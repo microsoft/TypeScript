@@ -14,6 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 /// <reference no-default-lib="true"/>
+
 /////////////////////////////
 /// IE DOM APIs
 /////////////////////////////
@@ -973,7 +974,7 @@ declare var ApplicationCache: {
 
 interface AriaRequestEvent extends Event {
     readonly attributeName: string;
-    attributeValue: string;
+    attributeValue: string | null;
 }
 
 declare var AriaRequestEvent: {
@@ -984,7 +985,7 @@ declare var AriaRequestEvent: {
 interface Attr extends Node {
     readonly name: string;
     readonly ownerElement: Element;
-    readonly prefix: string;
+    readonly prefix: string | null;
     readonly specified: boolean;
     value: string;
 }
@@ -1010,7 +1011,7 @@ declare var AudioBuffer: {
 }
 
 interface AudioBufferSourceNode extends AudioNode {
-    buffer: AudioBuffer;
+    buffer: AudioBuffer | null;
     readonly detune: AudioParam;
     loop: boolean;
     loopEnd: number;
@@ -1146,7 +1147,7 @@ interface AudioTrackList extends EventTarget {
     onaddtrack: (ev: TrackEvent) => any;
     onchange: (ev: Event) => any;
     onremovetrack: (ev: TrackEvent) => any;
-    getTrackById(id: string): AudioTrack;
+    getTrackById(id: string): AudioTrack | null;
     item(index: number): AudioTrack;
     addEventListener(type: "addtrack", listener: (ev: TrackEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "change", listener: (ev: Event) => any, useCapture?: boolean): void;
@@ -1360,343 +1361,343 @@ declare var CSSRuleList: {
 }
 
 interface CSSStyleDeclaration {
-    alignContent: string;
-    alignItems: string;
-    alignSelf: string;
-    alignmentBaseline: string;
-    animation: string;
-    animationDelay: string;
-    animationDirection: string;
-    animationDuration: string;
-    animationFillMode: string;
-    animationIterationCount: string;
-    animationName: string;
-    animationPlayState: string;
-    animationTimingFunction: string;
-    backfaceVisibility: string;
-    background: string;
-    backgroundAttachment: string;
-    backgroundClip: string;
-    backgroundColor: string;
-    backgroundImage: string;
-    backgroundOrigin: string;
-    backgroundPosition: string;
-    backgroundPositionX: string;
-    backgroundPositionY: string;
-    backgroundRepeat: string;
-    backgroundSize: string;
-    baselineShift: string;
-    border: string;
-    borderBottom: string;
-    borderBottomColor: string;
-    borderBottomLeftRadius: string;
-    borderBottomRightRadius: string;
-    borderBottomStyle: string;
-    borderBottomWidth: string;
-    borderCollapse: string;
-    borderColor: string;
-    borderImage: string;
-    borderImageOutset: string;
-    borderImageRepeat: string;
-    borderImageSlice: string;
-    borderImageSource: string;
-    borderImageWidth: string;
-    borderLeft: string;
-    borderLeftColor: string;
-    borderLeftStyle: string;
-    borderLeftWidth: string;
-    borderRadius: string;
-    borderRight: string;
-    borderRightColor: string;
-    borderRightStyle: string;
-    borderRightWidth: string;
-    borderSpacing: string;
-    borderStyle: string;
-    borderTop: string;
-    borderTopColor: string;
-    borderTopLeftRadius: string;
-    borderTopRightRadius: string;
-    borderTopStyle: string;
-    borderTopWidth: string;
-    borderWidth: string;
-    bottom: string;
-    boxShadow: string;
-    boxSizing: string;
-    breakAfter: string;
-    breakBefore: string;
-    breakInside: string;
-    captionSide: string;
-    clear: string;
-    clip: string;
-    clipPath: string;
-    clipRule: string;
-    color: string;
-    colorInterpolationFilters: string;
+    alignContent: string | null;
+    alignItems: string | null;
+    alignSelf: string | null;
+    alignmentBaseline: string | null;
+    animation: string | null;
+    animationDelay: string | null;
+    animationDirection: string | null;
+    animationDuration: string | null;
+    animationFillMode: string | null;
+    animationIterationCount: string | null;
+    animationName: string | null;
+    animationPlayState: string | null;
+    animationTimingFunction: string | null;
+    backfaceVisibility: string | null;
+    background: string | null;
+    backgroundAttachment: string | null;
+    backgroundClip: string | null;
+    backgroundColor: string | null;
+    backgroundImage: string | null;
+    backgroundOrigin: string | null;
+    backgroundPosition: string | null;
+    backgroundPositionX: string | null;
+    backgroundPositionY: string | null;
+    backgroundRepeat: string | null;
+    backgroundSize: string | null;
+    baselineShift: string | null;
+    border: string | null;
+    borderBottom: string | null;
+    borderBottomColor: string | null;
+    borderBottomLeftRadius: string | null;
+    borderBottomRightRadius: string | null;
+    borderBottomStyle: string | null;
+    borderBottomWidth: string | null;
+    borderCollapse: string | null;
+    borderColor: string | null;
+    borderImage: string | null;
+    borderImageOutset: string | null;
+    borderImageRepeat: string | null;
+    borderImageSlice: string | null;
+    borderImageSource: string | null;
+    borderImageWidth: string | null;
+    borderLeft: string | null;
+    borderLeftColor: string | null;
+    borderLeftStyle: string | null;
+    borderLeftWidth: string | null;
+    borderRadius: string | null;
+    borderRight: string | null;
+    borderRightColor: string | null;
+    borderRightStyle: string | null;
+    borderRightWidth: string | null;
+    borderSpacing: string | null;
+    borderStyle: string | null;
+    borderTop: string | null;
+    borderTopColor: string | null;
+    borderTopLeftRadius: string | null;
+    borderTopRightRadius: string | null;
+    borderTopStyle: string | null;
+    borderTopWidth: string | null;
+    borderWidth: string | null;
+    bottom: string | null;
+    boxShadow: string | null;
+    boxSizing: string | null;
+    breakAfter: string | null;
+    breakBefore: string | null;
+    breakInside: string | null;
+    captionSide: string | null;
+    clear: string | null;
+    clip: string | null;
+    clipPath: string | null;
+    clipRule: string | null;
+    color: string | null;
+    colorInterpolationFilters: string | null;
     columnCount: any;
-    columnFill: string;
+    columnFill: string | null;
     columnGap: any;
-    columnRule: string;
+    columnRule: string | null;
     columnRuleColor: any;
-    columnRuleStyle: string;
+    columnRuleStyle: string | null;
     columnRuleWidth: any;
-    columnSpan: string;
+    columnSpan: string | null;
     columnWidth: any;
-    columns: string;
-    content: string;
-    counterIncrement: string;
-    counterReset: string;
-    cssFloat: string;
+    columns: string | null;
+    content: string | null;
+    counterIncrement: string | null;
+    counterReset: string | null;
+    cssFloat: string | null;
     cssText: string;
-    cursor: string;
-    direction: string;
-    display: string;
-    dominantBaseline: string;
-    emptyCells: string;
-    enableBackground: string;
-    fill: string;
-    fillOpacity: string;
-    fillRule: string;
-    filter: string;
-    flex: string;
-    flexBasis: string;
-    flexDirection: string;
-    flexFlow: string;
-    flexGrow: string;
-    flexShrink: string;
-    flexWrap: string;
-    floodColor: string;
-    floodOpacity: string;
-    font: string;
-    fontFamily: string;
-    fontFeatureSettings: string;
-    fontSize: string;
-    fontSizeAdjust: string;
-    fontStretch: string;
-    fontStyle: string;
-    fontVariant: string;
-    fontWeight: string;
-    glyphOrientationHorizontal: string;
-    glyphOrientationVertical: string;
-    height: string;
-    imeMode: string;
-    justifyContent: string;
-    kerning: string;
-    left: string;
+    cursor: string | null;
+    direction: string | null;
+    display: string | null;
+    dominantBaseline: string | null;
+    emptyCells: string | null;
+    enableBackground: string | null;
+    fill: string | null;
+    fillOpacity: string | null;
+    fillRule: string | null;
+    filter: string | null;
+    flex: string | null;
+    flexBasis: string | null;
+    flexDirection: string | null;
+    flexFlow: string | null;
+    flexGrow: string | null;
+    flexShrink: string | null;
+    flexWrap: string | null;
+    floodColor: string | null;
+    floodOpacity: string | null;
+    font: string | null;
+    fontFamily: string | null;
+    fontFeatureSettings: string | null;
+    fontSize: string | null;
+    fontSizeAdjust: string | null;
+    fontStretch: string | null;
+    fontStyle: string | null;
+    fontVariant: string | null;
+    fontWeight: string | null;
+    glyphOrientationHorizontal: string | null;
+    glyphOrientationVertical: string | null;
+    height: string | null;
+    imeMode: string | null;
+    justifyContent: string | null;
+    kerning: string | null;
+    left: string | null;
     readonly length: number;
-    letterSpacing: string;
-    lightingColor: string;
-    lineHeight: string;
-    listStyle: string;
-    listStyleImage: string;
-    listStylePosition: string;
-    listStyleType: string;
-    margin: string;
-    marginBottom: string;
-    marginLeft: string;
-    marginRight: string;
-    marginTop: string;
-    marker: string;
-    markerEnd: string;
-    markerMid: string;
-    markerStart: string;
-    mask: string;
-    maxHeight: string;
-    maxWidth: string;
-    minHeight: string;
-    minWidth: string;
-    msContentZoomChaining: string;
-    msContentZoomLimit: string;
+    letterSpacing: string | null;
+    lightingColor: string | null;
+    lineHeight: string | null;
+    listStyle: string | null;
+    listStyleImage: string | null;
+    listStylePosition: string | null;
+    listStyleType: string | null;
+    margin: string | null;
+    marginBottom: string | null;
+    marginLeft: string | null;
+    marginRight: string | null;
+    marginTop: string | null;
+    marker: string | null;
+    markerEnd: string | null;
+    markerMid: string | null;
+    markerStart: string | null;
+    mask: string | null;
+    maxHeight: string | null;
+    maxWidth: string | null;
+    minHeight: string | null;
+    minWidth: string | null;
+    msContentZoomChaining: string | null;
+    msContentZoomLimit: string | null;
     msContentZoomLimitMax: any;
     msContentZoomLimitMin: any;
-    msContentZoomSnap: string;
-    msContentZoomSnapPoints: string;
-    msContentZoomSnapType: string;
-    msContentZooming: string;
-    msFlowFrom: string;
-    msFlowInto: string;
-    msFontFeatureSettings: string;
+    msContentZoomSnap: string | null;
+    msContentZoomSnapPoints: string | null;
+    msContentZoomSnapType: string | null;
+    msContentZooming: string | null;
+    msFlowFrom: string | null;
+    msFlowInto: string | null;
+    msFontFeatureSettings: string | null;
     msGridColumn: any;
-    msGridColumnAlign: string;
+    msGridColumnAlign: string | null;
     msGridColumnSpan: any;
-    msGridColumns: string;
+    msGridColumns: string | null;
     msGridRow: any;
-    msGridRowAlign: string;
+    msGridRowAlign: string | null;
     msGridRowSpan: any;
-    msGridRows: string;
-    msHighContrastAdjust: string;
-    msHyphenateLimitChars: string;
+    msGridRows: string | null;
+    msHighContrastAdjust: string | null;
+    msHyphenateLimitChars: string | null;
     msHyphenateLimitLines: any;
     msHyphenateLimitZone: any;
-    msHyphens: string;
-    msImeAlign: string;
-    msOverflowStyle: string;
-    msScrollChaining: string;
-    msScrollLimit: string;
+    msHyphens: string | null;
+    msImeAlign: string | null;
+    msOverflowStyle: string | null;
+    msScrollChaining: string | null;
+    msScrollLimit: string | null;
     msScrollLimitXMax: any;
     msScrollLimitXMin: any;
     msScrollLimitYMax: any;
     msScrollLimitYMin: any;
-    msScrollRails: string;
-    msScrollSnapPointsX: string;
-    msScrollSnapPointsY: string;
-    msScrollSnapType: string;
-    msScrollSnapX: string;
-    msScrollSnapY: string;
-    msScrollTranslation: string;
-    msTextCombineHorizontal: string;
+    msScrollRails: string | null;
+    msScrollSnapPointsX: string | null;
+    msScrollSnapPointsY: string | null;
+    msScrollSnapType: string | null;
+    msScrollSnapX: string | null;
+    msScrollSnapY: string | null;
+    msScrollTranslation: string | null;
+    msTextCombineHorizontal: string | null;
     msTextSizeAdjust: any;
-    msTouchAction: string;
-    msTouchSelect: string;
-    msUserSelect: string;
+    msTouchAction: string | null;
+    msTouchSelect: string | null;
+    msUserSelect: string | null;
     msWrapFlow: string;
     msWrapMargin: any;
     msWrapThrough: string;
-    opacity: string;
-    order: string;
-    orphans: string;
-    outline: string;
-    outlineColor: string;
-    outlineStyle: string;
-    outlineWidth: string;
-    overflow: string;
-    overflowX: string;
-    overflowY: string;
-    padding: string;
-    paddingBottom: string;
-    paddingLeft: string;
-    paddingRight: string;
-    paddingTop: string;
-    pageBreakAfter: string;
-    pageBreakBefore: string;
-    pageBreakInside: string;
+    opacity: string | null;
+    order: string | null;
+    orphans: string | null;
+    outline: string | null;
+    outlineColor: string | null;
+    outlineStyle: string | null;
+    outlineWidth: string | null;
+    overflow: string | null;
+    overflowX: string | null;
+    overflowY: string | null;
+    padding: string | null;
+    paddingBottom: string | null;
+    paddingLeft: string | null;
+    paddingRight: string | null;
+    paddingTop: string | null;
+    pageBreakAfter: string | null;
+    pageBreakBefore: string | null;
+    pageBreakInside: string | null;
     readonly parentRule: CSSRule;
-    perspective: string;
-    perspectiveOrigin: string;
-    pointerEvents: string;
-    position: string;
-    quotes: string;
-    right: string;
-    rubyAlign: string;
-    rubyOverhang: string;
-    rubyPosition: string;
-    stopColor: string;
-    stopOpacity: string;
-    stroke: string;
-    strokeDasharray: string;
-    strokeDashoffset: string;
-    strokeLinecap: string;
-    strokeLinejoin: string;
-    strokeMiterlimit: string;
-    strokeOpacity: string;
-    strokeWidth: string;
-    tableLayout: string;
-    textAlign: string;
-    textAlignLast: string;
-    textAnchor: string;
-    textDecoration: string;
-    textIndent: string;
-    textJustify: string;
-    textKashida: string;
-    textKashidaSpace: string;
-    textOverflow: string;
-    textShadow: string;
-    textTransform: string;
-    textUnderlinePosition: string;
-    top: string;
-    touchAction: string;
-    transform: string;
-    transformOrigin: string;
-    transformStyle: string;
-    transition: string;
-    transitionDelay: string;
-    transitionDuration: string;
-    transitionProperty: string;
-    transitionTimingFunction: string;
-    unicodeBidi: string;
-    verticalAlign: string;
-    visibility: string;
-    webkitAlignContent: string;
-    webkitAlignItems: string;
-    webkitAlignSelf: string;
-    webkitAnimation: string;
-    webkitAnimationDelay: string;
-    webkitAnimationDirection: string;
-    webkitAnimationDuration: string;
-    webkitAnimationFillMode: string;
-    webkitAnimationIterationCount: string;
-    webkitAnimationName: string;
-    webkitAnimationPlayState: string;
-    webkitAnimationTimingFunction: string;
-    webkitAppearance: string;
-    webkitBackfaceVisibility: string;
-    webkitBackgroundClip: string;
-    webkitBackgroundOrigin: string;
-    webkitBackgroundSize: string;
-    webkitBorderBottomLeftRadius: string;
-    webkitBorderBottomRightRadius: string;
-    webkitBorderImage: string;
-    webkitBorderRadius: string;
-    webkitBorderTopLeftRadius: string;
-    webkitBorderTopRightRadius: string;
-    webkitBoxAlign: string;
-    webkitBoxDirection: string;
-    webkitBoxFlex: string;
-    webkitBoxOrdinalGroup: string;
-    webkitBoxOrient: string;
-    webkitBoxPack: string;
-    webkitBoxSizing: string;
-    webkitColumnBreakAfter: string;
-    webkitColumnBreakBefore: string;
-    webkitColumnBreakInside: string;
+    perspective: string | null;
+    perspectiveOrigin: string | null;
+    pointerEvents: string | null;
+    position: string | null;
+    quotes: string | null;
+    right: string | null;
+    rubyAlign: string | null;
+    rubyOverhang: string | null;
+    rubyPosition: string | null;
+    stopColor: string | null;
+    stopOpacity: string | null;
+    stroke: string | null;
+    strokeDasharray: string | null;
+    strokeDashoffset: string | null;
+    strokeLinecap: string | null;
+    strokeLinejoin: string | null;
+    strokeMiterlimit: string | null;
+    strokeOpacity: string | null;
+    strokeWidth: string | null;
+    tableLayout: string | null;
+    textAlign: string | null;
+    textAlignLast: string | null;
+    textAnchor: string | null;
+    textDecoration: string | null;
+    textIndent: string | null;
+    textJustify: string | null;
+    textKashida: string | null;
+    textKashidaSpace: string | null;
+    textOverflow: string | null;
+    textShadow: string | null;
+    textTransform: string | null;
+    textUnderlinePosition: string | null;
+    top: string | null;
+    touchAction: string | null;
+    transform: string | null;
+    transformOrigin: string | null;
+    transformStyle: string | null;
+    transition: string | null;
+    transitionDelay: string | null;
+    transitionDuration: string | null;
+    transitionProperty: string | null;
+    transitionTimingFunction: string | null;
+    unicodeBidi: string | null;
+    verticalAlign: string | null;
+    visibility: string | null;
+    webkitAlignContent: string | null;
+    webkitAlignItems: string | null;
+    webkitAlignSelf: string | null;
+    webkitAnimation: string | null;
+    webkitAnimationDelay: string | null;
+    webkitAnimationDirection: string | null;
+    webkitAnimationDuration: string | null;
+    webkitAnimationFillMode: string | null;
+    webkitAnimationIterationCount: string | null;
+    webkitAnimationName: string | null;
+    webkitAnimationPlayState: string | null;
+    webkitAnimationTimingFunction: string | null;
+    webkitAppearance: string | null;
+    webkitBackfaceVisibility: string | null;
+    webkitBackgroundClip: string | null;
+    webkitBackgroundOrigin: string | null;
+    webkitBackgroundSize: string | null;
+    webkitBorderBottomLeftRadius: string | null;
+    webkitBorderBottomRightRadius: string | null;
+    webkitBorderImage: string | null;
+    webkitBorderRadius: string | null;
+    webkitBorderTopLeftRadius: string | null;
+    webkitBorderTopRightRadius: string | null;
+    webkitBoxAlign: string | null;
+    webkitBoxDirection: string | null;
+    webkitBoxFlex: string | null;
+    webkitBoxOrdinalGroup: string | null;
+    webkitBoxOrient: string | null;
+    webkitBoxPack: string | null;
+    webkitBoxSizing: string | null;
+    webkitColumnBreakAfter: string | null;
+    webkitColumnBreakBefore: string | null;
+    webkitColumnBreakInside: string | null;
     webkitColumnCount: any;
     webkitColumnGap: any;
-    webkitColumnRule: string;
+    webkitColumnRule: string | null;
     webkitColumnRuleColor: any;
-    webkitColumnRuleStyle: string;
+    webkitColumnRuleStyle: string | null;
     webkitColumnRuleWidth: any;
-    webkitColumnSpan: string;
+    webkitColumnSpan: string | null;
     webkitColumnWidth: any;
-    webkitColumns: string;
-    webkitFilter: string;
-    webkitFlex: string;
-    webkitFlexBasis: string;
-    webkitFlexDirection: string;
-    webkitFlexFlow: string;
-    webkitFlexGrow: string;
-    webkitFlexShrink: string;
-    webkitFlexWrap: string;
-    webkitJustifyContent: string;
-    webkitOrder: string;
-    webkitPerspective: string;
-    webkitPerspectiveOrigin: string;
-    webkitTapHighlightColor: string;
-    webkitTextFillColor: string;
+    webkitColumns: string | null;
+    webkitFilter: string | null;
+    webkitFlex: string | null;
+    webkitFlexBasis: string | null;
+    webkitFlexDirection: string | null;
+    webkitFlexFlow: string | null;
+    webkitFlexGrow: string | null;
+    webkitFlexShrink: string | null;
+    webkitFlexWrap: string | null;
+    webkitJustifyContent: string | null;
+    webkitOrder: string | null;
+    webkitPerspective: string | null;
+    webkitPerspectiveOrigin: string | null;
+    webkitTapHighlightColor: string | null;
+    webkitTextFillColor: string | null;
     webkitTextSizeAdjust: any;
-    webkitTransform: string;
-    webkitTransformOrigin: string;
-    webkitTransformStyle: string;
-    webkitTransition: string;
-    webkitTransitionDelay: string;
-    webkitTransitionDuration: string;
-    webkitTransitionProperty: string;
-    webkitTransitionTimingFunction: string;
-    webkitUserModify: string;
-    webkitUserSelect: string;
-    webkitWritingMode: string;
-    whiteSpace: string;
-    widows: string;
-    width: string;
-    wordBreak: string;
-    wordSpacing: string;
-    wordWrap: string;
-    writingMode: string;
-    zIndex: string;
-    zoom: string;
+    webkitTransform: string | null;
+    webkitTransformOrigin: string | null;
+    webkitTransformStyle: string | null;
+    webkitTransition: string | null;
+    webkitTransitionDelay: string | null;
+    webkitTransitionDuration: string | null;
+    webkitTransitionProperty: string | null;
+    webkitTransitionTimingFunction: string | null;
+    webkitUserModify: string | null;
+    webkitUserSelect: string | null;
+    webkitWritingMode: string | null;
+    whiteSpace: string | null;
+    widows: string | null;
+    width: string | null;
+    wordBreak: string | null;
+    wordSpacing: string | null;
+    wordWrap: string | null;
+    writingMode: string | null;
+    zIndex: string | null;
+    zoom: string | null;
     getPropertyPriority(propertyName: string): string;
     getPropertyValue(propertyName: string): string;
     item(index: number): string;
     removeProperty(propertyName: string): string;
-    setProperty(propertyName: string, value: string, priority?: string): void;
+    setProperty(propertyName: string, value: string | null, priority?: string): void;
     [index: number]: string;
 }
 
@@ -1788,6 +1789,9 @@ interface CanvasRenderingContext2D extends Object, CanvasPathMethods {
     strokeStyle: string | CanvasGradient | CanvasPattern;
     textAlign: string;
     textBaseline: string;
+    mozImageSmoothingEnabled: boolean;
+    webkitImageSmoothingEnabled: boolean;
+    oImageSmoothingEnabled: boolean;
     beginPath(): void;
     clearRect(x: number, y: number, w: number, h: number): void;
     clip(fillRule?: string): void;
@@ -1902,7 +1906,7 @@ declare var CloseEvent: {
 
 interface CommandEvent extends Event {
     readonly commandName: string;
-    readonly detail: string;
+    readonly detail: string | null;
 }
 
 declare var CommandEvent: {
@@ -1961,7 +1965,7 @@ declare var Console: {
 }
 
 interface ConvolverNode extends AudioNode {
-    buffer: AudioBuffer;
+    buffer: AudioBuffer | null;
     normalize: boolean;
 }
 
@@ -1972,12 +1976,12 @@ declare var ConvolverNode: {
 
 interface Coordinates {
     readonly accuracy: number;
-    readonly altitude: number;
-    readonly altitudeAccuracy: number;
-    readonly heading: number;
+    readonly altitude: number | null;
+    readonly altitudeAccuracy: number | null;
+    readonly heading: number | null;
     readonly latitude: number;
     readonly longitude: number;
-    readonly speed: number;
+    readonly speed: number | null;
 }
 
 declare var Coordinates: {
@@ -2103,10 +2107,10 @@ declare var DOMException: {
 }
 
 interface DOMImplementation {
-    createDocument(namespaceURI: string, qualifiedName: string, doctype: DocumentType): Document;
-    createDocumentType(qualifiedName: string, publicId: string, systemId: string): DocumentType;
+    createDocument(namespaceURI: string | null, qualifiedName: string | null, doctype: DocumentType): Document;
+    createDocumentType(qualifiedName: string, publicId: string | null, systemId: string | null): DocumentType;
     createHTMLDocument(title: string): Document;
-    hasFeature(feature: string, version: string): boolean;
+    hasFeature(feature: string | null, version: string | null): boolean;
 }
 
 declare var DOMImplementation: {
@@ -2135,7 +2139,7 @@ declare var DOMSettableTokenList: {
 interface DOMStringList {
     readonly length: number;
     contains(str: string): boolean;
-    item(index: number): string;
+    item(index: number): string | null;
     [index: number]: string;
 }
 
@@ -2197,8 +2201,8 @@ declare var DataTransfer: {
 interface DataTransferItem {
     readonly kind: string;
     readonly type: string;
-    getAsFile(): File;
-    getAsString(_callback: FunctionStringCallback): void;
+    getAsFile(): File | null;
+    getAsString(_callback: FunctionStringCallback | null): void;
 }
 
 declare var DataTransferItem: {
@@ -2208,7 +2212,7 @@ declare var DataTransferItem: {
 
 interface DataTransferItemList {
     readonly length: number;
-    add(data: File): DataTransferItem;
+    add(data: File): DataTransferItem | null;
     clear(): void;
     item(index: number): DataTransferItem;
     remove(index: number): void;
@@ -2243,9 +2247,9 @@ declare var DelayNode: {
 }
 
 interface DeviceAcceleration {
-    readonly x: number;
-    readonly y: number;
-    readonly z: number;
+    readonly x: number | null;
+    readonly y: number | null;
+    readonly z: number | null;
 }
 
 declare var DeviceAcceleration: {
@@ -2263,11 +2267,11 @@ declare var DeviceLightEvent: {
 }
 
 interface DeviceMotionEvent extends Event {
-    readonly acceleration: DeviceAcceleration;
-    readonly accelerationIncludingGravity: DeviceAcceleration;
-    readonly interval: number;
-    readonly rotationRate: DeviceRotationRate;
-    initDeviceMotionEvent(type: string, bubbles: boolean, cancelable: boolean, acceleration: DeviceAccelerationDict, accelerationIncludingGravity: DeviceAccelerationDict, rotationRate: DeviceRotationRateDict, interval: number): void;
+    readonly acceleration: DeviceAcceleration | null;
+    readonly accelerationIncludingGravity: DeviceAcceleration | null;
+    readonly interval: number | null;
+    readonly rotationRate: DeviceRotationRate | null;
+    initDeviceMotionEvent(type: string, bubbles: boolean, cancelable: boolean, acceleration: DeviceAccelerationDict | null, accelerationIncludingGravity: DeviceAccelerationDict | null, rotationRate: DeviceRotationRateDict | null, interval: number | null): void;
 }
 
 declare var DeviceMotionEvent: {
@@ -2277,10 +2281,10 @@ declare var DeviceMotionEvent: {
 
 interface DeviceOrientationEvent extends Event {
     readonly absolute: boolean;
-    readonly alpha: number;
-    readonly beta: number;
-    readonly gamma: number;
-    initDeviceOrientationEvent(type: string, bubbles: boolean, cancelable: boolean, alpha: number, beta: number, gamma: number, absolute: boolean): void;
+    readonly alpha: number | null;
+    readonly beta: number | null;
+    readonly gamma: number | null;
+    initDeviceOrientationEvent(type: string, bubbles: boolean, cancelable: boolean, alpha: number | null, beta: number | null, gamma: number | null, absolute: boolean): void;
 }
 
 declare var DeviceOrientationEvent: {
@@ -2289,9 +2293,9 @@ declare var DeviceOrientationEvent: {
 }
 
 interface DeviceRotationRate {
-    readonly alpha: number;
-    readonly beta: number;
-    readonly gamma: number;
+    readonly alpha: number | null;
+    readonly beta: number | null;
+    readonly gamma: number | null;
 }
 
 declare var DeviceRotationRate: {
@@ -2384,7 +2388,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Retrieves a collection, in source order, of all form objects in the document.
       */
     forms: HTMLCollectionOf<HTMLFormElement>;
-    readonly fullscreenElement: Element;
+    readonly fullscreenElement: Element | null;
     readonly fullscreenEnabled: boolean;
     readonly head: HTMLHeadElement;
     readonly hidden: boolean;
@@ -2399,7 +2403,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     /**
       * Returns the character encoding used to create the webpage that is loaded into the document object.
       */
-    readonly inputEncoding: string;
+    readonly inputEncoding: string | null;
     /**
       * Gets the date that the page was last modified, if the page supplies one. 
       */
@@ -2744,7 +2748,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Retrieves a collection of all script objects in the document.
       */
     scripts: HTMLCollectionOf<HTMLScriptElement>;
-    readonly scrollingElement: Element;
+    readonly scrollingElement: Element | null;
     /**
       * Retrieves a collection of styleSheet objects representing the style sheets that correspond to each instance of a link or style object in the document.
       */
@@ -2758,16 +2762,16 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Sets or gets the color of the links that the user has visited.
       */
     vlinkColor: string;
-    readonly webkitCurrentFullScreenElement: Element;
-    readonly webkitFullscreenElement: Element;
+    readonly webkitCurrentFullScreenElement: Element | null;
+    readonly webkitFullscreenElement: Element | null;
     readonly webkitFullscreenEnabled: boolean;
     readonly webkitIsFullScreen: boolean;
-    readonly xmlEncoding: string;
+    readonly xmlEncoding: string | null;
     xmlStandalone: boolean;
     /**
       * Gets or sets the version attribute specified in the declaration of an XML document.
       */
-    xmlVersion: string;
+    xmlVersion: string | null;
     adoptNode(source: Node): Node;
     captureEvents(): void;
     caretRangeFromPoint(x: number, y: number): Range;
@@ -2781,7 +2785,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * @param name String that sets the attribute object's name.
       */
     createAttribute(name: string): Attr;
-    createAttributeNS(namespaceURI: string, qualifiedName: string): Attr;
+    createAttributeNS(namespaceURI: string | null, qualifiedName: string): Attr;
     createCDATASection(data: string): CDATASection;
     /**
       * Creates a comment object with the specified data.
@@ -2877,6 +2881,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     createElement(tagName: "x-ms-webview"): MSHTMLWebViewElement;
     createElement(tagName: "xmp"): HTMLPreElement;
     createElement(tagName: string): HTMLElement;
+    createElementNS(namespaceURI: "http://www.w3.org/1999/xhtml", qualifiedName: string): HTMLElement
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "a"): SVGAElement
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "circle"): SVGCircleElement
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "clipPath"): SVGClipPathElement
@@ -2939,7 +2944,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "use"): SVGUseElement
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "view"): SVGViewElement
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: string): SVGElement
-    createElementNS(namespaceURI: string, qualifiedName: string): Element;
+    createElementNS(namespaceURI: string | null, qualifiedName: string): Element;
     createExpression(expression: string, resolver: XPathNSResolver): XPathExpression;
     createNSResolver(nodeResolver: Node): XPathNSResolver;
     /**
@@ -3000,12 +3005,12 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * @param elementId String that specifies the ID value. Case-insensitive.
       */
     getElementById(elementId: string): HTMLElement;
-    getElementsByClassName(classNames: string): NodeListOf<Element>;
+    getElementsByClassName(classNames: string): HTMLCollectionOf<Element>;
     /**
       * Gets a collection of objects based on the value of the NAME or ID attribute.
       * @param elementName Gets a collection of objects based on the value of the NAME or ID attribute.
       */
-    getElementsByName(elementName: string): NodeListOf<Element>;
+    getElementsByName(elementName: string): NodeListOf<HTMLElement>;
     /**
       * Retrieves a collection of objects based on the specified element name.
       * @param name Specifies the name of an element.
@@ -3187,7 +3192,9 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     getElementsByTagName(tagname: "x-ms-webview"): NodeListOf<MSHTMLWebViewElement>;
     getElementsByTagName(tagname: "xmp"): NodeListOf<HTMLPreElement>;
     getElementsByTagName(tagname: string): NodeListOf<Element>;
-    getElementsByTagNameNS(namespaceURI: string, localName: string): NodeListOf<Element>;
+    getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1999/xhtml", localName: string): HTMLCollectionOf<HTMLElement>;
+    getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
+    getElementsByTagNameNS(namespaceURI: string, localName: string): HTMLCollectionOf<Element>;
     /**
       * Returns an object representing the current selection of the document that is loaded into the object displaying a webpage.
       */
@@ -3254,8 +3261,6 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * @param content The text and HTML tags to write.
       */
     writeln(...content: string[]): void;
-    createElement(tagName: "picture"): HTMLPictureElement;
-    getElementsByTagName(tagname: "picture"): NodeListOf<HTMLPictureElement>;
     addEventListener(type: "MSContentZoom", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureChange", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -3372,11 +3377,11 @@ declare var DocumentFragment: {
 
 interface DocumentType extends Node, ChildNode {
     readonly entities: NamedNodeMap;
-    readonly internalSubset: string;
+    readonly internalSubset: string | null;
     readonly name: string;
     readonly notations: NamedNodeMap;
-    readonly publicId: string;
-    readonly systemId: string;
+    readonly publicId: string | null;
+    readonly systemId: string | null;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -3467,14 +3472,14 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     ontouchstart: (ev: TouchEvent) => any;
     onwebkitfullscreenchange: (ev: Event) => any;
     onwebkitfullscreenerror: (ev: Event) => any;
-    readonly prefix: string;
+    readonly prefix: string | null;
     readonly scrollHeight: number;
     scrollLeft: number;
     scrollTop: number;
     readonly scrollWidth: number;
     readonly tagName: string;
     innerHTML: string;
-    getAttribute(name?: string): string;
+    getAttribute(name?: string): string | null;
     getAttributeNS(namespaceURI: string, localName: string): string;
     getAttributeNode(name: string): Attr;
     getAttributeNodeNS(namespaceURI: string, localName: string): Attr;
@@ -3657,7 +3662,9 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     getElementsByTagName(name: "x-ms-webview"): NodeListOf<MSHTMLWebViewElement>;
     getElementsByTagName(name: "xmp"): NodeListOf<HTMLPreElement>;
     getElementsByTagName(name: string): NodeListOf<Element>;
-    getElementsByTagNameNS(namespaceURI: string, localName: string): NodeListOf<Element>;
+    getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1999/xhtml", localName: string): HTMLCollectionOf<HTMLElement>;
+    getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
+    getElementsByTagNameNS(namespaceURI: string, localName: string): HTMLCollectionOf<Element>;
     hasAttribute(name: string): boolean;
     hasAttributeNS(namespaceURI: string, localName: string): boolean;
     msGetRegionContent(): MSRangeCollection;
@@ -3682,7 +3689,6 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     webkitRequestFullscreen(): void;
     getElementsByClassName(classNames: string): NodeListOf<Element>;
     matches(selector: string): boolean;
-    getElementsByTagName(tagname: "picture"): NodeListOf<HTMLPictureElement>;
     addEventListener(type: "MSGestureChange", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureEnd", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -3750,7 +3756,7 @@ interface Event {
     readonly eventPhase: number;
     readonly isTrusted: boolean;
     returnValue: boolean;
-    readonly srcElement: Element;
+    readonly srcElement: Element | null;
     readonly target: EventTarget;
     readonly timeStamp: number;
     readonly type: string;
@@ -4045,7 +4051,7 @@ interface HTMLAppletElement extends HTMLElement {
       * Sets or retrieves the shape of the object.
       */
     name: string;
-    object: string;
+    object: string | null;
     /**
       * Sets or retrieves a message to be displayed while an object is loading.
       */
@@ -6100,7 +6106,7 @@ interface HTMLMediaElement extends HTMLElement {
       * Gets or sets a flag to specify whether playback should restart after it completes.
       */
     loop: boolean;
-    readonly mediaKeys: MediaKeys;
+    readonly mediaKeys: MediaKeys | null;
     /**
       * Specifies the purpose of the audio or video media, such as background audio or alerts.
       */
@@ -6173,7 +6179,7 @@ interface HTMLMediaElement extends HTMLElement {
       * The address or URL of the a media resource that is to be considered.
       */
     src: string;
-    srcObject: MediaStream;
+    srcObject: MediaStream | null;
     readonly textTracks: TextTrackList;
     readonly videoTracks: VideoTrackList;
     /**
@@ -6211,7 +6217,7 @@ interface HTMLMediaElement extends HTMLElement {
       * Loads and starts playback of a media resource.
       */
     play(): void;
-    setMediaKeys(mediaKeys: MediaKeys): PromiseLike<void>;
+    setMediaKeys(mediaKeys: MediaKeys | null): PromiseLike<void>;
     readonly HAVE_CURRENT_DATA: number;
     readonly HAVE_ENOUGH_DATA: number;
     readonly HAVE_FUTURE_DATA: number;
@@ -7523,8 +7529,8 @@ declare var HTMLVideoElement: {
 }
 
 interface HashChangeEvent extends Event {
-    readonly newURL: string;
-    readonly oldURL: string;
+    readonly newURL: string | null;
+    readonly oldURL: string | null;
 }
 
 declare var HashChangeEvent: {
@@ -7730,7 +7736,7 @@ declare var IDBTransaction: {
 }
 
 interface IDBVersionChangeEvent extends Event {
-    readonly newVersion: number;
+    readonly newVersion: number | null;
     readonly oldVersion: number;
 }
 
@@ -7753,7 +7759,7 @@ declare var ImageData: {
 
 interface KeyboardEvent extends UIEvent {
     readonly altKey: boolean;
-    readonly char: string;
+    readonly char: string | null;
     readonly charCode: number;
     readonly ctrlKey: boolean;
     readonly key: string;
@@ -8096,7 +8102,7 @@ declare var MSMediaKeyError: {
 }
 
 interface MSMediaKeyMessageEvent extends Event {
-    readonly destinationURL: string;
+    readonly destinationURL: string | null;
     readonly message: Uint8Array;
 }
 
@@ -8106,7 +8112,7 @@ declare var MSMediaKeyMessageEvent: {
 }
 
 interface MSMediaKeyNeededEvent extends Event {
-    readonly initData: Uint8Array;
+    readonly initData: Uint8Array | null;
 }
 
 declare var MSMediaKeyNeededEvent: {
@@ -8115,7 +8121,7 @@ declare var MSMediaKeyNeededEvent: {
 }
 
 interface MSMediaKeySession extends EventTarget {
-    readonly error: MSMediaKeyError;
+    readonly error: MSMediaKeyError | null;
     readonly keySystem: string;
     readonly sessionId: string;
     close(): void;
@@ -8285,7 +8291,7 @@ declare var MediaElementAudioSourceNode: {
 }
 
 interface MediaEncryptedEvent extends Event {
-    readonly initData: ArrayBuffer;
+    readonly initData: ArrayBuffer | null;
     readonly initDataType: string;
 }
 
@@ -8427,7 +8433,7 @@ interface MediaStream extends EventTarget {
     addTrack(track: MediaStreamTrack): void;
     clone(): MediaStream;
     getAudioTracks(): MediaStreamTrack[];
-    getTrackById(trackId: string): MediaStreamTrack;
+    getTrackById(trackId: string): MediaStreamTrack | null;
     getTracks(): MediaStreamTrack[];
     getVideoTracks(): MediaStreamTrack[];
     removeTrack(track: MediaStreamTrack): void;
@@ -8453,8 +8459,8 @@ declare var MediaStreamAudioSourceNode: {
 }
 
 interface MediaStreamError {
-    readonly constraintName: string;
-    readonly message: string;
+    readonly constraintName: string | null;
+    readonly message: string | null;
     readonly name: string;
 }
 
@@ -8464,7 +8470,7 @@ declare var MediaStreamError: {
 }
 
 interface MediaStreamErrorEvent extends Event {
-    readonly error: MediaStreamError;
+    readonly error: MediaStreamError | null;
 }
 
 declare var MediaStreamErrorEvent: {
@@ -8640,11 +8646,11 @@ declare var MutationObserver: {
 
 interface MutationRecord {
     readonly addedNodes: NodeList;
-    readonly attributeName: string;
-    readonly attributeNamespace: string;
-    readonly nextSibling: Node;
-    readonly oldValue: string;
-    readonly previousSibling: Node;
+    readonly attributeName: string | null;
+    readonly attributeNamespace: string | null;
+    readonly nextSibling: Node | null;
+    readonly oldValue: string | null;
+    readonly previousSibling: Node | null;
     readonly removedNodes: NodeList;
     readonly target: Node;
     readonly type: string;
@@ -8658,10 +8664,10 @@ declare var MutationRecord: {
 interface NamedNodeMap {
     readonly length: number;
     getNamedItem(name: string): Attr;
-    getNamedItemNS(namespaceURI: string, localName: string): Attr;
+    getNamedItemNS(namespaceURI: string | null, localName: string | null): Attr;
     item(index: number): Attr;
     removeNamedItem(name: string): Attr;
-    removeNamedItemNS(namespaceURI: string, localName: string): Attr;
+    removeNamedItemNS(namespaceURI: string | null, localName: string | null): Attr;
     setNamedItem(arg: Attr): Attr;
     setNamedItemNS(arg: Attr): Attr;
     [index: number]: Attr;
@@ -8727,33 +8733,33 @@ declare var Navigator: {
 
 interface Node extends EventTarget {
     readonly attributes: NamedNodeMap;
-    readonly baseURI: string;
+    readonly baseURI: string | null;
     readonly childNodes: NodeList;
     readonly firstChild: Node;
     readonly lastChild: Node;
-    readonly localName: string;
-    readonly namespaceURI: string;
+    readonly localName: string | null;
+    readonly namespaceURI: string | null;
     readonly nextSibling: Node;
     readonly nodeName: string;
     readonly nodeType: number;
-    nodeValue: string;
+    nodeValue: string | null;
     readonly ownerDocument: Document;
     readonly parentElement: HTMLElement;
     readonly parentNode: Node;
     readonly previousSibling: Node;
-    textContent: string;
+    textContent: string | null;
     appendChild(newChild: Node): Node;
     cloneNode(deep?: boolean): Node;
     compareDocumentPosition(other: Node): number;
     contains(child: Node): boolean;
     hasAttributes(): boolean;
     hasChildNodes(): boolean;
-    insertBefore(newChild: Node, refChild?: Node): Node;
-    isDefaultNamespace(namespaceURI: string): boolean;
+    insertBefore(newChild: Node, refChild: Node): Node;
+    isDefaultNamespace(namespaceURI: string | null): boolean;
     isEqualNode(arg: Node): boolean;
     isSameNode(other: Node): boolean;
-    lookupNamespaceURI(prefix: string): string;
-    lookupPrefix(namespaceURI: string): string;
+    lookupNamespaceURI(prefix: string | null): string | null;
+    lookupPrefix(namespaceURI: string | null): string | null;
     normalize(): void;
     removeChild(oldChild: Node): Node;
     replaceChild(newChild: Node, oldChild: Node): Node;
@@ -8982,10 +8988,10 @@ interface PerfWidgetExternal {
     addEventListener(eventType: string, callback: Function): void;
     getMemoryUsage(): number;
     getProcessCpuUsage(): number;
-    getRecentCpuUsage(last: number): any;
-    getRecentFrames(last: number): any;
-    getRecentMemoryUsage(last: number): any;
-    getRecentPaintRequests(last: number): any;
+    getRecentCpuUsage(last: number | null): any;
+    getRecentFrames(last: number | null): any;
+    getRecentMemoryUsage(last: number | null): any;
+    getRecentPaintRequests(last: number | null): any;
     removeEventListener(eventType: string, callback: Function): void;
     repositionWindow(x: number, y: number): void;
     resizeWindow(width: number, height: number): void;
@@ -9292,13 +9298,13 @@ declare var RTCDTMFToneChangeEvent: {
 }
 
 interface RTCDtlsTransport extends RTCStatsProvider {
-    ondtlsstatechange: (ev: RTCDtlsTransportStateChangedEvent) => any;
-    onerror: (ev: Event) => any;
+    ondtlsstatechange: ((ev: RTCDtlsTransportStateChangedEvent) => any) | null;
+    onerror: ((ev: Event) => any) | null;
     readonly state: string;
     readonly transport: RTCIceTransport;
     getLocalParameters(): RTCDtlsParameters;
     getRemoteCertificates(): ArrayBuffer[];
-    getRemoteParameters(): RTCDtlsParameters;
+    getRemoteParameters(): RTCDtlsParameters | null;
     start(remoteParameters: RTCDtlsParameters): void;
     stop(): void;
     addEventListener(type: "dtlsstatechange", listener: (ev: RTCDtlsTransportStateChangedEvent) => any, useCapture?: boolean): void;
@@ -9348,8 +9354,8 @@ declare var RTCIceCandidatePairChangedEvent: {
 
 interface RTCIceGatherer extends RTCStatsProvider {
     readonly component: string;
-    onerror: (ev: Event) => any;
-    onlocalcandidate: (ev: RTCIceGathererEvent) => any;
+    onerror: ((ev: Event) => any) | null;
+    onlocalcandidate: ((ev: RTCIceGathererEvent) => any) | null;
     createAssociatedGatherer(): RTCIceGatherer;
     getLocalCandidates(): RTCIceCandidate[];
     getLocalParameters(): RTCIceParameters;
@@ -9374,16 +9380,16 @@ declare var RTCIceGathererEvent: {
 
 interface RTCIceTransport extends RTCStatsProvider {
     readonly component: string;
-    readonly iceGatherer: RTCIceGatherer;
-    oncandidatepairchange: (ev: RTCIceCandidatePairChangedEvent) => any;
-    onicestatechange: (ev: RTCIceTransportStateChangedEvent) => any;
+    readonly iceGatherer: RTCIceGatherer | null;
+    oncandidatepairchange: ((ev: RTCIceCandidatePairChangedEvent) => any) | null;
+    onicestatechange: ((ev: RTCIceTransportStateChangedEvent) => any) | null;
     readonly role: string;
     readonly state: string;
     addRemoteCandidate(remoteCandidate: RTCIceCandidate | RTCIceCandidateComplete): void;
     createAssociatedTransport(): RTCIceTransport;
-    getNominatedCandidatePair(): RTCIceCandidatePair;
+    getNominatedCandidatePair(): RTCIceCandidatePair | null;
     getRemoteCandidates(): RTCIceCandidate[];
-    getRemoteParameters(): RTCIceParameters;
+    getRemoteParameters(): RTCIceParameters | null;
     setRemoteCandidates(remoteCandidates: RTCIceCandidate[]): void;
     start(gatherer: RTCIceGatherer, remoteParameters: RTCIceParameters, role?: string): void;
     stop(): void;
@@ -9407,9 +9413,9 @@ declare var RTCIceTransportStateChangedEvent: {
 }
 
 interface RTCRtpReceiver extends RTCStatsProvider {
-    onerror: (ev: Event) => any;
+    onerror: ((ev: Event) => any) | null;
     readonly rtcpTransport: RTCDtlsTransport;
-    readonly track: MediaStreamTrack;
+    readonly track: MediaStreamTrack | null;
     readonly transport: RTCDtlsTransport | RTCSrtpSdesTransport;
     getContributingSources(): RTCRtpContributingSource[];
     receive(parameters: RTCRtpParameters): void;
@@ -9427,8 +9433,8 @@ declare var RTCRtpReceiver: {
 }
 
 interface RTCRtpSender extends RTCStatsProvider {
-    onerror: (ev: Event) => any;
-    onssrcconflict: (ev: RTCSsrcConflictEvent) => any;
+    onerror: ((ev: Event) => any) | null;
+    onssrcconflict: ((ev: RTCSsrcConflictEvent) => any) | null;
     readonly rtcpTransport: RTCDtlsTransport;
     readonly track: MediaStreamTrack;
     readonly transport: RTCDtlsTransport | RTCSrtpSdesTransport;
@@ -9448,7 +9454,7 @@ declare var RTCRtpSender: {
 }
 
 interface RTCSrtpSdesTransport extends EventTarget {
-    onerror: (ev: Event) => any;
+    onerror: ((ev: Event) => any) | null;
     readonly transport: RTCIceTransport;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -11495,9 +11501,9 @@ interface SubtleCrypto {
     encrypt(algorithm: string | Algorithm, key: CryptoKey, data: ArrayBufferView): PromiseLike<any>;
     exportKey(format: string, key: CryptoKey): PromiseLike<any>;
     generateKey(algorithm: string | Algorithm, extractable: boolean, keyUsages: string[]): PromiseLike<any>;
-    importKey(format: string, keyData: ArrayBufferView, algorithm: string | Algorithm, extractable: boolean, keyUsages: string[]): PromiseLike<any>;
+    importKey(format: string, keyData: ArrayBufferView, algorithm: string | Algorithm | null, extractable: boolean, keyUsages: string[]): PromiseLike<any>;
     sign(algorithm: string | Algorithm, key: CryptoKey, data: ArrayBufferView): PromiseLike<any>;
-    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: string | Algorithm, unwrappedKeyAlgorithm: string | Algorithm, extractable: boolean, keyUsages: string[]): PromiseLike<any>;
+    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: string | Algorithm, unwrappedKeyAlgorithm: string | Algorithm | null, extractable: boolean, keyUsages: string[]): PromiseLike<any>;
     verify(algorithm: string | Algorithm, key: CryptoKey, signature: ArrayBufferView, data: ArrayBufferView): PromiseLike<any>;
     wrapKey(format: string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: string | Algorithm): PromiseLike<any>;
 }
@@ -11631,7 +11637,7 @@ declare var TextTrackCueList: {
 
 interface TextTrackList extends EventTarget {
     readonly length: number;
-    onaddtrack: (ev: TrackEvent) => any;
+    onaddtrack: ((ev: TrackEvent) => any) | null;
     item(index: number): TextTrack;
     addEventListener(type: "addtrack", listener: (ev: TrackEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -11687,7 +11693,7 @@ declare var TouchEvent: {
 
 interface TouchList {
     readonly length: number;
-    item(index: number): Touch;
+    item(index: number): Touch | null;
     [index: number]: Touch;
 }
 
@@ -11829,7 +11835,7 @@ interface VideoTrackList extends EventTarget {
     onchange: (ev: Event) => any;
     onremovetrack: (ev: TrackEvent) => any;
     readonly selectedIndex: number;
-    getTrackById(id: string): VideoTrack;
+    getTrackById(id: string): VideoTrack | null;
     item(index: number): VideoTrack;
     addEventListener(type: "addtrack", listener: (ev: TrackEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "change", listener: (ev: Event) => any, useCapture?: boolean): void;
@@ -11882,7 +11888,7 @@ declare var WEBGL_depth_texture: {
 }
 
 interface WaveShaperNode extends AudioNode {
-    curve: Float32Array;
+    curve: Float32Array | null;
     oversample: string;
 }
 
@@ -11956,12 +11962,12 @@ interface WebGLRenderingContext {
     readonly drawingBufferHeight: number;
     readonly drawingBufferWidth: number;
     activeTexture(texture: number): void;
-    attachShader(program: WebGLProgram, shader: WebGLShader): void;
-    bindAttribLocation(program: WebGLProgram, index: number, name: string): void;
-    bindBuffer(target: number, buffer: WebGLBuffer): void;
-    bindFramebuffer(target: number, framebuffer: WebGLFramebuffer): void;
-    bindRenderbuffer(target: number, renderbuffer: WebGLRenderbuffer): void;
-    bindTexture(target: number, texture: WebGLTexture): void;
+    attachShader(program: WebGLProgram | null, shader: WebGLShader | null): void;
+    bindAttribLocation(program: WebGLProgram | null, index: number, name: string): void;
+    bindBuffer(target: number, buffer: WebGLBuffer | null): void;
+    bindFramebuffer(target: number, framebuffer: WebGLFramebuffer | null): void;
+    bindRenderbuffer(target: number, renderbuffer: WebGLRenderbuffer | null): void;
+    bindTexture(target: number, texture: WebGLTexture | null): void;
     blendColor(red: number, green: number, blue: number, alpha: number): void;
     blendEquation(mode: number): void;
     blendEquationSeparate(modeRGB: number, modeAlpha: number): void;
@@ -11975,28 +11981,28 @@ interface WebGLRenderingContext {
     clearDepth(depth: number): void;
     clearStencil(s: number): void;
     colorMask(red: boolean, green: boolean, blue: boolean, alpha: boolean): void;
-    compileShader(shader: WebGLShader): void;
+    compileShader(shader: WebGLShader | null): void;
     compressedTexImage2D(target: number, level: number, internalformat: number, width: number, height: number, border: number, data: ArrayBufferView): void;
     compressedTexSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, data: ArrayBufferView): void;
     copyTexImage2D(target: number, level: number, internalformat: number, x: number, y: number, width: number, height: number, border: number): void;
     copyTexSubImage2D(target: number, level: number, xoffset: number, yoffset: number, x: number, y: number, width: number, height: number): void;
-    createBuffer(): WebGLBuffer;
-    createFramebuffer(): WebGLFramebuffer;
-    createProgram(): WebGLProgram;
-    createRenderbuffer(): WebGLRenderbuffer;
-    createShader(type: number): WebGLShader;
-    createTexture(): WebGLTexture;
+    createBuffer(): WebGLBuffer | null;
+    createFramebuffer(): WebGLFramebuffer | null;
+    createProgram(): WebGLProgram | null;
+    createRenderbuffer(): WebGLRenderbuffer | null;
+    createShader(type: number): WebGLShader | null;
+    createTexture(): WebGLTexture | null;
     cullFace(mode: number): void;
-    deleteBuffer(buffer: WebGLBuffer): void;
-    deleteFramebuffer(framebuffer: WebGLFramebuffer): void;
-    deleteProgram(program: WebGLProgram): void;
-    deleteRenderbuffer(renderbuffer: WebGLRenderbuffer): void;
-    deleteShader(shader: WebGLShader): void;
-    deleteTexture(texture: WebGLTexture): void;
+    deleteBuffer(buffer: WebGLBuffer | null): void;
+    deleteFramebuffer(framebuffer: WebGLFramebuffer | null): void;
+    deleteProgram(program: WebGLProgram | null): void;
+    deleteRenderbuffer(renderbuffer: WebGLRenderbuffer | null): void;
+    deleteShader(shader: WebGLShader | null): void;
+    deleteTexture(texture: WebGLTexture | null): void;
     depthFunc(func: number): void;
     depthMask(flag: boolean): void;
     depthRange(zNear: number, zFar: number): void;
-    detachShader(program: WebGLProgram, shader: WebGLShader): void;
+    detachShader(program: WebGLProgram | null, shader: WebGLShader | null): void;
     disable(cap: number): void;
     disableVertexAttribArray(index: number): void;
     drawArrays(mode: number, first: number, count: number): void;
@@ -12005,51 +12011,51 @@ interface WebGLRenderingContext {
     enableVertexAttribArray(index: number): void;
     finish(): void;
     flush(): void;
-    framebufferRenderbuffer(target: number, attachment: number, renderbuffertarget: number, renderbuffer: WebGLRenderbuffer): void;
-    framebufferTexture2D(target: number, attachment: number, textarget: number, texture: WebGLTexture, level: number): void;
+    framebufferRenderbuffer(target: number, attachment: number, renderbuffertarget: number, renderbuffer: WebGLRenderbuffer | null): void;
+    framebufferTexture2D(target: number, attachment: number, textarget: number, texture: WebGLTexture | null, level: number): void;
     frontFace(mode: number): void;
     generateMipmap(target: number): void;
-    getActiveAttrib(program: WebGLProgram, index: number): WebGLActiveInfo;
-    getActiveUniform(program: WebGLProgram, index: number): WebGLActiveInfo;
-    getAttachedShaders(program: WebGLProgram): WebGLShader[];
-    getAttribLocation(program: WebGLProgram, name: string): number;
+    getActiveAttrib(program: WebGLProgram | null, index: number): WebGLActiveInfo | null;
+    getActiveUniform(program: WebGLProgram | null, index: number): WebGLActiveInfo | null;
+    getAttachedShaders(program: WebGLProgram | null): WebGLShader[] | null;
+    getAttribLocation(program: WebGLProgram | null, name: string): number;
     getBufferParameter(target: number, pname: number): any;
     getContextAttributes(): WebGLContextAttributes;
     getError(): number;
     getExtension(name: string): any;
     getFramebufferAttachmentParameter(target: number, attachment: number, pname: number): any;
     getParameter(pname: number): any;
-    getProgramInfoLog(program: WebGLProgram): string;
-    getProgramParameter(program: WebGLProgram, pname: number): any;
+    getProgramInfoLog(program: WebGLProgram | null): string | null;
+    getProgramParameter(program: WebGLProgram | null, pname: number): any;
     getRenderbufferParameter(target: number, pname: number): any;
-    getShaderInfoLog(shader: WebGLShader): string;
-    getShaderParameter(shader: WebGLShader, pname: number): any;
-    getShaderPrecisionFormat(shadertype: number, precisiontype: number): WebGLShaderPrecisionFormat;
-    getShaderSource(shader: WebGLShader): string;
-    getSupportedExtensions(): string[];
+    getShaderInfoLog(shader: WebGLShader | null): string | null;
+    getShaderParameter(shader: WebGLShader | null, pname: number): any;
+    getShaderPrecisionFormat(shadertype: number, precisiontype: number): WebGLShaderPrecisionFormat | null;
+    getShaderSource(shader: WebGLShader | null): string | null;
+    getSupportedExtensions(): string[] | null;
     getTexParameter(target: number, pname: number): any;
-    getUniform(program: WebGLProgram, location: WebGLUniformLocation): any;
-    getUniformLocation(program: WebGLProgram, name: string): WebGLUniformLocation;
+    getUniform(program: WebGLProgram | null, location: WebGLUniformLocation | null): any;
+    getUniformLocation(program: WebGLProgram | null, name: string): WebGLUniformLocation | null;
     getVertexAttrib(index: number, pname: number): any;
     getVertexAttribOffset(index: number, pname: number): number;
     hint(target: number, mode: number): void;
-    isBuffer(buffer: WebGLBuffer): boolean;
+    isBuffer(buffer: WebGLBuffer | null): boolean;
     isContextLost(): boolean;
     isEnabled(cap: number): boolean;
-    isFramebuffer(framebuffer: WebGLFramebuffer): boolean;
-    isProgram(program: WebGLProgram): boolean;
-    isRenderbuffer(renderbuffer: WebGLRenderbuffer): boolean;
-    isShader(shader: WebGLShader): boolean;
-    isTexture(texture: WebGLTexture): boolean;
+    isFramebuffer(framebuffer: WebGLFramebuffer | null): boolean;
+    isProgram(program: WebGLProgram | null): boolean;
+    isRenderbuffer(renderbuffer: WebGLRenderbuffer | null): boolean;
+    isShader(shader: WebGLShader | null): boolean;
+    isTexture(texture: WebGLTexture | null): boolean;
     lineWidth(width: number): void;
-    linkProgram(program: WebGLProgram): void;
+    linkProgram(program: WebGLProgram | null): void;
     pixelStorei(pname: number, param: number): void;
     polygonOffset(factor: number, units: number): void;
-    readPixels(x: number, y: number, width: number, height: number, format: number, type: number, pixels: ArrayBufferView): void;
+    readPixels(x: number, y: number, width: number, height: number, format: number, type: number, pixels: ArrayBufferView | null): void;
     renderbufferStorage(target: number, internalformat: number, width: number, height: number): void;
     sampleCoverage(value: number, invert: boolean): void;
     scissor(x: number, y: number, width: number, height: number): void;
-    shaderSource(shader: WebGLShader, source: string): void;
+    shaderSource(shader: WebGLShader | null, source: string): void;
     stencilFunc(func: number, ref: number, mask: number): void;
     stencilFuncSeparate(face: number, func: number, ref: number, mask: number): void;
     stencilMask(mask: number): void;
@@ -12068,27 +12074,27 @@ interface WebGLRenderingContext {
     texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, canvas: HTMLCanvasElement): void;
     texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, video: HTMLVideoElement): void;
     texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, pixels: ImageData): void;
-    uniform1f(location: WebGLUniformLocation, x: number): void;
+    uniform1f(location: WebGLUniformLocation | null, x: number): void;
     uniform1fv(location: WebGLUniformLocation, v: Float32Array | number[]): void;
-    uniform1i(location: WebGLUniformLocation, x: number): void;
+    uniform1i(location: WebGLUniformLocation | null, x: number): void;
     uniform1iv(location: WebGLUniformLocation, v: Int32Array | number[]): void;
-    uniform2f(location: WebGLUniformLocation, x: number, y: number): void;
+    uniform2f(location: WebGLUniformLocation | null, x: number, y: number): void;
     uniform2fv(location: WebGLUniformLocation, v: Float32Array | number[]): void;
-    uniform2i(location: WebGLUniformLocation, x: number, y: number): void;
+    uniform2i(location: WebGLUniformLocation | null, x: number, y: number): void;
     uniform2iv(location: WebGLUniformLocation, v: Int32Array | number[]): void;
-    uniform3f(location: WebGLUniformLocation, x: number, y: number, z: number): void;
+    uniform3f(location: WebGLUniformLocation | null, x: number, y: number, z: number): void;
     uniform3fv(location: WebGLUniformLocation, v: Float32Array | number[]): void;
-    uniform3i(location: WebGLUniformLocation, x: number, y: number, z: number): void;
+    uniform3i(location: WebGLUniformLocation | null, x: number, y: number, z: number): void;
     uniform3iv(location: WebGLUniformLocation, v: Int32Array | number[]): void;
-    uniform4f(location: WebGLUniformLocation, x: number, y: number, z: number, w: number): void;
+    uniform4f(location: WebGLUniformLocation | null, x: number, y: number, z: number, w: number): void;
     uniform4fv(location: WebGLUniformLocation, v: Float32Array | number[]): void;
-    uniform4i(location: WebGLUniformLocation, x: number, y: number, z: number, w: number): void;
+    uniform4i(location: WebGLUniformLocation | null, x: number, y: number, z: number, w: number): void;
     uniform4iv(location: WebGLUniformLocation, v: Int32Array | number[]): void;
     uniformMatrix2fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | number[]): void;
     uniformMatrix3fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | number[]): void;
     uniformMatrix4fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | number[]): void;
-    useProgram(program: WebGLProgram): void;
-    validateProgram(program: WebGLProgram): void;
+    useProgram(program: WebGLProgram | null): void;
+    validateProgram(program: WebGLProgram | null): void;
     vertexAttrib1f(indx: number, x: number): void;
     vertexAttrib1fv(indx: number, values: Float32Array | number[]): void;
     vertexAttrib2f(indx: number, x: number, y: number): void;
@@ -12998,7 +13004,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     open(url?: string, target?: string, features?: string, replace?: boolean): Window;
     postMessage(message: any, targetOrigin: string, transfer?: any[]): void;
     print(): void;
-    prompt(message?: string, _default?: string): string;
+    prompt(message?: string, _default?: string): string | null;
     releaseEvents(): void;
     requestAnimationFrame(callback: FrameRequestCallback): number;
     resizeBy(x?: number, y?: number): void;
@@ -13151,7 +13157,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     withCredentials: boolean;
     abort(): void;
     getAllResponseHeaders(): string;
-    getResponseHeader(header: string): string;
+    getResponseHeader(header: string): string | null;
     msCachingEnabled(): boolean;
     open(method: string, url: string, async?: boolean, user?: string, password?: string): void;
     overrideMimeType(mime: string): void;
@@ -13675,14 +13681,6 @@ interface ProgressEventInit extends EventInit {
     total?: number;
 }
 
-interface HTMLPictureElement extends HTMLElement {
-}
-
-declare var HTMLPictureElement: {
-    prototype: HTMLPictureElement;
-    new(): HTMLPictureElement;
-}
-
 interface ClipboardEventInit extends EventInit {
     data?: string;
     dataType?: string;
@@ -13896,7 +13894,7 @@ declare function msWriteProfilerMark(profilerMarkName: string): void;
 declare function open(url?: string, target?: string, features?: string, replace?: boolean): Window;
 declare function postMessage(message: any, targetOrigin: string, transfer?: any[]): void;
 declare function print(): void;
-declare function prompt(message?: string, _default?: string): string;
+declare function prompt(message?: string, _default?: string): string | null;
 declare function releaseEvents(): void;
 declare function requestAnimationFrame(callback: FrameRequestCallback): number;
 declare function resizeBy(x?: number, y?: number): void;
