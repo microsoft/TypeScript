@@ -526,6 +526,7 @@ var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
 
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
+var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 compileFile(
     tsserverLibraryFile,
     languageServiceLibrarySources,
@@ -536,7 +537,7 @@ compileFile(
 
 // Local target to build the language service server library
 desc("Builds language service server library");
-task("lssl", [tsserverLibraryFile]);
+task("lssl", [tsserverLibraryFile, tsserverLibraryDefinitionFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
@@ -596,7 +597,7 @@ task("generate-spec", [specMd]);
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local", "lssl"].concat(libraryTargets), function() {
-    var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile].concat(libraryTargets);
+    var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });
