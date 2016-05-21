@@ -370,7 +370,7 @@ namespace ts {
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
                         let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
-                        return candidate && findRightmostToken(candidate)
+                        return candidate && findRightmostToken(candidate);
                     }
                     else {
                         // candidate should be in this node
@@ -490,8 +490,8 @@ namespace ts {
         return forEach(commentRanges, jsDocPrefix);
 
         function jsDocPrefix(c: CommentRange): boolean {
-            var text = sourceFile.text;
-            return text.length >= c.pos + 3 && text[c.pos] === '/' && text[c.pos + 1] === '*' && text[c.pos + 2] === '*';
+            const text = sourceFile.text;
+            return text.length >= c.pos + 3 && text[c.pos] === "/" && text[c.pos + 1] === "*" && text[c.pos + 2] === "*";
         }
     }
 
@@ -546,7 +546,7 @@ namespace ts {
         if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
         if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
 
-        return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
+        return result.length > 0 ? result.join(",") : ScriptElementKindModifier.none;
     }
 
     export function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node> {
@@ -629,7 +629,7 @@ namespace ts {
             // [a,b,c] from:
             // [a, b, c] = someExpression;
             if (node.parent.kind === SyntaxKind.BinaryExpression &&
-                (<BinaryExpression>node.parent).left === node && 
+                (<BinaryExpression>node.parent).left === node &&
                 (<BinaryExpression>node.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
                 return true;
             }
@@ -711,7 +711,7 @@ namespace ts {
         }
 
         function resetWriter() {
-            displayParts = []
+            displayParts = [];
             lineStart = true;
             indent = 0;
         }
@@ -768,7 +768,7 @@ namespace ts {
     }
 
     export function textOrKeywordPart(text: string) {
-        var kind = stringToToken(text);
+        const kind = stringToToken(text);
         return kind === undefined
             ? textPart(text)
             : keywordPart(kind);

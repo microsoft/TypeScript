@@ -32,7 +32,7 @@ namespace ts.server {
         children: ScriptInfo[] = [];     // files referenced by this file
         defaultProject: Project;      // project to use by default for file
         fileWatcher: FileWatcher;
-        formatCodeOptions = ts.clone(CompilerService.defaultFormatCodeOptions);
+        formatCodeOptions = ts.clone(CompilerService.getDefaultFormatCodeOptions(this.host));
         path: Path;
         scriptKind: ScriptKind;
 
@@ -533,7 +533,7 @@ namespace ts.server {
         // number becomes 0 for a watcher, then we should close it.
         directoryWatchersRefCount: ts.Map<number> = {};
         hostConfiguration: HostConfiguration;
-        timerForDetectingProjectFileListChanges: Map<NodeJS.Timer> = {};
+        timerForDetectingProjectFileListChanges: Map<any> = {};
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
@@ -542,7 +542,7 @@ namespace ts.server {
 
         addDefaultHostConfiguration() {
             this.hostConfiguration = {
-                formatCodeOptions: ts.clone(CompilerService.defaultFormatCodeOptions),
+                formatCodeOptions: ts.clone(CompilerService.getDefaultFormatCodeOptions(this.host)),
                 hostInfo: "Unknown host"
             };
         }
@@ -593,9 +593,9 @@ namespace ts.server {
 
         startTimerForDetectingProjectFileListChanges(project: Project) {
             if (this.timerForDetectingProjectFileListChanges[project.projectFilename]) {
-                clearTimeout(this.timerForDetectingProjectFileListChanges[project.projectFilename]);
+                this.host.clearTimeout(this.timerForDetectingProjectFileListChanges[project.projectFilename]);
             }
-            this.timerForDetectingProjectFileListChanges[project.projectFilename] = setTimeout(
+            this.timerForDetectingProjectFileListChanges[project.projectFilename] = this.host.setTimeout(
                 () => this.handleProjectFileListChanges(project),
                 250
             );
@@ -1382,23 +1382,25 @@ namespace ts.server {
             return ts.isExternalModule(sourceFile);
         }
 
-        static defaultFormatCodeOptions: ts.FormatCodeOptions = {
-            IndentSize: 4,
-            TabSize: 4,
-            NewLineCharacter: ts.sys ? ts.sys.newLine : "\n",
-            ConvertTabsToSpaces: true,
-            IndentStyle: ts.IndentStyle.Smart,
-            InsertSpaceAfterCommaDelimiter: true,
-            InsertSpaceAfterSemicolonInForStatements: true,
-            InsertSpaceBeforeAndAfterBinaryOperators: true,
-            InsertSpaceAfterKeywordsInControlFlowStatements: true,
-            InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-            InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-            InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-            InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-            PlaceOpenBraceOnNewLineForFunctions: false,
-            PlaceOpenBraceOnNewLineForControlBlocks: false,
-        };
+        static getDefaultFormatCodeOptions(host: ServerHost): ts.FormatCodeOptions {
+            return ts.clone({
+                IndentSize: 4,
+                TabSize: 4,
+                NewLineCharacter: host.newLine || "\n",
+                ConvertTabsToSpaces: true,
+                IndentStyle: ts.IndentStyle.Smart,
+                InsertSpaceAfterCommaDelimiter: true,
+                InsertSpaceAfterSemicolonInForStatements: true,
+                InsertSpaceBeforeAndAfterBinaryOperators: true,
+                InsertSpaceAfterKeywordsInControlFlowStatements: true,
+                InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
+                InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+                InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+                InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
+                PlaceOpenBraceOnNewLineForFunctions: false,
+                PlaceOpenBraceOnNewLineForControlBlocks: false,
+            });
+        }
     }
 
     export interface LineCollection {
