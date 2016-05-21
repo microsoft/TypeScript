@@ -1,0 +1,48 @@
+=== tests/cases/compiler/a.ts ===
+
+export class A {
+>A : A
+
+    static M: number;
+>M : number
+}
+
+=== tests/cases/compiler/b.ts ===
+import {A} from  "./a";
+>A : typeof A
+
+namespace A {
+>A : typeof A
+
+    export interface I { }
+>I : I
+}
+var x: A.I;
+>x : A.I
+>A : any
+>I : A.I
+
+var y = A.M;
+>y : number
+>A.M : number
+>A : typeof A
+>M : number
+
+export = A;
+>A : A
+
+=== tests/cases/compiler/c.ts ===
+import * as B from "./b";
+>B : typeof B
+
+var x: B.I;
+>x : B.I
+>B : any
+>I : B.I
+
+var y = B.M;
+>y : number
+>B.M : number
+>B : typeof B
+>M : number
+

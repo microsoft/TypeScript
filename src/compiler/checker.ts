@@ -969,7 +969,7 @@ namespace ts {
             if (node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
                 return resolveExternalModuleSymbol(resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node)));
             }
-            return getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>node.moduleReference, node);
+            return flattenMergedAliasSymbol(getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>node.moduleReference, node));
         }
 
         function getTargetOfImportClause(node: ImportClause): Symbol {
@@ -1083,11 +1083,25 @@ namespace ts {
         function getTargetOfExportSpecifier(node: ExportSpecifier): Symbol {
             return (<ExportDeclaration>node.parent.parent).moduleSpecifier ?
                 getExternalModuleMember(<ExportDeclaration>node.parent.parent, node) :
-                resolveEntityName(node.propertyName || node.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
+                flattenMergedAliasSymbol(resolveEntityName(node.propertyName || node.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace));
         }
 
         function getTargetOfExportAssignment(node: ExportAssignment): Symbol {
-            return resolveEntityName(<Identifier>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
+            return flattenMergedAliasSymbol(resolveEntityName(<Identifier>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace));
+        }
+
+        function flattenMergedAliasSymbol(symbol: Symbol): Symbol {
+            if (!symbol || !(symbol.flags & SymbolFlags.Alias)) {
+                return symbol;
+            }
+            const resolvedAliasSymbol = flattenMergedAliasSymbol(resolveAlias(symbol));
+            const result = createSymbol((symbol.flags & ~SymbolFlags.Alias) | resolvedAliasSymbol.flags, symbol.name);
+            result.declarations = concatenate(filter(symbol.declarations, d => !isAliasSymbolDeclaration(d)), resolvedAliasSymbol.declarations);
+            result.parent = symbol.parent || resolvedAliasSymbol.parent;
+            result.valueDeclaration = symbol.valueDeclaration || resolvedAliasSymbol.valueDeclaration;
+            mergeSymbolTable(result.members = cloneSymbolTable(symbol.members), resolvedAliasSymbol.members);
+            mergeSymbolTable(result.exports = cloneSymbolTable(symbol.exports), resolvedAliasSymbol.exports);
+            return result;
         }
 
         function getTargetOfAliasDeclaration(node: Declaration): Symbol {

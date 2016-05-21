@@ -1,0 +1,48 @@
+=== tests/cases/compiler/a.ts ===
+
+export class A {
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+    static M: number;
+>M : Symbol(A.M, Decl(a.ts, 1, 16))
+}
+
+=== tests/cases/compiler/b.ts ===
+import {A} from  "./a";
+>A : Symbol(A, Decl(b.ts, 0, 8), Decl(b.ts, 0, 23))
+
+namespace A {
+>A : Symbol(A, Decl(b.ts, 0, 8), Decl(b.ts, 0, 23))
+
+    export interface I { }
+>I : Symbol(I, Decl(b.ts, 1, 13))
+}
+var x: A.I;
+>x : Symbol(x, Decl(b.ts, 4, 3))
+>A : Symbol(A, Decl(b.ts, 0, 8), Decl(b.ts, 0, 23))
+>I : Symbol(A.I, Decl(b.ts, 1, 13))
+
+var y = A.M;
+>y : Symbol(y, Decl(b.ts, 5, 3))
+>A.M : Symbol(A.M, Decl(a.ts, 1, 16))
+>A : Symbol(A, Decl(b.ts, 0, 8), Decl(b.ts, 0, 23))
+>M : Symbol(A.M, Decl(a.ts, 1, 16))
+
+export = A;
+>A : Symbol(A, Decl(b.ts, 0, 8), Decl(b.ts, 0, 23))
+
+=== tests/cases/compiler/c.ts ===
+import * as B from "./b";
+>B : Symbol(B, Decl(c.ts, 0, 6))
+
+var x: B.I;
+>x : Symbol(x, Decl(c.ts, 1, 3))
+>B : Symbol(B, Decl(c.ts, 0, 6))
+>I : Symbol(B.I, Decl(b.ts, 1, 13))
+
+var y = B.M;
+>y : Symbol(y, Decl(c.ts, 2, 3))
+>B.M : Symbol(A.M, Decl(a.ts, 1, 16))
+>B : Symbol(B, Decl(c.ts, 0, 6))
+>M : Symbol(A.M, Decl(a.ts, 1, 16))
+
