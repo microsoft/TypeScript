@@ -1,0 +1,26 @@
+=== tests/cases/compiler/server.ts ===
+
+var foo = 2;
+>foo : number
+>2 : number
+
+foo = 3;
+>foo = 3 : number
+>foo : number
+>3 : number
+
+var baz = 3;
+>baz : number
+>3 : number
+
+baz = 4;
+>baz = 4 : number
+>baz : number
+>4 : number
+
+export { foo, baz, baz as quux };
+>foo : number
+>baz : number
+>baz : number
+>quux : number
+
