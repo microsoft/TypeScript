@@ -140,6 +140,11 @@ namespace ts {
             type: "boolean",
         },
         {
+            name: "skipLibCheck",
+            type: "boolean",
+            description: Diagnostics.Skip_type_checking_of_declaration_files,
+        },
+        {
             name: "out",
             type: "string",
             isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
