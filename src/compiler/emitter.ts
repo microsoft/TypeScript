@@ -2613,6 +2613,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 return isSourceFileLevelDeclarationInSystemJsModule(targetDeclaration, /*isExported*/ true);
             }
 
+            function isNameOfExportedSourceLevelDeclarationInClauseModule(node: Node): boolean {
+                if (modulekind === ModuleKind.System || node.kind !== SyntaxKind.Identifier || nodeIsSynthesized(node)) {
+                    return false;
+                }
+
+                return !exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, (<Identifier>node).text);
+            }
+
             function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
                 const exportChanged = (node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) &&
                     isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
@@ -2783,16 +2791,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     emitDestructuring(node, node.parent.kind === SyntaxKind.ExpressionStatement);
                 }
                 else {
-                    const exportChanged =
+                    const externalExportChanged =
                         node.operatorToken.kind >= SyntaxKind.FirstAssignment &&
                         node.operatorToken.kind <= SyntaxKind.LastAssignment &&
                         isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.left);
 
-                    if (exportChanged) {
+                    if (externalExportChanged) {
                         // emit assignment 'x <op> y' as 'exports("x", x <op> y)'
                         write(`${exportFunctionForFile}("`);
                         emitNodeWithoutSourceMap(node.left);
                         write(`", `);
+                    }
+
+                    const internalExportClauseMemberChanged =
+                        node.operatorToken.kind >= SyntaxKind.FirstAssignment &&
+                        node.operatorToken.kind <= SyntaxKind.LastAssignment &&
+                        isNameOfExportedSourceLevelDeclarationInClauseModule(node.left);
+
+                    if (internalExportClauseMemberChanged) {
+                        for (const specifier of exportSpecifiers[(<Identifier>node.left).text]) {
+                            emitStart(specifier.name);
+                            emitContainingModuleName(specifier);
+                            write(".");
+                            emitNodeWithCommentsAndWithoutSourcemap(specifier.name);
+                            emitEnd(specifier.name);
+                            write(" = ");
+                        }
                     }
 
                     if (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskToken || node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken) {
@@ -2815,7 +2839,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         decreaseIndentIf(indentedBeforeOperator, indentedAfterOperator);
                     }
 
-                    if (exportChanged) {
+                    if (externalExportChanged) {
                         write(")");
                     }
                 }
