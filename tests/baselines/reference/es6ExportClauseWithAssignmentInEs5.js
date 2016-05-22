@@ -17,4 +17,4 @@ exports.foo = foo = 3;
 var baz = 3;
 exports.baz = baz;
 exports.quux = baz;
-exports.quux = exports.baz = baz = 4;
+exports.baz = exports.quux = baz = 4;
