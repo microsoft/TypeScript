@@ -115,8 +115,8 @@ function f5() {
 >f5 : () => void
 
     let { x }: { x?: string | number } = { x: 1 };
->x : string | number | undefined
->x : string | number | undefined
+>x : string | number
+>x : string | number
 >{ x: 1 } : { x: number; }
 >x : number
 >1 : number
@@ -150,12 +150,12 @@ function f6() {
 >f6 : () => void
 
     let { x }: { x?: string | number } = {};
->x : string | number | undefined
->x : string | number | undefined
+>x : string | number
+>x : string | number
 >{} : {}
 
     x;
->x : string | number | undefined
+>x : string | number
 
     let { y }: { y?: string | undefined } = {};
 >y : string | undefined

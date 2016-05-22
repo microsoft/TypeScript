@@ -8,9 +8,9 @@ for (const x of ["a", "b"]) {
 >"b" : string
 
     x.substring;
->x.substring : (start: number, end?: number | undefined) => string
+>x.substring : (start: number, end?: number) => string
 >x : string
->substring : (start: number, end?: number | undefined) => string
+>substring : (start: number, end?: number) => string
 }
 
 // Spread
