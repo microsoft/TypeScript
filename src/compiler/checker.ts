@@ -11568,7 +11568,7 @@ namespace ts {
                 let types: Type[];
                 const funcIsGenerator = !!func.asteriskToken;
                 if (funcIsGenerator) {
-                    types = checkAndAggregateYieldOperandTypes(<Block>func.body, contextualMapper);
+                    types = checkAndAggregateYieldOperandTypes(func, contextualMapper);
                     if (types.length === 0) {
                         const iterableIteratorAny = createIterableIteratorType(anyType);
                         if (compilerOptions.noImplicitAny) {
@@ -11579,8 +11579,7 @@ namespace ts {
                     }
                 }
                 else {
-                    const hasImplicitReturn = !!(func.flags & NodeFlags.HasImplicitReturn);
-                    types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper, isAsync, hasImplicitReturn);
+                    types = checkAndAggregateReturnExpressionTypes(func, contextualMapper);
                     if (!types) {
                         return neverType;
                     }
@@ -11638,10 +11637,10 @@ namespace ts {
             }
         }
 
-        function checkAndAggregateYieldOperandTypes(body: Block, contextualMapper?: TypeMapper): Type[] {
+        function checkAndAggregateYieldOperandTypes(func: FunctionLikeDeclaration, contextualMapper: TypeMapper): Type[] {
             const aggregatedTypes: Type[] = [];
 
-            forEachYieldExpression(body, yieldExpression => {
+            forEachYieldExpression(<Block>func.body, yieldExpression => {
                 const expr = yieldExpression.expression;
                 if (expr) {
                     let type = checkExpressionCached(expr, contextualMapper);
@@ -11660,10 +11659,12 @@ namespace ts {
             return aggregatedTypes;
         }
 
-        function checkAndAggregateReturnExpressionTypes(body: Block, contextualMapper: TypeMapper, isAsync: boolean, hasImplicitReturn: boolean): Type[] {
+        function checkAndAggregateReturnExpressionTypes(func: FunctionLikeDeclaration, contextualMapper: TypeMapper): Type[] {
+            const isAsync = isAsyncFunctionLike(func);
             const aggregatedTypes: Type[] = [];
-            let hasOmittedExpressions = false;
-            forEachReturnStatement(body, returnStatement => {
+            let hasReturnWithNoExpression = !!(func.flags & NodeFlags.HasImplicitReturn);
+            let hasReturnOfTypeNever = false;
+            forEachReturnStatement(<Block>func.body, returnStatement => {
                 const expr = returnStatement.expression;
                 if (expr) {
                     let type = checkExpressionCached(expr, contextualMapper);
@@ -11672,20 +11673,24 @@ namespace ts {
                         // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
                         // return type of the body should be unwrapped to its awaited type, which should be wrapped in
                         // the native Promise<T> type by the caller.
-                        type = checkAwaitedType(type, body.parent, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
+                        type = checkAwaitedType(type, func, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
                     }
-                    if (type !== neverType && !contains(aggregatedTypes, type)) {
+                    if (type === neverType) {
+                        hasReturnOfTypeNever = true;
+                    }
+                    else if (!contains(aggregatedTypes, type)) {
                         aggregatedTypes.push(type);
                     }
                 }
                 else {
-                    hasOmittedExpressions = true;
+                    hasReturnWithNoExpression = true;
                 }
             });
-            if (aggregatedTypes.length === 0 && !hasOmittedExpressions && !hasImplicitReturn) {
+            if (aggregatedTypes.length === 0 && !hasReturnWithNoExpression && (hasReturnOfTypeNever ||
+                func.kind === SyntaxKind.FunctionExpression || func.kind === SyntaxKind.ArrowFunction)) {
                 return undefined;
             }
-            if (strictNullChecks && aggregatedTypes.length && (hasOmittedExpressions || hasImplicitReturn)) {
+            if (strictNullChecks && aggregatedTypes.length && hasReturnWithNoExpression) {
                 if (!contains(aggregatedTypes, undefinedType)) {
                     aggregatedTypes.push(undefinedType);
                 }
