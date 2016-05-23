@@ -223,12 +223,20 @@ namespace RWC {
 class RWCRunner extends RunnerBase {
     private static sourcePath = "internal/cases/rwc/";
 
+    public enumerateTestFiles() {
+        return Harness.IO.listFiles(RWCRunner.sourcePath, /.+\.json$/);
+    }
+
+    public kind(): TestRunnerKind {
+        return "rwc";
+    }
+
     /** Setup the runner's tests so that they are ready to be executed by the harness
      *  The first test should be a describe/it block that sets up the harness's compiler instance appropriately
      */
     public initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = Harness.IO.listFiles(RWCRunner.sourcePath, /.+\.json$/);
+        const testList = this.enumerateTestFiles();
         for (let i = 0; i < testList.length; i++) {
             this.runTest(testList[i]);
         }

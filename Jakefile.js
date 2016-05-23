@@ -680,9 +680,9 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, light, testConfigFile) {
-    console.log('Running test(s): ' + tests);
-    var testConfigContents = JSON.stringify({ test: [tests], light: light });
+function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, testConfigFile) {
+    var testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light: light, workerCount: workerCount, taskConfigsFolder: taskConfigsFolder });
+    console.log('Running tests with config: ' + testConfigContents);
     fs.writeFileSync('test.config', testConfigContents);
 }
 
@@ -692,7 +692,7 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
-function runConsoleTests(defaultReporter, defaultSubsets) {
+function runConsoleTests(defaultReporter, runInParallel) {
     cleanTestDirs();
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
@@ -701,9 +701,22 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
+    var workerCount, taskConfigsFolder;
+    if (runInParallel) {
+        // generate name to store task configuration files
+        var prefix = os.tmpdir() + "/ts-tests";
+        var i = 1;
+        do {
+            taskConfigsFolder = prefix + i;
+            i++;
+        } while (fs.existsSync(taskConfigsFolder));
+        fs.mkdirSync(taskConfigsFolder);
 
-    if (tests || light) {
-        writeTestConfigFile(tests, light, testConfigFile);
+        workerCount = process.env.workerCount || os.cpus().length;
+    }
+
+    if (tests || light || taskConfigsFolder) {
+        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, testConfigFile);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -717,45 +730,71 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
 
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
-    var subsetRegexes;
-    if(defaultSubsets.length === 0) {
-        subsetRegexes = [tests];
-    }
-    else {
-        var subsets = tests ? tests.split("|") : defaultSubsets;
-        subsetRegexes = subsets.map(function (sub) { return "^" + sub + ".*$"; });
-        subsetRegexes.push("^(?!" + subsets.join("|") + ").*$");
-    }
-    subsetRegexes.forEach(function (subsetRegex, i) {
-        tests = subsetRegex ? ' -g "' + subsetRegex + '"' : '';
+    if(!runInParallel) {
+        tests = tests ? ' -g "' + tests + '"' : '';
         var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
-        function finish() {
-            deleteTemporaryProjectOutput();
-            complete();
-        }
         exec(cmd, function () {
-            if (lintFlag && i === 0) {
-                var lint = jake.Task['lint'];
-                lint.addListener('complete', function () {
-                    complete();
-                });
-                lint.invoke();
+            if (i === 0) {
+                runLinter();
             }
             finish();
         }, finish);
-    });
+        
+    }
+    else {
+        // run task to load all tests and partition then between workers 
+        var cmd = "mocha " + " -R min " + colors + run;
+        console.log(cmd);
+        exec(cmd, function() {
+            // read all configuration files and spawn a worker for every config
+            var configFiles = fs.readdirSync(taskConfigsFolder);
+            var counter = configFiles.length;
+            // schedule work for chunks
+            configFiles.forEach(function (f) {
+                var configPath = path.join(taskConfigsFolder, f);
+                var workerCmd = "mocha" + " -t " + testTimeout + " -R " + reporter + " " + colors + " " + run + " --config='" + configPath + "'";
+                console.log(workerCmd);
+                exec(workerCmd, finishWorker, finishWorker) 
+            });
+            
+            function finishWorker() {
+                counter--;
+                if (counter === 0) {
+                    // last worker clean everything and runs linter
+                    runLinter();
+                    deleteTemporaryProjectOutput();
+                    jake.rmRf(taskConfigsFolder);
+                }
+                complete();
+            }
+        });
+    }
+    function finish() {
+        deleteTemporaryProjectOutput();
+        complete();
+    }
+    function runLinter() {
+        if (!lintFlag) {
+            return;
+        }
+        var lint = jake.Task['lint'];
+        lint.addListener('complete', function () {
+            complete();
+        });
+        lint.invoke();
+    }
 }
 
 var testTimeout = 20000;
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
 task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function() {
-    runConsoleTests('min', ['compiler', 'conformance', 'Projects', 'fourslash']);
+    runConsoleTests('min', /*runInParallel*/ true);
 }, {async: true});
 
 desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true.");
 task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
-    runConsoleTests('mocha-fivemat-progress-reporter', []);
+    runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);
 }, {async: true});
 
 desc("Generates code coverage data via instanbul");

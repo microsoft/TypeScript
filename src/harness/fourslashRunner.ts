@@ -12,7 +12,7 @@ const enum FourSlashTestType {
 
 class FourSlashRunner extends RunnerBase {
     protected basePath: string;
-    protected testSuiteName: string;
+    protected testSuiteName: TestRunnerKind;
 
     constructor(private testType: FourSlashTestType) {
         super();
@@ -36,9 +36,17 @@ class FourSlashRunner extends RunnerBase {
         }
     }
 
+    public enumerateTestFiles() {
+        return this.enumerateFiles(this.basePath, /\.ts/i, { recursive: false });
+    }
+
+    public kind() {
+        return this.testSuiteName;
+    }
+
     public initializeTests() {
         if (this.tests.length === 0) {
-            this.tests = this.enumerateFiles(this.basePath, /\.ts/i, { recursive: false });
+            this.tests = this.enumerateTestFiles();
         }
 
         describe(this.testSuiteName + " tests", () => {

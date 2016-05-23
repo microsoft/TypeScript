@@ -37,11 +37,19 @@ interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
 }
 
 class ProjectRunner extends RunnerBase {
+
+    public enumerateTestFiles() {
+        return this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
+    }
+
+    public kind(): TestRunnerKind {
+        return "project";
+    }
+
     public initializeTests() {
         if (this.tests.length === 0) {
-            const testFiles = this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
+            const testFiles = this.enumerateTestFiles();
             testFiles.forEach(fn => {
-                fn = fn.replace(/\\/g, "/");
                 this.runProjectTestCase(fn);
             });
         }
