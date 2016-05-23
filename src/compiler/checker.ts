@@ -6860,7 +6860,7 @@ namespace ts {
             }
 
             const resolved = <ResolvedType>type;
-            const members = transformTypeOfMembers(type, prop => prop.flags & TypeFlags.FreshObjectLiteral ? getRegularTypeOfObjectLiteral(prop) : prop);
+            const members = transformTypeOfMembers(type, getRegularTypeOfObjectLiteral);
             const regularNew = createAnonymousType(resolved.symbol,
                                                    members,
                                                    resolved.callSignatures,
