@@ -980,7 +980,7 @@ namespace ts {
 
         // or load all types from the automatic type import fields
         if (host && host.getDefaultTypeDirectiveNames) {
-            const commonRoot = computeCommonSourceDirectoryOfFilenames(rootFiles, host.getCurrentDirectory(), host.getCanonicalFileName);
+            const commonRoot = computeCommonSourceDirectoryOfFilenames(rootFiles, host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
             if (commonRoot) {
                 return host.getDefaultTypeDirectiveNames(commonRoot);
             }
