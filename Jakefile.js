@@ -976,6 +976,7 @@ var servicesLintTargets = [
 var lintTargets = compilerSources
     .concat(harnessCoreSources)
     .concat(serverCoreSources)
+    .concat(["client.ts"].map(function(f) { return path.join(serverDirectory, f); }))
     .concat(tslintRulesFiles)
     .concat(servicesLintTargets);
 
