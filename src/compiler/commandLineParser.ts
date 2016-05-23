@@ -391,7 +391,8 @@ namespace ts {
                     "es2015.symbol": "lib.es2015.symbol.d.ts",
                     "es2015.symbol.wellknown": "lib.es2015.symbol.wellknown.d.ts",
                     "es2016.array.include": "lib.es2016.array.include.d.ts",
-                    "es2017.object": "lib.es2017.object.d.ts"
+                    "es2017.object": "lib.es2017.object.d.ts",
+                    "es2017.sharedmemory": "lib.es2017.sharedmemory.d.ts"
                 },
             },
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
