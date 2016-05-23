@@ -972,6 +972,23 @@ namespace ts {
         return resolutions;
     }
 
+    export function getDefaultTypeDirectiveNames(options: CompilerOptions, rootFiles: string[], host: CompilerHost): string[] {
+        // Use explicit type list from tsconfig.json
+        if (options.types) {
+            return options.types;
+        }
+
+        // or load all types from the automatic type import fields
+        if (host && host.getDefaultTypeDirectiveNames) {
+            const commonRoot = computeCommonSourceDirectoryOfFilenames(rootFiles, host.getCurrentDirectory(), host.getCanonicalFileName);
+            if (commonRoot) {
+                return host.getDefaultTypeDirectiveNames(commonRoot);
+            }
+        }
+        
+        return undefined;
+    }
+
     export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
         let program: Program;
         let files: SourceFile[] = [];
@@ -1022,19 +1039,7 @@ namespace ts {
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
 
             // load type declarations specified via 'types' argument
-            let typeReferences: string[];
-            if (options.types) {
-                typeReferences = options.types;
-            }
-            else {
-                // or load all types from the automatic type import fields
-                if (host.getDefaultTypeDirectiveNames) {
-                    const commonRoot = getCommonSourceDirectory();
-                    if (commonRoot) {
-                        typeReferences = host.getDefaultTypeDirectiveNames(commonRoot);
-                    }
-                }
-            }
+            let typeReferences: string[] = getDefaultTypeDirectiveNames(options, rootNames, host);
 
             if (typeReferences) {
                 const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, /*containingFile*/ undefined);
