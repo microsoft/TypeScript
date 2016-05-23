@@ -2812,8 +2812,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     if (languageVersion === ScriptTarget.ES3 && name.text === "default") {
                         write('["default"]');
                     }
-                    write(".");
-                    emitNodeWithCommentsAndWithoutSourcemap(specifier.name);
+                    else {
+                        write(".");
+                        emitNodeWithCommentsAndWithoutSourcemap(specifier.name);
+                    }
                     emitEnd(specifier.name);
                     write(" = ");
                 }
