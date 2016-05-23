@@ -443,7 +443,7 @@
         "category": "Error",
         "code": 1147
     },
-    "Cannot compile modules unless the '--module' flag is provided with a valid module type. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
+    "Cannot use imports, exports, or module augmentations when '--module' is 'none'.": {
         "category": "Error",
         "code": 1148
     },
@@ -2296,7 +2296,7 @@
         "category": "Error",
         "code": 5062
     },
-    "Substututions for pattern '{0}' should be an array.": {
+    "Substitutions for pattern '{0}' should be an array.": {
         "category": "Error",
         "code": 5063
     },
@@ -2755,7 +2755,12 @@
     "Resolving real path for '{0}', result '{1}'": {
         "category": "Message",
         "code": 6130
-    },    
+    },
+    "Cannot compile modules using option '{0}' unless the '--module' flag is 'amd' or 'system'.": {
+        "category": "Error",
+        "code": 6131
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
