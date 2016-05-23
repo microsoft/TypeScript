@@ -6846,9 +6846,10 @@ namespace ts {
             return members;
         }
 
-        /** Mark an object literal as exempt from the excess properties check.
-         *  Recursively mark object literal members as exempt.
-         *  Leave signatures alone since they are not subject to the check.
+        /**
+         * If the the provided object literal is subject to the excess properties check,
+         * create a new that is exempt. Recursively mark object literal members as exempt.
+         * Leave signatures alone since they are not subject to the check.
          */
         function getRegularTypeOfObjectLiteral(type: Type): Type {
             if (!(type.flags & TypeFlags.FreshObjectLiteral)) {
