@@ -2791,9 +2791,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     emitDestructuring(node, node.parent.kind === SyntaxKind.ExpressionStatement);
                 }
                 else {
-                    const externalExportChanged =
-                        node.operatorToken.kind >= SyntaxKind.FirstAssignment &&
-                        node.operatorToken.kind <= SyntaxKind.LastAssignment &&
+                    const isAssignment = isAssignmentOperator(node.operatorToken.kind);
+
+                    const externalExportChanged = isAssignment &&
                         isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.left);
 
                     if (externalExportChanged) {
@@ -2803,9 +2803,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         write(`", `);
                     }
 
-                    const internalExportClauseMemberChanged =
-                        node.operatorToken.kind >= SyntaxKind.FirstAssignment &&
-                        node.operatorToken.kind <= SyntaxKind.LastAssignment &&
+                    const internalExportClauseMemberChanged = isAssignment &&
                         isNameOfExportedSourceLevelDeclarationInClauseModule(node.left);
 
                     if (internalExportClauseMemberChanged) {
