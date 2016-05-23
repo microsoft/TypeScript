@@ -266,16 +266,21 @@ namespace ts.server {
         }
     }
 
+    const sys = <ServerHost>ts.sys;
+
     // Override sys.write because fs.writeSync is not reliable on Node 4
-    ts.sys.write = (s: string) => writeMessage(s);
-    ts.sys.watchFile = (fileName, callback) => {
+    sys.write = (s: string) => writeMessage(s);
+    sys.watchFile = (fileName, callback) => {
         const watchedFile = pollingWatchedFileSet.addFile(fileName, callback);
         return {
             close: () => pollingWatchedFileSet.removeFile(watchedFile)
         };
     };
 
-    const ioSession = new IOSession(ts.sys, logger);
+    sys.setTimeout = setTimeout;
+    sys.clearTimeout = clearTimeout;
+
+    const ioSession = new IOSession(sys, logger);
     process.on("uncaughtException", function(err: Error) {
         ioSession.logError(err, "unknown");
     });

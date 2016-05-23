@@ -22,9 +22,9 @@ class StringIterator {
         };
     }
     [Symbol.iterator]() {
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
         return this;
 >this : Symbol(StringIterator, Decl(for-of18.ts, 1, 33))

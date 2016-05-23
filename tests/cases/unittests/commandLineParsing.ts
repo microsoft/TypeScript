@@ -60,7 +60,7 @@ namespace ts {
             assertParseResult(["--lib", "es5,invalidOption", "0.ts"],
                 {
                     errors: [{
-                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'dom', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include'",
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'dom', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object'",
                         category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
@@ -217,7 +217,7 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'dom', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include'",
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'dom', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object'",
                         category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
@@ -237,7 +237,7 @@ namespace ts {
             assertParseResult(["--lib", "es5,", "es7", "0.ts"],
                 {
                     errors: [{
-                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'dom', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include'",
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'dom', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object'",
                         category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
@@ -257,7 +257,7 @@ namespace ts {
             assertParseResult(["--lib", "es5, ", "es7", "0.ts"],
                 {
                     errors: [{
-                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'dom', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include'",
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'dom', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object'",
                         category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 

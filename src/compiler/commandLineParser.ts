@@ -140,6 +140,11 @@ namespace ts {
             type: "boolean",
         },
         {
+            name: "skipLibCheck",
+            type: "boolean",
+            description: Diagnostics.Skip_type_checking_of_declaration_files,
+        },
+        {
             name: "out",
             type: "string",
             isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
@@ -375,6 +380,7 @@ namespace ts {
                     "es2015": "lib.es2015.d.ts",
                     "es7": "lib.es2016.d.ts",
                     "es2016": "lib.es2016.d.ts",
+                    "es2017": "lib.es2017.d.ts",
                     // Host only
                     "dom": "lib.dom.d.ts",
                     "webworker": "lib.webworker.d.ts",
@@ -389,7 +395,8 @@ namespace ts {
                     "es2015.reflect": "lib.es2015.reflect.d.ts",
                     "es2015.symbol": "lib.es2015.symbol.d.ts",
                     "es2015.symbol.wellknown": "lib.es2015.symbol.wellknown.d.ts",
-                    "es2016.array.include": "lib.es2016.array.include.d.ts"
+                    "es2016.array.include": "lib.es2016.array.include.d.ts",
+                    "es2017.object": "lib.es2017.object.d.ts"
                 },
             },
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
@@ -652,6 +659,9 @@ namespace ts {
         return output;
     }
 
+    // Skip over any minified JavaScript files (ending in ".min.js")
+    // Skip over dotted files and folders as well
+    const IgnoreFileNamePattern = /(\.min\.js$)|([\\/]\.[\w.])/;
     /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
@@ -664,6 +674,7 @@ namespace ts {
         const compilerOptions: CompilerOptions = convertCompilerOptionsFromJsonWorker(json["compilerOptions"], basePath, errors, configFileName);
         const options = extend(existingOptions, compilerOptions);
         const typingOptions: TypingOptions = convertTypingOptionsFromJsonWorker(json["typingOptions"], basePath, errors, configFileName);
+
         options.configFilePath = configFileName;
 
         const fileNames = getFileNames(errors);
@@ -672,6 +683,7 @@ namespace ts {
             options,
             fileNames,
             typingOptions,
+            raw: json,
             errors
         };
 
@@ -694,11 +706,11 @@ namespace ts {
                 }
                 else {
                     // by default exclude node_modules, and any specificied output directory
-                    exclude = ["node_modules"];
-                    const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
-                    if (outDir) {
-                        exclude.push(outDir);
-                    }
+                    exclude = ["node_modules", "bower_components", "jspm_packages"];
+                }
+                const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
+                if (outDir) {
+                    exclude.push(outDir);
                 }
                 exclude = map(exclude, normalizeSlashes);
 
@@ -715,8 +727,7 @@ namespace ts {
                             continue;
                         }
 
-                        // Skip over any minified JavaScript files (ending in ".min.js")
-                        if (/\.min\.js$/.test(fileName)) {
+                        if (IgnoreFileNamePattern.test(fileName)) {
                             continue;
                         }
 

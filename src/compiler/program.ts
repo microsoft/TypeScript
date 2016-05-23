@@ -570,22 +570,29 @@ namespace ts {
         let resolvedFileName = tryLoadModuleUsingOptionalResolutionSettings(moduleName, containingDirectory, nodeLoadModuleByRelativeName,
             failedLookupLocations, supportedExtensions, state);
 
-        if (resolvedFileName) {
-            return createResolvedModule(resolvedFileName, /*isExternalLibraryImport*/false, failedLookupLocations);
+        let isExternalLibraryImport = false;
+        if (!resolvedFileName)  {
+            if (moduleHasNonRelativeName(moduleName)) {
+                if (traceEnabled) {
+                    trace(host, Diagnostics.Loading_module_0_from_node_modules_folder, moduleName);
+                }
+                resolvedFileName = loadModuleFromNodeModules(moduleName, containingDirectory, failedLookupLocations, state);
+                isExternalLibraryImport = resolvedFileName !== undefined;
+            }
+            else {
+                const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
+                resolvedFileName = nodeLoadModuleByRelativeName(candidate, supportedExtensions, failedLookupLocations, /*onlyRecordFailures*/ false, state);
+            }
         }
 
-        let isExternalLibraryImport = false;
-        if (moduleHasNonRelativeName(moduleName)) {
+        if (resolvedFileName && host.realpath) {
+            const originalFileName = resolvedFileName;
+            resolvedFileName = normalizePath(host.realpath(resolvedFileName));
             if (traceEnabled) {
-                trace(host, Diagnostics.Loading_module_0_from_node_modules_folder, moduleName);
+                trace(host, Diagnostics.Resolving_real_path_for_0_result_1, originalFileName, resolvedFileName);
             }
-            resolvedFileName = loadModuleFromNodeModules(moduleName, containingDirectory, failedLookupLocations, state);
-            isExternalLibraryImport = resolvedFileName !== undefined;
         }
-        else {
-            const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
-            resolvedFileName = nodeLoadModuleByRelativeName(candidate, supportedExtensions, failedLookupLocations, /*onlyRecordFailures*/ false, state);
-        }
+
         return createResolvedModule(resolvedFileName, isExternalLibraryImport, failedLookupLocations);
     }
 
@@ -873,6 +880,7 @@ namespace ts {
         }
 
         const newLine = getNewLineCharacter(options);
+        const realpath = sys.realpath && ((path: string) => sys.realpath(path));
 
         return {
             getSourceFile,
@@ -886,7 +894,8 @@ namespace ts {
             fileExists: fileName => sys.fileExists(fileName),
             readFile: fileName => sys.readFile(fileName),
             trace: (s: string) => sys.write(s + newLine),
-            directoryExists: directoryName => sys.directoryExists(directoryName)
+            directoryExists: directoryName => sys.directoryExists(directoryName),
+            realpath
         };
     }
 
@@ -1030,6 +1039,7 @@ namespace ts {
         program = {
             getRootFileNames: () => rootNames,
             getSourceFile,
+            getSourceFileByPath,
             getSourceFiles: () => files,
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
@@ -1106,7 +1116,11 @@ namespace ts {
                 (oldOptions.allowJs !== options.allowJs) ||
                 (oldOptions.rootDir !== options.rootDir) ||
                 (oldOptions.typesSearchPaths !== options.typesSearchPaths) ||
-                (oldOptions.configFilePath !== options.configFilePath)) {
+                (oldOptions.configFilePath !== options.configFilePath) ||
+                (oldOptions.baseUrl !== options.baseUrl) ||
+                (oldOptions.typesRoot !== options.typesRoot) ||
+                !arrayIsEqualTo(oldOptions.rootDirs, options.rootDirs) ||
+                !mapIsEqualTo(oldOptions.paths, options.paths)) {
                 return false;
             }
 
@@ -1128,7 +1142,10 @@ namespace ts {
             const modifiedSourceFiles: SourceFile[] = [];
 
             for (const oldSourceFile of oldProgram.getSourceFiles()) {
-                let newSourceFile = host.getSourceFile(oldSourceFile.fileName, options.target);
+                let newSourceFile = host.getSourceFileByPath
+                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target)
+                    : host.getSourceFile(oldSourceFile.fileName, options.target);
+
                 if (!newSourceFile) {
                     return false;
                 }
@@ -1223,6 +1240,7 @@ namespace ts {
                 getCurrentDirectory: () => currentDirectory,
                 getNewLine: () => host.getNewLine(),
                 getSourceFile: program.getSourceFile,
+                getSourceFileByPath: program.getSourceFileByPath,
                 getSourceFiles: program.getSourceFiles,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
@@ -1298,7 +1316,11 @@ namespace ts {
         }
 
         function getSourceFile(fileName: string): SourceFile {
-            return filesByName.get(toPath(fileName, currentDirectory, getCanonicalFileName));
+            return getSourceFileByPath(toPath(fileName, currentDirectory, getCanonicalFileName));
+        }
+
+        function getSourceFileByPath(path: Path): SourceFile {
+            return filesByName.get(path);
         }
 
         function getDiagnosticsHelper(
@@ -1740,10 +1762,6 @@ namespace ts {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
                 }
 
-                if (file) {
-                    file.wasReferenced = file.wasReferenced || isReference;
-                }
-
                 return file;
             }
 
@@ -1760,7 +1778,6 @@ namespace ts {
 
             filesByName.set(path, file);
             if (file) {
-                file.wasReferenced = file.wasReferenced || isReference;
                 file.path = path;
 
                 if (host.useCaseSensitiveFileNames()) {
@@ -1886,7 +1903,7 @@ namespace ts {
                     // add file to program only if:
                     // - resolution was successful
                     // - noResolve is falsy
-                    // - module name come from the list fo imports
+                    // - module name comes from the list of imports
                     const shouldAddFile = resolution &&
                         !options.noResolve &&
                         i < file.imports.length;
@@ -1999,7 +2016,7 @@ namespace ts {
                         }
                     }
                     else {
-                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substututions_for_pattern_0_should_be_an_array, key));
+                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substitutions_for_pattern_0_should_be_an_array, key));
                     }
                 }
             }
@@ -2058,7 +2075,7 @@ namespace ts {
             else if (firstExternalModuleSourceFile && languageVersion < ScriptTarget.ES6 && options.module === ModuleKind.None) {
                 // We cannot use createDiagnosticFromNode because nodes do not have parents yet
                 const span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
-                programDiagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_unless_the_module_flag_is_provided_with_a_valid_module_type_Consider_setting_the_module_compiler_option_in_a_tsconfig_json_file));
+                programDiagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_use_imports_exports_or_module_augmentations_when_module_is_none));
             }
 
             // Cannot specify module gen target of es6 when below es6
@@ -2067,8 +2084,14 @@ namespace ts {
             }
 
             // Cannot specify module gen that isn't amd or system with --out
-            if (outFile && options.module && !(options.module === ModuleKind.AMD || options.module === ModuleKind.System)) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile"));
+            if (outFile) {
+                if (options.module && !(options.module === ModuleKind.AMD || options.module === ModuleKind.System)) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile"));
+                }
+                else if (options.module === undefined && firstExternalModuleSourceFile) {
+                    const span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
+                    programDiagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system, options.out ? "out" : "outFile"));
+                }
             }
 
             // there has to be common source directory if user specified --outdir || --sourceRoot

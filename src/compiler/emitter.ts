@@ -1953,7 +1953,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         write("Object.defineProperty(");
                         emit(tempVar);
                         write(", ");
-                        emitStart(node.name);
+                        emitStart(property.name);
                         emitExpressionForPropertyName(property.name);
                         emitEnd(property.name);
                         write(", {");
@@ -4979,7 +4979,7 @@ const _super = (function (geti, seti) {
 
             function emitParameterPropertyAssignments(node: ConstructorDeclaration) {
                 forEach(node.parameters, param => {
-                    if (param.flags & NodeFlags.AccessibilityModifier) {
+                    if (param.flags & NodeFlags.ParameterPropertyModifier) {
                         writeLine();
                         emitStart(param);
                         emitStart(param.name);

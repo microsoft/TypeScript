@@ -24,6 +24,16 @@ interface EventInit {
     cancelable?: boolean;
 }
 
+interface IDBIndexParameters {
+    multiEntry?: boolean;
+    unique?: boolean;
+}
+
+interface IDBObjectStoreParameters {
+    autoIncrement?: boolean;
+    keyPath?: IDBKeyPath;
+}
+
 interface EventListener {
     (evt: Event): void;
 }
@@ -100,12 +110,12 @@ declare var Console: {
 
 interface Coordinates {
     readonly accuracy: number;
-    readonly altitude: number;
-    readonly altitudeAccuracy: number;
-    readonly heading: number;
+    readonly altitude: number | null;
+    readonly altitudeAccuracy: number | null;
+    readonly heading: number | null;
     readonly latitude: number;
     readonly longitude: number;
-    readonly speed: number;
+    readonly speed: number | null;
 }
 
 declare var Coordinates: {
@@ -192,7 +202,7 @@ declare var DOMException: {
 interface DOMStringList {
     readonly length: number;
     contains(str: string): boolean;
-    item(index: number): string;
+    item(index: number): string | null;
     [index: number]: string;
 }
 
@@ -475,7 +485,7 @@ declare var IDBTransaction: {
 }
 
 interface IDBVersionChangeEvent extends Event {
-    readonly newVersion: number;
+    readonly newVersion: number | null;
     readonly oldVersion: number;
 }
 
@@ -728,7 +738,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     withCredentials: boolean;
     abort(): void;
     getAllResponseHeaders(): string;
-    getResponseHeader(header: string): string;
+    getResponseHeader(header: string): string | null;
     msCachingEnabled(): boolean;
     open(method: string, url: string, async?: boolean, user?: string, password?: string): void;
     overrideMimeType(mime: string): void;
@@ -1007,4 +1017,5 @@ declare var console: Console;
 declare function addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
 declare function addEventListener(type: "message", listener: (ev: MessageEvent) => any, useCapture?: boolean): void;
 declare function addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+type IDBKeyPath = string;
 type IDBValidKey = number | string | Date | IDBArrayKey;
