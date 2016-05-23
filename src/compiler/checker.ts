@@ -6831,41 +6831,59 @@ namespace ts {
                 getSignaturesOfType(type, SignatureKind.Construct).length === 0;
         }
 
+        function createTransientSymbol(source: Symbol, type: Type) {
+            const symbol = <TransientSymbol>createSymbol(source.flags | SymbolFlags.Transient, source.name);
+            symbol.declarations = source.declarations;
+            symbol.parent = source.parent;
+            symbol.type = type;
+            symbol.target = source;
+            if (source.valueDeclaration) {
+                symbol.valueDeclaration = source.valueDeclaration;
+            }
+            return symbol;
+        }
+
+        function transformTypeOfMembers(type: Type, f: (propertyType: Type) => Type) {
+            const members: SymbolTable = {};
+            for (const property of getPropertiesOfObjectType(type)) {
+                const original = getTypeOfSymbol(property);
+                const updated = f(original);
+                members[property.name] = updated === original ? property : createTransientSymbol(property, updated);
+            };
+            return members;
+        }
+
+        /**
+         * If the the provided object literal is subject to the excess properties check,
+         * create a new that is exempt. Recursively mark object literal members as exempt.
+         * Leave signatures alone since they are not subject to the check.
+         */
         function getRegularTypeOfObjectLiteral(type: Type): Type {
-            if (type.flags & TypeFlags.FreshObjectLiteral) {
-                let regularType = (<FreshObjectLiteralType>type).regularType;
-                if (!regularType) {
-                    regularType = <ResolvedType>createType((<ResolvedType>type).flags & ~TypeFlags.FreshObjectLiteral);
-                    regularType.symbol = (<ResolvedType>type).symbol;
-                    regularType.members = (<ResolvedType>type).members;
-                    regularType.properties = (<ResolvedType>type).properties;
-                    regularType.callSignatures = (<ResolvedType>type).callSignatures;
-                    regularType.constructSignatures = (<ResolvedType>type).constructSignatures;
-                    regularType.stringIndexInfo = (<ResolvedType>type).stringIndexInfo;
-                    regularType.numberIndexInfo = (<ResolvedType>type).numberIndexInfo;
-                    (<FreshObjectLiteralType>type).regularType = regularType;
-                }
+            if (!(type.flags & TypeFlags.FreshObjectLiteral)) {
+                return type;
+            }
+            const regularType = (<FreshObjectLiteralType>type).regularType;
+            if (regularType) {
                 return regularType;
             }
-            return type;
+
+            const resolved = <ResolvedType>type;
+            const members = transformTypeOfMembers(type, getRegularTypeOfObjectLiteral);
+            const regularNew = createAnonymousType(resolved.symbol,
+                                                   members,
+                                                   resolved.callSignatures,
+                                                   resolved.constructSignatures,
+                                                   resolved.stringIndexInfo,
+                                                   resolved.numberIndexInfo);
+            regularNew.flags = resolved.flags & ~TypeFlags.FreshObjectLiteral;
+            (<FreshObjectLiteralType>type).regularType = regularNew;
+            return regularNew;
         }
 
         function getWidenedTypeOfObjectLiteral(type: Type): Type {
-            const properties = getPropertiesOfObjectType(type);
-            const members: SymbolTable = {};
-            forEach(properties, p => {
-                const propType = getTypeOfSymbol(p);
-                const widenedType = getWidenedType(propType);
-                if (propType !== widenedType) {
-                    const symbol = <TransientSymbol>createSymbol(p.flags | SymbolFlags.Transient, p.name);
-                    symbol.declarations = p.declarations;
-                    symbol.parent = p.parent;
-                    symbol.type = widenedType;
-                    symbol.target = p;
-                    if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
-                    p = symbol;
-                }
-                members[p.name] = p;
+            const members = transformTypeOfMembers(type, prop => {
+                const widened = getWidenedType(prop);
+                return prop === widened ? prop : widened;
             });
             const stringIndexInfo = getIndexInfoOfType(type, IndexKind.String);
             const numberIndexInfo = getIndexInfoOfType(type, IndexKind.Number);
