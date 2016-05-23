@@ -12,9 +12,16 @@ var baz = 3;
 baz = 4;
 >baz : Symbol(baz, Decl(server.ts, 4, 3))
 
-export { foo, baz, baz as quux };
->foo : Symbol(foo, Decl(server.ts, 7, 8))
->baz : Symbol(baz, Decl(server.ts, 7, 13))
->baz : Symbol(quux, Decl(server.ts, 7, 18))
->quux : Symbol(quux, Decl(server.ts, 7, 18))
+var buzz = 10;
+>buzz : Symbol(buzz, Decl(server.ts, 7, 3))
+
+buzz += 3;
+>buzz : Symbol(buzz, Decl(server.ts, 7, 3))
+
+export { foo, baz, baz as quux, buzz };
+>foo : Symbol(foo, Decl(server.ts, 10, 8))
+>baz : Symbol(baz, Decl(server.ts, 10, 13))
+>baz : Symbol(quux, Decl(server.ts, 10, 18))
+>quux : Symbol(quux, Decl(server.ts, 10, 18))
+>buzz : Symbol(buzz, Decl(server.ts, 10, 31))
 

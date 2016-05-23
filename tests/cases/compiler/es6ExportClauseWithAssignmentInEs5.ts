@@ -8,4 +8,7 @@ foo = 3;
 var baz = 3;
 baz = 4;
 
-export { foo, baz, baz as quux };
+var buzz = 10;
+buzz += 3;
+
+export { foo, baz, baz as quux, buzz };

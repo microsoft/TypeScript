@@ -18,9 +18,19 @@ baz = 4;
 >baz : number
 >4 : number
 
-export { foo, baz, baz as quux };
+var buzz = 10;
+>buzz : number
+>10 : number
+
+buzz += 3;
+>buzz += 3 : number
+>buzz : number
+>3 : number
+
+export { foo, baz, baz as quux, buzz };
 >foo : number
 >baz : number
 >baz : number
 >quux : number
+>buzz : number
 
