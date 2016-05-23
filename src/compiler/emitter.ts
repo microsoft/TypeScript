@@ -2809,6 +2809,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 for (const specifier of exportSpecifiers[name.text]) {
                     emitStart(specifier.name);
                     emitContainingModuleName(specifier);
+                    if (languageVersion === ScriptTarget.ES3 && name.text === "default") {
+                        write('["default"]');
+                    }
                     write(".");
                     emitNodeWithCommentsAndWithoutSourcemap(specifier.name);
                     emitEnd(specifier.name);
