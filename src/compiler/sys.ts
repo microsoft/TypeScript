@@ -411,7 +411,7 @@ namespace ts {
             }
 
             function getDirectories(path: string): string[] {
-                return _fs.readdirSync(path);
+                return filter<string>(_fs.readdirSync(path), p => fileSystemEntryExists(combinePaths(path, p), FileSystemEntryKind.Directory));
             }
 
             function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
