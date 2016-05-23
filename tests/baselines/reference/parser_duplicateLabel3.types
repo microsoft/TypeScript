@@ -7,7 +7,7 @@ while (true) {
 >true : boolean
 
   function f() {
->f : () => void
+>f : () => never
 
     target:
 >target : any

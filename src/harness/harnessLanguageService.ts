@@ -641,6 +641,14 @@ namespace Harness.LanguageService {
 
         startGroup(): void {
         }
+
+        setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
+            return setTimeout(callback, ms, args);
+        }
+
+        clearTimeout(timeoutId: any): void {
+            clearTimeout(timeoutId);
+        }
     }
 
     export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
