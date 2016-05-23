@@ -5859,7 +5859,7 @@ namespace ts {
                 }
 
                 if (!(target.flags & TypeFlags.Never)) {
-                    if (target.flags & TypeFlags.Any) return Ternary.True;
+                    if (target.flags & TypeFlags.Any || source.flags & TypeFlags.Never) return Ternary.True;
                     if (source.flags & TypeFlags.Undefined) {
                         if (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void) || source === emptyArrayElementType) return Ternary.True;
                     }
@@ -5874,7 +5874,7 @@ namespace ts {
                     }
                     if (source.flags & TypeFlags.StringLiteral && target === stringType) return Ternary.True;
                     if (relation === assignableRelation || relation === comparableRelation) {
-                        if (source.flags & (TypeFlags.Any | TypeFlags.Never)) return Ternary.True;
+                        if (source.flags & TypeFlags.Any) return Ternary.True;
                         if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
                     }
                     if (source.flags & TypeFlags.Boolean && target.flags & TypeFlags.Boolean) {
