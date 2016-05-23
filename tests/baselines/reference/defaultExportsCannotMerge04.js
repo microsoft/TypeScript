@@ -18,7 +18,7 @@ export interface Foo {
 function Foo() {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Foo;
+exports.default = exports.Foo;
 var Foo;
 (function (Foo) {
-})(Foo || (Foo = {}));
+})(exports.Foo || (exports.Foo = {}));
