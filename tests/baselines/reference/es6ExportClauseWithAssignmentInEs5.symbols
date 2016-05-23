@@ -18,10 +18,23 @@ var buzz = 10;
 buzz += 3;
 >buzz : Symbol(buzz, Decl(server.ts, 7, 3))
 
-export { foo, baz, baz as quux, buzz };
->foo : Symbol(foo, Decl(server.ts, 10, 8))
->baz : Symbol(baz, Decl(server.ts, 10, 13))
->baz : Symbol(quux, Decl(server.ts, 10, 18))
->quux : Symbol(quux, Decl(server.ts, 10, 18))
->buzz : Symbol(buzz, Decl(server.ts, 10, 31))
+var bizz = 8;
+>bizz : Symbol(bizz, Decl(server.ts, 10, 3))
+
+bizz++; // compiles to exports.bizz = bizz += 1
+>bizz : Symbol(bizz, Decl(server.ts, 10, 3))
+
+bizz--; // similarly
+>bizz : Symbol(bizz, Decl(server.ts, 10, 3))
+
+++bizz; // compiles to exports.bizz = ++bizz
+>bizz : Symbol(bizz, Decl(server.ts, 10, 3))
+
+export { foo, baz, baz as quux, buzz, bizz };
+>foo : Symbol(foo, Decl(server.ts, 15, 8))
+>baz : Symbol(baz, Decl(server.ts, 15, 13))
+>baz : Symbol(quux, Decl(server.ts, 15, 18))
+>quux : Symbol(quux, Decl(server.ts, 15, 18))
+>buzz : Symbol(buzz, Decl(server.ts, 15, 31))
+>bizz : Symbol(bizz, Decl(server.ts, 15, 37))
 

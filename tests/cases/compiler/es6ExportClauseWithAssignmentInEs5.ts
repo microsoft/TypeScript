@@ -11,4 +11,9 @@ baz = 4;
 var buzz = 10;
 buzz += 3;
 
-export { foo, baz, baz as quux, buzz };
+var bizz = 8;
+bizz++; // compiles to exports.bizz = bizz += 1
+bizz--; // similarly
+++bizz; // compiles to exports.bizz = ++bizz
+
+export { foo, baz, baz as quux, buzz, bizz };

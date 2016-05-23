@@ -2622,10 +2622,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
-                const exportChanged = (node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) &&
+                const isPlusPlusOrMinusMinus = (node.operator === SyntaxKind.PlusPlusToken
+                    || node.operator === SyntaxKind.MinusMinusToken);
+                const externalExportChanged = isPlusPlusOrMinusMinus &&
                     isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
 
-                if (exportChanged) {
+                if (externalExportChanged) {
                     // emit
                     // ++x
                     // as
@@ -2633,6 +2635,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write(`${exportFunctionForFile}("`);
                     emitNodeWithoutSourceMap(node.operand);
                     write(`", `);
+                }
+                const internalExportChanged = isPlusPlusOrMinusMinus &&
+                    isNameOfExportedSourceLevelDeclarationInClauseModule(node.operand);
+
+                if (internalExportChanged) {
+                    emitAliasEqual(<Identifier> node.operand);
                 }
 
                 write(tokenToString(node.operator));
@@ -2659,14 +2667,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
                 emit(node.operand);
 
-                if (exportChanged) {
+                if (externalExportChanged) {
                     write(")");
                 }
             }
 
             function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
-                const exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
-                if (exportChanged) {
+                const externalExportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
+                const internalExportChanged = isNameOfExportedSourceLevelDeclarationInClauseModule(node.operand);
+
+                if (externalExportChanged) {
                     // export function returns the value that was passes as the second argument
                     // however for postfix unary expressions result value should be the value before modification.
                     // emit 'x++' as '(export('x', ++x) - 1)' and 'x--' as '(export('x', --x) + 1)'
@@ -2682,6 +2692,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     }
                     else {
                         write(") + 1)");
+                    }
+                }
+                else if (internalExportChanged) {
+                    emitAliasEqual(<Identifier> node.operand);
+                    emit(node.operand);
+                    if (node.operator === SyntaxKind.PlusPlusToken) {
+                        write(" += 1");
+                    }
+                    else {
+                        write(" -= 1");
                     }
                 }
                 else {
@@ -2785,6 +2805,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
             }
 
+            function emitAliasEqual(name: Identifier): boolean {
+                for (const specifier of exportSpecifiers[name.text]) {
+                    emitStart(specifier.name);
+                    emitContainingModuleName(specifier);
+                    write(".");
+                    emitNodeWithCommentsAndWithoutSourcemap(specifier.name);
+                    emitEnd(specifier.name);
+                    write(" = ");
+                }
+                return true;
+            }
+
             function emitBinaryExpression(node: BinaryExpression) {
                 if (languageVersion < ScriptTarget.ES6 && node.operatorToken.kind === SyntaxKind.EqualsToken &&
                     (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
@@ -2803,18 +2835,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         write(`", `);
                     }
 
-                    const internalExportClauseMemberChanged = isAssignment &&
+                    const internalExportChanged = isAssignment &&
                         isNameOfExportedSourceLevelDeclarationInClauseModule(node.left);
 
-                    if (internalExportClauseMemberChanged) {
-                        for (const specifier of exportSpecifiers[(<Identifier>node.left).text]) {
-                            emitStart(specifier.name);
-                            emitContainingModuleName(specifier);
-                            write(".");
-                            emitNodeWithCommentsAndWithoutSourcemap(specifier.name);
-                            emitEnd(specifier.name);
-                            write(" = ");
-                        }
+                    if (internalExportChanged) {
+                        // export { foo }
+                        // emit foo = 2 as exports.foo = foo = 2
+                        emitAliasEqual(<Identifier>node.left);
                     }
 
                     if (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskToken || node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken) {

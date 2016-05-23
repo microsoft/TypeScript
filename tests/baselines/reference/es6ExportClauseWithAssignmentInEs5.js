@@ -9,7 +9,12 @@ baz = 4;
 var buzz = 10;
 buzz += 3;
 
-export { foo, baz, baz as quux, buzz };
+var bizz = 8;
+bizz++; // compiles to exports.bizz = bizz += 1
+bizz--; // similarly
+++bizz; // compiles to exports.bizz = ++bizz
+
+export { foo, baz, baz as quux, buzz, bizz };
 
 
 //// [server.js]
@@ -24,3 +29,8 @@ exports.baz = exports.quux = baz = 4;
 var buzz = 10;
 exports.buzz = buzz;
 exports.buzz = buzz += 3;
+var bizz = 8;
+exports.bizz = bizz;
+exports.bizz = bizz += 1; // compiles to exports.bizz = bizz += 1
+exports.bizz = bizz -= 1; // similarly
+exports.bizz = ++bizz; // compiles to exports.bizz = ++bizz
