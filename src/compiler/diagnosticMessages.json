@@ -443,7 +443,7 @@
         "category": "Error",
         "code": 1147
     },
-    "Cannot use imports, exports or module augmentations when '--module' is 'none'.": {
+    "Cannot use imports, exports, or module augmentations when '--module' is 'none'.": {
         "category": "Error",
         "code": 1148
     },
