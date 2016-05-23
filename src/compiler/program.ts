@@ -985,7 +985,7 @@ namespace ts {
                 return host.getDefaultTypeDirectiveNames(commonRoot);
             }
         }
-        
+
         return undefined;
     }
 
@@ -1039,7 +1039,7 @@ namespace ts {
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
 
             // load type declarations specified via 'types' argument
-            let typeReferences: string[] = getDefaultTypeDirectiveNames(options, rootNames, host);
+            const typeReferences: string[] = getDefaultTypeDirectiveNames(options, rootNames, host);
 
             if (typeReferences) {
                 const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, /*containingFile*/ undefined);
