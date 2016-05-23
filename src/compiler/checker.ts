@@ -6830,20 +6830,26 @@ namespace ts {
             symbol.parent = source.parent;
             symbol.type = type;
             symbol.target = source;
-            if (source.valueDeclaration) symbol.valueDeclaration = source.valueDeclaration;
+            if (source.valueDeclaration) {
+                symbol.valueDeclaration = source.valueDeclaration;
+            }
             return symbol;
         }
 
-        function updateTypeOfMembers(type: Type, update: (propertyType: Type) => Type) {
+        function transformTypeOfMembers(type: Type, f: (propertyType: Type) => Type) {
             const members: SymbolTable = {};
             for (const property of getPropertiesOfObjectType(type)) {
                 const original = getTypeOfSymbol(property);
-                const updated = update(original);
+                const updated = f(original);
                 members[property.name] = updated === original ? property : createTransientSymbol(property, updated);
             };
             return members;
         }
 
+        /** Mark an object literal as exempt from the excess properties check.
+         *  Recursively mark object literal members as exempt.
+         *  Leave signatures alone since they are not subject to the check.
+         */
         function getRegularTypeOfObjectLiteral(type: Type): Type {
             if (!(type.flags & TypeFlags.FreshObjectLiteral)) {
                 return type;
@@ -6854,7 +6860,7 @@ namespace ts {
             }
 
             const resolved = <ResolvedType>type;
-            const members = updateTypeOfMembers(type, prop => prop.flags & TypeFlags.FreshObjectLiteral ? getRegularTypeOfObjectLiteral(prop) : prop);
+            const members = transformTypeOfMembers(type, prop => prop.flags & TypeFlags.FreshObjectLiteral ? getRegularTypeOfObjectLiteral(prop) : prop);
             const regularNew = createAnonymousType(resolved.symbol,
                                                    members,
                                                    resolved.callSignatures,
@@ -6867,7 +6873,7 @@ namespace ts {
         }
 
         function getWidenedTypeOfObjectLiteral(type: Type): Type {
-            const members = updateTypeOfMembers(type, prop => {
+            const members = transformTypeOfMembers(type, prop => {
                 const widened = getWidenedType(prop);
                 return prop === widened ? prop : widened;
             });
