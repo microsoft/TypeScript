@@ -42,7 +42,7 @@ function isB(x: any): x is B {
 }
 
 function f1(x: A | B) {
->f1 : (x: A | B) => never
+>f1 : (x: A | B) => void
 >x : A | B
 >A : A
 >B : B
@@ -78,7 +78,7 @@ function f1(x: A | B) {
 }
 
 function f2(x: A | B) {
->f2 : (x: A | B) => never
+>f2 : (x: A | B) => void
 >x : A | B
 >A : A
 >B : B
