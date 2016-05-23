@@ -2348,6 +2348,10 @@
         "category": "Message",
         "code": 6011
     },
+    "Skip type checking of declaration files.": {
+        "category": "Message",
+        "code": 6012
+    },
     "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015'": {
         "category": "Message",
         "code": 6015

@@ -2505,6 +2505,7 @@ namespace ts {
         allowJs?: boolean;
         noImplicitUseStrict?: boolean;
         strictNullChecks?: boolean;
+        skipLibCheck?: boolean;
         listEmittedFiles?: boolean;
         lib?: string[];
         /* @internal */ stripInternal?: boolean;
