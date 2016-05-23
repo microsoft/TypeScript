@@ -11877,8 +11877,14 @@ namespace ts {
                 if (symbol.flags & SymbolFlags.Property &&
                     (expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) &&
                     (expr as PropertyAccessExpression | ElementAccessExpression).expression.kind === SyntaxKind.ThisKeyword) {
+                    // Look for if this is the constructor for the class that `symbol` is a property of.
                     const func = getContainingFunction(expr);
-                    return !(func && func.kind === SyntaxKind.Constructor && func.parent === symbol.valueDeclaration.parent);
+                    if (!(func && func.kind === SyntaxKind.Constructor))
+                        return true;
+                    // If func.parent is a class and symbol is a (readonly) property of that class, or
+                    // if func is a constructor and symbol is a (readonly) parameter property declared in it,
+                    // then symbol is writeable here.
+                    return !(func.parent === symbol.valueDeclaration.parent || func === symbol.valueDeclaration.parent);
                 }
                 return true;
             }
@@ -16383,14 +16389,11 @@ namespace ts {
         function checkSourceFileWorker(node: SourceFile) {
             const links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
-                // Check whether the file has declared it is the default lib,
-                // and whether the user has specifically chosen to avoid checking it.
-                if (compilerOptions.skipDefaultLibCheck) {
-                    // If the user specified '--noLib' and a file has a '/// <reference no-default-lib="true"/>',
-                    // then we should treat that file as a default lib.
-                    if (node.hasNoDefaultLib) {
-                        return;
-                    }
+                // If skipLibCheck is enabled, skip type checking if file is a declaration file.
+                // If skipDefaultLibCheck is enabled, skip type checking if file contains a
+                // '/// <reference no-default-lib="true"/>' directive.
+                if (compilerOptions.skipLibCheck && node.isDeclarationFile || compilerOptions.skipDefaultLibCheck && node.hasNoDefaultLib) {
+                    return;
                 }
 
                 // Grammar checking

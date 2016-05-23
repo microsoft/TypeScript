@@ -5,7 +5,7 @@
 ////    {| "itemName": "s", "kind": "property", "parentName": "Bar" |}public s: string;
 ////}
 ////{| "itemName": "\"my fil\\\"e\"", "kind": "module" |}
-////{| "itemName": "x", "kind": "var", "parentName": "\"file\"" |}
+////{| "itemName": "x", "kind": "var", "parentName": "\"my fil\\\"e\"" |}
 ////export var x: number;
 
 test.markers().forEach((marker) => {
