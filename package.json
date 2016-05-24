@@ -34,7 +34,7 @@
         "chai": "latest",
         "browserify": "latest",
         "istanbul": "latest",
-        "mocha-fivemat-progress-reporter": "latest",
+        "mocha-fivemat-progress-reporter": "vladima/mocha-fivemat-progress-reporter#fix_progress",
         "tslint": "next",
         "typescript": "next",
         "tsd": "latest"
