@@ -144,5 +144,4 @@ verify.navigationBar([
         "kind": "class",
         "indent": 1
     }
-]
-);
+]);

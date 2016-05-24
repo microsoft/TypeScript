@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts"/>
 
 ////function f() {
-////    function;
+////    function; // This is not included as a navigation item, but it causes 'f' to be considered top-level.
 ////}
 
 verify.navigationBar([

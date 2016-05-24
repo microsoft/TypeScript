@@ -1992,7 +1992,7 @@ namespace FourSlash {
             }
         }
 
-        public printNavigationBar(showChildItems = false) {
+        public printNavigationBar() {
             const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
             const length = items && items.length;
 
@@ -3190,8 +3190,8 @@ namespace FourSlashInterface {
             this.state.printNavigationItems(searchValue);
         }
 
-        public printNavigationBar(showChildItems = false) {
-            this.state.printNavigationBar(showChildItems);
+        public printNavigationBar() {
+            this.state.printNavigationBar();
         }
 
         public printReferences() {

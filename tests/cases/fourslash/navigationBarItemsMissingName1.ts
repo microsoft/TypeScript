@@ -3,7 +3,7 @@
 ////    foo() {}
 ////}
 
-verify.navigationBar( [
+verify.navigationBar([
   {
     "text": "\"navigationBarItemsMissingName1\"",
     "kind": "module",
