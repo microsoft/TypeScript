@@ -2476,6 +2476,7 @@ namespace ts {
         declaration?: boolean;
         declarationDir?: string;
         diagnostics?: boolean;
+        /*@internal*/ extendedDiagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
         init?: boolean;

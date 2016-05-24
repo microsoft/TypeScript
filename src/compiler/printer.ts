@@ -151,7 +151,7 @@ const _super = (function (geti, seti) {
                 decreaseIndent
             } = writer;
 
-            const sourceMap = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? createSourceMapWriter(host, writer) : getNullSourceMapWriter();
+            const sourceMap = createSourceMapWriter(host, writer);
             const {
                 emitStart,
                 emitEnd,
@@ -267,7 +267,7 @@ const _super = (function (geti, seti) {
                 isEmitNotificationEnabled = context.isEmitNotificationEnabled;
                 onSubstituteNode = context.onSubstituteNode;
                 onEmitNode = context.onEmitNode;
-                return printSourceFile;
+                return compilerOptions.extendedDiagnostics ? printSourceFileWithExtendedDiagnostics : printSourceFile;
             }
 
             function printSourceFile(node: SourceFile) {
@@ -276,8 +276,13 @@ const _super = (function (geti, seti) {
                 currentFileIdentifiers = node.identifiers;
                 sourceMap.setSourceFile(node);
                 comments.setSourceFile(node);
-                performance.mark("printStart");
                 emitNodeWithNotificationOption(node, emitWorker);
+                return node;
+            }
+
+            function printSourceFileWithExtendedDiagnostics(node: SourceFile) {
+                performance.mark("printStart");
+                printSourceFile(node);
                 performance.measure("printTime", "printStart");
                 return node;
             }
