@@ -8100,8 +8100,16 @@ namespace ts {
             return container === declarationContainer;
         }
 
+        function updateReferences(node: Identifier): void {
+            const symbol = getReferencedValueSymbol(node);
+            if (symbol) {
+                symbol.hasReference = true;
+            }
+        }
+
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
+            updateReferences(node);
 
             // As noted in ECMAScript 6 language spec, arrow functions never have an arguments objects.
             // Although in down-level emit of arrow function, we emit it using function expression which means that
