@@ -12954,6 +12954,82 @@ namespace ts {
             }
         }
 
+        function checkClassForDuplicateDeclarations(node: ClassLikeDeclaration) {
+            const getter = 1, setter = 2, property = getter | setter;
+
+            const instanceNames: Map<number> = {};
+            const staticNames: Map<number> = {};
+            for (const member of node.members) {
+                if (member.kind === SyntaxKind.Constructor) {
+                    for (const param of (member as ConstructorDeclaration).parameters) {
+                        if (isParameterPropertyDeclaration(param)) {
+                            addName(instanceNames, param.name, (param.name as Identifier).text, property);
+                        }
+                    }
+                }
+                else {
+                    const static = forEach(member.modifiers, m => m.kind === SyntaxKind.StaticKeyword);
+                    const names = static ? staticNames : instanceNames;
+
+                    const memberName = member.name && getPropertyNameForPropertyNameNode(member.name);
+                    switch (member.kind) {
+                        case SyntaxKind.GetAccessor:
+                            addName(names, member.name, memberName, getter);
+                            break;
+
+                        case SyntaxKind.SetAccessor:
+                            addName(names, member.name, memberName, setter);
+                            break;
+
+                        case SyntaxKind.PropertyDeclaration:
+                            addName(names, member.name, memberName, property);
+                            break;
+                    }
+                }
+            }
+
+            function addName(names: Map<number>, location: Node, name: string, meaning: number) {
+                if (hasProperty(names, name)) {
+                    const prev = names[name];
+                    if (prev & meaning) {
+                        error(location, Diagnostics.Duplicate_identifier_0, getTextOfNode(location));
+                    }
+                    else {
+                        names[name] = prev | meaning;
+                    }
+                }
+                else {
+                    names[name] = meaning;
+                }
+            }
+        }
+
+        function checkObjectTypeForDuplicateDeclarations(node: TypeLiteralNode | InterfaceDeclaration) {
+            const names: Map<boolean> = {};
+            for (const member of node.members) {
+                if (member.kind == SyntaxKind.PropertySignature) {
+                    let memberName: string;
+                    switch (member.name.kind) {
+                        case SyntaxKind.StringLiteral:
+                        case SyntaxKind.NumericLiteral:
+                        case SyntaxKind.Identifier:
+                            memberName = (member.name as LiteralExpression | Identifier).text;
+                            break;
+                        default:
+                            continue;
+                    }
+
+                    if (hasProperty(names, memberName)) {
+                        error(member.symbol.valueDeclaration.name, Diagnostics.Duplicate_identifier_0, memberName);
+                        error(member.name, Diagnostics.Duplicate_identifier_0, memberName);
+                    }
+                    else {
+                        names[memberName] = true;
+                    }
+                }
+            }
+        }
+
         function checkTypeForDuplicateIndexSignatures(node: Node) {
             if (node.kind === SyntaxKind.InterfaceDeclaration) {
                 const nodeSymbol = getSymbolOfNode(node);
@@ -13238,6 +13314,7 @@ namespace ts {
                 const type = getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
+                checkObjectTypeForDuplicateDeclarations(node);
             }
         }
 
@@ -14430,6 +14507,10 @@ namespace ts {
                 if (node.initializer) {
                     checkTypeAssignableTo(checkExpressionCached(node.initializer), declarationType, node, /*headMessage*/ undefined);
                 }
+                if (!areDeclarationFlagsIdentical(node, symbol.valueDeclaration)) {
+                    error(symbol.valueDeclaration.name, Diagnostics.All_declarations_of_0_must_have_identical_modifiers, declarationNameToString(node.name));
+                    error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_modifiers, declarationNameToString(node.name));
+                }
             }
             if (node.kind !== SyntaxKind.PropertyDeclaration && node.kind !== SyntaxKind.PropertySignature) {
                 // We know we don't have a binding pattern or computed name here
@@ -14442,6 +14523,21 @@ namespace ts {
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, <Identifier>node.name);
             }
+        }
+
+        function areDeclarationFlagsIdentical(left: Declaration, right: Declaration) {
+            if (hasQuestionToken(left) !== hasQuestionToken(right)) {
+                return false;
+            }
+
+            const interestingFlags = NodeFlags.Private |
+                NodeFlags.Protected |
+                NodeFlags.Async |
+                NodeFlags.Abstract |
+                NodeFlags.Readonly |
+                NodeFlags.Static;
+
+            return (left.flags & interestingFlags) === (right.flags & interestingFlags);
         }
 
         function checkVariableDeclaration(node: VariableDeclaration) {
@@ -15237,6 +15333,7 @@ namespace ts {
             const typeWithThis = getTypeWithThisArgument(type);
             const staticType = <ObjectType>getTypeOfSymbol(symbol);
             checkTypeParameterListsIdentical(node, symbol);
+            checkClassForDuplicateDeclarations(node);
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
@@ -15514,6 +15611,7 @@ namespace ts {
                         checkIndexConstraints(type);
                     }
                 }
+                checkObjectTypeForDuplicateDeclarations(node);
             }
             forEach(getInterfaceBaseTypeNodes(node), heritageElement => {
                 if (!isSupportedExpressionWithTypeArguments(heritageElement)) {
@@ -18152,7 +18250,6 @@ namespace ts {
                     name.kind === SyntaxKind.ComputedPropertyName) {
                     // If the name is not a ComputedPropertyName, the grammar checking will skip it
                     checkGrammarComputedPropertyName(<ComputedPropertyName>name);
-                    continue;
                 }
 
                 if (prop.kind === SyntaxKind.ShorthandPropertyAssignment && !inDestructuring && (<ShorthandPropertyAssignment>prop).objectAssignmentInitializer) {
@@ -18198,17 +18295,22 @@ namespace ts {
                     Debug.fail("Unexpected syntax kind:" + prop.kind);
                 }
 
-                if (!hasProperty(seen, (<Identifier>name).text)) {
-                    seen[(<Identifier>name).text] = currentKind;
+                const effectiveName = getPropertyNameForPropertyNameNode(name);
+                if (effectiveName === undefined) {
+                    continue;
+                }
+
+                if (!hasProperty(seen, effectiveName)) {
+                    seen[effectiveName] = currentKind;
                 }
                 else {
-                    const existingKind = seen[(<Identifier>name).text];
+                    const existingKind = seen[effectiveName];
                     if (currentKind === Property && existingKind === Property) {
-                        continue;
+                        grammarErrorOnNode(name, Diagnostics.Duplicate_identifier_0, getTextOfNode(name));
                     }
                     else if ((currentKind & GetOrSetAccessor) && (existingKind & GetOrSetAccessor)) {
                         if (existingKind !== GetOrSetAccessor && currentKind !== existingKind) {
-                            seen[(<Identifier>name).text] = currentKind | existingKind;
+                            seen[effectiveName] = currentKind | existingKind;
                         }
                         else {
                             return grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name);

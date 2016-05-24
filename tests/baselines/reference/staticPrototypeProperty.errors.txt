@@ -1,8 +1,7 @@
 tests/cases/compiler/staticPrototypeProperty.ts(2,11): error TS2300: Duplicate identifier 'prototype'.
-tests/cases/compiler/staticPrototypeProperty.ts(6,11): error TS2300: Duplicate identifier 'prototype'.
 
 
-==== tests/cases/compiler/staticPrototypeProperty.ts (2 errors) ====
+==== tests/cases/compiler/staticPrototypeProperty.ts (1 errors) ====
     class C {
        static prototype() { }
               ~~~~~~~~~
@@ -11,6 +10,4 @@ tests/cases/compiler/staticPrototypeProperty.ts(6,11): error TS2300: Duplicate i
      
     class C2 {
        static prototype;
-              ~~~~~~~~~
-!!! error TS2300: Duplicate identifier 'prototype'.
     }
