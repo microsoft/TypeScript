@@ -1,5 +1,9 @@
 /// <reference path="core.ts"/>
 
+// Java host
+declare var arguments: string[];
+const globalArguments = arguments;
+
 namespace ts {
     export type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
     export type DirectoryWatcherCallback = (directoryName: string) => void;
@@ -77,6 +81,12 @@ namespace ts {
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         realpath(path: string): string;
+    };
+
+    // Java host
+    declare var Java: {
+        type(t: string): any;
+        from(o: any): any;
     };
 
     export var sys: System = (function () {
@@ -581,8 +591,115 @@ namespace ts {
             };
         }
 
+        function getJavaSystem(): System {
+            const JavaString = Java.type("java.lang.String");
+            const System = Java.type("java.lang.System");
+            const Files = Java.type("java.nio.file.Files");
+            const Paths = Java.type("java.nio.file.Paths");
+
+            const useCaseSensitiveFileNames = !isWindows();
+
+            function isWindows() {
+                const osName = System.getProperty("os.name");
+                return osName && osName.startsWith("Windows");
+            }
+
+            function fileExists(path: string): boolean {
+                return Files.isRegularFile(Paths.get(path));
+            }
+
+            function directoryExists(path: string): boolean {
+                return Files.isDirectory(Paths.get(path));
+            }
+
+            function getCanonicalPath(path: string): string {
+                return useCaseSensitiveFileNames ? path : path.toLowerCase();
+            }
+
+            return {
+                args: globalArguments,
+                newLine: System.lineSeparator(),
+                useCaseSensitiveFileNames: useCaseSensitiveFileNames,
+                write: print,
+                readFile(path: string, encoding?: string): string {
+                    const bytes = Files.readAllBytes(Paths.get(path));
+                    if (encoding) {
+                        return new JavaString(bytes, encoding);
+                    }
+                    else if (bytes.length < 2) {
+                        return new JavaString(bytes, "UTF-8");
+                    }
+                    else {
+                        const byte0 = bytes[0] & 0xFF;
+                        const byte1 = bytes[1] & 0xFF;
+                        const charset = byte0 === 0xFF && byte1 === 0xFE || byte0 === 0xFE && byte1 === 0xFF ? "UTF-16" : "UTF-8";
+                        return new JavaString(bytes, charset);
+                    }
+                },
+                writeFile(path: string, data: string, writeByteOrderMark?: boolean): void {
+                    if (writeByteOrderMark) {
+                        data = "\uFEFF" + data;
+                    }
+                    Files.write(Paths.get(path), new JavaString(data).getBytes("UTF-8"));
+                },
+                watchFile: undefined,
+                watchDirectory: undefined,
+                resolvePath(path: string): string {
+                    return Paths.get(path).toAbsolutePath().toString();
+                },
+                fileExists,
+                directoryExists,
+                createDirectory(path: string): void {
+                    Files.createDirectories(Paths.get(path));
+                },
+                getExecutingFilePath(): string {
+                    return System.getProperty("executingFilePath") || "tsc.js";
+                },
+                getCurrentDirectory(): string {
+                    return Paths.get("").toAbsolutePath().toString();
+                },
+                readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
+                    const result: string[] = [];
+                    exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
+                    visitDirectory(path);
+                    return result;
+
+                    function visitDirectory(path: string) {
+                        const paths = Files.list(Paths.get(path || ".")).map((file: any) => file.toString()).toArray();
+                        const files = Java.from(paths).sort();
+                        const directories: string[] = [];
+                        for (const current of files) {
+                            if (!contains(exclude, getCanonicalPath(current))) {
+                                if (fileExists(current)) {
+                                    if (!extension || fileExtensionIs(current, extension)) {
+                                        result.push(current);
+                                    }
+                                }
+                                else if (directoryExists(current)) {
+                                    directories.push(current);
+                                }
+                            }
+                        }
+                        for (const current of directories) {
+                            visitDirectory(current);
+                        }
+                    }
+                },
+                getModifiedTime: undefined,
+                createHash: undefined,
+                getMemoryUsage: undefined,
+                exit(exitCode?: number): void {
+                    System.exit(exitCode);
+                },
+                realpath: undefined,
+            };
+        }
+
         if (typeof ChakraHost !== "undefined") {
             return getChakraSystem();
+        }
+        else if (typeof Java !== "undefined") {
+            return getJavaSystem();
         }
         else if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
             return getWScriptSystem();
