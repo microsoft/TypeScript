@@ -735,9 +735,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
         var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
         exec(cmd, function () {
-            if (i === 0) {
-                runLinter();
-            }
+            runLinter();
             finish();
         }, finish);
         
