@@ -314,6 +314,9 @@ namespace ts.NavigationBar {
                 case SyntaxKind.IndexSignature:
                     return createItem(node, "[]", ts.ScriptElementKind.indexSignatureElement);
 
+                case SyntaxKind.EnumDeclaration:
+                    return createItem(node, getTextOfNode((<EnumDeclaration>node).name), ts.ScriptElementKind.enumElement);
+
                 case SyntaxKind.EnumMember:
                     return createItem(node, getTextOfNode((<EnumMember>node).name), ts.ScriptElementKind.memberVariableElement);
 
