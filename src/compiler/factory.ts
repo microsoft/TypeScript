@@ -17,9 +17,7 @@ namespace ts {
             ? new ConstructorForKind(kind, location.pos, location.end)
             : new ConstructorForKind(kind, /*pos*/ -1, /*end*/ -1);
 
-        if (flags) {
-            node.flags = flags;
-        }
+        node.flags = flags | NodeFlags.Synthesized;
 
         return node;
     }
@@ -68,8 +66,7 @@ namespace ts {
         // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
         // the original node. We also need to exclude specific properties and only include own-
         // properties (to skip members already defined on the shared prototype).
-        const clone = <T>createNode(node.kind, /*location*/ undefined, /*flags*/ undefined);
-        clone.flags = node.flags;
+        const clone = <T>createNode(node.kind, /*location*/ undefined, node.flags);
         clone.original = node;
 
         for (const key in node) {
@@ -827,6 +824,7 @@ namespace ts {
         // Create an identifier and give it a parent. This allows us to resolve the react
         // namespace during emit.
         const react = createIdentifier(reactNamespace || "React");
+        react.flags &= ~NodeFlags.Synthesized;
         react.parent = parent;
         return react;
     }

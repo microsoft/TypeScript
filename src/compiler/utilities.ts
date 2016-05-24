@@ -1831,14 +1831,17 @@ namespace ts {
     }
 
     export function isSourceTreeNode(node: Node): boolean {
-        return node.original === undefined
-            && (node.parent !== undefined || node.kind === SyntaxKind.SourceFile);
+        return (node.flags & NodeFlags.Synthesized) === 0;
     }
 
     export function getSourceTreeNode(node: Node): Node {
+        if (isSourceTreeNode(node)) {
+            return node;
+        }
+
         node = getOriginalNode(node);
 
-        if (node && (node.parent !== undefined || node.kind === SyntaxKind.SourceFile)) {
+        if (isSourceTreeNode(node)) {
             return node;
         }
 

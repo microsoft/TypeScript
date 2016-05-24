@@ -383,6 +383,7 @@ namespace ts {
         Let =                1 << 0,   // Variable declaration
         Const =              1 << 1,   // Variable declaration
         NestedNamespace =    1 << 2,   // Namespace declaration
+        Synthesized =        1 << 3,   // Node was synthesized during transformation
         Namespace =          1 << 12,  // Namespace declaration
         ExportContext =      1 << 13,  // Export context (initialized by binding)
         ContainsThis =       1 << 14,  // Interface contains references to "this"

@@ -1752,7 +1752,10 @@ namespace ts {
         function serializeEntityNameAsExpression(node: EntityName, useFallback: boolean): Expression {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
+                    // Create a clone of the name with a new parent, and treat it as if it were
+                    // a source tree node for the purposes of the checker.
                     const name = getMutableClone(<Identifier>node);
+                    name.flags &= ~NodeFlags.Synthesized;
                     name.original = undefined;
                     name.parent = currentScope;
                     if (useFallback) {

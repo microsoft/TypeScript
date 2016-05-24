@@ -2034,7 +2034,7 @@ namespace ts {
             // FormalParameter [Yield,Await]:
             //      BindingElement[?Yield,?Await]
             node.name = parseIdentifierOrPattern();
-            if (getFullWidth(node.name) === 0 && node.flags === 0 && isModifierKind(token)) {
+            if (getFullWidth(node.name) === 0 && !hasModifiers(node) && isModifierKind(token)) {
                 // in cases like
                 // 'use strict'
                 // function foo(static)
