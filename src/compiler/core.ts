@@ -1157,15 +1157,15 @@ namespace ts {
             duration: number;
         }
 
-        const marks: MarkData[] = [];
-        const measures: MeasureData[] = [];
+        const markTimestamps: Map<number> = {};
+        const markCounts: Map<number> = {};
+        const measureDurations: Map<number> = {};
 
         let start = now();
         let enabled = false;
 
         /** Gets the current timer for performance measurements. */
         export function now() {
-            // TODO(rbuckton): Determine if there is a higher-resolution timer we can use.
             return Date.now();
         }
 
@@ -1176,8 +1176,53 @@ namespace ts {
          */
         export function mark(markName: string) {
             if (enabled) {
-                marks.push({ markName, timestamp: now() });
+                markTimestamps[markName] = now();
+                markCounts[markName] = getCount(markName) + 1;
             }
+        }
+
+        /**
+         * Gets the number of marks with the specified name.
+         *
+         * @param markName The name of the marks that should be counted.
+         */
+        export function getCount(markName: string) {
+            if (enabled) {
+                return getProperty(markCounts, markName) || 0;
+            }
+            return 0;
+        }
+
+        /**
+         * Gets the most recent timestamp for the marks with the specified name.
+         *
+         * @param markName The name of the mark.
+         */
+        export function getTimestamp(markName: string) {
+            if (enabled) {
+                return getProperty(markTimestamps, markName) || 0;
+            }
+            return 0;
+        }
+
+        /**
+         * Clears performance marks.
+         *
+         * @param markName The name of the mark whose time values should be cleared. If not
+         *      specified, all marks will be cleared.
+         */
+        export function clearMarks(markName?: string) {
+            if (markName === undefined) {
+                forEachKey(markTimestamps, clearMark);
+            }
+            else {
+                clearMark(markName);
+            }
+        }
+
+        function clearMark(markName: string) {
+            markTimestamps[markName] = 0;
+            markCounts[markName] = 0;
         }
 
         /**
@@ -1185,94 +1230,56 @@ namespace ts {
          *
          * @param measureName The name of the performance measurement.
          * @param startMarkName The name of the starting mark.
-         *          If provided, the most recent time value of the start mark is used.
-         *          If not specified, the value is the time that the performance service was
-         *          initialized or the last time it was reset.
+         *      If provided, the most recent time value of the start mark is used.
+         *      If not specified, the value is the time that the performance service was
+         *      initialized or the last time it was reset.
          * @param endMarkName The name of the ending mark.
-         *          If provided, the most recent time value of the end mark is used.
-         *          If not specified, the current time is used.
+         *      If provided, the most recent time value of the end mark is used.
+         *      If not specified, the current time is used.
          */
         export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
             if (enabled) {
-                measures.push({
-                    measureName,
-                    startMarkName,
-                    endMarkName,
-                    timestamp: now(),
-                    marksOffset: marks.length
-                });
+                const startTime = startMarkName ? getTimestamp(startMarkName) : start;
+                const endTime = endMarkName ? getTimestamp(endMarkName) : now();
+                const duration = endTime - startTime;
+                measureDurations[measureName] = getDuration(measureName) + duration;
             }
         }
 
         /**
-         * Gets an array of performance measures.
+         * Gets the total duration of all measurements with the supplied name.
          *
-         * @param measureName The name of the measure.
-         *          If provided, only measures with the provided name are returned.
-         *          If not specified, all measures are returned since the last time the
-         *          performance service was reset.
+         * @param measureName The name of the measure whose durations should be accumulated.
          */
-        export function getMeasures(measureName?: string) {
-            const result: Measure[] = [];
-            for (const measure of measures) {
-                if (measureName !== undefined && measureName !== measure.measureName) {
-                    continue;
-                }
-
-                let startOffset = 0;
-                let startTime = start;
-                if (measure.startMarkName) {
-                    const startMarkIndex = getMarkOffset(measure.startMarkName, 0, measure.marksOffset);
-                    if (startMarkIndex >= 0) {
-                        startOffset = startMarkIndex;
-                        startTime = marks[startMarkIndex].timestamp;
-                    }
-                }
-
-                let endTime = measure.timestamp;
-                if (measure.endMarkName) {
-                    const endMarkIndex = getMarkOffset(measure.endMarkName, startOffset, measure.marksOffset);
-                    if (endMarkIndex >= 0) {
-                        endTime = marks[endMarkIndex].timestamp;
-                    }
-                }
-
-                const duration = endTime - startTime;
-                result.push({
-                    name: measure.measureName,
-                    startTime,
-                    duration
-                });
-            }
-
-            return result;
+        export function getDuration(measureName: string) {
+            return getProperty(measureDurations, measureName) || 0;
         }
 
-        function getMarkOffset(markName: string, markStart: number, markEnd: number) {
-            if (markName === undefined) {
-                return -1;
+        /**
+         * Clears performance measures.
+         *
+         * @param measureName The name of the measure whose durations should be cleared. If not
+         *      specified, all measures will be cleared.
+         */
+        export function clearMeasures(measureName?: string) {
+            if (measureName === undefined) {
+                forEachKey(measureDurations, clearMeasure);
             }
-
-            if (markStart < 0) {
-                markStart = 0;
+            else {
+                clearMeasure(measureName);
             }
+        }
 
-            for (let i = markEnd - 1; i >= markStart; i--) {
-                const mark = marks[i];
-                if (mark.markName === markName) {
-                    return i;
-                }
-            }
-
-            return -1;
+        function clearMeasure(measureName: string) {
+            measureDurations[measureName] = 0;
         }
 
         /**
          * Resets all marks and measurements in the performance service.
          */
         export function reset() {
-            marks.length = 0;
-            measures.length = 0;
+            clearMarks();
+            clearMeasures();
             start = now();
         }
 

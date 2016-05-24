@@ -96,8 +96,7 @@ namespace ts {
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
         performance.mark("bindStart");
         binder(file, options);
-        performance.mark("bindEnd");
-        performance.measure("bindTime", "bindStart", "bindEnd");
+        performance.measure("bindTime", "bindStart");
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {

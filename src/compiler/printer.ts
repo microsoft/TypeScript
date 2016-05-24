@@ -276,7 +276,9 @@ const _super = (function (geti, seti) {
                 currentFileIdentifiers = node.identifiers;
                 sourceMap.setSourceFile(node);
                 comments.setSourceFile(node);
+                performance.mark("printStart");
                 emitNodeWithNotificationOption(node, emitWorker);
+                performance.measure("printTime", "printStart");
                 return node;
             }
 

@@ -7,7 +7,6 @@ namespace ts {
         setSourceFile(sourceFile: SourceFile): void;
         getLeadingComments(range: TextRange): CommentRange[];
         getLeadingComments(range: TextRange, contextNode: Node, ignoreNodeCallback: (contextNode: Node) => boolean, getTextRangeCallback: (contextNode: Node) => TextRange): CommentRange[];
-        getLeadingCommentsOfPosition(pos: number): CommentRange[];
         getTrailingComments(range: TextRange): CommentRange[];
         getTrailingComments(range: TextRange, contextNode: Node, ignoreNodeCallback: (contextNode: Node) => boolean, getTextRangeCallback: (contextNode: Node) => TextRange): CommentRange[];
         getTrailingCommentsOfPosition(pos: number): CommentRange[];
@@ -32,9 +31,9 @@ namespace ts {
 
         // This maps start->end for a comment range. See `hasConsumedCommentRange` and
         // `consumeCommentRange` for usage.
-        let consumedCommentRanges: number[];
-        let leadingCommentRangePositions: boolean[];
-        let trailingCommentRangePositions: boolean[];
+        let consumedCommentRanges: Map<number>;
+        let leadingCommentRangePositions: Map<boolean>;
+        let trailingCommentRangePositions: Map<boolean>;
 
         return compilerOptions.removeComments
             ? createCommentRemovingWriter()
@@ -45,7 +44,6 @@ namespace ts {
                 reset,
                 setSourceFile,
                 getLeadingComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean, getTextRangeCallback?: (contextNode: Node) => TextRange): CommentRange[] { return undefined; },
-                getLeadingCommentsOfPosition(pos: number): CommentRange[] { return undefined; },
                 getTrailingComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean, getTextRangeCallback?: (contextNode: Node) => TextRange): CommentRange[] { return undefined; },
                 getTrailingCommentsOfPosition(pos: number): CommentRange[] { return undefined; },
                 emitLeadingComments(range: TextRange, comments: CommentRange[], contextNode?: Node, getTextRangeCallback?: (contextNode: Node) => TextRange): void { },
@@ -69,7 +67,6 @@ namespace ts {
                 reset,
                 setSourceFile,
                 getLeadingComments,
-                getLeadingCommentsOfPosition,
                 getTrailingComments,
                 getTrailingCommentsOfPosition,
                 emitLeadingComments,
@@ -81,9 +78,14 @@ namespace ts {
             function getLeadingComments(range: TextRange): CommentRange[];
             function getLeadingComments(range: TextRange, contextNode: Node, ignoreNodeCallback: (contextNode: Node) => boolean, getTextRangeCallback: (contextNode: Node) => TextRange): CommentRange[];
             function getLeadingComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean, getTextRangeCallback?: (contextNode: Node) => TextRange) {
+                performance.mark("commentStart");
+
+                let comments: CommentRange[] = [];
+                let ignored = false;
                 if (contextNode) {
                     range = getTextRangeCallback(contextNode) || range;
                     if (ignoreNodeCallback(contextNode)) {
+                        ignored = true;
                         // If the node will not be emitted in JS, remove all the comments (normal,
                         // pinned and `///`) associated with the node, unless it is a triple slash
                         // comment at the top of the file.
@@ -97,15 +99,17 @@ namespace ts {
                         // The first `///` will NOT be removed while the second one will be removed
                         // even though both nodes will not be emitted.
                         if (range.pos === 0) {
-                            return filter(getLeadingCommentsOfPosition(0), isTripleSlashComment);
+                            comments = filter(getLeadingCommentsOfPosition(0), isTripleSlashComment);
                         }
-
-                        return undefined;
                     }
                 }
 
+                if (!ignored) {
+                    comments = getLeadingCommentsOfPosition(range.pos);
+                }
 
-                return getLeadingCommentsOfPosition(range.pos);
+                performance.measure("commentTime", "commentStart");
+                return comments;
             }
 
             /**
@@ -127,15 +131,25 @@ namespace ts {
             function getTrailingComments(range: TextRange): CommentRange[];
             function getTrailingComments(range: TextRange, contextNode: Node, ignoreNodeCallback: (contextNode: Node) => boolean, getTextRangeCallback: (contextNode: Node) => TextRange): CommentRange[];
             function getTrailingComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean, getTextRangeCallback?: (contextNode: Node) => TextRange) {
+                performance.mark("commentStart");
+
+                let ignored = false;
                 if (contextNode) {
                     if (ignoreNodeCallback(contextNode)) {
-                        return undefined;
+                        ignored = true;
                     }
-
-                    range = getTextRangeCallback(contextNode) || range;
+                    else {
+                        range = getTextRangeCallback(contextNode) || range;
+                    }
                 }
 
-                return getTrailingCommentsOfPosition(range.end);
+                let comments: CommentRange[];
+                if (!ignored) {
+                    comments = getTrailingCommentsOfPositionWorker(range.end);
+                }
+
+                performance.measure("commentTime", "commentStart");
+                return comments;
             }
 
             function getLeadingCommentsOfPosition(pos: number) {
@@ -151,6 +165,13 @@ namespace ts {
             }
 
             function getTrailingCommentsOfPosition(pos: number) {
+                performance.mark("commentStart");
+                const comments = getTrailingCommentsOfPositionWorker(pos);
+                performance.measure("commentTime", "commentStart");
+                return comments;
+            }
+
+            function getTrailingCommentsOfPositionWorker(pos: number) {
                 if (positionIsSynthesized(pos) || trailingCommentRangePositions[pos]) {
                     return undefined;
                 }
@@ -163,6 +184,7 @@ namespace ts {
             function emitLeadingComments(range: TextRange, comments: CommentRange[]): void;
             function emitLeadingComments(range: TextRange, comments: CommentRange[], contextNode: Node, getTextRangeCallback: (contextNode: Node) => TextRange): void;
             function emitLeadingComments(range: TextRange, comments: CommentRange[], contextNode?: Node, getTextRangeCallback?: (contextNode: Node) => TextRange) {
+                performance.mark("commentStart");
                 if (comments && comments.length > 0) {
                     if (contextNode) {
                         range = getTextRangeCallback(contextNode) || range;
@@ -173,11 +195,14 @@ namespace ts {
                     // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
                     emitComments(currentText, currentLineMap, writer, comments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeComment);
                 }
+                performance.measure("commentTime", "commentStart");
             }
 
             function emitTrailingComments(range: TextRange, comments: CommentRange[]) {
                 // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
+                performance.mark("commentStart");
                 emitComments(currentText, currentLineMap, writer, comments, /*leadingSeparator*/ true, /*trailingSeparator*/ false, newLine, writeComment);
+                performance.measure("commentTime", "commentStart");
             }
 
             function emitLeadingDetachedComments(range: TextRange): void;
@@ -187,7 +212,9 @@ namespace ts {
                     return;
                 }
 
+                performance.mark("commentStart");
                 emitDetachedCommentsAndUpdateCommentsInfo(range, /*removeComments*/ false);
+                performance.measure("commentTime", "commentStart");
             }
 
             function emitTrailingDetachedComments(range: TextRange): void;
@@ -264,9 +291,9 @@ namespace ts {
             currentText = sourceFile.text;
             currentLineMap = getLineStarts(sourceFile);
             detachedCommentsInfo = undefined;
-            consumedCommentRanges = [];
-            leadingCommentRangePositions = [];
-            trailingCommentRangePositions = [];
+            consumedCommentRanges = {};
+            leadingCommentRangePositions = {};
+            trailingCommentRangePositions = {};
         }
 
         function hasDetachedComments(pos: number) {

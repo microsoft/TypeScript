@@ -778,8 +778,7 @@ namespace ts {
             try {
                 performance.mark("ioReadStart");
                 text = sys.readFile(fileName, options.charset);
-                performance.mark("ioReadEnd");
-                performance.measure("ioReadTime", "ioReadStart", "ioReadEnd");
+                performance.measure("ioReadTime", "ioReadStart");
             }
             catch (e) {
                 if (onError) {
@@ -856,8 +855,7 @@ namespace ts {
                     sys.writeFile(fileName, data, writeByteOrderMark);
                 }
 
-                performance.mark("ioWriteEnd");
-                performance.measure("ioWriteTime", "ioWriteStart", "ioWriteEnd");
+                performance.measure("ioWriteTime", "ioWriteStart");
             }
             catch (e) {
                 if (onError) {
@@ -1052,8 +1050,7 @@ namespace ts {
 
         verifyCompilerOptions();
 
-        performance.mark("programEnd");
-        performance.measure("programTime", "programStart", "programEnd");
+        performance.measure("programTime", "programStart");
 
         return program;
 
@@ -1300,8 +1297,7 @@ namespace ts {
                 getEmitHost(writeFileCallback),
                 sourceFile);
 
-            performance.mark("emitEnd");
-            performance.measure("emitTime", "emitStart", "emitEnd");
+            performance.measure("emitTime", "emitStart");
 
             return emitResult;
         }

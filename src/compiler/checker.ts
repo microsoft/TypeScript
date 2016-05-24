@@ -16068,8 +16068,7 @@ namespace ts {
 
             checkSourceFileWorker(node);
 
-            performance.mark("checkEnd");
-            performance.measure("checkTime", "checkStart", "checkEnd");
+            performance.measure("checkTime", "checkStart");
         }
 
         // Fully type check a source file and collect the relevant diagnostics.
