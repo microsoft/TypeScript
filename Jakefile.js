@@ -978,7 +978,6 @@ var lintTargets = compilerSources
     // Other harness sources
     .concat(["instrumenter.ts"].map(function(f) { return path.join(harnessDirectory, f) }))
     .concat(serverCoreSources)
-    .concat(["client.ts"].map(function(f) { return path.join(serverDirectory, f); }))
     .concat(tslintRulesFiles)
     .concat(servicesLintTargets);
 
