@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(7,20): error TS2339: Property 'global' does not exist on type 'nothing'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(7,20): error TS2339: Property 'global' does not exist on type 'never'.
 
 
 ==== tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts (1 errors) ====
@@ -10,5 +10,5 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(7,20)
         result = result2;
     } else if (!result.global) {
                        ~~~~~~
-!!! error TS2339: Property 'global' does not exist on type 'nothing'.
+!!! error TS2339: Property 'global' does not exist on type 'never'.
     }

@@ -32,7 +32,7 @@ namespace ts.server {
         children: ScriptInfo[] = [];     // files referenced by this file
         defaultProject: Project;      // project to use by default for file
         fileWatcher: FileWatcher;
-        formatCodeOptions = ts.clone(CompilerService.defaultFormatCodeOptions);
+        formatCodeOptions = ts.clone(CompilerService.getDefaultFormatCodeOptions(this.host));
         path: Path;
         scriptKind: ScriptKind;
 
@@ -533,7 +533,7 @@ namespace ts.server {
         // number becomes 0 for a watcher, then we should close it.
         directoryWatchersRefCount: ts.Map<number> = {};
         hostConfiguration: HostConfiguration;
-        timerForDetectingProjectFileListChanges: Map<NodeJS.Timer> = {};
+        timerForDetectingProjectFileListChanges: Map<any> = {};
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
@@ -542,7 +542,7 @@ namespace ts.server {
 
         addDefaultHostConfiguration() {
             this.hostConfiguration = {
-                formatCodeOptions: ts.clone(CompilerService.defaultFormatCodeOptions),
+                formatCodeOptions: ts.clone(CompilerService.getDefaultFormatCodeOptions(this.host)),
                 hostInfo: "Unknown host"
             };
         }
@@ -593,9 +593,9 @@ namespace ts.server {
 
         startTimerForDetectingProjectFileListChanges(project: Project) {
             if (this.timerForDetectingProjectFileListChanges[project.projectFilename]) {
-                clearTimeout(this.timerForDetectingProjectFileListChanges[project.projectFilename]);
+                this.host.clearTimeout(this.timerForDetectingProjectFileListChanges[project.projectFilename]);
             }
-            this.timerForDetectingProjectFileListChanges[project.projectFilename] = setTimeout(
+            this.timerForDetectingProjectFileListChanges[project.projectFilename] = this.host.setTimeout(
                 () => this.handleProjectFileListChanges(project),
                 250
             );
@@ -1122,8 +1122,13 @@ namespace ts.server {
                         return { configFileName, configFileErrors: configResult.errors };
                     }
                     else {
+                        // even if opening config file was successful, it could still
+                        // contain errors that were tolerated.
                         this.log("Opened configuration file " + configFileName, "Info");
                         this.configuredProjects.push(configResult.project);
+                        if (configResult.errors && configResult.errors.length > 0) {
+                            return { configFileName, configFileErrors: configResult.errors };
+                        }
                     }
                 }
                 else {
@@ -1261,14 +1266,14 @@ namespace ts.server {
             }
             else {
                 const project = this.createProject(configFilename, projectOptions);
+                let errors: Diagnostic[];
                 for (const rootFilename of projectOptions.files) {
                     if (this.host.fileExists(rootFilename)) {
                         const info = this.openFile(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
                         project.addRoot(info);
                     }
                     else {
-                        const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, rootFilename);
-                        return { success: false, errors: [error] };
+                        (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.File_0_not_found, rootFilename));
                     }
                 }
                 project.finishGraph();
@@ -1279,7 +1284,7 @@ namespace ts.server {
                     path => this.directoryWatchedForSourceFilesChanged(project, path),
                     /*recursive*/ true
                 );
-                return { success: true, project: project };
+                return { success: true, project: project, errors };
             }
         }
 
@@ -1295,7 +1300,7 @@ namespace ts.server {
                 }
                 else {
                     const oldFileNames = project.compilerService.host.roots.map(info => info.fileName);
-                    const newFileNames = projectOptions.files;
+                    const newFileNames = ts.filter(projectOptions.files, f => this.host.fileExists(f));
                     const fileNamesToRemove = oldFileNames.filter(f => newFileNames.indexOf(f) < 0);
                     const fileNamesToAdd = newFileNames.filter(f => oldFileNames.indexOf(f) < 0);
 
@@ -1377,23 +1382,25 @@ namespace ts.server {
             return ts.isExternalModule(sourceFile);
         }
 
-        static defaultFormatCodeOptions: ts.FormatCodeOptions = {
-            IndentSize: 4,
-            TabSize: 4,
-            NewLineCharacter: ts.sys ? ts.sys.newLine : "\n",
-            ConvertTabsToSpaces: true,
-            IndentStyle: ts.IndentStyle.Smart,
-            InsertSpaceAfterCommaDelimiter: true,
-            InsertSpaceAfterSemicolonInForStatements: true,
-            InsertSpaceBeforeAndAfterBinaryOperators: true,
-            InsertSpaceAfterKeywordsInControlFlowStatements: true,
-            InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-            InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-            InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-            InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-            PlaceOpenBraceOnNewLineForFunctions: false,
-            PlaceOpenBraceOnNewLineForControlBlocks: false,
-        };
+        static getDefaultFormatCodeOptions(host: ServerHost): ts.FormatCodeOptions {
+            return ts.clone({
+                IndentSize: 4,
+                TabSize: 4,
+                NewLineCharacter: host.newLine || "\n",
+                ConvertTabsToSpaces: true,
+                IndentStyle: ts.IndentStyle.Smart,
+                InsertSpaceAfterCommaDelimiter: true,
+                InsertSpaceAfterSemicolonInForStatements: true,
+                InsertSpaceBeforeAndAfterBinaryOperators: true,
+                InsertSpaceAfterKeywordsInControlFlowStatements: true,
+                InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
+                InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+                InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+                InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
+                PlaceOpenBraceOnNewLineForFunctions: false,
+                PlaceOpenBraceOnNewLineForControlBlocks: false,
+            });
+        }
     }
 
     export interface LineCollection {

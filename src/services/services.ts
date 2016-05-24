@@ -50,6 +50,7 @@ namespace ts {
         getStringIndexType(): Type;
         getNumberIndexType(): Type;
         getBaseTypes(): ObjectType[];
+        getNonNullableType(): Type;
     }
 
     export interface Signature {
@@ -735,6 +736,9 @@ namespace ts {
                 ? this.checker.getBaseTypes(<InterfaceType><Type>this)
                 : undefined;
         }
+        getNonNullableType(): Type {
+            return this.checker.getNonNullableType(this);
+        }
     }
 
     class SignatureObject implements Signature {
@@ -904,6 +908,7 @@ namespace ts {
             function visit(node: Node): void {
                 switch (node.kind) {
                     case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.FunctionExpression:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
                         const functionDeclaration = <FunctionLikeDeclaration>node;
@@ -930,6 +935,7 @@ namespace ts {
                         break;
 
                     case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.EnumDeclaration:
@@ -944,34 +950,25 @@ namespace ts {
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.TypeLiteral:
                         addDeclaration(<Declaration>node);
-                    // fall through
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.VariableStatement:
-                    case SyntaxKind.VariableDeclarationList:
-                    case SyntaxKind.ObjectBindingPattern:
-                    case SyntaxKind.ArrayBindingPattern:
-                    case SyntaxKind.ModuleBlock:
                         forEachChild(node, visit);
                         break;
 
-                    case SyntaxKind.Block:
-                        if (isFunctionBlock(node)) {
-                            forEachChild(node, visit);
-                        }
-                        break;
-
                     case SyntaxKind.Parameter:
-                        // Only consider properties defined as constructor parameters
-                        if (!(node.flags & NodeFlags.AccessibilityModifier)) {
+                        // Only consider parameter properties
+                        if (!(node.flags & NodeFlags.ParameterPropertyModifier)) {
                             break;
                         }
                     // fall through
                     case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.BindingElement:
-                        if (isBindingPattern((<VariableDeclaration>node).name)) {
-                            forEachChild((<VariableDeclaration>node).name, visit);
+                    case SyntaxKind.BindingElement: {
+                        const decl = <VariableDeclaration> node;
+                        if (isBindingPattern(decl.name)) {
+                            forEachChild(decl.name, visit);
                             break;
                         }
+                        if (decl.initializer)
+                            visit(decl.initializer);
+                    }
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
@@ -1008,6 +1005,9 @@ namespace ts {
                             }
                         }
                         break;
+
+                    default:
+                        forEachChild(node, visit);
                 }
             }
         }
@@ -1542,68 +1542,74 @@ namespace ts {
         export const unknown = "";
         export const warning = "warning";
 
-        // predefined type (void) or keyword (class)
+        /** predefined type (void) or keyword (class) */
         export const keyword = "keyword";
 
-        // top level script node
+        /** top level script node */
         export const scriptElement = "script";
 
-        // module foo {}
+        /** module foo {} */
         export const moduleElement = "module";
 
-        // class X {}
+        /** class X {} */
         export const classElement = "class";
 
-        // var x = class X {}
+        /** var x = class X {} */
         export const localClassElement = "local class";
 
-        // interface Y {}
+        /** interface Y {} */
         export const interfaceElement = "interface";
 
-        // type T = ...
+        /** type T = ... */
         export const typeElement = "type";
 
-        // enum E
+        /** enum E */
         export const enumElement = "enum";
 
-        // Inside module and script only
-        // const v = ..
+        /**
+         * Inside module and script only
+         * const v = ..
+         */
         export const variableElement = "var";
 
-        // Inside function
+        /** Inside function */
         export const localVariableElement = "local var";
 
-        // Inside module and script only
-        // function f() { }
+        /**
+         * Inside module and script only
+         * function f() { }
+         */
         export const functionElement = "function";
 
-        // Inside function
+        /** Inside function */
         export const localFunctionElement = "local function";
 
-        // class X { [public|private]* foo() {} }
+        /** class X { [public|private]* foo() {} } */
         export const memberFunctionElement = "method";
 
-        // class X { [public|private]* [get|set] foo:number; }
+        /** class X { [public|private]* [get|set] foo:number; } */
         export const memberGetAccessorElement = "getter";
         export const memberSetAccessorElement = "setter";
 
-        // class X { [public|private]* foo:number; }
-        // interface Y { foo:number; }
+        /**
+         * class X { [public|private]* foo:number; }
+         * interface Y { foo:number; }
+         */
         export const memberVariableElement = "property";
 
-        // class X { constructor() { } }
+        /** class X { constructor() { } } */
         export const constructorImplementationElement = "constructor";
 
-        // interface Y { ():number; }
+        /** interface Y { ():number; } */
         export const callSignatureElement = "call";
 
-        // interface Y { []:number; }
+        /** interface Y { []:number; } */
         export const indexSignatureElement = "index";
 
-        // interface Y { new():Y; }
+        /** interface Y { new():Y; } */
         export const constructSignatureElement = "construct";
 
-        // function foo(*Y*: string)
+        /** function foo(*Y*: string) */
         export const parameterElement = "parameter";
 
         export const typeParameterElement = "type parameter";
@@ -2770,7 +2776,9 @@ namespace ts {
     /* @internal */ export function getNodeKind(node: Node): string {
         switch (node.kind) {
             case SyntaxKind.ModuleDeclaration: return ScriptElementKind.moduleElement;
-            case SyntaxKind.ClassDeclaration: return ScriptElementKind.classElement;
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+                return ScriptElementKind.classElement;
             case SyntaxKind.InterfaceDeclaration: return ScriptElementKind.interfaceElement;
             case SyntaxKind.TypeAliasDeclaration: return ScriptElementKind.typeElement;
             case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
@@ -2780,7 +2788,9 @@ namespace ts {
                     : isLet(node)
                         ? ScriptElementKind.letElement
                         : ScriptElementKind.variableElement;
-            case SyntaxKind.FunctionDeclaration: return ScriptElementKind.functionElement;
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+                return ScriptElementKind.functionElement;
             case SyntaxKind.GetAccessor: return ScriptElementKind.memberGetAccessorElement;
             case SyntaxKind.SetAccessor: return ScriptElementKind.memberSetAccessorElement;
             case SyntaxKind.MethodDeclaration:
@@ -2795,7 +2805,7 @@ namespace ts {
             case SyntaxKind.Constructor: return ScriptElementKind.constructorImplementationElement;
             case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
             case SyntaxKind.EnumMember: return ScriptElementKind.variableElement;
-            case SyntaxKind.Parameter: return (node.flags & NodeFlags.AccessibilityModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
+            case SyntaxKind.Parameter: return (node.flags & NodeFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ImportClause:
@@ -4366,7 +4376,7 @@ namespace ts {
                         (location.kind === SyntaxKind.ConstructorKeyword && location.parent.kind === SyntaxKind.Constructor)) { // At constructor keyword of constructor declaration
                         // get the signature from the declaration and write it
                         const functionDeclaration = <FunctionLikeDeclaration>location.parent;
-                        const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getConstructSignatures() : type.getCallSignatures();
+                        const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getNonNullableType().getConstructSignatures() : type.getNonNullableType().getCallSignatures();
                         if (!typeChecker.isImplementationOfOverload(functionDeclaration)) {
                             signature = typeChecker.getSignatureFromDeclaration(functionDeclaration);
                         }
@@ -4564,7 +4574,7 @@ namespace ts {
                             symbolFlags & SymbolFlags.Signature ||
                             symbolFlags & SymbolFlags.Accessor ||
                             symbolKind === ScriptElementKind.memberFunctionElement) {
-                            const allSignatures = type.getCallSignatures();
+                            const allSignatures = type.getNonNullableType().getCallSignatures();
                             addSignatureDisplayParts(allSignatures[0], allSignatures);
                         }
                     }
@@ -4645,7 +4655,7 @@ namespace ts {
 
             const sourceFile = getValidSourceFile(fileName);
             const node = getTouchingPropertyName(sourceFile, position);
-            if (!node) {
+            if (node === sourceFile) {
                 return undefined;
             }
 
@@ -4802,18 +4812,6 @@ namespace ts {
 
             const sourceFile = getValidSourceFile(fileName);
 
-            const node = getTouchingPropertyName(sourceFile, position);
-            if (!node) {
-                return undefined;
-            }
-
-            // Labels
-            if (isJumpStatementTarget(node)) {
-                const labelName = (<Identifier>node).text;
-                const label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
-                return label ? [createDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
-            }
-
             /// Triple slash reference comments
             const comment = findReferenceInPosition(sourceFile.referencedFiles, position);
             if (comment) {
@@ -4823,6 +4821,7 @@ namespace ts {
                 }
                 return undefined;
             }
+
             // Type reference directives
             const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
             if (typeReferenceDirective) {
@@ -4831,6 +4830,18 @@ namespace ts {
                     return [getDefinitionInfoForFileReference(typeReferenceDirective.fileName, referenceFile.resolvedFileName)];
                 }
                 return undefined;
+            }
+
+            const node = getTouchingPropertyName(sourceFile, position);
+            if (node === sourceFile) {
+                return undefined;
+            }
+
+            // Labels
+            if (isJumpStatementTarget(node)) {
+                const labelName = (<Identifier>node).text;
+                const label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
+                return label ? [createDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
             }
 
             const typeChecker = program.getTypeChecker();
@@ -4891,7 +4902,7 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
 
             const node = getTouchingPropertyName(sourceFile, position);
-            if (!node) {
+            if (node === sourceFile) {
                 return undefined;
             }
 
@@ -4941,8 +4952,7 @@ namespace ts {
         function getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
             synchronizeHostData();
 
-            filesToSearch = map(filesToSearch, normalizeSlashes);
-            const sourceFilesToSearch = filter(program.getSourceFiles(), f => contains(filesToSearch, f.fileName));
+            const sourceFilesToSearch = map(filesToSearch, f => program.getSourceFile(f));
             const sourceFile = getValidSourceFile(fileName);
 
             const node = getTouchingWord(sourceFile, position);
@@ -5628,7 +5638,7 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
 
             const node = getTouchingPropertyName(sourceFile, position);
-            if (!node) {
+            if (node === sourceFile) {
                 return undefined;
             }
 
@@ -6596,8 +6606,8 @@ namespace ts {
         /// NavigateTo
         function getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[] {
             synchronizeHostData();
-
-            return ts.NavigateTo.getNavigateToItems(program, cancellationToken, searchValue, maxResultCount);
+            const checker = getProgram().getTypeChecker();
+            return ts.NavigateTo.getNavigateToItems(program, checker, cancellationToken, searchValue, maxResultCount);
         }
 
         function getEmitOutput(fileName: string): EmitOutput {
@@ -6795,7 +6805,7 @@ namespace ts {
             // Get node at the location
             const node = getTouchingPropertyName(sourceFile, startPos);
 
-            if (!node) {
+            if (node === sourceFile) {
                 return;
             }
 

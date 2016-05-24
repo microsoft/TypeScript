@@ -1771,10 +1771,6 @@ namespace ts {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
                 }
 
-                if (file) {
-                    file.wasReferenced = file.wasReferenced || isReference;
-                }
-
                 // If this was a file found by a node_modules search, set the nodeModuleSearchDistance to parent distance + 1.
                 if (isFileFromNodeSearch) {
                     const newDistance = (refFile && refFile.nodeModuleSearchDistance) === undefined ? 1 : refFile.nodeModuleSearchDistance + 1;
@@ -1797,7 +1793,6 @@ namespace ts {
 
             filesByName.set(path, file);
             if (file) {
-                file.wasReferenced = file.wasReferenced || isReference;
                 file.path = path;
 
                 // Default to same distance as parent. Add one if found by a search.
@@ -2051,7 +2046,7 @@ namespace ts {
                         }
                     }
                     else {
-                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substututions_for_pattern_0_should_be_an_array, key));
+                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substitutions_for_pattern_0_should_be_an_array, key));
                     }
                 }
             }
@@ -2110,7 +2105,7 @@ namespace ts {
             else if (firstExternalModuleSourceFile && languageVersion < ScriptTarget.ES6 && options.module === ModuleKind.None) {
                 // We cannot use createDiagnosticFromNode because nodes do not have parents yet
                 const span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
-                programDiagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_unless_the_module_flag_is_provided_with_a_valid_module_type_Consider_setting_the_module_compiler_option_in_a_tsconfig_json_file));
+                programDiagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_use_imports_exports_or_module_augmentations_when_module_is_none));
             }
 
             // Cannot specify module gen target of es6 when below es6
@@ -2119,8 +2114,14 @@ namespace ts {
             }
 
             // Cannot specify module gen that isn't amd or system with --out
-            if (outFile && options.module && !(options.module === ModuleKind.AMD || options.module === ModuleKind.System)) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile"));
+            if (outFile) {
+                if (options.module && !(options.module === ModuleKind.AMD || options.module === ModuleKind.System)) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile"));
+                }
+                else if (options.module === undefined && firstExternalModuleSourceFile) {
+                    const span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
+                    programDiagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system, options.out ? "out" : "outFile"));
+                }
             }
 
             // there has to be common source directory if user specified --outdir || --sourceRoot

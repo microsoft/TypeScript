@@ -140,6 +140,11 @@ namespace ts {
             type: "boolean",
         },
         {
+            name: "skipLibCheck",
+            type: "boolean",
+            description: Diagnostics.Skip_type_checking_of_declaration_files,
+        },
+        {
             name: "out",
             type: "string",
             isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
@@ -706,11 +711,11 @@ namespace ts {
                 }
                 else {
                     // by default exclude node_modules, and any specificied output directory
-                    exclude = ["node_modules"];
-                    const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
-                    if (outDir) {
-                        exclude.push(outDir);
-                    }
+                    exclude = ["node_modules", "bower_components", "jspm_packages"];
+                }
+                const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
+                if (outDir) {
+                    exclude.push(outDir);
                 }
                 exclude = map(exclude, normalizeSlashes);
 

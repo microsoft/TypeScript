@@ -303,8 +303,8 @@ namespace ts {
             case SyntaxKind.ImportClause:
                 return visitNode(cbNode, (<ImportClause>node).name) ||
                     visitNode(cbNode, (<ImportClause>node).namedBindings);
-            case SyntaxKind.GlobalModuleExportDeclaration:
-                return visitNode(cbNode, (<GlobalModuleExportDeclaration>node).name);
+            case SyntaxKind.NamespaceExportDeclaration:
+                return visitNode(cbNode, (<NamespaceExportDeclaration>node).name);
 
             case SyntaxKind.NamespaceImport:
                 return visitNode(cbNode, (<NamespaceImport>node).name);
@@ -2368,6 +2368,7 @@ namespace ts {
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.UndefinedKeyword:
+                case SyntaxKind.NeverKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     const node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReference();
@@ -2410,6 +2411,7 @@ namespace ts {
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.TypeOfKeyword:
+                case SyntaxKind.NeverKeyword:
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.LessThanToken:
@@ -5342,8 +5344,8 @@ namespace ts {
             return nextToken() === SyntaxKind.SlashToken;
         }
 
-        function parseGlobalModuleExportDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): GlobalModuleExportDeclaration {
-            const exportDeclaration = <GlobalModuleExportDeclaration>createNode(SyntaxKind.GlobalModuleExportDeclaration, fullStart);
+        function parseGlobalModuleExportDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): NamespaceExportDeclaration {
+            const exportDeclaration = <NamespaceExportDeclaration>createNode(SyntaxKind.NamespaceExportDeclaration, fullStart);
             exportDeclaration.decorators = decorators;
             exportDeclaration.modifiers = modifiers;
             parseExpected(SyntaxKind.AsKeyword);

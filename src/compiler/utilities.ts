@@ -613,6 +613,7 @@ namespace ts {
             case SyntaxKind.BooleanKeyword:
             case SyntaxKind.SymbolKeyword:
             case SyntaxKind.UndefinedKeyword:
+            case SyntaxKind.NeverKeyword:
                 return true;
             case SyntaxKind.VoidKeyword:
                 return node.parent.kind !== SyntaxKind.VoidExpression;
@@ -1260,8 +1261,15 @@ namespace ts {
         else if (lhs.expression.kind === SyntaxKind.PropertyAccessExpression) {
             // chained dot, e.g. x.y.z = expr; this var is the 'x.y' part
             const innerPropertyAccess = <PropertyAccessExpression>lhs.expression;
-            if (innerPropertyAccess.expression.kind === SyntaxKind.Identifier && innerPropertyAccess.name.text === "prototype") {
-                return SpecialPropertyAssignmentKind.PrototypeProperty;
+            if (innerPropertyAccess.expression.kind === SyntaxKind.Identifier) {
+                // module.exports.name = expr
+                const innerPropertyAccessIdentifier = <Identifier>innerPropertyAccess.expression;
+                if (innerPropertyAccessIdentifier.text === "module" && innerPropertyAccess.name.text === "exports") {
+                    return SpecialPropertyAssignmentKind.ExportsProperty;
+                }
+                if (innerPropertyAccess.name.text === "prototype") {
+                    return SpecialPropertyAssignmentKind.PrototypeProperty;
+                }
             }
         }
 
@@ -1635,7 +1643,7 @@ namespace ts {
     // export default ...
     export function isAliasSymbolDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.ImportEqualsDeclaration ||
-            node.kind === SyntaxKind.GlobalModuleExportDeclaration ||
+            node.kind === SyntaxKind.NamespaceExportDeclaration ||
             node.kind === SyntaxKind.ImportClause && !!(<ImportClause>node).name ||
             node.kind === SyntaxKind.NamespaceImport ||
             node.kind === SyntaxKind.ImportSpecifier ||

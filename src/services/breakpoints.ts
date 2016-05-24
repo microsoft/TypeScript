@@ -24,7 +24,7 @@ namespace ts.BreakpointResolver {
             // token on same line if trailing trivia (comments or white spaces on same line) part of the last token on that line
             tokenAtLocation = findPrecedingToken(tokenAtLocation.pos, sourceFile);
 
-            // Its a blank line
+            // It's a blank line
             if (!tokenAtLocation || sourceFile.getLineAndCharacterOfPosition(tokenAtLocation.getEnd()).line !== lineOfPosition) {
                 return undefined;
             }
@@ -312,7 +312,7 @@ namespace ts.BreakpointResolver {
 
                                 case SyntaxKind.BinaryExpression:
                                     if ((<BinaryExpression>node.parent).operatorToken.kind === SyntaxKind.CommaToken) {
-                                        // if this is comma expression, the breakpoint is possible in this expression
+                                        // If this is a comma expression, the breakpoint is possible in this expression
                                         return textSpan(node);
                                     }
                                     break;
@@ -387,7 +387,7 @@ namespace ts.BreakpointResolver {
                     return spanInNode(variableDeclaration.parent.parent);
                 }
                 
-                // If this is a destructuring pattern set breakpoint in binding pattern
+                // If this is a destructuring pattern, set breakpoint in binding pattern
                 if (isBindingPattern(variableDeclaration.name)) {
                     return spanInBindingPattern(<BindingPattern>variableDeclaration.name);
                 }
@@ -402,9 +402,9 @@ namespace ts.BreakpointResolver {
 
                 let declarations = variableDeclaration.parent.declarations;
                 if (declarations && declarations[0] !== variableDeclaration) {
-                    // If we cant set breakpoint on this declaration, set it on previous one
+                    // If we cannot set breakpoint on this declaration, set it on previous one
                     // Because the variable declaration may be binding pattern and 
-                    // we would like to set breakpoint in last binding element if thats the case,
+                    // we would like to set breakpoint in last binding element if that's the case,
                     // use preceding token instead
                     return spanInNode(findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent));
                 }
@@ -418,7 +418,7 @@ namespace ts.BreakpointResolver {
 
             function spanInParameterDeclaration(parameter: ParameterDeclaration): TextSpan {
                 if (isBindingPattern(parameter.name)) {
-                    // set breakpoint in binding pattern
+                    // Set breakpoint in binding pattern
                     return spanInBindingPattern(<BindingPattern>parameter.name);
                 }
                 else if (canHaveSpanInParameterDeclaration(parameter)) {
@@ -492,7 +492,7 @@ namespace ts.BreakpointResolver {
 
             function spanInInitializerOfForLike(forLikeStatement: ForStatement | ForOfStatement | ForInStatement): TextSpan {
                 if (forLikeStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {
-                    // declaration list, set breakpoint in first declaration
+                    // Declaration list - set breakpoint in first declaration
                     let variableDeclarationList = <VariableDeclarationList>forLikeStatement.initializer;
                     if (variableDeclarationList.declarations.length > 0) {
                         return spanInNode(variableDeclarationList.declarations[0]);
@@ -578,7 +578,7 @@ namespace ts.BreakpointResolver {
             function spanInCloseBraceToken(node: Node): TextSpan {
                 switch (node.parent.kind) {
                     case SyntaxKind.ModuleBlock:
-                        // If this is not instantiated module block no bp span
+                        // If this is not an instantiated module block, no bp span
                         if (getModuleInstanceState(node.parent.parent) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
@@ -593,7 +593,7 @@ namespace ts.BreakpointResolver {
                             // Span on close brace token
                             return textSpan(node);
                         }
-                        // fall through.
+                        // fall through
 
                     case SyntaxKind.CatchClause:
                         return spanInNode(lastOrUndefined((<Block>node.parent).statements));
@@ -714,7 +714,7 @@ namespace ts.BreakpointResolver {
 
             function spanInOfKeyword(node: Node): TextSpan {
                 if (node.parent.kind === SyntaxKind.ForOfStatement) {
-                    // set using next token
+                    // Set using next token
                     return spanInNextNode(node);
                 }
 

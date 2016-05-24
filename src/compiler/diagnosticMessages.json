@@ -315,10 +315,6 @@
         "category": "Error",
         "code": 1110
     },
-    "A class member cannot be declared optional.": {
-        "category": "Error",
-        "code": 1112
-    },
     "A 'default' clause cannot appear more than once in a 'switch' statement.": {
         "category": "Error",
         "code": 1113
@@ -447,7 +443,7 @@
         "category": "Error",
         "code": 1147
     },
-    "Cannot compile modules unless the '--module' flag is provided with a valid module type. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
+    "Cannot use imports, exports, or module augmentations when '--module' is 'none'.": {
         "category": "Error",
         "code": 1148
     },
@@ -1751,6 +1747,10 @@
         "category": "Error",
         "code": 2533
     },
+    "A function returning 'never' cannot have a reachable end point.": {
+        "category": "Error",
+        "code": 2534
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -1922,6 +1922,10 @@
     "The 'this' types of each signature are incompatible.": {
         "category": "Error",
         "code": 2685
+    },
+    "Identifier '{0}' must be imported from a module": {
+        "category": "Error",
+        "code": 2686
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2296,7 +2300,7 @@
         "category": "Error",
         "code": 5062
     },
-    "Substututions for pattern '{0}' should be an array.": {
+    "Substitutions for pattern '{0}' should be an array.": {
         "category": "Error",
         "code": 5063
     },
@@ -2347,6 +2351,10 @@
     "Allow default imports from modules with no default export. This does not affect code emit, just typechecking.": {
         "category": "Message",
         "code": 6011
+    },
+    "Skip type checking of declaration files.": {
+        "category": "Message",
+        "code": 6012
     },
     "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015'": {
         "category": "Message",
@@ -2752,13 +2760,17 @@
         "category": "Message",
         "code": 6130
     },    
+    "Cannot compile modules using option '{0}' unless the '--module' flag is 'amd' or 'system'.": {
+        "category": "Error",
+        "code": 6131
+    },
     "The maximum dependency depth to search under node_modules and load JavaScript files": {
         "category": "Message",
-        "code": 6131
+        "code": 6132
     },
     "No types specified in 'package.json' but 'allowJs' is set, so returning 'main' value of '{0}'": {
         "category": "Message",
-        "code": 6132
+        "code": 6133
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

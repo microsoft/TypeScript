@@ -11,4 +11,4 @@
 ////    }
 ////}
 
-verify.getScriptLexicalStructureListCount(6); // 2x(class + field + constructor)
+verify.navigationBarCount(6); // 2x(class + field + constructor)

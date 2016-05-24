@@ -20,13 +20,13 @@ namespace ts.formatting {
         Unknown = -1
     }
 
-    /* 
+    /*
      * Indentation for the scope that can be dynamically recomputed.
-     * i.e 
+     * i.e
      * while(true)
      * { let x;
      * }
-     * Normally indentation is applied only to the first token in line so at glance 'var' should not be touched. 
+     * Normally indentation is applied only to the first token in line so at glance 'var' should not be touched.
      * However if some format rule adds new line between '}' and 'var' 'var' will become
      * the first token in line so it should be indented
      */
@@ -48,15 +48,15 @@ namespace ts.formatting {
           * foo(bar({
           *     $
           * }))
-          * Both 'foo', 'bar' introduce new indentation with delta = 4, but total indentation in $ is not 8. 
+          * Both 'foo', 'bar' introduce new indentation with delta = 4, but total indentation in $ is not 8.
           * foo: { indentation: 0, delta: 4 }
           * bar: { indentation: foo.indentation + foo.delta = 4, delta: 4} however 'foo' and 'bar' are on the same line
           * so bar inherits indentation from foo and bar.delta will be 4
-          * 
+          *
           */
         getDelta(child: TextRangeWithKind): number;
         /**
-          * Formatter calls this function when rule adds or deletes new lines from the text 
+          * Formatter calls this function when rule adds or deletes new lines from the text
           * so indentation scope can adjust values of indentation and delta.
           */
         recomputeIndentation(lineAddedByFormatting: boolean): void;
@@ -130,9 +130,9 @@ namespace ts.formatting {
     function findOutermostParent(position: number, expectedTokenKind: SyntaxKind, sourceFile: SourceFile): Node {
         let precedingToken = findPrecedingToken(position, sourceFile);
 
-        // when it is claimed that trigger character was typed at given position 
+        // when it is claimed that trigger character was typed at given position
         // we verify that there is a token with a matching kind whose end is equal to position (because the character was just typed).
-        // If this condition is not hold - then trigger character was typed in some other context, 
+        // If this condition is not hold - then trigger character was typed in some other context,
         // i.e.in comment and thus should not trigger autoformatting
         if (!precedingToken ||
             precedingToken.kind !== expectedTokenKind ||
@@ -142,12 +142,12 @@ namespace ts.formatting {
 
         // walk up and search for the parent node that ends at the same position with precedingToken.
         // for cases like this
-        // 
+        //
         // let x = 1;
         // while (true) {
-        // } 
+        // }
         // after typing close curly in while statement we want to reformat just the while statement.
-        // However if we just walk upwards searching for the parent that has the same end value - 
+        // However if we just walk upwards searching for the parent that has the same end value -
         // we'll end up with the whole source file. isListElement allows to stop on the list element level
         let current = precedingToken;
         while (current &&
@@ -223,7 +223,7 @@ namespace ts.formatting {
             // 'index' tracks the index of the most recent error that was checked.
             while (true) {
                 if (index >= sorted.length) {
-                    // all errors in the range were already checked -> no error in specified range 
+                    // all errors in the range were already checked -> no error in specified range
                     return false;
                 }
 
@@ -249,7 +249,7 @@ namespace ts.formatting {
 
     /**
       * Start of the original range might fall inside the comment - scanner will not yield appropriate results
-      * This function will look for token that is located before the start of target range 
+      * This function will look for token that is located before the start of target range
       * and return its end as start position for the scanner.
       */
     function getScanStartPosition(enclosingNode: Node, originalRange: TextRange, sourceFile: SourceFile): number {
@@ -274,7 +274,7 @@ namespace ts.formatting {
     }
 
     /*
-     * For cases like 
+     * For cases like
      * if (a ||
      *     b ||$
      *     c) {...}
@@ -284,8 +284,8 @@ namespace ts.formatting {
      * Initial indentation for this node will be 0.
      * Binary expressions don't introduce new indentation scopes, however it is possible
      * that some parent node on the same line does - like if statement in this case.
-     * Note that we are considering parents only from the same line with initial node - 
-     * if parent is on the different line - its delta was already contributed 
+     * Note that we are considering parents only from the same line with initial node -
+     * if parent is on the different line - its delta was already contributed
      * to the initial indentation.
      */
     function getOwnOrInheritedDelta(n: Node, options: FormatCodeOptions, sourceFile: SourceFile): number {
@@ -364,10 +364,10 @@ namespace ts.formatting {
         // local functions
 
         /** Tries to compute the indentation for a list element.
-          * If list element is not in range then 
-          * function will pick its actual indentation 
+          * If list element is not in range then
+          * function will pick its actual indentation
           * so it can be pushed downstream as inherited indentation.
-          * If list element is in the range - its indentation will be equal 
+          * If list element is in the range - its indentation will be equal
           * to inherited indentation from its predecessors.
           */
         function tryComputeIndentationForListItem(startPos: number,
@@ -378,7 +378,7 @@ namespace ts.formatting {
 
             if (rangeOverlapsWithStartEnd(range, startPos, endPos) ||
                 rangeContainsStartEnd(range, startPos, endPos) /* Not to miss zero-range nodes e.g. JsxText */) {
-                
+
                 if (inheritedIndentation !== Constants.Unknown) {
                     return inheritedIndentation;
                 }
@@ -529,12 +529,12 @@ namespace ts.formatting {
             // a useful observations when tracking context node
             //        /
             //      [a]
-            //   /   |   \ 
+            //   /   |   \
             //  [b] [c] [d]
-            // node 'a' is a context node for nodes 'b', 'c', 'd' 
+            // node 'a' is a context node for nodes 'b', 'c', 'd'
             // except for the leftmost leaf token in [b] - in this case context node ('e') is located somewhere above 'a'
             // this rule can be applied recursively to child nodes of 'a'.
-            // 
+            //
             // context node is set to parent node value after processing every child node
             // context node is set to parent of the token after processing every token
 
@@ -567,7 +567,8 @@ namespace ts.formatting {
                 parentDynamicIndentation: DynamicIndentation,
                 parentStartLine: number,
                 undecoratedParentStartLine: number,
-                isListItem: boolean): number {
+                isListItem: boolean,
+                isFirstListItem?: boolean): number {
 
                 let childStartPos = child.getStart(sourceFile);
 
@@ -626,6 +627,10 @@ namespace ts.formatting {
 
                 childContextNode = node;
 
+                if (isFirstListItem && parent.kind === SyntaxKind.ArrayLiteralExpression && inheritedIndentation === Constants.Unknown) {
+                    inheritedIndentation = childIndentation.indentation;
+                }
+
                 return inheritedIndentation;
             }
 
@@ -665,8 +670,9 @@ namespace ts.formatting {
                 }
 
                 let inheritedIndentation = Constants.Unknown;
-                for (let child of nodes) {
-                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListElement*/ true)
+                for (let i = 0; i < nodes.length; i++) {
+                    const child = nodes[i];
+                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListElement*/ true, /*isFirstListItem*/ i === 0);
                 }
 
                 if (listEndToken !== SyntaxKind.Unknown) {
@@ -674,7 +680,7 @@ namespace ts.formatting {
                         let tokenInfo = formattingScanner.readTokenInfo(parent);
                         // consume the list end token only if it is still belong to the parent
                         // there might be the case when current token matches end token but does not considered as one
-                        // function (x: function) <-- 
+                        // function (x: function) <--
                         // without this check close paren will be interpreted as list end token for function expression which is wrong
                         if (tokenInfo.token.kind === listEndToken && rangeContainsRange(parent, tokenInfo.token)) {
                             // consume list end token
@@ -733,7 +739,7 @@ namespace ts.formatting {
                         let commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind, tokenIndentation, container);
 
                         for (let triviaItem of currentTokenInfo.leadingTrivia) {
-                            const triviaInRange = rangeContainsRange(originalRange, triviaItem); 
+                            const triviaInRange = rangeContainsRange(originalRange, triviaItem);
                             switch (triviaItem.kind) {
                                 case SyntaxKind.MultiLineCommentTrivia:
                                     if (triviaInRange) {
@@ -826,7 +832,7 @@ namespace ts.formatting {
 
                 if (rule.Operation.Action & (RuleAction.Space | RuleAction.Delete) && currentStartLine !== previousStartLine) {
                     lineAdded = false;
-                    // Handle the case where the next line is moved to be the end of this line. 
+                    // Handle the case where the next line is moved to be the end of this line.
                     // In this case we don't indent the next line in the next pass.
                     if (currentParent.getStart(sourceFile) === currentItem.pos) {
                         dynamicIndentation.recomputeIndentation(/*lineAdded*/ false);
@@ -834,7 +840,7 @@ namespace ts.formatting {
                 }
                 else if (rule.Operation.Action & RuleAction.NewLine && currentStartLine === previousStartLine) {
                     lineAdded = true;
-                    // Handle the case where token2 is moved to the new line. 
+                    // Handle the case where token2 is moved to the new line.
                     // In this case we indent token2 in the next pass but we set
                     // sameLineIndent flag to notify the indenter that the indentation is within the line.
                     if (currentParent.getStart(sourceFile) === currentItem.pos) {

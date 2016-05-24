@@ -164,6 +164,7 @@ namespace ts {
         IsKeyword,
         ModuleKeyword,
         NamespaceKeyword,
+        NeverKeyword,
         ReadonlyKeyword,
         RequireKeyword,
         NumberKeyword,
@@ -276,7 +277,7 @@ namespace ts {
         ModuleDeclaration,
         ModuleBlock,
         CaseBlock,
-        GlobalModuleExportDeclaration,
+        NamespaceExportDeclaration,
         ImportEqualsDeclaration,
         ImportDeclaration,
         ImportClause,
@@ -1340,8 +1341,8 @@ namespace ts {
         name: Identifier;
     }
 
-    // @kind(SyntaxKind.GlobalModuleImport)
-    export interface GlobalModuleExportDeclaration extends DeclarationStatement {
+    // @kind(SyntaxKind.NamespaceExportDeclaration)
+    export interface NamespaceExportDeclaration extends DeclarationStatement {
         name: Identifier;
         moduleReference: LiteralLikeNode;
     }
@@ -1600,8 +1601,6 @@ namespace ts {
         /* @internal */ commonJsModuleIndicator: Node;
         // The number of times node_modules was searched to locate the package containing this file
         /* @internal */ nodeModuleSearchDistance?: number;
-        // True if the file was a root file in a compilation or a /// reference targets
-        /* @internal */ wasReferenced?: boolean;
 
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
@@ -1774,6 +1773,7 @@ namespace ts {
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getBaseTypes(type: InterfaceType): ObjectType[];
         getReturnTypeOfSignature(signature: Signature): Type;
+        getNonNullableType(type: Type): Type;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
@@ -2172,11 +2172,12 @@ namespace ts {
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
         ThisType                = 0x02000000,  // This type
         ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
+        Never                   = 0x08000000,  // Never type
 
         /* @internal */
         Nullable = Undefined | Null,
         /* @internal */
-        Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
+        Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
         Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
@@ -2505,6 +2506,7 @@ namespace ts {
         maxNodeModuleJsDepth?: number;
         noImplicitUseStrict?: boolean;
         strictNullChecks?: boolean;
+        skipLibCheck?: boolean;
         listEmittedFiles?: boolean;
         lib?: string[];
         /* @internal */ stripInternal?: boolean;

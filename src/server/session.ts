@@ -133,6 +133,8 @@ namespace ts.server {
     }
 
     export interface ServerHost extends ts.System {
+        setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
+        clearTimeout(timeoutId: any): void;
     }
 
     export class Session {
