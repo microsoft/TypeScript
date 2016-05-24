@@ -210,7 +210,6 @@ namespace ts {
     }
 
     describe("Reuse program structure", () => {
-        /* tslint:disable no-unused-variable */
         const target = ScriptTarget.Latest;
         const files = [
             { name: "a.ts", text: SourceText.New(
@@ -248,7 +247,7 @@ namespace ts {
 
         it("fails if change affects tripleslash references", () => {
             const program_1 = newProgram(files, ["a.ts"], { target });
-            const program_2 = updateProgram(program_1, ["a.ts"], { target }, files => {
+            updateProgram(program_1, ["a.ts"], { target }, files => {
                 const newReferences = `/// <reference path='b.ts'/>
                 /// <reference path='c.ts'/>
                 `;
@@ -259,7 +258,7 @@ namespace ts {
 
         it("fails if change affects imports", () => {
             const program_1 = newProgram(files, ["a.ts"], { target });
-            const program_2 = updateProgram(program_1, ["a.ts"], { target }, files => {
+            updateProgram(program_1, ["a.ts"], { target }, files => {
                 files[2].text = files[2].text.updateImportsAndExports("import x from 'b'");
             });
             assert.isTrue(!program_1.structureIsReused);
@@ -267,7 +266,7 @@ namespace ts {
 
         it("fails if change affects type directives", () => {
             const program_1 = newProgram(files, ["a.ts"], { target });
-            const program_2 = updateProgram(program_1, ["a.ts"], { target }, files => {
+            updateProgram(program_1, ["a.ts"], { target }, files => {
                 const newReferences = `
 /// <reference path='b.ts'/>
 /// <reference path='non-existing-file.ts'/>
@@ -279,19 +278,19 @@ namespace ts {
 
         it("fails if module kind changes", () => {
             const program_1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS });
-            const program_2 = updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.AMD }, files => void 0);
+            updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.AMD }, files => void 0);
             assert.isTrue(!program_1.structureIsReused);
         });
 
         it("fails if rootdir changes", () => {
             const program_1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/b" });
-            const program_2 = updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/c" }, files => void 0);
+            updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/c" }, files => void 0);
             assert.isTrue(!program_1.structureIsReused);
         });
 
         it("fails if config path changes", () => {
             const program_1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/b/tsconfig.json" });
-            const program_2 = updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/c/tsconfig.json" }, files => void 0);
+            updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/c/tsconfig.json" }, files => void 0);
             assert.isTrue(!program_1.structureIsReused);
         });
 
@@ -360,7 +359,7 @@ namespace ts {
             assert.isTrue(!program_2.structureIsReused);
             checkResolvedTypeDirectivesCache(program_3, "/a.ts", undefined);
 
-            const program_4 = updateProgram(program_3, ["/a.ts"], options, files => {
+            updateProgram(program_3, ["/a.ts"], options, files => {
                 const newReferences = `/// <reference types="typedefs"/>
                 /// <reference types="typedefs2"/>
                 `;
@@ -369,7 +368,6 @@ namespace ts {
             assert.isTrue(!program_3.structureIsReused);
             checkResolvedTypeDirectivesCache(program_1, "/a.ts", { "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } });
         });
-        /* tslint:enable no-unused-variable */
     });
 
     describe("host is optional", () => {

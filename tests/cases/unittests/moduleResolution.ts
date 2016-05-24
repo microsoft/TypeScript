@@ -1059,9 +1059,7 @@ import b = require("./moduleB.ts");
             const diagnostics1 = program1.getFileProcessingDiagnostics().getDiagnostics();
             assert.equal(diagnostics1.length, 1, "expected one diagnostic");
 
-            /* tslint:disable no-unused-variable */
-            const program2 = createProgram(names, {}, compilerHost, program1);
-            /* tslint:enable no-unused-variable */
+            createProgram(names, {}, compilerHost, program1);
             assert.isTrue(program1.structureIsReused);
             const diagnostics2 = program1.getFileProcessingDiagnostics().getDiagnostics();
             assert.equal(diagnostics2.length, 1, "expected one diagnostic");

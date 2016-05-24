@@ -1,7 +1,6 @@
 ///<reference path='..\..\..\..\src\harness\harness.ts' />
 
 describe("DocumentRegistry", () => {
-    /* tslint:disable no-unused-variable */
     it("documents are shared between projects", () => {
         const documentRegistry = ts.createDocumentRegistry();
         const defaultCompilerOptions = ts.getDefaultCompilerOptions();
@@ -47,7 +46,7 @@ describe("DocumentRegistry", () => {
         const defaultCompilerOptions = ts.getDefaultCompilerOptions();
 
         // Simulate one LS getting the document.
-        const f1 = documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "1");
+        documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "1");
 
         // Simulate another LS getting the document at another version.
         const f2 = documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "2");
@@ -66,16 +65,15 @@ describe("DocumentRegistry", () => {
         snapshot.getChangeRange = old => ts.createTextChangeRange(ts.createTextSpan(0, contents.length), contents.length);
 
         // Simulate one LS getting the document.
-        const f1 = documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, snapshot, /* version */ "1");
+        documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, snapshot, /* version */ "1");
 
         // Simulate another LS getting that document.
-        const f2 = documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, snapshot, /* version */ "1");
+        documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, snapshot, /* version */ "1");
 
         // Now LS1 updates their document.
-        const f3 = documentRegistry.updateDocument("file1.ts", defaultCompilerOptions, snapshot, /* version */ "2");
+        documentRegistry.updateDocument("file1.ts", defaultCompilerOptions, snapshot, /* version */ "2");
 
         // Now LS2 tries to update their document.
-        const f4 = documentRegistry.updateDocument("file1.ts", defaultCompilerOptions, snapshot, /* version */ "3");
+        documentRegistry.updateDocument("file1.ts", defaultCompilerOptions, snapshot, /* version */ "3");
     });
-    /* tslint:enable no-unused-variable */
 });
