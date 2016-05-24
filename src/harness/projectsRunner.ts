@@ -1,6 +1,6 @@
 ///<reference path="harness.ts" />
 ///<reference path="runnerbase.ts" />
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 // Test case is json of below type in tests/cases/project/
 interface ProjectRunnerTestCase {
@@ -156,7 +156,7 @@ class ProjectRunner extends RunnerBase {
             function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
                 let sourceFile: ts.SourceFile = undefined;
                 if (fileName === Harness.Compiler.defaultLibFileName) {
-                    sourceFile = languageVersion === ts.ScriptTarget.ES6 ? Harness.Compiler.defaultES6LibSourceFile : Harness.Compiler.defaultLibSourceFile;
+                    sourceFile = Harness.Compiler.getDefaultLibrarySourceFile(Harness.Compiler.getDefaultLibFileName(compilerOptions));
                 }
                 else {
                     const text = getSourceFileText(fileName);
@@ -370,14 +370,14 @@ class ProjectRunner extends RunnerBase {
                     }
 
                     const outputDtsFileName = emitOutputFilePathWithoutExtension + ".d.ts";
-                    const file = findOutpuDtsFile(outputDtsFileName);
+                    const file = findOutputDtsFile(outputDtsFileName);
                     if (file) {
                         allInputFiles.unshift(file);
                     }
                 }
                 else {
                     const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts";
-                    const outputDtsFile = findOutpuDtsFile(outputDtsFileName);
+                    const outputDtsFile = findOutputDtsFile(outputDtsFileName);
                     if (!ts.contains(allInputFiles, outputDtsFile)) {
                         allInputFiles.unshift(outputDtsFile);
                     }
@@ -387,7 +387,7 @@ class ProjectRunner extends RunnerBase {
             // Dont allow config files since we are compiling existing source options
             return compileProjectFiles(compilerResult.moduleKind, getInputFiles, getSourceFileText, writeFile, compilerResult.compilerOptions);
 
-            function findOutpuDtsFile(fileName: string) {
+            function findOutputDtsFile(fileName: string) {
                 return ts.forEach(compilerResult.outputFiles, outputFile => outputFile.emittedFileName === fileName ? outputFile : undefined);
             }
             function getInputFiles() {
@@ -412,7 +412,7 @@ class ProjectRunner extends RunnerBase {
 
         function getErrorsBaseline(compilerResult: CompileProjectFilesResult) {
             const inputFiles = compilerResult.program ? ts.map(ts.filter(compilerResult.program.getSourceFiles(),
-                sourceFile => sourceFile.fileName !== "lib.d.ts"),
+                sourceFile => !Harness.isDefaultLibraryFile(sourceFile.fileName)),
                 sourceFile => {
                     return {
                         unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
@@ -484,7 +484,7 @@ class ProjectRunner extends RunnerBase {
                     it("SourceMapRecord for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (compilerResult.sourceMapData) {
                             Harness.Baseline.runBaseline("SourceMapRecord for (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".sourcemap.txt", () => {
-                                return Harness.SourceMapRecoder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
+                                return Harness.SourceMapRecorder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
                                     ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
                             });
                         }

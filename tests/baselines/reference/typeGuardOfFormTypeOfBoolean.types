@@ -113,19 +113,18 @@ else {
 >boolOrC : C
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrNum === "boolean") {
 >typeof strOrNum === "boolean" : boolean
 >typeof strOrNum : string
 >strOrNum : string | number
 >"boolean" : string
 
-    var z1: string | number = strOrNum; // string | number
->z1 : string | number
->strOrNum : string | number
+    let z1: {} = strOrNum; // {}
+>z1 : {}
+>strOrNum : nothing
 }
 else {
-    var z2: string | number = strOrNum; // string | number
+    let z2: string | number = strOrNum; // string | number
 >z2 : string | number
 >strOrNum : string | number
 }
@@ -137,7 +136,7 @@ else {
 if (typeof strOrBool !== "boolean") {
 >typeof strOrBool !== "boolean" : boolean
 >typeof strOrBool : string
->strOrBool : string | boolean
+>strOrBool : boolean | string
 >"boolean" : string
 
     str = strOrBool; // string
@@ -154,7 +153,7 @@ else {
 if (typeof numOrBool !== "boolean") {
 >typeof numOrBool !== "boolean" : boolean
 >typeof numOrBool : string
->numOrBool : number | boolean
+>numOrBool : boolean | number
 >"boolean" : string
 
     num = numOrBool; // number
@@ -171,7 +170,7 @@ else {
 if (typeof strOrNumOrBool !== "boolean") {
 >typeof strOrNumOrBool !== "boolean" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : string | number | boolean
+>strOrNumOrBool : boolean | string | number
 >"boolean" : string
 
     strOrNum = strOrNumOrBool; // string | number
@@ -203,20 +202,19 @@ else {
 >boolOrC : boolean
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrNum !== "boolean") {
 >typeof strOrNum !== "boolean" : boolean
 >typeof strOrNum : string
 >strOrNum : string | number
 >"boolean" : string
 
-    var z1: string | number = strOrNum; // string | number
+    let z1: string | number = strOrNum; // string | number
 >z1 : string | number
 >strOrNum : string | number
 }
 else {
-    var z2: string | number = strOrNum; // string | number
->z2 : string | number
->strOrNum : string | number
+    let z2: {} = strOrNum; // {}
+>z2 : {}
+>strOrNum : nothing
 }
 

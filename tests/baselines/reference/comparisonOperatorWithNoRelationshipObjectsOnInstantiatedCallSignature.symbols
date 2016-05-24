@@ -3,7 +3,7 @@ class Base {
 >Base : Symbol(Base, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.ts, 0, 0))
 
     public a: string;
->a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.ts, 0, 12))
+>a : Symbol(Base.a, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.ts, 0, 12))
 }
 
 class Derived extends Base {
@@ -11,14 +11,14 @@ class Derived extends Base {
 >Base : Symbol(Base, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.ts, 0, 0))
 
     public b: string;
->b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.ts, 4, 28))
+>b : Symbol(Derived.b, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.ts, 4, 28))
 }
 
 class C {
 >C : Symbol(C, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.ts, 6, 1))
 
     public c: string;
->c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.ts, 8, 9))
+>c : Symbol(C.c, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.ts, 8, 9))
 }
 
 var a1: { fn<T>(x: T): T };

@@ -3,8 +3,8 @@ function* g() {
 >g : () => IterableIterator<number>
 
     let x = {
->x : {}
->{        get [yield 0]() {            return 0;        }    } : {}
+>x : { [x: number]: number; }
+>{        get [yield 0]() {            return 0;        }    } : { [x: number]: number; }
 
         get [yield 0]() {
 >yield 0 : any

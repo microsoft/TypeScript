@@ -2,7 +2,7 @@
 /// <reference path="runnerbase.ts" />
 /// <reference path="loggedIO.ts" />
 /// <reference path="..\compiler\commandLineParser.ts"/>
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 namespace RWC {
     function runWithIOLog(ioLog: IOLog, fn: (oldIO: Harness.IO) => void) {
@@ -31,22 +31,20 @@ namespace RWC {
             let otherFiles: Harness.Compiler.TestFile[] = [];
             let compilerResult: Harness.Compiler.CompilerResult;
             let compilerOptions: ts.CompilerOptions;
-            let baselineOpts: Harness.Baseline.BaselineOptions = {
+            const baselineOpts: Harness.Baseline.BaselineOptions = {
                 Subfolder: "rwc",
                 Baselinefolder: "internal/baselines"
             };
-            let baseName = /(.*)\/(.*).json/.exec(ts.normalizeSlashes(jsonPath))[2];
+            const baseName = /(.*)\/(.*).json/.exec(ts.normalizeSlashes(jsonPath))[2];
             let currentDirectory: string;
             let useCustomLibraryFile: boolean;
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
                 // Therefore we have to clean out large objects after the test is done.
-                inputFiles = undefined;
-                otherFiles = undefined;
+                inputFiles = [];
+                otherFiles = [];
                 compilerResult = undefined;
                 compilerOptions = undefined;
-                baselineOpts = undefined;
-                baseName = undefined;
                 currentDirectory = undefined;
                 // useCustomLibraryFile is a flag specified in the json object to indicate whether to use built/local/lib.d.ts
                 // or to use lib.d.ts inside the json object. If the flag is true, use the lib.d.ts inside json file
@@ -97,13 +95,13 @@ namespace RWC {
                             continue;
                         }
 
-                        if (!Harness.isLibraryFile(fileRead.path)) {
+                        if (!Harness.isDefaultLibraryFile(fileRead.path)) {
                             if (inInputList) {
                                 continue;
                             }
                             otherFiles.push(getHarnessCompilerInputUnit(fileRead.path));
                         }
-                        else if (!opts.options.noLib && Harness.isLibraryFile(fileRead.path)) {
+                        else if (!opts.options.noLib && Harness.isDefaultLibraryFile(fileRead.path)) {
                             if (!inInputList) {
                                 // If useCustomLibraryFile is true, we will use lib.d.ts from json object
                                 // otherwise use the lib.d.ts from built/local
@@ -192,8 +190,9 @@ namespace RWC {
                     if (compilerResult.errors.length === 0) {
                         return null;
                     }
-
-                    return Harness.Compiler.getErrorBaseline(inputFiles.concat(otherFiles), compilerResult.errors);
+                    // Do not include the library in the baselines to avoid noise
+                    const baselineFiles = inputFiles.concat(otherFiles).filter(f => !Harness.isDefaultLibraryFile(f.unitName));
+                    return Harness.Compiler.getErrorBaseline(baselineFiles, compilerResult.errors);
                 }, false, baselineOpts);
             });
 

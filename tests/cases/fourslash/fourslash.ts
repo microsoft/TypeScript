@@ -110,8 +110,8 @@ declare namespace FourSlashInterface {
         type(definitionIndex?: number): void;
         position(position: number, fileIndex?: number): any;
         position(position: number, fileName?: string): any;
-        file(index: number, content?: string): any;
-        file(name: string, content?: string): any;
+        file(index: number, content?: string, scriptKindName?: string): any;
+        file(name: string, content?: string, scriptKindName?: string): any;
     }
     class verifyNegatable {
         private negative;
@@ -136,6 +136,7 @@ declare namespace FourSlashInterface {
         typeDefinitionCountIs(expectedCount: number): void;
         definitionLocationExists(): void;
         verifyDefinitionsName(name: string, containerName: string): void;
+        isValidBraceCompletionAtPostion(openingBrace?: string): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: FourSlash.Range[]): void;
@@ -173,6 +174,7 @@ declare namespace FourSlashInterface {
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
+
         getScriptLexicalStructureListCount(count: number): void;
         getScriptLexicalStructureListContains(name: string, kind: string, fileName?: string, parentName?: string, isAdditionalSpan?: boolean, markerPosition?: number): void;
         navigationItemsListCount(count: number, searchValue: string, matchKind?: string): void;

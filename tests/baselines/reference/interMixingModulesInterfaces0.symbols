@@ -17,10 +17,10 @@ module A {
 >B : Symbol(B, Decl(interMixingModulesInterfaces0.ts, 0, 10), Decl(interMixingModulesInterfaces0.ts, 6, 5))
 
         name: string;
->name : Symbol(name, Decl(interMixingModulesInterfaces0.ts, 8, 24))
+>name : Symbol(B.name, Decl(interMixingModulesInterfaces0.ts, 8, 24))
 
         value: number;
->value : Symbol(value, Decl(interMixingModulesInterfaces0.ts, 9, 21))
+>value : Symbol(B.value, Decl(interMixingModulesInterfaces0.ts, 9, 21))
     }
 }
 

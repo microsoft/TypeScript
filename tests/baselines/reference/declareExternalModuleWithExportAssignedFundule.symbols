@@ -16,12 +16,12 @@ declare module "express" {
 >ExpressServer : Symbol(ExpressServer, Decl(declareExternalModuleWithExportAssignedFundule.ts, 6, 20))
 
             enable(name: string): ExpressServer;
->enable : Symbol(enable, Decl(declareExternalModuleWithExportAssignedFundule.ts, 8, 40))
+>enable : Symbol(ExpressServer.enable, Decl(declareExternalModuleWithExportAssignedFundule.ts, 8, 40))
 >name : Symbol(name, Decl(declareExternalModuleWithExportAssignedFundule.ts, 10, 19))
 >ExpressServer : Symbol(ExpressServer, Decl(declareExternalModuleWithExportAssignedFundule.ts, 6, 20))
 
             post(path: RegExp, handler: (req: Function) => void ): void;
->post : Symbol(post, Decl(declareExternalModuleWithExportAssignedFundule.ts, 10, 48))
+>post : Symbol(ExpressServer.post, Decl(declareExternalModuleWithExportAssignedFundule.ts, 10, 48))
 >path : Symbol(path, Decl(declareExternalModuleWithExportAssignedFundule.ts, 12, 17))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >handler : Symbol(handler, Decl(declareExternalModuleWithExportAssignedFundule.ts, 12, 30))

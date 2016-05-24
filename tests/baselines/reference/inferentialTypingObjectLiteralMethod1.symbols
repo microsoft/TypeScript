@@ -5,7 +5,7 @@ interface Int<T, U> {
 >U : Symbol(U, Decl(inferentialTypingObjectLiteralMethod1.ts, 0, 16))
 
     method(x: T): U;
->method : Symbol(method, Decl(inferentialTypingObjectLiteralMethod1.ts, 0, 21))
+>method : Symbol(Int.method, Decl(inferentialTypingObjectLiteralMethod1.ts, 0, 21))
 >x : Symbol(x, Decl(inferentialTypingObjectLiteralMethod1.ts, 1, 11))
 >T : Symbol(T, Decl(inferentialTypingObjectLiteralMethod1.ts, 0, 14))
 >U : Symbol(U, Decl(inferentialTypingObjectLiteralMethod1.ts, 0, 16))

@@ -5,7 +5,7 @@ interface IPromise<T, V> {
 >V : Symbol(V, Decl(promiseIdentityWithAny.ts, 0, 21))
 
     then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
->then : Symbol(then, Decl(promiseIdentityWithAny.ts, 0, 26))
+>then : Symbol(IPromise.then, Decl(promiseIdentityWithAny.ts, 0, 26))
 >U : Symbol(U, Decl(promiseIdentityWithAny.ts, 1, 9))
 >W : Symbol(W, Decl(promiseIdentityWithAny.ts, 1, 11))
 >callback : Symbol(callback, Decl(promiseIdentityWithAny.ts, 1, 15))
@@ -24,7 +24,7 @@ interface Promise<T, V> {
 >V : Symbol(V, Decl(promiseIdentityWithAny.ts, 3, 20))
 
     then<U, W>(callback: (x: T) => Promise<any, any>): Promise<any, any>;
->then : Symbol(then, Decl(promiseIdentityWithAny.ts, 3, 25))
+>then : Symbol(Promise.then, Decl(promiseIdentityWithAny.ts, 3, 25))
 >U : Symbol(U, Decl(promiseIdentityWithAny.ts, 4, 9))
 >W : Symbol(W, Decl(promiseIdentityWithAny.ts, 4, 11))
 >callback : Symbol(callback, Decl(promiseIdentityWithAny.ts, 4, 15))

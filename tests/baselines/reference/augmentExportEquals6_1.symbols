@@ -24,7 +24,7 @@ import x = require("file1");
 declare module "file1" {
     interface A { a: number }
 >A : Symbol(A, Decl(file1.d.ts, 3, 19), Decl(file2.ts, 4, 24))
->a : Symbol(a, Decl(file2.ts, 5, 17))
+>a : Symbol(A.a, Decl(file2.ts, 5, 17))
 }
 
 === tests/cases/compiler/file3.ts ===

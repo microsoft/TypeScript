@@ -4,7 +4,7 @@ declare class B<T> {
 >T : Symbol(T, Decl(superWithGenerics.ts, 0, 16))
 
     m<U>(): B<U>;
->m : Symbol(m, Decl(superWithGenerics.ts, 0, 20))
+>m : Symbol(B.m, Decl(superWithGenerics.ts, 0, 20))
 >U : Symbol(U, Decl(superWithGenerics.ts, 1, 6))
 >B : Symbol(B, Decl(superWithGenerics.ts, 0, 0))
 >U : Symbol(U, Decl(superWithGenerics.ts, 1, 6))

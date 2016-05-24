@@ -147,9 +147,8 @@ var _loop_3 = function(x, y) {
         };
         var out_a_2_1;
         for (var a_2 = 1; a_2 < 5; --a_2) {
-            var state_3 = _loop_4(a_2);
+            _loop_4(a_2);
             a_2 = out_a_2_1;
-            if (state_3 === "continue") continue;
         }
         y = 5;
     }
@@ -158,10 +157,9 @@ var _loop_3 = function(x, y) {
 };
 var out_x_2, out_y_2;
 for (var x = 1, y = 2; x < y; ++x, --y) {
-    var state_4 = _loop_3(x, y);
+    _loop_3(x, y);
     x = out_x_2;
     y = out_y_2;
-    if (state_4 === "continue") continue;
 }
 var _loop_5 = function(x, y) {
     var a = function () { return x++ + y++; };

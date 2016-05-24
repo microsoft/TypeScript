@@ -5,7 +5,7 @@ interface IPoint {
 >IPoint : Symbol(IPoint, Decl(sourceMap-FileWithComments.ts, 0, 0))
 
     getDist(): number;
->getDist : Symbol(getDist, Decl(sourceMap-FileWithComments.ts, 2, 18))
+>getDist : Symbol(IPoint.getDist, Decl(sourceMap-FileWithComments.ts, 2, 18))
 }
 
 // Module
@@ -19,27 +19,27 @@ module Shapes {
 
         // Constructor
         constructor(public x: number, public y: number) { }
->x : Symbol(x, Decl(sourceMap-FileWithComments.ts, 12, 20))
->y : Symbol(y, Decl(sourceMap-FileWithComments.ts, 12, 37))
+>x : Symbol(Point.x, Decl(sourceMap-FileWithComments.ts, 12, 20))
+>y : Symbol(Point.y, Decl(sourceMap-FileWithComments.ts, 12, 37))
 
         // Instance member
         getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
->getDist : Symbol(getDist, Decl(sourceMap-FileWithComments.ts, 12, 59))
+>getDist : Symbol(Point.getDist, Decl(sourceMap-FileWithComments.ts, 12, 59))
 >Math.sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
->this.x : Symbol(x, Decl(sourceMap-FileWithComments.ts, 12, 20))
+>this.x : Symbol(Point.x, Decl(sourceMap-FileWithComments.ts, 12, 20))
 >this : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 7, 15))
->x : Symbol(x, Decl(sourceMap-FileWithComments.ts, 12, 20))
->this.x : Symbol(x, Decl(sourceMap-FileWithComments.ts, 12, 20))
+>x : Symbol(Point.x, Decl(sourceMap-FileWithComments.ts, 12, 20))
+>this.x : Symbol(Point.x, Decl(sourceMap-FileWithComments.ts, 12, 20))
 >this : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 7, 15))
->x : Symbol(x, Decl(sourceMap-FileWithComments.ts, 12, 20))
->this.y : Symbol(y, Decl(sourceMap-FileWithComments.ts, 12, 37))
+>x : Symbol(Point.x, Decl(sourceMap-FileWithComments.ts, 12, 20))
+>this.y : Symbol(Point.y, Decl(sourceMap-FileWithComments.ts, 12, 37))
 >this : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 7, 15))
->y : Symbol(y, Decl(sourceMap-FileWithComments.ts, 12, 37))
->this.y : Symbol(y, Decl(sourceMap-FileWithComments.ts, 12, 37))
+>y : Symbol(Point.y, Decl(sourceMap-FileWithComments.ts, 12, 37))
+>this.y : Symbol(Point.y, Decl(sourceMap-FileWithComments.ts, 12, 37))
 >this : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 7, 15))
->y : Symbol(y, Decl(sourceMap-FileWithComments.ts, 12, 37))
+>y : Symbol(Point.y, Decl(sourceMap-FileWithComments.ts, 12, 37))
 
         // Static member
         static origin = new Point(0, 0);

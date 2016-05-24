@@ -1,0 +1,37 @@
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts(3,18): error TS2393: Duplicate function implementation.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts(5,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts(8,18): error TS2393: Duplicate function implementation.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts(10,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts(12,5): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts(16,1): error TS2346: Supplied parameters do not match any signature of call target.
+
+
+==== tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts (6 errors) ====
+    function foo(a: number) {
+        if (a === 10) {
+            function foo() { } // duplicate
+                     ~~~
+!!! error TS2393: Duplicate function implementation.
+            foo();
+            foo(10); // not ok
+            ~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+        }
+        else {
+            function foo() { } // duplicate
+                     ~~~
+!!! error TS2393: Duplicate function implementation.
+            foo();
+            foo(10);// not ok
+            ~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+        }
+        foo(10); // not ok
+        ~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+        foo(); 
+    }
+    foo(10);
+    foo(); // not ok - needs number
+    ~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.

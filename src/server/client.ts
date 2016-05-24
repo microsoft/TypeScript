@@ -83,7 +83,7 @@ namespace ts.server {
 
         private processResponse<T extends protocol.Response>(request: protocol.Request): T {
             var lastMessage = this.messages.shift();
-            Debug.assert(!!lastMessage, "Did not recieve any responses.");
+            Debug.assert(!!lastMessage, "Did not receive any responses.");
 
             // Read the content length
             var contentLengthPrefix = "Content-Length: ";
@@ -108,7 +108,7 @@ namespace ts.server {
             }
 
             // verify the sequence numbers
-            Debug.assert(response.request_seq === request.seq, "Malformed response: response sequance number did not match request sequence number.");
+            Debug.assert(response.request_seq === request.seq, "Malformed response: response sequence number did not match request sequence number.");
             
             // unmarshal errors
             if (!response.success) {
@@ -120,8 +120,8 @@ namespace ts.server {
             return response;
         }
 
-        openFile(fileName: string, content?: string): void {
-            var args: protocol.OpenRequestArgs = { file: fileName, fileContent: content };
+        openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX"  | "JSX"): void {
+            var args: protocol.OpenRequestArgs = { file: fileName, fileContent: content, scriptKindName };
             this.processRequest(CommandNames.Open, args);
         }
 
@@ -568,6 +568,10 @@ namespace ts.server {
             throw new Error("Not Implemented Yet."); 
         }
 
+        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
+            throw new Error("Not Implemented Yet."); 
+        }
+
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
             var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.FileLocationRequestArgs = {
@@ -613,7 +617,7 @@ namespace ts.server {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
 
-        getSourceFile(fileName: string): SourceFile {
+        getNonBoundSourceFile(fileName: string): SourceFile {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
 

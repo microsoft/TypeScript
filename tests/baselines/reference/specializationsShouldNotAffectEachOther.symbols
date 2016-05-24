@@ -4,7 +4,7 @@ interface Series  {
 >Series : Symbol(Series, Decl(specializationsShouldNotAffectEachOther.ts, 0, 0))
 
     data: string[];
->data : Symbol(data, Decl(specializationsShouldNotAffectEachOther.ts, 1, 19))
+>data : Symbol(Series.data, Decl(specializationsShouldNotAffectEachOther.ts, 1, 19))
 }
 
 var series: Series;

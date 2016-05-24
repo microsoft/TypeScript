@@ -14,13 +14,13 @@ module m2 {
 >connectExport : Symbol(connectExport, Decl(declareFileExportAssignment.ts, 3, 5))
 
         use: (mod: connectModule) => connectExport;
->use : Symbol(use, Decl(declareFileExportAssignment.ts, 4, 36))
+>use : Symbol(connectExport.use, Decl(declareFileExportAssignment.ts, 4, 36))
 >mod : Symbol(mod, Decl(declareFileExportAssignment.ts, 5, 14))
 >connectModule : Symbol(connectModule, Decl(declareFileExportAssignment.ts, 0, 11))
 >connectExport : Symbol(connectExport, Decl(declareFileExportAssignment.ts, 3, 5))
 
         listen: (port: number) => void;
->listen : Symbol(listen, Decl(declareFileExportAssignment.ts, 5, 51))
+>listen : Symbol(connectExport.listen, Decl(declareFileExportAssignment.ts, 5, 51))
 >port : Symbol(port, Decl(declareFileExportAssignment.ts, 6, 17))
     }
 

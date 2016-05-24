@@ -39,9 +39,9 @@ extractIndexer({
 }); // Should return string
 
 extractIndexer({
->extractIndexer({    ["" || 0]: ""}) : any
+>extractIndexer({    ["" || 0]: ""}) : string
 >extractIndexer : <T>(p: { [n: number]: T; }) => T
->{    ["" || 0]: ""} : { [x: number]: undefined; }
+>{    ["" || 0]: ""} : { [x: string]: string; }
 
     ["" || 0]: ""
 >"" || 0 : string | number

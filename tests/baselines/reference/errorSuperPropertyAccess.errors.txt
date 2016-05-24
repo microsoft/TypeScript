@@ -25,15 +25,15 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(99,19): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(109,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(110,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(111,9): error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(111,15): error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(113,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(114,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(115,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(116,9): error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(116,15): error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(119,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(120,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(121,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(122,9): error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(122,15): error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(127,16): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(127,30): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
 
@@ -204,7 +204,7 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
                   ~~~~~~~~~~~~~~~~~~~
 !!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
             super.privateStaticFunc();
-            ~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~~~~~~~~~~~~~~~
 !!! error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.
         }
         static get a() {
@@ -217,7 +217,7 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
                   ~~~~~~~~~~~~~~~~~~~
 !!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
             super.privateStaticFunc();
-            ~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~~~~~~~~~~~~~~~
 !!! error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.
             return '';
         }
@@ -231,7 +231,7 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
                   ~~~~~~~~~~~~~~~~~~~
 !!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
             super.privateStaticFunc();
-            ~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~~~~~~~~~~~~~~~
 !!! error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.
         }
     }

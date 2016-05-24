@@ -490,17 +490,17 @@ namespace ts.BreakpointResolver {
                 return spanInNode(block.statements[0]);
             }
 
-            function spanInInitializerOfForLike(forLikeStaement: ForStatement | ForOfStatement | ForInStatement): TextSpan {
-                if (forLikeStaement.initializer.kind === SyntaxKind.VariableDeclarationList) {
+            function spanInInitializerOfForLike(forLikeStatement: ForStatement | ForOfStatement | ForInStatement): TextSpan {
+                if (forLikeStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     // declaration list, set breakpoint in first declaration
-                    let variableDeclarationList = <VariableDeclarationList>forLikeStaement.initializer;
+                    let variableDeclarationList = <VariableDeclarationList>forLikeStatement.initializer;
                     if (variableDeclarationList.declarations.length > 0) {
                         return spanInNode(variableDeclarationList.declarations[0]);
                     }
                 }
                 else {
                     // Expression - set breakpoint in it
-                    return spanInNode(forLikeStaement.initializer);
+                    return spanInNode(forLikeStatement.initializer);
                 }
             }
 

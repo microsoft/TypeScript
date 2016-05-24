@@ -100,7 +100,7 @@ namespace ts.OutliningElementsCollector {
                         const closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
 
                         // Check if the block is standalone, or 'attached' to some parent statement.
-                        // If the latter, we want to collaps the block, but consider its hint span
+                        // If the latter, we want to collapse the block, but consider its hint span
                         // to be the entire span of the parent.
                         if (parent.kind === SyntaxKind.DoStatement ||
                             parent.kind === SyntaxKind.ForInStatement ||

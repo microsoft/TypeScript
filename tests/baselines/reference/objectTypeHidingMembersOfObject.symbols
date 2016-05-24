@@ -5,7 +5,7 @@ class C {
 >C : Symbol(C, Decl(objectTypeHidingMembersOfObject.ts, 0, 0))
 
     valueOf() { }
->valueOf : Symbol(valueOf, Decl(objectTypeHidingMembersOfObject.ts, 2, 9))
+>valueOf : Symbol(C.valueOf, Decl(objectTypeHidingMembersOfObject.ts, 2, 9))
 }
 
 var c: C;
@@ -22,7 +22,7 @@ interface I {
 >I : Symbol(I, Decl(objectTypeHidingMembersOfObject.ts, 7, 27))
 
     valueOf(): void;
->valueOf : Symbol(valueOf, Decl(objectTypeHidingMembersOfObject.ts, 9, 13))
+>valueOf : Symbol(I.valueOf, Decl(objectTypeHidingMembersOfObject.ts, 9, 13))
 }
 
 var i: I;

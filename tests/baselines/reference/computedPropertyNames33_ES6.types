@@ -12,8 +12,8 @@ class C<T> {
 >bar : () => number
 
         var obj = {
->obj : {}
->{            [foo<T>()]() { }        } : {}
+>obj : { [x: string]: () => void; }
+>{            [foo<T>()]() { }        } : { [x: string]: () => void; }
 
             [foo<T>()]() { }
 >foo<T>() : string

@@ -14,13 +14,13 @@
 >T : Symbol(T, Decl(genericInference2.ts, 1, 35))
 
            N: number; 
->N : Symbol(N, Decl(genericInference2.ts, 3, 27))
+>N : Symbol(Observable.N, Decl(genericInference2.ts, 3, 27))
 
            g: boolean; 
->g : Symbol(g, Decl(genericInference2.ts, 4, 21))
+>g : Symbol(Observable.g, Decl(genericInference2.ts, 4, 21))
 
            r: T; 
->r : Symbol(r, Decl(genericInference2.ts, 5, 22))
+>r : Symbol(Observable.r, Decl(genericInference2.ts, 5, 22))
 >T : Symbol(T, Decl(genericInference2.ts, 1, 35))
        } 
        export function observable<T>(value: T): Observable<T>; 

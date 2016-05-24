@@ -1,0 +1,9 @@
+=== tests/cases/compiler/destructuringInVariableDeclarations2.ts ===
+let { toString } = 1;
+>toString : Symbol(toString, Decl(destructuringInVariableDeclarations2.ts, 0, 5))
+{
+    let { toFixed } = 1;
+>toFixed : Symbol(toFixed, Decl(destructuringInVariableDeclarations2.ts, 2, 9))
+}
+export {};
+

@@ -4,7 +4,7 @@ interface B<T> {
 >T : Symbol(T, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 12))
 
     f(): B<number>;
->f : Symbol(f, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 16))
+>f : Symbol(B.f, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 16))
 >B : Symbol(B, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 0))
 
     (value: T): void;

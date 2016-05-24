@@ -97,19 +97,18 @@ else {
 >boolOrC : boolean
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrNumOrBool === "Object") {
 >typeof strOrNumOrBool === "Object" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
 >"Object" : string
 
-    var q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
->q1 : string | number | boolean
->strOrNumOrBool : string | number | boolean
+    let q1: {} = strOrNumOrBool; // {}
+>q1 : {}
+>strOrNumOrBool : nothing
 }
 else {
-    var q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
+    let q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
 >q2 : string | number | boolean
 >strOrNumOrBool : string | number | boolean
 }
@@ -120,7 +119,7 @@ else {
 if (typeof strOrC !== "Object") {
 >typeof strOrC !== "Object" : boolean
 >typeof strOrC : string
->strOrC : string | C
+>strOrC : C | string
 >"Object" : string
 
     var r2: string = strOrC; // string
@@ -136,7 +135,7 @@ else {
 if (typeof numOrC !== "Object") {
 >typeof numOrC !== "Object" : boolean
 >typeof numOrC : string
->numOrC : number | C
+>numOrC : C | number
 >"Object" : string
 
     var r3: number = numOrC; // number
@@ -152,7 +151,7 @@ else {
 if (typeof boolOrC !== "Object") {
 >typeof boolOrC !== "Object" : boolean
 >typeof boolOrC : string
->boolOrC : boolean | C
+>boolOrC : C | boolean
 >"Object" : string
 
     var r4: boolean = boolOrC; // boolean
@@ -166,20 +165,19 @@ else {
 >boolOrC : C
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrNumOrBool !== "Object") {
 >typeof strOrNumOrBool !== "Object" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
 >"Object" : string
 
-    var q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
+    let q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
 >q1 : string | number | boolean
 >strOrNumOrBool : string | number | boolean
 }
 else {
-    var q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
->q2 : string | number | boolean
->strOrNumOrBool : string | number | boolean
+    let q2: {} = strOrNumOrBool; // {}
+>q2 : {}
+>strOrNumOrBool : nothing
 }
 

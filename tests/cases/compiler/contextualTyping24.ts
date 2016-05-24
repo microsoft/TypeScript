@@ -1,1 +1,1 @@
-var foo:(a:{():number; (i:number):number; })=>number; foo = function(a:string){return 5};
+var foo:(a:{():number; (i:number):number; })=>number; foo = function(this: void, a:string){return 5};

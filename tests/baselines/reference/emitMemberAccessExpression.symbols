@@ -29,7 +29,7 @@ module Microsoft.PeopleAtWork.Model {
 >_Person : Symbol(_Person, Decl(emitMemberAccessExpression_file2.ts, 2, 37))
 
         public populate(raw: any) {
->populate : Symbol(populate, Decl(emitMemberAccessExpression_file2.ts, 3, 26))
+>populate : Symbol(_Person.populate, Decl(emitMemberAccessExpression_file2.ts, 3, 26))
 >raw : Symbol(raw, Decl(emitMemberAccessExpression_file2.ts, 4, 24))
 
             var res = Model.KnockoutExtentions;

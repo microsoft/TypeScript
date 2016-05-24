@@ -26,7 +26,7 @@ declare module "Observable" {
 declare module "M" {
     class Cls { x: number }
 >Cls : Symbol(Cls, Decl(O.d.ts, 6, 20))
->x : Symbol(x, Decl(O.d.ts, 7, 15))
+>x : Symbol(Cls.x, Decl(O.d.ts, 7, 15))
 }
 
 declare module "Map" {
@@ -38,7 +38,7 @@ declare module "Map" {
 >Observable : Symbol(Observable, Decl(O.d.ts, 2, 29), Decl(O.d.ts, 12, 25))
 
             foo(): Cls;
->foo : Symbol(foo, Decl(O.d.ts, 13, 30))
+>foo : Symbol(Observable.foo, Decl(O.d.ts, 13, 30))
 >Cls : Symbol(Cls, Decl(O.d.ts, 11, 12))
         }
     }

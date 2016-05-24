@@ -25,8 +25,8 @@ module A {
 >Point : Symbol(Point, Decl(module.d.ts, 0, 18), Decl(classPoint.ts, 0, 10))
 
         constructor(public x: number, public y: number) { }
->x : Symbol(x, Decl(classPoint.ts, 2, 20))
->y : Symbol(y, Decl(classPoint.ts, 2, 37))
+>x : Symbol(Point.x, Decl(classPoint.ts, 2, 20))
+>y : Symbol(Point.y, Decl(classPoint.ts, 2, 37))
     }
 }
 
