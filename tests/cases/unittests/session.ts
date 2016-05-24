@@ -14,6 +14,7 @@ namespace ts.server {
         resolvePath(): string { return void 0; },
         fileExists: () => false,
         directoryExists: () => false,
+        getDirectories: () => [],
         createDirectory(): void {},
         getExecutingFilePath(): string { return void 0; },
         getCurrentDirectory(): string { return void 0; },

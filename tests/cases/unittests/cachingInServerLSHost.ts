@@ -46,6 +46,7 @@ namespace ts {
             getCurrentDirectory: (): string => {
                 return "";
             },
+            getDirectories: (path: string) => [],
             readDirectory: (path: string, extension?: string, exclude?: string[]): string[] => {
                 throw new Error("NYI");
             },
