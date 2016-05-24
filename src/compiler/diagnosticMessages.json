@@ -2756,7 +2756,7 @@
         "category": "Message",
         "code": 6131
     },
-    "No types specified in 'package.json' and is 'allowJs' set. Returning package 'main' value of '{0}' for module": {
+    "No types specified in 'package.json' but 'allowJs' is set, so returning 'main' value of '{0}'": {
         "category": "Message",
         "code": 6132
     },

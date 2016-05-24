@@ -180,7 +180,7 @@ namespace ts {
         // Use the main module for inferring types if no types package specified and the allowJs is set
         if (state.compilerOptions.allowJs && jsonContent.main && typeof jsonContent.main === "string") {
             if (state.traceEnabled) {
-                trace(state.host, Diagnostics.No_types_specified_in_package_json_and_is_allowJs_set_Returning_package_main_value_of_0_for_module, jsonContent.main);
+                trace(state.host, Diagnostics.No_types_specified_in_package_json_but_allowJs_is_set_so_returning_main_value_of_0, jsonContent.main);
             }
             const mainFilePath = normalizePath(combinePaths(baseDirectory, jsonContent.main));
             return mainFilePath;
