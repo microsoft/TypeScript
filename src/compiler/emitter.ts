@@ -2613,7 +2613,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 return isSourceFileLevelDeclarationInSystemJsModule(targetDeclaration, /*isExported*/ true);
             }
 
-            function isNameOfExportedSourceLevelDeclarationInClauseModule(node: Node): boolean {
+            function isNameOfExportedDeclarationInNonES6Module(node: Node): boolean {
                 if (modulekind === ModuleKind.System || node.kind !== SyntaxKind.Identifier || nodeIsSynthesized(node)) {
                     return false;
                 }
@@ -2637,7 +2637,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write(`", `);
                 }
                 const internalExportChanged = isPlusPlusOrMinusMinus &&
-                    isNameOfExportedSourceLevelDeclarationInClauseModule(node.operand);
+                    isNameOfExportedDeclarationInNonES6Module(node.operand);
 
                 if (internalExportChanged) {
                     emitAliasEqual(<Identifier> node.operand);
@@ -2674,7 +2674,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
                 const externalExportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
-                const internalExportChanged = isNameOfExportedSourceLevelDeclarationInClauseModule(node.operand);
+                const internalExportChanged = isNameOfExportedDeclarationInNonES6Module(node.operand);
 
                 if (externalExportChanged) {
                     // export function returns the value that was passes as the second argument
@@ -2841,7 +2841,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     }
 
                     const internalExportChanged = isAssignment &&
-                        isNameOfExportedSourceLevelDeclarationInClauseModule(node.left);
+                        isNameOfExportedDeclarationInNonES6Module(node.left);
 
                     if (internalExportChanged) {
                         // export { foo }
@@ -5464,7 +5464,7 @@ const _super = (function (geti, seti) {
                         //
 
                         // NOTE: we reuse the same rewriting logic for cases when targeting ES6 and module kind is System.
-                        // Because of hoisting top level class declaration need to be emitted as class expressions. 
+                        // Because of hoisting top level class declaration need to be emitted as class expressions.
                         // Double bind case is only required if node is decorated.
                         if (isDecorated && resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithBodyScopedClassBinding) {
                             decoratedClassAlias = unescapeIdentifier(makeUniqueName(node.name ? node.name.text : "default"));
