@@ -9,7 +9,7 @@
 ////        {| "itemName": "LocalInterfaceInConstrcutor", "kind": "interface", "parentName": ""|}interface LocalInterfaceInConstrcutor {
 ////        }
 ////
-////        enum LocalEnumInConstructor {
+////        {| "itemName": "LocalEnumInConstructor", "kind": "enum", "parentName": "constructor"|}enum LocalEnumInConstructor {
 ////            {| "itemName": "LocalEnumMemberInConstructor", "kind": "property", "parentName": "LocalEnumInConstructor"|}LocalEnumMemberInConstructor,
 ////        }
 ////    }
@@ -24,7 +24,7 @@
 ////        {| "itemName": "LocalInterfaceInMethod", "kind": "interface", "parentName": ""|}interface LocalInterfaceInMethod {
 ////        }
 ////
-////        {| "itemName": "LocalEnumInMethod", "kind": "enum", "parentName": ""|}enum LocalEnumInMethod {
+////        {| "itemName": "LocalEnumInMethod", "kind": "enum", "parentName": "method"|}enum LocalEnumInMethod {
 ////            {| "itemName": "LocalEnumMemberInMethod", "kind": "property", "parentName": "LocalEnumInMethod"|}LocalEnumMemberInMethod,
 ////        }
 ////    }
@@ -39,4 +39,4 @@ test.markers().forEach((marker) => {
 });
 
 // no other items
-verify.navigationBarCount(17);
+verify.navigationBarCount(19);

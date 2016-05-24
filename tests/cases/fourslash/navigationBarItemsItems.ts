@@ -32,7 +32,7 @@
 ////        {| "itemName": "getOrigin", "kind": "method", "parentName": "Point" |}private static getOrigin() { return Point.origin;}
 ////    }
 ////
-////    {| "itemName": "Values", "kind": "enum", "parentName": "" |}enum Values {
+////    {| "itemName": "Values", "kind": "enum", "parentName": "Shapes" |}enum Values {
 ////        value1,
 ////        {| "itemName": "value2", "kind": "property", "parentName": "Values" |}value2,
 ////        value3,
@@ -49,4 +49,4 @@ test.markers().forEach((marker) => {
     }
 });
 
-verify.navigationBarCount(23);
+verify.navigationBarCount(24);
