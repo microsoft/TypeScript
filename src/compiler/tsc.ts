@@ -544,7 +544,7 @@ namespace ts {
     }
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
-        if (compilerOptions.diagnostics) {
+        if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
             performance.enable();
             performance.reset();
         }
@@ -558,7 +558,7 @@ namespace ts {
             });
         }
 
-        if (compilerOptions.diagnostics) {
+        if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
@@ -577,9 +577,6 @@ namespace ts {
             // emit time includes I/O write time. We preserve this behavior so we can accurately compare times.
             reportTimeStatistic("I/O read", performance.getDuration("ioReadTime"));
             reportTimeStatistic("I/O write", performance.getDuration("ioWriteTime"));
-            reportTimeStatistic("Print time", performance.getDuration("printTime"));
-            reportTimeStatistic("Comment time", performance.getDuration("commentTime"));
-            reportTimeStatistic("Sourcemap time", performance.getDuration("sourcemapTime"));
             const programTime = performance.getDuration("programTime");
             const bindTime = performance.getDuration("bindTime");
             const checkTime = performance.getDuration("checkTime");
@@ -589,6 +586,27 @@ namespace ts {
             reportTimeStatistic("Check time", checkTime);
             reportTimeStatistic("Emit time", emitTime);
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+
+            if (compilerOptions.extendedDiagnostics) {
+                sys.write("Extended Diagnostics:" + sys.newLine);
+                sys.write("Marks:" + sys.newLine);
+                for (const markName of performance.getMarkNames()) {
+                    if (/^(ioReadStart|ioWriteStart|programStart|bindStart|checkStart|emitStart)$/.test(markName)) {
+                        continue;
+                    }
+
+                    reportCountStatistic("  " + markName, performance.getCount(markName));
+                }
+
+                sys.write("Measures:" + sys.newLine);
+                for (const measureName of performance.getMeasureNames()) {
+                    if (/^(ioReadTime|ioWriteTime|programTime|bindTime|checkTime|emitTime)$/.test(measureName)) {
+                        continue;
+                    }
+
+                    reportTimeStatistic("  " + measureName, performance.getDuration(measureName));
+                }
+            }
 
             performance.disable();
             performance.reset();

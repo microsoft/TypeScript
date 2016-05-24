@@ -470,6 +470,10 @@ namespace ts {
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
+        /* @internal */ transformId?: number;           // Associates transient transformation properties with a specific transformation (initialized by transformation).
+        /* @internal */ emitFlags?: NodeEmitFlags;      // Transient emit flags for a synthesized node (initialized by transformation).
+        /* @internal */ sourceMapRange?: TextRange;     // Transient custom sourcemap range for a synthesized node (initialized by transformation).
+        /* @internal */ commentRange?: TextRange;       // Transient custom comment range for a synthesized node (initialized by transformation).
     }
 
     export interface NodeArray<T extends Node> extends Array<T>, TextRange {
@@ -2957,6 +2961,8 @@ namespace ts {
         //                 align with the old emitter.
         SourceMapEmitOpenBraceAsToken = 1 << 21,        // Emits the open brace of a block function body as a source mapped token.
         SourceMapAdjustRestParameterLoop = 1 << 22,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
+
+        HasNodeEmitFlags = 1 << 31,              // Indicates the node has emit flags set.
     }
 
     /** Additional context provided to `visitEachChild` */

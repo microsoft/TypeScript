@@ -1059,6 +1059,7 @@ namespace ts {
         this.excludeTransformFlags = TransformFlags.None;
         this.parent = undefined;
         this.original = undefined;
+        this.transformId = 0;
     }
 
     export let objectAllocator: ObjectAllocator = {
@@ -1182,15 +1183,19 @@ namespace ts {
         }
 
         /**
+         * Gets the names of all marks.
+         */
+        export function getMarkNames() {
+            return getKeys(markCounts);
+        }
+
+        /**
          * Gets the number of marks with the specified name.
          *
          * @param markName The name of the marks that should be counted.
          */
         export function getCount(markName: string) {
-            if (enabled) {
-                return getProperty(markCounts, markName) || 0;
-            }
-            return 0;
+            return enabled && getProperty(markCounts, markName) || 0;
         }
 
         /**
@@ -1199,10 +1204,7 @@ namespace ts {
          * @param markName The name of the mark.
          */
         export function getTimestamp(markName: string) {
-            if (enabled) {
-                return getProperty(markTimestamps, markName) || 0;
-            }
-            return 0;
+            return enabled && getProperty(markTimestamps, markName) || 0;
         }
 
         /**
@@ -1221,8 +1223,9 @@ namespace ts {
         }
 
         function clearMark(markName: string) {
-            markTimestamps[markName] = 0;
-            markCounts[markName] = 0;
+            if (delete markTimestamps[markName]) {
+                delete markCounts[markName];
+            }
         }
 
         /**
@@ -1247,12 +1250,19 @@ namespace ts {
         }
 
         /**
+         * Gets the names of all recorded measures.
+         */
+        export function getMeasureNames() {
+            return getKeys(measureDurations);
+        }
+
+        /**
          * Gets the total duration of all measurements with the supplied name.
          *
          * @param measureName The name of the measure whose durations should be accumulated.
          */
         export function getDuration(measureName: string) {
-            return getProperty(measureDurations, measureName) || 0;
+            return enabled && getProperty(measureDurations, measureName) || 0;
         }
 
         /**
@@ -1271,7 +1281,7 @@ namespace ts {
         }
 
         function clearMeasure(measureName: string) {
-            measureDurations[measureName] = 0;
+            delete measureDurations[measureName];
         }
 
         /**

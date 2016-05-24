@@ -46,6 +46,14 @@ namespace ts {
     }
 
     /**
+     * Tracks a monotonically increasing transformation id used to associate a node with a specific
+     * transformation. This ensures transient properties related to transformations can be safely
+     * stored on source tree nodes that may be reused across multiple transformations (such as
+     * with compile-on-save).
+     */
+    let nextTransformId = 1;
+
+    /**
      * Transforms an array of SourceFiles by passing them through each transformer.
      *
      * @param resolver The emit resolver provided by the checker.
@@ -54,12 +62,13 @@ namespace ts {
      * @param transforms An array of Transformers.
      */
     export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]) {
-        const nodeEmitFlags: Map<NodeEmitFlags> = {};
-        const sourceMapRanges: Map<TextRange> = {};
-        const commentRanges: Map<TextRange> = {};
+        const transformId = nextTransformId++;
+        const tokenSourceMapRanges: Map<TextRange> = { };
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
+        const sourceTreeNodesWithAnnotations: Node[] = [];
+
         let lastNodeEmitFlagsNode: Node;
         let lastNodeEmitFlags: NodeEmitFlags;
         let lastSourceMapRangeNode: Node;
@@ -118,7 +127,20 @@ namespace ts {
             }
 
             currentSourceFile = sourceFile;
-            return transformation(sourceFile);
+            sourceFile = transformation(sourceFile);
+
+            // Cleanup source tree nodes with annotations
+            for (const node of sourceTreeNodesWithAnnotations) {
+                if (node.transformId === transformId) {
+                    node.transformId = 0;
+                    node.emitFlags = 0;
+                    node.commentRange = undefined;
+                    node.sourceMapRange = undefined;
+                }
+            }
+
+            sourceTreeNodesWithAnnotations.length = 0;
+            return sourceFile;
         }
 
         /**
@@ -182,6 +204,28 @@ namespace ts {
         }
 
         /**
+         * Associates a node with the current transformation, initializing
+         * various transient transformation properties.
+         *
+         * @param node The node.
+         */
+        function beforeSetAnnotation(node: Node) {
+            if (node.transformId !== transformId) {
+                node.transformId = transformId;
+                if ((node.flags & NodeFlags.Synthesized) === 0) {
+                    node.emitFlags = 0;
+                    node.sourceMapRange = undefined;
+                    node.commentRange = undefined;
+
+                    // To avoid holding onto transformation artifacts, we keep track of any
+                    // source tree node we are annotating. This allows us to clean them up after
+                    // all transformations have completed.
+                    sourceTreeNodesWithAnnotations.push(node);
+                }
+            }
+        }
+
+        /**
          * Gets flags that control emit behavior of a node.
          *
          * If the node does not have its own NodeEmitFlags set, the node emit flags of its
@@ -196,15 +240,19 @@ namespace ts {
                 return lastNodeEmitFlags;
             }
 
-
+            // Get the emit flags for a node or from one of its original nodes.
             let flags: NodeEmitFlags;
-            while (node) {
-                let flags = node.id ? nodeEmitFlags[node.id] : undefined;
-                if (flags !== undefined) {
-                    break;
+            let current = node;
+            while (current) {
+                if (current.transformId === transformId) {
+                    const nodeEmitFlags = current.emitFlags;
+                    if (nodeEmitFlags) {
+                        flags = nodeEmitFlags & ~NodeEmitFlags.HasNodeEmitFlags;
+                        break;
+                    }
                 }
 
-                node = node.original;
+                current = current.original;
             }
 
             // Cache the most recently requested value.
@@ -220,14 +268,17 @@ namespace ts {
          * @param emitFlags The NodeEmitFlags for the node.
          */
         function setNodeEmitFlags<T extends Node>(node: T, emitFlags: NodeEmitFlags) {
+            // Merge existing flags.
             if (emitFlags & NodeEmitFlags.Merge) {
                 emitFlags = getNodeEmitFlags(node) | (emitFlags & ~NodeEmitFlags.Merge);
             }
 
+            beforeSetAnnotation(node);
+
             // Cache the most recently requested value.
             lastNodeEmitFlagsNode = node;
             lastNodeEmitFlags = emitFlags;
-            nodeEmitFlags[getNodeId(node)] = emitFlags;
+            node.emitFlags = emitFlags | NodeEmitFlags.HasNodeEmitFlags;
             return node;
         }
 
@@ -246,12 +297,15 @@ namespace ts {
                 return lastSourceMapRange || node;
             }
 
+            // Get the custom source map range for a node or from one of its original nodes.
             let range: TextRange;
             let current = node;
             while (current) {
-                range = current.id ? sourceMapRanges[current.id] : undefined;
-                if (range !== undefined) {
-                    break;
+                if (current.transformId === transformId) {
+                    range = current.sourceMapRange;
+                    if (range !== undefined) {
+                        break;
+                    }
                 }
 
                 current = current.original;
@@ -270,10 +324,12 @@ namespace ts {
          * @param range The text range.
          */
         function setSourceMapRange<T extends Node>(node: T, range: TextRange) {
+            beforeSetAnnotation(node);
+
             // Cache the most recently requested value.
             lastSourceMapRangeNode = node;
             lastSourceMapRange = range;
-            sourceMapRanges[getNodeId(node)] = range;
+            node.sourceMapRange = range;
             return node;
         }
 
@@ -290,13 +346,15 @@ namespace ts {
             // As a performance optimization, use the cached value of the most recent node.
             // This helps for cases where this function is called repeatedly for the same node.
             if (lastTokenSourceMapRangeNode === node && lastTokenSourceMapRangeToken === token) {
-                return lastSourceMapRange;
+                return lastTokenSourceMapRange;
             }
 
+            // Get the custom token source map range for a node or from one of its original nodes.
+            // Custom token ranges are not stored on the node to avoid the GC burden.
             let range: TextRange;
             let current = node;
             while (current) {
-                range = current.id ? sourceMapRanges[current.id + "-" + token] : undefined;
+                range = current.id ? tokenSourceMapRanges[current.id + "-" + token] : undefined;
                 if (range !== undefined) {
                     break;
                 }
@@ -323,7 +381,7 @@ namespace ts {
             lastTokenSourceMapRangeNode = node;
             lastTokenSourceMapRangeToken = token;
             lastTokenSourceMapRange = range;
-            sourceMapRanges[getNodeId(node) + "-" + token] = range;
+            tokenSourceMapRanges[getNodeId(node) + "-" + token] = range;
             return node;
         }
 
@@ -342,12 +400,15 @@ namespace ts {
                 return lastCommentMapRange || node;
             }
 
+            // Get the custom comment range for a node or from one of its original nodes.
             let range: TextRange;
             let current = node;
             while (current) {
-                range = current.id ? commentRanges[current.id] : undefined;
-                if (range !== undefined) {
-                    break;
+                if (current.transformId === transformId) {
+                    range = current.commentRange;
+                    if (range !== undefined) {
+                        break;
+                    }
                 }
 
                 current = current.original;
@@ -363,10 +424,12 @@ namespace ts {
          * Sets a custom text range to use when emitting comments.
          */
         function setCommentRange<T extends Node>(node: T, range: TextRange) {
+            beforeSetAnnotation(node);
+
             // Cache the most recently requested value.
             lastCommentMapRangeNode = node;
             lastCommentMapRange = range;
-            commentRanges[getNodeId(node)] = range;
+            node.commentRange = range;
             return node;
         }
 
