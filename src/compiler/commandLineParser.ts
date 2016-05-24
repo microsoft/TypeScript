@@ -38,6 +38,11 @@ namespace ts {
             description: Diagnostics.Print_this_message,
         },
         {
+            name: "help",
+            shortName: "?",
+            type: "boolean"
+        },
+        {
             name: "init",
             type: "boolean",
             description: Diagnostics.Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file,
