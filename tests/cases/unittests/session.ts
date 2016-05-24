@@ -111,23 +111,31 @@ namespace ts.server {
                     }
                     const req: protocol.Request = {
                         command: name,
-                        seq: i++,
+                        seq: i,
                         type: "command"
                     };
+                    i++;
                     session.onMessage(JSON.stringify(req));
-                    req.seq = i++;
+                    req.seq = i;
+                    i++;
                     req.arguments = {};
                     session.onMessage(JSON.stringify(req));
-                    req.seq = i++;
+                    req.seq = i;
+                    i++;
+                    /* tslint:disable no-null-keyword */
                     req.arguments = null;
+                    /* tslint:enable no-null-keyword */
                     session.onMessage(JSON.stringify(req));
-                    req.seq = i++;
+                    req.seq = i;
+                    i++;
                     req.arguments = "";
                     session.onMessage(JSON.stringify(req));
-                    req.seq = i++;
+                    req.seq = i;
+                    i++;
                     req.arguments = 0;
                     session.onMessage(JSON.stringify(req));
-                    req.seq = i++;
+                    req.seq = i;
+                    i++;
                     req.arguments = [];
                     session.onMessage(JSON.stringify(req));
                 }
