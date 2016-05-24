@@ -60,6 +60,15 @@ namespace ts {
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
+        let lastNodeEmitFlagsNode: Node;
+        let lastNodeEmitFlags: NodeEmitFlags;
+        let lastSourceMapRangeNode: Node;
+        let lastSourceMapRange: TextRange;
+        let lastTokenSourceMapRangeNode: Node;
+        let lastTokenSourceMapRangeToken: SyntaxKind;
+        let lastTokenSourceMapRange: TextRange;
+        let lastCommentMapRangeNode: Node;
+        let lastCommentMapRange: TextRange;
         let lexicalEnvironmentStackOffset = 0;
         let hoistedVariableDeclarations: VariableDeclaration[];
         let hoistedFunctionDeclarations: FunctionDeclaration[];
@@ -174,103 +183,189 @@ namespace ts {
 
         /**
          * Gets flags that control emit behavior of a node.
+         *
+         * If the node does not have its own NodeEmitFlags set, the node emit flags of its
+         * original pointer are used.
+         *
+         * @param node The node.
          */
         function getNodeEmitFlags(node: Node) {
+            // As a performance optimization, use the cached value of the most recent node.
+            // This helps for cases where this function is called repeatedly for the same node.
+            if (lastNodeEmitFlagsNode === node) {
+                return lastNodeEmitFlags;
+            }
+
+
+            let flags: NodeEmitFlags;
             while (node) {
-                let flags = nodeEmitFlags[getNodeId(node)];
+                let flags = node.id ? nodeEmitFlags[node.id] : undefined;
                 if (flags !== undefined) {
-                    return flags;
+                    break;
                 }
 
                 node = node.original;
             }
 
-            return undefined;
+            // Cache the most recently requested value.
+            lastNodeEmitFlagsNode = node;
+            lastNodeEmitFlags = flags;
+            return flags;
         }
 
         /**
          * Sets flags that control emit behavior of a node.
+         *
+         * @param node The node.
+         * @param emitFlags The NodeEmitFlags for the node.
          */
-        function setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags) {
-            if (flags & NodeEmitFlags.Merge) {
-                flags = getNodeEmitFlags(node) | (flags & ~NodeEmitFlags.Merge);
+        function setNodeEmitFlags<T extends Node>(node: T, emitFlags: NodeEmitFlags) {
+            if (emitFlags & NodeEmitFlags.Merge) {
+                emitFlags = getNodeEmitFlags(node) | (emitFlags & ~NodeEmitFlags.Merge);
             }
 
-            nodeEmitFlags[getNodeId(node)] = flags;
+            // Cache the most recently requested value.
+            lastNodeEmitFlagsNode = node;
+            lastNodeEmitFlags = emitFlags;
+            nodeEmitFlags[getNodeId(node)] = emitFlags;
             return node;
         }
 
         /**
          * Gets a custom text range to use when emitting source maps.
+         *
+         * If a node does not have its own custom source map text range, the custom source map
+         * text range of its original pointer is used.
+         *
+         * @param node The node.
          */
         function getSourceMapRange(node: Node) {
+            // As a performance optimization, use the cached value of the most recent node.
+            // This helps for cases where this function is called repeatedly for the same node.
+            if (lastSourceMapRangeNode === node) {
+                return lastSourceMapRange || node;
+            }
+
+            let range: TextRange;
             let current = node;
             while (current) {
-                const sourceMapRange = sourceMapRanges[getNodeId(current)];
-                if (sourceMapRange !== undefined) {
-                    return sourceMapRange;
+                range = current.id ? sourceMapRanges[current.id] : undefined;
+                if (range !== undefined) {
+                    break;
                 }
 
                 current = current.original;
             }
 
-            return node;
+            // Cache the most recently requested value.
+            lastSourceMapRangeNode = node;
+            lastSourceMapRange = range;
+            return range || node;
         }
 
         /**
          * Sets a custom text range to use when emitting source maps.
+         *
+         * @param node The node.
+         * @param range The text range.
          */
         function setSourceMapRange<T extends Node>(node: T, range: TextRange) {
+            // Cache the most recently requested value.
+            lastSourceMapRangeNode = node;
+            lastSourceMapRange = range;
             sourceMapRanges[getNodeId(node)] = range;
             return node;
         }
 
         /**
          * Gets the TextRange to use for source maps for a token of a node.
+         *
+         * If a node does not have its own custom source map text range for a token, the custom
+         * source map text range for the token of its original pointer is used.
+         *
+         * @param node The node.
+         * @param token The token.
          */
         function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
+            // As a performance optimization, use the cached value of the most recent node.
+            // This helps for cases where this function is called repeatedly for the same node.
+            if (lastTokenSourceMapRangeNode === node && lastTokenSourceMapRangeToken === token) {
+                return lastSourceMapRange;
+            }
+
+            let range: TextRange;
             let current = node;
             while (current) {
-                const tokenSourceMapRange = sourceMapRanges[getNodeId(node) + "-" + token];
-                if (tokenSourceMapRange !== undefined) {
-                    return tokenSourceMapRange;
+                range = current.id ? sourceMapRanges[current.id + "-" + token] : undefined;
+                if (range !== undefined) {
+                    break;
                 }
 
                 current = current.original;
             }
 
-            return undefined;
+            // Cache the most recently requested value.
+            lastTokenSourceMapRangeNode = node;
+            lastTokenSourceMapRangeToken = token;
+            lastTokenSourceMapRange = range;
+            return range;
         }
 
         /**
          * Sets the TextRange to use for source maps for a token of a node.
+         *
+         * @param node The node.
+         * @param token The token.
+         * @param range The text range.
          */
         function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
+            // Cache the most recently requested value.
+            lastTokenSourceMapRangeNode = node;
+            lastTokenSourceMapRangeToken = token;
+            lastTokenSourceMapRange = range;
             sourceMapRanges[getNodeId(node) + "-" + token] = range;
             return node;
         }
 
         /**
          * Gets a custom text range to use when emitting comments.
+         *
+         * If a node does not have its own custom source map text range, the custom source map
+         * text range of its original pointer is used.
+         *
+         * @param node The node.
          */
         function getCommentRange(node: Node) {
+            // As a performance optimization, use the cached value of the most recent node.
+            // This helps for cases where this function is called repeatedly for the same node.
+            if (lastCommentMapRangeNode === node) {
+                return lastCommentMapRange || node;
+            }
+
+            let range: TextRange;
             let current = node;
             while (current) {
-                const commentRange = commentRanges[getNodeId(current)];
-                if (commentRange !== undefined) {
-                    return commentRange;
+                range = current.id ? commentRanges[current.id] : undefined;
+                if (range !== undefined) {
+                    break;
                 }
 
                 current = current.original;
             }
 
-            return node;
+            // Cache the most recently requested value.
+            lastCommentMapRangeNode = node;
+            lastCommentMapRange = range;
+            return range || node;
         }
 
         /**
          * Sets a custom text range to use when emitting comments.
          */
         function setCommentRange<T extends Node>(node: T, range: TextRange) {
+            // Cache the most recently requested value.
+            lastCommentMapRangeNode = node;
+            lastCommentMapRange = range;
             commentRanges[getNodeId(node)] = range;
             return node;
         }
