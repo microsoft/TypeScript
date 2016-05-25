@@ -6,16 +6,17 @@ interface I<T> {
 declare function foo<T>(obj: I<T>): T
 
 foo({
-    p: "",
+    101: "",
     0: () => { },
     ["hi" + "bye"]: true,
     [0 + 1]: 0,
     [+"hi"]: [0]
 });
 
+
 //// [computedPropertyNamesContextualType7_ES5.js]
 foo((_a = {
-        p: "",
+        101: "",
         0: function () { }
     },
     _a["hi" + "bye"] = true,

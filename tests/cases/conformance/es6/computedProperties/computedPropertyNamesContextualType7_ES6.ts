@@ -6,7 +6,7 @@ interface I<T> {
 declare function foo<T>(obj: I<T>): T
 
 foo({
-    p: "",
+    101: "",
     0: () => { },
     ["hi" + "bye"]: true,
     [0 + 1]: 0,

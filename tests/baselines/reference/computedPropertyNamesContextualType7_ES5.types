@@ -17,12 +17,11 @@ declare function foo<T>(obj: I<T>): T
 >T : T
 
 foo({
->foo({    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]}) : (() => void) | number | number[]
+>foo({    101: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]}) : string | (() => void) | number | number[]
 >foo : <T>(obj: I<T>) => T
->{    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]} : { [x: string]: string | (() => void) | boolean | number | number[]; [x: number]: (() => void) | number | number[]; 0: () => void; p: string; }
+>{    101: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]} : { [x: string]: string | (() => void) | boolean | number | number[]; [x: number]: string | (() => void) | number | number[]; 0: () => void; 101: string; }
 
-    p: "",
->p : string
+    101: "",
 >"" : string
 
     0: () => { },
@@ -47,3 +46,4 @@ foo({
 >0 : number
 
 });
+

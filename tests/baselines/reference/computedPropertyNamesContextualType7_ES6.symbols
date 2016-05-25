@@ -19,11 +19,10 @@ declare function foo<T>(obj: I<T>): T
 foo({
 >foo : Symbol(foo, Decl(computedPropertyNamesContextualType7_ES6.ts, 2, 1))
 
-    p: "",
->p : Symbol(p, Decl(computedPropertyNamesContextualType7_ES6.ts, 6, 5))
-
+    101: "",
     0: () => { },
     ["hi" + "bye"]: true,
     [0 + 1]: 0,
     [+"hi"]: [0]
 });
+
