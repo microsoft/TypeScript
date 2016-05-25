@@ -907,9 +907,10 @@ function runConsoleTests(defaultReporter, defaultSubsets, dirty) {
         tests = subsetRegex ? ' -g "' + subsetRegex + '"' : '';
         var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
+        var start = new Date();
         exec(cmd, function () {
             deleteTemporaryProjectOutput();
-            if (i === 0 && !dirty) {
+            /*if (i === 0 && !dirty) {
                 var lint = jake.Task['lint'];
                 lint.addListener('complete', function () {
                     complete();
@@ -918,8 +919,11 @@ function runConsoleTests(defaultReporter, defaultSubsets, dirty) {
             }
             else {
                 complete();
-            }
+            }*/
+            var finish = new Date();
+            console.log("Execution time of", subsetRegex, ":", (finish.getTime() - start.getTime()), "ms");
         });
+
     });
 }
 

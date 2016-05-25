@@ -1,0 +1,39 @@
+=== tests/cases/compiler/classExpressionWithStaticPropertiesES64.ts ===
+declare var console: any;
+>console : Symbol(console, Decl(classExpressionWithStaticPropertiesES64.ts, 0, 11))
+
+const arr: any[] = [];
+>arr : Symbol(arr, Decl(classExpressionWithStaticPropertiesES64.ts, 1, 5))
+
+for (let i = 0; i < 3; i++) {
+>i : Symbol(i, Decl(classExpressionWithStaticPropertiesES64.ts, 2, 8))
+>i : Symbol(i, Decl(classExpressionWithStaticPropertiesES64.ts, 2, 8))
+>i : Symbol(i, Decl(classExpressionWithStaticPropertiesES64.ts, 2, 8))
+
+    arr.push((class C {
+>arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(classExpressionWithStaticPropertiesES64.ts, 1, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(classExpressionWithStaticPropertiesES64.ts, 3, 14))
+
+        static x = i;
+>x : Symbol(C.x, Decl(classExpressionWithStaticPropertiesES64.ts, 3, 23))
+>i : Symbol(i, Decl(classExpressionWithStaticPropertiesES64.ts, 2, 8))
+
+        static y = () => C.x * 2;
+>y : Symbol(C.y, Decl(classExpressionWithStaticPropertiesES64.ts, 4, 21))
+>C.x : Symbol(C.x, Decl(classExpressionWithStaticPropertiesES64.ts, 3, 23))
+>C : Symbol(C, Decl(classExpressionWithStaticPropertiesES64.ts, 3, 14))
+>x : Symbol(C.x, Decl(classExpressionWithStaticPropertiesES64.ts, 3, 23))
+
+    }), i);
+>i : Symbol(i, Decl(classExpressionWithStaticPropertiesES64.ts, 2, 8))
+}
+arr.forEach(C => console.log(C.y()));
+>arr.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(classExpressionWithStaticPropertiesES64.ts, 1, 5))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(classExpressionWithStaticPropertiesES64.ts, 8, 12))
+>console : Symbol(console, Decl(classExpressionWithStaticPropertiesES64.ts, 0, 11))
+>C : Symbol(C, Decl(classExpressionWithStaticPropertiesES64.ts, 8, 12))
+
