@@ -114,10 +114,12 @@ namespace ts {
             const body = createFunctionExpression(
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
+                /*typeParameters*/ undefined,
                 [
                     createParameter(exportFunctionForFile),
                     createParameter(contextObjectForFile)
                 ],
+                /*type*/ undefined,
                 setNodeEmitFlags(
                     createBlock(statements, /*location*/ undefined, /*multiLine*/ true),
                     NodeEmitFlags.EmitEmitHelpers
@@ -131,6 +133,7 @@ namespace ts {
                 createStatement(
                     createCall(
                         createPropertyAccess(createIdentifier("System"), "register"),
+                        /*typeArguments*/ undefined,
                         moduleName
                             ? [moduleName, dependencies, body]
                             : [dependencies, body]
@@ -204,6 +207,7 @@ namespace ts {
                     createVariableDeclarationList([
                         createVariableDeclaration(
                             "__moduleName",
+                            /*type*/ undefined,
                             createLogicalAnd(
                                 contextObjectForFile,
                                 createPropertyAccess(contextObjectForFile, "id")
@@ -244,7 +248,9 @@ namespace ts {
                                 createFunctionExpression(
                                     /*asteriskToken*/ undefined,
                                     /*name*/ undefined,
-                                    [],
+                                    /*typeParameters*/ undefined,
+                                    /*parameters*/ [],
+                                    /*type*/ undefined,
                                     createBlock(
                                         executeStatements,
                                         /*location*/ undefined,
@@ -328,6 +334,7 @@ namespace ts {
                     createVariableDeclarationList([
                         createVariableDeclaration(
                             exportedNamesStorageRef,
+                            /*type*/ undefined,
                             createObjectLiteral(exportedNames, /*location*/ undefined, /*multiline*/ true)
                         )
                     ])
@@ -397,6 +404,7 @@ namespace ts {
                                     createStatement(
                                         createCall(
                                             exportFunctionForFile,
+                                            /*typeArguments*/ undefined,
                                             [createObjectLiteral(properties, /*location*/ undefined, /*multiline*/ true)]
                                         )
                                     )
@@ -412,6 +420,7 @@ namespace ts {
                                     createStatement(
                                         createCall(
                                             exportStarFunction,
+                                            /*typeArguments*/ undefined,
                                             [parameterName]
                                         )
                                     )
@@ -425,7 +434,9 @@ namespace ts {
                     createFunctionExpression(
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
+                        /*typeParameters*/ undefined,
                         [createParameter(parameterName)],
+                        /*type*/ undefined,
                         createBlock(statements, /*location*/ undefined, /*multiLine*/ true)
                     )
                 );
@@ -651,10 +662,13 @@ namespace ts {
                 // If the function is exported, ensure it has a name and rewrite the function without any export flags.
                 const name = node.name || getGeneratedNameForNode(node);
                 const newNode = createFunctionDeclaration(
+                    /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     node.asteriskToken,
                     name,
+                    /*typeParameters*/ undefined,
                     node.parameters,
+                    /*type*/ undefined,
                     node.body,
                     /*location*/ node);
 
@@ -1199,23 +1213,27 @@ namespace ts {
 
             addNode(statements,
                 createFunctionDeclaration(
+                    /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     exportStarFunction,
+                    /*typeParameters*/ undefined,
                     [createParameter(m)],
+                    /*type*/ undefined,
                     createBlock([
                         createVariableStatement(
                             /*modifiers*/ undefined,
                             createVariableDeclarationList([
                                 createVariableDeclaration(
                                     exports,
+                                    /*type*/ undefined,
                                     createObjectLiteral([])
                                 )
                             ])
                         ),
                         createForIn(
                             createVariableDeclarationList([
-                                createVariableDeclaration(n)
+                                createVariableDeclaration(n, /*type*/ undefined)
                             ]),
                             m,
                             createBlock([
@@ -1236,6 +1254,7 @@ namespace ts {
                         createStatement(
                             createCall(
                                 exportFunctionForFile,
+                                /*typeArguments*/ undefined,
                                 [exports]
                             )
                         )
@@ -1255,7 +1274,7 @@ namespace ts {
          */
         function createExportExpression(name: Identifier | StringLiteral, value: Expression) {
             const exportName = isIdentifier(name) ? createLiteral(name.text) : name;
-            return createCall(exportFunctionForFile, [exportName, value]);
+            return createCall(exportFunctionForFile, /*typeArguments*/ undefined, [exportName, value]);
         }
 
         /**

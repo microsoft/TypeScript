@@ -3047,12 +3047,18 @@ namespace ts {
         return false;
     }
 
+    const syntaxKindCache: Map<string> = {};
+
     export function formatSyntaxKind(kind: SyntaxKind): string {
         const syntaxKindEnum = (<any>ts).SyntaxKind;
         if (syntaxKindEnum) {
+            if (syntaxKindCache[kind]) {
+                return syntaxKindCache[kind];
+            }
+
             for (const name in syntaxKindEnum) {
                 if (syntaxKindEnum[name] === kind) {
-                    return kind.toString() + " (" + name + ")";
+                    return syntaxKindCache[kind] = kind.toString() + " (" + name + ")";
                 }
             }
         }

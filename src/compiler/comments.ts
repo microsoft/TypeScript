@@ -329,8 +329,8 @@ namespace ts {
 
         function setSourceFile(sourceFile: SourceFile) {
             currentSourceFile = sourceFile;
-            currentText = sourceFile.text;
-            currentLineMap = getLineStarts(sourceFile);
+            currentText = currentSourceFile.text;
+            currentLineMap = getLineStarts(currentSourceFile);
             detachedCommentsInfo = undefined;
             consumedCommentRanges = {};
             leadingCommentRangePositions = {};

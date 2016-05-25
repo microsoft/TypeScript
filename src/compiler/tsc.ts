@@ -6,6 +6,21 @@ namespace ts {
         fileWatcher?: FileWatcher;
     }
 
+    interface Statistic {
+        name: string;
+        value: string;
+    }
+
+    interface Mark {
+        markName: string;
+        count: number;
+    }
+
+    interface Measure {
+        measureName: string;
+        duration: number;
+    }
+
     let reportDiagnostic = reportDiagnosticSimply;
 
     function reportDiagnostics(diagnostics: Diagnostic[], host: CompilerHost): void {
@@ -235,18 +250,6 @@ namespace ts {
         }
 
         return s;
-    }
-
-    function reportStatisticalValue(name: string, value: string) {
-        sys.write(padRight(name + ":", 20) + padLeft(value.toString(), 10) + sys.newLine);
-    }
-
-    function reportCountStatistic(name: string, count: number) {
-        reportStatisticalValue(name, "" + count);
-    }
-
-    function reportTimeStatistic(name: string, time: number) {
-        reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
     }
 
     function isJSONSupported() {
@@ -544,9 +547,11 @@ namespace ts {
     }
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
+        let statistics: Statistic[];
         if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
             performance.enable();
             performance.reset();
+            statistics = [];
         }
 
         const program = createProgram(fileNames, compilerOptions, compilerHost);
@@ -589,25 +594,42 @@ namespace ts {
 
             if (compilerOptions.extendedDiagnostics) {
                 sys.write("Extended Diagnostics:" + sys.newLine);
-                sys.write("Marks:" + sys.newLine);
+                const marks: Mark[] = [];
                 for (const markName of performance.getMarkNames()) {
                     if (/^(ioReadStart|ioWriteStart|programStart|bindStart|checkStart|emitStart)$/.test(markName)) {
                         continue;
                     }
 
-                    reportCountStatistic("  " + markName, performance.getCount(markName));
+                    marks.push({ markName, count: performance.getCount(markName) });
                 }
 
-                sys.write("Measures:" + sys.newLine);
+                if (marks.length) {
+                    marks.sort((x, y) => -compareValues(x.count, y.count));
+                    sys.write("Marks:" + sys.newLine);
+                    for (const { markName, count } of marks) {
+                        reportCountStatistic("  " + markName, count);
+                    }
+                }
+
+                const measures: Measure[] = [];
                 for (const measureName of performance.getMeasureNames()) {
                     if (/^(ioReadTime|ioWriteTime|programTime|bindTime|checkTime|emitTime)$/.test(measureName)) {
                         continue;
                     }
 
-                    reportTimeStatistic("  " + measureName, performance.getDuration(measureName));
+                    measures.push({ measureName, duration: performance.getDuration(measureName) });
+                }
+
+                if (measures.length) {
+                    measures.sort((x, y) => -compareValues(x.duration, y.duration));
+                    sys.write("Measures:" + sys.newLine);
+                    for (const { measureName, duration } of measures) {
+                        reportTimeStatistic("  " + measureName, duration);
+                    }
                 }
             }
 
+            reportStatistics();
             performance.disable();
             performance.reset();
         }
@@ -648,6 +670,36 @@ namespace ts {
                 return ExitStatus.DiagnosticsPresent_OutputsGenerated;
             }
             return ExitStatus.Success;
+        }
+
+        function reportStatistics() {
+            let nameSize = 0;
+            let valueSize = 0;
+            for (const { name, value } of statistics) {
+                if (name.length > nameSize) {
+                    nameSize = name.length;
+                }
+
+                if (value.length > valueSize) {
+                    valueSize = value.length;
+                }
+            }
+
+            for (const { name, value } of statistics) {
+                sys.write(padRight(name + ":", nameSize + 2) + padLeft(value.toString(), valueSize) + sys.newLine);
+            }
+        }
+
+        function reportStatisticalValue(name: string, value: string) {
+            statistics.push({ name, value });
+        }
+
+        function reportCountStatistic(name: string, count: number) {
+            reportStatisticalValue(name, "" + count);
+        }
+
+        function reportTimeStatistic(name: string, time: number) {
+            reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
         }
     }
 
