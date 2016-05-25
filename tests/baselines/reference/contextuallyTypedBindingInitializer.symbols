@@ -3,7 +3,7 @@ interface Show {
 >Show : Symbol(Show, Decl(contextuallyTypedBindingInitializer.ts, 0, 0))
 
     show: (x: number) => string;
->show : Symbol(show, Decl(contextuallyTypedBindingInitializer.ts, 0, 16))
+>show : Symbol(Show.show, Decl(contextuallyTypedBindingInitializer.ts, 0, 16))
 >x : Symbol(x, Decl(contextuallyTypedBindingInitializer.ts, 1, 11))
 }
 function f({ show = v => v.toString() }: Show) {}
@@ -26,6 +26,7 @@ function f2({ "show": showRename = v => v.toString() }: Show) {}
 
 function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
 >f3 : Symbol(f3, Decl(contextuallyTypedBindingInitializer.ts, 4, 64))
+>"show" : Symbol(showRename, Decl(contextuallyTypedBindingInitializer.ts, 5, 13))
 >showRename : Symbol(showRename, Decl(contextuallyTypedBindingInitializer.ts, 5, 13))
 >v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 5, 36))
 >v.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
@@ -37,7 +38,7 @@ interface Nested {
 >Nested : Symbol(Nested, Decl(contextuallyTypedBindingInitializer.ts, 5, 66))
 
     nested: Show
->nested : Symbol(nested, Decl(contextuallyTypedBindingInitializer.ts, 7, 18))
+>nested : Symbol(Nested.nested, Decl(contextuallyTypedBindingInitializer.ts, 7, 18))
 >Show : Symbol(Show, Decl(contextuallyTypedBindingInitializer.ts, 0, 0))
 }
 function ff({ nested = { show: v => v.toString() } }: Nested) {}
@@ -54,7 +55,7 @@ interface Tuples {
 >Tuples : Symbol(Tuples, Decl(contextuallyTypedBindingInitializer.ts, 10, 64))
 
     prop: [string, number];
->prop : Symbol(prop, Decl(contextuallyTypedBindingInitializer.ts, 12, 18))
+>prop : Symbol(Tuples.prop, Decl(contextuallyTypedBindingInitializer.ts, 12, 18))
 }
 function g({ prop = ["hello", 1234] }: Tuples) {}
 >g : Symbol(g, Decl(contextuallyTypedBindingInitializer.ts, 14, 1))
@@ -65,7 +66,7 @@ interface StringUnion {
 >StringUnion : Symbol(StringUnion, Decl(contextuallyTypedBindingInitializer.ts, 15, 49))
 
     prop: "foo" | "bar";
->prop : Symbol(prop, Decl(contextuallyTypedBindingInitializer.ts, 17, 23))
+>prop : Symbol(StringUnion.prop, Decl(contextuallyTypedBindingInitializer.ts, 17, 23))
 }
 function h({ prop = "foo" }: StringUnion) {}
 >h : Symbol(h, Decl(contextuallyTypedBindingInitializer.ts, 19, 1))
@@ -76,7 +77,7 @@ interface StringIdentity {
 >StringIdentity : Symbol(StringIdentity, Decl(contextuallyTypedBindingInitializer.ts, 20, 44))
 
     stringIdentity(s: string): string;
->stringIdentity : Symbol(stringIdentity, Decl(contextuallyTypedBindingInitializer.ts, 22, 26))
+>stringIdentity : Symbol(StringIdentity.stringIdentity, Decl(contextuallyTypedBindingInitializer.ts, 22, 26))
 >s : Symbol(s, Decl(contextuallyTypedBindingInitializer.ts, 23, 19))
 }
 let { stringIdentity: id = arg => arg }: StringIdentity = { stringIdentity: x => x};

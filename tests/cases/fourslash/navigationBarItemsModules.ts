@@ -27,9 +27,9 @@
 ////
 ////{| "itemName": "A", "kind": "module" |}
 ////module A {
-////    {| "itemName": "B", "kind": "module", "parentName": "E" |}
+////    {| "itemName": "B", "kind": "module", "parentName": "" |}
 ////    module B {
-////        {| "itemName": "C", "kind": "module", "parentName": "F" |}
+////        {| "itemName": "C", "kind": "module", "parentName": "" |}
 ////        module C {
 ////            {| "itemName": "x", "kind": "var", "parentName": "C" |}
 ////            declare var x;
@@ -39,10 +39,10 @@
 
 
 test.markers().forEach((marker) => {
-    verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
+    verify.navigationBarContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
 });
 
 /// We have 8 module keywords, and 4 var keywords.
 /// The declarations of A.B.C.x do not get merged, so the 4 vars are independent.
 /// The two 'A' modules, however, do get merged, so in reality we have 7 modules.
-verify.getScriptLexicalStructureListCount(11);
+verify.navigationBarCount(11);

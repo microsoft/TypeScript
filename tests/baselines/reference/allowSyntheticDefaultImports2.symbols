@@ -13,5 +13,5 @@ export class Foo {
 >Foo : Symbol(Foo, Decl(b.ts, 0, 0))
 
 	member: string;
->member : Symbol(member, Decl(b.ts, 0, 18))
+>member : Symbol(Foo.member, Decl(b.ts, 0, 18))
 }

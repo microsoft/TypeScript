@@ -35,7 +35,7 @@
 
 
 test.markers().forEach((marker) => {
-    verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
+    verify.navigationBarContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
 });
 
-verify.getScriptLexicalStructureListCount(9); // interface w/ 2 properties, class w/ 2 properties, 3 modules
+verify.navigationBarCount(9); // interface w/ 2 properties, class w/ 2 properties, 3 modules

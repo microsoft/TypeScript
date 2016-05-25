@@ -7,12 +7,12 @@ function f() {
 >C : Symbol(C, Decl(modifierOnClassDeclarationMemberInFunction.ts, 1, 14))
 
         public baz = 1;
->baz : Symbol(baz, Decl(modifierOnClassDeclarationMemberInFunction.ts, 2, 13))
+>baz : Symbol(C.baz, Decl(modifierOnClassDeclarationMemberInFunction.ts, 2, 13))
 
         static foo() { }
 >foo : Symbol(C.foo, Decl(modifierOnClassDeclarationMemberInFunction.ts, 3, 23))
 
         public bar() { }
->bar : Symbol(bar, Decl(modifierOnClassDeclarationMemberInFunction.ts, 4, 24))
+>bar : Symbol(C.bar, Decl(modifierOnClassDeclarationMemberInFunction.ts, 4, 24))
     }
 }

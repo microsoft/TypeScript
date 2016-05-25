@@ -61,11 +61,11 @@ function foo<T>(t: T) {
 
 interface X { x: number }
 >X : Symbol(X, Decl(inOperatorWithValidOperands.ts, 22, 1))
->x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 24, 13))
+>x : Symbol(X.x, Decl(inOperatorWithValidOperands.ts, 24, 13))
 
 interface Y { y: number }
 >Y : Symbol(Y, Decl(inOperatorWithValidOperands.ts, 24, 25))
->y : Symbol(y, Decl(inOperatorWithValidOperands.ts, 25, 13))
+>y : Symbol(Y.y, Decl(inOperatorWithValidOperands.ts, 25, 13))
 
 var c1: X | Y;
 >c1 : Symbol(c1, Decl(inOperatorWithValidOperands.ts, 27, 3))

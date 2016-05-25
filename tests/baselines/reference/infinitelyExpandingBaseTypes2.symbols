@@ -4,7 +4,7 @@ interface A<T>
 >T : Symbol(T, Decl(infinitelyExpandingBaseTypes2.ts, 0, 12))
 {
    x : A<()=>T>
->x : Symbol(x, Decl(infinitelyExpandingBaseTypes2.ts, 1, 1))
+>x : Symbol(A.x, Decl(infinitelyExpandingBaseTypes2.ts, 1, 1))
 >A : Symbol(A, Decl(infinitelyExpandingBaseTypes2.ts, 0, 0))
 >T : Symbol(T, Decl(infinitelyExpandingBaseTypes2.ts, 0, 12))
 }
@@ -14,7 +14,7 @@ interface B<T>
 >T : Symbol(T, Decl(infinitelyExpandingBaseTypes2.ts, 5, 12))
 {
    x : B<()=>T>
->x : Symbol(x, Decl(infinitelyExpandingBaseTypes2.ts, 6, 1))
+>x : Symbol(B.x, Decl(infinitelyExpandingBaseTypes2.ts, 6, 1))
 >B : Symbol(B, Decl(infinitelyExpandingBaseTypes2.ts, 3, 1))
 >T : Symbol(T, Decl(infinitelyExpandingBaseTypes2.ts, 5, 12))
 }

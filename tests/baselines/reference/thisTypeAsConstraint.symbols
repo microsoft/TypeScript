@@ -3,7 +3,7 @@ class C {
 >C : Symbol(C, Decl(thisTypeAsConstraint.ts, 0, 0))
 
   public m<T extends this>() {
->m : Symbol(m, Decl(thisTypeAsConstraint.ts, 0, 9))
+>m : Symbol(C.m, Decl(thisTypeAsConstraint.ts, 0, 9))
 >T : Symbol(T, Decl(thisTypeAsConstraint.ts, 1, 11))
   }
 }

@@ -11,7 +11,7 @@ interface I0 {
 >I0 : Symbol(I0, Decl(circularTypeAliasForUnionWithInterface.ts, 1, 22))
 
     x: T0;
->x : Symbol(x, Decl(circularTypeAliasForUnionWithInterface.ts, 2, 14))
+>x : Symbol(I0.x, Decl(circularTypeAliasForUnionWithInterface.ts, 2, 14))
 >T0 : Symbol(T0, Decl(circularTypeAliasForUnionWithInterface.ts, 0, 11))
 }
 

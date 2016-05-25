@@ -3,21 +3,21 @@ interface A {
 >A : Symbol(A, Decl(fluentInterfaces.ts, 0, 0))
 
     foo(): this;
->foo : Symbol(foo, Decl(fluentInterfaces.ts, 0, 13))
+>foo : Symbol(A.foo, Decl(fluentInterfaces.ts, 0, 13))
 }
 interface B extends A {
 >B : Symbol(B, Decl(fluentInterfaces.ts, 2, 1))
 >A : Symbol(A, Decl(fluentInterfaces.ts, 0, 0))
 
     bar(): this;
->bar : Symbol(bar, Decl(fluentInterfaces.ts, 3, 23))
+>bar : Symbol(B.bar, Decl(fluentInterfaces.ts, 3, 23))
 }
 interface C extends B {
 >C : Symbol(C, Decl(fluentInterfaces.ts, 5, 1))
 >B : Symbol(B, Decl(fluentInterfaces.ts, 2, 1))
 
     baz(): this;
->baz : Symbol(baz, Decl(fluentInterfaces.ts, 6, 23))
+>baz : Symbol(C.baz, Decl(fluentInterfaces.ts, 6, 23))
 }
 var c: C;
 >c : Symbol(c, Decl(fluentInterfaces.ts, 9, 3))

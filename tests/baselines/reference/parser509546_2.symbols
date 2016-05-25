@@ -5,6 +5,6 @@ export class Logger {
 >Logger : Symbol(Logger, Decl(parser509546_2.ts, 0, 13))
 
      public
->public : Symbol(public, Decl(parser509546_2.ts, 2, 21))
+>public : Symbol(Logger.public, Decl(parser509546_2.ts, 2, 21))
 }
 

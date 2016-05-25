@@ -29,13 +29,13 @@ module m2 {
 >connectExport : Symbol(connectExport, Decl(declFileImportModuleWithExportAssignment_0.ts, 4, 5))
 
         use: (mod: connectModule) => connectExport;
->use : Symbol(use, Decl(declFileImportModuleWithExportAssignment_0.ts, 5, 36))
+>use : Symbol(connectExport.use, Decl(declFileImportModuleWithExportAssignment_0.ts, 5, 36))
 >mod : Symbol(mod, Decl(declFileImportModuleWithExportAssignment_0.ts, 6, 14))
 >connectModule : Symbol(connectModule, Decl(declFileImportModuleWithExportAssignment_0.ts, 1, 11))
 >connectExport : Symbol(connectExport, Decl(declFileImportModuleWithExportAssignment_0.ts, 4, 5))
 
         listen: (port: number) => void;
->listen : Symbol(listen, Decl(declFileImportModuleWithExportAssignment_0.ts, 6, 51))
+>listen : Symbol(connectExport.listen, Decl(declFileImportModuleWithExportAssignment_0.ts, 6, 51))
 >port : Symbol(port, Decl(declFileImportModuleWithExportAssignment_0.ts, 7, 17))
     }
 

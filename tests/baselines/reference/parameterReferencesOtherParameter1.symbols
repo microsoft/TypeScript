@@ -3,7 +3,7 @@ class Model {
 >Model : Symbol(Model, Decl(parameterReferencesOtherParameter1.ts, 0, 0))
 
     public name: string;
->name : Symbol(name, Decl(parameterReferencesOtherParameter1.ts, 0, 13))
+>name : Symbol(Model.name, Decl(parameterReferencesOtherParameter1.ts, 0, 13))
 }
 
 class UI {

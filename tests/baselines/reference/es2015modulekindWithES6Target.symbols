@@ -9,7 +9,7 @@ export default class A
     }
 
     public B()
->B : Symbol(B, Decl(es2015modulekindWithES6Target.ts, 6, 5))
+>B : Symbol(A.B, Decl(es2015modulekindWithES6Target.ts, 6, 5))
     {
         return 42;
     }

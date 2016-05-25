@@ -5,4 +5,4 @@
 
 goTo.marker();
 edit.deleteAtCaret('class Bar { }'.length);
-verify.getScriptLexicalStructureListContains('Foo', 'enum', 'tests/cases/fourslash/deleteClassWithEnumPresent.ts', '');
+verify.navigationBarContains('Foo', 'enum', 'tests/cases/fourslash/deleteClassWithEnumPresent.ts', '');

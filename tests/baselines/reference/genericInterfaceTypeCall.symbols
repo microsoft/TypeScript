@@ -4,7 +4,7 @@ interface Foo<T> {
 >T : Symbol(T, Decl(genericInterfaceTypeCall.ts, 0, 14))
 
     reject(arg: T): void;
->reject : Symbol(reject, Decl(genericInterfaceTypeCall.ts, 0, 18))
+>reject : Symbol(Foo.reject, Decl(genericInterfaceTypeCall.ts, 0, 18))
 >arg : Symbol(arg, Decl(genericInterfaceTypeCall.ts, 1, 11))
 >T : Symbol(T, Decl(genericInterfaceTypeCall.ts, 0, 14))
 }
@@ -17,13 +17,13 @@ interface bar<T> {
 >T : Symbol(T, Decl(genericInterfaceTypeCall.ts, 5, 14))
 
     fail(func: (arg: T) => void ): void;
->fail : Symbol(fail, Decl(genericInterfaceTypeCall.ts, 5, 18))
+>fail : Symbol(bar.fail, Decl(genericInterfaceTypeCall.ts, 5, 18))
 >func : Symbol(func, Decl(genericInterfaceTypeCall.ts, 6, 9))
 >arg : Symbol(arg, Decl(genericInterfaceTypeCall.ts, 6, 16))
 >T : Symbol(T, Decl(genericInterfaceTypeCall.ts, 5, 14))
 
     fail2(func2: { (arg: T): void; }): void;
->fail2 : Symbol(fail2, Decl(genericInterfaceTypeCall.ts, 6, 40))
+>fail2 : Symbol(bar.fail2, Decl(genericInterfaceTypeCall.ts, 6, 40))
 >func2 : Symbol(func2, Decl(genericInterfaceTypeCall.ts, 7, 10))
 >arg : Symbol(arg, Decl(genericInterfaceTypeCall.ts, 7, 20))
 >T : Symbol(T, Decl(genericInterfaceTypeCall.ts, 5, 14))

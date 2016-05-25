@@ -4,10 +4,10 @@ interface Base {
 >Base : Symbol(Base, Decl(stringLiteralTypesOverloads03.ts, 0, 0))
 
     x: string;
->x : Symbol(x, Decl(stringLiteralTypesOverloads03.ts, 1, 16))
+>x : Symbol(Base.x, Decl(stringLiteralTypesOverloads03.ts, 1, 16))
 
     y: number;
->y : Symbol(y, Decl(stringLiteralTypesOverloads03.ts, 2, 14))
+>y : Symbol(Base.y, Decl(stringLiteralTypesOverloads03.ts, 2, 14))
 }
 
 interface HelloOrWorld extends Base {
@@ -15,7 +15,7 @@ interface HelloOrWorld extends Base {
 >Base : Symbol(Base, Decl(stringLiteralTypesOverloads03.ts, 0, 0))
 
     p1: boolean;
->p1 : Symbol(p1, Decl(stringLiteralTypesOverloads03.ts, 6, 37))
+>p1 : Symbol(HelloOrWorld.p1, Decl(stringLiteralTypesOverloads03.ts, 6, 37))
 }
 
 interface JustHello extends Base {
@@ -23,7 +23,7 @@ interface JustHello extends Base {
 >Base : Symbol(Base, Decl(stringLiteralTypesOverloads03.ts, 0, 0))
 
     p2: boolean;
->p2 : Symbol(p2, Decl(stringLiteralTypesOverloads03.ts, 10, 34))
+>p2 : Symbol(JustHello.p2, Decl(stringLiteralTypesOverloads03.ts, 10, 34))
 }
 
 interface JustWorld extends Base {
@@ -31,7 +31,7 @@ interface JustWorld extends Base {
 >Base : Symbol(Base, Decl(stringLiteralTypesOverloads03.ts, 0, 0))
 
     p3: boolean;
->p3 : Symbol(p3, Decl(stringLiteralTypesOverloads03.ts, 14, 34))
+>p3 : Symbol(JustWorld.p3, Decl(stringLiteralTypesOverloads03.ts, 14, 34))
 }
 
 let hello: "hello";

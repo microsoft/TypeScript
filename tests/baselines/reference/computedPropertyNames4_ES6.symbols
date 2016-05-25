@@ -31,7 +31,11 @@ var v = {
 >s : Symbol(s, Decl(computedPropertyNames4_ES6.ts, 0, 3))
 
     [""]: 0,
+>"" : Symbol([""], Decl(computedPropertyNames4_ES6.ts, 8, 12))
+
     [0]: 0,
+>0 : Symbol([0], Decl(computedPropertyNames4_ES6.ts, 9, 12))
+
     [a]: 1,
 >a : Symbol(a, Decl(computedPropertyNames4_ES6.ts, 2, 3))
 

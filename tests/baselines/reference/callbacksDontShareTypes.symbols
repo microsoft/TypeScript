@@ -4,15 +4,15 @@ interface Collection<T> {
 >T : Symbol(T, Decl(callbacksDontShareTypes.ts, 0, 21))
 
     length: number;
->length : Symbol(length, Decl(callbacksDontShareTypes.ts, 0, 25))
+>length : Symbol(Collection.length, Decl(callbacksDontShareTypes.ts, 0, 25))
 
     add(x: T): void;
->add : Symbol(add, Decl(callbacksDontShareTypes.ts, 1, 19))
+>add : Symbol(Collection.add, Decl(callbacksDontShareTypes.ts, 1, 19))
 >x : Symbol(x, Decl(callbacksDontShareTypes.ts, 2, 8))
 >T : Symbol(T, Decl(callbacksDontShareTypes.ts, 0, 21))
 
     remove(x: T): boolean;
->remove : Symbol(remove, Decl(callbacksDontShareTypes.ts, 2, 20))
+>remove : Symbol(Collection.remove, Decl(callbacksDontShareTypes.ts, 2, 20))
 >x : Symbol(x, Decl(callbacksDontShareTypes.ts, 3, 11))
 >T : Symbol(T, Decl(callbacksDontShareTypes.ts, 0, 21))
 }
@@ -20,7 +20,7 @@ interface Combinators {
 >Combinators : Symbol(Combinators, Decl(callbacksDontShareTypes.ts, 4, 1))
 
     map<T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>;
->map : Symbol(map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
 >T : Symbol(T, Decl(callbacksDontShareTypes.ts, 6, 8))
 >U : Symbol(U, Decl(callbacksDontShareTypes.ts, 6, 10))
 >c : Symbol(c, Decl(callbacksDontShareTypes.ts, 6, 14))
@@ -34,7 +34,7 @@ interface Combinators {
 >U : Symbol(U, Decl(callbacksDontShareTypes.ts, 6, 10))
 
     map<T>(c: Collection<T>, f: (x: T) => any): Collection<any>;
->map : Symbol(map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>map : Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
 >T : Symbol(T, Decl(callbacksDontShareTypes.ts, 7, 8))
 >c : Symbol(c, Decl(callbacksDontShareTypes.ts, 7, 11))
 >Collection : Symbol(Collection, Decl(callbacksDontShareTypes.ts, 0, 0))

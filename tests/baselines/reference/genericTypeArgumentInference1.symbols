@@ -18,7 +18,7 @@ module Underscore {
 >Static : Symbol(Static, Decl(genericTypeArgumentInference1.ts, 3, 5))
 
         all<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): T;
->all : Symbol(all, Decl(genericTypeArgumentInference1.ts, 4, 29))
+>all : Symbol(Static.all, Decl(genericTypeArgumentInference1.ts, 4, 29))
 >T : Symbol(T, Decl(genericTypeArgumentInference1.ts, 5, 12))
 >list : Symbol(list, Decl(genericTypeArgumentInference1.ts, 5, 15))
 >T : Symbol(T, Decl(genericTypeArgumentInference1.ts, 5, 12))
@@ -29,7 +29,7 @@ module Underscore {
 >T : Symbol(T, Decl(genericTypeArgumentInference1.ts, 5, 12))
 
         identity<T>(value: T): T;
->identity : Symbol(identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
+>identity : Symbol(Static.identity, Decl(genericTypeArgumentInference1.ts, 5, 77))
 >T : Symbol(T, Decl(genericTypeArgumentInference1.ts, 6, 17))
 >value : Symbol(value, Decl(genericTypeArgumentInference1.ts, 6, 20))
 >T : Symbol(T, Decl(genericTypeArgumentInference1.ts, 6, 17))

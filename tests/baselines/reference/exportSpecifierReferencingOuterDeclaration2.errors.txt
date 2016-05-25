@@ -1,4 +1,4 @@
-tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts(1,10): error TS2661: Cannot re-export name that is not defined in the module.
+tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts(1,10): error TS2661: Cannot export 'X'. Only local declarations can be exported from a module.
 
 
 ==== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_A.ts (0 errors) ====
@@ -7,5 +7,5 @@ tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts(1,10): err
 ==== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts (1 errors) ====
     export { X };
              ~
-!!! error TS2661: Cannot re-export name that is not defined in the module.
+!!! error TS2661: Cannot export 'X'. Only local declarations can be exported from a module.
     export declare function foo(): X.bar;

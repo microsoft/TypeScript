@@ -6,10 +6,10 @@ module A {
 >Point : Symbol(Point, Decl(ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.ts, 0, 10))
 
         x: number;
->x : Symbol(x, Decl(ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.ts, 2, 21))
+>x : Symbol(Point.x, Decl(ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.ts, 2, 21))
 
         y: number;
->y : Symbol(y, Decl(ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.ts, 3, 18))
+>y : Symbol(Point.y, Decl(ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.ts, 3, 18))
     }
 
     export interface points {

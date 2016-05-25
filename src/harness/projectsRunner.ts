@@ -1,6 +1,6 @@
 ///<reference path="harness.ts" />
 ///<reference path="runnerbase.ts" />
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 // Test case is json of below type in tests/cases/project/
 interface ProjectRunnerTestCase {
@@ -156,7 +156,7 @@ class ProjectRunner extends RunnerBase {
             function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
                 let sourceFile: ts.SourceFile = undefined;
                 if (fileName === Harness.Compiler.defaultLibFileName) {
-                    sourceFile = languageVersion === ts.ScriptTarget.ES6 ? Harness.Compiler.defaultES6LibSourceFile : Harness.Compiler.defaultLibSourceFile;
+                    sourceFile = Harness.Compiler.getDefaultLibrarySourceFile(Harness.Compiler.getDefaultLibFileName(compilerOptions));
                 }
                 else {
                     const text = getSourceFileText(fileName);
@@ -412,7 +412,7 @@ class ProjectRunner extends RunnerBase {
 
         function getErrorsBaseline(compilerResult: CompileProjectFilesResult) {
             const inputFiles = compilerResult.program ? ts.map(ts.filter(compilerResult.program.getSourceFiles(),
-                sourceFile => sourceFile.fileName !== "lib.d.ts"),
+                sourceFile => !Harness.isDefaultLibraryFile(sourceFile.fileName)),
                 sourceFile => {
                     return {
                         unitName: ts.isRootedDiskPath(sourceFile.fileName) ?

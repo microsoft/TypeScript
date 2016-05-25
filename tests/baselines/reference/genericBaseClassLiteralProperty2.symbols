@@ -8,15 +8,15 @@ class BaseCollection2<TItem extends CollectionItem2> {
 >CollectionItem2 : Symbol(CollectionItem2, Decl(genericBaseClassLiteralProperty2.ts, 0, 0))
 
     _itemsByKey: { [key: string]: TItem; };
->_itemsByKey : Symbol(_itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
+>_itemsByKey : Symbol(BaseCollection2._itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
 >key : Symbol(key, Decl(genericBaseClassLiteralProperty2.ts, 3, 20))
 >TItem : Symbol(TItem, Decl(genericBaseClassLiteralProperty2.ts, 2, 22))
 
     constructor() {
         this._itemsByKey = {};
->this._itemsByKey : Symbol(_itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
+>this._itemsByKey : Symbol(BaseCollection2._itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
 >this : Symbol(BaseCollection2, Decl(genericBaseClassLiteralProperty2.ts, 0, 25))
->_itemsByKey : Symbol(_itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
+>_itemsByKey : Symbol(BaseCollection2._itemsByKey, Decl(genericBaseClassLiteralProperty2.ts, 2, 54))
     }
 }
 
@@ -26,7 +26,7 @@ class DataView2 extends BaseCollection2<CollectionItem2> {
 >CollectionItem2 : Symbol(CollectionItem2, Decl(genericBaseClassLiteralProperty2.ts, 0, 0))
 
     fillItems(item: CollectionItem2) {
->fillItems : Symbol(fillItems, Decl(genericBaseClassLiteralProperty2.ts, 9, 58))
+>fillItems : Symbol(DataView2.fillItems, Decl(genericBaseClassLiteralProperty2.ts, 9, 58))
 >item : Symbol(item, Decl(genericBaseClassLiteralProperty2.ts, 10, 14))
 >CollectionItem2 : Symbol(CollectionItem2, Decl(genericBaseClassLiteralProperty2.ts, 0, 0))
 

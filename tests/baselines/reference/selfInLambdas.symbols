@@ -3,10 +3,10 @@ interface MouseEvent {
 >MouseEvent : Symbol(MouseEvent, Decl(selfInLambdas.ts, 0, 0))
 
     x: number;
->x : Symbol(x, Decl(selfInLambdas.ts, 0, 22))
+>x : Symbol(MouseEvent.x, Decl(selfInLambdas.ts, 0, 22))
 
     y: number;
->y : Symbol(y, Decl(selfInLambdas.ts, 1, 14))
+>y : Symbol(MouseEvent.y, Decl(selfInLambdas.ts, 1, 14))
 }
 
 declare var window: Window;
@@ -17,7 +17,7 @@ interface Window {
 >Window : Symbol(Window, Decl(selfInLambdas.ts, 5, 27))
 
     onmousemove: (ev: MouseEvent) => any;
->onmousemove : Symbol(onmousemove, Decl(selfInLambdas.ts, 6, 18))
+>onmousemove : Symbol(Window.onmousemove, Decl(selfInLambdas.ts, 6, 18))
 >ev : Symbol(ev, Decl(selfInLambdas.ts, 7, 18))
 >MouseEvent : Symbol(MouseEvent, Decl(selfInLambdas.ts, 0, 0))
     
@@ -52,28 +52,28 @@ class X {
 >X : Symbol(X, Decl(selfInLambdas.ts, 24, 1))
 
 	private value = "value";
->value : Symbol(value, Decl(selfInLambdas.ts, 28, 9))
+>value : Symbol(X.value, Decl(selfInLambdas.ts, 28, 9))
 
 	public foo() {
->foo : Symbol(foo, Decl(selfInLambdas.ts, 29, 25))
+>foo : Symbol(X.foo, Decl(selfInLambdas.ts, 29, 25))
 
 		var outer= () => {
 >outer : Symbol(outer, Decl(selfInLambdas.ts, 32, 5))
 
             var x = this.value;
 >x : Symbol(x, Decl(selfInLambdas.ts, 33, 15))
->this.value : Symbol(value, Decl(selfInLambdas.ts, 28, 9))
+>this.value : Symbol(X.value, Decl(selfInLambdas.ts, 28, 9))
 >this : Symbol(X, Decl(selfInLambdas.ts, 24, 1))
->value : Symbol(value, Decl(selfInLambdas.ts, 28, 9))
+>value : Symbol(X.value, Decl(selfInLambdas.ts, 28, 9))
 
             var inner = () => {
 >inner : Symbol(inner, Decl(selfInLambdas.ts, 34, 15))
 
                 var y = this.value;
 >y : Symbol(y, Decl(selfInLambdas.ts, 35, 19))
->this.value : Symbol(value, Decl(selfInLambdas.ts, 28, 9))
+>this.value : Symbol(X.value, Decl(selfInLambdas.ts, 28, 9))
 >this : Symbol(X, Decl(selfInLambdas.ts, 24, 1))
->value : Symbol(value, Decl(selfInLambdas.ts, 28, 9))
+>value : Symbol(X.value, Decl(selfInLambdas.ts, 28, 9))
 			}
 
 			inner();

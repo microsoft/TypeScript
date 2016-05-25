@@ -11,7 +11,7 @@ import { Observable } from "./observable"
 declare module "./observable" {
     interface I {x0}
 >I : Symbol(I, Decl(map1.ts, 5, 31), Decl(map2.ts, 4, 31))
->x0 : Symbol(x0, Decl(map1.ts, 6, 17))
+>x0 : Symbol(I.x0, Decl(map1.ts, 6, 17))
 }
 
 === tests/cases/compiler/map2.ts ===
@@ -26,7 +26,7 @@ import { Observable } from "./observable"
 declare module "./observable" {
     interface I {x1}
 >I : Symbol(I, Decl(map1.ts, 5, 31), Decl(map2.ts, 4, 31))
->x1 : Symbol(x1, Decl(map2.ts, 5, 17))
+>x1 : Symbol(I.x1, Decl(map2.ts, 5, 17))
 }
 
 
@@ -36,7 +36,7 @@ export declare class Observable<T> {
 >T : Symbol(T, Decl(observable.ts, 0, 32))
 
     filter(pred: (e:T) => boolean): Observable<T>;
->filter : Symbol(filter, Decl(observable.ts, 0, 36))
+>filter : Symbol(Observable.filter, Decl(observable.ts, 0, 36))
 >pred : Symbol(pred, Decl(observable.ts, 1, 11))
 >e : Symbol(e, Decl(observable.ts, 1, 18))
 >T : Symbol(T, Decl(observable.ts, 0, 32))

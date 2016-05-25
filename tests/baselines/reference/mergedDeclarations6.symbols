@@ -4,16 +4,16 @@ export class A {
 >A : Symbol(A, Decl(a.ts, 0, 0), Decl(b.ts, 2, 22))
 
     protected protected: any;
->protected : Symbol(protected, Decl(a.ts, 1, 16))
+>protected : Symbol(A.protected, Decl(a.ts, 1, 16))
 
     protected setProtected(val: any) {
->setProtected : Symbol(setProtected, Decl(a.ts, 2, 29))
+>setProtected : Symbol(A.setProtected, Decl(a.ts, 2, 29))
 >val : Symbol(val, Decl(a.ts, 4, 27))
 
         this.protected = val;
->this.protected : Symbol(protected, Decl(a.ts, 1, 16))
+>this.protected : Symbol(A.protected, Decl(a.ts, 1, 16))
 >this : Symbol(A, Decl(a.ts, 0, 0), Decl(b.ts, 2, 22))
->protected : Symbol(protected, Decl(a.ts, 1, 16))
+>protected : Symbol(A.protected, Decl(a.ts, 1, 16))
 >val : Symbol(val, Decl(a.ts, 4, 27))
     }
 }
@@ -32,7 +32,7 @@ export class B extends A {
 >A : Symbol(A, Decl(b.ts, 0, 8))
 
     protected setProtected() {
->setProtected : Symbol(setProtected, Decl(b.ts, 6, 26))
+>setProtected : Symbol(B.setProtected, Decl(b.ts, 6, 26))
 
     }
 }

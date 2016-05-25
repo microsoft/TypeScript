@@ -6,11 +6,11 @@ interface Entity<T extends Entity<T>> {
 >T : Symbol(T, Decl(recursiveTypes1.ts, 0, 17))
 
    X: T;
->X : Symbol(X, Decl(recursiveTypes1.ts, 0, 39))
+>X : Symbol(Entity.X, Decl(recursiveTypes1.ts, 0, 39))
 >T : Symbol(T, Decl(recursiveTypes1.ts, 0, 17))
 
    Y: T;
->Y : Symbol(Y, Decl(recursiveTypes1.ts, 1, 8))
+>Y : Symbol(Entity.Y, Decl(recursiveTypes1.ts, 1, 8))
 >T : Symbol(T, Decl(recursiveTypes1.ts, 0, 17))
 }
 
@@ -23,7 +23,7 @@ interface Person<U extends Person<U>> extends Entity<U> {
 >U : Symbol(U, Decl(recursiveTypes1.ts, 5, 17))
 
 	n: number;
->n : Symbol(n, Decl(recursiveTypes1.ts, 5, 57))
+>n : Symbol(Person.n, Decl(recursiveTypes1.ts, 5, 57))
 }
 
 interface Customer extends Person<Customer> {
@@ -32,6 +32,6 @@ interface Customer extends Person<Customer> {
 >Customer : Symbol(Customer, Decl(recursiveTypes1.ts, 7, 1))
 
 	s: string;
->s : Symbol(s, Decl(recursiveTypes1.ts, 9, 45))
+>s : Symbol(Customer.s, Decl(recursiveTypes1.ts, 9, 45))
 }
 

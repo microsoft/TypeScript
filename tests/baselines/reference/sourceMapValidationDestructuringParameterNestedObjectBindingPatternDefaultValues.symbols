@@ -10,10 +10,10 @@ interface Robot {
 >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 2, 1))
 
     name: string;
->name : Symbol(name, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 3, 17))
+>name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 3, 17))
 
     skills: {
->skills : Symbol(skills, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 4, 17))
+>skills : Symbol(Robot.skills, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 4, 17))
 
         primary?: string;
 >primary : Symbol(primary, Decl(sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts, 5, 13))
