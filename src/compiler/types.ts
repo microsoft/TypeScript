@@ -2789,6 +2789,13 @@ namespace ts {
         getCurrentDirectory?(): string;
     }
 
+    /* @internal */
+    export interface TypeDirectiveResolutionHost extends ModuleResolutionHost {
+        getCurrentDirectory(): string;
+        getCanonicalFileName(s: string): string;
+        getDefaultTypeDirectiveNames?(root: string): string[];
+    }
+
     export interface ResolvedModule {
         resolvedFileName: string;
         /*

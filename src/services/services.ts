@@ -1045,6 +1045,7 @@ namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
+        getDefaultTypeDirectiveNames?(rootPath: string): string[];
     }
 
     //
@@ -2947,6 +2948,9 @@ namespace ts {
                 compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile) => {
                     return host.resolveTypeReferenceDirectives(typeReferenceDirectiveNames, containingFile);
                 };
+            }
+            if (host.getDefaultTypeDirectiveNames) {
+                compilerHost.getDefaultTypeDirectiveNames = (path) => host.getDefaultTypeDirectiveNames(path);
             }
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);

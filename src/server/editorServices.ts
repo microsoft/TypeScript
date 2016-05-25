@@ -100,7 +100,7 @@ namespace ts.server {
 
         private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;
         private resolvedTypeReferenceDirectives: ts.FileMap<Map<TimestampedResolvedTypeReferenceDirective>>;
-        private moduleResolutionHost: ts.ModuleResolutionHost;
+        private moduleResolutionHost: ts.TypeDirectiveResolutionHost;
         private getCanonicalFileName: (fileName: string) => string;
 
         constructor(public host: ServerHost, public project: Project) {
@@ -111,7 +111,10 @@ namespace ts.server {
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
                 readFile: fileName => this.host.readFile(fileName),
-                directoryExists: directoryName => this.host.directoryExists(directoryName)
+                directoryExists: directoryName => this.host.directoryExists(directoryName),
+                getCanonicalFileName: fileName => this.getCanonicalFileName(fileName),
+                getDefaultTypeDirectiveNames: root => ts.readDefaultTypeDirectiveNames(root, this.host),
+                getCurrentDirectory: () => this.host.getCurrentDirectory()
             };
         }
 
@@ -122,7 +125,14 @@ namespace ts.server {
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
             getResult: (s: T) => R): R[] {
 
-            const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            let path: Path;
+            if (containingFile === undefined) {
+                path = '**:/ [root type directive]' as Path;
+            }
+            else {
+                path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            }
+
             const currentResolutionsInFile = cache.get(path);
 
             const newResolutions: Map<T> = {};
@@ -169,6 +179,10 @@ namespace ts.server {
                 // after all there is no point to invalidate it if we have no idea where to look for the module.
                 return resolution.failedLookupLocations.length === 0;
             }
+        }
+
+        getDefaultTypeDirectiveNames(path: string): string[] {
+            return ts.getDefaultTypeDirectiveNames(this.getCompilationSettings(), map(this.roots, file => file.path), this.moduleResolutionHost);
         }
 
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {

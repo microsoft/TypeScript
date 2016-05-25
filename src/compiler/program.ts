@@ -12,7 +12,7 @@ namespace ts {
 
     const emptyArray: any[] = [];
 
-    const defaultLibrarySearchPaths = [
+    export const defaultLibrarySearchPaths = [
         "types/",
         "node_modules/",
         "node_modules/@types/",
@@ -772,6 +772,19 @@ namespace ts {
         mtime: Date;
     }
 
+    export function readDefaultTypeDirectiveNames(rootPath: string, sys: System): string[] {
+        const localTypes = combinePaths(rootPath, "types");
+        const npmTypes = combinePaths(rootPath, "node_modules/@types");
+        let result: string[] = [];
+        if (sys.directoryExists(localTypes)) {
+            result = result.concat(sys.getDirectories(localTypes));
+        }
+        if (sys.directoryExists(npmTypes)) {
+            result = result.concat(sys.getDirectories(npmTypes));
+        }
+        return result;
+    }
+
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         const existingDirectories: Map<boolean> = {};
 
@@ -875,18 +888,6 @@ namespace ts {
             }
         }
 
-        function getDefaultTypeDirectiveNames(rootPath: string): string[] {
-            const localTypes = combinePaths(rootPath, "types");
-            const npmTypes = combinePaths(rootPath, "node_modules/@types");
-            let result: string[] = [];
-            if (sys.directoryExists(localTypes)) {
-                result = result.concat(sys.getDirectories(localTypes));
-            }
-            if (sys.directoryExists(npmTypes)) {
-                result = result.concat(sys.getDirectories(npmTypes));
-            }
-            return result;
-        }
 
         function getDefaultLibLocation(): string {
             return getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
@@ -896,7 +897,7 @@ namespace ts {
         const realpath = sys.realpath && ((path: string) => sys.realpath(path));
 
         return {
-            getDefaultTypeDirectiveNames,
+            getDefaultTypeDirectiveNames: (path) => readDefaultTypeDirectiveNames(path, sys),
             getSourceFile,
             getDefaultLibLocation,
             getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
@@ -972,7 +973,7 @@ namespace ts {
         return resolutions;
     }
 
-    export function getDefaultTypeDirectiveNames(options: CompilerOptions, rootFiles: string[], host: CompilerHost): string[] {
+    export function getDefaultTypeDirectiveNames(options: CompilerOptions, rootFiles: string[], host: TypeDirectiveResolutionHost): string[] {
         // Use explicit type list from tsconfig.json
         if (options.types) {
             return options.types;
