@@ -320,6 +320,10 @@ namespace ts.NavigationBar {
                 case SyntaxKind.EnumMember:
                     return createItem(node, getTextOfNode((<EnumMember>node).name), ts.ScriptElementKind.memberVariableElement);
 
+                //move?
+                case SyntaxKind.ModuleDeclaration:
+                    return createItem(node, getModuleName(<ModuleDeclaration>node), ts.ScriptElementKind.moduleElement);
+
                 case SyntaxKind.CallSignature:
                     return createItem(node, "()", ts.ScriptElementKind.callSignatureElement);
 
@@ -432,26 +436,6 @@ namespace ts.NavigationBar {
             }
 
             return undefined;
-
-            function getModuleName(moduleDeclaration: ModuleDeclaration): string {
-                // We want to maintain quotation marks.
-                if (isAmbientModule(moduleDeclaration)) {
-                    return getTextOfNode(moduleDeclaration.name);
-                }
-
-                // Otherwise, we need to aggregate each identifier to build up the qualified name.
-                const result: string[] = [];
-
-                result.push(moduleDeclaration.name.text);
-
-                while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
-                    moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
-
-                    result.push(moduleDeclaration.name.text);
-                }
-
-                return result.join(".");
-            }
 
             function createModuleItem(node: ModuleDeclaration): NavigationBarItem {
                 const moduleName = getModuleName(node);
@@ -585,6 +569,26 @@ namespace ts.NavigationBar {
                     childItems,
                     getIndent(node));
             }
+        }
+
+        function getModuleName(moduleDeclaration: ModuleDeclaration): string {
+            // We want to maintain quotation marks.
+            if (isAmbientModule(moduleDeclaration)) {
+                return getTextOfNode(moduleDeclaration.name);
+            }
+
+            // Otherwise, we need to aggregate each identifier to build up the qualified name.
+            const result: string[] = [];
+
+            result.push(moduleDeclaration.name.text);
+
+            while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
+                moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
+
+                result.push(moduleDeclaration.name.text);
+            }
+
+            return result.join(".");
         }
 
         function removeComputedProperties(node: EnumDeclaration): Declaration[] {

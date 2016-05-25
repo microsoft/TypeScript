@@ -1,13 +1,13 @@
 
-////{| "itemName": "\"Multiline\\r\\nMadness\"", "kind": "module" |}
+////{| "itemName": "\"Multiline\\r\\nMadness\"", "kind": "module", "parentName": "<global>" |}
 ////declare module "Multiline\r\nMadness" {
 ////}
 ////
-////{| "itemName": "\"Multiline\\\nMadness\"", "kind": "module" |}
+////{| "itemName": "\"Multiline\\\nMadness\"", "kind": "module", "parentName": "<global>" |}
 ////declare module "Multiline\
 ////Madness" {
 ////}
-////{| "itemName": "\"MultilineMadness\"", "kind": "module" |}
+////{| "itemName": "\"MultilineMadness\"", "kind": "module", "parentName": "<global>" |}
 ////declare module "MultilineMadness" {}
 ////
 ////{| "itemName": "Foo", "kind": "interface" |}
@@ -38,4 +38,4 @@ test.markers().forEach((marker) => {
     verify.navigationBarContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
 });
 
-verify.navigationBarCount(9); // interface w/ 2 properties, class w/ 2 properties, 3 modules
+verify.navigationBarCount(13);

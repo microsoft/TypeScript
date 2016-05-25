@@ -10,7 +10,7 @@
 ////}
 ////
 /////// Module
-////{| "itemName": "Shapes", "kind": "module", "parentName": "" |}module Shapes {
+////{| "itemName": "Shapes", "kind": "module", "parentName": "<global>" |}module Shapes {
 ////
 ////    // Class
 ////    {| "itemName": "Point", "kind": "class", "parentName": "" |}export class Point implements IPoint {
@@ -49,4 +49,4 @@ test.markers().forEach((marker) => {
     }
 });
 
-verify.navigationBarCount(24);
+verify.navigationBarCount(25);

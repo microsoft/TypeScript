@@ -22,9 +22,9 @@ goTo.marker("file1");
 verify.navigationBarContains("Module1", "module");
 verify.navigationBarContains("x", "var");
 // nothing else should show up
-verify.navigationBarCount(2);
+verify.navigationBarCount(4); // <global>, its child, Module1, its child
 
 goTo.marker("file2");
 verify.navigationBarContains("Module1.SubModule", "module");
 verify.navigationBarContains("y", "var");
-verify.navigationBarCount(2);
+verify.navigationBarCount(4);
