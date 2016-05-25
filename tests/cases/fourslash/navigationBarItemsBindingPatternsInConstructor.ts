@@ -11,4 +11,4 @@
 ////    }
 ////}
 
-verify.navigationBarCount(6); // 2x(class + field + constructor)
+verify.navigationBarCount(9); // global + 2 children + 2x(class + field + constructor)

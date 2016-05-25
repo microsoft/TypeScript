@@ -330,6 +330,9 @@ namespace ts.NavigationBar {
                 case SyntaxKind.PropertySignature:
                     return createItem(node, getTextOfNode((<PropertyDeclaration>node).name), ts.ScriptElementKind.memberVariableElement);
 
+                case SyntaxKind.ClassDeclaration:
+                    return createItem(node, getTextOfNode((<ClassDeclaration>node).name), ts.ScriptElementKind.classElement);
+
                 case SyntaxKind.FunctionDeclaration:
                     return createItem(node, getTextOfNode((<FunctionLikeDeclaration>node).name), ts.ScriptElementKind.functionElement);
 

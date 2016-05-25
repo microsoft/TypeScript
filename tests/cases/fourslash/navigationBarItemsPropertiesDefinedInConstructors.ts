@@ -12,4 +12,4 @@ verify.navigationBarContains("a", "property");
 verify.navigationBarContains("b", "property");
 
 // no other items
-verify.navigationBarCount(4);
+verify.navigationBarCount(6);

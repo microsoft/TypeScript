@@ -39,4 +39,4 @@ test.markers().forEach((marker) => {
 });
 
 // no other items
-verify.navigationBarCount(19);
+verify.navigationBarCount(21);

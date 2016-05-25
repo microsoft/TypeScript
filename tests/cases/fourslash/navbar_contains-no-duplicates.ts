@@ -2,7 +2,7 @@
 //// {| "itemName": "Windows", "kind": "module", "parentName": "" |}declare module Windows {
 ////     {| "itemName": "Foundation", "kind": "module", "parentName": "" |}export module Foundation {
 ////         export var {| "itemName": "A", "kind": "var" |}A;
-////         {| "itemName": "Test", "kind": "class" |}export class Test {
+////         {| "itemName": "Test", "kind": "class", "parentName": "Foundation" |}export class Test {
 ////             {| "itemName": "wow", "kind": "method" |}public wow();
 ////         }
 ////     }
@@ -38,4 +38,4 @@ test.markers().forEach(marker => {
             marker.position);
     }
 });
-verify.navigationBarCount(12);
+verify.navigationBarCount(15);
