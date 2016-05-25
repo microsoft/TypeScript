@@ -320,7 +320,6 @@ namespace ts.NavigationBar {
                 case SyntaxKind.EnumMember:
                     return createItem(node, getTextOfNode((<EnumMember>node).name), ts.ScriptElementKind.memberVariableElement);
 
-                //move?
                 case SyntaxKind.ModuleDeclaration:
                     return createItem(node, getModuleName(<ModuleDeclaration>node), ts.ScriptElementKind.moduleElement);
 
