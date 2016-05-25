@@ -1,5 +1,4 @@
 ///<reference path='references.ts' />
-/* tslint:disable:no-null-keyword */
 
 /* @internal */
 namespace ts.formatting {
@@ -62,14 +61,14 @@ namespace ts.formatting {
         public GetRule(context: FormattingContext): Rule {
             const bucketIndex = this.GetRuleBucketIndex(context.currentTokenSpan.kind, context.nextTokenSpan.kind);
             const bucket = this.map[bucketIndex];
-            if (bucket != null) {
+            if (bucket) {
                 for (const rule of bucket.Rules()) {
                     if (rule.Operation.Context.InContext(context)) {
                         return rule;
                     }
                 }
             }
-            return null;
+            return undefined;
         }
     }
 
