@@ -220,7 +220,7 @@ const _super = (function (geti, seti) {
 
                 // Write the source map
                 if (compilerOptions.sourceMap && !compilerOptions.inlineSourceMap) {
-                    writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(), compilerOptions.emitBOM);
+                    writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(),  /*writeByteOrderMark*/ false);
                 }
 
                 // Record source map data for the test harness.

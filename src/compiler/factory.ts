@@ -1183,9 +1183,6 @@ namespace ts {
             const right = getMutableClone(node.right);
             return createPropertyAccess(left, right, /*location*/ node);
         }
-        else if (isIdentifier(node)) {
-            return getMutableClone(node);
-        }
         else {
             return getMutableClone(node);
         }

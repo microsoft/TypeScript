@@ -698,9 +698,6 @@ namespace ts {
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             const statements: Statement[] = [];
             const name = node.name || getGeneratedNameForNode(node);
-            // Set emitFlags on the name of the classDeclaration
-            // This is so that when printer will not substitute the identifier
-            setNodeEmitFlags(name, NodeEmitFlags.NoSubstitution);
             if (hasModifier(node, ModifierFlags.Export)) {
                 statements.push(
                     setOriginalNode(
