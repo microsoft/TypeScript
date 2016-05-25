@@ -228,9 +228,7 @@ namespace ts {
             if (hasModifier(node, ModifierFlags.Ambient) && isStatement(node)) {
                 // TypeScript ambient declarations are elided, but some comments may be preserved.
                 // See the implementation of `getLeadingComments` in comments.ts for more details.
-                return isStatement(node)
-                    ? createNotEmittedStatement(node)
-                    : undefined;
+                return createNotEmittedStatement(node);
             }
 
             switch (node.kind) {
@@ -430,14 +428,17 @@ namespace ts {
 
             const constructor = getFirstConstructorWithBody(node);
             if (constructor) {
-                for (const parameter of constructor.parameters) {
-                    if (parameter.decorators && parameter.decorators.length > 0) {
-                        return true;
-                    }
-                }
+                return forEach(constructor.parameters, shouldEmitDecorateCallForParameter);
             }
 
             return false;
+        }
+
+        /**
+         * Tests whether we should emit a __decorate call for a parameter declaration.
+         */
+        function shouldEmitDecorateCallForParameter(parameter: ParameterDeclaration) {
+            return parameter.decorators !== undefined && parameter.decorators.length > 0;
         }
 
         /**

@@ -2172,8 +2172,8 @@ namespace ts {
                 // A GetAccessor or SetAccessor is ES5 syntax.
                 excludeFlags = TransformFlags.MethodOrAccessorExcludes;
 
-                // A GetAccessor or SetAccessor is TypeScript syntax if it is either abstract,
-                // or has a decorator.
+                // A GetAccessor or SetAccessor is TypeScript syntax if it has async or abstract
+                // modifiers, or has a decorator.
                 if ((<AccessorDeclaration>node).body === undefined
                     || hasModifier(node, ModifierFlags.Async | ModifierFlags.Abstract)
                     || subtreeFlags & TransformFlags.ContainsDecorators) {
