@@ -1,4 +1,5 @@
 /// <reference path="references.ts"/>
+/* tslint:disable:no-null-keyword */
 
 /* @internal */
 namespace ts.formatting {
@@ -27,8 +28,8 @@ namespace ts.formatting {
         public ensureUpToDate(options: ts.FormatCodeOptions) {
             // TODO: Should this be '==='?
             if (this.options == null || !ts.compareDataObjects(this.options, options)) {
-                let activeRules = this.createActiveRules(options);
-                let rulesMap = RulesMap.create(activeRules);
+                const activeRules = this.createActiveRules(options);
+                const rulesMap = RulesMap.create(activeRules);
 
                 this.activeRules = activeRules;
                 this.rulesMap = rulesMap;
