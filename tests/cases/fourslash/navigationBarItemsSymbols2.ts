@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
-////{| "itemName": "I", "kind": "interface", "parentName": "" |}
+////{| "itemName": "I", "kind": "interface", "parentName": "<global>" |}
 ////interface I {
 ////    {| "itemName": "[Symbol.isRegExp]", "kind": "property", "parentName": "I" |}
 ////    [Symbol.isRegExp]: string;
@@ -9,7 +9,8 @@
 ////}
 
 test.markers().forEach(marker => {
-    verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
+    verify.navigationBarContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
 });
 
-verify.getScriptLexicalStructureListCount(test.markers().length);
+// 2 are not marked: <global> and its child.
+verify.navigationBarCount(2 + test.markers().length);

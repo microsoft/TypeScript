@@ -1,5 +1,6 @@
 /// <reference path="checker.ts" />
 /// <reference path="factory.ts" />
+/// <reference path="utilities.ts" />
 
 /* @internal */
 namespace ts {

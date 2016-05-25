@@ -59,11 +59,9 @@ namespace ts {
         const territory = matchResult[3];
 
         // First try the entire locale, then fall back to just language if that's all we have.
-        if (!trySetLanguageAndTerritory(language, territory, errors) &&
-            !trySetLanguageAndTerritory(language, undefined, errors)) {
-
-            errors.push(createCompilerDiagnostic(Diagnostics.Unsupported_locale_0, locale));
-            return false;
+        // Either ways do not fail, and fallback to the English diagnostic strings.
+        if (!trySetLanguageAndTerritory(language, territory, errors)) {
+            trySetLanguageAndTerritory(language, undefined, errors);
         }
 
         return true;
@@ -396,9 +394,21 @@ namespace ts {
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }
-            if (isWatchSet(configParseResult.options) && !sys.watchFile) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* compilerHost */ undefined);
-                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            if (isWatchSet(configParseResult.options)) {
+                if (!sys.watchFile) {
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* compilerHost */ undefined);
+                    sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                }
+
+                if (!directoryWatcher && sys.watchDirectory && configFileName) {
+                    const directory = ts.getDirectoryPath(configFileName);
+                    directoryWatcher = sys.watchDirectory(
+                        // When the configFileName is just "tsconfig.json", the watched directory should be
+                        // the current directory; if there is a given "project" parameter, then the configFileName
+                        // is an absolute file name.
+                        directory == "" ? "." : directory,
+                        watchedDirectoryChanged, /*recursive*/ true);
+                };
             }
             return configParseResult;
         }

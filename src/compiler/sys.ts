@@ -3,6 +3,11 @@
 namespace ts {
     export type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
     export type DirectoryWatcherCallback = (directoryName: string) => void;
+    export interface WatchedFile {
+        fileName: string;
+        callback: FileWatcherCallback;
+        mtime?: Date;
+    }
 
     export interface System {
         args: string[];
@@ -19,19 +24,15 @@ namespace ts {
         createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         getModifiedTime?(path: string): Date;
         createHash?(data: string): string;
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
+        realpath?(path: string): string;
         /*@internal*/ getEnvironmentVariable(name: string): string;
         /*@internal*/ tryEnableSourceMapsForHost?(): void;
-    }
-
-    interface WatchedFile {
-        fileName: string;
-        callback: FileWatcherCallback;
-        mtime?: Date;
     }
 
     export interface FileWatcher {
@@ -73,9 +74,11 @@ namespace ts {
         resolvePath(path: string): string;
         readFile(path: string): string;
         writeFile(path: string, contents: string): void;
+        getDirectories(path: string): string[];
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
+        realpath(path: string): string;
         getEnvironmentVariable?(name: string): string;
     };
 
@@ -163,6 +166,11 @@ namespace ts {
                 return result.sort();
             }
 
+            function getDirectories(path: string): string[] {
+                const folder = fso.GetFolder(path);
+                return getNames(folder.subfolders);
+            }
+
             function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
                 const result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
@@ -216,6 +224,7 @@ namespace ts {
                 getCurrentDirectory() {
                     return new ActiveXObject("WScript.Shell").CurrentDirectory;
                 },
+                getDirectories,
                 getEnvironmentVariable(name: string) {
                     return new ActiveXObject("WScript.Shell").ExpandEnvironmentStrings(`%${name}%`);
                 },
@@ -236,83 +245,7 @@ namespace ts {
             const _os = require("os");
             const _crypto = require("crypto");
 
-            // average async stat takes about 30 microseconds
-            // set chunk size to do 30 files in < 1 millisecond
-            function createPollingWatchedFileSet(interval = 2500, chunkSize = 30) {
-                let watchedFiles: WatchedFile[] = [];
-                let nextFileToCheck = 0;
-                let watchTimer: any;
-
-                function getModifiedTime(fileName: string): Date {
-                    return _fs.statSync(fileName).mtime;
-                }
-
-                function poll(checkedIndex: number) {
-                    const watchedFile = watchedFiles[checkedIndex];
-                    if (!watchedFile) {
-                        return;
-                    }
-
-                    _fs.stat(watchedFile.fileName, (err: any, stats: any) => {
-                        if (err) {
-                            watchedFile.callback(watchedFile.fileName);
-                        }
-                        else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
-                            watchedFile.mtime = getModifiedTime(watchedFile.fileName);
-                            watchedFile.callback(watchedFile.fileName, watchedFile.mtime.getTime() === 0);
-                        }
-                    });
-                }
-
-                // this implementation uses polling and
-                // stat due to inconsistencies of fs.watch
-                // and efficiency of stat on modern filesystems
-                function startWatchTimer() {
-                    watchTimer = setInterval(() => {
-                        let count = 0;
-                        let nextToCheck = nextFileToCheck;
-                        let firstCheck = -1;
-                        while ((count < chunkSize) && (nextToCheck !== firstCheck)) {
-                            poll(nextToCheck);
-                            if (firstCheck < 0) {
-                                firstCheck = nextToCheck;
-                            }
-                            nextToCheck++;
-                            if (nextToCheck === watchedFiles.length) {
-                                nextToCheck = 0;
-                            }
-                            count++;
-                        }
-                        nextFileToCheck = nextToCheck;
-                    }, interval);
-                }
-
-                function addFile(fileName: string, callback: FileWatcherCallback): WatchedFile {
-                    const file: WatchedFile = {
-                        fileName,
-                        callback,
-                        mtime: getModifiedTime(fileName)
-                    };
-
-                    watchedFiles.push(file);
-                    if (watchedFiles.length === 1) {
-                        startWatchTimer();
-                    }
-                    return file;
-                }
-
-                function removeFile(file: WatchedFile) {
-                    watchedFiles = copyListRemovingItem(file, watchedFiles);
-                }
-
-                return {
-                    getModifiedTime: getModifiedTime,
-                    poll: poll,
-                    startWatchTimer: startWatchTimer,
-                    addFile: addFile,
-                    removeFile: removeFile
-                };
-            }
+            const useNonPollingWatchers = process.env["TSC_NONPOLLING_WATCHER"];
 
             function createWatchedFileSet() {
                 const dirWatchers: Map<DirectoryWatcher> = {};
@@ -395,26 +328,11 @@ namespace ts {
                     }
                 }
             }
-
-            // REVIEW: for now this implementation uses polling.
-            // The advantage of polling is that it works reliably
-            // on all os and with network mounted files.
-            // For 90 referenced files, the average time to detect
-            // changes is 2*msInterval (by default 5 seconds).
-            // The overhead of this is .04 percent (1/2500) with
-            // average pause of < 1 millisecond (and max
-            // pause less than 1.5 milliseconds); question is
-            // do we anticipate reference sets in the 100s and
-            // do we care about waiting 10-20 seconds to detect
-            // changes for large reference sets? If so, do we want
-            // to increase the chunk size or decrease the interval
-            // time dynamically to match the large reference set?
-            const pollingWatchedFileSet = createPollingWatchedFileSet();
             const watchedFileSet = createWatchedFileSet();
 
             function isNode4OrLater(): boolean {
-                 return parseInt(process.version.charAt(1)) >= 4;
-             }
+                return parseInt(process.version.charAt(1)) >= 4;
+            }
 
             const platform: string = _os.platform();
             // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
@@ -498,6 +416,10 @@ namespace ts {
                 return fileSystemEntryExists(path, FileSystemEntryKind.Directory);
             }
 
+            function getDirectories(path: string): string[] {
+                return filter<string>(_fs.readdirSync(path), p => fileSystemEntryExists(combinePaths(path, p), FileSystemEntryKind.Directory));
+            }
+
             function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
                 const result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
@@ -507,7 +429,7 @@ namespace ts {
                     const files = _fs.readdirSync(path || ".").sort();
                     const directories: string[] = [];
                     for (const current of files) {
-                        // This is necessary because on some file system node fails to exclude 
+                        // This is necessary because on some file system node fails to exclude
                         // "." and "..". See https://github.com/nodejs/node/issues/4002
                         if (current === "." || current === "..") {
                             continue;
@@ -541,15 +463,26 @@ namespace ts {
                 readFile,
                 writeFile,
                 watchFile: (fileName, callback) => {
-                    // Node 4.0 stabilized the `fs.watch` function on Windows which avoids polling
-                    // and is more efficient than `fs.watchFile` (ref: https://github.com/nodejs/node/pull/2649
-                    // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
-                    // if the current node.js version is newer than 4, use `fs.watch` instead.
-                    const watchSet = isNode4OrLater() ? watchedFileSet : pollingWatchedFileSet;
-                    const watchedFile =  watchSet.addFile(fileName, callback);
-                    return {
-                        close: () => watchSet.removeFile(watchedFile)
-                    };
+                    if (useNonPollingWatchers) {
+                        const watchedFile = watchedFileSet.addFile(fileName, callback);
+                        return {
+                            close: () => watchedFileSet.removeFile(watchedFile)
+                        };
+                    }
+                    else {
+                        _fs.watchFile(fileName, { persistent: true, interval: 250 }, fileChanged);
+                        return {
+                            close: () => _fs.unwatchFile(fileName, fileChanged)
+                        };
+                    }
+
+                    function fileChanged(curr: any, prev: any) {
+                        if (+curr.mtime <= +prev.mtime) {
+                            return;
+                        }
+
+                        callback(fileName);
+                    }
                 },
                 watchDirectory: (directoryName, callback, recursive) => {
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
@@ -592,6 +525,7 @@ namespace ts {
                 getCurrentDirectory() {
                     return process.cwd();
                 },
+                getDirectories,
                 getEnvironmentVariable(name: string) {
                     return process.env[name] || "";
                 },
@@ -618,6 +552,9 @@ namespace ts {
                 exit(exitCode?: number): void {
                     process.exit(exitCode);
                 },
+                realpath(path: string): string {
+                    return _fs.realpathSync(path);
+                },
                 tryEnableSourceMapsForHost() {
                     try {
                         require("source-map-support").install();
@@ -630,7 +567,7 @@ namespace ts {
         }
 
         function getChakraSystem(): System {
-
+            const realpath = ChakraHost.realpath && ((path: string) => ChakraHost.realpath(path));
             return {
                 newLine: ChakraHost.newLine || "\r\n",
                 args: ChakraHost.args,
@@ -654,9 +591,11 @@ namespace ts {
                 createDirectory: ChakraHost.createDirectory,
                 getExecutingFilePath: () => ChakraHost.executingFile,
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
+                getDirectories: ChakraHost.getDirectories,
                 getEnvironmentVariable: ChakraHost.getEnvironmentVariable || ((name: string) => ""),
                 readDirectory: ChakraHost.readDirectory,
                 exit: ChakraHost.quit,
+                realpath
             };
         }
 

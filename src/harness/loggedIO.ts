@@ -149,7 +149,7 @@ namespace Playback {
             recordLog = createEmptyLog();
 
             if (typeof underlying.args !== "function") {
-                recordLog.arguments = <string[]>underlying.args;
+                recordLog.arguments = underlying.args;
             }
         };
 

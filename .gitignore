@@ -6,6 +6,8 @@ tests/cases/perf/*
 !tests/cases/webharness/compilerToString.js
 test-args.txt
 ~*.docx
+\#*\#
+.\#*
 tests/baselines/local/*
 tests/baselines/local.old/*
 tests/services/baselines/local/*
@@ -46,5 +48,6 @@ coverage/
 internal/
 **/.DS_Store
 .settings
-.vscode/*
-!.vscode/tasks.json
+**/.vs
+**/.vscode
+!**/.vscode/tasks.json

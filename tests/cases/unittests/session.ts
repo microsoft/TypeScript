@@ -14,12 +14,15 @@ namespace ts.server {
         resolvePath(): string { return void 0; },
         fileExists: () => false,
         directoryExists: () => false,
+        getDirectories: () => [],
         createDirectory(): void {},
         getExecutingFilePath(): string { return void 0; },
         getCurrentDirectory(): string { return void 0; },
         getEnvironmentVariable(name: string): string { return ""; },
         readDirectory(): string[] { return []; },
-        exit(): void {}
+        exit(): void { },
+        setTimeout(callback, ms, ...args) { return 0; },
+        clearTimeout(timeoutId) { }
     };
     const mockLogger: Logger = {
         close(): void {},
@@ -110,23 +113,31 @@ namespace ts.server {
                     }
                     const req: protocol.Request = {
                         command: name,
-                        seq: i++,
+                        seq: i,
                         type: "command"
                     };
+                    i++;
                     session.onMessage(JSON.stringify(req));
-                    req.seq = i++;
+                    req.seq = i;
+                    i++;
                     req.arguments = {};
                     session.onMessage(JSON.stringify(req));
-                    req.seq = i++;
+                    req.seq = i;
+                    i++;
+                    /* tslint:disable no-null-keyword */
                     req.arguments = null;
+                    /* tslint:enable no-null-keyword */
                     session.onMessage(JSON.stringify(req));
-                    req.seq = i++;
+                    req.seq = i;
+                    i++;
                     req.arguments = "";
                     session.onMessage(JSON.stringify(req));
-                    req.seq = i++;
+                    req.seq = i;
+                    i++;
                     req.arguments = 0;
                     session.onMessage(JSON.stringify(req));
-                    req.seq = i++;
+                    req.seq = i;
+                    i++;
                     req.arguments = [];
                     session.onMessage(JSON.stringify(req));
                 }

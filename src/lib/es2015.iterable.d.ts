@@ -1,8 +1,16 @@
 /// <reference path="lib.es2015.symbol.d.ts" />
 
+interface SymbolConstructor {
+    /** 
+      * A method that returns the default iterator for an object. Called by the semantics of the 
+      * for-of statement.
+      */
+    readonly iterator: symbol;
+}
+
 interface IteratorResult<T> {
     done: boolean;
-    value?: T;
+    value: T;
 }
 
 interface Iterator<T> {
@@ -11,11 +19,18 @@ interface Iterator<T> {
     throw?(e?: any): IteratorResult<T>;
 }
 
-interface Iterable<T> { }
+interface Iterable<T> {
+    [Symbol.iterator](): Iterator<T>;
+}
 
-interface IterableIterator<T> extends Iterator<T> { }
+interface IterableIterator<T> extends Iterator<T> {
+    [Symbol.iterator](): IterableIterator<T>;
+}
 
 interface Array<T> {
+    /** Iterator */
+    [Symbol.iterator](): IterableIterator<T>;
+
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
@@ -48,7 +63,13 @@ interface ArrayConstructor {
     from<T>(iterable: Iterable<T>): Array<T>;
 }
 
+interface IArguments {
+    /** Iterator */
+    [Symbol.iterator](): IterableIterator<any>;
+}
+
 interface Map<K, V> {
+    [Symbol.iterator](): IterableIterator<[K,V]>;
     entries(): IterableIterator<[K, V]>;
     keys(): IterableIterator<K>;
     values(): IterableIterator<V>;
@@ -62,6 +83,23 @@ interface WeakMap<K, V> { }
 
 interface WeakMapConstructor {
     new <K, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
+}
+
+interface Set<T> {
+    [Symbol.iterator](): IterableIterator<T>;
+    entries(): IterableIterator<[T, T]>;
+    keys(): IterableIterator<T>;
+    values(): IterableIterator<T>;
+}
+
+interface SetConstructor {
+    new <T>(iterable: Iterable<T>): Set<T>;
+}
+
+interface WeakSet<T> { }
+
+interface WeakSetConstructor {
+    new <T>(iterable: Iterable<T>): WeakSet<T>;
 }
 
 interface Promise<T> { }
@@ -88,11 +126,17 @@ declare namespace Reflect {
     function enumerate(target: any): IterableIterator<any>;
 }
 
+interface String {
+    /** Iterator */
+    [Symbol.iterator](): IterableIterator<string>;
+}
+
 /**
   * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested 
   * number of bytes could not be allocated an exception is raised.
   */
 interface Int8Array {
+    [Symbol.iterator](): IterableIterator<number>;
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
@@ -124,6 +168,7 @@ interface Int8ArrayConstructor {
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint8Array {
+    [Symbol.iterator](): IterableIterator<number>;
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
@@ -155,6 +200,7 @@ interface Uint8ArrayConstructor {
   * If the requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint8ClampedArray {
+    [Symbol.iterator](): IterableIterator<number>;
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
@@ -189,6 +235,7 @@ interface Uint8ClampedArrayConstructor {
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Int16Array {
+    [Symbol.iterator](): IterableIterator<number>;
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
@@ -222,6 +269,7 @@ interface Int16ArrayConstructor {
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint16Array {
+    [Symbol.iterator](): IterableIterator<number>;
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
@@ -253,6 +301,7 @@ interface Uint16ArrayConstructor {
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Int32Array {
+    [Symbol.iterator](): IterableIterator<number>;
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
@@ -284,6 +333,7 @@ interface Int32ArrayConstructor {
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint32Array {
+    [Symbol.iterator](): IterableIterator<number>;
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
@@ -315,6 +365,7 @@ interface Uint32ArrayConstructor {
   * of bytes could not be allocated an exception is raised.
   */
 interface Float32Array {
+    [Symbol.iterator](): IterableIterator<number>;
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */
@@ -346,6 +397,7 @@ interface Float32ArrayConstructor {
   * number of bytes could not be allocated an exception is raised.
   */
 interface Float64Array {
+    [Symbol.iterator](): IterableIterator<number>;
     /** 
       * Returns an array of key, value pairs for every entry in the array
       */

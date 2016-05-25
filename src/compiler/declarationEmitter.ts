@@ -395,6 +395,7 @@ namespace ts {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NullKeyword:
+                case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ThisType:
                 case SyntaxKind.StringLiteralType:
                     return writeTextOfNode(currentText, type);
@@ -1052,7 +1053,7 @@ namespace ts {
             function emitParameterProperties(constructorDeclaration: ConstructorDeclaration) {
                 if (constructorDeclaration) {
                     forEach(constructorDeclaration.parameters, param => {
-                        if (hasModifier(param, ModifierFlags.AccessibilityModifier)) {
+                        if (hasModifier(param, ModifierFlags.ParameterPropertyModifier)) {
                             emitPropertyDeclaration(param);
                         }
                     });
@@ -1130,7 +1131,7 @@ namespace ts {
                     // what we want, namely the name expression enclosed in brackets.
                     writeTextOfNode(currentText, node.name);
                     // If optional property emit ?
-                    if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && hasQuestionToken(node)) {
+                    if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature || node.kind === SyntaxKind.Parameter) && hasQuestionToken(node)) {
                         write("?");
                     }
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && node.parent.kind === SyntaxKind.TypeLiteral) {
@@ -1378,6 +1379,7 @@ namespace ts {
         function emitSignatureDeclaration(node: SignatureDeclaration) {
             const prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
+            let closeParenthesizedFunctionType = false;
 
             if (node.kind === SyntaxKind.IndexSignature) {
                 // Index signature can have readonly modifier
@@ -1388,6 +1390,16 @@ namespace ts {
                 // Construct signature or constructor type write new Signature
                 if (node.kind === SyntaxKind.ConstructSignature || node.kind === SyntaxKind.ConstructorType) {
                     write("new ");
+                }
+                else if (node.kind === SyntaxKind.FunctionType) {
+                    const currentOutput = writer.getText();
+                    // Do not generate incorrect type when function type with type parameters is type argument
+                    // This could happen if user used space between two '<' making it error free
+                    // e.g var x: A< <Tany>(a: Tany)=>Tany>;
+                    if (node.typeParameters && currentOutput.charAt(currentOutput.length - 1) === "<") {
+                        closeParenthesizedFunctionType = true;
+                        write("(");
+                    }
                 }
                 emitTypeParameters(node.typeParameters);
                 write("(");
@@ -1421,6 +1433,9 @@ namespace ts {
             if (!isFunctionTypeOrConstructorType) {
                 write(";");
                 writeLine();
+            }
+            else if (closeParenthesizedFunctionType) {
+                write(")");
             }
 
             function getReturnTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
@@ -1740,7 +1755,7 @@ namespace ts {
         if (!emitSkipped) {
             const declarationOutput = emitDeclarationResult.referencesOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);
-            writeFile(host, emitterDiagnostics, declarationFilePath, declarationOutput, host.getCompilerOptions().emitBOM);
+            writeFile(host, emitterDiagnostics, declarationFilePath, declarationOutput, host.getCompilerOptions().emitBOM, sourceFiles);
         }
         return emitSkipped;
 

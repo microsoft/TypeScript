@@ -10,9 +10,9 @@ var object = {
 
     get 0() {
         return this._0;
->this._0 : number
->this : { 0: number; _0: number; }
->_0 : number
+>this._0 : any
+>this : any
+>_0 : any
 
     },
     set 0(x: number) {
@@ -20,9 +20,9 @@ var object = {
 
         this._0 = x;
 >this._0 = x : number
->this._0 : number
->this : { 0: number; _0: number; }
->_0 : number
+>this._0 : any
+>this : any
+>_0 : any
 >x : number
 
     },
