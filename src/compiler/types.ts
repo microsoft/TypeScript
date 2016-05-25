@@ -2141,6 +2141,7 @@ namespace ts {
         DecoratedClassWithSelfReference     = 0x00080000, // Decorated class that contains a binding to itself inside of the class body.
         SelfReferenceInDecoratedClass       = 0x00100000, // Binding to a decorated class inside of the class's body.
         NeedsLoopOutParameter               = 0x00200000, // Block scoped binding whose value should be explicitly copied outside of the converted loop
+        ClassExpressionWithCapturedBlockScopedBinding = 0x00400000, // ClassExpression that contains block scoped variables
     }
 
     /* @internal */
