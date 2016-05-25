@@ -6606,8 +6606,8 @@ namespace ts {
         /// NavigateTo
         function getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[] {
             synchronizeHostData();
-
-            return ts.NavigateTo.getNavigateToItems(program, cancellationToken, searchValue, maxResultCount);
+            const checker = getProgram().getTypeChecker();
+            return ts.NavigateTo.getNavigateToItems(program, checker, cancellationToken, searchValue, maxResultCount);
         }
 
         function getEmitOutput(fileName: string): EmitOutput {

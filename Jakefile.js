@@ -726,24 +726,40 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
         subsetRegexes = subsets.map(function (sub) { return "^" + sub + ".*$"; });
         subsetRegexes.push("^(?!" + subsets.join("|") + ").*$");
     }
+    var counter = subsetRegexes.length;
+    var errorStatus;
     subsetRegexes.forEach(function (subsetRegex, i) {
         tests = subsetRegex ? ' -g "' + subsetRegex + '"' : '';
         var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
-        function finish() {
+        function finish(status) {
+            counter--;
+            // save first error status
+            if (status !== undefined && errorStatus === undefined) {
+                errorStatus = status;
+            }
+
             deleteTemporaryProjectOutput();
-            complete();
+            if (counter !== 0 || errorStatus === undefined) {
+                // run linter when last worker is finished
+                if (lintFlag && counter === 0) {
+                    var lint = jake.Task['lint'];
+                    lint.addListener('complete', function () {
+                        complete();
+                    });
+                    lint.invoke();
+                }
+                complete();
+            }
+            else {
+                fail("Process exited with code " + status);
+            }
         }
         exec(cmd, function () {
-            if (lintFlag && i === 0) {
-                var lint = jake.Task['lint'];
-                lint.addListener('complete', function () {
-                    complete();
-                });
-                lint.invoke();
-            }
             finish();
-        }, finish);
+        }, function(e, status) {
+            finish(status);
+        });
     });
 }
 
@@ -962,36 +978,30 @@ function lintFileAsync(options, path, cb) {
     });
 }
 
-var servicesLintTargets = [
-    "navigateTo.ts",
-    "navigationBar.ts",
-    "outliningElementsCollector.ts",
-    "patternMatcher.ts",
-    "services.ts",
-    "shims.ts",
-    "jsTyping.ts"
-].map(function (s) {
-    return path.join(servicesDirectory, s);
-});
 var lintTargets = compilerSources
-    .concat(harnessCoreSources)
+    .concat(harnessSources)
+    // Other harness sources
+    .concat(["instrumenter.ts"].map(function(f) { return path.join(harnessDirectory, f) }))
     .concat(serverCoreSources)
     .concat(tslintRulesFiles)
-    .concat(servicesLintTargets);
+    .concat(servicesSources);
+
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
 task("lint", ["build-rules"], function() {
     var lintOptions = getLinterOptions();
     var failed = 0;
     var fileMatcher = RegExp(process.env.f || process.env.file || process.env.files || "");
+    var done = {};
     for (var i in lintTargets) {
         var target = lintTargets[i];
-        if (fileMatcher.test(target)) {
+        if (!done[target] && fileMatcher.test(target)) {
             var result = lintFile(lintOptions, target);
             if (result.failureCount > 0) {
                 console.log(result.output);
                 failed += result.failureCount;
             }
+            done[target] = true;
         }
     }
     if (failed > 0) {
