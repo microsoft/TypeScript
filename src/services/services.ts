@@ -1115,6 +1115,8 @@ namespace ts {
 
         isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean;
 
+        getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): TextChange[];
+
         getEmitOutput(fileName: string): EmitOutput;
 
         getProgram(): Program;
@@ -1753,9 +1755,18 @@ namespace ts {
         };
     }
 
-    // Cache host information about scrip Should be refreshed
+    export function getSupportedCodeFixes() {
+        return {
+            // TODO: get this from the actual language service
+            codeFixes: [
+                "TS2377" /* Constructors for derived classes must contain a 'super' call. */
+            ]
+        };
+    }
+
+    // Cache host information about script Should be refreshed
     // at each language service public entry point, since we don't know when
-    // set of scripts handled by the host changes.
+    // the set of scripts handled by the host changes.
     class HostCache {
         private fileNameToEntry: FileMap<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
@@ -7477,6 +7488,36 @@ namespace ts {
             return [];
         }
 
+        // TODO (pvanbren): move the codefixes to a separate file
+
+        function getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): TextChange[] {
+            synchronizeHostData();
+
+            interface CodeFix { (fileName: string, start: number, end: number): TextChange[] } 
+
+             // errorCodes should contain TS2377
+            const codeFixMap: Map<CodeFix> = {
+                "TS2377": fixMissingSuper
+            };
+
+            return codeFixMap[errorCodes[0]](fileName, start, end);
+
+            function fixMissingSuper(fileName: string, start: number, end: number) {
+
+                const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+                const token = getTokenAtPosition(sourceFile, start);
+                if (token.kind !== SyntaxKind.ConstructorKeyword) {
+                    // wait why are we not a on a constructor?
+                    return [];
+                }
+
+                const openCurly = (<ConstructorDeclaration>token.parent).body.getChildren(sourceFile)[0]; // assume this is the open curly
+                const position = openCurly.getEnd();   // want to position directly after open curly, we'll format using the formatting service in the host
+
+                return [{ newText: "super();", span: { start: position, length: 0 } }];
+            }
+        }
+
         /**
          * Checks if position points to a valid position to add JSDoc comments, and if so,
          * returns the appropriate template. Otherwise returns an empty string.
@@ -7947,6 +7988,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPostion,
+            getCodeFixAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
             getProgram

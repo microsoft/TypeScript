@@ -572,6 +572,10 @@ namespace ts.server {
             throw new Error("Not Implemented Yet."); 
         }
 
+        getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): ts.TextChange[] {
+            throw new Error("Not Implemented Yet.");
+        }
+
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
             var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.FileLocationRequestArgs = {
