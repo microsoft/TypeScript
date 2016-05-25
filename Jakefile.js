@@ -962,24 +962,13 @@ function lintFileAsync(options, path, cb) {
     });
 }
 
-var servicesLintTargets = [
-    "navigateTo.ts",
-    "navigationBar.ts",
-    "outliningElementsCollector.ts",
-    "patternMatcher.ts",
-    "services.ts",
-    "shims.ts",
-    "jsTyping.ts"
-].map(function (s) {
-    return path.join(servicesDirectory, s);
-});
 var lintTargets = compilerSources
     .concat(harnessSources)
     // Other harness sources
     .concat(["instrumenter.ts"].map(function(f) { return path.join(harnessDirectory, f) }))
     .concat(serverCoreSources)
     .concat(tslintRulesFiles)
-    .concat(servicesLintTargets);
+    .concat(servicesSources);
 
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");

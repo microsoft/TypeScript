@@ -1,4 +1,5 @@
 ///<reference path='references.ts' />
+/* tslint:disable:no-null-keyword */
 
 /* @internal */
 namespace ts.formatting {
@@ -17,11 +18,11 @@ namespace ts.formatting {
         }
 
         static create1(action: RuleAction) {
-            return RuleOperation.create2(RuleOperationContext.Any, action)
+            return RuleOperation.create2(RuleOperationContext.Any, action);
         }
 
         static create2(context: RuleOperationContext, action: RuleAction) {
-            let result = new RuleOperation();
+            const result = new RuleOperation();
             result.Context = context;
             result.Action = action;
             return result;

@@ -1,4 +1,5 @@
 ///<reference path='references.ts' />
+/* tslint:disable:no-null-keyword */
 
 /* @internal */
 namespace ts.formatting {
@@ -12,17 +13,17 @@ namespace ts.formatting {
         }
 
         static create(rules: Rule[]): RulesMap {
-            let result = new RulesMap();
+            const result = new RulesMap();
             result.Initialize(rules);
             return result;
         }
 
         public Initialize(rules: Rule[]) {
             this.mapRowLength = SyntaxKind.LastToken + 1;
-            this.map = <any> new Array(this.mapRowLength * this.mapRowLength);//new Array<RulesBucket>(this.mapRowLength * this.mapRowLength);
+            this.map = <any> new Array(this.mapRowLength * this.mapRowLength); // new Array<RulesBucket>(this.mapRowLength * this.mapRowLength);
 
             // This array is used only during construction of the rulesbucket in the map
-            let rulesBucketConstructionStateList: RulesBucketConstructionState[] = <any> new Array(this.map.length);//new Array<RulesBucketConstructionState>(this.map.length);
+            const rulesBucketConstructionStateList: RulesBucketConstructionState[] = <any>new Array(this.map.length); // new Array<RulesBucketConstructionState>(this.map.length);
 
             this.FillRules(rules, rulesBucketConstructionStateList);
             return this.map;
@@ -35,18 +36,18 @@ namespace ts.formatting {
         }
 
         private GetRuleBucketIndex(row: number, column: number): number {
-            let rulesBucketIndex = (row * this.mapRowLength) + column;
-            //Debug.Assert(rulesBucketIndex < this.map.Length, "Trying to access an index outside the array.");
+            const rulesBucketIndex = (row * this.mapRowLength) + column;
+            // Debug.Assert(rulesBucketIndex < this.map.Length, "Trying to access an index outside the array.");
             return rulesBucketIndex;
         }
 
         private FillRule(rule: Rule, rulesBucketConstructionStateList: RulesBucketConstructionState[]): void {
-            let specificRule = rule.Descriptor.LeftTokenRange !== Shared.TokenRange.Any &&
+            const specificRule = rule.Descriptor.LeftTokenRange !== Shared.TokenRange.Any &&
                                rule.Descriptor.RightTokenRange !== Shared.TokenRange.Any;
 
             rule.Descriptor.LeftTokenRange.GetTokens().forEach((left) => {
                 rule.Descriptor.RightTokenRange.GetTokens().forEach((right) => {
-                    let rulesBucketIndex = this.GetRuleBucketIndex(left, right);
+                    const rulesBucketIndex = this.GetRuleBucketIndex(left, right);
 
                     let rulesBucket = this.map[rulesBucketIndex];
                     if (rulesBucket === undefined) {
@@ -54,15 +55,15 @@ namespace ts.formatting {
                     }
 
                     rulesBucket.AddRule(rule, specificRule, rulesBucketConstructionStateList, rulesBucketIndex);
-                })
-            })
+                });
+            });
         }
 
         public GetRule(context: FormattingContext): Rule {
-            let bucketIndex = this.GetRuleBucketIndex(context.currentTokenSpan.kind, context.nextTokenSpan.kind);
-            let bucket = this.map[bucketIndex];
+            const bucketIndex = this.GetRuleBucketIndex(context.currentTokenSpan.kind, context.nextTokenSpan.kind);
+            const bucket = this.map[bucketIndex];
             if (bucket != null) {
-                for (let rule of bucket.Rules()) {
+                for (const rule of bucket.Rules()) {
                     if (rule.Operation.Context.InContext(context)) {
                         return rule;
                     }
@@ -72,8 +73,8 @@ namespace ts.formatting {
         }
     }
 
-    let MaskBitSize = 5;
-    let Mask = 0x1f;
+    const MaskBitSize = 5;
+    const Mask = 0x1f;
 
     export enum RulesPosition {
         IgnoreRulesSpecific = 0,
@@ -167,7 +168,7 @@ namespace ts.formatting {
             if (state === undefined) {
                 state = constructionState[rulesBucketIndex] = new RulesBucketConstructionState();
             }
-            let index = state.GetInsertionIndex(position);
+            const index = state.GetInsertionIndex(position);
             this.rules.splice(index, 0, rule);
             state.IncreaseInsertionIndex(position);
         }
