@@ -19,12 +19,12 @@ class C implements I {
 }
 let c = new C();
 c.explicitVoid = c.explicitThis; // error, 'void' is missing everything
-let o = { 
+let o = {
     n: 101,
-    explicitThis: function (m: number) { 
-        return m + this.n.length; // ok, this.n: any
+    explicitThis: function (m: number) {
+        return m + this.n.length; // error, 'length' does not exist on 'number'
     },
-    implicitThis(m: number): number { return m; } 
+    implicitThis(m: number): number { return m; }
 };
 let i: I = o;
 let o2: I = {

@@ -2,8 +2,12 @@ let o = {
     d: "bar",
     m() {
         return this.d.length;
+    },
+    f: function() {
+        return this.d.length;
     }
 }
+
 let mutuallyRecursive = {
     a: 100,
     start() {

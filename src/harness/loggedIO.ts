@@ -1,7 +1,7 @@
 /// <reference path="..\..\src\compiler\sys.ts" />
 /// <reference path="..\..\src\harness\harness.ts" />
 /// <reference path="..\..\src\harness\runnerbase.ts" />
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 interface FileInformation {
     contents: string;
@@ -149,7 +149,7 @@ namespace Playback {
             recordLog = createEmptyLog();
 
             if (typeof underlying.args !== "function") {
-                recordLog.arguments = <string[]>underlying.args;
+                recordLog.arguments = underlying.args;
             }
         };
 

@@ -9,7 +9,7 @@ namespace Harness.LanguageService {
         public editRanges: { length: number; textChangeRange: ts.TextChangeRange; }[] = [];
         private lineMap: number[] = undefined;
 
-        constructor(public fileName: string, public content: string) {
+        constructor(public fileName: string, public content: string, public isRootFile: boolean) {
             this.setContent(content);
         }
 
@@ -135,7 +135,13 @@ namespace Harness.LanguageService {
 
         public getFilenames(): string[] {
             const fileNames: string[] = [];
-            ts.forEachKey(this.fileNameToScript, (fileName) => { fileNames.push(fileName); });
+            ts.forEachValue(this.fileNameToScript, (scriptInfo) => {
+                if (scriptInfo.isRootFile) {
+                    // only include root files here
+                    // usually it means that we won't include lib.d.ts in the list of root files so it won't mess the computation of compilation root dir.
+                    fileNames.push(scriptInfo.fileName);
+                }
+            });
             return fileNames;
         }
 
@@ -143,8 +149,8 @@ namespace Harness.LanguageService {
             return ts.lookUp(this.fileNameToScript, fileName);
         }
 
-        public addScript(fileName: string, content: string): void {
-            this.fileNameToScript[fileName] = new ScriptInfo(fileName, content);
+        public addScript(fileName: string, content: string, isRootFile: boolean): void {
+            this.fileNameToScript[fileName] = new ScriptInfo(fileName, content, isRootFile);
         }
 
         public editScript(fileName: string, start: number, end: number, newText: string) {
@@ -157,7 +163,7 @@ namespace Harness.LanguageService {
             throw new Error("No script with name '" + fileName + "'");
         }
 
-        public openFile(fileName: string, content?: string): void {
+        public openFile(fileName: string, content?: string, scriptKindName?: string): void {
         }
 
         /**
@@ -176,8 +182,9 @@ namespace Harness.LanguageService {
     class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost {
         getCompilationSettings() { return this.settings; }
         getCancellationToken() { return this.cancellationToken; }
+        getDirectories(path: string): string[] { return []; }
         getCurrentDirectory(): string { return ""; }
-        getDefaultLibFileName(): string { return ""; }
+        getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
         getScriptFileNames(): string[] { return this.getFilenames(); }
         getScriptSnapshot(fileName: string): ts.IScriptSnapshot {
             const script = this.getScriptInfo(fileName);
@@ -210,6 +217,7 @@ namespace Harness.LanguageService {
         private nativeHost: NativeLanguageServiceHost;
 
         public getModuleResolutionsForFile: (fileName: string) => string;
+        public getTypeReferenceDirectiveResolutionsForFile: (fileName: string) => string;
 
         constructor(preprocessToResolve: boolean, cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             super(cancellationToken, options);
@@ -236,18 +244,32 @@ namespace Harness.LanguageService {
                     }
                     return JSON.stringify(imports);
                 };
+                this.getTypeReferenceDirectiveResolutionsForFile = (fileName) => {
+                    const scriptInfo = this.getScriptInfo(fileName);
+                    const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ false);
+                    const resolutions: ts.Map<ts.ResolvedTypeReferenceDirective> = {};
+                    const settings = this.nativeHost.getCompilationSettings();
+                    for (const typeReferenceDirective of preprocessInfo.typeReferenceDirectives) {
+                        const resolutionInfo = ts.resolveTypeReferenceDirective(typeReferenceDirective.fileName, fileName, settings, moduleResolutionHost);
+                        if (resolutionInfo.resolvedTypeReferenceDirective.resolvedFileName) {
+                            resolutions[typeReferenceDirective.fileName] = resolutionInfo.resolvedTypeReferenceDirective;
+                        }
+                    }
+                    return JSON.stringify(resolutions);
+                };
             }
         }
 
         getFilenames(): string[] { return this.nativeHost.getFilenames(); }
         getScriptInfo(fileName: string): ScriptInfo { return this.nativeHost.getScriptInfo(fileName); }
-        addScript(fileName: string, content: string): void { this.nativeHost.addScript(fileName, content); }
+        addScript(fileName: string, content: string, isRootFile: boolean): void { this.nativeHost.addScript(fileName, content, isRootFile); }
         editScript(fileName: string, start: number, end: number, newText: string): void { this.nativeHost.editScript(fileName, start, end, newText); }
         positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToLineAndCharacter(fileName, position); }
 
         getCompilationSettings(): string { return JSON.stringify(this.nativeHost.getCompilationSettings()); }
         getCancellationToken(): ts.HostCancellationToken { return this.nativeHost.getCancellationToken(); }
         getCurrentDirectory(): string { return this.nativeHost.getCurrentDirectory(); }
+        getDirectories(path: string) { return this.nativeHost.getDirectories(path); }
         getDefaultLibFileName(): string { return this.nativeHost.getDefaultLibFileName(); }
         getScriptFileNames(): string { return JSON.stringify(this.nativeHost.getScriptFileNames()); }
         getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
@@ -417,6 +439,9 @@ namespace Harness.LanguageService {
         getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion {
             return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position));
         }
+        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
+            return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPostion(fileName, position, openingBrace));
+        }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }
@@ -442,6 +467,7 @@ namespace Harness.LanguageService {
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo {
             let shimResult: {
                 referencedFiles: ts.IFileReference[];
+                typeReferenceDirectives: ts.IFileReference[];
                 importedFiles: ts.IFileReference[];
                 isLibFile: boolean;
             };
@@ -453,7 +479,8 @@ namespace Harness.LanguageService {
                 referencedFiles: [],
                 importedFiles: [],
                 ambientExternalModules: [],
-                isLibFile: shimResult.isLibFile
+                isLibFile: shimResult.isLibFile,
+                typeReferenceDirectives: []
             };
 
             ts.forEach(shimResult.referencedFiles, refFile => {
@@ -472,6 +499,13 @@ namespace Harness.LanguageService {
                 });
             });
 
+            ts.forEach(shimResult.typeReferenceDirectives, typeRefDirective => {
+                convertResult.importedFiles.push({
+                    fileName: typeRefDirective.path,
+                    pos: typeRefDirective.position,
+                    end: typeRefDirective.position + typeRefDirective.length
+                });
+            });
             return convertResult;
         }
     }
@@ -496,9 +530,9 @@ namespace Harness.LanguageService {
             this.client = client;
         }
 
-        openFile(fileName: string, content?: string): void {
-            super.openFile(fileName, content);
-            this.client.openFile(fileName, content);
+        openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
+            super.openFile(fileName, content, scriptKindName);
+            this.client.openFile(fileName, content, scriptKindName);
         }
 
         editScript(fileName: string, start: number, end: number, newText: string) {
@@ -568,6 +602,10 @@ namespace Harness.LanguageService {
             return this.host.getCurrentDirectory();
         }
 
+        getDirectories(path: string): string[] {
+            return [];
+        }
+
         readDirectory(path: string, extension?: string): string[] {
             throw new Error("Not implemented Yet.");
         }
@@ -608,6 +646,14 @@ namespace Harness.LanguageService {
         }
 
         startGroup(): void {
+        }
+
+        setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
+            return setTimeout(callback, ms, args);
+        }
+
+        clearTimeout(timeoutId: any): void {
+            clearTimeout(timeoutId);
         }
     }
 

@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 //// {| "itemName": "Windows", "kind": "module", "parentName": "" |}declare module Windows {
-////     {| "itemName": "Foundation", "kind": "module", "parentName": "Windows" |}export module Foundation {
+////     {| "itemName": "Foundation", "kind": "module", "parentName": "" |}export module Foundation {
 ////         export var {| "itemName": "A", "kind": "var" |}A;
 ////         {| "itemName": "Test", "kind": "class" |}export class Test {
 ////             {| "itemName": "wow", "kind": "method" |}public wow();
@@ -9,7 +9,7 @@
 //// }
 //// 
 //// {| "itemName": "Windows", "kind": "module", "parentName": "", "isAdditionalRange": true |}declare module Windows {
-////     {| "itemName": "Foundation", "kind": "module", "parentName": "Windows", "isAdditionalRange": true |}export module Foundation {
+////     {| "itemName": "Foundation", "kind": "module", "parentName": "", "isAdditionalRange": true |}export module Foundation {
 ////         export var {| "itemName": "B", "kind": "var" |}B;
 ////         {| "itemName": "Test", "kind": "module" |}export module Test {
 ////             {| "itemName": "Boom", "kind": "function" |}export function Boom(): number;
@@ -29,7 +29,7 @@
 
 test.markers().forEach(marker => {
     if (marker.data) {
-        verify.getScriptLexicalStructureListContains(
+        verify.navigationBarContains(
             marker.data.itemName,
             marker.data.kind,
             marker.fileName,
@@ -38,4 +38,4 @@ test.markers().forEach(marker => {
             marker.position);
     }
 });
-verify.getScriptLexicalStructureListCount(12);
+verify.navigationBarCount(12);

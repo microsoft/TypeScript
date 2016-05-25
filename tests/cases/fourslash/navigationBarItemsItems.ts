@@ -13,28 +13,28 @@
 ////{| "itemName": "Shapes", "kind": "module", "parentName": "" |}module Shapes {
 ////
 ////    // Class
-////    {| "itemName": "Point", "kind": "class", "parentName": "Shapes" |}export class Point implements IPoint {
-////        {| "itemName": "constructor", "kind": "constructor", "parentName": "Shapes.Point" |}constructor (public x: number, public y: number) { }
+////    {| "itemName": "Point", "kind": "class", "parentName": "" |}export class Point implements IPoint {
+////        {| "itemName": "constructor", "kind": "constructor", "parentName": "Point" |}constructor (public x: number, public y: number) { }
 ////
 ////        // Instance member
-////        {| "itemName": "getDist", "kind": "method", "parentName": "Shapes.Point" |}getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+////        {| "itemName": "getDist", "kind": "method", "parentName": "Point" |}getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
 ////
 ////        // Getter
-////        {| "itemName": "value", "kind": "getter", "parentName": "Shapes.Point" |}get value(): number { return 0; }
+////        {| "itemName": "value", "kind": "getter", "parentName": "Point" |}get value(): number { return 0; }
 ////
 ////        // Setter
-////        {| "itemName": "value", "kind": "setter", "parentName": "Shapes.Point" |}set value(newValue: number) { return; }
+////        {| "itemName": "value", "kind": "setter", "parentName": "Point" |}set value(newValue: number) { return; }
 ////
 ////        // Static member
-////        {| "itemName": "origin", "kind": "property", "parentName": "Shapes.Point" |}static origin = new Point(0, 0);
+////        {| "itemName": "origin", "kind": "property", "parentName": "Point" |}static origin = new Point(0, 0);
 ////
 ////        // Static method
-////        {| "itemName": "getOrigin", "kind": "method", "parentName": "Shapes.Point" |}private static getOrigin() { return Point.origin;}
+////        {| "itemName": "getOrigin", "kind": "method", "parentName": "Point" |}private static getOrigin() { return Point.origin;}
 ////    }
 ////
 ////    {| "itemName": "Values", "kind": "enum", "parentName": "Shapes" |}enum Values {
 ////        value1,
-////        {| "itemName": "value2", "kind": "property", "parentName": "Shapes.Values" |}value2,
+////        {| "itemName": "value2", "kind": "property", "parentName": "Values" |}value2,
 ////        value3,
 ////    }
 ////}
@@ -45,8 +45,8 @@
 
 test.markers().forEach((marker) => {
     if (marker.data) {
-        verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
+        verify.navigationBarContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
     }
 });
 
-verify.getScriptLexicalStructureListCount(23);
+verify.navigationBarCount(24);

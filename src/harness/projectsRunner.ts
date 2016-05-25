@@ -1,6 +1,6 @@
 ///<reference path="harness.ts" />
 ///<reference path="runnerbase.ts" />
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 // Test case is json of below type in tests/cases/project/
 interface ProjectRunnerTestCase {

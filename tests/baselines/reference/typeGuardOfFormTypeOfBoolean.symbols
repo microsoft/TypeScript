@@ -93,17 +93,16 @@ else {
 >boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfBoolean.ts, 11, 3))
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrNum === "boolean") {
 >strOrNum : Symbol(strOrNum, Decl(typeGuardOfFormTypeOfBoolean.ts, 5, 3))
 
-    var z1: string | number = strOrNum; // string | number
->z1 : Symbol(z1, Decl(typeGuardOfFormTypeOfBoolean.ts, 45, 7), Decl(typeGuardOfFormTypeOfBoolean.ts, 82, 7))
+    let z1: {} = strOrNum; // {}
+>z1 : Symbol(z1, Decl(typeGuardOfFormTypeOfBoolean.ts, 44, 7))
 >strOrNum : Symbol(strOrNum, Decl(typeGuardOfFormTypeOfBoolean.ts, 5, 3))
 }
 else {
-    var z2: string | number = strOrNum; // string | number
->z2 : Symbol(z2, Decl(typeGuardOfFormTypeOfBoolean.ts, 48, 7), Decl(typeGuardOfFormTypeOfBoolean.ts, 85, 7))
+    let z2: string | number = strOrNum; // string | number
+>z2 : Symbol(z2, Decl(typeGuardOfFormTypeOfBoolean.ts, 47, 7))
 >strOrNum : Symbol(strOrNum, Decl(typeGuardOfFormTypeOfBoolean.ts, 5, 3))
 }
 
@@ -160,17 +159,16 @@ else {
 >boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfBoolean.ts, 11, 3))
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrNum !== "boolean") {
 >strOrNum : Symbol(strOrNum, Decl(typeGuardOfFormTypeOfBoolean.ts, 5, 3))
 
-    var z1: string | number = strOrNum; // string | number
->z1 : Symbol(z1, Decl(typeGuardOfFormTypeOfBoolean.ts, 45, 7), Decl(typeGuardOfFormTypeOfBoolean.ts, 82, 7))
+    let z1: string | number = strOrNum; // string | number
+>z1 : Symbol(z1, Decl(typeGuardOfFormTypeOfBoolean.ts, 80, 7))
 >strOrNum : Symbol(strOrNum, Decl(typeGuardOfFormTypeOfBoolean.ts, 5, 3))
 }
 else {
-    var z2: string | number = strOrNum; // string | number
->z2 : Symbol(z2, Decl(typeGuardOfFormTypeOfBoolean.ts, 48, 7), Decl(typeGuardOfFormTypeOfBoolean.ts, 85, 7))
+    let z2: {} = strOrNum; // {}
+>z2 : Symbol(z2, Decl(typeGuardOfFormTypeOfBoolean.ts, 83, 7))
 >strOrNum : Symbol(strOrNum, Decl(typeGuardOfFormTypeOfBoolean.ts, 5, 3))
 }
 

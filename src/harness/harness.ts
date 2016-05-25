@@ -23,7 +23,7 @@
 /// <reference path="external\chai.d.ts"/>
 /// <reference path="sourceMapRecorder.ts"/>
 /// <reference path="runnerbase.ts"/>
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 // Block scoped definitions work poorly for global variables, temporarily enable var
 /* tslint:disable:no-var-keyword */
@@ -63,6 +63,11 @@ namespace Utils {
 
     export function encodeString(s: string): string {
         return Buffer ? (new Buffer(s)).toString("utf8") : s;
+    }
+
+    export function byteLength(s: string, encoding?: string): number {
+        // stub implementation if Buffer is not available (in-browser case)
+        return Buffer ? Buffer.byteLength(s, encoding) : s.length;
     }
 
     export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
@@ -122,7 +127,7 @@ namespace Utils {
     export function memoize<T extends Function>(f: T): T {
         const cache: { [idx: string]: any } = {};
 
-        return <any>(function () {
+        return <any>(function() {
             const key = Array.prototype.join.call(arguments);
             const cachedResult = cache[key];
             if (cachedResult) {
@@ -604,7 +609,7 @@ namespace Harness {
             export const getCurrentDirectory = () => "";
             export const args = () => <string[]>[];
             export const getExecutingFilePath = () => "";
-            export const exit = (exitCode: number) => {};
+            export const exit = (exitCode: number) => { };
 
             export let log = (s: string) => console.log(s);
 
@@ -821,7 +826,7 @@ namespace Harness {
             }
 
             if (!libFileNameSourceFileMap[fileName]) {
-                libFileNameSourceFileMap[fileName] = createSourceFileAndAssertInvariants(fileName,  IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest);
+                libFileNameSourceFileMap[fileName] = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest);
             }
             return libFileNameSourceFileMap[fileName];
         }
@@ -835,7 +840,7 @@ namespace Harness {
         export let fourslashSourceFile: ts.SourceFile;
 
         export function getCanonicalFileName(fileName: string): string {
-            return Harness.IO.useCaseSensitiveFileNames() ? fileName : fileName.toLowerCase();
+            return fileName;
         }
 
         export function createCompilerHost(
@@ -850,13 +855,23 @@ namespace Harness {
             // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
             const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames);
 
-            const fileMap: ts.FileMap<ts.SourceFile> = ts.createFileMap<ts.SourceFile>();
+            let realPathMap: ts.FileMap<string>;
+            const fileMap: ts.FileMap<() => ts.SourceFile> = ts.createFileMap<() => ts.SourceFile>();
             for (const file of inputFiles) {
                 if (file.content !== undefined) {
                     const fileName = ts.normalizePath(file.unitName);
-                    const sourceFile = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
                     const path = ts.toPath(file.unitName, currentDirectory, getCanonicalFileName);
-                    fileMap.set(path, sourceFile);
+                    if (file.fileOptions && file.fileOptions["symlink"]) {
+                        const link = file.fileOptions["symlink"];
+                        const linkPath = ts.toPath(link, currentDirectory, getCanonicalFileName);
+                        if (!realPathMap) {
+                            realPathMap = ts.createFileMap<string>();
+                        }
+                        realPathMap.set(linkPath, fileName);
+                        fileMap.set(path, (): ts.SourceFile => { throw new Error("Symlinks should always be resolved to a realpath first"); });
+                    }
+                    const sourceFile = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
+                    fileMap.set(path, () => sourceFile);
                 }
             }
 
@@ -864,7 +879,7 @@ namespace Harness {
                 fileName = ts.normalizePath(fileName);
                 const path = ts.toPath(fileName, currentDirectory, getCanonicalFileName);
                 if (fileMap.contains(path)) {
-                    return fileMap.get(path);
+                    return fileMap.get(path)();
                 }
                 else if (fileName === fourslashFileName) {
                     const tsFn = "tests/cases/fourslash/" + fourslashFileName;
@@ -883,7 +898,22 @@ namespace Harness {
                     newLineKind === ts.NewLineKind.LineFeed ? lineFeed :
                         Harness.IO.newLine();
 
+
             return {
+                getDefaultTypeDirectiveNames: (path: string) => {
+                    const results: string[] = [];
+                    fileMap.forEachValue((key, value) => {
+                        const rx = /node_modules\/@types\/(\w+)/;
+                        const typeNameResult = rx.exec(key);
+                        if (typeNameResult) {
+                            const typeName = typeNameResult[1];
+                            if (results.indexOf(typeName) < 0) {
+                                results.push(typeName);
+                            }
+                        }
+                    });
+                    return results;
+                },
                 getCurrentDirectory: () => currentDirectory,
                 getSourceFile,
                 getDefaultLibFileName,
@@ -891,8 +921,17 @@ namespace Harness {
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
-                fileExists: fileName => getSourceFile(fileName, ts.ScriptTarget.ES5) !== undefined,
-                readFile: (fileName: string): string => { return Harness.IO.readFile(fileName); }
+                fileExists: fileName => {
+                    const path = ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+                    return fileMap.contains(path) || (realPathMap && realPathMap.contains(path));
+                },
+                readFile: (fileName: string): string => {
+                    return fileMap.get(ts.toPath(fileName, currentDirectory, getCanonicalFileName))().getText();
+                },
+                realpath: realPathMap && ((f: string) => {
+                    const path = ts.toPath(f, currentDirectory, getCanonicalFileName);
+                    return realPathMap.contains(path) ? realPathMap.get(path) : path;
+                })
             };
         }
 
@@ -913,7 +952,9 @@ namespace Harness {
             { name: "libFiles", type: "string" },
             { name: "noErrorTruncation", type: "boolean" },
             { name: "suppressOutputPathCheck", type: "boolean" },
-            { name: "noImplicitReferences", type: "boolean" }
+            { name: "noImplicitReferences", type: "boolean" },
+            { name: "currentDirectory", type: "string" },
+            { name: "symlink", type: "string" }
         ];
 
         let optionsIndex: ts.Map<ts.CommandLineOption>;
@@ -968,6 +1009,7 @@ namespace Harness {
         export interface TestFile {
             unitName: string;
             content: string;
+            fileOptions?: any;
         }
 
         export interface CompilationOutput {
@@ -1033,7 +1075,7 @@ namespace Harness {
                 options.newLine);
 
             let traceResults: string[];
-            if (options.traceModuleResolution) {
+            if (options.traceResolution) {
                 traceResults = [];
                 compilerHost.trace = text => traceResults.push(text);
             }
@@ -1405,10 +1447,8 @@ namespace Harness {
                     // Comment line, check for global/file @options and record them
                     optionRegex.lastIndex = 0;
                     const metaDataName = testMetaData[1].toLowerCase();
-                    if (metaDataName === "filename") {
-                        currentFileOptions[testMetaData[1]] = testMetaData[2];
-                    }
-                    else {
+                    currentFileOptions[testMetaData[1]] = testMetaData[2];
+                    if (metaDataName !== "filename") {
                         continue;
                     }
 
@@ -1416,12 +1456,12 @@ namespace Harness {
                     if (currentFileName) {
                         // Store result file
                         const newTestFile = {
-                                content: currentFileContent,
-                                name: currentFileName,
-                                fileOptions: currentFileOptions,
-                                originalFilePath: fileName,
-                                references: refs
-                            };
+                            content: currentFileContent,
+                            name: currentFileName,
+                            fileOptions: currentFileOptions,
+                            originalFilePath: fileName,
+                            references: refs
+                        };
                         testUnitData.push(newTestFile);
 
                         // Reset local data
@@ -1479,6 +1519,7 @@ namespace Harness {
                         baseDir = ts.getNormalizedAbsolutePath(baseDir, rootDir);
                     }
                     tsConfig = ts.parseJsonConfigFileContent(configJson.config, parseConfigHost, baseDir);
+                    tsConfig.options.configFilePath = data.name;
 
                     // delete entry from the list
                     testUnitData.splice(i, 1);
@@ -1518,10 +1559,10 @@ namespace Harness {
 
         function baselinePath(fileName: string, type: string, baselineFolder: string, subfolder?: string) {
             if (subfolder !== undefined) {
-                return Harness.userSpecifiedRoot + baselineFolder + "/" +  subfolder + "/" + type + "/" + fileName;
+                return Harness.userSpecifiedRoot + baselineFolder + "/" + subfolder + "/" + type + "/" + fileName;
             }
             else {
-                return Harness.userSpecifiedRoot + baselineFolder + "/"  + type + "/" + fileName;
+                return Harness.userSpecifiedRoot + baselineFolder + "/" + type + "/" + fileName;
             }
         }
 
@@ -1590,7 +1631,7 @@ namespace Harness {
         }
 
         function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string, descriptionForDescribe: string) {
-            const encoded_actual =  Utils.encodeString(actual);
+            const encoded_actual = Utils.encodeString(actual);
             if (expected != encoded_actual) {
                 // Overwrite & issue error
                 const errMsg = "The baseline file " + relativeFileName + " has changed.";
