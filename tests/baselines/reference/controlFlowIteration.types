@@ -4,7 +4,7 @@ let cond: boolean;
 >cond : boolean
 
 function ff() {
->ff : () => never
+>ff : () => void
 
     let x: string | undefined;
 >x : string | undefined

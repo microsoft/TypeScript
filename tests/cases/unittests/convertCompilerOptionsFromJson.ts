@@ -2,25 +2,25 @@
 /// <reference path="..\..\..\src\compiler\commandLineParser.ts" />
 
 namespace ts {
-    describe('convertCompilerOptionsFromJson', () => {
+    describe("convertCompilerOptionsFromJson", () => {
         function assertCompilerOptions(json: any, configFileName: string, expectedResult: { compilerOptions: CompilerOptions, errors: Diagnostic[] }) {
             const { options: actualCompilerOptions, errors: actualErrors} = convertCompilerOptionsFromJson(json["compilerOptions"], "/apath/", configFileName);
-            
+
             const parsedCompilerOptions = JSON.stringify(actualCompilerOptions);
             const expectedCompilerOptions = JSON.stringify(expectedResult.compilerOptions);
             assert.equal(parsedCompilerOptions, expectedCompilerOptions);
-            
+
             const expectedErrors = expectedResult.errors;
             assert.isTrue(expectedResult.errors.length === actualErrors.length, `Expected error: ${JSON.stringify(expectedResult.errors)}. Actual error: ${JSON.stringify(actualErrors)}.`);
-            for (let i = 0; i < actualErrors.length; ++i) {
+            for (let i = 0; i < actualErrors.length; i++) {
                 const actualError = actualErrors[i];
-                const expectedError = expectedErrors[i]; 
+                const expectedError = expectedErrors[i];
                 assert.equal(actualError.code, expectedError.code);
                 assert.equal(actualError.category, expectedError.category);
                 assert.equal(actualError.messageText, expectedError.messageText);
             }
         }
-        
+
         // tsconfig.json tests
         it("Convert correctly format tsconfig.json to compiler-options ", () => {
             assertCompilerOptions(
@@ -448,7 +448,7 @@ namespace ts {
                     }
                 }, "jsconfig.json",
                 {
-                    compilerOptions: 
+                    compilerOptions:
                     {
                         allowJs: true
                     },
@@ -467,7 +467,7 @@ namespace ts {
         it("Convert default jsconfig.json to compiler-options ", () => {
             assertCompilerOptions({}, "jsconfig.json",
                 {
-                    compilerOptions: 
+                    compilerOptions:
                     {
                         allowJs: true
                     },

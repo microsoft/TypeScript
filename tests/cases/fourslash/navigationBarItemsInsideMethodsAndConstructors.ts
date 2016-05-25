@@ -2,30 +2,30 @@
 
 ////class Class {
 ////    constructor() {
-////        {| "itemName": "LocalFunctionInConstructor", "kind": "function", "parentName": "Class"|}function LocalFunctionInConstructor() {
+////        {| "itemName": "LocalFunctionInConstructor", "kind": "function", "parentName": "constructor"|}function LocalFunctionInConstructor() {
 ////
 ////        }
 ////
-////        {| "itemName": "LocalInterfaceInConstrcutor", "kind": "interface", "parentName": "foo"|}interface LocalInterfaceInConstrcutor {
+////        {| "itemName": "LocalInterfaceInConstrcutor", "kind": "interface", "parentName": ""|}interface LocalInterfaceInConstrcutor {
 ////        }
 ////
-////        enum LocalEnumInConstructor {
+////        {| "itemName": "LocalEnumInConstructor", "kind": "enum", "parentName": "constructor"|}enum LocalEnumInConstructor {
 ////            {| "itemName": "LocalEnumMemberInConstructor", "kind": "property", "parentName": "LocalEnumInConstructor"|}LocalEnumMemberInConstructor,
 ////        }
 ////    }
 ////
 ////    method() {
-////        {| "itemName": "LocalFunctionInMethod", "kind": "function", "parentName": "foo"|}function LocalFunctionInMethod() {
-////            {| "itemName": "LocalFunctionInLocalFunctionInMethod", "kind": "function", "parentName": "bar"|}function LocalFunctionInLocalFunctionInMethod() {
+////        {| "itemName": "LocalFunctionInMethod", "kind": "function", "parentName": "method"|}function LocalFunctionInMethod() {
+////            {| "itemName": "LocalFunctionInLocalFunctionInMethod", "kind": "function", "parentName": "LocalFunctionInMethod"|}function LocalFunctionInLocalFunctionInMethod() {
 ////
 ////            }
 ////        }
 ////
-////        {| "itemName": "LocalInterfaceInMethod", "kind": "interface", "parentName": "foo"|}interface LocalInterfaceInMethod {
+////        {| "itemName": "LocalInterfaceInMethod", "kind": "interface", "parentName": ""|}interface LocalInterfaceInMethod {
 ////        }
 ////
-////        enum LocalEnumInMethod {
-////            {| "itemName": "LocalEnumMemberInMethod", "kind": "property", "parentName": "foo"|}LocalEnumMemberInMethod,
+////        {| "itemName": "LocalEnumInMethod", "kind": "enum", "parentName": "method"|}enum LocalEnumInMethod {
+////            {| "itemName": "LocalEnumMemberInMethod", "kind": "property", "parentName": "LocalEnumInMethod"|}LocalEnumMemberInMethod,
 ////        }
 ////    }
 ////
@@ -39,4 +39,4 @@ test.markers().forEach((marker) => {
 });
 
 // no other items
-verify.navigationBarCount(17);
+verify.navigationBarCount(19);
