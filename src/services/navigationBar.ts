@@ -9,16 +9,10 @@ namespace ts.NavigationBar {
             return getJsNavigationBarItems(sourceFile, compilerOptions);
         }
 
-        // If the source file has any child items, then it included in the tree
-        // and takes lexical ownership of all other top-level items.
-        let hasGlobalNode = false;
-
         return getItemsWorker(getTopLevelNodes(sourceFile), createTopLevelItem);
 
         function getIndent(node: Node): number {
-            // If we have a global node in the tree,
-            // then it adds an extra layer of depth to all subnodes.
-            let indent = hasGlobalNode ? 1 : 0;
+            let indent = 1; // Global node is the only one with indent 0.
 
             let current = node.parent;
             while (current) {
@@ -508,11 +502,6 @@ namespace ts.NavigationBar {
             function createSourceFileItem(node: SourceFile): ts.NavigationBarItem {
                 const childItems = getItemsWorker(getChildNodes(node.statements), createChildItem);
 
-                if (childItems === undefined || childItems.length === 0) {
-                    return undefined;
-                }
-
-                hasGlobalNode = true;
                 const rootName = isExternalModule(node)
                     ? "\"" + escapeString(getBaseFileName(removeFileExtension(normalizePath(node.fileName)))) + "\""
                     : "<global>";

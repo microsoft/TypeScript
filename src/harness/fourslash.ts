@@ -1961,23 +1961,22 @@ namespace FourSlash {
 
         public verifyNavigationBarCount(expected: number) {
             const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
-            const actual = this.getNavigationBarItemsCount(items);
+            const actual = this.getNavigationBarItemsCount(items[0]);
 
             if (expected !== actual) {
                 this.raiseError(`verifyNavigationBarCount failed - found: ${actual} navigation items, expected: ${expected}.`);
             }
         }
 
-        private getNavigationBarItemsCount(items: ts.NavigationBarItem[]) {
-            let result = 0;
-            if (items) {
-                for (let i = 0, n = items.length; i < n; i++) {
-                    result++;
-                    result += this.getNavigationBarItemsCount(items[i].childItems);
-                }
+        private getNavigationBarItemsCount(root: ts.NavigationBarItem) {
+            ts.Debug.assert(root.kind === ts.ScriptElementKind.moduleElement);
+            function recur(item: ts.NavigationBarItem) {
+                let count = 1;
+                for (const child of item.childItems)
+                    count += recur(child);
+                return count;
             }
-
-            return result;
+            return recur(root);
         }
 
         public verifyNavigationBarContains(name: string, kind: string, fileName?: string, parentName?: string, isAdditionalSpan?: boolean, markerPosition?: number) {
