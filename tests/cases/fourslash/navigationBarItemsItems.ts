@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts"/>
 
 ////// Interface
-////{| "itemName": "IPoint", "kind": "interface", "parentName": "" |}interface IPoint {
+////{| "itemName": "IPoint", "kind": "interface", "parentName": "<global>" |}interface IPoint {
 ////    {| "itemName": "getDist", "kind": "method", "parentName": "IPoint" |}getDist(): number;
 ////    {| "itemName": "new()", "kind": "construct", "parentName": "IPoint" |}new(): IPoint;
 ////    {| "itemName": "()", "kind": "call", "parentName": "IPoint" |}(): any;
@@ -32,7 +32,7 @@
 ////        {| "itemName": "getOrigin", "kind": "method", "parentName": "Point" |}private static getOrigin() { return Point.origin;}
 ////    }
 ////
-////    {| "itemName": "Values", "kind": "enum", "parentName": "" |}enum Values {
+////    {| "itemName": "Values", "kind": "enum", "parentName": "Shapes" |}enum Values {
 ////        value1,
 ////        {| "itemName": "value2", "kind": "property", "parentName": "Values" |}value2,
 ////        value3,
@@ -49,4 +49,4 @@ test.markers().forEach((marker) => {
     }
 });
 
-verify.navigationBarCount(23);
+verify.navigationBarCount(25);

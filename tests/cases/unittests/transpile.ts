@@ -1,90 +1,90 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
-module ts {
+namespace ts {
     describe("Transpile", () => {
-        
+
         interface TranspileTestSettings {
             options?: TranspileOptions;
             expectedOutput?: string;
             expectedDiagnosticCodes?: number[];
         }
-        
+
         function checkDiagnostics(diagnostics: Diagnostic[], expectedDiagnosticCodes?: number[]) {
-            if(!expectedDiagnosticCodes) {
+            if (!expectedDiagnosticCodes) {
                 return;
             }
-            
+
             for (let i = 0; i < expectedDiagnosticCodes.length; i++) {
                 assert.equal(expectedDiagnosticCodes[i], diagnostics[i] && diagnostics[i].code, `Could not find expeced diagnostic.`);
             }
-            assert.equal(diagnostics.length, expectedDiagnosticCodes.length, "Resuting diagnostics count does not match expected");            
+            assert.equal(diagnostics.length, expectedDiagnosticCodes.length, "Resuting diagnostics count does not match expected");
         }
-        
+
         function test(input: string, testSettings: TranspileTestSettings): void {
-            
-            let transpileOptions: TranspileOptions = testSettings.options || {};
+
+            const transpileOptions: TranspileOptions = testSettings.options || {};
             if (!transpileOptions.compilerOptions) {
                 transpileOptions.compilerOptions = {};
             }
-            if(transpileOptions.compilerOptions.newLine === undefined) {
+            if (transpileOptions.compilerOptions.newLine === undefined) { // 
                 // use \r\n as default new line
                 transpileOptions.compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
             }
-            
-            let canUseOldTranspile = !transpileOptions.renamedDependencies;  
-            
+
+            const canUseOldTranspile = !transpileOptions.renamedDependencies;
+
             transpileOptions.reportDiagnostics = true;
-            let transpileModuleResult = transpileModule(input, transpileOptions);
-            
+            const transpileModuleResult = transpileModule(input, transpileOptions);
+
             checkDiagnostics(transpileModuleResult.diagnostics, testSettings.expectedDiagnosticCodes);
-            
+
             if (testSettings.expectedOutput !== undefined) {
                 assert.equal(transpileModuleResult.outputText, testSettings.expectedOutput);
             }
-            
+
             if (canUseOldTranspile) {
-                let diagnostics: Diagnostic[] = [];
-                let transpileResult = transpile(input, transpileOptions.compilerOptions, transpileOptions.fileName, diagnostics, transpileOptions.moduleName);                
+                const diagnostics: Diagnostic[] = [];
+                const transpileResult = transpile(input, transpileOptions.compilerOptions, transpileOptions.fileName, diagnostics, transpileOptions.moduleName);
                 checkDiagnostics(diagnostics, testSettings.expectedDiagnosticCodes);
                 if (testSettings.expectedOutput) {
                     assert.equal(transpileResult, testSettings.expectedOutput);
                 }
             }
-            
+
             // check source maps
             if (!transpileOptions.compilerOptions) {
                 transpileOptions.compilerOptions = {};
             }
-            
+
             if (!transpileOptions.fileName) {
                 transpileOptions.fileName = transpileOptions.compilerOptions.jsx ? "file.tsx" : "file.ts";
             }
-            
+
             transpileOptions.compilerOptions.sourceMap = true;
-            let transpileModuleResultWithSourceMap = transpileModule(input, transpileOptions);
+            const transpileModuleResultWithSourceMap = transpileModule(input, transpileOptions);
             assert.isTrue(transpileModuleResultWithSourceMap.sourceMapText !== undefined);
-            
-            let expectedSourceMapFileName = removeFileExtension(getBaseFileName(normalizeSlashes(transpileOptions.fileName))) + ".js.map";
-            let expectedSourceMappingUrlLine = `//# sourceMappingURL=${expectedSourceMapFileName}`;
-                        
+
+            const expectedSourceMapFileName = removeFileExtension(getBaseFileName(normalizeSlashes(transpileOptions.fileName))) + ".js.map";
+            const expectedSourceMappingUrlLine = `//# sourceMappingURL=${expectedSourceMapFileName}`;
+
             if (testSettings.expectedOutput !== undefined) {
                 assert.equal(transpileModuleResultWithSourceMap.outputText, testSettings.expectedOutput + expectedSourceMappingUrlLine);
             }
             else {
                 // expected output is not set, just verify that output text has sourceMappingURL as a last line
-                let output = transpileModuleResultWithSourceMap.outputText;
+                const output = transpileModuleResultWithSourceMap.outputText;
                 assert.isTrue(output.length >= expectedSourceMappingUrlLine.length);
                 if (output.length === expectedSourceMappingUrlLine.length) {
                     assert.equal(output, expectedSourceMappingUrlLine);
                 }
                 else {
-                    let suffix = getNewLineCharacter(transpileOptions.compilerOptions) + expectedSourceMappingUrlLine
+                    const suffix = getNewLineCharacter(transpileOptions.compilerOptions) + expectedSourceMappingUrlLine;
                     assert.isTrue(output.indexOf(suffix, output.length - suffix.length) !== -1);
                 }
-            }       
+            }
 
         }
-        
+
         it("Generates no diagnostics with valid inputs", () => {
             // No errors
             test(`var x = 0;`, { options: { compilerOptions: { module: ModuleKind.CommonJS } } });
@@ -92,7 +92,7 @@ module ts {
 
         it("Generates no diagnostics for missing file references", () => {
             test(`/// <reference path="file2.ts" />
-var x = 0;`, 
+var x = 0;`,
                 { options: { compilerOptions: { module: ModuleKind.CommonJS } } });
         });
 
@@ -112,23 +112,23 @@ var x = 0;`,
         });
 
         it("Generates module output", () => {
-            test(`var x = 0;`, 
-                { 
-                    options: { compilerOptions: { module: ModuleKind.AMD } }, 
+            test(`var x = 0;`,
+                {
+                    options: { compilerOptions: { module: ModuleKind.AMD } },
                     expectedOutput: `define(["require", "exports"], function (require, exports) {\r\n    "use strict";\r\n    var x = 0;\r\n});\r\n`
                 });
         });
 
         it("Uses correct newLine character", () => {
-            test(`var x = 0;`, 
-                { 
-                    options: { compilerOptions: { module: ModuleKind.CommonJS, newLine: NewLineKind.LineFeed } }, 
+            test(`var x = 0;`,
+                {
+                    options: { compilerOptions: { module: ModuleKind.CommonJS, newLine: NewLineKind.LineFeed } },
                     expectedOutput: `"use strict";\nvar x = 0;\n`
                 });
         });
 
         it("Sets module name", () => {
-            let output =
+            const output =
                 `System.register("NamedModule", [], function(exports_1, context_1) {\n` +
                 `    "use strict";\n` +
                 `    var __moduleName = context_1 && context_1.id;\n` +
@@ -140,11 +140,11 @@ var x = 0;`,
                 `        }\n` +
                 `    }\n` +
                 `});\n`;
-            test("var x = 1;", 
-                { 
-                    options: { compilerOptions: { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, moduleName: "NamedModule" }, 
+            test("var x = 1;",
+                {
+                    options: { compilerOptions: { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, moduleName: "NamedModule" },
                     expectedOutput: output
-                })
+                });
         });
 
         it("No extra errors for file without extension", () => {
@@ -152,11 +152,11 @@ var x = 0;`,
         });
 
         it("Rename dependencies - System", () => {
-            let input = 
+            const input =
                 `import {foo} from "SomeName";\n` +
                 `declare function use(a: any);\n` +
-                `use(foo);`
-            let output =
+                `use(foo);`;
+            const output =
                 `System.register(["SomeOtherName"], function(exports_1, context_1) {\n` +
                 `    "use strict";\n` +
                 `    var __moduleName = context_1 && context_1.id;\n` +
@@ -170,39 +170,39 @@ var x = 0;`,
                 `            use(SomeName_1.foo);\n` +
                 `        }\n` +
                 `    }\n` +
-                `});\n`
+                `});\n`;
 
-            test(input, 
-                { 
-                    options: { compilerOptions: { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } }, 
+            test(input,
+                {
+                    options: { compilerOptions: { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } },
                     expectedOutput: output
                 });
         });
 
         it("Rename dependencies - AMD", () => {
-            let input = 
+            const input =
                 `import {foo} from "SomeName";\n` +
                 `declare function use(a: any);\n` +
-                `use(foo);`
-            let output =
+                `use(foo);`;
+            const output =
                 `define(["require", "exports", "SomeOtherName"], function (require, exports, SomeName_1) {\n` +
                 `    "use strict";\n` +
                 `    use(SomeName_1.foo);\n` +
                 `});\n`;
 
-            test(input, 
-                { 
-                    options: { compilerOptions: { module: ModuleKind.AMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } }, 
+            test(input,
+                {
+                    options: { compilerOptions: { module: ModuleKind.AMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } },
                     expectedOutput: output
                 });
         });
 
         it("Rename dependencies - UMD", () => {
-            let input = 
+            const input =
                 `import {foo} from "SomeName";\n` +
                 `declare function use(a: any);\n` +
-                `use(foo);`
-            let output =
+                `use(foo);`;
+            const output =
                 `(function (factory) {\n` +
                 `    if (typeof module === 'object' && typeof module.exports === 'object') {\n` +
                 `        var v = factory(require, exports); if (v !== undefined) module.exports = v;\n` +
@@ -216,15 +216,15 @@ var x = 0;`,
                 `    use(SomeName_1.foo);\n` +
                 `});\n`;
 
-            test(input, 
-                { 
-                    options: { compilerOptions: { module: ModuleKind.UMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } }, 
+            test(input,
+                {
+                    options: { compilerOptions: { module: ModuleKind.UMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } },
                     expectedOutput: output
                 });
         });
-        
+
         it("Transpile with emit decorators and emit metadata", () => {
-            let input = 
+            const input =
                 `import {db} from './db';\n` +
                 `function someDecorator(target) {\n` +
                 `    return target;\n` +
@@ -237,29 +237,29 @@ var x = 0;`,
                 `        this.db.doSomething(); \n` +
                 `    }\n` +
                 `}\n` +
-                `export {MyClass}; \n`
-            let output =
+                `export {MyClass}; \n`;
+            const output =
                 `"use strict";\n` +
-                `var db_1 = require(\'./db\');\n` + 
+                `var db_1 = require(\'./db\');\n` +
                 `function someDecorator(target) {\n` +
                 `    return target;\n` +
-                `}\n` + 
-                `var MyClass = (function () {\n` + 
-                `    function MyClass(db) {\n` + 
-                `        this.db = db;\n` + 
-                `        this.db.doSomething();\n` + 
-                `    }\n` + 
-                `    MyClass = __decorate([\n` + 
-                `        someDecorator, \n` + 
-                `        __metadata(\'design:paramtypes\', [(typeof (_a = typeof db_1.db !== \'undefined\' && db_1.db) === \'function\' && _a) || Object])\n` + 
-                `    ], MyClass);\n` + 
-                `    return MyClass;\n` + 
-                `    var _a;\n` + 
-                `}());\n` + 
+                `}\n` +
+                `var MyClass = (function () {\n` +
+                `    function MyClass(db) {\n` +
+                `        this.db = db;\n` +
+                `        this.db.doSomething();\n` +
+                `    }\n` +
+                `    MyClass = __decorate([\n` +
+                `        someDecorator, \n` +
+                `        __metadata(\'design:paramtypes\', [(typeof (_a = typeof db_1.db !== \'undefined\' && db_1.db) === \'function\' && _a) || Object])\n` +
+                `    ], MyClass);\n` +
+                `    return MyClass;\n` +
+                `    var _a;\n` +
+                `}());\n` +
                 `exports.MyClass = MyClass;\n`;
 
-            test(input, 
-                { 
+            test(input,
+                {
                     options: {
                         compilerOptions: {
                             module: ModuleKind.CommonJS,
@@ -269,7 +269,7 @@ var x = 0;`,
                             experimentalDecorators: true,
                             target: ScriptTarget.ES5,
                         }
-                    }, 
+                    },
                     expectedOutput: output
                 });
         });
@@ -279,12 +279,12 @@ var x = 0;`,
         });
 
         it("transpile file as 'tsx' if 'jsx' is specified", () => {
-            let input = `var x = <div/>`;
-            let output = `"use strict";\nvar x = React.createElement("div", null);\n`;
+            const input = `var x = <div/>`;
+            const output = `"use strict";\nvar x = React.createElement("div", null);\n`;
             test(input, {
                 expectedOutput: output,
                 options: { compilerOptions: { jsx: JsxEmit.React, newLine: NewLineKind.LineFeed } }
-            })
+            });
         });
 
         it("transpile .js files", () => {
@@ -295,7 +295,7 @@ var x = 0;`,
                 options: { compilerOptions: { newLine: NewLineKind.LineFeed, module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true },
                 expectedDiagnosticCodes: []
             });
-        })
+        });
 
         it("Supports urls in file name", () => {
             test("var x", { expectedOutput: `"use strict";\r\nvar x;\r\n`, options: { fileName: "http://somewhere/directory//directory2/file.ts" } });

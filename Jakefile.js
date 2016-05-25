@@ -737,40 +737,64 @@ function runConsoleTests(defaultReporter, runInParallel) {
         exec(cmd, function () {
             runLinter();
             finish();
-        }, finish);
+        }, function(e, status) {
+            finish(status);
+        });
         
     }
     else {
-        // run task to load all tests and partition then between workers 
+        // run task to load all tests and partition them between workers 
         var cmd = "mocha " + " -R min " + colors + run;
         console.log(cmd);
         exec(cmd, function() {
             // read all configuration files and spawn a worker for every config
             var configFiles = fs.readdirSync(taskConfigsFolder);
             var counter = configFiles.length;
+            var firstErrorStatus;
             // schedule work for chunks
             configFiles.forEach(function (f) {
                 var configPath = path.join(taskConfigsFolder, f);
                 var workerCmd = "mocha" + " -t " + testTimeout + " -R " + reporter + " " + colors + " " + run + " --config='" + configPath + "'";
                 console.log(workerCmd);
-                exec(workerCmd, finishWorker, finishWorker) 
+                exec(workerCmd,  finishWorker, finishWorker) 
             });
             
-            function finishWorker() {
+            function finishWorker(errorStatus) {
                 counter--;
-                if (counter === 0) {
-                    // last worker clean everything and runs linter
-                    runLinter();
+                if (firstErrorStatus === undefined && errorStatus !== undefined) {
+                    firstErrorStatus = errorStatus;
+                }
+                if (counter !== 0) {
+                    complete();
+                }
+                else {
+                    // last worker clean everything and runs linter in case if there were no errors
                     deleteTemporaryProjectOutput();
                     jake.rmRf(taskConfigsFolder);
+                    if (firstErrorStatus === undefined) {
+                        runLinter();
+                        complete();
+                    }
+                    else {
+                        failWithStatus(firstErrorStatus);
+                    }
                 }
-                complete();
             }
         });
     }
-    function finish() {
+    
+    function failWithStatus(status) {
+        fail("Process exited with code " + status);
+    }
+    
+    function finish(errorStatus) {
         deleteTemporaryProjectOutput();
-        complete();
+        if (errorStatus !== undefined) {
+            failWithStatus(errorStatus);
+        }
+        else {
+            complete();
+        }
     }
     function runLinter() {
         if (!lintFlag) {
@@ -999,39 +1023,30 @@ function lintFileAsync(options, path, cb) {
     });
 }
 
-var servicesLintTargets = [
-    "navigateTo.ts",
-    "navigationBar.ts",
-    "outliningElementsCollector.ts",
-    "patternMatcher.ts",
-    "services.ts",
-    "shims.ts",
-    "jsTyping.ts"
-].map(function (s) {
-    return path.join(servicesDirectory, s);
-});
 var lintTargets = compilerSources
-    .concat(harnessCoreSources)
+    .concat(harnessSources)
     // Other harness sources
     .concat(["instrumenter.ts"].map(function(f) { return path.join(harnessDirectory, f) }))
     .concat(serverCoreSources)
-    .concat(["client.ts"].map(function(f) { return path.join(serverDirectory, f); }))
     .concat(tslintRulesFiles)
-    .concat(servicesLintTargets);
+    .concat(servicesSources);
+
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
 task("lint", ["build-rules"], function() {
     var lintOptions = getLinterOptions();
     var failed = 0;
     var fileMatcher = RegExp(process.env.f || process.env.file || process.env.files || "");
+    var done = {};
     for (var i in lintTargets) {
         var target = lintTargets[i];
-        if (fileMatcher.test(target)) {
+        if (!done[target] && fileMatcher.test(target)) {
             var result = lintFile(lintOptions, target);
             if (result.failureCount > 0) {
                 console.log(result.output);
                 failed += result.failureCount;
             }
+            done[target] = true;
         }
     }
     if (failed > 0) {

@@ -4,8 +4,8 @@
 namespace ts.formatting {
     export class Rules {
         public getRuleName(rule: Rule) {
-            let o: ts.Map<any> = <any>this;
-            for (let name in o) {
+            const o: ts.Map<any> = <any>this;
+            for (const name in o) {
                 if (o[name] === rule) {
                     return name;
                 }
@@ -166,7 +166,7 @@ namespace ts.formatting {
         public NoSpaceAfterKeywordInControl: Rule;
 
         // Open Brace braces after function
-        //TypeScript: Function can have return types, which can be made of tons of different token kinds
+        // TypeScript: Function can have return types, which can be made of tons of different token kinds
         public FunctionOpenBraceLeftTokenRange: Shared.TokenRange;
         public SpaceBeforeOpenBraceInFunction: Rule;
         public NewLineBeforeOpenBraceInFunction: Rule;
@@ -313,7 +313,7 @@ namespace ts.formatting {
             this.SpaceAfterVoidOperator = new Rule(RuleDescriptor.create3(SyntaxKind.VoidKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsVoidOpContext), RuleAction.Space));
 
             this.NoSpaceBetweenReturnAndSemicolon = new Rule(RuleDescriptor.create1(SyntaxKind.ReturnKeyword, SyntaxKind.SemicolonToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
-            
+
             // Add a space between statements. All keywords except (do,else,case) has open/close parens after them.
             // So, we have a rule to add a space for [),Any], [do,Any], [else,Any], and [case,Any]
             this.SpaceBetweenStatements = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.CloseParenToken, SyntaxKind.DoKeyword, SyntaxKind.ElseKeyword, SyntaxKind.CaseKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsNotForContext), RuleAction.Space));
@@ -458,7 +458,7 @@ namespace ts.formatting {
             this.NoSpaceAfterKeywordInControl = new Rule(RuleDescriptor.create2(Shared.TokenRange.Keywords, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsControlDeclContext), RuleAction.Delete));
 
             // Open Brace braces after function
-            //TypeScript: Function can have return types, which can be made of tons of different token kinds
+            // TypeScript: Function can have return types, which can be made of tons of different token kinds
             this.NewLineBeforeOpenBraceInFunction = new Rule(RuleDescriptor.create2(this.FunctionOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext, Rules.IsBeforeMultilineBlockContext), RuleAction.NewLine), RuleFlags.CanDeleteNewLines);
 
             // Open Brace braces after TypeScript module/class/interface
@@ -616,17 +616,17 @@ namespace ts.formatting {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                //case SyntaxKind.MemberFunctionDeclaration:
+                // case SyntaxKind.MemberFunctionDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                ///case SyntaxKind.MethodSignature:
+                // case SyntaxKind.MethodSignature:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.ArrowFunction:
-                //case SyntaxKind.ConstructorDeclaration:
-                //case SyntaxKind.SimpleArrowFunctionExpression:
-                //case SyntaxKind.ParenthesizedArrowFunctionExpression:
+                // case SyntaxKind.ConstructorDeclaration:
+                // case SyntaxKind.SimpleArrowFunctionExpression:
+                // case SyntaxKind.ParenthesizedArrowFunctionExpression:
                 case SyntaxKind.InterfaceDeclaration: // This one is not truly a function, but for formatting purposes, it acts just like one
                     return true;
             }
@@ -724,7 +724,7 @@ namespace ts.formatting {
         }
 
         static IsNotBeforeBlockInFunctionDeclarationContext(context: FormattingContext): boolean {
-            return !Rules.IsFunctionDeclContext(context) && !Rules.IsBeforeBlockContext(context)
+            return !Rules.IsFunctionDeclContext(context) && !Rules.IsBeforeBlockContext(context);
         }
 
         static IsEndOfDecoratorContextOnSameLine(context: FormattingContext): boolean {
@@ -755,7 +755,7 @@ namespace ts.formatting {
         }
 
         static IsObjectTypeContext(context: FormattingContext): boolean {
-            return context.contextNode.kind === SyntaxKind.TypeLiteral;// && context.contextNode.parent.kind !== SyntaxKind.InterfaceDeclaration;
+            return context.contextNode.kind === SyntaxKind.TypeLiteral; // && context.contextNode.parent.kind !== SyntaxKind.InterfaceDeclaration;
         }
 
         static IsTypeArgumentOrParameterOrAssertion(token: TextRangeWithKind, parent: Node): boolean {
