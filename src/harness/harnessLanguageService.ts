@@ -172,7 +172,7 @@ namespace Harness.LanguageService {
           */
         public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
             const script: ScriptInfo = this.fileNameToScript[fileName];
-            assert.isNotNull(script);
+            assert.isOk(script);
 
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
         }

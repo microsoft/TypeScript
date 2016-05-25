@@ -1,6 +1,7 @@
 /// <reference path="harness.ts" />
 /// <reference path="runnerbase.ts" />
 /// <reference path="typeWriter.ts" />
+// In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
 /* tslint:disable:no-null-keyword */
 
 const enum CompilerTestType {

@@ -20,8 +20,6 @@
 /// <reference path="rwcRunner.ts" />
 /// <reference path="harness.ts" />
 
-/* tslint:disable:no-null-keyword */
-
 let runners: RunnerBase[] = [];
 let iterations = 1;
 
