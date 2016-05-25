@@ -386,7 +386,7 @@ namespace ts {
                 return undefined;
             }
 
-            const configParseResult = parseJsonConfigFileContent(result.resultObject, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), sys.getCurrentDirectory()), commandLine.options, configFileName);
+            const configParseResult = parseJsonConfigFileContent(result.resultObject || {}, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), sys.getCurrentDirectory()), commandLine.options, configFileName);
             if (configParseResult.errors.length > 0) {
                 reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);

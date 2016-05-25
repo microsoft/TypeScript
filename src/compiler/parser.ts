@@ -562,7 +562,7 @@ namespace ts {
         /**
          * Returns an object that has been parsed from a JSON file, along with any errors found in parsing.
          */
-        export function parseJsonObjectResiliently(fileName: string, _sourceText: string): { resultObject?: Json.JsonObject, errors: Diagnostic[] } {
+        export function parseJsonObjectResiliently(fileName: string, _sourceText: string): { resultObject: Json.JsonObject | undefined, errors: Diagnostic[] } {
             initializeState(fileName, _sourceText, ScriptTarget.Latest, /*_syntaxCursor*/ undefined, ScriptKind.JS);
 
             // Create a dummy source file just to work resiliently.
@@ -575,6 +575,12 @@ namespace ts {
 
             // Prime the scanner.
             nextToken();
+
+            // Maintain old behavior where a file with nothing or nothing but whitespace/comments
+            // creates an empty configuration.
+            if (token === SyntaxKind.EndOfFileToken) {
+                return { resultObject: undefined, errors: [] };
+            }
 
             const jsonObjectRoot = parseTopLevelJsonObjectForFile();
             const resultObject = jsonObjectRoot ?
