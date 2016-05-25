@@ -19,3 +19,7 @@ var b5: Book & Cover = { foreward: "hi", color: "blue" };
 var b6: Book & Cover = { foreword: "hi", color: "blue", price: 10.99 };
 
 var b7: Book & number = { foreword: "hi", price: 10.99 };
+
+var b8: Cover | Cover[] = { couleur : "non" };
+
+var b9: Book | Book[] = { forewarned: "still no" };

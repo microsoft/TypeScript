@@ -21,6 +21,10 @@ var b6: Book & Cover = { foreword: "hi", color: "blue", price: 10.99 };
 
 var b7: Book & number = { foreword: "hi", price: 10.99 };
 
+var b8: Cover | Cover[] = { couleur : "non" };
+
+var b9: Book | Book[] = { forewarned: "still no" };
+
 
 //// [objectLiteralExcessProperties.js]
 var b1 = { forword: "oops" };
@@ -30,3 +34,5 @@ var b4 = { foreword: "hi", colour: "blue" };
 var b5 = { foreward: "hi", color: "blue" };
 var b6 = { foreword: "hi", color: "blue", price: 10.99 };
 var b7 = { foreword: "hi", price: 10.99 };
+var b8 = { couleur: "non" };
+var b9 = { forewarned: "still no" };
