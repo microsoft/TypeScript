@@ -741,7 +741,8 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
 
             deleteTemporaryProjectOutput();
             if (counter !== 0 || errorStatus === undefined) {
-                if (lintFlag) {
+                // run linter when last worker is finished
+                if (lintFlag && counter === 0) {
                     var lint = jake.Task['lint'];
                     lint.addListener('complete', function () {
                         complete();
