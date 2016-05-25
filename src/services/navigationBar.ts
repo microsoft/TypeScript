@@ -320,6 +320,9 @@ namespace ts.NavigationBar {
                 case SyntaxKind.EnumMember:
                     return createItem(node, getTextOfNode((<EnumMember>node).name), ts.ScriptElementKind.memberVariableElement);
 
+                case SyntaxKind.InterfaceDeclaration:
+                    return createItem(node, getTextOfNode((<InterfaceDeclaration>node).name), ts.ScriptElementKind.interfaceElement);
+
                 case SyntaxKind.CallSignature:
                     return createItem(node, "()", ts.ScriptElementKind.callSignatureElement);
 

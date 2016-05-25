@@ -12975,18 +12975,20 @@ namespace ts {
                     const names = static ? staticNames : instanceNames;
 
                     const memberName = member.name && getPropertyNameForPropertyNameNode(member.name);
-                    switch (member.kind) {
-                        case SyntaxKind.GetAccessor:
-                            addName(names, member.name, memberName, getter);
-                            break;
+                    if (memberName) {
+                        switch (member.kind) {
+                            case SyntaxKind.GetAccessor:
+                                addName(names, member.name, memberName, getter);
+                                break;
 
-                        case SyntaxKind.SetAccessor:
-                            addName(names, member.name, memberName, setter);
-                            break;
+                            case SyntaxKind.SetAccessor:
+                                addName(names, member.name, memberName, setter);
+                                break;
 
-                        case SyntaxKind.PropertyDeclaration:
-                            addName(names, member.name, memberName, property);
-                            break;
+                            case SyntaxKind.PropertyDeclaration:
+                                addName(names, member.name, memberName, property);
+                                break;
+                        }
                     }
                 }
             }
