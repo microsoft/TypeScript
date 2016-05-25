@@ -1096,14 +1096,6 @@ namespace FourSlash {
             }
             addSpanInfoString();
             return resultString;
-
-            function repeatString(count: number, char: string) {
-                let result = "";
-                for (let i = 0; i < count; i++) {
-                    result += char;
-                }
-                return result;
-            }
         }
 
         public getBreakpointStatementLocation(pos: number) {
@@ -2055,7 +2047,7 @@ namespace FourSlash {
 
             for (let i = 0; i < length; i++) {
                 const item = items[i];
-                Harness.IO.log(`name: ${item.text}, kind: ${item.kind}`);
+                Harness.IO.log(`${repeatString(item.indent, " ")}name: ${item.text}, kind: ${item.kind}, childItems: ${item.childItems.map(child => child.text)}`);
             }
         }
 
@@ -2741,6 +2733,14 @@ ${code}
             version: 0,
             fileName: fileName
         };
+    }
+
+    function repeatString(count: number, char: string) {
+        let result = "";
+        for (let i = 0; i < count; i++) {
+            result += char;
+        }
+        return result;
     }
 }
 
