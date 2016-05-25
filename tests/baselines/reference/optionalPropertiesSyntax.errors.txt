@@ -5,9 +5,9 @@ tests/cases/compiler/optionalPropertiesSyntax.ts(12,5): error TS1131: Property o
 tests/cases/compiler/optionalPropertiesSyntax.ts(18,11): error TS1005: ';' expected.
 tests/cases/compiler/optionalPropertiesSyntax.ts(18,12): error TS1131: Property or signature expected.
 tests/cases/compiler/optionalPropertiesSyntax.ts(24,5): error TS2300: Duplicate identifier 'prop'.
-tests/cases/compiler/optionalPropertiesSyntax.ts(24,5): error TS2686: All declarations of 'prop' must have identical modifiers.
+tests/cases/compiler/optionalPropertiesSyntax.ts(24,5): error TS2687: All declarations of 'prop' must have identical modifiers.
 tests/cases/compiler/optionalPropertiesSyntax.ts(25,5): error TS2300: Duplicate identifier 'prop'.
-tests/cases/compiler/optionalPropertiesSyntax.ts(25,5): error TS2686: All declarations of 'prop' must have identical modifiers.
+tests/cases/compiler/optionalPropertiesSyntax.ts(25,5): error TS2687: All declarations of 'prop' must have identical modifiers.
 tests/cases/compiler/optionalPropertiesSyntax.ts(32,5): error TS2375: Duplicate number index signature.
 tests/cases/compiler/optionalPropertiesSyntax.ts(32,18): error TS1005: ';' expected.
 tests/cases/compiler/optionalPropertiesSyntax.ts(32,19): error TS1131: Property or signature expected.
@@ -56,12 +56,12 @@ tests/cases/compiler/optionalPropertiesSyntax.ts(34,5): error TS2375: Duplicate 
         ~~~~
 !!! error TS2300: Duplicate identifier 'prop'.
         ~~~~
-!!! error TS2686: All declarations of 'prop' must have identical modifiers.
+!!! error TS2687: All declarations of 'prop' must have identical modifiers.
         prop?: any;
         ~~~~
 !!! error TS2300: Duplicate identifier 'prop'.
         ~~~~
-!!! error TS2686: All declarations of 'prop' must have identical modifiers.
+!!! error TS2687: All declarations of 'prop' must have identical modifiers.
         prop2?: any;
     }
     

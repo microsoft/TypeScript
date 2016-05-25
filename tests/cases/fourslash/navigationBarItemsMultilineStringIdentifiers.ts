@@ -10,7 +10,7 @@
 ////{| "itemName": "\"MultilineMadness\"", "kind": "module" |}
 ////declare module "MultilineMadness" {}
 ////
-////{| "itemName": "Foo", "kind": "interface" |}
+////{| "itemName": "Foo", "kind": "interface", "parentName": "<global>" |}
 ////interface Foo {
 ////    {| "itemName": "\"a1\\\\\\r\\nb\"", "kind": "property", "parentName": "Foo" |}
 ////    "a1\\\r\nb";

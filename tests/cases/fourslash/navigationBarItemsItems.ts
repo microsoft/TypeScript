@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts"/>
 
 ////// Interface
-////{| "itemName": "IPoint", "kind": "interface", "parentName": "" |}interface IPoint {
+////{| "itemName": "IPoint", "kind": "interface", "parentName": "<global>" |}interface IPoint {
 ////    {| "itemName": "getDist", "kind": "method", "parentName": "IPoint" |}getDist(): number;
 ////    {| "itemName": "new()", "kind": "construct", "parentName": "IPoint" |}new(): IPoint;
 ////    {| "itemName": "()", "kind": "call", "parentName": "IPoint" |}(): any;
@@ -49,4 +49,4 @@ test.markers().forEach((marker) => {
     }
 });
 
-verify.navigationBarCount(25);
+verify.navigationBarCount(26);
