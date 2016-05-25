@@ -726,24 +726,39 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
         subsetRegexes = subsets.map(function (sub) { return "^" + sub + ".*$"; });
         subsetRegexes.push("^(?!" + subsets.join("|") + ").*$");
     }
+    var counter = subsetRegexes.length;
+    var errorStatus;
     subsetRegexes.forEach(function (subsetRegex, i) {
         tests = subsetRegex ? ' -g "' + subsetRegex + '"' : '';
         var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
-        function finish() {
+        function finish(status) {
+            counter--;
+            // save first error status
+            if (status !== undefined && errorStatus === undefined) {
+                errorStatus = status;
+            }
+
             deleteTemporaryProjectOutput();
-            complete();
+            if (counter !== 0 || errorStatus === undefined) {
+                if (lintFlag) {
+                    var lint = jake.Task['lint'];
+                    lint.addListener('complete', function () {
+                        complete();
+                    });
+                    lint.invoke();
+                }
+                complete();
+            }
+            else {
+                fail("Process exited with code " + status);
+            }
         }
         exec(cmd, function () {
-            if (lintFlag && i === 0) {
-                var lint = jake.Task['lint'];
-                lint.addListener('complete', function () {
-                    complete();
-                });
-                lint.invoke();
-            }
             finish();
-        }, finish);
+        }, function(e, status) {
+            finish(status);
+        });
     });
 }
 
