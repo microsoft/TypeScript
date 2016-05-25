@@ -267,6 +267,9 @@ namespace ts {
             // find the child that contains 'position'
             for (let i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
                 const child = current.getChildAt(i);
+                if (position < child.getFullStart() || position > child.getEnd()) {
+                    continue;
+                }
                 const start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile);
                 if (start <= position) {
                     const end = child.getEnd();
