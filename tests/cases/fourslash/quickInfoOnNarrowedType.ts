@@ -31,8 +31,8 @@ verify.quickInfoIs('(parameter) strOrNum: string');
 verify.completionListContains("strOrNum", "(parameter) strOrNum: string");
 
 goTo.marker('4');
-verify.quickInfoIs('let s: undefined');
-verify.completionListContains("s", "let s: undefined");
+verify.quickInfoIs('let s: string | undefined');
+verify.completionListContains("s", "let s: string | undefined");
 
 goTo.marker('5');
 verify.quickInfoIs('let s: string | undefined');

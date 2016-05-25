@@ -129,8 +129,8 @@ namespace ts {
         let Symbol: { new (flags: SymbolFlags, name: string): Symbol };
         let classifiableNames: Map<string>;
 
-        const unreachableFlow: FlowNode = { kind: FlowKind.Unreachable };
-        const reportedUnreachableFlow: FlowNode = { kind: FlowKind.Unreachable };
+        const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
+        const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
 
         function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
             file = f;
@@ -138,6 +138,7 @@ namespace ts {
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = !!file.externalModuleIndicator;
             classifiableNames = {};
+            symbolCount = 0;
 
             Symbol = objectAllocator.getSymbolConstructor();
 
@@ -479,7 +480,7 @@ namespace ts {
                 savedActiveLabels = activeLabels;
 
                 hasExplicitReturn = false;
-                currentFlow = { kind: FlowKind.Start };
+                currentFlow = { flags: FlowFlags.Start };
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
                 activeLabels = undefined;
@@ -487,7 +488,7 @@ namespace ts {
 
             bindReachableStatement(node);
 
-            if (currentFlow.kind !== FlowKind.Unreachable && isFunctionLikeKind(kind) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
+            if (!(currentFlow.flags & FlowFlags.Unreachable) && isFunctionLikeKind(kind) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
                 flags |= NodeFlags.HasImplicitReturn;
                 if (hasExplicitReturn) {
                     flags |= NodeFlags.HasExplicitReturn;
@@ -584,6 +585,9 @@ namespace ts {
                 case SyntaxKind.BinaryExpression:
                     bindBinaryExpressionFlow(<BinaryExpression>node);
                     break;
+                case SyntaxKind.DeleteExpression:
+                    bindDeleteExpressionFlow(<DeleteExpression>node);
+                    break;
                 case SyntaxKind.ConditionalExpression:
                     bindConditionalExpressionFlow(<ConditionalExpression>node);
                     break;
@@ -643,50 +647,58 @@ namespace ts {
             return false;
         }
 
-        function createFlowLabel(): FlowLabel {
+        function createBranchLabel(): FlowLabel {
             return {
-                kind: FlowKind.Label,
+                flags: FlowFlags.BranchLabel,
                 antecedents: undefined
             };
         }
 
-        function createFlowLoopLabel(): FlowLabel {
+        function createLoopLabel(): FlowLabel {
             return {
-                kind: FlowKind.LoopLabel,
+                flags: FlowFlags.LoopLabel,
                 antecedents: undefined
             };
+        }
+
+        function setFlowNodeReferenced(flow: FlowNode) {
+            // On first reference we set the Referenced flag, thereafter we set the Shared flag
+            flow.flags |= flow.flags & FlowFlags.Referenced ? FlowFlags.Shared : FlowFlags.Referenced;
         }
 
         function addAntecedent(label: FlowLabel, antecedent: FlowNode): void {
-            if (antecedent.kind !== FlowKind.Unreachable && !contains(label.antecedents, antecedent)) {
+            if (!(antecedent.flags & FlowFlags.Unreachable) && !contains(label.antecedents, antecedent)) {
                 (label.antecedents || (label.antecedents = [])).push(antecedent);
+                setFlowNodeReferenced(antecedent);
             }
         }
 
-        function createFlowCondition(antecedent: FlowNode, expression: Expression, assumeTrue: boolean): FlowNode {
-            if (antecedent.kind === FlowKind.Unreachable) {
+        function createFlowCondition(flags: FlowFlags, antecedent: FlowNode, expression: Expression): FlowNode {
+            if (antecedent.flags & FlowFlags.Unreachable) {
                 return antecedent;
             }
             if (!expression) {
-                return assumeTrue ? antecedent : unreachableFlow;
+                return flags & FlowFlags.TrueCondition ? antecedent : unreachableFlow;
             }
-            if (expression.kind === SyntaxKind.TrueKeyword && !assumeTrue || expression.kind === SyntaxKind.FalseKeyword && assumeTrue) {
+            if (expression.kind === SyntaxKind.TrueKeyword && flags & FlowFlags.FalseCondition ||
+                expression.kind === SyntaxKind.FalseKeyword && flags & FlowFlags.TrueCondition) {
                 return unreachableFlow;
             }
             if (!isNarrowingExpression(expression)) {
                 return antecedent;
             }
+            setFlowNodeReferenced(antecedent);
             return <FlowCondition>{
-                kind: FlowKind.Condition,
+                flags,
                 antecedent,
                 expression,
-                assumeTrue
             };
         }
 
         function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
+            setFlowNodeReferenced(antecedent);
             return <FlowAssignment>{
-                kind: FlowKind.Assignment,
+                flags: FlowFlags.Assignment,
                 antecedent,
                 node
             };
@@ -751,8 +763,8 @@ namespace ts {
             currentTrueTarget = saveTrueTarget;
             currentFalseTarget = saveFalseTarget;
             if (!node || !isLogicalExpression(node)) {
-                addAntecedent(trueTarget, createFlowCondition(currentFlow, node, /*assumeTrue*/ true));
-                addAntecedent(falseTarget, createFlowCondition(currentFlow, node, /*assumeTrue*/ false));
+                addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
+                addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
             }
         }
 
@@ -767,9 +779,9 @@ namespace ts {
         }
 
         function bindWhileStatement(node: WhileStatement): void {
-            const preWhileLabel = createFlowLoopLabel();
-            const preBodyLabel = createFlowLabel();
-            const postWhileLabel = createFlowLabel();
+            const preWhileLabel = createLoopLabel();
+            const preBodyLabel = createBranchLabel();
+            const postWhileLabel = createBranchLabel();
             addAntecedent(preWhileLabel, currentFlow);
             currentFlow = preWhileLabel;
             bindCondition(node.expression, preBodyLabel, postWhileLabel);
@@ -780,9 +792,9 @@ namespace ts {
         }
 
         function bindDoStatement(node: DoStatement): void {
-            const preDoLabel = createFlowLoopLabel();
-            const preConditionLabel = createFlowLabel();
-            const postDoLabel = createFlowLabel();
+            const preDoLabel = createLoopLabel();
+            const preConditionLabel = createBranchLabel();
+            const postDoLabel = createBranchLabel();
             addAntecedent(preDoLabel, currentFlow);
             currentFlow = preDoLabel;
             bindIterativeStatement(node.statement, postDoLabel, preConditionLabel);
@@ -793,9 +805,9 @@ namespace ts {
         }
 
         function bindForStatement(node: ForStatement): void {
-            const preLoopLabel = createFlowLoopLabel();
-            const preBodyLabel = createFlowLabel();
-            const postLoopLabel = createFlowLabel();
+            const preLoopLabel = createLoopLabel();
+            const preBodyLabel = createBranchLabel();
+            const postLoopLabel = createBranchLabel();
             bind(node.initializer);
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = preLoopLabel;
@@ -808,8 +820,8 @@ namespace ts {
         }
 
         function bindForInOrForOfStatement(node: ForInStatement | ForOfStatement): void {
-            const preLoopLabel = createFlowLoopLabel();
-            const postLoopLabel = createFlowLabel();
+            const preLoopLabel = createLoopLabel();
+            const postLoopLabel = createBranchLabel();
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = preLoopLabel;
             bind(node.expression);
@@ -824,9 +836,9 @@ namespace ts {
         }
 
         function bindIfStatement(node: IfStatement): void {
-            const thenLabel = createFlowLabel();
-            const elseLabel = createFlowLabel();
-            const postIfLabel = createFlowLabel();
+            const thenLabel = createBranchLabel();
+            const elseLabel = createBranchLabel();
+            const postIfLabel = createBranchLabel();
             bindCondition(node.expression, thenLabel, elseLabel);
             currentFlow = finishFlowLabel(thenLabel);
             bind(node.thenStatement);
@@ -879,7 +891,7 @@ namespace ts {
         }
 
         function bindTryStatement(node: TryStatement): void {
-            const postFinallyLabel = createFlowLabel();
+            const postFinallyLabel = createBranchLabel();
             const preTryFlow = currentFlow;
             // TODO: Every statement in try block is potentially an exit point!
             bind(node.tryBlock);
@@ -897,7 +909,7 @@ namespace ts {
         }
 
         function bindSwitchStatement(node: SwitchStatement): void {
-            const postSwitchLabel = createFlowLabel();
+            const postSwitchLabel = createBranchLabel();
             bind(node.expression);
             const saveBreakTarget = currentBreakTarget;
             const savePreSwitchCaseFlow = preSwitchCaseFlow;
@@ -919,17 +931,17 @@ namespace ts {
             for (let i = 0; i < clauses.length; i++) {
                 const clause = clauses[i];
                 if (clause.statements.length) {
-                    if (currentFlow.kind === FlowKind.Unreachable) {
+                    if (currentFlow.flags & FlowFlags.Unreachable) {
                         currentFlow = preSwitchCaseFlow;
                     }
                     else {
-                        const preCaseLabel = createFlowLabel();
+                        const preCaseLabel = createBranchLabel();
                         addAntecedent(preCaseLabel, preSwitchCaseFlow);
                         addAntecedent(preCaseLabel, currentFlow);
                         currentFlow = finishFlowLabel(preCaseLabel);
                     }
                     bind(clause);
-                    if (currentFlow.kind !== FlowKind.Unreachable && i !== clauses.length - 1 && options.noFallthroughCasesInSwitch) {
+                    if (!(currentFlow.flags & FlowFlags.Unreachable) && i !== clauses.length - 1 && options.noFallthroughCasesInSwitch) {
                         errorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
                     }
                 }
@@ -955,8 +967,8 @@ namespace ts {
         }
 
         function bindLabeledStatement(node: LabeledStatement): void {
-            const preStatementLabel = createFlowLoopLabel();
-            const postStatementLabel = createFlowLabel();
+            const preStatementLabel = createLoopLabel();
+            const postStatementLabel = createBranchLabel();
             bind(node.label);
             addAntecedent(preStatementLabel, currentFlow);
             const activeLabel = pushActiveLabel(node.label.text, postStatementLabel, preStatementLabel);
@@ -1005,7 +1017,7 @@ namespace ts {
         }
 
         function bindLogicalExpression(node: BinaryExpression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
-            const preRightLabel = createFlowLabel();
+            const preRightLabel = createBranchLabel();
             if (node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
                 bindCondition(node.left, preRightLabel, falseTarget);
             }
@@ -1035,7 +1047,7 @@ namespace ts {
             const operator = node.operatorToken.kind;
             if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken) {
                 if (isTopLevelLogicalExpression(node)) {
-                    const postExpressionLabel = createFlowLabel();
+                    const postExpressionLabel = createBranchLabel();
                     bindLogicalExpression(node, postExpressionLabel, postExpressionLabel);
                     currentFlow = finishFlowLabel(postExpressionLabel);
                 }
@@ -1051,10 +1063,17 @@ namespace ts {
             }
         }
 
+        function bindDeleteExpressionFlow(node: DeleteExpression) {
+            forEachChild(node, bind);
+            if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
+                bindAssignmentTargetFlow(node.expression);
+            }
+        }
+
         function bindConditionalExpressionFlow(node: ConditionalExpression) {
-            const trueLabel = createFlowLabel();
-            const falseLabel = createFlowLabel();
-            const postExpressionLabel = createFlowLabel();
+            const trueLabel = createBranchLabel();
+            const falseLabel = createBranchLabel();
+            const postExpressionLabel = createBranchLabel();
             bindCondition(node.condition, trueLabel, falseLabel);
             currentFlow = finishFlowLabel(trueLabel);
             bind(node.whenTrue);
@@ -1755,8 +1774,8 @@ namespace ts {
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
-                case SyntaxKind.GlobalModuleExportDeclaration:
-                    return bindGlobalModuleExportDeclaration(<GlobalModuleExportDeclaration>node);
+                case SyntaxKind.NamespaceExportDeclaration:
+                    return bindNamespaceExportDeclaration(<NamespaceExportDeclaration>node);
                 case SyntaxKind.ImportClause:
                     return bindImportClause(<ImportClause>node);
                 case SyntaxKind.ExportDeclaration:
@@ -1806,7 +1825,7 @@ namespace ts {
             }
         }
 
-        function bindGlobalModuleExportDeclaration(node: GlobalModuleExportDeclaration) {
+        function bindNamespaceExportDeclaration(node: NamespaceExportDeclaration) {
             if (node.modifiers && node.modifiers.length) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Modifiers_cannot_appear_here));
             }
@@ -2074,7 +2093,7 @@ namespace ts {
         }
 
         function checkUnreachable(node: Node): boolean {
-            if (currentFlow.kind !== FlowKind.Unreachable) {
+            if (!(currentFlow.flags & FlowFlags.Unreachable)) {
                 return false;
             }
             if (currentFlow === unreachableFlow) {

@@ -1,0 +1,14 @@
+tests/cases/compiler/capturedParametersInInitializers2.ts(1,36): error TS2373: Initializer of parameter 'y' cannot reference identifier 'x' declared after it.
+tests/cases/compiler/capturedParametersInInitializers2.ts(4,26): error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
+
+
+==== tests/cases/compiler/capturedParametersInInitializers2.ts (2 errors) ====
+    function foo(y = class {static c = x}, x = 1) {
+                                       ~
+!!! error TS2373: Initializer of parameter 'y' cannot reference identifier 'x' declared after it.
+        y.c
+    }
+    function foo2(y = class {[x] = x}, x = 1) {
+                             ~~~
+!!! error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
+    }

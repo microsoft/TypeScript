@@ -89,16 +89,16 @@ class CompilerBaselineRunner extends RunnerBase {
                 otherFiles = [];
 
                 if (testCaseContent.settings["noImplicitReferences"] || /require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
-                    toBeCompiled.push({ unitName: this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content });
+                    toBeCompiled.push({ unitName: this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content, fileOptions: lastUnit.fileOptions });
                     units.forEach(unit => {
                         if (unit.name !== lastUnit.name) {
-                            otherFiles.push({ unitName: this.makeUnitName(unit.name, rootDir), content: unit.content });
+                            otherFiles.push({ unitName: this.makeUnitName(unit.name, rootDir), content: unit.content, fileOptions: unit.fileOptions });
                         }
                     });
                 }
                 else {
                     toBeCompiled = units.map(unit => {
-                        return { unitName: this.makeUnitName(unit.name, rootDir), content: unit.content };
+                        return { unitName: this.makeUnitName(unit.name, rootDir), content: unit.content, fileOptions: unit.fileOptions };
                     });
                 }
 
@@ -107,7 +107,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
 
                 const output = Harness.Compiler.compileFiles(
-                    toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ undefined);
+                    toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ harnessSettings["currentDirectory"]);
 
                 options = output.options;
                 result = output.result;

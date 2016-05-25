@@ -303,8 +303,8 @@ namespace ts {
             case SyntaxKind.ImportClause:
                 return visitNode(cbNode, (<ImportClause>node).name) ||
                     visitNode(cbNode, (<ImportClause>node).namedBindings);
-            case SyntaxKind.GlobalModuleExportDeclaration:
-                return visitNode(cbNode, (<GlobalModuleExportDeclaration>node).name);
+            case SyntaxKind.NamespaceExportDeclaration:
+                return visitNode(cbNode, (<NamespaceExportDeclaration>node).name);
 
             case SyntaxKind.NamespaceImport:
                 return visitNode(cbNode, (<NamespaceImport>node).name);
@@ -2382,6 +2382,7 @@ namespace ts {
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.UndefinedKeyword:
+                case SyntaxKind.NeverKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     const node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReference();
@@ -2424,6 +2425,7 @@ namespace ts {
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.TypeOfKeyword:
+                case SyntaxKind.NeverKeyword:
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.LessThanToken:
@@ -2699,7 +2701,8 @@ namespace ts {
             //      2) LeftHandSideExpression = AssignmentExpression[?in,?yield]
             //      3) LeftHandSideExpression AssignmentOperator AssignmentExpression[?in,?yield]
             //      4) ArrowFunctionExpression[?in,?yield]
-            //      5) [+Yield] YieldExpression[?In]
+            //      5) AsyncArrowFunctionExpression[in,yield,await]
+            //      6) [+Yield] YieldExpression[?In]
             //
             // Note: for ease of implementation we treat productions '2' and '3' as the same thing.
             // (i.e. they're both BinaryExpressions with an assignment operator in it).
@@ -2709,11 +2712,18 @@ namespace ts {
                 return parseYieldExpression();
             }
 
-            // Then, check if we have an arrow function (production '4') that starts with a parenthesized
-            // parameter list. If we do, we must *not* recurse for productions 1, 2 or 3. An ArrowFunction is
+            // Then, check if we have an arrow function (production '4' and '5') that starts with a parenthesized
+            // parameter list or is an async arrow function.
+            // AsyncArrowFunctionExpression:
+            //      1) async[no LineTerminator here]AsyncArrowBindingIdentifier[?Yield][no LineTerminator here]=>AsyncConciseBody[?In]
+            //      2) CoverCallExpressionAndAsyncArrowHead[?Yield, ?Await][no LineTerminator here]=>AsyncConciseBody[?In]
+            // Production (1) of AsyncArrowFunctionExpression is parsed in "tryParseAsyncSimpleArrowFunctionExpression".
+            // And production (2) is parsed in "tryParseParenthesizedArrowFunctionExpression". 
+            //
+            // If we do successfully parse arrow-function, we must *not* recurse for productions 1, 2 or 3. An ArrowFunction is
             // not a  LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done
             // with AssignmentExpression if we see one.
-            const arrowExpression = tryParseParenthesizedArrowFunctionExpression();
+            const arrowExpression = tryParseParenthesizedArrowFunctionExpression() || tryParseAsyncSimpleArrowFunctionExpression();
             if (arrowExpression) {
                 return arrowExpression;
             }
@@ -2805,10 +2815,17 @@ namespace ts {
             }
         }
 
-        function parseSimpleArrowFunctionExpression(identifier: Identifier): Expression {
+        function parseSimpleArrowFunctionExpression(identifier: Identifier, asyncModifier?: ModifiersArray): ArrowFunction {
             Debug.assert(token === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
 
-            const node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, identifier.pos);
+            let node: ArrowFunction;
+            if (asyncModifier) {
+                node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, asyncModifier.pos);
+                setModifiers(node, asyncModifier);
+            }
+            else {
+                node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, identifier.pos);
+            }
 
             const parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, identifier.pos);
             parameter.name = identifier;
@@ -2819,7 +2836,7 @@ namespace ts {
             node.parameters.end = parameter.end;
 
             node.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, "=>");
-            node.body = parseArrowFunctionExpressionBody(/*isAsync*/ false);
+            node.body = parseArrowFunctionExpressionBody(/*isAsync*/ !!asyncModifier);
 
             return finishNode(node);
         }
@@ -2985,6 +3002,40 @@ namespace ts {
 
         function parsePossibleParenthesizedArrowFunctionExpressionHead(): ArrowFunction {
             return parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity*/ false);
+        }
+
+        function tryParseAsyncSimpleArrowFunctionExpression(): ArrowFunction {
+            // We do a check here so that we won't be doing unnecessarily call to "lookAhead"
+            if (token === SyntaxKind.AsyncKeyword) {
+                const isUnParenthesizedAsyncArrowFunction = lookAhead(isUnParenthesizedAsyncArrowFunctionWorker);
+                if (isUnParenthesizedAsyncArrowFunction === Tristate.True) {
+                    const asyncModifier = parseModifiersForArrowFunction();
+                    const expr = parseBinaryExpressionOrHigher(/*precedence*/ 0);
+                    return parseSimpleArrowFunctionExpression(<Identifier>expr, asyncModifier);
+                }
+            }
+            return undefined;
+        }
+
+        function isUnParenthesizedAsyncArrowFunctionWorker(): Tristate {
+            // AsyncArrowFunctionExpression:
+            //      1) async[no LineTerminator here]AsyncArrowBindingIdentifier[?Yield][no LineTerminator here]=>AsyncConciseBody[?In]
+            //      2) CoverCallExpressionAndAsyncArrowHead[?Yield, ?Await][no LineTerminator here]=>AsyncConciseBody[?In]
+            if (token === SyntaxKind.AsyncKeyword) {
+                nextToken();
+                // If the "async" is followed by "=>" token then it is not a begining of an async arrow-function
+                // but instead a simple arrow-function which will be parsed inside "parseAssignmentExpressionOrHigher"
+                if (scanner.hasPrecedingLineBreak() || token === SyntaxKind.EqualsGreaterThanToken) {
+                    return Tristate.False;
+                }
+                // Check for un-parenthesized AsyncArrowFunction
+                const expr = parseBinaryExpressionOrHigher(/*precedence*/ 0);
+                if (!scanner.hasPrecedingLineBreak() && expr.kind === SyntaxKind.Identifier && token === SyntaxKind.EqualsGreaterThanToken) {
+                    return Tristate.True;
+                }
+            }
+
+            return Tristate.False;
         }
 
         function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): ArrowFunction {
@@ -5307,8 +5358,8 @@ namespace ts {
             return nextToken() === SyntaxKind.SlashToken;
         }
 
-        function parseGlobalModuleExportDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): GlobalModuleExportDeclaration {
-            const exportDeclaration = <GlobalModuleExportDeclaration>createNode(SyntaxKind.GlobalModuleExportDeclaration, fullStart);
+        function parseGlobalModuleExportDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): NamespaceExportDeclaration {
+            const exportDeclaration = <NamespaceExportDeclaration>createNode(SyntaxKind.NamespaceExportDeclaration, fullStart);
             exportDeclaration.decorators = decorators;
             exportDeclaration.modifiers = modifiers;
             parseExpected(SyntaxKind.AsKeyword);

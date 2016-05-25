@@ -22,9 +22,9 @@ class SymbolIterator {
     }
 
     [Symbol.iterator]() {
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
         return this;
 >this : Symbol(SymbolIterator, Decl(iteratorSpreadInArray2.ts, 0, 59))
@@ -48,9 +48,9 @@ class NumberIterator {
     }
 
     [Symbol.iterator]() {
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
         return this;
 >this : Symbol(NumberIterator, Decl(iteratorSpreadInArray2.ts, 13, 1))

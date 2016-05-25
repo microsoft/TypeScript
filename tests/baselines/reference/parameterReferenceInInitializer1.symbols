@@ -1,0 +1,41 @@
+=== tests/cases/compiler/parameterReferenceInInitializer1.ts ===
+function fn<a>(y: Y, set: (y: Y, x: number) => void): a {
+>fn : Symbol(fn, Decl(parameterReferenceInInitializer1.ts, 0, 0))
+>a : Symbol(a, Decl(parameterReferenceInInitializer1.ts, 0, 12))
+>y : Symbol(y, Decl(parameterReferenceInInitializer1.ts, 0, 15))
+>Y : Symbol(Y, Decl(parameterReferenceInInitializer1.ts, 2, 1))
+>set : Symbol(set, Decl(parameterReferenceInInitializer1.ts, 0, 20))
+>y : Symbol(y, Decl(parameterReferenceInInitializer1.ts, 0, 27))
+>Y : Symbol(Y, Decl(parameterReferenceInInitializer1.ts, 2, 1))
+>x : Symbol(x, Decl(parameterReferenceInInitializer1.ts, 0, 32))
+>a : Symbol(a, Decl(parameterReferenceInInitializer1.ts, 0, 12))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+interface Y { x: number }
+>Y : Symbol(Y, Decl(parameterReferenceInInitializer1.ts, 2, 1))
+>x : Symbol(Y.x, Decl(parameterReferenceInInitializer1.ts, 3, 13))
+
+class C {
+>C : Symbol(C, Decl(parameterReferenceInInitializer1.ts, 3, 25))
+
+    constructor(
+        y: Y,
+>y : Symbol(y, Decl(parameterReferenceInInitializer1.ts, 6, 16))
+>Y : Symbol(Y, Decl(parameterReferenceInInitializer1.ts, 2, 1))
+
+        public x = fn(y, (y, x) => y.x = x) // expected to work, but actually doesn't
+>x : Symbol(C.x, Decl(parameterReferenceInInitializer1.ts, 7, 13))
+>fn : Symbol(fn, Decl(parameterReferenceInInitializer1.ts, 0, 0))
+>y : Symbol(y, Decl(parameterReferenceInInitializer1.ts, 6, 16))
+>y : Symbol(y, Decl(parameterReferenceInInitializer1.ts, 8, 26))
+>x : Symbol(x, Decl(parameterReferenceInInitializer1.ts, 8, 28))
+>y.x : Symbol(Y.x, Decl(parameterReferenceInInitializer1.ts, 3, 13))
+>y : Symbol(y, Decl(parameterReferenceInInitializer1.ts, 8, 26))
+>x : Symbol(Y.x, Decl(parameterReferenceInInitializer1.ts, 3, 13))
+>x : Symbol(x, Decl(parameterReferenceInInitializer1.ts, 8, 28))
+
+    ) {
+    }
+}
