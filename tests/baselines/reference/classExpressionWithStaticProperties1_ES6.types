@@ -1,4 +1,4 @@
-=== tests/cases/compiler/classExpressionWithStaticPropertiesES61.ts ===
+=== tests/cases/compiler/classExpressionWithStaticProperties1_ES6.ts ===
 var v = class C { static a = 1; static b = 2 };
 >v : typeof C
 >class C { static a = 1; static b = 2 } : typeof C

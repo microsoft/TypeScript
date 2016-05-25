@@ -1,4 +1,4 @@
-//// [classExpressionWithStaticPropertiesES65.ts]
+//// [classExpressionWithStaticProperties5_ES6.ts]
 declare var console: any;
 const arr: any[] = [];
 for (let i = 0; i < 3; i++) {
@@ -9,7 +9,7 @@ for (let i = 0; i < 3; i++) {
 }
 arr.forEach(C => console.log(C.y()));
 
-//// [classExpressionWithStaticPropertiesES65.js]
+//// [classExpressionWithStaticProperties5_ES6.js]
 const arr = [];
 for (let i = 0; i < 3; i++) {
     arr.push((() => {
