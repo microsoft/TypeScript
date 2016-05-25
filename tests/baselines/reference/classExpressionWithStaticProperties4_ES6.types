@@ -1,4 +1,4 @@
-=== tests/cases/compiler/classExpressionWithStaticPropertiesES64.ts ===
+=== tests/cases/compiler/classExpressionWithStaticProperties4_ES6.ts ===
 declare var console: any;
 >console : any
 
