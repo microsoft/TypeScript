@@ -1,6 +1,6 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
-module ts {
+namespace ts {
     describe("Transpile", () => {
 
         interface TranspileTestSettings {

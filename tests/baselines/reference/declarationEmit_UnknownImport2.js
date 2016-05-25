@@ -4,5 +4,8 @@ import Foo From './Foo'; // Syntax error
 export default Foo
 
 //// [declarationEmit_UnknownImport2.js]
-'./Foo'; // Syntax error
 "use strict";
+var Foo = From;
+'./Foo'; // Syntax error
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Foo;

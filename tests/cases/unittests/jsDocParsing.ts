@@ -8,7 +8,7 @@ module ts {
         describe("TypeExpressions", () => {
             function parsesCorrectly(name: string, content: string) {
                 it(name, () => {
-                    let typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
+                    const typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
                     assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0);
 
                     Harness.Baseline.runBaseline("parseCorrectly", "JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json",
@@ -18,7 +18,7 @@ module ts {
 
             function parsesIncorrectly(name: string, content: string) {
                 it(name, () => {
-                    let type = ts.parseJSDocTypeExpressionForTests(content);
+                    const type = ts.parseJSDocTypeExpressionForTests(content);
                     assert.isTrue(!type || type.diagnostics.length > 0);
                 });
             }
@@ -93,7 +93,7 @@ module ts {
         describe("DocComments", () => {
             function parsesCorrectly(name: string, content: string) {
                 it(name, () => {
-                    let comment = parseIsolatedJSDocComment(content);
+                    const comment = parseIsolatedJSDocComment(content);
                     if (!comment) {
                         Debug.fail('Comment failed to parse entirely');
                     }
@@ -109,7 +109,7 @@ module ts {
 
             function parsesIncorrectly(name: string, content: string) {
                 it(name, () => {
-                    let type = parseIsolatedJSDocComment(content);
+                    const type = parseIsolatedJSDocComment(content);
                     assert.isTrue(!type || type.diagnostics.length > 0);
                 });
             }

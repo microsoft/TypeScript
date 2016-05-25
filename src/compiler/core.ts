@@ -108,10 +108,10 @@ namespace ts {
         return true;
     }
 
-    export function contains<T>(array: T[], value: T): boolean {
+    export function contains<T>(array: T[], value: T, areEqual?: (a: T, b: T) => boolean): boolean {
         if (array) {
             for (const v of array) {
-                if (v === value) {
+                if (areEqual ? areEqual(v, value) : v === value) {
                     return true;
                 }
             }
@@ -290,12 +290,12 @@ namespace ts {
         return [...array1, ...array2];
     }
 
-    export function deduplicate<T>(array: T[]): T[] {
+    export function deduplicate<T>(array: T[], areEqual?: (a: T, b: T) => boolean): T[] {
         let result: T[];
         if (array) {
             result = [];
             for (const item of array) {
-                if (!contains(result, item)) {
+                if (!contains(result, item, areEqual)) {
                     result.push(item);
                 }
             }

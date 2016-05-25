@@ -1,5 +1,24 @@
 [
-    "======== Resolving type reference directive 'jquery', containing file not set, root directory not set. ========",
-    "Root directory cannot be determined, skipping primary search paths.",
-    "Containing file is not specified and root directory cannot be determined, skipping lookup in 'node_modules' folder."
+    "======== Resolving type reference directive 'jquery', containing file not set, root directory '/'. ========",
+    "Resolving with primary search path '/types/'",
+    "File '/types/jquery/package.json' does not exist.",
+    "File '/types/jquery/index.d.ts' does not exist.",
+    "Resolving with primary search path '/node_modules/'",
+    "File '/node_modules/jquery/package.json' does not exist.",
+    "File '/node_modules/jquery/index.d.ts' does not exist.",
+    "Resolving with primary search path '/node_modules/@types/'",
+    "File '/node_modules/@types/jquery/package.json' does not exist.",
+    "File '/node_modules/@types/jquery/index.d.ts' does not exist.",
+    "Looking up in 'node_modules' folder, initial location '/'",
+    "File '/node_modules/jquery.ts' does not exist.",
+    "File '/node_modules/jquery.d.ts' does not exist.",
+    "File '/node_modules/jquery/package.json' does not exist.",
+    "File '/node_modules/jquery/index.ts' does not exist.",
+    "File '/node_modules/jquery/index.d.ts' does not exist.",
+    "File '/node_modules/@types/jquery.ts' does not exist.",
+    "File '/node_modules/@types/jquery.d.ts' does not exist.",
+    "File '/node_modules/@types/jquery/package.json' does not exist.",
+    "File '/node_modules/@types/jquery/index.ts' does not exist.",
+    "File '/node_modules/@types/jquery/index.d.ts' does not exist.",
+    "======== Type reference directive 'jquery' was not resolved. ========"
 ]

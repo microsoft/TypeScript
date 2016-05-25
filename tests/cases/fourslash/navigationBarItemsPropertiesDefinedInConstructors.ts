@@ -6,10 +6,10 @@
 ////    }
 ////}
 
-verify.getScriptLexicalStructureListContains("List", "class");
-verify.getScriptLexicalStructureListContains("constructor", "constructor");
-verify.getScriptLexicalStructureListContains("a", "property");
-verify.getScriptLexicalStructureListContains("b", "property");
+verify.navigationBarContains("List", "class");
+verify.navigationBarContains("constructor", "constructor");
+verify.navigationBarContains("a", "property");
+verify.navigationBarContains("b", "property");
 
 // no other items
-verify.getScriptLexicalStructureListCount(4);
+verify.navigationBarCount(4);

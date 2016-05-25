@@ -19,7 +19,7 @@ function printError(error: ts.Diagnostic): void {
     console.log(`${error.file && error.file.fileName}: ${error.messageText}`);
 }
 
-export function createProgram(rootFiles: string[], compilerOptionsJson: string): ts.Program {
+export function createProgram(rootFiles: string[], compilerOptionsJson: string): ts.Program | undefined {
     const { config, error } = ts.parseConfigFileTextToJson("tsconfig.json", compilerOptionsJson)
     if (error) {
         printError(error);

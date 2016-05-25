@@ -172,16 +172,16 @@ strOrNum = typeof obj1.method(strOrNum) === "string" && obj1.method(strOrNum);
 
 // accessing getter property
 strOrNum = typeof obj1.prop === "string" && obj1.prop; 
->strOrNum = typeof obj1.prop === "string" && obj1.prop : string | number
+>strOrNum = typeof obj1.prop === "string" && obj1.prop : string
 >strOrNum : string | number
->typeof obj1.prop === "string" && obj1.prop : string | number
+>typeof obj1.prop === "string" && obj1.prop : string
 >typeof obj1.prop === "string" : boolean
 >typeof obj1.prop : string
 >obj1.prop : string | number
 >obj1 : { method(param: string | number): string | number; prop: string | number; }
 >prop : string | number
 >"string" : string
->obj1.prop : string | number
+>obj1.prop : string
 >obj1 : { method(param: string | number): string | number; prop: string | number; }
->prop : string | number
+>prop : string
 

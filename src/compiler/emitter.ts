@@ -1488,6 +1488,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 switch (parent.kind) {
                     case SyntaxKind.ArrayLiteralExpression:
                     case SyntaxKind.AsExpression:
+                    case SyntaxKind.AwaitExpression:
                     case SyntaxKind.BinaryExpression:
                     case SyntaxKind.CallExpression:
                     case SyntaxKind.CaseClause:
@@ -1916,7 +1917,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         write("Object.defineProperty(");
                         emit(tempVar);
                         write(", ");
-                        emitStart(node.name);
+                        emitStart(property.name);
                         emitExpressionForPropertyName(property.name);
                         emitEnd(property.name);
                         write(", {");
@@ -4958,7 +4959,7 @@ const _super = (function (geti, seti) {
 
             function emitParameterPropertyAssignments(node: ConstructorDeclaration) {
                 forEach(node.parameters, param => {
-                    if (hasModifier(param, ModifierFlags.AccessibilityModifier)) {
+                    if (hasModifier(param, ModifierFlags.ParameterPropertyModifier)) {
                         writeLine();
                         emitStart(param);
                         emitStart(param.name);
@@ -7883,7 +7884,7 @@ const _super = (function (geti, seti) {
                     node.parent &&
                     node.parent.kind === SyntaxKind.ArrowFunction &&
                     (<ArrowFunction>node.parent).body === node &&
-                    compilerOptions.target <= ScriptTarget.ES5) {
+                    languageVersion <= ScriptTarget.ES5) {
 
                     return false;
                 }

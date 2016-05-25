@@ -518,6 +518,11 @@ declare namespace ts.server.protocol {
          * Then the known content will be used upon opening instead of the disk copy
          */
         fileContent?: string;
+        /**
+         * Used to specify the script kind of the file explicitly. It could be one of the following:
+         *      "TS", "JS", "TSX", "JSX"
+         */
+        scriptKindName?: "TS" | "JS" | "TSX" | "JSX";
     }
 
     /**
@@ -1003,6 +1008,32 @@ declare namespace ts.server.protocol {
       */
     export interface DiagnosticEvent extends Event {
         body?: DiagnosticEventBody;
+    }
+
+    export interface ConfigFileDiagnosticEventBody {
+        /**
+         * The file which trigged the searching and error-checking of the config file
+         */
+        triggerFile: string;
+
+        /**
+         * The name of the found config file.
+         */
+        configFile: string;
+
+        /**
+         * An arry of diagnostic information items for the found config file.
+         */
+        diagnostics: Diagnostic[];
+    }
+
+    /**
+     * Event message for "configFileDiag" event type.
+     * This event provides errors for a found config file.
+     */
+    export interface ConfigFileDiagnosticEvent extends Event {
+        body?: ConfigFileDiagnosticEventBody;
+        event: "configFileDiag";
     }
 
     /**

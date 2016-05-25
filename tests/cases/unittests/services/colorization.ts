@@ -7,15 +7,15 @@ interface ClassificationEntry {
     position?: number;
 }
 
-describe('Colorization', function () {
+describe("Colorization", function () {
     // Use the shim adapter to ensure test coverage of the shim layer for the classifier
-    var languageServiceAdapter = new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ false);
-    var classifier = languageServiceAdapter.getClassifier();
+    const languageServiceAdapter = new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ false);
+    const classifier = languageServiceAdapter.getClassifier();
 
     function getEntryAtPosition(result: ts.ClassificationResult, position: number) {
-        var entryPosition = 0;
-        for (var i = 0, n = result.entries.length; i < n; i++) {
-            var entry = result.entries[i];
+        let entryPosition = 0;
+        for (let i = 0, n = result.entries.length; i < n; i++) {
+            const entry = result.entries[i];
             if (entryPosition === position) {
                 return entry;
             }
@@ -32,7 +32,6 @@ describe('Colorization', function () {
     function identifier(text: string, position?: number) { return createClassification(text, ts.TokenClass.Identifier, position); }
     function numberLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.NumberLiteral, position); }
     function stringLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.StringLiteral, position); }
-    function regExpLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.RegExpLiteral, position); }
     function finalEndOfLineState(value: number): ClassificationEntry { return { value: value, classification: undefined, position: 0 }; }
     function createClassification(text: string, tokenClass: ts.TokenClass, position?: number): ClassificationEntry {
         return {
@@ -43,19 +42,19 @@ describe('Colorization', function () {
     }
 
     function testLexicalClassification(text: string, initialEndOfLineState: ts.EndOfLineState, ...expectedEntries: ClassificationEntry[]): void {
-        var result = classifier.getClassificationsForLine(text, initialEndOfLineState, /*syntacticClassifierAbsent*/ false);
+        const result = classifier.getClassificationsForLine(text, initialEndOfLineState, /*syntacticClassifierAbsent*/ false);
 
-        for (var i = 0, n = expectedEntries.length; i < n; i++) {
-            var expectedEntry = expectedEntries[i];
+        for (let i = 0, n = expectedEntries.length; i < n; i++) {
+            const expectedEntry = expectedEntries[i];
 
             if (expectedEntry.classification === undefined) {
                 assert.equal(result.finalLexState, expectedEntry.value, "final endOfLineState does not match expected.");
             }
             else {
-                var actualEntryPosition = expectedEntry.position !== undefined ? expectedEntry.position : text.indexOf(expectedEntry.value);
+                const actualEntryPosition = expectedEntry.position !== undefined ? expectedEntry.position : text.indexOf(expectedEntry.value);
                 assert(actualEntryPosition >= 0, "token: '" + expectedEntry.value + "' does not exit in text: '" + text + "'.");
 
-                var actualEntry = getEntryAtPosition(result, actualEntryPosition);
+                const actualEntry = getEntryAtPosition(result, actualEntryPosition);
 
                 assert(actualEntry, "Could not find classification entry for '" + expectedEntry.value + "' at position: " + actualEntryPosition);
                 assert.equal(actualEntry.classification, expectedEntry.classification, "Classification class does not match expected. Expected: " + ts.TokenClass[expectedEntry.classification] + ", Actual: " + ts.TokenClass[actualEntry.classification]);
@@ -292,7 +291,7 @@ describe('Colorization', function () {
                 stringLiteral("..."),
                 finalEndOfLineState(ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate));
         });
-        it("classifies the entire line of an unterminated multiline template middle/end",() => {
+        it("classifies the entire line of an unterminated multiline template middle/end", () => {
             testLexicalClassification("...",
                 ts.EndOfLineState.InTemplateMiddleOrTail,
                 stringLiteral("..."),
@@ -320,7 +319,7 @@ describe('Colorization', function () {
                 stringLiteral("}...`"),
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
-        it("classifies a template middle and propagates the end of line state",() => {
+        it("classifies a template middle and propagates the end of line state", () => {
             testLexicalClassification("${ 1 + 1 }...`",
                 ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
                 stringLiteral("${"),
@@ -331,8 +330,8 @@ describe('Colorization', function () {
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
         it("classifies substitution expressions with curly braces appropriately", () => {
-            var pos = 0;
-            var lastLength = 0;
+            let pos = 0;
+            let lastLength = 0;
 
             testLexicalClassification("...${ () => { } } ${ { x: `1` } }...`",
                 ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
@@ -354,7 +353,7 @@ describe('Colorization', function () {
             // Adjusts 'pos' by accounting for the length of each portion of the string,
             // but only return the last given string
             function track(...vals: string[]): string {
-                for (var i = 0, n = vals.length; i < n; i++) {
+                for (let i = 0, n = vals.length; i < n; i++) {
                     pos += lastLength;
                     lastLength = vals[i].length;
                 }

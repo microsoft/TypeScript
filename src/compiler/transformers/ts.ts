@@ -244,7 +244,8 @@ namespace ts {
                 case SyntaxKind.AsyncKeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.DeclareKeyword:
-                    // TypeScript accessibility modifiers are elided.
+                case SyntaxKind.ReadonlyKeyword:
+                    // TypeScript accessibility and readonly modifiers are elided.
 
                 case SyntaxKind.ArrayType:
                 case SyntaxKind.TupleType:
@@ -916,7 +917,7 @@ namespace ts {
          * @param parameter The parameter node.
          */
         function isParameterWithPropertyAssignment(parameter: ParameterDeclaration) {
-            return hasModifier(parameter, ModifierFlags.AccessibilityModifier)
+            return hasModifier(parameter, ModifierFlags.ParameterPropertyModifier)
                 && isIdentifier(parameter.name);
         }
 
