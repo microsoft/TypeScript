@@ -10,6 +10,7 @@
 /// <reference path='jsTyping.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
+/// <reference path='quickfixes/quickFixProvider.ts' />
 
 namespace ts {
     /** The version of the language service API */
@@ -1115,6 +1116,8 @@ namespace ts {
 
         isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean;
 
+        getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): { name: string, textChanges: TextChange[] };
+
         getEmitOutput(fileName: string): EmitOutput;
 
         getProgram(): Program;
@@ -1753,9 +1756,13 @@ namespace ts {
         };
     }
 
-    // Cache host information about scrip Should be refreshed
+    export function getSupportedCodeFixes() {
+        return quickFix.QuickFixProvider.getSupportedErrorCodes();
+    }
+
+    // Cache host information about script Should be refreshed
     // at each language service public entry point, since we don't know when
-    // set of scripts handled by the host changes.
+    // the set of scripts handled by the host changes.
     class HostCache {
         private fileNameToEntry: FileMap<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
@@ -2825,6 +2832,7 @@ namespace ts {
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
+        const quickFixProvider: quickFix.QuickFixProvider = new quickFix.QuickFixProvider();
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
         let lastProjectVersion: string;
@@ -7477,6 +7485,13 @@ namespace ts {
             return [];
         }
 
+        function getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): { name: string, textChanges: TextChange[] } {
+            synchronizeHostData();
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+
+            return quickFixProvider.fix(errorCodes[0], sourceFile, start, end);
+        }
+
         /**
          * Checks if position points to a valid position to add JSDoc comments, and if so,
          * returns the appropriate template. Otherwise returns an empty string.
@@ -7947,6 +7962,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPostion,
+            getCodeFixAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
             getProgram

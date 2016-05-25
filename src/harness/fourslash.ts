@@ -637,7 +637,6 @@ namespace FourSlash {
             }
         }
 
-
         public verifyCompletionListAllowsNewIdentifier(negative: boolean) {
             const completions = this.getCompletionListAtCaret();
 
@@ -1814,6 +1813,24 @@ namespace FourSlash {
                 if (expectedSpan.start !== actualCommentSpan.start || expectedSpan.end !== ts.textSpanEnd(actualCommentSpan)) {
                     this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.start},${expectedSpan.end}),  actual: (${actualCommentSpan.start},${ts.textSpanEnd(actualCommentSpan)})`);
                 }
+            }
+        }
+
+        public verifyCodeFixAtPosition(expectedChange: { span: ts.TextSpan, newText: string }) {
+            const position = this.currentCaretPosition;
+            const diagnostics = this.getDiagnostics(this.activeFile.fileName);
+
+            if (diagnostics.length === 0) {
+                this.raiseError("Errors expected");
+            }
+
+            // we expect a single error per file
+            const errorCode = diagnostics[0].code;
+
+            const actual = this.languageService.getCodeFixAtPosition(this.activeFile.fileName, position, position, [`TS${errorCode}`]);
+
+            if (actual.textChanges[0].newText !== expectedChange.newText) {
+                this.raiseError(`Not the expected text change.`);
             }
         }
 
@@ -3027,6 +3044,10 @@ namespace FourSlashInterface {
 
         public noDocCommentTemplate() {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
+        }
+
+        public codeFixAtPosition(expectedChange: { span: ts.TextSpan, newText: string }) {
+            this.state.verifyCodeFixAtPosition(expectedChange);
         }
 
         public getScriptLexicalStructureListCount(count: number) {
