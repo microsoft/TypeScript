@@ -23,3 +23,11 @@ var b7: Book & number = { foreword: "hi", price: 10.99 };
 var b8: Cover | Cover[] = { couleur : "non" };
 
 var b9: Book | Book[] = { forewarned: "still no" };
+
+interface Indexed {
+    [n: number]: Cover;
+}
+
+var b10: Indexed = { 0: { }, '1': { } }; // ok
+
+var b11: Indexed = { 0: { colour: "blue" } }; // nested object literal still errors
