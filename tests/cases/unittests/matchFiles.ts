@@ -3,33 +3,8 @@
 /// <reference path="..\..\..\src\harness\virtualFileSystem.ts" />
 
 namespace ts {
-    class MockParseConfigHost extends Utils.VirtualFileSystem implements ParseConfigHost {
-        constructor(currentDirectory: string, ignoreCase: boolean, files: string[]) {
-            super(currentDirectory, ignoreCase);
-            for (const file of files) {
-                this.addFile(file);
-            }
-        }
-
-        readDirectory(path: string, extensions: string[], excludes: string[], includes: string[]) {
-            return matchFiles(path, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.currentDirectory, (path: string) => this.getAccessibleFileSystemEntries(path));
-        }
-
-        getAccessibleFileSystemEntries(path: string) {
-            const entry = this.traversePath(path);
-            if (entry && entry.isDirectory()) {
-                const directory = <Utils.VirtualDirectory>entry;
-                return {
-                    files: map(directory.getFiles(), f => f.name),
-                    directories: map(directory.getDirectories(), d => d.name)
-                };
-            }
-            return { files: [], directories: [] };
-        }
-    }
-
     const caseInsensitiveBasePath = "c:/dev/";
-    const caseInsensitiveHost = new MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, [
+    const caseInsensitiveHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, [
         "c:/dev/a.ts",
         "c:/dev/a.d.ts",
         "c:/dev/a.js",
@@ -53,7 +28,7 @@ namespace ts {
     ]);
 
     const caseSensitiveBasePath = "/dev/";
-    const caseSensitiveHost = new MockParseConfigHost(caseSensitiveBasePath, /*useCaseSensitiveFileNames*/ true, [
+    const caseSensitiveHost = new Utils.MockParseConfigHost(caseSensitiveBasePath, /*useCaseSensitiveFileNames*/ true, [
         "/dev/a.ts",
         "/dev/a.d.ts",
         "/dev/a.js",
@@ -76,7 +51,7 @@ namespace ts {
         "/dev/js/b.js",
     ]);
 
-    const caseInsensitiveMixedExtensionHost = new MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, [
+    const caseInsensitiveMixedExtensionHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, [
         "c:/dev/a.ts",
         "c:/dev/a.d.ts",
         "c:/dev/a.js",

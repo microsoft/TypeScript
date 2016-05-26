@@ -1,4 +1,5 @@
 /// <reference path="harness.ts" />
+/// <reference path="..\compiler\commandLineParser.ts"/>
 namespace Utils {
     export class VirtualFileSystemEntry {
         fileSystem: VirtualFileSystem;
@@ -155,6 +156,31 @@ namespace Utils {
             }
 
             return directory;
+        }
+    }
+
+    export class MockParseConfigHost extends VirtualFileSystem implements ts.ParseConfigHost {
+        constructor(currentDirectory: string, ignoreCase: boolean, files: string[]) {
+            super(currentDirectory, ignoreCase);
+            for (const file of files) {
+                this.addFile(file);
+            }
+        }
+
+        readDirectory(path: string, extensions: string[], excludes: string[], includes: string[]) {
+            return ts.matchFiles(path, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.currentDirectory, (path: string) => this.getAccessibleFileSystemEntries(path));
+        }
+
+        getAccessibleFileSystemEntries(path: string) {
+            const entry = this.traversePath(path);
+            if (entry && entry.isDirectory()) {
+                const directory = <VirtualDirectory>entry;
+                return {
+                    files: ts.map(directory.getFiles(), f => f.name),
+                    directories: ts.map(directory.getDirectories(), d => d.name)
+                };
+            }
+            return { files: [], directories: [] };
         }
     }
 }

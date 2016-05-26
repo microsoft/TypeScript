@@ -2,31 +2,6 @@
 /// <reference path="..\..\..\src\compiler\commandLineParser.ts" />
 
 namespace ts {
-    class MockParseConfigHost extends Utils.VirtualFileSystem implements ParseConfigHost {
-        constructor(currentDirectory: string, ignoreCase: boolean, files: string[]) {
-            super(currentDirectory, ignoreCase);
-            for (const file of files) {
-                this.addFile(file);
-            }
-        }
-
-        readDirectory(path: string, extensions: string[], excludes: string[], includes: string[]) {
-            return matchFiles(path, extensions, excludes, includes, this.useCaseSensitiveFileNames, this.currentDirectory, (path: string) => this.getAccessibleFileSystemEntries(path));
-        }
-
-        getAccessibleFileSystemEntries(path: string) {
-            const entry = this.traversePath(path);
-            if (entry && entry.isDirectory()) {
-                const directory = <Utils.VirtualDirectory>entry;
-                return {
-                    files: map(directory.getFiles(), f => f.name),
-                    directories: map(directory.getDirectories(), d => d.name)
-                };
-            }
-            return { files: [], directories: [] };
-        }
-    }
-
     describe('parseConfigFileTextToJson', () => {
         function assertParseResult(jsonText: string, expectedConfigObject: { config?: any; error?: Diagnostic }) {
             let parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
@@ -41,13 +16,14 @@ namespace ts {
 
         function assertParseErrorWithExcludesKeyword(jsonText: string) {
              let parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
-             let parsedCommand = ts.parseJsonConfigFileContent(parsed, ts.sys, "tests/cases/unittests");
-             assert.isTrue(undefined !== parsedCommand.errors);
+             let parsedCommand = ts.parseJsonConfigFileContent(parsed.config, ts.sys, "tests/cases/unittests");
+             assert.isTrue(parsedCommand.errors && parsedCommand.errors.length === 1 &&
+                parsedCommand.errors[0].code === ts.Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
         }
 
         function assertParseFileList(jsonText: string, configFileName: string, basePath: string, allFileList: string[], expectedFileList: string[]) {
             const json = JSON.parse(jsonText);
-            const host: ParseConfigHost = new MockParseConfigHost(basePath, true, allFileList);
+            const host: ParseConfigHost = new Utils.MockParseConfigHost(basePath, true, allFileList);
             const parsed = ts.parseJsonConfigFileContent(json, host, basePath, /*existingOptions*/ undefined, configFileName);
             assert.isTrue(arrayIsEqualTo(parsed.fileNames.sort(), expectedFileList.sort()));
         }
@@ -125,19 +101,19 @@ namespace ts {
             assertParseResult(
                 `{
                     "compilerOptions": {
-                        "lib": "es5"
+                        "lib": ["es5"]
                     }
                 }`, {
-                    config: { compilerOptions: { lib: "es5" } }
+                    config: { compilerOptions: { lib: ["es5"] } }
                 });
 
             assertParseResult(
                 `{
                     "compilerOptions": {
-                        "lib": "es5,es6"
+                        "lib": ["es5", "es6"]
                     }
                 }`, {
-                    config: { compilerOptions: { lib: "es5,es6" } }
+                    config: { compilerOptions: { lib: ["es5", "es6"] } }
                 });
         });
 
@@ -145,7 +121,7 @@ namespace ts {
             assertParseErrorWithExcludesKeyword(
                 `{
                     "compilerOptions": {
-                        "lib": "es5"
+                        "lib": ["es5"]
                     },
                     "excludes": [
                         "foge.ts"

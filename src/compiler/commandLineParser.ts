@@ -713,6 +713,9 @@ namespace ts {
                     errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "exclude", "Array"));
                 }
             }
+            else if (hasProperty(json, "excludes")) {
+                errors.push(createCompilerDiagnostic(Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
+            }
             else {
                 // By default, exclude common package folders
                 excludeSpecs = ["node_modules", "bower_components", "jspm_packages"];
