@@ -782,8 +782,8 @@ namespace ts {
         // Walk up the directory spine until we find the first node_modules folder
         let nodeProbePath = normalizeSlashes(rootPath);
         while (getDirectoryPath(nodeProbePath) !== nodeProbePath) {
-            if (sys.directoryExists(combinePaths(nodeProbePath, 'node_modules'))) {
-                const nodeTypesPath = combinePaths(nodeProbePath, 'node_modules/@types');
+            if (sys.directoryExists(combinePaths(nodeProbePath, "node_modules"))) {
+                const nodeTypesPath = combinePaths(nodeProbePath, "node_modules/@types");
                 if (sys.directoryExists(nodeTypesPath)) {
                     result = result.concat(sys.getDirectories(nodeTypesPath));
                 }
@@ -982,6 +982,7 @@ namespace ts {
         return resolutions;
     }
 
+    /* @internal */
     export function getDefaultTypeDirectiveNames(options: CompilerOptions, rootFiles: string[], host: TypeDirectiveResolutionHost): string[] {
         // Use explicit type list from tsconfig.json
         if (options.types) {
@@ -1052,11 +1053,11 @@ namespace ts {
             const typeReferences: string[] = getDefaultTypeDirectiveNames(options, options.configFilePath ? [options.configFilePath] : rootNames, host);
 
             if (typeReferences) {
-                const commonRoot = computeCommonSourceDirectoryOfFilenames(rootNames, '.', f => host.getCanonicalFileName(f));
+                const commonRoot = computeCommonSourceDirectoryOfFilenames(rootNames, ".", f => host.getCanonicalFileName(f));
                 // This is a fictional filename. Resolution logic assumes we start from some file, but doesn't
                 // actually read that file; instead it starts from its containing folder and uses the filename
                 // as a key in its caching lookup.
-                const inferredRoot = commonRoot && combinePaths(commonRoot, '*inferred type directives*.ts');
+                const inferredRoot = commonRoot && combinePaths(commonRoot, "*inferred type directives*.ts");
                 const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, inferredRoot);
                 for (let i = 0; i < typeReferences.length; i++) {
                     processTypeReferenceDirective(typeReferences[i], resolutions[i]);
