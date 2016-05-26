@@ -1963,7 +1963,7 @@ namespace FourSlash {
             let items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
             items = this.simplifyNavigationBar(items);
             if (JSON.stringify(items) !== JSON.stringify(json)) {
-                this.raiseError(`verifyNavigationBar failed - expected: ${JSON.stringify(json, undefined, 2)}, got: ${JSON.stringify(items, undefined, 2)}`)
+                this.raiseError(`verifyNavigationBar failed - expected: ${JSON.stringify(json, undefined, 2)}, got: ${JSON.stringify(items, undefined, 2)}`);
             }
         }
 
@@ -1971,30 +1971,35 @@ namespace FourSlash {
         private simplifyNavigationBar(items: ts.NavigationBarItem[]): any {
             return items.map(item => {
                 item = ts.clone(item);
-                if (item.kindModifiers === "")
+                if (item.kindModifiers === "") {
                     delete item.kindModifiers;
+                }
+                // We won't check this.
                 delete item.spans;
                 item.childItems = item.childItems.map(child => {
                     child = ts.clone(child);
-                    ts.Debug.assert(child.childItems.length === 0);
-                    ts.Debug.assert(child.indent === 0);
-                    ts.Debug.assert(child.bolded === false);
-                    ts.Debug.assert(child.grayed === false);
-                    delete child.childItems;
-                    delete child.indent;
-                    delete child.bolded;
-                    delete child.grayed;
                     delete child.spans;
-                    if (child.kindModifiers === "")
+                    ts.Debug.assert(child.childItems.length === 0);
+                    delete child.childItems;
+                    ts.Debug.assert(child.indent === 0);
+                    delete child.indent;
+                    ts.Debug.assert(child.bolded === false);
+                    delete child.bolded;
+                    ts.Debug.assert(child.grayed === false);
+                    delete child.grayed;
+                    if (child.kindModifiers === "") {
                         delete child.kindModifiers;
+                    }
                     return child;
                 });
-                if (item.bolded === false)
+                if (item.bolded === false) {
                     delete item.bolded;
-                if (item.grayed === false)
+                }
+                if (item.grayed === false) {
                     delete item.grayed;
+                }
                 return item;
-            })
+            });
         }
 
         public printNavigationItems(searchValue: string) {
