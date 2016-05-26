@@ -1,11 +1,14 @@
 /// <reference path="fourslash.ts"/>
 
-////function listAPIFiles(path: string): string[] {
-/////*1*/ /*11*/
-/////*2*/    /*3*/
+/////*3*/function listAPIFiles (path : string): string[] {/*1*//*2*/
 ////}
 
 edit.enableFormatting();
-format.selection('1', '11');
-goTo.marker('3');
+goTo.marker("2");
+edit.insert("    ");
+goTo.marker("1");
+edit.insert("\n")
 verify.currentLineContentIs("    ");
+
+goTo.marker("3");
+verify.currentLineContentIs("function listAPIFiles(path: string): string[] {");
