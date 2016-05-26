@@ -2243,10 +2243,10 @@ namespace ts {
 
             // While we emit the source map for the node after skipping decorators and modifiers,
             // we need to emit the comments for the original range.
+            setOriginalNode(parameter, node);
             setCommentRange(parameter, node);
             setSourceMapRange(parameter, moveRangePastModifiers(node));
             setNodeEmitFlags(parameter.name, NodeEmitFlags.NoTrailingSourceMap);
-            setOriginalNode(parameter, node);
 
             return parameter;
         }
@@ -2564,6 +2564,8 @@ namespace ts {
                 ]
             );
 
+            setOriginalNode(statement, /*original*/ node);
+
             // Adjust the source map emit to match the old emitter.
             if (node.kind === SyntaxKind.EnumDeclaration) {
                 setSourceMapRange(statement.declarationList, node);
@@ -2592,7 +2594,6 @@ namespace ts {
             //
             setCommentRange(statement, node);
             setNodeEmitFlags(statement, NodeEmitFlags.NoTrailingComments);
-            setOriginalNode(statement, /*original*/ node);
             statements.push(statement);
         }
 
@@ -2748,7 +2749,7 @@ namespace ts {
         }
 
         function disableCommentsRecursive(node: Node) {
-            setNodeEmitFlags(node, NodeEmitFlags.NoComments | NodeEmitFlags.Merge);
+            setNodeEmitFlags(node, NodeEmitFlags.NoComments | getNodeEmitFlags(node));
             forEachChild(node, disableCommentsRecursive);
         }
 

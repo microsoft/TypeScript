@@ -22,17 +22,12 @@ namespace ts {
         return node;
     }
 
-    function updateNode<T extends Node>(updated: T, original: T): T {
-        updated.original = original;
-        if (original.transformId) {
-            updated.transformId = original.transformId;
-            updated.emitFlags = original.emitFlags;
-            updated.commentRange = original.commentRange;
-            updated.sourceMapRange = original.sourceMapRange;
-        }
+    export function updateNode<T extends Node>(updated: T, original: T): T {
+        setOriginalNode(updated, original);
         if (original.startsOnNewLine) {
             updated.startsOnNewLine = true;
         }
+
         return updated;
     }
 
@@ -1894,6 +1889,12 @@ namespace ts {
 
     export function setOriginalNode<T extends Node>(node: T, original: Node): T {
         node.original = original;
+        if (original && original.transformId && !node.transformId) {
+            node.transformId = original.transformId;
+            node.emitFlags = original.emitFlags;
+            node.commentRange = original.commentRange;
+            node.sourceMapRange = original.sourceMapRange;
+        }
         return node;
     }
 

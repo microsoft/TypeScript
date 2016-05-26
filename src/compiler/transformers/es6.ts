@@ -956,6 +956,7 @@ namespace ts {
          * @param initializer The initializer for the parameter.
          */
         function addDefaultValueAssignmentForInitializer(statements: Statement[], parameter: ParameterDeclaration, name: Identifier, initializer: Expression): void {
+            initializer = visitNode(initializer, visitor, isExpression);
             const statement = createIf(
                 createStrictEquality(
                     getSynthesizedClone(name),
@@ -966,7 +967,7 @@ namespace ts {
                         createStatement(
                             createAssignment(
                                 setNodeEmitFlags(getMutableClone(name), NodeEmitFlags.NoSourceMap),
-                                setNodeEmitFlags(visitNode(initializer, visitor, isExpression), NodeEmitFlags.NoSourceMap | NodeEmitFlags.Merge),
+                                setNodeEmitFlags(initializer, NodeEmitFlags.NoSourceMap | getNodeEmitFlags(initializer)),
                                 /*location*/ parameter
                             )
                         )
@@ -1533,7 +1534,7 @@ namespace ts {
                 // the source map range for the declaration list.
                 const firstDeclaration = firstOrUndefined(declarations);
                 const lastDeclaration = lastOrUndefined(declarations);
-                setSourceMapRange(node, createRange(firstDeclaration.pos, lastDeclaration.end));
+                setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
             }
 
             return declarationList;
