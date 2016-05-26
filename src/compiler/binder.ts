@@ -472,6 +472,9 @@ namespace ts {
 
                 hasExplicitReturn = false;
                 currentFlow = { flags: FlowFlags.Start };
+                if (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) {
+                    (<FlowStart>currentFlow).container = <FunctionExpression | ArrowFunction>node;
+                }
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
                 activeLabels = undefined;
@@ -588,6 +591,9 @@ namespace ts {
                     break;
                 case SyntaxKind.VariableDeclaration:
                     bindVariableDeclarationFlow(<VariableDeclaration>node);
+                    break;
+                case SyntaxKind.CallExpression:
+                    bindCallExpressionFlow(<CallExpression>node);
                     break;
                 default:
                     forEachChild(node, bind);
@@ -1095,6 +1101,20 @@ namespace ts {
             forEachChild(node, bind);
             if (node.initializer || node.parent.parent.kind === SyntaxKind.ForInStatement || node.parent.parent.kind === SyntaxKind.ForOfStatement) {
                 bindInitializedVariableFlow(node);
+            }
+        }
+
+        function bindCallExpressionFlow(node: CallExpression) {
+            forEachChild(node, bind);
+            // If the target of the call expression is a function expression or arrow function we have
+            // an immediately invoked function expression (IIFE). Initialize the flowNode property to
+            // the current control flow (which includes evaluation of the IIFE arguments).
+            let expr: Expression = node.expression;
+            while (expr.kind === SyntaxKind.ParenthesizedExpression) {
+                expr = (<ParenthesizedExpression>expr).expression;
+            }
+            if (expr.kind === SyntaxKind.FunctionExpression || expr.kind === SyntaxKind.ArrowFunction) {
+                node.flowNode = currentFlow;
             }
         }
 
@@ -2054,7 +2074,9 @@ namespace ts {
                     hasAsyncFunctions = true;
                 }
             }
-
+            if (currentFlow) {
+                node.flowNode = currentFlow;
+            }
             checkStrictModeFunctionName(<FunctionExpression>node);
             const bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
             return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
