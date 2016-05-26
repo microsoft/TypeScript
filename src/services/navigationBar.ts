@@ -140,7 +140,7 @@ namespace ts.NavigationBar {
         function sortNodes(nodes: Node[]): Node[] {
             return nodes.slice(0).sort((n1: Declaration, n2: Declaration) => {
                 if (n1.name && n2.name) {
-                    return getPropertyNameForPropertyNameNode(n1.name).localeCompare(getPropertyNameForPropertyNameNode(n2.name));
+                    return localeCompareFix(getPropertyNameForPropertyNameNode(n1.name), getPropertyNameForPropertyNameNode(n2.name));
                 }
                 else if (n1.name) {
                     return 1;
@@ -152,6 +152,16 @@ namespace ts.NavigationBar {
                     return n1.kind - n2.kind;
                 }
             });
+
+            // node 0.10 treats "a" as greater than "B".
+            // For consistency, sort alphabetically, falling back to which is lower-case.
+            function localeCompareFix(a: string, b: string) {
+                const cmp = a.toLowerCase().localeCompare(b.toLowerCase());
+                if (cmp !== 0)
+                    return cmp;
+                // Return the *opposite* of the `<` operator, which works the same in node 0.10 and 6.0.
+                return a < b ? 1 : a > b ? -1 : 0;
+            }
         }
 
         function addTopLevelNodes(nodes: Node[], topLevelNodes: Node[]): void {
