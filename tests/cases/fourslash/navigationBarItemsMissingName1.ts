@@ -1,16 +1,29 @@
 ////export function
-/////**
-//// * This is a class.
-//// */
-////{| "itemName": "C", "kind": "class", "parentName": "\"navigationBarItemsMissingName1\"" |} class C {
-////    {| "itemName": "foo", "kind": "method" |} foo() {
-////    }
+////class C {
+////    foo() {}
 ////}
 
-
-test.markers().forEach((marker) => {
-    verify.navigationBarContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
-});
-
-/// Root + 1 child, class + 1 child
-verify.navigationBarCount(4);
+verify.navigationBar([
+    {
+        "text": "\"navigationBarItemsMissingName1\"",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "C",
+                "kind": "class"
+            }
+        ],
+        "indent": 0
+    },
+    {
+        "text": "C",
+        "kind": "class",
+        "childItems": [
+            {
+                "text": "foo",
+                "kind": "method"
+            }
+        ],
+        "indent": 1
+    }
+]);

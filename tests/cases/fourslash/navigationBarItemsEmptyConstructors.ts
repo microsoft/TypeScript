@@ -5,8 +5,27 @@
 ////    }
 ////}
 
-verify.navigationBarContains("Test", "class");
-verify.navigationBarContains("constructor", "constructor");
-
-// no other items
-verify.navigationBarCount(4); // global + 1 child, Test + 1 child
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "Test",
+                "kind": "class"
+            }
+        ],
+        "indent": 0
+    },
+    {
+        "text": "Test",
+        "kind": "class",
+        "childItems": [
+            {
+                "text": "constructor",
+                "kind": "constructor"
+            }
+        ],
+        "indent": 1
+    }
+]);

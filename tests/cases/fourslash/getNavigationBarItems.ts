@@ -5,7 +5,31 @@
 ////    ["bar"]: string;
 ////}
 
-verify.navigationBarCount(5);
-verify.navigationBarContains("C", "class");
-verify.navigationBarChildItem("C", "[\"bar\"]", "property");
-verify.navigationBarChildItem("C", "foo", "property");
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "C",
+                "kind": "class"
+            }
+        ],
+        "indent": 0
+    },
+    {
+        "text": "C",
+        "kind": "class",
+        "childItems": [
+            {
+                "text": "[\"bar\"]",
+                "kind": "property"
+            },
+            {
+                "text": "foo",
+                "kind": "property"
+            }
+        ],
+        "indent": 1
+    }
+])

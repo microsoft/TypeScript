@@ -175,9 +175,7 @@ declare namespace FourSlashInterface {
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
 
-        navigationBarCount(count: number): void;
-        navigationBarContains(name: string, kind: string, fileName?: string, parentName?: string, isAdditionalSpan?: boolean, markerPosition?: number): void;
-        navigationBarChildItem(parent: string, text: string, kind: string): void;
+        navigationBar(json: any): void;
         navigationItemsListCount(count: number, searchValue: string, matchKind?: string): void;
         navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;

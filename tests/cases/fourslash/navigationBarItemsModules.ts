@@ -1,49 +1,137 @@
 /// <reference path="fourslash.ts"/>
 
-////{| "itemName": "\"X.Y.Z\"", "kind": "module", "parentName": "<global>" |}
-////declare module "X.Y.Z" {
-////}
+////declare module "X.Y.Z" {}
 ////
-////{| "itemName": "'X2.Y2.Z2'", "kind": "module", "parentName": "<global>" |}
-////declare module 'X2.Y2.Z2' {
-////}
+////declare module 'X2.Y2.Z2' {}
 ////
-////{| "itemName": "A.B.C", "kind": "module", "parentName": "<global>" |}
 ////module A.B.C {
-////    {| "itemName": "x", "kind": "var", "parentName": "A.B.C" |}
 ////    export var x;
 ////}
 ////
-////{| "itemName": "A.B", "kind": "module", "parentName": "<global>" |}
 ////module A.B {
-////    {| "itemName": "y", "kind": "var", "parentName": "A.B" |}
 ////    export var y;
 ////}
 ////
-////{| "itemName": "A", "kind": "module", "parentName": "<global>" |}
 ////module A {
-////    {| "itemName": "z", "kind": "var", "parentName": "A" |}
 ////    export var z;
 ////}
 ////
-////{| "itemName": "A", "kind": "module", "parentName": "<global>" |}
 ////module A {
-////    {| "itemName": "B", "kind": "module", "parentName": "A" |}
 ////    module B {
-////        {| "itemName": "C", "kind": "module", "parentName": "B" |}
 ////        module C {
-////            {| "itemName": "x", "kind": "var", "parentName": "C" |}
 ////            declare var x;
 ////        }
 ////    }
 ////}
 
-
-test.markers().forEach((marker) => {
-    verify.navigationBarContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
-});
-
-/// We have 8 module keywords, and 4 var keywords.
-/// The declarations of A.B.C.x do not get merged, so the 4 vars are independent.
-/// The two 'A' modules, however, do get merged, so in reality we have 7 modules.
-verify.navigationBarCount(19);
+//We have 8 module keywords, and 4 var keywords.
+//The declarations of A.B.C.x do not get merged, so the 4 vars are independent.
+//The two 'A' modules, however, do get merged, so in reality we have 7 modules.
+verify.navigationBar([
+  {
+    "text": "<global>",
+    "kind": "module",
+    "childItems": [
+      {
+        "text": "A.B.C",
+        "kind": "module"
+      },
+      {
+        "text": "A.B",
+        "kind": "module"
+      },
+      {
+        "text": "A",
+        "kind": "module"
+      },
+      {
+        "text": "\"X.Y.Z\"",
+        "kind": "module",
+        "kindModifiers": "declare"
+      },
+      {
+        "text": "'X2.Y2.Z2'",
+        "kind": "module",
+        "kindModifiers": "declare"
+      }
+    ],
+    "indent": 0
+  },
+  {
+    "text": "A.B.C",
+    "kind": "module",
+    "childItems": [
+      {
+        "text": "x",
+        "kind": "var",
+        "kindModifiers": "export"
+      }
+    ],
+    "indent": 1
+  },
+  {
+    "text": "A.B",
+    "kind": "module",
+    "childItems": [
+      {
+        "text": "y",
+        "kind": "var",
+        "kindModifiers": "export"
+      }
+    ],
+    "indent": 1
+  },
+  {
+    "text": "A",
+    "kind": "module",
+    "childItems": [
+      {
+        "text": "z",
+        "kind": "var",
+        "kindModifiers": "export"
+      },
+      {
+        "text": "B",
+        "kind": "module"
+      }
+    ],
+    "indent": 1
+  },
+  {
+    "text": "B",
+    "kind": "module",
+    "childItems": [
+      {
+        "text": "C",
+        "kind": "module"
+      }
+    ],
+    "indent": 2
+  },
+  {
+    "text": "C",
+    "kind": "module",
+    "childItems": [
+      {
+        "text": "x",
+        "kind": "var",
+        "kindModifiers": "declare"
+      }
+    ],
+    "indent": 3
+  },
+  {
+    "text": "\"X.Y.Z\"",
+    "kind": "module",
+    "kindModifiers": "declare",
+    "childItems": [],
+    "indent": 1
+  },
+  {
+    "text": "'X2.Y2.Z2'",
+    "kind": "module",
+    "kindModifiers": "declare",
+    "childItems": [],
+    "indent": 1
+  }
+]);
