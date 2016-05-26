@@ -6034,9 +6034,10 @@ namespace ts {
             function isKnownProperty(type: Type, name: string): boolean {
                 if (type.flags & TypeFlags.ObjectType) {
                     const resolved = resolveStructuredTypeMembers(type);
-                    if ((relation === assignableRelation || relation === comparableRelation) &&
-                        (type === globalObjectType || isEmptyObjectType(resolved)) ||
-                        resolved.stringIndexInfo || resolved.numberIndexInfo || getPropertyOfType(type, name)) {
+                    if ((relation === assignableRelation || relation === comparableRelation) && (type === globalObjectType || isEmptyObjectType(resolved)) ||
+                        resolved.stringIndexInfo ||
+                        (resolved.numberIndexInfo && isNumericLiteralName(name)) ||
+                        getPropertyOfType(type, name)) {
                         return true;
                     }
                 }
