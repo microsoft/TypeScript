@@ -82,12 +82,9 @@ namespace ts {
             function getLeadingComments(range: TextRange): CommentRange[];
             function getLeadingComments(range: TextRange, contextNode: Node, ignoreNodeCallback: (contextNode: Node) => boolean, getTextRangeCallback: (contextNode: Node) => TextRange): CommentRange[];
             function getLeadingComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean, getTextRangeCallback?: (contextNode: Node) => TextRange) {
-                let comments: CommentRange[] = [];
-                let ignored = false;
                 if (contextNode) {
                     range = getTextRangeCallback(contextNode) || range;
                     if (ignoreNodeCallback(contextNode)) {
-                        ignored = true;
                         // If the node will not be emitted in JS, remove all the comments (normal,
                         // pinned and `///`) associated with the node, unless it is a triple slash
                         // comment at the top of the file.
@@ -101,16 +98,14 @@ namespace ts {
                         // The first `///` will NOT be removed while the second one will be removed
                         // even though both nodes will not be emitted.
                         if (range.pos === 0) {
-                            comments = filter(getLeadingCommentsOfPosition(0), isTripleSlashComment);
+                            return filter(getLeadingCommentsOfPosition(0), isTripleSlashComment);
                         }
+
+                        return;
                     }
                 }
 
-                if (!ignored) {
-                    comments = getLeadingCommentsOfPosition(range.pos);
-                }
-
-                return comments;
+                return getLeadingCommentsOfPosition(range.pos);
             }
 
             /**
