@@ -31,7 +31,7 @@ namespace ts {
 
         // This maps start->end for a comment range. See `hasConsumedCommentRange` and
         // `consumeCommentRange` for usage.
-        let consumedCommentRanges: Map<number>;
+        let consumedCommentRanges: Map<boolean>;
         let leadingCommentRangePositions: Map<boolean>;
         let trailingCommentRangePositions: Map<boolean>;
 
@@ -157,8 +157,8 @@ namespace ts {
                 leadingCommentRangePositions[pos] = true;
                 const comments = hasDetachedComments(pos)
                     ? getLeadingCommentsWithoutDetachedComments()
-                    : getLeadingCommentRanges(currentText, pos);
-                return consumeCommentRanges(comments);
+                    : getLeadingCommentRanges(currentText, pos, consumedCommentRanges);
+                return comments;
             }
 
             function getTrailingCommentsOfPosition(pos: number) {
@@ -167,8 +167,8 @@ namespace ts {
                 }
 
                 trailingCommentRangePositions[pos] = true;
-                const comments = getTrailingCommentRanges(currentText, pos);
-                return consumeCommentRanges(comments);
+                const comments = getTrailingCommentRanges(currentText, pos, consumedCommentRanges);
+                return comments;
             }
 
             function emitLeadingComments(range: TextRange, comments: CommentRange[]): void;
@@ -210,53 +210,6 @@ namespace ts {
 
                 range = collapseRangeToEnd(range);
                 emitLeadingComments(range, getLeadingComments(range));
-            }
-
-            function hasConsumedCommentRange(comment: CommentRange) {
-                return comment.end === consumedCommentRanges[comment.pos];
-            }
-
-            function consumeCommentRange(comment: CommentRange) {
-                if (!hasConsumedCommentRange(comment)) {
-                    consumedCommentRanges[comment.pos] = comment.end;
-                    return true;
-                }
-
-                return false;
-            }
-
-            function consumeCommentRanges(comments: CommentRange[]) {
-                let consumed: CommentRange[];
-                if (comments) {
-                    let commentsSkipped = 0;
-                    let commentsConsumed = 0;
-                    for (let i = 0; i < comments.length; i++) {
-                        const comment = comments[i];
-                        if (consumeCommentRange(comment)) {
-                            commentsConsumed++;
-                            if (commentsSkipped !== 0) {
-                                if (consumed === undefined) {
-                                    consumed = [comment];
-                                }
-                                else {
-                                    consumed.push(comment);
-                                }
-                            }
-                        }
-                        else {
-                            commentsSkipped++;
-                            if (commentsConsumed !== 0 && consumed === undefined) {
-                                consumed = comments.slice(0, i);
-                            }
-                        }
-                    }
-
-                    if (commentsConsumed) {
-                        return consumed || comments;
-                    }
-                }
-
-                return noComments;
             }
         }
 
@@ -344,7 +297,7 @@ namespace ts {
         function getLeadingCommentsWithoutDetachedComments() {
             // get the leading comments from detachedPos
             const pos = lastOrUndefined(detachedCommentsInfo).detachedCommentEndPos;
-            const leadingComments = getLeadingCommentRanges(currentText, pos);
+            const leadingComments = getLeadingCommentRanges(currentText, pos, consumedCommentRanges);
             if (detachedCommentsInfo.length - 1) {
                 detachedCommentsInfo.pop();
             }
