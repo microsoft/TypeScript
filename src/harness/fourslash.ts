@@ -2354,7 +2354,7 @@ ${code}
         let currentFileContent: string = undefined;
         let currentFileName = fileName;
         let currentFileOptions: { [s: string]: string } = {};
-        
+
         function resetLocalData() {
             currentFileContent = undefined;
             currentFileOptions = {};
