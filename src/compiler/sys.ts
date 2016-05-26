@@ -425,10 +425,10 @@ namespace ts {
             function directoryExists(path: string): boolean {
                 return fileSystemEntryExists(path, FileSystemEntryKind.Directory);
             }
-	    
+
             function getDirectories(path: string): string[] {
                 return filter<string>(_fs.readdirSync(path), p => fileSystemEntryExists(combinePaths(path, p), FileSystemEntryKind.Directory));
-            }	    
+            }
 
             return {
                 args: process.argv.slice(2),
