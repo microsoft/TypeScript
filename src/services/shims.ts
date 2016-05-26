@@ -61,6 +61,7 @@ namespace ts {
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
         getProjectVersion?(): string;
@@ -398,6 +399,10 @@ namespace ts {
 
         public getCurrentDirectory(): string {
             return this.shimHost.getCurrentDirectory();
+        }
+
+        public getDirectories(path: string): string[] {
+            return this.shimHost.getDirectories(path);
         }
 
         public getDefaultLibFileName(options: CompilerOptions): string {

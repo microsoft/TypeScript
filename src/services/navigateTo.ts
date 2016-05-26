@@ -2,7 +2,7 @@
 namespace ts.NavigateTo {
     type RawNavigateToItem = { name: string; fileName: string; matchKind: PatternMatchKind; isCaseSensitive: boolean; declaration: Declaration };
 
-    export function getNavigateToItems(program: Program, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number): NavigateToItem[] {
+    export function getNavigateToItems(program: Program, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number): NavigateToItem[] {
         const patternMatcher = createPatternMatcher(searchValue);
         let rawItems: RawNavigateToItem[] = [];
 
@@ -46,6 +46,19 @@ namespace ts.NavigateTo {
                         rawItems.push({ name, fileName, matchKind, isCaseSensitive: allMatchesAreCaseSensitive(matches), declaration });
                     }
                 }
+            }
+        });
+
+        // Remove imports when the imported declaration is already in the list and has the same name.
+        rawItems = filter(rawItems, item => {
+            const decl = item.declaration;
+            if (decl.kind === SyntaxKind.ImportClause || decl.kind === SyntaxKind.ImportSpecifier || decl.kind === SyntaxKind.ImportEqualsDeclaration) {
+                const importer = checker.getSymbolAtLocation(decl.name);
+                const imported = checker.getAliasedSymbol(importer);
+                return importer.name !== imported.name;
+            }
+            else {
+                return true;
             }
         });
 

@@ -2,21 +2,21 @@
 /// <reference path="..\..\..\src\compiler\commandLineParser.ts" />
 
 namespace ts {
-    describe('parseConfigFileTextToJson', () => {
+    describe("parseConfigFileTextToJson", () => {
         function assertParseResult(jsonText: string, expectedConfigObject: { config?: any; error?: Diagnostic }) {
-            let parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
+            const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
             assert.equal(JSON.stringify(parsed), JSON.stringify(expectedConfigObject));
         }
 
         function assertParseError(jsonText: string) {
-             let parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
+             const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
              assert.isTrue(undefined === parsed.config);
              assert.isTrue(undefined !== parsed.error);
         }
 
         function assertParseErrorWithExcludesKeyword(jsonText: string) {
-             let parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
-             let parsedCommand = ts.parseJsonConfigFileContent(parsed.config, ts.sys, "tests/cases/unittests");
+             const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
+             const parsedCommand = ts.parseJsonConfigFileContent(parsed.config, ts.sys, "tests/cases/unittests");
              assert.isTrue(parsedCommand.errors && parsedCommand.errors.length === 1 &&
                 parsedCommand.errors[0].code === ts.Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
         }
@@ -136,7 +136,7 @@ namespace ts {
                 "/apath",
                 ["/apath/test.ts", "/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"],
                 ["/apath/test.ts"]
-            )
+            );
         });
 
         it("allow dotted files and folders when explicitly requested", () => {
@@ -148,7 +148,7 @@ namespace ts {
                 "/apath",
                 ["/apath/test.ts", "/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"],
                 ["/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"]
-            )
+            );
         });
 
         it("always exclude outDir", () => {
@@ -170,7 +170,7 @@ namespace ts {
             const expectedFiles = ["/b.ts"];
             assertParseFileList(tsconfigWithoutExclude, "tsconfig.json", rootDir, allFiles, expectedFiles);
             assertParseFileList(tsconfigWithExclude, "tsconfig.json", rootDir, allFiles, expectedFiles);
-        })
+        });
 
         it("implicitly exclude common package folders", () => {
             assertParseFileList(
@@ -179,7 +179,7 @@ namespace ts {
                 "/",
                 ["/node_modules/a.ts", "/bower_components/b.ts", "/jspm_packages/c.ts", "/d.ts", "/folder/e.ts"],
                 ["/d.ts", "/folder/e.ts"]
-            )
-        })
+            );
+        });
     });
 }

@@ -1096,14 +1096,6 @@ namespace FourSlash {
             }
             addSpanInfoString();
             return resultString;
-
-            function repeatString(count: number, char: string) {
-                let result = "";
-                for (let i = 0; i < count; i++) {
-                    result += char;
-                }
-                return result;
-            }
         }
 
         public getBreakpointStatementLocation(pos: number) {
@@ -1989,36 +1981,36 @@ namespace FourSlash {
             return result;
         }
 
-        public verifyNavigationBarContains(name: string, kind: string) {
-            const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
+        public verifyNavigationBarContains(name: string, kind: string, fileName?: string, parentName?: string, isAdditionalSpan?: boolean, markerPosition?: number) {
+            fileName = fileName || this.activeFile.fileName;
+            const items = this.languageService.getNavigationBarItems(fileName);
 
             if (!items || items.length === 0) {
                 this.raiseError("verifyNavigationBarContains failed - found 0 navigation items, expected at least one.");
             }
 
-            if (this.navigationBarItemsContains(items, name, kind)) {
+            if (this.navigationBarItemsContains(items, name, kind, parentName)) {
                 return;
             }
 
-            const missingItem = { name, kind };
+            const missingItem = { name, kind, parentName };
             this.raiseError(`verifyNavigationBarContains failed - could not find the item: ${JSON.stringify(missingItem, undefined, 2)} in the returned list: (${JSON.stringify(items, undefined, 2)})`);
         }
 
-        private navigationBarItemsContains(items: ts.NavigationBarItem[], name: string, kind: string) {
-            if (items) {
+        private navigationBarItemsContains(items: ts.NavigationBarItem[], name: string, kind: string, parentName?: string) {
+            function recur(items: ts.NavigationBarItem[], curParentName: string) {
                 for (let i = 0; i < items.length; i++) {
                     const item = items[i];
-                    if (item && item.text === name && item.kind === kind) {
+                    if (item && item.text === name && item.kind === kind && (!parentName || curParentName === parentName)) {
                         return true;
                     }
-
-                    if (this.navigationBarItemsContains(item.childItems, name, kind)) {
+                    if (recur(item.childItems, item.text)) {
                         return true;
                     }
                 }
+                return false;
             }
-
-            return false;
+            return recur(items, "");
         }
 
         public verifyNavigationBarChildItem(parent: string, name: string, kind: string) {
@@ -2055,7 +2047,7 @@ namespace FourSlash {
 
             for (let i = 0; i < length; i++) {
                 const item = items[i];
-                Harness.IO.log(`name: ${item.text}, kind: ${item.kind}`);
+                Harness.IO.log(`${repeatString(item.indent, " ")}name: ${item.text}, kind: ${item.kind}, childItems: ${item.childItems.map(child => child.text)}`);
             }
         }
 
@@ -2742,6 +2734,14 @@ ${code}
             fileName: fileName
         };
     }
+
+    function repeatString(count: number, char: string) {
+        let result = "";
+        for (let i = 0; i < count; i++) {
+            result += char;
+        }
+        return result;
+    }
 }
 
 namespace FourSlashInterface {
@@ -3055,7 +3055,7 @@ namespace FourSlashInterface {
             parentName?: string,
             isAdditionalSpan?: boolean,
             markerPosition?: number) {
-            this.state.verifyNavigationBarContains(name, kind);
+            this.state.verifyNavigationBarContains(name, kind, fileName, parentName, isAdditionalSpan, markerPosition);
         }
 
         public navigationBarChildItem(parent: string, name: string, kind: string) {

@@ -10,7 +10,7 @@
 ////{| "itemName": "\"MultilineMadness\"", "kind": "module" |}
 ////declare module "MultilineMadness" {}
 ////
-////{| "itemName": "Foo", "kind": "interface" |}
+////{| "itemName": "Foo", "kind": "interface", "parentName": "<global>" |}
 ////interface Foo {
 ////    {| "itemName": "\"a1\\\\\\r\\nb\"", "kind": "property", "parentName": "Foo" |}
 ////    "a1\\\r\nb";
@@ -38,4 +38,4 @@ test.markers().forEach((marker) => {
     verify.navigationBarContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
 });
 
-verify.navigationBarCount(9); // interface w/ 2 properties, class w/ 2 properties, 3 modules
+verify.navigationBarCount(11); // interface w/ 2 properties, class w/ 2 properties, 3 modules
