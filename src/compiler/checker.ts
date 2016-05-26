@@ -6036,11 +6036,9 @@ namespace ts {
                     const resolved = resolveStructuredTypeMembers(type);
                     if ((relation === assignableRelation || relation === comparableRelation) && (type === globalObjectType || isEmptyObjectType(resolved)) ||
                         resolved.stringIndexInfo ||
+                        (resolved.numberIndexInfo && isNumericLiteralName(name)) ||
                         getPropertyOfType(type, name)) {
                         return true;
-                    }
-                    if (resolved.numberIndexInfo) {
-                        return isNumericLiteralName(name);
                     }
                 }
                 else if (type.flags & TypeFlags.UnionOrIntersection) {
