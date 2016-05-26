@@ -781,7 +781,7 @@ namespace ts {
 
         // Walk up the directory spine until we find the first node_modules folder
         let nodeProbePath = normalizeSlashes(rootPath);
-        while (!isRootedDiskPath(nodeProbePath)) {
+        while (getDirectoryPath(nodeProbePath) !== nodeProbePath) {
             if (sys.directoryExists(combinePaths(nodeProbePath, 'node_modules'))) {
                 const nodeTypesPath = combinePaths(nodeProbePath, 'node_modules/@types');
                 if (sys.directoryExists(nodeTypesPath)) {
