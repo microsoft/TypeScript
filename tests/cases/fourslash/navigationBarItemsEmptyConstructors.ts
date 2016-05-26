@@ -9,4 +9,4 @@ verify.navigationBarContains("Test", "class");
 verify.navigationBarContains("constructor", "constructor");
 
 // no other items
-verify.navigationBarCount(2);
+verify.navigationBarCount(4); // global + 1 child, Test + 1 child

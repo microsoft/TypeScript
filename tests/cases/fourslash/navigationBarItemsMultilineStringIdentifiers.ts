@@ -20,7 +20,7 @@
 ////    b"(): Foo;
 ////}
 ////
-////{| "itemName": "Bar", "kind": "class" |}
+////{| "itemName": "Bar", "kind": "class", "parentName": "<global>" |}
 ////class Bar implements Foo {
 ////    {| "itemName": "'a1\\\\\\r\\nb'", "kind": "property", "parentName": "Bar" |}
 ////    'a1\\\r\nb': Foo;
@@ -38,4 +38,4 @@ test.markers().forEach((marker) => {
     verify.navigationBarContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
 });
 
-verify.navigationBarCount(11); // interface w/ 2 properties, class w/ 2 properties, 3 modules
+verify.navigationBarCount(12); // global + 1 child, interface w/ 2 properties, class w/ 2 properties, 3 modules

@@ -13,7 +13,7 @@
 ////{| "itemName": "Shapes", "kind": "module", "parentName": "" |}module Shapes {
 ////
 ////    // Class
-////    {| "itemName": "Point", "kind": "class", "parentName": "" |}export class Point implements IPoint {
+////    {| "itemName": "Point", "kind": "class", "parentName": "Shapes" |}export class Point implements IPoint {
 ////        {| "itemName": "constructor", "kind": "constructor", "parentName": "Point" |}constructor (public x: number, public y: number) { }
 ////
 ////        // Instance member
@@ -49,4 +49,4 @@ test.markers().forEach((marker) => {
     }
 });
 
-verify.navigationBarCount(25);
+verify.navigationBarCount(26);
