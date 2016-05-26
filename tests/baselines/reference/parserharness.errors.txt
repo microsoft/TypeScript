@@ -7,11 +7,11 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(25,17): er
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(43,19): error TS2304: Cannot find name 'require'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(44,14): error TS2304: Cannot find name 'require'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(341,13): error TS2304: Cannot find name 'errorHandlerStack'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(347,13): error TS2304: Cannot find name 'errorHandlerStack'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(351,17): error TS2304: Cannot find name 'errorHandlerStack'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(354,17): error TS2304: Cannot find name 'errorHandlerStack'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(354,35): error TS2304: Cannot find name 'errorHandlerStack'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(341,13): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(347,13): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(351,17): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(354,17): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(354,35): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(691,50): error TS2304: Cannot find name 'ITextWriter'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(716,47): error TS2503: Cannot find namespace 'TypeScript'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(721,62): error TS2304: Cannot find name 'ITextWriter'.
@@ -471,7 +471,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
             static pushGlobalErrorHandler(done: IDone) {
                 errorHandlerStack.push(function (e) {
                 ~~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'errorHandlerStack'.
+!!! error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
                     done(e);
                 });
             }
@@ -479,20 +479,20 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
             static popGlobalErrorHandler() {
                 errorHandlerStack.pop();
                 ~~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'errorHandlerStack'.
+!!! error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
             }
     
             static handleError(e: Error) {
                 if (errorHandlerStack.length === 0) {
                     ~~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'errorHandlerStack'.
+!!! error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
                     IO.printLine('Global error: ' + e);
                 } else {
                     errorHandlerStack[errorHandlerStack.length - 1](e);
                     ~~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'errorHandlerStack'.
+!!! error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
                                       ~~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'errorHandlerStack'.
+!!! error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
                 }
             }
         }

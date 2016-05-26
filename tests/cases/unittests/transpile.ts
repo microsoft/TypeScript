@@ -85,11 +85,6 @@ module ts {
 
         }
         
-        it("Generates correct compilerOptions diagnostics", () => {
-            // Expecting 5047: "Option 'isolatedModules' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher."
-            test(`var x = 0;`, { expectedDiagnosticCodes: [5047] });
-        });
-
         it("Generates no diagnostics with valid inputs", () => {
             // No errors
             test(`var x = 0;`, { options: { compilerOptions: { module: ModuleKind.CommonJS } } });
@@ -134,7 +129,10 @@ var x = 0;`,
 
         it("Sets module name", () => {
             let output =
-                `System.register("NamedModule", [], function(exports_1, __moduleName) {\n    "use strict";\n    var x;\n` +
+                `System.register("NamedModule", [], function(exports_1, context_1) {\n` +
+                `    "use strict";\n` +
+                `    var __moduleName = context_1 && context_1.id;\n` +
+                `    var x;\n` +
                 `    return {\n` +
                 `        setters:[],\n` +
                 `        execute: function() {\n` +
@@ -159,8 +157,9 @@ var x = 0;`,
                 `declare function use(a: any);\n` +
                 `use(foo);`
             let output =
-                `System.register(["SomeOtherName"], function(exports_1, __moduleName) {\n` +
+                `System.register(["SomeOtherName"], function(exports_1, context_1) {\n` +
                 `    "use strict";\n` +
+                `    var __moduleName = context_1 && context_1.id;\n` +
                 `    var SomeName_1;\n` +
                 `    return {\n` +
                 `        setters:[\n` +
@@ -278,7 +277,7 @@ var x = 0;`,
         it("Supports backslashes in file name", () => {
             test("var x", { expectedOutput: `"use strict";\r\nvar x;\r\n`, options: { fileName: "a\\b.ts" }});
         });
-        
+
         it("transpile file as 'tsx' if 'jsx' is specified", () => {
             let input = `var x = <div/>`;
             let output = `"use strict";\nvar x = React.createElement("div", null);\n`;
@@ -286,6 +285,20 @@ var x = 0;`,
                 expectedOutput: output,
                 options: { compilerOptions: { jsx: JsxEmit.React, newLine: NewLineKind.LineFeed } }
             })
+        });
+
+        it("transpile .js files", () => {
+            const input = "const a = 10;";
+            const output = `"use strict";\nvar a = 10;\n`;
+            test(input, {
+                expectedOutput: output,
+                options: { compilerOptions: { newLine: NewLineKind.LineFeed, module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true },
+                expectedDiagnosticCodes: []
+            });
+        })
+
+        it("Supports urls in file name", () => {
+            test("var x", { expectedOutput: `"use strict";\r\nvar x;\r\n`, options: { fileName: "http://somewhere/directory//directory2/file.ts" } });
         });
     });
 }

@@ -1,24 +1,26 @@
 ///<reference path="fourslash.ts"/>
 
-/////*InsertSpaceAfterCommaDelimiter*/[1,2,   3];
+/////*InsertSpaceAfterCommaDelimiter*/[1,2,   3];[ 72  ,    ];
 /////*InsertSpaceAfterSemicolonInForStatements*/for (i = 0;i;    i++);
 /////*InsertSpaceBeforeAndAfterBinaryOperators*/1+2-    3
 /////*InsertSpaceAfterKeywordsInControlFlowStatements*/if     (true) { }
 /////*InsertSpaceAfterFunctionKeywordForAnonymousFunctions*/(function               () { })
 /////*InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis*/(1  )
-/////*InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets*/[1  ]; [ ]; []; [,]
+/////*InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets*/[1  ]; [ ]; []; [,];
+/////*InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces*/`${1}`;`${   1  }`
 /////*PlaceOpenBraceOnNewLineForFunctions*/class   foo   { 
 ////}
 /////*PlaceOpenBraceOnNewLineForControlBlocks*/if (true)   {
 ////}
 
-runTest("InsertSpaceAfterCommaDelimiter", "[1, 2, 3];", "[1,2,3];");
+runTest("InsertSpaceAfterCommaDelimiter", "[1, 2, 3];[72,];", "[1,2,3];[72,];");
 runTest("InsertSpaceAfterSemicolonInForStatements", "for (i = 0; i; i++);", "for (i = 0;i;i++);");
 runTest("InsertSpaceBeforeAndAfterBinaryOperators", "1 + 2 - 3", "1+2-3");
 runTest("InsertSpaceAfterKeywordsInControlFlowStatements", "if (true) { }", "if(true) { }");
 runTest("InsertSpaceAfterFunctionKeywordForAnonymousFunctions", "(function () { })", "(function() { })");
 runTest("InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis", "    ( 1 )", "    (1)");
-runTest("InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets", "[ 1 ];[];[];[ , ]", "[1];[];[];[, ]");
+runTest("InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets", "[ 1 ];[];[];[ , ];", "[1];[];[];[,];");
+runTest("InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces", "`${ 1 }`; `${ 1 }`", "`${1}`; `${1}`");
 runTest("PlaceOpenBraceOnNewLineForFunctions", "class foo", "class foo {");
 runTest("PlaceOpenBraceOnNewLineForControlBlocks", "if ( true )", "if ( true ) {");
 

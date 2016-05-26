@@ -1,0 +1,163 @@
+=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.ts ===
+declare var console: {
+>console : { log(msg: string): void; }
+
+    log(msg: string): void;
+>log : (msg: string) => void
+>msg : string
+}
+interface Robot {
+>Robot : Robot
+
+    name: string;
+>name : string
+
+    skills: {
+>skills : { primary?: string; secondary?: string; }
+
+        primary?: string;
+>primary : string
+
+        secondary?: string;
+>secondary : string
+
+    };
+}
+var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
+>robotA : Robot
+>Robot : Robot
+>{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
+>name : string
+>"mower" : string
+>skills : { primary: string; secondary: string; }
+>{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
+>primary : string
+>"mowing" : string
+>secondary : string
+>"none" : string
+
+var robotB: Robot = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } };
+>robotB : Robot
+>Robot : Robot
+>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
+>name : string
+>"trimmer" : string
+>skills : { primary: string; secondary: string; }
+>{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
+>primary : string
+>"trimming" : string
+>secondary : string
+>"edging" : string
+
+var {
+    skills: {
+>skills : any
+
+        primary: primaryA = "noSkill",
+>primary : any
+>primaryA : string
+>"noSkill" : string
+
+        secondary: secondaryA = "noSkill"
+>secondary : any
+>secondaryA : string
+>"noSkill" : string
+
+    } = { primary: "noSkill", secondary: "noSkill" }
+>{ primary: "noSkill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
+>primary : string
+>"noSkill" : string
+>secondary : string
+>"noSkill" : string
+
+} = robotA;
+>robotA : Robot
+
+var {
+    name: nameB = "noNameSpecified",
+>name : any
+>nameB : string
+>"noNameSpecified" : string
+
+    skills: {
+>skills : any
+
+        primary: primaryB = "noSkill",
+>primary : any
+>primaryB : string
+>"noSkill" : string
+
+        secondary: secondaryB = "noSkill"
+>secondary : any
+>secondaryB : string
+>"noSkill" : string
+
+    } = { primary: "noSkill", secondary: "noSkill" }
+>{ primary: "noSkill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
+>primary : string
+>"noSkill" : string
+>secondary : string
+>"noSkill" : string
+
+} = robotB;
+>robotB : Robot
+
+var {
+    name: nameC = "noNameSpecified",
+>name : any
+>nameC : string
+>"noNameSpecified" : string
+
+    skills: {
+>skills : any
+
+        primary: primaryB = "noSkill",
+>primary : any
+>primaryB : string
+>"noSkill" : string
+
+        secondary: secondaryB = "noSkill"
+>secondary : any
+>secondaryB : string
+>"noSkill" : string
+
+    } = { primary: "noSkill", secondary: "noSkill" }
+>{ primary: "noSkill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
+>primary : string
+>"noSkill" : string
+>secondary : string
+>"noSkill" : string
+
+} = <Robot>{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } };
+><Robot>{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } } : Robot
+>Robot : Robot
+>{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } } : { name: string; skills: { primary: string; secondary: string; }; }
+>name : string
+>"Edger" : string
+>skills : { primary: string; secondary: string; }
+>{ primary: "edging", secondary: "branch trimming" } : { primary: string; secondary: string; }
+>primary : string
+>"edging" : string
+>secondary : string
+>"branch trimming" : string
+
+if (nameB == nameB) {
+>nameB == nameB : boolean
+>nameB : string
+>nameB : string
+
+    console.log(nameC);
+>console.log(nameC) : void
+>console.log : (msg: string) => void
+>console : { log(msg: string): void; }
+>log : (msg: string) => void
+>nameC : string
+}
+else {
+    console.log(nameC);
+>console.log(nameC) : void
+>console.log : (msg: string) => void
+>console : { log(msg: string): void; }
+>log : (msg: string) => void
+>nameC : string
+}

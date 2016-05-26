@@ -6,8 +6,8 @@ module A {
 >Point : Symbol(Point, Decl(importInTypePosition.ts, 0, 10))
 
         constructor(public x: number, public y: number) { }
->x : Symbol(x, Decl(importInTypePosition.ts, 2, 20))
->y : Symbol(y, Decl(importInTypePosition.ts, 2, 37))
+>x : Symbol(Point.x, Decl(importInTypePosition.ts, 2, 20))
+>y : Symbol(Point.y, Decl(importInTypePosition.ts, 2, 37))
     }
     export var Origin = new Point(0, 0);
 >Origin : Symbol(Origin, Decl(importInTypePosition.ts, 4, 14))

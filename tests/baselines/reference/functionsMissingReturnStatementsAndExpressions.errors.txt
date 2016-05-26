@@ -1,9 +1,10 @@
 tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(3,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(95,16): error TS2378: A 'get' accessor must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(118,5): error TS1003: Identifier expected.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(101,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(106,16): error TS2378: A 'get' accessor must return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(129,5): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts (3 errors) ====
+==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts (4 errors) ====
     
     
     function f1(): string {
@@ -98,6 +99,19 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(118,5): e
         return "Okay, not type annotated.";
     }
     
+    function f19(): void | number {
+        // Okay; function return type is union containing void
+    }
+    
+    function f20(): any | number {
+        // Okay; function return type is union containing any
+    }
+    
+    function f21(): number | string {
+                    ~~~~~~~~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+        // Not okay; union does not contain void or any
+    }
     
     class C {
         public get m1() {

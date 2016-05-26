@@ -1,4 +1,3 @@
-tests/cases/compiler/reservedWords2.ts(1,1): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 tests/cases/compiler/reservedWords2.ts(1,8): error TS1109: Expression expected.
 tests/cases/compiler/reservedWords2.ts(1,14): error TS1005: '(' expected.
 tests/cases/compiler/reservedWords2.ts(1,16): error TS2304: Cannot find name 'require'.
@@ -32,10 +31,8 @@ tests/cases/compiler/reservedWords2.ts(10,5): error TS2300: Duplicate identifier
 tests/cases/compiler/reservedWords2.ts(10,6): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/reservedWords2.ts (32 errors) ====
+==== tests/cases/compiler/reservedWords2.ts (31 errors) ====
     import while = require("dfdf");
-    ~~~~~~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
            ~~~~~
 !!! error TS1109: Expression expected.
                  ~

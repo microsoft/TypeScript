@@ -21,8 +21,8 @@ class D {
 }
 
 var x = {
->x : { a: number; }
->{    get a() { return 1 }} : { a: number; }
+>x : { readonly a: number; }
+>{    get a() { return 1 }} : { readonly a: number; }
 
     get a() { return 1 }
 >a : number

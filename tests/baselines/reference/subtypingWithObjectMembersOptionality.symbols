@@ -3,17 +3,17 @@
 
 interface Base { foo: string; }
 >Base : Symbol(Base, Decl(subtypingWithObjectMembersOptionality.ts, 0, 0))
->foo : Symbol(foo, Decl(subtypingWithObjectMembersOptionality.ts, 2, 16))
+>foo : Symbol(Base.foo, Decl(subtypingWithObjectMembersOptionality.ts, 2, 16))
 
 interface Derived extends Base { bar: string; }
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality.ts, 2, 31))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembersOptionality.ts, 0, 0))
->bar : Symbol(bar, Decl(subtypingWithObjectMembersOptionality.ts, 3, 32))
+>bar : Symbol(Derived.bar, Decl(subtypingWithObjectMembersOptionality.ts, 3, 32))
 
 interface Derived2 extends Derived { baz: string; }
 >Derived2 : Symbol(Derived2, Decl(subtypingWithObjectMembersOptionality.ts, 3, 47))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality.ts, 2, 31))
->baz : Symbol(baz, Decl(subtypingWithObjectMembersOptionality.ts, 4, 36))
+>baz : Symbol(Derived2.baz, Decl(subtypingWithObjectMembersOptionality.ts, 4, 36))
 
 // S is a subtype of a type T, and T is a supertype of S, if one of the following is true, where S' denotes the apparent type (section 3.8.1) of S:
 //   - S' and T are object types and, for each member M in T, one of the following is true:
@@ -27,7 +27,7 @@ interface T {
 >T : Symbol(T, Decl(subtypingWithObjectMembersOptionality.ts, 4, 51))
 
     Foo?: Base;
->Foo : Symbol(Foo, Decl(subtypingWithObjectMembersOptionality.ts, 14, 13))
+>Foo : Symbol(T.Foo, Decl(subtypingWithObjectMembersOptionality.ts, 14, 13))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembersOptionality.ts, 0, 0))
 }
 
@@ -36,7 +36,7 @@ interface S extends T {
 >T : Symbol(T, Decl(subtypingWithObjectMembersOptionality.ts, 4, 51))
 
     Foo: Derived
->Foo : Symbol(Foo, Decl(subtypingWithObjectMembersOptionality.ts, 18, 23))
+>Foo : Symbol(S.Foo, Decl(subtypingWithObjectMembersOptionality.ts, 18, 23))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality.ts, 2, 31))
 }
 
@@ -93,7 +93,7 @@ module TwoLevels {
 >T : Symbol(T, Decl(subtypingWithObjectMembersOptionality.ts, 43, 18))
 
         Foo?: Base;
->Foo : Symbol(Foo, Decl(subtypingWithObjectMembersOptionality.ts, 44, 17))
+>Foo : Symbol(T.Foo, Decl(subtypingWithObjectMembersOptionality.ts, 44, 17))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembersOptionality.ts, 0, 0))
     }
 
@@ -102,7 +102,7 @@ module TwoLevels {
 >T : Symbol(T, Decl(subtypingWithObjectMembersOptionality.ts, 43, 18))
 
         Foo: Derived2 
->Foo : Symbol(Foo, Decl(subtypingWithObjectMembersOptionality.ts, 48, 27))
+>Foo : Symbol(S.Foo, Decl(subtypingWithObjectMembersOptionality.ts, 48, 27))
 >Derived2 : Symbol(Derived2, Decl(subtypingWithObjectMembersOptionality.ts, 3, 47))
     }
 

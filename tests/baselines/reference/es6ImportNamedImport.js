@@ -53,26 +53,26 @@ exports.z2 = 10;
 exports.aaaa = 10;
 //// [es6ImportNamedImport_1.js]
 "use strict";
-var es6ImportNamedImport_0_1 = require("./es6ImportNamedImport_0");
+const es6ImportNamedImport_0_1 = require("./es6ImportNamedImport_0");
 var xxxx = es6ImportNamedImport_0_1.a;
-var es6ImportNamedImport_0_2 = require("./es6ImportNamedImport_0");
+const es6ImportNamedImport_0_2 = require("./es6ImportNamedImport_0");
 var xxxx = es6ImportNamedImport_0_2.a;
-var es6ImportNamedImport_0_3 = require("./es6ImportNamedImport_0");
+const es6ImportNamedImport_0_3 = require("./es6ImportNamedImport_0");
 var xxxx = es6ImportNamedImport_0_3.x;
 var xxxx = es6ImportNamedImport_0_3.a;
-var es6ImportNamedImport_0_4 = require("./es6ImportNamedImport_0");
+const es6ImportNamedImport_0_4 = require("./es6ImportNamedImport_0");
 var xxxx = es6ImportNamedImport_0_4.x;
-var es6ImportNamedImport_0_5 = require("./es6ImportNamedImport_0");
+const es6ImportNamedImport_0_5 = require("./es6ImportNamedImport_0");
 var xxxx = es6ImportNamedImport_0_5.m;
-var es6ImportNamedImport_0_6 = require("./es6ImportNamedImport_0");
+const es6ImportNamedImport_0_6 = require("./es6ImportNamedImport_0");
 var xxxx = es6ImportNamedImport_0_6.a1;
 var xxxx = es6ImportNamedImport_0_6.x1;
-var es6ImportNamedImport_0_7 = require("./es6ImportNamedImport_0");
+const es6ImportNamedImport_0_7 = require("./es6ImportNamedImport_0");
 var xxxx = es6ImportNamedImport_0_7.a1;
 var xxxx = es6ImportNamedImport_0_7.x1;
-var es6ImportNamedImport_0_8 = require("./es6ImportNamedImport_0");
+const es6ImportNamedImport_0_8 = require("./es6ImportNamedImport_0");
 var z111 = es6ImportNamedImport_0_8.z1;
-var es6ImportNamedImport_0_9 = require("./es6ImportNamedImport_0");
+const es6ImportNamedImport_0_9 = require("./es6ImportNamedImport_0");
 var z2 = es6ImportNamedImport_0_9.z2; // z2 shouldn't give redeclare error
 
 

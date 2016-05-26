@@ -42,32 +42,32 @@ function foo0_1(x) {
 >x : any
 
     for (let x in []) {
->x : any
+>x : string
 >[] : undefined[]
 
         var v = x;
->v : any
->x : any
+>v : string
+>x : string
 
         (function() { return x + v });
->(function() { return x + v }) : () => any
->function() { return x + v } : () => any
->x + v : any
->x : any
->v : any
+>(function() { return x + v }) : () => string
+>function() { return x + v } : () => string
+>x + v : string
+>x : string
+>v : string
 
         (() => x + v);
->(() => x + v) : () => any
->() => x + v : () => any
->x + v : any
->x : any
->v : any
+>(() => x + v) : () => string
+>() => x + v : () => string
+>x + v : string
+>x : string
+>v : string
     }
 
     use(v);
 >use(v) : any
 >use : (a: any) => any
->v : any
+>v : string
 }
 
 function foo1(x) {
@@ -438,32 +438,32 @@ function foo0_1_c(x) {
 >x : any
 
     for (const x in []) {
->x : any
+>x : string
 >[] : undefined[]
 
         var v = x;
->v : any
->x : any
+>v : string
+>x : string
 
         (function() { return x + v });
->(function() { return x + v }) : () => any
->function() { return x + v } : () => any
->x + v : any
->x : any
->v : any
+>(function() { return x + v }) : () => string
+>function() { return x + v } : () => string
+>x + v : string
+>x : string
+>v : string
 
         (() => x + v);
->(() => x + v) : () => any
->() => x + v : () => any
->x + v : any
->x : any
->v : any
+>(() => x + v) : () => string
+>() => x + v : () => string
+>x + v : string
+>x : string
+>v : string
     }
 
     use(v);
 >use(v) : any
 >use : (a: any) => any
->v : any
+>v : string
 }
 
 function foo1_c(x) {

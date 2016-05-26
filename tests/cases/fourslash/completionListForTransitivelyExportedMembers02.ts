@@ -25,11 +25,11 @@
 
 // @Filename: C.ts
 ////export var cVar = "see!";
-////export * from "A";
-////export * from "B"
+////export * from "./A";
+////export * from "./B"
 
 // @Filename: D.ts
-////import * as c from "C";
+////import * as c from "./C";
 ////var x = c.Inner./**/
 
 goTo.marker();

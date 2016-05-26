@@ -17,7 +17,7 @@
 ////}
 
 //@Filename: findAllRefsOnDefinition.ts
-////import Second = require("findAllRefsOnDefinition-import");
+////import Second = require("./findAllRefsOnDefinition-import");
 ////
 ////var second = new Second.Test()
 ////second.start();

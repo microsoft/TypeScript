@@ -29,7 +29,7 @@ let l9 = 0, l10 :string = "", l11 = null;
 >null : null
 
 for(let l11 in {}) { }
->l11 : any
+>l11 : string
 >{} : {}
 
 for(let l12 = 0; l12 < 9; l12++) { }

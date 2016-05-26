@@ -16,7 +16,7 @@ class MyComponent {
 >MyComponent : Symbol(MyComponent, Decl(component.ts, 2, 27))
 
     constructor(public Service: Service) {
->Service : Symbol(Service, Decl(component.ts, 6, 16))
+>Service : Symbol(MyComponent.Service, Decl(component.ts, 6, 16))
 >Service : Symbol(Service, Decl(component.ts, 0, 6))
     }
 
@@ -24,7 +24,7 @@ class MyComponent {
 >decorator : Symbol(decorator, Decl(component.ts, 2, 11))
 
     method(x: this) {
->method : Symbol(method, Decl(component.ts, 7, 5))
+>method : Symbol(MyComponent.method, Decl(component.ts, 7, 5))
 >x : Symbol(x, Decl(component.ts, 10, 11))
     }
 }

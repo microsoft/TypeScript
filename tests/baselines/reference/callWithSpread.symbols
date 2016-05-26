@@ -3,7 +3,7 @@ interface X {
 >X : Symbol(X, Decl(callWithSpread.ts, 0, 0))
 
     foo(x: number, y: number, ...z: string[]);
->foo : Symbol(foo, Decl(callWithSpread.ts, 0, 13))
+>foo : Symbol(X.foo, Decl(callWithSpread.ts, 0, 13))
 >x : Symbol(x, Decl(callWithSpread.ts, 1, 8))
 >y : Symbol(y, Decl(callWithSpread.ts, 1, 18))
 >z : Symbol(z, Decl(callWithSpread.ts, 1, 29))
@@ -107,22 +107,22 @@ class C {
 >z : Symbol(z, Decl(callWithSpread.ts, 31, 37))
 
         this.foo(x, y);
->this.foo : Symbol(foo, Decl(callWithSpread.ts, 34, 5))
+>this.foo : Symbol(C.foo, Decl(callWithSpread.ts, 34, 5))
 >this : Symbol(C, Decl(callWithSpread.ts, 28, 40))
->foo : Symbol(foo, Decl(callWithSpread.ts, 34, 5))
+>foo : Symbol(C.foo, Decl(callWithSpread.ts, 34, 5))
 >x : Symbol(x, Decl(callWithSpread.ts, 31, 16))
 >y : Symbol(y, Decl(callWithSpread.ts, 31, 26))
 
         this.foo(x, y, ...z);
->this.foo : Symbol(foo, Decl(callWithSpread.ts, 34, 5))
+>this.foo : Symbol(C.foo, Decl(callWithSpread.ts, 34, 5))
 >this : Symbol(C, Decl(callWithSpread.ts, 28, 40))
->foo : Symbol(foo, Decl(callWithSpread.ts, 34, 5))
+>foo : Symbol(C.foo, Decl(callWithSpread.ts, 34, 5))
 >x : Symbol(x, Decl(callWithSpread.ts, 31, 16))
 >y : Symbol(y, Decl(callWithSpread.ts, 31, 26))
 >z : Symbol(z, Decl(callWithSpread.ts, 31, 37))
     }
     foo(x: number, y: number, ...z: string[]) {
->foo : Symbol(foo, Decl(callWithSpread.ts, 34, 5))
+>foo : Symbol(C.foo, Decl(callWithSpread.ts, 34, 5))
 >x : Symbol(x, Decl(callWithSpread.ts, 35, 8))
 >y : Symbol(y, Decl(callWithSpread.ts, 35, 18))
 >z : Symbol(z, Decl(callWithSpread.ts, 35, 29))
@@ -142,7 +142,7 @@ class D extends C {
 >a : Symbol(a, Decl(callWithSpread.ts, 7, 3))
     }
     foo() {
->foo : Symbol(foo, Decl(callWithSpread.ts, 43, 5))
+>foo : Symbol(D.foo, Decl(callWithSpread.ts, 43, 5))
 
         super.foo(1, 2);
 >super.foo : Symbol(C.foo, Decl(callWithSpread.ts, 34, 5))

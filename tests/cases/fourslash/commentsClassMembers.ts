@@ -694,7 +694,7 @@ verify.completionListContains("a", "(parameter) a: number", "this is first param
 verify.quickInfoIs("(parameter) a: number", "this is first parameter a\nmore info about a");
 
 goTo.marker('116');
-verify.quickInfoIs("class cWithConstructorProperty", "");
+verify.quickInfoIs("this: this", "");
 
 goTo.marker('117');
 verify.quickInfoIs("(local var) bbbb: number", "");

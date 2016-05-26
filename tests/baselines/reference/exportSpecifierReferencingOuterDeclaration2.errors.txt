@@ -1,0 +1,11 @@
+tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts(1,10): error TS2661: Cannot export 'X'. Only local declarations can be exported from a module.
+
+
+==== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_A.ts (0 errors) ====
+    declare module X { export interface bar { } }
+    
+==== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts (1 errors) ====
+    export { X };
+             ~
+!!! error TS2661: Cannot export 'X'. Only local declarations can be exported from a module.
+    export declare function foo(): X.bar;

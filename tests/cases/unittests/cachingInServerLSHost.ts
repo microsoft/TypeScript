@@ -1,12 +1,22 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
-module ts {
+namespace ts {
     interface File {
         name: string;
         content: string;
     }
 
-    function createDefaultServerHost(fileMap: Map<File>): server.ServerHost  {
+    function createDefaultServerHost(fileMap: Map<File>): server.ServerHost {
+        let existingDirectories: Map<boolean> = {};
+        forEachValue(fileMap, v => {
+            let dir = getDirectoryPath(v.name);
+            let previous: string;
+            do {
+                existingDirectories[dir] = true;
+                previous = dir;
+                dir = getDirectoryPath(dir);
+            } while (dir !== previous);
+        });
         return {
             args: <string[]>[],
             newLine: "\r\n",
@@ -26,7 +36,7 @@ module ts {
                 return hasProperty(fileMap, path);
             },
             directoryExists: (path: string): boolean => {
-                throw new Error("NYI");
+                return hasProperty(existingDirectories, path);
             },
             createDirectory: (path: string) => {
             },
@@ -44,13 +54,15 @@ module ts {
             watchFile: (path, callback) => {
                 return {
                     close: () => { }
-                }
+                };
             },
             watchDirectory: (path, callback, recursive?) => {
                 return {
                     close: () => { }
-                }
-            }
+                };
+            },
+            setTimeout,
+            clearTimeout
         };
     }
 
@@ -69,7 +81,7 @@ module ts {
         let projectService = new server.ProjectService(serverHost, logger);
         let rootScriptInfo = projectService.openFile(rootFile, /* openedByClient */true);
         let project = projectService.createInferredProject(rootScriptInfo);
-        project.setProjectOptions( {files: [rootScriptInfo.fileName], compilerOptions: {module: ts.ModuleKind.AMD} } );
+        project.setProjectOptions( {files: [rootScriptInfo.fileName], compilerOptions: {module: ts.ModuleKind.AMD} } ); 
         return {
             project,
             rootScriptInfo
@@ -118,8 +130,8 @@ module ts {
                         return false;
                     }
                     fileExistsIsCalled = true;
-                    assert.isTrue(fileName.indexOf('/f2.') !== -1);
-                    return originalFileExists(fileName);
+                    assert.isTrue(fileName.indexOf("/f2.") !== -1);
+                    return originalFileExists.call(serverHost, fileName);
                 };
                 let newContent = `import {x} from "f2"`;
                 rootScriptInfo.editContent(0, rootScriptInfo.content.length, newContent);
@@ -127,12 +139,12 @@ module ts {
                 try {
                     // trigger synchronization to make sure that LSHost will try to find 'f2' module on disk
                     project.compilerService.languageService.getSemanticDiagnostics(imported.name);
-                    assert.isTrue(false, `should not find file '${imported.name}'`)
+                    assert.isTrue(false, `should not find file '${imported.name}'`);
                 }
-                catch(e) {
+                catch (e) {
                     assert.isTrue(e.message.indexOf(`Could not find file: '${imported.name}'.`) === 0);
                 }
-
+                
                 assert.isTrue(fileExistsIsCalled);
             }
             {
@@ -142,8 +154,8 @@ module ts {
                         return false;
                     }
                     fileExistsCalled = true;
-                    assert.isTrue(fileName.indexOf('/f1.') !== -1);
-                    return originalFileExists(fileName);
+                    assert.isTrue(fileName.indexOf("/f1.") !== -1);
+                    return originalFileExists.call(serverHost, fileName);
                 };
 
                 let newContent = `import {x} from "f1"`;
@@ -166,12 +178,12 @@ module ts {
 
         it("loads missing files from disk", () => {
             let root: File = {
-                name: 'c:/foo.ts',
+                name: `c:/foo.ts`,
                 content: `import {x} from "bar"`
             };
 
             let imported: File = {
-                name: 'c:/bar.d.ts',
+                name: `c:/bar.d.ts`,
                 content: `export var y = 1`
             };
 
@@ -188,7 +200,7 @@ module ts {
                     fileExistsCalledForBar = fileName.indexOf("/bar.") !== -1;
                 }
 
-                return originalFileExists(fileName);
+                return originalFileExists.call(serverHost, fileName);
             };
 
             let { project, rootScriptInfo } = createProject(root.name, serverHost);
@@ -201,11 +213,11 @@ module ts {
             // assert that import will success once file appear on disk
             fileMap[imported.name] = imported;
             fileExistsCalledForBar = false;
-            rootScriptInfo.editContent(0, rootScriptInfo.content.length, `import {y} from "bar"`)
+            rootScriptInfo.editContent(0, rootScriptInfo.content.length, `import {y} from "bar"`);
 
             diags = project.compilerService.languageService.getSemanticDiagnostics(root.name);
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
             assert.isTrue(diags.length === 0);
-        })
+        });
     });
 }

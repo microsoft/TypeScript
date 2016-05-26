@@ -88,9 +88,9 @@ sourceFile:ES5For-of8.ts
 12>                                 'c'
 13>                                    ]
 14>                                     
-15>                                       foo().x
+15>                                       ['a', 'b', 'c']
 16>                                                     
-17>                                                       foo().x of ['a', 'b', 'c']
+17>                                                       ['a', 'b', 'c']
 18>                                                           )
 1->Emitted(4, 1) Source(4, 1) + SourceIndex(0)
 2 >Emitted(4, 4) Source(4, 4) + SourceIndex(0)
@@ -105,9 +105,9 @@ sourceFile:ES5For-of8.ts
 11>Emitted(4, 34) Source(4, 28) + SourceIndex(0)
 12>Emitted(4, 37) Source(4, 31) + SourceIndex(0)
 13>Emitted(4, 38) Source(4, 32) + SourceIndex(0)
-14>Emitted(4, 40) Source(4, 6) + SourceIndex(0)
-15>Emitted(4, 54) Source(4, 13) + SourceIndex(0)
-16>Emitted(4, 56) Source(4, 6) + SourceIndex(0)
+14>Emitted(4, 40) Source(4, 17) + SourceIndex(0)
+15>Emitted(4, 54) Source(4, 32) + SourceIndex(0)
+16>Emitted(4, 56) Source(4, 17) + SourceIndex(0)
 17>Emitted(4, 60) Source(4, 32) + SourceIndex(0)
 18>Emitted(4, 61) Source(4, 33) + SourceIndex(0)
 ---

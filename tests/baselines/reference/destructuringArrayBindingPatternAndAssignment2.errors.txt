@@ -5,7 +5,6 @@ tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAss
   Types of property '1' are incompatible.
     Type 'number' is not assignable to type 'boolean'.
 tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment2.ts(17,6): error TS2322: Type 'string' is not assignable to type 'Number'.
-  Property 'toFixed' is missing in type 'String'.
 tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment2.ts(22,5): error TS2322: Type 'number[]' is not assignable to type '[number, number]'.
   Property '0' is missing in type 'number[]'.
 tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment2.ts(23,5): error TS2322: Type 'number[]' is not assignable to type '[string, string]'.
@@ -43,7 +42,6 @@ tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAss
     var [b3 = "string", b4, b5] = bar();  // Error
          ~~
 !!! error TS2322: Type 'string' is not assignable to type 'Number'.
-!!! error TS2322:   Property 'toFixed' is missing in type 'String'.
     
     // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
     //      S is not a tuple- like type and the numeric index signature type of S is assignable to the target given in E.

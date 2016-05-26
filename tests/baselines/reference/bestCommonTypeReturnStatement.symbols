@@ -5,7 +5,7 @@ interface IPromise<T> {
 >T : Symbol(T, Decl(bestCommonTypeReturnStatement.ts, 1, 19))
 
     then(successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any): IPromise<any>;
->then : Symbol(then, Decl(bestCommonTypeReturnStatement.ts, 1, 23))
+>then : Symbol(IPromise.then, Decl(bestCommonTypeReturnStatement.ts, 1, 23))
 >successCallback : Symbol(successCallback, Decl(bestCommonTypeReturnStatement.ts, 2, 9))
 >promiseValue : Symbol(promiseValue, Decl(bestCommonTypeReturnStatement.ts, 2, 27))
 >T : Symbol(T, Decl(bestCommonTypeReturnStatement.ts, 1, 19))

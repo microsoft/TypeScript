@@ -171,7 +171,9 @@ var C = (function (_super) {
 function hasANonBooleanReturnStatement(x) {
     return '';
 }
-function hasTypeGuardTypeInsideTypeGuardType(x) {
+is;
+A;
+{
     return true;
 }
 function hasMissingIsKeyword() {
@@ -224,10 +226,14 @@ assign3 = function (p1, p2, p3) {
     return true;
 };
 // Type predicates in non-return type positions
-var b1;
-function b2(a) { }
+var b1 = is, A;
+function b2(a, A) {
+    if (a === void 0) { a = is; }
+}
 ;
-function b3() {
+is;
+A;
+{
     return true;
 }
 ;
@@ -252,6 +258,8 @@ var D = (function () {
     });
     return D;
 }());
+is;
+C;
 // Reference to rest parameter
 function b4() {
     var a = [];

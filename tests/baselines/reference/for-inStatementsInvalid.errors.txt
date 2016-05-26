@@ -7,7 +7,6 @@ tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(1
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(18,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(19,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(20,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(21,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(22,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(29,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(38,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
@@ -16,7 +15,7 @@ tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(5
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(62,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 
 
-==== tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts (16 errors) ====
+==== tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts (15 errors) ====
     var aNumber: number;
     for (aNumber in {}) { }
          ~~~~~~~
@@ -56,8 +55,6 @@ tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(6
                   ~~~~~~~~~~
 !!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
     for (var x in 42 ? d[x] : c[x]) { }
-                  ~~~~~~~~~~~~~~~~
-!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
     for (var x in c[23]) { }
                   ~~~~~
 !!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.

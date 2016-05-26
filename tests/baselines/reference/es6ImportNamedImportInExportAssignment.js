@@ -13,7 +13,7 @@ export = a;
 exports.a = 10;
 //// [es6ImportNamedImportInExportAssignment_1.js]
 "use strict";
-var es6ImportNamedImportInExportAssignment_0_1 = require("./es6ImportNamedImportInExportAssignment_0");
+const es6ImportNamedImportInExportAssignment_0_1 = require("./es6ImportNamedImportInExportAssignment_0");
 module.exports = es6ImportNamedImportInExportAssignment_0_1.a;
 
 

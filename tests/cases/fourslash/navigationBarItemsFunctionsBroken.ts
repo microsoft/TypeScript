@@ -6,7 +6,7 @@
 ////}
 
 test.markers().forEach((marker) => {
-    verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
+    verify.navigationBarContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
 });
 
-verify.getScriptLexicalStructureListCount(3); // <global> and 'f'. 
+verify.navigationBarCount(3); // <global> and 'f'. 

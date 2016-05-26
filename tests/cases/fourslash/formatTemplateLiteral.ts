@@ -32,9 +32,9 @@ verify.currentLineContentIs("let w = `bar${3}`;");
 goTo.marker("5");
 verify.currentLineContentIs("    `template`;");
 goTo.marker("6");
-verify.currentLineContentIs("String.raw `foo`;");
+verify.currentLineContentIs("String.raw`foo`;");
 goTo.marker("7");
-verify.currentLineContentIs("String.raw `bar${3}`;");
+verify.currentLineContentIs("String.raw`bar${3}`;");
 
 goTo.marker("spaceInside");
 verify.currentLineContentIs('`Write ${JSON.stringify("")} and ${(765)} and ${346}`;');

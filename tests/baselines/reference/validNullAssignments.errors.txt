@@ -1,4 +1,4 @@
-tests/cases/conformance/types/primitives/null/validNullAssignments.ts(10,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/types/primitives/null/validNullAssignments.ts(10,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
 tests/cases/conformance/types/primitives/null/validNullAssignments.ts(15,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/types/primitives/null/validNullAssignments.ts(20,1): error TS2304: Cannot find name 'I'.
 tests/cases/conformance/types/primitives/null/validNullAssignments.ts(23,1): error TS2364: Invalid left-hand side of assignment expression.
@@ -17,7 +17,7 @@ tests/cases/conformance/types/primitives/null/validNullAssignments.ts(30,1): err
     enum E { A }
     E.A = null; // error
     ~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
     
     class C { foo: string }
     var f: C;

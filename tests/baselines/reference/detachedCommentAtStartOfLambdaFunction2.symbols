@@ -3,10 +3,10 @@ class TestFile {
 >TestFile : Symbol(TestFile, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 0, 0))
 
     name: string;
->name : Symbol(name, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 0, 16))
+>name : Symbol(TestFile.name, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 0, 16))
 
     foo(message: string): () => string {
->foo : Symbol(foo, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 1, 17))
+>foo : Symbol(TestFile.foo, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 1, 17))
 >message : Symbol(message, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 2, 8))
 
         return (...x: string[]) =>
@@ -18,8 +18,8 @@ class TestFile {
 
             message + this.name;
 >message : Symbol(message, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 2, 8))
->this.name : Symbol(name, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 0, 16))
+>this.name : Symbol(TestFile.name, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 0, 16))
 >this : Symbol(TestFile, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 0, 0))
->name : Symbol(name, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 0, 16))
+>name : Symbol(TestFile.name, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 0, 16))
     }
 }

@@ -63,7 +63,7 @@ declare class cls {
 
     constructor();
     method(): cls;
->method : Symbol(method, Decl(ambientDeclarations.ts, 26, 18))
+>method : Symbol(cls.method, Decl(ambientDeclarations.ts, 26, 18))
 >cls : Symbol(cls, Decl(ambientDeclarations.ts, 22, 36))
 
     static static(p): number;
@@ -74,7 +74,7 @@ declare class cls {
 >q : Symbol(cls.q, Decl(ambientDeclarations.ts, 28, 29))
 
     private fn();
->fn : Symbol(fn, Decl(ambientDeclarations.ts, 29, 13))
+>fn : Symbol(cls.fn, Decl(ambientDeclarations.ts, 29, 13))
 
     private static fns();
 >fns : Symbol(cls.fns, Decl(ambientDeclarations.ts, 30, 17))

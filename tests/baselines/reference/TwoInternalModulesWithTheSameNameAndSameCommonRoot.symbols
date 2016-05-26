@@ -6,10 +6,10 @@ module A {
 >Point : Symbol(Point, Decl(part1.ts, 0, 10))
 
         x: number;
->x : Symbol(x, Decl(part1.ts, 1, 28))
+>x : Symbol(Point.x, Decl(part1.ts, 1, 28))
 
         y: number;
->y : Symbol(y, Decl(part1.ts, 2, 18))
+>y : Symbol(Point.y, Decl(part1.ts, 2, 18))
     }
 
     export module Utils {
@@ -52,9 +52,9 @@ module A {
 >Plane : Symbol(Plane, Decl(part2.ts, 3, 25))
 
             constructor(public tl: Point, public br: Point) { }
->tl : Symbol(tl, Decl(part2.ts, 5, 24))
+>tl : Symbol(Plane.tl, Decl(part2.ts, 5, 24))
 >Point : Symbol(Point, Decl(part1.ts, 0, 10))
->br : Symbol(br, Decl(part2.ts, 5, 41))
+>br : Symbol(Plane.br, Decl(part2.ts, 5, 41))
 >Point : Symbol(Point, Decl(part1.ts, 0, 10))
         }
     }

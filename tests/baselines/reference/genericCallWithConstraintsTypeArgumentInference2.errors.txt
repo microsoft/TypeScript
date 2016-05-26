@@ -1,5 +1,4 @@
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstraintsTypeArgumentInference2.ts(11,26): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Date'.
-  Property 'toDateString' is missing in type 'Number'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstraintsTypeArgumentInference2.ts (1 errors) ====
@@ -16,5 +15,4 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithCon
     var r4 = foo<Date, Date>(1); // error
                              ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'Date'.
-!!! error TS2345:   Property 'toDateString' is missing in type 'Number'.
     var r5 = foo<Date, Date>(new Date()); // no error

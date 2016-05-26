@@ -5,13 +5,14 @@ tests/cases/compiler/recursiveLetConst.ts(5,14): error TS2448: Block-scoped vari
 tests/cases/compiler/recursiveLetConst.ts(6,14): error TS2448: Block-scoped variable 'v' used before its declaration.
 tests/cases/compiler/recursiveLetConst.ts(7,1): error TS7027: Unreachable code detected.
 tests/cases/compiler/recursiveLetConst.ts(7,16): error TS2448: Block-scoped variable 'v' used before its declaration.
+tests/cases/compiler/recursiveLetConst.ts(8,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/compiler/recursiveLetConst.ts(8,15): error TS2448: Block-scoped variable 'v' used before its declaration.
 tests/cases/compiler/recursiveLetConst.ts(9,15): error TS2448: Block-scoped variable 'v' used before its declaration.
 tests/cases/compiler/recursiveLetConst.ts(10,17): error TS2448: Block-scoped variable 'v' used before its declaration.
 tests/cases/compiler/recursiveLetConst.ts(11,11): error TS2448: Block-scoped variable 'x2' used before its declaration.
 
 
-==== tests/cases/compiler/recursiveLetConst.ts (11 errors) ====
+==== tests/cases/compiler/recursiveLetConst.ts (12 errors) ====
     'use strict'
     let x = x + 1;
             ~
@@ -34,6 +35,8 @@ tests/cases/compiler/recursiveLetConst.ts(11,11): error TS2448: Block-scoped var
                    ~
 !!! error TS2448: Block-scoped variable 'v' used before its declaration.
     for (let v in v) { }
+                  ~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
                   ~
 !!! error TS2448: Block-scoped variable 'v' used before its declaration.
     for (let v of v) { }

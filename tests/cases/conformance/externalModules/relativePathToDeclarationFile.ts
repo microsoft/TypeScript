@@ -1,3 +1,4 @@
+// @ModuleResolution: classic
 // @Filename: test/foo.d.ts
 export declare module M2 {
 	export var x: boolean;

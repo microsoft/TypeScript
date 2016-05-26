@@ -2,8 +2,9 @@
 declare module JSX {
 >JSX : any
 
-	interface Element { }
+	interface Element { something; }
 >Element : Element
+>something : any
 
 	interface IntrinsicElements { }
 >IntrinsicElements : IntrinsicElements

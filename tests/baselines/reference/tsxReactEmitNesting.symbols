@@ -1,0 +1,139 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+
+declare var vdom: any;
+>vdom : Symbol(vdom, Decl(file.tsx, 1, 11))
+
+declare var ctrl: any;
+>ctrl : Symbol(ctrl, Decl(file.tsx, 2, 11))
+
+declare var model: any;
+>model : Symbol(model, Decl(file.tsx, 3, 11))
+
+// A simple render function with nesting and control statements
+let render = (ctrl, model) =>
+>render : Symbol(render, Decl(file.tsx, 6, 3))
+>ctrl : Symbol(ctrl, Decl(file.tsx, 6, 14))
+>model : Symbol(model, Decl(file.tsx, 6, 19))
+
+    <section class="todoapp">
+>section : Symbol(unknown)
+>class : Symbol(unknown)
+
+        <header class="header">
+>header : Symbol(unknown)
+>class : Symbol(unknown)
+
+            <h1>todos &lt;x&gt;</h1>
+>h1 : Symbol(unknown)
+>h1 : Symbol(unknown)
+
+            <input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?" value={model.newTodo} onKeyup={ctrl.addTodo.bind(ctrl, model)} />
+>input : Symbol(unknown)
+>class : Symbol(unknown)
+>autofocus : Symbol(unknown)
+>autocomplete : Symbol(unknown)
+>placeholder : Symbol(unknown)
+>value : Symbol(unknown)
+>model : Symbol(model, Decl(file.tsx, 6, 19))
+>onKeyup : Symbol(unknown)
+>ctrl : Symbol(ctrl, Decl(file.tsx, 6, 14))
+>ctrl : Symbol(ctrl, Decl(file.tsx, 6, 14))
+>model : Symbol(model, Decl(file.tsx, 6, 19))
+
+        </header>
+>header : Symbol(unknown)
+
+        <section class="main" style={{display:(model.todos && model.todos.length) ? "block" : "none"}}>
+>section : Symbol(unknown)
+>class : Symbol(unknown)
+>style : Symbol(unknown)
+>display : Symbol(display, Decl(file.tsx, 12, 38))
+>model : Symbol(model, Decl(file.tsx, 6, 19))
+>model : Symbol(model, Decl(file.tsx, 6, 19))
+
+            <input class="toggle-all" type="checkbox" onChange={ctrl.toggleAll.bind(ctrl)}/>
+>input : Symbol(unknown)
+>class : Symbol(unknown)
+>type : Symbol(unknown)
+>onChange : Symbol(unknown)
+>ctrl : Symbol(ctrl, Decl(file.tsx, 6, 14))
+>ctrl : Symbol(ctrl, Decl(file.tsx, 6, 14))
+
+            <ul class="todo-list">
+>ul : Symbol(unknown)
+>class : Symbol(unknown)
+
+                {model.filteredTodos.map((todo) =>
+>model : Symbol(model, Decl(file.tsx, 6, 19))
+>todo : Symbol(todo, Decl(file.tsx, 15, 42))
+
+                    <li class={{todo: true, completed: todo.completed, editing: todo == model.editedTodo}}>
+>li : Symbol(unknown)
+>class : Symbol(unknown)
+>todo : Symbol(todo, Decl(file.tsx, 16, 32))
+>completed : Symbol(completed, Decl(file.tsx, 16, 43))
+>todo : Symbol(todo, Decl(file.tsx, 15, 42))
+>editing : Symbol(editing, Decl(file.tsx, 16, 70))
+>todo : Symbol(todo, Decl(file.tsx, 15, 42))
+>model : Symbol(model, Decl(file.tsx, 6, 19))
+
+                        <div class="view">
+>div : Symbol(unknown)
+>class : Symbol(unknown)
+
+                            {(!todo.editable) ?
+>todo : Symbol(todo, Decl(file.tsx, 15, 42))
+
+                                <input class="toggle" type="checkbox"></input>
+>input : Symbol(unknown)
+>class : Symbol(unknown)
+>type : Symbol(unknown)
+>input : Symbol(unknown)
+
+                                : null
+                            }
+                            <label onDoubleClick={()=>{ctrl.editTodo(todo)}}>{todo.title}</label>
+>label : Symbol(unknown)
+>onDoubleClick : Symbol(unknown)
+>ctrl : Symbol(ctrl, Decl(file.tsx, 6, 14))
+>todo : Symbol(todo, Decl(file.tsx, 15, 42))
+>todo : Symbol(todo, Decl(file.tsx, 15, 42))
+>label : Symbol(unknown)
+
+                            <button class="destroy" onClick={ctrl.removeTodo.bind(ctrl,todo)}></button>
+>button : Symbol(unknown)
+>class : Symbol(unknown)
+>onClick : Symbol(unknown)
+>ctrl : Symbol(ctrl, Decl(file.tsx, 6, 14))
+>ctrl : Symbol(ctrl, Decl(file.tsx, 6, 14))
+>todo : Symbol(todo, Decl(file.tsx, 15, 42))
+>button : Symbol(unknown)
+
+                            <div class="iconBorder">
+>div : Symbol(unknown)
+>class : Symbol(unknown)
+
+                                <div class="icon"/>
+>div : Symbol(unknown)
+>class : Symbol(unknown)
+
+                            </div>
+>div : Symbol(unknown)
+
+                        </div>
+>div : Symbol(unknown)
+
+                    </li>
+>li : Symbol(unknown)
+
+                )}
+            </ul>
+>ul : Symbol(unknown)
+
+        </section>
+>section : Symbol(unknown)
+
+    </section>
+>section : Symbol(unknown)
+
+

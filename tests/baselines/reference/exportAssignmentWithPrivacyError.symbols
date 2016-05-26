@@ -11,13 +11,13 @@ interface connectexport {
 >connectexport : Symbol(connectexport, Decl(exportAssignmentWithPrivacyError.ts, 2, 1))
 
     use: (mod: connectmodule) => connectexport;
->use : Symbol(use, Decl(exportAssignmentWithPrivacyError.ts, 3, 25))
+>use : Symbol(connectexport.use, Decl(exportAssignmentWithPrivacyError.ts, 3, 25))
 >mod : Symbol(mod, Decl(exportAssignmentWithPrivacyError.ts, 4, 10))
 >connectmodule : Symbol(connectmodule, Decl(exportAssignmentWithPrivacyError.ts, 0, 0))
 >connectexport : Symbol(connectexport, Decl(exportAssignmentWithPrivacyError.ts, 2, 1))
 
     listen: (port: number) => void;
->listen : Symbol(listen, Decl(exportAssignmentWithPrivacyError.ts, 4, 47))
+>listen : Symbol(connectexport.listen, Decl(exportAssignmentWithPrivacyError.ts, 4, 47))
 >port : Symbol(port, Decl(exportAssignmentWithPrivacyError.ts, 5, 13))
 }
 

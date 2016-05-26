@@ -1,6 +1,7 @@
 ﻿// @module: commonjs
 // @includebuiltfile: typescript_standalone.d.ts
-// @stripInternal:true
+// @noImplicitAny:true
+// @strictNullChecks:true
 
 /*
  * Note: This test is a public API sample. The sample sources can be found 
@@ -57,7 +58,7 @@ export function delint(sourceFile: ts.SourceFile) {
     }
 }
 
-const fileNames = process.argv.slice(2);
+const fileNames: string[] = process.argv.slice(2);
 fileNames.forEach(fileName => {
     // Parse a file
     let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);

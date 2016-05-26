@@ -45,8 +45,8 @@
 
 test.markers().forEach((marker) => {
     if (marker.data) {
-        verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
+        verify.navigationBarContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
     }
 });
 
-verify.getScriptLexicalStructureListCount(23);
+verify.navigationBarCount(23);

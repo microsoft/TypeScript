@@ -1,0 +1,943 @@
+
+1  >declare var console: {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (0 to 22)  SpanInfo: undefined
+--------------------------------
+2  >    log(msg: any): void;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (23 to 47)  SpanInfo: undefined
+--------------------------------
+3  >}
+
+    ~~                                            => Pos: (48 to 49)  SpanInfo: undefined
+--------------------------------
+4  >interface Robot {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (50 to 67)  SpanInfo: undefined
+--------------------------------
+5  >    name: string;
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (68 to 85)  SpanInfo: undefined
+--------------------------------
+6  >    skill: string;
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (86 to 104)  SpanInfo: undefined
+--------------------------------
+7  >}
+
+    ~~                                            => Pos: (105 to 106)  SpanInfo: undefined
+--------------------------------
+8  >interface MultiRobot {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (107 to 129)  SpanInfo: undefined
+--------------------------------
+9  >    name: string;
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (130 to 147)  SpanInfo: undefined
+--------------------------------
+10 >    skills: {
+
+    ~~~~~~~~~~~~~~                                => Pos: (148 to 161)  SpanInfo: undefined
+--------------------------------
+11 >        primary: string;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (162 to 186)  SpanInfo: undefined
+--------------------------------
+12 >        secondary: string;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (187 to 213)  SpanInfo: undefined
+--------------------------------
+13 >    };
+
+    ~~~~~~~                                       => Pos: (214 to 220)  SpanInfo: undefined
+--------------------------------
+14 >}
+
+    ~~                                            => Pos: (221 to 222)  SpanInfo: undefined
+--------------------------------
+15 >let robots: Robot[] = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (223 to 322)  SpanInfo: {"start":223,"length":98}
+    >let robots: Robot[] = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
+    >:=> (line 15, col 0) to (line 15, col 98)
+--------------------------------
+16 >let multiRobots: MultiRobot[] = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (323 to 424)  SpanInfo: {"start":323,"length":180}
+    >let multiRobots: MultiRobot[] = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+    >    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
+    >:=> (line 16, col 0) to (line 17, col 78)
+--------------------------------
+17 >    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (425 to 504)  SpanInfo: {"start":323,"length":180}
+    >let multiRobots: MultiRobot[] = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+    >    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
+    >:=> (line 16, col 0) to (line 17, col 78)
+--------------------------------
+18 >function getRobots() {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (505 to 527)  SpanInfo: {"start":532,"length":13}
+    >return robots
+    >:=> (line 19, col 4) to (line 19, col 17)
+--------------------------------
+19 >    return robots;
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (528 to 546)  SpanInfo: {"start":532,"length":13}
+    >return robots
+    >:=> (line 19, col 4) to (line 19, col 17)
+--------------------------------
+20 >}
+
+    ~~                                            => Pos: (547 to 548)  SpanInfo: {"start":547,"length":1}
+    >}
+    >:=> (line 20, col 0) to (line 20, col 1)
+--------------------------------
+21 >function getMultiRobots() {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (549 to 576)  SpanInfo: {"start":581,"length":18}
+    >return multiRobots
+    >:=> (line 22, col 4) to (line 22, col 22)
+--------------------------------
+22 >    return multiRobots;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (577 to 600)  SpanInfo: {"start":581,"length":18}
+    >return multiRobots
+    >:=> (line 22, col 4) to (line 22, col 22)
+--------------------------------
+23 >}
+
+    ~~                                            => Pos: (601 to 602)  SpanInfo: {"start":601,"length":1}
+    >}
+    >:=> (line 23, col 0) to (line 23, col 1)
+--------------------------------
+24 >let nameA: string, primaryA: string, secondaryA: string, i: number, skillA: string;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (603 to 686)  SpanInfo: undefined
+--------------------------------
+25 >let name: string, primary: string, secondary: string, skill: string;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (687 to 755)  SpanInfo: undefined
+--------------------------------
+26 >for ({name: nameA } of robots) {
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (756 to 774)  SpanInfo: {"start":762,"length":11}
+    >name: nameA
+    >:=> (line 26, col 6) to (line 26, col 17)
+26 >for ({name: nameA } of robots) {
+
+                       ~~~~~~~~~~~~~~             => Pos: (775 to 788)  SpanInfo: {"start":779,"length":6}
+    >robots
+    >:=> (line 26, col 23) to (line 26, col 29)
+--------------------------------
+27 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (789 to 812)  SpanInfo: {"start":793,"length":18}
+    >console.log(nameA)
+    >:=> (line 27, col 4) to (line 27, col 22)
+--------------------------------
+28 >}
+
+    ~~                                            => Pos: (813 to 814)  SpanInfo: {"start":793,"length":18}
+    >console.log(nameA)
+    >:=> (line 27, col 4) to (line 27, col 22)
+--------------------------------
+29 >for ({name: nameA } of getRobots()) {
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (815 to 833)  SpanInfo: {"start":821,"length":11}
+    >name: nameA
+    >:=> (line 29, col 6) to (line 29, col 17)
+29 >for ({name: nameA } of getRobots()) {
+
+                       ~~~~~~~~~~~~~~~~~~~        => Pos: (834 to 852)  SpanInfo: {"start":838,"length":11}
+    >getRobots()
+    >:=> (line 29, col 23) to (line 29, col 34)
+--------------------------------
+30 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (853 to 876)  SpanInfo: {"start":857,"length":18}
+    >console.log(nameA)
+    >:=> (line 30, col 4) to (line 30, col 22)
+--------------------------------
+31 >}
+
+    ~~                                            => Pos: (877 to 878)  SpanInfo: {"start":857,"length":18}
+    >console.log(nameA)
+    >:=> (line 30, col 4) to (line 30, col 22)
+--------------------------------
+32 >for ({name: nameA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (879 to 897)  SpanInfo: {"start":885,"length":11}
+    >name: nameA
+    >:=> (line 32, col 6) to (line 32, col 17)
+32 >for ({name: nameA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (898 to 981)  SpanInfo: {"start":902,"length":76}
+    >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
+    >:=> (line 32, col 23) to (line 32, col 99)
+--------------------------------
+33 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (982 to 1005)  SpanInfo: {"start":986,"length":18}
+    >console.log(nameA)
+    >:=> (line 33, col 4) to (line 33, col 22)
+--------------------------------
+34 >}
+
+    ~~                                            => Pos: (1006 to 1007)  SpanInfo: {"start":986,"length":18}
+    >console.log(nameA)
+    >:=> (line 33, col 4) to (line 33, col 22)
+--------------------------------
+35 >for ({ skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+
+    ~~~~~~~~~~~~~~                                => Pos: (1008 to 1021)  SpanInfo: {"start":1015,"length":52}
+    >skills: { primary: primaryA, secondary: secondaryA }
+    >:=> (line 35, col 7) to (line 35, col 59)
+35 >for ({ skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+
+                  ~~~~~~~~~~~~~~~~~~~~~           => Pos: (1022 to 1042)  SpanInfo: {"start":1025,"length":17}
+    >primary: primaryA
+    >:=> (line 35, col 17) to (line 35, col 34)
+35 >for ({ skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1043 to 1066)  SpanInfo: {"start":1044,"length":21}
+    >secondary: secondaryA
+    >:=> (line 35, col 36) to (line 35, col 57)
+35 >for ({ skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+
+                                                               ~~=> Pos: (1067 to 1068)  SpanInfo: {"start":1015,"length":52}
+    >skills: { primary: primaryA, secondary: secondaryA }
+    >:=> (line 35, col 7) to (line 35, col 59)
+35 >for ({ skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+
+                                                                 ~~~~~~~~~~~~~~~~~~~=> Pos: (1069 to 1087)  SpanInfo: {"start":1073,"length":11}
+    >multiRobots
+    >:=> (line 35, col 65) to (line 35, col 76)
+--------------------------------
+36 >    console.log(primaryA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (1088 to 1114)  SpanInfo: {"start":1092,"length":21}
+    >console.log(primaryA)
+    >:=> (line 36, col 4) to (line 36, col 25)
+--------------------------------
+37 >}
+
+    ~~                                            => Pos: (1115 to 1116)  SpanInfo: {"start":1092,"length":21}
+    >console.log(primaryA)
+    >:=> (line 36, col 4) to (line 36, col 25)
+--------------------------------
+38 >for ({ skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
+
+    ~~~~~~~~~~~~~~                                => Pos: (1117 to 1130)  SpanInfo: {"start":1124,"length":52}
+    >skills: { primary: primaryA, secondary: secondaryA }
+    >:=> (line 38, col 7) to (line 38, col 59)
+38 >for ({ skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
+
+                  ~~~~~~~~~~~~~~~~~~~~~           => Pos: (1131 to 1151)  SpanInfo: {"start":1134,"length":17}
+    >primary: primaryA
+    >:=> (line 38, col 17) to (line 38, col 34)
+38 >for ({ skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
+
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1152 to 1175)  SpanInfo: {"start":1153,"length":21}
+    >secondary: secondaryA
+    >:=> (line 38, col 36) to (line 38, col 57)
+38 >for ({ skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
+
+                                                               ~~=> Pos: (1176 to 1177)  SpanInfo: {"start":1124,"length":52}
+    >skills: { primary: primaryA, secondary: secondaryA }
+    >:=> (line 38, col 7) to (line 38, col 59)
+38 >for ({ skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
+
+                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1178 to 1201)  SpanInfo: {"start":1182,"length":16}
+    >getMultiRobots()
+    >:=> (line 38, col 65) to (line 38, col 81)
+--------------------------------
+39 >    console.log(primaryA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (1202 to 1228)  SpanInfo: {"start":1206,"length":21}
+    >console.log(primaryA)
+    >:=> (line 39, col 4) to (line 39, col 25)
+--------------------------------
+40 >}
+
+    ~~                                            => Pos: (1229 to 1230)  SpanInfo: {"start":1206,"length":21}
+    >console.log(primaryA)
+    >:=> (line 39, col 4) to (line 39, col 25)
+--------------------------------
+41 >for ({ skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+    ~~~~~~~~~~~~~~                                => Pos: (1231 to 1244)  SpanInfo: {"start":1238,"length":52}
+    >skills: { primary: primaryA, secondary: secondaryA }
+    >:=> (line 41, col 7) to (line 41, col 59)
+41 >for ({ skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                  ~~~~~~~~~~~~~~~~~~~~~           => Pos: (1245 to 1265)  SpanInfo: {"start":1248,"length":17}
+    >primary: primaryA
+    >:=> (line 41, col 17) to (line 41, col 34)
+41 >for ({ skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1266 to 1289)  SpanInfo: {"start":1267,"length":21}
+    >secondary: secondaryA
+    >:=> (line 41, col 36) to (line 41, col 57)
+41 >for ({ skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                                                               ~~=> Pos: (1290 to 1291)  SpanInfo: {"start":1238,"length":52}
+    >skills: { primary: primaryA, secondary: secondaryA }
+    >:=> (line 41, col 7) to (line 41, col 59)
+41 >for ({ skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1292 to 1365)  SpanInfo: {"start":1296,"length":148}
+    >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+    >    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
+    >:=> (line 41, col 65) to (line 42, col 78)
+--------------------------------
+42 >    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1366 to 1447)  SpanInfo: {"start":1296,"length":148}
+    >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+    >    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
+    >:=> (line 41, col 65) to (line 42, col 78)
+--------------------------------
+43 >    console.log(primaryA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (1448 to 1474)  SpanInfo: {"start":1452,"length":21}
+    >console.log(primaryA)
+    >:=> (line 43, col 4) to (line 43, col 25)
+--------------------------------
+44 >}
+
+    ~~                                            => Pos: (1475 to 1476)  SpanInfo: {"start":1452,"length":21}
+    >console.log(primaryA)
+    >:=> (line 43, col 4) to (line 43, col 25)
+--------------------------------
+45 >for ({name } of robots) {
+
+    ~~~~~~~~~~~~                                  => Pos: (1477 to 1488)  SpanInfo: {"start":1483,"length":4}
+    >name
+    >:=> (line 45, col 6) to (line 45, col 10)
+45 >for ({name } of robots) {
+
+                ~~~~~~~~~~~~~~                    => Pos: (1489 to 1502)  SpanInfo: {"start":1493,"length":6}
+    >robots
+    >:=> (line 45, col 16) to (line 45, col 22)
+--------------------------------
+46 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (1503 to 1526)  SpanInfo: {"start":1507,"length":18}
+    >console.log(nameA)
+    >:=> (line 46, col 4) to (line 46, col 22)
+--------------------------------
+47 >}
+
+    ~~                                            => Pos: (1527 to 1528)  SpanInfo: {"start":1507,"length":18}
+    >console.log(nameA)
+    >:=> (line 46, col 4) to (line 46, col 22)
+--------------------------------
+48 >for ({name } of getRobots()) {
+
+    ~~~~~~~~~~~~                                  => Pos: (1529 to 1540)  SpanInfo: {"start":1535,"length":4}
+    >name
+    >:=> (line 48, col 6) to (line 48, col 10)
+48 >for ({name } of getRobots()) {
+
+                ~~~~~~~~~~~~~~~~~~~               => Pos: (1541 to 1559)  SpanInfo: {"start":1545,"length":11}
+    >getRobots()
+    >:=> (line 48, col 16) to (line 48, col 27)
+--------------------------------
+49 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (1560 to 1583)  SpanInfo: {"start":1564,"length":18}
+    >console.log(nameA)
+    >:=> (line 49, col 4) to (line 49, col 22)
+--------------------------------
+50 >}
+
+    ~~                                            => Pos: (1584 to 1585)  SpanInfo: {"start":1564,"length":18}
+    >console.log(nameA)
+    >:=> (line 49, col 4) to (line 49, col 22)
+--------------------------------
+51 >for ({name } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+
+    ~~~~~~~~~~~~                                  => Pos: (1586 to 1597)  SpanInfo: {"start":1592,"length":4}
+    >name
+    >:=> (line 51, col 6) to (line 51, col 10)
+51 >for ({name } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1598 to 1681)  SpanInfo: {"start":1602,"length":76}
+    >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
+    >:=> (line 51, col 16) to (line 51, col 92)
+--------------------------------
+52 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (1682 to 1705)  SpanInfo: {"start":1686,"length":18}
+    >console.log(nameA)
+    >:=> (line 52, col 4) to (line 52, col 22)
+--------------------------------
+53 >}
+
+    ~~                                            => Pos: (1706 to 1707)  SpanInfo: {"start":1686,"length":18}
+    >console.log(nameA)
+    >:=> (line 52, col 4) to (line 52, col 22)
+--------------------------------
+54 >for ({ skills: { primary, secondary } } of multiRobots) {
+
+    ~~~~~~~~~~~~~~                                => Pos: (1708 to 1721)  SpanInfo: {"start":1715,"length":30}
+    >skills: { primary, secondary }
+    >:=> (line 54, col 7) to (line 54, col 37)
+54 >for ({ skills: { primary, secondary } } of multiRobots) {
+
+                  ~~~~~~~~~~~                     => Pos: (1722 to 1732)  SpanInfo: {"start":1725,"length":7}
+    >primary
+    >:=> (line 54, col 17) to (line 54, col 24)
+54 >for ({ skills: { primary, secondary } } of multiRobots) {
+
+                             ~~~~~~~~~~~~         => Pos: (1733 to 1744)  SpanInfo: {"start":1734,"length":9}
+    >secondary
+    >:=> (line 54, col 26) to (line 54, col 35)
+54 >for ({ skills: { primary, secondary } } of multiRobots) {
+
+                                         ~~       => Pos: (1745 to 1746)  SpanInfo: {"start":1715,"length":30}
+    >skills: { primary, secondary }
+    >:=> (line 54, col 7) to (line 54, col 37)
+54 >for ({ skills: { primary, secondary } } of multiRobots) {
+
+                                           ~~~~~~~~~~~~~~~~~~~=> Pos: (1747 to 1765)  SpanInfo: {"start":1751,"length":11}
+    >multiRobots
+    >:=> (line 54, col 43) to (line 54, col 54)
+--------------------------------
+55 >    console.log(primaryA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (1766 to 1792)  SpanInfo: {"start":1770,"length":21}
+    >console.log(primaryA)
+    >:=> (line 55, col 4) to (line 55, col 25)
+--------------------------------
+56 >}
+
+    ~~                                            => Pos: (1793 to 1794)  SpanInfo: {"start":1770,"length":21}
+    >console.log(primaryA)
+    >:=> (line 55, col 4) to (line 55, col 25)
+--------------------------------
+57 >for ({ skills: { primary, secondary } } of getMultiRobots()) {
+
+    ~~~~~~~~~~~~~~                                => Pos: (1795 to 1808)  SpanInfo: {"start":1802,"length":30}
+    >skills: { primary, secondary }
+    >:=> (line 57, col 7) to (line 57, col 37)
+57 >for ({ skills: { primary, secondary } } of getMultiRobots()) {
+
+                  ~~~~~~~~~~~                     => Pos: (1809 to 1819)  SpanInfo: {"start":1812,"length":7}
+    >primary
+    >:=> (line 57, col 17) to (line 57, col 24)
+57 >for ({ skills: { primary, secondary } } of getMultiRobots()) {
+
+                             ~~~~~~~~~~~~         => Pos: (1820 to 1831)  SpanInfo: {"start":1821,"length":9}
+    >secondary
+    >:=> (line 57, col 26) to (line 57, col 35)
+57 >for ({ skills: { primary, secondary } } of getMultiRobots()) {
+
+                                         ~~       => Pos: (1832 to 1833)  SpanInfo: {"start":1802,"length":30}
+    >skills: { primary, secondary }
+    >:=> (line 57, col 7) to (line 57, col 37)
+57 >for ({ skills: { primary, secondary } } of getMultiRobots()) {
+
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1834 to 1857)  SpanInfo: {"start":1838,"length":16}
+    >getMultiRobots()
+    >:=> (line 57, col 43) to (line 57, col 59)
+--------------------------------
+58 >    console.log(primaryA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (1858 to 1884)  SpanInfo: {"start":1862,"length":21}
+    >console.log(primaryA)
+    >:=> (line 58, col 4) to (line 58, col 25)
+--------------------------------
+59 >}
+
+    ~~                                            => Pos: (1885 to 1886)  SpanInfo: {"start":1862,"length":21}
+    >console.log(primaryA)
+    >:=> (line 58, col 4) to (line 58, col 25)
+--------------------------------
+60 >for ({ skills: { primary, secondary } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+    ~~~~~~~~~~~~~~                                => Pos: (1887 to 1900)  SpanInfo: {"start":1894,"length":30}
+    >skills: { primary, secondary }
+    >:=> (line 60, col 7) to (line 60, col 37)
+60 >for ({ skills: { primary, secondary } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                  ~~~~~~~~~~~                     => Pos: (1901 to 1911)  SpanInfo: {"start":1904,"length":7}
+    >primary
+    >:=> (line 60, col 17) to (line 60, col 24)
+60 >for ({ skills: { primary, secondary } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                             ~~~~~~~~~~~~         => Pos: (1912 to 1923)  SpanInfo: {"start":1913,"length":9}
+    >secondary
+    >:=> (line 60, col 26) to (line 60, col 35)
+60 >for ({ skills: { primary, secondary } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                                         ~~       => Pos: (1924 to 1925)  SpanInfo: {"start":1894,"length":30}
+    >skills: { primary, secondary }
+    >:=> (line 60, col 7) to (line 60, col 37)
+60 >for ({ skills: { primary, secondary } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1926 to 1999)  SpanInfo: {"start":1930,"length":148}
+    >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+    >    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
+    >:=> (line 60, col 43) to (line 61, col 78)
+--------------------------------
+61 >    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (2000 to 2081)  SpanInfo: {"start":1930,"length":148}
+    >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+    >    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
+    >:=> (line 60, col 43) to (line 61, col 78)
+--------------------------------
+62 >    console.log(primaryA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (2082 to 2108)  SpanInfo: {"start":2086,"length":21}
+    >console.log(primaryA)
+    >:=> (line 62, col 4) to (line 62, col 25)
+--------------------------------
+63 >}
+
+    ~~                                            => Pos: (2109 to 2110)  SpanInfo: {"start":2086,"length":21}
+    >console.log(primaryA)
+    >:=> (line 62, col 4) to (line 62, col 25)
+--------------------------------
+64 >for ({name: nameA, skill: skillA } of robots) {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (2111 to 2128)  SpanInfo: {"start":2117,"length":11}
+    >name: nameA
+    >:=> (line 64, col 6) to (line 64, col 17)
+64 >for ({name: nameA, skill: skillA } of robots) {
+
+                      ~~~~~~~~~~~~~~~~            => Pos: (2129 to 2144)  SpanInfo: {"start":2130,"length":13}
+    >skill: skillA
+    >:=> (line 64, col 19) to (line 64, col 32)
+64 >for ({name: nameA, skill: skillA } of robots) {
+
+                                      ~~~~~~~~~~~~~~=> Pos: (2145 to 2158)  SpanInfo: {"start":2149,"length":6}
+    >robots
+    >:=> (line 64, col 38) to (line 64, col 44)
+--------------------------------
+65 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (2159 to 2182)  SpanInfo: {"start":2163,"length":18}
+    >console.log(nameA)
+    >:=> (line 65, col 4) to (line 65, col 22)
+--------------------------------
+66 >}
+
+    ~~                                            => Pos: (2183 to 2184)  SpanInfo: {"start":2163,"length":18}
+    >console.log(nameA)
+    >:=> (line 65, col 4) to (line 65, col 22)
+--------------------------------
+67 >for ({name: nameA, skill: skillA } of getRobots()) {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (2185 to 2202)  SpanInfo: {"start":2191,"length":11}
+    >name: nameA
+    >:=> (line 67, col 6) to (line 67, col 17)
+67 >for ({name: nameA, skill: skillA } of getRobots()) {
+
+                      ~~~~~~~~~~~~~~~~            => Pos: (2203 to 2218)  SpanInfo: {"start":2204,"length":13}
+    >skill: skillA
+    >:=> (line 67, col 19) to (line 67, col 32)
+67 >for ({name: nameA, skill: skillA } of getRobots()) {
+
+                                      ~~~~~~~~~~~~~~~~~~~=> Pos: (2219 to 2237)  SpanInfo: {"start":2223,"length":11}
+    >getRobots()
+    >:=> (line 67, col 38) to (line 67, col 49)
+--------------------------------
+68 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (2238 to 2261)  SpanInfo: {"start":2242,"length":18}
+    >console.log(nameA)
+    >:=> (line 68, col 4) to (line 68, col 22)
+--------------------------------
+69 >}
+
+    ~~                                            => Pos: (2262 to 2263)  SpanInfo: {"start":2242,"length":18}
+    >console.log(nameA)
+    >:=> (line 68, col 4) to (line 68, col 22)
+--------------------------------
+70 >for ({name: nameA, skill: skillA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (2264 to 2281)  SpanInfo: {"start":2270,"length":11}
+    >name: nameA
+    >:=> (line 70, col 6) to (line 70, col 17)
+70 >for ({name: nameA, skill: skillA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+
+                      ~~~~~~~~~~~~~~~~            => Pos: (2282 to 2297)  SpanInfo: {"start":2283,"length":13}
+    >skill: skillA
+    >:=> (line 70, col 19) to (line 70, col 32)
+70 >for ({name: nameA, skill: skillA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (2298 to 2381)  SpanInfo: {"start":2302,"length":76}
+    >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
+    >:=> (line 70, col 38) to (line 70, col 114)
+--------------------------------
+71 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (2382 to 2405)  SpanInfo: {"start":2386,"length":18}
+    >console.log(nameA)
+    >:=> (line 71, col 4) to (line 71, col 22)
+--------------------------------
+72 >}
+
+    ~~                                            => Pos: (2406 to 2407)  SpanInfo: {"start":2386,"length":18}
+    >console.log(nameA)
+    >:=> (line 71, col 4) to (line 71, col 22)
+--------------------------------
+73 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (2408 to 2425)  SpanInfo: {"start":2414,"length":11}
+    >name: nameA
+    >:=> (line 73, col 6) to (line 73, col 17)
+73 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+
+                      ~~~~~~~~                    => Pos: (2426 to 2433)  SpanInfo: {"start":2427,"length":52}
+    >skills: { primary: primaryA, secondary: secondaryA }
+    >:=> (line 73, col 19) to (line 73, col 71)
+73 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+
+                              ~~~~~~~~~~~~~~~~~~~~~=> Pos: (2434 to 2454)  SpanInfo: {"start":2437,"length":17}
+    >primary: primaryA
+    >:=> (line 73, col 29) to (line 73, col 46)
+73 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+
+                                                   ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (2455 to 2478)  SpanInfo: {"start":2456,"length":21}
+    >secondary: secondaryA
+    >:=> (line 73, col 48) to (line 73, col 69)
+73 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+
+                                                                           ~~=> Pos: (2479 to 2480)  SpanInfo: {"start":2427,"length":52}
+    >skills: { primary: primaryA, secondary: secondaryA }
+    >:=> (line 73, col 19) to (line 73, col 71)
+73 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+
+                                                                             ~~~~~~~~~~~~~~~~~~~=> Pos: (2481 to 2499)  SpanInfo: {"start":2485,"length":11}
+    >multiRobots
+    >:=> (line 73, col 77) to (line 73, col 88)
+--------------------------------
+74 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (2500 to 2523)  SpanInfo: {"start":2504,"length":18}
+    >console.log(nameA)
+    >:=> (line 74, col 4) to (line 74, col 22)
+--------------------------------
+75 >}
+
+    ~~                                            => Pos: (2524 to 2525)  SpanInfo: {"start":2504,"length":18}
+    >console.log(nameA)
+    >:=> (line 74, col 4) to (line 74, col 22)
+--------------------------------
+76 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (2526 to 2543)  SpanInfo: {"start":2532,"length":11}
+    >name: nameA
+    >:=> (line 76, col 6) to (line 76, col 17)
+76 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
+
+                      ~~~~~~~~                    => Pos: (2544 to 2551)  SpanInfo: {"start":2545,"length":52}
+    >skills: { primary: primaryA, secondary: secondaryA }
+    >:=> (line 76, col 19) to (line 76, col 71)
+76 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
+
+                              ~~~~~~~~~~~~~~~~~~~~~=> Pos: (2552 to 2572)  SpanInfo: {"start":2555,"length":17}
+    >primary: primaryA
+    >:=> (line 76, col 29) to (line 76, col 46)
+76 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
+
+                                                   ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (2573 to 2596)  SpanInfo: {"start":2574,"length":21}
+    >secondary: secondaryA
+    >:=> (line 76, col 48) to (line 76, col 69)
+76 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
+
+                                                                           ~~=> Pos: (2597 to 2598)  SpanInfo: {"start":2545,"length":52}
+    >skills: { primary: primaryA, secondary: secondaryA }
+    >:=> (line 76, col 19) to (line 76, col 71)
+76 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
+
+                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (2599 to 2622)  SpanInfo: {"start":2603,"length":16}
+    >getMultiRobots()
+    >:=> (line 76, col 77) to (line 76, col 93)
+--------------------------------
+77 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (2623 to 2646)  SpanInfo: {"start":2627,"length":18}
+    >console.log(nameA)
+    >:=> (line 77, col 4) to (line 77, col 22)
+--------------------------------
+78 >}
+
+    ~~                                            => Pos: (2647 to 2648)  SpanInfo: {"start":2627,"length":18}
+    >console.log(nameA)
+    >:=> (line 77, col 4) to (line 77, col 22)
+--------------------------------
+79 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (2649 to 2666)  SpanInfo: {"start":2655,"length":11}
+    >name: nameA
+    >:=> (line 79, col 6) to (line 79, col 17)
+79 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                      ~~~~~~~~                    => Pos: (2667 to 2674)  SpanInfo: {"start":2668,"length":52}
+    >skills: { primary: primaryA, secondary: secondaryA }
+    >:=> (line 79, col 19) to (line 79, col 71)
+79 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                              ~~~~~~~~~~~~~~~~~~~~~=> Pos: (2675 to 2695)  SpanInfo: {"start":2678,"length":17}
+    >primary: primaryA
+    >:=> (line 79, col 29) to (line 79, col 46)
+79 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                                                   ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (2696 to 2719)  SpanInfo: {"start":2697,"length":21}
+    >secondary: secondaryA
+    >:=> (line 79, col 48) to (line 79, col 69)
+79 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                                                                           ~~=> Pos: (2720 to 2721)  SpanInfo: {"start":2668,"length":52}
+    >skills: { primary: primaryA, secondary: secondaryA }
+    >:=> (line 79, col 19) to (line 79, col 71)
+79 >for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (2722 to 2795)  SpanInfo: {"start":2726,"length":148}
+    >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+    >    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
+    >:=> (line 79, col 77) to (line 80, col 78)
+--------------------------------
+80 >    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (2796 to 2877)  SpanInfo: {"start":2726,"length":148}
+    >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+    >    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
+    >:=> (line 79, col 77) to (line 80, col 78)
+--------------------------------
+81 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (2878 to 2901)  SpanInfo: {"start":2882,"length":18}
+    >console.log(nameA)
+    >:=> (line 81, col 4) to (line 81, col 22)
+--------------------------------
+82 >}
+
+    ~~                                            => Pos: (2902 to 2903)  SpanInfo: {"start":2882,"length":18}
+    >console.log(nameA)
+    >:=> (line 81, col 4) to (line 81, col 22)
+--------------------------------
+83 >for ({name, skill } of robots) {
+
+    ~~~~~~~~~~~                                   => Pos: (2904 to 2914)  SpanInfo: {"start":2910,"length":4}
+    >name
+    >:=> (line 83, col 6) to (line 83, col 10)
+83 >for ({name, skill } of robots) {
+
+               ~~~~~~~~                           => Pos: (2915 to 2922)  SpanInfo: {"start":2916,"length":5}
+    >skill
+    >:=> (line 83, col 12) to (line 83, col 17)
+83 >for ({name, skill } of robots) {
+
+                       ~~~~~~~~~~~~~~             => Pos: (2923 to 2936)  SpanInfo: {"start":2927,"length":6}
+    >robots
+    >:=> (line 83, col 23) to (line 83, col 29)
+--------------------------------
+84 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (2937 to 2960)  SpanInfo: {"start":2941,"length":18}
+    >console.log(nameA)
+    >:=> (line 84, col 4) to (line 84, col 22)
+--------------------------------
+85 >}
+
+    ~~                                            => Pos: (2961 to 2962)  SpanInfo: {"start":2941,"length":18}
+    >console.log(nameA)
+    >:=> (line 84, col 4) to (line 84, col 22)
+--------------------------------
+86 >for ({name, skill } of getRobots()) {
+
+    ~~~~~~~~~~~                                   => Pos: (2963 to 2973)  SpanInfo: {"start":2969,"length":4}
+    >name
+    >:=> (line 86, col 6) to (line 86, col 10)
+86 >for ({name, skill } of getRobots()) {
+
+               ~~~~~~~~                           => Pos: (2974 to 2981)  SpanInfo: {"start":2975,"length":5}
+    >skill
+    >:=> (line 86, col 12) to (line 86, col 17)
+86 >for ({name, skill } of getRobots()) {
+
+                       ~~~~~~~~~~~~~~~~~~~        => Pos: (2982 to 3000)  SpanInfo: {"start":2986,"length":11}
+    >getRobots()
+    >:=> (line 86, col 23) to (line 86, col 34)
+--------------------------------
+87 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (3001 to 3024)  SpanInfo: {"start":3005,"length":18}
+    >console.log(nameA)
+    >:=> (line 87, col 4) to (line 87, col 22)
+--------------------------------
+88 >}
+
+    ~~                                            => Pos: (3025 to 3026)  SpanInfo: {"start":3005,"length":18}
+    >console.log(nameA)
+    >:=> (line 87, col 4) to (line 87, col 22)
+--------------------------------
+89 >for ({name, skill } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+
+    ~~~~~~~~~~~                                   => Pos: (3027 to 3037)  SpanInfo: {"start":3033,"length":4}
+    >name
+    >:=> (line 89, col 6) to (line 89, col 10)
+89 >for ({name, skill } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+
+               ~~~~~~~~                           => Pos: (3038 to 3045)  SpanInfo: {"start":3039,"length":5}
+    >skill
+    >:=> (line 89, col 12) to (line 89, col 17)
+89 >for ({name, skill } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (3046 to 3129)  SpanInfo: {"start":3050,"length":76}
+    >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
+    >:=> (line 89, col 23) to (line 89, col 99)
+--------------------------------
+90 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (3130 to 3153)  SpanInfo: {"start":3134,"length":18}
+    >console.log(nameA)
+    >:=> (line 90, col 4) to (line 90, col 22)
+--------------------------------
+91 >}
+
+    ~~                                            => Pos: (3154 to 3155)  SpanInfo: {"start":3134,"length":18}
+    >console.log(nameA)
+    >:=> (line 90, col 4) to (line 90, col 22)
+--------------------------------
+92 >for ({name, skills: { primary, secondary } } of multiRobots) {
+
+    ~~~~~~~~~~~                                   => Pos: (3156 to 3166)  SpanInfo: {"start":3162,"length":4}
+    >name
+    >:=> (line 92, col 6) to (line 92, col 10)
+92 >for ({name, skills: { primary, secondary } } of multiRobots) {
+
+               ~~~~~~~~                           => Pos: (3167 to 3174)  SpanInfo: {"start":3168,"length":30}
+    >skills: { primary, secondary }
+    >:=> (line 92, col 12) to (line 92, col 42)
+92 >for ({name, skills: { primary, secondary } } of multiRobots) {
+
+                       ~~~~~~~~~~~                => Pos: (3175 to 3185)  SpanInfo: {"start":3178,"length":7}
+    >primary
+    >:=> (line 92, col 22) to (line 92, col 29)
+92 >for ({name, skills: { primary, secondary } } of multiRobots) {
+
+                                  ~~~~~~~~~~~~    => Pos: (3186 to 3197)  SpanInfo: {"start":3187,"length":9}
+    >secondary
+    >:=> (line 92, col 31) to (line 92, col 40)
+92 >for ({name, skills: { primary, secondary } } of multiRobots) {
+
+                                              ~~  => Pos: (3198 to 3199)  SpanInfo: {"start":3168,"length":30}
+    >skills: { primary, secondary }
+    >:=> (line 92, col 12) to (line 92, col 42)
+92 >for ({name, skills: { primary, secondary } } of multiRobots) {
+
+                                                ~~~~~~~~~~~~~~~~~~~=> Pos: (3200 to 3218)  SpanInfo: {"start":3204,"length":11}
+    >multiRobots
+    >:=> (line 92, col 48) to (line 92, col 59)
+--------------------------------
+93 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (3219 to 3242)  SpanInfo: {"start":3223,"length":18}
+    >console.log(nameA)
+    >:=> (line 93, col 4) to (line 93, col 22)
+--------------------------------
+94 >}
+
+    ~~                                            => Pos: (3243 to 3244)  SpanInfo: {"start":3223,"length":18}
+    >console.log(nameA)
+    >:=> (line 93, col 4) to (line 93, col 22)
+--------------------------------
+95 >for ({name, skills: { primary, secondary } } of getMultiRobots()) {
+
+    ~~~~~~~~~~~                                   => Pos: (3245 to 3255)  SpanInfo: {"start":3251,"length":4}
+    >name
+    >:=> (line 95, col 6) to (line 95, col 10)
+95 >for ({name, skills: { primary, secondary } } of getMultiRobots()) {
+
+               ~~~~~~~~                           => Pos: (3256 to 3263)  SpanInfo: {"start":3257,"length":30}
+    >skills: { primary, secondary }
+    >:=> (line 95, col 12) to (line 95, col 42)
+95 >for ({name, skills: { primary, secondary } } of getMultiRobots()) {
+
+                       ~~~~~~~~~~~                => Pos: (3264 to 3274)  SpanInfo: {"start":3267,"length":7}
+    >primary
+    >:=> (line 95, col 22) to (line 95, col 29)
+95 >for ({name, skills: { primary, secondary } } of getMultiRobots()) {
+
+                                  ~~~~~~~~~~~~    => Pos: (3275 to 3286)  SpanInfo: {"start":3276,"length":9}
+    >secondary
+    >:=> (line 95, col 31) to (line 95, col 40)
+95 >for ({name, skills: { primary, secondary } } of getMultiRobots()) {
+
+                                              ~~  => Pos: (3287 to 3288)  SpanInfo: {"start":3257,"length":30}
+    >skills: { primary, secondary }
+    >:=> (line 95, col 12) to (line 95, col 42)
+95 >for ({name, skills: { primary, secondary } } of getMultiRobots()) {
+
+                                                ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (3289 to 3312)  SpanInfo: {"start":3293,"length":16}
+    >getMultiRobots()
+    >:=> (line 95, col 48) to (line 95, col 64)
+--------------------------------
+96 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (3313 to 3336)  SpanInfo: {"start":3317,"length":18}
+    >console.log(nameA)
+    >:=> (line 96, col 4) to (line 96, col 22)
+--------------------------------
+97 >}
+
+    ~~                                            => Pos: (3337 to 3338)  SpanInfo: {"start":3317,"length":18}
+    >console.log(nameA)
+    >:=> (line 96, col 4) to (line 96, col 22)
+--------------------------------
+98 >for ({name, skills: { primary, secondary } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+    ~~~~~~~~~~~                                   => Pos: (3339 to 3349)  SpanInfo: {"start":3345,"length":4}
+    >name
+    >:=> (line 98, col 6) to (line 98, col 10)
+98 >for ({name, skills: { primary, secondary } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+               ~~~~~~~~                           => Pos: (3350 to 3357)  SpanInfo: {"start":3351,"length":30}
+    >skills: { primary, secondary }
+    >:=> (line 98, col 12) to (line 98, col 42)
+98 >for ({name, skills: { primary, secondary } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                       ~~~~~~~~~~~                => Pos: (3358 to 3368)  SpanInfo: {"start":3361,"length":7}
+    >primary
+    >:=> (line 98, col 22) to (line 98, col 29)
+98 >for ({name, skills: { primary, secondary } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                                  ~~~~~~~~~~~~    => Pos: (3369 to 3380)  SpanInfo: {"start":3370,"length":9}
+    >secondary
+    >:=> (line 98, col 31) to (line 98, col 40)
+98 >for ({name, skills: { primary, secondary } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                                              ~~  => Pos: (3381 to 3382)  SpanInfo: {"start":3351,"length":30}
+    >skills: { primary, secondary }
+    >:=> (line 98, col 12) to (line 98, col 42)
+98 >for ({name, skills: { primary, secondary } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+
+                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (3383 to 3456)  SpanInfo: {"start":3387,"length":148}
+    >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+    >    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
+    >:=> (line 98, col 48) to (line 99, col 78)
+--------------------------------
+99 >    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (3457 to 3538)  SpanInfo: {"start":3387,"length":148}
+    >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+    >    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
+    >:=> (line 98, col 48) to (line 99, col 78)
+--------------------------------
+100>    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (3539 to 3562)  SpanInfo: {"start":3543,"length":18}
+    >console.log(nameA)
+    >:=> (line 100, col 4) to (line 100, col 22)
+--------------------------------
+101>}
+    ~                                             => Pos: (3563 to 3563)  SpanInfo: {"start":3543,"length":18}
+    >console.log(nameA)
+    >:=> (line 100, col 4) to (line 100, col 22)

@@ -1,18 +1,18 @@
 === tests/cases/compiler/capturedLetConstInLoop1_ES6.ts ===
 //==== let
 for (let x in {}) {
->x : any
+>x : string
 >{} : {}
 
     (function() { return x});
->(function() { return x}) : () => any
->function() { return x} : () => any
->x : any
+>(function() { return x}) : () => string
+>function() { return x} : () => string
+>x : string
 
     (() => x);
->(() => x) : () => any
->() => x : () => any
->x : any
+>(() => x) : () => string
+>() => x : () => string
+>x : string
 }
 
 for (let x of []) {
@@ -216,18 +216,18 @@ for (let y = 0; y < 1; ++y) {
 
 //=========const
 for (const x in {}) {
->x : any
+>x : string
 >{} : {}
 
     (function() { return x});
->(function() { return x}) : () => any
->function() { return x} : () => any
->x : any
+>(function() { return x}) : () => string
+>function() { return x} : () => string
+>x : string
 
     (() => x);
->(() => x) : () => any
->() => x : () => any
->x : any
+>(() => x) : () => string
+>() => x : () => string
+>x : string
 }
 
 for (const x of []) {

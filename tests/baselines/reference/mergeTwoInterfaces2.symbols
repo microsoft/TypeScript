@@ -9,7 +9,7 @@ module M2 {
 >A : Symbol(A, Decl(mergeTwoInterfaces2.ts, 3, 11), Decl(mergeTwoInterfaces2.ts, 13, 11))
 
         foo: string;
->foo : Symbol(foo, Decl(mergeTwoInterfaces2.ts, 4, 24))
+>foo : Symbol(A.foo, Decl(mergeTwoInterfaces2.ts, 4, 24))
     }
 
     var a: A;
@@ -36,7 +36,7 @@ module M2 {
 >A : Symbol(A, Decl(mergeTwoInterfaces2.ts, 3, 11), Decl(mergeTwoInterfaces2.ts, 13, 11))
 
         bar: number;
->bar : Symbol(bar, Decl(mergeTwoInterfaces2.ts, 14, 24))
+>bar : Symbol(A.bar, Decl(mergeTwoInterfaces2.ts, 14, 24))
     }
 
     var a: A;
@@ -67,7 +67,7 @@ module M2 {
 >A : Symbol(A, Decl(mergeTwoInterfaces2.ts, 25, 22), Decl(mergeTwoInterfaces2.ts, 37, 22))
 
             foo: string;
->foo : Symbol(foo, Decl(mergeTwoInterfaces2.ts, 26, 28))
+>foo : Symbol(A.foo, Decl(mergeTwoInterfaces2.ts, 26, 28))
         }
 
         var a: A;
@@ -98,7 +98,7 @@ module M2 {
 >A : Symbol(A, Decl(mergeTwoInterfaces2.ts, 25, 22), Decl(mergeTwoInterfaces2.ts, 37, 22))
 
             bar: number;
->bar : Symbol(bar, Decl(mergeTwoInterfaces2.ts, 38, 28))
+>bar : Symbol(A.bar, Decl(mergeTwoInterfaces2.ts, 38, 28))
         }
 
         var a: A;

@@ -59,6 +59,8 @@ module M {
 >S.Bar : Symbol(S.Bar, Decl(file.tsx, 8, 18))
 >S : Symbol(S, Decl(file.tsx, 7, 39), Decl(file.tsx, 18, 14))
 >Bar : Symbol(S.Bar, Decl(file.tsx, 8, 18))
+>S.Bar : Symbol(S.Bar, Decl(file.tsx, 8, 18))
+>S : Symbol(S, Decl(file.tsx, 7, 39), Decl(file.tsx, 18, 14))
 >Bar : Symbol(S.Bar, Decl(file.tsx, 8, 18))
 }
 

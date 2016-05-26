@@ -483,22 +483,125 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >typedArrays : any[]
 }
 
-/*
 function CreateTypedArraysOf(obj) {
+>CreateTypedArraysOf : (obj: any) => any[]
+>obj : any
+
     var typedArrays = [];
+>typedArrays : any[]
+>[] : undefined[]
+
     typedArrays[0] = Int8Array.of(...obj);
+>typedArrays[0] = Int8Array.of(...obj) : Int8Array
+>typedArrays[0] : any
+>typedArrays : any[]
+>0 : number
+>Int8Array.of(...obj) : Int8Array
+>Int8Array.of : (...items: number[]) => Int8Array
+>Int8Array : Int8ArrayConstructor
+>of : (...items: number[]) => Int8Array
+>...obj : any
+>obj : any
+
     typedArrays[1] = Uint8Array.of(...obj);
+>typedArrays[1] = Uint8Array.of(...obj) : Uint8Array
+>typedArrays[1] : any
+>typedArrays : any[]
+>1 : number
+>Uint8Array.of(...obj) : Uint8Array
+>Uint8Array.of : (...items: number[]) => Uint8Array
+>Uint8Array : Uint8ArrayConstructor
+>of : (...items: number[]) => Uint8Array
+>...obj : any
+>obj : any
+
     typedArrays[2] = Int16Array.of(...obj);
+>typedArrays[2] = Int16Array.of(...obj) : Int16Array
+>typedArrays[2] : any
+>typedArrays : any[]
+>2 : number
+>Int16Array.of(...obj) : Int16Array
+>Int16Array.of : (...items: number[]) => Int16Array
+>Int16Array : Int16ArrayConstructor
+>of : (...items: number[]) => Int16Array
+>...obj : any
+>obj : any
+
     typedArrays[3] = Uint16Array.of(...obj);
+>typedArrays[3] = Uint16Array.of(...obj) : Uint16Array
+>typedArrays[3] : any
+>typedArrays : any[]
+>3 : number
+>Uint16Array.of(...obj) : Uint16Array
+>Uint16Array.of : (...items: number[]) => Uint16Array
+>Uint16Array : Uint16ArrayConstructor
+>of : (...items: number[]) => Uint16Array
+>...obj : any
+>obj : any
+
     typedArrays[4] = Int32Array.of(...obj);
+>typedArrays[4] = Int32Array.of(...obj) : Int32Array
+>typedArrays[4] : any
+>typedArrays : any[]
+>4 : number
+>Int32Array.of(...obj) : Int32Array
+>Int32Array.of : (...items: number[]) => Int32Array
+>Int32Array : Int32ArrayConstructor
+>of : (...items: number[]) => Int32Array
+>...obj : any
+>obj : any
+
     typedArrays[5] = Uint32Array.of(...obj);
+>typedArrays[5] = Uint32Array.of(...obj) : Uint32Array
+>typedArrays[5] : any
+>typedArrays : any[]
+>5 : number
+>Uint32Array.of(...obj) : Uint32Array
+>Uint32Array.of : (...items: number[]) => Uint32Array
+>Uint32Array : Uint32ArrayConstructor
+>of : (...items: number[]) => Uint32Array
+>...obj : any
+>obj : any
+
     typedArrays[6] = Float32Array.of(...obj);
+>typedArrays[6] = Float32Array.of(...obj) : Float32Array
+>typedArrays[6] : any
+>typedArrays : any[]
+>6 : number
+>Float32Array.of(...obj) : Float32Array
+>Float32Array.of : (...items: number[]) => Float32Array
+>Float32Array : Float32ArrayConstructor
+>of : (...items: number[]) => Float32Array
+>...obj : any
+>obj : any
+
     typedArrays[7] = Float64Array.of(...obj);
+>typedArrays[7] = Float64Array.of(...obj) : Float64Array
+>typedArrays[7] : any
+>typedArrays : any[]
+>7 : number
+>Float64Array.of(...obj) : Float64Array
+>Float64Array.of : (...items: number[]) => Float64Array
+>Float64Array : Float64ArrayConstructor
+>of : (...items: number[]) => Float64Array
+>...obj : any
+>obj : any
+
     typedArrays[8] = Uint8ClampedArray.of(...obj);
+>typedArrays[8] = Uint8ClampedArray.of(...obj) : Uint8ClampedArray
+>typedArrays[8] : any
+>typedArrays : any[]
+>8 : number
+>Uint8ClampedArray.of(...obj) : Uint8ClampedArray
+>Uint8ClampedArray.of : (...items: number[]) => Uint8ClampedArray
+>Uint8ClampedArray : Uint8ClampedArrayConstructor
+>of : (...items: number[]) => Uint8ClampedArray
+>...obj : any
+>obj : any
 
     return typedArrays;
+>typedArrays : any[]
 }
-*/
 
 function CreateTypedArraysOf2() {
 >CreateTypedArraysOf2 : () => any[]

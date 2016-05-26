@@ -7,12 +7,12 @@ interface I {
 
     (): void;
     apply(a: any, b?: any): void;
->apply : Symbol(apply, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 4, 13))
+>apply : Symbol(I.apply, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 4, 13))
 >a : Symbol(a, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 5, 10))
 >b : Symbol(b, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 5, 17))
 
     call(thisArg: number, ...argArray: number[]): any;
->call : Symbol(call, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 5, 33))
+>call : Symbol(I.call, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 5, 33))
 >thisArg : Symbol(thisArg, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 6, 9))
 >argArray : Symbol(argArray, Decl(objectTypeWithCallSignatureHidingMembersOfFunction.ts, 6, 25))
 }

@@ -4,7 +4,7 @@ class C<T> {
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 0, 8))
 
     f() {
->f : Symbol(f, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 0, 12))
+>f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 0, 12))
 
         var x: T;
 >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 2, 11))
@@ -34,7 +34,7 @@ interface I<T> {
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 10, 12))
 
     foo: T;
->foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 10, 16))
+>foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 10, 16))
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 10, 12))
 }
 var i: I<number>;

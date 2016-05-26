@@ -1,0 +1,28 @@
+=== tests/cases/compiler/blockScopedBindingsReassignedInLoop4.ts ===
+function f1() {
+>f1 : Symbol(f1, Decl(blockScopedBindingsReassignedInLoop4.ts, 0, 0))
+
+    for (let x = 1, y = 2; x < y; ++x, --y) {
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop4.ts, 1, 12))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop4.ts, 1, 19))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop4.ts, 1, 12))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop4.ts, 1, 19))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop4.ts, 1, 12))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop4.ts, 1, 19))
+
+        let a = () => x++ + y++;
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop4.ts, 2, 11))
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop4.ts, 1, 12))
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop4.ts, 1, 19))
+
+        if (x == 1) {
+>x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop4.ts, 1, 12))
+
+            return 1;
+        }
+        else {
+            y = 5;
+>y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop4.ts, 1, 19))
+        }
+    }
+}

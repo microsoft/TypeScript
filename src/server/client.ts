@@ -1,5 +1,5 @@
 /// <reference path="session.ts" />
- 
+
 namespace ts.server {
 
     export interface SessionClientHost extends LanguageServiceHost {
@@ -25,23 +25,23 @@ namespace ts.server {
         private lineMaps: ts.Map<number[]> = {};
         private messages: string[] = [];
         private lastRenameEntry: RenameEntry;
-        
+
         constructor(private host: SessionClientHost) {
         }
 
-        public onMessage(message: string): void { 
+        public onMessage(message: string): void {
             this.messages.push(message);
         }
 
-        private writeMessage(message: string): void { 
+        private writeMessage(message: string): void {
             this.host.writeMessage(message);
         }
 
-        private getLineMap(fileName: string): number[] { 
+        private getLineMap(fileName: string): number[] {
             var lineMap = ts.lookUp(this.lineMaps, fileName);
             if (!lineMap) {
                 var scriptSnapshot = this.host.getScriptSnapshot(fileName);
-                lineMap  = this.lineMaps[fileName] = ts.computeLineStarts(scriptSnapshot.getText(0, scriptSnapshot.getLength()));
+                lineMap = this.lineMaps[fileName] = ts.computeLineStarts(scriptSnapshot.getText(0, scriptSnapshot.getLength()));
             }
             return lineMap;
         }
@@ -82,34 +82,29 @@ namespace ts.server {
         }
 
         private processResponse<T extends protocol.Response>(request: protocol.Request): T {
-            var lastMessage = this.messages.shift();
-            Debug.assert(!!lastMessage, "Did not recieve any responses.");
-
-            // Read the content length
-            var contentLengthPrefix = "Content-Length: ";
-            var lines = lastMessage.split("\r\n");
-            Debug.assert(lines.length >= 2, "Malformed response: Expected 3 lines in the response.");
-
-            var contentLengthText = lines[0];
-            Debug.assert(contentLengthText.indexOf(contentLengthPrefix) === 0, "Malformed response: Response text did not contain content-length header.");
-            var contentLength = parseInt(contentLengthText.substring(contentLengthPrefix.length));
-
-            // Read the body
-            var responseBody = lines[2];
-
-            // Verify content length
-            Debug.assert(responseBody.length + 1 === contentLength, "Malformed response: Content length did not match the response's body length.");
-
-            try {
-                var response: T = JSON.parse(responseBody);
-            }
-            catch (e) {
-                throw new Error("Malformed response: Failed to parse server response: " + lastMessage + ". \r\n  Error details: " + e.message);
+            let foundResponseMessage = false;
+            let lastMessage: string;
+            let response: T;
+            while (!foundResponseMessage) {
+                lastMessage = this.messages.shift();
+                Debug.assert(!!lastMessage, "Did not receive any responses.");
+                const responseBody = processMessage(lastMessage);
+                try {
+                    response = JSON.parse(responseBody);
+                    // the server may emit events before emitting the response. We
+                    // want to ignore these events for testing purpose.
+                    if (response.type === "response") {
+                        foundResponseMessage = true;
+                    }
+                }
+                catch (e) {
+                    throw new Error("Malformed response: Failed to parse server response: " + lastMessage + ". \r\n  Error details: " + e.message);
+                }
             }
 
             // verify the sequence numbers
-            Debug.assert(response.request_seq === request.seq, "Malformed response: response sequance number did not match request sequence number.");
-            
+            Debug.assert(response.request_seq === request.seq, "Malformed response: response sequence number did not match request sequence number.");
+
             // unmarshal errors
             if (!response.success) {
                 throw new Error("Error " + response.message);
@@ -118,10 +113,28 @@ namespace ts.server {
             Debug.assert(!!response.body, "Malformed response: Unexpected empty response body.");
 
             return response;
+
+            function processMessage(message: string) {
+                // Read the content length
+                const contentLengthPrefix = "Content-Length: ";
+                const lines = message.split("\r\n");
+                Debug.assert(lines.length >= 2, "Malformed response: Expected 3 lines in the response.");
+
+                const contentLengthText = lines[0];
+                Debug.assert(contentLengthText.indexOf(contentLengthPrefix) === 0, "Malformed response: Response text did not contain content-length header.");
+                const contentLength = parseInt(contentLengthText.substring(contentLengthPrefix.length));
+
+                // Read the body
+                const responseBody = lines[2];
+
+                // Verify content length
+                Debug.assert(responseBody.length + 1 === contentLength, "Malformed response: Content length did not match the response's body length.");
+                return responseBody;
+            }
         }
 
-        openFile(fileName: string, content?: string): void {
-            var args: protocol.OpenRequestArgs = { file: fileName, fileContent: content };
+        openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
+            var args: protocol.OpenRequestArgs = { file: fileName, fileContent: content, scriptKindName };
             this.processRequest(CommandNames.Open, args);
         }
 
@@ -186,7 +199,7 @@ namespace ts.server {
                 fileNames: response.body.fileNames
             };
         }
-        
+
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.CompletionsRequestArgs = {
@@ -199,13 +212,13 @@ namespace ts.server {
             var request = this.processRequest<protocol.CompletionsRequest>(CommandNames.Completions, args);
             var response = this.processResponse<protocol.CompletionsResponse>(request);
 
-            return  {
+            return {
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
                 entries: response.body
             };
         }
-     
+
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
             var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.CompletionDetailsRequestArgs = {
@@ -234,7 +247,7 @@ namespace ts.server {
                 var fileName = entry.file;
                 var start = this.lineOffsetToPosition(fileName, entry.start);
                 var end = this.lineOffsetToPosition(fileName, entry.end);
-                
+
                 return {
                     name: entry.name,
                     containerName: entry.containerName || "",
@@ -264,7 +277,7 @@ namespace ts.server {
             var request = this.processRequest<protocol.FormatRequest>(CommandNames.Format, args);
             var response = this.processResponse<protocol.FormatResponse>(request);
 
-            return response.body.map(entry=> this.convertCodeEditsToTextChange(fileName, entry));
+            return response.body.map(entry => this.convertCodeEditsToTextChange(fileName, entry));
         }
 
         getFormattingEditsForDocument(fileName: string, options: ts.FormatCodeOptions): ts.TextChange[] {
@@ -284,7 +297,7 @@ namespace ts.server {
             var request = this.processRequest<protocol.FormatOnKeyRequest>(CommandNames.Formatonkey, args);
             var response = this.processResponse<protocol.FormatResponse>(request);
 
-            return response.body.map(entry=> this.convertCodeEditsToTextChange(fileName, entry));
+            return response.body.map(entry => this.convertCodeEditsToTextChange(fileName, entry));
         }
 
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
@@ -339,7 +352,7 @@ namespace ts.server {
             });
         }
 
-        findReferences(fileName: string, position: number): ReferencedSymbol[]{
+        findReferences(fileName: string, position: number): ReferencedSymbol[] {
             // Not yet implemented.
             return [];
         }
@@ -444,7 +457,7 @@ namespace ts.server {
                 text: item.text,
                 kind: item.kind,
                 kindModifiers: item.kindModifiers || "",
-                spans: item.spans.map(span=> createTextSpanFromBounds(this.lineOffsetToPosition(fileName, span.start), this.lineOffsetToPosition(fileName, span.end))),
+                spans: item.spans.map(span => createTextSpanFromBounds(this.lineOffsetToPosition(fileName, span.start), this.lineOffsetToPosition(fileName, span.end))),
                 childItems: this.decodeNavigationBarItems(item.childItems, fileName),
                 indent: 0,
                 bolded: false,
@@ -478,10 +491,10 @@ namespace ts.server {
                 line: lineOffset.line,
                 offset: lineOffset.offset
             };
-            
+
             var request = this.processRequest<protocol.SignatureHelpRequest>(CommandNames.SignatureHelp, args);
             var response = this.processResponse<protocol.SignatureHelpResponse>(request);
-            
+
             if (!response.body) {
                 return undefined;
             }
@@ -490,7 +503,7 @@ namespace ts.server {
             var span = helpItems.applicableSpan;
             var start = this.lineOffsetToPosition(fileName, span.start);
             var end = this.lineOffsetToPosition(fileName, span.end);
-            
+
             var result: SignatureHelpItems = {
                 items: helpItems.items,
                 applicableSpan: {
@@ -499,7 +512,7 @@ namespace ts.server {
                 },
                 selectedItemIndex: helpItems.selectedItemIndex,
                 argumentIndex: helpItems.argumentIndex,
-                argumentCount: helpItems.argumentCount,                
+                argumentCount: helpItems.argumentCount,
             }
             return result;
         }
@@ -561,11 +574,15 @@ namespace ts.server {
         }
 
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
-            throw new Error("Not Implemented Yet."); 
+            throw new Error("Not Implemented Yet.");
         }
-        
+
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
-            throw new Error("Not Implemented Yet."); 
+            throw new Error("Not Implemented Yet.");
+        }
+
+        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
+            throw new Error("Not Implemented Yet.");
         }
 
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
@@ -613,7 +630,7 @@ namespace ts.server {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
 
-        getSourceFile(fileName: string): SourceFile {
+        getNonBoundSourceFile(fileName: string): SourceFile {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
 

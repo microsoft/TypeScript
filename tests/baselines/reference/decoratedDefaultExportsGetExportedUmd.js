@@ -30,7 +30,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 })(function (require, exports) {
     "use strict";
     var decorator;
-    let Foo = class {
+    let Foo = class Foo {
     };
     Foo = __decorate([
         decorator

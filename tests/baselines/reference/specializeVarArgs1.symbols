@@ -14,7 +14,7 @@ interface ObservableArray<T> extends Observable<T[]>
 {
 
     push(...values: T[]);
->push : Symbol(push, Decl(specializeVarArgs1.ts, 6, 1))
+>push : Symbol(ObservableArray.push, Decl(specializeVarArgs1.ts, 6, 1))
 >values : Symbol(values, Decl(specializeVarArgs1.ts, 8, 9))
 >T : Symbol(T, Decl(specializeVarArgs1.ts, 4, 26))
 

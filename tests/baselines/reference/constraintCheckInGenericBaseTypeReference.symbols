@@ -4,7 +4,7 @@ class Constraint {
 >Constraint : Symbol(Constraint, Decl(constraintCheckInGenericBaseTypeReference.ts, 0, 0))
 
     public method() { }
->method : Symbol(method, Decl(constraintCheckInGenericBaseTypeReference.ts, 1, 18))
+>method : Symbol(Constraint.method, Decl(constraintCheckInGenericBaseTypeReference.ts, 1, 18))
 }
 class GenericBase<T extends Constraint> {
 >GenericBase : Symbol(GenericBase, Decl(constraintCheckInGenericBaseTypeReference.ts, 3, 1))
@@ -12,7 +12,7 @@ class GenericBase<T extends Constraint> {
 >Constraint : Symbol(Constraint, Decl(constraintCheckInGenericBaseTypeReference.ts, 0, 0))
 
     public items: any;
->items : Symbol(items, Decl(constraintCheckInGenericBaseTypeReference.ts, 4, 41))
+>items : Symbol(GenericBase.items, Decl(constraintCheckInGenericBaseTypeReference.ts, 4, 41))
 }
 class Derived extends GenericBase<TypeArg> {
 >Derived : Symbol(Derived, Decl(constraintCheckInGenericBaseTypeReference.ts, 6, 1))
@@ -24,7 +24,7 @@ class TypeArg {
 >TypeArg : Symbol(TypeArg, Decl(constraintCheckInGenericBaseTypeReference.ts, 9, 1))
 
     public method() {
->method : Symbol(method, Decl(constraintCheckInGenericBaseTypeReference.ts, 10, 15))
+>method : Symbol(TypeArg.method, Decl(constraintCheckInGenericBaseTypeReference.ts, 10, 15))
 
         Container.People.items;
 >Container.People.items : Symbol(GenericBase.items, Decl(constraintCheckInGenericBaseTypeReference.ts, 4, 41))

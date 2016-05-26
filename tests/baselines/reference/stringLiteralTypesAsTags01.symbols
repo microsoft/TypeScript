@@ -7,7 +7,7 @@ interface Entity {
 >Entity : Symbol(Entity, Decl(stringLiteralTypesAsTags01.ts, 1, 21))
 
     kind: Kind;
->kind : Symbol(kind, Decl(stringLiteralTypesAsTags01.ts, 3, 18))
+>kind : Symbol(Entity.kind, Decl(stringLiteralTypesAsTags01.ts, 3, 18))
 >Kind : Symbol(Kind, Decl(stringLiteralTypesAsTags01.ts, 0, 0))
 }
 
@@ -16,10 +16,10 @@ interface A extends Entity {
 >Entity : Symbol(Entity, Decl(stringLiteralTypesAsTags01.ts, 1, 21))
 
     kind: "A";
->kind : Symbol(kind, Decl(stringLiteralTypesAsTags01.ts, 7, 28))
+>kind : Symbol(A.kind, Decl(stringLiteralTypesAsTags01.ts, 7, 28))
 
     a: number;
->a : Symbol(a, Decl(stringLiteralTypesAsTags01.ts, 8, 14))
+>a : Symbol(A.a, Decl(stringLiteralTypesAsTags01.ts, 8, 14))
 }
 
 interface B extends Entity {
@@ -27,10 +27,10 @@ interface B extends Entity {
 >Entity : Symbol(Entity, Decl(stringLiteralTypesAsTags01.ts, 1, 21))
 
     kind: "B";
->kind : Symbol(kind, Decl(stringLiteralTypesAsTags01.ts, 12, 28))
+>kind : Symbol(B.kind, Decl(stringLiteralTypesAsTags01.ts, 12, 28))
 
     b: string;
->b : Symbol(b, Decl(stringLiteralTypesAsTags01.ts, 13, 14))
+>b : Symbol(B.b, Decl(stringLiteralTypesAsTags01.ts, 13, 14))
 }
 
 function hasKind(entity: Entity, kind: "A"): entity is A;

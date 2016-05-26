@@ -36,7 +36,7 @@ function foo0_1(x) {
 >x : any
 
     for (let x in []) {
->x : any
+>x : string
 >[] : undefined[]
 
         let a = arguments.length;
@@ -46,17 +46,17 @@ function foo0_1(x) {
 >length : number
 
         (function() { return x + a });
->(function() { return x + a }) : () => any
->function() { return x + a } : () => any
->x + a : any
->x : any
+>(function() { return x + a }) : () => string
+>function() { return x + a } : () => string
+>x + a : string
+>x : string
 >a : number
 
         (() => x + a);
->(() => x + a) : () => any
->() => x + a : () => any
->x + a : any
->x : any
+>(() => x + a) : () => string
+>() => x + a : () => string
+>x + a : string
+>x : string
 >a : number
     }
 }
@@ -399,7 +399,7 @@ function foo0_1_c(x) {
 >x : any
 
     for (const x in []) {
->x : any
+>x : string
 >[] : undefined[]
 
         const a = arguments.length;
@@ -409,17 +409,17 @@ function foo0_1_c(x) {
 >length : number
 
         (function() { return x + a });
->(function() { return x + a }) : () => any
->function() { return x + a } : () => any
->x + a : any
->x : any
+>(function() { return x + a }) : () => string
+>function() { return x + a } : () => string
+>x + a : string
+>x : string
 >a : number
 
         (() => x + a);
->(() => x + a) : () => any
->() => x + a : () => any
->x + a : any
->x : any
+>(() => x + a) : () => string
+>() => x + a : () => string
+>x + a : string
+>x : string
 >a : number
     }
 }

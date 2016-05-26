@@ -4,7 +4,7 @@ class A<T> {
 >T : Symbol(T, Decl(genericClassExpressionInFunction.ts, 0, 8))
 
     genericVar: T
->genericVar : Symbol(genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
+>genericVar : Symbol(A.genericVar, Decl(genericClassExpressionInFunction.ts, 0, 12))
 >T : Symbol(T, Decl(genericClassExpressionInFunction.ts, 0, 8))
 }
 function B1<U>() {
@@ -21,7 +21,7 @@ class B2<V> {
 >V : Symbol(V, Decl(genericClassExpressionInFunction.ts, 7, 9))
 
     anon = class extends A<V> { }
->anon : Symbol(anon, Decl(genericClassExpressionInFunction.ts, 7, 13))
+>anon : Symbol(B2.anon, Decl(genericClassExpressionInFunction.ts, 7, 13))
 >A : Symbol(A, Decl(genericClassExpressionInFunction.ts, 0, 0))
 >V : Symbol(V, Decl(genericClassExpressionInFunction.ts, 7, 9))
 }
@@ -41,7 +41,7 @@ class K extends B1<number>() {
 >B1 : Symbol(B1, Decl(genericClassExpressionInFunction.ts, 2, 1))
 
     namae: string;
->namae : Symbol(namae, Decl(genericClassExpressionInFunction.ts, 14, 30))
+>namae : Symbol(K.namae, Decl(genericClassExpressionInFunction.ts, 14, 30))
 }
 class C extends (new B2<number>().anon) {
 >C : Symbol(C, Decl(genericClassExpressionInFunction.ts, 16, 1))
@@ -50,7 +50,7 @@ class C extends (new B2<number>().anon) {
 >anon : Symbol(B2.anon, Decl(genericClassExpressionInFunction.ts, 7, 13))
 
     name: string;
->name : Symbol(name, Decl(genericClassExpressionInFunction.ts, 17, 41))
+>name : Symbol(C.name, Decl(genericClassExpressionInFunction.ts, 17, 41))
 }
 let b3Number = B3<number>();
 >b3Number : Symbol(b3Number, Decl(genericClassExpressionInFunction.ts, 20, 3))
@@ -61,7 +61,7 @@ class S extends b3Number<string> {
 >b3Number : Symbol(b3Number, Decl(genericClassExpressionInFunction.ts, 20, 3))
 
     nom: string;
->nom : Symbol(nom, Decl(genericClassExpressionInFunction.ts, 21, 34))
+>nom : Symbol(S.nom, Decl(genericClassExpressionInFunction.ts, 21, 34))
 }
 var c = new C();
 >c : Symbol(c, Decl(genericClassExpressionInFunction.ts, 24, 3))

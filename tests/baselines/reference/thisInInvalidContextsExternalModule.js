@@ -12,7 +12,7 @@ class ClassWithNoInitializer extends BaseErrClass {
     t;
     //'this' in optional super call
     constructor() {
-        super(this); // OK
+        super(this); // error: "super" has to be called before "this" accessing
     }
 }
 
@@ -71,7 +71,7 @@ var ClassWithNoInitializer = (function (_super) {
     __extends(ClassWithNoInitializer, _super);
     //'this' in optional super call
     function ClassWithNoInitializer() {
-        _super.call(this, this); // OK
+        _super.call(this, this); // error: "super" has to be called before "this" accessing
     }
     return ClassWithNoInitializer;
 }(BaseErrClass));

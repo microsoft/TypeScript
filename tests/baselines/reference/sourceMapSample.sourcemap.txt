@@ -525,64 +525,61 @@ sourceFile:sourceMapSample.ts
 2 >            ^^^
 3 >               ^
 4 >                ^
-5 >                 ^^^
-6 >                    ^
-7 >                     ^
-8 >                      ^^^
-9 >                         ^
-10>                          ^^
-11>                            ^
-12>                             ^^^
-13>                                ^^^^^^^^^^^^^
-14>                                             ^
-15>                                              ^^^^^^
-16>                                                    ^^
-17>                                                      ^
-18>                                                       ^^
-19>                                                         ^^
-20>                                                           ^
-21>                                                            ^^->
+5 >                 ^^^^
+6 >                     ^
+7 >                      ^^^
+8 >                         ^
+9 >                          ^^
+10>                            ^
+11>                             ^^^
+12>                                ^^^^^^^^^^^^^
+13>                                             ^
+14>                                              ^^^^^^
+15>                                                    ^^
+16>                                                      ^
+17>                                                       ^^
+18>                                                         ^^
+19>                                                           ^
+20>                                                            ^^->
 1->
   >        
 2 >            for
 3 >                
 4 >                (
-5 >                 var
-6 >                     
-7 >                     i
-8 >                       = 
-9 >                         0
-10>                          ; 
-11>                            i
-12>                              < 
-13>                                restGreetings
-14>                                             .
-15>                                              length
-16>                                                    ; 
-17>                                                      i
-18>                                                       ++
-19>                                                         ) 
-20>                                                           {
+5 >                 var 
+6 >                     i
+7 >                       = 
+8 >                         0
+9 >                          ; 
+10>                            i
+11>                              < 
+12>                                restGreetings
+13>                                             .
+14>                                              length
+15>                                                    ; 
+16>                                                      i
+17>                                                       ++
+18>                                                         ) 
+19>                                                           {
 1->Emitted(27, 13) Source(24, 9) + SourceIndex(0)
 2 >Emitted(27, 16) Source(24, 12) + SourceIndex(0)
 3 >Emitted(27, 17) Source(24, 13) + SourceIndex(0)
 4 >Emitted(27, 18) Source(24, 14) + SourceIndex(0)
-5 >Emitted(27, 21) Source(24, 17) + SourceIndex(0)
-6 >Emitted(27, 22) Source(24, 18) + SourceIndex(0)
-7 >Emitted(27, 23) Source(24, 19) + SourceIndex(0)
-8 >Emitted(27, 26) Source(24, 22) + SourceIndex(0)
-9 >Emitted(27, 27) Source(24, 23) + SourceIndex(0)
-10>Emitted(27, 29) Source(24, 25) + SourceIndex(0)
-11>Emitted(27, 30) Source(24, 26) + SourceIndex(0)
-12>Emitted(27, 33) Source(24, 29) + SourceIndex(0)
-13>Emitted(27, 46) Source(24, 42) + SourceIndex(0)
-14>Emitted(27, 47) Source(24, 43) + SourceIndex(0)
-15>Emitted(27, 53) Source(24, 49) + SourceIndex(0)
-16>Emitted(27, 55) Source(24, 51) + SourceIndex(0)
-17>Emitted(27, 56) Source(24, 52) + SourceIndex(0)
-18>Emitted(27, 58) Source(24, 54) + SourceIndex(0)
-19>Emitted(27, 60) Source(24, 56) + SourceIndex(0)
-20>Emitted(27, 61) Source(24, 57) + SourceIndex(0)
+5 >Emitted(27, 22) Source(24, 18) + SourceIndex(0)
+6 >Emitted(27, 23) Source(24, 19) + SourceIndex(0)
+7 >Emitted(27, 26) Source(24, 22) + SourceIndex(0)
+8 >Emitted(27, 27) Source(24, 23) + SourceIndex(0)
+9 >Emitted(27, 29) Source(24, 25) + SourceIndex(0)
+10>Emitted(27, 30) Source(24, 26) + SourceIndex(0)
+11>Emitted(27, 33) Source(24, 29) + SourceIndex(0)
+12>Emitted(27, 46) Source(24, 42) + SourceIndex(0)
+13>Emitted(27, 47) Source(24, 43) + SourceIndex(0)
+14>Emitted(27, 53) Source(24, 49) + SourceIndex(0)
+15>Emitted(27, 55) Source(24, 51) + SourceIndex(0)
+16>Emitted(27, 56) Source(24, 52) + SourceIndex(0)
+17>Emitted(27, 58) Source(24, 54) + SourceIndex(0)
+18>Emitted(27, 60) Source(24, 56) + SourceIndex(0)
+19>Emitted(27, 61) Source(24, 57) + SourceIndex(0)
 ---
 >>>                greeters.push(new Greeter(restGreetings[i]));
 1->^^^^^^^^^^^^^^^^
@@ -720,63 +717,60 @@ sourceFile:sourceMapSample.ts
 2 >        ^^^
 3 >           ^
 4 >            ^
-5 >             ^^^
-6 >                ^
-7 >                 ^
-8 >                  ^^^
-9 >                     ^
-10>                      ^^
-11>                        ^
-12>                         ^^^
-13>                            ^
-14>                             ^
-15>                              ^^^^^^
-16>                                    ^^
-17>                                      ^
-18>                                       ^^
-19>                                         ^^
-20>                                           ^
+5 >             ^^^^
+6 >                 ^
+7 >                  ^^^
+8 >                     ^
+9 >                      ^^
+10>                        ^
+11>                         ^^^
+12>                            ^
+13>                             ^
+14>                              ^^^^^^
+15>                                    ^^
+16>                                      ^
+17>                                       ^^
+18>                                         ^^
+19>                                           ^
 1->
   >    
 2 >        for
 3 >            
 4 >            (
-5 >             var
-6 >                 
-7 >                 j
-8 >                   = 
-9 >                     0
-10>                      ; 
-11>                        j
-12>                          < 
-13>                            b
-14>                             .
-15>                              length
-16>                                    ; 
-17>                                      j
-18>                                       ++
-19>                                         ) 
-20>                                           {
+5 >             var 
+6 >                 j
+7 >                   = 
+8 >                     0
+9 >                      ; 
+10>                        j
+11>                          < 
+12>                            b
+13>                             .
+14>                              length
+15>                                    ; 
+16>                                      j
+17>                                       ++
+18>                                         ) 
+19>                                           {
 1->Emitted(33, 9) Source(32, 5) + SourceIndex(0)
 2 >Emitted(33, 12) Source(32, 8) + SourceIndex(0)
 3 >Emitted(33, 13) Source(32, 9) + SourceIndex(0)
 4 >Emitted(33, 14) Source(32, 10) + SourceIndex(0)
-5 >Emitted(33, 17) Source(32, 13) + SourceIndex(0)
-6 >Emitted(33, 18) Source(32, 14) + SourceIndex(0)
-7 >Emitted(33, 19) Source(32, 15) + SourceIndex(0)
-8 >Emitted(33, 22) Source(32, 18) + SourceIndex(0)
-9 >Emitted(33, 23) Source(32, 19) + SourceIndex(0)
-10>Emitted(33, 25) Source(32, 21) + SourceIndex(0)
-11>Emitted(33, 26) Source(32, 22) + SourceIndex(0)
-12>Emitted(33, 29) Source(32, 25) + SourceIndex(0)
-13>Emitted(33, 30) Source(32, 26) + SourceIndex(0)
-14>Emitted(33, 31) Source(32, 27) + SourceIndex(0)
-15>Emitted(33, 37) Source(32, 33) + SourceIndex(0)
-16>Emitted(33, 39) Source(32, 35) + SourceIndex(0)
-17>Emitted(33, 40) Source(32, 36) + SourceIndex(0)
-18>Emitted(33, 42) Source(32, 38) + SourceIndex(0)
-19>Emitted(33, 44) Source(32, 40) + SourceIndex(0)
-20>Emitted(33, 45) Source(32, 41) + SourceIndex(0)
+5 >Emitted(33, 18) Source(32, 14) + SourceIndex(0)
+6 >Emitted(33, 19) Source(32, 15) + SourceIndex(0)
+7 >Emitted(33, 22) Source(32, 18) + SourceIndex(0)
+8 >Emitted(33, 23) Source(32, 19) + SourceIndex(0)
+9 >Emitted(33, 25) Source(32, 21) + SourceIndex(0)
+10>Emitted(33, 26) Source(32, 22) + SourceIndex(0)
+11>Emitted(33, 29) Source(32, 25) + SourceIndex(0)
+12>Emitted(33, 30) Source(32, 26) + SourceIndex(0)
+13>Emitted(33, 31) Source(32, 27) + SourceIndex(0)
+14>Emitted(33, 37) Source(32, 33) + SourceIndex(0)
+15>Emitted(33, 39) Source(32, 35) + SourceIndex(0)
+16>Emitted(33, 40) Source(32, 36) + SourceIndex(0)
+17>Emitted(33, 42) Source(32, 38) + SourceIndex(0)
+18>Emitted(33, 44) Source(32, 40) + SourceIndex(0)
+19>Emitted(33, 45) Source(32, 41) + SourceIndex(0)
 ---
 >>>            b[j].greet();
 1 >^^^^^^^^^^^^

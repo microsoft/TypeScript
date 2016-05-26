@@ -13,7 +13,7 @@ declare module Q {
 >T : Symbol(T, Decl(funduleUsedAcrossFileBoundary_file1.ts, 2, 22))
 
         foo: string;
->foo : Symbol(foo, Decl(funduleUsedAcrossFileBoundary_file1.ts, 2, 26))
+>foo : Symbol(Promise.foo, Decl(funduleUsedAcrossFileBoundary_file1.ts, 2, 26))
     }
     export function defer<T>(): string;
 >defer : Symbol(defer, Decl(funduleUsedAcrossFileBoundary_file1.ts, 4, 5))

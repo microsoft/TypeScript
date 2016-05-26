@@ -22,9 +22,9 @@ var /*2*/ x = point.x;
 
 //// [declFileObjectLiteralWithOnlyGetter.d.ts]
 declare function makePoint(x: number): {
-    x: number;
+    readonly x: number;
 };
 declare var point: {
-    x: number;
+    readonly x: number;
 };
 declare var x: number;

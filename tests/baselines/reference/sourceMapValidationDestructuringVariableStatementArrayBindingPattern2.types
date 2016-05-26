@@ -1,0 +1,84 @@
+=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts ===
+declare var console: {
+>console : { log(msg: string): void; }
+
+    log(msg: string): void;
+>log : (msg: string) => void
+>msg : string
+}
+type MultiSkilledRobot = [string, [string, string]];
+>MultiSkilledRobot : [string, [string, string]]
+
+var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
+>multiRobotA : [string, [string, string]]
+>MultiSkilledRobot : [string, [string, string]]
+>["mower", ["mowing", ""]] : [string, [string, string]]
+>"mower" : string
+>["mowing", ""] : [string, string]
+>"mowing" : string
+>"" : string
+
+var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
+>multiRobotB : [string, [string, string]]
+>MultiSkilledRobot : [string, [string, string]]
+>["trimmer", ["trimming", "edging"]] : [string, [string, string]]
+>"trimmer" : string
+>["trimming", "edging"] : [string, string]
+>"trimming" : string
+>"edging" : string
+
+let [, skillA] = multiRobotA;
+> : undefined
+>skillA : [string, string]
+>multiRobotA : [string, [string, string]]
+
+let [nameMB] = multiRobotB;
+>nameMB : string
+>multiRobotB : [string, [string, string]]
+
+let [nameMA, [primarySkillA, secondarySkillA]] = multiRobotA;
+>nameMA : string
+>primarySkillA : string
+>secondarySkillA : string
+>multiRobotA : [string, [string, string]]
+
+let [nameMC] = ["roomba", ["vaccum", "mopping"]];
+>nameMC : string
+>["roomba", ["vaccum", "mopping"]] : [string, string[]]
+>"roomba" : string
+>["vaccum", "mopping"] : string[]
+>"vaccum" : string
+>"mopping" : string
+
+let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping"]];
+>nameMC2 : string
+>primarySkillC : string
+>secondarySkillC : string
+>["roomba", ["vaccum", "mopping"]] : [string, [string, string]]
+>"roomba" : string
+>["vaccum", "mopping"] : [string, string]
+>"vaccum" : string
+>"mopping" : string
+
+let [...multiRobotAInfo] = multiRobotA;
+>multiRobotAInfo : (string | [string, string])[]
+>multiRobotA : [string, [string, string]]
+
+if (nameMB == nameMA) {
+>nameMB == nameMA : boolean
+>nameMB : string
+>nameMA : string
+
+    console.log(skillA[0] + skillA[1]);
+>console.log(skillA[0] + skillA[1]) : void
+>console.log : (msg: string) => void
+>console : { log(msg: string): void; }
+>log : (msg: string) => void
+>skillA[0] + skillA[1] : string
+>skillA[0] : string
+>skillA : [string, string]
+>0 : number
+>skillA[1] : string
+>skillA : [string, string]
+>1 : number
+}

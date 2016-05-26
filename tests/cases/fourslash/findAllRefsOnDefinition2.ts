@@ -9,7 +9,7 @@
 ////}
 
 //@Filename: findAllRefsOnDefinition2.ts
-////import Second = require("findAllRefsOnDefinition2-import");
+////import Second = require("./findAllRefsOnDefinition2-import");
 ////
 ////var start: Second.Test.start;
 ////var stop: Second.Test.stop;

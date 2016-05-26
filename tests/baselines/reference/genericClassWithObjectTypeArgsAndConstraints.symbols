@@ -6,17 +6,17 @@ class C {
 >C : Symbol(C, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 0, 0))
 
     x: string;
->x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 3, 9))
+>x : Symbol(C.x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 3, 9))
 }
 
 class D {
 >D : Symbol(D, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 5, 1))
 
     x: string;
->x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 7, 9))
+>x : Symbol(D.x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 7, 9))
 
     y: string;
->y : Symbol(y, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 8, 14))
+>y : Symbol(D.y, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 8, 14))
 }
 
 class X<T> {
@@ -24,7 +24,7 @@ class X<T> {
 >T : Symbol(T, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 12, 8))
 
     x: T;
->x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 12, 12))
+>x : Symbol(X.x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 12, 12))
 >T : Symbol(T, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 12, 8))
 }
 
@@ -37,7 +37,7 @@ module Class {
 >x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 23))
 
         foo<T extends { x: string }>(t: X<T>, t2: X<T>) {
->foo : Symbol(foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 38))
+>foo : Symbol(G.foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 38))
 >T : Symbol(T, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 18, 12))
 >x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 18, 23))
 >t : Symbol(t, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 18, 37))
@@ -94,7 +94,7 @@ module Class {
 >C : Symbol(C, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 0, 0))
 
         foo2<T extends C>(t: X<T>, t2: X<T>) {
->foo2 : Symbol(foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 30, 27))
+>foo2 : Symbol(G2.foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 30, 27))
 >T : Symbol(T, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 31, 13))
 >C : Symbol(C, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 0, 0))
 >t : Symbol(t, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 31, 26))
@@ -143,7 +143,7 @@ module Interface {
 >x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 27))
 
         foo<T extends { x: string }>(t: X<T>, t2: X<T>): T;
->foo : Symbol(foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 42))
+>foo : Symbol(G.foo, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 42))
 >T : Symbol(T, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 43, 12))
 >x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 43, 23))
 >t : Symbol(t, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 43, 37))
@@ -193,7 +193,7 @@ module Interface {
 >C : Symbol(C, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 0, 0))
 
         foo2<T extends C>(t: X<T>, t2: X<T>): T;
->foo2 : Symbol(foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 52, 31))
+>foo2 : Symbol(G2.foo2, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 52, 31))
 >T : Symbol(T, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 53, 13))
 >C : Symbol(C, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 0, 0))
 >t : Symbol(t, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 53, 26))

@@ -9,10 +9,10 @@ interface ClassificationEntry {
 
 describe('Colorization', function () {
     // Use the shim adapter to ensure test coverage of the shim layer for the classifier
-    var languageServiceAdapter = new Harness.LanguageService.ShimLanugageServiceAdapter(/*preprocessToResolve*/ false);
+    var languageServiceAdapter = new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ false);
     var classifier = languageServiceAdapter.getClassifier();
 
-    function getEntryAtPosistion(result: ts.ClassificationResult, position: number) {
+    function getEntryAtPosition(result: ts.ClassificationResult, position: number) {
         var entryPosition = 0;
         for (var i = 0, n = result.entries.length; i < n; i++) {
             var entry = result.entries[i];
@@ -55,7 +55,7 @@ describe('Colorization', function () {
                 var actualEntryPosition = expectedEntry.position !== undefined ? expectedEntry.position : text.indexOf(expectedEntry.value);
                 assert(actualEntryPosition >= 0, "token: '" + expectedEntry.value + "' does not exit in text: '" + text + "'.");
 
-                var actualEntry = getEntryAtPosistion(result, actualEntryPosition);
+                var actualEntry = getEntryAtPosition(result, actualEntryPosition);
 
                 assert(actualEntry, "Could not find classification entry for '" + expectedEntry.value + "' at position: " + actualEntryPosition);
                 assert.equal(actualEntry.classification, expectedEntry.classification, "Classification class does not match expected. Expected: " + ts.TokenClass[expectedEntry.classification] + ", Actual: " + ts.TokenClass[actualEntry.classification]);

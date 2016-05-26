@@ -1,8 +1,8 @@
 # TypeScript Language Specification
 
-Version 1.6
+Version 1.8
 
-August, 2015
+January, 2016
 
 <br/>
 
@@ -58,8 +58,8 @@ TypeScript is a trademark of Microsoft Corporation.
   * [3.6 Type Parameters](#3.6)
     * [3.6.1 Type Parameter Lists](#3.6.1)
     * [3.6.2 Type Argument Lists](#3.6.2)
+    * [3.6.3 This-types](#3.6.3)
   * [3.7 Named Types](#3.7)
-    * [3.7.1 Instance Types](#3.7.1)
   * [3.8 Specifying Types](#3.8)
     * [3.8.1 Predefined Types](#3.8.1)
     * [3.8.2 Type References](#3.8.2)
@@ -71,6 +71,7 @@ TypeScript is a trademark of Microsoft Corporation.
     * [3.8.8 Function Type Literals](#3.8.8)
     * [3.8.9 Constructor Type Literals](#3.8.9)
     * [3.8.10 Type Queries](#3.8.10)
+    * [3.8.11 This-Type References](#3.8.11)
   * [3.9 Specifying Members](#3.9)
     * [3.9.1 Property Signatures](#3.9.1)
     * [3.9.2 Call Signatures](#3.9.2)
@@ -158,7 +159,8 @@ TypeScript is a trademark of Microsoft Corporation.
   * [6.5 Generic Functions](#6.5)
   * [6.6 Code Generation](#6.6)
   * [6.7 Generator Functions](#6.7)
-  * [6.8 Type Guard Functions](#6.8)
+  * [6.8 Asynchronous Functions](#6.8)
+  * [6.9 Type Guard Functions](#6.9)
 * [7 Interfaces](#7)
   * [7.1 Interface Declarations](#7.1)
   * [7.2 Declaration Merging](#7.2)
@@ -184,9 +186,10 @@ TypeScript is a trademark of Microsoft Corporation.
     * [8.4.3 Member Accessor Declarations](#8.4.3)
     * [8.4.4 Dynamic Property Declarations](#8.4.4)
   * [8.5 Index Member Declarations](#8.5)
-  * [8.6 Code Generation](#8.6)
-    * [8.6.1 Classes Without Extends Clauses](#8.6.1)
-    * [8.6.2 Classes With Extends Clauses](#8.6.2)
+  * [8.6 Decorators](#8.6)
+  * [8.7 Code Generation](#8.7)
+    * [8.7.1 Classes Without Extends Clauses](#8.7.1)
+    * [8.7.2 Classes With Extends Clauses](#8.7.2)
 * [9 Enums](#9)
   * [9.1 Enum Declarations](#9.1)
   * [9.2 Enum Members](#9.2)
@@ -238,9 +241,9 @@ TypeScript is a trademark of Microsoft Corporation.
 
 JavaScript applications such as web e-mail, maps, document editing, and collaboration tools are becoming an increasingly important part of the everyday computing. We designed TypeScript to meet the needs of the JavaScript programming teams that build and maintain large JavaScript programs. TypeScript helps programming teams to define interfaces between software components and to gain insight into the behavior of existing JavaScript libraries. TypeScript also enables teams to reduce naming conflicts by organizing their code into dynamically-loadable modules. TypeScript's optional type system enables JavaScript programmers to use highly-productive development tools and practices: static checking, symbol-based navigation, statement completion, and code re-factoring.
 
-TypeScript is a syntactic sugar for JavaScript. TypeScript syntax is a superset of ECMAScript 6 (ES6) syntax. Every JavaScript program is also a TypeScript program. The TypeScript compiler performs only file-local transformations on TypeScript programs and does not re-order variables declared in TypeScript. This leads to JavaScript output that closely matches the TypeScript input. TypeScript does not transform variable names, making tractable the direct debugging of emitted JavaScript. TypeScript optionally provides source maps, enabling source-level debugging. TypeScript tools typically emit JavaScript upon file save, preserving the test, edit, refresh cycle commonly used in JavaScript development.
+TypeScript is a syntactic sugar for JavaScript. TypeScript syntax is a superset of ECMAScript 2015 (ES2015) syntax. Every JavaScript program is also a TypeScript program. The TypeScript compiler performs only file-local transformations on TypeScript programs and does not re-order variables declared in TypeScript. This leads to JavaScript output that closely matches the TypeScript input. TypeScript does not transform variable names, making tractable the direct debugging of emitted JavaScript. TypeScript optionally provides source maps, enabling source-level debugging. TypeScript tools typically emit JavaScript upon file save, preserving the test, edit, refresh cycle commonly used in JavaScript development.
 
-TypeScript syntax includes all features of ECMAScript 6 (ES6), including classes and modules, and provides the ability to translate these features into ECMAScript 3 or 5 compliant code.
+TypeScript syntax includes all features of ECMAScript 2015, including classes and modules, and provides the ability to translate these features into ECMAScript 3 or 5 compliant code.
 
 Classes enable programmers to express common object-oriented patterns in a standard way, making features like inheritance more readable and interoperable. Modules enable programmers to organize their code into components while avoiding naming conflicts. The TypeScript compiler provides module code generation options that support either static or dynamic loading of module contents.
 
@@ -474,7 +477,7 @@ Section [4.23](#4.23) provides additional information about contextually typed e
 
 ## <a name="1.6"/>1.6 Classes
 
-JavaScript practice has two very common design patterns: the module pattern and the class pattern. Roughly speaking, the module pattern uses closures to hide names and to encapsulate private data, while the class pattern uses prototype chains to implement many variations on object-oriented inheritance mechanisms. Libraries such as 'prototype.js' are typical of this practice. TypeScript's namespaces are a formalization of the module pattern. (The term "module pattern" is somewhat unfortunate now that ECMAScript 6 formally supports modules in a manner different from what the module pattern prescribes. For this reason, TypeScript uses the term "namespace" for its formalization of the module pattern.)
+JavaScript practice has two very common design patterns: the module pattern and the class pattern. Roughly speaking, the module pattern uses closures to hide names and to encapsulate private data, while the class pattern uses prototype chains to implement many variations on object-oriented inheritance mechanisms. Libraries such as 'prototype.js' are typical of this practice. TypeScript's namespaces are a formalization of the module pattern. (The term "module pattern" is somewhat unfortunate now that ECMAScript 2015 formally supports modules in a manner different from what the module pattern prescribes. For this reason, TypeScript uses the term "namespace" for its formalization of the module pattern.)
 
 This section and the namespace section below will show how TypeScript emits consistent, idiomatic JavaScript when emitting ECMAScript 3 or 5 compliant code for classes and namespaces. The goal of TypeScript's translation is to emit exactly what a programmer would type when implementing a class or namespace unaided by a tool. This section will also describe how TypeScript infers a type for each class declaration. We'll start with a simple BankAccount class.
 
@@ -773,13 +776,13 @@ In this case, the compiler assumes that the namespace object resides in global v
 
 ## <a name="1.11"/>1.11 Modules
 
-TypeScript also supports ECMAScript 6 modules, which are files that contain top-level *export* and *import* directives. For this type of module the TypeScript compiler can emit both ECMAScript 6 compliant code and down-level ECMAScript 3 or 5 compliant code for a variety of module loading systems, including CommonJS, Asynchronous Module Definition (AMD), and Universal Module Definition (UMD).
+TypeScript also supports ECMAScript 2015 modules, which are files that contain top-level *export* and *import* directives. For this type of module the TypeScript compiler can emit both ECMAScript 2015 compliant code and down-level ECMAScript 3 or 5 compliant code for a variety of module loading systems, including CommonJS, Asynchronous Module Definition (AMD), and Universal Module Definition (UMD).
 
 <br/>
 
 # <a name="2"/>2 Basic Concepts
 
-The remainder of this document is the formal specification of the TypeScript programming language and is intended to be read as an adjunct to the [ECMAScript Language Specification](http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf) (specifically, the ECMA-262 Standard, 6th Edition). This document describes the syntactic grammar added by TypeScript along with the compile-time processing and type checking performed by the TypeScript compiler, but it only minimally discusses the run-time behavior of programs since that is covered by the ECMAScript specification.
+The remainder of this document is the formal specification of the TypeScript programming language and is intended to be read as an adjunct to the [ECMAScript 2015 Language Specification](http://www.ecma-international.org/ecma-262/6.0/) (specifically, the ECMA-262 Standard, 6th Edition). This document describes the syntactic grammar added by TypeScript along with the compile-time processing and type checking performed by the TypeScript compiler, but it only minimally discusses the run-time behavior of programs since that is covered by the ECMAScript specification.
 
 ## <a name="2.1"/>2.1 Grammar Conventions
 
@@ -866,7 +869,7 @@ A property name can be any identifier (including a reserved word), a string lite
 
 ### <a name="2.2.3"/>2.2.3 Computed Property Names
 
-ECMAScript 6 permits object literals and classes to declare members with computed property names. A computed property name specifies an expression that computes the actual property name at run-time. Because the final property name isn't known at compile-time, TypeScript can only perform limited checks for entities declared with computed property names. However, a subset of computed property names known as ***well-known symbols*** can be used anywhere a *PropertyName* is expected, including property names within types. A computed property name is a well-known symbol if it is of the form
+ECMAScript 2015 permits object literals and classes to declare members with computed property names. A computed property name specifies an expression that computes the actual property name at run-time. Because the final property name isn't known at compile-time, TypeScript can only perform limited checks for entities declared with computed property names. However, a subset of computed property names known as ***well-known symbols*** can be used anywhere a *PropertyName* is expected, including property names within types. A computed property name is a well-known symbol if it is of the form
 
 ```TypeScript
 [ Symbol . xxx ]
@@ -883,6 +886,8 @@ interface Iterable<T> {
     [Symbol.iterator](): Iterator<T>;  
 }
 ```
+
+*TODO: Update to reflect treatment of [computed property names with literal expressions](https://github.com/Microsoft/TypeScript/pull/5535)*.
 
 ## <a name="2.3"/>2.3 Declarations
 
@@ -913,7 +918,7 @@ Declarations introduce the following meanings for the name they declare:
 
 * A variable, parameter, function, generator, member variable, member function, member accessor, or enum member declaration introduces a value meaning.
 * An interface, type alias, or type parameter declaration introduces a type meaning.
-* A class declaration introduces a value meaning (the constructor function) and a type meaning (the class instance type).
+* A class declaration introduces a value meaning (the constructor function) and a type meaning (the class type).
 * An enum declaration introduces a value meaning (the enum instance) and a type meaning (the enum type).
 * A namespace declaration introduces a namespace meaning (the type and namespace container) and, if the namespace is instantiated (section [10.1](#10.1)), a value meaning (the namespace instance).
 * An import or export declaration introduces the meaning(s) of the imported or exported entity.
@@ -996,7 +1001,9 @@ When an identifier is resolved as a *TypeName* (section [3.8.2](#3.8.2)), only n
 
 When an identifier is resolved as a *NamespaceName* (section [3.8.2](#3.8.2)), only names in scope with a namespace meaning are considered and other names are ignored.
 
-Note that class members are never directly in scope—they can only be accessed by applying the dot ('.') operator to a class instance. This even includes members of the current instance in a constructor or member function, which are accessed by applying the dot operator to `this`.
+*TODO: [Include specific rules for alias resolution](https://github.com/Microsoft/TypeScript/issues/3158)*.
+
+Note that class and interface members are never directly in scope—they can only be accessed by applying the dot ('.') operator to a class or interface instance. This even includes members of the current instance in a constructor or member function, which are accessed by applying the dot operator to `this`.
 
 As the rules above imply, locally declared entities in a namespace are closer in scope than exported entities declared in other namespace declarations for the same namespace. For example:
 
@@ -1121,7 +1128,7 @@ var c = abc.charAt(2);  // Property of String interface
 
 The Symbol primitive type corresponds to the similarly named JavaScript primitive type and represents unique tokens that may be used as keys for object properties.
 
-The `symbol` keyword references the Symbol primitive type. Symbol values are obtained using the global object 'Symbol' which has a number of methods and properties and can be invoked as a function. In particular, the global object 'Symbol' defines a number of well-known symbols ([2.2.3](#2.2.3)) that can be used in a manner similar to identifiers. Note that the 'Symbol' object is available only in ECMAScript 6 environments.
+The `symbol` keyword references the Symbol primitive type. Symbol values are obtained using the global object 'Symbol' which has a number of methods and properties and can be invoked as a function. In particular, the global object 'Symbol' defines a number of well-known symbols ([2.2.3](#2.2.3)) that can be used in a manner similar to identifiers. Note that the 'Symbol' object is available only in ECMAScript 2015 environments.
 
 For purposes of determining type relationships (section [3.11](#3.11)) and accessing properties (section [4.13](#4.13)), the Symbol primitive type behaves as an object type with the same properties as the global interface type 'Symbol'.
 
@@ -1185,6 +1192,8 @@ Enum types are assignable to the Number primitive type, and vice versa, but diff
 Specialized signatures (section [3.9.2.4](#3.9.2.4)) permit string literals to be used as types in parameter type annotations. String literal types are permitted only in that context and nowhere else.
 
 All string literal types are subtypes of the String primitive type.
+
+*TODO: Update to reflect [expanded support for string literal types](https://github.com/Microsoft/TypeScript/pull/5185)*.
 
 ## <a name="3.3"/>3.3 Object Types
 
@@ -1352,7 +1361,7 @@ var b = x.b;  // b has type number
 var c = x.c;  // Error, no property c in union type
 ```
 
-Note that 'x.a' has a union type because the type of 'a' is different in 'A' and 'B', whereas 'x.b' simply has type number because that is the type of 'b' in both 'A' and 'B'. Also note that there is no property 'x.c' because only 'A' has a property 'c'.
+Note that 'x.a' has a union type because the type of 'a' is different in 'A' and 'B', whereas 'x.b' simply has type number because that is the type of 'b' in both 'A' and 'B'. Also note that there is no property 'x.c' because only 'B' has a property 'c'.
 
 When used as a contextual type (section [4.23](#4.23)), a union type has those members that are present in any of its constituent types, with types that are unions of the respective members in the constituent types. Specifically, a union type used as a contextual type has the apparent members defined in section [3.11.1](#3.11.1), except that a particular member need only be present in one or more constituent types instead of all constituent types.
 
@@ -1437,7 +1446,7 @@ Type parameter names must be unique. A compile-time error occurs if two or more 
 
 The scope of a type parameter extends over the entire declaration with which the type parameter list is associated, with the exception of static member declarations in classes.
 
-Each type parameter has an associated type parameter ***constraint*** that establishes an upper bound for type arguments. Omitting a constraint or specifying type `any` as the constraint corresponds to specifying the empty object type `{}`. Type parameters declared in a particular type parameter list may not be referenced in constraints in that type parameter list.
+A type parameter may have an associated type parameter ***constraint*** that establishes an upper bound for type arguments. Type parameters may be referenced in type parameter constraints within the same type parameter list, including even constraint declarations that occur to the left of the type parameter.
 
 The ***base constraint*** of a type parameter *T* is defined as follows:
 
@@ -1448,14 +1457,20 @@ The ***base constraint*** of a type parameter *T* is defined as follows:
 In the example
 
 ```TypeScript
-interface G<T, U extends Function> {  
-    f<V extends U>(x: V): V;  
-}
+interface G<T, U extends V, V extends Function> { }
 ```
 
-the base constraint of 'T' is the empty object type, and the base constraint of 'U' and 'V' is 'Function'.
+the base constraint of 'T' is the empty object type and the base constraint of 'U' and 'V' is 'Function'.
 
 For purposes of determining type relationships (section [3.11](#3.11)), type parameters appear to be subtypes of their base constraint. Likewise, in property accesses (section [4.13](#4.13)), `new` operations (section [4.14](#4.14)), and function calls (section [4.15](#4.15)), type parameters appear to have the members of their base constraint, but no other members.
+
+It is an error for a type parameter to directly or indirectly be a constraint for itself. For example, both of the following declarations are invalid:
+
+```TypeScript
+interface A<T extends T> { }
+
+interface B<T extends U, U extends T> { }
+```
 
 ### <a name="3.6.2"/>3.6.2 Type Argument Lists
 
@@ -1471,7 +1486,7 @@ A type reference (section [3.8.2](#3.8.2)) to a generic type must include a list
 &emsp;&emsp;*TypeArgument:*  
 &emsp;&emsp;&emsp;*Type*
 
-Type arguments correspond one-to-one with type parameters of the generic type or function being referenced. A type argument list is required to specify exactly one type argument for each corresponding type parameter, and each type argument is required to ***satisfy*** the constraint of its corresponding type parameter. A type argument satisfies a type parameter constraint if the type argument is assignable to (section [3.11.4](#3.11.4)) the constraint type once type arguments are substituted for type parameters.
+Type arguments correspond one-to-one with type parameters of the generic type or function being referenced. A type argument list is required to specify exactly one type argument for each corresponding type parameter, and each type argument for a constrained type parameter is required to ***satisfy*** the constraint of that type parameter. A type argument satisfies a type parameter constraint if the type argument is assignable to (section [3.11.4](#3.11.4)) the constraint type once type arguments are substituted for type parameters.
 
 Given the declaration
 
@@ -1482,6 +1497,33 @@ interface G<T, U extends Function> { }
 a type reference of the form 'G&lt;A, B>' places no requirements on 'A' but requires 'B' to be assignable to 'Function'.
 
 The process of substituting type arguments for type parameters in a generic type or generic signature is known as ***instantiating*** the generic type or signature. Instantiation of a generic type or signature can fail if the supplied type arguments do not satisfy the constraints of their corresponding type parameters.
+
+### <a name="3.6.3"/>3.6.3 This-types
+
+Every class and interface has a ***this-type*** that represents the actual type of instances of the class or interface within the declaration of the class or interface. The this-type is referenced using the keyword `this` in a type position. Within instance methods and constructors of a class, the type of the expression `this` (section [4.2](#4.2)) is the this-type of the class.
+
+Classes and interfaces support inheritance and therefore the instance represented by `this` in a method isn't necessarily an instance of the containing class—it may in fact be an instance of a derived class or interface. To model this relationship, the this-type of a class or interface is classified as a type parameter. Unlike other type parameters, it is not possible to explicitly pass a type argument for a this-type. Instead, in a type reference to a class or interface type, the type reference *itself* is implicitly passed as a type argument for the this-type. For example:
+
+```TypeScript
+class A {  
+    foo() {  
+        return this;  
+    }  
+}
+
+class B extends A {  
+    bar() {  
+        return this;  
+    }  
+}
+
+let b: B;  
+let x = b.foo().bar();  // Fluent pattern works, type of x is B
+```
+
+In the declaration of `b` above, the type reference `B` is itself passed as a type argument for B's this-type. Thus, the referenced type is an instantiation of class `B` where all occurrences of the type `this` are replaced with `B`, and for that reason the `foo` method of `B` actually returns `B` (as opposed to `A`).
+
+The this-type of a given class or interface type *C* implicitly has a constraint consisting of a type reference to *C* with *C*'s own type parameters passed as type arguments and with that type reference passed as the type argument for the this-type.
 
 ## <a name="3.7"/>3.7 Named Types
 
@@ -1511,21 +1553,6 @@ is indistinguishable from the type
 { first: string; second: Entity; }
 ```
 
-### <a name="3.7.1"/>3.7.1 Instance Types
-
-Each class and interface has an associated actual type known as the ***instance type***. For a non-generic class or interface, the instance type is simply a type reference to the class or interface. For a generic class or interface, the instance type is an instantiation of the generic type where each of the type arguments is the corresponding type parameter. Since the instance type uses the type parameters it can be used only where the type parameters are in scope—that is, inside the declaration of the class or interface. Within the constructor and instance member functions of a class, the type of `this` is the instance type of the class.
-
-The following example illustrates the concept of an instance type:
-
-```TypeScript
-class G<T> {               // Introduce type parameter T  
-    self: G<T>;            // Use T as type argument to form instance type  
-    f() {  
-        this.self = this;  // self and this are both of type G<T>  
-    }  
-}
-```
-
 ## <a name="3.8"/>3.8 Specifying Types
 
 Types are specified either by referencing their keyword or name, or by writing object type literals, array type literals, tuple type literals, function type literals, constructor type literals, or type queries.
@@ -1550,7 +1577,8 @@ Types are specified either by referencing their keyword or name, or by writing o
 &emsp;&emsp;&emsp;*ObjectType*  
 &emsp;&emsp;&emsp;*ArrayType*  
 &emsp;&emsp;&emsp;*TupleType*  
-&emsp;&emsp;&emsp;*TypeQuery*
+&emsp;&emsp;&emsp;*TypeQuery*  
+&emsp;&emsp;&emsp;*ThisType*
 
 &emsp;&emsp;*ParenthesizedType:*  
 &emsp;&emsp;&emsp;`(`&emsp;*Type*&emsp;`)`
@@ -1711,7 +1739,7 @@ A union type literal is written as a sequence of types separated by vertical bar
 &emsp;&emsp;*UnionType:*  
 &emsp;&emsp;&emsp;*UnionOrIntersectionOrPrimaryType*&emsp;`|`&emsp;*IntersectionOrPrimaryType*
 
-A union typle literal references a union type (section [3.4](#3.4)).
+A union type literal references a union type (section [3.4](#3.4)).
 
 ### <a name="3.8.7"/>3.8.7 Intersection Type Literals
 
@@ -1720,7 +1748,7 @@ An intersection type literal is written as a sequence of types separated by ampe
 &emsp;&emsp;*IntersectionType:*  
 &emsp;&emsp;&emsp;*IntersectionOrPrimaryType*&emsp;`&`&emsp;*PrimaryType*
 
-An intersection typle literal references an intersection type (section [3.5](#3.5)).
+An intersection type literal references an intersection type (section [3.5](#3.5)).
 
 ### <a name="3.8.8"/>3.8.8 Function Type Literals
 
@@ -1803,6 +1831,41 @@ var h: () => typeof h;
 ```
 
 Here, 'g' and 'g.x' have the same recursive type, and likewise 'h' and 'h()' have the same recursive type.
+
+### <a name="3.8.11"/>3.8.11 This-Type References
+
+The `this` keyword is used to reference the this-type (section [3.6.3](#3.6.3)) of a class or interface.
+
+&emsp;&emsp;*ThisType:*  
+&emsp;&emsp;&emsp;`this`
+
+The meaning of a *ThisType* depends on the closest enclosing *FunctionDeclaration*, *FunctionExpression*, *PropertyDefinition*, *ClassElement*, or *TypeMember*, known as the root declaration of the *ThisType*, as follows:
+
+* When the root declaration is an instance member or constructor of a class, the *ThisType* references the this-type of that class.
+* When the root declaration is a member of an interface type, the *ThisType* references the this-type of that interface.
+* Otherwise, the *ThisType* is an error.
+
+Note that in order to avoid ambiguities it is not possible to reference the this-type of a class or interface in a nested object type literal. In the example
+
+```TypeScript
+interface ListItem {  
+    getHead(): this;  
+    getTail(): this;  
+    getHeadAndTail(): { head: this, tail: this };  // Error  
+}
+```
+
+the `this` references on the last line are in error because their root declarations are not members of a class or interface. The recommended way to reference the this-type of an outer class or interface in an object type literal is to declare an intermediate generic type and pass `this` as a type argument. For example:
+
+```TypeScript
+type HeadAndTail<T> = { head: T, tail: T };
+
+interface ListItem {  
+    getHead(): this;  
+    getTail(): this;  
+    getHeadAndTail(): HeadAndTail<this>;  
+}
+```
 
 ## <a name="3.9"/>3.9 Specifying Members
 
@@ -1930,6 +1993,8 @@ When a parameter type annotation specifies a string literal type, the containing
 A parameter can be marked optional by following its name or binding pattern with a question mark (`?`) or by including an initializer. Initializers (including binding property or element initializers) are permitted only when the parameter list occurs in conjunction with a function body, i.e. only in a *FunctionExpression*, *FunctionImplementation*, *MemberFunctionImplementation*, or *ConstructorImplementation* grammar production.
 
 *TODO: Update to reflect [binding parameter cannot be optional in implementation signature](https://github.com/Microsoft/TypeScript/issues/2797)*.
+
+*TODO: Update to reflect [required parameters support initializers](https://github.com/Microsoft/TypeScript/pull/4022)*.
 
 #### <a name="3.9.2.3"/>3.9.2.3 Return Type
 
@@ -2122,8 +2187,9 @@ Types in TypeScript have identity, subtype, supertype, and assignment compatibil
 
 The ***apparent members*** of a type are the members observed in subtype, supertype, and assignment compatibility relationships, as well as in the type checking of property accesses (section [4.13](#4.13)), `new` operations (section [4.14](#4.14)), and function calls (section [4.15](#4.15)). The apparent members of a type are determined as follows:
 
-* The apparent members of the primitive types Number, Boolean, and String are the apparent members of the global interface types 'Number', 'Boolean', and 'String' respectively.
-* The apparent members of an enum type are the apparent members of the global interface type 'Number'.
+* The apparent members of the primitive type Number and all enum types are the apparent members of the global interface type 'Number'.
+* The apparent members of the primitive type Boolean are the apparent members of the global interface type 'Boolean'.
+* The apparent members of the primitive type String and all string literal types are the apparent members of the global interface type 'String'.
 * The apparent members of a type parameter are the apparent members of the constraint (section [3.6.1](#3.6.1)) of that type parameter.
 * The apparent members of an object type *T* are the combination of the following:
   * The declared and/or inherited members of *T*.
@@ -2239,7 +2305,7 @@ Types are required to be assignment compatible in certain circumstances, such as
 * *S* or *T* is the Any type.
 * *S* is the Undefined type.
 * *S* is the Null type and *T* is not the Undefined type.
-* *S* or *T* is an enum type and* *the other is the primitive type Number.
+* *S* or *T* is an enum type and the other is the primitive type Number.
 * *S* is a string literal type and *T* is the primitive type String.
 * *S* is a union type and each constituent type of *S* is assignable to *T*.
 * *S* is an intersection type and at least one constituent type of *S* is assignable to *T*.
@@ -2258,8 +2324,8 @@ Types are required to be assignment compatible in certain circumstances, such as
     * *M* has a rest parameter or the number of non-optional parameters in *N* is less than or equal to the total number of parameters in *M*,
     * for parameter positions that are present in both signatures, each parameter type in *N* is assignable to or from the corresponding parameter type in *M*, and
     * the result type of *M* is Void, or the result type of *N* is assignable to that of *M*.
-  * *M* is a string index signature of type *U* and *S* has an apparent string index signature of a type that is assignable to *U*.
-  * *M* is a numeric index signature of type *U* and *S* has an apparent string or numeric index signature of a type that is assignable to *U*.
+  * *M* is a string index signature of type *U*, and *U* is the Any type or *S* has an apparent string index signature of a type that is assignable to *U*.
+  * *M* is a numeric index signature of type *U*, and *U* is the Any type or *S* has an apparent string or numeric index signature of a type that is assignable to *U*.
 
 When comparing call or construct signatures, parameter names are ignored and rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
 
@@ -2366,6 +2432,8 @@ In certain contexts, inferences for a given set of type parameters are made *fro
 
 When comparing call or construct signatures, signatures in *S* correspond to signatures of the same kind in *T* pairwise in declaration order. If *S* and *T* have different numbers of a given kind of signature, the excess *first* signatures in declaration order of the longer list are ignored.
 
+*TODO: Update to reflect [improved union and intersection type inference](https://github.com/Microsoft/TypeScript/pull/5738)*.
+
 ### <a name="3.11.8"/>3.11.8 Recursive Types
 
 Classes and interfaces can reference themselves in their internal structure, in effect creating recursive types with infinite nesting. For example, the type
@@ -2443,7 +2511,7 @@ Expressions are classified as ***values*** or ***references***. References are t
 
 The type of `this` in an expression depends on the location in which the reference takes place:
 
-* In a constructor, instance member function, instance member accessor, or instance member variable initializer, `this` is of the class instance type of the containing class.
+* In a constructor, instance member function, instance member accessor, or instance member variable initializer, `this` is of the this-type (section [3.6.3](#3.6.3)) of the containing class.
 * In a static member function or static member accessor, the type of `this` is the constructor function type of the containing class.
 * In a function declaration or a function expression, `this` is of type Any.
 * In the global namespace, `this` is of type Any.
@@ -2569,6 +2637,8 @@ The resulting type an array literal expression is determined as follows:
 
 A spread element must specify an expression of an array-like type (section [3.3.2](#3.3.2)), or otherwise an error occurs.
 
+*TODO: The compiler currently doesn't support applying the spread operator to a string (to spread the individual characters of a string into a string array). This will eventually be allowed, but only when the code generation target is ECMAScript 2015 or later*.
+
 *TODO: Document spreading an [iterator](https://github.com/Microsoft/TypeScript/pull/2498) into an array literal*.
 
 The rules above mean that an array literal is always of an array type, unless it is contextually typed by a tuple-like type. For example
@@ -2619,7 +2689,7 @@ A super call invokes the constructor of the base class on the instance reference
 
 The type of a super call expression is Void.
 
-The JavaScript code generated for a super call is specified in section [8.6.2](#8.6.2).
+The JavaScript code generated for a super call is specified in section [8.7.2](#8.7.2).
 
 ### <a name="4.9.2"/>4.9.2 Super Property Access
 
@@ -2632,7 +2702,7 @@ Super property accesses are not permitted in other contexts, and it is not possi
 
 Super property accesses are typically used to access overridden base class member functions from derived class member functions. For an example of this, see section [8.4.2](#8.4.2).
 
-The JavaScript code generated for a super property access is specified in section [8.6.2](#8.6.2).
+The JavaScript code generated for a super property access is specified in section [8.7.2](#8.7.2).
 
 *TODO: Update section to include [bracket notation in super property access](https://github.com/Microsoft/TypeScript/issues/3970)*.
 
@@ -2777,7 +2847,7 @@ object . name
 where *object* is an expression and *name* is an identifier (including, possibly, a reserved word), is used to access the property with the given name on the given object. A dot notation property access is processed as follows at compile-time:
 
 * If *object* is of type Any, any *name* is permitted and the property access is of type Any.
-* Otherwise, if *name* denotes an accessible apparent property (section [3.11.1](#3.11.1)) in the type of *object*, the property access is of the type of that property. Public members are always accessible, but private and protected members of a class have restricted accessibility, as described in [8.2.2](#8.2.2).
+* Otherwise, if *name* denotes an accessible apparent property (section [3.11.1](#3.11.1)) in the widened type (section [3.12](#3.12)) of *object*, the property access is of the type of that property. Public members are always accessible, but private and protected members of a class have restricted accessibility, as described in [8.2.2](#8.2.2).
 * Otherwise, the property access is invalid and a compile-time error occurs.
 
 A bracket notation property access of the form
@@ -2892,7 +2962,7 @@ Given a signature &lt; *T<sub>1</sub>* , *T<sub>2</sub>* , … , *T<sub>n</sub>*
 Type argument inference produces a set of candidate types for each type parameter. Given a type parameter *T* and set of candidate types, the actual inferred type argument is determined as follows:
 
 * If the set of candidate argument types is empty, the inferred type argument for *T* is *T*'s constraint.
-* Otherwise, if at least one of the candidate types is a supertype of all of the other candidate types, let *C* denote the first such candidate type. If *C* satisfies *T*'s constraint, the inferred type argument for *T* is *C*. Otherwise, the inferred type argument for *T* is *T*'s constraint.
+* Otherwise, if at least one of the candidate types is a supertype of all of the other candidate types, let *C* denote the widened form (section [3.12](#3.12)) of the first such candidate type. If *C* satisfies *T*'s constraint, the inferred type argument for *T* is *C*. Otherwise, the inferred type argument for *T* is *T*'s constraint.
 * Otherwise, if no candidate type is a supertype of all of the other candidate types, type inference has fails and no type argument is inferred for *T*.
 
 In order to compute candidate types, the argument list is processed as follows:
@@ -3030,6 +3100,8 @@ if (shape instanceof Circle) {
 }
 ```
 
+*TODO: Document [as operator](https://github.com/Microsoft/TypeScript/pull/3564)*.
+
 ## <a name="4.17"/>4.17 JSX Expressions
 
 *TODO: Document [JSX expressions](https://github.com/Microsoft/TypeScript/issues/3203)*.
@@ -3105,6 +3177,8 @@ These operators require their operands to be of type Any, the Number primitive t
 |Number|Number||Number|||
 |String||||||
 |Other||||||
+
+*TODO: Document the [exponentation operator](https://github.com/Microsoft/TypeScript/issues/4812)*.
 
 ### <a name="4.19.2"/>4.19.2 The + operator
 
@@ -3218,7 +3292,7 @@ is subject to the same requirements, and produces a value of the same type, as t
 
 ### <a name="4.21.1"/>4.21.1 Destructuring Assignment
 
-A ***destructuring assignment*** is an assignment operation in which the left hand operand is a destructuring assignment pattern as defined by the *AssignmentPattern* production in the ECMAScript 6 specification.
+A ***destructuring assignment*** is an assignment operation in which the left hand operand is a destructuring assignment pattern as defined by the *AssignmentPattern* production in the ECMAScript 2015 specification.
 
 In a destructuring assignment expression, the type of the expression on the right must be assignable to the assignment target on the left. An expression of type *S* is considered assignable to an assignment target *V* if one of the following is true:
 
@@ -3233,9 +3307,11 @@ In a destructuring assignment expression, the type of the expression on the righ
   * *S* is a tuple-like type (section [3.3.3](#3.3.3)) with a property named *N* of a type that is assignable to the target given in *E*, where *N* is the numeric index of *E* in the array assignment pattern, or
   * *S* is not a tuple-like type and the numeric index signature type of *S* is assignable to the target given in *E*.
 
+*TODO: [Update to specify behavior when assignment element E is a rest element](https://github.com/Microsoft/TypeScript/issues/2713)*.
+
 In an assignment property or element that includes a default value, the type of the default value must be assignable to the target given in the assignment property or element.
 
-When the output target is ECMAScript 6 or higher, destructuring variable assignments remain unchanged in the emitted JavaScript code. When the output target is ECMAScript 3 or 5, destructuring variable assignments are rewritten to series of simple assignments. For example, the destructuring assignment
+When the output target is ECMAScript 2015 or higher, destructuring variable assignments remain unchanged in the emitted JavaScript code. When the output target is ECMAScript 3 or 5, destructuring variable assignments are rewritten to series of simple assignments. For example, the destructuring assignment
 
 ```TypeScript
 var x = 1;  
@@ -3360,6 +3436,8 @@ In the rules above, when a narrowing operation would remove all constituent type
 
 Note that type guards affect types of variables and parameters only and have no effect on members of objects such as properties. Also note that it is possible to defeat a type guard by calling a function that changes the type of the guarded variable.
 
+*TODO: Document [user defined type guard functions](https://github.com/Microsoft/TypeScript/issues/1007)*.
+
 In the example
 
 ```TypeScript
@@ -3432,7 +3510,7 @@ This chapter describes the static type checking TypeScript provides for JavaScri
 
 ## <a name="5.1"/>5.1 Blocks
 
-Blocks are extended to include local interface, type alias, and enum declarations (classes are already included by the ECMAScript 6 grammar).
+Blocks are extended to include local interface, type alias, and enum declarations (classes are already included by the ECMAScript 2015 grammar).
 
 &emsp;&emsp;*Declaration:*  *( Modified )*  
 &emsp;&emsp;&emsp;…  
@@ -3549,7 +3627,9 @@ The type *T* associated with a binding element is determined as follows:
 
 When a destructuring variable declaration, binding property, or binding element specifies an initializer expression, the type of the initializer expression is required to be assignable to the widened form of the type associated with the destructuring variable declaration, binding property, or binding element.
 
-When the output target is ECMAScript 6 or higher, except for removing the optional type annotation, destructuring variable declarations remain unchanged in the emitted JavaScript code.
+*TODO: Update rules to reflect [improved checking of destructuring with literal initializers](https://github.com/Microsoft/TypeScript/pull/4598)*.
+
+When the output target is ECMAScript 2015 or higher, except for removing the optional type annotation, destructuring variable declarations remain unchanged in the emitted JavaScript code.
 
 When the output target is ECMAScript 3 or 5, destructuring variable declarations are rewritten to simple variable declarations. For example, an object destructuring declaration of the form
 
@@ -3805,7 +3885,7 @@ function g(x: number) {
 
 the inferred return type for 'f' and 'g' is Any because the functions reference themselves through a cycle with no return type annotations. Adding an explicit return type 'number' to either breaks the cycle and causes the return type 'number' to be inferred for the other.
 
-An explicitly typed function whose return type isn't the Void or the Any type must have at least one return statement somewhere in its body. An exception to this rule is if the function implementation consists of a single 'throw' statement.
+An explicitly typed function whose return type isn't the Void type, the Any type, or a union type containing the Void or Any type as a constituent must have at least one return statement somewhere in its body. An exception to this rule is if the function implementation consists of a single 'throw' statement.
 
 The type of 'this' in a function implementation is the Any type.
 
@@ -3855,7 +3935,7 @@ The type of local introduced in a destructuring parameter declaration is determi
 * Otherwise, if the parameter is a rest parameter, *T* is `any[]`.
 * Otherwise, *T* is `any`.
 
-When the output target is ECMAScript 6 or higher, except for removing the optional type annotation, destructuring parameter declarations remain unchanged in the emitted JavaScript code. When the output target is ECMAScript 3 or 5, destructuring parameter declarations are rewritten to local variable declarations.
+When the output target is ECMAScript 2015 or higher, except for removing the optional type annotation, destructuring parameter declarations remain unchanged in the emitted JavaScript code. When the output target is ECMAScript 3 or 5, destructuring parameter declarations are rewritten to local variable declarations.
 
 The example
 
@@ -3965,9 +4045,13 @@ where *Parameter* is the parameter name and *Default* is the default value expre
 
 *TODO: Document [generator functions](https://github.com/Microsoft/TypeScript/issues/2873)*.
 
-## <a name="6.8"/>6.8 Type Guard Functions
+## <a name="6.8"/>6.8 Asynchronous Functions
 
-*TODO: Document [type guard functions](https://github.com/Microsoft/TypeScript/issues/1007)*.
+*TODO: Document [asynchronous functions](https://github.com/Microsoft/TypeScript/issues/1664)*.
+
+## <a name="6.9"/>6.9 Type Guard Functions
+
+*TODO: Document [type guard functions](https://github.com/Microsoft/TypeScript/issues/1007), including [this type predicates](https://github.com/Microsoft/TypeScript/pull/5906)*.
 
 <br/>
 
@@ -4016,7 +4100,7 @@ The following constraints must be satisfied by an interface declaration or other
 * An interface cannot declare a property with the same name as an inherited private or protected property.
 * Inherited properties with the same name must be identical (section [3.11.2](#3.11.2)).
 * All properties of the interface must satisfy the constraints implied by the index signatures of the interface as specified in section [3.9.4](#3.9.4).
-* The instance type (section [3.7.1](#3.7.1)) of the declared interface must be assignable (section [3.11.4](#3.11.4)) to each of the base type references.
+* The this-type (section [3.6.3](#3.6.3)) of the declared interface must be assignable (section [3.11.4](#3.11.4)) to each of the base type references.
 
 An interface is permitted to inherit identical members from multiple base types and will in that case only contain one occurrence of each particular member.
 
@@ -4089,6 +4173,8 @@ interface Document {
 ```
 
 Note that the members of the last interface declaration appear first in the merged declaration. Also note that the relative order of members declared in the same interface body is preserved.
+
+*TODO: Document [class and interface declaration merging](https://github.com/Microsoft/TypeScript/pull/3333)*.
 
 ## <a name="7.3"/>7.3 Interfaces Extending Classes
 
@@ -4193,13 +4279,13 @@ var Point: {
 };
 ```
 
-The context in which a class is referenced distinguishes between the class instance type and the constructor function. For example, in the assignment statement
+The context in which a class is referenced distinguishes between the class type and the constructor function. For example, in the assignment statement
 
 ```TypeScript
 var p: Point = new Point(10, 20);
 ```
 
-the identifier 'Point' in the type annotation refers to the class instance type, whereas the identifier 'Point' in the `new` expression refers to the constructor function object.
+the identifier 'Point' in the type annotation refers to the class type, whereas the identifier 'Point' in the `new` expression refers to the constructor function object.
 
 ### <a name="8.1.1"/>8.1.1 Class Heritage Specification
 
@@ -4225,7 +4311,7 @@ The following constraints must be satisfied by the class heritage specification 
 
 * If present, the type reference specified in the `extends` clause must denote a class type. Furthermore, the *TypeName* part of the type reference is required to be a reference to the class constructor function when evaluated as an expression.
 * A class declaration may not, directly or indirectly, specify a base class that originates in the same declaration. In other words a class cannot, directly or indirectly, be a base class of itself, regardless of type arguments.
-* The instance type (section [3.7.1](#3.7.1)) of the declared class must be assignable (section [3.11.4](#3.11.4)) to the base type reference and each of the type references listed in the `implements` clause.
+* The this-type (section [3.6.3](#3.6.3)) of the declared class must be assignable (section [3.11.4](#3.11.4)) to the base type reference and each of the type references listed in the `implements` clause.
 * The constructor function type created by the class declaration must be assignable to the base class constructor function type, ignoring construct signatures.
 
 The following example illustrates a situation in which the first rule above would be violated:
@@ -4266,7 +4352,7 @@ The members of a class consist of the members introduced through member declarat
 
 Members are either ***instance members*** or ***static members***.
 
-Instance members are members of the class type (section [8.2.4](#8.2.4)) and its associated instance type. Within constructors, instance member functions, and instance member accessors, the type of `this` is the instance type (section [3.7.1](#3.7.1)) of the class.
+Instance members are members of the class type (section [8.2.4](#8.2.4)) and its associated this-type. Within constructors, instance member functions, and instance member accessors, the type of `this` is the this-type (section [3.6.3](#3.6.3)) of the class.
 
 Static members are declared using the `static` modifier and are members of the constructor function type (section [8.2.5](#8.2.5)). Within static member functions and static member accessors, the type of `this` is the constructor function type.
 
@@ -4280,7 +4366,7 @@ Public property members can be accessed everywhere without restrictions.
 
 Private property members can be accessed only within their declaring class. Specifically, a private member *M* declared in a class *C* can be accessed only within the class body of *C*.
 
-Protected property members can be accessed only within their declaring class and classes derived from their declaring class, and a protected instance property member must be accessed *through* an instance of the enclosing class. Specifically, a protected member *M* declared in a class *C* can be accessed only within the class body of *C* or the class body of a class derived from *C*. Furthermore, when a protected instance member *M* is accessed in a property access *E*`.`*M* within the body of a class *D*, the type of *E* is required to be *D* or a type that directly or indirectly has *D* as a base type, regardless of type arguments.
+Protected property members can be accessed only within their declaring class and classes derived from their declaring class, and a protected instance property member must be accessed *through* an instance of the enclosing class or a subclass thereof. Specifically, a protected member *M* declared in a class *C* can be accessed only within the class body of *C* or the class body of a class derived from *C*. Furthermore, when a protected instance member *M* is accessed in a property access *E*`.`*M* within the body of a class *D*, the type of *E* is required to be *D* or a type that directly or indirectly has *D* as a base type, regardless of type arguments.
 
 Private and protected accessibility is enforced only at compile-time and serves as no more than an *indication of intent*. Since JavaScript provides no mechanism to create private and protected properties on an object, it is not possible to enforce the private and protected modifiers in dynamic code at run-time. For example, private and protected accessibility can be defeated by changing an object's static type to Any and accessing the member dynamically.
 
@@ -4326,14 +4412,14 @@ An index member in a derived class is said to override an index member in a base
 
 ### <a name="8.2.4"/>8.2.4 Class Types
 
-A class declaration declares a new named type (section [3.7](#3.7)) called a class type. Within the constructor and member functions of a class, the type of `this` is the instance type (section [3.7.1](#3.7.1)) of this class type. The class type has the following members:
+A class declaration declares a new named type (section [3.7](#3.7)) called a class type. Within the constructor and instance member functions of a class, the type of `this` is the this-type (section [3.6.3](#3.6.3)) of that class type. The class type has the following members:
 
 * A property for each instance member variable declaration in the class body.
 * A property of a function type for each instance member function declaration in the class body.
 * A property for each uniquely named instance member accessor declaration in the class body.
 * A property for each constructor parameter declared with a `public`, `private`, or `protected` modifier.
 * An index signature for each instance index member declaration in the class body.
-* All base class instance type property or index members that are not overridden in the class.
+* All base class instance property or index members that are not overridden in the class.
 
 All instance property members (including those that are private or protected) of a class must satisfy the constraints implied by the index members of the class as specified in section [3.9.4](#3.9.4).
 
@@ -4353,7 +4439,7 @@ class B extends A {
 }
 ```
 
-the instance type of 'A' is
+the class type of 'A' is equivalent to
 
 ```TypeScript
 interface A {  
@@ -4363,7 +4449,7 @@ interface A {
 }
 ```
 
-and the instance type of 'B' is
+and the class type of 'B' is equivalent to
 
 ```TypeScript
 interface B {  
@@ -4374,16 +4460,16 @@ interface B {
 }
 ```
 
-Note that static declarations in a class do not contribute to the class type and its instance type—rather, static declarations introduce properties on the constructor function object. Also note that the declaration of 'g' in 'B' overrides the member inherited from 'A'.
+Note that static declarations in a class do not contribute to the class type—rather, static declarations introduce properties on the constructor function object. Also note that the declaration of 'g' in 'B' overrides the member inherited from 'A'.
 
 ### <a name="8.2.5"/>8.2.5 Constructor Function Types
 
 The type of the constructor function introduced by a class declaration is called the constructor function type. The constructor function type has the following members:
 
-* If the class contains no constructor declaration and has no base class, a single construct signature with no parameters, having the same type parameters as the class and returning the instance type of the class.
-* If the class contains no constructor declaration and has a base class, a set of construct signatures with the same parameters as those of the base class constructor function type following substitution of type parameters with the type arguments specified in the base class type reference, all having the same type parameters as the class and returning the instance type of the class.
-* If the class contains a constructor declaration with no overloads, a construct signature with the parameter list of the constructor implementation, having the same type parameters as the class and returning the instance type of the class.
-* If the class contains a constructor declaration with overloads, a set of construct signatures with the parameter lists of the overloads, all having the same type parameters as the class and returning the instance type of the class.
+* If the class contains no constructor declaration and has no base class, a single construct signature with no parameters, having the same type parameters as the class (if any) and returning an instantiation of the class type with those type parameters passed as type arguments.
+* If the class contains no constructor declaration and has a base class, a set of construct signatures with the same parameters as those of the base class constructor function type following substitution of type parameters with the type arguments specified in the base class type reference, all having the same type parameters as the class (if any) and returning an instantiation of the class type with those type parameters passed as type arguments.
+* If the class contains a constructor declaration with no overloads, a construct signature with the parameter list of the constructor implementation, having the same type parameters as the class (if any) and returning an instantiation of the class type with those type parameters passed as type arguments.
+* If the class contains a constructor declaration with overloads, a set of construct signatures with the parameter lists of the overloads, all having the same type parameters as the class (if any) and returning an instantiation of the class type with those type parameters passed as type arguments.
 * A property for each static member variable declaration in the class body.
 * A property of a function type for each static member function declaration in the class body.
 * A property for each uniquely named static member accessor declaration in the class body.
@@ -4428,7 +4514,7 @@ var TwoArrays: {
 }
 ```
 
-Note that the construct signatures in the constructor function types have the same type parameters as their class and return the instance type of their class. Also note that when a derived class doesn't declare a constructor, type arguments from the base class reference are substituted before construct signatures are propagated from the base constructor function type to the derived constructor function type.
+Note that each construct signature in the constructor function types has the same type parameters as its class and returns an instantiation of its class with those type parameters passed as type arguments. Also note that when a derived class doesn't declare a constructor, type arguments from the base class reference are substituted before construct signatures are propagated from the base constructor function type to the derived constructor function type.
 
 ## <a name="8.3"/>8.3 Constructor Declarations
 
@@ -4446,7 +4532,7 @@ When a class has constructor overloads, the overloads determine the construct si
 
 When a class has both constructor overloads and a constructor implementation, the overloads must precede the implementation and all of the declarations must be consecutive with no intervening grammatical elements.
 
-The function body of a constructor is permitted to contain return statements. If return statements specify expressions, those expressions must be of types that are assignable to the instance type of the class.
+The function body of a constructor is permitted to contain return statements. If return statements specify expressions, those expressions must be of types that are assignable to the this-type (section [3.6.3](#3.6.3)) of the class.
 
 The type parameters of a generic class are in scope and accessible in a constructor declaration.
 
@@ -4477,6 +4563,8 @@ class Point {
     }  
 }
 ```
+
+A parameter property declaration may declare an optional parameter (by including a question mark or a default value), but the property introduced by such a declaration is always considered a required property (section [3.3.6](#3.3.6)).
 
 ### <a name="8.3.2"/>8.3.2 Super Calls
 
@@ -4524,7 +4612,7 @@ Property member declarations can be member variable declarations, member functio
 &emsp;&emsp;&emsp;*MemberFunctionDeclaration*  
 &emsp;&emsp;&emsp;*MemberAccessorDeclaration*
 
-Member declarations without a `static` modifier are called instance member declarations. Instance property member declarations declare properties in the class instance type (section [8.2.4](#8.2.4)), and must specify names that are unique among all instance property member and parameter property declarations in the containing class, with the exception that instance get and set accessor declarations may pairwise specify the same name.
+Member declarations without a `static` modifier are called instance member declarations. Instance property member declarations declare properties in the class type (section [8.2.4](#8.2.4)), and must specify names that are unique among all instance property member and parameter property declarations in the containing class, with the exception that instance get and set accessor declarations may pairwise specify the same name.
 
 Member declarations with a `static` modifier are called static member declarations. Static property member declarations declare properties in the constructor function type (section [8.2.5](#8.2.5)), and must specify names that are unique among all static property member declarations in the containing class, with the exception that static get and set accessor declarations may pairwise specify the same name.
 
@@ -4549,7 +4637,7 @@ class Point {
 }
 ```
 
-The class instance type 'Point' has the members:
+The class type 'Point' has the members:
 
 ```TypeScript
 interface Point {  
@@ -4578,7 +4666,7 @@ A member variable declaration declares an instance member variable or a static m
 
 The type associated with a member variable declaration is determined in the same manner as an ordinary variable declaration (see section [5.2](#5.2)).
 
-An instance member variable declaration introduces a member in the class instance type and optionally initializes a property on instances of the class. Initializers in instance member variable declarations are executed once for every new instance of the class and are equivalent to assignments to properties of `this` in the constructor. In an initializer expression for an instance member variable, `this` is of the class instance type.
+An instance member variable declaration introduces a member in the class type and optionally initializes a property on instances of the class. Initializers in instance member variable declarations are executed once for every new instance of the class and are equivalent to assignments to properties of `this` in the constructor. In an initializer expression for an instance member variable, `this` is of the this-type (section [3.6.3](#3.6.3)) of the class.
 
 A static member variable declaration introduces a property in the constructor function type and optionally initializes a property on the constructor function object. Initializers in static member variable declarations are executed once when the containing script or module is loaded.
 
@@ -4625,7 +4713,7 @@ A member function declaration is processed in the same manner as an ordinary fun
 
 All declarations for the same member function must specify the same accessibility (public, private, or protected) and kind (instance or static).
 
-An instance member function declaration declares a property in the class instance type and assigns a function object to a property on the prototype object of the class. In the body of an instance member function declaration, `this` is of the class instance type.
+An instance member function declaration declares a property in the class type and assigns a function object to a property on the prototype object of the class. In the body of an instance member function declaration, `this` is of the this-type (section [3.6.3](#3.6.3)) of the class.
 
 A static member function declaration declares a property in the constructor function type and assigns a function object to a property on the constructor function object. In the body of a static member function declaration, the type of `this` is the constructor function type.
 
@@ -4691,23 +4779,23 @@ Get and set accessors are processed in the same manner as in an object literal (
 
 Accessors for the same member name must specify the same accessibility.
 
-An instance member accessor declaration declares a property in the class instance type and defines a property on the prototype object of the class with a get or set accessor. In the body of an instance member accessor declaration, `this` is of the class instance type.
+An instance member accessor declaration declares a property in the class type and defines a property on the prototype object of the class with a get or set accessor. In the body of an instance member accessor declaration, `this` is of the this-type (section [3.6.3](#3.6.3)) of the class.
 
 A static member accessor declaration declares a property in the constructor function type and defines a property on the constructor function object of the class with a get or set accessor. In the body of a static member accessor declaration, the type of `this` is the constructor function type.
 
-Get and set accessors are emitted as calls to 'Object.defineProperty' in the generated JavaScript, as described in section [8.6.1](#8.6.1).
+Get and set accessors are emitted as calls to 'Object.defineProperty' in the generated JavaScript, as described in section [8.7.1](#8.7.1).
 
 ### <a name="8.4.4"/>8.4.4 Dynamic Property Declarations
 
 If the *PropertyName* of a property member declaration is a computed property name that doesn't denote a well-known symbol ([2.2.3](#2.2.3)), the construct is considered a ***dynamic property declaration***. The following rules apply to dynamic property declarations:
 
-* A dynamic property declaration does not introduce a property in the class instance type or constructor function type.
+* A dynamic property declaration does not introduce a property in the class type or constructor function type.
 * The property name expression of a dynamic property assignment must be of type Any or the String, Number, or Symbol primitive type.
 * The name associated with a dynamic property declarations is considered to be a numeric property name if the property name expression is of type Any or the Number primitive type.
 
 ## <a name="8.5"/>8.5 Index Member Declarations
 
-An index member declaration introduces an index signature (section [3.9.4](#3.9.4)) in the class instance type.
+An index member declaration introduces an index signature (section [3.9.4](#3.9.4)) in the class type.
 
 &emsp;&emsp;*IndexMemberDeclaration:*  
 &emsp;&emsp;&emsp;*IndexSignature*&emsp;`;`
@@ -4720,11 +4808,15 @@ It is not possible to declare index members for the static side of a class.
 
 Note that it is seldom meaningful to include a string index signature in a class because it constrains all instance properties of the class. However, numeric index signatures can be useful to control the element type when a class is used in an array-like manner.
 
-## <a name="8.6"/>8.6 Code Generation
+## <a name="8.6"/>8.6 Decorators
 
-When the output target is ECMAScript 6 or higher, type parameters, implements clauses, accessibility modifiers, and member variable declarations are removed in the emitted code, but otherwise class declarations are emitted as written. When the output target is ECMAScript 3 or 5, more comprehensive rewrites are performed, as described in this section.
+*TODO: Document [decorators](https://github.com/Microsoft/TypeScript/issues/2249)*.
 
-### <a name="8.6.1"/>8.6.1 Classes Without Extends Clauses
+## <a name="8.7"/>8.7 Code Generation
+
+When the output target is ECMAScript 2015 or higher, type parameters, implements clauses, accessibility modifiers, and member variable declarations are removed in the emitted code, but otherwise class declarations are emitted as written. When the output target is ECMAScript 3 or 5, more comprehensive rewrites are performed, as described in this section.
+
+### <a name="8.7.1"/>8.7.1 Classes Without Extends Clauses
 
 A class with no `extends` clause generates JavaScript equivalent to the following:
 
@@ -4828,7 +4920,7 @@ where *MemberName* is the name of the member accessor, *GetAccessorStatements* i
 
 where *MemberName* is the name of the static variable, and *InitializerExpression* is the code generated for the initializer expression.
 
-### <a name="8.6.2"/>8.6.2 Classes With Extends Clauses
+### <a name="8.7.2"/>8.7.2 Classes With Extends Clauses
 
 A class with an `extends` clause generates JavaScript equivalent to the following:
 
@@ -5396,7 +5488,7 @@ This copies a reference to the entity into a property on the namespace instance.
 
 # <a name="11"/>11 Scripts and Modules
 
-TypeScript implements support for ECMAScript 6 modules and supports down-level code generation targeting CommonJS, AMD, and other module systems.
+TypeScript implements support for ECMAScript 2015 modules and supports down-level code generation targeting CommonJS, AMD, and other module systems.
 
 ## <a name="11.1"/>11.1 Programs and Source Files
 
@@ -5424,7 +5516,7 @@ When a TypeScript program is compiled, all of the program's source files are pro
 
 The TypeScript compiler automatically determines a source file's dependencies and includes those dependencies in the program being compiled. The determination is made from "reference comments" and module import declarations as follows:
 
-* A comment of the form /// &lt;reference path="…"/> adds a dependency on the source file specified in the path argument. The path is resolved relative to the directory of the containing source file.
+* A comment of the form /// &lt;reference path="…"/> that occurs before the first token in a source file adds a dependency on the source file specified in the path argument. The path is resolved relative to the directory of the containing source file.
 * A module import declaration that specifies a relative module name (section [11.3.1](#11.3.1)) resolves the name relative to the directory of the containing source file. If a source file with the resulting path and file extension '.ts' exists, that file is added as a dependency. Otherwise, if a source file with the resulting path and file extension '.d.ts' exists, that file is added as a dependency.
 * A module import declaration that specifies a top-level module name (section [11.3.1](#11.3.1)) resolves the name in a host dependent manner (typically by resolving the name relative to a module name space root or searching for the name in a series of directories). If a source file with extension '.ts' or '.d.ts' corresponding to the reference is located, that file is added as a dependency.
 
@@ -5539,7 +5631,7 @@ TypeScript supports multiple patterns of JavaScript code generation for modules:
 * CommonJS. This format is used by server frameworks such as node.js.
 * AMD (Asynchronous Module Definition). This format is used by asynchronous module loaders such as RequireJS.
 * UMD (Universal Module Definition). A variation of the AMD format that allows modules to also be loaded by CommonJS loaders.
-* System. This format is used to represent ECMAScript 6 semantics with high fidelity in down-level environments.
+* System. This format is used to represent ECMAScript 2015 semantics with high fidelity in down-level environments.
 
 The desired module code generation pattern is selected through a compiler option and does not affect the TypeScript source code. Indeed, it is possible to author modules that can be compiled for use both on the server side (e.g. using node.js) and on the client side (using an AMD compliant loader) with no changes to the TypeScript source code.
 
@@ -5620,7 +5712,7 @@ An import require declaration of the form
 import m = require("mod");
 ```
 
-is equivalent to the ECMAScript 6 import declaration
+is equivalent to the ECMAScript 2015 import declaration
 
 ```TypeScript
 import * as m from "mod";
@@ -5828,16 +5920,17 @@ The 'main' and 'log' example from section [11.3](#11.3) above generates the foll
 File main.js:
 
 ```TypeScript
-var log = require("./log");  
-log.message("hello");
+var log_1 = require("./log");  
+log_1.message("hello");
 ```
 
 File log.js:
 
 ```TypeScript
-exports.message = function(s) {  
+function message(s) {  
     console.log(s);  
-}
+}  
+exports.message = message;
 ```
 
 A module import declaration is represented in the generated JavaScript as a variable initialized by a call to the 'require' function provided by the module system host. A variable declaration and 'require' call is emitted for a particular imported module only if the imported module, or a local alias (section [10.3](#10.3)) that references the imported module, is referenced as a *PrimaryExpression* somewhere in the body of the importing module. If an imported module is referenced only as a *NamespaceName* or *TypeQueryExpression*, nothing is emitted.
@@ -5850,15 +5943,15 @@ File geometry.ts:
 export interface Point { x: number; y: number };
 
 export function point(x: number, y: number): Point {  
-    return { x: x, y: y };  
+    return { x, y };  
 }
 ```
 
 File game.ts:
 
 ```TypeScript
-import g = require("./geometry");  
-var p = g.point(10, 20);
+import * as g from "./geometry";  
+let p = g.point(10, 20);
 ```
 
 The 'game' module references the imported 'geometry' module in an expression (through its alias 'g') and a 'require' call is therefore included in the emitted JavaScript:
@@ -5871,8 +5964,8 @@ var p = g.point(10, 20);
 Had the 'game' module instead been written to only reference 'geometry' in a type position
 
 ```TypeScript
-import g = require("./geometry");  
-var p: g.Point = { x: 10, y: 20 };
+import * as g from "./geometry";  
+let p: g.Point = { x: 10, y: 20 };
 ```
 
 the emitted JavaScript would have no dependency on the 'geometry' module and would simply be
@@ -5890,8 +5983,8 @@ The "main" and "log" example from above generates the following JavaScript code 
 File main.js:
 
 ```TypeScript
-define(["require", "exports", "./log"], function(require, exports, log) {  
-    log.message("hello");  
+define(["require", "exports", "./log"], function(require, exports, log_1) {  
+    log_1.message("hello");  
 }
 ```
 
@@ -5899,9 +5992,10 @@ File log.js:
 
 ```TypeScript
 define(["require", "exports"], function(require, exports) {  
-    exports.message = function(s) {  
+    function message(s) {  
         console.log(s);  
     }  
+    exports.message = message;  
 }
 ```
 
@@ -5957,7 +6051,7 @@ Ambient function declarations cannot specify a function bodies and do not permit
 
 ### <a name="12.1.3"/>12.1.3 Ambient Class Declarations
 
-An ambient class declaration declares a class instance type and a constructor function in the containing declaration space.
+An ambient class declaration declares a class type and a constructor function in the containing declaration space.
 
 &emsp;&emsp;*AmbientClassDeclaration:*  
 &emsp;&emsp;&emsp;`class`&emsp;*BindingIdentifier*&emsp;*TypeParameters<sub>opt</sub>*&emsp;*ClassHeritage*&emsp;`{`&emsp;*AmbientClassBody*&emsp;`}`
@@ -6057,7 +6151,7 @@ declare module "io" {
 
 # <a name="A"/>A Grammar
 
-This appendix contains a summary of the grammar found in the main document. As described in section [2.1](#2.1), the TypeScript grammar is a superset of the grammar defined in the [ECMAScript Language Specification](http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf) (specifically, the ECMA-262 Standard, 6th Edition) and this appendix lists only productions that are new or modified from the ECMAScript grammar.
+This appendix contains a summary of the grammar found in the main document. As described in section [2.1](#2.1), the TypeScript grammar is a superset of the grammar defined in the [ECMAScript 2015 Language Specification](http://www.ecma-international.org/ecma-262/6.0/) (specifically, the ECMA-262 Standard, 6th Edition) and this appendix lists only productions that are new or modified from the ECMAScript grammar.
 
 ## <a name="A.1"/>A.1 Types
 
@@ -6104,7 +6198,8 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;*ObjectType*  
 &emsp;&emsp;&emsp;*ArrayType*  
 &emsp;&emsp;&emsp;*TupleType*  
-&emsp;&emsp;&emsp;*TypeQuery*
+&emsp;&emsp;&emsp;*TypeQuery*  
+&emsp;&emsp;&emsp;*ThisType*
 
 &emsp;&emsp;*ParenthesizedType:*  
 &emsp;&emsp;&emsp;`(`&emsp;*Type*&emsp;`)`
@@ -6178,6 +6273,9 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;*TypeQueryExpression:*  
 &emsp;&emsp;&emsp;*IdentifierReference*  
 &emsp;&emsp;&emsp;*TypeQueryExpression*&emsp;`.`&emsp;*IdentifierName*
+
+&emsp;&emsp;*ThisType:*  
+&emsp;&emsp;&emsp;`this`
 
 &emsp;&emsp;*PropertySignature:*  
 &emsp;&emsp;&emsp;*PropertyName*&emsp;`?`*<sub>opt</sub>*&emsp;*TypeAnnotation<sub>opt</sub>*

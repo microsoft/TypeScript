@@ -3,20 +3,20 @@ interface BaseInterface {
 >BaseInterface : Symbol(BaseInterface, Decl(mergedInheritedClassInterface.ts, 0, 0))
 
     required: number;
->required : Symbol(required, Decl(mergedInheritedClassInterface.ts, 0, 25))
+>required : Symbol(BaseInterface.required, Decl(mergedInheritedClassInterface.ts, 0, 25))
 
     optional?: number;
->optional : Symbol(optional, Decl(mergedInheritedClassInterface.ts, 1, 21))
+>optional : Symbol(BaseInterface.optional, Decl(mergedInheritedClassInterface.ts, 1, 21))
 }
 
 class BaseClass {
 >BaseClass : Symbol(BaseClass, Decl(mergedInheritedClassInterface.ts, 3, 1))
 
     baseMethod() { }
->baseMethod : Symbol(baseMethod, Decl(mergedInheritedClassInterface.ts, 5, 17))
+>baseMethod : Symbol(BaseClass.baseMethod, Decl(mergedInheritedClassInterface.ts, 5, 17))
 
     baseNumber: number;
->baseNumber : Symbol(baseNumber, Decl(mergedInheritedClassInterface.ts, 6, 20))
+>baseNumber : Symbol(BaseClass.baseNumber, Decl(mergedInheritedClassInterface.ts, 6, 20))
 }
 
 interface Child extends BaseInterface {
@@ -24,7 +24,7 @@ interface Child extends BaseInterface {
 >BaseInterface : Symbol(BaseInterface, Decl(mergedInheritedClassInterface.ts, 0, 0))
 
     additional: number;
->additional : Symbol(additional, Decl(mergedInheritedClassInterface.ts, 10, 39))
+>additional : Symbol(Child.additional, Decl(mergedInheritedClassInterface.ts, 10, 39))
 }
 
 class Child extends BaseClass {
@@ -32,10 +32,10 @@ class Child extends BaseClass {
 >BaseClass : Symbol(BaseClass, Decl(mergedInheritedClassInterface.ts, 3, 1))
 
     classNumber: number;
->classNumber : Symbol(classNumber, Decl(mergedInheritedClassInterface.ts, 14, 31))
+>classNumber : Symbol(Child.classNumber, Decl(mergedInheritedClassInterface.ts, 14, 31))
 
     method() { }
->method : Symbol(method, Decl(mergedInheritedClassInterface.ts, 15, 24))
+>method : Symbol(Child.method, Decl(mergedInheritedClassInterface.ts, 15, 24))
 }
 
 interface ChildNoBaseClass extends BaseInterface {
@@ -43,16 +43,16 @@ interface ChildNoBaseClass extends BaseInterface {
 >BaseInterface : Symbol(BaseInterface, Decl(mergedInheritedClassInterface.ts, 0, 0))
 
     additional2: string;
->additional2 : Symbol(additional2, Decl(mergedInheritedClassInterface.ts, 19, 50))
+>additional2 : Symbol(ChildNoBaseClass.additional2, Decl(mergedInheritedClassInterface.ts, 19, 50))
 }
 class ChildNoBaseClass {
 >ChildNoBaseClass : Symbol(ChildNoBaseClass, Decl(mergedInheritedClassInterface.ts, 17, 1), Decl(mergedInheritedClassInterface.ts, 21, 1))
 
     classString: string;
->classString : Symbol(classString, Decl(mergedInheritedClassInterface.ts, 22, 24))
+>classString : Symbol(ChildNoBaseClass.classString, Decl(mergedInheritedClassInterface.ts, 22, 24))
 
     method2() { }
->method2 : Symbol(method2, Decl(mergedInheritedClassInterface.ts, 23, 24))
+>method2 : Symbol(ChildNoBaseClass.method2, Decl(mergedInheritedClassInterface.ts, 23, 24))
 }
 class Grandchild extends ChildNoBaseClass {
 >Grandchild : Symbol(Grandchild, Decl(mergedInheritedClassInterface.ts, 25, 1))

@@ -5,12 +5,12 @@
 ////}
 
 //@Filename: b.ts
-////import { /*2*/Class as /*3*/C2} from "a";
+////import { /*2*/Class as /*3*/C2} from "./a";
 ////
 ////var c = new C2();
 
 //@Filename: c.ts
-////export { /*4*/Class as /*5*/C3 } from "a";
+////export { /*4*/Class as /*5*/C3 } from "./a";
 
 goTo.file("a.ts");
 goTo.marker("1");
