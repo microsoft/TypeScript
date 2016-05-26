@@ -1,6 +1,5 @@
 ///<reference path="harness.ts" />
 ///<reference path="runnerbase.ts" />
-/* tslint:disable:no-null-keyword */
 
 // Test case is json of below type in tests/cases/project/
 interface ProjectRunnerTestCase {
@@ -53,7 +52,7 @@ class ProjectRunner extends RunnerBase {
     private runProjectTestCase(testCaseFileName: string) {
         let testCase: ProjectRunnerTestCase & ts.CompilerOptions;
 
-        let testFileText: string = null;
+        let testFileText: string;
         try {
             testFileText = Harness.IO.readFile(testCaseFileName);
         }

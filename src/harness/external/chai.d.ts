@@ -169,7 +169,6 @@ declare module chai {
         function notEqual(actual: any, expected: any, message?: string): void;
         function isTrue(value: any, message?: string): void;
         function isFalse(value: any, message?: string): void;
-        function isNull(value: any, message?: string): void;
-        function isNotNull(value: any, message?: string): void;
+        function isOk(actual: any, message?: string): void;
     }
 }

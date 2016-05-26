@@ -1,10 +1,10 @@
 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(11,24): error TS2300: Duplicate identifier 'y'.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(18,5): error TS2686: All declarations of 'y' must have identical modifiers.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(18,5): error TS2687: All declarations of 'y' must have identical modifiers.
 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(19,25): error TS2300: Duplicate identifier 'y'.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(19,25): error TS2686: All declarations of 'y' must have identical modifiers.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(26,5): error TS2686: All declarations of 'y' must have identical modifiers.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(19,25): error TS2687: All declarations of 'y' must have identical modifiers.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(26,5): error TS2687: All declarations of 'y' must have identical modifiers.
 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(27,27): error TS2300: Duplicate identifier 'y'.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(27,27): error TS2686: All declarations of 'y' must have identical modifiers.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(27,27): error TS2687: All declarations of 'y' must have identical modifiers.
 
 
 ==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts (7 errors) ====
@@ -29,12 +29,12 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/co
     class E {
         y: number;
         ~
-!!! error TS2686: All declarations of 'y' must have identical modifiers.
+!!! error TS2687: All declarations of 'y' must have identical modifiers.
         constructor(private y: number) { } // error
                             ~
 !!! error TS2300: Duplicate identifier 'y'.
                             ~
-!!! error TS2686: All declarations of 'y' must have identical modifiers.
+!!! error TS2687: All declarations of 'y' must have identical modifiers.
     }
     
     var e: E;
@@ -43,12 +43,12 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/co
     class F {
         y: number;
         ~
-!!! error TS2686: All declarations of 'y' must have identical modifiers.
+!!! error TS2687: All declarations of 'y' must have identical modifiers.
         constructor(protected y: number) { } // error
                               ~
 !!! error TS2300: Duplicate identifier 'y'.
                               ~
-!!! error TS2686: All declarations of 'y' must have identical modifiers.
+!!! error TS2687: All declarations of 'y' must have identical modifiers.
     }
     
     var f: F;

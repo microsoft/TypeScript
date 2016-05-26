@@ -1,7 +1,6 @@
 ///<reference path="fourslash.ts" />
 ///<reference path="harness.ts"/>
 ///<reference path="runnerbase.ts" />
-/* tslint:disable:no-null-keyword */
 
 const enum FourSlashTestType {
     Native,

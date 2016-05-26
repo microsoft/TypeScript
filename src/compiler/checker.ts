@@ -6039,9 +6039,10 @@ namespace ts {
             function isKnownProperty(type: Type, name: string): boolean {
                 if (type.flags & TypeFlags.ObjectType) {
                     const resolved = resolveStructuredTypeMembers(type);
-                    if ((relation === assignableRelation || relation === comparableRelation) &&
-                        (type === globalObjectType || isEmptyObjectType(resolved)) ||
-                        resolved.stringIndexInfo || resolved.numberIndexInfo || getPropertyOfType(type, name)) {
+                    if ((relation === assignableRelation || relation === comparableRelation) && (type === globalObjectType || isEmptyObjectType(resolved)) ||
+                        resolved.stringIndexInfo ||
+                        (resolved.numberIndexInfo && isNumericLiteralName(name)) ||
+                        getPropertyOfType(type, name)) {
                         return true;
                     }
                 }
@@ -7163,11 +7164,10 @@ namespace ts {
                             inferFromTypes(source, t);
                         }
                     }
-                    // Next, if target is a union type containing a single naked type parameter, make a
-                    // secondary inference to that type parameter. We don't do this for intersection types
-                    // because in a target type like Foo & T we don't know how which parts of the source type
-                    // should be matched by Foo and which should be inferred to T.
-                    if (target.flags & TypeFlags.Union && typeParameterCount === 1) {
+                    // Next, if target containings a single naked type parameter, make a secondary inference to that type
+                    // parameter. This gives meaningful results for union types in co-variant positions and intersection
+                    // types in contra-variant positions (such as callback parameters).
+                    if (typeParameterCount === 1) {
                         inferiority++;
                         inferFromTypes(source, typeParameter);
                         inferiority--;
@@ -12977,18 +12977,20 @@ namespace ts {
                     const names = static ? staticNames : instanceNames;
 
                     const memberName = member.name && getPropertyNameForPropertyNameNode(member.name);
-                    switch (member.kind) {
-                        case SyntaxKind.GetAccessor:
-                            addName(names, member.name, memberName, getter);
-                            break;
+                    if (memberName) {
+                        switch (member.kind) {
+                            case SyntaxKind.GetAccessor:
+                                addName(names, member.name, memberName, getter);
+                                break;
 
-                        case SyntaxKind.SetAccessor:
-                            addName(names, member.name, memberName, setter);
-                            break;
+                            case SyntaxKind.SetAccessor:
+                                addName(names, member.name, memberName, setter);
+                                break;
 
-                        case SyntaxKind.PropertyDeclaration:
-                            addName(names, member.name, memberName, property);
-                            break;
+                            case SyntaxKind.PropertyDeclaration:
+                                addName(names, member.name, memberName, property);
+                                break;
+                        }
                     }
                 }
             }

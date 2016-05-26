@@ -1,35 +1,36 @@
+/// <reference path="fourslash.ts"/>
 
-////{| "itemName": "\"X.Y.Z\"", "kind": "module" |}
+////{| "itemName": "\"X.Y.Z\"", "kind": "module", "parentName": "<global>" |}
 ////declare module "X.Y.Z" {
 ////}
 ////
-////{| "itemName": "'X2.Y2.Z2'", "kind": "module" |}
+////{| "itemName": "'X2.Y2.Z2'", "kind": "module", "parentName": "<global>" |}
 ////declare module 'X2.Y2.Z2' {
 ////}
 ////
-////{| "itemName": "A.B.C", "kind": "module" |}
+////{| "itemName": "A.B.C", "kind": "module", "parentName": "<global>" |}
 ////module A.B.C {
 ////    {| "itemName": "x", "kind": "var", "parentName": "A.B.C" |}
 ////    export var x;
 ////}
 ////
-////{| "itemName": "A.B", "kind": "module" |}
+////{| "itemName": "A.B", "kind": "module", "parentName": "<global>" |}
 ////module A.B {
 ////    {| "itemName": "y", "kind": "var", "parentName": "A.B" |}
 ////    export var y;
 ////}
 ////
-////{| "itemName": "A", "kind": "module" |}
+////{| "itemName": "A", "kind": "module", "parentName": "<global>" |}
 ////module A {
 ////    {| "itemName": "z", "kind": "var", "parentName": "A" |}
 ////    export var z;
 ////}
 ////
-////{| "itemName": "A", "kind": "module" |}
+////{| "itemName": "A", "kind": "module", "parentName": "<global>" |}
 ////module A {
-////    {| "itemName": "B", "kind": "module", "parentName": "" |}
+////    {| "itemName": "B", "kind": "module", "parentName": "A" |}
 ////    module B {
-////        {| "itemName": "C", "kind": "module", "parentName": "" |}
+////        {| "itemName": "C", "kind": "module", "parentName": "B" |}
 ////        module C {
 ////            {| "itemName": "x", "kind": "var", "parentName": "C" |}
 ////            declare var x;
@@ -45,4 +46,4 @@ test.markers().forEach((marker) => {
 /// We have 8 module keywords, and 4 var keywords.
 /// The declarations of A.B.C.x do not get merged, so the 4 vars are independent.
 /// The two 'A' modules, however, do get merged, so in reality we have 7 modules.
-verify.navigationBarCount(11);
+verify.navigationBarCount(19);
