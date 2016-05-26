@@ -825,7 +825,6 @@ namespace ts {
             updated.scriptKind = node.scriptKind;
             updated.externalModuleIndicator = node.externalModuleIndicator;
             updated.commonJsModuleIndicator = node.commonJsModuleIndicator;
-            updated.wasReferenced = node.wasReferenced;
             updated.identifiers = node.identifiers;
             updated.nodeCount = node.nodeCount;
             updated.identifierCount = node.identifierCount;
