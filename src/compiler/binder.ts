@@ -2701,13 +2701,12 @@ namespace ts {
     }
 
     function computeModuleDeclaration(node: ModuleDeclaration, subtreeFlags: TransformFlags) {
-        let transformFlags = subtreeFlags;
+        let transformFlags = TransformFlags.AssertTypeScript;
         const excludeFlags = TransformFlags.ModuleExcludes;
         const modifierFlags = getModifierFlags(node);
 
-        // An ambient declaration is TypeScript syntax.
-        if (modifierFlags & ModifierFlags.Ambient) {
-            subtreeFlags = TransformFlags.None;
+        if ((modifierFlags & ModifierFlags.Ambient) === 0) {
+            transformFlags |= subtreeFlags;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
