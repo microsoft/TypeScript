@@ -14529,7 +14529,7 @@ namespace ts {
         function areDeclarationFlagsIdentical(left: Declaration, right: Declaration) {
             if ((left.kind === SyntaxKind.Parameter && right.kind === SyntaxKind.VariableDeclaration) ||
                 (left.kind === SyntaxKind.VariableDeclaration && right.kind === SyntaxKind.Parameter)) {
-                // Diffrences in optionality between paramters and variables are allowed.
+                // Differences in optionality between parameters and variables are allowed.
                 return true;
             }
 
