@@ -125,13 +125,7 @@ namespace ts.server {
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
             getResult: (s: T) => R): R[] {
 
-            let path: Path;
-            if (containingFile === undefined) {
-                path = '**:/ [root type directive]' as Path;
-            }
-            else {
-                path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
-            }
+            const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
 
             const currentResolutionsInFile = cache.get(path);
 

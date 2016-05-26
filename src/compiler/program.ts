@@ -774,13 +774,22 @@ namespace ts {
 
     export function readDefaultTypeDirectiveNames(rootPath: string, sys: System): string[] {
         const localTypes = combinePaths(rootPath, "types");
-        const npmTypes = combinePaths(rootPath, "node_modules/@types");
         let result: string[] = [];
         if (sys.directoryExists(localTypes)) {
             result = result.concat(sys.getDirectories(localTypes));
         }
-        if (sys.directoryExists(npmTypes)) {
-            result = result.concat(sys.getDirectories(npmTypes));
+
+        // Walk up the directory spine until we find the first node_modules folder
+        let nodeProbePath = normalizeSlashes(rootPath);
+        while (!isRootedDiskPath(nodeProbePath)) {
+            if (sys.directoryExists(combinePaths(nodeProbePath, 'node_modules'))) {
+                const nodeTypesPath = combinePaths(nodeProbePath, 'node_modules/@types');
+                if (sys.directoryExists(nodeTypesPath)) {
+                    result = result.concat(sys.getDirectories(nodeTypesPath));
+                }
+                break;
+            }
+            nodeProbePath = getDirectoryPath(nodeProbePath);
         }
         return result;
     }
@@ -1040,10 +1049,15 @@ namespace ts {
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
 
             // load type declarations specified via 'types' argument
-            const typeReferences: string[] = getDefaultTypeDirectiveNames(options, rootNames, host);
+            const typeReferences: string[] = getDefaultTypeDirectiveNames(options, options.configFilePath ? [options.configFilePath] : rootNames, host);
 
             if (typeReferences) {
-                const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, /*containingFile*/ undefined);
+                const commonRoot = computeCommonSourceDirectoryOfFilenames(rootNames, '.', f => host.getCanonicalFileName(f));
+                // This is a fictional filename. Resolution logic assumes we start from some file, but doesn't
+                // actually read that file; instead it starts from its containing folder and uses the filename
+                // as a key in its caching lookup.
+                const inferredRoot = commonRoot && combinePaths(commonRoot, '*inferred type directives*.ts');
+                const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, inferredRoot);
                 for (let i = 0; i < typeReferences.length; i++) {
                     processTypeReferenceDirective(typeReferences[i], resolutions[i]);
                 }
