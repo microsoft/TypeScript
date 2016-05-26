@@ -10,7 +10,7 @@
 ////{| "itemName": "\"MultilineMadness\"", "kind": "module", "parentName": "<global>" |}
 ////declare module "MultilineMadness" {}
 ////
-////{| "itemName": "Foo", "kind": "interface" |}
+////{| "itemName": "Foo", "kind": "interface", "parentName": "<global>" |}
 ////interface Foo {
 ////    {| "itemName": "\"a1\\\\\\r\\nb\"", "kind": "property", "parentName": "Foo" |}
 ////    "a1\\\r\nb";
@@ -20,7 +20,7 @@
 ////    b"(): Foo;
 ////}
 ////
-////{| "itemName": "Bar", "kind": "class" |}
+////{| "itemName": "Bar", "kind": "class", "parentName": "<global>" |}
 ////class Bar implements Foo {
 ////    {| "itemName": "'a1\\\\\\r\\nb'", "kind": "property", "parentName": "Bar" |}
 ////    'a1\\\r\nb': Foo;
@@ -38,4 +38,4 @@ test.markers().forEach((marker) => {
     verify.navigationBarContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
 });
 
-verify.navigationBarCount(13);
+verify.navigationBarCount(15);

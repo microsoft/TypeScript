@@ -323,6 +323,10 @@ namespace ts.NavigationBar {
                 case SyntaxKind.ModuleDeclaration:
                     return createItem(node, getModuleName(<ModuleDeclaration>node), ts.ScriptElementKind.moduleElement);
 
+                case SyntaxKind.InterfaceDeclaration:
+                    return createItem(node, getTextOfNode((<InterfaceDeclaration>node).name), ts.ScriptElementKind.interfaceElement);
+
+
                 case SyntaxKind.CallSignature:
                     return createItem(node, "()", ts.ScriptElementKind.callSignatureElement);
 
@@ -332,6 +336,9 @@ namespace ts.NavigationBar {
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                     return createItem(node, getTextOfNode((<PropertyDeclaration>node).name), ts.ScriptElementKind.memberVariableElement);
+
+                case SyntaxKind.ClassDeclaration:
+                    return createItem(node, getTextOfNode((<ClassDeclaration>node).name), ts.ScriptElementKind.classElement);
 
                 case SyntaxKind.FunctionDeclaration:
                     return createItem(node, getTextOfNode((<FunctionLikeDeclaration>node).name), ts.ScriptElementKind.functionElement);
