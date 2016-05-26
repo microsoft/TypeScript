@@ -98,6 +98,7 @@ namespace ts.NavigationBar {
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.ImportSpecifier:
                     case SyntaxKind.ExportSpecifier:
+                    case SyntaxKind.TypeAliasDeclaration:
                         childNodes.push(node);
                         break;
                 }
@@ -330,6 +331,8 @@ namespace ts.NavigationBar {
                 case SyntaxKind.InterfaceDeclaration:
                     return createItem(node, getTextOfNode((<InterfaceDeclaration>node).name), ts.ScriptElementKind.interfaceElement);
 
+                case SyntaxKind.TypeAliasDeclaration:
+                    return createItem(node, getTextOfNode((<TypeAliasDeclaration>node).name), ts.ScriptElementKind.typeElement);
 
                 case SyntaxKind.CallSignature:
                     return createItem(node, "()", ts.ScriptElementKind.callSignatureElement);

@@ -6,7 +6,12 @@ verify.navigationBar([
     {
         "text": "<global>",
         "kind": "module",
-        "childItems": [],
+        "childItems": [
+            {
+                "text": "T",
+                "kind": "type"
+            }
+        ],
         "indent": 0
     },
     {
