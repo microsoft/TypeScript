@@ -7695,11 +7695,11 @@ namespace ts {
                             getTypeAtFlowLoopLabel(<FlowLabel>flow);
                     }
                     else if (flow.flags & FlowFlags.Start) {
-                        let container = (<FlowStart>flow).container;
+                        const container = (<FlowStart>flow).container;
                         if (container) {
                             // If container is an IIFE continue with the control flow associated with the
                             // call expression node.
-                            let iife = getImmediatelyInvokedFunctionExpression(<FunctionExpression>container);
+                            const iife = getImmediatelyInvokedFunctionExpression(<FunctionExpression>container);
                             if (iife && iife.flowNode) {
                                 flow = iife.flowNode;
                                 continue;
@@ -8084,16 +8084,6 @@ namespace ts {
                 expression = (expression as ParenthesizedExpression).expression;
             }
             return expression;
-        }
-
-        function getControlFlowContainer(node: Identifier, declarationContainer: Node, skipFunctionExpressions: boolean) {
-            let container = getContainingFunctionOrModule(node);
-            while (container !== declarationContainer &&
-                (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.ArrowFunction) &&
-                (skipFunctionExpressions || getImmediatelyInvokedFunctionExpression(<FunctionExpression>container))) {
-                container = getContainingFunctionOrModule(container);
-            }
-            return container;
         }
 
         function isDeclarationIncludedInFlow(reference: Node, declaration: Declaration, includeOuterFunctions: boolean) {
