@@ -1517,29 +1517,22 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.JSDocTypedefTag)
-    export interface JSDocTypedefTag extends JSDocTag, Declaration, JSDocParentTag {
+    export interface JSDocTypedefTag extends JSDocTag, Declaration {
         name: Identifier;
         typeExpression?: JSDocTypeExpression;
         type: JSDocType;
-    }
-
-    export interface JSDocParentTag extends JSDocTag {
-        jsDocPropertyTags?: NodeArray<JSDocPropertyTag>;
-        jsDocTypeTag?: JSDocTypeTag;
     }
 
     // @kind(SyntaxKind.JSDocPropertyTag)
     export interface JSDocPropertyTag extends JSDocTag, TypeElement {
         name: Identifier;
         typeExpression: JSDocTypeExpression;
-        // Add a "type" property here to make the interface compatible 
-        // with the "VariableLikeDeclaration" definition
-        type: TypeNode;
     }
 
     // @kind(SyntaxKind.JSDocTypeLiteral)
     export interface JSDocTypeLiteral extends JSDocType {
-        members: NodeArray<TypeElement>;
+        jsDocPropertyTags?: NodeArray<JSDocPropertyTag>;
+        jsDocTypeTag?: JSDocTypeTag;
     }
 
     // @kind(SyntaxKind.JSDocParameterTag)
