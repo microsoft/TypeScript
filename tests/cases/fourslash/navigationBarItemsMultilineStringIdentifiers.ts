@@ -38,4 +38,4 @@ test.markers().forEach((marker) => {
     verify.navigationBarContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
 });
 
-verify.navigationBarCount(11); // global + 1 child, interface w/ 2 properties, class w/ 2 properties, 3 modules
+verify.navigationBarCount(12); // global + 1 child, interface w/ 2 properties, class w/ 2 properties, 3 modules
