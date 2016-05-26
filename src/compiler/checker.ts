@@ -8101,9 +8101,11 @@ namespace ts {
         }
 
         function updateReferences(node: Identifier): void {
-            const symbol = getReferencedValueSymbol(node);
-            if (symbol) {
-                symbol.hasReference = true;
+            if (!isSourceFileADefinitionFile(node)) {
+                const symbol = getReferencedValueSymbol(node);
+                if (symbol) {
+                    symbol.hasReference = true;
+                }
             }
         }
 
@@ -13128,6 +13130,7 @@ namespace ts {
             checkGrammarConstructorTypeParameters(node) || checkGrammarConstructorTypeAnnotation(node);
 
             checkSourceElement(node.body);
+            checkUnusedIdentifiers(node);
 
             const symbol = getSymbolOfNode(node);
             const firstDeclaration = getDeclarationOfKind(symbol, node.kind);
@@ -14170,6 +14173,7 @@ namespace ts {
             }
 
             checkSourceElement(node.body);
+            checkUnusedIdentifiers(node);
             if (!node.asteriskToken) {
                 const returnOrPromisedType = node.type && (isAsync ? checkAsyncFunctionReturnType(node) : getTypeFromTypeNode(node.type));
                 checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
@@ -14187,6 +14191,26 @@ namespace ts {
                     // yielded values have no common supertype, or it can give an implicit any error if it has no
                     // yielded values. The only way to trigger these errors is to try checking its return type.
                     getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+                }
+            }
+        }
+
+        function isSourceFileADefinitionFile(node: Node): boolean {
+            return getSourceFileOfNode(node).fileName.indexOf(".d.ts") > 0;
+        }
+
+        function checkUnusedIdentifiers(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration): void {
+            if (!isSourceFileADefinitionFile(node)) {
+                for (const key in node.locals) {
+                    if (!node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
+                        if (compilerOptions.noUnusedLocals && node.locals[key].valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
+                            error(node, Diagnostics.Variable_0_has_never_been_used, key);
+                        }
+
+                        if (compilerOptions.noUnusedParameters && node.locals[key].valueDeclaration.kind === SyntaxKind.Parameter) {
+                            error(node, Diagnostics.Parameter_0_has_never_been_used, key);
+                        }
+                    }
                 }
             }
         }

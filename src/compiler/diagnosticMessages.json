@@ -2772,6 +2772,14 @@
         "category": "Error",
         "code": 6131
     },
+    "Variable '{0}' has never been used.": {
+        "category": "Message",
+        "code": 6132
+    },
+    "Parameter '{0}' has never been used.": {
+        "category": "Message",
+        "code": 6133
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

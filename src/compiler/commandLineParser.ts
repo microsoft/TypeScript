@@ -133,6 +133,16 @@ namespace ts {
             description: Diagnostics.Raise_error_on_this_expressions_with_an_implied_any_type,
         },
         {
+            name: "noUnusedLocals",
+            type: "boolean",
+            description: Diagnostics.Variable_0_has_never_been_used,
+        },
+        {
+            name: "noUnusedParameters",
+            type: "boolean",
+            description: Diagnostics.Parameter_0_has_never_been_used
+        },
+        {
             name: "noLib",
             type: "boolean",
         },
