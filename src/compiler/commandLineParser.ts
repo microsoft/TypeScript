@@ -713,6 +713,16 @@ namespace ts {
                     errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "exclude", "Array"));
                 }
             }
+            else {
+                // By default, exclude common package folders
+                excludeSpecs = ["node_modules", "bower_components", "jspm_packages"];
+            }
+
+            // Always exclude the output directory unless explicitly included
+            const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
+            if (outDir) {
+                excludeSpecs.push(outDir);
+            }
 
             if (fileNames === undefined && includeSpecs === undefined) {
                 includeSpecs = ["**/*"];
@@ -885,7 +895,6 @@ namespace ts {
      */
     function matchFileNames(fileNames: string[], include: string[], exclude: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[]): ExpandResult {
         basePath = normalizePath(basePath);
-        basePath = removeTrailingDirectorySeparator(basePath);
 
         // The exclude spec list is converted into a regular expression, which allows us to quickly
         // test whether a file or directory should be excluded before recursively traversing the
@@ -938,6 +947,10 @@ namespace ts {
                 // <file>.d.ts (or <file>.js if "allowJs" is enabled) in the same
                 // directory when they are compilation outputs.
                 if (hasFileWithHigherPriorityExtension(file, literalFileMap, wildcardFileMap, supportedExtensions, keyMapper)) {
+                    continue;
+                }
+
+                if (IgnoreFileNamePattern.test(file)) {
                     continue;
                 }
 

@@ -1067,7 +1067,7 @@ namespace ts {
 
         return basePaths;
     }
-    
+
     export function ensureScriptKind(fileName: string, scriptKind?: ScriptKind): ScriptKind {
         // Using scriptKind as a condition handles both:
         // - 'scriptKind' is unspecified and thus it is `undefined`

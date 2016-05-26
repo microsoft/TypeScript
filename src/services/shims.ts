@@ -81,7 +81,7 @@ namespace ts {
          */
         readDirectory(rootDir: string, extension: string, exclude?: string, include?: string, depth?: number): string;
         useCaseSensitiveFileNames?(): boolean;
-	trace(s: string): void;
+        trace(s: string): void;
     }
 
     ///
@@ -432,10 +432,10 @@ namespace ts {
 
         public directoryExists: (directoryName: string) => boolean;
         public realpath: (path: string) => string;
-	    public useCaseSensitiveFileNames: boolean;
+        public useCaseSensitiveFileNames: boolean;
 
         constructor(private shimHost: CoreServicesShimHost) {
-	    this.useCaseSensitiveFileNames = this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
+        this.useCaseSensitiveFileNames = this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
             if ("directoryExists" in this.shimHost) {
                 this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
             }
@@ -453,7 +453,7 @@ namespace ts {
                     JSON.stringify(extensions),
                     JSON.stringify(exclude),
                     JSON.stringify(include),
-		            depth
+                    depth
                 ));
             }
             catch (e) {

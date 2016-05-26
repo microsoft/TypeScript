@@ -367,7 +367,7 @@ namespace ts {
                     const files: string[] = [];
                     const directories: string[] = [];
                     for (const entry of entries) {
-		        // This is necessary because on some file system node fails to exclude
+                        // This is necessary because on some file system node fails to exclude
                         // "." and "..". See https://github.com/nodejs/node/issues/4002
                         if (entry === "." || entry === "..") {
                             continue;
@@ -390,10 +390,6 @@ namespace ts {
 
             function readDirectory(path: string, extensions?: string[], excludes?: string[], includes?: string[]): string[] {
                 return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), getAccessibleFileSystemEntries);
-            }
-	    
-	    function getCanonicalPath(path: string): string {
-                return useCaseSensitiveFileNames ? path : path.toLowerCase();
             }
 
             const enum FileSystemEntryKind {
