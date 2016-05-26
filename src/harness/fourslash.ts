@@ -18,7 +18,6 @@
 /// <reference path="harnessLanguageService.ts" />
 /// <reference path="harness.ts" />
 /// <reference path="fourslashRunner.ts" />
-/* tslint:disable:no-null-keyword */
 
 namespace FourSlash {
     ts.disableIncrementalParsing = false;
@@ -198,7 +197,7 @@ namespace FourSlash {
         public lastKnownMarker: string = "";
 
         // The file that's currently 'opened'
-        public activeFile: FourSlashFile = null;
+        public activeFile: FourSlashFile;
 
         // Whether or not we should format on keystrokes
         public enableFormatting = true;
@@ -922,7 +921,7 @@ namespace FourSlash {
 
         public verifyCurrentParameterIsletiable(isVariable: boolean) {
             const signature = this.getActiveSignatureHelpItem();
-            assert.isNotNull(signature);
+            assert.isOk(signature);
             assert.equal(isVariable, signature.isVariadic);
         }
 
@@ -1911,7 +1910,7 @@ namespace FourSlash {
         public verifyNavigationItemsCount(expected: number, searchValue: string, matchKind?: string) {
             const items = this.languageService.getNavigateToItems(searchValue);
             let actual = 0;
-            let item: ts.NavigateToItem = null;
+            let item: ts.NavigateToItem;
 
             // Count only the match that match the same MatchKind
             for (let i = 0; i < items.length; i++) {
@@ -2183,7 +2182,7 @@ namespace FourSlash {
         }
 
         private findFile(indexOrName: any) {
-            let result: FourSlashFile = null;
+            let result: FourSlashFile;
             if (typeof indexOrName === "number") {
                 const index = <number>indexOrName;
                 if (index >= this.testData.files.length) {
@@ -2352,9 +2351,15 @@ ${code}
         const ranges: Range[] = [];
 
         // Stuff related to the subfile we're parsing
-        let currentFileContent: string = null;
+        let currentFileContent: string = undefined;
         let currentFileName = fileName;
         let currentFileOptions: { [s: string]: string } = {};
+
+        function resetLocalData() {
+            currentFileContent = undefined;
+            currentFileOptions = {};
+            currentFileName = fileName;
+        }
 
         for (let i = 0; i < lines.length; i++) {
             let line = lines[i];
@@ -2368,7 +2373,7 @@ ${code}
                 // Subfile content line
 
                 // Append to the current subfile content, inserting a newline needed
-                if (currentFileContent === null) {
+                if (currentFileContent === undefined) {
                     currentFileContent = "";
                 }
                 else {
@@ -2400,10 +2405,7 @@ ${code}
                                 // Store result file
                                 files.push(file);
 
-                                // Reset local data
-                                currentFileContent = null;
-                                currentFileOptions = {};
-                                currentFileName = fileName;
+                                resetLocalData();
                             }
 
                             currentFileName = basePath + "/" + match[2];
@@ -2430,10 +2432,7 @@ ${code}
                     // Store result file
                     files.push(file);
 
-                    // Reset local data
-                    currentFileContent = null;
-                    currentFileOptions = {};
-                    currentFileName = fileName;
+                    resetLocalData();
                 }
             }
         }
@@ -2498,7 +2497,7 @@ ${code}
 
         if (markerValue === undefined) {
             reportError(fileName, location.sourceLine, location.sourceColumn, "Object markers can not be empty");
-            return null;
+            return undefined;
         }
 
         const marker: Marker = {
@@ -2527,7 +2526,7 @@ ${code}
         if (markerMap[name] !== undefined) {
             const message = "Marker '" + name + "' is duplicated in the source file contents.";
             reportError(marker.fileName, location.sourceLine, location.sourceColumn, message);
-            return null;
+            return undefined;
         }
         else {
             markerMap[name] = marker;
@@ -2546,7 +2545,7 @@ ${code}
         let output = "";
 
         /// The current marker (or maybe multi-line comment?) we're parsing, possibly
-        let openMarker: LocationInformation = null;
+        let openMarker: LocationInformation = undefined;
 
         /// A stack of the open range markers that are still unclosed
         const openRanges: RangeLocationInformation[] = [];
@@ -2654,7 +2653,7 @@ ${code}
                             difference += i + 1 - openMarker.sourcePosition;
 
                             // Reset the state
-                            openMarker = null;
+                            openMarker = undefined;
                             state = State.none;
                         }
                         break;
@@ -2676,7 +2675,7 @@ ${code}
                             difference += i + 1 - openMarker.sourcePosition;
 
                             // Reset the state
-                            openMarker = null;
+                            openMarker = undefined;
                             state = State.none;
                         }
                         else if (validMarkerChars.indexOf(currentChar) < 0) {
@@ -2688,7 +2687,7 @@ ${code}
                                 // Bail out the text we've gathered so far back into the output
                                 flush(i);
                                 lastNormalCharPosition = i;
-                                openMarker = null;
+                                openMarker = undefined;
 
                                 state = State.none;
                             }
@@ -2719,7 +2718,7 @@ ${code}
             reportError(fileName, openRange.sourceLine, openRange.sourceColumn, "Unterminated range.");
         }
 
-        if (openMarker !== null) {
+        if (openMarker) {
             reportError(fileName, openMarker.sourceLine, openMarker.sourceColumn, "Unterminated marker.");
         }
 

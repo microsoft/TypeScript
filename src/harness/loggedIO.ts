@@ -1,7 +1,6 @@
 /// <reference path="..\..\src\compiler\sys.ts" />
 /// <reference path="..\..\src\harness\harness.ts" />
 /// <reference path="..\..\src\harness\runnerbase.ts" />
-/* tslint:disable:no-null-keyword */
 
 interface FileInformation {
     contents: string;
@@ -94,7 +93,7 @@ namespace Playback {
             return lookup[s] = func(s);
         });
         run.reset = () => {
-            lookup = null;
+            lookup = undefined;
         };
 
         return run;
@@ -170,7 +169,8 @@ namespace Playback {
             path => callAndRecord(underlying.fileExists(path), recordLog.fileExists, { path }),
             memoize(path => {
                 // If we read from the file, it must exist
-                if (findResultByPath(wrapper, replayLog.filesRead, path, null) !== null) {
+                const noResult = {};
+                if (findResultByPath(wrapper, replayLog.filesRead, path, noResult) !== noResult) {
                     return true;
                 }
                 else {
