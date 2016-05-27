@@ -560,7 +560,6 @@ namespace ts {
         let statistics: Statistic[];
         if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
             performance.enable();
-            performance.reset();
             statistics = [];
         }
 
@@ -610,7 +609,6 @@ namespace ts {
             reportStatistics();
 
             performance.disable();
-            performance.reset();
         }
 
         return { program, exitStatus };
