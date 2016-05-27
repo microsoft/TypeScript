@@ -12,6 +12,7 @@ namespace ts {
 
     export function createCommentWriter(host: EmitHost, writer: EmitTextWriter, sourceMap: SourceMapWriter): CommentWriter {
         const compilerOptions = host.getCompilerOptions();
+        const extendedDiagnostics = compilerOptions.extendedDiagnostics;
         const newLine = host.getNewLine();
         const { emitPos } = sourceMap;
 
@@ -47,6 +48,11 @@ namespace ts {
                     emitCallback(node);
                 }
                 else {
+                    let commentStart: number;
+                    if (extendedDiagnostics) {
+                        commentStart = performance.mark();
+                    }
+
                     const emitFlags = node.emitFlags;
                     const isEmittedNode = node.kind !== SyntaxKind.NotEmittedStatement;
                     const skipLeadingComments = pos < 0 || (emitFlags & NodeEmitFlags.NoLeadingComments) !== 0;
@@ -77,7 +83,14 @@ namespace ts {
                         }
                     }
 
-                    emitCallback(node);
+                    if (extendedDiagnostics) {
+                        performance.measure("commentTime", commentStart);
+                        emitCallback(node);
+                        commentStart = performance.mark();
+                    }
+                    else {
+                        emitCallback(node);
+                    }
 
                     // Restore previous container state.
                     containerPos = savedContainerPos;
@@ -89,11 +102,20 @@ namespace ts {
                     if (!skipTrailingComments && isEmittedNode) {
                         emitTrailingComments(end);
                     }
+
+                    if (extendedDiagnostics) {
+                        performance.measure("commentTime", commentStart);
+                    }
                 }
             }
         }
 
         function emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void) {
+            let commentStart: number;
+            if (extendedDiagnostics) {
+                commentStart = performance.mark();
+            }
+
             const { pos, end } = detachedRange;
             const emitFlags = node.emitFlags;
             const skipLeadingComments = pos < 0 || (emitFlags & NodeEmitFlags.NoLeadingComments) !== 0;
@@ -103,10 +125,21 @@ namespace ts {
                 emitDetachedCommentsAndUpdateCommentsInfo(detachedRange, compilerOptions.removeComments);
             }
 
-            emitCallback(node);
+            if (extendedDiagnostics) {
+                performance.measure("commentTime", commentStart);
+                emitCallback(node);
+                commentStart = performance.mark();
+            }
+            else {
+                emitCallback(node);
+            }
 
             if (!skipTrailingComments) {
                 emitLeadingComments(detachedRange.end, /*isEmittedNode*/ true);
+            }
+
+            if (extendedDiagnostics) {
+                performance.measure("commentTime", commentStart);
             }
         }
 
@@ -147,10 +180,19 @@ namespace ts {
                 return;
             }
 
+            let commentStart: number;
+            if (extendedDiagnostics) {
+                commentStart = performance.mark();
+            }
+
             const trailingComments = getTrailingCommentsToEmit(pos);
 
             // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
             emitComments(currentText, currentLineMap, writer, trailingComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeComment);
+
+            if (extendedDiagnostics) {
+                performance.measure("commentTime", commentStart);
+            }
         }
 
         function getLeadingCommentsToEmit(pos: number) {

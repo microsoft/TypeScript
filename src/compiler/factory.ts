@@ -100,16 +100,6 @@ namespace ts {
         return clone;
     }
 
-    /**
-     * Gets a clone of a node with a unique node ID.
-     */
-    export function getUniqueClone<T extends Node>(node: T): T {
-        const clone = getMutableClone(node);
-        clone.id = 0;
-        getNodeId(clone);
-        return clone;
-    }
-
     // Literals
 
     export function createLiteral(textSource: StringLiteral | Identifier, location?: TextRange): StringLiteral;
@@ -1030,8 +1020,9 @@ namespace ts {
     }
 
     function createReactNamespace(reactNamespace: string, parent: JsxOpeningLikeElement) {
-        // Create an identifier and give it a parent. This allows us to resolve the react
-        // namespace during emit.
+        // To ensure the emit resolver can properly resolve the namespace, we need to
+        // treat this identifier as if it were a source tree node by clearing the `Synthesized`
+        // flag and setting a parent node.
         const react = createIdentifier(reactNamespace || "React");
         react.flags &= ~NodeFlags.Synthesized;
         react.parent = parent;

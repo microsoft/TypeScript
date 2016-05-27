@@ -1139,121 +1139,47 @@ namespace ts {
     /** Performance measurements for the compiler. */
     /*@internal*/
     export namespace performance {
-        interface MarkData {
-            markName: string;
-            timestamp: number;
-        }
-
-        interface MeasureData {
-            measureName: string;
-            startMarkName: string;
-            endMarkName: string;
-            timestamp: number;
-            marksOffset: number;
-        }
-
-        export interface Measure {
-            name: string;
-            startTime: number;
-            duration: number;
-        }
-
-        const markTimestamps: Map<number> = {};
-        const markCounts: Map<number> = {};
-        const measureDurations: Map<number> = {};
-
-        let start = now();
+        let counters: Map<number> = {};
+        let measures: Map<number> = {};
         let enabled = false;
 
-        /** Gets the current timer for performance measurements. */
-        export function now() {
-            return Date.now();
-        }
-
         /**
-         * Adds a performance mark with the specified name.
+         * Increments a counter with the specified name.
          *
-         * @param markName The name of the performance mark.
+         * @param counterName The name of the counter.
          */
-        export function mark(markName: string) {
+        export function increment(counterName: string) {
             if (enabled) {
-                markTimestamps[markName] = now();
-                markCounts[markName] = getCount(markName) + 1;
+                counters[counterName] = (getProperty(counters, counterName) || 0) + 1;
             }
         }
 
         /**
-         * Gets the names of all marks.
-         */
-        export function getMarkNames() {
-            return getKeys(markCounts);
-        }
-
-        /**
-         * Gets the number of marks with the specified name.
+         * Gets the value of the counter with the specified name.
          *
-         * @param markName The name of the marks that should be counted.
+         * @param counterName The name of the counter.
          */
-        export function getCount(markName: string) {
-            return enabled && getProperty(markCounts, markName) || 0;
+        export function getCount(counterName: string) {
+            return enabled && getProperty(counters, counterName) || 0;
         }
 
         /**
-         * Gets the most recent timestamp for the marks with the specified name.
-         *
-         * @param markName The name of the mark.
+         * Marks the start of a performance measurement.
          */
-        export function getTimestamp(markName: string) {
-            return enabled && getProperty(markTimestamps, markName) || 0;
-        }
-
-        /**
-         * Clears performance marks.
-         *
-         * @param markName The name of the mark whose time values should be cleared. If not
-         *      specified, all marks will be cleared.
-         */
-        export function clearMarks(markName?: string) {
-            if (markName === undefined) {
-                forEachKey(markTimestamps, clearMark);
-            }
-            else {
-                clearMark(markName);
-            }
-        }
-
-        function clearMark(markName: string) {
-            if (delete markTimestamps[markName]) {
-                delete markCounts[markName];
-            }
+        export function mark() {
+            return enabled ? Date.now() : 0;
         }
 
         /**
          * Adds a performance measurement with the specified name.
          *
          * @param measureName The name of the performance measurement.
-         * @param startMarkName The name of the starting mark.
-         *      If provided, the most recent time value of the start mark is used.
-         *      If not specified, the value is the time that the performance service was
-         *      initialized or the last time it was reset.
-         * @param endMarkName The name of the ending mark.
-         *      If provided, the most recent time value of the end mark is used.
-         *      If not specified, the current time is used.
+         * @param marker The timestamp of the starting mark.
          */
-        export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
+        export function measure(measureName: string, marker: number) {
             if (enabled) {
-                const startTime = startMarkName ? getTimestamp(startMarkName) : start;
-                const endTime = endMarkName ? getTimestamp(endMarkName) : now();
-                const duration = endTime - startTime;
-                measureDurations[measureName] = getDuration(measureName) + duration;
+                measures[measureName] = (getProperty(measures, measureName) || 0) + (mark() - marker);
             }
-        }
-
-        /**
-         * Gets the names of all recorded measures.
-         */
-        export function getMeasureNames() {
-            return getKeys(measureDurations);
         }
 
         /**
@@ -1262,35 +1188,15 @@ namespace ts {
          * @param measureName The name of the measure whose durations should be accumulated.
          */
         export function getDuration(measureName: string) {
-            return enabled && getProperty(measureDurations, measureName) || 0;
-        }
-
-        /**
-         * Clears performance measures.
-         *
-         * @param measureName The name of the measure whose durations should be cleared. If not
-         *      specified, all measures will be cleared.
-         */
-        export function clearMeasures(measureName?: string) {
-            if (measureName === undefined) {
-                forEachKey(measureDurations, clearMeasure);
-            }
-            else {
-                clearMeasure(measureName);
-            }
-        }
-
-        function clearMeasure(measureName: string) {
-            delete measureDurations[measureName];
+            return enabled && getProperty(measures, measureName) || 0;
         }
 
         /**
          * Resets all marks and measurements in the performance service.
          */
         export function reset() {
-            clearMarks();
-            clearMeasures();
-            start = now();
+            counters = {};
+            measures = {};
         }
 
         /** Enables performance measurements for the compiler. */

@@ -274,9 +274,9 @@ const _super = (function (geti, seti) {
             }
 
             function printSourceFileWithExtendedDiagnostics(node: SourceFile) {
-                performance.mark("printStart");
+                const printStart = performance.mark();
                 printSourceFile(node);
-                performance.measure("printTime", "printStart");
+                performance.measure("printTime", printStart);
                 return node;
             }
 
