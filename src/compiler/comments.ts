@@ -272,42 +272,42 @@ namespace ts {
                 reset,
                 setSourceFile,
                 getLeadingComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean, getTextRangeCallback?: (contextNode: Node) => TextRange): CommentRange[] {
-                    performance.mark("commentStart");
+                    const commentStart = performance.mark();
                     const comments = getLeadingComments(range, contextNode, ignoreNodeCallback, getTextRangeCallback);
-                    performance.measure("commentTime", "commentStart");
+                    performance.measure("commentTime", commentStart);
                     return comments;
                 },
                 getTrailingComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean, getTextRangeCallback?: (contextNode: Node) => TextRange): CommentRange[] {
-                    performance.mark("commentStart");
+                    const commentStart = performance.mark();
                     const comments = getTrailingComments(range, contextNode, ignoreNodeCallback, getTextRangeCallback);
-                    performance.measure("commentTime", "commentStart");
+                    performance.measure("commentTime", commentStart);
                     return comments;
                 },
                 getTrailingCommentsOfPosition(pos: number): CommentRange[] {
-                    performance.mark("commentStart");
+                    const commentStart = performance.mark();
                     const comments = getTrailingCommentsOfPosition(pos);
-                    performance.measure("commentTime", "commentStart");
+                    performance.measure("commentTime", commentStart);
                     return comments;
                 },
                 emitLeadingComments(range: TextRange, comments: CommentRange[], contextNode?: Node, getTextRangeCallback?: (contextNode: Node) => TextRange): void {
-                    performance.mark("commentStart");
+                    const commentStart = performance.mark();
                     emitLeadingComments(range, comments, contextNode, getTextRangeCallback);
-                    performance.measure("commentTime", "commentStart");
+                    performance.measure("commentTime", commentStart);
                 },
                 emitTrailingComments(range: TextRange, comments: CommentRange[]): void {
-                    performance.mark("commentStart");
+                    const commentStart = performance.mark();
                     emitLeadingComments(range, comments);
-                    performance.measure("commentTime", "commentStart");
+                    performance.measure("commentTime", commentStart);
                 },
                 emitLeadingDetachedComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean): void {
-                    performance.mark("commentStart");
+                    const commentStart = performance.mark();
                     emitLeadingDetachedComments(range, contextNode, ignoreNodeCallback);
-                    performance.measure("commentTime", "commentStart");
+                    performance.measure("commentTime", commentStart);
                 },
                 emitTrailingDetachedComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean): void {
-                    performance.mark("commentStart");
+                    const commentStart = performance.mark();
                     emitTrailingDetachedComments(range, contextNode, ignoreNodeCallback);
-                    performance.measure("commentTime", "commentStart");
+                    performance.measure("commentTime", commentStart);
                 }
             };
         }

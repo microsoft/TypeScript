@@ -571,6 +571,12 @@ namespace ts {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
 
+            if (compilerOptions.extendedDiagnostics) {
+                reportTimeStatistic("Print time", performance.getDuration("printTime"));
+                reportTimeStatistic("Comment time", performance.getDuration("commentTime"));
+                reportTimeStatistic("SourceMap time", performance.getDuration("sourceMapTime"));
+            }
+
             // Individual component times.
             // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
             // I/O read time and processing time for triple-slash references and module imports, and the reported
@@ -586,27 +592,6 @@ namespace ts {
             reportTimeStatistic("Check time", checkTime);
             reportTimeStatistic("Emit time", emitTime);
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
-
-            if (compilerOptions.extendedDiagnostics) {
-                sys.write("Extended Diagnostics:" + sys.newLine);
-                sys.write("Marks:" + sys.newLine);
-                for (const markName of performance.getMarkNames()) {
-                    if (/^(ioReadStart|ioWriteStart|programStart|bindStart|checkStart|emitStart)$/.test(markName)) {
-                        continue;
-                    }
-
-                    reportCountStatistic("  " + markName, performance.getCount(markName));
-                }
-
-                sys.write("Measures:" + sys.newLine);
-                for (const measureName of performance.getMeasureNames()) {
-                    if (/^(ioReadTime|ioWriteTime|programTime|bindTime|checkTime|emitTime)$/.test(measureName)) {
-                        continue;
-                    }
-
-                    reportTimeStatistic("  " + measureName, performance.getDuration(measureName));
-                }
-            }
 
             performance.disable();
             performance.reset();

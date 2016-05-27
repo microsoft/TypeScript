@@ -776,9 +776,9 @@ namespace ts {
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             let text: string;
             try {
-                performance.mark("ioReadStart");
+                const ioReadStart = performance.mark();
                 text = sys.readFile(fileName, options.charset);
-                performance.measure("ioReadTime", "ioReadStart");
+                performance.measure("ioReadTime", ioReadStart);
             }
             catch (e) {
                 if (onError) {
@@ -845,7 +845,7 @@ namespace ts {
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
-                performance.mark("ioWriteStart");
+                const ioWriteStart = performance.mark();
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
                 if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
@@ -855,7 +855,7 @@ namespace ts {
                     sys.writeFile(fileName, data, writeByteOrderMark);
                 }
 
-                performance.measure("ioWriteTime", "ioWriteStart");
+                performance.measure("ioWriteTime", ioWriteStart);
             }
             catch (e) {
                 if (onError) {
@@ -957,7 +957,7 @@ namespace ts {
         let resolvedTypeReferenceDirectives: Map<ResolvedTypeReferenceDirective> = {};
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
-        performance.mark("programStart");
+        const programStart = performance.mark();
 
         host = host || createCompilerHost(options);
 
@@ -1050,7 +1050,7 @@ namespace ts {
 
         verifyCompilerOptions();
 
-        performance.measure("programTime", "programStart");
+        performance.measure("programTime", programStart);
 
         return program;
 
@@ -1283,7 +1283,7 @@ namespace ts {
             // checked is to not pass the file to getEmitResolver.
             const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile);
 
-            performance.mark("emitStart");
+            const emitStart = performance.mark();
 
             // TODO(rbuckton): remove USE_TRANSFORMS condition when we switch to transforms permanently.
             let useLegacyEmitter = options.useLegacyEmitter;
@@ -1297,7 +1297,7 @@ namespace ts {
                 getEmitHost(writeFileCallback),
                 sourceFile);
 
-            performance.measure("emitTime", "emitStart");
+            performance.measure("emitTime", emitStart);
 
             return emitResult;
         }

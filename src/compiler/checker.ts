@@ -16064,11 +16064,11 @@ namespace ts {
         }
 
         function checkSourceFile(node: SourceFile) {
-            performance.mark("checkStart");
+            const checkStart = performance.mark();
 
             checkSourceFileWorker(node);
 
-            performance.measure("checkTime", "checkStart");
+            performance.measure("checkTime", checkStart);
         }
 
         // Fully type check a source file and collect the relevant diagnostics.
