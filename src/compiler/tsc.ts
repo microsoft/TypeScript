@@ -238,7 +238,7 @@ namespace ts {
     }
 
     function reportStatisticalValue(name: string, value: string) {
-        sys.write(padRight(name + ":", 12) + padLeft(value.toString(), 10) + sys.newLine);
+        sys.write(padRight(name + ":", 20) + padLeft(value.toString(), 10) + sys.newLine);
     }
 
     function reportCountStatistic(name: string, count: number) {
@@ -544,12 +544,9 @@ namespace ts {
     }
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
-        ioReadTime = 0;
-        ioWriteTime = 0;
-        programTime = 0;
-        bindTime = 0;
-        checkTime = 0;
-        emitTime = 0;
+        if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
+            performance.enable();
+        }
 
         const program = createProgram(fileNames, compilerOptions, compilerHost);
         const exitStatus = compileProgram();
@@ -560,7 +557,7 @@ namespace ts {
             });
         }
 
-        if (compilerOptions.diagnostics) {
+        if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
@@ -573,17 +570,29 @@ namespace ts {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
 
+            if (compilerOptions.extendedDiagnostics) {
+                reportTimeStatistic("Print time", performance.getDuration("printTime"));
+                reportTimeStatistic("Comment time", performance.getDuration("commentTime"));
+                reportTimeStatistic("SourceMap time", performance.getDuration("sourceMapTime"));
+            }
+
             // Individual component times.
             // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
             // I/O read time and processing time for triple-slash references and module imports, and the reported
             // emit time includes I/O write time. We preserve this behavior so we can accurately compare times.
-            reportTimeStatistic("I/O read", ioReadTime);
-            reportTimeStatistic("I/O write", ioWriteTime);
+            reportTimeStatistic("I/O read", performance.getDuration("ioReadTime"));
+            reportTimeStatistic("I/O write", performance.getDuration("ioWriteTime"));
+            const programTime = performance.getDuration("programTime");
+            const bindTime = performance.getDuration("bindTime");
+            const checkTime = performance.getDuration("checkTime");
+            const emitTime = performance.getDuration("emitTime");
             reportTimeStatistic("Parse time", programTime);
             reportTimeStatistic("Bind time", bindTime);
             reportTimeStatistic("Check time", checkTime);
             reportTimeStatistic("Emit time", emitTime);
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+
+            performance.disable();
         }
 
         return { program, exitStatus };

@@ -7,7 +7,6 @@ namespace ts {
         setSourceFile(sourceFile: SourceFile): void;
         getLeadingComments(range: TextRange): CommentRange[];
         getLeadingComments(range: TextRange, contextNode: Node, ignoreNodeCallback: (contextNode: Node) => boolean, getTextRangeCallback: (contextNode: Node) => TextRange): CommentRange[];
-        getLeadingCommentsOfPosition(pos: number): CommentRange[];
         getTrailingComments(range: TextRange): CommentRange[];
         getTrailingComments(range: TextRange, contextNode: Node, ignoreNodeCallback: (contextNode: Node) => boolean, getTextRangeCallback: (contextNode: Node) => TextRange): CommentRange[];
         getTrailingCommentsOfPosition(pos: number): CommentRange[];
@@ -32,20 +31,23 @@ namespace ts {
 
         // This maps start->end for a comment range. See `hasConsumedCommentRange` and
         // `consumeCommentRange` for usage.
-        let consumedCommentRanges: number[];
-        let leadingCommentRangePositions: boolean[];
-        let trailingCommentRangePositions: boolean[];
+        let consumedCommentRanges: Map<number>;
+        let leadingCommentRangePositions: Map<boolean>;
+        let trailingCommentRangePositions: Map<boolean>;
 
-        return compilerOptions.removeComments
+        const commentWriter = compilerOptions.removeComments
             ? createCommentRemovingWriter()
             : createCommentPreservingWriter();
+
+        return compilerOptions.extendedDiagnostics
+            ? createCommentWriterWithExtendedDiagnostics(commentWriter)
+            : commentWriter;
 
         function createCommentRemovingWriter(): CommentWriter {
             return {
                 reset,
                 setSourceFile,
                 getLeadingComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean, getTextRangeCallback?: (contextNode: Node) => TextRange): CommentRange[] { return undefined; },
-                getLeadingCommentsOfPosition(pos: number): CommentRange[] { return undefined; },
                 getTrailingComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean, getTextRangeCallback?: (contextNode: Node) => TextRange): CommentRange[] { return undefined; },
                 getTrailingCommentsOfPosition(pos: number): CommentRange[] { return undefined; },
                 emitLeadingComments(range: TextRange, comments: CommentRange[], contextNode?: Node, getTextRangeCallback?: (contextNode: Node) => TextRange): void { },
@@ -69,7 +71,6 @@ namespace ts {
                 reset,
                 setSourceFile,
                 getLeadingComments,
-                getLeadingCommentsOfPosition,
                 getTrailingComments,
                 getTrailingCommentsOfPosition,
                 emitLeadingComments,
@@ -100,10 +101,9 @@ namespace ts {
                             return filter(getLeadingCommentsOfPosition(0), isTripleSlashComment);
                         }
 
-                        return undefined;
+                        return;
                     }
                 }
-
 
                 return getLeadingCommentsOfPosition(range.pos);
             }
@@ -127,15 +127,21 @@ namespace ts {
             function getTrailingComments(range: TextRange): CommentRange[];
             function getTrailingComments(range: TextRange, contextNode: Node, ignoreNodeCallback: (contextNode: Node) => boolean, getTextRangeCallback: (contextNode: Node) => TextRange): CommentRange[];
             function getTrailingComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean, getTextRangeCallback?: (contextNode: Node) => TextRange) {
+                let ignored = false;
                 if (contextNode) {
                     if (ignoreNodeCallback(contextNode)) {
-                        return undefined;
+                        ignored = true;
                     }
-
-                    range = getTextRangeCallback(contextNode) || range;
+                    else {
+                        range = getTextRangeCallback(contextNode) || range;
+                    }
                 }
 
-                return getTrailingCommentsOfPosition(range.end);
+                let comments: CommentRange[];
+                if (!ignored) {
+                    comments = getTrailingCommentsOfPosition(range.end);
+                }
+                return comments;
             }
 
             function getLeadingCommentsOfPosition(pos: number) {
@@ -249,6 +255,63 @@ namespace ts {
             }
         }
 
+        function createCommentWriterWithExtendedDiagnostics(writer: CommentWriter): CommentWriter {
+            const {
+                reset,
+                setSourceFile,
+                getLeadingComments,
+                getTrailingComments,
+                getTrailingCommentsOfPosition,
+                emitLeadingComments,
+                emitTrailingComments,
+                emitLeadingDetachedComments,
+                emitTrailingDetachedComments
+            } = writer;
+
+            return {
+                reset,
+                setSourceFile,
+                getLeadingComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean, getTextRangeCallback?: (contextNode: Node) => TextRange): CommentRange[] {
+                    const commentStart = performance.mark();
+                    const comments = getLeadingComments(range, contextNode, ignoreNodeCallback, getTextRangeCallback);
+                    performance.measure("commentTime", commentStart);
+                    return comments;
+                },
+                getTrailingComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean, getTextRangeCallback?: (contextNode: Node) => TextRange): CommentRange[] {
+                    const commentStart = performance.mark();
+                    const comments = getTrailingComments(range, contextNode, ignoreNodeCallback, getTextRangeCallback);
+                    performance.measure("commentTime", commentStart);
+                    return comments;
+                },
+                getTrailingCommentsOfPosition(pos: number): CommentRange[] {
+                    const commentStart = performance.mark();
+                    const comments = getTrailingCommentsOfPosition(pos);
+                    performance.measure("commentTime", commentStart);
+                    return comments;
+                },
+                emitLeadingComments(range: TextRange, comments: CommentRange[], contextNode?: Node, getTextRangeCallback?: (contextNode: Node) => TextRange): void {
+                    const commentStart = performance.mark();
+                    emitLeadingComments(range, comments, contextNode, getTextRangeCallback);
+                    performance.measure("commentTime", commentStart);
+                },
+                emitTrailingComments(range: TextRange, comments: CommentRange[]): void {
+                    const commentStart = performance.mark();
+                    emitLeadingComments(range, comments);
+                    performance.measure("commentTime", commentStart);
+                },
+                emitLeadingDetachedComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean): void {
+                    const commentStart = performance.mark();
+                    emitLeadingDetachedComments(range, contextNode, ignoreNodeCallback);
+                    performance.measure("commentTime", commentStart);
+                },
+                emitTrailingDetachedComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean): void {
+                    const commentStart = performance.mark();
+                    emitTrailingDetachedComments(range, contextNode, ignoreNodeCallback);
+                    performance.measure("commentTime", commentStart);
+                }
+            };
+        }
+
         function reset() {
             currentSourceFile = undefined;
             currentText = undefined;
@@ -264,9 +327,9 @@ namespace ts {
             currentText = sourceFile.text;
             currentLineMap = getLineStarts(sourceFile);
             detachedCommentsInfo = undefined;
-            consumedCommentRanges = [];
-            leadingCommentRangePositions = [];
-            trailingCommentRangePositions = [];
+            consumedCommentRanges = {};
+            leadingCommentRangePositions = {};
+            trailingCommentRangePositions = {};
         }
 
         function hasDetachedComments(pos: number) {

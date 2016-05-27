@@ -593,7 +593,7 @@ namespace ts {
     function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
         let result: CommentRange[];
         let collecting = trailing || pos === 0;
-        while (pos < text.length) {
+        while (pos >= 0 && pos < text.length) {
             const ch = text.charCodeAt(pos);
             switch (ch) {
                 case CharacterCodes.carriageReturn:

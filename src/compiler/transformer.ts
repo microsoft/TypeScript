@@ -23,6 +23,100 @@ namespace ts {
         EmitNotifications = 1 << 1,
     }
 
+    /* @internal */
+    export interface TransformationContext extends LexicalEnvironment {
+        getCompilerOptions(): CompilerOptions;
+        getEmitResolver(): EmitResolver;
+        getEmitHost(): EmitHost;
+
+        /**
+         * Gets flags used to customize later transformations or emit.
+         */
+        getNodeEmitFlags(node: Node): NodeEmitFlags;
+
+        /**
+         * Sets flags used to customize later transformations or emit.
+         */
+        setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags): T;
+
+        /**
+         * Gets the TextRange to use for source maps for the node.
+         */
+        getSourceMapRange(node: Node): TextRange;
+
+        /**
+         * Sets the TextRange to use for source maps for the node.
+         */
+        setSourceMapRange<T extends Node>(node: T, range: TextRange): T;
+
+        /**
+         * Gets the TextRange to use for source maps for a token of a node.
+         */
+        getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange;
+
+        /**
+         * Sets the TextRange to use for source maps for a token of a node.
+         */
+        setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange): T;
+
+        /**
+         * Gets the TextRange to use for comments for the node.
+         */
+        getCommentRange(node: Node): TextRange;
+
+        /**
+         * Sets the TextRange to use for comments for the node.
+         */
+        setCommentRange<T extends Node>(node: T, range: TextRange): T;
+
+        /**
+         * Hoists a function declaration to the containing scope.
+         */
+        hoistFunctionDeclaration(node: FunctionDeclaration): void;
+
+        /**
+         * Hoists a variable declaration to the containing scope.
+         */
+        hoistVariableDeclaration(node: Identifier): void;
+
+        /**
+         * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
+         */
+        enableSubstitution(kind: SyntaxKind): void;
+
+        /**
+         * Determines whether expression substitutions are enabled for the provided node.
+         */
+        isSubstitutionEnabled(node: Node): boolean;
+
+        /**
+         * Hook used by transformers to substitute expressions just before they
+         * are emitted by the pretty printer.
+         */
+        onSubstituteNode?: (node: Node, isExpression: boolean) => Node;
+
+        /**
+         * Enables before/after emit notifications in the pretty printer for the provided
+         * SyntaxKind.
+         */
+        enableEmitNotification(kind: SyntaxKind): void;
+
+        /**
+         * Determines whether before/after emit notifications should be raised in the pretty
+         * printer when it emits a node.
+         */
+        isEmitNotificationEnabled(node: Node): boolean;
+
+        /**
+         * Hook used to allow transformers to capture state before or after
+         * the printer emits a node.
+         */
+        onEmitNode?: (node: Node, emit: (node: Node) => void) => void;
+    }
+
+    /* @internal */
+    export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
+
     export function getTransformers(compilerOptions: CompilerOptions) {
         const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);
@@ -46,6 +140,14 @@ namespace ts {
     }
 
     /**
+     * Tracks a monotonically increasing transformation id used to associate a node with a specific
+     * transformation. This ensures transient properties related to transformations can be safely
+     * stored on source tree nodes that may be reused across multiple transformations (such as
+     * with compile-on-save).
+     */
+    let nextTransformId = 1;
+
+    /**
      * Transforms an array of SourceFiles by passing them through each transformer.
      *
      * @param resolver The emit resolver provided by the checker.
@@ -54,10 +156,22 @@ namespace ts {
      * @param transforms An array of Transformers.
      */
     export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]) {
-        const nodeEmitOptions: NodeEmitOptions[] = [];
+        const transformId = nextTransformId++;
+        const tokenSourceMapRanges: Map<TextRange> = { };
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
+        const sourceTreeNodesWithAnnotations: Node[] = [];
+
+        let lastNodeEmitFlagsNode: Node;
+        let lastNodeEmitFlags: NodeEmitFlags;
+        let lastSourceMapRangeNode: Node;
+        let lastSourceMapRange: TextRange;
+        let lastTokenSourceMapRangeNode: Node;
+        let lastTokenSourceMapRangeToken: SyntaxKind;
+        let lastTokenSourceMapRange: TextRange;
+        let lastCommentMapRangeNode: Node;
+        let lastCommentMapRange: TextRange;
         let lexicalEnvironmentStackOffset = 0;
         let hoistedVariableDeclarations: VariableDeclaration[];
         let hoistedFunctionDeclarations: FunctionDeclaration[];
@@ -107,7 +221,20 @@ namespace ts {
             }
 
             currentSourceFile = sourceFile;
-            return transformation(sourceFile);
+            sourceFile = transformation(sourceFile);
+
+            // Cleanup source tree nodes with annotations
+            for (const node of sourceTreeNodesWithAnnotations) {
+                if (node.transformId === transformId) {
+                    node.transformId = 0;
+                    node.emitFlags = 0;
+                    node.commentRange = undefined;
+                    node.sourceMapRange = undefined;
+                }
+            }
+
+            sourceTreeNodesWithAnnotations.length = 0;
+            return sourceFile;
         }
 
         /**
@@ -170,143 +297,233 @@ namespace ts {
             emit(node);
         }
 
-        function getEmitOptions(node: Node, create?: boolean) {
-            let options = isSourceTreeNode(node)
-                ? nodeEmitOptions[getNodeId(node)]
-                : node.emitOptions;
-            if (!options && create) {
-                options = { };
-                if (isSourceTreeNode(node)) {
-                    nodeEmitOptions[getNodeId(node)] = options;
-                }
-                else {
-                    node.emitOptions = options;
+        /**
+         * Associates a node with the current transformation, initializing
+         * various transient transformation properties.
+         *
+         * @param node The node.
+         */
+        function beforeSetAnnotation(node: Node) {
+            if (node.transformId !== transformId) {
+                node.transformId = transformId;
+                if ((node.flags & NodeFlags.Synthesized) === 0) {
+                    node.emitFlags = 0;
+                    node.sourceMapRange = undefined;
+                    node.commentRange = undefined;
+
+                    // To avoid holding onto transformation artifacts, we keep track of any
+                    // source tree node we are annotating. This allows us to clean them up after
+                    // all transformations have completed.
+                    sourceTreeNodesWithAnnotations.push(node);
                 }
             }
-            return options;
         }
 
         /**
          * Gets flags that control emit behavior of a node.
+         *
+         * If the node does not have its own NodeEmitFlags set, the node emit flags of its
+         * original pointer are used.
+         *
+         * @param node The node.
          */
         function getNodeEmitFlags(node: Node) {
-            while (node) {
-                const options = getEmitOptions(node, /*create*/ false);
-                if (options && options.flags !== undefined) {
-                    if (options.flags & NodeEmitFlags.Merge) {
-                        options.flags = (options.flags | getNodeEmitFlags(node.original)) & ~NodeEmitFlags.Merge;
-                    }
-
-                    return options.flags;
-                }
-
-                node = node.original;
+            // As a performance optimization, use the cached value of the most recent node.
+            // This helps for cases where this function is called repeatedly for the same node.
+            if (lastNodeEmitFlagsNode === node) {
+                return lastNodeEmitFlags;
             }
 
-            return undefined;
+            // Get the emit flags for a node or from one of its original nodes.
+            let flags: NodeEmitFlags;
+            let current = node;
+            while (current) {
+                if (current.transformId === transformId) {
+                    const nodeEmitFlags = current.emitFlags;
+                    if (nodeEmitFlags) {
+                        flags = nodeEmitFlags & ~NodeEmitFlags.HasNodeEmitFlags;
+                        break;
+                    }
+                }
+
+                current = current.original;
+            }
+
+            // Cache the most recently requested value.
+            lastNodeEmitFlagsNode = node;
+            lastNodeEmitFlags = flags;
+            return flags;
         }
 
         /**
          * Sets flags that control emit behavior of a node.
+         *
+         * @param node The node.
+         * @param emitFlags The NodeEmitFlags for the node.
          */
-        function setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags) {
-            const options = getEmitOptions(node, /*create*/ true);
-            if (flags & NodeEmitFlags.Merge) {
-                flags = options.flags | (flags & ~NodeEmitFlags.Merge);
+        function setNodeEmitFlags<T extends Node>(node: T, emitFlags: NodeEmitFlags) {
+            // Merge existing flags.
+            if (emitFlags & NodeEmitFlags.Merge) {
+                emitFlags = getNodeEmitFlags(node) | (emitFlags & ~NodeEmitFlags.Merge);
             }
 
-            options.flags = flags;
+            beforeSetAnnotation(node);
+
+            // Cache the most recently requested value.
+            lastNodeEmitFlagsNode = node;
+            lastNodeEmitFlags = emitFlags;
+            node.emitFlags = emitFlags | NodeEmitFlags.HasNodeEmitFlags;
             return node;
         }
 
         /**
          * Gets a custom text range to use when emitting source maps.
+         *
+         * If a node does not have its own custom source map text range, the custom source map
+         * text range of its original pointer is used.
+         *
+         * @param node The node.
          */
         function getSourceMapRange(node: Node) {
+            // As a performance optimization, use the cached value of the most recent node.
+            // This helps for cases where this function is called repeatedly for the same node.
+            if (lastSourceMapRangeNode === node) {
+                return lastSourceMapRange || node;
+            }
+
+            // Get the custom source map range for a node or from one of its original nodes.
+            let range: TextRange;
             let current = node;
             while (current) {
-                const options = getEmitOptions(current);
-                if (options && options.sourceMapRange !== undefined) {
-                    return options.sourceMapRange;
+                if (current.transformId === transformId) {
+                    range = current.sourceMapRange;
+                    if (range !== undefined) {
+                        break;
+                    }
                 }
 
                 current = current.original;
             }
 
-            return node;
+            // Cache the most recently requested value.
+            lastSourceMapRangeNode = node;
+            lastSourceMapRange = range;
+            return range || node;
         }
 
         /**
          * Sets a custom text range to use when emitting source maps.
+         *
+         * @param node The node.
+         * @param range The text range.
          */
         function setSourceMapRange<T extends Node>(node: T, range: TextRange) {
-            getEmitOptions(node, /*create*/ true).sourceMapRange = range;
+            beforeSetAnnotation(node);
+
+            // Cache the most recently requested value.
+            lastSourceMapRangeNode = node;
+            lastSourceMapRange = range;
+            node.sourceMapRange = range;
             return node;
         }
 
-        function getTokenSourceMapRanges(node: Node) {
+        /**
+         * Gets the TextRange to use for source maps for a token of a node.
+         *
+         * If a node does not have its own custom source map text range for a token, the custom
+         * source map text range for the token of its original pointer is used.
+         *
+         * @param node The node.
+         * @param token The token.
+         */
+        function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
+            // As a performance optimization, use the cached value of the most recent node.
+            // This helps for cases where this function is called repeatedly for the same node.
+            if (lastTokenSourceMapRangeNode === node && lastTokenSourceMapRangeToken === token) {
+                return lastTokenSourceMapRange;
+            }
+
+            // Get the custom token source map range for a node or from one of its original nodes.
+            // Custom token ranges are not stored on the node to avoid the GC burden.
+            let range: TextRange;
             let current = node;
             while (current) {
-                const options = getEmitOptions(current);
-                if (options && options.tokenSourceMapRange) {
-                    return options.tokenSourceMapRange;
+                range = current.id ? tokenSourceMapRanges[current.id + "-" + token] : undefined;
+                if (range !== undefined) {
+                    break;
                 }
 
                 current = current.original;
             }
 
-            return undefined;
-        }
-
-        /**
-         * Gets the TextRange to use for source maps for a token of a node.
-         */
-        function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
-            const ranges = getTokenSourceMapRanges(node);
-            if (ranges) {
-                return ranges[token];
-            }
-
-            return undefined;
+            // Cache the most recently requested value.
+            lastTokenSourceMapRangeNode = node;
+            lastTokenSourceMapRangeToken = token;
+            lastTokenSourceMapRange = range;
+            return range;
         }
 
         /**
          * Sets the TextRange to use for source maps for a token of a node.
+         *
+         * @param node The node.
+         * @param token The token.
+         * @param range The text range.
          */
         function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
-            const options = getEmitOptions(node, /*create*/ true);
-            if (!options.tokenSourceMapRange) {
-                const existingRanges = getTokenSourceMapRanges(node);
-                const ranges = existingRanges ? clone(existingRanges) : { };
-                options.tokenSourceMapRange = ranges;
-            }
-
-            options.tokenSourceMapRange[token] = range;
+            // Cache the most recently requested value.
+            lastTokenSourceMapRangeNode = node;
+            lastTokenSourceMapRangeToken = token;
+            lastTokenSourceMapRange = range;
+            tokenSourceMapRanges[getNodeId(node) + "-" + token] = range;
             return node;
         }
 
         /**
          * Gets a custom text range to use when emitting comments.
+         *
+         * If a node does not have its own custom source map text range, the custom source map
+         * text range of its original pointer is used.
+         *
+         * @param node The node.
          */
         function getCommentRange(node: Node) {
+            // As a performance optimization, use the cached value of the most recent node.
+            // This helps for cases where this function is called repeatedly for the same node.
+            if (lastCommentMapRangeNode === node) {
+                return lastCommentMapRange || node;
+            }
+
+            // Get the custom comment range for a node or from one of its original nodes.
+            let range: TextRange;
             let current = node;
             while (current) {
-                const options = getEmitOptions(current, /*create*/ false);
-                if (options && options.commentRange !== undefined) {
-                    return options.commentRange;
+                if (current.transformId === transformId) {
+                    range = current.commentRange;
+                    if (range !== undefined) {
+                        break;
+                    }
                 }
 
                 current = current.original;
             }
 
-            return node;
+            // Cache the most recently requested value.
+            lastCommentMapRangeNode = node;
+            lastCommentMapRange = range;
+            return range || node;
         }
 
         /**
          * Sets a custom text range to use when emitting comments.
          */
         function setCommentRange<T extends Node>(node: T, range: TextRange) {
-            getEmitOptions(node, /*create*/ true).commentRange = range;
+            beforeSetAnnotation(node);
+
+            // Cache the most recently requested value.
+            lastCommentMapRangeNode = node;
+            lastCommentMapRange = range;
+            node.commentRange = range;
             return node;
         }
 

@@ -1049,6 +1049,7 @@ namespace ts {
     }
 
     function Node(kind: SyntaxKind, pos: number, end: number) {
+        this.id = 0;
         this.kind = kind;
         this.pos = pos;
         this.end = end;
@@ -1058,6 +1059,7 @@ namespace ts {
         this.excludeTransformFlags = TransformFlags.None;
         this.parent = undefined;
         this.original = undefined;
+        this.transformId = 0;
     }
 
     export let objectAllocator: ObjectAllocator = {
@@ -1118,6 +1120,18 @@ namespace ts {
         }
     }
 
+    export function getEnvironmentVariable(name: string, host?: CompilerHost) {
+        if (host && host.getEnvironmentVariable) {
+            return host.getEnvironmentVariable(name);
+        }
+
+        if (sys && sys.getEnvironmentVariable) {
+            return sys.getEnvironmentVariable(name);
+        }
+
+        return "";
+    }
+
     export function copyListRemovingItem<T>(item: T, list: T[]) {
         const copiedList: T[] = [];
         for (const e of list) {
@@ -1134,4 +1148,80 @@ namespace ts {
             : ((fileName) => fileName.toLowerCase());
     }
 
+    /** Performance measurements for the compiler. */
+    /*@internal*/
+    export namespace performance {
+        let counters: Map<number>;
+        let measures: Map<number>;
+
+        /**
+         * Increments a counter with the specified name.
+         *
+         * @param counterName The name of the counter.
+         */
+        export function increment(counterName: string) {
+            if (counters) {
+                counters[counterName] = (getProperty(counters, counterName) || 0) + 1;
+            }
+        }
+
+        /**
+         * Gets the value of the counter with the specified name.
+         *
+         * @param counterName The name of the counter.
+         */
+        export function getCount(counterName: string) {
+            return counters && getProperty(counters, counterName) || 0;
+        }
+
+        /**
+         * Marks the start of a performance measurement.
+         */
+        export function mark() {
+            return measures ? Date.now() : 0;
+        }
+
+        /**
+         * Adds a performance measurement with the specified name.
+         *
+         * @param measureName The name of the performance measurement.
+         * @param marker The timestamp of the starting mark.
+         */
+        export function measure(measureName: string, marker: number) {
+            if (measures) {
+                measures[measureName] = (getProperty(measures, measureName) || 0) + (mark() - marker);
+            }
+        }
+
+        /**
+         * Gets the total duration of all measurements with the supplied name.
+         *
+         * @param measureName The name of the measure whose durations should be accumulated.
+         */
+        export function getDuration(measureName: string) {
+            return measures && getProperty(measures, measureName) || 0;
+        }
+
+        /** Enables (and resets) performance measurements for the compiler. */
+        export function enable() {
+            counters = { };
+            measures = {
+                programTime: 0,
+                parseTime: 0,
+                bindTime: 0,
+                emitTime: 0,
+                ioReadTime: 0,
+                ioWriteTime: 0,
+                printTime: 0,
+                commentTime: 0,
+                sourceMapTime: 0
+            };
+        }
+
+        /** Disables (and clears) performance measurements for the compiler. */
+        export function disable() {
+            counters = undefined;
+            measures = undefined;
+        }
+    }
 }

@@ -383,6 +383,7 @@ namespace ts {
         Let =                1 << 0,   // Variable declaration
         Const =              1 << 1,   // Variable declaration
         NestedNamespace =    1 << 2,   // Namespace declaration
+        Synthesized =        1 << 3,   // Node was synthesized during transformation
         Namespace =          1 << 12,  // Namespace declaration
         ExportContext =      1 << 13,  // Export context (initialized by binding)
         ContainsThis =       1 << 14,  // Interface contains references to "this"
@@ -469,7 +470,10 @@ namespace ts {
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
-        /* @internal */ emitOptions?: NodeEmitOptions;  // Options used to control node emit (used by transforms, should never be set directly on a source tree node)
+        /* @internal */ transformId?: number;           // Associates transient transformation properties with a specific transformation (initialized by transformation).
+        /* @internal */ emitFlags?: NodeEmitFlags;      // Transient emit flags for a synthesized node (initialized by transformation).
+        /* @internal */ sourceMapRange?: TextRange;     // Transient custom sourcemap range for a synthesized node (initialized by transformation).
+        /* @internal */ commentRange?: TextRange;       // Transient custom comment range for a synthesized node (initialized by transformation).
     }
 
     export interface NodeArray<T extends Node> extends Array<T>, TextRange {
@@ -502,6 +506,7 @@ namespace ts {
         text: string;                                   // Text of identifier (with escapes converted to characters)
         originalKeywordKind?: SyntaxKind;               // Original syntaxKind which get set so that we can report an error later
         /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind;   // Specifies whether to auto-generate the text for an identifier.
+        /*@internal*/ autoGenerateId?: number;          // Ensures unique generated identifiers get unique names, but clones get the same name.
     }
 
     // Transient identifier node (marked by id === -1)
@@ -2475,6 +2480,7 @@ namespace ts {
         declaration?: boolean;
         declarationDir?: string;
         diagnostics?: boolean;
+        /*@internal*/ extendedDiagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
         init?: boolean;
@@ -2955,26 +2961,8 @@ namespace ts {
         //                 align with the old emitter.
         SourceMapEmitOpenBraceAsToken = 1 << 21,        // Emits the open brace of a block function body as a source mapped token.
         SourceMapAdjustRestParameterLoop = 1 << 22,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
-    }
 
-    /* @internal */
-    export interface NodeEmitOptions {
-        /**
-         * Specifies a custom range to use when emitting source maps.
-         */
-        sourceMapRange?: TextRange;
-        /**
-         * Specifies a custom range to use when emitting tokens of a node.
-         */
-        tokenSourceMapRange?: Map<TextRange>;
-        /**
-         * Specifies a custom range to use when emitting comments.
-         */
-        commentRange?: TextRange;
-        /**
-         * Specifies flags to use to customize emit.
-         */
-        flags?: NodeEmitFlags;
+        HasNodeEmitFlags = 1 << 31,              // Indicates the node has emit flags set.
     }
 
     /** Additional context provided to `visitEachChild` */
@@ -2987,99 +2975,6 @@ namespace ts {
         endLexicalEnvironment(): Statement[];
     }
 
-    /* @internal */
-    export interface TransformationContext extends LexicalEnvironment {
-        getCompilerOptions(): CompilerOptions;
-        getEmitResolver(): EmitResolver;
-        getEmitHost(): EmitHost;
-
-        /**
-         * Gets flags used to customize later transformations or emit.
-         */
-        getNodeEmitFlags(node: Node): NodeEmitFlags;
-
-        /**
-         * Sets flags used to customize later transformations or emit.
-         */
-        setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags): T;
-
-        /**
-         * Gets the TextRange to use for source maps for the node.
-         */
-        getSourceMapRange(node: Node): TextRange;
-
-        /**
-         * Sets the TextRange to use for source maps for the node.
-         */
-        setSourceMapRange<T extends Node>(node: T, range: TextRange): T;
-
-        /**
-         * Gets the TextRange to use for source maps for a token of a node.
-         */
-        getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange;
-
-        /**
-         * Sets the TextRange to use for source maps for a token of a node.
-         */
-        setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange): T;
-
-        /**
-         * Gets the TextRange to use for comments for the node.
-         */
-        getCommentRange(node: Node): TextRange;
-
-        /**
-         * Sets the TextRange to use for comments for the node.
-         */
-        setCommentRange<T extends Node>(node: T, range: TextRange): T;
-
-        /**
-         * Hoists a function declaration to the containing scope.
-         */
-        hoistFunctionDeclaration(node: FunctionDeclaration): void;
-
-        /**
-         * Hoists a variable declaration to the containing scope.
-         */
-        hoistVariableDeclaration(node: Identifier): void;
-
-        /**
-         * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
-         */
-        enableSubstitution(kind: SyntaxKind): void;
-
-        /**
-         * Determines whether expression substitutions are enabled for the provided node.
-         */
-        isSubstitutionEnabled(node: Node): boolean;
-
-        /**
-         * Hook used by transformers to substitute expressions just before they
-         * are emitted by the pretty printer.
-         */
-        onSubstituteNode?: (node: Node, isExpression: boolean) => Node;
-
-        /**
-         * Enables before/after emit notifications in the pretty printer for the provided
-         * SyntaxKind.
-         */
-        enableEmitNotification(kind: SyntaxKind): void;
-
-        /**
-         * Determines whether before/after emit notifications should be raised in the pretty
-         * printer when it emits a node.
-         */
-        isEmitNotificationEnabled(node: Node): boolean;
-
-        /**
-         * Hook used to allow transformers to capture state before or after
-         * the printer emits a node.
-         */
-        onEmitNode?: (node: Node, emit: (node: Node) => void) => void;
-    }
-
-    /* @internal */
-    export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
 
     export interface TextSpan {
         start: number;

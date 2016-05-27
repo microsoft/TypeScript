@@ -4,11 +4,6 @@
 /// <reference path="printer.ts" />
 
 namespace ts {
-    /* @internal */ export let programTime = 0;
-    /* @internal */ export let emitTime = 0;
-    /* @internal */ export let ioReadTime = 0;
-    /* @internal */ export let ioWriteTime = 0;
-
     /** The version of the TypeScript compiler release */
 
     const emptyArray: any[] = [];
@@ -781,9 +776,9 @@ namespace ts {
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             let text: string;
             try {
-                const start = new Date().getTime();
+                const ioReadStart = performance.mark();
                 text = sys.readFile(fileName, options.charset);
-                ioReadTime += new Date().getTime() - start;
+                performance.measure("ioReadTime", ioReadStart);
             }
             catch (e) {
                 if (onError) {
@@ -850,7 +845,7 @@ namespace ts {
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
-                const start = new Date().getTime();
+                const ioWriteStart = performance.mark();
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
                 if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
@@ -860,7 +855,7 @@ namespace ts {
                     sys.writeFile(fileName, data, writeByteOrderMark);
                 }
 
-                ioWriteTime += new Date().getTime() - start;
+                performance.measure("ioWriteTime", ioWriteStart);
             }
             catch (e) {
                 if (onError) {
@@ -962,7 +957,7 @@ namespace ts {
         let resolvedTypeReferenceDirectives: Map<ResolvedTypeReferenceDirective> = {};
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
-        const start = new Date().getTime();
+        const programStart = performance.mark();
 
         host = host || createCompilerHost(options);
 
@@ -1055,7 +1050,7 @@ namespace ts {
 
         verifyCompilerOptions();
 
-        programTime += new Date().getTime() - start;
+        performance.measure("programTime", programStart);
 
         return program;
 
@@ -1288,7 +1283,7 @@ namespace ts {
             // checked is to not pass the file to getEmitResolver.
             const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile);
 
-            const start = new Date().getTime();
+            const emitStart = performance.mark();
 
             // TODO(rbuckton): remove USE_TRANSFORMS condition when we switch to transforms permanently.
             let useLegacyEmitter = options.useLegacyEmitter;
@@ -1302,7 +1297,8 @@ namespace ts {
                 getEmitHost(writeFileCallback),
                 sourceFile);
 
-            emitTime += new Date().getTime() - start;
+            performance.measure("emitTime", emitStart);
+
             return emitResult;
         }
 
@@ -2076,7 +2072,7 @@ namespace ts {
             }
 
             // Cannot specify module gen that isn't amd or system with --out
-            // Report this error if user specified --module moduleKind 
+            // Report this error if user specified --module moduleKind
             // or if there is external module in compilation which defaults to commonjs
             const emitModuleKind = getEmitModuleKind(options);
             if (outFile && (options.module || firstExternalModuleSourceFile) && !(emitModuleKind === ModuleKind.AMD || emitModuleKind === ModuleKind.System)) {

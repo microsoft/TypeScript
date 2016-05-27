@@ -251,7 +251,9 @@ namespace ts {
                 emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value, location);
             }
             else {
-                const name = getSynthesizedClone(<Identifier>target, { sourceMapRange: target, commentRange: target });
+                const name = getMutableClone(<Identifier>target);
+                context.setSourceMapRange(name, target);
+                context.setCommentRange(name, target);
                 emitAssignment(name, value, location, /*original*/ undefined);
             }
         }

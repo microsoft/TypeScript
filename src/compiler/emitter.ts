@@ -524,7 +524,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             const writer = createTextWriter(newLine);
             const { write, writeTextOfNode, writeLine, increaseIndent, decreaseIndent } = writer;
 
-            let sourceMap = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? createSourceMapWriter(host, writer) : getNullSourceMapWriter();
+            let sourceMap = createSourceMapWriter(host, writer);
             let { setSourceFile, emitStart, emitEnd, emitPos } = sourceMap;
 
             let currentSourceFile: SourceFile;
