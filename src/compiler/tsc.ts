@@ -546,7 +546,6 @@ namespace ts {
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
         if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
             performance.enable();
-            performance.reset();
         }
 
         const program = createProgram(fileNames, compilerOptions, compilerHost);
@@ -594,7 +593,6 @@ namespace ts {
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
 
             performance.disable();
-            performance.reset();
         }
 
         return { program, exitStatus };
