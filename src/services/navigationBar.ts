@@ -383,7 +383,7 @@ namespace ts.NavigationBar {
 
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
-                    return createItem(node, getTextOfNode((<ClassDeclaration>node).name), ts.ScriptElementKind.classElement);
+                    return createItem(node, getFunctionOrClassName(<ClassDeclaration>node), ts.ScriptElementKind.classElement);
 
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.FunctionExpression:

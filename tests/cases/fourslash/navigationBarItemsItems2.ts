@@ -13,6 +13,11 @@ verify.navigationBar([
         "kind": "module",
         "childItems": [
             {
+                "text": "<class>",
+                "kind": "class",
+                "kindModifiers": "export"
+            },
+            {
                 "text": "A",
                 "kind": "module"
             }

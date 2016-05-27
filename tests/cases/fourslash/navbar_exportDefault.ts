@@ -16,7 +16,14 @@ goTo.file("a.ts");
 verify.navigationBar([
     {
         "text": "\"a\"",
-        "kind": "module"
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "default",
+                "kind": "class",
+                "kindModifiers": "export"
+            }
+        ]
     },
     {
         "text": "default",

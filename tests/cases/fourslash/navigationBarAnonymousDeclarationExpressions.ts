@@ -42,6 +42,10 @@ verify.navigationBar([
             {
                 "text": "classes",
                 "kind": "function"
+            },
+            {
+                "text": "global.cls",
+                "kind": "class"
             }
         ]
     },
@@ -106,6 +110,14 @@ verify.navigationBar([
         "kind": "function",
         "childItems": [
             {
+                "text": "<class>",
+                "kind": "class"
+            },
+            {
+                "text": "cls2",
+                "kind": "class"
+            },
+            {
                 "text": "cls3",
                 "kind": "class"
             }
@@ -132,4 +144,5 @@ verify.navigationBar([
         "kind": "class",
         "indent": 1
     }
-]);
+]
+);

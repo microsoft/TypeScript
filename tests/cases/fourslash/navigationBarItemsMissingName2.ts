@@ -7,19 +7,25 @@
 
 // Anonymous classes are still included.
 verify.navigationBar([
-    {
-        "text": "<global>",
-        "kind": "module"
-    },
-    {
+  {
+    "text": "<global>",
+    "kind": "module",
+    "childItems": [
+      {
         "text": "<class>",
-        "kind": "class",
-        "childItems": [
-            {
-                "text": "foo",
-                "kind": "method"
-            }
-        ],
-        "indent": 1
-    }
+        "kind": "class"
+      }
+    ]
+  },
+  {
+    "text": "<class>",
+    "kind": "class",
+    "childItems": [
+      {
+        "text": "foo",
+        "kind": "method"
+      }
+    ],
+    "indent": 1
+  }
 ]);
