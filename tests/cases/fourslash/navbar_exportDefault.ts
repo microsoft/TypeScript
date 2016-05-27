@@ -52,6 +52,13 @@ verify.navigationBar([
     {
         "text": "\"c\"",
         "kind": "module",
+        "childItems": [
+            {
+                "text": "default",
+                "kind": "function",
+                "kindModifiers": "export"
+            }
+        ]
     },
     {
         "text": "default",

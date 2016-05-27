@@ -12,7 +12,7 @@ verify.navigationBar([
         "kind": "module"
     },
     {
-        "text": "default",
+        "text": "<class>",
         "kind": "class",
         "childItems": [
             {

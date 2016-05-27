@@ -19,7 +19,7 @@ verify.navigationBar([
         ]
     },
     {
-        "text": "default",
+        "text": "<class>",
         "kind": "class",
         "kindModifiers": "export",
         "indent": 1

@@ -15,7 +15,7 @@
 ////    })();
 ////})();
 ////(function() { // Different anonymous functions are not merged
-////    These will only show up as childItems.
+////    // These will only show up as childItems.
 ////    function z() {}
 ////    console.log(function() {})
 ////})
@@ -26,17 +26,110 @@
 ////    (class { });
 ////})
 
-verify.navigationBarCount(21);
-verify.navigationBarIndex("<global>", 0);
-verify.navigationBarIndex("<function>", 1);
-verify.navigationBarIndex("x", 2);
-verify.navigationBarIndex("nest", 3);
-verify.navigationBarIndex("<function>", 4);
-verify.navigationBarIndex("global.cls", 5);
-verify.navigationBarIndex("classes", 6);
-verify.navigationBarIndex("cls2", 7);
-verify.navigationBarIndex("<class>", 8);
-verify.navigationBarIndex("cls3", 9);
-
-verify.navigationBarContains("global.cls", "class");
-
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "<function>",
+                "kind": "function"
+            },
+            {
+                "text": "<function>",
+                "kind": "function"
+            },
+            {
+                "text": "classes",
+                "kind": "function"
+            }
+        ]
+    },
+    {
+        "text": "<function>",
+        "kind": "function",
+        "childItems": [
+            {
+                "text": "nest",
+                "kind": "function"
+            },
+            {
+                "text": "x",
+                "kind": "function"
+            },
+            {
+                "text": "y",
+                "kind": "const"
+            }
+        ],
+        "indent": 1
+    },
+    {
+        "text": "nest",
+        "kind": "function",
+        "childItems": [
+            {
+                "text": "moreNest",
+                "kind": "function"
+            }
+        ],
+        "indent": 2
+    },
+    {
+        "text": "x",
+        "kind": "function",
+        "childItems": [
+            {
+                "text": "xx",
+                "kind": "function"
+            }
+        ],
+        "indent": 2
+    },
+    {
+        "text": "<function>",
+        "kind": "function",
+        "childItems": [
+            {
+                "text": "<function>",
+                "kind": "function"
+            },
+            {
+                "text": "z",
+                "kind": "function"
+            }
+        ],
+        "indent": 1
+    },
+    {
+        "text": "classes",
+        "kind": "function",
+        "childItems": [
+            {
+                "text": "cls3",
+                "kind": "class"
+            }
+        ],
+        "indent": 1
+    },
+    {
+        "text": "<class>",
+        "kind": "class",
+        "indent": 2
+    },
+    {
+        "text": "cls2",
+        "kind": "class",
+        "indent": 2
+    },
+    {
+        "text": "cls3",
+        "kind": "class",
+        "indent": 2
+    },
+    {
+        "text": "global.cls",
+        "kind": "class",
+        "indent": 1
+    }
+]);

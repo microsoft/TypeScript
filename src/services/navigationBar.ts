@@ -88,10 +88,17 @@ namespace ts.NavigationBar {
 
                     case SyntaxKind.BindingElement:
                     case SyntaxKind.VariableDeclaration:
-                        if (isBindingPattern((<VariableDeclaration>node).name)) {
-                            visit((<VariableDeclaration>node).name);
+                        const decl = <VariableDeclaration>node;
+                        if (isBindingPattern(decl.name)) {
+                            visit(decl.name);
                             break;
                         }
+                        // Don't include the const 'x' in `const x = function() {}`, just use the function.
+                        if (decl.initializer && isFunctionOrClassExpression(decl.initializer)) {
+                            visit(decl.initializer);
+                            break;
+                        }
+
                         // Fall through
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.ClassDeclaration:
@@ -149,10 +156,9 @@ namespace ts.NavigationBar {
 
         function sortNodesInPlace(nodes: Node[]): void {
             nodes.sort((n1, n2) => {
-                // Get the name if it exists. OK if node is not a declaration.
-                const name1 = (<Declaration> n1).name, name2 = (<Declaration> n2).name;
+                const name1 = tryGetName(n1), name2 = tryGetName(n2);
                 if (name1 && name2) {
-                    return localeCompareFix(getPropertyNameForPropertyNameNode(name1), getPropertyNameForPropertyNameNode(name2));
+                    return localeCompareFix(name1, name2);
                 }
                 else if (name1) {
                     return 1;
@@ -848,6 +854,21 @@ namespace ts.NavigationBar {
     const anonymousFunctionText = "<function>";
     const anonymousClassText = "<class>";
 
+    function tryGetName(node: Node): string {
+        const decl = <Declaration>node;
+        if (decl.name) {
+            return getPropertyNameForPropertyNameNode(decl.name);
+        }
+        switch (node.kind) {
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.ClassExpression:
+                return getFunctionOrClassName(<FunctionExpression | ArrowFunction | ClassExpression>node);
+            default:
+                return undefined;
+        }
+    }
+
     /** Get the name for a (possibly anonymous) class/function expression. */
     function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration | ArrowFunction | ClassLikeDeclaration): string {
         if (node.name && getFullWidth(node.name) > 0) {
@@ -871,7 +892,7 @@ namespace ts.NavigationBar {
             return "default";
         }
         else {
-            return node.kind === SyntaxKind.ClassExpression ? anonymousClassText : anonymousFunctionText;
+            return isClassLike(node) ? anonymousClassText : anonymousFunctionText;
         }
     }
 
