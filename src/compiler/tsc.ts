@@ -607,6 +607,7 @@ namespace ts {
             reportTimeStatistic("Check time", checkTime);
             reportTimeStatistic("Emit time", emitTime);
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+            reportStatistics();
 
             performance.disable();
             performance.reset();
