@@ -759,7 +759,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
                 exec(workerCmd,  finishWorker, finishWorker) 
             });
             
-            function finishWorker(errorStatus) {
+            function finishWorker(e, errorStatus) {
                 counter--;
                 if (firstErrorStatus === undefined && errorStatus !== undefined) {
                     firstErrorStatus = errorStatus;
