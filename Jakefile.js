@@ -766,15 +766,22 @@ function runTestsAndWriteOutput(file, defaultSubsets) {
 
     var subsetRegexes;
     var subsets;
-    if (defaultSubsets.length === 0) {
+    if (tests || defaultSubsets.length === 0) {
         subsetRegexes = [tests];
         subsets = [tests];
     }
     else {
-        subsets = tests ? tests.split("|") : defaultSubsets;
-        subsetRegexes = subsets.map(function (sub) { return "^" + sub + ".*$"; });
-        subsetRegexes.push("^(?!" + subsets.join("|") + ").*$");
+        subsets = [];
+        subsetRegexes = [];
+        negations = [];
+        for (const subset of defaultSubsets) {
+            subsets.push(subset.name);
+            subsetRegexes.push(subset.pattern);
+            negations.push(subset.pattern);
+        }
+
         subsets.push("other");
+        subsetRegexes.push("^(?!" + negations.join("|") + ")");
     }
 
     var out = fs.createWriteStream(file);
@@ -1080,11 +1087,23 @@ task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
 }, {async: true});
 
 task("runtests-file", ["build-rules", "tests", builtLocalDirectory], function () {
-    runTestsAndWriteOutput("tests/baselines/local/testresults.tap", []);
+    var subsets = [];
+    var cores = os.cpus().length;
+    if (cores > 1) {
+        subsets.push({ name: "conformance", pattern: "^conformance\\b" });
+        subsets.push({ name: "compiler", pattern: "^compiler\\b" });
+        subsets.push({ name: "projects", pattern: "^Projects\\b" });
+        if (cores > 4) {
+            subsets.push({ name: "fourslash", pattern: "^fourslash\\b" });
+            subsets.push({ name: "fourslash (shims, shims-pp, server)", pattern: "^fourslash-" });
+        }
+        else {
+            subsets.push({ name: "fourslash", pattern: "^fourslash" });
+        }
+    }
+    runTestsAndWriteOutput("tests/baselines/local/testresults.tap", subsets);
 }, { async: true });
-task("runtests-file-parallel", ["build-rules", "tests", builtLocalDirectory], function () {
-    runTestsAndWriteOutput("tests/baselines/local/testresults.tap", ["conformance", "compiler", "Projects", "fourslash"]);
-}, { async: true });
+
 task("runtests-dirty", ["build-rules", "tests", builtLocalDirectory], function () {
     runConsoleTests("mocha-fivemat-progress-reporter", [], /*dirty*/ true);
 }, { async: true });
