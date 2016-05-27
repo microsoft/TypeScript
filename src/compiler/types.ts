@@ -2455,7 +2455,7 @@ namespace ts {
         /* @internal */ configFilePath?: string;           // When options come from a config file, its path is recorded here
         declaration?: boolean;
         declarationDir?: string;
-        diagnostics?: boolean;
+        /* @internal */ diagnostics?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
@@ -2497,7 +2497,7 @@ namespace ts {
         rootDir?: string;
         rootDirs?: RootPaths;
         skipLibCheck?: boolean;
-        /* @internal */ skipDefaultLibCheck?: boolean;
+        skipDefaultLibCheck?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
         strictNullChecks?: boolean;
