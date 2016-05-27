@@ -1526,6 +1526,7 @@ namespace ts {
 
             const declarationList = createVariableDeclarationList(declarations, /*location*/ node);
             setOriginalNode(declarationList, node);
+            setCommentRange(declarationList, node);
 
             if (node.transformFlags & TransformFlags.ContainsBindingPattern
                 && (isBindingPattern(node.declarations[0].name)

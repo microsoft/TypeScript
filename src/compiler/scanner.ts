@@ -591,7 +591,7 @@ namespace ts {
      * and the next token are returned.
      * If true, comments occurring between the given position and the next line break are returned.
      */
-    function getCommentRanges(text: string, pos: number, trailing: boolean, consumedCommentRanges?: Map<boolean>): CommentRange[] {
+    function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
         let result: CommentRange[];
         let collecting = trailing || pos === 0;
         while (pos >= 0 && pos < text.length) {
@@ -643,15 +643,12 @@ namespace ts {
                             }
                         }
 
-                        if (collecting && (!consumedCommentRanges || !(startPos in consumedCommentRanges))) {
+                        if (collecting) {
                             if (!result) {
                                 result = [];
                             }
 
                             result.push({ pos: startPos, end: pos, hasTrailingNewLine, kind });
-                            if (consumedCommentRanges) {
-                                consumedCommentRanges[startPos] = true;
-                            }
                         }
 
                         continue;
@@ -673,12 +670,12 @@ namespace ts {
         return result;
     }
 
-    export function getLeadingCommentRanges(text: string, pos: number, consumedCommentRanges?: Map<boolean>): CommentRange[] {
-        return getCommentRanges(text, pos, /*trailing*/ false, consumedCommentRanges);
+    export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] {
+        return getCommentRanges(text, pos, /*trailing*/ false);
     }
 
-    export function getTrailingCommentRanges(text: string, pos: number, consumedCommentRanges?: Map<boolean>): CommentRange[] {
-        return getCommentRanges(text, pos, /*trailing*/ true, consumedCommentRanges);
+    export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] {
+        return getCommentRanges(text, pos, /*trailing*/ true);
     }
 
     /** Optionally, get the shebang */
