@@ -271,7 +271,7 @@ namespace ts.NavigationBar {
                 const item = createItem(child);
                 if (item !== undefined) {
                     if (item.text.length > 0) {
-                        if (isDeclarationExpression(child)) {
+                        if (isFunctionOrClassExpression(child)) {
                             // Never merge
                             items.push(item);
                             continue;
@@ -361,7 +361,7 @@ namespace ts.NavigationBar {
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.FunctionDeclaration:
-                    return createItem(node, declarationExpressionName(<ArrowFunction | FunctionExpression | FunctionDeclaration>node), ts.ScriptElementKind.functionElement);
+                    return createItem(node, getFunctionOrClassName(<ArrowFunction | FunctionExpression | FunctionDeclaration>node), ts.ScriptElementKind.functionElement);
 
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.BindingElement:
@@ -513,7 +513,7 @@ namespace ts.NavigationBar {
                 const childItems = getItemsWorker(children, createChildItem);
 
                 return getNavigationBarItem(
-                    declarationExpressionName(node),
+                    getFunctionOrClassName(node),
                     ts.ScriptElementKind.functionElement,
                     getNodeModifiers(node),
                     [getNodeSpan(node)],
@@ -595,7 +595,7 @@ namespace ts.NavigationBar {
                 }
 
                 return getNavigationBarItem(
-                    declarationExpressionName(node),
+                    getFunctionOrClassName(node),
                     ts.ScriptElementKind.classElement,
                     getNodeModifiers(node),
                     [getNodeSpan(node)],
@@ -686,7 +686,7 @@ namespace ts.NavigationBar {
                 topItem = lastTop;
                 indent--;
 
-                if (newItem && isAnonFn(newItem) && newItem.childItems.length === 0) {
+                if (newItem && isAnonymousFunction(newItem) && newItem.childItems.length === 0) {
                     topItem.childItems.pop();
                 }
             }
@@ -796,7 +796,7 @@ namespace ts.NavigationBar {
             }
 
             const fnExpr = node as FunctionExpression | ArrowFunction | ClassExpression;
-            const fnName = declarationExpressionName(fnExpr);
+            const fnName = getFunctionOrClassName(fnExpr);
             const scriptKind = node.kind === SyntaxKind.ClassExpression ? ScriptElementKind.classElement : ScriptElementKind.functionElement;
             return getNavBarItem(fnName, scriptKind, [getNodeSpan(node)]);
         }
@@ -829,11 +829,11 @@ namespace ts.NavigationBar {
         return sourceFileItem.childItems;
     }
 
-    const anonFnText = "<function>";
-    const anonClassText = "<class>";
+    const anonymousFunctionText = "<function>";
+    const anonymousClassText = "<class>";
 
-    // Get the name for a (possibly anonymous) class/function expression.
-    function declarationExpressionName(node: FunctionExpression | FunctionDeclaration | ArrowFunction | ClassLikeDeclaration): string {
+    /** Get the name for a (possibly anonymous) class/function expression. */
+    function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration | ArrowFunction | ClassLikeDeclaration): string {
         if (node.name && getFullWidth(node.name) > 0) {
             return declarationNameToString(node.name);
         }
@@ -855,15 +855,15 @@ namespace ts.NavigationBar {
             return "default";
         }
         else {
-            return node.kind === SyntaxKind.ClassExpression ? anonClassText : anonFnText;
+            return node.kind === SyntaxKind.ClassExpression ? anonymousClassText : anonymousFunctionText;
         }
     }
 
-    function isAnonFn(item: NavigationBarItem): boolean {
-        return item.text === anonFnText;
+    function isAnonymousFunction(item: NavigationBarItem): boolean {
+        return item.text === anonymousFunctionText;
     }
 
-    function isDeclarationExpression(node: Node) {
+    function isFunctionOrClassExpression(node: Node): boolean {
         return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction || node.kind === SyntaxKind.ClassExpression;
     }
 }
