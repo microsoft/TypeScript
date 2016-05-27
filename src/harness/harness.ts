@@ -1464,7 +1464,7 @@ namespace Harness {
             }
 
             public getSourceMapRecord() {
-                if (this.sourceMapData.length > 0) {
+                if (this.sourceMapData && this.sourceMapData.length > 0) {
                     return Harness.SourceMapRecorder.getSourceMapRecord(this.sourceMapData, this.program, this.files);
                 }
             }
