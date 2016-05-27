@@ -11,13 +11,11 @@ verify.navigationBar([
                 "text": "T",
                 "kind": "type"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "T",
         "kind": "type",
-        "childItems": [],
         "indent": 1
     }
 ]);

@@ -27,7 +27,6 @@ verify.navigationBar([
                 "kind": "alias",
                 "kindModifiers": "export"
             }
-        ],
-        "indent": 0
+        ]
     }
 ]);

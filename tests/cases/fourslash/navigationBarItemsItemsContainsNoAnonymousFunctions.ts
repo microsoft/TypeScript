@@ -33,9 +33,7 @@ goTo.marker("file1");
 verify.navigationBar([
     {
         "text": "<global>",
-        "kind": "module",
-        "childItems": [],
-        "indent": 0
+        "kind": "module"
     }
 ]);
 
@@ -49,8 +47,7 @@ verify.navigationBar([
                 "text": "x",
                 "kind": "var"
             }
-        ],
-        "indent": 0
+        ]
     }
 ]);
 
@@ -68,19 +65,16 @@ verify.navigationBar([
                 "text": "foo",
                 "kind": "function"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "bar",
         "kind": "function",
-        "childItems": [],
         "indent": 1
     },
     {
         "text": "foo",
         "kind": "function",
-        "childItems": [],
         "indent": 1
     }
 ]);

@@ -14,13 +14,11 @@ verify.navigationBar([
                 "text": "E",
                 "kind": "enum"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "E",
         "kind": "enum",
-        "childItems": [],
         "indent": 1
     }
 ]);

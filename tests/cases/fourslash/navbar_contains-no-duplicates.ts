@@ -45,8 +45,7 @@ verify.navigationBar([
                 "kind": "module",
                 "kindModifiers": "declare"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "ABC",

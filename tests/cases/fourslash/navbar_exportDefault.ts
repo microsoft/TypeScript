@@ -16,15 +16,12 @@ goTo.file("a.ts");
 verify.navigationBar([
     {
         "text": "\"a\"",
-        "kind": "module",
-        "childItems": [],
-        "indent": 0
+        "kind": "module"
     },
     {
         "text": "default",
         "kind": "class",
         "kindModifiers": "export",
-        "childItems": [],
         "indent": 1
     }
 ]);
@@ -40,14 +37,12 @@ verify.navigationBar([
                 "kind": "class",
                 "kindModifiers": "export"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "C",
         "kind": "class",
         "kindModifiers": "export",
-        "childItems": [],
         "indent": 1
     }
 ]);
@@ -57,14 +52,11 @@ verify.navigationBar([
     {
         "text": "\"c\"",
         "kind": "module",
-        "childItems": [],
-        "indent": 0
     },
     {
         "text": "default",
         "kind": "function",
         "kindModifiers": "export",
-        "childItems": [],
         "indent": 1
     }
 ]);
@@ -80,14 +72,12 @@ verify.navigationBar([
                 "kind": "function",
                 "kindModifiers": "export"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "Func",
         "kind": "function",
         "kindModifiers": "export",
-        "childItems": [],
         "indent": 1
     }
 ]);

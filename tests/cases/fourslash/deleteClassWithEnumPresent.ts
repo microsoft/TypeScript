@@ -14,8 +14,7 @@ verify.navigationBar([
                 "text": "Foo",
                 "kind": "enum"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "Foo",

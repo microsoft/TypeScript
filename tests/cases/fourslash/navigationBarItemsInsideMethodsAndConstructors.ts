@@ -27,8 +27,7 @@ verify.navigationBar([
                 "text": "Class",
                 "kind": "class"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "Class",
@@ -82,13 +81,11 @@ verify.navigationBar([
     {
         "text": "LocalFunctionInConstructor",
         "kind": "function",
-        "childItems": [],
         "indent": 2
     },
     {
         "text": "LocalInterfaceInConstrcutor",
         "kind": "interface",
-        "childItems": [],
         "indent": 2
     },
     {
@@ -135,7 +132,6 @@ verify.navigationBar([
     {
         "text": "LocalInterfaceInMethod",
         "kind": "interface",
-        "childItems": [],
         "indent": 2
     }
 ]);

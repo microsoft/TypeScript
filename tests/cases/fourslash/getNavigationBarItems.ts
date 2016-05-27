@@ -14,8 +14,7 @@ verify.navigationBar([
                 "text": "C",
                 "kind": "class"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "C",

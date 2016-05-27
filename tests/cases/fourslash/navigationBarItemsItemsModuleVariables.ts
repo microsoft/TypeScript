@@ -29,8 +29,7 @@ verify.navigationBar([
                 "text": "Module1",
                 "kind": "module"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "Module1",
@@ -56,8 +55,7 @@ verify.navigationBar([
                 "text": "Module1.SubModule",
                 "kind": "module"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "Module1.SubModule",

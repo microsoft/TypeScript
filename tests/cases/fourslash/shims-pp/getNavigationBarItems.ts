@@ -11,7 +11,6 @@ verify.navigationBar([
                 "text": "c",
                 "kind": "const"
             }
-        ],
-        "indent": 0
+        ]
     }
 ]);

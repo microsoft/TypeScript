@@ -60,8 +60,7 @@ verify.navigationBar([
                 "text": "Shapes",
                 "kind": "module"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "IPoint",

@@ -21,8 +21,7 @@ verify.navigationBar([
                 "kind": "var",
                 "kindModifiers": "export"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "Bar",

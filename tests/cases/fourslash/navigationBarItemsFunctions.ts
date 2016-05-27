@@ -27,13 +27,11 @@ verify.navigationBar([
                 "text": "foo",
                 "kind": "function"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "baz",
         "kind": "function",
-        "childItems": [],
         "indent": 1
     },
     {

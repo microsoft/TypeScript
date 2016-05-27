@@ -55,7 +55,6 @@ verify.navigationBar([
                 "text": "g",
                 "kind": "var"
             }
-        ],
-        "indent": 0
+        ]
     }
 ]);

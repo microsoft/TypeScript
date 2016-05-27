@@ -14,13 +14,11 @@ verify.navigationBar([
                 "text": "f",
                 "kind": "function"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "f",
         "kind": "function",
-        "childItems": [],
         "indent": 1
     }
 ]);

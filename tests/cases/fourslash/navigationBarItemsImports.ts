@@ -51,7 +51,6 @@ verify.navigationBar([
                 "text": "ns",
                 "kind": "alias"
             }
-        ],
-        "indent": 0
+        ]
     }
 ]);

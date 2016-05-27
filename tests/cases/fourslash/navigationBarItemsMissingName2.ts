@@ -9,9 +9,7 @@
 verify.navigationBar([
     {
         "text": "<global>",
-        "kind": "module",
-        "childItems": [],
-        "indent": 0
+        "kind": "module"
     },
     {
         "text": "default",

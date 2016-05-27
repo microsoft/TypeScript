@@ -1960,46 +1960,24 @@ namespace FourSlash {
         }
 
         public verifyNavigationBar(json: any) {
-            let items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
-            items = this.simplifyNavigationBar(items);
-            if (JSON.stringify(items) !== JSON.stringify(json)) {
-                this.raiseError(`verifyNavigationBar failed - expected: ${JSON.stringify(json, undefined, 2)}, got: ${JSON.stringify(items, undefined, 2)}`);
+            const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
+            if (JSON.stringify(items, replacer) !== JSON.stringify(json)) {
+                this.raiseError(`verifyNavigationBar failed - expected: ${JSON.stringify(json, undefined, 2)}, got: ${JSON.stringify(items, replacer, 2)}`);
             }
-        }
 
-        // Remove any properties that tend to all have the same value so that test data is easier to read.
-        private simplifyNavigationBar(items: ts.NavigationBarItem[]): any {
-            return items.map(item => {
-                item = ts.clone(item);
-                if (item.kindModifiers === "") {
-                    delete item.kindModifiers;
+            // Make the data easier to read.
+            function replacer(key: string, value: any) {
+                switch (key) {
+                    case "spans":
+                        // We won't ever check this.
+                        return undefined;
+                    case "childItems":
+                        return value.length === 0 ? undefined : value;
+                    default:
+                        // Omit falsy values, those are presumed to be the default.
+                        return value || undefined;
                 }
-                // We won't check this.
-                delete item.spans;
-                item.childItems = item.childItems.map(child => {
-                    child = ts.clone(child);
-                    delete child.spans;
-                    ts.Debug.assert(child.childItems.length === 0);
-                    delete child.childItems;
-                    ts.Debug.assert(child.indent === 0);
-                    delete child.indent;
-                    ts.Debug.assert(child.bolded === false);
-                    delete child.bolded;
-                    ts.Debug.assert(child.grayed === false);
-                    delete child.grayed;
-                    if (child.kindModifiers === "") {
-                        delete child.kindModifiers;
-                    }
-                    return child;
-                });
-                if (item.bolded === false) {
-                    delete item.bolded;
-                }
-                if (item.grayed === false) {
-                    delete item.grayed;
-                }
-                return item;
-            });
+            }
         }
 
         public printNavigationItems(searchValue: string) {

@@ -52,8 +52,7 @@ verify.navigationBar([
                 "kind": "module",
                 "kindModifiers": "declare"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "Bar",
@@ -89,21 +88,18 @@ verify.navigationBar([
         "text": "\"Multiline\\r\\nMadness\"",
         "kind": "module",
         "kindModifiers": "declare",
-        "childItems": [],
         "indent": 1
     },
     {
         "text": "\"Multiline\\\nMadness\"",
         "kind": "module",
         "kindModifiers": "declare",
-        "childItems": [],
         "indent": 1
     },
     {
         "text": "\"MultilineMadness\"",
         "kind": "module",
         "kindModifiers": "declare",
-        "childItems": [],
         "indent": 1
     }
 ]);

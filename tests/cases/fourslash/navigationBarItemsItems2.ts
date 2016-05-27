@@ -16,20 +16,17 @@ verify.navigationBar([
                 "text": "A",
                 "kind": "module"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "default",
         "kind": "class",
         "kindModifiers": "export",
-        "childItems": [],
         "indent": 1
     },
     {
         "text": "A",
         "kind": "module",
-        "childItems": [],
         "indent": 1
     }
 ]);

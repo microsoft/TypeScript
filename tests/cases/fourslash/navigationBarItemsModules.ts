@@ -54,8 +54,7 @@ verify.navigationBar([
         "kind": "module",
         "kindModifiers": "declare"
       }
-    ],
-    "indent": 0
+    ]
   },
   {
     "text": "A.B.C",
@@ -124,14 +123,12 @@ verify.navigationBar([
     "text": "\"X.Y.Z\"",
     "kind": "module",
     "kindModifiers": "declare",
-    "childItems": [],
     "indent": 1
   },
   {
     "text": "'X2.Y2.Z2'",
     "kind": "module",
     "kindModifiers": "declare",
-    "childItems": [],
     "indent": 1
   }
 ]);

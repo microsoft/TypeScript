@@ -14,8 +14,7 @@ verify.navigationBar([
                 "kind": "class",
                 "kindModifiers": "export"
             }
-        ],
-        "indent": 0
+        ]
     },
     {
         "text": "Bar",
