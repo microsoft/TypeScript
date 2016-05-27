@@ -1,6 +1,11 @@
 //// [neverType.ts]
 
-function error(message: string) {
+
+function error(message: string): never {
+    throw new Error(message);
+}
+
+function errorVoid(message: string) {
     throw new Error(message);
 }
 
@@ -8,7 +13,19 @@ function fail() {
     return error("Something failed");
 }
 
-function infiniteLoop() {
+function failOrThrow(shouldFail: boolean) {
+    if (shouldFail) {
+        return fail();
+    }
+    throw new Error();
+}
+
+function infiniteLoop1() {
+    while (true) {
+    }
+}
+
+function infiniteLoop2(): never {
     while (true) {
     }
 }
@@ -33,6 +50,21 @@ function check<T>(x: T | undefined) {
     return x || error("Undefined value");
 }
 
+class C {
+    void1() {
+        throw new Error();
+    }
+    void2() {
+        while (true) {}
+    }
+    never1(): never {
+        throw new Error();
+    }
+    never2(): never {
+        while (true) {}
+    }
+}
+
 function f1(x: string | number) {
     if (typeof x === "boolean") {
         x;  // never
@@ -45,13 +77,6 @@ function f2(x: string | number) {
             return x;  // never
         }
     }
-}
-
-function failOrThrow(shouldFail: boolean) {
-    if (shouldFail) {
-        return fail();
-    }
-    throw new Error();
 }
 
 function test(cb: () => string) {
@@ -71,10 +96,23 @@ test(errorCallback);
 function error(message) {
     throw new Error(message);
 }
+function errorVoid(message) {
+    throw new Error(message);
+}
 function fail() {
     return error("Something failed");
 }
-function infiniteLoop() {
+function failOrThrow(shouldFail) {
+    if (shouldFail) {
+        return fail();
+    }
+    throw new Error();
+}
+function infiniteLoop1() {
+    while (true) {
+    }
+}
+function infiniteLoop2() {
     while (true) {
     }
 }
@@ -95,6 +133,23 @@ function move2(direction) {
 function check(x) {
     return x || error("Undefined value");
 }
+var C = (function () {
+    function C() {
+    }
+    C.prototype.void1 = function () {
+        throw new Error();
+    };
+    C.prototype.void2 = function () {
+        while (true) { }
+    };
+    C.prototype.never1 = function () {
+        throw new Error();
+    };
+    C.prototype.never2 = function () {
+        while (true) { }
+    };
+    return C;
+}());
 function f1(x) {
     if (typeof x === "boolean") {
         x; // never
@@ -106,12 +161,6 @@ function f2(x) {
             return x; // never
         }
     }
-}
-function failOrThrow(shouldFail) {
-    if (shouldFail) {
-        return fail();
-    }
-    throw new Error();
 }
 function test(cb) {
     var s = cb();
@@ -126,13 +175,21 @@ test(errorCallback);
 
 //// [neverType.d.ts]
 declare function error(message: string): never;
+declare function errorVoid(message: string): void;
 declare function fail(): never;
-declare function infiniteLoop(): never;
+declare function failOrThrow(shouldFail: boolean): never;
+declare function infiniteLoop1(): void;
+declare function infiniteLoop2(): never;
 declare function move1(direction: "up" | "down"): number;
 declare function move2(direction: "up" | "down"): number;
 declare function check<T>(x: T | undefined): T;
+declare class C {
+    void1(): void;
+    void2(): void;
+    never1(): never;
+    never2(): never;
+}
 declare function f1(x: string | number): void;
 declare function f2(x: string | number): never;
-declare function failOrThrow(shouldFail: boolean): never;
 declare function test(cb: () => string): string;
 declare let errorCallback: () => never;

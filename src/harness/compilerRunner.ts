@@ -1,6 +1,7 @@
 /// <reference path="harness.ts" />
 /// <reference path="runnerbase.ts" />
 /// <reference path="typeWriter.ts" />
+// In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
 /* tslint:disable:no-null-keyword */
 
 const enum CompilerTestType {
@@ -107,7 +108,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
 
                 const output = Harness.Compiler.compileFiles(
-                    toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ undefined);
+                    toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ harnessSettings["currentDirectory"]);
 
                 options = output.options;
                 result = output.result;

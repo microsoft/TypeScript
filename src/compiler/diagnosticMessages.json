@@ -1923,6 +1923,14 @@
         "category": "Error",
         "code": 2685
     },
+    "Identifier '{0}' must be imported from a module": {
+        "category": "Error",
+        "code": 2686
+    },
+    "All declarations of '{0}' must have identical modifiers.": {
+        "category": "Error",
+        "code": 2687
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

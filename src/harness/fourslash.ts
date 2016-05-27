@@ -18,7 +18,6 @@
 /// <reference path="harnessLanguageService.ts" />
 /// <reference path="harness.ts" />
 /// <reference path="fourslashRunner.ts" />
-/* tslint:disable:no-null-keyword */
 
 namespace FourSlash {
     ts.disableIncrementalParsing = false;
@@ -198,7 +197,7 @@ namespace FourSlash {
         public lastKnownMarker: string = "";
 
         // The file that's currently 'opened'
-        public activeFile: FourSlashFile = null;
+        public activeFile: FourSlashFile;
 
         // Whether or not we should format on keystrokes
         public enableFormatting = true;
@@ -922,7 +921,7 @@ namespace FourSlash {
 
         public verifyCurrentParameterIsletiable(isVariable: boolean) {
             const signature = this.getActiveSignatureHelpItem();
-            assert.isNotNull(signature);
+            assert.isOk(signature);
             assert.equal(isVariable, signature.isVariadic);
         }
 
@@ -1096,14 +1095,6 @@ namespace FourSlash {
             }
             addSpanInfoString();
             return resultString;
-
-            function repeatString(count: number, char: string) {
-                let result = "";
-                for (let i = 0; i < count; i++) {
-                    result += char;
-                }
-                return result;
-            }
         }
 
         public getBreakpointStatementLocation(pos: number) {
@@ -1919,7 +1910,7 @@ namespace FourSlash {
         public verifyNavigationItemsCount(expected: number, searchValue: string, matchKind?: string) {
             const items = this.languageService.getNavigateToItems(searchValue);
             let actual = 0;
-            let item: ts.NavigateToItem = null;
+            let item: ts.NavigateToItem;
 
             // Count only the match that match the same MatchKind
             for (let i = 0; i < items.length; i++) {
@@ -1968,80 +1959,23 @@ namespace FourSlash {
             }
         }
 
-        public verifyNavigationBarCount(expected: number) {
+        public verifyNavigationBar(json: any) {
             const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
-            const actual = this.getNavigationBarItemsCount(items);
-
-            if (expected !== actual) {
-                this.raiseError(`verifyNavigationBarCount failed - found: ${actual} navigation items, expected: ${expected}.`);
-            }
-        }
-
-        private getNavigationBarItemsCount(items: ts.NavigationBarItem[]) {
-            let result = 0;
-            if (items) {
-                for (let i = 0, n = items.length; i < n; i++) {
-                    result++;
-                    result += this.getNavigationBarItemsCount(items[i].childItems);
-                }
+            if (JSON.stringify(items, replacer) !== JSON.stringify(json)) {
+                this.raiseError(`verifyNavigationBar failed - expected: ${JSON.stringify(json, undefined, 2)}, got: ${JSON.stringify(items, replacer, 2)}`);
             }
 
-            return result;
-        }
-
-        public verifyNavigationBarIndex(name: string, index: number) {
-            const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
-            if (!items[index]) {
-                this.raiseError(`verifyNavigationBarIndex failed - No item at index ${index}`);
-            }
-            const actual = items[index].text;
-            if (actual !== name) {
-                this.raiseError(`verifyNavigationBarIndex failed - Item at index ${index} is named ${actual} instead of ${name}.`);
-            }
-        }
-
-        public verifyNavigationBarContains(name: string, kind: string, fileName?: string, parentName?: string, isAdditionalSpan?: boolean, markerPosition?: number) {
-            fileName = fileName || this.activeFile.fileName;
-            const items = this.languageService.getNavigationBarItems(fileName);
-
-            if (!items || items.length === 0) {
-                this.raiseError("verifyNavigationBarContains failed - found 0 navigation items, expected at least one.");
-            }
-
-            if (this.navigationBarItemsContains(items, name, kind, parentName)) {
-                return;
-            }
-
-            const missingItem = { name, kind, parentName };
-            this.raiseError(`verifyNavigationBarContains failed - could not find the item: ${JSON.stringify(missingItem, undefined, 2)} in the returned list: (${JSON.stringify(items, undefined, 2)})`);
-        }
-
-        private navigationBarItemsContains(items: ts.NavigationBarItem[], name: string, kind: string, parentName?: string) {
-            function recur(items: ts.NavigationBarItem[], curParentName: string) {
-                for (let i = 0; i < items.length; i++) {
-                    const item = items[i];
-                    if (item && item.text === name && item.kind === kind && (!parentName || curParentName === parentName)) {
-                        return true;
-                    }
-                    if (recur(item.childItems, item.text)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            return recur(items, "");
-        }
-
-        public verifyNavigationBarChildItem(parent: string, name: string, kind: string) {
-            const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
-
-            for (let i = 0; i < items.length; i++) {
-                const item = items[i];
-                if (item.text === parent) {
-                    if (this.navigationBarItemsContains(item.childItems, name, kind))
-                        return;
-                    const missingItem = { name, kind };
-                    this.raiseError(`verifyNavigationBarChildItem failed - could not find the item: ${JSON.stringify(missingItem)} in the children list: (${JSON.stringify(item.childItems, undefined, 2)})`);
+            // Make the data easier to read.
+            function replacer(key: string, value: any) {
+                switch (key) {
+                    case "spans":
+                        // We won't ever check this.
+                        return undefined;
+                    case "childItems":
+                        return value.length === 0 ? undefined : value;
+                    default:
+                        // Omit falsy values, those are presumed to be the default.
+                        return value || undefined;
                 }
             }
         }
@@ -2066,16 +2000,7 @@ namespace FourSlash {
 
             for (let i = 0; i < length; i++) {
                 const item = items[i];
-                const childrenText = showChildItems ? `, children: ${item.childItems.map(child => child.text)}` : "";
-                Harness.IO.log(`${strRepeat("  ", item.indent)}name: ${item.text}, kind: ${item.kind}${childrenText}`);
-            }
-
-            function strRepeat(str: string, times: number) {
-                let out = "";
-                for (let i = 0; i < times; i++) {
-                    out += str;
-                }
-                return out;
+                Harness.IO.log(`${repeatString(item.indent, " ")}name: ${item.text}, kind: ${item.kind}, childItems: ${item.childItems.map(child => child.text)}`);
             }
         }
 
@@ -2211,7 +2136,7 @@ namespace FourSlash {
         }
 
         private findFile(indexOrName: any) {
-            let result: FourSlashFile = null;
+            let result: FourSlashFile;
             if (typeof indexOrName === "number") {
                 const index = <number>indexOrName;
                 if (index >= this.testData.files.length) {
@@ -2380,9 +2305,15 @@ ${code}
         const ranges: Range[] = [];
 
         // Stuff related to the subfile we're parsing
-        let currentFileContent: string = null;
+        let currentFileContent: string = undefined;
         let currentFileName = fileName;
         let currentFileOptions: { [s: string]: string } = {};
+
+        function resetLocalData() {
+            currentFileContent = undefined;
+            currentFileOptions = {};
+            currentFileName = fileName;
+        }
 
         for (let i = 0; i < lines.length; i++) {
             let line = lines[i];
@@ -2396,7 +2327,7 @@ ${code}
                 // Subfile content line
 
                 // Append to the current subfile content, inserting a newline needed
-                if (currentFileContent === null) {
+                if (currentFileContent === undefined) {
                     currentFileContent = "";
                 }
                 else {
@@ -2428,10 +2359,7 @@ ${code}
                                 // Store result file
                                 files.push(file);
 
-                                // Reset local data
-                                currentFileContent = null;
-                                currentFileOptions = {};
-                                currentFileName = fileName;
+                                resetLocalData();
                             }
 
                             currentFileName = basePath + "/" + match[2];
@@ -2458,10 +2386,7 @@ ${code}
                     // Store result file
                     files.push(file);
 
-                    // Reset local data
-                    currentFileContent = null;
-                    currentFileOptions = {};
-                    currentFileName = fileName;
+                    resetLocalData();
                 }
             }
         }
@@ -2526,7 +2451,7 @@ ${code}
 
         if (markerValue === undefined) {
             reportError(fileName, location.sourceLine, location.sourceColumn, "Object markers can not be empty");
-            return null;
+            return undefined;
         }
 
         const marker: Marker = {
@@ -2555,7 +2480,7 @@ ${code}
         if (markerMap[name] !== undefined) {
             const message = "Marker '" + name + "' is duplicated in the source file contents.";
             reportError(marker.fileName, location.sourceLine, location.sourceColumn, message);
-            return null;
+            return undefined;
         }
         else {
             markerMap[name] = marker;
@@ -2574,7 +2499,7 @@ ${code}
         let output = "";
 
         /// The current marker (or maybe multi-line comment?) we're parsing, possibly
-        let openMarker: LocationInformation = null;
+        let openMarker: LocationInformation = undefined;
 
         /// A stack of the open range markers that are still unclosed
         const openRanges: RangeLocationInformation[] = [];
@@ -2682,7 +2607,7 @@ ${code}
                             difference += i + 1 - openMarker.sourcePosition;
 
                             // Reset the state
-                            openMarker = null;
+                            openMarker = undefined;
                             state = State.none;
                         }
                         break;
@@ -2704,7 +2629,7 @@ ${code}
                             difference += i + 1 - openMarker.sourcePosition;
 
                             // Reset the state
-                            openMarker = null;
+                            openMarker = undefined;
                             state = State.none;
                         }
                         else if (validMarkerChars.indexOf(currentChar) < 0) {
@@ -2716,7 +2641,7 @@ ${code}
                                 // Bail out the text we've gathered so far back into the output
                                 flush(i);
                                 lastNormalCharPosition = i;
-                                openMarker = null;
+                                openMarker = undefined;
 
                                 state = State.none;
                             }
@@ -2747,7 +2672,7 @@ ${code}
             reportError(fileName, openRange.sourceLine, openRange.sourceColumn, "Unterminated range.");
         }
 
-        if (openMarker !== null) {
+        if (openMarker) {
             reportError(fileName, openMarker.sourceLine, openMarker.sourceColumn, "Unterminated marker.");
         }
 
@@ -2761,6 +2686,14 @@ ${code}
             version: 0,
             fileName: fileName
         };
+    }
+
+    function repeatString(count: number, char: string) {
+        let result = "";
+        for (let i = 0; i < count; i++) {
+            result += char;
+        }
+        return result;
     }
 }
 
@@ -3063,27 +2996,8 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
-        public navigationBarCount(count: number) {
-            this.state.verifyNavigationBarCount(count);
-        }
-
-        public navigationBarIndex(name: string, index: number) {
-            this.state.verifyNavigationBarIndex(name, index);
-        }
-
-        // TODO: figure out what to do with the unused arguments.
-        public navigationBarContains(
-            name: string,
-            kind: string,
-            fileName?: string,
-            parentName?: string,
-            isAdditionalSpan?: boolean,
-            markerPosition?: number) {
-            this.state.verifyNavigationBarContains(name, kind, fileName, parentName, isAdditionalSpan, markerPosition);
-        }
-
-        public navigationBarChildItem(parent: string, name: string, kind: string) {
-            this.state.verifyNavigationBarChildItem(parent, name, kind);
+        public navigationBar(json: any) {
+            this.state.verifyNavigationBar(json);
         }
 
         public navigationItemsListCount(count: number, searchValue: string, matchKind?: string) {

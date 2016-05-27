@@ -196,8 +196,8 @@ namespace ts {
             traceEnabled
         };
 
-        // use typesRoot and fallback to directory that contains tsconfig if typesRoot is not set
-        const rootDir = options.typesRoot || (options.configFilePath ? getDirectoryPath(options.configFilePath) : undefined);
+        // use typesRoot and fallback to directory that contains tsconfig or current directory if typesRoot is not set
+        const rootDir = options.typesRoot || (options.configFilePath ? getDirectoryPath(options.configFilePath) : (host.getCurrentDirectory && host.getCurrentDirectory()));
 
         if (traceEnabled) {
             if (containingFile === undefined) {
@@ -875,6 +875,19 @@ namespace ts {
             }
         }
 
+        function getDefaultTypeDirectiveNames(rootPath: string): string[] {
+            const localTypes = combinePaths(rootPath, "types");
+            const npmTypes = combinePaths(rootPath, "node_modules/@types");
+            let result: string[] = [];
+            if (sys.directoryExists(localTypes)) {
+                result = result.concat(sys.getDirectories(localTypes));
+            }
+            if (sys.directoryExists(npmTypes)) {
+                result = result.concat(sys.getDirectories(npmTypes));
+            }
+            return result;
+        }
+
         function getDefaultLibLocation(): string {
             return getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
         }
@@ -883,6 +896,7 @@ namespace ts {
         const realpath = sys.realpath && ((path: string) => sys.realpath(path));
 
         return {
+            getDefaultTypeDirectiveNames,
             getSourceFile,
             getDefaultLibLocation,
             getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
@@ -958,6 +972,23 @@ namespace ts {
         return resolutions;
     }
 
+    export function getDefaultTypeDirectiveNames(options: CompilerOptions, rootFiles: string[], host: CompilerHost): string[] {
+        // Use explicit type list from tsconfig.json
+        if (options.types) {
+            return options.types;
+        }
+
+        // or load all types from the automatic type import fields
+        if (host && host.getDefaultTypeDirectiveNames) {
+            const commonRoot = computeCommonSourceDirectoryOfFilenames(rootFiles, host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
+            if (commonRoot) {
+                return host.getDefaultTypeDirectiveNames(commonRoot);
+            }
+        }
+
+        return undefined;
+    }
+
     export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
         let program: Program;
         let files: SourceFile[] = [];
@@ -1005,15 +1036,18 @@ namespace ts {
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase()) : undefined;
 
         if (!tryReuseStructureFromOldProgram()) {
+            forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
+
             // load type declarations specified via 'types' argument
-            if (options.types && options.types.length) {
-                const resolutions = resolveTypeReferenceDirectiveNamesWorker(options.types, /*containingFile*/ undefined);
-                for (let i = 0; i < options.types.length; i++) {
-                    processTypeReferenceDirective(options.types[i], resolutions[i]);
+            const typeReferences: string[] = getDefaultTypeDirectiveNames(options, rootNames, host);
+
+            if (typeReferences) {
+                const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, /*containingFile*/ undefined);
+                for (let i = 0; i < typeReferences.length; i++) {
+                    processTypeReferenceDirective(typeReferences[i], resolutions[i]);
                 }
             }
 
-            forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
             // Do not process the default library if:
             //  - The '--noLib' flag is used.
             //  - A 'no-default-lib' reference comment is encountered in
@@ -1762,10 +1796,6 @@ namespace ts {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
                 }
 
-                if (file) {
-                    file.wasReferenced = file.wasReferenced || isReference;
-                }
-
                 return file;
             }
 
@@ -1782,7 +1812,6 @@ namespace ts {
 
             filesByName.set(path, file);
             if (file) {
-                file.wasReferenced = file.wasReferenced || isReference;
                 file.path = path;
 
                 if (host.useCaseSensitiveFileNames()) {
@@ -1914,20 +1943,7 @@ namespace ts {
                         i < file.imports.length;
 
                     if (shouldAddFile) {
-                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, /*isReference*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
-
-                        if (importedFile && resolution.isExternalLibraryImport) {
-                            // Since currently irrespective of allowJs, we only look for supportedTypeScript extension external module files,
-                            // this check is ok. Otherwise this would be never true for javascript file
-                            if (!isExternalModule(importedFile) && importedFile.statements.length) {
-                                const start = getTokenPosOfNode(file.imports[i], file);
-                                fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
-                            }
-                            else if (importedFile.referencedFiles.length) {
-                                const firstRef = importedFile.referencedFiles[0];
-                                fileProcessingDiagnostics.add(createFileDiagnostic(importedFile, firstRef.pos, firstRef.end - firstRef.pos, Diagnostics.Exported_external_package_typings_file_cannot_contain_tripleslash_references_Please_contact_the_package_author_to_update_the_package_definition));
-                            }
-                        }
+                        findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, /*isReference*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
                     }
                 }
             }
