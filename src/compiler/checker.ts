@@ -8109,6 +8109,13 @@ namespace ts {
             }
         }
 
+        function updateReferencesForTypedParameters(node: TypeNode): void {
+            const symbol = getNodeLinks(node).resolvedSymbol;
+            if (symbol) {
+                symbol.hasReference = true;
+            }
+        }
+
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
             updateReferences(node);
@@ -9992,6 +9999,7 @@ namespace ts {
                 return unknownType;
             }
 
+            prop.hasReference = true;
             getNodeLinks(node).resolvedSymbol = prop;
 
             if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
@@ -13107,6 +13115,9 @@ namespace ts {
             checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarProperty(node) || checkGrammarComputedPropertyName(node.name);
 
             checkVariableLikeDeclaration(node);
+            if (node.type && node.type.kind === SyntaxKind.TypeReference) {
+                updateReferencesForTypedParameters(node.type);
+            }
         }
 
         function checkMethodDeclaration(node: MethodDeclaration) {
@@ -14207,13 +14218,48 @@ namespace ts {
                             error(node, Diagnostics.Variable_0_has_never_been_used, key);
                         }
 
-                        if (compilerOptions.noUnusedParameters && node.locals[key].valueDeclaration.kind === SyntaxKind.Parameter) {
+                        if (compilerOptions.noUnusedParameters
+                            && node.locals[key].valueDeclaration.kind === SyntaxKind.Parameter
+                            && node.parent.kind === SyntaxKind.FunctionDeclaration) {
                             error(node, Diagnostics.Parameter_0_has_never_been_used, key);
                         }
                     }
                 }
             }
         }
+
+        function checkUnusedPrivates(node: ClassDeclaration): void {
+            if (!isSourceFileADefinitionFile(node)) {
+                for (let i = 0; i < node.members.length; i++) {
+                    switch (node.members[i].kind) {
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.PropertyDeclaration:
+                            if (compilerOptions.noUnusedLocals && isPrivateClassElement(node.members[i]) && !node.members[i].symbol.hasReference) {
+                                error(node, Diagnostics.Variable_0_has_never_been_used, node.members[i].symbol.name);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                //var typeParametersLength = (node.typeParameters) ? node.typeParameters.length : 0;
+                for (let i = 0; node.typeParameters && i < node.typeParameters.length; i++) {
+                    if (compilerOptions.noUnusedLocals && !node.typeParameters[i].symbol.hasReference) {
+                        error(node, Diagnostics.Variable_0_has_never_been_used, node.typeParameters[i].symbol.name);
+                    }
+                }
+            }                
+        }
+
+        function isPrivateClassElement(node: ClassElement): boolean {
+            for (let i = 0; node.modifiers && i < node.modifiers.length; i++) {
+                if (node.modifiers[i].kind === SyntaxKind.PrivateKeyword)
+                    return true;
+            }
+            return false;
+        }
+
 
         function checkBlock(node: Block) {
             // Grammar checking for SyntaxKind.Block
@@ -15372,6 +15418,7 @@ namespace ts {
             }
             checkClassLikeDeclaration(node);
             forEach(node.members, checkSourceElement);
+            checkUnusedPrivates(node);
         }
 
         function checkClassLikeDeclaration(node: ClassLikeDeclaration) {
