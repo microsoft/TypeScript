@@ -6,10 +6,36 @@
 ////    }
 ////}
 
-verify.navigationBarContains("List", "class");
-verify.navigationBarContains("constructor", "constructor");
-verify.navigationBarContains("a", "property");
-verify.navigationBarContains("b", "property");
-
-// no other items
-verify.navigationBarCount(6);
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "List",
+                "kind": "class"
+            }
+        ]
+    },
+    {
+        "text": "List",
+        "kind": "class",
+        "childItems": [
+            {
+                "text": "constructor",
+                "kind": "constructor"
+            },
+            {
+                "text": "a",
+                "kind": "property",
+                "kindModifiers": "public"
+            },
+            {
+                "text": "b",
+                "kind": "property",
+                "kindModifiers": "public"
+            }
+        ],
+        "indent": 1
+    }
+]);
