@@ -1009,7 +1009,7 @@ namespace ts {
             }
 
             // `declarationName` is the name of the local declaration for the parameter.
-            const declarationName = getUniqueClone(<Identifier>parameter.name);
+            const declarationName = getMutableClone(<Identifier>parameter.name);
             setNodeEmitFlags(declarationName, NodeEmitFlags.NoSourceMap);
 
             // `expressionName` is the name of the parameter used in expressions.
@@ -2940,7 +2940,7 @@ namespace ts {
          */
         function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: NodeEmitFlags) {
             if (node.name && !isGeneratedIdentifier(node.name)) {
-                const name = getUniqueClone(node.name);
+                const name = getMutableClone(node.name);
                 emitFlags |= getNodeEmitFlags(node.name);
                 if (!allowSourceMaps) {
                     emitFlags |= NodeEmitFlags.NoSourceMap;
