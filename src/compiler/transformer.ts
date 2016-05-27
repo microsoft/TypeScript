@@ -23,6 +23,100 @@ namespace ts {
         EmitNotifications = 1 << 1,
     }
 
+    /* @internal */
+    export interface TransformationContext extends LexicalEnvironment {
+        getCompilerOptions(): CompilerOptions;
+        getEmitResolver(): EmitResolver;
+        getEmitHost(): EmitHost;
+
+        /**
+         * Gets flags used to customize later transformations or emit.
+         */
+        getNodeEmitFlags(node: Node): NodeEmitFlags;
+
+        /**
+         * Sets flags used to customize later transformations or emit.
+         */
+        setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags): T;
+
+        /**
+         * Gets the TextRange to use for source maps for the node.
+         */
+        getSourceMapRange(node: Node): TextRange;
+
+        /**
+         * Sets the TextRange to use for source maps for the node.
+         */
+        setSourceMapRange<T extends Node>(node: T, range: TextRange): T;
+
+        /**
+         * Gets the TextRange to use for source maps for a token of a node.
+         */
+        getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange;
+
+        /**
+         * Sets the TextRange to use for source maps for a token of a node.
+         */
+        setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange): T;
+
+        /**
+         * Gets the TextRange to use for comments for the node.
+         */
+        getCommentRange(node: Node): TextRange;
+
+        /**
+         * Sets the TextRange to use for comments for the node.
+         */
+        setCommentRange<T extends Node>(node: T, range: TextRange): T;
+
+        /**
+         * Hoists a function declaration to the containing scope.
+         */
+        hoistFunctionDeclaration(node: FunctionDeclaration): void;
+
+        /**
+         * Hoists a variable declaration to the containing scope.
+         */
+        hoistVariableDeclaration(node: Identifier): void;
+
+        /**
+         * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
+         */
+        enableSubstitution(kind: SyntaxKind): void;
+
+        /**
+         * Determines whether expression substitutions are enabled for the provided node.
+         */
+        isSubstitutionEnabled(node: Node): boolean;
+
+        /**
+         * Hook used by transformers to substitute expressions just before they
+         * are emitted by the pretty printer.
+         */
+        onSubstituteNode?: (node: Node, isExpression: boolean) => Node;
+
+        /**
+         * Enables before/after emit notifications in the pretty printer for the provided
+         * SyntaxKind.
+         */
+        enableEmitNotification(kind: SyntaxKind): void;
+
+        /**
+         * Determines whether before/after emit notifications should be raised in the pretty
+         * printer when it emits a node.
+         */
+        isEmitNotificationEnabled(node: Node): boolean;
+
+        /**
+         * Hook used to allow transformers to capture state before or after
+         * the printer emits a node.
+         */
+        onEmitNode?: (node: Node, emit: (node: Node) => void) => void;
+    }
+
+    /* @internal */
+    export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
+
     export function getTransformers(compilerOptions: CompilerOptions) {
         const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);

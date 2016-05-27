@@ -1120,6 +1120,18 @@ namespace ts {
         }
     }
 
+    export function getEnvironmentVariable(name: string, host?: CompilerHost) {
+        if (host && host.getEnvironmentVariable) {
+            return host.getEnvironmentVariable(name);
+        }
+
+        if (sys && sys.getEnvironmentVariable) {
+            return sys.getEnvironmentVariable(name);
+        }
+
+        return "";
+    }
+
     export function copyListRemovingItem<T>(item: T, list: T[]) {
         const copiedList: T[] = [];
         for (const e of list) {
