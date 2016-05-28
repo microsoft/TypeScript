@@ -82,6 +82,9 @@ let maybeNumber: number | undefined;
 >maybeNumber : Symbol(maybeNumber, Decl(controlFlowIIFE.ts, 31, 3))
 
 })();
+maybeNumber++;
+>maybeNumber : Symbol(maybeNumber, Decl(controlFlowIIFE.ts, 31, 3))
+
 if (maybeNumber !== undefined) {
 >maybeNumber : Symbol(maybeNumber, Decl(controlFlowIIFE.ts, 31, 3))
 >undefined : Symbol(undefined)
@@ -91,10 +94,10 @@ if (maybeNumber !== undefined) {
 }
 
 let test: string | undefined;
->test : Symbol(test, Decl(controlFlowIIFE.ts, 39, 3))
+>test : Symbol(test, Decl(controlFlowIIFE.ts, 40, 3))
 
 if (!test) {
->test : Symbol(test, Decl(controlFlowIIFE.ts, 39, 3))
+>test : Symbol(test, Decl(controlFlowIIFE.ts, 40, 3))
 
     throw new Error('Test is not defined');
 >Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
@@ -102,7 +105,7 @@ if (!test) {
 (() => {
     test.slice(1); // No error
 >test.slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
->test : Symbol(test, Decl(controlFlowIIFE.ts, 39, 3))
+>test : Symbol(test, Decl(controlFlowIIFE.ts, 40, 3))
 >slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
 
 })();

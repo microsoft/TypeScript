@@ -34,6 +34,7 @@ let maybeNumber: number | undefined;
 (function () {
     maybeNumber = 1;
 })();
+maybeNumber++;
 if (maybeNumber !== undefined) {
     maybeNumber++;
 }

@@ -112,9 +112,13 @@ let maybeNumber: number | undefined;
 >1 : number
 
 })();
+maybeNumber++;
+>maybeNumber++ : number
+>maybeNumber : number
+
 if (maybeNumber !== undefined) {
 >maybeNumber !== undefined : boolean
->maybeNumber : number | undefined
+>maybeNumber : number
 >undefined : undefined
 
     maybeNumber++;
