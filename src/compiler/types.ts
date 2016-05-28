@@ -416,6 +416,7 @@ namespace ts {
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
         EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions,
+        ReachabilityAndEmitFlags = ReachabilityCheckFlags | EmitHelperFlags,
 
         // Parsing context flags
         ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile,

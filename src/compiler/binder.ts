@@ -104,14 +104,15 @@ namespace ts {
         let seenThisKeyword: boolean;
 
         // state used by reachability checks
-        let hasExplicitReturn: boolean;
         let currentFlow: FlowNode;
         let currentBreakTarget: FlowLabel;
         let currentContinueTarget: FlowLabel;
+        let currentReturnTarget: FlowLabel;
         let currentTrueTarget: FlowLabel;
         let currentFalseTarget: FlowLabel;
         let preSwitchCaseFlow: FlowNode;
         let activeLabels: ActiveLabel[];
+        let hasExplicitReturn: boolean;
 
         // state used for emit helpers
         let hasClassExtends: boolean;
@@ -156,13 +157,14 @@ namespace ts {
             blockScopeContainer = undefined;
             lastContainer = undefined;
             seenThisKeyword = false;
-            hasExplicitReturn = false;
             currentFlow = undefined;
             currentBreakTarget = undefined;
             currentContinueTarget = undefined;
+            currentReturnTarget = undefined;
             currentTrueTarget = undefined;
             currentFalseTarget = undefined;
             activeLabels = undefined;
+            hasExplicitReturn = false;
             hasClassExtends = false;
             hasAsyncFunctions = false;
             hasDecorators = false;
@@ -443,20 +445,20 @@ namespace ts {
                 blockScopeContainer.locals = undefined;
             }
 
-            let savedHasExplicitReturn: boolean;
-            let savedCurrentFlow: FlowNode;
-            let savedBreakTarget: FlowLabel;
-            let savedContinueTarget: FlowLabel;
-            let savedActiveLabels: ActiveLabel[];
+            let saveCurrentFlow: FlowNode;
+            let saveBreakTarget: FlowLabel;
+            let saveContinueTarget: FlowLabel;
+            let saveReturnTarget: FlowLabel;
+            let saveActiveLabels: ActiveLabel[];
+            let saveHasExplicitReturn: boolean;
+            let isIIFE: boolean;
 
             const kind = node.kind;
             let flags = node.flags;
 
-            // reset all reachability check related flags on node (for incremental scenarios)
-            flags &= ~NodeFlags.ReachabilityCheckFlags;
-
-            // reset all emit helper flags on node (for incremental scenarios)
-            flags &= ~NodeFlags.EmitHelperFlags;
+            // Reset all reachability check related flags on node (for incremental scenarios)
+            // Reset all emit helper flags on node (for incremental scenarios)
+            flags &= ~NodeFlags.ReachabilityAndEmitFlags;
 
             if (kind === SyntaxKind.InterfaceDeclaration) {
                 seenThisKeyword = false;
@@ -464,23 +466,30 @@ namespace ts {
 
             const saveState = kind === SyntaxKind.SourceFile || kind === SyntaxKind.ModuleBlock || isFunctionLikeKind(kind);
             if (saveState) {
-                savedHasExplicitReturn = hasExplicitReturn;
-                savedCurrentFlow = currentFlow;
-                savedBreakTarget = currentBreakTarget;
-                savedContinueTarget = currentContinueTarget;
-                savedActiveLabels = activeLabels;
-
-                hasExplicitReturn = false;
-                currentFlow = { flags: FlowFlags.Start };
-                if (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) {
-                    (<FlowStart>currentFlow).container = <FunctionExpression | ArrowFunction>node;
+                saveCurrentFlow = currentFlow;
+                saveBreakTarget = currentBreakTarget;
+                saveContinueTarget = currentContinueTarget;
+                saveReturnTarget = currentReturnTarget;
+                saveActiveLabels = activeLabels;
+                saveHasExplicitReturn = hasExplicitReturn;
+                isIIFE = (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) && !!getImmediatelyInvokedFunctionExpression(node);
+                if (isIIFE) {
+                    currentReturnTarget = createBranchLabel();
+                }
+                else {
+                    currentFlow = { flags: FlowFlags.Start };
+                    if (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) {
+                        (<FlowStart>currentFlow).container = <FunctionExpression | ArrowFunction>node;
+                    }
+                    currentReturnTarget = undefined;
                 }
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
                 activeLabels = undefined;
+                hasExplicitReturn = false;
             }
 
-            if (isInJavaScriptFile(node) && node.jsDocComment) {
+            if (node.flags & NodeFlags.JavaScriptFile && node.jsDocComment) {
                 bind(node.jsDocComment);
             }
 
@@ -518,11 +527,18 @@ namespace ts {
             node.flags = flags;
 
             if (saveState) {
-                hasExplicitReturn = savedHasExplicitReturn;
-                currentFlow = savedCurrentFlow;
-                currentBreakTarget = savedBreakTarget;
-                currentContinueTarget = savedContinueTarget;
-                activeLabels = savedActiveLabels;
+                if (isIIFE) {
+                    addAntecedent(currentReturnTarget, currentFlow);
+                    currentFlow = finishFlowLabel(currentReturnTarget);
+                }
+                else {
+                    currentFlow = saveCurrentFlow;
+                }
+                currentBreakTarget = saveBreakTarget;
+                currentContinueTarget = saveContinueTarget;
+                currentReturnTarget = saveReturnTarget;
+                activeLabels = saveActiveLabels;
+                hasExplicitReturn = saveHasExplicitReturn;
             }
 
             container = saveContainer;
@@ -854,6 +870,9 @@ namespace ts {
             bind(node.expression);
             if (node.kind === SyntaxKind.ReturnStatement) {
                 hasExplicitReturn = true;
+                if (currentReturnTarget) {
+                    addAntecedent(currentReturnTarget, currentFlow);
+                }
             }
             currentFlow = unreachableFlow;
         }
@@ -1105,7 +1124,6 @@ namespace ts {
         }
 
         function bindCallExpressionFlow(node: CallExpression) {
-            forEachChild(node, bind);
             // If the target of the call expression is a function expression or arrow function we have
             // an immediately invoked function expression (IIFE). Initialize the flowNode property to
             // the current control flow (which includes evaluation of the IIFE arguments).
@@ -1114,7 +1132,12 @@ namespace ts {
                 expr = (<ParenthesizedExpression>expr).expression;
             }
             if (expr.kind === SyntaxKind.FunctionExpression || expr.kind === SyntaxKind.ArrowFunction) {
-                node.flowNode = currentFlow;
+                forEach(node.typeArguments, bind);
+                forEach(node.arguments, bind);
+                bind(node.expression);
+            }
+            else {
+                forEachChild(node, bind);
             }
         }
 

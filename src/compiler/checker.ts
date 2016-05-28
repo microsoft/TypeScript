@@ -7695,20 +7695,11 @@ namespace ts {
                             getTypeAtFlowLoopLabel(<FlowLabel>flow);
                     }
                     else if (flow.flags & FlowFlags.Start) {
+                        // Check if we should continue with the control flow of the containing function.
                         const container = (<FlowStart>flow).container;
-                        if (container) {
-                            // If container is an IIFE continue with the control flow associated with the
-                            // call expression node.
-                            const iife = getImmediatelyInvokedFunctionExpression(<FunctionExpression>container);
-                            if (iife && iife.flowNode) {
-                                flow = iife.flowNode;
-                                continue;
-                            }
-                            // Check if we should continue with the control flow of the containing function.
-                            if (includeOuterFunctions && container.flowNode) {
-                                flow = container.flowNode;
-                                continue;
-                            }
+                        if (container && includeOuterFunctions) {
+                            flow = container.flowNode;
+                            continue;
                         }
                         // At the top of the flow we have the initial type.
                         type = initialType;
@@ -8652,23 +8643,25 @@ namespace ts {
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
             const func = parameter.parent;
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
-                const iife = getImmediatelyInvokedFunctionExpression(func);
-                if (iife) {
-                    const indexOfParameter = indexOf(func.parameters, parameter);
-                    if (iife.arguments && indexOfParameter < iife.arguments.length) {
-                        if (parameter.dotDotDotToken) {
-                            const restTypes: Type[] = [];
-                            for (let i = indexOfParameter; i < iife.arguments.length; i++) {
-                                restTypes.push(getTypeOfExpression(iife.arguments[i]));
+                if (func.kind === SyntaxKind.FunctionExpression || func.kind === SyntaxKind.ArrowFunction) {
+                    const iife = getImmediatelyInvokedFunctionExpression(func);
+                    if (iife) {
+                        const indexOfParameter = indexOf(func.parameters, parameter);
+                        if (iife.arguments && indexOfParameter < iife.arguments.length) {
+                            if (parameter.dotDotDotToken) {
+                                const restTypes: Type[] = [];
+                                for (let i = indexOfParameter; i < iife.arguments.length; i++) {
+                                    restTypes.push(getTypeOfExpression(iife.arguments[i]));
+                                }
+                                return createArrayType(getUnionType(restTypes));
                             }
-                            return createArrayType(getUnionType(restTypes));
+                            const links = getNodeLinks(iife);
+                            const cached = links.resolvedSignature;
+                            links.resolvedSignature = anySignature;
+                            const type = checkExpression(iife.arguments[indexOfParameter]);
+                            links.resolvedSignature = cached;
+                            return type;
                         }
-                        const links = getNodeLinks(iife);
-                        const cached = links.resolvedSignature;
-                        links.resolvedSignature = anySignature;
-                        const type = checkExpression(iife.arguments[indexOfParameter]);
-                        links.resolvedSignature = cached;
-                        return type;
                     }
                 }
                 const contextualSignature = getContextualSignature(func);
@@ -8689,20 +8682,6 @@ namespace ts {
                 }
             }
             return undefined;
-        }
-
-        function getImmediatelyInvokedFunctionExpression(func: FunctionExpression | MethodDeclaration) {
-            if (isFunctionExpressionOrArrowFunction(func)) {
-                let prev: Node = func;
-                let parent: Node = func.parent;
-                while (parent.kind === SyntaxKind.ParenthesizedExpression) {
-                    prev = parent;
-                    parent = parent.parent;
-                }
-                if (parent.kind === SyntaxKind.CallExpression && (parent as CallExpression).expression === prev) {
-                    return parent as CallExpression;
-                }
-            }
         }
 
         // In a variable, parameter or property declaration with a type annotation,
