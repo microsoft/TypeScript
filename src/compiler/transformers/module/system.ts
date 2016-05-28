@@ -12,10 +12,6 @@ namespace ts {
         const {
             getNodeEmitFlags,
             setNodeEmitFlags,
-            getCommentRange,
-            setCommentRange,
-            getSourceMapRange,
-            setSourceMapRange,
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,

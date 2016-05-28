@@ -2993,19 +2993,6 @@ namespace ts {
             }
         }
 
-        function getDeclarationNameExpression(node: DeclarationStatement) {
-            const name = getDeclarationName(node);
-            if (isNamespaceExport(node)) {
-                return getNamespaceMemberName(name);
-            }
-            else {
-                // We set the "ExportName" flag to indicate to any module transformer
-                // downstream that any `exports.` prefix should be added.
-                setNodeEmitFlags(name, getNodeEmitFlags(name) | NodeEmitFlags.ExportName);
-                return name;
-            }
-        }
-
         function getClassPrototype(node: ClassExpression | ClassDeclaration) {
             return createPropertyAccess(getDeclarationName(node), "prototype");
         }
@@ -3109,7 +3096,7 @@ namespace ts {
                     currentDecoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAliases[getOriginalNodeId(node)];
                 }
                 else if (node.kind === SyntaxKind.Identifier) {
-                    const declaration = resolver.getReferencedValueDeclaration(<Identifier>node)
+                    const declaration = resolver.getReferencedValueDeclaration(<Identifier>node);
                     if (declaration && isClassWithDecorators(declaration)) {
                         currentDecoratedClassAliases[getOriginalNodeId(declaration)] = decoratedClassAliases[getOriginalNodeId(declaration)];
                     }

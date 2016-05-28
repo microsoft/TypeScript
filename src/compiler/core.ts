@@ -1120,6 +1120,18 @@ namespace ts {
         }
     }
 
+    export function getEnvironmentVariable(name: string, host?: CompilerHost) {
+        if (host && host.getEnvironmentVariable) {
+            return host.getEnvironmentVariable(name);
+        }
+
+        if (sys && sys.getEnvironmentVariable) {
+            return sys.getEnvironmentVariable(name);
+        }
+
+        return "";
+    }
+
     export function copyListRemovingItem<T>(item: T, list: T[]) {
         const copiedList: T[] = [];
         for (const e of list) {
@@ -1141,7 +1153,6 @@ namespace ts {
     export namespace performance {
         let counters: Map<number>;
         let measures: Map<number>;
-        let enabled = false;
 
         /**
          * Increments a counter with the specified name.
@@ -1149,7 +1160,7 @@ namespace ts {
          * @param counterName The name of the counter.
          */
         export function increment(counterName: string) {
-            if (enabled) {
+            if (counters) {
                 counters[counterName] = (getProperty(counters, counterName) || 0) + 1;
             }
         }
@@ -1160,14 +1171,14 @@ namespace ts {
          * @param counterName The name of the counter.
          */
         export function getCount(counterName: string) {
-            return enabled && getProperty(counters, counterName) || 0;
+            return counters && getProperty(counters, counterName) || 0;
         }
 
         /**
          * Marks the start of a performance measurement.
          */
         export function mark() {
-            return enabled ? Date.now() : 0;
+            return measures ? Date.now() : 0;
         }
 
         /**
@@ -1177,7 +1188,7 @@ namespace ts {
          * @param marker The timestamp of the starting mark.
          */
         export function measure(measureName: string, marker: number) {
-            if (enabled) {
+            if (measures) {
                 measures[measureName] = (getProperty(measures, measureName) || 0) + (mark() - marker);
             }
         }
@@ -1188,35 +1199,29 @@ namespace ts {
          * @param measureName The name of the measure whose durations should be accumulated.
          */
         export function getDuration(measureName: string) {
-            return enabled && getProperty(measures, measureName) || 0;
+            return measures && getProperty(measures, measureName) || 0;
         }
 
-        /** Enables performance measurements for the compiler. */
+        /** Enables (and resets) performance measurements for the compiler. */
         export function enable() {
-            if (!enabled) {
-                enabled = true;
-                counters = { };
-                measures = {
-                    programTime: 0,
-                    parseTime: 0,
-                    bindTime: 0,
-                    emitTime: 0,
-                    ioReadTime: 0,
-                    ioWriteTime: 0,
-                    printTime: 0,
-                    commentTime: 0,
-                    sourceMapTime: 0
-                };
-            }
+            counters = { };
+            measures = {
+                programTime: 0,
+                parseTime: 0,
+                bindTime: 0,
+                emitTime: 0,
+                ioReadTime: 0,
+                ioWriteTime: 0,
+                printTime: 0,
+                commentTime: 0,
+                sourceMapTime: 0
+            };
         }
 
-        /** Disables performance measurements for the compiler. */
+        /** Disables (and clears) performance measurements for the compiler. */
         export function disable() {
-            if (enabled) {
-                enabled = false;
-                counters = undefined;
-                measures = undefined;
-            }
+            counters = undefined;
+            measures = undefined;
         }
     }
 }
