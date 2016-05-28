@@ -50,7 +50,7 @@ namespace ts {
                 return undefined; // do not emit export equals for ES6
             }
             const original = getOriginalNode(node);
-            return nodeIsSynthesized(original) || resolver.isValueAliasDeclaration(original) ? node: undefined;
+            return nodeIsSynthesized(original) || resolver.isValueAliasDeclaration(original) ? node : undefined;
         }
 
         function visitExportDeclaration(node: ExportDeclaration): ExportDeclaration {
@@ -64,7 +64,7 @@ namespace ts {
             if (node.exportClause === newExportClause) {
                 return node;
             }
-            return newExportClause 
+            return newExportClause
                 ? createExportDeclaration(newExportClause, node.moduleSpecifier)
                 : undefined;
         }
@@ -106,12 +106,12 @@ namespace ts {
             const newNamedBindings = visitNode(node.namedBindings, visitor, isNamedImportBindings, /*optional*/ true);
             return newDefaultImport !== node.name || newNamedBindings !== node.namedBindings
                 ? createImportClause(newDefaultImport, newNamedBindings)
-                : node; 
+                : node;
         }
 
         function visitNamedBindings(node: NamedImportBindings): VisitResult<NamedImportBindings> {
             if (node.kind === SyntaxKind.NamespaceImport) {
-                return resolver.isReferencedAliasDeclaration(node) ? node: undefined;
+                return resolver.isReferencedAliasDeclaration(node) ? node : undefined;
             }
             else {
                 const newNamedImportElements = visitNodes((<NamedImports>node).elements, visitor, isImportSpecifier);

@@ -619,7 +619,7 @@ namespace ts {
             if (hasModifier(node, ModifierFlags.Export)) {
                 const variables = getInitializedVariables(node.declarationList);
                 if (variables.length > 0) {
-                    let inlineAssignments = createStatement(
+                    const inlineAssignments = createStatement(
                         inlineExpressions(
                             map(variables, transformInitializedVariable)
                         ),
@@ -648,7 +648,7 @@ namespace ts {
         function addExportMemberAssignmentsForBindingName(resultStatements: Statement[], name: BindingName): void {
             if (isBindingPattern(name)) {
                 for (const element of name.elements) {
-                    addExportMemberAssignmentsForBindingName(resultStatements, element.name)
+                    addExportMemberAssignmentsForBindingName(resultStatements, element.name);
                 }
             }
             else {

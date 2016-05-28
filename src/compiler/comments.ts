@@ -296,7 +296,7 @@ namespace ts {
                 },
                 emitTrailingComments(range: TextRange, comments: CommentRange[]): void {
                     const commentStart = performance.mark();
-                    emitLeadingComments(range, comments);
+                    emitTrailingComments(range, comments);
                     performance.measure("commentTime", commentStart);
                 },
                 emitLeadingDetachedComments(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (contextNode: Node) => boolean): void {

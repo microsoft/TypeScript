@@ -508,10 +508,6 @@ namespace ts {
             return skipTrivia(currentSourceText, rangeHasDecorators ? (range as Node).decorators.end : range.pos);
         }
 
-        function getStartPos(range: TextRange) {
-            return skipTrivia(currentSourceText, range.pos);
-        }
-
         /**
          * Emits a mapping for the start of a range.
          *

@@ -3,8 +3,6 @@
 
 /* @internal */
 namespace ts {
-    const synthesizedLocation: TextRange = { pos: -1, end: -1 };
-
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
@@ -151,7 +149,8 @@ namespace ts {
         name.text = "";
         name.originalKeywordKind = SyntaxKind.Unknown;
         name.autoGenerateKind = GeneratedIdentifierKind.Auto;
-        name.autoGenerateId = nextAutoGenerateId++;
+        name.autoGenerateId = nextAutoGenerateId;
+        nextAutoGenerateId++;
         if (recordTempVariable) {
             recordTempVariable(name);
         }
@@ -163,7 +162,8 @@ namespace ts {
         name.text = "";
         name.originalKeywordKind = SyntaxKind.Unknown;
         name.autoGenerateKind = GeneratedIdentifierKind.Loop;
-        name.autoGenerateId = nextAutoGenerateId++;
+        name.autoGenerateId = nextAutoGenerateId;
+        nextAutoGenerateId++;
         return name;
     }
 
@@ -172,7 +172,8 @@ namespace ts {
         name.text = text;
         name.originalKeywordKind = SyntaxKind.Unknown;
         name.autoGenerateKind = GeneratedIdentifierKind.Unique;
-        name.autoGenerateId = nextAutoGenerateId++;
+        name.autoGenerateId = nextAutoGenerateId;
+        nextAutoGenerateId++;
         return name;
     }
 
@@ -182,7 +183,8 @@ namespace ts {
         name.text = "";
         name.originalKeywordKind = SyntaxKind.Unknown;
         name.autoGenerateKind = GeneratedIdentifierKind.Node;
-        name.autoGenerateId = nextAutoGenerateId++;
+        name.autoGenerateId = nextAutoGenerateId;
+        nextAutoGenerateId++;
         return name;
     }
 
