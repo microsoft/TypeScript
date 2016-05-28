@@ -11,16 +11,6 @@ namespace ts {
         value: string;
     }
 
-    interface Mark {
-        markName: string;
-        count: number;
-    }
-
-    interface Measure {
-        measureName: string;
-        duration: number;
-    }
-
     let reportDiagnostic = reportDiagnosticSimply;
 
     function reportDiagnostics(diagnostics: Diagnostic[], host: CompilerHost): void {
@@ -560,7 +550,6 @@ namespace ts {
         let statistics: Statistic[];
         if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
             performance.enable();
-            performance.reset();
             statistics = [];
         }
 
@@ -610,7 +599,6 @@ namespace ts {
             reportStatistics();
 
             performance.disable();
-            performance.reset();
         }
 
         return { program, exitStatus };

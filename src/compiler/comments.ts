@@ -23,9 +23,9 @@ namespace ts {
         let currentText: string;
         let currentLineMap: number[];
         let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[];
-
-        // Tracks comment ranges that have already been consumed.
-        let consumedCommentRanges: Map<boolean>;
+        let hasWrittenComment = false;
+        let hasLastComment: boolean;
+        let lastCommentEnd: number;
 
         return {
             reset,
@@ -122,7 +122,7 @@ namespace ts {
             const skipTrailingComments = end < 0 || (emitFlags & NodeEmitFlags.NoTrailingComments) !== 0 || compilerOptions.removeComments;
 
             if (!skipLeadingComments) {
-                emitDetachedCommentsAndUpdateCommentsInfo(detachedRange, compilerOptions.removeComments);
+                emitDetachedCommentsAndUpdateCommentsInfo(detachedRange);
             }
 
             if (extendedDiagnostics) {
@@ -144,11 +144,12 @@ namespace ts {
         }
 
         function emitLeadingComments(pos: number, isEmittedNode: boolean) {
-            let leadingComments: CommentRange[];
+            hasWrittenComment = false;
+
             if (isEmittedNode) {
-                leadingComments = getLeadingCommentsToEmit(pos);
+                forEachLeadingCommentToEmit(pos, emitLeadingComment);
             }
-            else {
+            else if (pos === 0) {
                 // If the node will not be emitted in JS, remove all the comments(normal, pinned and ///) associated with the node,
                 // unless it is a triple slash comment at the top of the file.
                 // For Example:
@@ -157,22 +158,52 @@ namespace ts {
                 //      /// <reference-path ...>
                 //      interface F {}
                 //  The first /// will NOT be removed while the second one will be removed even though both node will not be emitted
-                if (pos === 0) {
-                    leadingComments = filter(getLeadingCommentsToEmit(pos), isTripleSlashComment);
-                }
+                forEachLeadingCommentToEmit(pos, emitTripleSlashLeadingComment);
+            }
+        }
+
+        function emitTripleSlashLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
+            if (isTripleSlashComment(commentPos, commentEnd)) {
+                emitLeadingComment(commentPos, commentEnd, kind, hasTrailingNewLine, rangePos);
+            }
+        }
+
+        function emitLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
+            if (!hasWrittenComment) {
+                emitNewLineBeforeLeadingCommentOfPosition(currentLineMap, writer, rangePos, commentPos);
+                hasWrittenComment = true;
             }
 
-            emitNewLineBeforeLeadingCommentsOfPosition(currentLineMap, writer, pos, leadingComments);
-
             // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-            emitComments(currentText, currentLineMap, writer, leadingComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeComment);
+            emitPos(commentPos);
+            writeCommentRange(currentText, currentLineMap, writer, commentPos, commentEnd, newLine);
+            emitPos(commentEnd);
+
+            if (hasTrailingNewLine) {
+                writer.writeLine();
+            }
+            else {
+                writer.write(" ");
+            }
         }
 
         function emitTrailingComments(pos: number) {
-            const trailingComments = getTrailingCommentsToEmit(pos);
+            forEachTrailingCommentToEmit(pos, emitTrailingComment);
+        }
 
-            // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
-            emitComments(currentText, currentLineMap, writer, trailingComments, /*leadingSeparator*/ true, /*trailingSeparator*/ false, newLine, writeComment);
+        function emitTrailingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean) {
+            // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment2*/
+            if (!writer.isAtStartOfLine()) {
+                writer.write(" ");
+            }
+
+            emitPos(commentPos);
+            writeCommentRange(currentText, currentLineMap, writer, commentPos, commentEnd, newLine);
+            emitPos(commentEnd);
+
+            if (hasTrailingNewLine) {
+                writer.writeLine();
+            }
         }
 
         function emitTrailingCommentsOfPosition(pos: number) {
@@ -185,49 +216,45 @@ namespace ts {
                 commentStart = performance.mark();
             }
 
-            const trailingComments = getTrailingCommentsToEmit(pos);
-
-            // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
-            emitComments(currentText, currentLineMap, writer, trailingComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeComment);
+            forEachTrailingCommentToEmit(pos, emitTrailingCommentOfPosition);
 
             if (extendedDiagnostics) {
                 performance.measure("commentTime", commentStart);
             }
         }
 
-        function getLeadingCommentsToEmit(pos: number) {
+        function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean) {
+            // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
+
+            emitPos(commentPos);
+            writeCommentRange(currentText, currentLineMap, writer, commentPos, commentEnd, newLine);
+            emitPos(commentEnd);
+
+            if (hasTrailingNewLine) {
+                writer.writeLine();
+            }
+            else {
+                writer.write(" ");
+            }
+        }
+
+        function forEachLeadingCommentToEmit(pos: number, cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) => void) {
             // Emit the leading comments only if the container's pos doesn't match because the container should take care of emitting these comments
             if (containerPos === -1 || pos !== containerPos) {
-                return hasDetachedComments(pos)
-                    ? getLeadingCommentsWithoutDetachedComments()
-                    : getLeadingCommentRanges(currentText, pos);
+                if (hasDetachedComments(pos)) {
+                    forEachLeadingCommentWithoutDetachedComments(cb);
+                }
+                else {
+                    forEachLeadingCommentRange(currentText, pos, cb, /*state*/ pos);
+                }
             }
         }
 
-        function getTrailingCommentsToEmit(end: number) {
+        function forEachTrailingCommentToEmit(end: number, cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean) => void) {
             // Emit the trailing comments only if the container's end doesn't match because the container should take care of emitting these comments
             if (containerEnd === -1 || (end !== containerEnd && end !== declarationListContainerEnd)) {
-                return getTrailingCommentRanges(currentText, end);
+                forEachTrailingCommentRange(currentText, end, cb);
             }
-        }
-
-        /**
-         * Determine if the given comment is a triple-slash
-         *
-         * @return true if the comment is a triple-slash comment else false
-         **/
-        function isTripleSlashComment(comment: CommentRange) {
-            // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
-            // so that we don't end up computing comment string and doing match for all // comments
-            if (currentText.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
-                comment.pos + 2 < comment.end &&
-                currentText.charCodeAt(comment.pos + 2) === CharacterCodes.slash) {
-                const textSubStr = currentText.substring(comment.pos, comment.end);
-                return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
-                    textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ?
-                    true : false;
-            }
-            return false;
         }
 
         function reset() {
@@ -235,7 +262,6 @@ namespace ts {
             currentText = undefined;
             currentLineMap = undefined;
             detachedCommentsInfo = undefined;
-            consumedCommentRanges = undefined;
         }
 
         function setSourceFile(sourceFile: SourceFile) {
@@ -243,17 +269,15 @@ namespace ts {
             currentText = currentSourceFile.text;
             currentLineMap = getLineStarts(currentSourceFile);
             detachedCommentsInfo = undefined;
-            consumedCommentRanges = {};
         }
 
         function hasDetachedComments(pos: number) {
             return detachedCommentsInfo !== undefined && lastOrUndefined(detachedCommentsInfo).nodePos === pos;
         }
 
-        function getLeadingCommentsWithoutDetachedComments() {
+        function forEachLeadingCommentWithoutDetachedComments(cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) => void) {
             // get the leading comments from detachedPos
             const pos = lastOrUndefined(detachedCommentsInfo).detachedCommentEndPos;
-            const leadingComments = getLeadingCommentRanges(currentText, pos);
             if (detachedCommentsInfo.length - 1) {
                 detachedCommentsInfo.pop();
             }
@@ -261,12 +285,11 @@ namespace ts {
                 detachedCommentsInfo = undefined;
             }
 
-            return leadingComments;
+            forEachLeadingCommentRange(currentText, pos, cb, /*state*/ pos);
         }
 
-        function emitDetachedCommentsAndUpdateCommentsInfo(node: TextRange, removeComments: boolean) {
-            const currentDetachedCommentInfo = emitDetachedComments(currentText, currentLineMap, writer, writeComment, node, newLine, removeComments);
-
+        function emitDetachedCommentsAndUpdateCommentsInfo(range: TextRange) {
+            const currentDetachedCommentInfo = emitDetachedComments(currentText, currentLineMap, writer, writeComment, range, newLine, compilerOptions.removeComments);
             if (currentDetachedCommentInfo) {
                 if (detachedCommentsInfo) {
                     detachedCommentsInfo.push(currentDetachedCommentInfo);
@@ -277,10 +300,29 @@ namespace ts {
             }
         }
 
-        function writeComment(text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) {
-            emitPos(comment.pos);
-            writeCommentRange(text, lineMap, writer, comment, newLine);
-            emitPos(comment.end);
+        function writeComment(text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
+            emitPos(commentPos);
+            writeCommentRange(text, lineMap, writer, commentPos, commentEnd, newLine);
+            emitPos(commentEnd);
+        }
+
+        /**
+         * Determine if the given comment is a triple-slash
+         *
+         * @return true if the comment is a triple-slash comment else false
+         **/
+        function isTripleSlashComment(commentPos: number, commentEnd: number) {
+            // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
+            // so that we don't end up computing comment string and doing match for all // comments
+            if (currentText.charCodeAt(commentPos + 1) === CharacterCodes.slash &&
+                commentPos + 2 < commentEnd &&
+                currentText.charCodeAt(commentPos + 2) === CharacterCodes.slash) {
+                const textSubStr = currentText.substring(commentPos, commentEnd);
+                return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
+                    textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ?
+                    true : false;
+            }
+            return false;
         }
     }
 }

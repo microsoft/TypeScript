@@ -2285,6 +2285,7 @@ namespace ts {
         getLine(): number;
         getColumn(): number;
         getIndent(): number;
+        isAtStartOfLine(): boolean;
         reset(): void;
     }
 
@@ -2373,6 +2374,7 @@ namespace ts {
             getLine: () => lineCount + 1,
             getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
             getText: () => output,
+            isAtStartOfLine: () => lineStart,
             reset
         };
     }
@@ -2601,8 +2603,16 @@ namespace ts {
         }
     }
 
+    export function emitNewLineBeforeLeadingCommentOfPosition(lineMap: number[], writer: EmitTextWriter, pos: number, commentPos: number) {
+        // If the leading comments start on different line than the start of node, write new line
+        if (pos !== commentPos &&
+            getLineOfLocalPositionFromLineMap(lineMap, pos) !== getLineOfLocalPositionFromLineMap(lineMap, commentPos)) {
+            writer.writeLine();
+        }
+    }
+
     export function emitComments(text: string, lineMap: number[], writer: EmitTextWriter, comments: CommentRange[], leadingSeparator: boolean, trailingSeparator: boolean, newLine: string,
-        writeComment: (text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) => void) {
+        writeComment: (text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void) {
         if (comments && comments.length > 0) {
             if (leadingSeparator) {
                 writer.write(" ");
@@ -2615,7 +2625,7 @@ namespace ts {
                     emitInterveningSeparator = false;
                 }
 
-                writeComment(text, lineMap, writer, comment, newLine);
+                writeComment(text, lineMap, writer, comment.pos, comment.end, newLine);
                 if (comment.hasTrailingNewLine) {
                     writer.writeLine();
                 }
@@ -2635,7 +2645,7 @@ namespace ts {
      * the next statement by space.
      */
     export function emitDetachedComments(text: string, lineMap: number[], writer: EmitTextWriter,
-        writeComment: (text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) => void,
+        writeComment: (text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void,
         node: TextRange, newLine: string, removeComments: boolean) {
         let leadingComments: CommentRange[];
         let currentDetachedCommentInfo: {nodePos: number, detachedCommentEndPos: number};
@@ -2699,20 +2709,20 @@ namespace ts {
 
     }
 
-    export function writeCommentRange(text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) {
-        if (text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
-            const firstCommentLineAndCharacter = computeLineAndCharacterOfPosition(lineMap, comment.pos);
+    export function writeCommentRange(text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
+        if (text.charCodeAt(commentPos + 1) === CharacterCodes.asterisk) {
+            const firstCommentLineAndCharacter = computeLineAndCharacterOfPosition(lineMap, commentPos);
             const lineCount = lineMap.length;
             let firstCommentLineIndent: number;
-            for (let pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
+            for (let pos = commentPos, currentLine = firstCommentLineAndCharacter.line; pos < commentEnd; currentLine++) {
                 const nextLineStart = (currentLine + 1) === lineCount
                     ? text.length + 1
                     : lineMap[currentLine + 1];
 
-                if (pos !== comment.pos) {
+                if (pos !== commentPos) {
                     // If we are not emitting first line, we need to write the spaces to adjust the alignment
                     if (firstCommentLineIndent === undefined) {
-                        firstCommentLineIndent = calculateIndent(text, lineMap[firstCommentLineAndCharacter.line], comment.pos);
+                        firstCommentLineIndent = calculateIndent(text, lineMap[firstCommentLineAndCharacter.line], commentPos);
                     }
 
                     // These are number of spaces writer is going to write at current indent
@@ -2753,24 +2763,24 @@ namespace ts {
                 }
 
                 // Write the comment line text
-                writeTrimmedCurrentLine(text, comment, writer, newLine, pos, nextLineStart);
+                writeTrimmedCurrentLine(text, commentEnd, writer, newLine, pos, nextLineStart);
 
                 pos = nextLineStart;
             }
         }
         else {
             // Single line comment of style //....
-            writer.write(text.substring(comment.pos, comment.end));
+            writer.write(text.substring(commentPos, commentEnd));
         }
     }
 
-    function writeTrimmedCurrentLine(text: string, comment: CommentRange, writer: EmitTextWriter, newLine: string, pos: number, nextLineStart: number) {
-        const end = Math.min(comment.end, nextLineStart - 1);
+    function writeTrimmedCurrentLine(text: string, commentEnd: number, writer: EmitTextWriter, newLine: string, pos: number, nextLineStart: number) {
+        const end = Math.min(commentEnd, nextLineStart - 1);
         const currentLineText = text.substring(pos, end).replace(/^\s+|\s+$/g, "");
         if (currentLineText) {
             // trimmed forward and ending spaces text
             writer.write(currentLineText);
-            if (end !== comment.end) {
+            if (end !== commentEnd) {
                 writer.writeLine();
             }
         }

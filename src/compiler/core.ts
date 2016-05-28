@@ -1139,8 +1139,8 @@ namespace ts {
     /** Performance measurements for the compiler. */
     /*@internal*/
     export namespace performance {
-        let counters: Map<number> = {};
-        let measures: Map<number> = {};
+        let counters: Map<number>;
+        let measures: Map<number>;
         let enabled = false;
 
         /**
@@ -1191,22 +1191,32 @@ namespace ts {
             return enabled && getProperty(measures, measureName) || 0;
         }
 
-        /**
-         * Resets all marks and measurements in the performance service.
-         */
-        export function reset() {
-            counters = {};
-            measures = {};
-        }
-
         /** Enables performance measurements for the compiler. */
         export function enable() {
-            enabled = true;
+            if (!enabled) {
+                enabled = true;
+                counters = { };
+                measures = {
+                    programTime: 0,
+                    parseTime: 0,
+                    bindTime: 0,
+                    emitTime: 0,
+                    ioReadTime: 0,
+                    ioWriteTime: 0,
+                    printTime: 0,
+                    commentTime: 0,
+                    sourceMapTime: 0
+                };
+            }
         }
 
         /** Disables performance measurements for the compiler. */
         export function disable() {
-            enabled = false;
+            if (enabled) {
+                enabled = false;
+                counters = undefined;
+                measures = undefined;
+            }
         }
     }
 }
