@@ -1009,7 +1009,7 @@ namespace ts {
             }
 
             // `declarationName` is the name of the local declaration for the parameter.
-            const declarationName = getUniqueClone(<Identifier>parameter.name);
+            const declarationName = getMutableClone(<Identifier>parameter.name);
             setNodeEmitFlags(declarationName, NodeEmitFlags.NoSourceMap);
 
             // `expressionName` is the name of the parameter used in expressions.
@@ -2919,20 +2919,6 @@ namespace ts {
         }
 
         /**
-         * Gets the export name for a declaration for use in expressions.
-         *
-         * An export name will *always* be prefixed with an module or namespace export modifier
-         * like "exports." if one is required.
-         *
-         * @param node The declaration.
-         * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
-         */
-        function getExportName(node: ClassDeclaration | ClassExpression | FunctionDeclaration, allowComments?: boolean, allowSourceMaps?: boolean) {
-            return getDeclarationName(node, allowComments, allowSourceMaps, NodeEmitFlags.ExportName);
-        }
-
-        /**
          * Gets the name of a declaration, without source map or comments.
          *
          * @param node The declaration.
@@ -2940,7 +2926,7 @@ namespace ts {
          */
         function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: NodeEmitFlags) {
             if (node.name && !isGeneratedIdentifier(node.name)) {
-                const name = getUniqueClone(node.name);
+                const name = getMutableClone(node.name);
                 emitFlags |= getNodeEmitFlags(node.name);
                 if (!allowSourceMaps) {
                     emitFlags |= NodeEmitFlags.NoSourceMap;

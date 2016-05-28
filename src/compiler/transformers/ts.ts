@@ -933,10 +933,10 @@ namespace ts {
         function transformParameterWithPropertyAssignment(node: ParameterDeclaration) {
             Debug.assert(isIdentifier(node.name));
             const name = node.name as Identifier;
-            const propertyName = getUniqueClone(name);
+            const propertyName = getMutableClone(name);
             setNodeEmitFlags(propertyName, NodeEmitFlags.NoComments | NodeEmitFlags.NoSourceMap);
 
-            const localName = getUniqueClone(name);
+            const localName = getMutableClone(name);
             setNodeEmitFlags(localName, NodeEmitFlags.NoComments);
 
             return startOnNewLine(
@@ -2953,7 +2953,7 @@ namespace ts {
          */
         function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: NodeEmitFlags) {
             if (node.name) {
-                const name = getUniqueClone(node.name);
+                const name = getMutableClone(node.name);
                 emitFlags |= getNodeEmitFlags(node.name);
                 if (!allowSourceMaps) {
                     emitFlags |= NodeEmitFlags.NoSourceMap;
@@ -2971,19 +2971,6 @@ namespace ts {
             }
             else {
                 return getGeneratedNameForNode(node);
-            }
-        }
-
-        function getDeclarationNameExpression(node: DeclarationStatement) {
-            const name = getDeclarationName(node);
-            if (isNamespaceExport(node)) {
-                return getNamespaceMemberName(name);
-            }
-            else {
-                // We set the "ExportName" flag to indicate to any module transformer
-                // downstream that any `exports.` prefix should be added.
-                setNodeEmitFlags(name, getNodeEmitFlags(name) | NodeEmitFlags.ExportName);
-                return name;
             }
         }
 
@@ -3090,7 +3077,7 @@ namespace ts {
                     currentDecoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAliases[getOriginalNodeId(node)];
                 }
                 else if (node.kind === SyntaxKind.Identifier) {
-                    const declaration = resolver.getReferencedValueDeclaration(<Identifier>node)
+                    const declaration = resolver.getReferencedValueDeclaration(<Identifier>node);
                     if (declaration && isClassWithDecorators(declaration)) {
                         currentDecoratedClassAliases[getOriginalNodeId(declaration)] = decoratedClassAliases[getOriginalNodeId(declaration)];
                     }

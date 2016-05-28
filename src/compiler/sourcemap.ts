@@ -508,10 +508,6 @@ namespace ts {
             return skipTrivia(currentSourceText, rangeHasDecorators ? (range as Node).decorators.end : range.pos);
         }
 
-        function getStartPos(range: TextRange) {
-            return skipTrivia(currentSourceText, range.pos);
-        }
-
         /**
          * Emits a mapping for the start of a range.
          *
@@ -782,30 +778,30 @@ namespace ts {
             getSourceMapData,
             setSourceFile,
             emitPos(pos: number): void {
-                performance.mark("sourcemapStart");
+                const sourcemapStart = performance.mark();
                 emitPos(pos);
-                performance.measure("sourcemapTime", "sourcemapStart");
+                performance.measure("sourceMapTime", sourcemapStart);
             },
             emitStart(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void {
-                performance.mark("sourcemapStart");
+                const sourcemapStart = performance.mark();
                 emitStart(range, contextNode, ignoreNodeCallback, ignoreChildrenCallback, getTextRangeCallback);
-                performance.measure("sourcemapTime", "sourcemapStart");
+                performance.measure("sourceMapTime", sourcemapStart);
             },
             emitEnd(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void {
-                performance.mark("sourcemapStart");
+                const sourcemapStart = performance.mark();
                 emitEnd(range, contextNode, ignoreNodeCallback, ignoreChildrenCallback, getTextRangeCallback);
-                performance.measure("sourcemapTime", "sourcemapStart");
+                performance.measure("sourceMapTime", sourcemapStart);
             },
             emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
-                performance.mark("sourcemapStart");
+                const sourcemapStart = performance.mark();
                 tokenStartPos = emitTokenStart(token, tokenStartPos, contextNode, ignoreTokenCallback, getTokenTextRangeCallback);
-                performance.measure("sourcemapTime", "sourcemapStart");
+                performance.measure("sourceMapTime", sourcemapStart);
                 return tokenStartPos;
             },
             emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
-                performance.mark("sourcemapStart");
+                const sourcemapStart = performance.mark();
                 tokenEndPos = emitTokenEnd(token, tokenEndPos, contextNode, ignoreTokenCallback, getTokenTextRangeCallback);
-                performance.measure("sourcemapTime", "sourcemapStart");
+                performance.measure("sourceMapTime", sourcemapStart);
                 return tokenEndPos;
             },
             changeEmitSourcePos,

@@ -11,16 +11,6 @@ namespace ts {
         value: string;
     }
 
-    interface Mark {
-        markName: string;
-        count: number;
-    }
-
-    interface Measure {
-        measureName: string;
-        duration: number;
-    }
-
     let reportDiagnostic = reportDiagnosticSimply;
 
     function reportDiagnostics(diagnostics: Diagnostic[], host: CompilerHost): void {
@@ -560,7 +550,6 @@ namespace ts {
         let statistics: Statistic[];
         if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
             performance.enable();
-            performance.reset();
             statistics = [];
         }
 
@@ -586,6 +575,12 @@ namespace ts {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
 
+            if (compilerOptions.extendedDiagnostics) {
+                reportTimeStatistic("Print time", performance.getDuration("printTime"));
+                reportTimeStatistic("Comment time", performance.getDuration("commentTime"));
+                reportTimeStatistic("SourceMap time", performance.getDuration("sourceMapTime"));
+            }
+
             // Individual component times.
             // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
             // I/O read time and processing time for triple-slash references and module imports, and the reported
@@ -601,47 +596,9 @@ namespace ts {
             reportTimeStatistic("Check time", checkTime);
             reportTimeStatistic("Emit time", emitTime);
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
-
-            if (compilerOptions.extendedDiagnostics) {
-                sys.write("Extended Diagnostics:" + sys.newLine);
-                const marks: Mark[] = [];
-                for (const markName of performance.getMarkNames()) {
-                    if (/^(ioReadStart|ioWriteStart|programStart|bindStart|checkStart|emitStart)$/.test(markName)) {
-                        continue;
-                    }
-
-                    marks.push({ markName, count: performance.getCount(markName) });
-                }
-
-                if (marks.length) {
-                    marks.sort((x, y) => -compareValues(x.count, y.count));
-                    sys.write("Marks:" + sys.newLine);
-                    for (const { markName, count } of marks) {
-                        reportCountStatistic("  " + markName, count);
-                    }
-                }
-
-                const measures: Measure[] = [];
-                for (const measureName of performance.getMeasureNames()) {
-                    if (/^(ioReadTime|ioWriteTime|programTime|bindTime|checkTime|emitTime)$/.test(measureName)) {
-                        continue;
-                    }
-
-                    measures.push({ measureName, duration: performance.getDuration(measureName) });
-                }
-
-                if (measures.length) {
-                    measures.sort((x, y) => -compareValues(x.duration, y.duration));
-                    sys.write("Measures:" + sys.newLine);
-                    for (const { measureName, duration } of measures) {
-                        reportTimeStatistic("  " + measureName, duration);
-                    }
-                }
-            }
-
             reportStatistics();
+
             performance.disable();
-            performance.reset();
         }
 
         return { program, exitStatus };
