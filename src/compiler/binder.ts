@@ -1556,15 +1556,9 @@ namespace ts {
             if (!node) {
                 return;
             }
-
             node.parent = parent;
-
             const saveInStrictMode = inStrictMode;
-            if (!saveInStrictMode) {
-                updateStrictMode(node);
-            }
-
-            // First we bind declaration nodes to a symbol if possible.  We'll both create a symbol
+            // First we bind declaration nodes to a symbol if possible. We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
             // destination symbol tables are:
             //
@@ -1572,56 +1566,40 @@ namespace ts {
             //  2) The 'members' table of the current container's symbol.
             //  3) The 'locals' table of the current container.
             //
-            // However, not all symbols will end up in any of these tables.  'Anonymous' symbols
+            // However, not all symbols will end up in any of these tables. 'Anonymous' symbols
             // (like TypeLiterals for example) will not be put in any table.
             bindWorker(node);
-
-            // Then we recurse into the children of the node to bind them as well.  For certain
-            // symbols we do specialized work when we recurse.  For example, we'll keep track of
-            // the current 'container' node when it changes.  This helps us know which symbol table
-            // a local should go into for example.
-            const saveParent = parent;
-            parent = node;
-            const containerFlags = getContainerFlags(node);
-            if (containerFlags === ContainerFlags.None) {
-                bindChildren(node);
+            // Then we recurse into the children of the node to bind them as well. For certain
+            // symbols we do specialized work when we recurse. For example, we'll keep track of
+            // the current 'container' node when it changes. This helps us know which symbol table
+            // a local should go into for example. Since terminal nodes are known not to have
+            // children, as an optimization we don't process those.
+            if (node.kind > SyntaxKind.LastToken) {
+                const saveParent = parent;
+                parent = node;
+                const containerFlags = getContainerFlags(node);
+                if (containerFlags === ContainerFlags.None) {
+                    bindChildren(node);
+                }
+                else {
+                    bindContainer(node, containerFlags);
+                }
+                parent = saveParent;
             }
-            else {
-                bindContainer(node, containerFlags);
-            }
-            parent = saveParent;
-
             inStrictMode = saveInStrictMode;
         }
 
-        function updateStrictMode(node: Node) {
-            switch (node.kind) {
-                case SyntaxKind.SourceFile:
-                case SyntaxKind.ModuleBlock:
-                    updateStrictModeStatementList((<SourceFile | ModuleBlock>node).statements);
-                    return;
-                case SyntaxKind.Block:
-                    if (isFunctionLike(node.parent)) {
-                        updateStrictModeStatementList((<Block>node).statements);
-                    }
-                    return;
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                    // All classes are automatically in strict mode in ES6.
-                    inStrictMode = true;
-                    return;
-            }
-        }
-
         function updateStrictModeStatementList(statements: NodeArray<Statement>) {
-            for (const statement of statements) {
-                if (!isPrologueDirective(statement)) {
-                    return;
-                }
+            if (!inStrictMode) {
+                for (const statement of statements) {
+                    if (!isPrologueDirective(statement)) {
+                        return;
+                    }
 
-                if (isUseStrictPrologueDirective(<ExpressionStatement>statement)) {
-                    inStrictMode = true;
-                    return;
+                    if (isUseStrictPrologueDirective(<ExpressionStatement>statement)) {
+                        inStrictMode = true;
+                        return;
+                    }
                 }
             }
         }
@@ -1753,6 +1731,8 @@ namespace ts {
                 // Members of classes, interfaces, and modules
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
+                    // All classes are automatically in strict mode in ES6.
+                    inStrictMode = true;
                     return bindClassLikeDeclaration(<ClassLikeDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
@@ -1778,7 +1758,15 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                     return bindExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.SourceFile:
+                    updateStrictModeStatementList((<SourceFile>node).statements);
                     return bindSourceFileIfExternalModule();
+                case SyntaxKind.Block:
+                    if (!isFunctionLike(node.parent)) {
+                        return;
+                    }
+                    // Fall through
+                case SyntaxKind.ModuleBlock:
+                    return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
             }
         }
 
