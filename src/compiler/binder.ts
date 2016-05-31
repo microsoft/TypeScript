@@ -929,8 +929,8 @@ namespace ts {
             preSwitchCaseFlow = currentFlow;
             bind(node.caseBlock);
             addAntecedent(postSwitchLabel, currentFlow);
-            const hasDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause);
-            if (!hasDefault) {
+            const hasNonEmptyDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause && c.statements.length);
+            if (!hasNonEmptyDefault) {
                 addAntecedent(postSwitchLabel, preSwitchCaseFlow);
             }
             currentBreakTarget = saveBreakTarget;

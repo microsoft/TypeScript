@@ -1959,69 +1959,23 @@ namespace FourSlash {
             }
         }
 
-        public verifyNavigationBarCount(expected: number) {
+        public verifyNavigationBar(json: any) {
             const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
-            const actual = this.getNavigationBarItemsCount(items);
-
-            if (expected !== actual) {
-                this.raiseError(`verifyNavigationBarCount failed - found: ${actual} navigation items, expected: ${expected}.`);
-            }
-        }
-
-        private getNavigationBarItemsCount(items: ts.NavigationBarItem[]) {
-            let result = 0;
-            if (items) {
-                for (let i = 0, n = items.length; i < n; i++) {
-                    result++;
-                    result += this.getNavigationBarItemsCount(items[i].childItems);
-                }
+            if (JSON.stringify(items, replacer) !== JSON.stringify(json)) {
+                this.raiseError(`verifyNavigationBar failed - expected: ${JSON.stringify(json, undefined, 2)}, got: ${JSON.stringify(items, replacer, 2)}`);
             }
 
-            return result;
-        }
-
-        public verifyNavigationBarContains(name: string, kind: string, fileName?: string, parentName?: string, isAdditionalSpan?: boolean, markerPosition?: number) {
-            fileName = fileName || this.activeFile.fileName;
-            const items = this.languageService.getNavigationBarItems(fileName);
-
-            if (!items || items.length === 0) {
-                this.raiseError("verifyNavigationBarContains failed - found 0 navigation items, expected at least one.");
-            }
-
-            if (this.navigationBarItemsContains(items, name, kind, parentName)) {
-                return;
-            }
-
-            const missingItem = { name, kind, parentName };
-            this.raiseError(`verifyNavigationBarContains failed - could not find the item: ${JSON.stringify(missingItem, undefined, 2)} in the returned list: (${JSON.stringify(items, undefined, 2)})`);
-        }
-
-        private navigationBarItemsContains(items: ts.NavigationBarItem[], name: string, kind: string, parentName?: string) {
-            function recur(items: ts.NavigationBarItem[], curParentName: string) {
-                for (let i = 0; i < items.length; i++) {
-                    const item = items[i];
-                    if (item && item.text === name && item.kind === kind && (!parentName || curParentName === parentName)) {
-                        return true;
-                    }
-                    if (recur(item.childItems, item.text)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            return recur(items, "");
-        }
-
-        public verifyNavigationBarChildItem(parent: string, name: string, kind: string) {
-            const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
-
-            for (let i = 0; i < items.length; i++) {
-                const item = items[i];
-                if (item.text === parent) {
-                    if (this.navigationBarItemsContains(item.childItems, name, kind))
-                        return;
-                    const missingItem = { name, kind };
-                    this.raiseError(`verifyNavigationBarChildItem failed - could not find the item: ${JSON.stringify(missingItem)} in the children list: (${JSON.stringify(item.childItems, undefined, 2)})`);
+            // Make the data easier to read.
+            function replacer(key: string, value: any) {
+                switch (key) {
+                    case "spans":
+                        // We won't ever check this.
+                        return undefined;
+                    case "childItems":
+                        return value.length === 0 ? undefined : value;
+                    default:
+                        // Omit falsy values, those are presumed to be the default.
+                        return value || undefined;
                 }
             }
         }
@@ -3042,23 +2996,8 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
-        public navigationBarCount(count: number) {
-            this.state.verifyNavigationBarCount(count);
-        }
-
-        // TODO: figure out what to do with the unused arguments.
-        public navigationBarContains(
-            name: string,
-            kind: string,
-            fileName?: string,
-            parentName?: string,
-            isAdditionalSpan?: boolean,
-            markerPosition?: number) {
-            this.state.verifyNavigationBarContains(name, kind, fileName, parentName, isAdditionalSpan, markerPosition);
-        }
-
-        public navigationBarChildItem(parent: string, name: string, kind: string) {
-            this.state.verifyNavigationBarChildItem(parent, name, kind);
+        public navigationBar(json: any) {
+            this.state.verifyNavigationBar(json);
         }
 
         public navigationItemsListCount(count: number, searchValue: string, matchKind?: string) {

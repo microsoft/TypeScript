@@ -12,7 +12,7 @@ const enum CompilerTestType {
 
 class CompilerBaselineRunner extends RunnerBase {
     private basePath = "tests/cases";
-    private testSuiteName: string;
+    private testSuiteName: TestRunnerKind;
     private errors: boolean;
     private emit: boolean;
     private decl: boolean;
@@ -39,6 +39,14 @@ class CompilerBaselineRunner extends RunnerBase {
             this.testSuiteName = "compiler"; // default to this for historical reasons
         }
         this.basePath += "/" + this.testSuiteName;
+    }
+
+    public kind() {
+        return this.testSuiteName;
+    }
+
+    public enumerateTestFiles() {
+        return this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true });
     }
 
     private makeUnitName(name: string, root: string) {
@@ -391,7 +399,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
             // this will set up a series of describe/it blocks to run between the setup and cleanup phases
             if (this.tests.length === 0) {
-                const testFiles = this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true });
+                const testFiles = this.enumerateTestFiles();
                 testFiles.forEach(fn => {
                     fn = fn.replace(/\\/g, "/");
                     this.checkTestCodeOutput(fn);
