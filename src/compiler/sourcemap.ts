@@ -508,10 +508,6 @@ namespace ts {
             return skipTrivia(currentSourceText, rangeHasDecorators ? (range as Node).decorators.end : range.pos);
         }
 
-        function getStartPos(range: TextRange) {
-            return skipTrivia(currentSourceText, range.pos);
-        }
-
         /**
          * Emits a mapping for the start of a range.
          *
@@ -701,7 +697,7 @@ namespace ts {
          */
         function setSourceFile(sourceFile: SourceFile) {
             currentSourceFile = sourceFile;
-            currentSourceText = sourceFile.text;
+            currentSourceText = currentSourceFile.text;
 
             // Add the file to tsFilePaths
             // If sourceroot option: Use the relative path corresponding to the common directory path
@@ -720,10 +716,10 @@ namespace ts {
                 sourceMapData.sourceMapSources.push(source);
 
                 // The one that can be used from program to get the actual source file
-                sourceMapData.inputSourceFileNames.push(sourceFile.fileName);
+                sourceMapData.inputSourceFileNames.push(currentSourceFile.fileName);
 
                 if (compilerOptions.inlineSources) {
-                    sourceMapData.sourceMapSourcesContent.push(sourceFile.text);
+                    sourceMapData.sourceMapSourcesContent.push(currentSourceFile.text);
                 }
             }
         }

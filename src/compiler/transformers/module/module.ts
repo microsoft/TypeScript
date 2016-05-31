@@ -147,6 +147,7 @@ namespace ts {
                 createStatement(
                     createCall(
                         define,
+                        /*typeArguments*/ undefined,
                         [
                             // Add the module name (if provided).
                             ...(moduleName ? [moduleName] : []),
@@ -167,11 +168,13 @@ namespace ts {
                             createFunctionExpression(
                                 /*asteriskToken*/ undefined,
                                 /*name*/ undefined,
+                                /*typeParameters*/ undefined,
                                 [
                                     createParameter("require"),
                                     createParameter("exports"),
                                     ...importAliasNames
                                 ],
+                                /*type*/ undefined,
                                 transformAsynchronousModuleBody(node)
                             )
                         ]
@@ -307,6 +310,7 @@ namespace ts {
                         variables.push(
                             createVariableDeclaration(
                                 getSynthesizedClone(namespaceDeclaration.name),
+                                /*type*/ undefined,
                                 createRequireCall(node)
                             )
                         );
@@ -319,6 +323,7 @@ namespace ts {
                         variables.push(
                             createVariableDeclaration(
                                 getGeneratedNameForNode(node),
+                                /*type*/ undefined,
                                 createRequireCall(node)
                             )
                         );
@@ -327,6 +332,7 @@ namespace ts {
                             variables.push(
                                 createVariableDeclaration(
                                     getSynthesizedClone(namespaceDeclaration.name),
+                                    /*type*/ undefined,
                                     getGeneratedNameForNode(node)
                                 )
                             );
@@ -350,6 +356,7 @@ namespace ts {
                         createVariableDeclarationList([
                             createVariableDeclaration(
                                 getSynthesizedClone(namespaceDeclaration.name),
+                                /*type*/ undefined,
                                 getGeneratedNameForNode(node),
                                 /*location*/ node
                             )
@@ -390,6 +397,7 @@ namespace ts {
                             createVariableDeclarationList([
                                 createVariableDeclaration(
                                     getSynthesizedClone(node.name),
+                                    /*type*/ undefined,
                                     createRequireCall(node)
                                 )
                             ],
@@ -431,6 +439,7 @@ namespace ts {
                             createVariableDeclarationList([
                                 createVariableDeclaration(
                                     generatedName,
+                                    /*type*/ undefined,
                                     createRequireCall(node)
                                 )
                             ]),
@@ -460,6 +469,7 @@ namespace ts {
                 return createStatement(
                     createCall(
                         createIdentifier("__export"),
+                        /*typeArguments*/ undefined,
                         [
                             moduleKind !== ModuleKind.AMD
                                 ? createRequireCall(node)
@@ -517,6 +527,7 @@ namespace ts {
                         createStatement(
                             createCall(
                                 createPropertyAccess(createIdentifier("Object"), "defineProperty"),
+                                /*typeArguments*/ undefined,
                                 [
                                     createIdentifier("exports"),
                                     createLiteral("__esModule"),
@@ -608,7 +619,7 @@ namespace ts {
             if (hasModifier(node, ModifierFlags.Export)) {
                 const variables = getInitializedVariables(node.declarationList);
                 if (variables.length > 0) {
-                    let inlineAssignments = createStatement(
+                    const inlineAssignments = createStatement(
                         inlineExpressions(
                             map(variables, transformInitializedVariable)
                         ),
@@ -637,7 +648,7 @@ namespace ts {
         function addExportMemberAssignmentsForBindingName(resultStatements: Statement[], name: BindingName): void {
             if (isBindingPattern(name)) {
                 for (const element of name.elements) {
-                    addExportMemberAssignmentsForBindingName(resultStatements, element.name)
+                    addExportMemberAssignmentsForBindingName(resultStatements, element.name);
                 }
             }
             else {
@@ -671,10 +682,13 @@ namespace ts {
                 statements.push(
                     setOriginalNode(
                         createFunctionDeclaration(
+                            /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             /*asteriskToken*/ undefined,
                             name,
+                            /*typeParameters*/ undefined,
                             node.parameters,
+                            /*type*/ undefined,
                             node.body,
                             /*location*/ node
                         ),
@@ -772,6 +786,7 @@ namespace ts {
                     /*modifiers*/ undefined,
                     [createVariableDeclaration(
                         getDeclarationName(node),
+                        /*type*/ undefined,
                         createPropertyAccess(createIdentifier("exports"), getDeclarationName(node))
                     )],
                     /*location*/ node
@@ -907,7 +922,7 @@ namespace ts {
                 args.push(moduleName);
             }
 
-            return createCall(createIdentifier("require"), args);
+            return createCall(createIdentifier("require"), /*typeArguments*/ undefined, args);
         }
 
         function createExportStatement(name: Identifier, value: Expression, location?: TextRange) {
