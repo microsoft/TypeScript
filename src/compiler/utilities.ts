@@ -1007,6 +1007,20 @@ namespace ts {
         }
     }
 
+    export function getImmediatelyInvokedFunctionExpression(func: Node): CallExpression {
+        if (func.kind === SyntaxKind.FunctionExpression || func.kind === SyntaxKind.ArrowFunction) {
+            let prev = func;
+            let parent = func.parent;
+            while (parent.kind === SyntaxKind.ParenthesizedExpression) {
+                prev = parent;
+                parent = parent.parent;
+            }
+            if (parent.kind === SyntaxKind.CallExpression && (parent as CallExpression).expression === prev) {
+                return parent as CallExpression;
+            }
+        }
+    }
+
     /**
      * Determines whether a node is a property or element access expression for super.
      */

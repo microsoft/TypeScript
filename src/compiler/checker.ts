@@ -7660,7 +7660,7 @@ namespace ts {
                 getInitialTypeOfBindingElement(<BindingElement>node);
         }
 
-        function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean) {
+        function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, includeOuterFunctions: boolean) {
             let key: string;
             if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
@@ -7706,14 +7706,20 @@ namespace ts {
                             getTypeAtFlowBranchLabel(<FlowLabel>flow) :
                             getTypeAtFlowLoopLabel(<FlowLabel>flow);
                     }
-                    else if (flow.flags & FlowFlags.Unreachable) {
+                    else if (flow.flags & FlowFlags.Start) {
+                        // Check if we should continue with the control flow of the containing function.
+                        const container = (<FlowStart>flow).container;
+                        if (container && includeOuterFunctions) {
+                            flow = container.flowNode;
+                            continue;
+                        }
+                        // At the top of the flow we have the initial type.
+                        type = initialType;
+                    }
+                    else {
                         // Unreachable code errors are reported in the binding phase. Here we
                         // simply return the declared type to reduce follow-on errors.
                         type = declaredType;
-                    }
-                    else {
-                        // At the top of the flow we have the initial type.
-                        type = initialType;
                     }
                     if (flow.flags & FlowFlags.Shared) {
                         // Record visited node and the associated type in the cache.
@@ -8083,6 +8089,17 @@ namespace ts {
             return expression;
         }
 
+        function isDeclarationIncludedInFlow(reference: Node, declaration: Declaration, includeOuterFunctions: boolean) {
+            const declarationContainer = getContainingFunctionOrModule(declaration);
+            let container = getContainingFunctionOrModule(reference);
+            while (container !== declarationContainer &&
+                (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.ArrowFunction) &&
+                (includeOuterFunctions || getImmediatelyInvokedFunctionExpression(<FunctionExpression>container))) {
+                container = getContainingFunctionOrModule(container);
+            }
+            return container === declarationContainer;
+        }
+
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
 
@@ -8139,10 +8156,11 @@ namespace ts {
                 return type;
             }
             const declaration = localOrExportSymbol.valueDeclaration;
+            const includeOuterFunctions = isReadonlySymbol(localOrExportSymbol);
             const assumeInitialized = !strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || !declaration ||
                 getRootDeclaration(declaration).kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
-                getContainingFunctionOrModule(declaration) !== getContainingFunctionOrModule(node);
-            const flowType = getFlowTypeOfReference(node, type, assumeInitialized);
+                !isDeclarationIncludedInFlow(node, declaration, includeOuterFunctions);
+            const flowType = getFlowTypeOfReference(node, type, assumeInitialized, includeOuterFunctions);
             if (!assumeInitialized && !(getNullableKind(type) & TypeFlags.Undefined) && getNullableKind(flowType) & TypeFlags.Undefined) {
                 error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
                 // Return the declared type to reduce follow-on errors
@@ -8391,7 +8409,7 @@ namespace ts {
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
                 const type = container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
-                return getFlowTypeOfReference(node, type, /*assumeInitialized*/ true);
+                return getFlowTypeOfReference(node, type, /*assumeInitialized*/ true, /*includeOuterFunctions*/ true);
             }
 
             if (isInJavaScriptFile(node)) {
@@ -8637,23 +8655,25 @@ namespace ts {
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
             const func = parameter.parent;
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
-                const iife = getImmediatelyInvokedFunctionExpression(func);
-                if (iife) {
-                    const indexOfParameter = indexOf(func.parameters, parameter);
-                    if (iife.arguments && indexOfParameter < iife.arguments.length) {
-                        if (parameter.dotDotDotToken) {
-                            const restTypes: Type[] = [];
-                            for (let i = indexOfParameter; i < iife.arguments.length; i++) {
-                                restTypes.push(getTypeOfExpression(iife.arguments[i]));
+                if (func.kind === SyntaxKind.FunctionExpression || func.kind === SyntaxKind.ArrowFunction) {
+                    const iife = getImmediatelyInvokedFunctionExpression(func);
+                    if (iife) {
+                        const indexOfParameter = indexOf(func.parameters, parameter);
+                        if (iife.arguments && indexOfParameter < iife.arguments.length) {
+                            if (parameter.dotDotDotToken) {
+                                const restTypes: Type[] = [];
+                                for (let i = indexOfParameter; i < iife.arguments.length; i++) {
+                                    restTypes.push(getTypeOfExpression(iife.arguments[i]));
+                                }
+                                return createArrayType(getUnionType(restTypes));
                             }
-                            return createArrayType(getUnionType(restTypes));
+                            const links = getNodeLinks(iife);
+                            const cached = links.resolvedSignature;
+                            links.resolvedSignature = anySignature;
+                            const type = checkExpression(iife.arguments[indexOfParameter]);
+                            links.resolvedSignature = cached;
+                            return type;
                         }
-                        const links = getNodeLinks(iife);
-                        const cached = links.resolvedSignature;
-                        links.resolvedSignature = anySignature;
-                        const type = checkExpression(iife.arguments[indexOfParameter]);
-                        links.resolvedSignature = cached;
-                        return type;
                     }
                 }
                 const contextualSignature = getContextualSignature(func);
@@ -8674,20 +8694,6 @@ namespace ts {
                 }
             }
             return undefined;
-        }
-
-        function getImmediatelyInvokedFunctionExpression(func: FunctionExpression | MethodDeclaration) {
-            if (isFunctionExpressionOrArrowFunction(func)) {
-                let prev: Node = func;
-                let parent: Node = func.parent;
-                while (parent.kind === SyntaxKind.ParenthesizedExpression) {
-                    prev = parent;
-                    parent = parent.parent;
-                }
-                if (parent.kind === SyntaxKind.CallExpression && (parent as CallExpression).expression === prev) {
-                    return parent as CallExpression;
-                }
-            }
         }
 
         // In a variable, parameter or property declaration with a type annotation,
@@ -10003,7 +10009,7 @@ namespace ts {
                     return propType;
                 }
             }
-            return getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true);
+            return getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*includeOuterFunctions*/ false);
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean {

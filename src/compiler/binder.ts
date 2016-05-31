@@ -77,12 +77,14 @@ namespace ts {
         //      Blocks (when not parented by functions), Catch clauses, For/For-in/For-of statements...
         IsBlockScopedContainer = 1 << 1,
 
-        HasLocals = 1 << 2,
+        // The current node is the container of a control flow path. The current control flow should
+        // be saved and restored, and a new control flow initialized within the container.
+        IsControlFlowContainer = 1 << 2,
 
-        // If the current node is a container that also container that also contains locals.  Examples:
-        //
-        //      Functions, Methods, Modules, Source-files.
-        IsContainerWithLocals = IsContainer | HasLocals
+        IsFunctionLike = 1 << 3,
+        IsFunctionExpression = 1 << 4,
+        HasLocals = 1 << 5,
+        IsInterface = 1 << 6,
     }
 
     const binder = createBinder();
@@ -103,22 +105,19 @@ namespace ts {
         let lastContainer: Node;
         let seenThisKeyword: boolean;
 
-        // state used by reachability checks
-        let hasExplicitReturn: boolean;
+        // state used by control flow analysis
         let currentFlow: FlowNode;
         let currentBreakTarget: FlowLabel;
         let currentContinueTarget: FlowLabel;
+        let currentReturnTarget: FlowLabel;
         let currentTrueTarget: FlowLabel;
         let currentFalseTarget: FlowLabel;
         let preSwitchCaseFlow: FlowNode;
         let activeLabels: ActiveLabel[];
+        let hasExplicitReturn: boolean;
 
         // state used for emit helpers
-        let hasClassExtends: boolean;
-        let hasAsyncFunctions: boolean;
-        let hasDecorators: boolean;
-        let hasParameterDecorators: boolean;
-        let hasJsxSpreadAttribute: boolean;
+        let emitFlags: NodeFlags;
 
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
@@ -156,18 +155,15 @@ namespace ts {
             blockScopeContainer = undefined;
             lastContainer = undefined;
             seenThisKeyword = false;
-            hasExplicitReturn = false;
             currentFlow = undefined;
             currentBreakTarget = undefined;
             currentContinueTarget = undefined;
+            currentReturnTarget = undefined;
             currentTrueTarget = undefined;
             currentFalseTarget = undefined;
             activeLabels = undefined;
-            hasClassExtends = false;
-            hasAsyncFunctions = false;
-            hasDecorators = false;
-            hasParameterDecorators = false;
-            hasJsxSpreadAttribute = false;
+            hasExplicitReturn = false;
+            emitFlags = NodeFlags.None;
         }
 
         return bindSourceFile;
@@ -412,25 +408,12 @@ namespace ts {
         // All container nodes are kept on a linked list in declaration order. This list is used by
         // the getLocalNameOfContainer function in the type checker to validate that the local name
         // used for a container is unique.
-        function bindChildren(node: Node) {
+        function bindContainer(node: Node, containerFlags: ContainerFlags) {
             // Before we recurse into a node's children, we first save the existing parent, container
             // and block-container.  Then after we pop out of processing the children, we restore
             // these saved values.
-            const saveParent = parent;
             const saveContainer = container;
             const savedBlockScopeContainer = blockScopeContainer;
-
-            // This node will now be set as the parent of all of its children as we recurse into them.
-            parent = node;
-
-            // Binding of JsDocComment should be done before the current block scope container changes.
-            // because the scope of JsDocComment should not be affected by whether the current node is a
-            // container or not.
-            if (isInJavaScriptFile(node) && node.jsDocComments) {
-                for (const jsDocComment of node.jsDocComments) {
-                    bind(jsDocComment);
-                }
-            }
 
             // Depending on what kind of node this is, we may have to adjust the current container
             // and block-container.   If the current node is a container, then it is automatically
@@ -449,111 +432,90 @@ namespace ts {
             // reusing a node from a previous compilation, that node may have had 'locals' created
             // for it.  We must clear this so we don't accidentally move any stale data forward from
             // a previous compilation.
-            const containerFlags = getContainerFlags(node);
             if (containerFlags & ContainerFlags.IsContainer) {
                 container = blockScopeContainer = node;
-
                 if (containerFlags & ContainerFlags.HasLocals) {
                     container.locals = {};
                 }
-
                 addToContainerChain(container);
             }
             else if (containerFlags & ContainerFlags.IsBlockScopedContainer) {
                 blockScopeContainer = node;
                 blockScopeContainer.locals = undefined;
             }
-
-            let savedHasExplicitReturn: boolean;
-            let savedCurrentFlow: FlowNode;
-            let savedBreakTarget: FlowLabel;
-            let savedContinueTarget: FlowLabel;
-            let savedActiveLabels: ActiveLabel[];
-
-            const kind = node.kind;
-            let flags = node.flags;
-
-            // reset all reachability check related flags on node (for incremental scenarios)
-            flags &= ~NodeFlags.ReachabilityCheckFlags;
-
-            // reset all emit helper flags on node (for incremental scenarios)
-            flags &= ~NodeFlags.EmitHelperFlags;
-
-            if (kind === SyntaxKind.InterfaceDeclaration) {
-                seenThisKeyword = false;
-            }
-
-            const saveState = kind === SyntaxKind.SourceFile || kind === SyntaxKind.ModuleBlock || isFunctionLikeKind(kind);
-            if (saveState) {
-                savedHasExplicitReturn = hasExplicitReturn;
-                savedCurrentFlow = currentFlow;
-                savedBreakTarget = currentBreakTarget;
-                savedContinueTarget = currentContinueTarget;
-                savedActiveLabels = activeLabels;
-
-                hasExplicitReturn = false;
-                currentFlow = { flags: FlowFlags.Start };
+            if (containerFlags & ContainerFlags.IsControlFlowContainer) {
+                const saveCurrentFlow = currentFlow;
+                const saveBreakTarget = currentBreakTarget;
+                const saveContinueTarget = currentContinueTarget;
+                const saveReturnTarget = currentReturnTarget;
+                const saveActiveLabels = activeLabels;
+                const saveHasExplicitReturn = hasExplicitReturn;
+                const isIIFE = containerFlags & ContainerFlags.IsFunctionExpression && !!getImmediatelyInvokedFunctionExpression(node);
+                // An IIFE is considered part of the containing control flow. Return statements behave
+                // similarly to break statements that exit to a label just past the statement body.
+                if (isIIFE) {
+                    currentReturnTarget = createBranchLabel();
+                }
+                else {
+                    currentFlow = { flags: FlowFlags.Start };
+                    if (containerFlags & ContainerFlags.IsFunctionExpression) {
+                        (<FlowStart>currentFlow).container = <FunctionExpression | ArrowFunction>node;
+                    }
+                    currentReturnTarget = undefined;
+                }
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
                 activeLabels = undefined;
+                hasExplicitReturn = false;
+                bindChildren(node);
+                // Reset all reachability check related flags on node (for incremental scenarios)
+                // Reset all emit helper flags on node (for incremental scenarios)
+                node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
+                if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
+                    node.flags |= NodeFlags.HasImplicitReturn;
+                    if (hasExplicitReturn) node.flags |= NodeFlags.HasExplicitReturn;
+                }
+                if (node.kind === SyntaxKind.SourceFile) {
+                    node.flags |= emitFlags;
+                }
+                if (isIIFE) {
+                    addAntecedent(currentReturnTarget, currentFlow);
+                    currentFlow = finishFlowLabel(currentReturnTarget);
+                }
+                else {
+                    currentFlow = saveCurrentFlow;
+                }
+                currentBreakTarget = saveBreakTarget;
+                currentContinueTarget = saveContinueTarget;
+                currentReturnTarget = saveReturnTarget;
+                activeLabels = saveActiveLabels;
+                hasExplicitReturn = saveHasExplicitReturn;
             }
-
-            bindReachableStatement(node);
-
-            if (!(currentFlow.flags & FlowFlags.Unreachable) && isFunctionLikeKind(kind) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
-                flags |= NodeFlags.HasImplicitReturn;
-                if (hasExplicitReturn) {
-                    flags |= NodeFlags.HasExplicitReturn;
-                }
+            else if (containerFlags & ContainerFlags.IsInterface) {
+                seenThisKeyword = false;
+                bindChildren(node);
+                node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
             }
-
-            if (kind === SyntaxKind.InterfaceDeclaration) {
-                flags = seenThisKeyword ? flags | NodeFlags.ContainsThis : flags & ~NodeFlags.ContainsThis;
+            else {
+                bindChildren(node);
             }
-
-            if (kind === SyntaxKind.SourceFile) {
-                if (hasClassExtends) {
-                    flags |= NodeFlags.HasClassExtends;
-                }
-                if (hasDecorators) {
-                    flags |= NodeFlags.HasDecorators;
-                }
-                if (hasParameterDecorators) {
-                    flags |= NodeFlags.HasParamDecorators;
-                }
-                if (hasAsyncFunctions) {
-                    flags |= NodeFlags.HasAsyncFunctions;
-                }
-                if (hasJsxSpreadAttribute) {
-                    flags |= NodeFlags.HasJsxSpreadAttribute;
-                }
-            }
-
-            node.flags = flags;
-
-            if (saveState) {
-                hasExplicitReturn = savedHasExplicitReturn;
-                currentFlow = savedCurrentFlow;
-                currentBreakTarget = savedBreakTarget;
-                currentContinueTarget = savedContinueTarget;
-                activeLabels = savedActiveLabels;
-            }
-
             container = saveContainer;
-            parent = saveParent;
             blockScopeContainer = savedBlockScopeContainer;
         }
 
-        /**
-         * Returns true if node and its subnodes were successfully traversed.
-         * Returning false means that node was not examined and caller needs to dive into the node himself.
-         */
-        function bindReachableStatement(node: Node): void {
+        function bindChildren(node: Node): void {
+            // Binding of JsDocComment should be done before the current block scope container changes.
+            // because the scope of JsDocComment should not be affected by whether the current node is a
+            // container or not.
+            if (isInJavaScriptFile(node) && node.jsDocComments) {
+                for (const jsDocComment of node.jsDocComments) {
+                    bind(jsDocComment);
+                }
+            }
             if (checkUnreachable(node)) {
                 forEachChild(node, bind);
                 return;
             }
-
             switch (node.kind) {
                 case SyntaxKind.WhileStatement:
                     bindWhileStatement(<WhileStatement>node);
@@ -605,6 +567,9 @@ namespace ts {
                     break;
                 case SyntaxKind.VariableDeclaration:
                     bindVariableDeclarationFlow(<VariableDeclaration>node);
+                    break;
+                case SyntaxKind.CallExpression:
+                    bindCallExpressionFlow(<CallExpression>node);
                     break;
                 default:
                     forEachChild(node, bind);
@@ -865,6 +830,9 @@ namespace ts {
             bind(node.expression);
             if (node.kind === SyntaxKind.ReturnStatement) {
                 hasExplicitReturn = true;
+                if (currentReturnTarget) {
+                    addAntecedent(currentReturnTarget, currentFlow);
+                }
             }
             currentFlow = unreachableFlow;
         }
@@ -1115,11 +1083,28 @@ namespace ts {
             }
         }
 
+        function bindCallExpressionFlow(node: CallExpression) {
+            // If the target of the call expression is a function expression or arrow function we have
+            // an immediately invoked function expression (IIFE). Initialize the flowNode property to
+            // the current control flow (which includes evaluation of the IIFE arguments).
+            let expr: Expression = node.expression;
+            while (expr.kind === SyntaxKind.ParenthesizedExpression) {
+                expr = (<ParenthesizedExpression>expr).expression;
+            }
+            if (expr.kind === SyntaxKind.FunctionExpression || expr.kind === SyntaxKind.ArrowFunction) {
+                forEach(node.typeArguments, bind);
+                forEach(node.arguments, bind);
+                bind(node.expression);
+            }
+            else {
+                forEachChild(node, bind);
+            }
+        }
+
         function getContainerFlags(node: Node): ContainerFlags {
             switch (node.kind) {
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TypeLiteral:
@@ -1127,24 +1112,36 @@ namespace ts {
                 case SyntaxKind.JSDocRecordType:
                     return ContainerFlags.IsContainer;
 
+                case SyntaxKind.InterfaceDeclaration:
+                    return ContainerFlags.IsContainer | ContainerFlags.IsInterface;
+
+                case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                    return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
+
+                case SyntaxKind.SourceFile:
+                    return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
+
+                case SyntaxKind.Constructor:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.Constructor:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
                 case SyntaxKind.FunctionType:
-                case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.ConstructorType:
+                    return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
+
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.SourceFile:
-                case SyntaxKind.TypeAliasDeclaration:
-                    return ContainerFlags.IsContainerWithLocals;
+                    return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsFunctionExpression;
+
+                case SyntaxKind.ModuleBlock:
+                    return ContainerFlags.IsControlFlowContainer;
 
                 case SyntaxKind.CatchClause:
                 case SyntaxKind.ForStatement:
@@ -1579,15 +1576,9 @@ namespace ts {
             if (!node) {
                 return;
             }
-
             node.parent = parent;
-
-            const savedInStrictMode = inStrictMode;
-            if (!savedInStrictMode) {
-                updateStrictMode(node);
-            }
-
-            // First we bind declaration nodes to a symbol if possible.  We'll both create a symbol
+            const saveInStrictMode = inStrictMode;
+            // First we bind declaration nodes to a symbol if possible. We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
             // destination symbol tables are:
             //
@@ -1595,47 +1586,40 @@ namespace ts {
             //  2) The 'members' table of the current container's symbol.
             //  3) The 'locals' table of the current container.
             //
-            // However, not all symbols will end up in any of these tables.  'Anonymous' symbols
+            // However, not all symbols will end up in any of these tables. 'Anonymous' symbols
             // (like TypeLiterals for example) will not be put in any table.
             bindWorker(node);
-
-            // Then we recurse into the children of the node to bind them as well.  For certain
-            // symbols we do specialized work when we recurse.  For example, we'll keep track of
-            // the current 'container' node when it changes.  This helps us know which symbol table
-            // a local should go into for example.
-            bindChildren(node);
-
-            inStrictMode = savedInStrictMode;
-        }
-
-        function updateStrictMode(node: Node) {
-            switch (node.kind) {
-                case SyntaxKind.SourceFile:
-                case SyntaxKind.ModuleBlock:
-                    updateStrictModeStatementList((<SourceFile | ModuleBlock>node).statements);
-                    return;
-                case SyntaxKind.Block:
-                    if (isFunctionLike(node.parent)) {
-                        updateStrictModeStatementList((<Block>node).statements);
-                    }
-                    return;
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                    // All classes are automatically in strict mode in ES6.
-                    inStrictMode = true;
-                    return;
+            // Then we recurse into the children of the node to bind them as well. For certain
+            // symbols we do specialized work when we recurse. For example, we'll keep track of
+            // the current 'container' node when it changes. This helps us know which symbol table
+            // a local should go into for example. Since terminal nodes are known not to have
+            // children, as an optimization we don't process those.
+            if (node.kind > SyntaxKind.LastToken) {
+                const saveParent = parent;
+                parent = node;
+                const containerFlags = getContainerFlags(node);
+                if (containerFlags === ContainerFlags.None) {
+                    bindChildren(node);
+                }
+                else {
+                    bindContainer(node, containerFlags);
+                }
+                parent = saveParent;
             }
+            inStrictMode = saveInStrictMode;
         }
 
         function updateStrictModeStatementList(statements: NodeArray<Statement>) {
-            for (const statement of statements) {
-                if (!isPrologueDirective(statement)) {
-                    return;
-                }
+            if (!inStrictMode) {
+                for (const statement of statements) {
+                    if (!isPrologueDirective(statement)) {
+                        return;
+                    }
 
-                if (isUseStrictPrologueDirective(<ExpressionStatement>statement)) {
-                    inStrictMode = true;
-                    return;
+                    if (isUseStrictPrologueDirective(<ExpressionStatement>statement)) {
+                        inStrictMode = true;
+                        return;
+                    }
                 }
             }
         }
@@ -1724,7 +1708,7 @@ namespace ts {
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes);
 
                 case SyntaxKind.JsxSpreadAttribute:
-                    hasJsxSpreadAttribute = true;
+                    emitFlags |= NodeFlags.HasJsxSpreadAttribute;
                     return;
 
                 case SyntaxKind.CallSignature:
@@ -1770,6 +1754,8 @@ namespace ts {
                 // Members of classes, interfaces, and modules
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
+                    // All classes are automatically in strict mode in ES6.
+                    inStrictMode = true;
                     return bindClassLikeDeclaration(<ClassLikeDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
@@ -1796,7 +1782,15 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                     return bindExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.SourceFile:
+                    updateStrictModeStatementList((<SourceFile>node).statements);
                     return bindSourceFileIfExternalModule();
+                case SyntaxKind.Block:
+                    if (!isFunctionLike(node.parent)) {
+                        return;
+                    }
+                    // Fall through
+                case SyntaxKind.ModuleBlock:
+                    return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
             }
         }
 
@@ -1958,10 +1952,10 @@ namespace ts {
         function bindClassLikeDeclaration(node: ClassLikeDeclaration) {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
                 if (getClassExtendsHeritageClauseElement(node) !== undefined) {
-                    hasClassExtends = true;
+                    emitFlags |= NodeFlags.HasClassExtends;
                 }
                 if (nodeIsDecorated(node)) {
-                    hasDecorators = true;
+                    emitFlags |= NodeFlags.HasDecorators;
                 }
             }
 
@@ -2037,8 +2031,7 @@ namespace ts {
             if (!isDeclarationFile(file) &&
                 !isInAmbientContext(node) &&
                 nodeIsDecorated(node)) {
-                hasDecorators = true;
-                hasParameterDecorators = true;
+                emitFlags |= (NodeFlags.HasDecorators | NodeFlags.HasParamDecorators);
             }
 
             if (inStrictMode) {
@@ -2065,7 +2058,7 @@ namespace ts {
         function bindFunctionDeclaration(node: FunctionDeclaration) {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
                 if (isAsyncFunctionLike(node)) {
-                    hasAsyncFunctions = true;
+                    emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
             }
 
@@ -2082,10 +2075,12 @@ namespace ts {
         function bindFunctionExpression(node: FunctionExpression) {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
                 if (isAsyncFunctionLike(node)) {
-                    hasAsyncFunctions = true;
+                    emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
             }
-
+            if (currentFlow) {
+                node.flowNode = currentFlow;
+            }
             checkStrictModeFunctionName(<FunctionExpression>node);
             const bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
             return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
@@ -2094,10 +2089,10 @@ namespace ts {
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
                 if (isAsyncFunctionLike(node)) {
-                    hasAsyncFunctions = true;
+                    emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
                 if (nodeIsDecorated(node)) {
-                    hasDecorators = true;
+                    emitFlags |= NodeFlags.HasDecorators;
                 }
             }
 
