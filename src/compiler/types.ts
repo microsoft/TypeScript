@@ -376,7 +376,9 @@ namespace ts {
         LastBinaryOperator = CaretEqualsToken,
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
-        LastJSDocNode = JSDocTypeLiteral
+        LastJSDocNode = JSDocTypeLiteral,
+        FirstJSDocTagNode = JSDocComment,
+        LastJSDocTagNode = JSDocTypeLiteral
     }
 
     export const enum NodeFlags {
@@ -1518,9 +1520,9 @@ namespace ts {
 
     // @kind(SyntaxKind.JSDocTypedefTag)
     export interface JSDocTypedefTag extends JSDocTag, Declaration {
-        name: Identifier;
+        name?: Identifier;
         typeExpression?: JSDocTypeExpression;
-        type: JSDocType;
+        jsDocTypeLiteral?: JSDocTypeLiteral;
     }
 
     // @kind(SyntaxKind.JSDocPropertyTag)

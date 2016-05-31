@@ -276,16 +276,7 @@ namespace ts {
                 scanner.setText((sourceFile || this.getSourceFile()).text);
                 children = [];
                 let pos = this.pos;
-                const useJSDocScanner =
-                    this.kind === SyntaxKind.JSDocComment ||
-                    this.kind === SyntaxKind.JSDocParameterTag ||
-                    this.kind === SyntaxKind.JSDocTag ||
-                    this.kind === SyntaxKind.JSDocParameterTag ||
-                    this.kind === SyntaxKind.JSDocReturnTag ||
-                    this.kind === SyntaxKind.JSDocTypeTag ||
-                    this.kind === SyntaxKind.JSDocTemplateTag ||
-                    this.kind === SyntaxKind.JSDocTypedefTag ||
-                    this.kind === SyntaxKind.JSDocPropertyTag;
+                const useJSDocScanner = this.kind >= SyntaxKind.FirstJSDocTagNode && this.kind <= SyntaxKind.LastJSDocTagNode;
                 const processNode = (node: Node) => {
                     if (pos < node.pos) {
                         pos = this.addSyntheticNodes(children, pos, node.pos, useJSDocScanner);

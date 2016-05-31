@@ -404,7 +404,7 @@ namespace ts {
             case SyntaxKind.JSDocTypedefTag:
                 return visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
                     visitNode(cbNode, (<JSDocTypedefTag>node).name) ||
-                    visitNode(cbNode, (<JSDocTypedefTag>node).type);
+                    visitNode(cbNode, (<JSDocTypedefTag>node).jsDocTypeLiteral);
             case SyntaxKind.JSDocTypeLiteral:
                 return visitNodes(cbNodes, (<JSDocTypeLiteral>node).jsDocPropertyTags);
             case SyntaxKind.JSDocPropertyTag:
@@ -6301,28 +6301,11 @@ namespace ts {
                 function handleTypedefTag(atToken: Node, tagName: Identifier): JSDocTypedefTag {
                     const typeExpression = tryParseTypeExpression();
                     skipWhitespace();
-                    let name = parseJSDocIdentifierName();
-                    if (!name) {
-                        let foundNameFromParentNode = false;
-                        if (parentNode && parentNode.kind === SyntaxKind.VariableStatement) {
-                            if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
-                                const nameFromParentNode = (<VariableStatement>parentNode).declarationList.declarations[0].name;
-                                if (nameFromParentNode.kind === SyntaxKind.Identifier) {
-                                    foundNameFromParentNode = true;
-                                    name = <Identifier>nameFromParentNode;
-                                }
-                            }
-                        }
-                        if (!foundNameFromParentNode) {
-                            parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
-                            return undefined;
-                        }
-                    }
 
                     const typedefTag = <JSDocTypedefTag>createNode(SyntaxKind.JSDocTypedefTag, atToken.pos);
                     typedefTag.atToken = atToken;
                     typedefTag.tagName = tagName;
-                    typedefTag.name = name;
+                    typedefTag.name = parseJSDocIdentifierName();
                     typedefTag.typeExpression = typeExpression;
 
                     if (typeExpression) {
@@ -6331,16 +6314,16 @@ namespace ts {
                             if (jsDocTypeReference.name.kind === SyntaxKind.Identifier) {
                                 const name = <Identifier>jsDocTypeReference.name;
                                 if (name.text === "Object") {
-                                    typedefTag.type = scanChildTags();
+                                    typedefTag.jsDocTypeLiteral = scanChildTags();
                                 }
                             }
                         }
-                        if (!typedefTag.type) {
-                            typedefTag.type = typeExpression.type;
+                        if (!typedefTag.jsDocTypeLiteral) {
+                            typedefTag.jsDocTypeLiteral = typeExpression.type;
                         }
                     }
                     else {
-                        typedefTag.type = scanChildTags();
+                        typedefTag.jsDocTypeLiteral = scanChildTags();
                     }
 
                     return finishNode(typedefTag);

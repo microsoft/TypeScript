@@ -653,6 +653,12 @@ namespace ts.NavigationBar {
                 topItem.childItems.push(newItem);
             }
 
+            if (node.jsDocComments && node.jsDocComments.length > 0) {
+                for (const jsDocComment of node.jsDocComments) {
+                    visitNode(jsDocComment);
+                }
+            }
+
             // Add a level if traversing into a container
             if (newItem && (isFunctionLike(node) || isClassLike(node))) {
                 const lastTop = topItem;

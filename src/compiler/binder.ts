@@ -267,6 +267,18 @@ namespace ts {
                     let functionType = <JSDocFunctionType>node.parent;
                     let index = indexOf(functionType.parameters, node);
                     return "p" + index;
+                case SyntaxKind.JSDocTypedefTag:
+                    const parentNode = node.parent && node.parent.parent;
+                    let nameFromParentNode: string;
+                    if (parentNode && parentNode.kind === SyntaxKind.VariableStatement) {
+                        if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
+                            const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
+                            if (nameIdentifier.kind === SyntaxKind.Identifier) {
+                                nameFromParentNode = (<Identifier>nameIdentifier).text;
+                            }
+                        }
+                    }
+                    return nameFromParentNode;
             }
         }
 

@@ -3586,11 +3586,21 @@ namespace ts {
                     return unknownType;
                 }
 
+                let type: Type;
                 let declaration: JSDocTypedefTag | TypeAliasDeclaration = <JSDocTypedefTag>getDeclarationOfKind(symbol, SyntaxKind.JSDocTypedefTag);
-                if (!declaration) {
-                    declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
+                if (declaration) {
+                    if (declaration.jsDocTypeLiteral) {
+                        type = getTypeFromTypeNode(declaration.jsDocTypeLiteral);
+                    }
+                    else {
+                        type = getTypeFromTypeNode(declaration.typeExpression.type);
+                    }
                 }
-                let type = getTypeFromTypeNode(declaration.type);
+                else {
+                    declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
+                    type = getTypeFromTypeNode(declaration.type);
+                }
+
                 if (popTypeResolution()) {
                     links.typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                     if (links.typeParameters) {
