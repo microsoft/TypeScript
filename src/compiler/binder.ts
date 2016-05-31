@@ -263,6 +263,18 @@ namespace ts {
                     let functionType = <JSDocFunctionType>node.parent;
                     let index = indexOf(functionType.parameters, node);
                     return "p" + index;
+                case SyntaxKind.JSDocTypedefTag:
+                    const parentNode = node.parent && node.parent.parent;
+                    let nameFromParentNode: string;
+                    if (parentNode && parentNode.kind === SyntaxKind.VariableStatement) {
+                        if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
+                            const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
+                            if (nameIdentifier.kind === SyntaxKind.Identifier) {
+                                nameFromParentNode = (<Identifier>nameIdentifier).text;
+                            }
+                        }
+                    }
+                    return nameFromParentNode;
             }
         }
 
@@ -402,6 +414,7 @@ namespace ts {
             // these saved values.
             const saveContainer = container;
             const savedBlockScopeContainer = blockScopeContainer;
+
             // Depending on what kind of node this is, we may have to adjust the current container
             // and block-container.   If the current node is a container, then it is automatically
             // considered the current block-container as well.  Also, for containers that we know
@@ -491,8 +504,13 @@ namespace ts {
         }
 
         function bindChildren(node: Node): void {
-            if (node.flags & NodeFlags.JavaScriptFile && node.jsDocComment) {
-                bind(node.jsDocComment);
+            // Binding of JsDocComment should be done before the current block scope container changes.
+            // because the scope of JsDocComment should not be affected by whether the current node is a
+            // container or not.
+            if (isInJavaScriptFile(node) && node.jsDocComments) {
+                for (const jsDocComment of node.jsDocComments) {
+                    bind(jsDocComment);
+                }
             }
             if (checkUnreachable(node)) {
                 forEachChild(node, bind);
@@ -1090,6 +1108,7 @@ namespace ts {
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JSDocRecordType:
                     return ContainerFlags.IsContainer;
 
@@ -1190,6 +1209,7 @@ namespace ts {
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.JSDocRecordType:
+                case SyntaxKind.JSDocTypeLiteral:
                     // Interface/Object-types always have their children added to the 'members' of
                     // their container. They are only accessible through an instance of their
                     // container, and are never in scope otherwise (even inside the body of the
@@ -1218,7 +1238,7 @@ namespace ts {
                     // their container in the tree.  To accomplish this, we simply add their declared
                     // symbol to the 'locals' of the container.  These symbols can then be found as
                     // the type checker walks up the containers, checking them for matching names.
-                    return declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
+                    return declareSymbol(container.locals, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
             }
         }
 
@@ -1679,6 +1699,8 @@ namespace ts {
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.JSDocRecordMember:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property | ((<PropertyDeclaration>node).questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
+                case SyntaxKind.JSDocPropertyTag:
+                    return bindJSDocProperty(<JSDocPropertyTag>node);
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
@@ -1714,6 +1736,7 @@ namespace ts {
                 case SyntaxKind.JSDocFunctionType:
                     return bindFunctionOrConstructorType(<SignatureDeclaration>node);
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JSDocRecordType:
                     return bindAnonymousDeclaration(<TypeLiteralNode>node, SymbolFlags.TypeLiteral, "__type");
                 case SyntaxKind.ObjectLiteralExpression:
@@ -1736,6 +1759,7 @@ namespace ts {
                     return bindClassLikeDeclaration(<ClassLikeDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
+                case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.TypeAliasDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                 case SyntaxKind.EnumDeclaration:
@@ -2075,6 +2099,10 @@ namespace ts {
             return hasDynamicName(node)
                 ? bindAnonymousDeclaration(node, symbolFlags, "__computed")
                 : declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
+        }
+
+        function bindJSDocProperty(node: JSDocPropertyTag) {
+            return declareSymbolAndAddToSymbolTable(node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
         }
 
         // reachability checks

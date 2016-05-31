@@ -3581,8 +3581,22 @@ namespace ts {
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.DeclaredType)) {
                     return unknownType;
                 }
-                const declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
-                let type = getTypeFromTypeNode(declaration.type);
+
+                let type: Type;
+                let declaration: JSDocTypedefTag | TypeAliasDeclaration = <JSDocTypedefTag>getDeclarationOfKind(symbol, SyntaxKind.JSDocTypedefTag);
+                if (declaration) {
+                    if (declaration.jsDocTypeLiteral) {
+                        type = getTypeFromTypeNode(declaration.jsDocTypeLiteral);
+                    }
+                    else {
+                        type = getTypeFromTypeNode(declaration.typeExpression.type);
+                    }
+                }
+                else {
+                    declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
+                    type = getTypeFromTypeNode(declaration.type);
+                }
+
                 if (popTypeResolution()) {
                     links.typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                     if (links.typeParameters) {
@@ -5253,6 +5267,7 @@ namespace ts {
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.JSDocRecordType:
                     return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
@@ -16728,7 +16743,7 @@ namespace ts {
                 node = node.parent;
             }
 
-            return node.parent && node.parent.kind === SyntaxKind.TypeReference;
+            return node.parent && (node.parent.kind === SyntaxKind.TypeReference || node.parent.kind === SyntaxKind.JSDocTypeReference) ;
         }
 
         function isHeritageClauseElementIdentifier(entityName: Node): boolean {
@@ -16864,7 +16879,7 @@ namespace ts {
                 }
             }
             else if (isTypeReferenceIdentifier(<EntityName>entityName)) {
-                let meaning = entityName.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
+                let meaning = (entityName.parent.kind === SyntaxKind.TypeReference || entityName.parent.kind === SyntaxKind.JSDocTypeReference) ? SymbolFlags.Type : SymbolFlags.Namespace;
                 // Include aliases in the meaning, this ensures that we do not follow aliases to where they point and instead
                 // return the alias symbol.
                 meaning |= SymbolFlags.Alias;

@@ -434,7 +434,7 @@ namespace ts {
       }
 
       /* @internal */
-      export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
+      export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean, stopAtComments = false): number {
           // Using ! with a greater than test is a fast way of testing the following conditions:
           //  pos === undefined || pos === null || isNaN(pos) || pos < 0;
           if (!(pos >= 0)) {
@@ -462,6 +462,9 @@ namespace ts {
                       pos++;
                       continue;
                   case CharacterCodes.slash:
+                      if (stopAtComments) {
+                          break;
+                      }
                       if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
                           pos += 2;
                           while (pos < text.length) {
