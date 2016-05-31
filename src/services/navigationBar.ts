@@ -13,7 +13,7 @@ namespace ts.NavigationBar {
      */
     interface NavNode {
         node: Node;
-        additionalNodes?: Node[];
+        additionalNodes: Node[]; // May be missing
         parent: NavNode; // Missing for root decl
         children: NavNode[];
         indent: number; // # of parents
@@ -27,19 +27,25 @@ namespace ts.NavigationBar {
 
     /** Creates a child node and adds it to parent. */
     function createNavNode(parent: NavNode, node: Node): NavNode {
-        // `item` is set during `convertToItem`
-        const item: NavNode = { node, parent, children: [], indent: parent ? parent.indent + 1 : 0 };
+        const navNode: NavNode = {
+            node,
+            additionalNodes: undefined,
+            parent,
+            children: [],
+            indent:
+            parent ? parent.indent + 1 : 0
+        };
         if (parent) {
-            parent.children.push(item);
+            parent.children.push(navNode);
         }
-        addChildren(item);
-        return item;
+        addChildren(navNode);
+        return navNode;
     }
 
     /** Traverse through parent.node's descendants and find declarations to add as parent's children. */
     function addChildren(parent: NavNode): void {
         function recur(node: Node) {
-            if (isDeclaration(node)) { //TODO:PERF: get rid of this call, just use 1 switch statement.
+            if (isDeclaration(node)) {
                 switch (node.kind) {
                     case SyntaxKind.Parameter: // Parameter properties handled by SyntaxKind.Constructor case
                     case SyntaxKind.TypeParameter:
@@ -119,10 +125,10 @@ namespace ts.NavigationBar {
             }
             else {
                 switch (node.kind) {
+                    // TODO: These should probably be added to isDeclaration
                     case SyntaxKind.CallSignature:
                     case SyntaxKind.ConstructSignature:
                     case SyntaxKind.IndexSignature:
-                    case SyntaxKind.MethodSignature:
                         createNavNode(parent, node);
                         break;
                     default:
@@ -137,24 +143,23 @@ namespace ts.NavigationBar {
         }
         forEachChild(parentNode, recur);
 
-        parent.children = mergeChildren(parent.children);
+        mergeChildren(parent.children);
         sortChildren(parent.children);
     }
 
-    //TODO: mutate input array, return void
     /** Merge declarations of the same kind. */
-    function mergeChildren(children: NavNode[]): NavNode[] {
-        const map: Map<NavNode[]> = {};
-        return filter(children, child => {
+    function mergeChildren(children: NavNode[]): void {
+        const nameToNavNodes: Map<NavNode[]> = {};
+        filterMutate(children, child => {
             const decl = <Declaration>child.node;
             const name = decl.name && decl.name.getText();
             if (!name)
                 // Anonymous items are never merged.
                 return true;
 
-            const itemsWithSameName = map[name];
+            const itemsWithSameName = nameToNavNodes[name];
             if (!itemsWithSameName) {
-                map[name] = [child];
+                nameToNavNodes[name] = [child];
                 return true;
             }
 
@@ -193,8 +198,8 @@ namespace ts.NavigationBar {
                 target.additionalNodes.push(...source.additionalNodes);
             }
 
-            //TODO:PERF
-            target.children = mergeChildren(target.children.concat(source.children));
+            target.children.push(...source.children);
+            mergeChildren(target.children);
             sortChildren(target.children);
         }
     }
@@ -347,7 +352,6 @@ namespace ts.NavigationBar {
         };
 
         function convertToChildItem(n: NavNode): NavigationBarItem {
-            //TODO:PERF
             const nodes = [n.node];
             if (n.additionalNodes) {
                 nodes.push(...n.additionalNodes);
