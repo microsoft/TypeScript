@@ -9,16 +9,10 @@ namespace ts.NavigationBar {
             return getJsNavigationBarItems(sourceFile, compilerOptions);
         }
 
-        // If the source file has any child items, then it included in the tree
-        // and takes lexical ownership of all other top-level items.
-        let hasGlobalNode = false;
-
         return getItemsWorker(getTopLevelNodes(sourceFile), createTopLevelItem);
 
         function getIndent(node: Node): number {
-            // If we have a global node in the tree,
-            // then it adds an extra layer of depth to all subnodes.
-            let indent = hasGlobalNode ? 1 : 0;
+            let indent = 1; // Global node is the only one with indent 0.
 
             let current = node.parent;
             while (current) {
@@ -104,6 +98,7 @@ namespace ts.NavigationBar {
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.ImportSpecifier:
                     case SyntaxKind.ExportSpecifier:
+                    case SyntaxKind.TypeAliasDeclaration:
                         childNodes.push(node);
                         break;
                 }
@@ -140,7 +135,7 @@ namespace ts.NavigationBar {
         function sortNodes(nodes: Node[]): Node[] {
             return nodes.slice(0).sort((n1: Declaration, n2: Declaration) => {
                 if (n1.name && n2.name) {
-                    return getPropertyNameForPropertyNameNode(n1.name).localeCompare(getPropertyNameForPropertyNameNode(n2.name));
+                    return localeCompareFix(getPropertyNameForPropertyNameNode(n1.name), getPropertyNameForPropertyNameNode(n2.name));
                 }
                 else if (n1.name) {
                     return 1;
@@ -152,6 +147,16 @@ namespace ts.NavigationBar {
                     return n1.kind - n2.kind;
                 }
             });
+
+            // node 0.10 treats "a" as greater than "B".
+            // For consistency, sort alphabetically, falling back to which is lower-case.
+            function localeCompareFix(a: string, b: string) {
+                const cmp = a.toLowerCase().localeCompare(b.toLowerCase());
+                if (cmp !== 0)
+                    return cmp;
+                // Return the *opposite* of the `<` operator, which works the same in node 0.10 and 6.0.
+                return a < b ? 1 : a > b ? -1 : 0;
+            }
         }
 
         function addTopLevelNodes(nodes: Node[], topLevelNodes: Node[]): void {
@@ -314,8 +319,20 @@ namespace ts.NavigationBar {
                 case SyntaxKind.IndexSignature:
                     return createItem(node, "[]", ts.ScriptElementKind.indexSignatureElement);
 
+                case SyntaxKind.EnumDeclaration:
+                    return createItem(node, getTextOfNode((<EnumDeclaration>node).name), ts.ScriptElementKind.enumElement);
+
                 case SyntaxKind.EnumMember:
                     return createItem(node, getTextOfNode((<EnumMember>node).name), ts.ScriptElementKind.memberVariableElement);
+
+                case SyntaxKind.ModuleDeclaration:
+                    return createItem(node, getModuleName(<ModuleDeclaration>node), ts.ScriptElementKind.moduleElement);
+
+                case SyntaxKind.InterfaceDeclaration:
+                    return createItem(node, getTextOfNode((<InterfaceDeclaration>node).name), ts.ScriptElementKind.interfaceElement);
+
+                case SyntaxKind.TypeAliasDeclaration:
+                    return createItem(node, getTextOfNode((<TypeAliasDeclaration>node).name), ts.ScriptElementKind.typeElement);
 
                 case SyntaxKind.CallSignature:
                     return createItem(node, "()", ts.ScriptElementKind.callSignatureElement);
@@ -326,6 +343,9 @@ namespace ts.NavigationBar {
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                     return createItem(node, getTextOfNode((<PropertyDeclaration>node).name), ts.ScriptElementKind.memberVariableElement);
+
+                case SyntaxKind.ClassDeclaration:
+                    return createItem(node, getTextOfNode((<ClassDeclaration>node).name), ts.ScriptElementKind.classElement);
 
                 case SyntaxKind.FunctionDeclaration:
                     return createItem(node, getTextOfNode((<FunctionLikeDeclaration>node).name), ts.ScriptElementKind.functionElement);
@@ -430,26 +450,6 @@ namespace ts.NavigationBar {
 
             return undefined;
 
-            function getModuleName(moduleDeclaration: ModuleDeclaration): string {
-                // We want to maintain quotation marks.
-                if (isAmbientModule(moduleDeclaration)) {
-                    return getTextOfNode(moduleDeclaration.name);
-                }
-
-                // Otherwise, we need to aggregate each identifier to build up the qualified name.
-                const result: string[] = [];
-
-                result.push(moduleDeclaration.name.text);
-
-                while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
-                    moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
-
-                    result.push(moduleDeclaration.name.text);
-                }
-
-                return result.join(".");
-            }
-
             function createModuleItem(node: ModuleDeclaration): NavigationBarItem {
                 const moduleName = getModuleName(node);
 
@@ -515,11 +515,6 @@ namespace ts.NavigationBar {
             function createSourceFileItem(node: SourceFile): ts.NavigationBarItem {
                 const childItems = getItemsWorker(getChildNodes(node.statements), createChildItem);
 
-                if (childItems === undefined || childItems.length === 0) {
-                    return undefined;
-                }
-
-                hasGlobalNode = true;
                 const rootName = isExternalModule(node)
                     ? "\"" + escapeString(getBaseFileName(removeFileExtension(normalizePath(node.fileName)))) + "\""
                     : "<global>";
@@ -582,6 +577,26 @@ namespace ts.NavigationBar {
                     childItems,
                     getIndent(node));
             }
+        }
+
+        function getModuleName(moduleDeclaration: ModuleDeclaration): string {
+            // We want to maintain quotation marks.
+            if (isAmbientModule(moduleDeclaration)) {
+                return getTextOfNode(moduleDeclaration.name);
+            }
+
+            // Otherwise, we need to aggregate each identifier to build up the qualified name.
+            const result: string[] = [];
+
+            result.push(moduleDeclaration.name.text);
+
+            while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
+                moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
+
+                result.push(moduleDeclaration.name.text);
+            }
+
+            return result.join(".");
         }
 
         function removeComputedProperties(node: EnumDeclaration): Declaration[] {

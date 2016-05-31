@@ -23,7 +23,6 @@
 /// <reference path="external\chai.d.ts"/>
 /// <reference path="sourceMapRecorder.ts"/>
 /// <reference path="runnerbase.ts"/>
-/* tslint:disable:no-null-keyword */
 
 // Block scoped definitions work poorly for global variables, temporarily enable var
 /* tslint:disable:no-var-keyword */
@@ -32,7 +31,7 @@
 var _chai: typeof chai = require("chai");
 var assert: typeof _chai.assert = _chai.assert;
 declare var __dirname: string; // Node-specific
-var global = <any>Function("return this").call(null);
+var global = <any>Function("return this").call(undefined);
 /* tslint:enable:no-var-keyword */
 
 namespace Utils {
@@ -127,7 +126,7 @@ namespace Utils {
     export function memoize<T extends Function>(f: T): T {
         const cache: { [idx: string]: any } = {};
 
-        return <any>(function () {
+        return <any>(function() {
             const key = Array.prototype.join.call(arguments);
             const cachedResult = cache[key];
             if (cachedResult) {
@@ -558,15 +557,9 @@ namespace Harness {
             }
 
             export function directoryName(path: string) {
-                let dirPath = pathModule.dirname(path);
-
+                const dirPath = pathModule.dirname(path);
                 // Node will just continue to repeat the root path, rather than return null
-                if (dirPath === path) {
-                    dirPath = null;
-                }
-                else {
-                    return dirPath;
-                }
+                return dirPath === path ? undefined : dirPath;
             }
 
             export let listFiles: typeof IO.listFiles = (path, spec?, options?) => {
@@ -609,7 +602,7 @@ namespace Harness {
             export const getCurrentDirectory = () => "";
             export const args = () => <string[]>[];
             export const getExecutingFilePath = () => "";
-            export const exit = (exitCode: number) => {};
+            export const exit = (exitCode: number) => { };
 
             export let log = (s: string) => console.log(s);
 
@@ -634,7 +627,7 @@ namespace Harness {
                         xhr.send();
                     }
                     catch (e) {
-                        return { status: 404, responseText: null };
+                        return { status: 404, responseText: undefined };
                     }
 
                     return waitForXHR(xhr);
@@ -651,7 +644,7 @@ namespace Harness {
                     }
                     catch (e) {
                         log(`XHR Error: ${e}`);
-                        return { status: 500, responseText: null };
+                        return { status: 500, responseText: undefined };
                     }
 
                     return waitForXHR(xhr);
@@ -663,7 +656,7 @@ namespace Harness {
             }
 
             export function deleteFile(path: string) {
-                Http.writeToServerSync(serverRoot + path, "DELETE", null);
+                Http.writeToServerSync(serverRoot + path, "DELETE");
             }
 
             export function directoryExists(path: string): boolean {
@@ -674,7 +667,7 @@ namespace Harness {
                 let dirPath = path;
                 // root of the server
                 if (dirPath.match(/localhost:\d+$/) || dirPath.match(/localhost:\d+\/$/)) {
-                    dirPath = null;
+                    dirPath = undefined;
                     // path + fileName
                 }
                 else if (dirPath.indexOf(".") === -1) {
@@ -722,7 +715,7 @@ namespace Harness {
                     return response.responseText;
                 }
                 else {
-                    return null;
+                    return undefined;
                 }
             }
 
@@ -826,7 +819,7 @@ namespace Harness {
             }
 
             if (!libFileNameSourceFileMap[fileName]) {
-                libFileNameSourceFileMap[fileName] = createSourceFileAndAssertInvariants(fileName,  IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest);
+                libFileNameSourceFileMap[fileName] = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest);
             }
             return libFileNameSourceFileMap[fileName];
         }
@@ -900,6 +893,20 @@ namespace Harness {
 
 
             return {
+                getDefaultTypeDirectiveNames: (path: string) => {
+                    const results: string[] = [];
+                    fileMap.forEachValue((key, value) => {
+                        const rx = /node_modules\/@types\/(\w+)/;
+                        const typeNameResult = rx.exec(key);
+                        if (typeNameResult) {
+                            const typeName = typeNameResult[1];
+                            if (results.indexOf(typeName) < 0) {
+                                results.push(typeName);
+                            }
+                        }
+                    });
+                    return results;
+                },
                 getCurrentDirectory: () => currentDirectory,
                 getSourceFile,
                 getDefaultLibFileName,
@@ -939,6 +946,7 @@ namespace Harness {
             { name: "noErrorTruncation", type: "boolean" },
             { name: "suppressOutputPathCheck", type: "boolean" },
             { name: "noImplicitReferences", type: "boolean" },
+            { name: "currentDirectory", type: "string" },
             { name: "symlink", type: "string" }
         ];
 
@@ -1403,7 +1411,9 @@ namespace Harness {
             const opts: CompilerSettings = {};
 
             let match: RegExpExecArray;
-            while ((match = optionRegex.exec(content)) != null) {
+            /* tslint:disable:no-null-keyword */
+            while ((match = optionRegex.exec(content)) !== null) {
+            /* tslint:enable:no-null-keyword */
                 opts[match[1]] = match[2];
             }
 
@@ -1420,9 +1430,9 @@ namespace Harness {
             const lines = Utils.splitContentByNewlines(code);
 
             // Stuff related to the subfile we're parsing
-            let currentFileContent: string = null;
+            let currentFileContent: string = undefined;
             let currentFileOptions: any = {};
-            let currentFileName: any = null;
+            let currentFileName: any = undefined;
             let refs: string[] = [];
 
             for (let i = 0; i < lines.length; i++) {
@@ -1441,16 +1451,16 @@ namespace Harness {
                     if (currentFileName) {
                         // Store result file
                         const newTestFile = {
-                                content: currentFileContent,
-                                name: currentFileName,
-                                fileOptions: currentFileOptions,
-                                originalFilePath: fileName,
-                                references: refs
-                            };
+                            content: currentFileContent,
+                            name: currentFileName,
+                            fileOptions: currentFileOptions,
+                            originalFilePath: fileName,
+                            references: refs
+                        };
                         testUnitData.push(newTestFile);
 
                         // Reset local data
-                        currentFileContent = null;
+                        currentFileContent = undefined;
                         currentFileOptions = {};
                         currentFileName = testMetaData[2];
                         refs = [];
@@ -1463,7 +1473,7 @@ namespace Harness {
                 else {
                     // Subfile content line
                     // Append to the current subfile content, inserting a newline needed
-                    if (currentFileContent === null) {
+                    if (currentFileContent === undefined) {
                         currentFileContent = "";
                     }
                     else {
@@ -1544,10 +1554,10 @@ namespace Harness {
 
         function baselinePath(fileName: string, type: string, baselineFolder: string, subfolder?: string) {
             if (subfolder !== undefined) {
-                return Harness.userSpecifiedRoot + baselineFolder + "/" +  subfolder + "/" + type + "/" + fileName;
+                return Harness.userSpecifiedRoot + baselineFolder + "/" + subfolder + "/" + type + "/" + fileName;
             }
             else {
-                return Harness.userSpecifiedRoot + baselineFolder + "/"  + type + "/" + fileName;
+                return Harness.userSpecifiedRoot + baselineFolder + "/" + type + "/" + fileName;
             }
         }
 
@@ -1586,7 +1596,9 @@ namespace Harness {
 
             // Store the content in the 'local' folder so we
             // can accept it later (manually)
+            /* tslint:disable:no-null-keyword */
             if (actual !== null) {
+            /* tslint:enable:no-null-keyword */
                 IO.writeFile(actualFileName, actual);
             }
 
@@ -1603,7 +1615,9 @@ namespace Harness {
 
             const refFileName = referencePath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
 
+            /* tslint:disable:no-null-keyword */
             if (actual === null) {
+            /* tslint:enable:no-null-keyword */
                 actual = "<no content>";
             }
 
@@ -1616,7 +1630,7 @@ namespace Harness {
         }
 
         function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string, descriptionForDescribe: string) {
-            const encoded_actual =  Utils.encodeString(actual);
+            const encoded_actual = Utils.encodeString(actual);
             if (expected != encoded_actual) {
                 // Overwrite & issue error
                 const errMsg = "The baseline file " + relativeFileName + " has changed.";

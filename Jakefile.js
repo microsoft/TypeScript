@@ -680,9 +680,9 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, light, testConfigFile) {
-    console.log('Running test(s): ' + tests);
-    var testConfigContents = JSON.stringify({ test: [tests], light: light });
+function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount) {
+    var testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light: light, workerCount: workerCount, taskConfigsFolder: taskConfigsFolder });
+    console.log('Running tests with config: ' + testConfigContents);
     fs.writeFileSync('test.config', testConfigContents);
 }
 
@@ -692,7 +692,7 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
-function runConsoleTests(defaultReporter, defaultSubsets) {
+function runConsoleTests(defaultReporter, runInParallel) {
     cleanTestDirs();
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
@@ -701,9 +701,22 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
+    var workerCount, taskConfigsFolder;
+    if (runInParallel) {
+        // generate name to store task configuration files
+        var prefix = os.tmpdir() + "/ts-tests";
+        var i = 1;
+        do {
+            taskConfigsFolder = prefix + i;
+            i++;
+        } while (fs.existsSync(taskConfigsFolder));
+        fs.mkdirSync(taskConfigsFolder);
 
-    if (tests || light) {
-        writeTestConfigFile(tests, light, testConfigFile);
+        workerCount = process.env.workerCount || os.cpus().length;
+    }
+
+    if (tests || light || taskConfigsFolder) {
+        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -717,45 +730,93 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
 
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
-    var subsetRegexes;
-    if(defaultSubsets.length === 0) {
-        subsetRegexes = [tests];
-    }
-    else {
-        var subsets = tests ? tests.split("|") : defaultSubsets;
-        subsetRegexes = subsets.map(function (sub) { return "^" + sub + ".*$"; });
-        subsetRegexes.push("^(?!" + subsets.join("|") + ").*$");
-    }
-    subsetRegexes.forEach(function (subsetRegex, i) {
-        tests = subsetRegex ? ' -g "' + subsetRegex + '"' : '';
+    if(!runInParallel) {
+        tests = tests ? ' -g "' + tests + '"' : '';
         var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
-        function finish() {
-            deleteTemporaryProjectOutput();
+        exec(cmd, function () {
+            runLinter();
+            finish();
+        }, function(e, status) {
+            finish(status);
+        });
+        
+    }
+    else {
+        // run task to load all tests and partition them between workers 
+        var cmd = "mocha " + " -R min " + colors + run;
+        console.log(cmd);
+        exec(cmd, function() {
+            // read all configuration files and spawn a worker for every config
+            var configFiles = fs.readdirSync(taskConfigsFolder);
+            var counter = configFiles.length;
+            var firstErrorStatus;
+            // schedule work for chunks
+            configFiles.forEach(function (f) {
+                var configPath = path.join(taskConfigsFolder, f);
+                var workerCmd = "mocha" + " -t " + testTimeout + " -R " + reporter + " " + colors + " " + run + " --config='" + configPath + "'";
+                console.log(workerCmd);
+                exec(workerCmd,  finishWorker, finishWorker) 
+            });
+            
+            function finishWorker(e, errorStatus) {
+                counter--;
+                if (firstErrorStatus === undefined && errorStatus !== undefined) {
+                    firstErrorStatus = errorStatus;
+                }
+                if (counter !== 0) {
+                    complete();
+                }
+                else {
+                    // last worker clean everything and runs linter in case if there were no errors
+                    deleteTemporaryProjectOutput();
+                    jake.rmRf(taskConfigsFolder);
+                    if (firstErrorStatus === undefined) {
+                        runLinter();
+                        complete();
+                    }
+                    else {
+                        failWithStatus(firstErrorStatus);
+                    }
+                }
+            }
+        });
+    }
+    
+    function failWithStatus(status) {
+        fail("Process exited with code " + status);
+    }
+    
+    function finish(errorStatus) {
+        deleteTemporaryProjectOutput();
+        if (errorStatus !== undefined) {
+            failWithStatus(errorStatus);
+        }
+        else {
             complete();
         }
-        exec(cmd, function () {
-            if (lintFlag && i === 0) {
-                var lint = jake.Task['lint'];
-                lint.addListener('complete', function () {
-                    complete();
-                });
-                lint.invoke();
-            }
-            finish();
-        }, finish);
-    });
+    }
+    function runLinter() {
+        if (!lintFlag) {
+            return;
+        }
+        var lint = jake.Task['lint'];
+        lint.addListener('complete', function () {
+            complete();
+        });
+        lint.invoke();
+    }
 }
 
 var testTimeout = 20000;
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
 task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function() {
-    runConsoleTests('min', ['compiler', 'conformance', 'Projects', 'fourslash']);
+    runConsoleTests('min', /*runInParallel*/ true);
 }, {async: true});
 
 desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true.");
 task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
-    runConsoleTests('mocha-fivemat-progress-reporter', []);
+    runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);
 }, {async: true});
 
 desc("Generates code coverage data via instanbul");
@@ -789,7 +850,7 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFi
         fs.unlinkSync(testConfigFile);
     }
     if(tests || light) {
-        writeTestConfigFile(tests, light, testConfigFile);
+        writeTestConfigFile(tests, light);
     }
 
     tests = tests ? tests : '';
@@ -962,39 +1023,30 @@ function lintFileAsync(options, path, cb) {
     });
 }
 
-var servicesLintTargets = [
-    "navigateTo.ts",
-    "navigationBar.ts",
-    "outliningElementsCollector.ts",
-    "patternMatcher.ts",
-    "services.ts",
-    "shims.ts",
-    "jsTyping.ts"
-].map(function (s) {
-    return path.join(servicesDirectory, s);
-});
 var lintTargets = compilerSources
-    .concat(harnessCoreSources)
+    .concat(harnessSources)
     // Other harness sources
     .concat(["instrumenter.ts"].map(function(f) { return path.join(harnessDirectory, f) }))
     .concat(serverCoreSources)
-    .concat(["client.ts"].map(function(f) { return path.join(serverDirectory, f); }))
     .concat(tslintRulesFiles)
-    .concat(servicesLintTargets);
+    .concat(servicesSources);
+
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
 task("lint", ["build-rules"], function() {
     var lintOptions = getLinterOptions();
     var failed = 0;
     var fileMatcher = RegExp(process.env.f || process.env.file || process.env.files || "");
+    var done = {};
     for (var i in lintTargets) {
         var target = lintTargets[i];
-        if (fileMatcher.test(target)) {
+        if (!done[target] && fileMatcher.test(target)) {
             var result = lintFile(lintOptions, target);
             if (result.failureCount > 0) {
                 console.log(result.output);
                 failed += result.failureCount;
             }
+            done[target] = true;
         }
     }
     if (failed > 0) {

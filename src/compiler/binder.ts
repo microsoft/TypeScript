@@ -912,8 +912,8 @@ namespace ts {
             preSwitchCaseFlow = currentFlow;
             bind(node.caseBlock);
             addAntecedent(postSwitchLabel, currentFlow);
-            const hasDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause);
-            if (!hasDefault) {
+            const hasNonEmptyDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause && c.statements.length);
+            if (!hasNonEmptyDefault) {
                 addAntecedent(postSwitchLabel, preSwitchCaseFlow);
             }
             currentBreakTarget = saveBreakTarget;
@@ -1880,12 +1880,20 @@ namespace ts {
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression) {
-            // Declare a 'member' in case it turns out the container was an ES5 class
-            if (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) {
-                container.symbol.members = container.symbol.members || {};
-                // It's acceptable for multiple 'this' assignments of the same identifier to occur
-                declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+            // Declare a 'member' in case it turns out the container was an ES5 class or ES6 constructor
+            let assignee: Node;
+            if (container.kind === SyntaxKind.FunctionDeclaration || container.kind === SyntaxKind.FunctionDeclaration) {
+                assignee = container;
             }
+            else if (container.kind === SyntaxKind.Constructor) {
+                assignee = container.parent;
+            }
+            else {
+                return;
+            }
+            assignee.symbol.members = assignee.symbol.members || {};
+            // It's acceptable for multiple 'this' assignments of the same identifier to occur
+            declareSymbol(assignee.symbol.members, assignee.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
         }
 
         function bindPrototypePropertyAssignment(node: BinaryExpression) {
@@ -2027,7 +2035,7 @@ namespace ts {
             // containing class.
             if (isParameterPropertyDeclaration(node)) {
                 const classDeclaration = <ClassLikeDeclaration>node.parent.parent;
-                declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property | (node.questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
             }
         }
 

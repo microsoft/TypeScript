@@ -2,7 +2,7 @@
 /// <reference path="..\..\..\src\compiler\commandLineParser.ts" />
 
 namespace ts {
-    describe('parseCommandLine', () => {
+    describe("parseCommandLine", () => {
 
         function assertParseResult(commandLine: string[], expectedParsedCommandLine: ts.ParsedCommandLine) {
             const parsed = ts.parseCommandLine(commandLine);
@@ -13,9 +13,9 @@ namespace ts {
             const parsedErrors = parsed.errors;
             const expectedErrors = expectedParsedCommandLine.errors;
             assert.isTrue(parsedErrors.length === expectedErrors.length, `Expected error: ${JSON.stringify(expectedErrors)}. Actual error: ${JSON.stringify(parsedErrors)}.`);
-            for (let i = 0; i < parsedErrors.length; ++i) {
+            for (let i = 0; i < parsedErrors.length; i++) {
                 const parsedError = parsedErrors[i];
-                const expectedError = expectedErrors[i]; 
+                const expectedError = expectedErrors[i];
                 assert.equal(parsedError.code, expectedError.code);
                 assert.equal(parsedError.category, expectedError.category);
                 assert.equal(parsedError.messageText, expectedError.messageText);
@@ -24,9 +24,9 @@ namespace ts {
             const parsedFileNames = parsed.fileNames;
             const expectedFileNames = expectedParsedCommandLine.fileNames;
             assert.isTrue(parsedFileNames.length === expectedFileNames.length, `Expected fileNames: [${JSON.stringify(expectedFileNames)}]. Actual fileNames: [${JSON.stringify(parsedFileNames)}].`);
-            for (let i = 0; i < parsedFileNames.length; ++i) {
+            for (let i = 0; i < parsedFileNames.length; i++) {
                 const parsedFileName = parsedFileNames[i];
-                const expectedFileName = expectedFileNames[i]; 
+                const expectedFileName = expectedFileNames[i];
                 assert.equal(parsedFileName, expectedFileName);
             }
         }
@@ -113,7 +113,7 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                            messageText: "Argument for '--module' option must be:  'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015'", 
+                            messageText: "Argument for '--module' option must be:  'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015'",
                             category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                             code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
