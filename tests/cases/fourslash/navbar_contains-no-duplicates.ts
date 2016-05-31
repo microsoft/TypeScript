@@ -95,13 +95,13 @@ verify.navigationBar([
                 "kindModifiers": "export,declare"
             },
             {
-                "text": "Test",
-                "kind": "class",
+                "text": "B",
+                "kind": "var",
                 "kindModifiers": "export,declare"
             },
             {
-                "text": "B",
-                "kind": "var",
+                "text": "Test",
+                "kind": "class",
                 "kindModifiers": "export,declare"
             },
             {
