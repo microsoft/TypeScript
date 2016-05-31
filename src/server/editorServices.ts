@@ -84,12 +84,43 @@ namespace ts.server {
             this.svc.edit(start, end - start, newText);
         }
 
-        getTextChangeRangeBetweenVersions(startVersion: number, endVersion: number): ts.TextChangeRange {
-            return this.svc.getTextChangesBetweenVersions(startVersion, endVersion);
+        /**
+         *  @param line 1 based index
+         */
+        lineToTextSpan(line: number) {
+            const index = this.snap().index;
+            const lineInfo = index.lineNumberToInfo(line + 1);
+            let len: number;
+            if (lineInfo.leaf) {
+                len = lineInfo.leaf.text.length;
+            }
+            else {
+                const nextLineInfo = index.lineNumberToInfo(line + 2);
+                len = nextLineInfo.offset - lineInfo.offset;
+            }
+            return ts.createTextSpan(lineInfo.offset, len);
         }
 
-        getChangeRange(oldSnapshot: ts.IScriptSnapshot): ts.TextChangeRange {
-            return this.snap().getChangeRange(oldSnapshot);
+        /**
+         * @param line 1 based index
+         * @param offset 1 based index
+         */
+        lineOffsetToPosition(line: number, offset: number): number {
+            const index = this.snap().index;
+
+            const lineInfo = index.lineNumberToInfo(line);
+            // TODO: assert this offset is actually on the line
+            return (lineInfo.offset + offset - 1);
+        }
+
+        /**
+         * @param line 1-based index
+         * @param offset 1-based index
+         */
+        positionToLineOffset(position: number): ILineInfo {
+            const index = this.snap().index;
+            const lineOffset = index.charOffsetToLineNumberAndPos(position);
+            return { line: lineOffset.line, offset: lineOffset.offset + 1 };
         }
     }
 
@@ -104,7 +135,6 @@ namespace ts.server {
     }
 
     export class LSHost implements ts.LanguageServiceHost {
-        ls: ts.LanguageService;
         compilationSettings: ts.CompilerOptions;
         filenameToScript: ts.FileMap<ScriptInfo>;
         roots: ScriptInfo[] = [];
@@ -195,6 +225,11 @@ namespace ts.server {
             return ts.combinePaths(nodeModuleBinDir, ts.getDefaultLibFileName(this.compilationSettings));
         }
 
+        getScriptInfoForRootFile(fileName: string): ScriptInfo {
+            const path = toPath(fileName, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            return this.filenameToScript.get(path);
+        }
+
         getScriptSnapshot(filename: string): ts.IScriptSnapshot {
             const scriptInfo = this.getScriptInfo(filename);
             if (scriptInfo) {
@@ -236,10 +271,6 @@ namespace ts.server {
 
         getCurrentDirectory(): string {
             return "";
-        }
-
-        getScriptIsOpen(filename: string) {
-            return this.getScriptInfo(filename).isOpen;
         }
 
         removeReferencedFile(info: ScriptInfo) {
@@ -315,52 +346,6 @@ namespace ts.server {
 
         directoryExists(path: string): boolean {
             return this.host.directoryExists(path);
-        }
-
-        /**
-         *  @param line 1 based index
-         */
-        lineToTextSpan(filename: string, line: number): ts.TextSpan {
-            const path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
-            const script: ScriptInfo = this.filenameToScript.get(path);
-            const index = script.snap().index;
-
-            const lineInfo = index.lineNumberToInfo(line + 1);
-            let len: number;
-            if (lineInfo.leaf) {
-                len = lineInfo.leaf.text.length;
-            }
-            else {
-                const nextLineInfo = index.lineNumberToInfo(line + 2);
-                len = nextLineInfo.offset - lineInfo.offset;
-            }
-            return ts.createTextSpan(lineInfo.offset, len);
-        }
-
-        /**
-         * @param line 1 based index
-         * @param offset 1 based index
-         */
-        lineOffsetToPosition(filename: string, line: number, offset: number): number {
-            const path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
-            const script: ScriptInfo = this.filenameToScript.get(path);
-            const index = script.snap().index;
-
-            const lineInfo = index.lineNumberToInfo(line);
-            // TODO: assert this offset is actually on the line
-            return (lineInfo.offset + offset - 1);
-        }
-
-        /**
-         * @param line 1-based index
-         * @param offset 1-based index
-         */
-        positionToLineOffset(filename: string, position: number): ILineInfo {
-            const path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
-            const script: ScriptInfo = this.filenameToScript.get(path);
-            const index = script.snap().index;
-            const lineOffset = index.charOffsetToLineNumberAndPos(position);
-            return { line: lineOffset.line, offset: lineOffset.offset + 1 };
         }
     }
 
@@ -1366,32 +1351,6 @@ namespace ts.server {
 
     }
 
-    export class CompilerServic1e {
-        host: LSHost;
-        languageService: ts.LanguageService;
-        settings: ts.CompilerOptions;
-        documentRegistry = ts.createDocumentRegistry();
-
-        constructor(public project: Project, opt?: ts.CompilerOptions) {
-            this.host = new LSHost(project.projectService.host, project);
-            if (opt) {
-                this.setCompilerOptions(opt);
-            }
-            else {
-                const defaultOpts = ts.getDefaultCompilerOptions();
-                defaultOpts.allowNonTsExtensions = true;
-                defaultOpts.allowJs = true;
-                this.setCompilerOptions(defaultOpts);
-            }
-            this.languageService = ts.createLanguageService(this.host, this.documentRegistry);
-        }
-
-        setCompilerOptions(opt: ts.CompilerOptions) {
-            this.settings = opt;
-            this.host.setCompilationSettings(opt);
-        }
-    }
-
     export interface LineCollection {
         charCount(): number;
         lineCount(): number;
@@ -2305,18 +2264,7 @@ namespace ts.server {
     }
 
     export class LineLeaf implements LineCollection {
-        udata: any;
-
         constructor(public text: string) {
-
-        }
-
-        setUdata(data: any) {
-            this.udata = data;
-        }
-
-        getUdata() {
-            return this.udata;
         }
 
         isLeaf() {

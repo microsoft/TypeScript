@@ -69,9 +69,10 @@ namespace ts.server {
     }
 
     function formatDiag(fileName: string, project: Project, diag: ts.Diagnostic): protocol.Diagnostic {
+        const scriptInfo = project.lsHost.getScriptInfoForRootFile(fileName);
         return {
-            start: project.lsHost.positionToLineOffset(fileName, diag.start),
-            end: project.lsHost.positionToLineOffset(fileName, diag.start + diag.length),
+            start: scriptInfo.positionToLineOffset(diag.start),
+            end: scriptInfo.positionToLineOffset(diag.start + diag.length),
             text: ts.flattenDiagnosticMessageText(diag.messageText, "\n")
         };
     }
@@ -317,19 +318,22 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const lsHost = project.lsHost;
-            const position = lsHost.lineOffsetToPosition(file, line, offset);
+            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const position = scriptInfo.lineOffsetToPosition(line, offset);
 
             const definitions = project.languageService.getDefinitionAtPosition(file, position);
             if (!definitions) {
                 return undefined;
             }
 
-            return definitions.map(def => ({
-                file: def.fileName,
-                start: lsHost.positionToLineOffset(def.fileName, def.textSpan.start),
-                end: lsHost.positionToLineOffset(def.fileName, ts.textSpanEnd(def.textSpan))
-            }));
+            return definitions.map(def => {
+                const defScriptInfo = project.lsHost.getScriptInfoForRootFile(def.fileName);
+                return {
+                    file: def.fileName,
+                    start: defScriptInfo.positionToLineOffset(def.textSpan.start),
+                    end: defScriptInfo.positionToLineOffset(ts.textSpanEnd(def.textSpan))
+                }
+            });
         }
 
         private getTypeDefinition(line: number, offset: number, fileName: string): protocol.FileSpan[] {
@@ -339,19 +343,22 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const lsHost = project.lsHost;
-            const position = lsHost.lineOffsetToPosition(file, line, offset);
+            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const position = scriptInfo.lineOffsetToPosition(line, offset);
 
             const definitions = project.languageService.getTypeDefinitionAtPosition(file, position);
             if (!definitions) {
                 return undefined;
             }
 
-            return definitions.map(def => ({
-                file: def.fileName,
-                start: lsHost.positionToLineOffset(def.fileName, def.textSpan.start),
-                end: lsHost.positionToLineOffset(def.fileName, ts.textSpanEnd(def.textSpan))
-            }));
+            return definitions.map(def => {
+                const defScriptInfo = project.lsHost.getScriptInfoForRootFile(def.fileName);
+                return {
+                    file: def.fileName,
+                    start: defScriptInfo.positionToLineOffset(def.textSpan.start),
+                    end: defScriptInfo.positionToLineOffset(ts.textSpanEnd(def.textSpan))
+                }
+            });
         }
 
         private getOccurrences(line: number, offset: number, fileName: string): protocol.OccurrencesResponseItem[] {
@@ -362,8 +369,8 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const { lsHost } = project;
-            const position = lsHost.lineOffsetToPosition(fileName, line, offset);
+            const scriptInfo = project.lsHost.getScriptInfo(fileName);
+            const position = scriptInfo.lineOffsetToPosition(line, offset);
 
             const occurrences = project.languageService.getOccurrencesAtPosition(fileName, position);
 
@@ -373,8 +380,9 @@ namespace ts.server {
 
             return occurrences.map(occurrence => {
                 const { fileName, isWriteAccess, textSpan } = occurrence;
-                const start = lsHost.positionToLineOffset(fileName, textSpan.start);
-                const end = lsHost.positionToLineOffset(fileName, ts.textSpanEnd(textSpan));
+                const scriptInfo = project.lsHost.getScriptInfo(fileName);
+                const start = scriptInfo.positionToLineOffset(textSpan.start);
+                const end = scriptInfo.positionToLineOffset(ts.textSpanEnd(textSpan));
                 return {
                     start,
                     end,
@@ -392,8 +400,8 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const { lsHost } = project;
-            const position = lsHost.lineOffsetToPosition(fileName, line, offset);
+            const scriptInfo = project.lsHost.getScriptInfo(fileName);
+            const position = scriptInfo.lineOffsetToPosition(line, offset);
 
             const documentHighlights = project.languageService.getDocumentHighlights(fileName, position, filesToSearch);
 
@@ -406,6 +414,7 @@ namespace ts.server {
             function convertToDocumentHighlightsItem(documentHighlights: ts.DocumentHighlights): ts.server.protocol.DocumentHighlightsItem {
                 const { fileName, highlightSpans } = documentHighlights;
 
+                const scriptInfo = project.lsHost.getScriptInfo(fileName);
                 return {
                     file: fileName,
                     highlightSpans: highlightSpans.map(convertHighlightSpan)
@@ -413,8 +422,8 @@ namespace ts.server {
 
                 function convertHighlightSpan(highlightSpan: ts.HighlightSpan): ts.server.protocol.HighlightSpan {
                     const { textSpan, kind } = highlightSpan;
-                    const start = lsHost.positionToLineOffset(fileName, textSpan.start);
-                    const end = lsHost.positionToLineOffset(fileName, ts.textSpanEnd(textSpan));
+                    const start = scriptInfo.positionToLineOffset(textSpan.start);
+                    const end = scriptInfo.positionToLineOffset(ts.textSpanEnd(textSpan));
                     return { start, end, kind };
                 }
             }
@@ -445,8 +454,8 @@ namespace ts.server {
 
             const defaultProject = projects[0];
             // The rename info should be the same for every project
-            const lsHost = defaultProject.lsHost;
-            const position = lsHost.lineOffsetToPosition(file, line, offset);
+            const scriptInfo = defaultProject.lsHost.getScriptInfoForRootFile(file);
+            const position = scriptInfo.lineOffsetToPosition(line, offset);
             const renameInfo = defaultProject.languageService.getRenameInfo(file, position);
             if (!renameInfo) {
                 return undefined;
@@ -467,11 +476,14 @@ namespace ts.server {
                         return [];
                     }
 
-                    return renameLocations.map(location => (<protocol.FileSpan>{
-                        file: location.fileName,
-                        start: project.lsHost.positionToLineOffset(location.fileName, location.textSpan.start),
-                        end: project.lsHost.positionToLineOffset(location.fileName, ts.textSpanEnd(location.textSpan)),
-                    }));
+                    return renameLocations.map(location => {
+                        const locationScriptInfo = project.lsHost.getScriptInfoForRootFile(location.fileName);
+                        return <protocol.FileSpan>{
+                            file: location.fileName,
+                            start: locationScriptInfo.positionToLineOffset(location.textSpan.start),
+                            end: locationScriptInfo.positionToLineOffset(ts.textSpanEnd(location.textSpan)),
+                        }
+                    });
                 },
                 compareRenameLocation,
                 (a, b) => a.file === b.file && a.start.line === b.start.line && a.start.offset === b.start.offset
@@ -525,8 +537,8 @@ namespace ts.server {
             }
 
             const defaultProject = projects[0];
-            const lsHost = defaultProject.lsHost;
-            const position = lsHost.lineOffsetToPosition(file, line, offset);
+            const scriptInfo = defaultProject.lsHost.getScriptInfoForRootFile(file);
+            const position = scriptInfo.lineOffsetToPosition(line, offset);
             const nameInfo = defaultProject.languageService.getQuickInfoAtPosition(file, position);
             if (!nameInfo) {
                 return undefined;
@@ -534,8 +546,8 @@ namespace ts.server {
 
             const displayString = ts.displayPartsToString(nameInfo.displayParts);
             const nameSpan = nameInfo.textSpan;
-            const nameColStart = lsHost.positionToLineOffset(file, nameSpan.start).offset;
-            const nameText = lsHost.getScriptSnapshot(file).getText(nameSpan.start, ts.textSpanEnd(nameSpan));
+            const nameColStart = scriptInfo.positionToLineOffset(nameSpan.start).offset;
+            const nameText = scriptInfo.snap().getText(nameSpan.start, ts.textSpanEnd(nameSpan));
             const refs = combineProjectOutput<protocol.ReferencesResponseItem>(
                 projects,
                 (project: Project) => {
@@ -545,15 +557,15 @@ namespace ts.server {
                     }
 
                     return references.map(ref => {
-                        const start = project.lsHost.positionToLineOffset(ref.fileName, ref.textSpan.start);
-                        const refLineSpan = project.lsHost.lineToTextSpan(ref.fileName, start.line - 1);
-                        const snap = project.lsHost.getScriptSnapshot(ref.fileName);
-                        const lineText = snap.getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
+                        const refScriptInfo = project.lsHost.getScriptInfoForRootFile(ref.fileName);
+                        const start = refScriptInfo.positionToLineOffset(ref.textSpan.start);
+                        const refLineSpan = refScriptInfo.lineToTextSpan(start.line - 1);
+                        const lineText = refScriptInfo.snap().getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
                         return {
                             file: ref.fileName,
                             start: start,
                             lineText: lineText,
-                            end: project.lsHost.positionToLineOffset(ref.fileName, ts.textSpanEnd(ref.textSpan)),
+                            end: refScriptInfo.positionToLineOffset(ts.textSpanEnd(ref.textSpan)),
                             isWriteAccess: ref.isWriteAccess
                         };
                     });
@@ -598,8 +610,8 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const lsHost = project.lsHost;
-            const position = lsHost.lineOffsetToPosition(file, line, offset);
+            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const position = scriptInfo.lineOffsetToPosition(line, offset);
             const quickInfo = project.languageService.getQuickInfoAtPosition(file, position);
             if (!quickInfo) {
                 return undefined;
@@ -610,8 +622,8 @@ namespace ts.server {
             return {
                 kind: quickInfo.kind,
                 kindModifiers: quickInfo.kindModifiers,
-                start: lsHost.positionToLineOffset(file, quickInfo.textSpan.start),
-                end: lsHost.positionToLineOffset(file, ts.textSpanEnd(quickInfo.textSpan)),
+                start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
+                end: scriptInfo.positionToLineOffset(ts.textSpanEnd(quickInfo.textSpan)),
                 displayString: displayString,
                 documentation: docString,
             };
@@ -624,9 +636,9 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const lsHost = project.lsHost;
-            const startPosition = lsHost.lineOffsetToPosition(file, line, offset);
-            const endPosition = lsHost.lineOffsetToPosition(file, endLine, endOffset);
+            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const startPosition = scriptInfo.lineOffsetToPosition(line, offset);
+            const endPosition = scriptInfo.lineOffsetToPosition(endLine, endOffset);
 
             // TODO: avoid duplicate code (with formatonkey)
             const edits = project.languageService.getFormattingEditsForRange(file, startPosition, endPosition,
@@ -637,8 +649,8 @@ namespace ts.server {
 
             return edits.map((edit) => {
                 return {
-                    start: lsHost.positionToLineOffset(file, edit.span.start),
-                    end: lsHost.positionToLineOffset(file, ts.textSpanEnd(edit.span)),
+                    start: scriptInfo.positionToLineOffset(edit.span.start),
+                    end: scriptInfo.positionToLineOffset(ts.textSpanEnd(edit.span)),
                     newText: edit.newText ? edit.newText : ""
                 };
             });
@@ -652,8 +664,8 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const lsHost = project.lsHost;
-            const position = lsHost.lineOffsetToPosition(file, line, offset);
+            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const position = scriptInfo.lineOffsetToPosition(line, offset);
             const formatOptions = this.projectService.getFormatCodeOptions(file);
             const edits = project.languageService.getFormattingEditsAfterKeystroke(file, position, key,
                 formatOptions);
@@ -664,42 +676,39 @@ namespace ts.server {
             // only to the previous line.  If all this is true, then
             // add edits necessary to properly indent the current line.
             if ((key == "\n") && ((!edits) || (edits.length === 0) || allEditsBeforePos(edits, position))) {
-                const scriptInfo = lsHost.getScriptInfo(file);
-                if (scriptInfo) {
-                    const lineInfo = scriptInfo.getLineInfo(line);
-                    if (lineInfo && (lineInfo.leaf) && (lineInfo.leaf.text)) {
-                        const lineText = lineInfo.leaf.text;
-                        if (lineText.search("\\S") < 0) {
-                            // TODO: get these options from host
-                            const editorOptions: ts.EditorOptions = {
-                                IndentSize: formatOptions.IndentSize,
-                                TabSize: formatOptions.TabSize,
-                                NewLineCharacter: formatOptions.NewLineCharacter,
-                                ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces,
-                                IndentStyle: ts.IndentStyle.Smart,
-                            };
-                            const preferredIndent = project.languageService.getIndentationAtPosition(file, position, editorOptions);
-                            let hasIndent = 0;
-                            let i: number, len: number;
-                            for (i = 0, len = lineText.length; i < len; i++) {
-                                if (lineText.charAt(i) == " ") {
-                                    hasIndent++;
-                                }
-                                else if (lineText.charAt(i) == "\t") {
-                                    hasIndent += editorOptions.TabSize;
-                                }
-                                else {
-                                    break;
-                                }
+                const lineInfo = scriptInfo.getLineInfo(line);
+                if (lineInfo && (lineInfo.leaf) && (lineInfo.leaf.text)) {
+                    const lineText = lineInfo.leaf.text;
+                    if (lineText.search("\\S") < 0) {
+                        // TODO: get these options from host
+                        const editorOptions: ts.EditorOptions = {
+                            IndentSize: formatOptions.IndentSize,
+                            TabSize: formatOptions.TabSize,
+                            NewLineCharacter: formatOptions.NewLineCharacter,
+                            ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces,
+                            IndentStyle: ts.IndentStyle.Smart,
+                        };
+                        const preferredIndent = project.languageService.getIndentationAtPosition(file, position, editorOptions);
+                        let hasIndent = 0;
+                        let i: number, len: number;
+                        for (i = 0, len = lineText.length; i < len; i++) {
+                            if (lineText.charAt(i) == " ") {
+                                hasIndent++;
                             }
-                            // i points to the first non whitespace character
-                            if (preferredIndent !== hasIndent) {
-                                const firstNoWhiteSpacePosition = lineInfo.offset + i;
-                                edits.push({
-                                    span: ts.createTextSpanFromBounds(lineInfo.offset, firstNoWhiteSpacePosition),
-                                    newText: generateIndentString(preferredIndent, editorOptions)
-                                });
+                            else if (lineText.charAt(i) == "\t") {
+                                hasIndent += editorOptions.TabSize;
                             }
+                            else {
+                                break;
+                            }
+                        }
+                        // i points to the first non whitespace character
+                        if (preferredIndent !== hasIndent) {
+                            const firstNoWhiteSpacePosition = lineInfo.offset + i;
+                            edits.push({
+                                span: ts.createTextSpanFromBounds(lineInfo.offset, firstNoWhiteSpacePosition),
+                                newText: generateIndentString(preferredIndent, editorOptions)
+                            });
                         }
                     }
                 }
@@ -711,10 +720,8 @@ namespace ts.server {
 
             return edits.map((edit) => {
                 return {
-                    start: lsHost.positionToLineOffset(file,
-                        edit.span.start),
-                    end: lsHost.positionToLineOffset(file,
-                        ts.textSpanEnd(edit.span)),
+                    start: scriptInfo.positionToLineOffset(edit.span.start),
+                    end: scriptInfo.positionToLineOffset(ts.textSpanEnd(edit.span)),
                     newText: edit.newText ? edit.newText : ""
                 };
             });
@@ -730,8 +737,8 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const lsHost = project.lsHost;
-            const position = lsHost.lineOffsetToPosition(file, line, offset);
+            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const position = scriptInfo.lineOffsetToPosition(line, offset);
 
             const completions = project.languageService.getCompletionsAtPosition(file, position);
             if (!completions) {
@@ -754,8 +761,8 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const lsHost = project.lsHost;
-            const position = lsHost.lineOffsetToPosition(file, line, offset);
+            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const position = scriptInfo.lineOffsetToPosition(line, offset);
 
             return entryNames.reduce((accum: protocol.CompletionEntryDetails[], entryName: string) => {
                 const details = project.languageService.getCompletionEntryDetails(file, position, entryName);
@@ -773,8 +780,8 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const lsHost = project.lsHost;
-            const position = lsHost.lineOffsetToPosition(file, line, offset);
+            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const position = scriptInfo.lineOffsetToPosition(line, offset);
             const helpItems = project.languageService.getSignatureHelpItems(file, position);
             if (!helpItems) {
                 return undefined;
@@ -784,8 +791,8 @@ namespace ts.server {
             const result: protocol.SignatureHelpItems = {
                 items: helpItems.items,
                 applicableSpan: {
-                    start: lsHost.positionToLineOffset(file, span.start),
-                    end: lsHost.positionToLineOffset(file, span.start + span.length)
+                    start: scriptInfo.positionToLineOffset(span.start),
+                    end: scriptInfo.positionToLineOffset(span.start + span.length)
                 },
                 selectedItemIndex: helpItems.selectedItemIndex,
                 argumentIndex: helpItems.argumentIndex,
@@ -814,11 +821,11 @@ namespace ts.server {
             const file = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(file);
             if (project) {
-                const lsHost = project.lsHost;
-                const start = lsHost.lineOffsetToPosition(file, line, offset);
-                const end = lsHost.lineOffsetToPosition(file, endLine, endOffset);
+                const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+                const start = scriptInfo.lineOffsetToPosition(line, offset);
+                const end = scriptInfo.lineOffsetToPosition(endLine, endOffset);
                 if (start >= 0) {
-                    lsHost.editScript(file, start, end, insertString);
+                    scriptInfo.editContent(start, end, insertString);
                     this.changeSeq++;
                 }
                 this.updateProjectStructure(this.changeSeq, (n) => n === this.changeSeq);
@@ -861,15 +868,15 @@ namespace ts.server {
                 return undefined;
             }
 
-            const lsHost = project.lsHost;
+            const scriptInfo = project.lsHost.getScriptInfoForRootFile(fileName);
 
             return items.map(item => ({
                 text: item.text,
                 kind: item.kind,
                 kindModifiers: item.kindModifiers,
                 spans: item.spans.map(span => ({
-                    start: lsHost.positionToLineOffset(fileName, span.start),
-                    end: lsHost.positionToLineOffset(fileName, ts.textSpanEnd(span))
+                    start: scriptInfo.positionToLineOffset(span.start),
+                    end: scriptInfo.positionToLineOffset(ts.textSpanEnd(span))
                 })),
                 childItems: this.decorateNavigationBarItem(project, fileName, item.childItems)
             }));
@@ -908,8 +915,9 @@ namespace ts.server {
                     }
 
                     return navItems.map((navItem) => {
-                        const start = project.lsHost.positionToLineOffset(navItem.fileName, navItem.textSpan.start);
-                        const end = project.lsHost.positionToLineOffset(navItem.fileName, ts.textSpanEnd(navItem.textSpan));
+                        const scriptInfo = project.lsHost.getScriptInfoForRootFile(navItem.fileName);
+                        const start = scriptInfo.positionToLineOffset(navItem.textSpan.start);
+                        const end = scriptInfo.positionToLineOffset(ts.textSpanEnd(navItem.textSpan));
                         const bakedItem: protocol.NavtoItem = {
                             name: navItem.name,
                             kind: navItem.kind,
@@ -955,8 +963,8 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const lsHost = project.lsHost;
-            const position = lsHost.lineOffsetToPosition(file, line, offset);
+            const scriptInfo = project.lsHost.getScriptInfoForRootFile(fileName);
+            const position = scriptInfo.lineOffsetToPosition(line, offset);
 
             const spans = project.languageService.getBraceMatchingAtPosition(file, position);
             if (!spans) {
@@ -964,8 +972,8 @@ namespace ts.server {
             }
 
             return spans.map(span => ({
-                start: lsHost.positionToLineOffset(file, span.start),
-                end: lsHost.positionToLineOffset(file, span.start + span.length)
+                start: scriptInfo.positionToLineOffset(span.start),
+                end: scriptInfo.positionToLineOffset(span.start + span.length)
             }));
         }
 
