@@ -84,7 +84,7 @@ namespace ts.formatting {
         // if the character at the end of the span is a line break, we shouldn't include it, because it indicates we don't want to
         // touch the current line at all. Also, on some OSes the line break consists of two characters (\r\n), we should test if the
         // previous character before the end of format span is line break character as well.
-        while (isLineBreak(sourceFile.text.charCodeAt(endOfFormatSpan))) {
+        if (isLineBreak(sourceFile.text.charCodeAt(endOfFormatSpan))) {
             endOfFormatSpan--;
         }
         const span = {
