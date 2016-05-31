@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts"/>
 
 ////class List<T> {
-////    constructor(public a: boolean, public b: T, c: number) {
+////    constructor(public a: boolean, private b: T, readonly c: string, d: number) {
 ////        var local = 0;
 ////    }
 ////}
@@ -33,7 +33,11 @@ verify.navigationBar([
             {
                 "text": "b",
                 "kind": "property",
-                "kindModifiers": "public"
+                "kindModifiers": "private"
+            },
+            {
+                "text": "c",
+                "kind": "property"
             }
         ],
         "indent": 1
