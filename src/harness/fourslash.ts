@@ -1486,6 +1486,12 @@ namespace FourSlash {
             this.fixCaretPosition();
         }
 
+        public formatOnType(pos: number, key: string) {
+            const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, pos, key, this.formatCodeOptions);
+            this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+            this.fixCaretPosition();
+        }
+
         private updateMarkersForEdit(fileName: string, minChar: number, limChar: number, text: string) {
             for (let i = 0; i < this.testData.markers.length; i++) {
                 const marker = this.testData.markers[i];
@@ -3221,6 +3227,10 @@ namespace FourSlashInterface {
 
         public selection(startMarker: string, endMarker: string) {
             this.state.formatSelection(this.state.getMarkerByName(startMarker).position, this.state.getMarkerByName(endMarker).position);
+        }
+
+        public onType(posMarker: string, key: string) {
+            this.state.formatOnType(this.state.getMarkerByName(posMarker).position, key);
         }
 
         public setOption(name: string, value: number): void;
