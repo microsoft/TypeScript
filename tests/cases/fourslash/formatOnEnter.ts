@@ -1,13 +1,16 @@
 /// <reference path="fourslash.ts"/>
 
-/////*3*/function listAPIFiles (path : string): string[] {/*1*//*2*/
+/////*3*/function listAPIFiles (path : string): string[] {
+////    /*1*/
+////    /*2*/
 ////}
 
-edit.enableFormatting();
-goTo.marker("2");
-edit.insert("    ");
 goTo.marker("1");
-edit.insert("\n")
+format.onType("1", "\n");
+verify.currentLineContentIs("    ");
+
+goTo.marker("2");
+format.onType("2", "\n");
 verify.currentLineContentIs("    ");
 
 goTo.marker("3");
