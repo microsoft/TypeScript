@@ -2065,17 +2065,11 @@ const _super = (function (geti, seti) {
             function emitSourceFileWorker(node: SourceFile) {
                 const statements = node.statements;
                 const statementOffset = emitPrologueDirectives(statements);
-                if (getNodeEmitFlags(node) & NodeEmitFlags.NoLexicalEnvironment) {
-                    emitHelpers(node);
-                    emitList(node, statements, ListFormat.MultiLine, statementOffset);
-                }
-                else {
-                    const savedTempFlags = tempFlags;
-                    tempFlags = 0;
-                    emitHelpers(node);
-                    emitList(node, statements, ListFormat.MultiLine, statementOffset);
-                    tempFlags = savedTempFlags;
-                }
+                const savedTempFlags = tempFlags;
+                tempFlags = 0;
+                emitHelpers(node);
+                emitList(node, statements, ListFormat.MultiLine, statementOffset);
+                tempFlags = savedTempFlags;
             }
 
             // Transformation nodes

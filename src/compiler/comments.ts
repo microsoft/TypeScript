@@ -26,6 +26,7 @@ namespace ts {
         let hasWrittenComment = false;
         let hasLastComment: boolean;
         let lastCommentEnd: number;
+        let disabled: boolean = compilerOptions.removeComments;
 
         return {
             reset,
@@ -36,16 +37,22 @@ namespace ts {
         };
 
         function emitNodeWithComments(node: Node, emitCallback: (node: Node) => void) {
-            if (compilerOptions.removeComments) {
+            if (disabled) {
                 emitCallback(node);
                 return;
             }
 
             if (node) {
                 const { pos, end } = node.commentRange || node;
+                const emitFlags = node.emitFlags;
                 if ((pos < 0 && end < 0) || (pos === end)) {
                     // Both pos and end are synthesized, so just emit the node without comments.
-                    emitCallback(node);
+                    if (emitFlags & NodeEmitFlags.NoNestedComments) {
+                        disableCommentsAndEmit(node, emitCallback);
+                    }
+                    else {
+                        emitCallback(node);
+                    }
                 }
                 else {
                     let commentStart: number;
@@ -53,7 +60,6 @@ namespace ts {
                         commentStart = performance.mark();
                     }
 
-                    const emitFlags = node.emitFlags;
                     const isEmittedNode = node.kind !== SyntaxKind.NotEmittedStatement;
                     const skipLeadingComments = pos < 0 || (emitFlags & NodeEmitFlags.NoLeadingComments) !== 0;
                     const skipTrailingComments = end < 0 || (emitFlags & NodeEmitFlags.NoTrailingComments) !== 0;
@@ -85,11 +91,17 @@ namespace ts {
 
                     if (extendedDiagnostics) {
                         performance.measure("commentTime", commentStart);
-                        emitCallback(node);
-                        commentStart = performance.mark();
+                    }
+
+                    if (emitFlags & NodeEmitFlags.NoNestedComments) {
+                        disableCommentsAndEmit(node, emitCallback);
                     }
                     else {
                         emitCallback(node);
+                    }
+
+                    if (extendedDiagnostics) {
+                        commentStart = performance.mark();
                     }
 
                     // Restore previous container state.
@@ -119,7 +131,7 @@ namespace ts {
             const { pos, end } = detachedRange;
             const emitFlags = node.emitFlags;
             const skipLeadingComments = pos < 0 || (emitFlags & NodeEmitFlags.NoLeadingComments) !== 0;
-            const skipTrailingComments = end < 0 || (emitFlags & NodeEmitFlags.NoTrailingComments) !== 0 || compilerOptions.removeComments;
+            const skipTrailingComments = disabled || end < 0 || (emitFlags & NodeEmitFlags.NoTrailingComments) !== 0;
 
             if (!skipLeadingComments) {
                 emitDetachedCommentsAndUpdateCommentsInfo(detachedRange);
@@ -127,11 +139,17 @@ namespace ts {
 
             if (extendedDiagnostics) {
                 performance.measure("commentTime", commentStart);
-                emitCallback(node);
-                commentStart = performance.mark();
+            }
+
+            if (emitFlags & NodeEmitFlags.NoNestedComments) {
+                disableCommentsAndEmit(node, emitCallback);
             }
             else {
                 emitCallback(node);
+            }
+
+            if (extendedDiagnostics) {
+                commentStart = performance.mark();
             }
 
             if (!skipTrailingComments) {
@@ -207,7 +225,7 @@ namespace ts {
         }
 
         function emitTrailingCommentsOfPosition(pos: number) {
-            if (compilerOptions.removeComments) {
+            if (disabled) {
                 return;
             }
 
@@ -269,6 +287,18 @@ namespace ts {
             currentText = currentSourceFile.text;
             currentLineMap = getLineStarts(currentSourceFile);
             detachedCommentsInfo = undefined;
+            disabled = false;
+        }
+
+        function disableCommentsAndEmit(node: Node, emitCallback: (node: Node) => void): void {
+            if (disabled) {
+                emitCallback(node);
+            }
+            else {
+                disabled = true;
+                emitCallback(node);
+                disabled = false;
+            }
         }
 
         function hasDetachedComments(pos: number) {
@@ -289,7 +319,7 @@ namespace ts {
         }
 
         function emitDetachedCommentsAndUpdateCommentsInfo(range: TextRange) {
-            const currentDetachedCommentInfo = emitDetachedComments(currentText, currentLineMap, writer, writeComment, range, newLine, compilerOptions.removeComments);
+            const currentDetachedCommentInfo = emitDetachedComments(currentText, currentLineMap, writer, writeComment, range, newLine, disabled);
             if (currentDetachedCommentInfo) {
                 if (detachedCommentsInfo) {
                     detachedCommentsInfo.push(currentDetachedCommentInfo);

@@ -2984,21 +2984,21 @@ namespace ts {
         EmitSuperHelper = 1 << 2,                // Emit the basic _super helper for async methods.
         EmitAdvancedSuperHelper = 1 << 3,        // Emit the advanced _super helper for async methods.
         UMDDefine = 1 << 4,                      // This node should be replaced with the UMD define helper.
-        NoLexicalEnvironment = 1 << 5,           // A new LexicalEnvironment should *not* be introduced when emitting this node, this is primarily used when printing a SystemJS module.
-        SingleLine = 1 << 6,                     // The contents of this node should be emitted on a single line.
-        AdviseOnEmitNode = 1 << 7,               // The printer should invoke the onEmitNode callback when printing this node.
-        NoSubstitution = 1 << 8,                 // Disables further substitution of an expression.
-        CapturesThis = 1 << 9,                   // The function captures a lexical `this`
-        NoLeadingSourceMap = 1 << 10,            // Do not emit a leading source map location for this node.
-        NoTrailingSourceMap = 1 << 11,           // Do not emit a trailing source map location for this node.
+        SingleLine = 1 << 5,                     // The contents of this node should be emitted on a single line.
+        AdviseOnEmitNode = 1 << 6,               // The printer should invoke the onEmitNode callback when printing this node.
+        NoSubstitution = 1 << 7,                 // Disables further substitution of an expression.
+        CapturesThis = 1 << 8,                   // The function captures a lexical `this`
+        NoLeadingSourceMap = 1 << 9,             // Do not emit a leading source map location for this node.
+        NoTrailingSourceMap = 1 << 10,           // Do not emit a trailing source map location for this node.
         NoSourceMap = NoLeadingSourceMap | NoTrailingSourceMap, // Do not emit a source map location for this node.
-        NoNestedSourceMaps = 1 << 12,            // Do not emit source map locations for children of this node.
-        NoTokenLeadingSourceMaps = 1 << 13,      // Do not emit leading source map location for token nodes.
-        NoTokenTrailingSourceMaps = 1 << 14,     // Do not emit trailing source map location for token nodes.
+        NoNestedSourceMaps = 1 << 11,            // Do not emit source map locations for children of this node.
+        NoTokenLeadingSourceMaps = 1 << 12,      // Do not emit leading source map location for token nodes.
+        NoTokenTrailingSourceMaps = 1 << 13,     // Do not emit trailing source map location for token nodes.
         NoTokenSourceMaps = NoTokenLeadingSourceMaps | NoTokenTrailingSourceMaps, // Do not emit source map locations for tokens of this node.
-        NoLeadingComments = 1 << 15,             // Do not emit leading comments for this node.
-        NoTrailingComments = 1 << 16,            // Do not emit trailing comments for this node.
+        NoLeadingComments = 1 << 14,             // Do not emit leading comments for this node.
+        NoTrailingComments = 1 << 15,            // Do not emit trailing comments for this node.
         NoComments = NoLeadingComments | NoTrailingComments, // Do not emit comments for this node.
+        NoNestedComments = 1 << 16,
         ExportName = 1 << 17,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
         LocalName = 1 << 18,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
         Indented = 1 << 19,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
@@ -3007,10 +3007,8 @@ namespace ts {
         // TODO(rbuckton): These should be removed once source maps are aligned with the old
         //                 emitter and new baselines are taken. This exists solely to
         //                 align with the old emitter.
-        SourceMapEmitOpenBraceAsToken = 1 << 21,        // Emits the open brace of a block function body as a source mapped token.
-        SourceMapAdjustRestParameterLoop = 1 << 22,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
-
-        HasNodeEmitFlags = 1 << 31,              // Indicates the node has emit flags set.
+        SourceMapEmitOpenBraceAsToken = 1 << 20,        // Emits the open brace of a block function body as a source mapped token.
+        SourceMapAdjustRestParameterLoop = 1 << 21,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
     }
 
     /** Additional context provided to `visitEachChild` */

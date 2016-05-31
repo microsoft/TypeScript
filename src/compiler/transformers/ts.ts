@@ -2768,11 +2768,6 @@ namespace ts {
                     && resolver.isTopLevelValueImportEqualsWithEntityName(node));
         }
 
-        function disableCommentsRecursive(node: Node) {
-            setNodeEmitFlags(node, NodeEmitFlags.NoComments | getNodeEmitFlags(node));
-            forEachChild(node, disableCommentsRecursive);
-        }
-
         /**
          * Visits an import equals declaration.
          *
@@ -2788,7 +2783,8 @@ namespace ts {
             }
 
             const moduleReference = createExpressionFromEntityName(<EntityName>node.moduleReference);
-            disableCommentsRecursive(moduleReference);
+            setNodeEmitFlags(moduleReference, NodeEmitFlags.NoComments | NodeEmitFlags.NoNestedComments);
+
             if (isNamedExternalModuleExport(node) || !isNamespaceExport(node)) {
                 //  export var ${name} = ${moduleReference};
                 //  var ${name} = ${moduleReference};

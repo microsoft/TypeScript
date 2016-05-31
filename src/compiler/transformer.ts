@@ -300,12 +300,12 @@ namespace ts {
          * @param node The node.
          */
         function beforeSetAnnotation(node: Node) {
-            node.transformId = transformId;
-            if ((node.flags & NodeFlags.Synthesized) === 0) {
+            if ((node.flags & NodeFlags.Synthesized) === 0 && node.transformId !== transformId) {
                 // To avoid holding onto transformation artifacts, we keep track of any
                 // source tree node we are annotating. This allows us to clean them up after
                 // all transformations have completed.
                 sourceTreeNodesWithAnnotations.push(node);
+                node.transformId = transformId;
             }
         }
 
@@ -318,7 +318,7 @@ namespace ts {
          * @param node The node.
          */
         function getNodeEmitFlags(node: Node) {
-            return node.emitFlags & ~NodeEmitFlags.HasNodeEmitFlags;
+            return node.emitFlags;
         }
 
         /**
@@ -329,7 +329,7 @@ namespace ts {
          */
         function setNodeEmitFlags<T extends Node>(node: T, emitFlags: NodeEmitFlags) {
             beforeSetAnnotation(node);
-            node.emitFlags = emitFlags | NodeEmitFlags.HasNodeEmitFlags;
+            node.emitFlags = emitFlags;
             return node;
         }
 
