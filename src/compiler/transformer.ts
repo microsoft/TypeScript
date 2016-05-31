@@ -156,7 +156,9 @@ namespace ts {
      * @param transforms An array of Transformers.
      */
     export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]) {
-        const transformId = nextTransformId++;
+        const transformId = nextTransformId;
+        nextTransformId++;
+
         const tokenSourceMapRanges: Map<TextRange> = { };
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
