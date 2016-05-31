@@ -2725,7 +2725,7 @@ namespace ts {
             //      1) async[no LineTerminator here]AsyncArrowBindingIdentifier[?Yield][no LineTerminator here]=>AsyncConciseBody[?In]
             //      2) CoverCallExpressionAndAsyncArrowHead[?Yield, ?Await][no LineTerminator here]=>AsyncConciseBody[?In]
             // Production (1) of AsyncArrowFunctionExpression is parsed in "tryParseAsyncSimpleArrowFunctionExpression".
-            // And production (2) is parsed in "tryParseParenthesizedArrowFunctionExpression". 
+            // And production (2) is parsed in "tryParseParenthesizedArrowFunctionExpression".
             //
             // If we do successfully parse arrow-function, we must *not* recurse for productions 1, 2 or 3. An ArrowFunction is
             // not a  LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done
@@ -6050,7 +6050,7 @@ namespace ts {
                 const saveParseDiagnosticsLength = parseDiagnostics.length;
                 const saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
 
-                const comment = parseJSDocCommentWorker(start, length, parent);
+                const comment = parseJSDocCommentWorker(start, length);
                 if (comment) {
                     comment.parent = parent;
                 }
@@ -6062,7 +6062,7 @@ namespace ts {
                 return comment;
             }
 
-            export function parseJSDocCommentWorker(start: number, length: number, parentNode?: Node): JSDocComment {
+            export function parseJSDocCommentWorker(start: number, length: number): JSDocComment {
                 const content = sourceText;
                 start = start || 0;
                 const end = length === undefined ? content.length : start + length;
