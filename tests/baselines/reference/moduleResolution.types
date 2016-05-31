@@ -1,0 +1,36 @@
+=== tests/cases/compiler/a.ts ===
+export default 0;
+No type information for this code.
+No type information for this code.// No extension: '.ts' added
+No type information for this code.=== tests/cases/compiler/b.ts ===
+import a from './a';
+>a : number
+
+// Matching extension
+=== tests/cases/compiler/c.ts ===
+import a from './a.ts';
+>a : number
+
+// '.js' extension: stripped and replaced with '.ts'
+=== tests/cases/compiler/d.ts ===
+import a from './a.js';
+>a : number
+
+=== tests/cases/compiler/jquery.d.ts ===
+declare var x: number;
+>x : number
+
+export default x;
+>x : number
+
+// No extension: '.d.ts' added
+=== tests/cases/compiler/jquery_user_1.ts ===
+import j from "./jquery";
+>j : number
+
+// '.js' extension: stripped and replaced with '.d.ts'
+=== tests/cases/compiler/jquery_user_1.ts ===
+import j from "./jquery.js"
+>j : number
+>j : number
+

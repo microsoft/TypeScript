@@ -615,6 +615,7 @@ namespace ts {
     }
 
     /**
+     * @param extensions - Either supportedTypeScriptExtensions or if --allowJs, allSupportedExtensions
      * @param {boolean} onlyRecordFailures - if true then function won't try to actually load files but instead record all attempts as failures. This flag is necessary
      * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
      */
@@ -626,13 +627,29 @@ namespace ts {
                 onlyRecordFailures = !directoryProbablyExists(directory, state.host);
             }
         }
-        return forEach(extensions, tryLoad);
 
-        function tryLoad(ext: string): string {
-            if (ext === ".tsx" && state.skipTsx) {
-                return undefined;
+        if (state.skipTsx)
+            extensions = filter(extensions, ext => ext !== "tsx");
+
+        // First try to keep/add an extension: importing "./foo.ts" can be matched by a file "./foo.ts", and "./foo" by "./foo.d.ts"
+        const keepOrAddExtension = forEach(extensions, ext =>
+           tryLoad(fileExtensionIs(candidate, ext) ? candidate : candidate + ext));
+        if (keepOrAddExtension) {
+            return keepOrAddExtension;
+        }
+
+        // Then try stripping a ".js" or ".jsx" extension and replacing it with a different one, e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
+        return forEach(supportedJavascriptExtensions, jsExt => {
+            const extensionless = tryRemoveExtension(candidate, jsExt);
+            if (extensionless !== undefined) {
+                return forEach(supportedTypeScriptExtensions, ext => {
+                    if (ext !== jsExt)
+                        return tryLoad(extensionless + ext);
+                });
             }
-            const fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
+        });
+
+        function tryLoad(fileName: string): string {
             if (!onlyRecordFailures && state.host.fileExists(fileName)) {
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.File_0_exist_use_it_as_a_name_resolution_result, fileName);
