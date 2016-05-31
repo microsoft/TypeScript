@@ -1074,8 +1074,8 @@ namespace ts {
      * Determines whether a node is a property or element access expression for super.
      */
     export function isSuperProperty(node: Node): node is (PropertyAccessExpression | ElementAccessExpression) {
-        return (node.kind === SyntaxKind.PropertyAccessExpression
-            || node.kind === SyntaxKind.ElementAccessExpression)
+        const kind = node.kind;
+        return (kind === SyntaxKind.PropertyAccessExpression || kind === SyntaxKind.ElementAccessExpression)
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
     }
 
