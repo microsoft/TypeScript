@@ -628,24 +628,25 @@ namespace ts {
             }
         }
 
-        if (state.skipTsx)
-            extensions = filter(extensions, ext => ext !== "tsx");
-
         // First try to keep/add an extension: importing "./foo.ts" can be matched by a file "./foo.ts", and "./foo" by "./foo.d.ts"
-        const keepOrAddExtension = forEach(extensions, ext =>
-           tryLoad(fileExtensionIs(candidate, ext) ? candidate : candidate + ext));
+        const keepOrAddExtension = forEach(extensions, ext => {
+            if (state.skipTsx && (ext === ".jsx" || ext === ".tsx")) {
+                return;
+            }
+            return tryLoad(fileExtensionIs(candidate, ext) ? candidate : candidate + ext);
+        });
         if (keepOrAddExtension) {
             return keepOrAddExtension;
         }
 
-        // Then try stripping a ".js" or ".jsx" extension and replacing it with a different one, e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
+        // Then try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one, e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
         return forEach(supportedJavascriptExtensions, jsExt => {
+            if (state.skipTsx && jsExt === ".jsx") {
+                return;
+            }
             const extensionless = tryRemoveExtension(candidate, jsExt);
             if (extensionless !== undefined) {
-                return forEach(supportedTypeScriptExtensions, ext => {
-                    if (ext !== jsExt)
-                        return tryLoad(extensionless + ext);
-                });
+                return forEach(supportedTypeScriptExtensions, tsExt => tryLoad(extensionless + tsExt));
             }
         });
 
