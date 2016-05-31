@@ -680,7 +680,7 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, testConfigFile) {
+function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount) {
     var testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light: light, workerCount: workerCount, taskConfigsFolder: taskConfigsFolder });
     console.log('Running tests with config: ' + testConfigContents);
     fs.writeFileSync('test.config', testConfigContents);
@@ -716,7 +716,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 
     if (tests || light || taskConfigsFolder) {
-        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, testConfigFile);
+        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -850,7 +850,7 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFi
         fs.unlinkSync(testConfigFile);
     }
     if(tests || light) {
-        writeTestConfigFile(tests, light, testConfigFile);
+        writeTestConfigFile(tests, light);
     }
 
     tests = tests ? tests : '';
