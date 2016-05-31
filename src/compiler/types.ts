@@ -416,6 +416,7 @@ namespace ts {
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
         EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions,
+        ReachabilityAndEmitFlags = ReachabilityCheckFlags | EmitHelperFlags,
 
         // Parsing context flags
         ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile,
@@ -1535,6 +1536,13 @@ namespace ts {
     export interface FlowNode {
         flags: FlowFlags;
         id?: number;     // Node id used by flow type cache in checker
+    }
+
+    // FlowStart represents the start of a control flow. For a function expression or arrow
+    // function, the container property references the function (which in turn has a flowNode
+    // property for the containing control flow).
+    export interface FlowStart extends FlowNode {
+        container?: FunctionExpression | ArrowFunction;
     }
 
     // FlowLabel represents a junction with multiple possible preceding control flows.
