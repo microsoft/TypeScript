@@ -223,7 +223,10 @@ namespace Utils {
 
             // For some markers in SyntaxKind, we should print its original syntax name instead of
             // the marker name in tests.
-            if (k === (<any>ts).SyntaxKind.FirstJSDocNode || k === (<any>ts).SyntaxKind.LastJSDocNode) {
+            if (k === (<any>ts).SyntaxKind.FirstJSDocNode ||
+                k === (<any>ts).SyntaxKind.LastJSDocNode ||
+                k === (<any>ts).SyntaxKind.FirstJSDocTagNode ||
+                k === (<any>ts).SyntaxKind.LastJSDocTagNode) {
                 for (const kindName in (<any>ts).SyntaxKind) {
                     if ((<any>ts).SyntaxKind[kindName] === k) {
                         return kindName;

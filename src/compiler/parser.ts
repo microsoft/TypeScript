@@ -672,6 +672,13 @@ namespace ts {
                     const saveParent = parent;
                     parent = n;
                     forEachChild(n, visitNode);
+                    if (n.jsDocComments) {
+                        for (const jsDocComment of n.jsDocComments) {
+                            jsDocComment.parent = n;
+                            parent = jsDocComment;
+                            forEachChild(jsDocComment, visitNode);
+                        }
+                    }
                     parent = saveParent;
                 }
             }
