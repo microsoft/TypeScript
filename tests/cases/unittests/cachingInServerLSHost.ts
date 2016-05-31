@@ -105,7 +105,7 @@ namespace ts {
             const { project, rootScriptInfo } = createProject(root.name, serverHost);
 
             // ensure that imported file was found
-            let diags = project.compilerService.languageService.getSemanticDiagnostics(imported.name);
+            let diags = project.languageService.getSemanticDiagnostics(imported.name);
             assert.equal(diags.length, 1);
 
             const originalFileExists = serverHost.fileExists;
@@ -120,7 +120,7 @@ namespace ts {
                 var x: string = 1;`;
                 rootScriptInfo.editContent(0, rootScriptInfo.content.length, newContent);
                 // trigger synchronization to make sure that import will be fetched from the cache
-                diags = project.compilerService.languageService.getSemanticDiagnostics(imported.name);
+                diags = project.languageService.getSemanticDiagnostics(imported.name);
                 // ensure file has correct number of errors after edit
                 assert.equal(diags.length, 1);
             }
@@ -139,7 +139,7 @@ namespace ts {
 
                 try {
                     // trigger synchronization to make sure that LSHost will try to find 'f2' module on disk
-                    project.compilerService.languageService.getSemanticDiagnostics(imported.name);
+                    project.languageService.getSemanticDiagnostics(imported.name);
                     assert.isTrue(false, `should not find file '${imported.name}'`);
                 }
                 catch (e) {
@@ -160,7 +160,7 @@ namespace ts {
 
                 const newContent = `import {x} from "f1"`;
                 rootScriptInfo.editContent(0, rootScriptInfo.content.length, newContent);
-                project.compilerService.languageService.getSemanticDiagnostics(imported.name);
+                project.languageService.getSemanticDiagnostics(imported.name);
                 assert.isTrue(fileExistsCalled);
 
                 // setting compiler options discards module resolution cache
@@ -171,7 +171,7 @@ namespace ts {
                 opts.compilerOptions.target = ts.ScriptTarget.ES5;
                 project.setProjectOptions(opts);
 
-                project.compilerService.languageService.getSemanticDiagnostics(imported.name);
+                project.languageService.getSemanticDiagnostics(imported.name);
                 assert.isTrue(fileExistsCalled);
             }
         });
@@ -205,7 +205,7 @@ namespace ts {
 
             const { project, rootScriptInfo } = createProject(root.name, serverHost);
 
-            let diags = project.compilerService.languageService.getSemanticDiagnostics(root.name);
+            let diags = project.languageService.getSemanticDiagnostics(root.name);
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
             assert.isTrue(diags.length === 1, "one diagnostic expected");
             assert.isTrue(typeof diags[0].messageText === "string" && ((<string>diags[0].messageText).indexOf("Cannot find module") === 0), "should be 'cannot find module' message");
@@ -215,7 +215,7 @@ namespace ts {
             fileExistsCalledForBar = false;
             rootScriptInfo.editContent(0, rootScriptInfo.content.length, `import {y} from "bar"`);
 
-            diags = project.compilerService.languageService.getSemanticDiagnostics(root.name);
+            diags = project.languageService.getSemanticDiagnostics(root.name);
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
             assert.isTrue(diags.length === 0);
         });

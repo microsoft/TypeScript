@@ -16,6 +16,25 @@ namespace ts.server {
     }
 
     const lineCollectionCapacity = 4;
+    function getDefaultFormatCodeOptions(host: ServerHost): ts.FormatCodeOptions {
+        return ts.clone(<ts.FormatCodeOptions>{
+            IndentSize: 4,
+            TabSize: 4,
+            NewLineCharacter: host.newLine || "\n",
+            ConvertTabsToSpaces: true,
+            IndentStyle: ts.IndentStyle.Smart,
+            InsertSpaceAfterCommaDelimiter: true,
+            InsertSpaceAfterSemicolonInForStatements: true,
+            InsertSpaceBeforeAndAfterBinaryOperators: true,
+            InsertSpaceAfterKeywordsInControlFlowStatements: true,
+            InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
+            InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+            InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+            InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
+            PlaceOpenBraceOnNewLineForFunctions: false,
+            PlaceOpenBraceOnNewLineForControlBlocks: false,
+        });
+    }
 
     function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
         const hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -32,13 +51,14 @@ namespace ts.server {
         children: ScriptInfo[] = [];     // files referenced by this file
         defaultProject: Project;      // project to use by default for file
         fileWatcher: FileWatcher;
-        formatCodeOptions = ts.clone(CompilerService.getDefaultFormatCodeOptions(this.host));
+        formatCodeOptions: ts.FormatCodeOptions;
         path: Path;
         scriptKind: ScriptKind;
 
         constructor(private host: ServerHost, public fileName: string, public content: string, public isOpen = false) {
             this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
             this.svc = ScriptVersionCache.fromString(host, content);
+            this.formatCodeOptions = getDefaultFormatCodeOptions(this.host);
         }
 
         setFormatOptions(formatOptions: protocol.FormatOptions): void {
@@ -51,17 +71,8 @@ namespace ts.server {
             this.isOpen = false;
         }
 
-        addChild(childInfo: ScriptInfo) {
-            this.children.push(childInfo);
-        }
-
         snap() {
             return this.svc.getSnapshot();
-        }
-
-        getText() {
-            const snap = this.snap();
-            return snap.getText(0, snap.getLength());
         }
 
         getLineInfo(line: number) {
@@ -196,15 +207,6 @@ namespace ts.server {
             // conservatively assume that changing compiler options might affect module resolution strategy
             this.resolvedModuleNames.clear();
             this.resolvedTypeReferenceDirectives.clear();
-        }
-
-        lineAffectsRefs(filename: string, line: number) {
-            const info = this.getScriptInfo(filename);
-            const lineInfo = info.getLineInfo(line);
-            if (lineInfo && lineInfo.text) {
-                const regex = /reference|import|\/\*|\*\//;
-                return regex.test(lineInfo.text);
-            }
         }
 
         getCompilationSettings() {
@@ -369,7 +371,8 @@ namespace ts.server {
     }
 
     export class Project {
-        compilerService: CompilerService;
+        lsHost: LSHost;
+        languageService: LanguageService;
         projectFilename: string;
         projectFileWatcher: FileWatcher;
         directoryWatcher: FileWatcher;
@@ -381,12 +384,22 @@ namespace ts.server {
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
 
-        constructor(public projectService: ProjectService, public projectOptions?: ProjectOptions) {
+        constructor(public projectService: ProjectService, documentRegistry: ts.DocumentRegistry, public projectOptions?: ProjectOptions) {
             if (projectOptions && projectOptions.files) {
                 // If files are listed explicitly, allow all extensions
                 projectOptions.compilerOptions.allowNonTsExtensions = true;
             }
-            this.compilerService = new CompilerService(this, projectOptions && projectOptions.compilerOptions);
+            this.lsHost = new LSHost(this.projectService.host, this);
+            if (projectOptions && projectOptions.compilerOptions) {
+                this.lsHost.setCompilationSettings(projectOptions.compilerOptions);
+            }
+            else {
+                const defaultOpts = ts.getDefaultCompilerOptions();
+                defaultOpts.allowNonTsExtensions = true;
+                defaultOpts.allowJs = true;
+                this.lsHost.setCompilationSettings(defaultOpts);
+            }
+            this.languageService = ts.createLanguageService(this.lsHost, documentRegistry);
         }
 
         addOpenRef() {
@@ -403,7 +416,7 @@ namespace ts.server {
         }
 
         getRootFiles() {
-            return this.compilerService.host.roots.map(info => info.fileName);
+            return this.lsHost.roots.map(info => info.fileName);
         }
 
         getFileNames() {
@@ -425,11 +438,11 @@ namespace ts.server {
         }
 
         isRoot(info: ScriptInfo) {
-            return this.compilerService.host.roots.some(root => root === info);
+            return this.lsHost.roots.some(root => root === info);
         }
 
         removeReferencedFile(info: ScriptInfo) {
-            this.compilerService.host.removeReferencedFile(info);
+            this.lsHost.removeReferencedFile(info);
             this.updateGraph();
         }
 
@@ -444,11 +457,11 @@ namespace ts.server {
 
         finishGraph() {
             this.updateGraph();
-            this.compilerService.languageService.getNavigateToItems(".*");
+            this.languageService.getNavigateToItems(".*");
         }
 
         updateGraph() {
-            this.program = this.compilerService.languageService.getProgram();
+            this.program = this.languageService.getProgram();
             this.updateFileMap();
         }
 
@@ -458,12 +471,12 @@ namespace ts.server {
 
         // add a root file to project
         addRoot(info: ScriptInfo) {
-            this.compilerService.host.addRoot(info);
+            this.lsHost.addRoot(info);
         }
 
         // remove a root file from project
         removeRoot(info: ScriptInfo) {
-            this.compilerService.host.removeRoot(info);
+            this.lsHost.removeRoot(info);
         }
 
         filesToString() {
@@ -477,7 +490,7 @@ namespace ts.server {
             this.projectOptions = projectOptions;
             if (projectOptions.compilerOptions) {
                 projectOptions.compilerOptions.allowNonTsExtensions = true;
-                this.compilerService.setCompilerOptions(projectOptions.compilerOptions);
+                this.lsHost.setCompilationSettings(projectOptions.compilerOptions);
             }
         }
     }
@@ -535,14 +548,17 @@ namespace ts.server {
         hostConfiguration: HostConfiguration;
         timerForDetectingProjectFileListChanges: Map<any> = {};
 
+        documentRegistry: ts.DocumentRegistry;
+
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
             this.addDefaultHostConfiguration();
+            this.documentRegistry = ts.createDocumentRegistry(host.useCaseSensitiveFileNames, host.getCurrentDirectory());
         }
 
         addDefaultHostConfiguration() {
             this.hostConfiguration = {
-                formatCodeOptions: ts.clone(CompilerService.getDefaultFormatCodeOptions(this.host)),
+                formatCodeOptions: getDefaultFormatCodeOptions(this.host),
                 hostInfo: "Unknown host"
             };
         }
@@ -686,7 +702,7 @@ namespace ts.server {
         }
 
         createInferredProject(root: ScriptInfo) {
-            const project = new Project(this);
+            const project = new Project(this, this.documentRegistry);
             project.addRoot(root);
 
             let currentPath = ts.getDirectoryPath(root.fileName);
@@ -1299,7 +1315,7 @@ namespace ts.server {
                     return errors;
                 }
                 else {
-                    const oldFileNames = project.compilerService.host.roots.map(info => info.fileName);
+                    const oldFileNames = project.lsHost.roots.map(info => info.fileName);
                     const newFileNames = ts.filter(projectOptions.files, f => this.host.fileExists(f));
                     const fileNamesToRemove = oldFileNames.filter(f => newFileNames.indexOf(f) < 0);
                     const fileNamesToAdd = newFileNames.filter(f => oldFileNames.indexOf(f) < 0);
@@ -1343,17 +1359,16 @@ namespace ts.server {
         }
 
         createProject(projectFilename: string, projectOptions?: ProjectOptions) {
-            const project = new Project(this, projectOptions);
+            const project = new Project(this, this.documentRegistry, projectOptions);
             project.projectFilename = projectFilename;
             return project;
         }
 
     }
 
-    export class CompilerService {
+    export class CompilerServic1e {
         host: LSHost;
         languageService: ts.LanguageService;
-        classifier: ts.Classifier;
         settings: ts.CompilerOptions;
         documentRegistry = ts.createDocumentRegistry();
 
@@ -1369,37 +1384,11 @@ namespace ts.server {
                 this.setCompilerOptions(defaultOpts);
             }
             this.languageService = ts.createLanguageService(this.host, this.documentRegistry);
-            this.classifier = ts.createClassifier();
         }
 
         setCompilerOptions(opt: ts.CompilerOptions) {
             this.settings = opt;
             this.host.setCompilationSettings(opt);
-        }
-
-        isExternalModule(filename: string): boolean {
-            const sourceFile = this.languageService.getNonBoundSourceFile(filename);
-            return ts.isExternalModule(sourceFile);
-        }
-
-        static getDefaultFormatCodeOptions(host: ServerHost): ts.FormatCodeOptions {
-            return ts.clone({
-                IndentSize: 4,
-                TabSize: 4,
-                NewLineCharacter: host.newLine || "\n",
-                ConvertTabsToSpaces: true,
-                IndentStyle: ts.IndentStyle.Smart,
-                InsertSpaceAfterCommaDelimiter: true,
-                InsertSpaceAfterSemicolonInForStatements: true,
-                InsertSpaceBeforeAndAfterBinaryOperators: true,
-                InsertSpaceAfterKeywordsInControlFlowStatements: true,
-                InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-                InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-                InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-                InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-                PlaceOpenBraceOnNewLineForFunctions: false,
-                PlaceOpenBraceOnNewLineForControlBlocks: false,
-            });
         }
     }
 
