@@ -1021,13 +1021,14 @@ namespace ts {
         //
         //  /a/b/*      - Watch /a/b directly to catch any new file
         //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
-        const excludeRegExp = getRegularExpressionForWildcard(exclude, path, "exclude", useCaseSensitiveFileNames);
+        const rawExcludeRegex = getRegularExpressionForWildcard(exclude, path, "exclude");
+        const excludeRegex = rawExcludeRegex && new RegExp(rawExcludeRegex, useCaseSensitiveFileNames ? "" : "i");
         const wildcardDirectories: Map<WatchDirectoryFlags> = {};
         if (include !== undefined) {
             const recursiveKeys: string[] = [];
             for (const file of include) {
                 const name = combinePaths(path, file);
-                if (excludeRegExp && excludeRegExp.test(name)) {
+                if (excludeRegex && excludeRegex.test(name)) {
                     continue;
                 }
 

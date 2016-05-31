@@ -80,8 +80,9 @@ namespace ts {
          * @param exclude A JSON encoded string[] containing the paths to exclude
          *  when enumerating the directory.
          */
-        readDirectory(rootDir: string, extension: string, exclude?: string, include?: string, depth?: number): string;
+        readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
         useCaseSensitiveFileNames?(): boolean;
+        getCurrentDirectory(): string;
         trace(s: string): void;
     }
 
@@ -453,11 +454,15 @@ namespace ts {
             // Wrap the API changes for 2.0 release. This try/catch
             // should be removed once TypeScript 2.0 has shipped.
             try {
+                const pattern = getFileMatcherPatterns(rootDir, extensions, exclude, include,
+                    this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
                 return JSON.parse(this.shimHost.readDirectory(
                     rootDir,
                     JSON.stringify(extensions),
-                    JSON.stringify(exclude),
-                    JSON.stringify(include),
+                    JSON.stringify(pattern.basePaths),
+                    pattern.excludePattern,
+                    pattern.includeFilePattern,
+                    pattern.includeDirectoryPattern,
                     depth
                 ));
             }

@@ -911,7 +911,7 @@ namespace ts {
     const reservedCharacterPattern = /[^\w\s\/]/g;
     const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
 
-    export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude", useCaseSensitiveFileNames: boolean) {
+    export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude") {
         if (specs === undefined || specs.length === 0) {
             return undefined;
         }
@@ -978,7 +978,7 @@ namespace ts {
             return undefined;
         }
 
-        return new RegExp("^(" + pattern + (usage === "exclude" ? ")($|/)" : ")$"), useCaseSensitiveFileNames ? "" : "i");
+        return "^(" + pattern + (usage === "exclude" ? ")($|/)" : ")$");
     }
 
     function replaceWildcardCharacter(match: string) {
@@ -990,15 +990,39 @@ namespace ts {
         directories: string[];
     }
 
-    export function matchFiles(path: string, extensions: string[], excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string, getFileSystemEntries: (path: string) => FileSystemEntries): string[] {
+    interface FileMatcherPatterns {
+        includeFilePattern: string;
+        includeDirectoryPattern: string;
+        excludePattern: string;
+        basePaths: string[];
+    }
+
+    export function getFileMatcherPatterns(path: string, extensions: string[], excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
         const absolutePath = combinePaths(currentDirectory, path);
-        const includeFileRegex = getRegularExpressionForWildcard(includes, absolutePath, "files", useCaseSensitiveFileNames);
-        const includeDirectoryRegex = getRegularExpressionForWildcard(includes, absolutePath, "directories", useCaseSensitiveFileNames);
-        const excludeRegex = getRegularExpressionForWildcard(excludes, absolutePath, "exclude", useCaseSensitiveFileNames);
+
+        return {
+            includeFilePattern: getRegularExpressionForWildcard(includes, absolutePath, "files"),
+            includeDirectoryPattern: getRegularExpressionForWildcard(includes, absolutePath, "directories"),
+            excludePattern: getRegularExpressionForWildcard(excludes, absolutePath, "exclude"),
+            basePaths: getBasePaths(path, includes, useCaseSensitiveFileNames)
+        };
+    }
+
+    export function matchFiles(path: string, extensions: string[], excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string, getFileSystemEntries: (path: string) => FileSystemEntries): string[] {
+        path = normalizePath(path);
+        currentDirectory = normalizePath(currentDirectory);
+
+        const patterns = getFileMatcherPatterns(path, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
+
+        const regexFlag = useCaseSensitiveFileNames ? "" : "i";
+        const includeFileRegex = patterns.includeFilePattern && new RegExp(patterns.includeFilePattern, regexFlag);
+        const includeDirectoryRegex = patterns.includeDirectoryPattern && new RegExp(patterns.includeDirectoryPattern, regexFlag);
+        const excludeRegex = patterns.excludePattern && new RegExp(patterns.excludePattern, regexFlag);
+
         const result: string[] = [];
-        for (const basePath of getBasePaths(path, includes, useCaseSensitiveFileNames)) {
+        for (const basePath of patterns.basePaths) {
             visitDirectory(basePath, combinePaths(currentDirectory, basePath));
         }
         return result;

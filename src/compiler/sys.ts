@@ -73,7 +73,7 @@ namespace ts {
         readFile(path: string): string;
         writeFile(path: string, contents: string): void;
         getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
+        readDirectory(path: string, extensions?: string[], basePaths?: string[], excludeEx?: string, includeFileEx?: string, includeDirEx?: string): string[];
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         realpath(path: string): string;
@@ -558,7 +558,10 @@ namespace ts {
                 getExecutingFilePath: () => ChakraHost.executingFile,
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
                 getDirectories: ChakraHost.getDirectories,
-                readDirectory: ChakraHost.readDirectory,
+                readDirectory: (path: string, extensions?: string[], excludes?: string[], includes?: string[]) => {
+                    const pattern = getFileMatcherPatterns(path, extensions, excludes, includes, !!ChakraHost.useCaseSensitiveFileNames, ChakraHost.currentDirectory);
+                    return ChakraHost.readDirectory(path, extensions, pattern.basePaths, pattern.excludePattern, pattern.includeFilePattern, pattern.includeDirectoryPattern);
+                },
                 exit: ChakraHost.quit,
                 realpath
             };
