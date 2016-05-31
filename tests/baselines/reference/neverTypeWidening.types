@@ -1,0 +1,70 @@
+=== tests/cases/compiler/neverTypeWidening.ts ===
+
+let a = [];                     // never[] widens to any[]
+>a : any[]
+>[] : never[]
+
+let b = [...[], ...[]];         // never[] widens to any[]
+>b : any[]
+>[...[], ...[]] : never[]
+>...[] : never
+>[] : never[]
+>...[] : never
+>[] : never[]
+
+let c = [...[...[]]];           // never[] widens to any[]
+>c : any[]
+>[...[...[]]] : never[]
+>...[...[]] : never
+>[...[]] : never[]
+>...[] : never
+>[] : never[]
+
+let d = [...[], ...[1, 2, 3]];  // number[]
+>d : number[]
+>[...[], ...[1, 2, 3]] : number[]
+>...[] : never
+>[] : never[]
+>...[1, 2, 3] : number
+>[1, 2, 3] : number[]
+>1 : number
+>2 : number
+>3 : number
+
+let e = [1, 2, 3].concat([]);   // number[]
+>e : number[]
+>[1, 2, 3].concat([]) : number[]
+>[1, 2, 3].concat : (...items: (number | number[])[]) => number[]
+>[1, 2, 3] : number[]
+>1 : number
+>2 : number
+>3 : number
+>concat : (...items: (number | number[])[]) => number[]
+>[] : never[]
+
+// Repro from #8878
+
+function concat<T>(xs: T[], ys: T[]): T[] {
+>concat : <T>(xs: T[], ys: T[]) => T[]
+>T : T
+>xs : T[]
+>T : T
+>ys : T[]
+>T : T
+>T : T
+
+    return [...xs, ...ys];
+>[...xs, ...ys] : T[]
+>...xs : T
+>xs : T[]
+>...ys : T
+>ys : T[]
+}
+const y = concat([], ["a"]);
+>y : string[]
+>concat([], ["a"]) : string[]
+>concat : <T>(xs: T[], ys: T[]) => T[]
+>[] : never[]
+>["a"] : string[]
+>"a" : string
+
