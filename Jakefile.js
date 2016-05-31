@@ -100,6 +100,7 @@ var servicesSources = [
 
 var serverCoreSources = [
     "node.d.ts",
+    "scriptVersionCache.ts",
     "editorServices.ts",
     "protocol.d.ts",
     "session.ts",
@@ -160,6 +161,7 @@ var harnessSources = harnessCoreSources.concat([
     "protocol.d.ts",
     "session.ts",
     "client.ts",
+    "scriptVersionCache.ts",
     "editorServices.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
