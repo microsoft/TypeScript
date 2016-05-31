@@ -615,11 +615,26 @@ namespace ts {
     }
 
     /**
-     * @param extensions - Either supportedTypeScriptExtensions or if --allowJs, allSupportedExtensions
      * @param {boolean} onlyRecordFailures - if true then function won't try to actually load files but instead record all attempts as failures. This flag is necessary
      * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
      */
     function loadModuleFromFile(candidate: string, extensions: string[], failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
+        // First try to keep/add an extension: importing "./foo.ts" can be matched by a file "./foo.ts", and "./foo" by "./foo.d.ts"
+        const keepOrAddExtension = loadModuleFromFileWorker(candidate, extensions, failedLookupLocation, onlyRecordFailures, state);
+        if (keepOrAddExtension) {
+            return keepOrAddExtension;
+        }
+        // Then try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one, e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
+        if (hasJavaScriptFileExtension(candidate)) {
+            const extensionless = removeFileExtension(candidate);
+            if (state.traceEnabled) {
+                const extension = candidate.substring(extensionless.length);
+                trace(state.host, Diagnostics.File_name_0_has_a_1_extension_stripping_it, candidate, extension);
+            }
+            return loadModuleFromFileWorker(extensionless, extensions, failedLookupLocation, onlyRecordFailures, state);
+        }
+    }
+    function loadModuleFromFileWorker(candidate: string, extensions: string[], failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
         if (!onlyRecordFailures) {
             // check if containig folder exists - if it doesn't then just record failures for all supported extensions without disk probing
             const directory = getDirectoryPath(candidate);
@@ -628,26 +643,11 @@ namespace ts {
             }
         }
 
-        // First try to keep/add an extension: importing "./foo.ts" can be matched by a file "./foo.ts", and "./foo" by "./foo.d.ts"
-        const keepOrAddExtension = forEach(extensions, ext => {
+        return forEach(extensions, ext => {
             if (state.skipTsx && (ext === ".jsx" || ext === ".tsx")) {
                 return;
             }
             return tryLoad(fileExtensionIs(candidate, ext) ? candidate : candidate + ext);
-        });
-        if (keepOrAddExtension) {
-            return keepOrAddExtension;
-        }
-
-        // Then try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one, e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
-        return forEach(supportedJavascriptExtensions, jsExt => {
-            if (state.skipTsx && jsExt === ".jsx") {
-                return;
-            }
-            const extensionless = tryRemoveExtension(candidate, jsExt);
-            if (extensionless !== undefined) {
-                return forEach(supportedTypeScriptExtensions, tsExt => tryLoad(extensionless + tsExt));
-            }
         });
 
         function tryLoad(fileName: string): string {

@@ -861,6 +861,13 @@ namespace ts {
         return fileExtensionIs(path, extension) ? path.substring(0, path.length - extension.length) : undefined;
     }
 
+    export function getFileExtension(path: string): string {
+        const dot = path.lastIndexOf(".");
+        if (dot !== -1) {
+            return path.substring(dot);
+        }
+    }
+
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
         getSourceFileConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => SourceFile;

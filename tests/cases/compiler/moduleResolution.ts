@@ -1,3 +1,4 @@
+// @traceResolution: true
 // @Filename: a.ts
 export default 0;
 
