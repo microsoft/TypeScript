@@ -1151,8 +1151,22 @@ namespace ts {
     /** Performance measurements for the compiler. */
     /*@internal*/
     export namespace performance {
+        declare const onProfilerEvent: { (markName: string): void; profiler: boolean; };
+        let profilerEvent: (markName: string) => void;
         let counters: Map<number>;
         let measures: Map<number>;
+
+        /**
+         * Emit a performance event if ts-profiler is connected. This is primarily used
+         * to generate heap snapshots.
+         *
+         * @param eventName A name for the event.
+         */
+        export function emit(eventName: string) {
+            if (profilerEvent) {
+                onProfilerEvent(eventName);
+            }
+        }
 
         /**
          * Increments a counter with the specified name.
@@ -1189,7 +1203,7 @@ namespace ts {
          */
         export function measure(measureName: string, marker: number) {
             if (measures) {
-                measures[measureName] = (getProperty(measures, measureName) || 0) + (mark() - marker);
+                measures[measureName] = (getProperty(measures, measureName) || 0) + (Date.now() - marker);
             }
         }
 
@@ -1216,12 +1230,17 @@ namespace ts {
                 commentTime: 0,
                 sourceMapTime: 0
             };
+
+            profilerEvent = typeof onProfilerEvent === "function" && onProfilerEvent.profiler === true
+                ? onProfilerEvent
+                : undefined;
         }
 
         /** Disables (and clears) performance measurements for the compiler. */
         export function disable() {
             counters = undefined;
             measures = undefined;
+            profilerEvent = undefined;
         }
     }
 }
