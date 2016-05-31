@@ -10,7 +10,21 @@
 //// /** @type {/*1*/NumberLike} */
 //// var numberLike;
 
-verify.navigationBarContains("NumberLike", "type");
-verify.navigationBarContains("NumberLike2", "type");
-verify.navigationBarContains("NumberLike2", "var");
-verify.navigationBarContains("numberLike", "var");
+verify.navigationBar([
+  {
+    "text": "NumberLike",
+    "kind": "type"
+  },
+  {
+    "text": "NumberLike2",
+    "kind": "type"
+  },
+  {
+    "text": "NumberLike2",
+    "kind": "var"
+  },
+  {
+    "text": "numberLike",
+    "kind": "var"
+  }
+]);
