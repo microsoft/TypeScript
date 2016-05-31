@@ -1,8 +1,9 @@
 tests/cases/compiler/importDeclWithDeclareModifier.ts(5,9): error TS1029: 'export' modifier must precede 'declare' modifier.
+tests/cases/compiler/importDeclWithDeclareModifier.ts(5,27): error TS2304: Cannot find name 'x'.
 tests/cases/compiler/importDeclWithDeclareModifier.ts(5,29): error TS2305: Module 'x' has no exported member 'c'.
 
 
-==== tests/cases/compiler/importDeclWithDeclareModifier.ts (2 errors) ====
+==== tests/cases/compiler/importDeclWithDeclareModifier.ts (3 errors) ====
     module x {
         interface c {
         }
@@ -10,6 +11,8 @@ tests/cases/compiler/importDeclWithDeclareModifier.ts(5,29): error TS2305: Modul
     declare export import a = x.c;
             ~~~~~~
 !!! error TS1029: 'export' modifier must precede 'declare' modifier.
+                              ~
+!!! error TS2304: Cannot find name 'x'.
                                 ~
 !!! error TS2305: Module 'x' has no exported member 'c'.
     var b: a;

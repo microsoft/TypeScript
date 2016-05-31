@@ -9,16 +9,10 @@ namespace ts.NavigationBar {
             return getJsNavigationBarItems(sourceFile, compilerOptions);
         }
 
-        // If the source file has any child items, then it included in the tree
-        // and takes lexical ownership of all other top-level items.
-        let hasGlobalNode = false;
-
         return getItemsWorker(getTopLevelNodes(sourceFile), createTopLevelItem);
 
         function getIndent(node: Node): number {
-            // If we have a global node in the tree,
-            // then it adds an extra layer of depth to all subnodes.
-            let indent = hasGlobalNode ? 1 : 0;
+            let indent = 1; // Global node is the only one with indent 0.
 
             let current = node.parent;
             while (current) {
@@ -46,7 +40,7 @@ namespace ts.NavigationBar {
         }
 
         function getChildNodes(nodes: Node[]): Node[] {
-            let childNodes: Node[] = [];
+            const childNodes: Node[] = [];
 
             function visit(node: Node) {
                 switch (node.kind) {
@@ -104,12 +98,13 @@ namespace ts.NavigationBar {
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.ImportSpecifier:
                     case SyntaxKind.ExportSpecifier:
+                    case SyntaxKind.TypeAliasDeclaration:
                         childNodes.push(node);
                         break;
                 }
             }
 
-            //for (let i = 0, n = nodes.length; i < n; i++) {
+            // for (let i = 0, n = nodes.length; i < n; i++) {
             //    let node = nodes[i];
 
             //    if (node.kind === SyntaxKind.ClassDeclaration ||
@@ -123,13 +118,13 @@ namespace ts.NavigationBar {
             //    else if (node.kind === SyntaxKind.VariableStatement) {
             //        childNodes.push.apply(childNodes, (<VariableStatement>node).declarations);
             //    }
-            //}
+            // }
             forEach(nodes, visit);
             return sortNodes(childNodes);
         }
 
         function getTopLevelNodes(node: SourceFile): Node[] {
-            let topLevelNodes: Node[] = [];
+            const topLevelNodes: Node[] = [];
             topLevelNodes.push(node);
 
             addTopLevelNodes(node.statements, topLevelNodes);
@@ -140,7 +135,7 @@ namespace ts.NavigationBar {
         function sortNodes(nodes: Node[]): Node[] {
             return nodes.slice(0).sort((n1: Declaration, n2: Declaration) => {
                 if (n1.name && n2.name) {
-                    return getPropertyNameForPropertyNameNode(n1.name).localeCompare(getPropertyNameForPropertyNameNode(n2.name));
+                    return localeCompareFix(getPropertyNameForPropertyNameNode(n1.name), getPropertyNameForPropertyNameNode(n2.name));
                 }
                 else if (n1.name) {
                     return 1;
@@ -152,12 +147,22 @@ namespace ts.NavigationBar {
                     return n1.kind - n2.kind;
                 }
             });
+
+            // node 0.10 treats "a" as greater than "B".
+            // For consistency, sort alphabetically, falling back to which is lower-case.
+            function localeCompareFix(a: string, b: string) {
+                const cmp = a.toLowerCase().localeCompare(b.toLowerCase());
+                if (cmp !== 0)
+                    return cmp;
+                // Return the *opposite* of the `<` operator, which works the same in node 0.10 and 6.0.
+                return a < b ? 1 : a > b ? -1 : 0;
+            }
         }
 
         function addTopLevelNodes(nodes: Node[], topLevelNodes: Node[]): void {
             nodes = sortNodes(nodes);
 
-            for (let node of nodes) {
+            for (const node of nodes) {
                 switch (node.kind) {
                     case SyntaxKind.ClassDeclaration:
                         topLevelNodes.push(node);
@@ -176,6 +181,7 @@ namespace ts.NavigationBar {
                         break;
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
                         topLevelNodes.push(node);
                         break;
 
@@ -197,7 +203,7 @@ namespace ts.NavigationBar {
         }
 
         function hasNamedFunctionDeclarations(nodes: NodeArray<Statement>): boolean {
-            for (let s of nodes) {
+            for (const s of nodes) {
                 if (s.kind === SyntaxKind.FunctionDeclaration && !isEmpty((<FunctionDeclaration>s).name.text)) {
                     return true;
                 }
@@ -237,17 +243,17 @@ namespace ts.NavigationBar {
         }
 
         function getItemsWorker(nodes: Node[], createItem: (n: Node) => ts.NavigationBarItem): ts.NavigationBarItem[] {
-            let items: ts.NavigationBarItem[] = [];
+            const items: ts.NavigationBarItem[] = [];
 
-            let keyToItem: Map<NavigationBarItem> = {};
+            const keyToItem: Map<NavigationBarItem> = {};
 
-            for (let child of nodes) {
-                let item = createItem(child);
+            for (const child of nodes) {
+                const item = createItem(child);
                 if (item !== undefined) {
                     if (item.text.length > 0) {
-                        let key = item.text + "-" + item.kind + "-" + item.indent;
+                        const key = item.text + "-" + item.kind + "-" + item.indent;
 
-                        let itemWithSameName = keyToItem[key];
+                        const itemWithSameName = keyToItem[key];
                         if (itemWithSameName) {
                             // We had an item with the same name.  Merge these items together.
                             merge(itemWithSameName, item);
@@ -274,8 +280,8 @@ namespace ts.NavigationBar {
 
                 // Next, recursively merge or add any children in the source as appropriate.
                 outer:
-                for (let sourceChild of source.childItems) {
-                    for (let targetChild of target.childItems) {
+                for (const sourceChild of source.childItems) {
+                    for (const targetChild of target.childItems) {
                         if (targetChild.text === sourceChild.text && targetChild.kind === sourceChild.kind) {
                             // Found a match.  merge them.
                             merge(targetChild, sourceChild);
@@ -313,8 +319,20 @@ namespace ts.NavigationBar {
                 case SyntaxKind.IndexSignature:
                     return createItem(node, "[]", ts.ScriptElementKind.indexSignatureElement);
 
+                case SyntaxKind.EnumDeclaration:
+                    return createItem(node, getTextOfNode((<EnumDeclaration>node).name), ts.ScriptElementKind.enumElement);
+
                 case SyntaxKind.EnumMember:
                     return createItem(node, getTextOfNode((<EnumMember>node).name), ts.ScriptElementKind.memberVariableElement);
+
+                case SyntaxKind.ModuleDeclaration:
+                    return createItem(node, getModuleName(<ModuleDeclaration>node), ts.ScriptElementKind.moduleElement);
+
+                case SyntaxKind.InterfaceDeclaration:
+                    return createItem(node, getTextOfNode((<InterfaceDeclaration>node).name), ts.ScriptElementKind.interfaceElement);
+
+                case SyntaxKind.TypeAliasDeclaration:
+                    return createItem(node, getTextOfNode((<TypeAliasDeclaration>node).name), ts.ScriptElementKind.typeElement);
 
                 case SyntaxKind.CallSignature:
                     return createItem(node, "()", ts.ScriptElementKind.callSignatureElement);
@@ -325,6 +343,9 @@ namespace ts.NavigationBar {
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                     return createItem(node, getTextOfNode((<PropertyDeclaration>node).name), ts.ScriptElementKind.memberVariableElement);
+
+                case SyntaxKind.ClassDeclaration:
+                    return createItem(node, getTextOfNode((<ClassDeclaration>node).name), ts.ScriptElementKind.classElement);
 
                 case SyntaxKind.FunctionDeclaration:
                     return createItem(node, getTextOfNode((<FunctionLikeDeclaration>node).name), ts.ScriptElementKind.functionElement);
@@ -382,7 +403,7 @@ namespace ts.NavigationBar {
             return !text || text.trim() === "";
         }
 
-        function getNavigationBarItem(text: string, kind: string, kindModifiers: string, spans: TextSpan[], childItems: NavigationBarItem[] = [], indent: number = 0): NavigationBarItem {
+        function getNavigationBarItem(text: string, kind: string, kindModifiers: string, spans: TextSpan[], childItems: NavigationBarItem[] = [], indent = 0): NavigationBarItem {
             if (isEmpty(text)) {
                 return undefined;
             }
@@ -422,34 +443,17 @@ namespace ts.NavigationBar {
 
                 case SyntaxKind.FunctionDeclaration:
                     return createFunctionItem(<FunctionDeclaration>node);
+
+                case SyntaxKind.TypeAliasDeclaration:
+                    return createTypeAliasItem(<TypeAliasDeclaration>node);
             }
 
             return undefined;
 
-            function getModuleName(moduleDeclaration: ModuleDeclaration): string {
-                // We want to maintain quotation marks.
-                if (isAmbientModule(moduleDeclaration)) {
-                    return getTextOfNode(moduleDeclaration.name);
-                }
-
-                // Otherwise, we need to aggregate each identifier to build up the qualified name.
-                let result: string[] = [];
-
-                result.push(moduleDeclaration.name.text);
-
-                while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
-                    moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
-
-                    result.push(moduleDeclaration.name.text);
-                }
-
-                return result.join(".");
-            }
-
             function createModuleItem(node: ModuleDeclaration): NavigationBarItem {
-                let moduleName = getModuleName(node);
+                const moduleName = getModuleName(node);
 
-                let childItems = getItemsWorker(getChildNodes((<Block>getInnermostModule(node).body).statements), createChildItem);
+                const childItems = getItemsWorker(getChildNodes((<Block>getInnermostModule(node).body).statements), createChildItem);
 
                 return getNavigationBarItem(moduleName,
                     ts.ScriptElementKind.moduleElement,
@@ -461,9 +465,9 @@ namespace ts.NavigationBar {
 
             function createFunctionItem(node: FunctionDeclaration): ts.NavigationBarItem  {
                 if (node.body && node.body.kind === SyntaxKind.Block) {
-                    let childItems = getItemsWorker(sortNodes((<Block>node.body).statements), createChildItem);
+                    const childItems = getItemsWorker(sortNodes((<Block>node.body).statements), createChildItem);
 
-                    return getNavigationBarItem(!node.name ? "default": node.name.text,
+                    return getNavigationBarItem(!node.name ? "default" : node.name.text,
                         ts.ScriptElementKind.functionElement,
                         getNodeModifiers(node),
                         [getNodeSpan(node)],
@@ -474,9 +478,18 @@ namespace ts.NavigationBar {
                 return undefined;
             }
 
+            function createTypeAliasItem(node: TypeAliasDeclaration): ts.NavigationBarItem {
+                return getNavigationBarItem(node.name.text,
+                    ts.ScriptElementKind.typeElement,
+                    getNodeModifiers(node),
+                    [getNodeSpan(node)],
+                    [],
+                    getIndent(node));
+            }
+
             function createMemberFunctionLikeItem(node: MethodDeclaration | ConstructorDeclaration): ts.NavigationBarItem  {
                 if (node.body && node.body.kind === SyntaxKind.Block) {
-                    let childItems = getItemsWorker(sortNodes((<Block>node.body).statements), createChildItem);
+                    const childItems = getItemsWorker(sortNodes((<Block>node.body).statements), createChildItem);
                     let scriptElementKind: string;
                     let memberFunctionName: string;
                     if (node.kind === SyntaxKind.MethodDeclaration) {
@@ -500,16 +513,11 @@ namespace ts.NavigationBar {
             }
 
             function createSourceFileItem(node: SourceFile): ts.NavigationBarItem {
-                let childItems = getItemsWorker(getChildNodes(node.statements), createChildItem);
+                const childItems = getItemsWorker(getChildNodes(node.statements), createChildItem);
 
-                if (childItems === undefined || childItems.length === 0) {
-                    return undefined;
-                }
-
-                hasGlobalNode = true;
-                let rootName = isExternalModule(node)
+                const rootName = isExternalModule(node)
                     ? "\"" + escapeString(getBaseFileName(removeFileExtension(normalizePath(node.fileName)))) + "\""
-                    : "<global>"
+                    : "<global>";
 
                 return getNavigationBarItem(rootName,
                     ts.ScriptElementKind.moduleElement,
@@ -522,14 +530,14 @@ namespace ts.NavigationBar {
                 let childItems: NavigationBarItem[];
 
                 if (node.members) {
-                    let constructor = <ConstructorDeclaration>forEach(node.members, member => {
+                    const constructor = <ConstructorDeclaration>forEach(node.members, member => {
                         return member.kind === SyntaxKind.Constructor && member;
                     });
 
                     // Add the constructor parameters in as children of the class (for property parameters).
                     // Note that *all non-binding pattern named* parameters will be added to the nodes array, but parameters that
                     // are not properties will be filtered out later by createChildItem.
-                    let nodes: Node[] = removeDynamicallyNamedProperties(node);
+                    const nodes: Node[] = removeDynamicallyNamedProperties(node);
                     if (constructor) {
                         addRange(nodes, filter(constructor.parameters, p => !isBindingPattern(p.name)));
                     }
@@ -537,7 +545,7 @@ namespace ts.NavigationBar {
                     childItems = getItemsWorker(sortNodes(nodes), createChildItem);
                 }
 
-                var nodeName = !node.name ? "default" : node.name.text;
+                const nodeName = !node.name ? "default" : node.name.text;
 
                 return getNavigationBarItem(
                     nodeName,
@@ -549,7 +557,7 @@ namespace ts.NavigationBar {
             }
 
             function createEnumItem(node: EnumDeclaration): ts.NavigationBarItem {
-                let childItems = getItemsWorker(sortNodes(removeComputedProperties(node)), createChildItem);
+                const childItems = getItemsWorker(sortNodes(removeComputedProperties(node)), createChildItem);
                 return getNavigationBarItem(
                     node.name.text,
                     ts.ScriptElementKind.enumElement,
@@ -560,7 +568,7 @@ namespace ts.NavigationBar {
             }
 
             function createInterfaceItem(node: InterfaceDeclaration): ts.NavigationBarItem {
-                let childItems = getItemsWorker(sortNodes(removeDynamicallyNamedProperties(node)), createChildItem);
+                const childItems = getItemsWorker(sortNodes(removeDynamicallyNamedProperties(node)), createChildItem);
                 return getNavigationBarItem(
                     node.name.text,
                     ts.ScriptElementKind.interfaceElement,
@@ -571,6 +579,26 @@ namespace ts.NavigationBar {
             }
         }
 
+        function getModuleName(moduleDeclaration: ModuleDeclaration): string {
+            // We want to maintain quotation marks.
+            if (isAmbientModule(moduleDeclaration)) {
+                return getTextOfNode(moduleDeclaration.name);
+            }
+
+            // Otherwise, we need to aggregate each identifier to build up the qualified name.
+            const result: string[] = [];
+
+            result.push(moduleDeclaration.name.text);
+
+            while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
+                moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
+
+                result.push(moduleDeclaration.name.text);
+            }
+
+            return result.join(".");
+        }
+
         function removeComputedProperties(node: EnumDeclaration): Declaration[] {
             return filter<Declaration>(node.members, member => member.name === undefined || member.name.kind !== SyntaxKind.ComputedPropertyName);
         }
@@ -578,7 +606,7 @@ namespace ts.NavigationBar {
         /**
          * Like removeComputedProperties, but retains the properties with well known symbol names
          */
-        function removeDynamicallyNamedProperties(node: ClassDeclaration | InterfaceDeclaration): Declaration[]{
+        function removeDynamicallyNamedProperties(node: ClassDeclaration | InterfaceDeclaration): Declaration[] {
             return filter<Declaration>(node.members, member => !hasDynamicName(member));
         }
 
@@ -606,11 +634,11 @@ namespace ts.NavigationBar {
         const anonClassText = "<class>";
         let indent = 0;
 
-        let rootName = isExternalModule(sourceFile) ?
+        const rootName = isExternalModule(sourceFile) ?
             "\"" + escapeString(getBaseFileName(removeFileExtension(normalizePath(sourceFile.fileName)))) + "\""
             : "<global>";
 
-        let sourceFileItem = getNavBarItem(rootName, ScriptElementKind.moduleElement, [getNodeSpan(sourceFile)]);
+        const sourceFileItem = getNavBarItem(rootName, ScriptElementKind.moduleElement, [getNodeSpan(sourceFile)]);
         let topItem = sourceFileItem;
 
         // Walk the whole file, because we want to also find function expressions - which may be in variable initializer,
@@ -643,12 +671,12 @@ namespace ts.NavigationBar {
             }
         }
 
-        function createNavBarItem(node: Node) : NavigationBarItem {
+        function createNavBarItem(node: Node): NavigationBarItem {
             switch (node.kind) {
                 case SyntaxKind.VariableDeclaration:
                     // Only add to the navbar if at the top-level of the file
                     // Note: "const" and "let" are also SyntaxKind.VariableDeclarations
-                    if(node.parent/*VariableDeclarationList*/.parent/*VariableStatement*/
+                    if (node.parent/*VariableDeclarationList*/.parent/*VariableStatement*/
                            .parent/*SourceFile*/.kind !== SyntaxKind.SourceFile) {
                         return undefined;
                     }
@@ -711,7 +739,7 @@ namespace ts.NavigationBar {
         function getNavBarItem(text: string, kind: string, spans: TextSpan[], kindModifiers = ScriptElementKindModifier.none): NavigationBarItem {
             return {
                 text, kind, kindModifiers, spans, childItems: [], indent, bolded: false, grayed: false
-            }
+            };
         }
 
         function getDefineModuleItem(node: Node): NavigationBarItem {
@@ -724,7 +752,7 @@ namespace ts.NavigationBar {
                 return undefined;
             }
             const callExpr = node.parent as CallExpression;
-            if (callExpr.expression.kind !== SyntaxKind.Identifier || callExpr.expression.getText() !== 'define') {
+            if (callExpr.expression.kind !== SyntaxKind.Identifier || callExpr.expression.getText() !== "define") {
                 return undefined;
             }
 

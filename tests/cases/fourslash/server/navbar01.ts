@@ -1,52 +1,166 @@
 /// <reference path="../fourslash.ts"/>
 
 ////// Interface
-////{| "itemName": "IPoint", "kind": "interface", "parentName": "" |}interface IPoint {
-////    {| "itemName": "getDist", "kind": "method", "parentName": "IPoint" |}getDist(): number;
-////    {| "itemName": "new()", "kind": "construct", "parentName": "IPoint" |}new(): IPoint;
-////    {| "itemName": "()", "kind": "call", "parentName": "IPoint" |}(): any;
-////    {| "itemName": "[]", "kind": "index", "parentName": "IPoint" |}[x:string]: number;
-////    {| "itemName": "prop", "kind": "property", "parentName": "IPoint" |}prop: string;
+////interface IPoint {
+////    getDist(): number;
+////    new(): IPoint;
+////    (): any;
+////    [x:string]: number;
+////    prop: string;
 ////}
 ////
 /////// Module
-////{| "itemName": "Shapes", "kind": "module", "parentName": "" |}module Shapes {
-////
+////module Shapes {
 ////    // Class
-////    {| "itemName": "Point", "kind": "class", "parentName": "Shapes" |}export class Point implements IPoint {
-////        {| "itemName": "constructor", "kind": "constructor", "parentName": "Shapes.Point" |}constructor (public x: number, public y: number) { }
+////    export class Point implements IPoint {
+////        constructor (public x: number, public y: number) { }
 ////
 ////        // Instance member
-////        {| "itemName": "getDist", "kind": "method", "parentName": "Shapes.Point" |}getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+////        getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
 ////
 ////        // Getter
-////        {| "itemName": "value", "kind": "getter", "parentName": "Shapes.Point" |}get value(): number { return 0; }
+////        get value(): number { return 0; }
 ////
 ////        // Setter
-////        {| "itemName": "value", "kind": "setter", "parentName": "Shapes.Point" |}set value(newValue: number) { return; }
+////        set value(newValue: number) { return; }
 ////
 ////        // Static member
-////        {| "itemName": "origin", "kind": "property", "parentName": "Shapes.Point" |}static origin = new Point(0, 0);
+////        static origin = new Point(0, 0);
 ////
 ////        // Static method
-////        {| "itemName": "getOrigin", "kind": "method", "parentName": "Shapes.Point" |}private static getOrigin() { return Point.origin;}
+////        private static getOrigin() { return Point.origin;}
 ////    }
 ////
-////    {| "itemName": "Values", "kind": "enum", "parentName": "Shapes" |}enum Values {
-////        value1,
-////        {| "itemName": "value2", "kind": "property", "parentName": "Shapes.Values" |}value2,
-////        value3,
-////    }
+////    enum Values { value1, value2, value3 }
 ////}
 ////
 ////// Local variables
-////{| "itemName": "p", "kind": "var", "parentName": "" |}var p: IPoint = new Shapes.Point(3, 4);
-////{| "itemName": "dist", "kind": "var", "parentName": "" |}var dist = p.getDist();
+////var p: IPoint = new Shapes.Point(3, 4);
+////var dist = p.getDist();
 
-test.markers().forEach((marker) => {
-    if (marker.data) {
-        verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "dist",
+                "kind": "var"
+            },
+            {
+                "text": "IPoint",
+                "kind": "interface"
+            },
+            {
+                "text": "p",
+                "kind": "var"
+            },
+            {
+                "text": "Shapes",
+                "kind": "module"
+            }
+        ]
+    },
+    {
+        "text": "IPoint",
+        "kind": "interface",
+        "childItems": [
+            {
+                "text": "()",
+                "kind": "call"
+            },
+            {
+                "text": "new()",
+                "kind": "construct"
+            },
+            {
+                "text": "[]",
+                "kind": "index"
+            },
+            {
+                "text": "getDist",
+                "kind": "method"
+            },
+            {
+                "text": "prop",
+                "kind": "property"
+            }
+        ]
+    },
+    {
+        "text": "Shapes",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "Point",
+                "kind": "class",
+                "kindModifiers": "export"
+            },
+            {
+                "text": "Values",
+                "kind": "enum"
+            }
+        ]
+    },
+    {
+        "text": "Point",
+        "kind": "class",
+        "kindModifiers": "export",
+        "childItems": [
+            {
+                "text": "constructor",
+                "kind": "constructor"
+            },
+            {
+                "text": "getDist",
+                "kind": "method"
+            },
+            {
+                "text": "getOrigin",
+                "kind": "method",
+                "kindModifiers": "private,static"
+            },
+            {
+                "text": "origin",
+                "kind": "property",
+                "kindModifiers": "static"
+            },
+            {
+                "text": "value",
+                "kind": "getter"
+            },
+            {
+                "text": "value",
+                "kind": "setter"
+            },
+            {
+                "text": "x",
+                "kind": "property",
+                "kindModifiers": "public"
+            },
+            {
+                "text": "y",
+                "kind": "property",
+                "kindModifiers": "public"
+            }
+        ]
+    },
+    {
+        "text": "Values",
+        "kind": "enum",
+        "childItems": [
+            {
+                "text": "value1",
+                "kind": "property"
+            },
+            {
+                "text": "value2",
+                "kind": "property"
+            },
+            {
+                "text": "value3",
+                "kind": "property"
+            }
+        ]
     }
-});
-
-verify.getScriptLexicalStructureListCount(23);
+]);

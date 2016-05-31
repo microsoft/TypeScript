@@ -37,3 +37,22 @@ tests/cases/compiler/controlFlowLoopAnalysis.ts(13,25): error TS2345: Argument o
         }
     }
     
+    // Repro from #8511
+    
+    function mapUntilCant<a, b>(
+        values: a[],
+        canTake: (value: a, index: number) => boolean,
+        mapping: (value: a, index: number) => b
+    ): b[] {
+        let result: b[] = [];
+        for (let index = 0, length = values.length; index < length; index++) {
+            let value = values[index];
+            if (canTake(value, index)) {
+                result.push(mapping(value, index));
+            } else {
+                return result;
+            }
+        }
+        return result;
+    }
+    

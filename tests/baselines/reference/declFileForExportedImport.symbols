@@ -11,7 +11,7 @@ var y = a.x;
 
 export import b = a;
 >b : Symbol(b, Decl(declFileForExportedImport_1.ts, 2, 12))
->a : Symbol(a, Decl(declFileForExportedImport_0.ts, 0, 0))
+>a : Symbol(a, Decl(declFileForExportedImport_1.ts, 0, 0))
 
 var z = b.x;
 >z : Symbol(z, Decl(declFileForExportedImport_1.ts, 5, 3))

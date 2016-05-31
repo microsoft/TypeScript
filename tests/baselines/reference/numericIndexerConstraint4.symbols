@@ -21,7 +21,6 @@ var x: {
 >idx : Symbol(idx, Decl(numericIndexerConstraint4.ts, 9, 5))
 >A : Symbol(A, Decl(numericIndexerConstraint4.ts, 0, 0))
 
-} = { data: new B() }
->data : Symbol(data, Decl(numericIndexerConstraint4.ts, 10, 5))
+} = { 0: new B() }
 >B : Symbol(B, Decl(numericIndexerConstraint4.ts, 2, 1))
 
