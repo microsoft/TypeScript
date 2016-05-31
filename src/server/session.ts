@@ -69,7 +69,7 @@ namespace ts.server {
     }
 
     function formatDiag(fileName: string, project: Project, diag: ts.Diagnostic): protocol.Diagnostic {
-        const scriptInfo = project.lsHost.getScriptInfoForRootFile(fileName);
+        const scriptInfo = project.getScriptInfo(fileName);
         return {
             start: scriptInfo.positionToLineOffset(diag.start),
             end: scriptInfo.positionToLineOffset(diag.start + diag.length),
@@ -318,7 +318,7 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const scriptInfo = project.getScriptInfo(file);
             const position = scriptInfo.lineOffsetToPosition(line, offset);
 
             const definitions = project.languageService.getDefinitionAtPosition(file, position);
@@ -327,12 +327,12 @@ namespace ts.server {
             }
 
             return definitions.map(def => {
-                const defScriptInfo = project.lsHost.getScriptInfoForRootFile(def.fileName);
+                const defScriptInfo = project.getScriptInfo(def.fileName);
                 return {
                     file: def.fileName,
                     start: defScriptInfo.positionToLineOffset(def.textSpan.start),
                     end: defScriptInfo.positionToLineOffset(ts.textSpanEnd(def.textSpan))
-                }
+                };
             });
         }
 
@@ -343,7 +343,7 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const scriptInfo = project.getScriptInfo(file);
             const position = scriptInfo.lineOffsetToPosition(line, offset);
 
             const definitions = project.languageService.getTypeDefinitionAtPosition(file, position);
@@ -352,12 +352,12 @@ namespace ts.server {
             }
 
             return definitions.map(def => {
-                const defScriptInfo = project.lsHost.getScriptInfoForRootFile(def.fileName);
+                const defScriptInfo = project.getScriptInfo(def.fileName);
                 return {
                     file: def.fileName,
                     start: defScriptInfo.positionToLineOffset(def.textSpan.start),
                     end: defScriptInfo.positionToLineOffset(ts.textSpanEnd(def.textSpan))
-                }
+                };
             });
         }
 
@@ -369,7 +369,7 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const scriptInfo = project.lsHost.getScriptInfo(fileName);
+            const scriptInfo = project.getScriptInfo(fileName);
             const position = scriptInfo.lineOffsetToPosition(line, offset);
 
             const occurrences = project.languageService.getOccurrencesAtPosition(fileName, position);
@@ -380,7 +380,7 @@ namespace ts.server {
 
             return occurrences.map(occurrence => {
                 const { fileName, isWriteAccess, textSpan } = occurrence;
-                const scriptInfo = project.lsHost.getScriptInfo(fileName);
+                const scriptInfo = project.getScriptInfo(fileName);
                 const start = scriptInfo.positionToLineOffset(textSpan.start);
                 const end = scriptInfo.positionToLineOffset(ts.textSpanEnd(textSpan));
                 return {
@@ -400,7 +400,7 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const scriptInfo = project.lsHost.getScriptInfo(fileName);
+            const scriptInfo = project.getScriptInfo(fileName);
             const position = scriptInfo.lineOffsetToPosition(line, offset);
 
             const documentHighlights = project.languageService.getDocumentHighlights(fileName, position, filesToSearch);
@@ -414,7 +414,7 @@ namespace ts.server {
             function convertToDocumentHighlightsItem(documentHighlights: ts.DocumentHighlights): ts.server.protocol.DocumentHighlightsItem {
                 const { fileName, highlightSpans } = documentHighlights;
 
-                const scriptInfo = project.lsHost.getScriptInfo(fileName);
+                const scriptInfo = project.getScriptInfo(fileName);
                 return {
                     file: fileName,
                     highlightSpans: highlightSpans.map(convertHighlightSpan)
@@ -454,7 +454,7 @@ namespace ts.server {
 
             const defaultProject = projects[0];
             // The rename info should be the same for every project
-            const scriptInfo = defaultProject.lsHost.getScriptInfoForRootFile(file);
+            const scriptInfo = defaultProject.getScriptInfo(file);
             const position = scriptInfo.lineOffsetToPosition(line, offset);
             const renameInfo = defaultProject.languageService.getRenameInfo(file, position);
             if (!renameInfo) {
@@ -477,12 +477,12 @@ namespace ts.server {
                     }
 
                     return renameLocations.map(location => {
-                        const locationScriptInfo = project.lsHost.getScriptInfoForRootFile(location.fileName);
+                        const locationScriptInfo = project.getScriptInfo(location.fileName);
                         return <protocol.FileSpan>{
                             file: location.fileName,
                             start: locationScriptInfo.positionToLineOffset(location.textSpan.start),
                             end: locationScriptInfo.positionToLineOffset(ts.textSpanEnd(location.textSpan)),
-                        }
+                        };
                     });
                 },
                 compareRenameLocation,
@@ -537,7 +537,7 @@ namespace ts.server {
             }
 
             const defaultProject = projects[0];
-            const scriptInfo = defaultProject.lsHost.getScriptInfoForRootFile(file);
+            const scriptInfo = defaultProject.getScriptInfo(file);
             const position = scriptInfo.lineOffsetToPosition(line, offset);
             const nameInfo = defaultProject.languageService.getQuickInfoAtPosition(file, position);
             if (!nameInfo) {
@@ -557,7 +557,7 @@ namespace ts.server {
                     }
 
                     return references.map(ref => {
-                        const refScriptInfo = project.lsHost.getScriptInfoForRootFile(ref.fileName);
+                        const refScriptInfo = project.getScriptInfo(ref.fileName);
                         const start = refScriptInfo.positionToLineOffset(ref.textSpan.start);
                         const refLineSpan = refScriptInfo.lineToTextSpan(start.line - 1);
                         const lineText = refScriptInfo.snap().getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
@@ -610,7 +610,7 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const scriptInfo = project.getScriptInfo(file);
             const position = scriptInfo.lineOffsetToPosition(line, offset);
             const quickInfo = project.languageService.getQuickInfoAtPosition(file, position);
             if (!quickInfo) {
@@ -636,7 +636,7 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const scriptInfo = project.getScriptInfo(file);
             const startPosition = scriptInfo.lineOffsetToPosition(line, offset);
             const endPosition = scriptInfo.lineOffsetToPosition(endLine, endOffset);
 
@@ -664,7 +664,7 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const scriptInfo = project.getScriptInfo(file);
             const position = scriptInfo.lineOffsetToPosition(line, offset);
             const formatOptions = this.projectService.getFormatCodeOptions(file);
             const edits = project.languageService.getFormattingEditsAfterKeystroke(file, position, key,
@@ -737,7 +737,7 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const scriptInfo = project.getScriptInfo(file);
             const position = scriptInfo.lineOffsetToPosition(line, offset);
 
             const completions = project.languageService.getCompletionsAtPosition(file, position);
@@ -761,7 +761,7 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const scriptInfo = project.getScriptInfo(file);
             const position = scriptInfo.lineOffsetToPosition(line, offset);
 
             return entryNames.reduce((accum: protocol.CompletionEntryDetails[], entryName: string) => {
@@ -780,7 +780,7 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+            const scriptInfo = project.getScriptInfo(file);
             const position = scriptInfo.lineOffsetToPosition(line, offset);
             const helpItems = project.languageService.getSignatureHelpItems(file, position);
             if (!helpItems) {
@@ -821,7 +821,7 @@ namespace ts.server {
             const file = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(file);
             if (project) {
-                const scriptInfo = project.lsHost.getScriptInfoForRootFile(file);
+                const scriptInfo = project.getScriptInfo(file);
                 const start = scriptInfo.lineOffsetToPosition(line, offset);
                 const end = scriptInfo.lineOffsetToPosition(endLine, endOffset);
                 if (start >= 0) {
@@ -839,7 +839,7 @@ namespace ts.server {
             if (project) {
                 this.changeSeq++;
                 // make sure no changes happen before this one is finished
-                project.lsHost.reloadScript(file, tmpfile, () => {
+                project.reloadScript(file, tmpfile, () => {
                     this.output(undefined, CommandNames.Reload, reqSeq);
                 });
             }
@@ -851,7 +851,7 @@ namespace ts.server {
 
             const project = this.projectService.getProjectForFile(file);
             if (project) {
-                project.lsHost.saveTo(file, tmpfile);
+                project.saveTo(file, tmpfile);
             }
         }
 
@@ -868,7 +868,7 @@ namespace ts.server {
                 return undefined;
             }
 
-            const scriptInfo = project.lsHost.getScriptInfoForRootFile(fileName);
+            const scriptInfo = project.getScriptInfo(fileName);
 
             return items.map(item => ({
                 text: item.text,
@@ -915,7 +915,7 @@ namespace ts.server {
                     }
 
                     return navItems.map((navItem) => {
-                        const scriptInfo = project.lsHost.getScriptInfoForRootFile(navItem.fileName);
+                        const scriptInfo = project.getScriptInfo(navItem.fileName);
                         const start = scriptInfo.positionToLineOffset(navItem.textSpan.start);
                         const end = scriptInfo.positionToLineOffset(ts.textSpanEnd(navItem.textSpan));
                         const bakedItem: protocol.NavtoItem = {
@@ -963,7 +963,7 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const scriptInfo = project.lsHost.getScriptInfoForRootFile(fileName);
+            const scriptInfo = project.getScriptInfo(fileName);
             const position = scriptInfo.lineOffsetToPosition(line, offset);
 
             const spans = project.languageService.getBraceMatchingAtPosition(file, position);

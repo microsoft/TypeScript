@@ -48,7 +48,6 @@ namespace ts.server {
 
     export class ScriptInfo {
         svc: ScriptVersionCache;
-        children: ScriptInfo[] = [];     // files referenced by this file
         defaultProject: Project;      // project to use by default for file
         fileWatcher: FileWatcher;
         formatCodeOptions: ts.FormatCodeOptions;
@@ -135,20 +134,14 @@ namespace ts.server {
     }
 
     export class LSHost implements ts.LanguageServiceHost {
-        compilationSettings: ts.CompilerOptions;
-        filenameToScript: ts.FileMap<ScriptInfo>;
-        roots: ScriptInfo[] = [];
-
+        private compilationSettings: ts.CompilerOptions;
         private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;
         private resolvedTypeReferenceDirectives: ts.FileMap<Map<TimestampedResolvedTypeReferenceDirective>>;
         private moduleResolutionHost: ts.ModuleResolutionHost;
-        private getCanonicalFileName: (fileName: string) => string;
 
-        constructor(public host: ServerHost, public project: Project) {
-            this.getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+        constructor(private host: ServerHost, private project: Project) {
             this.resolvedModuleNames = createFileMap<Map<TimestampedResolvedModule>>();
             this.resolvedTypeReferenceDirectives = createFileMap<Map<TimestampedResolvedTypeReferenceDirective>>();
-            this.filenameToScript = createFileMap<ScriptInfo>();
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
                 readFile: fileName => this.host.readFile(fileName),
@@ -163,7 +156,7 @@ namespace ts.server {
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
             getResult: (s: T) => R): R[] {
 
-            const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const path = toPath(containingFile, this.host.getCurrentDirectory(), this.project.getCanonicalFileName);
             const currentResolutionsInFile = cache.get(path);
 
             const newResolutions: Map<T> = {};
@@ -225,13 +218,8 @@ namespace ts.server {
             return ts.combinePaths(nodeModuleBinDir, ts.getDefaultLibFileName(this.compilationSettings));
         }
 
-        getScriptInfoForRootFile(fileName: string): ScriptInfo {
-            const path = toPath(fileName, this.host.getCurrentDirectory(), this.getCanonicalFileName);
-            return this.filenameToScript.get(path);
-        }
-
         getScriptSnapshot(filename: string): ts.IScriptSnapshot {
-            const scriptInfo = this.getScriptInfo(filename);
+            const scriptInfo = this.project.getScriptInfo(filename);
             if (scriptInfo) {
                 return scriptInfo.snap();
             }
@@ -250,11 +238,11 @@ namespace ts.server {
         }
 
         getScriptFileNames() {
-            return this.roots.map(root => root.fileName);
+            return this.project.getRootFiles();
         }
 
         getScriptKind(fileName: string) {
-            const info = this.getScriptInfo(fileName);
+            const info = this.project.getScriptInfo(fileName);
             if (!info) {
                 return undefined;
             }
@@ -266,7 +254,7 @@ namespace ts.server {
         }
 
         getScriptVersion(filename: string) {
-            return this.getScriptInfo(filename).svc.latestVersion().toString();
+            return this.project.getScriptInfo(filename).svc.latestVersion().toString();
         }
 
         getCurrentDirectory(): string {
@@ -275,73 +263,22 @@ namespace ts.server {
 
         removeReferencedFile(info: ScriptInfo) {
             if (!info.isOpen) {
-                this.filenameToScript.remove(info.path);
                 this.resolvedModuleNames.remove(info.path);
                 this.resolvedTypeReferenceDirectives.remove(info.path);
-            }
-        }
-
-        getScriptInfo(filename: string): ScriptInfo {
-            const path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
-            let scriptInfo = this.filenameToScript.get(path);
-            if (!scriptInfo) {
-                scriptInfo = this.project.openReferencedFile(filename);
-                if (scriptInfo) {
-                    this.filenameToScript.set(path, scriptInfo);
-                }
-            }
-            return scriptInfo;
-        }
-
-        addRoot(info: ScriptInfo) {
-            if (!this.filenameToScript.contains(info.path)) {
-                this.filenameToScript.set(info.path, info);
-                this.roots.push(info);
             }
         }
 
         removeRoot(info: ScriptInfo) {
-            if (!this.filenameToScript.contains(info.path)) {
-                this.filenameToScript.remove(info.path);
-                this.roots = copyListRemovingItem(info, this.roots);
-                this.resolvedModuleNames.remove(info.path);
-                this.resolvedTypeReferenceDirectives.remove(info.path);
-            }
-        }
-
-        saveTo(filename: string, tmpfilename: string) {
-            const script = this.getScriptInfo(filename);
-            if (script) {
-                const snap = script.snap();
-                this.host.writeFile(tmpfilename, snap.getText(0, snap.getLength()));
-            }
-        }
-
-        reloadScript(filename: string, tmpfilename: string, cb: () => any) {
-            const script = this.getScriptInfo(filename);
-            if (script) {
-                script.svc.reloadFromFile(tmpfilename, cb);
-            }
-        }
-
-        editScript(filename: string, start: number, end: number, newText: string) {
-            const script = this.getScriptInfo(filename);
-            if (script) {
-                script.editContent(start, end, newText);
-                return;
-            }
-
-            throw new Error("No script with name '" + filename + "'");
+            this.resolvedModuleNames.remove(info.path);
+            this.resolvedTypeReferenceDirectives.remove(info.path);
         }
 
         resolvePath(path: string): string {
-            const result = this.host.resolvePath(path);
-            return result;
+            return this.host.resolvePath(path);
         }
 
         fileExists(path: string): boolean {
-            const result = this.host.fileExists(path);
-            return result;
+            return this.host.fileExists(path);
         }
 
         directoryExists(path: string): boolean {
@@ -356,7 +293,7 @@ namespace ts.server {
     }
 
     export class Project {
-        lsHost: LSHost;
+        private lsHost: LSHost;
         languageService: LanguageService;
         projectFilename: string;
         projectFileWatcher: FileWatcher;
@@ -369,7 +306,14 @@ namespace ts.server {
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
 
+        getCanonicalFileName: (fileName: string) => string;
+
+        private rootFiles: ScriptInfo[] = [];
+        private pathToScriptInfo: ts.FileMap<ScriptInfo>;
+
         constructor(public projectService: ProjectService, documentRegistry: ts.DocumentRegistry, public projectOptions?: ProjectOptions) {
+            this.pathToScriptInfo = ts.createFileMap<ScriptInfo>();
+            this.getCanonicalFileName = ts.createGetCanonicalFileName(this.projectService.host.useCaseSensitiveFileNames);
             if (projectOptions && projectOptions.files) {
                 // If files are listed explicitly, allow all extensions
                 projectOptions.compilerOptions.allowNonTsExtensions = true;
@@ -401,7 +345,7 @@ namespace ts.server {
         }
 
         getRootFiles() {
-            return this.lsHost.roots.map(info => info.fileName);
+            return this.rootFiles.map(info => info.fileName);
         }
 
         getFileNames() {
@@ -423,11 +367,14 @@ namespace ts.server {
         }
 
         isRoot(info: ScriptInfo) {
-            return this.lsHost.roots.some(root => root === info);
+            return this.rootFiles.some(root => root === info);
         }
 
         removeReferencedFile(info: ScriptInfo) {
-            this.lsHost.removeReferencedFile(info);
+            if (!info.isOpen) {
+                this.pathToScriptInfo.remove(info.path);
+                this.lsHost.removeReferencedFile(info);
+            }
             this.updateGraph();
         }
 
@@ -456,12 +403,31 @@ namespace ts.server {
 
         // add a root file to project
         addRoot(info: ScriptInfo) {
-            this.lsHost.addRoot(info);
+            if (!this.pathToScriptInfo.contains(info.path)) {
+                this.pathToScriptInfo.set(info.path, info);
+                this.rootFiles.push(info);
+            }
         }
 
         // remove a root file from project
         removeRoot(info: ScriptInfo) {
-            this.lsHost.removeRoot(info);
+            if (!this.pathToScriptInfo.contains(info.path)) {
+                this.pathToScriptInfo.remove(info.path);
+                this.rootFiles = copyListRemovingItem(info, this.rootFiles);
+                this.lsHost.removeRoot(info);
+            }
+        }
+
+        getScriptInfo(fileName: string) {
+            const path = toPath(fileName, this.projectService.host.getCurrentDirectory(), this.getCanonicalFileName);
+            let scriptInfo = this.pathToScriptInfo.get(path);
+            if (!scriptInfo) {
+                scriptInfo = this.openReferencedFile(fileName);
+                if (scriptInfo) {
+                    this.pathToScriptInfo.set(path, scriptInfo);
+                }
+            }
+            return scriptInfo;
         }
 
         filesToString() {
@@ -477,6 +443,30 @@ namespace ts.server {
                 projectOptions.compilerOptions.allowNonTsExtensions = true;
                 this.lsHost.setCompilationSettings(projectOptions.compilerOptions);
             }
+        }
+       saveTo(filename: string, tmpfilename: string) {
+            const script = this.getScriptInfo(filename);
+            if (script) {
+                const snap = script.snap();
+                this.projectService.host.writeFile(tmpfilename, snap.getText(0, snap.getLength()));
+            }
+        }
+
+        reloadScript(filename: string, tmpfilename: string, cb: () => any) {
+            const script = this.getScriptInfo(filename);
+            if (script) {
+                script.svc.reloadFromFile(tmpfilename, cb);
+            }
+        }
+
+        editScript(filename: string, start: number, end: number, newText: string) {
+            const script = this.getScriptInfo(filename);
+            if (script) {
+                script.editContent(start, end, newText);
+                return;
+            }
+
+            throw new Error("No script with name '" + filename + "'");
         }
     }
 
@@ -1300,7 +1290,7 @@ namespace ts.server {
                     return errors;
                 }
                 else {
-                    const oldFileNames = project.lsHost.roots.map(info => info.fileName);
+                    const oldFileNames = project.getRootFiles();
                     const newFileNames = ts.filter(projectOptions.files, f => this.host.fileExists(f));
                     const fileNamesToRemove = oldFileNames.filter(f => newFileNames.indexOf(f) < 0);
                     const fileNamesToAdd = newFileNames.filter(f => oldFileNames.indexOf(f) < 0);
