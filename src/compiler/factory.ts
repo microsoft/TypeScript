@@ -1882,11 +1882,11 @@ namespace ts {
 
     export function setOriginalNode<T extends Node>(node: T, original: Node): T {
         node.original = original;
-        if (original && original.transformId && !node.transformId) {
-            node.transformId = original.transformId;
-            node.emitFlags = original.emitFlags;
-            node.commentRange = original.commentRange;
-            node.sourceMapRange = original.sourceMapRange;
+        if (original) {
+            const { emitFlags, commentRange, sourceMapRange } = original;
+            if (emitFlags) node.emitFlags = emitFlags;
+            if (commentRange) node.commentRange = commentRange;
+            if (sourceMapRange) node.sourceMapRange = sourceMapRange;
         }
         return node;
     }

@@ -17136,7 +17136,7 @@ namespace ts {
 
         function isArgumentsLocalBinding(node: Identifier): boolean {
             if (!isGeneratedIdentifier(node)) {
-                node = getSourceTreeNodeOfType(node, isIdentifier);
+                node = getParseTreeNode(node, isIdentifier);
                 if (node) {
                     return getReferencedValueSymbol(node) === argumentsSymbol;
                 }
@@ -17182,7 +17182,7 @@ namespace ts {
         // When resolved as an expression identifier, if the given node references an exported entity, return the declaration
         // node of the exported entity's container. Otherwise, return undefined.
         function getReferencedExportContainer(node: Identifier, prefixLocals?: boolean): SourceFile | ModuleDeclaration | EnumDeclaration {
-            node = getSourceTreeNodeOfType(node, isIdentifier);
+            node = getParseTreeNode(node, isIdentifier);
             if (node) {
                 // When resolving the export container for the name of a module or enum
                 // declaration, we need to start resolution at the declaration's container.
@@ -17220,7 +17220,7 @@ namespace ts {
         // When resolved as an expression identifier, if the given node references an import, return the declaration of
         // that import. Otherwise, return undefined.
         function getReferencedImportDeclaration(node: Identifier): Declaration {
-            node = getSourceTreeNodeOfType(node, isIdentifier);
+            node = getParseTreeNode(node, isIdentifier);
             if (node) {
                 const symbol = getReferencedValueSymbol(node);
                 if (symbol && symbol.flags & SymbolFlags.Alias) {
@@ -17279,7 +17279,7 @@ namespace ts {
         // return the declaration of that entity. Otherwise, return undefined.
         function getReferencedDeclarationWithCollidingName(node: Identifier): Declaration {
             if (!isGeneratedIdentifier(node)) {
-                node = getSourceTreeNodeOfType(node, isIdentifier);
+                node = getParseTreeNode(node, isIdentifier);
                 if (node) {
                     const symbol = getReferencedValueSymbol(node);
                     if (symbol && isSymbolOfDeclarationWithCollidingName(symbol)) {
@@ -17294,7 +17294,7 @@ namespace ts {
         // Return true if the given node is a declaration of a nested block scoped entity with a name that either hides an
         // existing name or might hide a name when compiled downlevel
         function isDeclarationWithCollidingName(node: Declaration): boolean {
-            node = getSourceTreeNodeOfType(node, isDeclaration);
+            node = getParseTreeNode(node, isDeclaration);
             if (node) {
                 const symbol = getSymbolOfNode(node);
                 if (symbol) {
@@ -17306,7 +17306,7 @@ namespace ts {
         }
 
         function isValueAliasDeclaration(node: Node): boolean {
-            node = getSourceTreeNode(node);
+            node = getParseTreeNode(node);
             if (node === undefined) {
                 // A synthesized node comes from an emit transformation and is always a value.
                 return true;
@@ -17332,7 +17332,7 @@ namespace ts {
         }
 
         function isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean {
-            node = getSourceTreeNodeOfType(node, isImportEqualsDeclaration);
+            node = getParseTreeNode(node, isImportEqualsDeclaration);
             if (node === undefined || node.parent.kind !== SyntaxKind.SourceFile || !isInternalModuleImportEqualsDeclaration(node)) {
                 // parent is not source file or it is not reference to internal module
                 return false;
@@ -17358,7 +17358,7 @@ namespace ts {
         }
 
         function isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean {
-            node = getSourceTreeNode(node);
+            node = getParseTreeNode(node);
             if (isAliasSymbolDeclaration(node)) {
                 const symbol = getSymbolOfNode(node);
                 if (symbol && getSymbolLinks(symbol).referenced) {
@@ -17394,7 +17394,7 @@ namespace ts {
         }
 
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
-            node = getSourceTreeNode(node);
+            node = getParseTreeNode(node);
             return node ? getNodeLinks(node).flags : undefined;
         }
 
@@ -17525,7 +17525,7 @@ namespace ts {
 
         function getReferencedValueDeclaration(reference: Identifier): Declaration {
             if (!isGeneratedIdentifier(reference)) {
-                reference = getSourceTreeNodeOfType(reference, isIdentifier);
+                reference = getParseTreeNode(reference, isIdentifier);
                 if (reference) {
                     const symbol = getReferencedValueSymbol(reference);
                     if (symbol) {
