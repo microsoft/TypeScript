@@ -8643,25 +8643,23 @@ namespace ts {
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
             const func = parameter.parent;
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
-                if (func.kind === SyntaxKind.FunctionExpression || func.kind === SyntaxKind.ArrowFunction) {
-                    const iife = getImmediatelyInvokedFunctionExpression(func);
-                    if (iife) {
-                        const indexOfParameter = indexOf(func.parameters, parameter);
-                        if (iife.arguments && indexOfParameter < iife.arguments.length) {
-                            if (parameter.dotDotDotToken) {
-                                const restTypes: Type[] = [];
-                                for (let i = indexOfParameter; i < iife.arguments.length; i++) {
-                                    restTypes.push(getTypeOfExpression(iife.arguments[i]));
-                                }
-                                return createArrayType(getUnionType(restTypes));
+                const iife = getImmediatelyInvokedFunctionExpression(func);
+                if (iife) {
+                    const indexOfParameter = indexOf(func.parameters, parameter);
+                    if (iife.arguments && indexOfParameter < iife.arguments.length) {
+                        if (parameter.dotDotDotToken) {
+                            const restTypes: Type[] = [];
+                            for (let i = indexOfParameter; i < iife.arguments.length; i++) {
+                                restTypes.push(getTypeOfExpression(iife.arguments[i]));
                             }
-                            const links = getNodeLinks(iife);
-                            const cached = links.resolvedSignature;
-                            links.resolvedSignature = anySignature;
-                            const type = checkExpression(iife.arguments[indexOfParameter]);
-                            links.resolvedSignature = cached;
-                            return type;
+                            return createArrayType(getUnionType(restTypes));
                         }
+                        const links = getNodeLinks(iife);
+                        const cached = links.resolvedSignature;
+                        links.resolvedSignature = anySignature;
+                        const type = checkExpression(iife.arguments[indexOfParameter]);
+                        links.resolvedSignature = cached;
+                        return type;
                     }
                 }
                 const contextualSignature = getContextualSignature(func);
