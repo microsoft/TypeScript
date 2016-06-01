@@ -757,7 +757,7 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
-function runTestsAndWriteOutput(file) {
+function runTestsAndWriteOutput(file, defaultSubsets) {
     cleanTestDirs();
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
@@ -772,114 +772,238 @@ function runTestsAndWriteOutput(file) {
         testTimeout = 100000;
     }
 
-    var args = [];
-    args.push("-R", "tap");
-    args.push("--no-colors");
-    args.push("-t", testTimeout);
-    if (tests) {
-        args.push("-g", '"' + tests + '"');
+    var subsetRegexes;
+    var subsets;
+    if (tests || defaultSubsets.length === 0) {
+        subsetRegexes = [tests];
+        subsets = [tests];
     }
-    args.push(run);
+    else {
+        subsets = [];
+        subsetRegexes = [];
+        negations = [];
+        for (const subset of defaultSubsets) {
+            subsets.push(subset.name);
+            subsetRegexes.push(subset.pattern);
+            negations.push(subset.pattern);
+        }
 
-    var cmd = "mocha " + args.join(" ");
-    console.log(cmd);
-    var p = child_process.spawn(
-        process.platform === "win32" ? "cmd" : "/bin/sh",
-        process.platform === "win32" ? ["/c", cmd] : ["-c", cmd], {
-            windowsVerbatimArguments: true
-        });
+        subsets.push("other");
+        subsetRegexes.push("^(?!" + negations.join("|") + ")");
+    }
 
     var out = fs.createWriteStream(file);
+    var outFileNames = subsetRegexes.length !== 1 ? [] : undefined;
     var tapRange = /^(\d+)\.\.(\d+)(?:$|\r\n?|\n)/;
     var tapOk = /^ok\s/;
     var tapNotOk = /^not\sok\s/;
-    var tapComment = /^#/;
+    var tapComment = /^#(?: (tests|pass|fail) (\d+)$)?/;
     var typeError = /^\s+TypeError:/;
     var debugError = /^\s+Error:\sDebug\sFailure\./;
-    var progress = new ProgressBar("Running tests...");
-    var expectedTestCount = 0;
-    var testCount = 0;
-    var failureCount = 0;
-    var successCount = 0;
-    var comments = [];
-    var typeErrorCount = 0;
-    var debugErrorCount = 0;
-
-    var rl = readline.createInterface({
-        input: p.stdout,
-        terminal: false
-    });
-
-    function updateProgress(percentComplete) {
-        progress.update(percentComplete,
-            /*foregroundColor*/ failureCount > 0
-                ? "red"
-                : successCount === expectedTestCount
-                    ? "green"
-                    : "cyan",
-            /*backgroundColor*/ "gray"
-        );
-    }
-
-    rl.on("line", function (line) {
-        var m = tapRange.exec(line);
-        if (m) {
-            expectedTestCount = parseInt(m[2]);
-            return;
-        }
-
-        if (tapOk.test(line)) {
-            out.write(line.replace(/^ok\s+\d+\s+/, "ok ") + os.EOL);
-            successCount++;
-        }
-        else if (tapNotOk.test(line)) {
-            out.write(line.replace(/^not\s+ok\s+\d+\s+/, "not ok ") + os.EOL);
-            failureCount++;
+    var progress = new ProgressBar();
+    var totalTypeErrorCount = 0;
+    var totalDebugErrorCount = 0;
+    var totalReportedTestCount = 0;
+    var totalReportedPassCount = 0;
+    var totalReportedFailCount = 0;
+    var counter = subsetRegexes.length;
+    var errorStatus;
+    subsetRegexes.forEach(function (subsetRegex, i) {
+        var expectedTestCount = 0;
+        var testCount = 0;
+        var failureCount = 0;
+        var successCount = 0;
+        var reportedTestCount = 0;
+        var reportedPassCount = 0;
+        var reportedFailCount = 0;
+        var comments = [];
+        var typeErrorCount = 0;
+        var debugErrorCount = 0;
+        var outFileName;
+        var outFile;
+        if (subsetRegexes.length === 1) {
+            outFile = out;
         }
         else {
-            out.write(line + os.EOL);
-            if (tapComment.test(line)) {
-                comments.push(line);
+            outFileName = path.join(os.tmpdir(), path.basename(file) + "." + i);
+            outFileNames[i] = outFileName;
+            outFile = fs.createWriteStream(outFileName);
+        }
+
+        var args = [];
+        args.push("-R", "tap");
+        args.push("--no-colors");
+        args.push("-t", testTimeout);
+        if (subsetRegex) {
+            args.push("-g", '"' + subsetRegex + '"');
+        }
+
+        args.push(run);
+
+        var cmd = "mocha " + args.join(" ");
+        if (subsetRegexes.length === 1) {
+            console.log(cmd);
+        }
+
+        updateProgress(0);
+
+        var p = child_process.spawn(
+            process.platform === "win32" ? "cmd" : "/bin/sh",
+            process.platform === "win32" ? ["/c", cmd] : ["-c", cmd], {
+                windowsVerbatimArguments: true,
+                env: { NODE_ENV: "development" }
+            });
+
+        var rl = readline.createInterface({
+            input: p.stdout,
+            terminal: false
+        });
+
+        var start;
+        var end;
+        rl.on("line", function (line) {
+            if (!start) start = Date.now();
+            var m = tapRange.exec(line);
+            if (m) {
+                expectedTestCount = parseInt(m[2]);
+                return;
             }
-            else if (typeError.test(line)) {
-                typeErrorCount++;
+
+            if (tapOk.test(line)) {
+                outFile.write(line.replace(/^ok\s+\d+\s+/, "ok ") + os.EOL);
+                successCount++;
             }
-            else if (debugError.test(line)) {
-                debugErrorCount++;
+            else if (tapNotOk.test(line)) {
+                outFile.write(line.replace(/^not\s+ok\s+\d+\s+/, "not ok ") + os.EOL);
+                failureCount++;
             }
+            else {
+                m = tapComment.exec(line);
+                if (m) {
+                    if (m[1] === "tests") {
+                        end = Date.now();
+                        reportedTestCount = parseInt(m[2]);
+                    }
+                    else if (m[1] === "pass") {
+                        reportedPassCount = parseInt(m[2]);
+                    }
+                    else if (m[1] === "fail") {
+                        reportedFailCount = parseInt(m[2]);
+                    }
+                    else {
+                        outFile.write(line + os.EOL);
+                    }
+                }
+                else {
+                    outFile.write(line + os.EOL);
+                    if (typeError.test(line)) {
+                        typeErrorCount++;
+                    }
+                    else if (debugError.test(line)) {
+                        debugErrorCount++;
+                    }
+                }
+                return;
+            }
+
+            testCount++;
+
+            var percentComplete = testCount * 100 / expectedTestCount;
+            updateProgress(percentComplete);
+        });
+
+        p.on("exit", function (status) {
+            totalReportedTestCount += reportedTestCount;
+            totalReportedPassCount += reportedPassCount;
+            totalReportedFailCount += reportedFailCount;
+            totalTypeErrorCount += typeErrorCount;
+            totalDebugErrorCount += debugErrorCount;
+
+            var duration = end - start;
+            var summary =
+                "pass: " + reportedPassCount + "/" + reportedTestCount +
+                ", duration: " + (duration / 1000).toFixed(2) + "s";
+
+            updateProgress(100, summary);
+
+            if (subsetRegexes.length !== 1) {
+                outFile.close();
+            }
+
+            if (status && !errorStatus) {
+                errorStatus = status;
+            }
+
+            counter--;
+            if (counter === 0) {
+                if (subsetRegexes.length !== 1) {
+                    concatenate();
+                }
+                else {
+                    finish();
+                }
+            }
+        });
+
+        function updateProgress(percentComplete, status) {
+            var title = status || (percentComplete < 100 ? "running..." : "done");
+            if (subsetRegexes.length !== 1) {
+                title = "[" + subsets[i] + "] " + title;
+            }
+
+            progress.update(percentComplete,
+                /*foregroundColor*/ failureCount > 0
+                    ? "red"
+                    : successCount === expectedTestCount
+                        ? "green"
+                        : "cyan",
+                /*backgroundColor*/ "gray",
+                title,
+                i
+            );
+        }
+    });
+
+    function concatenate() {
+        if (outFileNames.length > 0) {
+            var outFileName = outFileNames.shift();
+            var outFile = fs.createReadStream(outFileName);
+            outFile.pipe(out, { end: false });
+            outFile.on("end", function () {
+                fs.unlinkSync(outFileName);
+                concatenate();
+            });
             return;
         }
 
-        testCount++;
+        finish();
+    }
 
-        var percentComplete = testCount * 100 / expectedTestCount;
-        updateProgress(percentComplete);
-    });
+    function finish() {
+        out.write(
+            "# tests " + totalReportedTestCount + os.EOL +
+            "# pass " + totalReportedPassCount + os.EOL +
+            "# fail " + totalReportedFailCount + os.EOL);
+        console.log("# tests " + totalReportedTestCount);
+        console.log("# pass " + totalReportedPassCount);
+        console.log("# fail " + totalReportedFailCount);
 
-    p.on("exit", function (status) {
-        if (progress.visible) {
-            updateProgress(100);
-            process.stdout.write("done." + os.EOL);
+        if (totalTypeErrorCount) {
+            console.log("# type errors " + totalTypeErrorCount);
         }
 
-        console.log(comments.join(os.EOL));
-
-        if (typeErrorCount) {
-            console.log("# type errors: %s", typeErrorCount);
-        }
-
-        if (debugErrorCount) {
-            console.log("# debug errors: %s", debugErrorCount);
+        if (totalDebugErrorCount) {
+            console.log("# debug errors " + totalDebugErrorCount);
         }
 
         deleteTemporaryProjectOutput();
-        if (status) {
-            fail("Process exited with code " + status);
+        if (totalReportedFailCount) {
+            fail("Test failures reported: " + totalReportedFailCount);
         }
         else {
             complete();
         }
-    });
+    }
 }
 
 function runConsoleTests(defaultReporter, runInParallel, dirty) {
@@ -1014,8 +1138,23 @@ task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
 }, {async: true});
 
 task("runtests-file", ["build-rules", "tests", builtLocalDirectory], function () {
-    runTestsAndWriteOutput("tests/baselines/local/testresults.tap");
+    var subsets = [];
+    var cores = os.cpus().length;
+    if (cores > 1) {
+        subsets.push({ name: "conformance", pattern: "^conformance\\b" });
+        subsets.push({ name: "compiler", pattern: "^compiler\\b" });
+        subsets.push({ name: "projects", pattern: "^Projects\\b" });
+        if (cores > 4) {
+            subsets.push({ name: "fourslash", pattern: "^fourslash\\b" });
+            subsets.push({ name: "fourslash (shims, shims-pp, server)", pattern: "^fourslash-" });
+        }
+        else {
+            subsets.push({ name: "fourslash", pattern: "^fourslash" });
+        }
+    }
+    runTestsAndWriteOutput("tests/baselines/local/testresults.tap", subsets);
 }, { async: true });
+
 task("runtests-dirty", ["build-rules", "tests", builtLocalDirectory], function () {
     runConsoleTests("mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*dirty*/ true);
 }, { async: true });
@@ -1301,8 +1440,9 @@ task("lint-server", ["build-rules"], function() {
     }
 });
 
-function ProgressBar(title) {
-    this.title = title;
+function ProgressBar() {
+    this._progress = [];
+    this._lineCount = 0;
 }
 ProgressBar.prototype = {
     progressChars: ["\u0020", "\u2591", "\u2592", "\u2593", "\u2588"],
@@ -1331,7 +1471,9 @@ ProgressBar.prototype = {
         },
         reset: "\u001b[0m"
     },
-    update: function (percentComplete, foregroundColor, backgroundColor) {
+    update: function (percentComplete, foregroundColor, backgroundColor, title, index) {
+        if (index === undefined) index = 0;
+
         var progress = "";
         for (var i = 0; i < 100; i += 4) {
             progress += this.progressChars[Math.floor(Math.max(0, Math.min(4, percentComplete - i)))];
@@ -1350,20 +1492,13 @@ ProgressBar.prototype = {
             progress += this.colors.reset;
         }
 
-        if (this._lastProgress !== progress || !this.visible) {
-            this._print(progress);
+        if (title) {
+            progress += " " + title;
         }
-    },
-    hide: function () {
-        if (this.visible) {
-            this._savedProgress = this._lastProgress;
-            this.clear();
-        }
-    },
-    show: function () {
-        if (this._savedProgress && !this.visible) {
-            this._print(this._savedProgress);
-            this._savedProgress = undefined;
+
+        if (this._progress[index] !== progress) {
+            this._progress[index] = progress;
+            this._print(index);
         }
     },
     clear: function () {
@@ -1374,12 +1509,22 @@ ProgressBar.prototype = {
             this.visible = false;
         }
     },
-    _print: function (progress) {
-        readline.moveCursor(process.stdout, -process.stdout.columns, 0);
-        process.stdout.write(this.title ? progress + " " + this.title : progress);
-        readline.clearLine(process.stdout, 1);
-        this._lastProgress = progress;
-        this.visible = true;
+    _print: function (index) {
+        readline.moveCursor(process.stdout, -process.stdout.columns, -this._lineCount);
+        var lineCount = 0;
+        for (var i = 0; i < this._progress.length; i++) {
+            if (i === index) {
+                readline.clearLine(process.stdout, 1);
+                process.stdout.write(this._progress[i] + os.EOL);
+            }
+            else {
+                readline.moveCursor(process.stdout, -process.stdout.columns, +1);
+            }
+
+            lineCount++;
+        }
+
+        this._lineCount = lineCount;
     }
 };
 

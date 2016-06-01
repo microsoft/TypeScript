@@ -8238,10 +8238,10 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function writeComment(text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) {
-                emitPos(comment.pos);
-                writeCommentRange(text, lineMap, writer, comment, newLine);
-                emitPos(comment.end);
+            function writeComment(text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
+                emitPos(commentPos);
+                writeCommentRange(text, lineMap, writer, commentPos, commentEnd, newLine);
+                emitPos(commentEnd);
             }
 
             function emitShebang() {

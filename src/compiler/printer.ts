@@ -161,13 +161,9 @@ const _super = (function (geti, seti) {
 
             const comments = createCommentWriter(host, writer, sourceMap);
             const {
-                getLeadingComments,
-                getTrailingComments,
-                getTrailingCommentsOfPosition,
-                emitLeadingComments,
-                emitTrailingComments,
-                emitLeadingDetachedComments,
-                emitTrailingDetachedComments
+                emitNodeWithComments,
+                emitBodyWithDetachedComments,
+                emitTrailingCommentsOfPosition
             } = comments;
 
             let context: TransformationContext;
@@ -175,7 +171,6 @@ const _super = (function (geti, seti) {
             let setNodeEmitFlags: (node: Node, flags: NodeEmitFlags) => void;
             let getSourceMapRange: (node: Node) => TextRange;
             let getTokenSourceMapRange: (node: Node, token: SyntaxKind) => TextRange;
-            let getCommentRange: (node: Node) => TextRange;
             let isSubstitutionEnabled: (node: Node) => boolean;
             let isEmitNotificationEnabled: (node: Node) => boolean;
             let onSubstituteNode: (node: Node, isExpression: boolean) => Node;
@@ -240,7 +235,6 @@ const _super = (function (geti, seti) {
                 setNodeEmitFlags = undefined;
                 getSourceMapRange = undefined;
                 getTokenSourceMapRange = undefined;
-                getCommentRange = undefined;
                 isSubstitutionEnabled = undefined;
                 isEmitNotificationEnabled = undefined;
                 onSubstituteNode = undefined;
@@ -262,7 +256,6 @@ const _super = (function (geti, seti) {
                 setNodeEmitFlags = context.setNodeEmitFlags;
                 getSourceMapRange = context.getSourceMapRange;
                 getTokenSourceMapRange = context.getTokenSourceMapRange;
-                getCommentRange = context.getCommentRange;
                 isSubstitutionEnabled = context.isSubstitutionEnabled;
                 isEmitNotificationEnabled = context.isEmitNotificationEnabled;
                 onSubstituteNode = context.onSubstituteNode;
@@ -276,7 +269,7 @@ const _super = (function (geti, seti) {
                 currentFileIdentifiers = node.identifiers;
                 sourceMap.setSourceFile(node);
                 comments.setSourceFile(node);
-                emitNodeWithNotificationOption(node, emitWorker);
+                emitNodeWithNotification(node, emitWorker);
                 return node;
             }
 
@@ -291,7 +284,7 @@ const _super = (function (geti, seti) {
              * Emits a node.
              */
             function emit(node: Node) {
-                emitNodeWithNotificationOption(node, emitWithoutNotificationOption);
+                emitNodeWithNotification(node, emitWithComments);
             }
 
             /**
@@ -315,51 +308,71 @@ const _super = (function (geti, seti) {
             }
 
             /**
-             * Emits a node without calling onEmitNode.
-             * NOTE: Do not call this method directly.
+             * Emits a node with comments.
+             *
+             * NOTE: Do not call this method directly. It is part of the emit pipeline
+             * and should only be called indirectly from emit.
              */
-            function emitWithoutNotificationOption(node: Node) {
-                emitNodeWithWorker(node, emitWorker);
+            function emitWithComments(node: Node) {
+                emitNodeWithComments(node, emitWithSourceMap);
+            }
+
+            /**
+             * Emits a node with source maps.
+             *
+             * NOTE: Do not call this method directly. It is part of the emit pipeline
+             * and should only be called indirectly from emitWithComments.
+             */
+            function emitWithSourceMap(node: Node) {
+                emitNodeWithSourceMap(node, emitWorker);
             }
 
             /**
              * Emits an expression node.
              */
             function emitExpression(node: Expression) {
-                emitNodeWithNotificationOption(node, emitExpressionWithoutNotificationOption);
+                emitNodeWithNotification(node, emitExpressionWithComments);
             }
 
             /**
-             * Emits an expression without calling onEmitNode.
-             * NOTE: Do not call this method directly.
+             * Emits an expression with comments.
+             *
+             * NOTE: Do not call this method directly. It is part of the emitExpression pipeline
+             * and should only be called indirectly from emitExpression.
              */
-            function emitExpressionWithoutNotificationOption(node: Expression) {
-                emitNodeWithWorker(node, emitExpressionWorker);
+            function emitExpressionWithComments(node: Expression) {
+                emitNodeWithComments(node, emitExpressionWithSourceMap);
+            }
+
+            /**
+             * Emits an expression with source maps.
+             *
+             * NOTE: Do not call this method directly. It is part of the emitExpression pipeline
+             * and should only be called indirectly from emitExpressionWithComments.
+             */
+            function emitExpressionWithSourceMap(node: Expression) {
+                emitNodeWithSourceMap(node, emitExpressionWorker);
             }
 
             /**
              * Emits a node with emit notification if available.
              */
-            function emitNodeWithNotificationOption(node: Node, emit: (node: Node) => void) {
+            function emitNodeWithNotification(node: Node, emitCallback: (node: Node) => void) {
                 if (node) {
                     if (isEmitNotificationEnabled(node)) {
-                        onEmitNode(node, emit);
+                        onEmitNode(node, emitCallback);
                     }
                     else {
-                        emit(node);
+                        emitCallback(node);
                     }
                 }
             }
 
-            function emitNodeWithWorker(node: Node, emitWorker: (node: Node) => void) {
+            function emitNodeWithSourceMap(node: Node, emitCallback: (node: Node) => void) {
                 if (node) {
-                    const leadingComments = getLeadingComments(/*range*/ node, /*contextNode*/ node, shouldSkipLeadingCommentsForNode, getCommentRange);
-                    const trailingComments = getTrailingComments(/*range*/ node, /*contextNode*/ node, shouldSkipTrailingCommentsForNode, getCommentRange);
-                    emitLeadingComments(/*range*/ node, leadingComments, /*contextNode*/ node, getCommentRange);
                     emitStart(/*range*/ node, /*contextNode*/ node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
-                    emitWorker(node);
+                    emitCallback(node);
                     emitEnd(/*range*/ node, /*contextNode*/ node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
-                    emitTrailingComments(node, trailingComments);
                 }
             }
 
@@ -1642,13 +1655,26 @@ const _super = (function (geti, seti) {
                 }
 
                 increaseIndent();
-                emitLeadingDetachedComments(body.statements, body, shouldSkipLeadingCommentsForNode);
 
+                emitBodyWithDetachedComments(body, body.statements,
+                    shouldEmitBlockFunctionBodyOnSingleLine(parentNode, body)
+                        ? emitBlockFunctionBodyOnSingleLine
+                        : emitBlockFunctionBodyWorker);
+
+                decreaseIndent();
+                writeToken(SyntaxKind.CloseBraceToken, body.statements.end, body);
+            }
+
+            function emitBlockFunctionBodyOnSingleLine(body: Block) {
+                emitBlockFunctionBodyWorker(body, /*emitBlockFunctionBodyOnSingleLine*/ true);
+            }
+
+            function emitBlockFunctionBodyWorker(body: Block, emitBlockFunctionBodyOnSingleLine?: boolean) {
                 // Emit all the prologue directives (like "use strict").
                 const statementOffset = emitPrologueDirectives(body.statements, /*startWithNewLine*/ true);
                 const helpersEmitted = emitHelpers(body);
 
-                if (statementOffset === 0 && !helpersEmitted && shouldEmitBlockFunctionBodyOnSingleLine(parentNode, body)) {
+                if (statementOffset === 0 && !helpersEmitted && emitBlockFunctionBodyOnSingleLine) {
                     decreaseIndent();
                     emitList(body, body.statements, ListFormat.SingleLineFunctionBodyStatements);
                     increaseIndent();
@@ -1656,10 +1682,6 @@ const _super = (function (geti, seti) {
                 else {
                     emitList(body, body.statements, ListFormat.MultiLineFunctionBodyStatements, statementOffset);
                 }
-
-                emitTrailingDetachedComments(body.statements, body, shouldSkipTrailingCommentsForNode);
-                decreaseIndent();
-                writeToken(SyntaxKind.CloseBraceToken, body.statements.end, body);
             }
 
             function emitClassDeclaration(node: ClassDeclaration) {
@@ -2004,9 +2026,12 @@ const _super = (function (geti, seti) {
                 //          }
                 // "comment1" is not considered to be leading comment for node.initializer
                 // but rather a trailing comment on the previous node.
-                if (!shouldSkipLeadingCommentsForNode(node.initializer)) {
-                    emitLeadingComments(/*range*/ node.initializer, getTrailingComments(collapseRangeToStart(node.initializer)), /*contextNode*/ node.initializer, getCommentRange);
+                const initializer = node.initializer;
+                if (!shouldSkipLeadingCommentsForNode(initializer)) {
+                    const commentRange = initializer.commentRange || initializer;
+                    emitTrailingCommentsOfPosition(commentRange.pos);
                 }
+
                 emitExpression(node.initializer);
             }
 
@@ -2034,23 +2059,17 @@ const _super = (function (geti, seti) {
             function emitSourceFile(node: SourceFile) {
                 writeLine();
                 emitShebang();
-                emitLeadingDetachedComments(node);
+                emitBodyWithDetachedComments(node, node.statements, emitSourceFileWorker);
+            }
 
+            function emitSourceFileWorker(node: SourceFile) {
                 const statements = node.statements;
                 const statementOffset = emitPrologueDirectives(statements);
-                if (getNodeEmitFlags(node) & NodeEmitFlags.NoLexicalEnvironment) {
-                    emitHelpers(node);
-                    emitList(node, statements, ListFormat.MultiLine, statementOffset);
-                }
-                else {
-                    const savedTempFlags = tempFlags;
-                    tempFlags = 0;
-                    emitHelpers(node);
-                    emitList(node, statements, ListFormat.MultiLine, statementOffset);
-                    tempFlags = savedTempFlags;
-                }
-
-                emitTrailingDetachedComments(node.statements);
+                const savedTempFlags = tempFlags;
+                tempFlags = 0;
+                emitHelpers(node);
+                emitList(node, statements, ListFormat.MultiLine, statementOffset);
+                tempFlags = savedTempFlags;
             }
 
             // Transformation nodes
@@ -2326,7 +2345,8 @@ const _super = (function (geti, seti) {
                 }
                 else {
                     // Write the opening line terminator or leading whitespace.
-                    let shouldEmitInterveningComments = true;
+                    const mayEmitInterveningComments = (format & ListFormat.NoInterveningComments) === 0;
+                    let shouldEmitInterveningComments = mayEmitInterveningComments;
                     if (shouldWriteLeadingLineTerminator(parentNode, children, format)) {
                         writeLine();
                         shouldEmitInterveningComments = false;
@@ -2369,10 +2389,11 @@ const _super = (function (geti, seti) {
                         }
 
                         if (shouldEmitInterveningComments) {
-                            emitLeadingComments(/*node*/ child, getTrailingCommentsOfPosition(child.pos), /*contextNode*/ child, getCommentRange);
+                            const commentRange = child.commentRange || child;
+                            emitTrailingCommentsOfPosition(commentRange.pos);
                         }
                         else {
-                            shouldEmitInterveningComments = true;
+                            shouldEmitInterveningComments = mayEmitInterveningComments;
                         }
 
                         // Emit this child.
@@ -2876,6 +2897,7 @@ const _super = (function (geti, seti) {
         // Other
         PreferNewLine = 1 << 15,        // Prefer adding a LineTerminator between synthesized nodes.
         NoTrailingNewLine = 1 << 16,    // Do not emit a trailing NewLine for a MultiLine list.
+        NoInterveningComments = 1 << 17,// Do not emit comments between each node
 
         // Precomputed Formats
         Modifiers = SingleLine | SpaceBetweenSiblings,
@@ -2890,7 +2912,7 @@ const _super = (function (geti, seti) {
         ArrayLiteralExpressionElements = PreserveLines | CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | Indented | SquareBrackets,
         CallExpressionArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,
         NewExpressionArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis | OptionalIfUndefined,
-        TemplateExpressionSpans = SingleLine,
+        TemplateExpressionSpans = SingleLine | NoInterveningComments,
         SingleLineBlockStatements = SpaceBetweenBraces | SpaceBetweenSiblings | SingleLine,
         MultiLineBlockStatements = Indented | MultiLine,
         VariableDeclarationList = CommaDelimited | SpaceBetweenSiblings | SingleLine,
@@ -2902,8 +2924,8 @@ const _super = (function (geti, seti) {
         EnumMembers = CommaDelimited | Indented | MultiLine,
         CaseBlockClauses = Indented | MultiLine,
         NamedImportsOrExportsElements = CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | SingleLine | SpaceBetweenBraces,
-        JsxElementChildren = SingleLine,
-        JsxElementAttributes = SingleLine | SpaceBetweenSiblings,
+        JsxElementChildren = SingleLine | NoInterveningComments,
+        JsxElementAttributes = SingleLine | SpaceBetweenSiblings | NoInterveningComments,
         CaseOrDefaultClauseStatements = Indented | MultiLine | NoTrailingNewLine | OptionalIfEmpty,
         HeritageClauseTypes = CommaDelimited | SpaceBetweenSiblings | SingleLine,
         SourceFileStatements = MultiLine | NoTrailingNewLine,
