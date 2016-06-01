@@ -14232,7 +14232,7 @@ namespace ts {
             if (compilerOptions.noUnusedParameters && !isSourceFileADefinitionFile) {
                 for (const key in node.locals) {
                     if (!node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
-                        if (node.locals[key].valueDeclaration.kind === SyntaxKind.Parameter) {
+                        if (node.locals[key].valueDeclaration.kind === SyntaxKind.Parameter && node.parent.kind !== SyntaxKind.InterfaceDeclaration) {
                             error(node, Diagnostics.Parameter_0_has_never_been_used, key);
                         }
                     }
