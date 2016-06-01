@@ -44,6 +44,7 @@ namespace ts {
 
         let typeCount = 0;
         let symbolCount = 0;
+        let isSourceFileADefinitionFile: boolean = false;
 
         const emptyArray: any[] = [];
         const emptySymbols: SymbolTable = {};
@@ -8101,7 +8102,7 @@ namespace ts {
         }
 
         function updateReferences(node: Identifier): void {
-            if (!isSourceFileADefinitionFile(node)) {
+            if (!isSourceFileADefinitionFile) {
                 const symbol = getReferencedValueSymbol(node);
                 if (symbol) {
                     symbol.hasReference = true;
@@ -14206,7 +14207,7 @@ namespace ts {
             }
         }
 
-        function isSourceFileADefinitionFile(node: Node): boolean {
+        function checkSourceFileADefinitionFile(node: Node): boolean {
             return getSourceFileOfNode(node).fileName.indexOf(".d.ts") > 0;
         }
 
@@ -14216,7 +14217,7 @@ namespace ts {
         }
 
         function checkUnusedIdentifiers(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration): void {
-            if (compilerOptions.noUnusedLocals && !isSourceFileADefinitionFile(node)) {
+            if (compilerOptions.noUnusedLocals && !isSourceFileADefinitionFile) {
                 for (const key in node.locals) {
                     if (!node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
                         if (node.locals[key].valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
@@ -14228,7 +14229,7 @@ namespace ts {
         }
 
         function checkUnusedParameters(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration): void {
-            if (compilerOptions.noUnusedParameters && !isSourceFileADefinitionFile(node)) {
+            if (compilerOptions.noUnusedParameters && !isSourceFileADefinitionFile) {
                 for (const key in node.locals) {
                     if (!node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
                         if (node.locals[key].valueDeclaration.kind === SyntaxKind.Parameter) {
@@ -14240,7 +14241,7 @@ namespace ts {
         }
 
         function checkUnusedModulePrivates(node: ModuleDeclaration): void {
-            if (compilerOptions.noUnusedLocals && !isSourceFileADefinitionFile(node)) {
+            if (compilerOptions.noUnusedLocals && !isSourceFileADefinitionFile) {
                 for (const key in node.locals) {
                     if (!node.locals[key].hasReference && !node.locals[key].exportSymbol) {
                         if ((node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind)
@@ -14253,7 +14254,7 @@ namespace ts {
         }
 
         function checkUnusedPrivates(node: ClassDeclaration): void {
-            if (compilerOptions.noUnusedLocals && !isSourceFileADefinitionFile(node)) {
+            if (compilerOptions.noUnusedLocals && !isSourceFileADefinitionFile) {
                 for (let i = 0; node.members && i < node.members.length; i++) {
                     switch (node.members[i].kind) {
                         case SyntaxKind.MethodDeclaration:
@@ -16641,6 +16642,7 @@ namespace ts {
         function checkSourceFile(node: SourceFile) {
             const start = new Date().getTime();
 
+            isSourceFileADefinitionFile = checkSourceFileADefinitionFile(node);
             checkSourceFileWorker(node);
 
             checkTime += new Date().getTime() - start;
