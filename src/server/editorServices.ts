@@ -123,25 +123,15 @@ namespace ts.server {
         }
     }
 
-    interface Timestamped {
-        lastCheckTime?: number;
-    }
-
-    interface TimestampedResolvedModule extends ResolvedModuleWithFailedLookupLocations, Timestamped {
-    }
-
-    interface TimestampedResolvedTypeReferenceDirective extends ResolvedTypeReferenceDirectiveWithFailedLookupLocations, Timestamped {
-    }
-
     export class LSHost implements ts.LanguageServiceHost {
         private compilationSettings: ts.CompilerOptions;
-        private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;
-        private resolvedTypeReferenceDirectives: ts.FileMap<Map<TimestampedResolvedTypeReferenceDirective>>;
+        private resolvedModuleNames: ts.FileMap<Map<ResolvedModuleWithFailedLookupLocations>>;
+        private resolvedTypeReferenceDirectives: ts.FileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>;
         private moduleResolutionHost: ts.ModuleResolutionHost;
 
         constructor(private host: ServerHost, private project: Project) {
-            this.resolvedModuleNames = createFileMap<Map<TimestampedResolvedModule>>();
-            this.resolvedTypeReferenceDirectives = createFileMap<Map<TimestampedResolvedTypeReferenceDirective>>();
+            this.resolvedModuleNames = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
+            this.resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
                 readFile: fileName => this.host.readFile(fileName),
@@ -149,7 +139,7 @@ namespace ts.server {
             };
         }
 
-        private resolveNamesWithLocalCache<T extends Timestamped & { failedLookupLocations: string[] }, R>(
+        private resolveNamesWithLocalCache<T extends { failedLookupLocations: string[] }, R>(
             names: string[],
             containingFile: string,
             cache: ts.FileMap<Map<T>>,
@@ -173,9 +163,7 @@ namespace ts.server {
                         resolution = existingResolution;
                     }
                     else {
-                        resolution = loader(name, containingFile, compilerOptions, this.moduleResolutionHost);
-                        resolution.lastCheckTime = Date.now();
-                        newResolutions[name] = resolution;
+                        newResolutions[name] = resolution = loader(name, containingFile, compilerOptions, this.moduleResolutionHost);
                     }
                 }
 
@@ -195,7 +183,6 @@ namespace ts.server {
 
                 if (getResult(resolution)) {
                     // TODO: consider checking failedLookupLocations
-                    // TODO: use lastCheckTime to track expiration for module name resolution
                     return true;
                 }
 
@@ -292,31 +279,31 @@ namespace ts.server {
         compilerOptions?: ts.CompilerOptions;
     }
 
-    export class Project {
+    export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
         private pathToScriptInfo: ts.FileMap<ScriptInfo>;
         private readonly lsHost: LSHost;
+        private filenameToSourceFile: ts.Map<ts.SourceFile> = {};
 
         readonly languageService: LanguageService;
         readonly getCanonicalFileName: (fileName: string) => string;
 
-        projectFileWatcher: FileWatcher;
-        directoryWatcher: FileWatcher;
-        // Used to keep track of what directories are watched for this project
-        directoriesWatchedForTsconfig: string[] = [];
-        program: ts.Program;
-        filenameToSourceFile: ts.Map<ts.SourceFile> = {};
-        updateGraphSeq = 0;
-        /** Used for configured projects which may have multiple open roots */
-        openRefCount = 0;
+        private program: ts.Program;
 
-        constructor(readonly projectFilename: string, public projectService: ProjectService, documentRegistry: ts.DocumentRegistry, public projectOptions?: ProjectOptions) {
+        constructor(
+            readonly projectFilename: string,
+            public readonly projectService: ProjectService,
+            documentRegistry: ts.DocumentRegistry,
+            public projectOptions?: ProjectOptions) {
+
             this.pathToScriptInfo = ts.createFileMap<ScriptInfo>();
             this.getCanonicalFileName = ts.createGetCanonicalFileName(this.projectService.host.useCaseSensitiveFileNames);
+
             if (projectOptions && projectOptions.files) {
                 // If files are listed explicitly, allow all extensions
                 projectOptions.compilerOptions.allowNonTsExtensions = true;
             }
+
             this.lsHost = new LSHost(this.projectService.host, this);
             if (projectOptions && projectOptions.compilerOptions) {
                 this.lsHost.setCompilationSettings(projectOptions.compilerOptions);
@@ -328,15 +315,6 @@ namespace ts.server {
                 this.lsHost.setCompilationSettings(defaultOpts);
             }
             this.languageService = ts.createLanguageService(this.lsHost, documentRegistry);
-        }
-
-        addOpenRef() {
-            this.openRefCount++;
-        }
-
-        deleteOpenRef() {
-            this.openRefCount--;
-            return this.openRefCount;
         }
 
         getRootFiles() {
@@ -466,6 +444,35 @@ namespace ts.server {
         }
     }
 
+    class InferredProject extends Project {
+        // Used to keep track of what directories are watched for this project
+        directoriesWatchedForTsconfig: string[] = [];
+        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry) {
+            super(/*projectFilename*/ undefined, projectService, documentRegistry);
+        }
+    }
+
+    class ConfiguredProject extends Project {
+        projectFileWatcher: FileWatcher;
+        directoryWatcher: FileWatcher;
+        /** Used for configured projects which may have multiple open roots */
+        openRefCount = 0;
+
+        constructor(projectFilename: string, projectService: ProjectService, documentRegistry: ts.DocumentRegistry, projectOptions: ProjectOptions) {
+            super(projectFilename, projectService, documentRegistry, projectOptions);
+        }
+
+        addOpenRef() {
+            this.openRefCount++;
+        }
+
+        deleteOpenRef() {
+            this.openRefCount--;
+            return this.openRefCount;
+        }
+    }
+
+
     export interface ProjectOpenResult {
         success?: boolean;
         errorMsg?: string;
@@ -504,9 +511,9 @@ namespace ts.server {
         // open, non-configured root files
         openFileRoots: ScriptInfo[] = [];
         // projects built from openFileRoots
-        inferredProjects: Project[] = [];
+        inferredProjects: InferredProject[] = [];
         // projects specified by a tsconfig.json file
-        configuredProjects: Project[] = [];
+        configuredProjects: ConfiguredProject[] = [];
         // open files referenced by a project
         openFilesReferenced: ScriptInfo[] = [];
         // open files that are roots of a configured project
@@ -673,7 +680,7 @@ namespace ts.server {
         }
 
         createInferredProject(root: ScriptInfo) {
-            const project = new Project(/*projectFilename*/ undefined, this, this.documentRegistry);
+            const project = new InferredProject(this, this.documentRegistry);
             project.addRoot(root);
 
             let currentPath = ts.getDirectoryPath(root.fileName);
@@ -733,7 +740,7 @@ namespace ts.server {
         }
 
         updateConfiguredProjectList() {
-            const configuredProjects: Project[] = [];
+            const configuredProjects: ConfiguredProject[] = [];
             for (let i = 0, len = this.configuredProjects.length; i < len; i++) {
                 if (this.configuredProjects[i].openRefCount > 0) {
                     configuredProjects.push(this.configuredProjects[i]);
@@ -745,12 +752,12 @@ namespace ts.server {
         removeProject(project: Project) {
             this.log("remove project: " + project.getRootFiles().toString());
             if (project.isConfiguredProject()) {
-                project.projectFileWatcher.close();
-                project.directoryWatcher.close();
-                this.configuredProjects = copyListRemovingItem(project, this.configuredProjects);
+                (<ConfiguredProject>project).projectFileWatcher.close();
+                (<ConfiguredProject>project).directoryWatcher.close();
+                this.configuredProjects = copyListRemovingItem((<ConfiguredProject>project), this.configuredProjects);
             }
             else {
-                for (const directory of project.directoriesWatchedForTsconfig) {
+                for (const directory of (<InferredProject>project).directoriesWatchedForTsconfig) {
                     // if the ref count for this directory watcher drops to 0, it's time to close it
                     project.projectService.directoryWatchersRefCount[directory]--;
                     if (!project.projectService.directoryWatchersRefCount[directory]) {
@@ -759,7 +766,7 @@ namespace ts.server {
                         delete project.projectService.directoryWatchersForTsconfig[directory];
                     }
                 }
-                this.inferredProjects = copyListRemovingItem(project, this.inferredProjects);
+                this.inferredProjects = copyListRemovingItem((<InferredProject>project), this.inferredProjects);
             }
 
             const fileNames = project.getFileNames();
@@ -848,7 +855,7 @@ namespace ts.server {
 
                 for (let i = 0, len = this.openFileRootsConfigured.length; i < len; i++) {
                     if (info === this.openFileRootsConfigured[i]) {
-                        if (info.defaultProject.deleteOpenRef() === 0) {
+                        if ((<ConfiguredProject>info.defaultProject).deleteOpenRef() === 0) {
                             removedProject = info.defaultProject;
                         }
                     }
@@ -1246,13 +1253,13 @@ namespace ts.server {
 
         }
 
-        openConfigFile(configFilename: string, clientFileName?: string): { success: boolean, project?: Project, errors?: Diagnostic[] } {
+        openConfigFile(configFilename: string, clientFileName?: string): { success: boolean, project?: ConfiguredProject, errors?: Diagnostic[] } {
             const { succeeded, projectOptions, errors } = this.configFileToProjectOptions(configFilename);
             if (!succeeded) {
                 return { success: false, errors };
             }
             else {
-                const project = this.createProject(configFilename, projectOptions);
+                const project = new ConfiguredProject(configFilename, this, this.documentRegistry, projectOptions);
                 let errors: Diagnostic[];
                 for (const rootFilename of projectOptions.files) {
                     if (this.host.fileExists(rootFilename)) {
@@ -1327,10 +1334,6 @@ namespace ts.server {
                     project.finishGraph();
                 }
             }
-        }
-
-        createProject(projectFilename: string, projectOptions?: ProjectOptions) {
-            return new Project(projectFilename, this, this.documentRegistry, projectOptions);
         }
     }
 }
