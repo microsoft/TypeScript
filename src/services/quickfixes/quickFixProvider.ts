@@ -1,8 +1,5 @@
-///<reference path='..\services.ts' />
-///<reference path='superFixes.ts' />
-
 /* @internal */
-namespace ts.quickFix {
+namespace ts {
 
     export interface QuickFix {
         name: string;
@@ -10,28 +7,44 @@ namespace ts.quickFix {
         getFix(sourceFile: SourceFile, start: number, end: number): TextChange[];
     }
 
-    export class QuickFixProvider {
-        // TODO: 
-        //  Make the provider query the fixes for all the errorcodes they can fix
-        //  and allow multiple fixes to fix the same error
+    export interface SuggestedFix {
+        name: string;
+        textChanges: TextChange[];
+    }
 
-        private static quickFixes: Map<QuickFix> = {
-            [MissingSuperFix.errorCode]: MissingSuperFix,
-            [SuperOrderFix.errorCode]: SuperOrderFix,
-        };
+    export namespace quickFix {
 
-        public static getSupportedErrorCodes() {
-            return getKeys(QuickFixProvider.quickFixes);
+        export const enum FixPriority {
+            AboveNormal,
+            Normal,
+            BelowNormal,
         }
 
-        public fix(errorCode: string, sourceFile: SourceFile, start: number, end: number) {
-            const fix = QuickFixProvider.quickFixes[errorCode];
+        var quickFixes: Map<QuickFix> = {};
 
-            if (!fix) {
-                throw new Error(`No fix found for error: '${errorCode}'`);
+        export function registerQuickFix(fix: QuickFix){
+            quickFixes[fix.errorCode] = fix;
+        }
+
+        export class QuickFixProvider {
+            // TODO: 
+            //  Make the provider query the fixes for all the errorcodes they can fix
+            //  and allow multiple fixes to fix the same error
+
+            public static getSupportedErrorCodes() {
+
+                return getKeys(quickFixes);
             }
 
-            return { name: fix.name, textChanges: fix.getFix(sourceFile, start, end) };
+            public fix(errorCode: string, sourceFile: SourceFile, start: number, end: number): SuggestedFix{
+                const fix = quickFixes[errorCode];
+
+                if (!fix) {
+                    throw new Error(`No fix found for error: '${errorCode}'`);
+                }
+
+                return { name: fix.name, textChanges: fix.getFix(sourceFile, start, end) };
+            }
         }
     }
 }

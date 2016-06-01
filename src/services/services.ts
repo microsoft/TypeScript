@@ -10,7 +10,7 @@
 /// <reference path='jsTyping.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
-/// <reference path='quickfixes/quickFixProvider.ts' />
+/// <reference path='quickfixes/references.ts' />
 
 namespace ts {
     /** The version of the language service API */
@@ -1116,7 +1116,7 @@ namespace ts {
 
         isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean;
 
-        getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): { name: string, textChanges: TextChange[] };
+        getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): SuggestedFix;
 
         getEmitOutput(fileName: string): EmitOutput;
 
@@ -7485,7 +7485,7 @@ namespace ts {
             return [];
         }
 
-        function getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): { name: string, textChanges: TextChange[] } {
+        function getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): SuggestedFix {
             synchronizeHostData();
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 

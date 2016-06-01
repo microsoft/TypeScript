@@ -1817,7 +1817,6 @@ namespace FourSlash {
         }
 
         public verifyCodeFixAtPosition(expectedChange: { span: ts.TextSpan, newText: string }) {
-            const position = this.currentCaretPosition;
             const diagnostics = this.getDiagnostics(this.activeFile.fileName);
 
             if (diagnostics.length === 0) {
@@ -1826,6 +1825,7 @@ namespace FourSlash {
 
             // we expect a single error per file
             const errorCode = diagnostics[0].code;
+            const position = diagnostics[0].start;
 
             const actual = this.languageService.getCodeFixAtPosition(this.activeFile.fileName, position, position, [`TS${errorCode}`]);
 
