@@ -570,17 +570,17 @@ namespace ts {
             //  ---------------------------------------------------------------------
             //  TypeScript                      | Javascript
             //  ---------------------------------------------------------------------
-            //  @dec                            | let C_1;
-            //  class C {                       | let C = C_1 = class C {
-            //    static x() { return C.y; }    |   static x() { return C_1.y; }
-            //    static y = 1;                 | }
+            //  @dec                            | let C_1 = class C {
+            //  class C {                       |   static x() { return C_1.y; }
+            //    static x() { return C.y; }    | }
+            //    static y = 1;                 | let C = C_1;
             //  }                               | C.y = 1;
             //                                  | C = C_1 = __decorate([dec], C);
             //  ---------------------------------------------------------------------
-            //  @dec                            | let C_1;
-            //  export class C {                | let C = C_1 = class C {
-            //    static x() { return C.y; }    |   static x() { return C_1.y; }
-            //    static y = 1;                 | }
+            //  @dec                            | let C_1 = class C {
+            //  export class C {                |   static x() { return C_1.y; }
+            //    static x() { return C.y; }    | }
+            //    static y = 1;                 | let C = C_1;
             //  }                               | C.y = 1;
             //                                  | C = C_1 = __decorate([dec], C);
             //                                  | export { C };
@@ -612,10 +612,10 @@ namespace ts {
             //  ---------------------------------------------------------------------
             //  TypeScript                      | Javascript
             //  ---------------------------------------------------------------------
-            //  @dec                            | let C_1;
-            //  export default class C {        | let C = C_1 = class C {
-            //    static x() { return C.y; }    |   static x() { return C_1.y; }
-            //    static y = 1;                 | }
+            //  @dec                            | let C_1 = class C {
+            //  export default class C {        |   static x() { return C_1.y; }
+            //    static x() { return C.y; }    | }
+            //    static y = 1;                 | let C = C_1;
             //  }                               | C.y = 1;
             //                                  | C = C_1 = __decorate([dec], C);
             //                                  | export default C;
@@ -647,35 +647,19 @@ namespace ts {
                 enableSubstitutionForDecoratedClasses();
                 decoratedClassAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? node.name.text : "default");
                 decoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAlias;
-
-                // We emit the class alias as a `let` declaration here so that it has the same
-                // TDZ as the class.
-
-                //  let ${decoratedClassAlias};
-                addNode(statements,
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createLetDeclarationList([
-                            createVariableDeclaration(decoratedClassAlias)
-                        ])
-                    )
-                );
-
-                //  ${decoratedClassAlias} = ${classExpression}
-                classExpression = createAssignment(
-                    decoratedClassAlias,
-                    classExpression,
-                    /*location*/ location);
             }
 
-            //  let ${name} = ${classExpression};
+            const declaredName = getDeclarationName(node, /*allowComments*/ true);
+
+            //  let ${name} = ${classExpression} where name is either declaredName if the class doesn't contain self-reference
+            //                                         or decoratedClassAlias if the class contain self-reference.
             addNode(statements,
                 setOriginalNode(
                     createVariableStatement(
                         /*modifiers*/ undefined,
                         createLetDeclarationList([
                             createVariableDeclaration(
-                                getDeclarationName(node, /*allowComments*/ true),
+                                decoratedClassAlias || declaredName,
                                 /*type*/ undefined,
                                 classExpression
                             )
@@ -685,6 +669,29 @@ namespace ts {
                     /*original*/ node
                 )
             );
+
+            if (decoratedClassAlias) {
+                // We emit the class alias as a `let` declaration here so that it has the same
+                // TDZ as the class.
+
+                // let ${declareName} = ${decoratedClassAlias}
+                addNode(statements,
+                    setOriginalNode(
+                        createVariableStatement(
+                            /*modifiers*/ undefined,
+                            createLetDeclarationList([
+                                createVariableDeclaration(
+                                    declaredName,
+                                    /*type*/ undefined,
+                                    decoratedClassAlias
+                                )
+                            ]),
+                            /*location*/ location
+                        ),
+                        /*original*/ node
+                    )
+                );
+            }
 
             return decoratedClassAlias;
         }
