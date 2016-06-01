@@ -674,7 +674,7 @@ namespace ts {
                 // We emit the class alias as a `let` declaration here so that it has the same
                 // TDZ as the class.
 
-                // let ${declareName} = ${decoratedClassAlias}
+                // let ${declaredName} = ${decoratedClassAlias}
                 addNode(statements,
                     setOriginalNode(
                         createVariableStatement(
