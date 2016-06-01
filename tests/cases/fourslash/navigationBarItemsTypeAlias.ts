@@ -2,5 +2,20 @@
 
 ////type T = number | string;
 
-verify.navigationBarCount(1);
-verify.navigationBarContains("T", "type");
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "T",
+                "kind": "type"
+            }
+        ]
+    },
+    {
+        "text": "T",
+        "kind": "type",
+        "indent": 1
+    }
+]);

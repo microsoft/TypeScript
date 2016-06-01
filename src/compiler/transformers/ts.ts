@@ -256,6 +256,7 @@ namespace ts {
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
+                case SyntaxKind.NeverKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.ConstructorType:

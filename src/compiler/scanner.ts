@@ -434,7 +434,7 @@ namespace ts {
       }
 
       /* @internal */
-      export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
+      export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean, stopAtComments = false): number {
           if (positionIsSynthesized(pos)) {
               return pos;
           }
@@ -460,6 +460,9 @@ namespace ts {
                       pos++;
                       continue;
                   case CharacterCodes.slash:
+                      if (stopAtComments) {
+                          break;
+                      }
                       if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
                           pos += 2;
                           while (pos < text.length) {

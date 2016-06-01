@@ -26,7 +26,7 @@ namespace ts {
         let hasWrittenComment = false;
         let hasLastComment: boolean;
         let lastCommentEnd: number;
-        let disabled: boolean = false;
+        let disabled: boolean = compilerOptions.removeComments;
 
         return {
             reset,
@@ -37,7 +37,7 @@ namespace ts {
         };
 
         function emitNodeWithComments(node: Node, emitCallback: (node: Node) => void) {
-            if (compilerOptions.removeComments) {
+            if (disabled) {
                 emitCallback(node);
                 return;
             }
@@ -131,7 +131,7 @@ namespace ts {
             const { pos, end } = detachedRange;
             const emitFlags = node.emitFlags;
             const skipLeadingComments = pos < 0 || (emitFlags & NodeEmitFlags.NoLeadingComments) !== 0;
-            const skipTrailingComments = end < 0 || (emitFlags & NodeEmitFlags.NoTrailingComments) !== 0 || compilerOptions.removeComments;
+            const skipTrailingComments = disabled || end < 0 || (emitFlags & NodeEmitFlags.NoTrailingComments) !== 0;
 
             if (!skipLeadingComments) {
                 emitDetachedCommentsAndUpdateCommentsInfo(detachedRange);
@@ -139,11 +139,17 @@ namespace ts {
 
             if (extendedDiagnostics) {
                 performance.measure("commentTime", commentStart);
-                emitCallback(node);
-                commentStart = performance.mark();
+            }
+
+            if (emitFlags & NodeEmitFlags.NoNestedComments) {
+                disableCommentsAndEmit(node, emitCallback);
             }
             else {
                 emitCallback(node);
+            }
+
+            if (extendedDiagnostics) {
+                commentStart = performance.mark();
             }
 
             if (!skipTrailingComments) {
@@ -219,7 +225,7 @@ namespace ts {
         }
 
         function emitTrailingCommentsOfPosition(pos: number) {
-            if (compilerOptions.removeComments) {
+            if (disabled) {
                 return;
             }
 
@@ -313,7 +319,7 @@ namespace ts {
         }
 
         function emitDetachedCommentsAndUpdateCommentsInfo(range: TextRange) {
-            const currentDetachedCommentInfo = emitDetachedComments(currentText, currentLineMap, writer, writeComment, range, newLine, compilerOptions.removeComments);
+            const currentDetachedCommentInfo = emitDetachedComments(currentText, currentLineMap, writer, writeComment, range, newLine, disabled);
             if (currentDetachedCommentInfo) {
                 if (detachedCommentsInfo) {
                     detachedCommentsInfo.push(currentDetachedCommentInfo);
