@@ -643,15 +643,13 @@ namespace ts {
                 onlyRecordFailures = !directoryProbablyExists(directory, state.host);
             }
         }
+        return forEach(extensions, tryLoad);
 
-        return forEach(extensions, ext => {
+        function tryLoad(ext: string): string {
             if (state.skipTsx && (ext === ".jsx" || ext === ".tsx")) {
-                return;
+                return undefined;
             }
-            return tryLoad(fileExtensionIs(candidate, ext) ? candidate : candidate + ext);
-        });
-
-        function tryLoad(fileName: string): string {
+            const fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
             if (!onlyRecordFailures && state.host.fileExists(fileName)) {
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.File_0_exist_use_it_as_a_name_resolution_result, fileName);
