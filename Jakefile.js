@@ -1156,7 +1156,7 @@ task("runtests-file", ["build-rules", "tests", builtLocalDirectory], function ()
 }, { async: true });
 
 task("runtests-dirty", ["build-rules", "tests", builtLocalDirectory], function () {
-    runConsoleTests("mocha-fivemat-progress-reporter", [], /*dirty*/ true);
+    runConsoleTests("mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*dirty*/ true);
 }, { async: true });
 
 desc("Generates code coverage data via instanbul");
