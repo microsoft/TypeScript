@@ -164,6 +164,7 @@ namespace ts {
         IsKeyword,
         ModuleKeyword,
         NamespaceKeyword,
+        NeverKeyword,
         ReadonlyKeyword,
         RequireKeyword,
         NumberKeyword,
@@ -276,7 +277,7 @@ namespace ts {
         ModuleDeclaration,
         ModuleBlock,
         CaseBlock,
-        GlobalModuleExportDeclaration,
+        NamespaceExportDeclaration,
         ImportEqualsDeclaration,
         ImportDeclaration,
         ImportClause,
@@ -342,6 +343,9 @@ namespace ts {
         JSDocReturnTag,
         JSDocTypeTag,
         JSDocTemplateTag,
+        JSDocTypedefTag,
+        JSDocPropertyTag,
+        JSDocTypeLiteral,
 
         // Synthesized list
         SyntaxList,
@@ -371,6 +375,10 @@ namespace ts {
         FirstBinaryOperator = LessThanToken,
         LastBinaryOperator = CaretEqualsToken,
         FirstNode = QualifiedName,
+        FirstJSDocNode = JSDocTypeExpression,
+        LastJSDocNode = JSDocTypeLiteral,
+        FirstJSDocTagNode = JSDocComment,
+        LastJSDocTagNode = JSDocTypeLiteral
     }
 
     export const enum NodeFlags {
@@ -407,12 +415,15 @@ namespace ts {
         HasAggregatedChildData = 1 << 29,  // If we've computed data from children and cached it in this node
         HasJsxSpreadAttribute = 1 << 30,
 
-        Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
+        Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async | Readonly,
         AccessibilityModifier = Public | Private | Protected,
+        // Accessibility modifiers and 'readonly' can be attached to a parameter in a constructor to make it a property.
+        ParameterPropertyModifier = AccessibilityModifier | Readonly,
         BlockScoped = Let | Const,
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
         EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions,
+        ReachabilityAndEmitFlags = ReachabilityCheckFlags | EmitHelperFlags,
 
         // Parsing context flags
         ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile,
@@ -445,7 +456,7 @@ namespace ts {
         modifiers?: ModifiersArray;                     // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
         parent?: Node;                                  // Parent node (initialized by binding
-        /* @internal */ jsDocComment?: JSDocComment;    // JSDoc for the node, if it has any.  Only for .js files.
+        /* @internal */ jsDocComments?: JSDocComment[]; // JSDoc for the node, if it has any.  Only for .js files.
         /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
@@ -609,6 +620,7 @@ namespace ts {
     // SyntaxKind.PropertyAssignment
     // SyntaxKind.ShorthandPropertyAssignment
     // SyntaxKind.EnumMember
+    // SyntaxKind.JSDocPropertyTag
     export interface VariableLikeDeclaration extends Declaration {
         propertyName?: PropertyName;
         dotDotDotToken?: Node;
@@ -1338,8 +1350,8 @@ namespace ts {
         name: Identifier;
     }
 
-    // @kind(SyntaxKind.GlobalModuleImport)
-    export interface GlobalModuleExportDeclaration extends DeclarationStatement {
+    // @kind(SyntaxKind.NamespaceExportDeclaration)
+    export interface NamespaceExportDeclaration extends DeclarationStatement {
         name: Identifier;
         moduleReference: LiteralLikeNode;
     }
@@ -1507,6 +1519,25 @@ namespace ts {
         typeExpression: JSDocTypeExpression;
     }
 
+    // @kind(SyntaxKind.JSDocTypedefTag)
+    export interface JSDocTypedefTag extends JSDocTag, Declaration {
+        name?: Identifier;
+        typeExpression?: JSDocTypeExpression;
+        jsDocTypeLiteral?: JSDocTypeLiteral;
+    }
+
+    // @kind(SyntaxKind.JSDocPropertyTag)
+    export interface JSDocPropertyTag extends JSDocTag, TypeElement {
+        name: Identifier;
+        typeExpression: JSDocTypeExpression;
+    }
+
+    // @kind(SyntaxKind.JSDocTypeLiteral)
+    export interface JSDocTypeLiteral extends JSDocType {
+        jsDocPropertyTags?: NodeArray<JSDocPropertyTag>;
+        jsDocTypeTag?: JSDocTypeTag;
+    }
+
     // @kind(SyntaxKind.JSDocParameterTag)
     export interface JSDocParameterTag extends JSDocTag {
         preParameterName?: Identifier;
@@ -1515,18 +1546,30 @@ namespace ts {
         isBracketed: boolean;
     }
 
-    export const enum FlowKind {
-        Unreachable,
-        Start,
-        Label,
-        LoopLabel,
-        Assignment,
-        Condition
+    export const enum FlowFlags {
+        Unreachable    = 1 << 0,  // Unreachable code
+        Start          = 1 << 1,  // Start of flow graph
+        BranchLabel    = 1 << 2,  // Non-looping junction
+        LoopLabel      = 1 << 3,  // Looping junction
+        Assignment     = 1 << 4,  // Assignment
+        TrueCondition  = 1 << 5,  // Condition known to be true
+        FalseCondition = 1 << 6,  // Condition known to be false
+        Referenced     = 1 << 7,  // Referenced as antecedent once
+        Shared         = 1 << 8,  // Referenced as antecedent more than once
+        Label = BranchLabel | LoopLabel,
+        Condition = TrueCondition | FalseCondition
     }
 
     export interface FlowNode {
-        kind: FlowKind;  // Node kind
+        flags: FlowFlags;
         id?: number;     // Node id used by flow type cache in checker
+    }
+
+    // FlowStart represents the start of a control flow. For a function expression or arrow
+    // function, the container property references the function (which in turn has a flowNode
+    // property for the containing control flow).
+    export interface FlowStart extends FlowNode {
+        container?: FunctionExpression | ArrowFunction;
     }
 
     // FlowLabel represents a junction with multiple possible preceding control flows.
@@ -1545,7 +1588,6 @@ namespace ts {
     // node's location in the control flow.
     export interface FlowCondition extends FlowNode {
         expression: Expression;
-        assumeTrue: boolean;
         antecedent: FlowNode;
     }
 
@@ -1592,8 +1634,6 @@ namespace ts {
         /* @internal */ externalModuleIndicator: Node;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
-        // True if the file was a root file in a compilation or a /// reference targets
-        /* @internal */ wasReferenced?: boolean;
 
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
@@ -1623,6 +1663,7 @@ namespace ts {
     export interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
         getSourceFile(fileName: string): SourceFile;
+        getSourceFileByPath(path: Path): SourceFile;
         getCurrentDirectory(): string;
     }
 
@@ -1765,6 +1806,7 @@ namespace ts {
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getBaseTypes(type: InterfaceType): ObjectType[];
         getReturnTypeOfSignature(signature: Signature): Type;
+        getNonNullableType(type: Type): Type;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
@@ -2018,7 +2060,7 @@ namespace ts {
         BlockScopedVariableExcludes = Value,
 
         ParameterExcludes = Value,
-        PropertyExcludes = Value,
+        PropertyExcludes = None,
         EnumMemberExcludes = Value,
         FunctionExcludes = Value & ~(Function | ValueModule),
         ClassExcludes = (Value | Type) & ~(ValueModule | Interface), // class-interface mergability done in checker.ts
@@ -2163,11 +2205,12 @@ namespace ts {
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
         ThisType                = 0x02000000,  // This type
         ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
+        Never                   = 0x08000000,  // Never type
 
         /* @internal */
         Nullable = Undefined | Null,
         /* @internal */
-        Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
+        Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
         Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
@@ -2501,6 +2544,7 @@ namespace ts {
         allowJs?: boolean;
         noImplicitUseStrict?: boolean;
         strictNullChecks?: boolean;
+        skipLibCheck?: boolean;
         listEmittedFiles?: boolean;
         lib?: string[];
         /* @internal */ stripInternal?: boolean;
@@ -2598,6 +2642,7 @@ namespace ts {
         options: CompilerOptions;
         typingOptions?: TypingOptions;
         fileNames: string[];
+        raw?: any;
         errors: Diagnostic[];
     }
 
@@ -2781,6 +2826,8 @@ namespace ts {
         readFile(fileName: string): string;
         trace?(s: string): void;
         directoryExists?(directoryName: string): boolean;
+        realpath?(path: string): string;
+        getCurrentDirectory?(): string;
     }
 
     export interface ResolvedModule {
@@ -2813,9 +2860,11 @@ namespace ts {
 
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+        getSourceFileByPath?(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
+        getDefaultTypeDirectiveNames?(rootPath: string): string[];
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
@@ -2866,5 +2915,10 @@ namespace ts {
         getModificationCount(): number;
 
         /* @internal */ reattachFileDiagnostics(newFile: SourceFile): void;
+    }
+
+    // SyntaxKind.SyntaxList
+    export interface SyntaxList extends Node {
+        _children: Node[];
     }
 }

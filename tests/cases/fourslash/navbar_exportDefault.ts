@@ -1,24 +1,83 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: a.ts
-//// {| "itemName": "default", "kind": "class", "parentName": "" |}export default class { }
+////export default class { }
 
 // @Filename: b.ts
-//// {| "itemName": "C", "kind": "class", "parentName": "" |}export default class C { }
+////export default class C { }
 
 // @Filename: c.ts
-//// {| "itemName": "default", "kind": "function", "parentName": "" |}export default function { }
+////export default function { }
 
 // @Filename: d.ts
-//// {| "itemName": "Func", "kind": "function", "parentName": "" |}export default function Func { }
+////export default function Func { }
 
-test.markers().forEach(marker => {
-    goTo.file(marker.fileName);
-    verify.getScriptLexicalStructureListContains(
-        marker.data.itemName,
-        marker.data.kind,
-        marker.fileName,
-        marker.data.parentName,
-        marker.data.isAdditionalRange,
-        marker.position);
-});
+goTo.file("a.ts");
+verify.navigationBar([
+    {
+        "text": "\"a\"",
+        "kind": "module"
+    },
+    {
+        "text": "default",
+        "kind": "class",
+        "kindModifiers": "export",
+        "indent": 1
+    }
+]);
+
+goTo.file("b.ts");
+verify.navigationBar([
+    {
+        "text": "\"b\"",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "C",
+                "kind": "class",
+                "kindModifiers": "export"
+            }
+        ]
+    },
+    {
+        "text": "C",
+        "kind": "class",
+        "kindModifiers": "export",
+        "indent": 1
+    }
+]);
+
+goTo.file("c.ts");
+verify.navigationBar([
+    {
+        "text": "\"c\"",
+        "kind": "module",
+    },
+    {
+        "text": "default",
+        "kind": "function",
+        "kindModifiers": "export",
+        "indent": 1
+    }
+]);
+
+goTo.file("d.ts");
+verify.navigationBar([
+    {
+        "text": "\"d\"",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "Func",
+                "kind": "function",
+                "kindModifiers": "export"
+            }
+        ]
+    },
+    {
+        "text": "Func",
+        "kind": "function",
+        "kindModifiers": "export",
+        "indent": 1
+    }
+]);

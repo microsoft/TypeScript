@@ -1,5 +1,10 @@
 /// <reference path="harness.ts" />
 
+
+type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "rwc" | "test262";
+type CompilerTestKind = "conformance" | "compiler";
+type FourslashTestKind = "fourslash" | "fourslash-shims" | "fourslash-shims-pp" | "fourslash-server";
+
 abstract class RunnerBase {
     constructor() { }
 
@@ -12,8 +17,12 @@ abstract class RunnerBase {
     }
 
     public enumerateFiles(folder: string, regex?: RegExp, options?: { recursive: boolean }): string[] {
-        return Harness.IO.listFiles(Harness.userSpecifiedRoot + folder, regex, { recursive: (options ? options.recursive : false) });
+        return ts.map(Harness.IO.listFiles(Harness.userSpecifiedRoot + folder, regex, { recursive: (options ? options.recursive : false) }), ts.normalizeSlashes);
     }
+
+    abstract kind(): TestRunnerKind;
+
+    abstract enumerateTestFiles(): string[];
 
     /** Setup the runner's tests so that they are ready to be executed by the harness 
      *  The first test should be a describe/it block that sets up the harness's compiler instance appropriately

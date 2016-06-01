@@ -47,7 +47,7 @@ function test2(a: any) {
 >"boolean" : string
 
             a;
->a : {}
+>a : boolean
         }
         else {
             a;
@@ -129,7 +129,7 @@ function test5(a: boolean | void) {
         }
         else {
             a;
->a : {}
+>a : void
         }
     }
     else {
@@ -188,7 +188,7 @@ function test7(a: boolean | void) {
     }
     else {
         a;
->a : {}
+>a : void
     }
 }
 
