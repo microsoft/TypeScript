@@ -1223,7 +1223,7 @@ namespace ts {
                 const left = name.kind === SyntaxKind.QualifiedName ? (<QualifiedName>name).left : (<PropertyAccessExpression>name).expression;
                 const right = name.kind === SyntaxKind.QualifiedName ? (<QualifiedName>name).right : (<PropertyAccessExpression>name).name;
 
-                const namespace = resolveEntityName(left, SymbolFlags.Namespace, ignoreErrors, dontResolveAlias, location);
+                const namespace = resolveEntityName(left, SymbolFlags.Namespace, ignoreErrors, /*dontResolveAlias*/ false, location);
                 if (!namespace || namespace === unknownSymbol || nodeIsMissing(right)) {
                     return undefined;
                 }
