@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/moduleResolution.ts] ////
 
 //// [a.ts]
+
 export default 0;
 
 // No extension: '.ts' added
