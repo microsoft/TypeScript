@@ -291,7 +291,7 @@ namespace ts.server {
                 if (matchSeq(seq)) {
                     const checkSpec = checkList[index];
                     index++;
-                    if (checkSpec.project.getSourceFileFromName(checkSpec.fileName, requireOpen)) {
+                    if (checkSpec.project.containsFile(checkSpec.fileName, requireOpen)) {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
                         this.immediateId = setImmediate(() => {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);

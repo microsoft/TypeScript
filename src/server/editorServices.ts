@@ -123,20 +123,16 @@ namespace ts.server {
         }
     }
 
-    export class LSHost implements ts.LanguageServiceHost {
+    export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost {
         private compilationSettings: ts.CompilerOptions;
         private resolvedModuleNames: ts.FileMap<Map<ResolvedModuleWithFailedLookupLocations>>;
         private resolvedTypeReferenceDirectives: ts.FileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>;
-        private moduleResolutionHost: ts.ModuleResolutionHost;
+        private getCanonicalFileName: (fileName: string) => string;
 
         constructor(private host: ServerHost, private project: Project) {
+            this.getCanonicalFileName = ts.createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.resolvedModuleNames = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
             this.resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
-            this.moduleResolutionHost = {
-                fileExists: fileName => this.fileExists(fileName),
-                readFile: fileName => this.host.readFile(fileName),
-                directoryExists: directoryName => this.host.directoryExists(directoryName)
-            };
         }
 
         private resolveNamesWithLocalCache<T extends { failedLookupLocations: string[] }, R>(
@@ -146,7 +142,7 @@ namespace ts.server {
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
             getResult: (s: T) => R): R[] {
 
-            const path = toPath(containingFile, this.host.getCurrentDirectory(), this.project.getCanonicalFileName);
+            const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const currentResolutionsInFile = cache.get(path);
 
             const newResolutions: Map<T> = {};
@@ -163,7 +159,7 @@ namespace ts.server {
                         resolution = existingResolution;
                     }
                     else {
-                        newResolutions[name] = resolution = loader(name, containingFile, compilerOptions, this.moduleResolutionHost);
+                        newResolutions[name] = resolution = loader(name, containingFile, compilerOptions, this);
                     }
                 }
 
@@ -271,6 +267,10 @@ namespace ts.server {
         directoryExists(path: string): boolean {
             return this.host.directoryExists(path);
         }
+
+        readFile(fileName: string): string {
+            return this.host.readFile(fileName);
+        }
     }
 
     export interface ProjectOptions {
@@ -281,12 +281,9 @@ namespace ts.server {
 
     export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
-        private pathToScriptInfo: ts.FileMap<ScriptInfo>;
         private readonly lsHost: LSHost;
-        private filenameToSourceFile: ts.Map<ts.SourceFile> = {};
 
         readonly languageService: LanguageService;
-        readonly getCanonicalFileName: (fileName: string) => string;
 
         private program: ts.Program;
 
@@ -295,9 +292,6 @@ namespace ts.server {
             public readonly projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,
             public projectOptions?: ProjectOptions) {
-
-            this.pathToScriptInfo = ts.createFileMap<ScriptInfo>();
-            this.getCanonicalFileName = ts.createGetCanonicalFileName(this.projectService.host.useCaseSensitiveFileNames);
 
             if (projectOptions && projectOptions.files) {
                 // If files are listed explicitly, allow all extensions
@@ -326,15 +320,15 @@ namespace ts.server {
             return sourceFiles.map(sourceFile => sourceFile.fileName);
         }
 
-        getSourceFile(info: ScriptInfo) {
-            return this.filenameToSourceFile[info.fileName];
+        containsScriptInfo(info: ScriptInfo): boolean {
+            return this.program.getSourceFileByPath(info.path) !== undefined;
         }
 
-        getSourceFileFromName(filename: string, requireOpen?: boolean) {
+        containsFile(filename: string, requireOpen?: boolean) {
             const info = this.projectService.getScriptInfo(filename);
             if (info) {
                 if ((!requireOpen) || info.isOpen) {
-                    return this.getSourceFile(info);
+                    return this.containsScriptInfo(info);
                 }
             }
         }
@@ -345,19 +339,9 @@ namespace ts.server {
 
         removeReferencedFile(info: ScriptInfo) {
             if (!info.isOpen) {
-                this.pathToScriptInfo.remove(info.path);
                 this.lsHost.removeReferencedFile(info);
             }
             this.updateGraph();
-        }
-
-        updateFileMap() {
-            this.filenameToSourceFile = {};
-            const sourceFiles = this.program.getSourceFiles();
-            for (let i = 0, len = sourceFiles.length; i < len; i++) {
-                const normFilename = ts.normalizePath(sourceFiles[i].fileName);
-                this.filenameToSourceFile[normFilename] = sourceFiles[i];
-            }
         }
 
         finishGraph() {
@@ -367,7 +351,6 @@ namespace ts.server {
 
         updateGraph() {
             this.program = this.languageService.getProgram();
-            this.updateFileMap();
         }
 
         isConfiguredProject() {
@@ -376,37 +359,31 @@ namespace ts.server {
 
         // add a root file to project
         addRoot(info: ScriptInfo) {
-            if (!this.pathToScriptInfo.contains(info.path)) {
-                this.pathToScriptInfo.set(info.path, info);
+            if (!this.isRoot(info)) {
                 this.rootFiles.push(info);
             }
         }
 
         // remove a root file from project
         removeRoot(info: ScriptInfo) {
-            if (!this.pathToScriptInfo.contains(info.path)) {
-                this.pathToScriptInfo.remove(info.path);
+            if (this.isRoot(info)) {
                 this.rootFiles = copyListRemovingItem(info, this.rootFiles);
                 this.lsHost.removeRoot(info);
             }
         }
 
         getScriptInfo(fileName: string) {
-            const path = toPath(fileName, this.projectService.host.getCurrentDirectory(), this.getCanonicalFileName);
-            let scriptInfo = this.pathToScriptInfo.get(path);
-            if (!scriptInfo) {
-                scriptInfo = this.projectService.openFile(fileName, /*openedByClient*/ false);
-                if (scriptInfo) {
-                    this.pathToScriptInfo.set(path, scriptInfo);
-                }
-            }
-            return scriptInfo;
+            return this.projectService.openFile(fileName, /*openedByClient*/ false);
         }
 
         filesToString() {
+            if (!this.program) {
+                return "";
+            }
             let strBuilder = "";
-            ts.forEachValue(this.filenameToSourceFile,
-                sourceFile => { strBuilder += sourceFile.fileName + "\n"; });
+            for (const file of this.program.getSourceFiles()) {
+                strBuilder += `${file.fileName}\n`;
+            }
             return strBuilder;
         }
 
@@ -807,7 +784,7 @@ namespace ts.server {
                     for (let i = 0, len = this.openFileRoots.length; i < len; i++) {
                         const r = this.openFileRoots[i];
                         // if r referenced by the new project
-                        if (info.defaultProject.getSourceFile(r)) {
+                        if (info.defaultProject.containsScriptInfo(r)) {
                             // remove project rooted at r
                             this.removeProject(r.defaultProject);
                             // put r in referenced open file list
@@ -902,7 +879,7 @@ namespace ts.server {
                 const inferredProject = this.inferredProjects[i];
                 inferredProject.updateGraph();
                 if (inferredProject !== excludedProject) {
-                    if (inferredProject.getSourceFile(info)) {
+                    if (inferredProject.containsScriptInfo(info)) {
                         info.defaultProject = inferredProject;
                         referencingProjects.push(inferredProject);
                     }
@@ -911,7 +888,7 @@ namespace ts.server {
             for (let i = 0, len = this.configuredProjects.length; i < len; i++) {
                 const configuredProject = this.configuredProjects[i];
                 configuredProject.updateGraph();
-                if (configuredProject.getSourceFile(info)) {
+                if (configuredProject.containsScriptInfo(info)) {
                     info.defaultProject = configuredProject;
                     referencingProjects.push(configuredProject);
                 }
@@ -944,7 +921,7 @@ namespace ts.server {
             const openFileRootsConfigured: ScriptInfo[] = [];
             for (const info of this.openFileRootsConfigured) {
                 const project = info.defaultProject;
-                if (!project || !(project.getSourceFile(info))) {
+                if (!project || !(project.containsScriptInfo(info))) {
                     info.defaultProject = undefined;
                     unattachedOpenFiles.push(info);
                 }
@@ -962,8 +939,7 @@ namespace ts.server {
             for (let i = 0, len = this.openFilesReferenced.length; i < len; i++) {
                 const referencedFile = this.openFilesReferenced[i];
                 referencedFile.defaultProject.updateGraph();
-                const sourceFile = referencedFile.defaultProject.getSourceFile(referencedFile);
-                if (sourceFile) {
+                if (referencedFile.defaultProject.containsScriptInfo(referencedFile)) {
                     openFilesReferenced.push(referencedFile);
                 }
                 else {
