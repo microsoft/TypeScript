@@ -14228,9 +14228,21 @@ namespace ts {
             }
         }
 
+        function checkUnusedModulePrivates(node: ModuleDeclaration): void {
+            if (!isSourceFileADefinitionFile(node)) {
+                for (const key in node.locals) {
+                    if (!node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
+                        if (compilerOptions.noUnusedLocals && !node.locals[key].exportSymbol) {
+                            error(node, Diagnostics.Variable_0_has_never_been_used, key);
+                        }
+                    }                    
+                }
+            }
+        }
+
         function checkUnusedPrivates(node: ClassDeclaration): void {
             if (!isSourceFileADefinitionFile(node)) {
-                for (let i = 0; i < node.members.length; i++) {
+                for (let i = 0; node.members && i < node.members.length; i++) {
                     switch (node.members[i].kind) {
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.PropertyDeclaration:
@@ -14243,7 +14255,6 @@ namespace ts {
                     }
                 }
 
-                //var typeParametersLength = (node.typeParameters) ? node.typeParameters.length : 0;
                 for (let i = 0; node.typeParameters && i < node.typeParameters.length; i++) {
                     if (compilerOptions.noUnusedLocals && !node.typeParameters[i].symbol.hasReference) {
                         error(node, Diagnostics.Variable_0_has_never_been_used, node.typeParameters[i].symbol.name);
@@ -16117,6 +16128,7 @@ namespace ts {
                 }
             }
             checkSourceElement(node.body);
+            checkUnusedModulePrivates(node);
         }
 
         function checkModuleAugmentationElement(node: Node, isGlobalAugmentation: boolean): void {
