@@ -261,7 +261,7 @@ declare namespace ts {
         ModuleDeclaration = 225,
         ModuleBlock = 226,
         CaseBlock = 227,
-        GlobalModuleExportDeclaration = 228,
+        NamespaceExportDeclaration = 228,
         ImportEqualsDeclaration = 229,
         ImportDeclaration = 230,
         ImportClause = 231,
@@ -934,7 +934,7 @@ declare namespace ts {
     interface NamespaceImport extends Declaration {
         name: Identifier;
     }
-    interface GlobalModuleExportDeclaration extends DeclarationStatement {
+    interface NamespaceExportDeclaration extends DeclarationStatement {
         name: Identifier;
         moduleReference: LiteralLikeNode;
     }
@@ -1329,7 +1329,7 @@ declare namespace ts {
         FunctionScopedVariableExcludes = 107454,
         BlockScopedVariableExcludes = 107455,
         ParameterExcludes = 107455,
-        PropertyExcludes = 107455,
+        PropertyExcludes = 0,
         EnumMemberExcludes = 107455,
         FunctionExcludes = 106927,
         ClassExcludes = 899519,
@@ -1554,6 +1554,7 @@ declare namespace ts {
         allowJs?: boolean;
         noImplicitUseStrict?: boolean;
         strictNullChecks?: boolean;
+        skipLibCheck?: boolean;
         listEmittedFiles?: boolean;
         lib?: string[];
         types?: string[];
@@ -1627,6 +1628,7 @@ declare namespace ts {
         trace?(s: string): void;
         directoryExists?(directoryName: string): boolean;
         realpath?(path: string): string;
+        getCurrentDirectory?(): string;
     }
     interface ResolvedModule {
         resolvedFileName: string;
@@ -1650,6 +1652,7 @@ declare namespace ts {
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
+        getDefaultTypeDirectiveNames?(rootPath: string): string[];
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
@@ -1693,6 +1696,7 @@ declare namespace ts {
         createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         getModifiedTime?(path: string): Date;
         createHash?(data: string): string;
@@ -1812,6 +1816,7 @@ declare namespace ts {
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
     function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
+    function getDefaultTypeDirectiveNames(options: CompilerOptions, rootFiles: string[], host: CompilerHost): string[];
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program;
 }
 declare namespace ts {
@@ -2345,26 +2350,55 @@ declare namespace ts {
     namespace ScriptElementKind {
         const unknown: string;
         const warning: string;
+        /** predefined type (void) or keyword (class) */
         const keyword: string;
+        /** top level script node */
         const scriptElement: string;
+        /** module foo {} */
         const moduleElement: string;
+        /** class X {} */
         const classElement: string;
+        /** var x = class X {} */
         const localClassElement: string;
+        /** interface Y {} */
         const interfaceElement: string;
+        /** type T = ... */
         const typeElement: string;
+        /** enum E */
         const enumElement: string;
+        /**
+         * Inside module and script only
+         * const v = ..
+         */
         const variableElement: string;
+        /** Inside function */
         const localVariableElement: string;
+        /**
+         * Inside module and script only
+         * function f() { }
+         */
         const functionElement: string;
+        /** Inside function */
         const localFunctionElement: string;
+        /** class X { [public|private]* foo() {} } */
         const memberFunctionElement: string;
+        /** class X { [public|private]* [get|set] foo:number; } */
         const memberGetAccessorElement: string;
         const memberSetAccessorElement: string;
+        /**
+         * class X { [public|private]* foo:number; }
+         * interface Y { foo:number; }
+         */
         const memberVariableElement: string;
+        /** class X { constructor() { } } */
         const constructorImplementationElement: string;
+        /** interface Y { ():number; } */
         const callSignatureElement: string;
+        /** interface Y { []:number; } */
         const indexSignatureElement: string;
+        /** interface Y { new():Y; } */
         const constructSignatureElement: string;
+        /** function foo(*Y*: string) */
         const parameterElement: string;
         const typeParameterElement: string;
         const primitiveType: string;

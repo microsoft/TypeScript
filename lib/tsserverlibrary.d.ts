@@ -247,7 +247,7 @@ declare namespace ts {
         ModuleDeclaration = 225,
         ModuleBlock = 226,
         CaseBlock = 227,
-        GlobalModuleExportDeclaration = 228,
+        NamespaceExportDeclaration = 228,
         ImportEqualsDeclaration = 229,
         ImportDeclaration = 230,
         ImportClause = 231,
@@ -925,7 +925,7 @@ declare namespace ts {
     interface NamespaceImport extends Declaration {
         name: Identifier;
     }
-    interface GlobalModuleExportDeclaration extends DeclarationStatement {
+    interface NamespaceExportDeclaration extends DeclarationStatement {
         name: Identifier;
         moduleReference: LiteralLikeNode;
     }
@@ -1087,7 +1087,6 @@ declare namespace ts {
         scriptKind: ScriptKind;
         externalModuleIndicator: Node;
         commonJsModuleIndicator: Node;
-        wasReferenced?: boolean;
         identifiers: Map<string>;
         nodeCount: number;
         identifierCount: number;
@@ -1381,7 +1380,7 @@ declare namespace ts {
         FunctionScopedVariableExcludes = 107454,
         BlockScopedVariableExcludes = 107455,
         ParameterExcludes = 107455,
-        PropertyExcludes = 107455,
+        PropertyExcludes = 0,
         EnumMemberExcludes = 107455,
         FunctionExcludes = 106927,
         ClassExcludes = 899519,
@@ -1735,6 +1734,7 @@ declare namespace ts {
         allowJs?: boolean;
         noImplicitUseStrict?: boolean;
         strictNullChecks?: boolean;
+        skipLibCheck?: boolean;
         listEmittedFiles?: boolean;
         lib?: string[];
         stripInternal?: boolean;
@@ -1967,6 +1967,7 @@ declare namespace ts {
         trace?(s: string): void;
         directoryExists?(directoryName: string): boolean;
         realpath?(path: string): string;
+        getCurrentDirectory?(): string;
     }
     interface ResolvedModule {
         resolvedFileName: string;
@@ -1990,6 +1991,7 @@ declare namespace ts {
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
+        getDefaultTypeDirectiveNames?(rootPath: string): string[];
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
@@ -2136,6 +2138,7 @@ declare namespace ts {
         createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         getModifiedTime?(path: string): Date;
         createHash?(data: string): string;
@@ -2820,7 +2823,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Cannot_compile_modules_unless_the_module_flag_is_provided_with_a_valid_module_type_Consider_setting_the_module_compiler_option_in_a_tsconfig_json_file: {
+        Cannot_use_imports_exports_or_module_augmentations_when_module_is_none: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -5040,6 +5043,18 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        Identifier_0_must_be_imported_from_a_module: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        All_declarations_of_0_must_have_identical_modifiers: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
         Import_declaration_0_is_using_private_name_1: {
             code: number;
             category: DiagnosticCategory;
@@ -5598,7 +5613,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Substututions_for_pattern_0_should_be_an_array: {
+        Substitutions_for_pattern_0_should_be_an_array: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -5671,6 +5686,12 @@ declare namespace ts {
             message: string;
         };
         Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typechecking: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Skip_type_checking_of_declaration_files: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -6277,6 +6298,12 @@ declare namespace ts {
             message: string;
         };
         Resolving_real_path_for_0_result_1: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -7024,6 +7051,7 @@ declare namespace ts {
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
     function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
+    function getDefaultTypeDirectiveNames(options: CompilerOptions, rootFiles: string[], host: CompilerHost): string[];
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program;
 }
 declare namespace ts.BreakpointResolver {
@@ -7033,7 +7061,7 @@ declare namespace ts.OutliningElementsCollector {
     function collectElements(sourceFile: SourceFile): OutliningSpan[];
 }
 declare namespace ts.NavigateTo {
-    function getNavigateToItems(program: Program, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number): NavigateToItem[];
+    function getNavigateToItems(program: Program, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number): NavigateToItem[];
 }
 declare namespace ts.NavigationBar {
     function getNavigationBarItems(sourceFile: SourceFile, compilerOptions: CompilerOptions): ts.NavigationBarItem[];
@@ -7431,7 +7459,7 @@ declare namespace ts.formatting {
     }
 }
 declare namespace ts.formatting {
-    module Shared {
+    namespace Shared {
         interface ITokenAccess {
             GetTokens(): SyntaxKind[];
             Contains(token: SyntaxKind): boolean;
@@ -7516,7 +7544,7 @@ declare namespace ts.formatting {
     function getIndentationString(indentation: number, options: FormatCodeOptions): string;
 }
 declare namespace ts.formatting {
-    module SmartIndenter {
+    namespace SmartIndenter {
         function getIndentation(position: number, sourceFile: SourceFile, options: EditorOptions): number;
         function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: FormatCodeOptions): number;
         function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFile): boolean;
@@ -8487,6 +8515,7 @@ declare namespace ts {
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
         getProjectVersion?(): string;
@@ -8582,6 +8611,7 @@ declare namespace ts {
         getLocalizedDiagnosticMessages(): any;
         getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
         getDefaultLibFileName(options: CompilerOptions): string;
     }
     class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost {

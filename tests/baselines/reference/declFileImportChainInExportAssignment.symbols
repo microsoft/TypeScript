@@ -17,7 +17,7 @@ import a = m.c;
 
 import b = a;
 >b : Symbol(b, Decl(declFileImportChainInExportAssignment.ts, 6, 15))
->a : Symbol(a, Decl(declFileImportChainInExportAssignment.ts, 0, 10))
+>a : Symbol(a, Decl(declFileImportChainInExportAssignment.ts, 5, 1))
 
 export = b;
 >b : Symbol(b, Decl(declFileImportChainInExportAssignment.ts, 6, 15))
