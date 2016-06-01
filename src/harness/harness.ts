@@ -769,7 +769,7 @@ namespace Harness {
                     return response.responseText;
                 }
                 else {
-                    return null;
+                    return undefined;
                 }
             }
 

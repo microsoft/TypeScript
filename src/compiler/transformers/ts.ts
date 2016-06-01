@@ -627,7 +627,7 @@ namespace ts {
             //  ... = class ${name} ${heritageClauses} {
             //      ${members}
             //  }
-            let classExpression: Expression = setOriginalNode(
+            const classExpression: Expression = setOriginalNode(
                 createClassExpression(
                     name,
                     visitNodes(node.heritageClauses, visitor, isHeritageClause),
