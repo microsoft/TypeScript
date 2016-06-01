@@ -293,9 +293,13 @@ namespace ts.server {
     }
 
     export class Project {
-        private lsHost: LSHost;
-        languageService: LanguageService;
-        projectFilename: string;
+        private rootFiles: ScriptInfo[] = [];
+        private pathToScriptInfo: ts.FileMap<ScriptInfo>;
+        private readonly lsHost: LSHost;
+
+        readonly languageService: LanguageService;
+        readonly getCanonicalFileName: (fileName: string) => string;
+
         projectFileWatcher: FileWatcher;
         directoryWatcher: FileWatcher;
         // Used to keep track of what directories are watched for this project
@@ -306,12 +310,7 @@ namespace ts.server {
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
 
-        getCanonicalFileName: (fileName: string) => string;
-
-        private rootFiles: ScriptInfo[] = [];
-        private pathToScriptInfo: ts.FileMap<ScriptInfo>;
-
-        constructor(public projectService: ProjectService, documentRegistry: ts.DocumentRegistry, public projectOptions?: ProjectOptions) {
+        constructor(readonly projectFilename: string, public projectService: ProjectService, documentRegistry: ts.DocumentRegistry, public projectOptions?: ProjectOptions) {
             this.pathToScriptInfo = ts.createFileMap<ScriptInfo>();
             this.getCanonicalFileName = ts.createGetCanonicalFileName(this.projectService.host.useCaseSensitiveFileNames);
             if (projectOptions && projectOptions.files) {
@@ -338,10 +337,6 @@ namespace ts.server {
         deleteOpenRef() {
             this.openRefCount--;
             return this.openRefCount;
-        }
-
-        openReferencedFile(filename: string) {
-            return this.projectService.openFile(filename, /*openedByClient*/ false);
         }
 
         getRootFiles() {
@@ -422,7 +417,7 @@ namespace ts.server {
             const path = toPath(fileName, this.projectService.host.getCurrentDirectory(), this.getCanonicalFileName);
             let scriptInfo = this.pathToScriptInfo.get(path);
             if (!scriptInfo) {
-                scriptInfo = this.openReferencedFile(fileName);
+                scriptInfo = this.projectService.openFile(fileName, /*openedByClient*/ false);
                 if (scriptInfo) {
                     this.pathToScriptInfo.set(path, scriptInfo);
                 }
@@ -678,7 +673,7 @@ namespace ts.server {
         }
 
         createInferredProject(root: ScriptInfo) {
-            const project = new Project(this, this.documentRegistry);
+            const project = new Project(/*projectFilename*/ undefined, this, this.documentRegistry);
             project.addRoot(root);
 
             let currentPath = ts.getDirectoryPath(root.fileName);
@@ -1335,9 +1330,7 @@ namespace ts.server {
         }
 
         createProject(projectFilename: string, projectOptions?: ProjectOptions) {
-            const project = new Project(this, this.documentRegistry, projectOptions);
-            project.projectFilename = projectFilename;
-            return project;
+            return new Project(projectFilename, this, this.documentRegistry, projectOptions);
         }
     }
 }
