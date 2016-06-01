@@ -8156,23 +8156,12 @@ namespace ts {
                 return type;
             }
             const declaration = localOrExportSymbol.valueDeclaration;
-<<<<<<< HEAD
-            const defaultsToDeclaredType = !strictNullChecks || type.flags & TypeFlags.Any || !declaration ||
-                declaration.kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
-                getContainingFunctionOrModule(declaration) !== getContainingFunctionOrModule(node);
-            if (defaultsToDeclaredType && type.flags & TypeFlags.NotNarrowable) {
-                return type;
-            }
-            const flowType = getFlowTypeOfReference(node, type, defaultsToDeclaredType ? type : undefinedType);
-            if (strictNullChecks && !(type.flags & TypeFlags.Any) && !(getNullableKind(type) & TypeFlags.Undefined) && getNullableKind(flowType) & TypeFlags.Undefined) {
-=======
             const includeOuterFunctions = isReadonlySymbol(localOrExportSymbol);
             const assumeInitialized = !strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || !declaration ||
                 getRootDeclaration(declaration).kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
                 !isDeclarationIncludedInFlow(node, declaration, includeOuterFunctions);
             const flowType = getFlowTypeOfReference(node, type, assumeInitialized, includeOuterFunctions);
             if (!assumeInitialized && !(getNullableKind(type) & TypeFlags.Undefined) && getNullableKind(flowType) & TypeFlags.Undefined) {
->>>>>>> master
                 error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
                 // Return the declared type to reduce follow-on errors
                 return type;
