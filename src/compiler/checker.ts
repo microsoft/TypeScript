@@ -13141,7 +13141,7 @@ namespace ts {
             checkGrammarConstructorTypeParameters(node) || checkGrammarConstructorTypeAnnotation(node);
 
             checkSourceElement(node.body);
-            checkUnusedIdentifiers(node);
+            checkUnusedLocals(node);
 
             const symbol = getSymbolOfNode(node);
             const firstDeclaration = getDeclarationOfKind(symbol, node.kind);
@@ -14184,7 +14184,7 @@ namespace ts {
             }
 
             checkSourceElement(node.body);
-            checkUnusedIdentifiers(node);
+            checkUnusedLocals(node);
             if (!node.asteriskToken) {
                 const returnOrPromisedType = node.type && (isAsync ? checkAsyncFunctionReturnType(node) : getTypeFromTypeNode(node.type));
                 checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
@@ -14210,17 +14210,28 @@ namespace ts {
             return getSourceFileOfNode(node).fileName.indexOf(".d.ts") > 0;
         }
 
+        function checkUnusedLocals(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration): void {
+            checkUnusedIdentifiers(node);
+            checkUnusedParameters(node);
+        }
+
         function checkUnusedIdentifiers(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration): void {
-            if (!isSourceFileADefinitionFile(node)) {
+            if (compilerOptions.noUnusedLocals && !isSourceFileADefinitionFile(node)) {
                 for (const key in node.locals) {
                     if (!node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
-                        if (compilerOptions.noUnusedLocals && node.locals[key].valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
+                        if (node.locals[key].valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
                             error(node, Diagnostics.Variable_0_has_never_been_used, key);
                         }
+                    }
+                }
+            } 
+        }
 
-                        if (compilerOptions.noUnusedParameters
-                            && node.locals[key].valueDeclaration.kind === SyntaxKind.Parameter
-                            && node.parent.kind === SyntaxKind.FunctionDeclaration) {
+        function checkUnusedParameters(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration): void {
+            if (compilerOptions.noUnusedParameters && !isSourceFileADefinitionFile(node)) {
+                for (const key in node.locals) {
+                    if (!node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
+                        if (node.locals[key].valueDeclaration.kind === SyntaxKind.Parameter) {
                             error(node, Diagnostics.Parameter_0_has_never_been_used, key);
                         }
                     }
@@ -14229,10 +14240,11 @@ namespace ts {
         }
 
         function checkUnusedModulePrivates(node: ModuleDeclaration): void {
-            if (!isSourceFileADefinitionFile(node)) {
+            if (compilerOptions.noUnusedLocals && !isSourceFileADefinitionFile(node)) {
                 for (const key in node.locals) {
-                    if (!node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
-                        if (compilerOptions.noUnusedLocals && !node.locals[key].exportSymbol) {
+                    if (!node.locals[key].hasReference && !node.locals[key].exportSymbol) {
+                        if ((node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind)
+                            || (node.locals[key].declarations && node.locals[key].declarations[0].kind === SyntaxKind.InterfaceDeclaration)) {
                             error(node, Diagnostics.Variable_0_has_never_been_used, key);
                         }
                     }                    
@@ -14241,12 +14253,12 @@ namespace ts {
         }
 
         function checkUnusedPrivates(node: ClassDeclaration): void {
-            if (!isSourceFileADefinitionFile(node)) {
+            if (compilerOptions.noUnusedLocals && !isSourceFileADefinitionFile(node)) {
                 for (let i = 0; node.members && i < node.members.length; i++) {
                     switch (node.members[i].kind) {
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.PropertyDeclaration:
-                            if (compilerOptions.noUnusedLocals && isPrivateClassElement(node.members[i]) && !node.members[i].symbol.hasReference) {
+                            if (isPrivateClassElement(node.members[i]) && !node.members[i].symbol.hasReference) {
                                 error(node, Diagnostics.Variable_0_has_never_been_used, node.members[i].symbol.name);
                             }
                             break;
@@ -14256,7 +14268,7 @@ namespace ts {
                 }
 
                 for (let i = 0; node.typeParameters && i < node.typeParameters.length; i++) {
-                    if (compilerOptions.noUnusedLocals && !node.typeParameters[i].symbol.hasReference) {
+                    if (!node.typeParameters[i].symbol.hasReference) {
                         error(node, Diagnostics.Variable_0_has_never_been_used, node.typeParameters[i].symbol.name);
                     }
                 }
@@ -14270,7 +14282,6 @@ namespace ts {
             }
             return false;
         }
-
 
         function checkBlock(node: Block) {
             // Grammar checking for SyntaxKind.Block
@@ -15494,6 +15505,9 @@ namespace ts {
                     if (produceDiagnostics) {
                         const t = getTypeFromTypeNode(typeRefNode);
                         if (t !== unknownType) {
+                            if (t.symbol) {
+                                t.symbol.hasReference = true;
+                            }
                             const declaredType = (t.flags & TypeFlags.Reference) ? (<TypeReference>t).target : t;
                             if (declaredType.flags & (TypeFlags.Class | TypeFlags.Interface)) {
                                 checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(t, type.thisType), node.name || node, Diagnostics.Class_0_incorrectly_implements_interface_1);
