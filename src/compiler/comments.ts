@@ -287,7 +287,6 @@ namespace ts {
             currentText = currentSourceFile.text;
             currentLineMap = getLineStarts(currentSourceFile);
             detachedCommentsInfo = undefined;
-            disabled = false;
         }
 
         function disableCommentsAndEmit(node: Node, emitCallback: (node: Node) => void): void {
