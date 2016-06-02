@@ -1044,7 +1044,7 @@ namespace ts {
         }
 
         if (updated !== node) {
-            updated.original = node;
+            updateNode(updated, node);
         }
 
         // performance.measure(measureName, markName);
