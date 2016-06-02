@@ -441,14 +441,14 @@ namespace ts {
     /* @internal */
     export function parseIsolatedJSDocComment(content: string, start?: number, length?: number) {
         const result = Parser.JSDocParser.parseIsolatedJSDocComment(content, start, length);
-        if (result.jsDocComment) {
+        if (result && result.jsDocComment) {
             // because the jsDocComment was parsed out of the source file, it might
             // not be covered by the fixupParentReferences.
             let parentNode: Node = result.jsDocComment;
             forEachChild(result.jsDocComment, visitNode);
 
             function visitNode(n: Node): void {
-                if (n.parent !== parentNode) {
+                if (n.parent === undefined) {
                     n.parent = parentNode;
 
                     const saveParent = parentNode;
