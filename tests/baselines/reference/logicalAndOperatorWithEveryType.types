@@ -623,7 +623,7 @@ var rj8 = a8 && undefined;
 
 var rj9 = null && undefined;
 >rj9 : any
->null && undefined : null
+>null && undefined : undefined
 >null : null
 >undefined : undefined
 
