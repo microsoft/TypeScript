@@ -382,19 +382,6 @@ const _super = (function (geti, seti) {
         }
 
         /**
-         * Determines whether to skip trailing comment emit for a node.
-         *
-         * We do not emit comments for NotEmittedStatement nodes or any node that has
-         * NodeEmitFlags.NoTrailingComments.
-         *
-         * @param node A Node.
-         */
-        function shouldSkipTrailingCommentsForNode(node: Node) {
-            return isNotEmittedStatement(node)
-                || (node.emitFlags & NodeEmitFlags.NoTrailingComments) !== 0;
-        }
-
-        /**
          * Determines whether to skip source map emit for the start position of a node.
          *
          * We do not emit source maps for NotEmittedStatement nodes or any node that
@@ -2890,7 +2877,7 @@ const _super = (function (geti, seti) {
         // Other
         PreferNewLine = 1 << 15,        // Prefer adding a LineTerminator between synthesized nodes.
         NoTrailingNewLine = 1 << 16,    // Do not emit a trailing NewLine for a MultiLine list.
-        NoInterveningComments = 1 << 17,// Do not emit comments between each node
+        NoInterveningComments = 1 << 17, // Do not emit comments between each node
 
         // Precomputed Formats
         Modifiers = SingleLine | SpaceBetweenSiblings,

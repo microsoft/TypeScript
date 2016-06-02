@@ -472,7 +472,7 @@ class ProjectRunner extends RunnerBase {
 
                     it("Baseline of emitted result (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (testCase.baselineCheck) {
-                            var lastError: any = undefined;
+                            let lastError: any = undefined;
                             ts.forEach(compilerResult.outputFiles, outputFile => {
                                 try {
                                     Harness.Baseline.runBaseline("Baseline of emitted result (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {

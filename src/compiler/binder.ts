@@ -506,7 +506,7 @@ namespace ts {
             container = saveContainer;
             blockScopeContainer = savedBlockScopeContainer;
         }
-        
+
         function bindChildren(node: Node): void {
             if (skipTransformFlagAggregation) {
                 bindChildrenWorker(node);

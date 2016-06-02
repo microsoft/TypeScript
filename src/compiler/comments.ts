@@ -24,8 +24,6 @@ namespace ts {
         let currentLineMap: number[];
         let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[];
         let hasWrittenComment = false;
-        let hasLastComment: boolean;
-        let lastCommentEnd: number;
         let disabled: boolean = compilerOptions.removeComments;
 
         return {
@@ -287,7 +285,6 @@ namespace ts {
             currentText = currentSourceFile.text;
             currentLineMap = getLineStarts(currentSourceFile);
             detachedCommentsInfo = undefined;
-            disabled = false;
         }
 
         function disableCommentsAndEmit(node: Node, emitCallback: (node: Node) => void): void {

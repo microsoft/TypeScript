@@ -250,6 +250,9 @@ namespace ts {
         // Transform each source file.
         const transformed = map(sourceFiles, transformSourceFile);
 
+        // Disable modification of the lexical environment.
+        lexicalEnvironmentDisabled = true;
+
         return {
             getSourceFiles: () => transformed,
             getTokenSourceMapRange,
