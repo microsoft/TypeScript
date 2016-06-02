@@ -1,9 +1,8 @@
 /* @internal */
 namespace ts {
-
     export interface QuickFix {
         name: string;
-        errorCode: string;
+        errorCodes: string[];
         getFix(sourceFile: SourceFile, start: number, end: number): TextChange[];
     }
 
@@ -13,7 +12,6 @@ namespace ts {
     }
 
     export namespace quickFix {
-
         export const enum FixPriority {
             AboveNormal,
             Normal,
@@ -22,25 +20,21 @@ namespace ts {
 
         var quickFixes: Map<QuickFix> = {};
 
-        export function registerQuickFix(fix: QuickFix){
-            quickFixes[fix.errorCode] = fix;
+        export function registerQuickFix(fix: QuickFix) {
+            fix.errorCodes.forEach(error => quickFixes[error] = fix);
         }
 
         export class QuickFixProvider {
-            // TODO: 
-            //  Make the provider query the fixes for all the errorcodes they can fix
-            //  and allow multiple fixes to fix the same error
 
             public static getSupportedErrorCodes() {
-
                 return getKeys(quickFixes);
             }
 
-            public fix(errorCode: string, sourceFile: SourceFile, start: number, end: number): SuggestedFix{
+            public fix(errorCode: string, sourceFile: SourceFile, start: number, end: number): SuggestedFix {
                 const fix = quickFixes[errorCode];
 
                 if (!fix) {
-                    throw new Error(`No fix found for error: '${errorCode}'`);
+                    throw new Error(`No fix found for error: '${errorCode}'.`);
                 }
 
                 return { name: fix.name, textChanges: fix.getFix(sourceFile, start, end) };
