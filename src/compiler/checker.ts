@@ -14225,7 +14225,7 @@ namespace ts {
                         }
                     }
                 }
-            } 
+            }
         }
 
         function checkUnusedParameters(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration): void {
@@ -14248,7 +14248,7 @@ namespace ts {
                             || (node.locals[key].declarations && node.locals[key].declarations[0].kind === SyntaxKind.InterfaceDeclaration)) {
                             error(node, Diagnostics.Variable_0_has_never_been_used, key);
                         }
-                    }                    
+                    }
                 }
             }
         }
@@ -14273,7 +14273,7 @@ namespace ts {
                         error(node, Diagnostics.Variable_0_has_never_been_used, node.typeParameters[i].symbol.name);
                     }
                 }
-            }                
+            }
         }
 
         function isPrivateClassElement(node: ClassElement): boolean {
