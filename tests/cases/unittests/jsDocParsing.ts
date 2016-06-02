@@ -1004,7 +1004,8 @@ namespace ts {
                 if (result !== expected) {
                     // Turn on a human-readable diff
                     if (typeof require !== "undefined") {
-                        require("chai").config.showDiff = true;
+                        const chai = require("chai");
+                        chai.config.showDiff = true;
                         chai.expect(JSON.parse(result)).equal(JSON.parse(expected));
                     }
                     else {

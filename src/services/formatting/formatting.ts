@@ -81,6 +81,12 @@ namespace ts.formatting {
         while (isWhiteSpace(sourceFile.text.charCodeAt(endOfFormatSpan)) && !isLineBreak(sourceFile.text.charCodeAt(endOfFormatSpan))) {
             endOfFormatSpan--;
         }
+        // if the character at the end of the span is a line break, we shouldn't include it, because it indicates we don't want to
+        // touch the current line at all. Also, on some OSes the line break consists of two characters (\r\n), we should test if the
+        // previous character before the end of format span is line break character as well.
+        if (isLineBreak(sourceFile.text.charCodeAt(endOfFormatSpan))) {
+            endOfFormatSpan--;
+        }
         const span = {
             // get start position for the previous line
             pos: getStartPositionOfLine(line - 1, sourceFile),

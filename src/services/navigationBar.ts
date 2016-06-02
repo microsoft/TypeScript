@@ -652,6 +652,12 @@ namespace ts.NavigationBar {
                 topItem.childItems.push(newItem);
             }
 
+            if (node.jsDocComments && node.jsDocComments.length > 0) {
+                for (const jsDocComment of node.jsDocComments) {
+                    visitNode(jsDocComment);
+                }
+            }
+
             // Add a level if traversing into a container
             if (newItem && (isFunctionLike(node) || isClassLike(node))) {
                 const lastTop = topItem;
@@ -731,6 +737,27 @@ namespace ts.NavigationBar {
                     }
                     const declName = declarationNameToString(decl.name);
                     return getNavBarItem(declName, ScriptElementKind.constElement, [getNodeSpan(node)]);
+                case SyntaxKind.JSDocTypedefTag:
+                    if ((<JSDocTypedefTag>node).name) {
+                        return getNavBarItem(
+                            (<JSDocTypedefTag>node).name.text,
+                            ScriptElementKind.typeElement,
+                            [getNodeSpan(node)]);
+                    }
+                    else {
+                        const parentNode = node.parent && node.parent.parent;
+                        if (parentNode && parentNode.kind === SyntaxKind.VariableStatement) {
+                            if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
+                                const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
+                                if (nameIdentifier.kind === SyntaxKind.Identifier) {
+                                    return getNavBarItem(
+                                        (<Identifier>nameIdentifier).text,
+                                        ScriptElementKind.typeElement,
+                                        [getNodeSpan(node)]);
+                                }
+                            }
+                        }
+                    }
                 default:
                     return undefined;
             }
@@ -801,7 +828,7 @@ namespace ts.NavigationBar {
         }
 
         function getNodeSpan(node: Node) {
-            return node.kind === SyntaxKind.SourceFile
+           return node.kind === SyntaxKind.SourceFile
                 ? createTextSpanFromBounds(node.getFullStart(), node.getEnd())
                 : createTextSpanFromBounds(node.getStart(), node.getEnd());
         }

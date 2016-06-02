@@ -1131,7 +1131,7 @@ namespace ts.server {
             else {
                 this.log("No config files found.");
             }
-            return {};
+            return configFileName ? { configFileName } : {};
         }
 
         /**
