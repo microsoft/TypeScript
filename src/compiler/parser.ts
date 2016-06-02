@@ -440,7 +440,26 @@ namespace ts {
 
     /* @internal */
     export function parseIsolatedJSDocComment(content: string, start?: number, length?: number) {
-        return Parser.JSDocParser.parseIsolatedJSDocComment(content, start, length);
+        const result = Parser.JSDocParser.parseIsolatedJSDocComment(content, start, length);
+        if (result.jsDocComment) {
+            // because the jsDocComment was parsed out of the source file, it might
+            // not be covered by the fixupParentReferences.
+            let parentNode: Node = result.jsDocComment;
+            forEachChild(result.jsDocComment, visitNode);
+
+            function visitNode(n: Node): void {
+                if (n.parent !== parentNode) {
+                    n.parent = parentNode;
+
+                    const saveParent = parentNode;
+                    parentNode = n;
+                    forEachChild(n, visitNode);
+                    parentNode = saveParent;
+                }
+            }
+        }
+
+        return result;
     }
 
     /* @internal */
