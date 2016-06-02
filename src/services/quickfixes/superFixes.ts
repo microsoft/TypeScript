@@ -1,11 +1,9 @@
-﻿
-
-/* @internal */
+﻿/* @internal */
 namespace ts.quickFix {
 
     registerQuickFix({
         name: `Add missing 'super()' call.`,
-        errorCode: "TS2377",
+        errorCodes: ["TS2377"],
         getFix: (sourceFile: SourceFile, start: number, end: number) => {
             const token = getTokenAtPosition(sourceFile, start);
             if (token.kind !== SyntaxKind.ConstructorKeyword) {
@@ -22,17 +20,51 @@ namespace ts.quickFix {
 
     registerQuickFix({
         name: `Make super call the first statement in the constructor.`,
-        errorCode: "TS17009",
-        getFix: (SourceFile: SourceFile, start: number, end: number): [{ newText: string; span: { start: number, length: number } }] => {
+        errorCodes: ["TS17009"],
+        getFix: (sourceFile: SourceFile, start: number, end: number): TextChange[] => {
+            const token = getTokenAtPosition(sourceFile, start);
+            const constructor = getContainingFunction(token);
 
-            throw new Error("Not implemented");
+            if (constructor.kind !== SyntaxKind.Constructor) {
+                // wait why are we not a on a constructor?
+                throw new Error("Failed to find the constructor.");
+            }
+            const superCall = findSuperCall((<ConstructorDeclaration>constructor).body);
+
+            const children = (<ConstructorDeclaration>constructor).body.getChildren(sourceFile);
+
+            // first child is the open curly, this is where we want to put the 'super' call.
+            const newPosition = children[0].getEnd();
+
+            if (!superCall) {
+                throw new Error(`Failed to find super call.`);
+            }
+
+            return [{
+                newText: superCall.getText(sourceFile),
+                span: { start: newPosition, length: 0 }
+            },
+            {
+                newText: "",
+                span: { start: superCall.getStart(sourceFile), length: superCall.getFullWidth() }
+            }]
+
+            function findSuperCall(n: Node): Node {
+                if (isSuperCallExpression(n)) {
+                    return n;
+                }
+                if (isFunctionLike(n)) {
+                    return undefined;
+                }
+                return forEachChild(n, findSuperCall);
+            }
         }
     });
 
     registerQuickFix({
         name: `Add Type to static member access.`,
-        errorCode: "TS2662",
-        getFix: (SourceFile: SourceFile, start: number, end: number): [{ newText: string; span: { start: number, length: number } }] => {
+        errorCodes: ["TS2662"],
+        getFix: (sourceFile: SourceFile, start: number, end: number): TextChange[] => {
 
             throw new Error("Not implemented");
         }
