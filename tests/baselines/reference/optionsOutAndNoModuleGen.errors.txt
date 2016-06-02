@@ -1,7 +1,8 @@
-error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+tests/cases/compiler/optionsOutAndNoModuleGen.ts(2,1): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
 
 
-!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
-==== tests/cases/compiler/optionsOutAndNoModuleGen.ts (0 errors) ====
+==== tests/cases/compiler/optionsOutAndNoModuleGen.ts (1 errors) ====
     
     export var x = 10;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
