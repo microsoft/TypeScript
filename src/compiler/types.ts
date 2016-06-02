@@ -1725,6 +1725,7 @@ namespace ts {
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
+        /* @internal */ patternAmbientModules?: PatternAmbientModule[];
     }
 
     export interface ScriptReferenceHost {
@@ -2200,6 +2201,18 @@ namespace ts {
 
     export interface SymbolTable {
         [index: string]: Symbol;
+    }
+
+    /** Represents a "prefix*suffix" pattern. */
+    export interface Pattern {
+        prefix: string;
+        suffix: string;
+    }
+    
+    /** Used to track a `declare module "foo*"`-like declaration. */
+    export interface PatternAmbientModule {
+        pattern: Pattern;
+        symbol: Symbol;
     }
 
     /* @internal */
