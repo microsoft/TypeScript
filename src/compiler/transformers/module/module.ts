@@ -17,6 +17,7 @@ namespace ts {
             hoistVariableDeclaration,
             setNodeEmitFlags,
             getNodeEmitFlags,
+            setSourceMapRange,
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
@@ -926,7 +927,13 @@ namespace ts {
         }
 
         function createExportStatement(name: Identifier, value: Expression, location?: TextRange) {
-            return startOnNewLine(createStatement(createExportAssignment(name, value), location));
+            const statement = createStatement(createExportAssignment(name, value));
+            statement.startsOnNewLine = true;
+            if (location) {
+                setSourceMapRange(statement, location);
+            }
+
+            return statement;
         }
 
         function createExportAssignment(name: Identifier, value: Expression) {

@@ -2251,10 +2251,10 @@ namespace ts {
 
             // While we emit the source map for the node after skipping decorators and modifiers,
             // we need to emit the comments for the original range.
+            setOriginalNode(parameter, node);
             setCommentRange(parameter, node);
             setSourceMapRange(parameter, moveRangePastModifiers(node));
             setNodeEmitFlags(parameter.name, NodeEmitFlags.NoTrailingSourceMap);
-            setOriginalNode(parameter, node);
 
             return parameter;
         }
@@ -2384,17 +2384,16 @@ namespace ts {
          * Adds a trailing VariableStatement for an enum or module declaration.
          */
         function addVarForEnumExportedFromNamespace(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
-            statements.push(
-                createVariableStatement(
-                    /*modifiers*/ undefined,
-                    [createVariableDeclaration(
-                        getDeclarationName(node),
-                        /*type*/ undefined,
-                        getExportName(node)
-                    )],
-                    /*location*/ node
-                )
+            const statement = createVariableStatement(
+                /*modifiers*/ undefined,
+                [createVariableDeclaration(
+                    getDeclarationName(node),
+                    /*type*/ undefined,
+                    getExportName(node)
+                )]
             );
+            setSourceMapRange(statement, node);
+            statements.push(statement);
         }
 
         /**
@@ -2410,47 +2409,61 @@ namespace ts {
             }
 
             const statements: Statement[] = [];
+
+            // We request to be advised when the printer is about to print this node. This allows
+            // us to set up the correct state for later substitutions.
+            let emitFlags = NodeEmitFlags.AdviseOnEmitNode;
+
+            // If needed, we should emit a variable declaration for the enum. If we emit
+            // a leading variable declaration, we should not emit leading comments for the
+            // enum body.
             if (shouldEmitVarForEnumDeclaration(node)) {
                 addVarForEnumOrModuleDeclaration(statements, node);
+
+                // We should still emit the comments if we are emitting a system module.
+                if (moduleKind !== ModuleKind.System || currentScope !== currentSourceFile) {
+                    emitFlags |= NodeEmitFlags.NoLeadingComments;
+                }
             }
 
-            const innerName = getNamespaceContainerName(node);
-            const paramName = getNamespaceParameterName(node);
+            // `parameterName` is the declaration name used inside of the enum.
+            const parameterName = getNamespaceParameterName(node);
+
+            // `containerName` is the expression used inside of the enum for assignments.
+            const containerName = getNamespaceContainerName(node);
+
+            // `exportName` is the expression used within this node's container for any exported references.
             const exportName = getExportName(node);
 
             //  (function (x) {
             //      x[x["y"] = 0] = "y";
             //      ...
             //  })(x || (x = {}));
-            statements.push(
-                setNodeEmitFlags(
-                    setOriginalNode(
-                        createStatement(
-                            createCall(
-                                createFunctionExpression(
-                                    /*asteriskToken*/ undefined,
-                                    /*name*/ undefined,
-                                    /*typeParameters*/ undefined,
-                                    [createParameter(paramName)],
-                                    /*type*/ undefined,
-                                    transformEnumBody(node, innerName)
-                                ),
-                                /*typeArguments*/ undefined,
-                                [createLogicalOr(
-                                    exportName,
-                                    createAssignment(
-                                        exportName,
-                                        createObjectLiteral()
-                                    )
-                                )]
-                            ),
-                            /*location*/ node
-                        ),
-                        /*original*/ node
+            const enumStatement = createStatement(
+                createCall(
+                    createFunctionExpression(
+                        /*asteriskToken*/ undefined,
+                        /*name*/ undefined,
+                        /*typeParameters*/ undefined,
+                        [createParameter(parameterName)],
+                        /*type*/ undefined,
+                        transformEnumBody(node, containerName)
                     ),
-                    NodeEmitFlags.AdviseOnEmitNode
-                )
+                    /*typeArguments*/ undefined,
+                    [createLogicalOr(
+                        exportName,
+                        createAssignment(
+                            exportName,
+                            createObjectLiteral()
+                        )
+                    )]
+                ),
+                /*location*/ node
             );
+
+            setOriginalNode(enumStatement, node);
+            setNodeEmitFlags(enumStatement, emitFlags);
+            statements.push(enumStatement);
 
             if (isNamespaceExport(node)) {
                 addVarForEnumExportedFromNamespace(statements, node);
@@ -2572,6 +2585,8 @@ namespace ts {
                 ]
             );
 
+            setOriginalNode(statement, /*original*/ node);
+
             // Adjust the source map emit to match the old emitter.
             if (node.kind === SyntaxKind.EnumDeclaration) {
                 setSourceMapRange(statement.declarationList, node);
@@ -2600,7 +2615,6 @@ namespace ts {
             //
             setCommentRange(statement, node);
             setNodeEmitFlags(statement, NodeEmitFlags.NoTrailingComments);
-            setOriginalNode(statement, /*original*/ node);
             statements.push(statement);
         }
 
@@ -2621,8 +2635,19 @@ namespace ts {
 
             const statements: Statement[] = [];
 
+            // We request to be advised when the printer is about to print this node. This allows
+            // us to set up the correct state for later substitutions.
+            let emitFlags = NodeEmitFlags.AdviseOnEmitNode;
+
+            // If needed, we should emit a variable declaration for the module. If we emit
+            // a leading variable declaration, we should not emit leading comments for the
+            // module body.
             if (shouldEmitVarForModuleDeclaration(node)) {
                 addVarForEnumOrModuleDeclaration(statements, node);
+                // We should still emit the comments if we are emitting a system module.
+                if (moduleKind !== ModuleKind.System || currentScope !== currentSourceFile) {
+                    emitFlags |= NodeEmitFlags.NoLeadingComments;
+                }
             }
 
             // `parameterName` is the declaration name used inside of the namespace.
@@ -2656,30 +2681,25 @@ namespace ts {
             //  (function (x_1) {
             //      x_1.y = ...;
             //  })(x || (x = {}));
-            statements.push(
-                setNodeEmitFlags(
-                    setOriginalNode(
-                        createStatement(
-                            createCall(
-                                createFunctionExpression(
-                                    /*asteriskToken*/ undefined,
-                                    /*name*/ undefined,
-                                    /*typeParameters*/ undefined,
-                                    [createParameter(parameterName)],
-                                    /*type*/ undefined,
-                                    transformModuleBody(node, containerName)
-                                ),
-                                /*typeArguments*/ undefined,
-                                [moduleArg]
-                            ),
-                            /*location*/ node
-                        ),
-                        /*original*/ node
+            const moduleStatement = createStatement(
+                createCall(
+                    createFunctionExpression(
+                        /*asteriskToken*/ undefined,
+                        /*name*/ undefined,
+                        /*typeParameters*/ undefined,
+                        [createParameter(parameterName)],
+                        /*type*/ undefined,
+                        transformModuleBody(node, containerName)
                     ),
-                    NodeEmitFlags.AdviseOnEmitNode
-                )
+                    /*typeArguments*/ undefined,
+                    [moduleArg]
+                ),
+                /*location*/ node
             );
 
+            setOriginalNode(moduleStatement, node);
+            setNodeEmitFlags(moduleStatement, emitFlags);
+            statements.push(moduleStatement);
             return statements;
         }
 
@@ -2755,11 +2775,6 @@ namespace ts {
                     && resolver.isTopLevelValueImportEqualsWithEntityName(node));
         }
 
-        function disableCommentsRecursive(node: Node) {
-            setNodeEmitFlags(node, NodeEmitFlags.NoComments | NodeEmitFlags.Merge);
-            forEachChild(node, disableCommentsRecursive);
-        }
-
         /**
          * Visits an import equals declaration.
          *
@@ -2775,7 +2790,8 @@ namespace ts {
             }
 
             const moduleReference = createExpressionFromEntityName(<EntityName>node.moduleReference);
-            disableCommentsRecursive(moduleReference);
+            setNodeEmitFlags(moduleReference, NodeEmitFlags.NoComments | NodeEmitFlags.NoNestedComments);
+
             if (isNamedExternalModuleExport(node) || !isNamespaceExport(node)) {
                 //  export var ${name} = ${moduleReference};
                 //  var ${name} = ${moduleReference};
@@ -2853,16 +2869,15 @@ namespace ts {
         }
 
         function addExportMemberAssignment(statements: Statement[], node: DeclarationStatement) {
-            statements.push(
-                createStatement(
-                    createAssignment(
-                        getExportName(node),
-                        getLocalName(node, /*noSourceMaps*/ true),
-                        /*location*/ createRange(node.name.pos, node.end)
-                    ),
-                    /*location*/ createRange(-1, node.end)
-                )
+            const expression = createAssignment(
+                getExportName(node),
+                getLocalName(node, /*noSourceMaps*/ true)
             );
+            setSourceMapRange(expression, createRange(node.name.pos, node.end));
+
+            const statement = createStatement(expression);
+            setSourceMapRange(statement, createRange(-1, node.end));
+            statements.push(statement);
         }
 
         function createNamespaceExport(exportName: Identifier, exportValue: Expression, location?: TextRange) {
