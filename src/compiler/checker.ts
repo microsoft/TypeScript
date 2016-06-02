@@ -110,16 +110,17 @@ namespace ts {
         const unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
         const resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
 
-        const nullableWideningFlags = strictNullChecks ? 0 : TypeFlags.ContainsUndefinedOrNull;
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
         const stringType = createIntrinsicType(TypeFlags.String, "string");
         const numberType = createIntrinsicType(TypeFlags.Number, "number");
         const booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean");
         const esSymbolType = createIntrinsicType(TypeFlags.ESSymbol, "symbol");
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
-        const undefinedType = createIntrinsicType(TypeFlags.Undefined | nullableWideningFlags, "undefined");
-        const nullType = createIntrinsicType(TypeFlags.Null | nullableWideningFlags, "null");
-        const emptyArrayElementType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
+        const undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
+        const undefinedWideningType = strictNullChecks ? undefinedType : createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsWideningType, "undefined");
+        const nullType = createIntrinsicType(TypeFlags.Null, "null");
+        const nullWideningType = strictNullChecks ? nullType : createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsWideningType, "null");
+        const emptyArrayElementType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsWideningType, "undefined");
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         const neverType = createIntrinsicType(TypeFlags.Never, "never");
 
@@ -3405,7 +3406,7 @@ namespace ts {
                     error(type.symbol.valueDeclaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_base_expression, symbolToString(type.symbol));
                     return type.resolvedBaseConstructorType = unknownType;
                 }
-                if (baseConstructorType !== unknownType && baseConstructorType !== nullType && !isConstructorType(baseConstructorType)) {
+                if (baseConstructorType !== unknownType && baseConstructorType !== nullWideningType && !isConstructorType(baseConstructorType)) {
                     error(baseTypeNode.expression, Diagnostics.Type_0_is_not_a_constructor_function_type, typeToString(baseConstructorType));
                     return type.resolvedBaseConstructorType = unknownType;
                 }
@@ -5011,6 +5012,7 @@ namespace ts {
             containsAny?: boolean;
             containsUndefined?: boolean;
             containsNull?: boolean;
+            containsNonWideningType?: boolean;
         }
 
         function addTypeToSet(typeSet: TypeSet, type: Type, typeSetKind: TypeFlags) {
@@ -5021,6 +5023,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Any) typeSet.containsAny = true;
                 if (type.flags & TypeFlags.Undefined) typeSet.containsUndefined = true;
                 if (type.flags & TypeFlags.Null) typeSet.containsNull = true;
+                if (!(type.flags & TypeFlags.ContainsWideningType)) typeSet.containsNonWideningType = true;
             }
             else if (type !== neverType && !contains(typeSet, type)) {
                 typeSet.push(type);
@@ -5081,8 +5084,8 @@ namespace ts {
                 removeSubtypes(typeSet);
             }
             if (typeSet.length === 0) {
-                return typeSet.containsNull ? nullType :
-                    typeSet.containsUndefined ? undefinedType :
+                return typeSet.containsNull ? typeSet.containsNonWideningType ? nullType : nullWideningType :
+                    typeSet.containsUndefined ? typeSet.containsNonWideningType ? undefinedType : undefinedWideningType :
                     neverType;
             }
             else if (typeSet.length === 1) {
@@ -5882,7 +5885,7 @@ namespace ts {
                 if (!(target.flags & TypeFlags.Never)) {
                     if (target.flags & TypeFlags.Any || source.flags & TypeFlags.Never) return Ternary.True;
                     if (source.flags & TypeFlags.Undefined) {
-                        if (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void) || source === emptyArrayElementType) return Ternary.True;
+                        if (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void)) return Ternary.True;
                     }
                     if (source.flags & TypeFlags.Null) {
                         if (!strictNullChecks || target.flags & TypeFlags.Null) return Ternary.True;
@@ -6972,7 +6975,7 @@ namespace ts {
             if (type.flags & TypeFlags.ObjectLiteral) {
                 for (const p of getPropertiesOfObjectType(type)) {
                     const t = getTypeOfSymbol(p);
-                    if (t.flags & TypeFlags.ContainsUndefinedOrNull) {
+                    if (t.flags & TypeFlags.ContainsWideningType) {
                         if (!reportWideningErrorsInType(t)) {
                             error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(getWidenedType(t)));
                         }
@@ -7019,7 +7022,7 @@ namespace ts {
         }
 
         function reportErrorsFromWidening(declaration: Declaration, type: Type) {
-            if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & TypeFlags.ContainsUndefinedOrNull) {
+            if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & TypeFlags.ContainsWideningType) {
                 // Report implicit any error within type if possible, otherwise report error on declaration
                 if (!reportWideningErrorsInType(type)) {
                     reportImplicitAnyError(declaration, type);
@@ -8311,7 +8314,7 @@ namespace ts {
             const classInstanceType = <InterfaceType>getDeclaredTypeOfSymbol(classSymbol);
             const baseConstructorType = getBaseConstructorTypeOfClass(classInstanceType);
 
-            return baseConstructorType === nullType;
+            return baseConstructorType === nullWideningType;
         }
 
         function checkThisExpression(node: Node): Type {
@@ -9202,7 +9205,7 @@ namespace ts {
                     }
                 }
             }
-            return createArrayType(elementTypes.length ? getUnionType(elementTypes) : emptyArrayElementType);
+            return createArrayType(elementTypes.length ? getUnionType(elementTypes) : strictNullChecks ? neverType : undefinedWideningType);
         }
 
         function isNumericName(name: DeclarationName): boolean {
@@ -12002,7 +12005,7 @@ namespace ts {
 
         function checkVoidExpression(node: VoidExpression): Type {
             checkExpression(node.expression);
-            return undefinedType;
+            return undefinedWideningType;
         }
 
         function checkAwaitExpression(node: AwaitExpression): Type {
@@ -12409,7 +12412,7 @@ namespace ts {
                 case SyntaxKind.InKeyword:
                     return checkInExpression(left, right, leftType, rightType);
                 case SyntaxKind.AmpersandAmpersandToken:
-                    return addNullableKind(rightType, getNullableKind(leftType));
+                    return strictNullChecks ? addNullableKind(rightType, getNullableKind(leftType)) : rightType;
                 case SyntaxKind.BarBarToken:
                     return getUnionType([getNonNullableType(leftType), rightType]);
                 case SyntaxKind.EqualsToken:
@@ -12676,7 +12679,7 @@ namespace ts {
                 case SyntaxKind.SuperKeyword:
                     return checkSuperExpression(node);
                 case SyntaxKind.NullKeyword:
-                    return nullType;
+                    return nullWideningType;
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
                     return booleanType;
@@ -12734,7 +12737,7 @@ namespace ts {
                 case SyntaxKind.SpreadElementExpression:
                     return checkSpreadElementExpression(<SpreadElementExpression>node, contextualMapper);
                 case SyntaxKind.OmittedExpression:
-                    return undefinedType;
+                    return undefinedWideningType;
                 case SyntaxKind.YieldExpression:
                     return checkYieldExpression(<YieldExpression>node);
                 case SyntaxKind.JsxExpression:
@@ -17648,7 +17651,7 @@ namespace ts {
             // Setup global builtins
             addToSymbolTable(globals, builtinGlobals, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0);
 
-            getSymbolLinks(undefinedSymbol).type = undefinedType;
+            getSymbolLinks(undefinedSymbol).type = undefinedWideningType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
             getSymbolLinks(unknownSymbol).type = unknownType;
 
