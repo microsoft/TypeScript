@@ -1287,7 +1287,26 @@ namespace ts {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
                 }
                 else {
-                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                    let pattern: Pattern | undefined;
+                    if (node.name.kind === SyntaxKind.StringLiteral) {
+                        const text = (<StringLiteral>node.name).text;
+                        if (hasZeroOrOneAsteriskCharacter(text)) {
+                            pattern = tryParsePattern(text);
+                        }
+                        else {
+                            errorOnFirstToken(node.name, Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, text);
+                        }
+                    }
+
+                    if (pattern) {
+                        // TODO: don't really need such a symbol in container.locals...
+                        const symbol = declareSymbol(container.locals, undefined, node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                        file.patternAmbientModules = file.patternAmbientModules || [];
+                        file.patternAmbientModules.push({ pattern, symbol });
+                    }
+                    else {
+                        declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                    }
                 }
             }
             else {
