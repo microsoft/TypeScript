@@ -44,7 +44,7 @@ namespace ts {
 
         let typeCount = 0;
         let symbolCount = 0;
-        let isSourceFileADefinitionFile: boolean = false;
+        let isSourceFileADefinitionFile = false;
 
         const emptyArray: any[] = [];
         const emptySymbols: SymbolTable = {};
