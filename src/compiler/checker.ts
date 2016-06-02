@@ -110,7 +110,7 @@ namespace ts {
         const unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
         const resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
 
-        const nullableWideningFlags = strictNullChecks ? 0 : TypeFlags.ContainsUndefinedOrNull;
+        const nullableWideningFlags = strictNullChecks ? 0 : TypeFlags.ContainsWideningType;
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
         const stringType = createIntrinsicType(TypeFlags.String, "string");
         const numberType = createIntrinsicType(TypeFlags.Number, "number");
@@ -119,9 +119,9 @@ namespace ts {
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
         const undefinedType = createIntrinsicType(TypeFlags.Undefined | nullableWideningFlags, "undefined");
         const nullType = createIntrinsicType(TypeFlags.Null | nullableWideningFlags, "null");
-        const emptyArrayElementType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         const neverType = createIntrinsicType(TypeFlags.Never, "never");
+        const wideningNeverType = createIntrinsicType(TypeFlags.Never | TypeFlags.ContainsWideningType, "never");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -5022,7 +5022,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Undefined) typeSet.containsUndefined = true;
                 if (type.flags & TypeFlags.Null) typeSet.containsNull = true;
             }
-            else if (type !== neverType && !contains(typeSet, type)) {
+            else if (!(type.flags & TypeFlags.Never) && !contains(typeSet, type)) {
                 typeSet.push(type);
             }
         }
@@ -5882,7 +5882,7 @@ namespace ts {
                 if (!(target.flags & TypeFlags.Never)) {
                     if (target.flags & TypeFlags.Any || source.flags & TypeFlags.Never) return Ternary.True;
                     if (source.flags & TypeFlags.Undefined) {
-                        if (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void) || source === emptyArrayElementType) return Ternary.True;
+                        if (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void)) return Ternary.True;
                     }
                     if (source.flags & TypeFlags.Null) {
                         if (!strictNullChecks || target.flags & TypeFlags.Null) return Ternary.True;
@@ -6796,7 +6796,7 @@ namespace ts {
             // A type is array-like if it is a reference to the global Array or global ReadonlyArray type,
             // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>
             return type.flags & TypeFlags.Reference && ((<TypeReference>type).target === globalArrayType || (<TypeReference>type).target === globalReadonlyArrayType) ||
-                !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
+                !(type.flags & TypeFlags.WideningType) && isTypeAssignableTo(type, anyReadonlyArrayType);
         }
 
         function isTupleLikeType(type: Type): boolean {
@@ -6920,7 +6920,7 @@ namespace ts {
 
         function getWidenedType(type: Type): Type {
             if (type.flags & TypeFlags.RequiresWidening) {
-                if (type.flags & TypeFlags.Nullable) {
+                if (type.flags & TypeFlags.WideningType) {
                     return anyType;
                 }
                 if (type.flags & TypeFlags.ObjectLiteral) {
@@ -6972,7 +6972,7 @@ namespace ts {
             if (type.flags & TypeFlags.ObjectLiteral) {
                 for (const p of getPropertiesOfObjectType(type)) {
                     const t = getTypeOfSymbol(p);
-                    if (t.flags & TypeFlags.ContainsUndefinedOrNull) {
+                    if (t.flags & TypeFlags.ContainsWideningType) {
                         if (!reportWideningErrorsInType(t)) {
                             error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(getWidenedType(t)));
                         }
@@ -7019,7 +7019,7 @@ namespace ts {
         }
 
         function reportErrorsFromWidening(declaration: Declaration, type: Type) {
-            if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & TypeFlags.ContainsUndefinedOrNull) {
+            if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & TypeFlags.ContainsWideningType) {
                 // Report implicit any error within type if possible, otherwise report error on declaration
                 if (!reportWideningErrorsInType(type)) {
                     reportImplicitAnyError(declaration, type);
@@ -9202,7 +9202,8 @@ namespace ts {
                     }
                 }
             }
-            return createArrayType(elementTypes.length ? getUnionType(elementTypes) : emptyArrayElementType);
+            const elementType = getUnionType(elementTypes);
+            return createArrayType(elementType === neverType ? strictNullChecks ? wideningNeverType : undefinedType : elementType);
         }
 
         function isNumericName(name: DeclarationName): boolean {

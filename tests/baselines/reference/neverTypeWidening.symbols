@@ -1,0 +1,38 @@
+=== tests/cases/compiler/neverTypeWidening.ts ===
+
+let a = [];                     // never[] widens to any[]
+>a : Symbol(a, Decl(neverTypeWidening.ts, 1, 3))
+
+let b = [...[], ...[]];         // never[] widens to any[]
+>b : Symbol(b, Decl(neverTypeWidening.ts, 2, 3))
+
+let c = [...[...[]]];           // never[] widens to any[]
+>c : Symbol(c, Decl(neverTypeWidening.ts, 3, 3))
+
+let d = [...[], ...[1, 2, 3]];  // number[]
+>d : Symbol(d, Decl(neverTypeWidening.ts, 4, 3))
+
+let e = [1, 2, 3].concat([]);   // number[]
+>e : Symbol(e, Decl(neverTypeWidening.ts, 5, 3))
+>[1, 2, 3].concat : Symbol(Array.concat, Decl(lib.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.d.ts, --, --))
+
+// Repro from #8878
+
+function concat<T>(xs: T[], ys: T[]): T[] {
+>concat : Symbol(concat, Decl(neverTypeWidening.ts, 5, 29))
+>T : Symbol(T, Decl(neverTypeWidening.ts, 9, 16))
+>xs : Symbol(xs, Decl(neverTypeWidening.ts, 9, 19))
+>T : Symbol(T, Decl(neverTypeWidening.ts, 9, 16))
+>ys : Symbol(ys, Decl(neverTypeWidening.ts, 9, 27))
+>T : Symbol(T, Decl(neverTypeWidening.ts, 9, 16))
+>T : Symbol(T, Decl(neverTypeWidening.ts, 9, 16))
+
+    return [...xs, ...ys];
+>xs : Symbol(xs, Decl(neverTypeWidening.ts, 9, 19))
+>ys : Symbol(ys, Decl(neverTypeWidening.ts, 9, 27))
+}
+const y = concat([], ["a"]);
+>y : Symbol(y, Decl(neverTypeWidening.ts, 12, 5))
+>concat : Symbol(concat, Decl(neverTypeWidening.ts, 5, 29))
+
