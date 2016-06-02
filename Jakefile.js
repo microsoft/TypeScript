@@ -782,7 +782,7 @@ function runTestsAndWriteOutput(file, defaultSubsets) {
         subsets = [];
         subsetRegexes = [];
         negations = [];
-        for (const subset of defaultSubsets) {
+        for (var subset of defaultSubsets) {
             subsets.push(subset.name);
             subsetRegexes.push(subset.pattern);
             negations.push(subset.pattern);
