@@ -127,6 +127,7 @@ namespace ts.server {
         export const ProjectInfo = "projectInfo";
         export const ReloadProjects = "reloadProjects";
         export const Unknown = "unknown";
+        export const LoadExternalProject = "loadExternalProject";
     }
 
     namespace Errors {
@@ -1027,6 +1028,10 @@ namespace ts.server {
         }
 
         private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
+            [CommandNames.LoadExternalProject]: (request: protocol.Request) => {
+                const project = this.projectService.loadExternalProject(request.arguments);
+                return { responseRequired: true, response: { files: project.getFileNames() } };
+            },
             [CommandNames.Exit]: () => {
                 this.exit();
                 return { responseRequired: false };

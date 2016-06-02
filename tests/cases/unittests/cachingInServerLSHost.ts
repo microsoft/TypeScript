@@ -82,7 +82,7 @@ namespace ts {
         const projectService = new server.ProjectService(serverHost, logger);
         const rootScriptInfo = projectService.openFile(rootFile, /* openedByClient */true);
         const project = projectService.createInferredProject(rootScriptInfo);
-        project.setProjectOptions({ files: [rootScriptInfo.fileName], compilerOptions: { module: ts.ModuleKind.AMD } });
+        project.setCompilerOptions({ module: ts.ModuleKind.AMD } );
         return {
             project,
             rootScriptInfo
@@ -166,10 +166,9 @@ namespace ts {
                 // setting compiler options discards module resolution cache
                 fileExistsCalled = false;
 
-                const opts = ts.clone(project.projectOptions);
-                opts.compilerOptions = ts.clone(opts.compilerOptions);
-                opts.compilerOptions.target = ts.ScriptTarget.ES5;
-                project.setProjectOptions(opts);
+                const compilerOptions = ts.clone(project.getCompilerOptions());
+                compilerOptions.target = ts.ScriptTarget.ES5;
+                project.setCompilerOptions(compilerOptions);
 
                 project.languageService.getSemanticDiagnostics(imported.name);
                 assert.isTrue(fileExistsCalled);

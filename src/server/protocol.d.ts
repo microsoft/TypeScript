@@ -418,6 +418,17 @@ declare namespace ts.server.protocol {
         body?: RenameResponseBody;
     }
 
+    export interface ExternalProject {
+        projectFileName: string;
+        rootFiles: string[];
+        options: CompilerOptions;
+    }
+
+    export interface OpenFile {
+        fileName: string;
+        content?: string;
+    }
+
     /**
      * Editor options
      */
@@ -535,6 +546,16 @@ declare namespace ts.server.protocol {
       */
     export interface OpenRequest extends Request {
         arguments: OpenRequestArgs;
+    }
+
+    type LoadExternalProjectArgs = ExternalProject;
+
+    export interface LoadExternalProject extends Request {
+        arguments: LoadExternalProjectArgs;
+    }
+
+    interface LoadExternalProjectResponse extends Response {
+        files: string[];
     }
 
     /**
