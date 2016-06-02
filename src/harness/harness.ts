@@ -1678,9 +1678,15 @@ namespace Harness {
 
             const actual = generateContent();
 
+            if (actual === undefined) {
+                throw new Error("The generated content was \"undefined\". Return \"null\" if no baselining is required.\"");
+            }
+
             // Store the content in the 'local' folder so we
             // can accept it later (manually)
-            if (actual !== undefined) {
+            /* tslint:disable:no-null-keyword */
+            if (actual !== null) {
+            /* tslint:enable:no-null-keyword */
                 IO.writeFile(actualFileName, actual);
             }
 
@@ -1738,10 +1744,8 @@ namespace Harness {
                 else {
                     actual = generateActual(actualFileName, generateContent);
 
-                    if (actual) {
-                        const comparison = compareToBaseline(actual, relativeFileName, opts);
-                        writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, descriptionForDescribe);
-                    }
+                    const comparison = compareToBaseline(actual, relativeFileName, opts);
+                    writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, descriptionForDescribe);
                 }
             }
             catch (e) {
