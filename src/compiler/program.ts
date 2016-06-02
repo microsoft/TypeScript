@@ -1712,9 +1712,12 @@ namespace ts {
                                 // The StringLiteral must specify a top - level external module name.
                                 // Relative external module names are not permitted
 
-                                // NOTE: body of ambient module is always a module block
-                                for (const statement of (<ModuleBlock>(<ModuleDeclaration>node).body).statements) {
-                                    collectModuleReferences(statement, /*inAmbientModule*/ true);
+                                // NOTE: body of ambient module is always a module block, if it exists
+                                const body = <ModuleBlock>(<ModuleDeclaration>node).body;
+                                if (body) {
+                                    for (const statement of body.statements) {
+                                        collectModuleReferences(statement, /*inAmbientModule*/ true);
+                                    }
                                 }
                             }
                         }

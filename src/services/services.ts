@@ -415,7 +415,7 @@ namespace ts {
                     }
 
                     // If this is left side of dotted module declaration, there is no doc comments associated with this node
-                    if (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).body.kind === SyntaxKind.ModuleDeclaration) {
+                    if (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).body && (<ModuleDeclaration>declaration).body.kind === SyntaxKind.ModuleDeclaration) {
                         return;
                     }
 
