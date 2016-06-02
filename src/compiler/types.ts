@@ -469,7 +469,6 @@ namespace ts {
         flags: NodeFlags;
         /* @internal */ modifierFlagsCache?: ModifierFlags;
         /* @internal */ transformFlags?: TransformFlags;
-        /* @internal */ excludeTransformFlags?: TransformFlags;
         decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
         modifiers?: NodeArray<Modifier>;                // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)

@@ -1056,7 +1056,6 @@ namespace ts {
         this.flags = NodeFlags.None;
         this.modifierFlagsCache = ModifierFlags.None;
         this.transformFlags = TransformFlags.None;
-        this.excludeTransformFlags = TransformFlags.None;
         this.parent = undefined;
         this.original = undefined;
         this.transformId = 0;
