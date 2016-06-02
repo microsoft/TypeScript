@@ -444,19 +444,7 @@ namespace ts {
         if (result && result.jsDocComment) {
             // because the jsDocComment was parsed out of the source file, it might
             // not be covered by the fixupParentReferences.
-            let parentNode: Node = result.jsDocComment;
-            forEachChild(result.jsDocComment, visitNode);
-
-            function visitNode(n: Node): void {
-                if (n.parent === undefined) {
-                    n.parent = parentNode;
-
-                    const saveParent = parentNode;
-                    parentNode = n;
-                    forEachChild(n, visitNode);
-                    parentNode = saveParent;
-                }
-            }
+            Parser.fixupParentReferences(result.jsDocComment);
         }
 
         return result;
@@ -671,14 +659,14 @@ namespace ts {
             return node;
         }
 
-        export function fixupParentReferences(sourceFile: Node) {
+        export function fixupParentReferences(rootNode: Node) {
             // normally parent references are set during binding. However, for clients that only need
             // a syntax tree, and no semantic features, then the binding process is an unnecessary
             // overhead.  This functions allows us to set all the parents, without all the expense of
             // binding.
 
-            let parent: Node = sourceFile;
-            forEachChild(sourceFile, visitNode);
+            let parent: Node = rootNode;
+            forEachChild(rootNode, visitNode);
             return;
 
             function visitNode(n: Node): void {
