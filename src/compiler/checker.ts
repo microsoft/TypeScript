@@ -10322,7 +10322,7 @@ namespace ts {
         }
 
         function hasCorrectArity(node: CallLikeExpression, args: Expression[], signature: Signature) {
-            let adjustedArgCount: number;            // Apparent number of arguments we will have in this call
+            let argCount: number;            // Apparent number of arguments we will have in this call
             let typeArguments: NodeArray<TypeNode>;  // Type arguments (undefined if none)
             let callIsIncomplete: boolean;           // In incomplete call we want to be lenient when we have too few arguments
             let isDecorator: boolean;
@@ -10333,7 +10333,7 @@ namespace ts {
 
                 // Even if the call is incomplete, we'll have a missing expression as our last argument,
                 // so we can say the count is just the arg list length
-                adjustedArgCount = args.length;
+                argCount = args.length;
                 typeArguments = undefined;
 
                 if (tagExpression.template.kind === SyntaxKind.TemplateExpression) {
@@ -10356,7 +10356,7 @@ namespace ts {
             else if (node.kind === SyntaxKind.Decorator) {
                 isDecorator = true;
                 typeArguments = undefined;
-                adjustedArgCount = getEffectiveArgumentCount(node, /*args*/ undefined, signature);
+                argCount = getEffectiveArgumentCount(node, /*args*/ undefined, signature);
             }
             else {
                 const callExpression = <CallExpression>node;
@@ -10367,8 +10367,7 @@ namespace ts {
                     return signature.minArgumentCount === 0;
                 }
 
-                // For IDE scenarios we may have an incomplete call, so a trailing comma is tantamount to adding another argument.
-                adjustedArgCount = callExpression.arguments.hasTrailingComma ? args.length + 1 : args.length;
+                argCount = args.length;
 
                 // If we are missing the close paren, the call is incomplete.
                 callIsIncomplete = (<CallExpression>callExpression).arguments.end === callExpression.end;
@@ -10392,12 +10391,12 @@ namespace ts {
             }
 
             // Too many arguments implies incorrect arity.
-            if (!signature.hasRestParameter && adjustedArgCount > signature.parameters.length) {
+            if (!signature.hasRestParameter && argCount > signature.parameters.length) {
                 return false;
             }
 
             // If the call is incomplete, we should skip the lower bound check.
-            const hasEnoughArguments = adjustedArgCount >= signature.minArgumentCount;
+            const hasEnoughArguments = argCount >= signature.minArgumentCount;
             return callIsIncomplete || hasEnoughArguments;
         }
 
@@ -18027,10 +18026,6 @@ namespace ts {
         }
 
         function checkGrammarParameterList(parameters: NodeArray<ParameterDeclaration>) {
-            if (checkGrammarForDisallowedTrailingComma(parameters)) {
-                return true;
-            }
-
             let seenOptionalParameter = false;
             const parameterCount = parameters.length;
 
@@ -18149,8 +18144,7 @@ namespace ts {
         }
 
         function checkGrammarArguments(node: CallExpression, args: NodeArray<Expression>): boolean {
-            return checkGrammarForDisallowedTrailingComma(args) ||
-                checkGrammarForOmittedArgument(node, args);
+            return checkGrammarForOmittedArgument(node, args);
         }
 
         function checkGrammarHeritageClause(node: HeritageClause): boolean {
