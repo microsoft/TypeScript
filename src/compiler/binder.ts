@@ -506,7 +506,7 @@ namespace ts {
             container = saveContainer;
             blockScopeContainer = savedBlockScopeContainer;
         }
-        
+
         function bindChildren(node: Node): void {
             if (skipTransformFlagAggregation) {
                 bindChildrenWorker(node);
@@ -2267,7 +2267,6 @@ namespace ts {
 
     function computeCallExpression(node: CallExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const excludeFlags = TransformFlags.ArrayLiteralOrCallOrNewExcludes;
         const expression = node.expression;
         const expressionKind = expression.kind;
 
@@ -2279,8 +2278,7 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.ArrayLiteralOrCallOrNewExcludes;
     }
 
     function isSuperOrSuperProperty(node: Node, kind: SyntaxKind) {
@@ -2300,7 +2298,6 @@ namespace ts {
 
     function computeBinaryExpression(node: BinaryExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const excludeFlags = TransformFlags.NodeExcludes;
         const operatorTokenKind = node.operatorToken.kind;
         const leftKind = node.left.kind;
 
@@ -2317,13 +2314,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
     }
 
     function computeParameter(node: ParameterDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const excludeFlags = TransformFlags.ParameterExcludes;
         const modifierFlags = getModifierFlags(node);
         const name = node.name;
         const initializer = node.initializer;
@@ -2352,13 +2347,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.ParameterExcludes;
     }
 
     function computeParenthesizedExpression(node: ParenthesizedExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const excludeFlags = TransformFlags.NodeExcludes;
         const expression = node.expression;
         const expressionKind = expression.kind;
         const expressionTransformFlags = expression.transformFlags;
@@ -2378,13 +2371,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
     }
 
     function computeClassDeclaration(node: ClassDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags: TransformFlags;
-        const excludeFlags = TransformFlags.ClassExcludes;
         const modifierFlags = getModifierFlags(node);
 
         if (modifierFlags & ModifierFlags.Ambient) {
@@ -2411,14 +2402,12 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.ClassExcludes;
     }
 
     function computeClassExpression(node: ClassExpression, subtreeFlags: TransformFlags) {
         // A ClassExpression is ES6 syntax.
         let transformFlags = subtreeFlags | TransformFlags.AssertES6;
-        const excludeFlags = TransformFlags.ClassExcludes;
 
         // A class with a parameter property assignment, property initializer, or decorator is
         // TypeScript syntax.
@@ -2433,13 +2422,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.ClassExcludes;
     }
 
     function computeHeritageClause(node: HeritageClause, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const excludeFlags = TransformFlags.NodeExcludes;
 
         switch (node.token) {
             case SyntaxKind.ExtendsKeyword:
@@ -2458,15 +2445,13 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
     }
 
     function computeExpressionWithTypeArguments(node: ExpressionWithTypeArguments, subtreeFlags: TransformFlags) {
         // An ExpressionWithTypeArguments is ES6 syntax, as it is used in the
         // extends clause of a class.
         let transformFlags = subtreeFlags | TransformFlags.AssertES6;
-        const excludeFlags = TransformFlags.NodeExcludes;
 
         // If an ExpressionWithTypeArguments contains type arguments, then it
         // is TypeScript syntax.
@@ -2475,13 +2460,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
     }
 
     function computeConstructor(node: ConstructorDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const excludeFlags = TransformFlags.ConstructorExcludes;
         const body = node.body;
 
         if (body === undefined) {
@@ -2490,14 +2473,12 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.ConstructorExcludes;
     }
 
     function computeMethod(node: MethodDeclaration, subtreeFlags: TransformFlags) {
         // A MethodDeclaration is ES6 syntax.
         let transformFlags = subtreeFlags | TransformFlags.AssertES6;
-        const excludeFlags = TransformFlags.MethodOrAccessorExcludes;
         const modifierFlags = getModifierFlags(node);
         const body = node.body;
         const typeParameters = node.typeParameters;
@@ -2512,13 +2493,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.MethodOrAccessorExcludes;
     }
 
     function computeAccessor(node: AccessorDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const excludeFlags = TransformFlags.MethodOrAccessorExcludes;
         const modifierFlags = getModifierFlags(node);
         const body = node.body;
 
@@ -2531,14 +2510,12 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.MethodOrAccessorExcludes;
     }
 
     function computePropertyDeclaration(node: PropertyDeclaration, subtreeFlags: TransformFlags) {
         // A PropertyDeclaration is TypeScript syntax.
         let transformFlags = subtreeFlags | TransformFlags.AssertTypeScript;
-        const excludeFlags = TransformFlags.NodeExcludes;
 
         // If the PropertyDeclaration has an initializer, we need to inform its ancestor
         // so that it handle the transformation.
@@ -2547,13 +2524,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
     }
 
     function computeFunctionDeclaration(node: FunctionDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags: TransformFlags;
-        const excludeFlags = TransformFlags.FunctionExcludes;
         const modifierFlags = getModifierFlags(node);
         const body = node.body;
         const asteriskToken = node.asteriskToken;
@@ -2585,13 +2560,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.FunctionExcludes;
     }
 
     function computeFunctionExpression(node: FunctionExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const excludeFlags = TransformFlags.FunctionExcludes;
         const modifierFlags = getModifierFlags(node);
         const asteriskToken = node.asteriskToken;
 
@@ -2607,14 +2580,12 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.FunctionExcludes;
     }
 
     function computeArrowFunction(node: ArrowFunction, subtreeFlags: TransformFlags) {
         // An ArrowFunction is ES6 syntax, and excludes markers that should not escape the scope of an ArrowFunction.
         let transformFlags = subtreeFlags | TransformFlags.AssertES6;
-        const excludeFlags = TransformFlags.ArrowFunctionExcludes;
         const modifierFlags = getModifierFlags(node);
 
         // An async arrow function is TypeScript syntax.
@@ -2628,13 +2599,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.ArrowFunctionExcludes;
     }
 
     function computePropertyAccess(node: PropertyAccessExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const excludeFlags = TransformFlags.NodeExcludes;
         const expression = node.expression;
         const expressionKind = expression.kind;
 
@@ -2645,13 +2614,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
     }
 
     function computeVariableDeclaration(node: VariableDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const excludeFlags = TransformFlags.NodeExcludes;
         const nameKind = node.name.kind;
 
         // A VariableDeclaration with a binding pattern is ES6 syntax.
@@ -2660,13 +2627,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
     }
 
     function computeVariableStatement(node: VariableStatement, subtreeFlags: TransformFlags) {
         let transformFlags: TransformFlags;
-        const excludeFlags = TransformFlags.NodeExcludes;
         const modifierFlags = getModifierFlags(node);
         const declarationListTransformFlags = node.declarationList.transformFlags;
 
@@ -2688,13 +2653,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
     }
 
     function computeLabeledStatement(node: LabeledStatement, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const excludeFlags = TransformFlags.NodeExcludes;
 
         // A labeled statement containing a block scoped binding *may* need to be transformed from ES6.
         if (subtreeFlags & TransformFlags.ContainsBlockScopedBinding
@@ -2703,13 +2666,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
     }
 
     function computeImportEquals(node: ImportEqualsDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const excludeFlags = TransformFlags.NodeExcludes;
 
         // An ImportEqualsDeclaration with a namespace reference is TypeScript.
         if (!isExternalModuleImportEqualsDeclaration(node)) {
@@ -2717,13 +2678,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
     }
 
     function computeExpressionStatement(node: ExpressionStatement, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const excludeFlags = TransformFlags.NodeExcludes;
 
         // If the expression of an expression statement is a destructuring assignment,
         // then we treat the statement as ES6 so that we can indicate that we do not
@@ -2733,13 +2692,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
     }
 
     function computeModuleDeclaration(node: ModuleDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags = TransformFlags.AssertTypeScript;
-        const excludeFlags = TransformFlags.ModuleExcludes;
         const modifierFlags = getModifierFlags(node);
 
         if ((modifierFlags & ModifierFlags.Ambient) === 0) {
@@ -2747,13 +2704,11 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.ModuleExcludes;
     }
 
     function computeVariableDeclarationList(node: VariableDeclarationList, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const excludeFlags = TransformFlags.VariableDeclarationListExcludes;
 
         if (subtreeFlags & TransformFlags.ContainsBindingPattern) {
             transformFlags |= TransformFlags.AssertES6;
@@ -2765,8 +2720,7 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
-        return transformFlags & ~excludeFlags;
+        return transformFlags & ~TransformFlags.VariableDeclarationListExcludes;
     }
 
     function computeOther(node: Node, kind: SyntaxKind, subtreeFlags: TransformFlags) {
@@ -2948,7 +2902,6 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags;
         return transformFlags & ~excludeFlags;
     }
 }
