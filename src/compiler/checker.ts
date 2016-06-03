@@ -380,7 +380,6 @@ namespace ts {
         }
 
         function mergeSymbol(target: Symbol, source: Symbol) {
-            //TODO: how to merge w/ shorthand ambient module?
             if (!(target.flags & getExcludedSymbolFlags(source.flags))) {
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
                     // reset flag when merging instantiated module into value module that has only const enums
