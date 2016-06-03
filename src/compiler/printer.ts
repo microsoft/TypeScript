@@ -169,7 +169,7 @@ const _super = (function (geti, seti) {
         const printStart = performance.mark();
 
         // Emit each output file
-        forEachEmitFile(host, transformed.getSourceFiles(), emitFile);
+        forEachTransformedEmitFile(host, transformed.getSourceFiles(), emitFile);
 
         // Clean up after transformation
         transformed.dispose();
@@ -220,7 +220,7 @@ const _super = (function (geti, seti) {
                 forEach(sourceFiles, emitEmitHelpers);
             }
 
-            // Transform and print the source files
+            // Print each transformed source file.
             forEach(sourceFiles, printSourceFile);
 
             writeLine();

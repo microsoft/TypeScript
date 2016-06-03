@@ -300,8 +300,8 @@ namespace ts {
             return getTokenPosOfNode(node.jsDocComments[0]);
         }
 
-        // For a syntax list, it is possible that one of its children has JSDocComment nodes, while 
-        // the syntax list itself considers them as normal trivia. Therefore if we simply skip 
+        // For a syntax list, it is possible that one of its children has JSDocComment nodes, while
+        // the syntax list itself considers them as normal trivia. Therefore if we simply skip
         // trivia for the list, we may have skipped the JSDocComment as well. So we should process its
         // first child to determine the actual position of its first token.
         if (node.kind === SyntaxKind.SyntaxList && (<SyntaxList>node)._children.length > 0) {
@@ -2485,6 +2485,15 @@ namespace ts {
         declarationFilePath: string;
     }
 
+    /**
+     * Gets the source files that are expected to have an emit output.
+     *
+     * Originally part of `forEachExpectedEmitFile`, this functionality was extracted to support
+     * transformations.
+     *
+     * @param host An EmitHost.
+     * @param targetSourceFile An optional target source file to emit.
+     */
     export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile) {
         const options = host.getCompilerOptions();
         if (options.outFile || options.out) {
@@ -2508,7 +2517,18 @@ namespace ts {
         return !isDeclarationFile(sourceFile) && !isExternalModule(sourceFile);
     }
 
-    export function forEachEmitFile(host: EmitHost, sourceFiles: SourceFile[],
+    /**
+     * Iterates over each source file to emit. The source files are expected to have been
+     * transformed for use by the pretty printer.
+     *
+     * Originally part of `forEachExpectedEmitFile`, this functionality was extracted to support
+     * transformations.
+     *
+     * @param host An EmitHost.
+     * @param sourceFiles The transformed source files to emit.
+     * @param action The action to execute.
+     */
+    export function forEachTransformedEmitFile(host: EmitHost, sourceFiles: SourceFile[],
         action: (jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) => void) {
         const options = host.getCompilerOptions();
         // Emit on each source file
@@ -2559,6 +2579,15 @@ namespace ts {
         return options.sourceMap ? jsFilePath + ".map" : undefined;
     }
 
+    /**
+     * Iterates over the source files that are expected to have an emit output. This function
+     * is used by the legacy emitter and the declaration emitter and should not be used by
+     * the tree transforming emitter.
+     *
+     * @param host An EmitHost.
+     * @param action The action to execute.
+     * @param targetSourceFile An optional target source file to emit.
+     */
     export function forEachExpectedEmitFile(host: EmitHost,
         action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) => void,
         targetSourceFile?: SourceFile) {
