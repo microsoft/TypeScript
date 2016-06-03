@@ -300,8 +300,8 @@ namespace ts {
             return getTokenPosOfNode(node.jsDocComments[0]);
         }
 
-        // For a syntax list, it is possible that one of its children has JSDocComment nodes, while 
-        // the syntax list itself considers them as normal trivia. Therefore if we simply skip 
+        // For a syntax list, it is possible that one of its children has JSDocComment nodes, while
+        // the syntax list itself considers them as normal trivia. Therefore if we simply skip
         // trivia for the list, we may have skipped the JSDocComment as well. So we should process its
         // first child to determine the actual position of its first token.
         if (node.kind === SyntaxKind.SyntaxList && (<SyntaxList>node)._children.length > 0) {
@@ -1926,27 +1926,55 @@ namespace ts {
         return node;
     }
 
-    export function isSourceTreeNode(node: Node): boolean {
+    /**
+     * Gets a value indicating whether a node originated in the parse tree.
+     *
+     * @param node The node to test.
+     */
+    export function isParseTreeNode(node: Node): boolean {
         return (node.flags & NodeFlags.Synthesized) === 0;
     }
 
-    export function getSourceTreeNode(node: Node): Node {
-        if (isSourceTreeNode(node)) {
+    /**
+     * Gets the original parse tree node for a node.
+     *
+     * @param node The original node.
+     * @returns The original parse tree node if found; otherwise, undefined.
+     */
+    export function getParseTreeNode(node: Node): Node;
+
+    /**
+     * Gets the original parse tree node for a node.
+     *
+     * @param node The original node.
+     * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
+     * @returns The original parse tree node if found; otherwise, undefined.
+     */
+    export function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
+    export function getParseTreeNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
+        if (isParseTreeNode(node)) {
             return node;
         }
 
         node = getOriginalNode(node);
 
-        if (isSourceTreeNode(node)) {
+        if (isParseTreeNode(node) && (!nodeTest || nodeTest(node))) {
             return node;
         }
 
         return undefined;
     }
 
-    export function getSourceTreeNodeOfType<T extends Node>(node: T, nodeTest: (node: Node) => node is T): T {
-        const source = getSourceTreeNode(node);
-        return source && nodeTest(source) ? source : undefined;
+    export function getOriginalSourceFiles(sourceFiles: SourceFile[]) {
+        const originalSourceFiles: SourceFile[] = [];
+        for (const sourceFile of sourceFiles) {
+            const originalSourceFile = getParseTreeNode(sourceFile, isSourceFile);
+            if (originalSourceFile) {
+                originalSourceFiles.push(originalSourceFile);
+            }
+        }
+
+        return originalSourceFiles;
     }
 
     export function getOriginalNodeId(node: Node) {
@@ -2457,6 +2485,109 @@ namespace ts {
         declarationFilePath: string;
     }
 
+    /**
+     * Gets the source files that are expected to have an emit output.
+     *
+     * Originally part of `forEachExpectedEmitFile`, this functionality was extracted to support
+     * transformations.
+     *
+     * @param host An EmitHost.
+     * @param targetSourceFile An optional target source file to emit.
+     */
+    export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile) {
+        const options = host.getCompilerOptions();
+        if (options.outFile || options.out) {
+            const moduleKind = getEmitModuleKind(options);
+            const moduleEmitEnabled = moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.System;
+            const sourceFiles = host.getSourceFiles();
+            // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
+            return filter(sourceFiles, moduleEmitEnabled ? isNonDeclarationFile : isBundleEmitNonExternalModule);
+        }
+        else {
+            const sourceFiles = targetSourceFile === undefined ? host.getSourceFiles() : [targetSourceFile];
+            return filter(sourceFiles, isNonDeclarationFile);
+        }
+    }
+
+    function isNonDeclarationFile(sourceFile: SourceFile) {
+        return !isDeclarationFile(sourceFile);
+    }
+
+    function isBundleEmitNonExternalModule(sourceFile: SourceFile) {
+        return !isDeclarationFile(sourceFile) && !isExternalModule(sourceFile);
+    }
+
+    /**
+     * Iterates over each source file to emit. The source files are expected to have been
+     * transformed for use by the pretty printer.
+     *
+     * Originally part of `forEachExpectedEmitFile`, this functionality was extracted to support
+     * transformations.
+     *
+     * @param host An EmitHost.
+     * @param sourceFiles The transformed source files to emit.
+     * @param action The action to execute.
+     */
+    export function forEachTransformedEmitFile(host: EmitHost, sourceFiles: SourceFile[],
+        action: (jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) => void) {
+        const options = host.getCompilerOptions();
+        // Emit on each source file
+        if (options.outFile || options.out) {
+            onBundledEmit(host, sourceFiles);
+        }
+        else {
+            for (const sourceFile of sourceFiles) {
+                if (!isDeclarationFile(sourceFile)) {
+                    onSingleFileEmit(host, sourceFile);
+                }
+            }
+        }
+
+        function onSingleFileEmit(host: EmitHost, sourceFile: SourceFile) {
+            // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
+            // So for JavaScript files, '.jsx' is only emitted if the input was '.jsx', and JsxEmit.Preserve.
+            // For TypeScript, the only time to emit with a '.jsx' extension, is on JSX input, and JsxEmit.Preserve
+            let extension = ".js";
+            if (options.jsx === JsxEmit.Preserve) {
+                if (isSourceFileJavaScript(sourceFile)) {
+                    if (fileExtensionIs(sourceFile.fileName, ".jsx")) {
+                        extension = ".jsx";
+                    }
+                }
+                else if (sourceFile.languageVariant === LanguageVariant.JSX) {
+                    // TypeScript source file preserving JSX syntax
+                    extension = ".jsx";
+                }
+            }
+            const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, extension);
+            const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
+            const declarationFilePath = !isSourceFileJavaScript(sourceFile) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
+            action(jsFilePath, sourceMapFilePath, declarationFilePath, [sourceFile], /*isBundledEmit*/ false);
+        }
+
+        function onBundledEmit(host: EmitHost, sourceFiles: SourceFile[]) {
+            if (sourceFiles.length) {
+                const jsFilePath = options.outFile || options.out;
+                const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
+                const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : undefined;
+                action(jsFilePath, sourceMapFilePath, declarationFilePath, sourceFiles, /*isBundledEmit*/ true);
+            }
+        }
+    }
+
+    function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
+        return options.sourceMap ? jsFilePath + ".map" : undefined;
+    }
+
+    /**
+     * Iterates over the source files that are expected to have an emit output. This function
+     * is used by the legacy emitter and the declaration emitter and should not be used by
+     * the tree transforming emitter.
+     *
+     * @param host An EmitHost.
+     * @param action The action to execute.
+     * @param targetSourceFile An optional target source file to emit.
+     */
     export function forEachExpectedEmitFile(host: EmitHost,
         action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) => void,
         targetSourceFile?: SourceFile) {
@@ -2516,10 +2647,6 @@ namespace ts {
                 };
                 action(emitFileNames, bundledSources, /*isBundledEmit*/true);
             }
-        }
-
-        function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
-            return options.sourceMap ? jsFilePath + ".map" : undefined;
         }
     }
 

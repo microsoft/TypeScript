@@ -1425,15 +1425,13 @@ namespace ts {
             // If we are here it is most likely because our expression is a destructuring assignment.
             switch (node.expression.kind) {
                 case SyntaxKind.ParenthesizedExpression:
-                    return createStatement(
-                        visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false),
-                        /*location*/ node
+                    return updateStatement(node,
+                        visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false)
                     );
 
                 case SyntaxKind.BinaryExpression:
-                    return createStatement(
-                        visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false),
-                        /*location*/ node
+                    return updateStatement(node,
+                        visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false)
                     );
             }
 
@@ -2831,7 +2829,7 @@ namespace ts {
             // Only substitute the identifier if we have enabled substitutions for block-scoped
             // bindings.
             if (enabledSubstitutions & ES6SubstitutionFlags.BlockScopedBindings) {
-                const original = getSourceTreeNodeOfType(node, isIdentifier);
+                const original = getParseTreeNode(node, isIdentifier);
                 if (original && isNameOfDeclarationWithCollidingName(original)) {
                     return getGeneratedNameForNode(original);
                 }

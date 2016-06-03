@@ -23,7 +23,52 @@ namespace ts {
         EmitNotifications = 1 << 1,
     }
 
-    /* @internal */
+    export interface TransformationResult {
+        /**
+         * Gets the transformed source files.
+         */
+        getSourceFiles(): SourceFile[];
+
+        /**
+         * Gets the TextRange to use for source maps for a token of a node.
+         */
+        getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange;
+
+        /**
+         * Determines whether expression substitutions are enabled for the provided node.
+         */
+        isSubstitutionEnabled(node: Node): boolean;
+
+        /**
+         * Determines whether before/after emit notifications should be raised in the pretty
+         * printer when it emits a node.
+         */
+        isEmitNotificationEnabled(node: Node): boolean;
+
+        /**
+         * Hook used by transformers to substitute expressions just before they
+         * are emitted by the pretty printer.
+         *
+         * @param node The node to substitute.
+         * @param isExpression A value indicating whether the node is in an expression context.
+         */
+        onSubstituteNode(node: Node, isExpression: boolean): Node;
+
+        /**
+         * Hook used to allow transformers to capture state before or after
+         * the printer emits a node.
+         *
+         * @param node The node to emit.
+         * @param emitCallback A callback used to emit the node.
+         */
+        onEmitNode(node: Node, emitCallback: (node: Node) => void): void;
+
+        /**
+         * Reset transient transformation properties on parse tree nodes.
+         */
+        dispose(): void;
+    }
+
     export interface TransformationContext extends LexicalEnvironment {
         getCompilerOptions(): CompilerOptions;
         getEmitResolver(): EmitResolver;
@@ -155,7 +200,7 @@ namespace ts {
      * @param sourceFiles An array of source files
      * @param transforms An array of Transformers.
      */
-    export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]) {
+    export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]): TransformationResult {
         const transformId = nextTransformId;
         nextTransformId++;
 
@@ -163,7 +208,7 @@ namespace ts {
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
-        const sourceTreeNodesWithAnnotations: Node[] = [];
+        const parseTreeNodesWithAnnotations: Node[] = [];
 
         let lastTokenSourceMapRangeNode: Node;
         let lastTokenSourceMapRangeToken: SyntaxKind;
@@ -171,7 +216,6 @@ namespace ts {
         let lexicalEnvironmentStackOffset = 0;
         let hoistedVariableDeclarations: VariableDeclaration[];
         let hoistedFunctionDeclarations: FunctionDeclaration[];
-        let currentSourceFile: SourceFile;
         let lexicalEnvironmentDisabled: boolean;
 
         // The transformation context is provided to each transformer as part of transformer
@@ -204,7 +248,37 @@ namespace ts {
         const transformation = chain(...transformers)(context);
 
         // Transform each source file.
-        return map(sourceFiles, transformSourceFile);
+        const transformed = map(sourceFiles, transformSourceFile);
+
+        // Disable modification of the lexical environment.
+        lexicalEnvironmentDisabled = true;
+
+        return {
+            getSourceFiles: () => transformed,
+            getTokenSourceMapRange,
+            isSubstitutionEnabled,
+            isEmitNotificationEnabled,
+            onSubstituteNode: context.onSubstituteNode,
+            onEmitNode: context.onEmitNode,
+            dispose() {
+                // During transformation we may need to annotate a parse tree node with transient
+                // transformation properties. As parse tree nodes live longer than transformation
+                // nodes, we need to make sure we reclaim any memory allocated for custom ranges
+                // from these nodes to ensure we do not hold onto entire subtrees just for position
+                // information. We also need to reset these nodes to a pre-transformation state
+                // for incremental parsing scenarios so that we do not impact later emit.
+                for (const node of parseTreeNodesWithAnnotations) {
+                    if (node.transformId === transformId) {
+                        node.transformId = 0;
+                        node.emitFlags = 0;
+                        node.commentRange = undefined;
+                        node.sourceMapRange = undefined;
+                    }
+                }
+
+                parseTreeNodesWithAnnotations.length = 0;
+            }
+        };
 
         /**
          * Transforms a source file.
@@ -216,21 +290,7 @@ namespace ts {
                 return sourceFile;
             }
 
-            currentSourceFile = sourceFile;
-            sourceFile = transformation(sourceFile);
-
-            // Cleanup source tree nodes with annotations
-            for (const node of sourceTreeNodesWithAnnotations) {
-                if (node.transformId === transformId) {
-                    node.transformId = 0;
-                    node.emitFlags = 0;
-                    node.commentRange = undefined;
-                    node.sourceMapRange = undefined;
-                }
-            }
-
-            sourceTreeNodesWithAnnotations.length = 0;
-            return sourceFile;
+            return transformation(sourceFile);
         }
 
         /**
@@ -281,15 +341,6 @@ namespace ts {
          * @param emit A callback used to emit the node in the printer.
          */
         function onEmitNode(node: Node, emit: (node: Node) => void) {
-            // Ensure that lexical environment modifications are disabled during the print phase.
-            if (!lexicalEnvironmentDisabled) {
-                const savedLexicalEnvironmentDisabled = lexicalEnvironmentDisabled;
-                lexicalEnvironmentDisabled = true;
-                emit(node);
-                lexicalEnvironmentDisabled = savedLexicalEnvironmentDisabled;
-                return;
-            }
-
             emit(node);
         }
 
@@ -302,9 +353,9 @@ namespace ts {
         function beforeSetAnnotation(node: Node) {
             if ((node.flags & NodeFlags.Synthesized) === 0 && node.transformId !== transformId) {
                 // To avoid holding onto transformation artifacts, we keep track of any
-                // source tree node we are annotating. This allows us to clean them up after
+                // parse tree node we are annotating. This allows us to clean them up after
                 // all transformations have completed.
-                sourceTreeNodesWithAnnotations.push(node);
+                parseTreeNodesWithAnnotations.push(node);
                 node.transformId = transformId;
             }
         }
@@ -520,7 +571,11 @@ namespace ts {
     function chain<T, U>(...args: ((t: T) => (u: U) => U)[]): (t: T) => (u: U) => U;
     function chain<T, U>(a: (t: T) => (u: U) => U, b: (t: T) => (u: U) => U, c: (t: T) => (u: U) => U, d: (t: T) => (u: U) => U, e: (t: T) => (u: U) => U): (t: T) => (u: U) => U {
         if (e) {
-            const args = arrayOf<(t: T) => (u: U) => U>(arguments);
+            const args: ((t: T) => (u: U) => U)[] = [];
+            for (let i = 0; i < arguments.length; i++) {
+                args[i] = arguments[i];
+            }
+
             return t => compose(...map(args, f => f(t)));
         }
         else if (d) {
@@ -549,7 +604,11 @@ namespace ts {
     function compose<T>(...args: ((t: T) => T)[]): (t: T) => T;
     function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t: T) => T, e: (t: T) => T): (t: T) => T {
         if (e) {
-            const args = arrayOf(arguments);
+            const args: ((t: T) => T)[] = [];
+            for (let i = 0; i < arguments.length; i++) {
+                args[i] = arguments[i];
+            }
+
             return t => reduceLeft<(t: T) => T, T>(args, (u, f) => f(u), t);
         }
         else if (d) {
@@ -567,17 +626,5 @@ namespace ts {
         else {
             return t => t;
         }
-    }
-
-    /**
-     * Makes an array from an ArrayLike.
-     */
-    function arrayOf<T>(arrayLike: ArrayLike<T>) {
-        const length = arrayLike.length;
-        const array: T[] = new Array<T>(length);
-        for (let i = 0; i < length; i++) {
-            array[i] = arrayLike[i];
-        }
-        return array;
     }
 }
