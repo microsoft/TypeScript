@@ -85,7 +85,8 @@ verify.navigationBar([
                 "text": "prop",
                 "kind": "property"
             }
-        ]
+        ],
+        "indent": 1
     },
     {
         "text": "Shapes",
@@ -100,7 +101,8 @@ verify.navigationBar([
                 "text": "Values",
                 "kind": "enum"
             }
-        ]
+        ],
+        "indent": 1
     },
     {
         "text": "Point",
@@ -143,7 +145,8 @@ verify.navigationBar([
                 "kind": "property",
                 "kindModifiers": "public"
             }
-        ]
+        ],
+        "indent": 2
     },
     {
         "text": "Values",
@@ -161,6 +164,7 @@ verify.navigationBar([
                 "text": "value3",
                 "kind": "property"
             }
-        ]
+        ],
+        "indent": 2
     }
 ]);
