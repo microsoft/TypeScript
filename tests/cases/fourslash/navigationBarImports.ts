@@ -6,7 +6,7 @@
 
 verify.navigationBar([
     {
-        "text": "\"navigationBarImportEquals\"",
+        "text": "\"navigationBarImports\"",
         "kind": "module",
         "childItems": [
             {
