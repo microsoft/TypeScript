@@ -435,7 +435,7 @@ namespace ts.server {
             const project = this.projectService.getProjectForFile(fileName);
 
             const projectInfo: protocol.ProjectInfo = {
-                configFileName: project.projectFilename
+                configFileName: project.getProjectFileName()
             };
 
             if (needFileNameList) {
