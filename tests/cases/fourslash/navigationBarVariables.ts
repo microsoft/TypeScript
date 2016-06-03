@@ -24,3 +24,30 @@ verify.navigationBar([
         ]
     }
 ]);
+
+// @Filename: file2.ts
+////var {a} = 0;
+////let {a: b} = 0;
+////const [c] = 0;
+
+goTo.file("file2.ts");
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "a",
+                "kind": "var"
+            },
+            {
+                "text": "b",
+                "kind": "let"
+            },
+            {
+                "text": "c",
+                "kind": "const"
+            }
+        ]
+    }
+]);
