@@ -11269,7 +11269,7 @@ namespace ts {
             const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(declaration.parent.symbol);
             const declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(declaration.parent.symbol);
 
-            // A private or protected constructor can only be instantiated within it's own class 
+            // A private or protected constructor can only be instantiated within it's own class
             if (!isNodeWithinClass(node, declaringClassDeclaration)) {
                 if (flags & NodeFlags.Private) {
                     error(node, Diagnostics.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration, typeToString(declaringClass));
@@ -16132,12 +16132,12 @@ namespace ts {
             const symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
             if (target !== unknownSymbol) {
-                // For external modules symbol represent local symbol for an alias. 
+                // For external modules symbol represent local symbol for an alias.
                 // This local symbol will merge any other local declarations (excluding other aliases)
                 // and symbol.flags will contains combined representation for all merged declaration.
                 // Based on symbol.flags we can compute a set of excluded meanings (meaning that resolved alias should not have,
-                // otherwise it will conflict with some local declaration). Note that in addition to normal flags we include matching SymbolFlags.Export* 
-                // in order to prevent collisions with declarations that were exported from the current module (they still contribute to local names). 
+                // otherwise it will conflict with some local declaration). Note that in addition to normal flags we include matching SymbolFlags.Export*
+                // in order to prevent collisions with declarations that were exported from the current module (they still contribute to local names).
                 const excludedMeanings =
                     (symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue) ? SymbolFlags.Value : 0) |
                     (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
@@ -16336,7 +16336,7 @@ namespace ts {
                         continue;
                     }
                     const { declarations, flags } = exports[id];
-                    // ECMA262: 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries. 
+                    // ECMA262: 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries.
                     // (TS Exceptions: namespaces, function overloads, enums, and interfaces)
                     if (flags & (SymbolFlags.Namespace | SymbolFlags.Interface | SymbolFlags.Enum)) {
                         continue;
@@ -17041,10 +17041,10 @@ namespace ts {
         }
 
         // Gets the type of object literal or array literal of destructuring assignment.
-        // { a } from 
+        // { a } from
         //     for ( { a } of elems) {
         //     }
-        // [ a ] from 
+        // [ a ] from
         //     [a] = [ some array ...]
         function getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(expr: Expression): Type {
             Debug.assert(expr.kind === SyntaxKind.ObjectLiteralExpression || expr.kind === SyntaxKind.ArrayLiteralExpression);
@@ -17077,10 +17077,10 @@ namespace ts {
         }
 
         // Gets the property symbol corresponding to the property in destructuring assignment
-        // 'property1' from 
+        // 'property1' from
         //     for ( { property1: a } of elems) {
         //     }
-        // 'property1' at location 'a' from: 
+        // 'property1' at location 'a' from:
         //     [a] = [ property1, property2 ]
         function getPropertySymbolOfDestructuringAssignment(location: Identifier) {
             // Get the type of the object or array literal and then look for property of given name in the type
