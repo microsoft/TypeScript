@@ -274,20 +274,33 @@ namespace ts.server {
     }
 
     export interface ProjectOptions {
-        // these fields can be present in the project file
+        /**
+         * true if config file explicitly listed files
+         **/
         configHasFilesProperty?: boolean;
+        /**
+         * these fields can be present in the project file
+         **/
         files?: string[];
         compilerOptions?: ts.CompilerOptions;
     }
 
+    export enum ProjectKind {
+        Inferred,
+        Configured,
+        External
+    }
+
     export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
+        private rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
         private readonly lsHost: LSHost;
 
         readonly languageService: LanguageService;
         private program: ts.Program;
 
         constructor(
+            readonly projectKind: ProjectKind,
             readonly projectFilename: string,
             public readonly projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,
@@ -299,7 +312,7 @@ namespace ts.server {
                 compilerOptions.allowNonTsExtensions = true;
                 compilerOptions.allowJs = true;
             }
-            else if (files) {
+            else if (files && files.length) {
                 // If files are listed explicitly, allow all extensions
                 compilerOptions.allowNonTsExtensions = true;
             }
@@ -307,6 +320,16 @@ namespace ts.server {
             this.lsHost = new LSHost(this.projectService.host, this);
             this.lsHost.setCompilationSettings(compilerOptions);
             this.languageService = ts.createLanguageService(this.lsHost, documentRegistry);
+        }
+
+        isConfiguredProject() {
+            // TODO: remove
+            return this.projectKind !== ProjectKind.Inferred;
+        }
+
+        close() {
+            // signal language service to release files acquired from document registry
+            this.languageService.dispose();
         }
 
         getCompilerOptions() {
@@ -336,7 +359,24 @@ namespace ts.server {
         }
 
         isRoot(info: ScriptInfo) {
-            return this.rootFiles.some(root => root === info);
+            return this.rootFilesMap.contains(info.path);
+        }
+
+        // add a root file to project
+        addRoot(info: ScriptInfo) {
+            if (!this.isRoot(info)) {
+                this.rootFiles.push(info);
+                this.rootFilesMap.set(info.path, info);
+            }
+        }
+
+        // remove a root file from project
+        removeRoot(info: ScriptInfo) {
+            if (this.isRoot(info)) {
+                this.rootFiles = copyListRemovingItem(info, this.rootFiles);
+                this.rootFilesMap.remove(info.path);
+                this.lsHost.removeRoot(info);
+            }
         }
 
         removeReferencedFile(info: ScriptInfo) {
@@ -346,32 +386,8 @@ namespace ts.server {
             this.updateGraph();
         }
 
-        finishGraph() {
-            this.updateGraph();
-            this.languageService.getNavigateToItems(".*");
-        }
-
         updateGraph() {
             this.program = this.languageService.getProgram();
-        }
-
-        isConfiguredProject() {
-            return this.projectFilename;
-        }
-
-        // add a root file to project
-        addRoot(info: ScriptInfo) {
-            if (!this.isRoot(info)) {
-                this.rootFiles.push(info);
-            }
-        }
-
-        // remove a root file from project
-        removeRoot(info: ScriptInfo) {
-            if (this.isRoot(info)) {
-                this.rootFiles = copyListRemovingItem(info, this.rootFiles);
-                this.lsHost.removeRoot(info);
-            }
         }
 
         getScriptInfo(fileName: string) {
@@ -426,7 +442,7 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
         constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry) {
-            super(/*projectFilename*/ undefined, projectService, documentRegistry, /*files*/ undefined, /*compilerOptions*/ undefined);
+            super(ProjectKind.Inferred, /*projectFilename*/ undefined, projectService, documentRegistry, /*files*/ undefined, /*compilerOptions*/ undefined);
         }
     }
 
@@ -437,7 +453,7 @@ namespace ts.server {
         openRefCount = 0;
 
         constructor(projectFilename: string, projectService: ProjectService, documentRegistry: ts.DocumentRegistry, files: string[], compilerOptions: CompilerOptions) {
-            super(projectFilename, projectService, documentRegistry, files, compilerOptions);
+            super(ProjectKind.Configured, projectFilename, projectService, documentRegistry, files, compilerOptions);
         }
 
         watchConfigFile(callback: (project: Project) => void) {
@@ -508,21 +524,36 @@ namespace ts.server {
 
     export class ProjectService {
         filenameToScriptInfo: ts.Map<ScriptInfo> = {};
-        // open, non-configured root files
+        /** 
+         * open, non-configured root files 
+         **/
         openFileRoots: ScriptInfo[] = [];
-        // projects built from openFileRoots
+        /**
+         * projects built from openFileRoots
+         **/
         inferredProjects: InferredProject[] = [];
-        // projects specified by a tsconfig.json file
+        /**
+         * projects specified by a tsconfig.json file
+         **/
         configuredProjects: ConfiguredProject[] = [];
-        // open files referenced by a project
+        /**
+         * open files referenced by a project
+         **/
         openFilesReferenced: ScriptInfo[] = [];
-        // open files that are roots of a configured project
+        /**
+         * open files that are roots of a configured project
+         **/
         openFileRootsConfigured: ScriptInfo[] = [];
-        // a path to directory watcher map that detects added tsconfig files
+        /**
+         * a path to directory watcher map that detects added tsconfig files
+         **/
         directoryWatchersForTsconfig: ts.Map<FileWatcher> = {};
-        // count of how many projects are using the directory watcher. If the
-        // number becomes 0 for a watcher, then we should close it.
+        /**
+         * count of how many projects are using the directory watcher.
+         * If the number becomes 0 for a watcher, then we should close it.
+         **/
         directoryWatchersRefCount: ts.Map<number> = {};
+
         hostConfiguration: HostConfiguration;
         timerForDetectingProjectFileListChanges: Map<any> = {};
 
@@ -700,7 +731,7 @@ namespace ts.server {
                 parentPath = ts.getDirectoryPath(parentPath);
             }
 
-            project.finishGraph();
+            project.updateGraph();
             this.inferredProjects.push(project);
             return project;
         }
@@ -1290,7 +1321,7 @@ namespace ts.server {
                     (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.File_0_not_found, rootFilename));
                 }
             }
-            project.finishGraph();
+            project.updateGraph();
             if (watchConfigFile) {
                 project.watchConfigFile(project => this.watchedProjectConfigFileChanged(project));
             }
@@ -1357,7 +1388,7 @@ namespace ts.server {
             }
 
             project.setCompilerOptions(newOptions);
-            project.finishGraph();
+            project.updateGraph();
         }
 
         updateConfiguredProject(project: Project) {

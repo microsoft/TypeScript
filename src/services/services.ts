@@ -3090,8 +3090,10 @@ namespace ts {
 
         function dispose(): void {
             if (program) {
-                forEach(program.getSourceFiles(), f =>
-                    documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()));
+                const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
+                for (const file of program.getSourceFiles()) {
+                    documentRegistry.releaseDocumentWithKey(file.path, key);
+                }
             }
         }
 
