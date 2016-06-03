@@ -441,8 +441,17 @@ namespace ts.server {
     class InferredProject extends Project {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
+
         constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry) {
             super(ProjectKind.Inferred, /*projectFilename*/ undefined, projectService, documentRegistry, /*files*/ undefined, /*compilerOptions*/ undefined);
+        }
+
+        close() {
+            super.close();
+
+            for (const directory of this.directoriesWatchedForTsconfig) {
+                this.projectService.stopWatchingDirectory(directory);
+            }
         }
     }
 
@@ -470,6 +479,8 @@ namespace ts.server {
         }
 
         close() {
+            super.close();
+
             if (this.projectFileWatcher) {
                 this.projectFileWatcher.close();
             }
@@ -561,11 +572,21 @@ namespace ts.server {
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
-            this.addDefaultHostConfiguration();
+            this.setDefaultHostConfiguration();
             this.documentRegistry = ts.createDocumentRegistry(host.useCaseSensitiveFileNames, host.getCurrentDirectory());
         }
 
-        addDefaultHostConfiguration() {
+        stopWatchingDirectory(directory: string) {
+            // if the ref count for this directory watcher drops to 0, it's time to close it
+            this.directoryWatchersRefCount[directory]--;
+            if (this.directoryWatchersRefCount[directory] === 0) {
+                this.log("Close directory watcher for: " + directory);
+                this.directoryWatchersForTsconfig[directory].close();
+                delete this.directoryWatchersForTsconfig[directory];
+            }
+        }
+
+        private setDefaultHostConfiguration() {
             this.hostConfiguration = {
                 formatCodeOptions: getDefaultFormatCodeOptions(this.host),
                 hostInfo: "Unknown host"
@@ -582,7 +603,7 @@ namespace ts.server {
             return this.hostConfiguration.formatCodeOptions;
         }
 
-        watchedFileChanged(fileName: string) {
+        private watchedFileChanged(fileName: string) {
             const info = this.filenameToScriptInfo[fileName];
             if (!info) {
                 this.psLogger.info("Error: got watch notification for unknown file: " + fileName);
@@ -664,19 +685,19 @@ namespace ts.server {
             // We should only care about the new tsconfig file if it contains any
             // opened root files of existing inferred projects
             for (const openFileRoot of openFileRoots) {
-                if (rootFilesInTsconfig.indexOf(openFileRoot) >= 0) {
+                if (contains(rootFilesInTsconfig, openFileRoot)) {
                     this.reloadProjects();
                     return;
                 }
             }
         }
 
-        getCanonicalFileName(fileName: string) {
+        private getCanonicalFileName(fileName: string) {
             const name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
             return ts.normalizePath(name);
         }
 
-        watchedProjectConfigFileChanged(project: Project) {
+        private watchedProjectConfigFileChanged(project: Project) {
             this.log("Config file changed: " + project.projectFilename);
             this.updateConfiguredProject(project);
             this.updateProjectStructure();
@@ -773,8 +794,12 @@ namespace ts.server {
         updateConfiguredProjectList() {
             const configuredProjects: ConfiguredProject[] = [];
             for (let i = 0, len = this.configuredProjects.length; i < len; i++) {
-                if (this.configuredProjects[i].openRefCount > 0) {
-                    configuredProjects.push(this.configuredProjects[i]);
+                const proj = this.configuredProjects[i];
+                if (proj.openRefCount > 0) {
+                    configuredProjects.push(proj);
+                }
+                else {
+                    proj.close();
                 }
             }
             this.configuredProjects = configuredProjects;
@@ -782,8 +807,9 @@ namespace ts.server {
 
         removeProject(project: Project) {
             this.log("remove project: " + project.getRootFiles().toString());
+            project.close();
+
             if (project.isConfiguredProject()) {
-                (<ConfiguredProject>project).close();
                 this.configuredProjects = copyListRemovingItem((<ConfiguredProject>project), this.configuredProjects);
             }
             else {
