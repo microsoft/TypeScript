@@ -54,7 +54,7 @@ namespace ts {
         }
         else if (node.kind === SyntaxKind.ModuleDeclaration) {
             const body = (<ModuleDeclaration>node).body;
-            return body ? getModuleInstanceState(body) : ModuleInstanceState.NonInstantiated;
+            return body ? getModuleInstanceState(body) : ModuleInstanceState.Instantiated;
         }
         else {
             return ModuleInstanceState.Instantiated;

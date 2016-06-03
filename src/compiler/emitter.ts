@@ -6295,7 +6295,7 @@ const _super = (function (geti, seti) {
                 write(getGeneratedNameForNode(node));
                 emitEnd(node.name);
                 write(") ");
-                // node.body must exist, as this is a non-ambient module
+                Debug.assert(node.body !== undefined); // node.body must exist, as this is a non-ambient module
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
                     const saveConvertedLoopState = convertedLoopState;
                     const saveTempFlags = tempFlags;

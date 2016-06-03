@@ -18,7 +18,3 @@ foo(bar, baz);
 var jquery_1 = require("jquery");
 var baz = require("fs");
 jquery_1["default"](jquery_1.bar, baz);
-
-
-//// [user.d.ts]
-/// <reference path="declarations.d.ts" />
