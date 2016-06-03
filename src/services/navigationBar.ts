@@ -229,12 +229,23 @@ namespace ts.NavigationBar {
         if (localeCompareIsCorrect) {
             return a.localeCompare(b);
         }
-
-        const cmp = a.toLowerCase().localeCompare(b.toLowerCase());
-        if (cmp !== 0)
-            return cmp;
-        // Return the *opposite* of the `<` operator
-        return a < b ? 1 : a > b ? -1 : 0;
+        else {
+            // This isn't perfect, but it passes all of our tests.
+            for (let i = 0; i < Math.min(a.length, b.length); i++) {
+                const chA = a.charAt(i), chB = b.charAt(i);
+                if (chA === "\"" && chB === "'") {
+                    return 1;
+                }
+                if (chA === "'" && chB === "\"") {
+                    return -1;
+                }
+                const cmp = chA.toLowerCase().localeCompare(chB.toLowerCase());
+                if (cmp !== 0) {
+                    return cmp;
+                }
+            }
+            return a.length - b.length;
+        }
     }
 
     /**
