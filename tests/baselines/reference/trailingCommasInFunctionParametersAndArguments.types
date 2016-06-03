@@ -8,3 +8,13 @@ f1(1,);
 >f1 : (x: any) => void
 >1 : number
 
+function f2(...args,) {}
+>f2 : (...args: any[]) => void
+>args : any[]
+
+f2(...[],);
+>f2(...[],) : void
+>f2 : (...args: any[]) => void
+>...[] : undefined
+>[] : undefined[]
+
