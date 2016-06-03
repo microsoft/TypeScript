@@ -137,7 +137,7 @@ namespace ts {
         }
         return result;
     }
-    
+
     export function filterMutate<T>(array: T[], f: (x: T) => boolean): void {
         let outIndex = 0;
         for (const item of array) {
