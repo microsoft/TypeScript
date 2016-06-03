@@ -1204,9 +1204,9 @@ namespace ts {
             lastContainer = next;
         }
 
-        function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): void {
+        function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
             // Just call this directly so that the return type of this function stays "void".
-            declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes);
+            return declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes);
         }
 
         function declareSymbolAndAddToSymbolTableWorker(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
@@ -1321,14 +1321,10 @@ namespace ts {
                         }
                     }
 
+                    const symbol = declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+
                     if (pattern) {
-                        // TODO: don't really need such a symbol in container.locals...
-                        const symbol = declareSymbol(container.locals, undefined, node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
-                        file.patternAmbientModules = file.patternAmbientModules || [];
-                        file.patternAmbientModules.push({ pattern, symbol });
-                    }
-                    else {
-                        declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                        (file.patternAmbientModules || (file.patternAmbientModules = [])).push({ pattern, symbol });
                     }
                 }
             }
@@ -2110,10 +2106,10 @@ namespace ts {
             checkStrictModeFunctionName(<FunctionDeclaration>node);
             if (inStrictMode) {
                 checkStrictModeFunctionDeclaration(node);
-                return bindBlockScopedDeclaration(node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+                bindBlockScopedDeclaration(node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
             }
             else {
-                return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+                declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
             }
         }
 

@@ -1290,9 +1290,11 @@ namespace ts {
                 return undefined;
             }
 
-            const patternModuleSymbol = getPatternAmbientModule(moduleName);
-            if (patternModuleSymbol) {
-                return getMergedSymbol(patternModuleSymbol);
+            if (patternAmbientModules) {
+                const pattern = findBestPatternMatch(patternAmbientModules, _ => _.pattern, moduleName);
+                if (pattern) {
+                    return getMergedSymbol(pattern.symbol);
+                }
             }
 
             if (moduleNotFoundError) {
@@ -1300,16 +1302,6 @@ namespace ts {
                 error(moduleReferenceLiteral, moduleNotFoundError, moduleName);
             }
             return undefined;
-        }
-
-        /** Get an ambient module with a wildcard ("*") in it. */
-        function getPatternAmbientModule(name: string): Symbol | undefined {
-            if (patternAmbientModules) {
-                const pattern = findBestPatternMatch(patternAmbientModules, _ => _.pattern, name);
-                if (pattern) {
-                    return pattern.symbol;
-                }
-            }
         }
 
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
