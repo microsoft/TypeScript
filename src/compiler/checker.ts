@@ -14237,7 +14237,7 @@ namespace ts {
                 for (const key in node.locals) {
                     if (!node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
                         if (node.locals[key].valueDeclaration.kind !== SyntaxKind.Parameter) {
-                            error(node, Diagnostics.Variable_0_has_never_been_used, key);
+                            error(node.locals[key].valueDeclaration, Diagnostics.Variable_0_has_never_been_used, key);
                         }
                     }
                 }
@@ -14249,7 +14249,7 @@ namespace ts {
                 for (const key in node.locals) {
                     if (!node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
                         if (node.locals[key].valueDeclaration.kind === SyntaxKind.Parameter && node.parent.kind !== SyntaxKind.InterfaceDeclaration) {
-                            error(node, Diagnostics.Parameter_0_has_never_been_used, key);
+                            error(node.locals[key].valueDeclaration, Diagnostics.Parameter_0_has_never_been_used, key);
                         }
                     }
                 }
@@ -14260,9 +14260,11 @@ namespace ts {
             if (compilerOptions.noUnusedLocals && !isSourceFileADefinitionFile) {
                 for (const key in node.locals) {
                     if (!node.locals[key].hasReference && !node.locals[key].exportSymbol) {
-                        if ((node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind)
-                            || (node.locals[key].declarations && node.locals[key].declarations[0].kind === SyntaxKind.InterfaceDeclaration)) {
-                            error(node, Diagnostics.Variable_0_has_never_been_used, key);
+                        if ((node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind)) {
+                            error(node.locals[key].valueDeclaration, Diagnostics.Variable_0_has_never_been_used, key);
+                        }
+                        else if (node.locals[key].declarations && node.locals[key].declarations[0].kind === SyntaxKind.InterfaceDeclaration) {
+                            error(node.locals[key].declarations[0], Diagnostics.Variable_0_has_never_been_used, key);
                         }
                     }
                 }
@@ -14276,7 +14278,7 @@ namespace ts {
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.PropertyDeclaration:
                             if (isPrivateClassElement(node.members[i]) && !node.members[i].symbol.hasReference) {
-                                error(node, Diagnostics.Variable_0_has_never_been_used, node.members[i].symbol.name);
+                                error(node.members[i], Diagnostics.Variable_0_has_never_been_used, node.members[i].symbol.name);
                             }
                             break;
                         default:
@@ -14286,7 +14288,7 @@ namespace ts {
 
                 for (let i = 0; node.typeParameters && i < node.typeParameters.length; i++) {
                     if (!node.typeParameters[i].symbol.hasReference) {
-                        error(node, Diagnostics.Variable_0_has_never_been_used, node.typeParameters[i].symbol.name);
+                        error(node.typeParameters[i], Diagnostics.Variable_0_has_never_been_used, node.typeParameters[i].symbol.name);
                     }
                 }
             }
