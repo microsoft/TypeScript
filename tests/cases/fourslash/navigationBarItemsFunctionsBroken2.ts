@@ -11,6 +11,10 @@ verify.navigationBar([
         "kind": "module",
         "childItems": [
             {
+                "text": "<function>",
+                "kind": "function"
+            },
+            {
                 "text": "f",
                 "kind": "function"
             }
@@ -19,6 +23,12 @@ verify.navigationBar([
     {
         "text": "f",
         "kind": "function",
+        "childItems": [
+            {
+                "text": "<function>",
+                "kind": "function"
+            }
+        ],
         "indent": 1
     }
 ]);
