@@ -755,13 +755,18 @@ function runConsoleTests(defaultReporter, runInParallel) {
             // schedule work for chunks
             configFiles.forEach(function (f) {
                 var configPath = path.join(taskConfigsFolder, f);
-                var workerCmd = "mocha" + " -t " + testTimeout + " -R " + reporter + " " + colors + " " + run + " --config='" + configPath + "'";
+                var workerCmd = "mocha" + " -t " + testTimeout + " -R " + reporter + " " + colors + bail + " " + run + " --config='" + configPath + "'";
                 console.log(workerCmd);
                 exec(workerCmd,  finishWorker, finishWorker) 
             });
             
             function finishWorker(e, errorStatus) {
                 counter--;
+
+                if (bail && errorStatus !== undefined) {
+                    failWithStatus(firstErrorStatus);
+                }
+
                 if (firstErrorStatus === undefined && errorStatus !== undefined) {
                     firstErrorStatus = errorStatus;
                 }
@@ -810,7 +815,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
 }
 
 var testTimeout = 20000;
-desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
+desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true bail=false.");
 task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function() {
     runConsoleTests('min', /*runInParallel*/ true);
 }, {async: true});
