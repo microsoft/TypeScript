@@ -8117,6 +8117,16 @@ namespace ts {
             }
         }
 
+        function updateReferencesForInterfaceImplementations(node: InterfaceDeclaration): void {
+            const extendedTypeNode = getClassExtendsHeritageClauseElement(node);
+            if (extendedTypeNode) {
+                const t = getTypeFromTypeNode(extendedTypeNode);
+                if (t !== unknownType && t.symbol) {
+                    t.symbol.hasReference = true;
+                }
+            }
+        }
+
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
             updateReferences(node);
@@ -11899,6 +11909,7 @@ namespace ts {
 
                 if (node.body.kind === SyntaxKind.Block) {
                     checkSourceElement(node.body);
+                    checkUnusedLocals(node);
                 }
                 else {
                     // From within an async function you can return either a non-promise value or a promise. Any
@@ -13335,13 +13346,18 @@ namespace ts {
         function checkTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments) {
             checkGrammarTypeArguments(node, node.typeArguments);
             const type = getTypeFromTypeReference(node);
-            if (type !== unknownType && node.typeArguments) {
-                // Do type argument local checks only if referenced type is successfully resolved
-                forEach(node.typeArguments, checkSourceElement);
-                if (produceDiagnostics) {
-                    const symbol = getNodeLinks(node).resolvedSymbol;
-                    const typeParameters = symbol.flags & SymbolFlags.TypeAlias ? getSymbolLinks(symbol).typeParameters : (<TypeReference>type).target.localTypeParameters;
-                    checkTypeArgumentConstraints(typeParameters, node.typeArguments);
+            if (type !== unknownType) {
+                if (type.symbol) {
+                    type.symbol.hasReference = true;
+                }
+                if (node.typeArguments) {
+                    // Do type argument local checks only if referenced type is successfully resolved
+                    forEach(node.typeArguments, checkSourceElement);
+                    if (produceDiagnostics) {
+                        const symbol = getNodeLinks(node).resolvedSymbol;
+                        const typeParameters = symbol.flags & SymbolFlags.TypeAlias ? getSymbolLinks(symbol).typeParameters : (<TypeReference>type).target.localTypeParameters;
+                        checkTypeArgumentConstraints(typeParameters, node.typeArguments);
+                    }
                 }
             }
         }
@@ -14211,16 +14227,16 @@ namespace ts {
             return getSourceFileOfNode(node).fileName.indexOf(".d.ts") > 0;
         }
 
-        function checkUnusedLocals(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration): void {
+        function checkUnusedLocals(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction): void {
             checkUnusedIdentifiers(node);
             checkUnusedParameters(node);
         }
 
-        function checkUnusedIdentifiers(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration): void {
+        function checkUnusedIdentifiers(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction): void {
             if (compilerOptions.noUnusedLocals && !isSourceFileADefinitionFile) {
                 for (const key in node.locals) {
                     if (!node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
-                        if (node.locals[key].valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
+                        if (node.locals[key].valueDeclaration.kind !== SyntaxKind.Parameter) {
                             error(node, Diagnostics.Variable_0_has_never_been_used, key);
                         }
                     }
@@ -14228,7 +14244,7 @@ namespace ts {
             }
         }
 
-        function checkUnusedParameters(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration): void {
+        function checkUnusedParameters(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction): void {
             if (compilerOptions.noUnusedParameters && !isSourceFileADefinitionFile) {
                 for (const key in node.locals) {
                     if (!node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
@@ -15727,6 +15743,7 @@ namespace ts {
                 checkExportsOnMergedDeclarations(node);
                 const symbol = getSymbolOfNode(node);
                 checkTypeParameterListsIdentical(node, symbol);
+                updateReferencesForInterfaceImplementations(node);
 
                 // Only check this symbol once
                 const firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
