@@ -1745,7 +1745,7 @@ namespace FourSlash {
 
             function jsonMismatchString() {
                 return Harness.IO.newLine() +
-                    "expected: '" + Harness.IO.newLine() + stringify(expected, undefined, 2) + "'" + Harness.IO.newLine() +
+                    "expected: '" + Harness.IO.newLine() + stringify(expected) + "'" + Harness.IO.newLine() +
                     "actual:   '" + Harness.IO.newLine() + stringify(actual) + "'";
             }
         }
@@ -2138,7 +2138,7 @@ namespace FourSlash {
 
             const itemsString = items.map(item => stringify({ name: item.name, kind: item.kind })).join(",\n");
 
-            this.raiseError(`Expected "${stringify({ name, text, documentation, kind )}" to be in list [${itemsString}]`);
+            this.raiseError(`Expected "${stringify({ name, text, documentation, kind })}" to be in list [${itemsString}]`);
         }
 
         private findFile(indexOrName: any) {
