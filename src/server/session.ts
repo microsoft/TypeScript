@@ -872,7 +872,8 @@ namespace ts.server {
                     start: compilerService.host.positionToLineOffset(fileName, span.start),
                     end: compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(span))
                 })),
-                childItems: this.decorateNavigationBarItem(project, fileName, item.childItems)
+                childItems: this.decorateNavigationBarItem(project, fileName, item.childItems),
+                indent: item.indent
             }));
         }
 
