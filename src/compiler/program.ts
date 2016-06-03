@@ -95,6 +95,7 @@ namespace ts {
         return compilerOptions.traceResolution && host.trace !== undefined;
     }
 
+    /* @internal */
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
         let seenAsterisk = false;
         for (let i = 0; i < str.length; i++) {
@@ -502,7 +503,7 @@ namespace ts {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
             }
-            matchedPattern = matchPatternOrExact(Object.keys(state.compilerOptions.paths), moduleName);
+            matchedPattern = matchPatternOrExact(getKeys(state.compilerOptions.paths), moduleName);
         }
 
         if (matchedPattern) {
@@ -570,6 +571,7 @@ namespace ts {
     }
 
     /** Return the object corresponding to the best pattern to match `candidate`. */
+    /* @internal */
     export function findBestPatternMatch<T>(values: T[], getPattern: (value: T) => Pattern, candidate: string): T | undefined {
         let matchedValue: T | undefined = undefined;
         // use length of prefix as betterness criteria
@@ -592,6 +594,7 @@ namespace ts {
                endsWith(candidate, suffix);
     }
 
+    /* @internal */
     export function tryParsePattern(pattern: string): Pattern | undefined {
         // This should be verified outside of here and a proper error thrown.
         Debug.assert(hasZeroOrOneAsteriskCharacter(pattern));
