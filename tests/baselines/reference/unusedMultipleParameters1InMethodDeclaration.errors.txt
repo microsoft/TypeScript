@@ -1,0 +1,16 @@
+tests/cases/compiler/unusedMultipleParameters1InMethodDeclaration.ts(3,20): message TS6133: Parameter 'person' has never been used.
+tests/cases/compiler/unusedMultipleParameters1InMethodDeclaration.ts(4,13): message TS6132: Variable 'unused' has never been used.
+
+
+==== tests/cases/compiler/unusedMultipleParameters1InMethodDeclaration.ts (2 errors) ====
+    
+    class Dummy {
+        public greeter(person: string, person2: string) {
+                       ~~~~~~~~~~~~~~
+!!! message TS6133: Parameter 'person' has never been used.
+            var unused = 20;
+                ~~~~~~
+!!! message TS6132: Variable 'unused' has never been used.
+            person2 = "dummy value";
+        }
+    }

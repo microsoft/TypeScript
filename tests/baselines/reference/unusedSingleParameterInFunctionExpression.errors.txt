@@ -1,0 +1,13 @@
+tests/cases/compiler/unusedSingleParameterInFunctionExpression.ts(2,21): message TS6133: Parameter 'person' has never been used.
+tests/cases/compiler/unusedSingleParameterInFunctionExpression.ts(3,9): message TS6132: Variable 'unused' has never been used.
+
+
+==== tests/cases/compiler/unusedSingleParameterInFunctionExpression.ts (2 errors) ====
+    
+    var func = function(person: string) {
+                        ~~~~~~~~~~~~~~
+!!! message TS6133: Parameter 'person' has never been used.
+        var unused = 20;
+            ~~~~~~
+!!! message TS6132: Variable 'unused' has never been used.
+    }

@@ -1,0 +1,16 @@
+tests/cases/compiler/unusedInterfaceinNamespace2.ts(3,15): message TS6132: Variable 'i1' has never been used.
+
+
+==== tests/cases/compiler/unusedInterfaceinNamespace2.ts (1 errors) ====
+    
+    namespace Validation {
+        interface i1 {
+                  ~~
+!!! message TS6132: Variable 'i1' has never been used.
+    
+        }
+    
+        export interface i2 {
+    
+        }
+    }

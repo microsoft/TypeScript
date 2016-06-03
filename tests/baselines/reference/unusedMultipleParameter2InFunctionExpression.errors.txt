@@ -1,0 +1,17 @@
+tests/cases/compiler/unusedMultipleParameter2InFunctionExpression.ts(2,21): message TS6133: Parameter 'person' has never been used.
+tests/cases/compiler/unusedMultipleParameter2InFunctionExpression.ts(2,54): message TS6133: Parameter 'person3' has never been used.
+tests/cases/compiler/unusedMultipleParameter2InFunctionExpression.ts(3,9): message TS6132: Variable 'unused' has never been used.
+
+
+==== tests/cases/compiler/unusedMultipleParameter2InFunctionExpression.ts (3 errors) ====
+    
+    var func = function(person: string, person2: string, person3: string) {
+                        ~~~~~~~~~~~~~~
+!!! message TS6133: Parameter 'person' has never been used.
+                                                         ~~~~~~~~~~~~~~~
+!!! message TS6133: Parameter 'person3' has never been used.
+        var unused = 20;
+            ~~~~~~
+!!! message TS6132: Variable 'unused' has never been used.
+        person2 = "Dummy value";
+    }

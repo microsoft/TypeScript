@@ -1,0 +1,26 @@
+tests/cases/compiler/unusedFunctionsinNamespaces5.ts(10,14): message TS6132: Variable 'function3' has never been used.
+tests/cases/compiler/unusedFunctionsinNamespaces5.ts(14,14): message TS6132: Variable 'function4' has never been used.
+
+
+==== tests/cases/compiler/unusedFunctionsinNamespaces5.ts (2 errors) ====
+    
+    namespace Validation {
+        var function1 = function() {
+        }
+    
+        export function function2() {
+    
+        }
+    
+        function function3() {
+                 ~~~~~~~~~
+!!! message TS6132: Variable 'function3' has never been used.
+            function1();
+        }
+    
+        function function4() {
+                 ~~~~~~~~~
+!!! message TS6132: Variable 'function4' has never been used.
+    
+        }
+    }

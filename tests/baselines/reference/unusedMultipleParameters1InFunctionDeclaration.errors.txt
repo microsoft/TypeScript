@@ -1,0 +1,14 @@
+tests/cases/compiler/unusedMultipleParameters1InFunctionDeclaration.ts(2,18): message TS6133: Parameter 'person' has never been used.
+tests/cases/compiler/unusedMultipleParameters1InFunctionDeclaration.ts(3,9): message TS6132: Variable 'unused' has never been used.
+
+
+==== tests/cases/compiler/unusedMultipleParameters1InFunctionDeclaration.ts (2 errors) ====
+    
+    function greeter(person: string, person2: string) {
+                     ~~~~~~~~~~~~~~
+!!! message TS6133: Parameter 'person' has never been used.
+        var unused = 20;
+            ~~~~~~
+!!! message TS6132: Variable 'unused' has never been used.
+        person2 = "dummy value";
+    }
