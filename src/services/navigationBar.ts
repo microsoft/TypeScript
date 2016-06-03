@@ -44,101 +44,102 @@ namespace ts.NavigationBar {
 
     /** Traverse through parent.node's descendants and find declarations to add as parent's children. */
     function addChildren(parent: NavNode): void {
-        function recur(node: Node) {
-            if (isDeclaration(node)) {
-                switch (node.kind) {
-                    case SyntaxKind.Parameter: // Parameter properties handled by SyntaxKind.Constructor case
-                    case SyntaxKind.TypeParameter:
-                    case SyntaxKind.PropertyAssignment:
-                        // Don't treat this as a declaration.
-                        forEachChild(node, recur);
-                        break;
-
-                    case SyntaxKind.Constructor:
-                        // Get parameter properties, and treat them as being on the *same* level as the constructor, not under it.
-                        const ctr = <ConstructorDeclaration>node;
-                        createNavNode(parent, ctr);
-                        for (const param of ctr.parameters) {
-                            if (isParameterPropertyDeclaration(param)) {
-                                createNavNode(parent, param);
-                            }
+        function recur(node: Node): void {
+            switch (node.kind) {
+                case SyntaxKind.Constructor:
+                    // Get parameter properties, and treat them as being on the *same* level as the constructor, not under it.
+                    const ctr = <ConstructorDeclaration>node;
+                    createNavNode(parent, ctr);
+                    for (const param of ctr.parameters) {
+                        if (isParameterPropertyDeclaration(param)) {
+                            createNavNode(parent, param);
                         }
-                        break;
+                    }
+                    break;
 
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.PropertySignature:
-                        if (!hasDynamicName((<ClassElement | TypeElement> node))) {
-                            createNavNode(parent, node);
-                        }
-                        break;
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                    if (!hasDynamicName((<ClassElement | TypeElement> node))) {
+                        createNavNode(parent, node);
+                    }
+                    break;
 
-                    case SyntaxKind.EnumMember:
-                        if (!isComputedProperty(<EnumMember>node)) {
-                            createNavNode(parent, node);
-                        }
-                        break;
+                case SyntaxKind.EnumMember:
+                    if (!isComputedProperty(<EnumMember>node)) {
+                        createNavNode(parent, node);
+                    }
+                    break;
 
-                    case SyntaxKind.ImportClause:
-                        let importClause = <ImportClause>node;
-                        // Handle default import case e.g.:
-                        //    import d from "mod";
-                        if (importClause.name) {
-                            createNavNode(parent, importClause);
-                        }
+                case SyntaxKind.ImportClause:
+                    let importClause = <ImportClause>node;
+                    // Handle default import case e.g.:
+                    //    import d from "mod";
+                    if (importClause.name) {
+                        createNavNode(parent, importClause);
+                    }
 
-                        // Handle named bindings in imports e.g.:
-                        //    import * as NS from "mod";
-                        //    import {a, b as B} from "mod";
-                        if (importClause.namedBindings) {
-                            if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                                createNavNode(parent, <NamespaceImport>importClause.namedBindings);
-                            }
-                            else {
-                                forEach((<NamedImports>importClause.namedBindings).elements, recur);
-                            }
-                        }
-                        break;
-
-                    case SyntaxKind.BindingElement:
-                    case SyntaxKind.VariableDeclaration:
-                        const decl = <VariableDeclaration>node;
-                        const name = decl.name;
-                        if (isBindingPattern(name)) {
-                            recur(name);
-                        }
-                        else if (decl.initializer && isFunctionOrClassExpression(decl.initializer)) {
-                            // For `const x = function() {}`, just use the function node, not the const.
-                            recur(decl.initializer);
+                    // Handle named bindings in imports e.g.:
+                    //    import * as NS from "mod";
+                    //    import {a, b as B} from "mod";
+                    if (importClause.namedBindings) {
+                        if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                            createNavNode(parent, <NamespaceImport>importClause.namedBindings);
                         }
                         else {
-                            createNavNode(parent, node);
+                            forEach((<NamedImports>importClause.namedBindings).elements, recur);
                         }
-                        break;
+                    }
+                    break;
 
-                    default:
+                case SyntaxKind.BindingElement:
+                case SyntaxKind.VariableDeclaration:
+                    const decl = <VariableDeclaration>node;
+                    const name = decl.name;
+                    if (isBindingPattern(name)) {
+                        recur(name);
+                    }
+                    else if (decl.initializer && isFunctionOrClassExpression(decl.initializer)) {
+                        // For `const x = function() {}`, just use the function node, not the const.
+                        recur(decl.initializer);
+                    }
+                    else {
                         createNavNode(parent, node);
-                }
-            }
-            else {
-                switch (node.kind) {
-                    case SyntaxKind.CallSignature:
-                    case SyntaxKind.ConstructSignature:
-                    case SyntaxKind.IndexSignature:
-                        createNavNode(parent, node);
-                        break;
-                    default:
-                        if (node.jsDocComments) {
-                            for (const jsDocComment of node.jsDocComments) {
-                                recur(jsDocComment);
-                            }
+                    }
+                    break;
+
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.ExportSpecifier:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.NamespaceImport:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.JSDocTypedefTag:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.IndexSignature:
+                    createNavNode(parent, node);
+                    break;
+
+                default:
+                    if (node.jsDocComments) {
+                        for (const jsDocComment of node.jsDocComments) {
+                            recur(jsDocComment);
                         }
+                    }
 
-                        forEachChild(node, recur);
-                }
+                    forEachChild(node, recur);
             }
         }
 
@@ -514,7 +515,7 @@ namespace ts.NavigationBar {
         return member.name === undefined || member.name.kind === SyntaxKind.ComputedPropertyName;
     }
 
-    function getNodeSpan(node: Node) {
+    function getNodeSpan(node: Node): TextSpan {
         return node.kind === SyntaxKind.SourceFile
             ? createTextSpanFromBounds(node.getFullStart(), node.getEnd())
             : createTextSpanFromBounds(node.getStart(), node.getEnd());
