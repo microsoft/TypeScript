@@ -5884,6 +5884,10 @@ interface HTMLLinkElement extends HTMLElement, LinkStyle {
       */
     hreflang: string;
     /**
+     * Sets or retrieves the Subresource Integrity metadata.
+    */
+    integrity: string;
+    /**
       * Sets or retrieves the media type.
       */
     media: string;
@@ -6753,6 +6757,10 @@ interface HTMLScriptElement extends HTMLElement {
       * Sets or retrieves the object that is bound to the event script.
       */
     htmlFor: string;
+    /**
+      * Sets or retrieves the Subresource Integrity metadata.
+      */
+    integrity: string;
     /**
       * Retrieves the URL to an external file that contains the source code or data.
       */
