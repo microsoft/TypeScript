@@ -297,7 +297,7 @@ namespace ts.server {
         private readonly lsHost: LSHost;
 
         readonly languageService: LanguageService;
-        private program: ts.Program;
+        protected program: ts.Program;
 
         constructor(
             readonly projectKind: ProjectKind,
@@ -453,7 +453,86 @@ namespace ts.server {
         }
     }
 
-    class ConfiguredProject extends Project {
+    interface Delta {
+        addedFiles: string[];
+        removedFiles: string[];
+        replacedFiles: string[];
+        projectName: string;
+        version: number;
+    }
+
+    const id = (x: any) => x;
+
+    abstract class VersionedProject extends Project {
+
+        private lastReportedFileNames: Map<string>;
+        private lastReportedVersion: number = 0;
+        private currentVersion: number = 1;
+
+        updateGraph() {
+            const oldProgram = this.program;
+
+            super.updateGraph();
+
+            if (!oldProgram || !oldProgram.structureIsReused) {
+                this.currentVersion++;
+            }
+        }
+
+        getDeltaFromVersion(lastKnownVersion?: number): Delta {
+            if (this.lastReportedVersion === this.currentVersion) {
+                return {
+                    projectName: this.getProjectFileName(),
+                    addedFiles: [],
+                    removedFiles: [],
+                    version: this.currentVersion,
+                    replacedFiles: []
+                };
+            }
+            if (this.lastReportedFileNames && lastKnownVersion === this.lastReportedVersion) {
+                const lastReportedFileNames = this.lastReportedFileNames;
+                const currentFiles = arrayToMap(this.getFileNames(), id);
+
+                const addedFiles: string[] = [];
+                const removedFiles: string[] = [];
+                for (const id in currentFiles) {
+                    if (hasProperty(currentFiles, id) && !hasProperty(lastReportedFileNames, id)) {
+                        addedFiles.push(id);
+                    }
+                }
+                for (const id in lastReportedFileNames) {
+                    if (hasProperty(lastReportedFileNames, id) && !hasProperty(currentFiles, id)) {
+                        removedFiles.push(id);
+                    }
+                }
+                this.lastReportedFileNames = currentFiles;
+
+                this.lastReportedFileNames = currentFiles;
+                this.lastReportedVersion = this.currentVersion;
+                return {
+                    projectName: this.getProjectFileName(),
+                    addedFiles,
+                    removedFiles,
+                    version: this.currentVersion,
+                    replacedFiles: []
+                };
+            }
+            else {
+                // unknown version - return everything
+                const projectFileNames = this.getFileNames();
+                this.lastReportedFileNames = arrayToMap(projectFileNames, id);
+                return {
+                    projectName: this.getProjectFileName(),
+                    addedFiles: [],
+                    removedFiles: [],
+                    version: this.currentVersion,
+                    replacedFiles: projectFileNames
+                };
+            }
+        }
+    }
+
+    class ConfiguredProject extends VersionedProject {
         private projectFileWatcher: FileWatcher;
         private directoryWatcher: FileWatcher;
         /** Used for configured projects which may have multiple open roots */
@@ -498,7 +577,7 @@ namespace ts.server {
         }
     }
 
-    class ExternalProject extends Project {
+    class ExternalProject extends VersionedProject {
         constructor(readonly projectFileName: string, projectService: ProjectService, documentRegistry: ts.DocumentRegistry, compilerOptions: CompilerOptions) {
             super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, compilerOptions);
         }
@@ -1261,28 +1340,38 @@ namespace ts.server {
             this.psLogger.endGroup();
         }
 
-        loadExternalProject(externalProject: protocol.ExternalProject): Project {
+        loadExternalProject(externalProject: protocol.ExternalProject): Delta[] {
             const project = this.findConfiguredProjectByConfigFile(externalProject.projectFileName);
             if (project) {
                 this.updateConfiguredProjectWorker(project, externalProject.rootFiles, externalProject.options);
-                return project;
+                return [project.getDeltaFromVersion()];
             }
             else {
-                // check if root files contain tsconfig.json
-                // if yes - treat project as configured
-                const tsconfigFile = forEach(externalProject.rootFiles, f => getBaseFileName(f) === "tsconfig.json" && f);
-                if (tsconfigFile) {
-                    const newRootFiles = copyListRemovingItem(tsconfigFile, externalProject.rootFiles);
-                    const { success, project, errors } = this.openConfigFile(tsconfigFile);
-                    if (success) {
-                        // keep project alive
-                        project.addOpenRef();
+                let tsConfigFiles: string[];
+                const rootFiles: string[] = [];
+                for (const file of externalProject.rootFiles) {
+                    if (getBaseFileName(file) === "tsconfig.json") {
+                        (tsConfigFiles || (tsConfigFiles = [])).push(file);
                     }
-                    return project;
+                    else {
+                        rootFiles.push(file);
+                    }
+                }
+                if (tsConfigFiles) {
+                    const deltas: Delta[] = [];
+                    for (const tsconfigFile of tsConfigFiles) {
+                        const { success, project, errors } = this.openConfigFile(tsconfigFile);
+                        if (success) {
+                            // keep project alive
+                            project.addOpenRef();
+                            deltas.push(project.getDeltaFromVersion());
+                        }
+                    }
+                    return deltas;
                 }
                 else {
                     const { project, errors } = this.createAndAddExternalProject(externalProject.projectFileName, externalProject.rootFiles, externalProject.options);
-                    return project;
+                    return [project.getDeltaFromVersion()];
                 }
             }
         }

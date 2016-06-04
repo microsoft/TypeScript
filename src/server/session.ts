@@ -1029,8 +1029,8 @@ namespace ts.server {
 
         private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
             [CommandNames.LoadExternalProject]: (request: protocol.Request) => {
-                const project = this.projectService.loadExternalProject(request.arguments);
-                return { responseRequired: true, response: { files: project.getFileNames() } };
+                const deltas = this.projectService.loadExternalProject(request.arguments);
+                return { responseRequired: true, response: { files: deltas } };
             },
             [CommandNames.Exit]: () => {
                 this.exit();
