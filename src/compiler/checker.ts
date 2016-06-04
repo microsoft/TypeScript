@@ -9991,23 +9991,13 @@ namespace ts {
             }
 
             const propType = getTypeOfSymbol(prop);
+            // Only compute control flow type if this is a property access expression that isn't an
+            // assignment target, and the referenced property was declared as a variable, property,
+            // accessor, or optional method.
             if (node.kind !== SyntaxKind.PropertyAccessExpression || isAssignmentTarget(node) ||
-                !(propType.flags & TypeFlags.Union) && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor))) {
+                !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) &&
+                !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
                 return propType;
-            }
-            const leftmostNode = getLeftmostIdentifierOrThis(node);
-            if (!leftmostNode) {
-                return propType;
-            }
-            if (leftmostNode.kind === SyntaxKind.Identifier) {
-                const leftmostSymbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>leftmostNode));
-                if (!leftmostSymbol) {
-                    return propType;
-                }
-                const declaration = leftmostSymbol.valueDeclaration;
-                if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.Parameter && declaration.kind !== SyntaxKind.BindingElement) {
-                    return propType;
-                }
             }
             return getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*includeOuterFunctions*/ false);
         }
