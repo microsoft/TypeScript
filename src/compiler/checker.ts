@@ -8091,13 +8091,22 @@ namespace ts {
             return expression;
         }
 
+        function getControlFlowContainer(node: Node): Node {
+            while (true) {
+                node = node.parent;
+                if (isFunctionLike(node) || node.kind === SyntaxKind.ModuleBlock || node.kind === SyntaxKind.SourceFile || node.kind === SyntaxKind.PropertyDeclaration) {
+                    return node;
+                }
+            }
+        }
+
         function isDeclarationIncludedInFlow(reference: Node, declaration: Declaration, includeOuterFunctions: boolean) {
-            const declarationContainer = getContainingFunctionOrModule(declaration);
-            let container = getContainingFunctionOrModule(reference);
+            const declarationContainer = getControlFlowContainer(declaration);
+            let container = getControlFlowContainer(reference);
             while (container !== declarationContainer &&
                 (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.ArrowFunction) &&
                 (includeOuterFunctions || getImmediatelyInvokedFunctionExpression(<FunctionExpression>container))) {
-                container = getContainingFunctionOrModule(container);
+                container = getControlFlowContainer(container);
             }
             return container === declarationContainer;
         }

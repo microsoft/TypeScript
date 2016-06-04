@@ -880,15 +880,6 @@ namespace ts {
         }
     }
 
-    export function getContainingFunctionOrModule(node: Node): Node {
-        while (true) {
-            node = node.parent;
-            if (isFunctionLike(node) || node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.SourceFile) {
-                return node;
-            }
-        }
-    }
-
     export function getContainingClass(node: Node): ClassLikeDeclaration {
         while (true) {
             node = node.parent;
