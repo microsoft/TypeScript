@@ -301,7 +301,7 @@ namespace ts.NavigationBar {
                     if (isBindingPattern((<ParameterDeclaration>node).name)) {
                         break;
                     }
-                    if ((node.flags & NodeFlags.Modifier) === 0) {
+                    if (!hasModifiers(node)) {
                         return undefined;
                     }
                     return createItem(node, getTextOfNode((<ParameterDeclaration>node).name), ts.ScriptElementKind.memberVariableElement);
@@ -700,7 +700,7 @@ namespace ts.NavigationBar {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     // "export default function().." looks just like a regular function/class declaration, except with the 'default' flag
-                    const name = node.flags && (node.flags & NodeFlags.Default) && !(node as (Declaration)).name ? "default" :
+                    const name = hasModifier(node, ModifierFlags.Default) && !(node as (Declaration)).name ? "default" :
                             node.kind === SyntaxKind.Constructor ? "constructor" :
                             declarationNameToString((node as (Declaration)).name);
                     return getNavBarItem(name, getScriptKindForElementKind(node.kind), [getNodeSpan(node)]);

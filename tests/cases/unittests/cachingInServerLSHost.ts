@@ -47,6 +47,7 @@ namespace ts {
                 return "";
             },
             getDirectories: (path: string) => [],
+            getEnvironmentVariable: (name: string) => "",
             readDirectory: (path: string, extension?: string, exclude?: string[]): string[] => {
                 throw new Error("NYI");
             },
@@ -82,7 +83,7 @@ namespace ts {
         const projectService = new server.ProjectService(serverHost, logger);
         const rootScriptInfo = projectService.openFile(rootFile, /* openedByClient */true);
         const project = projectService.createInferredProject(rootScriptInfo);
-        project.setProjectOptions({ files: [rootScriptInfo.fileName], compilerOptions: { module: ts.ModuleKind.AMD } });
+        project.setProjectOptions( {files: [rootScriptInfo.fileName], compilerOptions: {module: ts.ModuleKind.AMD} } );
         return {
             project,
             rootScriptInfo

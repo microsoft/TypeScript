@@ -28,6 +28,11 @@ namespace ts {
             type: "boolean",
         },
         {
+            name: "extendedDiagnostics",
+            type: "boolean",
+            experimental: true,
+        },
+        {
             name: "emitBOM",
             type: "boolean"
         },
@@ -368,6 +373,12 @@ namespace ts {
             name: "noImplicitUseStrict",
             type: "boolean",
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
+        },
+        {
+            name: "useLegacyEmitter",
+            type: "boolean",
+            experimental: true,
+            description: Diagnostics.Use_the_legacy_emitter_instead_of_the_transforming_emitter
         },
         {
             name: "listEmittedFiles",

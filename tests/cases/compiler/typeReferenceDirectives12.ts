@@ -3,6 +3,7 @@
 // @typesRoot: /
 // @traceResolution: true
 // @out: output.js
+// @module: amd
 
 // @filename: /types/lib/index.d.ts
 

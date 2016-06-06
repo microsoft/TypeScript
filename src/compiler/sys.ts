@@ -31,6 +31,8 @@ namespace ts {
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
         realpath?(path: string): string;
+        /*@internal*/ getEnvironmentVariable(name: string): string;
+        /*@internal*/ tryEnableSourceMapsForHost?(): void;
     }
 
     export interface FileWatcher {
@@ -77,6 +79,7 @@ namespace ts {
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         realpath(path: string): string;
+        getEnvironmentVariable?(name: string): string;
     };
 
     export var sys: System = (function () {
@@ -222,6 +225,9 @@ namespace ts {
                     return new ActiveXObject("WScript.Shell").CurrentDirectory;
                 },
                 getDirectories,
+                getEnvironmentVariable(name: string) {
+                    return new ActiveXObject("WScript.Shell").ExpandEnvironmentStrings(`%${name}%`);
+                },
                 readDirectory,
                 exit(exitCode?: number): void {
                     try {
@@ -520,6 +526,9 @@ namespace ts {
                     return process.cwd();
                 },
                 getDirectories,
+                getEnvironmentVariable(name: string) {
+                    return process.env[name] || "";
+                },
                 readDirectory,
                 getModifiedTime(path) {
                     try {
@@ -545,6 +554,14 @@ namespace ts {
                 },
                 realpath(path: string): string {
                     return _fs.realpathSync(path);
+                },
+                tryEnableSourceMapsForHost() {
+                    try {
+                        require("source-map-support").install();
+                    }
+                    catch (e) {
+                        // Could not enable source maps.
+                    }
                 }
             };
         }
@@ -575,6 +592,7 @@ namespace ts {
                 getExecutingFilePath: () => ChakraHost.executingFile,
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
                 getDirectories: ChakraHost.getDirectories,
+                getEnvironmentVariable: ChakraHost.getEnvironmentVariable || ((name: string) => ""),
                 readDirectory: ChakraHost.readDirectory,
                 exit: ChakraHost.quit,
                 realpath

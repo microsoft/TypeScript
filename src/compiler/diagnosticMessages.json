@@ -2773,6 +2773,10 @@
         "code": 6131
     },
 
+    "Use the legacy emitter instead of the transforming emitter.": {
+        "category": "Message",
+        "code": 6132
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

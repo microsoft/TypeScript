@@ -606,6 +606,10 @@ namespace Harness.LanguageService {
             return [];
         }
 
+        getEnvironmentVariable(name: string): string {
+            return ts.sys.getEnvironmentVariable(name);
+        }
+
         readDirectory(path: string, extension?: string): string[] {
             throw new Error("Not implemented Yet.");
         }
@@ -690,4 +694,3 @@ namespace Harness.LanguageService {
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { throw new Error("getPreProcessedFileInfo is not available using the server interface."); }
     }
 }
- 

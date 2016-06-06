@@ -129,35 +129,41 @@ sourceFile:sourceMapValidationDestructuringVariableStatement.ts
 ---
 >>>var nameA = robotA.name;
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^
-3 >                       ^
-4 >                        ^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^^^^^^
+4 >                       ^
+5 >                        ^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >var { 
-2 >name: nameA
-3 >                        } = robotA;
+2 >
+3 >    name: nameA
+4 >                        } = robotA;
 1 >Emitted(4, 1) Source(11, 7) + SourceIndex(0)
-2 >Emitted(4, 24) Source(11, 18) + SourceIndex(0)
-3 >Emitted(4, 25) Source(11, 30) + SourceIndex(0)
+2 >Emitted(4, 5) Source(11, 7) + SourceIndex(0)
+3 >Emitted(4, 24) Source(11, 18) + SourceIndex(0)
+4 >Emitted(4, 25) Source(11, 30) + SourceIndex(0)
 ---
 >>>var nameB = robotB.name, skillB = robotB.skill;
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^
-3 >                       ^^
-4 >                         ^^^^^^^^^^^^^^^^^^^^^
-5 >                                              ^
-6 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^^^^^^
+4 >                       ^^
+5 >                         ^^^^^^^^^^^^^^^^^^^^^
+6 >                                              ^
+7 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >var { 
-2 >name: nameB
-3 >                       , 
-4 >                         skill: skillB
-5 >                                               } = robotB;
+2 >
+3 >    name: nameB
+4 >                       , 
+5 >                         skill: skillB
+6 >                                               } = robotB;
 1->Emitted(5, 1) Source(12, 7) + SourceIndex(0)
-2 >Emitted(5, 24) Source(12, 18) + SourceIndex(0)
-3 >Emitted(5, 26) Source(12, 20) + SourceIndex(0)
-4 >Emitted(5, 47) Source(12, 33) + SourceIndex(0)
-5 >Emitted(5, 48) Source(12, 45) + SourceIndex(0)
+2 >Emitted(5, 5) Source(12, 7) + SourceIndex(0)
+3 >Emitted(5, 24) Source(12, 18) + SourceIndex(0)
+4 >Emitted(5, 26) Source(12, 20) + SourceIndex(0)
+5 >Emitted(5, 47) Source(12, 33) + SourceIndex(0)
+6 >Emitted(5, 48) Source(12, 45) + SourceIndex(0)
 ---
 >>>var _a = { name: "Edger", skill: "cutting edges" }, nameC = _a.name, skillC = _a.skill;
 1->
@@ -169,16 +175,16 @@ sourceFile:sourceMapValidationDestructuringVariableStatement.ts
 7 >                                                                     ^^^^^^^^^^^^^^^^^
 8 >                                                                                      ^
 1->
-  >
+  >var 
 2 >
-3 >    var { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }
+3 >    { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }
 4 >                                                  
 5 >                                                    name: nameC
 6 >                                                                   , 
 7 >                                                                     skill: skillC
 8 >                                                                                       } = { name: "Edger", skill: "cutting edges" };
-1->Emitted(6, 1) Source(13, 1) + SourceIndex(0)
-2 >Emitted(6, 5) Source(13, 1) + SourceIndex(0)
+1->Emitted(6, 1) Source(13, 5) + SourceIndex(0)
+2 >Emitted(6, 5) Source(13, 5) + SourceIndex(0)
 3 >Emitted(6, 51) Source(13, 79) + SourceIndex(0)
 4 >Emitted(6, 53) Source(13, 7) + SourceIndex(0)
 5 >Emitted(6, 68) Source(13, 18) + SourceIndex(0)

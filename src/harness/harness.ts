@@ -408,6 +408,60 @@ namespace Utils {
 
         throw new Error("Could not find child in parent");
     }
+
+    const maxHarnessFrames = 1;
+
+    export function filterStack(error: Error, stackTraceLimit: number = Infinity) {
+        const stack = <string>(<any>error).stack;
+        if (stack) {
+            const lines = stack.split(/\r\n?|\n/g);
+            const filtered: string[] = [];
+            let frameCount = 0;
+            let harnessFrameCount = 0;
+            for (let line of lines) {
+                if (isStackFrame(line)) {
+                    if (frameCount >= stackTraceLimit
+                        || isMocha(line)
+                        || isNode(line)) {
+                        continue;
+                    }
+
+                    if (isHarness(line)) {
+                        if (harnessFrameCount >= maxHarnessFrames) {
+                            continue;
+                        }
+
+                        harnessFrameCount++;
+                    }
+
+                    line = line.replace(/\bfile:\/\/\/(.*?)(?=(:\d+)*($|\)))/, (_, path) => ts.sys.resolvePath(path));
+                    frameCount++;
+                }
+
+                filtered.push(line);
+            }
+
+            (<any>error).stack = filtered.join(Harness.IO.newLine());
+        }
+
+        return error;
+    }
+
+    function isStackFrame(line: string) {
+        return /^\s+at\s/.test(line);
+    }
+
+    function isMocha(line: string) {
+        return /[\\/](node_modules|components)[\\/]mocha(js)?[\\/]|[\\/]mocha\.js/.test(line);
+    }
+
+    function isNode(line: string) {
+        return /\((timers|events|node|module)\.js:/.test(line);
+    }
+
+    function isHarness(line: string) {
+        return /[\\/]src[\\/]harness[\\/]|[\\/]run\.js/.test(line);
+    }
 }
 
 namespace Harness.Path {
@@ -443,6 +497,8 @@ namespace Harness {
         getExecutingFilePath(): string;
         exit(exitCode?: number): void;
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        tryEnableSourceMapsForHost?(): void;
+        getEnvironmentVariable?(name: string): string;
     }
     export var IO: IO;
 
@@ -481,6 +537,7 @@ namespace Harness {
             export const fileExists: typeof IO.fileExists = fso.FileExists;
             export const log: typeof IO.log = global.WScript && global.WScript.StdOut.WriteLine;
             export const readDirectory: typeof IO.readDirectory = (path, extension, exclude) => ts.sys.readDirectory(path, extension, exclude);
+            export const getEnvironmentVariable: typeof IO.getEnvironmentVariable = name => ts.sys.getEnvironmentVariable(name);
 
             export function createDirectory(path: string) {
                 if (directoryExists(path)) {
@@ -550,6 +607,13 @@ namespace Harness {
             export const log: typeof IO.log = s => console.log(s);
 
             export const readDirectory: typeof IO.readDirectory = (path, extension, exclude) => ts.sys.readDirectory(path, extension, exclude);
+            export const getEnvironmentVariable: typeof IO.getEnvironmentVariable = name => ts.sys.getEnvironmentVariable(name);
+
+            export function tryEnableSourceMapsForHost() {
+                if (ts.sys.tryEnableSourceMapsForHost) {
+                    ts.sys.tryEnableSourceMapsForHost();
+                }
+            }
 
             export function createDirectory(path: string) {
                 if (!directoryExists(path)) {
@@ -698,7 +762,16 @@ namespace Harness {
                 return dirPath;
             }
             export let directoryName: typeof IO.directoryName = Utils.memoize(directoryNameImpl);
-            export const resolvePath = (path: string) => directoryName(path);
+
+            export function resolvePath(path: string) {
+                const response = Http.getFileFromServerSync(serverRoot + path + "?resolve=true");
+                if (response.status === 200) {
+                    return response.responseText;
+                }
+                else {
+                    return undefined;
+                }
+            }
 
             export function fileExists(path: string): boolean {
                 const response = Http.getFileFromServerSync(serverRoot + path);
@@ -758,7 +831,9 @@ namespace Harness {
 namespace Harness {
     export const libFolder = "built/local/";
     const tcServicesFileName = ts.combinePaths(libFolder, Utils.getExecutionEnvironment() === Utils.ExecutionEnvironment.Browser ? "typescriptServicesInBrowserTest.js" : "typescriptServices.js");
-    export const tcServicesFile = IO.readFile(tcServicesFileName);
+    export const tcServicesFile = IO.readFile(tcServicesFileName) + (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser
+        ? IO.newLine() + `//# sourceURL=${IO.resolvePath(tcServicesFileName)}`
+        : "");
 
     export interface SourceMapEmitterCallback {
         (emittedFile: string, emittedLine: number, emittedColumn: number, sourceFile: string, sourceLine: number, sourceColumn: number, sourceName: string): void;
@@ -1395,7 +1470,7 @@ namespace Harness {
             }
 
             public getSourceMapRecord() {
-                if (this.sourceMapData) {
+                if (this.sourceMapData && this.sourceMapData.length > 0) {
                     return Harness.SourceMapRecorder.getSourceMapRecord(this.sourceMapData, this.program, this.files);
                 }
             }
@@ -1660,17 +1735,21 @@ namespace Harness {
 
             let actual = <string>undefined;
             const actualFileName = localPath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
+            try {
+                if (runImmediately) {
+                    actual = generateActual(actualFileName, generateContent);
+                    const comparison = compareToBaseline(actual, relativeFileName, opts);
+                    writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, descriptionForDescribe);
+                }
+                else {
+                    actual = generateActual(actualFileName, generateContent);
 
-            if (runImmediately) {
-                actual = generateActual(actualFileName, generateContent);
-                const comparison = compareToBaseline(actual, relativeFileName, opts);
-                writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, descriptionForDescribe);
+                    const comparison = compareToBaseline(actual, relativeFileName, opts);
+                    writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, descriptionForDescribe);
+                }
             }
-            else {
-                actual = generateActual(actualFileName, generateContent);
-
-                const comparison = compareToBaseline(actual, relativeFileName, opts);
-                writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, descriptionForDescribe);
+            catch (e) {
+                throw Utils.filterStack(e);
             }
         }
     }
@@ -1691,6 +1770,10 @@ namespace Harness {
     }
 
     if (Error) (<any>Error).stackTraceLimit = 1;
+}
+
+if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable("NODE_ENV"))) {
+    Harness.IO.tryEnableSourceMapsForHost();
 }
 
 // TODO: not sure why Utils.evalFile isn't working with this, eventually will concat it like old compiler instead of eval

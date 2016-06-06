@@ -1,13 +1,9 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 /// <reference path="core.ts" />
+/// <reference path="printer.ts" />
 
 namespace ts {
-    /* @internal */ export let programTime = 0;
-    /* @internal */ export let emitTime = 0;
-    /* @internal */ export let ioReadTime = 0;
-    /* @internal */ export let ioWriteTime = 0;
-
     /** The version of the TypeScript compiler release */
 
     const emptyArray: any[] = [];
@@ -787,9 +783,9 @@ namespace ts {
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             let text: string;
             try {
-                const start = new Date().getTime();
+                const ioReadStart = performance.mark();
                 text = sys.readFile(fileName, options.charset);
-                ioReadTime += new Date().getTime() - start;
+                performance.measure("ioReadTime", ioReadStart);
             }
             catch (e) {
                 if (onError) {
@@ -856,7 +852,7 @@ namespace ts {
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
-                const start = new Date().getTime();
+                const ioWriteStart = performance.mark();
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
                 if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
@@ -866,7 +862,7 @@ namespace ts {
                     sys.writeFile(fileName, data, writeByteOrderMark);
                 }
 
-                ioWriteTime += new Date().getTime() - start;
+                performance.measure("ioWriteTime", ioWriteStart);
             }
             catch (e) {
                 if (onError) {
@@ -909,7 +905,8 @@ namespace ts {
             readFile: fileName => sys.readFile(fileName),
             trace: (s: string) => sys.write(s + newLine),
             directoryExists: directoryName => sys.directoryExists(directoryName),
-            realpath
+            realpath,
+            getEnvironmentVariable: name => getEnvironmentVariable(name, /*host*/ undefined)
         };
     }
 
@@ -1000,7 +997,7 @@ namespace ts {
         let resolvedTypeReferenceDirectives: Map<ResolvedTypeReferenceDirective> = {};
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
-        const start = new Date().getTime();
+        const programStart = performance.mark();
 
         host = host || createCompilerHost(options);
 
@@ -1097,7 +1094,7 @@ namespace ts {
 
         verifyCompilerOptions();
 
-        programTime += new Date().getTime() - start;
+        performance.measure("programTime", programStart);
 
         return program;
 
@@ -1338,14 +1335,22 @@ namespace ts {
             // checked is to not pass the file to getEmitResolver.
             const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile);
 
-            const start = new Date().getTime();
+            const emitStart = performance.mark();
 
-            const emitResult = emitFiles(
+            // TODO(rbuckton): remove USE_TRANSFORMS condition when we switch to transforms permanently.
+            let useLegacyEmitter = options.useLegacyEmitter;
+            if (/^(no?|f(alse)?|0|-)$/i.test(getEnvironmentVariable("USE_TRANSFORMS", host))) {
+                useLegacyEmitter = true;
+            }
+
+            const fileEmitter = useLegacyEmitter ? emitFiles : printFiles;
+            const emitResult = fileEmitter(
                 emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile);
 
-            emitTime += new Date().getTime() - start;
+            performance.measure("emitTime", emitStart);
+
             return emitResult;
         }
 
@@ -1579,7 +1584,7 @@ namespace ts {
                     return false;
                 }
 
-                function checkModifiers(modifiers: ModifiersArray): boolean {
+                function checkModifiers(modifiers: NodeArray<Modifier>): boolean {
                     if (modifiers) {
                         for (const modifier of modifiers) {
                             switch (modifier.kind) {
@@ -1696,7 +1701,7 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.ModuleDeclaration:
-                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
+                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || isDeclarationFile(file))) {
                             const moduleName = <LiteralExpression>(<ModuleDeclaration>node).name;
                             // Ambient module declarations can be interpreted as augmentations for some existing external modules.
                             // This will happen in two cases:
@@ -2139,7 +2144,7 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
             }
 
-            if (options.reactNamespace && !isIdentifier(options.reactNamespace, languageVersion)) {
+            if (options.reactNamespace && !isIdentifierText(options.reactNamespace, languageVersion)) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalid_value_for_reactNamespace_0_is_not_a_valid_identifier, options.reactNamespace));
             }
 

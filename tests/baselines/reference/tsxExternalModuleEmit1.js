@@ -38,7 +38,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var React = require('react');
+var React = require("react");
 var Button = (function (_super) {
     __extends(Button, _super);
     function Button() {
@@ -57,9 +57,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var React = require('react');
+var React = require("react");
 // Should see var button_1 = require('./button') here
-var button_1 = require('./button');
+var button_1 = require("./button");
 var App = (function (_super) {
     __extends(App, _super);
     function App() {

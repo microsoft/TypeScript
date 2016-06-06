@@ -13,6 +13,6 @@ const X: Invalid1 = "Should fail to construct";
 
 //// [file.js]
 "use strict";
-var React = require('react');
+var React = require("react");
 var X = "Should fail to construct";
 React.createElement(X, null);

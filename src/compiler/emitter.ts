@@ -406,7 +406,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         };
 
         function isUniqueLocalName(name: string, container: Node): boolean {
-            for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
+            for (let node = container; isNodeDescendantOf(node, container); node = node.nextContainer) {
                 if (node.locals && hasProperty(node.locals, name)) {
                     // We conservatively include alias symbols to cover cases where they're emitted as locals
                     if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
@@ -524,7 +524,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             const writer = createTextWriter(newLine);
             const { write, writeTextOfNode, writeLine, increaseIndent, decreaseIndent } = writer;
 
-            let sourceMap = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? createSourceMapWriter(host, writer) : getNullSourceMapWriter();
+            let sourceMap = createSourceMapWriter(host, writer);
             let { setSourceFile, emitStart, emitEnd, emitPos } = sourceMap;
 
             let currentSourceFile: SourceFile;
@@ -962,7 +962,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             function emitLiteral(node: LiteralExpression | TemplateLiteralFragment) {
-                const text = getLiteralText(node);
+                const text = getLiteralText(node, currentSourceFile, languageVersion);
 
                 if ((compilerOptions.sourceMap || compilerOptions.inlineSourceMap) && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
@@ -974,43 +974,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 else {
                     write(text);
                 }
-            }
-
-            function getLiteralText(node: LiteralExpression | TemplateLiteralFragment) {
-                // Any template literal or string literal with an extended escape
-                // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
-                if (languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
-                    return getQuotedEscapedLiteralText('"', node.text, '"');
-                }
-
-                // If we don't need to downlevel and we can reach the original source text using
-                // the node's parent reference, then simply get the text as it was originally written.
-                if (node.parent) {
-                    return getTextOfNodeFromSourceText(currentText, node);
-                }
-
-                // If we can't reach the original source text, use the canonical form if it's a number,
-                // or an escaped quoted form of the original text if it's string-like.
-                switch (node.kind) {
-                    case SyntaxKind.StringLiteral:
-                        return getQuotedEscapedLiteralText('"', node.text, '"');
-                    case SyntaxKind.NoSubstitutionTemplateLiteral:
-                        return getQuotedEscapedLiteralText("`", node.text, "`");
-                    case SyntaxKind.TemplateHead:
-                        return getQuotedEscapedLiteralText("`", node.text, "${");
-                    case SyntaxKind.TemplateMiddle:
-                        return getQuotedEscapedLiteralText("}", node.text, "${");
-                    case SyntaxKind.TemplateTail:
-                        return getQuotedEscapedLiteralText("}", node.text, "`");
-                    case SyntaxKind.NumericLiteral:
-                        return node.text;
-                }
-
-                Debug.fail(`Literal kind '${node.kind}' not accounted for.`);
-            }
-
-            function getQuotedEscapedLiteralText(leftQuote: string, text: string, rightQuote: string) {
-                return leftQuote + escapeNonAsciiCharacters(escapeString(text)) + rightQuote;
             }
 
             function emitDownlevelRawTemplateLiteral(node: LiteralExpression) {
@@ -1087,7 +1050,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     return;
                 }
 
-                const emitOuterParens = isExpression(node.parent)
+                const emitOuterParens = node.parent.kind !== SyntaxKind.ArrowFunction
+                    && isPartOfExpression(node.parent)
                     && templateNeedsParens(node, <Expression>node.parent);
 
                 if (emitOuterParens) {
@@ -1634,7 +1598,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             return;
                         }
                     }
-                    else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BodyScopedClassBinding) {
+                    else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.SelfReferenceInDecoratedClass) {
                         // Due to the emit for class decorators, any reference to the class from inside of the class body
                         // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                         // behavior of class names in ES6.
@@ -2020,7 +1984,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 if (multiLine) {
                     decreaseIndent();
-                    writeLine();
                 }
 
                 write(")");
@@ -2294,41 +2257,49 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 emit(node.right);
             }
 
-            function emitQualifiedNameAsExpression(node: QualifiedName, useFallback: boolean) {
+            function emitQualifiedNameAsExpression(node: QualifiedName, useFallback: boolean, location?: Node) {
                 if (node.left.kind === SyntaxKind.Identifier) {
-                    emitEntityNameAsExpression(node.left, useFallback);
+                    emitEntityNameAsExpression(node.left, useFallback, location);
                 }
                 else if (useFallback) {
                     const temp = createAndRecordTempVariable(TempFlags.Auto);
                     write("(");
                     emitNodeWithoutSourceMap(temp);
                     write(" = ");
-                    emitEntityNameAsExpression(node.left, /*useFallback*/ true);
+                    emitEntityNameAsExpression(node.left, /*useFallback*/ true, location);
                     write(") && ");
                     emitNodeWithoutSourceMap(temp);
                 }
                 else {
-                    emitEntityNameAsExpression(node.left, /*useFallback*/ false);
+                    emitEntityNameAsExpression(node.left, /*useFallback*/ false, location);
                 }
 
                 write(".");
                 emit(node.right);
             }
 
-            function emitEntityNameAsExpression(node: EntityName | Expression, useFallback: boolean) {
+            function emitEntityNameAsExpression(node: EntityName | Expression, useFallback: boolean, location?: Node) {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
+                        let name = <Identifier>node;
+                        if (location) {
+                            // to resolve the expression to the correct container, create a shallow
+                            // clone of `node` with a new parent.
+                            name = clone(name);
+                            name.parent = location;
+                        }
+
                         if (useFallback) {
                             write("typeof ");
-                            emitExpressionIdentifier(<Identifier>node);
+                            emitExpressionIdentifier(name);
                             write(" !== 'undefined' && ");
                         }
 
-                        emitExpressionIdentifier(<Identifier>node);
+                        emitExpressionIdentifier(name);
                         break;
 
                     case SyntaxKind.QualifiedName:
-                        emitQualifiedNameAsExpression(<QualifiedName>node, useFallback);
+                        emitQualifiedNameAsExpression(<QualifiedName>node, useFallback, location);
                         break;
 
                     default:
@@ -2359,12 +2330,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 return forEach(elements, e => e.kind === SyntaxKind.SpreadElementExpression);
             }
 
-            function skipParentheses(node: Expression): Expression {
+            function skipParenthesesAndAssertions(node: Expression): Expression {
                 while (node.kind === SyntaxKind.ParenthesizedExpression ||
                     node.kind === SyntaxKind.TypeAssertionExpression ||
                     node.kind === SyntaxKind.AsExpression ||
                     node.kind === SyntaxKind.NonNullExpression) {
                     node = (<ParenthesizedExpression | AssertionExpression | NonNullExpression>node).expression;
+                }
+                return node;
+            }
+
+            function skipAssertions(node: Expression): Expression {
+                while (node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression) {
+                    node = (<ParenthesizedExpression | AssertionExpression>node).expression;
                 }
                 return node;
             }
@@ -2386,7 +2364,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function emitCallWithSpread(node: CallExpression) {
                 let target: Expression;
-                const expr = skipParentheses(node.expression);
+                const expr = skipParenthesesAndAssertions(node.expression);
                 if (expr.kind === SyntaxKind.PropertyAccessExpression) {
                     // Target will be emitted as "this" argument
                     target = emitCallTarget((<PropertyAccessExpression>expr).expression);
@@ -2460,7 +2438,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     superCall = true;
                 }
                 else {
-                    superCall = isSuperPropertyOrElementAccess(expression);
+                    superCall = isSuperProperty(expression);
                     isAsyncMethodWithSuper = superCall && isInAsyncMethodWithSuperInES6(node);
                     emit(expression);
                 }
@@ -2704,7 +2682,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 let current = getRootDeclaration(node).parent;
                 while (current) {
                     if (current.kind === SyntaxKind.SourceFile) {
-                        return !isExported || ((getCombinedNodeFlags(node) & NodeFlags.Export) !== 0);
+                        return !isExported || ((getCombinedModifierFlags(node) & ModifierFlags.Export) !== 0);
                     }
                     else if (isDeclaration(current)) {
                         return false;
@@ -2822,7 +2800,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             function synthesizedNodeStartsOnNewLine(node: Node) {
-                return nodeIsSynthesized(node) && (<SynthesizedNode>node).startsOnNewLine;
+                return nodeIsSynthesized(node) && node.startsOnNewLine;
             }
 
             function emitConditionalExpression(node: ConditionalExpression) {
@@ -3485,8 +3463,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 // we can't reuse 'arr' because it might be modified within the body of the loop.
                 const counter = createTempVariable(TempFlags._i);
                 const rhsReference = createSynthesizedNode(SyntaxKind.Identifier) as Identifier;
-                rhsReference.text = node.expression.kind === SyntaxKind.Identifier ?
-                    makeUniqueName((<Identifier>node.expression).text) :
+                const expressionWithoutAssertions = skipAssertions(node.expression);
+                rhsReference.text = expressionWithoutAssertions.kind === SyntaxKind.Identifier ?
+                    makeUniqueName((<Identifier>expressionWithoutAssertions).text) :
                     makeTempVariableName(TempFlags.Auto);
 
                 // This is the let keyword for the counter and rhsReference. The let keyword for
@@ -3801,7 +3780,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function emitModuleMemberName(node: Declaration) {
                 emitStart(node.name);
-                if (getCombinedNodeFlags(node) & NodeFlags.Export) {
+                if (getCombinedModifierFlags(node) & ModifierFlags.Export) {
                     const container = getContainingModule(node);
                     if (container) {
                         write(getGeneratedNameForNode(container));
@@ -3825,7 +3804,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function emitEs6ExportDefaultCompat(node: Node) {
                 if (node.parent.kind === SyntaxKind.SourceFile) {
-                    Debug.assert(!!(node.flags & NodeFlags.Default) || node.kind === SyntaxKind.ExportAssignment);
+                    Debug.assert(hasModifier(node, ModifierFlags.Default) || node.kind === SyntaxKind.ExportAssignment);
                     // only allow export default at a source file level
                     if (modulekind === ModuleKind.CommonJS || modulekind === ModuleKind.AMD || modulekind === ModuleKind.UMD) {
                         if (!isEs6Module) {
@@ -3844,7 +3823,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             function emitExportMemberAssignment(node: FunctionLikeDeclaration | ClassDeclaration) {
-                if (node.flags & NodeFlags.Export) {
+                if (hasModifier(node, ModifierFlags.Export)) {
                     writeLine();
                     emitStart(node);
 
@@ -3853,7 +3832,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         // emit export default <smth> as
                         // export("default", <smth>)
                         write(`${exportFunctionForFile}("`);
-                        if (node.flags & NodeFlags.Default) {
+                        if (hasModifier(node, ModifierFlags.Default)) {
                             write("default");
                         }
                         else {
@@ -3864,7 +3843,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         write(")");
                     }
                     else {
-                        if (node.flags & NodeFlags.Default) {
+                        if (hasModifier(node, ModifierFlags.Default)) {
                             emitEs6ExportDefaultCompat(node);
                             if (languageVersion === ScriptTarget.ES3) {
                                 write('exports["default"]');
@@ -3958,7 +3937,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write(" = ");
                     emit(value);
                 });
-                emitEnd(nodeForSourceMap, /*stopOverridingSpan*/true);
+                emitEnd(nodeForSourceMap);
+                sourceMap.stopOverridingSpan();
 
                 if (exportChanged) {
                     write(")");
@@ -3995,7 +3975,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 // because actual variable declarations are hoisted
                 let canDefineTempVariablesInPlace = false;
                 if (root.kind === SyntaxKind.VariableDeclaration) {
-                    const isExported = getCombinedNodeFlags(root) & NodeFlags.Export;
+                    const isExported = getCombinedModifierFlags(root) & ModifierFlags.Export;
                     const isSourceLevelForSystemModuleKind = shouldHoistDeclarationInSystemJsModule(root);
                     canDefineTempVariablesInPlace = !isExported && !isSourceLevelForSystemModuleKind;
                 }
@@ -4242,7 +4222,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function emitVariableDeclaration(node: VariableDeclaration) {
                 if (isBindingPattern(node.name)) {
-                    const isExported = getCombinedNodeFlags(node) & NodeFlags.Export;
+                    const isExported = getCombinedModifierFlags(node) & ModifierFlags.Export;
                     if (languageVersion >= ScriptTarget.ES6 && (!isExported || modulekind === ModuleKind.ES6)) {
                         // emit ES6 destructuring only if target module is ES6 or variable is not exported
                         // exported variables in CJS/AMD are prefixed with 'exports.' so result javascript { exports.toString } = 1; is illegal
@@ -4356,7 +4336,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             function isES6ExportedDeclaration(node: Node) {
-                return !!(node.flags & NodeFlags.Export) &&
+                return hasModifier(node, ModifierFlags.Export) &&
                     modulekind === ModuleKind.ES6 &&
                     node.parent.kind === SyntaxKind.SourceFile;
             }
@@ -4364,7 +4344,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             function emitVariableStatement(node: VariableStatement) {
                 let startIsEmitted = false;
 
-                if (node.flags & NodeFlags.Export) {
+                if (hasModifier(node, ModifierFlags.Export)) {
                     if (isES6ExportedDeclaration(node)) {
                         // Exported ES6 module member
                         write("export ");
@@ -4393,7 +4373,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             function shouldEmitLeadingAndTrailingCommentsForVariableStatement(node: VariableStatement) {
                 // If we're not exporting the variables, there's nothing special here.
                 // Always emit comments for these nodes.
-                if (!(node.flags & NodeFlags.Export)) {
+                if (!hasModifier(node, ModifierFlags.Export)) {
                     return true;
                 }
 
@@ -4524,7 +4504,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     writeLine();
                     emitStart(restParam);
                     emitNodeWithCommentsAndWithoutSourcemap(restParam.name);
-                    write("[" + tempName + " - " + restIndex + "] = arguments[" + tempName + "];");
+                    write(`[${tempName} - ${restIndex}] = arguments[${tempName}];`);
                     emitEnd(restParam);
                     decreaseIndent();
                     writeLine();
@@ -4601,7 +4581,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 if (!shouldEmitAsArrowFunction(node)) {
                     if (isES6ExportedDeclaration(node)) {
                         write("export ");
-                        if (node.flags & NodeFlags.Default) {
+                        if (hasModifier(node, ModifierFlags.Default)) {
                             write("default ");
                         }
                     }
@@ -4857,7 +4837,7 @@ const _super = (function (geti, seti) {
             }
 
             function emitExpressionFunctionBody(node: FunctionLikeDeclaration, body: Expression) {
-                if (languageVersion < ScriptTarget.ES6 || node.flags & NodeFlags.Async) {
+                if (languageVersion < ScriptTarget.ES6 || hasModifier(node, ModifierFlags.Async)) {
                     emitDownLevelExpressionFunctionBody(node, body);
                     return;
                 }
@@ -4979,7 +4959,7 @@ const _super = (function (geti, seti) {
 
             function emitParameterPropertyAssignments(node: ConstructorDeclaration) {
                 forEach(node.parameters, param => {
-                    if (param.flags & NodeFlags.ParameterPropertyModifier) {
+                    if (hasModifier(param, ModifierFlags.ParameterPropertyModifier)) {
                         writeLine();
                         emitStart(param);
                         emitStart(param.name);
@@ -5015,7 +4995,7 @@ const _super = (function (geti, seti) {
             function getInitializedProperties(node: ClassLikeDeclaration, isStatic: boolean) {
                 const properties: PropertyDeclaration[] = [];
                 for (const member of node.members) {
-                    if (member.kind === SyntaxKind.PropertyDeclaration && isStatic === ((member.flags & NodeFlags.Static) !== 0) && (<PropertyDeclaration>member).initializer) {
+                    if (member.kind === SyntaxKind.PropertyDeclaration && isStatic === hasModifier(member, ModifierFlags.Static) && (<PropertyDeclaration>member).initializer) {
                         properties.push(<PropertyDeclaration>member);
                     }
                 }
@@ -5038,7 +5018,7 @@ const _super = (function (geti, seti) {
                     emit(receiver);
                 }
                 else {
-                    if (property.flags & NodeFlags.Static) {
+                    if (hasModifier(property, ModifierFlags.Static)) {
                         emitDeclarationName(node);
                     }
                     else {
@@ -5140,7 +5120,7 @@ const _super = (function (geti, seti) {
                         writeLine();
                         emitLeadingComments(member);
                         emitStart(member);
-                        if (member.flags & NodeFlags.Static) {
+                        if (hasModifier(member, ModifierFlags.Static)) {
                             write("static ");
                         }
 
@@ -5198,7 +5178,7 @@ const _super = (function (geti, seti) {
                         emitCommentsOnNotEmittedNode(member);
                     }
                     // Check if there is any non-static property assignment
-                    if (member.kind === SyntaxKind.PropertyDeclaration && (<PropertyDeclaration>member).initializer && (member.flags & NodeFlags.Static) === 0) {
+                    if (member.kind === SyntaxKind.PropertyDeclaration && (<PropertyDeclaration>member).initializer && !hasModifier(member, ModifierFlags.Static)) {
                         hasInstancePropertyWithInitializer = true;
                     }
                 });
@@ -5412,12 +5392,12 @@ const _super = (function (geti, seti) {
                         // NOTE: we reuse the same rewriting logic for cases when targeting ES6 and module kind is System.
                         // Because of hoisting top level class declaration need to be emitted as class expressions.
                         // Double bind case is only required if node is decorated.
-                        if (isDecorated && resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithBodyScopedClassBinding) {
+                        if (isDecorated && resolver.getNodeCheckFlags(node) & NodeCheckFlags.DecoratedClassWithSelfReference) {
                             decoratedClassAlias = unescapeIdentifier(makeUniqueName(node.name ? node.name.text : "default"));
                             decoratedClassAliases[getNodeId(node)] = decoratedClassAlias;
                         }
 
-                        if (isES6ExportedDeclaration(node) && !(node.flags & NodeFlags.Default) && decoratedClassAlias === undefined) {
+                        if (isES6ExportedDeclaration(node) && !hasModifier(node, ModifierFlags.Default) && decoratedClassAlias === undefined) {
                             write("export ");
                         }
 
@@ -5435,7 +5415,7 @@ const _super = (function (geti, seti) {
                     }
                     else if (isES6ExportedDeclaration(node)) {
                         write("export ");
-                        if (node.flags & NodeFlags.Default) {
+                        if (hasModifier(node, ModifierFlags.Default)) {
                             write("default ");
                         }
                     }
@@ -5469,7 +5449,7 @@ const _super = (function (geti, seti) {
                 // emit name if
                 // - node has a name
                 // - this is default export with static initializers
-                if (node.name || (node.flags & NodeFlags.Default && (staticProperties.length > 0 || modulekind !== ModuleKind.ES6) && !rewriteAsClassExpression)) {
+                if (node.name || (hasModifier(node, ModifierFlags.Default) && (staticProperties.length > 0 || modulekind !== ModuleKind.ES6) && !rewriteAsClassExpression)) {
                     write(" ");
                     emitDeclarationName(node);
                 }
@@ -5493,7 +5473,7 @@ const _super = (function (geti, seti) {
                     if (decoratedClassAlias !== undefined) {
                         write(";");
                         writeLine();
-                        if (isES6ExportedDeclaration(node) && !(node.flags & NodeFlags.Default)) {
+                        if (isES6ExportedDeclaration(node) && !hasModifier(node, ModifierFlags.Default)) {
                             write("export ");
                         }
                         write("let ");
@@ -5528,7 +5508,7 @@ const _super = (function (geti, seti) {
                     emitDecoratorsOfClass(node, decoratedClassAlias);
                 }
 
-                if (!(node.flags & NodeFlags.Export)) {
+                if (!hasModifier(node, ModifierFlags.Export)) {
                     return;
                 }
                 if (modulekind !== ModuleKind.ES6) {
@@ -5537,7 +5517,7 @@ const _super = (function (geti, seti) {
                 else {
                     // If this is an exported class, but not on the top level (i.e. on an internal
                     // module), export it
-                    if (node.flags & NodeFlags.Default) {
+                    if (hasModifier(node, ModifierFlags.Default)) {
                         // if this is a top level default export of decorated class, write the export after the declaration.
                         if (isDecorated) {
                             writeLine();
@@ -5565,6 +5545,18 @@ const _super = (function (geti, seti) {
                         write("var ");
                     }
                     emitDeclarationName(node);
+                    write(" = ");
+                }
+
+                const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
+                const isClassExpressionWithStaticProperties = staticProperties.length > 0 && node.kind === SyntaxKind.ClassExpression;
+                let tempVariable: Identifier;
+
+                if (isClassExpressionWithStaticProperties) {
+                    tempVariable = createAndRecordTempVariable(TempFlags.Auto);
+                    write("(");
+                    increaseIndent();
+                    emit(tempVariable);
                     write(" = ");
                 }
 
@@ -5597,9 +5589,6 @@ const _super = (function (geti, seti) {
                 writeLine();
                 emitConstructor(node, baseTypeNode);
                 emitMemberFunctionsForES5AndLower(node);
-                emitPropertyDeclarations(node, getInitializedProperties(node, /*isStatic*/ true));
-                writeLine();
-                emitDecoratorsOfClass(node, /*decoratedClassAlias*/ undefined);
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
                     write("return ");
@@ -5626,7 +5615,22 @@ const _super = (function (geti, seti) {
                 write("))");
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     write(";");
+                    emitPropertyDeclarations(node, staticProperties);
+                    emitDecoratorsOfClass(node, /*decoratedClassAlias*/ undefined);
                 }
+                else if (isClassExpressionWithStaticProperties) {
+                    for (const property of staticProperties) {
+                        write(",");
+                        writeLine();
+                        emitPropertyDeclaration(node, property, /*receiver*/ tempVariable, /*isExpression*/ true);
+                    }
+                    write(",");
+                    writeLine();
+                    emit(tempVariable);
+                    decreaseIndent();
+                    write(")");
+                }
+
                 emitEnd(node);
 
                 if (node.kind === SyntaxKind.ClassDeclaration) {
@@ -5636,14 +5640,14 @@ const _super = (function (geti, seti) {
 
             function emitClassMemberPrefix(node: ClassLikeDeclaration, member: Node) {
                 emitDeclarationName(node);
-                if (!(member.flags & NodeFlags.Static)) {
+                if (!hasModifier(member, ModifierFlags.Static)) {
                     write(".prototype");
                 }
             }
 
             function emitDecoratorsOfClass(node: ClassLikeDeclaration, decoratedClassAlias: string) {
                 emitDecoratorsOfMembers(node, /*staticFlag*/ 0);
-                emitDecoratorsOfMembers(node, NodeFlags.Static);
+                emitDecoratorsOfMembers(node, ModifierFlags.Static);
                 emitDecoratorsOfConstructor(node, decoratedClassAlias);
             }
 
@@ -5697,10 +5701,10 @@ const _super = (function (geti, seti) {
                 writeLine();
             }
 
-            function emitDecoratorsOfMembers(node: ClassLikeDeclaration, staticFlag: NodeFlags) {
+            function emitDecoratorsOfMembers(node: ClassLikeDeclaration, staticFlag: ModifierFlags) {
                 for (const member of node.members) {
                     // only emit members in the correct group
-                    if ((member.flags & NodeFlags.Static) !== staticFlag) {
+                    if ((getModifierFlags(member) & ModifierFlags.Static) !== staticFlag) {
                         continue;
                     }
 
@@ -5979,27 +5983,26 @@ const _super = (function (geti, seti) {
             /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the __metadata decorator. */
             function emitSerializedTypeReferenceNode(node: TypeReferenceNode) {
                 let location: Node = node.parent;
-                while (isDeclaration(location) || isTypeNode(location)) {
+                while (isDeclaration(location) || isPartOfTypeNode(location)) {
                     location = location.parent;
                 }
 
                 // Clone the type name and parent it to a location outside of the current declaration.
-                const typeName = cloneEntityName(node.typeName, location);
-                const result = resolver.getTypeReferenceSerializationKind(typeName);
+                const result = resolver.getTypeReferenceSerializationKind(node.typeName, location);
                 switch (result) {
                     case TypeReferenceSerializationKind.Unknown:
                         let temp = createAndRecordTempVariable(TempFlags.Auto);
                         write("(typeof (");
                         emitNodeWithoutSourceMap(temp);
                         write(" = ");
-                        emitEntityNameAsExpression(typeName, /*useFallback*/ true);
+                        emitEntityNameAsExpression(node.typeName, /*useFallback*/ true, location);
                         write(") === 'function' && ");
                         emitNodeWithoutSourceMap(temp);
                         write(") || Object");
                         break;
 
                     case TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue:
-                        emitEntityNameAsExpression(typeName, /*useFallback*/ false);
+                        emitEntityNameAsExpression(node.typeName, /*useFallback*/ false, location);
                         break;
 
                     case TypeReferenceSerializationKind.VoidType:
@@ -6161,7 +6164,7 @@ const _super = (function (geti, seti) {
                     // do not emit var if variable was already hoisted
 
                     const isES6ExportedEnum = isES6ExportedDeclaration(node);
-                    if (!(node.flags & NodeFlags.Export) || (isES6ExportedEnum && isFirstDeclarationOfKind(node, node.symbol && node.symbol.declarations, SyntaxKind.EnumDeclaration))) {
+                    if (!hasModifier(node, ModifierFlags.Export) || (isES6ExportedEnum && isFirstDeclarationOfKind(node, node.symbol && node.symbol.declarations, SyntaxKind.EnumDeclaration))) {
                         emitStart(node);
                         if (isES6ExportedEnum) {
                             write("export ");
@@ -6190,7 +6193,7 @@ const _super = (function (geti, seti) {
                 emitModuleMemberName(node);
                 write(" = {}));");
                 emitEnd(node);
-                if (!isES6ExportedDeclaration(node) && node.flags & NodeFlags.Export && !shouldHoistDeclarationInSystemJsModule(node)) {
+                if (!isES6ExportedDeclaration(node) && hasModifier(node, ModifierFlags.Export) && !shouldHoistDeclarationInSystemJsModule(node)) {
                     // do not emit var if variable was already hoisted
                     writeLine();
                     emitStart(node);
@@ -6202,7 +6205,7 @@ const _super = (function (geti, seti) {
                     write(";");
                 }
                 if (modulekind !== ModuleKind.ES6 && node.parent === currentSourceFile) {
-                    if (modulekind === ModuleKind.System && (node.flags & NodeFlags.Export)) {
+                    if (modulekind === ModuleKind.System && hasModifier(node, ModifierFlags.Export)) {
                         // write the call to exporter for enum
                         writeLine();
                         write(`${exportFunctionForFile}("`);
@@ -6324,7 +6327,7 @@ const _super = (function (geti, seti) {
                 }
                 write(")(");
                 // write moduleDecl = containingModule.m only if it is not exported es6 module member
-                if ((node.flags & NodeFlags.Export) && !isES6ExportedDeclaration(node)) {
+                if (hasModifier(node, ModifierFlags.Export) && !isES6ExportedDeclaration(node)) {
                     emit(node.name);
                     write(" = ");
                 }
@@ -6334,7 +6337,7 @@ const _super = (function (geti, seti) {
                 write(" = {}));");
                 emitEnd(node);
                 if (!isES6ExportedDeclaration(node) && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
-                    if (modulekind === ModuleKind.System && (node.flags & NodeFlags.Export)) {
+                    if (modulekind === ModuleKind.System && hasModifier(node, ModifierFlags.Export)) {
                         writeLine();
                         write(`${exportFunctionForFile}("`);
                         emitDeclarationName(node);
@@ -6446,7 +6449,7 @@ const _super = (function (geti, seti) {
 
             function emitExternalImportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration) {
                 if (contains(externalImports, node)) {
-                    const isExportedImport = node.kind === SyntaxKind.ImportEqualsDeclaration && (node.flags & NodeFlags.Export) !== 0;
+                    const isExportedImport = node.kind === SyntaxKind.ImportEqualsDeclaration && hasModifier(node, ModifierFlags.Export);
                     const namespaceDeclaration = getNamespaceDeclarationNode(node);
                     const varOrConst = (languageVersion <= ScriptTarget.ES5) ? "var " : "const ";
 
@@ -6536,7 +6539,7 @@ const _super = (function (geti, seti) {
                             write("export ");
                             write("var ");
                         }
-                        else if (!(node.flags & NodeFlags.Export)) {
+                        else if (!hasModifier(node, ModifierFlags.Export)) {
                             write("var ");
                         }
                     }
@@ -6781,7 +6784,8 @@ const _super = (function (geti, seti) {
                 }
                 const moduleName = getExternalModuleName(importNode);
                 if (moduleName.kind === SyntaxKind.StringLiteral) {
-                    return tryRenameExternalModule(<LiteralExpression>moduleName) || getLiteralText(<LiteralExpression>moduleName);
+                    return tryRenameExternalModule(<LiteralExpression>moduleName)
+                        || getLiteralText(<LiteralExpression>moduleName, currentSourceFile, languageVersion);
                 }
 
                 return undefined;
@@ -6928,7 +6932,7 @@ const _super = (function (geti, seti) {
                 function writeExportedName(node: Identifier | Declaration): void {
                     // do not record default exports
                     // they are local to module and never overwritten (explicitly skipped) by star export
-                    if (node.kind !== SyntaxKind.Identifier && node.flags & NodeFlags.Default) {
+                    if (node.kind !== SyntaxKind.Identifier && hasModifier(node, ModifierFlags.Default)) {
                         return;
                     }
 
@@ -7000,8 +7004,8 @@ const _super = (function (geti, seti) {
                             emit(local);
                         }
 
-                        const flags = getCombinedNodeFlags(local.kind === SyntaxKind.Identifier ? local.parent : local);
-                        if (flags & NodeFlags.Export) {
+                        const flags = getCombinedModifierFlags(local.kind === SyntaxKind.Identifier ? local.parent : local);
+                        if (flags & ModifierFlags.Export) {
                             if (!exportedDeclarations) {
                                 exportedDeclarations = [];
                             }
@@ -7016,7 +7020,7 @@ const _super = (function (geti, seti) {
                         writeLine();
                         emit(f);
 
-                        if (f.flags & NodeFlags.Export) {
+                        if (hasModifier(f, ModifierFlags.Export)) {
                             if (!exportedDeclarations) {
                                 exportedDeclarations = [];
                             }
@@ -7028,7 +7032,7 @@ const _super = (function (geti, seti) {
                 return exportedDeclarations;
 
                 function visit(node: Node): void {
-                    if (node.flags & NodeFlags.Ambient) {
+                    if (hasModifier(node, ModifierFlags.Ambient)) {
                         return;
                     }
 
@@ -7797,7 +7801,7 @@ const _super = (function (geti, seti) {
 
             function emitNodeConsideringCommentsOption(node: Node, emitNodeConsideringSourcemap: (node: Node) => void): void {
                 if (node) {
-                    if (node.flags & NodeFlags.Ambient) {
+                    if (hasModifier(node, ModifierFlags.Ambient)) {
                         return emitCommentsOnNotEmittedNode(node);
                     }
 
@@ -8169,7 +8173,7 @@ const _super = (function (geti, seti) {
                 emitNewLineBeforeLeadingComments(currentLineMap, writer, node, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentText, currentLineMap, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
+                emitComments(currentText, currentLineMap, writer, leadingComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitTrailingComments(node: Node) {
@@ -8181,7 +8185,7 @@ const _super = (function (geti, seti) {
                 const trailingComments = getTrailingCommentsToEmit(node);
 
                 // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
-                emitComments(currentText, currentLineMap, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);
+                emitComments(currentText, currentLineMap, writer, trailingComments, /*leadingSeparator*/ true, /*trailingSeparator*/ false, newLine, writeComment);
             }
 
             /**
@@ -8196,8 +8200,8 @@ const _super = (function (geti, seti) {
 
                 const trailingComments = getTrailingCommentRanges(currentText, pos);
 
-                // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
-                emitComments(currentText, currentLineMap, writer, trailingComments, /*trailingSeparator*/ true, newLine, writeComment);
+                // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
+                emitComments(currentText, currentLineMap, writer, trailingComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitLeadingCommentsOfPositionWorker(pos: number) {
@@ -8218,7 +8222,7 @@ const _super = (function (geti, seti) {
                 emitNewLineBeforeLeadingComments(currentLineMap, writer, { pos: pos, end: pos }, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentText, currentLineMap, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
+                emitComments(currentText, currentLineMap, writer, leadingComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitDetachedCommentsAndUpdateCommentsInfo(node: TextRange) {
@@ -8234,10 +8238,10 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function writeComment(text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) {
-                emitPos(comment.pos);
-                writeCommentRange(text, lineMap, writer, comment, newLine);
-                emitPos(comment.end);
+            function writeComment(text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
+                emitPos(commentPos);
+                writeCommentRange(text, lineMap, writer, commentPos, commentEnd, newLine);
+                emitPos(commentEnd);
             }
 
             function emitShebang() {
