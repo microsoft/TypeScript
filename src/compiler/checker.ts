@@ -7664,7 +7664,7 @@ namespace ts {
 
         function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, includeOuterFunctions: boolean) {
             let key: string;
-            if (!reference.flowNode || assumeInitialized && (declaredType.flags & TypeFlags.NotNarrowable)) {
+            if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
             const initialType = assumeInitialized ? declaredType : addNullableKind(declaredType, TypeFlags.Undefined);
