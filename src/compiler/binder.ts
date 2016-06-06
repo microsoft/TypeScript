@@ -1142,6 +1142,8 @@ namespace ts {
 
                 case SyntaxKind.ModuleBlock:
                     return ContainerFlags.IsControlFlowContainer;
+                case SyntaxKind.PropertyDeclaration:
+                    return (<PropertyDeclaration>node).initializer ? ContainerFlags.IsControlFlowContainer : 0;
 
                 case SyntaxKind.CatchClause:
                 case SyntaxKind.ForStatement:

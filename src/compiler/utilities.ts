@@ -302,8 +302,8 @@ namespace ts {
             return getTokenPosOfNode(node.jsDocComments[0]);
         }
 
-        // For a syntax list, it is possible that one of its children has JSDocComment nodes, while 
-        // the syntax list itself considers them as normal trivia. Therefore if we simply skip 
+        // For a syntax list, it is possible that one of its children has JSDocComment nodes, while
+        // the syntax list itself considers them as normal trivia. Therefore if we simply skip
         // trivia for the list, we may have skipped the JSDocComment as well. So we should process its
         // first child to determine the actual position of its first token.
         if (node.kind === SyntaxKind.SyntaxList && (<SyntaxList>node)._children.length > 0) {
