@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/moduleResolution.ts] ////
+//// [tests/cases/conformance/externalModules/moduleResolutionWithExtensions.ts] ////
 
 //// [a.ts]
 
