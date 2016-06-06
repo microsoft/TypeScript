@@ -861,6 +861,10 @@ namespace ts {
         return fileExtensionIs(path, extension) ? path.substring(0, path.length - extension.length) : undefined;
     }
 
+    export function isJsxOrTsxExtension(ext: string): boolean {
+        return ext === ".jsx" || ext === ".tsx";
+    }
+
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
         getSourceFileConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => SourceFile;

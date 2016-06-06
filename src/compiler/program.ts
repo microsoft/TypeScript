@@ -646,7 +646,7 @@ namespace ts {
         return forEach(extensions, tryLoad);
 
         function tryLoad(ext: string): string {
-            if (state.skipTsx && (ext === ".jsx" || ext === ".tsx")) {
+            if (state.skipTsx && isJsxOrTsxExtension(ext)) {
                 return undefined;
             }
             const fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
