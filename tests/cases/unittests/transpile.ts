@@ -7,13 +7,17 @@ namespace ts {
             options?: TranspileOptions;
             expectedOutput?: string;
             expectedDiagnosticCodes?: number[];
+            expectedDiagnosticTexts?: string[];
         }
 
-        function checkDiagnostics(diagnostics: Diagnostic[], expectedDiagnosticCodes: number[] = []) {
-            for (let i = 0; i < expectedDiagnosticCodes.length; i++) {
-                assert.equal(expectedDiagnosticCodes[i], diagnostics[i] && diagnostics[i].code, `Could not find expeced diagnostic.`);
+        function checkDiagnostics(diagnostics: Diagnostic[], expectedDiagnosticCodes: number[] = [], expectedDiagnosticTexts: string[] = []) {
+            const n = expectedDiagnosticCodes.length;
+            assert.equal(n, expectedDiagnosticTexts.length);
+            for (let i = 0; i < n; i++) {
+                assert.equal(expectedDiagnosticCodes[i], diagnostics[i] && diagnostics[i].code, `Could not find expected diagnostic.`);
+                assert.equal(expectedDiagnosticTexts[i], diagnostics[i] && diagnostics[i].messageText);
             }
-            assert.equal(diagnostics.length, expectedDiagnosticCodes.length, "Resuting diagnostics count does not match expected");
+            assert.equal(diagnostics.length, n, "Resuting diagnostics count does not match expected");
         }
 
         function test(input: string, testSettings: TranspileTestSettings): void {
@@ -32,7 +36,7 @@ namespace ts {
             transpileOptions.reportDiagnostics = true;
             const transpileModuleResult = transpileModule(input, transpileOptions);
 
-            checkDiagnostics(transpileModuleResult.diagnostics, testSettings.expectedDiagnosticCodes);
+            checkDiagnostics(transpileModuleResult.diagnostics, testSettings.expectedDiagnosticCodes, testSettings.expectedDiagnosticTexts);
 
             if (testSettings.expectedOutput !== undefined) {
                 assert.equal(transpileModuleResult.outputText, testSettings.expectedOutput);
@@ -41,7 +45,7 @@ namespace ts {
             if (canUseOldTranspile) {
                 const diagnostics: Diagnostic[] = [];
                 const transpileResult = transpile(input, transpileOptions.compilerOptions, transpileOptions.fileName, diagnostics, transpileOptions.moduleName);
-                checkDiagnostics(diagnostics, testSettings.expectedDiagnosticCodes);
+                checkDiagnostics(diagnostics, testSettings.expectedDiagnosticCodes, testSettings.expectedDiagnosticTexts);
                 if (testSettings.expectedOutput) {
                     assert.equal(transpileResult, testSettings.expectedOutput);
                 }
@@ -313,7 +317,8 @@ var x = 0;`,
             it("Fails on bad value", () => {
                 test(``, {
                     options: { compilerOptions: { module: <ModuleKind><any>{} } },
-                    expectedDiagnosticCodes: [6046]
+                    expectedDiagnosticCodes: [6046],
+                    expectedDiagnosticTexts: ["Argument for '--module' option must be:  'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015'"]
                 });
             });
         });
