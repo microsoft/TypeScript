@@ -115,7 +115,12 @@ namespace ts {
         }
 
         const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+        if (diagnostic.category === DiagnosticCategory.Extension) {
+            output += `${ category } ${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+        }
+        else {
+            output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+        }
 
         sys.write(output);
     }
@@ -604,13 +609,16 @@ namespace ts {
             // First get and report any syntactic errors.
             diagnostics = program.getSyntacticDiagnostics();
 
+            // Count extension diagnostics and ignore them for determining continued error reporting
+            const extensionDiagnostics = filter(diagnostics, d => d.category === DiagnosticCategory.Extension).length;
+
             // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
-            if (diagnostics.length === 0) {
-                diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
+            if (diagnostics.length === extensionDiagnostics) {
+                diagnostics = diagnostics.concat(program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics()));
 
-                if (diagnostics.length === 0) {
-                    diagnostics = program.getSemanticDiagnostics();
+                if (diagnostics.length === extensionDiagnostics) {
+                    diagnostics = diagnostics.concat(program.getSemanticDiagnostics());
                 }
             }
 

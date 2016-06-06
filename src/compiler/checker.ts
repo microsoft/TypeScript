@@ -17258,6 +17258,10 @@ namespace ts {
                 return getTypeForVariableLikeDeclaration(<VariableLikeDeclaration>node.parent, /*includeOptionality*/ true);
             }
 
+            if (node.kind === SyntaxKind.SourceFile) {
+                return unknownType;
+            }
+
             if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
                 const symbol = getSymbolAtLocation(node);
                 const declaredType = symbol && getDeclaredTypeOfSymbol(symbol);

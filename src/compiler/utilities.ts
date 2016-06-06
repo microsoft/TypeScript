@@ -453,6 +453,19 @@ namespace ts {
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2);
     }
 
+    export function createExtensionDiagnosticForNode(node: Node, extension: string, message: string): Diagnostic {
+        const sourceFile = getSourceFileOfNode(node);
+        const span = getErrorSpanForNode(sourceFile, node);
+        return {
+            file: sourceFile,
+            messageText: message,
+            code: extension,
+            start: span.start,
+            length: span.length,
+            category: DiagnosticCategory.Extension
+        };
+    }
+
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);

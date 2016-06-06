@@ -2656,7 +2656,7 @@
         "category": "Message",
         "code": 6099
     },
-    "'package.json' does not have 'types' field.": {
+    "'package.json' does not have '{0}' field.": {
         "category": "Message",
         "code": 6100
     },
@@ -2787,6 +2787,19 @@
     "File name '{0}' has a '{1}' extension - stripping it": {
         "category": "Message",
         "code": 6132
+    },
+
+    "List of compiler extensions to require.": {
+        "category": "Message",
+        "code": 6150
+    },
+    "Extension loading failed with error '{0}'.": {
+        "category": "Error",
+        "code": 6151
+    },
+    "Extension '{0}' exported member '{1}' has extension kind '{2}', but was type '{3}' when type '{4}' was expected.": {
+        "category": "Error",
+        "code": 6152
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

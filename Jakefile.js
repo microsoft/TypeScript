@@ -157,7 +157,8 @@ var harnessSources = harnessCoreSources.concat([
     "convertCompilerOptionsFromJson.ts",
     "convertTypingOptionsFromJson.ts",
     "tsserverProjectSystem.ts",
-    "matchFiles.ts"
+    "matchFiles.ts",
+    "extensionAPI.ts",
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -527,7 +528,7 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
 
                 // Node package definition file to be distributed without the package. Created by replacing
                 // 'ts' namespace with '"typescript"' as a module.
-                var nodeStandaloneDefinitionsFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
+                var nodeStandaloneDefinitionsFileContents = definitionFileContents.replace(/declare (namespace|module) ts {/g, 'declare module "typescript" {\n    import * as ts from "typescript";');
                 fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
             });
 

@@ -32,6 +32,7 @@ namespace ts {
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
         realpath?(path: string): string;
+        loadExtension?(name: string): any;
     }
 
     export interface FileWatcher {
@@ -547,6 +548,9 @@ namespace ts {
                 },
                 realpath(path: string): string {
                     return _fs.realpathSync(path);
+                },
+                loadExtension(name) {
+                    return require(name);
                 }
             };
         }

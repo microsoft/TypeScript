@@ -176,6 +176,26 @@ namespace ts {
         return array1.concat(array2);
     }
 
+    export function flatten<T>(array1: T[][]): T[] {
+        if (!array1 || !array1.length) return <any>array1;
+        return [].concat(...array1);
+    }
+
+    export function groupBy<T>(array: T[], classifier: (item: T) => string): {[index: string]: T[]};
+    export function groupBy<T>(array: T[], classifier: (item: T) => number): {[index: number]: T[]};
+    export function groupBy<T>(array: T[], classifier: (item: T) => (string | number)): {[index: string]: T[], [index: number]: T[]} {
+        if (!array || !array.length) return undefined;
+        const ret: {[index: string]: T[], [index: number]: T[]} = {};
+        for (let i = 0, len = array.length; i < len; i++) {
+            const result = classifier(array[i]);
+            if (!ret[result]) {
+                ret[result] = [];
+            }
+            ret[result].push(array[i]);
+        }
+        return ret;
+    }
+
     export function deduplicate<T>(array: T[], areEqual?: (a: T, b: T) => boolean): T[] {
         let result: T[];
         if (array) {
