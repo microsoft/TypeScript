@@ -6,16 +6,55 @@
 ////const bar1, [c, d]
 ////var {e, x: [f, g]} = {a:1, x:[]};
 
-verify.getScriptLexicalStructureListCount(12); // global (1) + variable declarations (4) + binding patterns (7)
-verify.getScriptLexicalStructureListContains("foo", "var");
-verify.getScriptLexicalStructureListContains("bar", "var");
-verify.getScriptLexicalStructureListContains("foo1", "let")
-verify.getScriptLexicalStructureListContains("a", "let");
-verify.getScriptLexicalStructureListContains("b", "let");
-verify.getScriptLexicalStructureListContains("bar1", "const");
-verify.getScriptLexicalStructureListContains("c", "const");
-verify.getScriptLexicalStructureListContains("d", "const");
-verify.getScriptLexicalStructureListContains("e", "var");
-verify.getScriptLexicalStructureListContains("f", "var");
-verify.getScriptLexicalStructureListContains("g", "var");
-
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "a",
+                "kind": "let"
+            },
+            {
+                "text": "b",
+                "kind": "let"
+            },
+            {
+                "text": "bar",
+                "kind": "var"
+            },
+            {
+                "text": "bar1",
+                "kind": "const"
+            },
+            {
+                "text": "c",
+                "kind": "const"
+            },
+            {
+                "text": "d",
+                "kind": "const"
+            },
+            {
+                "text": "e",
+                "kind": "var"
+            },
+            {
+                "text": "f",
+                "kind": "var"
+            },
+            {
+                "text": "foo",
+                "kind": "var"
+            },
+            {
+                "text": "foo1",
+                "kind": "let"
+            },
+            {
+                "text": "g",
+                "kind": "var"
+            }
+        ]
+    }
+]);

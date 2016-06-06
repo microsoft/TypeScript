@@ -54,7 +54,7 @@ export = M2D;
 >M2D : typeof M2D
 
 declare namespace M2D {
->M2D : typeof 
+>M2D : typeof Math2d
 
 	interface Point {
 >Point : Point

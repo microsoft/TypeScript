@@ -8,4 +8,4 @@ class B extends A {
 
 var x: {
     [idx: number]: A;
-} = { data: new B() }
+} = { 0: new B() }

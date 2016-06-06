@@ -24,6 +24,7 @@ namespace ts {
         createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         getModifiedTime?(path: string): Date;
         createHash?(data: string): string;
@@ -71,6 +72,7 @@ namespace ts {
         resolvePath(path: string): string;
         readFile(path: string): string;
         writeFile(path: string, contents: string): void;
+        getDirectories(path: string): string[];
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
@@ -161,6 +163,11 @@ namespace ts {
                 return result.sort();
             }
 
+            function getDirectories(path: string): string[] {
+                const folder = fso.GetFolder(path);
+                return getNames(folder.subfolders);
+            }
+
             function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
                 const result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
@@ -214,6 +221,7 @@ namespace ts {
                 getCurrentDirectory() {
                     return new ActiveXObject("WScript.Shell").CurrentDirectory;
                 },
+                getDirectories,
                 readDirectory,
                 exit(exitCode?: number): void {
                     try {
@@ -402,6 +410,10 @@ namespace ts {
                 return fileSystemEntryExists(path, FileSystemEntryKind.Directory);
             }
 
+            function getDirectories(path: string): string[] {
+                return filter<string>(_fs.readdirSync(path), p => fileSystemEntryExists(combinePaths(path, p), FileSystemEntryKind.Directory));
+            }
+
             function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
                 const result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
@@ -507,6 +519,7 @@ namespace ts {
                 getCurrentDirectory() {
                     return process.cwd();
                 },
+                getDirectories,
                 readDirectory,
                 getModifiedTime(path) {
                     try {
@@ -561,6 +574,7 @@ namespace ts {
                 createDirectory: ChakraHost.createDirectory,
                 getExecutingFilePath: () => ChakraHost.executingFile,
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
+                getDirectories: ChakraHost.getDirectories,
                 readDirectory: ChakraHost.readDirectory,
                 exit: ChakraHost.quit,
                 realpath
