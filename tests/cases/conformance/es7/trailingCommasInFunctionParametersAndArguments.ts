@@ -16,5 +16,13 @@ declare function f3(x, y,): string;
 // Works for constructors too
 class X {
     constructor(a,) { }
+    // *Not* allowed in getter
+    get x(,) { return 0; }
+    set x(value,) { }
 }
+interface Y {
+    new(x,);
+    (x,);
+}
+
 new X(1,);

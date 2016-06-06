@@ -17,7 +17,15 @@ declare function f3(x, y,): string;
 // Works for constructors too
 class X {
     constructor(a,) { }
+    // *Not* allowed in getter
+    get x(,) { return 0; }
+    set x(value,) { }
 }
+interface Y {
+    new(x,);
+    (x,);
+}
+
 new X(1,);
 
 
@@ -37,6 +45,13 @@ f3(1, 2);
 var X = (function () {
     function X(a) {
     }
+    Object.defineProperty(X.prototype, "x", {
+        // *Not* allowed in getter
+        get: function () { return 0; },
+        set: function (value) { },
+        enumerable: true,
+        configurable: true
+    });
     return X;
 }());
 new X(1);
