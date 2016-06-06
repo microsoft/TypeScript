@@ -35,10 +35,12 @@ verify.navigationBar([
     },
     {
         "text": "NumberLike",
-        "kind": "type"
+        "kind": "type",
+        "indent": 1,
     },
     {
         "text": "NumberLike2",
-        "kind": "type"
+        "kind": "type",
+        "indent": 1
     }
 ]);
