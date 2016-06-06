@@ -764,7 +764,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
                 counter--;
 
                 if (bail && errorStatus !== undefined) {
-                    failWithStatus(firstErrorStatus);
+                    failWithStatus(errorStatus);
                 }
 
                 if (firstErrorStatus === undefined && errorStatus !== undefined) {
