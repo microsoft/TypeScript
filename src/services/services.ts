@@ -1945,6 +1945,36 @@ namespace ts {
         sourceMapText?: string;
     }
 
+    /** JS users may pass in string values for enum compiler options (such as ModuleKind), so convert. */
+    function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]) {
+        options = clone(options);
+
+        for (const opt of stringValuedEnums) {
+            if (!hasProperty(options, opt.name)) {
+                continue;
+            }
+
+            const value = options[opt.name];
+            // Value should be a key of opt.type
+            if (typeof value === "string") {
+                // If value is not a string, this will fail
+                options[opt.name] = parseCustomTypeOption(opt, value, diagnostics);
+            }
+            else {
+                if (!forEachValue(opt.type, v => v === value)) {
+                    // Supplied value isn't a valid enum value.
+                    diagnostics.push(createCompilerDiagnosticForInvalidCustomType(opt));
+                }
+            }
+        }
+
+        return options;
+    }
+
+    const stringValuedEnums = <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o => {
+        return typeof o.type === "object" && !forEachValue(<Map<any>> o.type, v => typeof v !== "number");
+    });
+
     /*
      * This function will compile source text from 'input' argument using specified compiler options.
      * If not options are provided - it will use a set of default compiler options.
@@ -1955,7 +1985,9 @@ namespace ts {
      * - noResolve = true
      */
     export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
-        const options = transpileOptions.compilerOptions ? clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
+        const diagnostics: Diagnostic[] = [];
+
+        const options: CompilerOptions = transpileOptions.compilerOptions ? fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics) : getDefaultCompilerOptions();
 
         options.isolatedModules = true;
 
@@ -2013,9 +2045,7 @@ namespace ts {
 
         const program = createProgram([inputFileName], options, compilerHost);
 
-        let diagnostics: Diagnostic[];
         if (transpileOptions.reportDiagnostics) {
-            diagnostics = [];
             addRange(/*to*/ diagnostics, /*from*/ program.getSyntacticDiagnostics(sourceFile));
             addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
         }
