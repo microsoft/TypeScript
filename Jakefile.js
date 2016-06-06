@@ -208,7 +208,7 @@ var librarySourceMap = [
         { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
         { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
         { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
-        
+
         // JavaScript + all host library
         { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
         { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") }
@@ -521,7 +521,7 @@ compileFile(servicesFileInBrowserTest, servicesSources,[builtLocalDirectory, cop
                 var i = content.lastIndexOf("\n");
                 fs.writeFileSync(servicesFileInBrowserTest, content.substring(0, i) + "\r\n//# sourceURL=../built/local/typeScriptServices.js" + content.substring(i));
             });
-    
+
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
@@ -741,10 +741,10 @@ function runConsoleTests(defaultReporter, runInParallel) {
         }, function(e, status) {
             finish(status);
         });
-        
+
     }
     else {
-        // run task to load all tests and partition them between workers 
+        // run task to load all tests and partition them between workers
         var cmd = "mocha " + " -R min " + colors + run;
         console.log(cmd);
         exec(cmd, function() {
@@ -757,9 +757,9 @@ function runConsoleTests(defaultReporter, runInParallel) {
                 var configPath = path.join(taskConfigsFolder, f);
                 var workerCmd = "mocha" + " -t " + testTimeout + " -R " + reporter + " " + colors + " " + run + " --config='" + configPath + "'";
                 console.log(workerCmd);
-                exec(workerCmd,  finishWorker, finishWorker) 
+                exec(workerCmd,  finishWorker, finishWorker)
             });
-            
+
             function finishWorker(e, errorStatus) {
                 counter--;
                 if (firstErrorStatus === undefined && errorStatus !== undefined) {
@@ -783,11 +783,11 @@ function runConsoleTests(defaultReporter, runInParallel) {
             }
         });
     }
-    
+
     function failWithStatus(status) {
         fail("Process exited with code " + status);
     }
-    
+
     function finish(errorStatus) {
         deleteTemporaryProjectOutput();
         if (errorStatus !== undefined) {
