@@ -9,11 +9,7 @@ namespace ts {
             expectedDiagnosticCodes?: number[];
         }
 
-        function checkDiagnostics(diagnostics: Diagnostic[], expectedDiagnosticCodes?: number[]) {
-            if (!expectedDiagnosticCodes) {
-                return;
-            }
-
+        function checkDiagnostics(diagnostics: Diagnostic[], expectedDiagnosticCodes: number[] = []) {
             for (let i = 0; i < expectedDiagnosticCodes.length; i++) {
                 assert.equal(expectedDiagnosticCodes[i], diagnostics[i] && diagnostics[i].code, `Could not find expeced diagnostic.`);
             }
@@ -26,7 +22,7 @@ namespace ts {
             if (!transpileOptions.compilerOptions) {
                 transpileOptions.compilerOptions = {};
             }
-            if (transpileOptions.compilerOptions.newLine === undefined) { // 
+            if (transpileOptions.compilerOptions.newLine === undefined) {
                 // use \r\n as default new line
                 transpileOptions.compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
             }
@@ -292,13 +288,34 @@ var x = 0;`,
             const output = `"use strict";\nvar a = 10;\n`;
             test(input, {
                 expectedOutput: output,
-                options: { compilerOptions: { newLine: NewLineKind.LineFeed, module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true },
-                expectedDiagnosticCodes: []
+                options: { compilerOptions: { newLine: NewLineKind.LineFeed, module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
             });
         });
 
         it("Supports urls in file name", () => {
             test("var x", { expectedOutput: `"use strict";\r\nvar x;\r\n`, options: { fileName: "http://somewhere/directory//directory2/file.ts" } });
+        });
+
+        describe("String values for enums", () => {
+            it("Accepts strings instead of enum values", () => {
+                test(`export const x = 0`, {
+                    options: {
+                        compilerOptions: {
+                            module: <ModuleKind><any>"es6",
+                            // Capitalization and spaces ignored
+                            target: <ScriptTarget><any>" Es6 "
+                        }
+                    },
+                    expectedOutput: "export const x = 0;\r\n"
+                });
+            });
+
+            it("Fails on bad value", () => {
+                test(``, {
+                    options: { compilerOptions: { module: <ModuleKind><any>{} } },
+                    expectedDiagnosticCodes: [6046]
+                });
+            });
         });
     });
 }
