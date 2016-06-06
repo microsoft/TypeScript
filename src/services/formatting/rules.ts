@@ -554,17 +554,17 @@ namespace ts.formatting {
         static IsSameLineTokenOrBeforeMultilineBlockContext(context: FormattingContext): boolean {
             //// This check is mainly used inside SpaceBeforeOpenBraceInControl and SpaceBeforeOpenBraceInFunction.
             ////
-            //// Ex: 
+            //// Ex:
             //// if (1)     { ....
             ////      * ) and { are on the same line so apply the rule. Here we don't care whether it's same or multi block context
             ////
-            //// Ex: 
+            //// Ex:
             //// if (1)
             //// { ... }
             ////      * ) and { are on different lines. We only need to format if the block is multiline context. So in this case we don't format.
             ////
             //// Ex:
-            //// if (1) 
+            //// if (1)
             //// { ...
             //// }
             ////      * ) and { are on different lines. We only need to format if the block is multiline context. So in this case we format.

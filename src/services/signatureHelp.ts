@@ -3,9 +3,9 @@
 namespace ts.SignatureHelp {
 
     // A partially written generic type expression is not guaranteed to have the correct syntax tree. the expression could be parsed as less than/greater than expression or a comma expression
-    // or some other combination depending on what the user has typed so far. For the purposes of signature help we need to consider any location after "<" as a possible generic type reference. 
-    // To do this, the method will back parse the expression starting at the position required. it will try to parse the current expression as a generic type expression, if it did succeed it 
-    // will return the generic identifier that started the expression (e.g. "foo" in "foo<any, |"). It is then up to the caller to ensure that this is a valid generic expression through 
+    // or some other combination depending on what the user has typed so far. For the purposes of signature help we need to consider any location after "<" as a possible generic type reference.
+    // To do this, the method will back parse the expression starting at the position required. it will try to parse the current expression as a generic type expression, if it did succeed it
+    // will return the generic identifier that started the expression (e.g. "foo" in "foo<any, |"). It is then up to the caller to ensure that this is a valid generic expression through
     // looking up the type. The method will also keep track of the parameter index inside the expression.
     // public static isInPartiallyWrittenTypeArgumentList(syntaxTree: TypeScript.SyntaxTree, position: number): any {
     //    let token = Syntax.findTokenOnLeft(syntaxTree.sourceUnit(), position, /*includeSkippedTokens*/ true);
@@ -202,7 +202,7 @@ namespace ts.SignatureHelp {
         cancellationToken.throwIfCancellationRequested();
 
         if (!candidates.length) {
-            // We didn't have any sig help items produced by the TS compiler.  If this is a JS 
+            // We didn't have any sig help items produced by the TS compiler.  If this is a JS
             // file, then see if we can figure out anything better.
             if (isSourceFileJavaScript(sourceFile)) {
                 return createJavaScriptSignatureHelpItems(argumentInfo);
@@ -353,8 +353,8 @@ namespace ts.SignatureHelp {
         }
 
         function getArgumentIndex(argumentsList: Node, node: Node) {
-            // The list we got back can include commas.  In the presence of errors it may 
-            // also just have nodes without commas.  For example "Foo(a b c)" will have 3 
+            // The list we got back can include commas.  In the presence of errors it may
+            // also just have nodes without commas.  For example "Foo(a b c)" will have 3
             // args without commas.   We want to find what index we're at.  So we count
             // forward until we hit ourselves, only incrementing the index if it isn't a
             // comma.
@@ -386,8 +386,8 @@ namespace ts.SignatureHelp {
             // 'a' '<comma>'.  So, in the case where the last child is a comma, we increase the
             // arg count by one to compensate.
             //
-            // Note: this subtlety only applies to the last comma.  If you had "Foo(a,,"  then 
-            // we'll have:  'a' '<comma>' '<missing>' 
+            // Note: this subtlety only applies to the last comma.  If you had "Foo(a,,"  then
+            // we'll have:  'a' '<comma>' '<missing>'
             // That will give us 2 non-commas.  We then add one for the last comma, givin us an
             // arg count of 3.
             const listChildren = argumentsList.getChildren();
