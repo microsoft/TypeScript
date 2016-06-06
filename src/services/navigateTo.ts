@@ -9,7 +9,7 @@ namespace ts.NavigateTo {
         // This means "compare in a case insensitive manner."
         const baseSensitivity: Intl.CollatorOptions = { sensitivity: "base" };
 
-        // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[] 
+        // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[]
         forEach(program.getSourceFiles(), sourceFile => {
             cancellationToken.throwIfCancellationRequested();
 
@@ -17,7 +17,7 @@ namespace ts.NavigateTo {
             for (const name in nameToDeclarations) {
                 const declarations = getProperty(nameToDeclarations, name);
                 if (declarations) {
-                    // First do a quick check to see if the name of the declaration matches the 
+                    // First do a quick check to see if the name of the declaration matches the
                     // last portion of the (possibly) dotted name they're searching for.
                     let matches = patternMatcher.getMatchesForLastSegmentOfPattern(name);
 
@@ -26,7 +26,7 @@ namespace ts.NavigateTo {
                     }
 
                     for (const declaration of declarations) {
-                        // It was a match!  If the pattern has dots in it, then also see if the 
+                        // It was a match!  If the pattern has dots in it, then also see if the
                         // declaration container matches as well.
                         if (patternMatcher.patternContainsDots) {
                             const containers = getContainers(declaration);

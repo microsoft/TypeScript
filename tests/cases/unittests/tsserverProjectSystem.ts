@@ -216,7 +216,6 @@ namespace ts {
         readonly exit = () => notImplemented();
         readonly getEnvironmentVariable = (s: string) => notImplemented();
         readonly tryEnableSourceMapsForHost = () => notImplemented();
-
     }
 
     describe("tsserver project system:", () => {
