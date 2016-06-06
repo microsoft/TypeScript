@@ -636,7 +636,6 @@ namespace FourSlash {
             }
         }
 
-
         public verifyCompletionListAllowsNewIdentifier(negative: boolean) {
             const completions = this.getCompletionListAtCaret();
 
@@ -1814,6 +1813,24 @@ namespace FourSlash {
             }
         }
 
+        public verifyCodeFixAtPosition(expectedChange: { span: ts.TextSpan, newText: string }) {
+            const diagnostics = this.getDiagnostics(this.activeFile.fileName);
+
+            if (diagnostics.length === 0) {
+                this.raiseError("Errors expected");
+            }
+
+            // we expect a single error per file
+            const errorCode = diagnostics[0].code;
+            const position = diagnostics[0].start;
+
+            const actual = this.languageService.getCodeFixAtPosition(this.activeFile.fileName, position, position, [`TS${errorCode}`]);
+
+            if (actual.textChanges[0].newText !== expectedChange.newText) {
+                this.raiseError(`Not the expected text change.`);
+            }
+        }
+
         public verifyDocCommentTemplate(expected?: ts.TextInsertion) {
             const name = "verifyDocCommentTemplate";
             const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition);
@@ -1984,6 +2001,59 @@ namespace FourSlash {
                         return value || undefined;
                 }
             }
+        }
+
+        public verifyGetScriptLexicalStructureListCount(expected: number) {
+            const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
+            const actual = this.getNavigationBarItemsCount(items);
+
+            if (expected !== actual) {
+                this.raiseError(`verifyGetScriptLexicalStructureListCount failed - found: ${actual} navigation items, expected: ${expected}.`);
+            }
+        }
+
+        private getNavigationBarItemsCount(items: ts.NavigationBarItem[]) {
+            let result = 0;
+            if (items) {
+                for (let i = 0, n = items.length; i < n; i++) {
+                    result++;
+                    result += this.getNavigationBarItemsCount(items[i].childItems);
+                }
+            }
+
+            return result;
+        }
+
+        public verifyGetScriptLexicalStructureListContains(name: string, kind: string) {
+            const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
+
+            if (!items || items.length === 0) {
+                this.raiseError("verifyGetScriptLexicalStructureListContains failed - found 0 navigation items, expected at least one.");
+            }
+
+            if (this.navigationBarItemsContains(items, name, kind)) {
+                return;
+            }
+
+            const missingItem = { name: name, kind: kind };
+            this.raiseError(`verifyGetScriptLexicalStructureListContains failed - could not find the item: ${JSON.stringify(missingItem, undefined, 2)} in the returned list: (${JSON.stringify(items, undefined, 2)})`);
+        }
+
+        private navigationBarItemsContains(items: ts.NavigationBarItem[], name: string, kind: string) {
+            if (items) {
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i];
+                    if (item && item.text === name && item.kind === kind) {
+                        return true;
+                    }
+
+                    if (this.navigationBarItemsContains(item.childItems, name, kind)) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public printNavigationItems(searchValue: string) {
@@ -3004,6 +3074,25 @@ namespace FourSlashInterface {
 
         public noDocCommentTemplate() {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
+        }
+
+        public codeFixAtPosition(expectedChange: { span: ts.TextSpan, newText: string }) {
+            this.state.verifyCodeFixAtPosition(expectedChange);
+        }
+
+        public getScriptLexicalStructureListCount(count: number) {
+            this.state.verifyGetScriptLexicalStructureListCount(count);
+        }
+
+        // TODO: figure out what to do with the unused arguments.
+        public getScriptLexicalStructureListContains(
+            name: string,
+            kind: string,
+            fileName?: string,
+            parentName?: string,
+            isAdditionalSpan?: boolean,
+            markerPosition?: number) {
+            this.state.verifyGetScriptLexicalStructureListContains(name, kind);
         }
 
         public navigationBar(json: any) {
