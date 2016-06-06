@@ -1,16 +1,20 @@
-tests/cases/conformance/ambient/declarations.d.ts(6,16): error TS5061: Pattern 'too*many*asterisks' can have at most one '*' character
+tests/cases/conformance/ambient/declarations.d.ts(10,16): error TS5061: Pattern 'too*many*asterisks' can have at most one '*' character
 
 
 ==== tests/cases/conformance/ambient/user.ts (0 errors) ====
     ///<reference path="declarations.d.ts" />
-    import {foo} from "foobarbaz";
-    foo(0);
+    import {foo, baz} from "foobarbaz";
+    foo(baz);
     
     import {foos} from "foosball";
     
 ==== tests/cases/conformance/ambient/declarations.d.ts (1 errors) ====
     declare module "foo*baz" {
         export function foo(n: number): void;
+    }
+    // Augmentations still work
+    declare module "foo*baz" {
+        export const baz: number;
     }
     
     // Should be an error

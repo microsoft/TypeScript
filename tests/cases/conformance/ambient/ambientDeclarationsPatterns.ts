@@ -2,6 +2,10 @@
 declare module "foo*baz" {
     export function foo(n: number): void;
 }
+// Augmentations still work
+declare module "foo*baz" {
+    export const baz: number;
+}
 
 // Should be an error
 declare module "too*many*asterisks" { }
@@ -13,7 +17,7 @@ declare module "foos*" {
 
 // @Filename: user.ts
 ///<reference path="declarations.d.ts" />
-import {foo} from "foobarbaz";
-foo(0);
+import {foo, baz} from "foobarbaz";
+foo(baz);
 
 import {foos} from "foosball";
