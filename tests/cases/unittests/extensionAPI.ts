@@ -20,10 +20,10 @@ namespace ts {
             }
 
             for (let i = 0; i < expectedDiagnosticCodes.length; i++) {
-                assert.equal(expectedDiagnosticCodes[i], diagnostics[i] && diagnostics[i].code, `Could not find expeced diagnostic.`);
+                assert.equal(expectedDiagnosticCodes[i], diagnostics[i] && diagnostics[i].code, `Could not find expeced diagnostic: (expected) [${expectedDiagnosticCodes.toString()}] vs (actual) [${map(diagnostics, d => d.code).toString()}]. First diagnostic: ${prettyPrintDiagnostic(diagnostics[0])}`);
             }
             if (expectedDiagnosticCodes.length === 0 && diagnostics.length) {
-                throw new Error(`Unexpected diagnostic (${diagnostics.length - 1} more): ${prettyPrintDiagnostic(diagnostics[0])}`);
+                throw new Error(`Unexpected diagnostic (${map(diagnostics, d => d.code).toString()}): ${prettyPrintDiagnostic(diagnostics[0])}`);
             }
             assert.equal(diagnostics.length, expectedDiagnosticCodes.length, "Resuting diagnostics count does not match expected");
         }
@@ -43,10 +43,12 @@ namespace ts {
 
         let virtualFs: Map<string> = {};
 
-        const getCanonicalFileName = createGetCanonicalFileName(true);
+        const innerCanonicalName = createGetCanonicalFileName(true);
+        const getCanonicalFileName = (fileName: string) => toPath(fileName, "/", innerCanonicalName);
 
         function loadSetIntoFsAt(set: Map<string>, prefix: string) {
-            forEachKey(set, key => void (virtualFs[getCanonicalFileName(combinePaths(prefix, key))] = set[key]));
+            // Load a fileset at the given location, but exclude the /lib/ dir from the added set
+            forEachKey(set, key => startsWith(key, "/lib/") ? void 0 : void (virtualFs[getCanonicalFileName(prefix + key)] = set[key]));
         }
 
         function loadSetIntoFs(set: Map<string>) {
@@ -95,7 +97,7 @@ namespace ts {
                     (name: string) => {
                         return this.loadExtension(
                             this.getCanonicalFileName(
-                                ts.resolveModuleName(name, fullPath, {module: ts.ModuleKind.CommonJS}, this, true).resolvedModule.resolvedFileName
+                                resolveModuleName(name, fullPath, {module: ModuleKind.CommonJS}, this, true).resolvedModule.resolvedFileName
                             )
                         );
                     }
@@ -105,6 +107,47 @@ namespace ts {
             trace(s) {
                 console.log(s);
             }
+        };
+
+        function makeMockLSHost(files: string[], options: CompilerOptions): LanguageServiceHost {
+            files = filter(files, file => !endsWith(file, ".json"));
+            return {
+                getCompilationSettings: () => options,
+                getScriptFileNames: () => files,
+                getScriptVersion(fileName) {
+                    return "1";
+                },
+                getScriptSnapshot(fileName): IScriptSnapshot {
+                    const fileContents = virtualFs[getCanonicalFileName(fileName)];
+                    if (!fileContents) return;
+                    return ScriptSnapshot.fromString(fileContents);
+                },
+                getCurrentDirectory() {
+                    return "";
+                },
+                getDefaultLibFileName() {
+                    return "/lib/lib.d.ts";
+                },
+                loadExtension(path) {
+                    const fullPath = getCanonicalFileName(path);
+                    const m = {exports: {}};
+                    ((module, exports, require) => { eval(virtualFs[fullPath]); })(
+                        m,
+                        m.exports,
+                        (name: string) => {
+                            return this.loadExtension(
+                                getCanonicalFileName(
+                                    resolveModuleName(name, fullPath, {module: ModuleKind.CommonJS}, mockHost, true).resolvedModule.resolvedFileName
+                                )
+                            );
+                        }
+                    );
+                    return m.exports;
+                },
+                trace(s) {
+                    console.log(s);
+                }
+            };
         };
 
         const extensionAPI: Map<string> = {
@@ -130,22 +173,51 @@ export abstract class SemanticLintWalker implements tsi.LintWalker {
     constructor(protected ts: typeof tsi, protected checker: tsi.TypeChecker, protected args: any) {}
     abstract visit(node: tsi.Node, accept: tsi.LintAcceptMethod, error: tsi.LintErrorMethod): void;
 }
+
+export abstract class LanguageServiceProvider implements tsi.LanguageServiceProvider {
+    private static __tsCompilerExtensionKind: tsi.ExtensionKind.LanguageService = "language-service";
+    constructor(protected ts: typeof tsi, protected host: tsi.LanguageServiceHost, protected service: tsi.LanguageService, protected registry: tsi.DocumentRegistry, args: any) {}
+}
 `
         };
         // Compile extension API once (generating .d.ts and .js)
 
-        function compile(fileset: Map<string>, options: ts.CompilerOptions): Diagnostic[] {
-            loadSetIntoFs(virtualLib);
-            loadSetIntoFs(fileset);
+        function languageServiceCompile(typescriptFiles: string[], options: CompilerOptions, additionalVerifiers?: (service: LanguageService) => void): Diagnostic[] {
+            options.allowJs = true;
+            options.noEmit = true;
+            const service = createLanguageService(makeMockLSHost(getKeys(virtualFs), options));
 
-            const program = createProgram(filter(getKeys(fileset), name => name != "package.json"), options, mockHost);
+            if (additionalVerifiers) {
+                additionalVerifiers(service);
+            }
+
+            const diagnostics = concatenate(concatenate(
+                service.getProgramDiagnostics(),
+                flatten(map(typescriptFiles, fileName => service.getSyntacticDiagnostics(getCanonicalFileName(fileName))))),
+                flatten(map(typescriptFiles, fileName => service.getSemanticDiagnostics(getCanonicalFileName(fileName)))));
+
+            return sortAndDeduplicateDiagnostics(diagnostics);
+        }
+
+        type VirtualCompilationFunction = (files: string[], options: CompilerOptions, additionalVerifiers?: () => void) => Diagnostic[];
+
+        function programCompile(typescriptFiles: string[], options: CompilerOptions): Diagnostic[] {
+            const program = createProgram(typescriptFiles, options, mockHost);
             program.emit();
 
             return ts.getPreEmitDiagnostics(program);
         }
 
-        function buildMap(map: Map<string>, out: Map<string>, compilerOptions?: CompilerOptions, shouldError?: boolean): Diagnostic[] {
-            const diagnostics = compile(map, compilerOptions ? compilerOptions : {module: ModuleKind.CommonJS, declaration: true});
+        function compile(fileset: Map<string>, options: ts.CompilerOptions, compileFunc: VirtualCompilationFunction, additionalVerifiers?: () => void): Diagnostic[] {
+            loadSetIntoFs(virtualLib);
+            loadSetIntoFs(fileset);
+
+            const typescriptFiles = filter(getKeys(fileset), name => endsWith(name, ".ts"));
+            return compileFunc(typescriptFiles, options, additionalVerifiers);
+        }
+
+        function buildMap(compileFunc: VirtualCompilationFunction, map: Map<string>, out: Map<string>, compilerOptions?: CompilerOptions, shouldError?: boolean, additionalVerifiers?: () => void): Diagnostic[] {
+            const diagnostics = compile(map, compilerOptions ? compilerOptions : {module: ModuleKind.CommonJS, declaration: true}, compileFunc, additionalVerifiers);
             if (shouldError && diagnostics && diagnostics.length) {
                 for (let i = 0; i < diagnostics.length; i++) {
                     console.log(prettyPrintDiagnostic(diagnostics[i]));
@@ -156,7 +228,7 @@ export abstract class SemanticLintWalker implements tsi.LintWalker {
             virtualFs = {};
             return diagnostics;
         }
-        buildMap(extensionAPI, extensionAPI, {module: ModuleKind.CommonJS, declaration: true, baseUrl: ".", paths: {"typescript": ["/lib/typescript.d.ts"]}}, /*shouldError*/true);
+        buildMap(programCompile, extensionAPI, extensionAPI, {module: ModuleKind.CommonJS, declaration: true, baseUrl: ".", paths: {"typescript": ["/lib/typescript.d.ts"]}}, /*shouldError*/true);
 
         const extensions: Map<Map<string>> = {
             "test-syntactic-lint": {
@@ -295,21 +367,432 @@ export class IsValueBar extends SemanticLintWalker {
     }
 }
 `
+            },
+            "test-language-service": {
+                "package.json": `{
+  "name": "test-language-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": ""
+}`,
+                "index.ts": `
+import {LanguageServiceProvider} from "typescript-plugin-api";
+
+export default class extends LanguageServiceProvider {
+    constructor(ts, host, service, registry, args) { super(ts, host, service, registry, args); }
+    getProgramDiagnosticsFilter(previous) {
+        previous.push({
+            file: undefined,
+            start: undefined,
+            length: undefined,
+            messageText: "Test language service plugin loaded!",
+            category: 2,
+            code: "test-plugin-loaded",
+        });
+        return previous;
+    }
+}
+`
+            },
+            "test-service-overrides": {
+                "package.json": `{
+  "name": "test-service-overrides",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": ""
+}`,
+                "index.ts": `
+import {LanguageServiceProvider} from "typescript-plugin-api";
+import * as ts from "typescript";
+
+export default class extends LanguageServiceProvider {
+    constructor(ts, host, service, registry, args) { super(ts, host, service, registry, args); }
+    getProgramDiagnostics() {
+        return [{
+            file: undefined,
+            start: undefined,
+            length: undefined,
+            messageText: "Program diagnostics replaced!",
+            category: 2,
+            code: "program-diagnostics-replaced",
+        }];
+    }
+    getSyntacticDiagnostics(fileName) {
+        return [{
+            file: undefined,
+            start: undefined,
+            length: undefined,
+            messageText: "Syntactic diagnostics replaced!",
+            category: 2,
+            code: "syntactic-diagnostics-replaced",
+        }];
+    }
+    getSemanticDiagnostics(fileName) {
+        return [{
+            file: undefined,
+            start: undefined,
+            length: undefined,
+            messageText: "Semantic diagnostics replaced!",
+            category: 2,
+            code: "semantic-diagnostics-replaced",
+        }];
+    }
+    getEncodedSyntacticClassifications(fileName, span) {
+        return {
+            spans: [span.start, span.length, this.ts.endsWith(fileName, "atotc.ts") ? this.ts.ClassificationType.text : this.ts.ClassificationType.comment],
+            endOfLineState: this.ts.EndOfLineState.None
+        };
+    }
+    getEncodedSemanticClassifications(fileName, span) {
+        return {
+            spans: [span.start, span.length, this.ts.endsWith(fileName, "atotc.ts") ? this.ts.ClassificationType.moduleName : this.ts.ClassificationType.comment],
+            endOfLineState: this.ts.EndOfLineState.None
+        };
+    }
+    getCompletionsAtPosition(fileName, position) {
+        return {
+            isMemberCompletion: false,
+            isNewIdentifierLocation: false,
+            entries: [{name: fileName, kind: 0, kindModifiers: 0, sortText: fileName}]
+        };
+    }
+    getCompletionEntryDetails(fileName, position, entryName) {
+        return {
+            name: fileName,
+            kind: position.toString(),
+            kindModifiers: entryName,
+            displayParts: [],
+            documentation: [],
+        };
+    }
+    getQuickInfoAtPosition(fileName, position) {
+        return {};
+    }
+    getNameOrDottedNameSpan(fileName, startPos, endPos) {
+        return {};
+    }
+    getBreakpointStatementAtPosition(fileName, position) {
+        return {};
+    }
+    getSignatureHelpItems(fileName, position) {
+        return {};
+    }
+    getRenameInfo(fileName, position) {
+        return {};
+    }
+    findRenameLocations(fileName, position, findInStrings, findInComments) {
+        return {};
+    }
+    getDefinitionAtPosition(fileName, position) {
+        return {};
+    }
+    getTypeDefinitionAtPosition(fileName, position) {
+        return {};
+    }
+    getReferencesAtPosition(fileName, position) {
+        return {};
+    }
+    findReferences(fileName, position) {
+        return {};
+    }
+    getDocumentHighlights(fileName, position, filesToSearch) {
+        return {};
+    }
+    getNavigateToItems(searchValue, maxResultCount) {
+        return {};
+    }
+    getNavigationBarItems(fileName) {
+        return {};
+    }
+    getOutliningSpans(fileName) {
+        return {};
+    }
+    getTodoComments(fileName, descriptors) {
+        return {};
+    }
+    getBraceMatchingAtPosition(fileName, position) {
+        return {};
+    }
+    getIndentationAtPosition(fileName, position, options) {
+        return {};
+    }
+    getFormattingEditsForRange(fileName, start, end, options) {
+        return {};
+    }
+    getFormattingEditsForDocument(fileName, options) {
+        return {};
+    }
+    getFormattingEditsAfterKeystroke(fileName, position, key, options) {
+        return {};
+    }
+    getDocCommentTemplateAtPosition(fileName, position) {
+        return {};
+    }
+}
+`
+            },
+            "test-service-filters": {
+                "package.json": `{
+  "name": "test-service-filters",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": ""
+}`,
+                "index.ts": `
+import {LanguageServiceProvider} from "typescript-plugin-api";
+
+import * as ts from "typescript";
+
+export default class extends LanguageServiceProvider {
+    constructor(ts, host, service, registry, args) { super(ts, host, service, registry, args); }
+    getProgramDiagnosticsFilter(previous) {
+        return [{
+            file: undefined,
+            start: undefined,
+            length: undefined,
+            messageText: "Program diagnostics replaced!",
+            category: 2,
+            code: "program-diagnostics-replaced",
+        }];
+    }
+    getSyntacticDiagnosticsFilter(fileName, previous) {
+        return [{
+            file: undefined,
+            start: undefined,
+            length: undefined,
+            messageText: "Syntactic diagnostics replaced!",
+            category: 2,
+            code: "syntactic-diagnostics-replaced",
+        }];
+    }
+    getSemanticDiagnosticsFilter(fileName, previous) {
+        return [{
+            file: undefined,
+            start: undefined,
+            length: undefined,
+            messageText: "Semantic diagnostics replaced!",
+            category: 2,
+            code: "semantic-diagnostics-replaced",
+        }];
+    }
+    getEncodedSyntacticClassificationsFilter(fileName, span, previous) {
+        return {
+            spans: [span.start, span.length, this.ts.endsWith(fileName, "atotc.ts") ? this.ts.ClassificationType.text : this.ts.ClassificationType.comment],
+            endOfLineState: this.ts.EndOfLineState.None
+        };
+    }
+    getEncodedSemanticClassificationsFilter(fileName, span, previous) {
+        return {
+            spans: [span.start, span.length, this.ts.endsWith(fileName, "atotc.ts") ? this.ts.ClassificationType.moduleName : this.ts.ClassificationType.comment],
+            endOfLineState: this.ts.EndOfLineState.None
+        };
+    }
+    getCompletionsAtPositionFilter(fileName, position, previous) {
+        return {
+            isMemberCompletion: false,
+            isNewIdentifierLocation: false,
+            entries: [{name: fileName, kind: 0, kindModifiers: 0, sortText: fileName}]
+        };
+    }
+    getCompletionEntryDetailsFilter(fileName, position, entryName, previous) {
+        return {
+            name: fileName,
+            kind: position.toString(),
+            kindModifiers: entryName,
+            displayParts: [],
+            documentation: [],
+        };
+    }
+    getQuickInfoAtPositionFilter(fileName, position, previous) {
+        return {};
+    }
+    getNameOrDottedNameSpanFilter(fileName, startPos, endPos, previous) {
+        return {};
+    }
+    getBreakpointStatementAtPositionFilter(fileName, position, previous) {
+        return {};
+    }
+    getSignatureHelpItemsFilter(fileName, position, previous) {
+        return {};
+    }
+    getRenameInfoFilter(fileName, position, previous) {
+        return {};
+    }
+    findRenameLocationsFilter(fileName, position, findInStrings, findInComments, previous) {
+        return {};
+    }
+    getDefinitionAtPositionFilter(fileName, position, previous) {
+        return {};
+    }
+    getTypeDefinitionAtPositionFilter(fileName, position, previous) {
+        return {};
+    }
+    getReferencesAtPositionFilter(fileName, position, previous) {
+        return {};
+    }
+    findReferencesFilter(fileName, position, previous) {
+        return {};
+    }
+    getDocumentHighlightsFilter(fileName, position, filesToSearch, previous) {
+        return {};
+    }
+    getNavigateToItemsFilter(searchValue, maxResultCount, previous) {
+        return {};
+    }
+    getNavigationBarItemsFilter(fileName, previous) {
+        return {};
+    }
+    getOutliningSpansFilter(fileName, previous) {
+        return {};
+    }
+    getTodoCommentsFilter(fileName, descriptors, previous) {
+        return {};
+    }
+    getBraceMatchingAtPositionFilter(fileName, position, previous) {
+        return {};
+    }
+    getIndentationAtPositionFilter(fileName, position, options, previous) {
+        return {};
+    }
+    getFormattingEditsForRangeFilter(fileName, start, end, options, previous) {
+        return {};
+    }
+    getFormattingEditsForDocumentFilter(fileName, options, previous) {
+        return {};
+    }
+    getFormattingEditsAfterKeystrokeFilter(fileName, position, key, options, previous) {
+        return {};
+    }
+    getDocCommentTemplateAtPositionFilter(fileName, position, previous) {
+        return {};
+    }
+}
+`
+            },
+            "test-service-passthru": {
+                "package.json": `{
+  "name": "test-service-passthru",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": ""
+}`,
+                "index.ts": `
+import {LanguageServiceProvider} from "typescript-plugin-api";
+
+export default class extends LanguageServiceProvider {
+    constructor(ts, host, service, registry, args) { super(ts, host, service, registry, args); }
+    getProgramDiagnosticsFilter(previous) {
+        return previous;
+    }
+    getSyntacticDiagnosticsFilter(fileName, previous) {
+        return previous;
+    }
+    getSemanticDiagnosticsFilter(fileName, previous) {
+        return previous;
+    }
+}
+`
+            },
+            "test-service-chain": {
+                "package.json": `{
+  "name": "test-service-chain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": ""
+}`,
+                "index.ts": `
+import {LanguageServiceProvider} from "typescript-plugin-api";
+
+export class AddsDiagnostics extends LanguageServiceProvider {
+    constructor(ts, host, service, registry, args) { super(ts, host, service, registry, args); }
+    getProgramDiagnosticsFilter(previous) {
+        return previous.concat([{
+            file: undefined,
+            start: undefined,
+            length: undefined,
+            messageText: "Program diagnostics amended!",
+            category: 2,
+            code: "program-diagnostics-amended",
+        }]);
+    }
+    getSyntacticDiagnosticsFilter(fileName, previous) {
+        return previous.concat([{
+            file: undefined,
+            start: undefined,
+            length: undefined,
+            messageText: "Syntactic diagnostics amended!",
+            category: 2,
+            code: "syntactic-diagnostics-amended",
+        }]);
+    }
+    getSemanticDiagnosticsFilter(fileName, previous) {
+        return previous.concat([{
+            file: undefined,
+            start: undefined,
+            length: undefined,
+            messageText: "Semantic diagnostics amended!",
+            category: 2,
+            code: "semantic-diagnostics-amended",
+        }]);
+    }
+}
+
+// Since this is exported second, it should be second in the chain. Probably.
+// This is honestly dependent on js host key ordering 
+export class MutatesAddedDiagnostics extends LanguageServiceProvider {
+    constructor(ts, host, service, registry, args) { super(ts, host, service, registry, args); }
+    getProgramDiagnosticsFilter(previous) {
+        return previous.map(prev => prev.code === "program-diagnostics-amended" ? {
+            file: undefined,
+            start: undefined,
+            length: undefined,
+            messageText: "Program diagnostics mutated!",
+            category: 2,
+            code: "program-diagnostics-mutated",
+        } : prev);
+    }
+    getSyntacticDiagnosticsFilter(fileName, previous) {
+        return previous.map(prev => prev.code === "syntactic-diagnostics-amended" ? {
+            file: undefined,
+            start: undefined,
+            length: undefined,
+            messageText: "Syntactic diagnostics mutated!",
+            category: 2,
+            code: "syntactic-diagnostics-mutated",
+        } : prev);
+    }
+    getSemanticDiagnosticsFilter(fileName, previous) {
+        return previous.map(prev => prev.code === "semantic-diagnostics-amended" ? {
+            file: undefined,
+            start: undefined,
+            length: undefined,
+            messageText: "Semantic diagnostics mutated!",
+            category: 2,
+            code: "semantic-diagnostics-mutated",
+        } : prev);
+    }
+}
+`
             }
         };
 
         // Compile each extension once with the extension API in its node_modules folder (also generating .d.ts and .js)
         forEachKey(extensions, extName => {
             loadSetIntoFsAt(extensionAPI, "/node_modules/typescript-plugin-api");
-            buildMap(extensions[extName], extensions[extName], {module: ModuleKind.CommonJS, declaration: true, experimentalDecorators: true, baseUrl: "/", paths: {"typescript": ["lib/typescript.d.ts"]}}, /*shouldError*/true);
+            buildMap(programCompile, extensions[extName], extensions[extName], {module: ModuleKind.CommonJS, declaration: true, experimentalDecorators: true, baseUrl: "/", paths: {"typescript": ["lib/typescript.d.ts"]}}, /*shouldError*/true);
         });
 
         /**
          * Setup a new test, where all extensions specified in the options hash are available in a node_modules folder, alongside the extension API
          */
-        function test(sources: Map<string>, options: ExtensionTestOptions) {
+        function test(sources: Map<string>, options: ExtensionTestOptions, compileFunc: VirtualCompilationFunction = programCompile, additionalVerifiers?: (...args: any[]) => void) {
             forEach(options.availableExtensions, ext => loadSetIntoFsAt(extensions[ext], `/node_modules/${ext}`));
-            const diagnostics = buildMap(sources, sources, options.compilerOptions);
+            const diagnostics = buildMap(compileFunc, sources, sources, options.compilerOptions, /*shouldError*/false, additionalVerifiers);
             checkDiagnostics(diagnostics, options.expectedDiagnostics);
         }
 
@@ -450,6 +933,256 @@ export class IsValueBar extends SemanticLintWalker {
                     module: ModuleKind.CommonJS,
                 }
             });
+        });
+
+        it("can load language service rules and add program diagnostics", () => {
+            test({
+                "main.ts": "console.log('Did you know? The empty string is falsey.')"
+            }, {
+                availableExtensions: ["test-language-service"],
+                expectedDiagnostics: ["test-plugin-loaded"],
+                compilerOptions: {
+                    extensions: ["test-language-service"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+        });
+
+        const atotcFile = getCanonicalFileName("atotc.ts");
+        const atotcText = `
+It was the best of times, it was the worst of times,
+it was the age of wisdom, it was the age of foolishness,
+it was the epoch of belief, it was the epoch of incredulity,
+it was the season of Light, it was the season of Darkness,
+it was the spring of hope, it was the winter of despair,
+we had everything before us, we had nothing before us,
+we were all going direct to Heaven, we were all going direct
+the other way--in short, the period was so far like the present
+period, that some of its noisiest authorities insisted on its
+being received, for good or for evil, in the superlative degree
+of comparison only.
+`;
+        const testDummyLS = (service: LanguageService) => {
+            assert.deepEqual(service.getEncodedSyntacticClassifications(atotcFile, {start: 0, length: 24}),
+                {spans: [0, 24, ClassificationType.text], endOfLineState: EndOfLineState.None},
+                "Syntactic classifications did not match!");
+            assert.deepEqual(service.getEncodedSemanticClassifications(atotcFile, {start: 24, length: 42}),
+                {spans: [24, 42, ClassificationType.moduleName], endOfLineState: EndOfLineState.None},
+                "Semantic classifications did not match!");
+            assert.deepEqual(service.getCompletionsAtPosition(atotcFile, 0), {
+                isMemberCompletion: false,
+                isNewIdentifierLocation: false,
+                entries: [{name: atotcFile, kind: 0, kindModifiers: 0, sortText: atotcFile}]
+            }, "Completions did not match!");
+            assert.deepEqual(service.getCompletionEntryDetails(atotcFile, 0, "first"), {
+                name: atotcFile,
+                kind: (0).toString(),
+                kindModifiers: "first",
+                displayParts: [],
+                documentation: [],
+            }, "Completion details did not match!");
+            assert.deepEqual(service.getQuickInfoAtPosition(atotcFile, 0), {}, "Quick info did not match!");
+            assert.deepEqual(service.getNameOrDottedNameSpan(atotcFile, 0, 0), {}, "Name or dotted span info did not match!");
+            assert.deepEqual(service.getBreakpointStatementAtPosition(atotcFile, 0), {}, "Breakpoint statement info did not match!");
+            assert.deepEqual(service.getSignatureHelpItems(atotcFile, 0), {}, "Signature help items did not match!");
+            assert.deepEqual(service.getRenameInfo(atotcFile, 0), {}, "Rename info did not match!");
+            assert.deepEqual(service.findRenameLocations(atotcFile, 0, false, false), {}, "Rename locations did not match!");
+            assert.deepEqual(service.getDefinitionAtPosition(atotcFile, 0), {}, "Definition info did not match!");
+            assert.deepEqual(service.getTypeDefinitionAtPosition(atotcFile, 0), {}, "Type definition info did not match!");
+            assert.deepEqual(service.getReferencesAtPosition(atotcFile, 0), {}, "References did not match!");
+            assert.deepEqual(service.findReferences(atotcFile, 0), {}, "Find references did not match!");
+            assert.deepEqual(service.getDocumentHighlights(atotcFile, 0, []), {}, "Document highlights did not match!");
+            assert.deepEqual(service.getNavigateToItems(atotcFile), {}, "NavTo items did not match!");
+            assert.deepEqual(service.getNavigationBarItems(atotcFile), {}, "NavBar items did not match!");
+            assert.deepEqual(service.getOutliningSpans(atotcFile), {}, "Outlining spans did not match!");
+            assert.deepEqual(service.getTodoComments(atotcFile, []), {}, "Todo comments did not match!");
+            assert.deepEqual(service.getBraceMatchingAtPosition(atotcFile, 0), {}, "Brace positions did not match!");
+            assert.deepEqual(service.getIndentationAtPosition(atotcFile, 0, {} as EditorOptions), {}, "Indentation positions did not match!");
+            assert.deepEqual(service.getFormattingEditsForRange(atotcFile, 0, 1, {} as FormatCodeOptions), {}, "Range edits did not match!");
+            assert.deepEqual(service.getFormattingEditsForDocument(atotcFile, {} as FormatCodeOptions), {}, "Document edits did not match!");
+            assert.deepEqual(service.getFormattingEditsAfterKeystroke(atotcFile, 0, "q", {} as FormatCodeOptions), {}, "Keystroke edits did not match!");
+            assert.deepEqual(service.getDocCommentTemplateAtPosition(atotcFile, 0), {}, "Doc comment template did not match!");
+        };
+
+        it("can override all language service functionality", () => {
+            test({
+                [atotcFile]: atotcText
+            }, {
+                availableExtensions: ["test-service-overrides"],
+                expectedDiagnostics: ["program-diagnostics-replaced", "semantic-diagnostics-replaced", "syntactic-diagnostics-replaced"],
+                compilerOptions: {
+                    extensions: ["test-service-overrides"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile, testDummyLS);
+        });
+
+        it("can filter all language service functionality", () => {
+            test({
+                [atotcFile]: atotcText
+            }, {
+                availableExtensions: ["test-service-filters"],
+                expectedDiagnostics: ["program-diagnostics-replaced", "semantic-diagnostics-replaced", "syntactic-diagnostics-replaced"],
+                compilerOptions: {
+                    extensions: ["test-service-filters"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile, testDummyLS);
+        });
+
+        it("can filter without altering functionality", () => {
+            test({
+                ["main.ts"]: "console.log('Hello, test.') -"
+            }, {
+                availableExtensions: ["test-service-passthru"],
+                expectedDiagnostics: [2362, 1109],
+                compilerOptions: {
+                    extensions: ["test-service-passthru"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+        });
+
+        it("can filter and mutate while chaining plugins", () => {
+            test({
+                ["main.ts"]: "console.log('Hello, test.') -"
+            }, {
+                availableExtensions: ["test-service-chain"],
+                expectedDiagnostics: ["program-diagnostics-mutated", "semantic-diagnostics-mutated", "syntactic-diagnostics-mutated", 2362, 1109],
+                compilerOptions: {
+                    extensions: ["test-service-chain"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+        });
+
+        it("can run all lint plugins in the language service", () => {
+            test({
+                "main.ts": `console.log("Hello, world!");`,
+            }, {
+                availableExtensions: ["test-syntactic-lint"],
+                expectedDiagnostics: [],
+                compilerOptions: {
+                    extensions: ["test-syntactic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `interface Foo {a; b;}`,
+            }, {
+                availableExtensions: ["test-syntactic-lint"],
+                expectedDiagnostics: ["test-syntactic-lint"],
+                compilerOptions: {
+                    extensions: ["test-syntactic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `console.log("Hello, world!");`,
+            }, {
+                availableExtensions: ["test-semantic-lint"],
+                expectedDiagnostics: [],
+                compilerOptions: {
+                    extensions: ["test-semantic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `const s: "foo" = "foo";`,
+            }, {
+                availableExtensions: ["test-semantic-lint"],
+                expectedDiagnostics: ["test-semantic-lint", "test-semantic-lint"],
+                compilerOptions: {
+                    extensions: ["test-semantic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `console.log("Hello, world!");`,
+            }, {
+                availableExtensions: ["test-syntactic-lint", "test-semantic-lint"],
+                expectedDiagnostics: [],
+                compilerOptions: {
+                    extensions: ["test-syntactic-lint", "test-semantic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `const s: "foo" = "foo";`,
+            }, {
+                availableExtensions: ["test-syntactic-lint", "test-semantic-lint"],
+                expectedDiagnostics: ["test-semantic-lint", "test-semantic-lint"],
+                compilerOptions: {
+                    extensions: ["test-syntactic-lint", "test-semantic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `interface Foo {a; b;}`,
+            }, {
+                availableExtensions: ["test-syntactic-lint", "test-semantic-lint"],
+                expectedDiagnostics: ["test-syntactic-lint"],
+                compilerOptions: {
+                    extensions: ["test-syntactic-lint", "test-semantic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `interface Foo {a; b;}
+                const s: "foo" = "foo";`,
+            }, {
+                availableExtensions: ["test-syntactic-lint", "test-semantic-lint"],
+                expectedDiagnostics: ["test-syntactic-lint", "test-semantic-lint", "test-semantic-lint"],
+                compilerOptions: {
+                    extensions: ["test-syntactic-lint", "test-semantic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `interface Foo {a; b;}`,
+            }, {
+                availableExtensions: ["test-extension-arguments"],
+                expectedDiagnostics: ["test-extension-arguments", "test-extension-arguments"],
+                compilerOptions: {
+                    extensions: {
+                        "test-extension-arguments": ["a", "b"]
+                    },
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `interface Foo {b;}
+                interface Bar {a;}
+                const f: "foo" = "foo";
+                let b: "bar" = "bar";`,
+            }, {
+                availableExtensions: ["test-multi-extension"],
+                expectedDiagnostics: ["test-multi-extension[IsNamedFoo]", "test-multi-extension[IsNamedBar]", "test-multi-extension[IsValueFoo]", "test-multi-extension[IsValueFoo]", "test-multi-extension[IsValueBar]", "test-multi-extension[IsValueBar]"],
+                compilerOptions: {
+                    extensions: ["test-multi-extension"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `console.log("Hello, world!");`,
+            }, {
+                availableExtensions: [],
+                expectedDiagnostics: [6151, 6151],
+                compilerOptions: {
+                    extensions: ["test-syntactic-lint", "test-semantic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
         });
     });
 }

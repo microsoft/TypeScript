@@ -1079,6 +1079,8 @@ namespace ts {
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
         getDirectories?(directoryName: string): string[];
+
+        loadExtension?(path: string): any;
     }
 
     //
@@ -1091,9 +1093,12 @@ namespace ts {
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
 
-        // TODO: Rename this to getProgramDiagnostics to better indicate that these are any
-        // diagnostics present for the program level, and not just 'options' diagnostics.
+        /**
+         * @deprecated Use getProgramDiagnostics instead.
+         */
         getCompilerOptionsDiagnostics(): Diagnostic[];
+
+        getProgramDiagnostics(): Diagnostic[];
 
         /**
          * @deprecated Use getEncodedSyntacticClassifications instead.
@@ -1156,6 +1161,86 @@ namespace ts {
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
 
         dispose(): void;
+    }
+
+    export interface LanguageServiceProvider {
+        // Overrides
+
+        // A plugin can implement one of the override methods to replace the results that would
+        // be returned by the TypeScript language service. If a plugin returns a defined results
+        // (that is, is not undefined) then that result is used instead of invoking the
+        // corresponding TypeScript method. If multiple plugins are registered, they are
+        // consulted in the order they are returned from the host. The first defined result
+        // returned by a plugin is used and no other plugin overrides are consulted.
+
+        getProgramDiagnostics?(): Diagnostic[];
+        getSyntacticDiagnostics?(fileName: string): Diagnostic[];
+        getSemanticDiagnostics?(fileName: string): Diagnostic[];
+        getEncodedSyntacticClassifications?(fileName: string, span: TextSpan): Classifications;
+        getEncodedSemanticClassifications?(fileName: string, span: TextSpan): Classifications;
+        getCompletionsAtPosition?(fileName: string, position: number): CompletionInfo;
+        getCompletionEntryDetails?(fileName: string, position: number, entryName: string): CompletionEntryDetails;
+        getQuickInfoAtPosition?(fileName: string, position: number): QuickInfo;
+        getNameOrDottedNameSpan?(fileName: string, startPos: number, endPos: number): TextSpan;
+        getBreakpointStatementAtPosition?(fileName: string, position: number): TextSpan;
+        getSignatureHelpItems?(fileName: string, position: number): SignatureHelpItems;
+        getRenameInfo?(fileName: string, position: number): RenameInfo;
+        findRenameLocations?(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[];
+        getDefinitionAtPosition?(fileName: string, position: number): DefinitionInfo[];
+        getTypeDefinitionAtPosition?(fileName: string, position: number): DefinitionInfo[];
+        getReferencesAtPosition?(fileName: string, position: number): ReferenceEntry[];
+        findReferences?(fileName: string, position: number): ReferencedSymbol[];
+        getDocumentHighlights?(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[];
+        getNavigateToItems?(searchValue: string, maxResultCount: number): NavigateToItem[];
+        getNavigationBarItems?(fileName: string): NavigationBarItem[];
+        getOutliningSpans?(fileName: string): OutliningSpan[];
+        getTodoComments?(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
+        getBraceMatchingAtPosition?(fileName: string, position: number): TextSpan[];
+        getIndentationAtPosition?(fileName: string, position: number, options: EditorOptions): number;
+        getFormattingEditsForRange?(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[];
+        getFormattingEditsForDocument?(fileName: string, options: FormatCodeOptions): TextChange[];
+        getFormattingEditsAfterKeystroke?(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
+        getDocCommentTemplateAtPosition?(fileName: string, position: number): TextInsertion;
+
+        // Filters
+
+        // A plugin can implement one of the filter methods to augment, extend or modify a result
+        // prior to the host receiving it. The TypeScript language service is invoked and the
+        // result is passed to the plugin as the value of the previous parameter. If more than one
+        // plugin is registered, the plugins are consulted in the order they are returned from the
+        // host. The value passed in as previous is the result returned by the prior plugin. If a
+        // plugin returns undefined, the result passed in as previous is used and the undefined
+        // result is ignored. All plugins are consulted before the result is returned to the host.
+        // If a plugin overrides behavior of the method, no filter methods are consulted.
+
+        getProgramDiagnosticsFilter?(previous: Diagnostic[]): Diagnostic[];
+        getSyntacticDiagnosticsFilter?(fileName: string, previous: Diagnostic[]): Diagnostic[];
+        getSemanticDiagnosticsFilter?(fileName: string, previous: Diagnostic[]): Diagnostic[];
+        getEncodedSyntacticClassificationsFilter?(fileName: string, span: TextSpan, previous: Classifications): Classifications;
+        getEncodedSemanticClassificationsFilter?(fileName: string, span: TextSpan, previous: Classifications): Classifications;
+        getCompletionsAtPositionFilter?(fileName: string, position: number, previous: CompletionInfo): CompletionInfo;
+        getCompletionEntryDetailsFilter?(fileName: string, position: number, entryName: string, previous: CompletionEntryDetails): CompletionEntryDetails;
+        getQuickInfoAtPositionFilter?(fileName: string, position: number, previous: QuickInfo): QuickInfo;
+        getNameOrDottedNameSpanFilter?(fileName: string, startPos: number, endPos: number, previous: TextSpan): TextSpan;
+        getBreakpointStatementAtPositionFilter?(fileName: string, position: number, previous: TextSpan): TextSpan;
+        getSignatureHelpItemsFilter?(fileName: string, position: number, previous: SignatureHelpItems): SignatureHelpItems;
+        getRenameInfoFilter?(fileName: string, position: number, previous: RenameInfo): RenameInfo;
+        findRenameLocationsFilter?(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, previous: RenameLocation[]): RenameLocation[];
+        getDefinitionAtPositionFilter?(fileName: string, position: number, previous: DefinitionInfo[]): DefinitionInfo[];
+        getTypeDefinitionAtPositionFilter?(fileName: string, position: number, previous: DefinitionInfo[]): DefinitionInfo[];
+        getReferencesAtPositionFilter?(fileName: string, position: number, previous: ReferenceEntry[]): ReferenceEntry[];
+        findReferencesFilter?(fileName: string, position: number, previous: ReferencedSymbol[]): ReferencedSymbol[];
+        getDocumentHighlightsFilter?(fileName: string, position: number, filesToSearch: string[], previous: DocumentHighlights[]): DocumentHighlights[];
+        getNavigateToItemsFilter?(searchValue: string, maxResultCount: number, previous: NavigateToItem[]): NavigateToItem[];
+        getNavigationBarItemsFilter?(fileName: string, previous: NavigationBarItem[]): NavigationBarItem[];
+        getOutliningSpansFilter?(fileName: string, previous: OutliningSpan[]): OutliningSpan[];
+        getTodoCommentsFilter?(fileName: string, descriptors: TodoCommentDescriptor[], previous: TodoComment[]): TodoComment[];
+        getBraceMatchingAtPositionFilter?(fileName: string, position: number, previous: TextSpan[]): TextSpan[];
+        getIndentationAtPositionFilter?(fileName: string, position: number, options: EditorOptions, previous: number): number;
+        getFormattingEditsForRangeFilter?(fileName: string, start: number, end: number, options: FormatCodeOptions, previous: TextChange[]): TextChange[];
+        getFormattingEditsForDocumentFilter?(fileName: string, options: FormatCodeOptions, previous: TextChange[]): TextChange[];
+        getFormattingEditsAfterKeystrokeFilter?(fileName: string, position: number, key: string, options: FormatCodeOptions, previous: TextChange[]): TextChange[];
+        getDocCommentTemplateAtPositionFilter?(fileName: string, position: number, previous: TextInsertion): TextInsertion;
     }
 
     export interface Classifications {
@@ -2915,6 +3000,69 @@ namespace ts {
 
     export function createLanguageService(host: LanguageServiceHost,
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
+            const baseService = createUnextendedLanguageService(host, documentRegistry);
+            const extensions = baseService.getProgram().getCompilerExtensions()["language-service"];
+            const instantiatedExtensions = map(extensions, extension => new extension.ctor(ts, host, baseService, documentRegistry, extension.args));
+
+            function wrap(key: string): Function {
+                return (...args: any[]) => {
+                    if (instantiatedExtensions && instantiatedExtensions.length) {
+                        for (let i = 0; i < instantiatedExtensions.length; i++) {
+                            const extension = instantiatedExtensions[i];
+                            if ((extension as any)[key]) {
+                                return (extension as any)[key](...args);
+                            }
+                        }
+                        let result: any = (baseService as any)[key](...args);
+                        const filterKey = `${key}Filter`;
+                        for (let i = 0; i < instantiatedExtensions.length; i++) {
+                            const extension = instantiatedExtensions[i];
+                            if ((extension as any)[filterKey]) {
+                                result = (extension as any)[filterKey](...args, result);
+                            }
+                        }
+                        return result;
+                    }
+                    return (baseService as any)[key](...args);
+                };
+            }
+
+            function buildWrappedService(underlyingMembers: Map<any>, wrappedMembers: string[]): LanguageService {
+                // Add wrapped members to map
+                forEach(wrappedMembers, member => {
+                    underlyingMembers[member] = wrap(member);
+                });
+                // Map getProgramDiagnostics to deprecated getCompilerOptionsDiagnostics
+                underlyingMembers["getCompilerOptionsDiagnostics"] = underlyingMembers["getProgramDiagnostics"];
+                return underlyingMembers as LanguageService;
+            }
+
+            return buildWrappedService({
+                cleanupSemanticCache: () => baseService.cleanupSemanticCache(),
+                getSyntacticClassifications: (fileName: string, span: TextSpan) => baseService.getSyntacticClassifications(fileName, span),
+                getSemanticClassifications: (fileName: string, span: TextSpan) => baseService.getSemanticClassifications(fileName, span),
+                getOccurrencesAtPosition: (fileName: string, position: number) => baseService.getOccurrencesAtPosition(fileName, position),
+                isValidBraceCompletionAtPostion: (fileName: string, pos: number, openingBrace: number) => baseService.isValidBraceCompletionAtPostion(fileName, pos, openingBrace),
+                getEmitOutput: (fileName: string) => baseService.getEmitOutput(fileName),
+                getProgram: () => baseService.getProgram(),
+                getNonBoundSourceFile: (fileName: string) => baseService.getNonBoundSourceFile(fileName),
+                dispose: () => baseService.dispose(),
+            }, [
+                "getSyntacticDiagnostics", "getSemanticDiagnostics", "getProgramDiagnostics",
+                "getEncodedSyntacticClassifications", "getEncodedSemanticClassifications", "getCompletionsAtPosition",
+                "getCompletionEntryDetails", "getQuickInfoAtPosition", "getNameOrDottedNameSpan",
+                "getBreakpointStatementAtPosition", "getSignatureHelpItems", "getRenameInfo",
+                "findRenameLocations", "getDefinitionAtPosition", "getTypeDefinitionAtPosition",
+                "getReferencesAtPosition", "findReferences", "getDocumentHighlights",
+                "getNavigateToItems", "getNavigationBarItems", "getOutliningSpans",
+                "getTodoComments", "getBraceMatchingAtPosition", "getIndentationAtPosition",
+                "getFormattingEditsForRange", "getFormattingEditsForDocument", "getFormattingEditsAfterKeystroke",
+                "getDocCommentTemplateAtPosition"
+            ]);
+        }
+
+    export function createUnextendedLanguageService(host: LanguageServiceHost,
+        documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let ruleProvider: formatting.RulesProvider;
@@ -3020,6 +3168,9 @@ namespace ts {
                 },
                 getDirectories: path => {
                     return host.getDirectories ? host.getDirectories(path) : [];
+                },
+                loadExtension: path => {
+                    return host.loadExtension ? host.loadExtension(path) : undefined;
                 }
             };
             if (host.trace) {
@@ -3197,7 +3348,7 @@ namespace ts {
             return concatenate(semanticDiagnostics, declarationDiagnostics);
         }
 
-        function getCompilerOptionsDiagnostics() {
+        function getProgramDiagnostics() {
             synchronizeHostData();
             return program.getOptionsDiagnostics(cancellationToken).concat(
                    program.getGlobalDiagnostics(cancellationToken));
@@ -8108,7 +8259,8 @@ namespace ts {
             cleanupSemanticCache,
             getSyntacticDiagnostics,
             getSemanticDiagnostics,
-            getCompilerOptionsDiagnostics,
+            getCompilerOptionsDiagnostics: getProgramDiagnostics,
+            getProgramDiagnostics,
             getSyntacticClassifications,
             getSemanticClassifications,
             getEncodedSyntacticClassifications,

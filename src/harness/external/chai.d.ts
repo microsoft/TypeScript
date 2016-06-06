@@ -175,5 +175,6 @@ declare module chai {
         function isOk(actual: any, message?: string): void;
         function isUndefined(value: any, message?: string): void;
         function isDefined(value: any, message?: string): void;
+        function deepEqual(actual: any, expected: any, message?: string): void;
     }
 }

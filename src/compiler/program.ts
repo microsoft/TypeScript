@@ -1251,6 +1251,7 @@ namespace ts {
                             switch (ext.kind) {
                                 case ExtensionKind.SemanticLint:
                                 case ExtensionKind.SyntacticLint:
+                                case ExtensionKind.LanguageService:
                                     if (typeof potentialExtension !== "function") {
                                         programDiagnostics.add(createCompilerDiagnostic(
                                             Diagnostics.Extension_0_exported_member_1_has_extension_kind_2_but_was_type_3_when_type_4_was_expected,
@@ -1262,7 +1263,13 @@ namespace ts {
                                         ));
                                         return;
                                     }
-                                    (ext as (SemanticLintExtension | SyntacticLintExtension)).ctor = potentialExtension;
+                                    (ext as (SemanticLintExtension | SyntacticLintExtension | LanguageServiceExtension)).ctor = potentialExtension;
+                                    break;
+                                default:
+                                    // Include a default case which just puts the extension unchecked onto the base extension
+                                    // This can allow language service extensions to query for custom extension kinds
+                                    (ext as any).__extension =  potentialExtension;
+                                    break;
                             }
                             aggregate.push(ext as Extension);
                         }

@@ -2920,17 +2920,29 @@ namespace ts {
         new (typescript: typeof ts, checker: TypeChecker, args: any): LintWalker;
     }
 
+    export interface LanguageServiceHost {} // The members for these interfaces are provided in the services layer
+    export interface LanguageService {}
+    export interface LanguageServiceProvider {}
+    export interface DocumentRegistry {}
+
+    export interface LanguageServiceProviderStatic {
+        new (typescript: typeof ts, host: LanguageServiceHost, service: LanguageService, registry: DocumentRegistry, args: any): LanguageServiceProvider;
+    }
+
     export namespace ExtensionKind {
         export const SemanticLint: "semantic-lint" = "semantic-lint";
         export type SemanticLint = "semantic-lint";
         export const SyntacticLint: "syntactic-lint" = "syntactic-lint";
         export type SyntacticLint = "syntactic-lint";
+        export const LanguageService: "language-service" = "language-service";
+        export type LanguageService = "language-service";
     }
-    export type ExtensionKind = ExtensionKind.SemanticLint | ExtensionKind.SyntacticLint;
+    export type ExtensionKind = ExtensionKind.SemanticLint | ExtensionKind.SyntacticLint | ExtensionKind.LanguageService;
 
     export interface ExtensionCollectionMap {
         "syntactic-lint"?: SyntacticLintExtension[];
         "semantic-lint"?: SemanticLintExtension[];
+        "language-service"?: LanguageServiceExtension[];
         [index: string]: Extension[] | undefined;
     }
 
@@ -2950,7 +2962,12 @@ namespace ts {
         ctor: SemanticLintProviderStatic;
     }
 
-    export type Extension = SyntacticLintExtension | SemanticLintExtension;
+    // @kind(ExtensionKind.LanguageService)
+    export interface LanguageServiceExtension extends ExtensionBase {
+        ctor: LanguageServiceProviderStatic;
+    }
+
+    export type Extension = SyntacticLintExtension | SemanticLintExtension | LanguageServiceExtension;
 
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
