@@ -13,3 +13,29 @@ function f2(...args,) {}
 f2(...[],);
 >f2 : Symbol(f2, Decl(trailingCommasInFunctionParametersAndArguments.ts, 2, 7))
 
+// Not confused by overloads
+declare function f3(x, ): number;
+>f3 : Symbol(f3, Decl(trailingCommasInFunctionParametersAndArguments.ts, 6, 11), Decl(trailingCommasInFunctionParametersAndArguments.ts, 9, 33))
+>x : Symbol(x, Decl(trailingCommasInFunctionParametersAndArguments.ts, 9, 20))
+
+declare function f3(x, y,): string;
+>f3 : Symbol(f3, Decl(trailingCommasInFunctionParametersAndArguments.ts, 6, 11), Decl(trailingCommasInFunctionParametersAndArguments.ts, 9, 33))
+>x : Symbol(x, Decl(trailingCommasInFunctionParametersAndArguments.ts, 10, 20))
+>y : Symbol(y, Decl(trailingCommasInFunctionParametersAndArguments.ts, 10, 22))
+
+<number>f3(1,);
+>f3 : Symbol(f3, Decl(trailingCommasInFunctionParametersAndArguments.ts, 6, 11), Decl(trailingCommasInFunctionParametersAndArguments.ts, 9, 33))
+
+<string>f3(1, 2,);
+>f3 : Symbol(f3, Decl(trailingCommasInFunctionParametersAndArguments.ts, 6, 11), Decl(trailingCommasInFunctionParametersAndArguments.ts, 9, 33))
+
+// Works for constructors too
+class X {
+>X : Symbol(X, Decl(trailingCommasInFunctionParametersAndArguments.ts, 13, 18))
+
+    constructor(a,) { }
+>a : Symbol(a, Decl(trailingCommasInFunctionParametersAndArguments.ts, 17, 16))
+}
+new X(1,);
+>X : Symbol(X, Decl(trailingCommasInFunctionParametersAndArguments.ts, 13, 18))
+

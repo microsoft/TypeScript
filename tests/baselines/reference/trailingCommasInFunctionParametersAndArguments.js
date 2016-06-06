@@ -7,6 +7,19 @@ function f2(...args,) {}
 
 f2(...[],);
 
+// Not confused by overloads
+declare function f3(x, ): number;
+declare function f3(x, y,): string;
+
+<number>f3(1,);
+<string>f3(1, 2,);
+
+// Works for constructors too
+class X {
+    constructor(a,) { }
+}
+new X(1,);
+
 
 //// [trailingCommasInFunctionParametersAndArguments.js]
 function f1(x) { }
@@ -18,3 +31,12 @@ function f2() {
     }
 }
 f2.apply(void 0, []);
+f3(1);
+f3(1, 2);
+// Works for constructors too
+var X = (function () {
+    function X(a) {
+    }
+    return X;
+}());
+new X(1);
