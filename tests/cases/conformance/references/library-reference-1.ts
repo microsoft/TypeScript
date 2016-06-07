@@ -1,6 +1,6 @@
 // @noImplicitReferences: true
 // @traceResolution: true
-// @typesRoot: /types
+// @typesRoot: ./
 
 // We can find typings in the ./types folder
 
