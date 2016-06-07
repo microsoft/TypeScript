@@ -1,0 +1,5 @@
+{
+  "scenario": "Verify exclude property in project option",
+  "projectRoot": "tests/cases/projects/projectOption/SpecifyExcludeWithNoRelativePath",
+  "baselineCheck": true
+}
