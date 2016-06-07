@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es7/trailingCommasInFunctionParamLists/trailingCommasInFunctionParameter.ts ===
+function f1(x, y,) {
+>f1 : (x: any, y: any) => void
+>x : any
+>y : any
+}
+
+function f2() {
+>f2 : () => (x: any) => void
+
+    return (x,) => {}
+>(x,) => {} : (x: any) => void
+>x : any
+}
