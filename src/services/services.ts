@@ -406,12 +406,11 @@ namespace ts {
                     const sourceFileOfDeclaration = getSourceFileOfNode(declaration);
                     // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
                     if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
-                        ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                            const cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
-                            if (cleanedParamJsDocComment) {
-                                addRange(jsDocCommentParts, cleanedParamJsDocComment);
-                            }
-                        });
+                        if ((declaration.parent.kind === SyntaxKind.FunctionExpression || declaration.parent.kind === SyntaxKind.ArrowFunction) &&
+                            declaration.parent.parent.kind === SyntaxKind.VariableDeclaration) {
+                            addCommentParts(declaration.parent.parent.parent, sourceFileOfDeclaration, getCleanedParamJsDocComment);
+                        }
+                        addCommentParts(declaration.parent, sourceFileOfDeclaration, getCleanedParamJsDocComment);
                     }
 
                     // If this is left side of dotted module declaration, there is no doc comments associated with this node
@@ -419,23 +418,43 @@ namespace ts {
                         return;
                     }
 
+                    if ((declaration.kind === SyntaxKind.FunctionExpression || declaration.kind === SyntaxKind.ArrowFunction) &&
+                        declaration.parent.kind === SyntaxKind.VariableDeclaration) {
+                        addCommentParts(declaration.parent.parent, sourceFileOfDeclaration, getCleanedJsDocComment);
+                    }
+
                     // If this is dotted module name, get the doc comments from the parent
                     while (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.parent.kind === SyntaxKind.ModuleDeclaration) {
                         declaration = <ModuleDeclaration>declaration.parent;
                     }
+                    addCommentParts(declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration,
+                                    sourceFileOfDeclaration,
+                                    getCleanedJsDocComment);
 
-                    // Get the cleaned js doc comment text from the declaration
-                    ts.forEach(getJsDocCommentTextRange(
-                        declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                            const cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
-                            if (cleanedJsDocComment) {
-                                addRange(jsDocCommentParts, cleanedJsDocComment);
-                            }
-                        });
+                    if (declaration.kind === SyntaxKind.VariableDeclaration) {
+                        const init = (declaration as VariableDeclaration).initializer;
+                        if (init && (init.kind === SyntaxKind.FunctionExpression || init.kind === SyntaxKind.ArrowFunction)) {
+                            // Get the cleaned js doc comment text from the initializer
+                            addCommentParts(init, sourceFileOfDeclaration, getCleanedJsDocComment);
+                        }
+                    }
                 }
             });
 
             return jsDocCommentParts;
+
+            function addCommentParts(commented: Node,
+                                     sourceFileOfDeclaration: SourceFile,
+                                     getCommentPart: (pos: number, end: number, file: SourceFile) => SymbolDisplayPart[]): void {
+                const ranges = getJsDocCommentTextRange(commented, sourceFileOfDeclaration);
+                // Get the cleaned js doc comment text from the declaration
+                ts.forEach(ranges, jsDocCommentTextRange => {
+                    const cleanedComment = getCommentPart(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                    if (cleanedComment) {
+                        addRange(jsDocCommentParts, cleanedComment);
+                    }
+                });
+            }
 
             function getJsDocCommentTextRange(node: Node, sourceFile: SourceFile): TextRange[] {
                 return ts.map(getJsDocComments(node, sourceFile),

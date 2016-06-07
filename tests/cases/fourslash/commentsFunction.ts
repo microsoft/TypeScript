@@ -33,6 +33,20 @@
 ////    }
 ////    return lamb/*31*/daVar("World") + /*32*/a;
 ////}
+/////**
+//// * On variable
+//// * @param s the first parameter!
+//// * @returns the parameter's length
+//// */
+////var assi/*33*/gned = /**
+////                * Summary on expression
+////                * @param s param on expression
+////                * @returns return on expression
+////                */function(/** On parameter */s: string) {
+////  return s.length;
+////}
+////assig/*34*/ned/*35*/(/*36*/"hey");
+
 
 goTo.marker('1');
 verify.currentSignatureHelpDocCommentIs("This comment should appear for foo");
@@ -68,14 +82,15 @@ verify.completionListContains('a', '(parameter) a: string', 'this is comment abo
 verify.completionListContains('b', '(parameter) b: number', 'this is comment for b');
 
 goTo.marker('11');
-verify.quickInfoIs("var lambdaFoo: (a: number, b: number) => number", "lamdaFoo var comment");
+verify.quickInfoIs("var lambdaFoo: (a: number, b: number) => number", "lamdaFoo var comment\nthis is lambda comment");
 
 goTo.marker('12');
-verify.quickInfoIs("var lambddaNoVarComment: (a: number, b: number) => number", "");
+// pick up doccomments from the lambda itself
+verify.quickInfoIs("var lambddaNoVarComment: (a: number, b: number) => number", "this is lambda multiplication");
 
 goTo.marker('13');
-verify.completionListContains('lambdaFoo', 'var lambdaFoo: (a: number, b: number) => number', '');
-verify.completionListContains('lambddaNoVarComment', 'var lambddaNoVarComment: (a: number, b: number) => number', '');
+verify.completionListContains('lambdaFoo', 'var lambdaFoo: (a: number, b: number) => number', 'lamdaFoo var comment\nthis is lambda comment');
+verify.completionListContains('lambddaNoVarComment', 'var lambddaNoVarComment: (a: number, b: number) => number', 'this is lambda multiplication');
 
 goTo.marker('14');
 verify.currentParameterHelpArgumentDocCommentIs("param a");
@@ -129,3 +144,14 @@ goTo.marker('31');
 verify.quickInfoIs('(local var) lambdaVar: (b: string) => string', '');
 goTo.marker('32');
 verify.quickInfoIs('(parameter) a: number', '');
+
+goTo.marker('33');
+verify.quickInfoIs("var assigned: (s: string) => number", "On variable\n@returns the parameter's length\nSummary on expression\n@returns return on expression");
+goTo.marker('34');
+verify.quickInfoIs("var assigned: (s: string) => number", "On variable\n@returns the parameter's length\nSummary on expression\n@returns return on expression");
+goTo.marker('35');
+verify.completionListContains("assigned", "var assigned: (s: string) => number", "On variable\n@returns the parameter's length\nSummary on expression\n@returns return on expression");
+goTo.marker('36');
+verify.currentSignatureHelpDocCommentIs("On variable\n@returns the parameter's length\nSummary on expression\n@returns return on expression");
+verify.currentParameterHelpArgumentDocCommentIs("param on expression\nthe first parameter!\nOn parameter ");
+
