@@ -1143,6 +1143,7 @@ namespace ts {
             // if any of these properties has changed - structure cannot be reused
             const oldOptions = oldProgram.getCompilerOptions();
             if ((oldOptions.module !== options.module) ||
+                (oldOptions.moduleResolution !== options.moduleResolution) ||
                 (oldOptions.noResolve !== options.noResolve) ||
                 (oldOptions.target !== options.target) ||
                 (oldOptions.noLib !== options.noLib) ||
