@@ -516,6 +516,7 @@ namespace ts {
             options,
             fileNames: getFileNames(),
             typingOptions: getTypingOptions(),
+            raw: json,
             errors
         };
 
