@@ -375,12 +375,6 @@ namespace ts {
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
         },
         {
-            name: "useLegacyEmitter",
-            type: "boolean",
-            experimental: true,
-            description: Diagnostics.Use_the_legacy_emitter_instead_of_the_transforming_emitter
-        },
-        {
             name: "listEmittedFiles",
             type: "boolean"
         },
