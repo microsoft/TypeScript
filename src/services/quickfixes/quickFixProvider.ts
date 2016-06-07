@@ -18,10 +18,17 @@ namespace ts {
             BelowNormal,
         }
 
-        var quickFixes: Map<QuickFix> = {};
+        var quickFixes: Map<QuickFix[]> = {};
 
         export function registerQuickFix(fix: QuickFix) {
-            fix.errorCodes.forEach(error => quickFixes[error] = fix);
+            fix.errorCodes.forEach(error => {
+                let fixes = quickFixes[error];
+                if (!fixes) {
+                    fixes = [];
+                    quickFixes[error] = fixes;
+                }
+                fixes.push(fix);
+            });
         }
 
         export class QuickFixProvider {
@@ -30,14 +37,14 @@ namespace ts {
                 return getKeys(quickFixes);
             }
 
-            public fix(errorCode: string, sourceFile: SourceFile, start: number, end: number): SuggestedFix {
+            public getFixes(errorCode: string, sourceFile: SourceFile, start: number, end: number): SuggestedFix {
                 const fix = quickFixes[errorCode];
 
-                if (!fix) {
-                    throw new Error(`No fix found for error: '${errorCode}'.`);
+                if (!fix || fix.length == 0) {
+                    throw new Error(`No fixes found for error: '${errorCode}'.`);
                 }
 
-                return { name: fix.name, textChanges: fix.getFix(sourceFile, start, end) };
+                return { name: fix[0].name, textChanges: fix[0].getFix(sourceFile, start, end) };
             }
         }
     }

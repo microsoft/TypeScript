@@ -7489,7 +7489,7 @@ namespace ts {
             synchronizeHostData();
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-            return quickFixProvider.fix(errorCodes[0], sourceFile, start, end);
+            return quickFixProvider.getFixes(errorCodes[0], sourceFile, start, end);
         }
 
         /**

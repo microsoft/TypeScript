@@ -1,6 +1,11 @@
 ﻿/* @internal */
 namespace ts.quickFix {
 
+    function getOpenBraceEnd(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
+        // First token is the open curly, this is where we want to put the 'super' call.
+        return constructor.body.getFirstToken(sourceFile).getEnd();
+    }
+
     registerQuickFix({
         name: `Add missing 'super()' call.`,
         errorCodes: ["TS2377"],
@@ -11,10 +16,9 @@ namespace ts.quickFix {
                 throw new Error("Failed to find the constructor.");
             }
 
-            const openCurly = (<ConstructorDeclaration>token.parent).body.getChildren(sourceFile)[0]; // assume this is the open curly
-            const position = openCurly.getEnd();   // want to position directly after open curly, we'll format using the formatting service in the host
+            const newPosition = getOpenBraceEnd(<ConstructorDeclaration>token.parent, sourceFile);
 
-            return [{ newText: "super();", span: { start: position, length: 0 } }];
+            return [{ newText: "super();", span: { start: newPosition, length: 0 } }];
         }
     });
 
@@ -26,19 +30,16 @@ namespace ts.quickFix {
             const constructor = getContainingFunction(token);
 
             if (constructor.kind !== SyntaxKind.Constructor) {
-                // wait why are we not a on a constructor?
+                // Wait why are we not a on a constructor?
                 throw new Error("Failed to find the constructor.");
             }
             const superCall = findSuperCall((<ConstructorDeclaration>constructor).body);
 
-            const children = (<ConstructorDeclaration>constructor).body.getChildren(sourceFile);
-
-            // first child is the open curly, this is where we want to put the 'super' call.
-            const newPosition = children[0].getEnd();
-
             if (!superCall) {
                 throw new Error(`Failed to find super call.`);
             }
+
+            const newPosition = getOpenBraceEnd(<ConstructorDeclaration>constructor, sourceFile);
 
             return [{
                 newText: superCall.getText(sourceFile),
@@ -47,7 +48,7 @@ namespace ts.quickFix {
             {
                 newText: "",
                 span: { start: superCall.getStart(sourceFile), length: superCall.getFullWidth() }
-            }]
+            }];
 
             function findSuperCall(n: Node): Node {
                 if (isSuperCallExpression(n)) {

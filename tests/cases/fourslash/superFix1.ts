@@ -3,7 +3,7 @@
 ////class Base{
 ////}
 ////class C extends Base{
-////    /*0*/constructor() {
+////    constructor() {/*0*/
 ////    }
 ////}
 
