@@ -1,5 +1,4 @@
 error TS2304: Cannot find name '/lib'.
-/main.ts(1,14): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
 
 
 !!! error TS2304: Cannot find name '/lib'.
@@ -15,10 +14,8 @@ error TS2304: Cannot find name '/lib'.
     
     interface Lib { x }
     
-==== /main.ts (1 errors) ====
+==== /main.ts (0 errors) ====
     export class Cls {
-                 ~~~
-!!! error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
         x
     }
     

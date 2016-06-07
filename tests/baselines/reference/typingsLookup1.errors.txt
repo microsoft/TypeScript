@@ -1,0 +1,13 @@
+error TS2304: Cannot find name '/jquery'.
+tests/cases/conformance/typings/a.ts(1,1): error TS2304: Cannot find name '$'.
+
+
+!!! error TS2304: Cannot find name '/jquery'.
+==== tests/cases/conformance/typings/a.ts (1 errors) ====
+    $.x;
+    ~
+!!! error TS2304: Cannot find name '$'.
+    
+==== tests/cases/conformance/typings/node_modules/@types/jquery/index.d.ts (0 errors) ====
+    declare var $: { x: any };
+    

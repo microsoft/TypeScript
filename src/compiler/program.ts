@@ -9,16 +9,16 @@ namespace ts {
     /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
+    export const version = "1.9.0";
 
     const emptyArray: any[] = [];
 
+    const defaultTypesFolderName = "types";
     const defaultLibrarySearchPaths = [
         "types/",
         "node_modules/",
         "node_modules/@types/",
     ];
-
-    export const version = "1.9.0";
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
         while (true) {
@@ -875,19 +875,6 @@ namespace ts {
             }
         }
 
-        function getDefaultTypeDirectiveNames(rootPath: string): string[] {
-            const localTypes = combinePaths(rootPath, "types");
-            const npmTypes = combinePaths(rootPath, "node_modules/@types");
-            let result: string[] = [];
-            if (sys.directoryExists(localTypes)) {
-                result = result.concat(sys.getDirectories(localTypes));
-            }
-            if (sys.directoryExists(npmTypes)) {
-                result = result.concat(sys.getDirectories(npmTypes));
-            }
-            return result;
-        }
-
         function getDefaultLibLocation(): string {
             return getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
         }
@@ -896,7 +883,6 @@ namespace ts {
         const realpath = sys.realpath && ((path: string) => sys.realpath(path));
 
         return {
-            getDefaultTypeDirectiveNames,
             getSourceFile,
             getDefaultLibLocation,
             getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
@@ -909,6 +895,7 @@ namespace ts {
             readFile: fileName => sys.readFile(fileName),
             trace: (s: string) => sys.write(s + newLine),
             directoryExists: directoryName => sys.directoryExists(directoryName),
+            getDirectories: (path: string) => sys.getDirectories(path),
             realpath
         };
     }
@@ -972,21 +959,93 @@ namespace ts {
         return resolutions;
     }
 
-    export function getDefaultTypeDirectiveNames(options: CompilerOptions, rootFiles: string[], host: CompilerHost): string[] {
+
+    /**
+      * Computes the types folder, a.k.a. the primary types lookup location.
+      * This is commonly './types' relative to whatever the compilation root is.
+      */
+    function getTypesFolderLocation(options: CompilerOptions, host: CompilerHost, inferredRoot: string): Path {
+        // Openish question: When tsconfig specifies a rootDir *and* a relative typesRoot, is the typesRoot
+        // relative to the tsconfig file path, or the rootDir path?
+
+        // If typesRoot came from tsconfig, then it's relative the config file path.
+        // Otherwise, it's relative to the current folder.
+        if (options.typesRoot) {
+            // true case is e.g. tsconfig { typesRoot: './foo' }, so types is [tsconfigPath]/foo
+            // false case is e.g. tsc a.ts --typesRoot foo, so types is [cwd]/foo
+            const typesRootParent = options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory();
+            return toPath(combinePaths(options.typesRoot, defaultTypesFolderName), typesRootParent, f => host.getCanonicalFileName(f));
+        }
+
+        // If we have an explicit rootDir, use that
+        // This could be relative to the tsconfig file path, or absolute
+        if (options.rootDir) {
+            if (isRootedDiskPath(options.rootDir)) {
+                // e.g. root dir is given as C:/src/foo, so types is C:/src/foo/types
+                return toPath(defaultTypesFolderName, options.rootDir, f => host.getCanonicalFileName(f));
+            }
+            else {
+                // e.g. root dir is ../foo from tsconfig, so types is [tsconfig path]/../foo/types
+                //   or root dir is ../foo from commandline, so types is [cwd]/types
+                const rootDirParent = options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory();
+                return toPath(defaultTypesFolderName, rootDirParent, f => host.getCanonicalFileName(f));
+            }
+        }
+
+        // No typesRoot specified and no rootDir specified, so use the inferredRoot as the place to start
+        // if there's no tsconfig file
+        const inferredParent = options.configFilePath ? getDirectoryPath(options.configFilePath) : inferredRoot;
+        if (inferredParent === undefined) {
+            // There's no common compilation root, so there is no types folder. Sad!
+            return undefined;
+        }
+        return toPath(defaultTypesFolderName, inferredParent, f => host.getCanonicalFileName(f));
+    }
+
+    function getInferredTypesRoot(options: CompilerOptions, rootFiles: string[], host: CompilerHost) {
+        return computeCommonSourceDirectoryOfFilenames(rootFiles, host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
+    }
+
+    /**
+      * Given a set of options and a set of root files, returns the set of type directive names
+      *   that should be included for this program automatically.
+      * This list could either come from the config file,
+      *   or from enumerating the types root + initial secondary types lookup location.
+      * More type directives might appear in the program later as a result of loading actual source files;
+      *   this list is only the set of defaults that are implicitly included.
+      */
+    export function getAutomaticTypeDirectiveNames(options: CompilerOptions, rootFiles: string[], host: CompilerHost): string[] {
         // Use explicit type list from tsconfig.json
         if (options.types) {
             return options.types;
         }
 
-        // or load all types from the automatic type import fields
-        if (host && host.getDefaultTypeDirectiveNames) {
-            const commonRoot = computeCommonSourceDirectoryOfFilenames(rootFiles, host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
-            if (commonRoot) {
-                return host.getDefaultTypeDirectiveNames(commonRoot);
+        // This is the primary lookup location
+        const inferredRoot = getInferredTypesRoot(options, rootFiles, host);
+        const primaryLocation = getTypesFolderLocation(options, host, inferredRoot);
+        if (host.directoryExists) {
+            let result = primaryLocation && host.directoryExists(primaryLocation) && host.getDirectories(primaryLocation);
+
+            // Walk up the spine until we see a node_modules folder, then use its @types folder if it exists
+            let nodeModulesSearchLocation = options.configFilePath ? getDirectoryPath(options.configFilePath) : inferredRoot;
+            if (nodeModulesSearchLocation) {
+                while (nodeModulesSearchLocation !== getDirectoryPath(nodeModulesSearchLocation)) {
+                    if (host.directoryExists(combinePaths(nodeModulesSearchLocation, "node_modules"))) {
+                        const typesScopeFolder = combinePaths(nodeModulesSearchLocation, "node_modules/@types");
+                        if (host.directoryExists(typesScopeFolder)) {
+                            const typesPackages = host.getDirectories(typesScopeFolder);
+                            result = result ? result.concat(typesPackages) : typesPackages;
+                        }
+                        break;
+                    }
+                    nodeModulesSearchLocation = getDirectoryPath(nodeModulesSearchLocation);
+                }
             }
+
+            return result || emptyArray;
         }
 
-        return undefined;
+        return emptyArray;
     }
 
     export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
@@ -1038,11 +1097,13 @@ namespace ts {
         if (!tryReuseStructureFromOldProgram()) {
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
 
-            // load type declarations specified via 'types' argument
-            const typeReferences: string[] = getDefaultTypeDirectiveNames(options, rootNames, host);
+            // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
+            const typeReferences: string[] = getAutomaticTypeDirectiveNames(options, rootNames, host);
 
             if (typeReferences) {
-                const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, /*containingFile*/ undefined);
+                const inferredRoot = getInferredTypesRoot(options, rootNames, host);
+                const containingFilename = combinePaths(inferredRoot, "__inferred type names__.ts");
+                const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, containingFilename);
                 for (let i = 0; i < typeReferences.length; i++) {
                     processTypeReferenceDirective(typeReferences[i], resolutions[i]);
                 }

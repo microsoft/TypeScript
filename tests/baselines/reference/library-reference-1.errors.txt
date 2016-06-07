@@ -1,0 +1,19 @@
+/consumer.ts(1,1): error TS2304: Cannot find name 'jquery'.
+/consumer.ts(2,1): error TS2304: Cannot find name '$'.
+
+
+==== /consumer.ts (2 errors) ====
+    /// <reference types="jquery" />
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'jquery'.
+    $.foo();
+    ~
+!!! error TS2304: Cannot find name '$'.
+    
+==== /types/jquery/index.d.ts (0 errors) ====
+    
+    // We can find typings in the ./types folder
+    
+    declare var $: { foo(): void };
+    
+    

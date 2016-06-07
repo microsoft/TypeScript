@@ -1,0 +1,14 @@
+error TS2304: Cannot find name '/lib'.
+
+
+!!! error TS2304: Cannot find name '/lib'.
+==== /app.ts (0 errors) ====
+    /// <reference types="lib"/>
+    interface A {
+        x: $
+    }
+==== /types/lib/index.d.ts (0 errors) ====
+    
+    
+    interface $ { x }
+    

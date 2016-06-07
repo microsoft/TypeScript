@@ -314,6 +314,7 @@ namespace ts {
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: (fileName, content): void => { throw new Error("NotImplemented"); },
                 getCurrentDirectory: () => currentDirectory,
+                getDirectories: () => [],
                 getCanonicalFileName: fileName => fileName.toLowerCase(),
                 getNewLine: () => "\r\n",
                 useCaseSensitiveFileNames: () => false,
@@ -397,6 +398,7 @@ export = C;
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: (fileName, content): void => { throw new Error("NotImplemented"); },
                 getCurrentDirectory: () => currentDirectory,
+                getDirectories: () => [],
                 getCanonicalFileName,
                 getNewLine: () => "\r\n",
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
@@ -1050,6 +1052,7 @@ import b = require("./moduleB.ts");
                     throw new Error("NYI");
                 },
                 getCurrentDirectory: () => "/",
+                getDirectories: () => [],
                 getCanonicalFileName: f => f.toLowerCase(),
                 getNewLine: () => "\r\n",
                 useCaseSensitiveFileNames: () => false,

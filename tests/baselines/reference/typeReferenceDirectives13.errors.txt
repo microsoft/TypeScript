@@ -1,0 +1,18 @@
+error TS2304: Cannot find name '/lib'.
+
+
+!!! error TS2304: Cannot find name '/lib'.
+==== /app.ts (0 errors) ====
+    /// <reference types="lib"/>
+    import {$} from "./ref";
+    export interface A {
+        x: () => typeof $
+    }
+    
+==== /ref.d.ts (0 errors) ====
+    
+    export interface $ { x }
+    
+==== /types/lib/index.d.ts (0 errors) ====
+    declare let $: { x: number }
+    

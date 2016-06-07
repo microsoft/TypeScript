@@ -117,6 +117,9 @@ namespace ts {
             getCurrentDirectory(): string {
                 return "";
             },
+            getDirectories(path: string): string[] {
+                return [];
+            },
             getCanonicalFileName(fileName): string {
                 return sys && sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
             },
