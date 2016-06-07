@@ -1,4 +1,5 @@
 //// [trailingCommasInFunctionParametersAndArguments.ts]
+
 function f1(x,) {}
 
 f1(1,);
@@ -17,8 +18,7 @@ declare function f3(x, y,): string;
 // Works for constructors too
 class X {
     constructor(a,) { }
-    // *Not* allowed in getter
-    get x(,) { return 0; }
+    // See trailingCommasInGetter.ts
     set x(value,) { }
 }
 interface Y {
@@ -46,8 +46,7 @@ var X = (function () {
     function X(a) {
     }
     Object.defineProperty(X.prototype, "x", {
-        // *Not* allowed in getter
-        get: function () { return 0; },
+        // See trailingCommasInGetter.ts
         set: function (value) { },
         enumerable: true,
         configurable: true

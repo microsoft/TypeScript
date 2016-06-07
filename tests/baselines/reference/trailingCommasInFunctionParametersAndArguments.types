@@ -1,4 +1,5 @@
 === tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts ===
+
 function f1(x,) {}
 >f1 : (x: any) => void
 >x : any
@@ -47,7 +48,22 @@ class X {
 
     constructor(a,) { }
 >a : any
+
+    // See trailingCommasInGetter.ts
+    set x(value,) { }
+>x : any
+>value : any
 }
+interface Y {
+>Y : Y
+
+    new(x,);
+>x : any
+
+    (x,);
+>x : any
+}
+
 new X(1,);
 >new X(1,) : X
 >X : typeof X

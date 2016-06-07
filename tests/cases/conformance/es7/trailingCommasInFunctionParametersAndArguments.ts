@@ -1,3 +1,5 @@
+// @target: es5
+
 function f1(x,) {}
 
 f1(1,);
@@ -16,8 +18,7 @@ declare function f3(x, y,): string;
 // Works for constructors too
 class X {
     constructor(a,) { }
-    // *Not* allowed in getter
-    get x(,) { return 0; }
+    // See trailingCommasInGetter.ts
     set x(value,) { }
 }
 interface Y {
