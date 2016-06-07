@@ -5,7 +5,6 @@ var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
 var Linter = require("tslint");
-var readline = require("readline");
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -54,7 +53,6 @@ var compilerSources = [
     "transformer.ts",
     "sourcemap.ts",
     "comments.ts",
-    "printer.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -87,7 +85,6 @@ var servicesSources = [
     "transformer.ts",
     "sourcemap.ts",
     "comments.ts",
-    "printer.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -193,17 +190,6 @@ var harnessSources = harnessCoreSources.concat([
     return path.join(serverDirectory, f);
 }));
 
-var librarySourceMap = [
-    { target: "lib.core.d.ts", sources: ["header.d.ts", "core.d.ts"] },
-    { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "dom.generated.d.ts"] },
-    { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "webworker.generated.d.ts"] },
-    { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"] },
-    { target: "lib.d.ts", sources: ["header.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
-    { target: "lib.core.es6.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts"] },
-    { target: "lib.es6.d.ts", sources: ["header.d.ts", "es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
-    { target: "lib.core.es7.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts", "es7.d.ts"] },
-    { target: "lib.es7.d.ts", sources: ["header.d.ts", "es6.d.ts", "es7.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
-];
 var es2015LibrarySources = [
     "es2015.core.d.ts",
     "es2015.collection.d.ts",
@@ -314,6 +300,10 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
     */
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts, callback) {
     file(outFile, prereqs, function() {
+        if (process.env.USE_TRANSFORMS === "false") {
+            useBuiltCompiler = false;
+        }
+
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
         var options = "--noImplicitAny --noEmitOnError --pretty";
         opts = opts || {};
@@ -355,10 +345,6 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
 
         if (opts.stripInternal) {
             options += " --stripInternal";
-        }
-
-        if (useBuiltCompiler && !environmentVariableIsDisabled("USE_TRANSFORMS")) {
-            console.warn("\u001b[93mwarning: 'USE_TRANSFORMS' environment variable is not set to 'false'. Experimental transforms will be enabled by default.\u001b[0m");
         }
 
         var cmd = host + " " + compilerPath + " " + options + " ";
@@ -723,33 +709,16 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, light, taskConfigFolder, workerCount, stackTraceLimit) {
-    var testConfig;
-    if (tests) {
-        (testConfig || (testConfig = {})).test = [tests];
-    }
-
-    if (light) {
-        (testConfig || (testConfig = {})).light = light;
-    }
-
-    if (workerCount) {
-        (testConfig || (testConfig = {})).workerCount = workerCount;
-    }
-
-    if (taskConfigFolder) {
-        (testConfig || (testConfig = {})).taskConfigFolder = taskConfigFolder;
-    }
-
-    if (/^(\d+|full)$/.test(stackTraceLimit)) {
-        (testConfig || (testConfig = {})).stackTraceLimit = stackTraceLimit;
-    }
-
-    if (testConfig) {
-        var testConfigContents = JSON.stringify(testConfig);
-        console.log('Running tests with config: ' + testConfigContents);
-        fs.writeFileSync('test.config', testConfigContents);
-    }
+function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit) {
+    var testConfigContents = JSON.stringify({ 
+        test: tests ? [tests] : undefined,
+        light: light,
+        workerCount: workerCount,
+        taskConfigsFolder: taskConfigsFolder,
+        stackTraceLimit: stackTraceLimit
+    });
+    console.log('Running tests with config: ' + testConfigContents);
+    fs.writeFileSync('test.config', testConfigContents);
 }
 
 function deleteTemporaryProjectOutput() {
@@ -758,257 +727,8 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
-function runTestsAndWriteOutput(file, defaultSubsets) {
-    cleanTestDirs();
-    var tests = process.env.test || process.env.tests || process.env.t;
-    var light = process.env.light || false;
-    var testConfigFile = 'test.config';
-    if (fs.existsSync(testConfigFile)) {
-        fs.unlinkSync(testConfigFile);
-    }
-
-    writeTestConfigFile(testConfigFile, tests, light, 10);
-
-    if (tests && tests.toLocaleLowerCase() === "rwc") {
-        testTimeout = 100000;
-    }
-
-    var subsetRegexes;
-    var subsets;
-    if (tests || defaultSubsets.length === 0) {
-        subsetRegexes = [tests];
-        subsets = [tests];
-    }
-    else {
-        subsets = [];
-        subsetRegexes = [];
-        negations = [];
-        for (var i = 0; i < defaultSubsets.length; ++i) {
-            var subset = defaultSubsets[i];
-            subsets.push(subset.name);
-            subsetRegexes.push(subset.pattern);
-            negations.push(subset.pattern);
-        }
-
-        subsets.push("other");
-        subsetRegexes.push("^(?!" + negations.join("|") + ")");
-    }
-
-    var out = fs.createWriteStream(file);
-    var outFileNames = subsetRegexes.length !== 1 ? [] : undefined;
-    var tapRange = /^(\d+)\.\.(\d+)(?:$|\r\n?|\n)/;
-    var tapOk = /^ok\s/;
-    var tapNotOk = /^not\sok\s/;
-    var tapComment = /^#(?: (tests|pass|fail) (\d+)$)?/;
-    var typeError = /^\s+TypeError:/;
-    var debugError = /^\s+Error:\sDebug\sFailure\./;
-    var progress = new ProgressBar();
-    var totalTypeErrorCount = 0;
-    var totalDebugErrorCount = 0;
-    var totalReportedTestCount = 0;
-    var totalReportedPassCount = 0;
-    var totalReportedFailCount = 0;
-    var counter = subsetRegexes.length;
-    var errorStatus;
-    subsetRegexes.forEach(function (subsetRegex, i) {
-        var expectedTestCount = 0;
-        var testCount = 0;
-        var failureCount = 0;
-        var successCount = 0;
-        var reportedTestCount = 0;
-        var reportedPassCount = 0;
-        var reportedFailCount = 0;
-        var comments = [];
-        var typeErrorCount = 0;
-        var debugErrorCount = 0;
-        var outFileName;
-        var outFile;
-        if (subsetRegexes.length === 1) {
-            outFile = out;
-        }
-        else {
-            outFileName = path.join(os.tmpdir(), path.basename(file) + "." + i);
-            outFileNames[i] = outFileName;
-            outFile = fs.createWriteStream(outFileName);
-        }
-
-        var args = [];
-        args.push("-R", "tap");
-        args.push("--no-colors");
-        args.push("-t", testTimeout);
-        if (subsetRegex) {
-            args.push("-g", '"' + subsetRegex + '"');
-        }
-
-        args.push(run);
-
-        var cmd = "mocha " + args.join(" ");
-        if (subsetRegexes.length === 1) {
-            console.log(cmd);
-        }
-
-        updateProgress(0);
-
-        var p = child_process.spawn(
-            process.platform === "win32" ? "cmd" : "/bin/sh",
-            process.platform === "win32" ? ["/c", cmd] : ["-c", cmd], {
-                windowsVerbatimArguments: true,
-                env: { NODE_ENV: "development" }
-            });
-
-        var rl = readline.createInterface({
-            input: p.stdout,
-            terminal: false
-        });
-
-        var start;
-        var end;
-        rl.on("line", function (line) {
-            if (!start) start = Date.now();
-            var m = tapRange.exec(line);
-            if (m) {
-                expectedTestCount = parseInt(m[2]);
-                return;
-            }
-
-            if (tapOk.test(line)) {
-                outFile.write(line.replace(/^ok\s+\d+\s+/, "ok ") + os.EOL);
-                successCount++;
-            }
-            else if (tapNotOk.test(line)) {
-                outFile.write(line.replace(/^not\s+ok\s+\d+\s+/, "not ok ") + os.EOL);
-                failureCount++;
-            }
-            else {
-                m = tapComment.exec(line);
-                if (m) {
-                    if (m[1] === "tests") {
-                        end = Date.now();
-                        reportedTestCount = parseInt(m[2]);
-                    }
-                    else if (m[1] === "pass") {
-                        reportedPassCount = parseInt(m[2]);
-                    }
-                    else if (m[1] === "fail") {
-                        reportedFailCount = parseInt(m[2]);
-                    }
-                    else {
-                        outFile.write(line + os.EOL);
-                    }
-                }
-                else {
-                    outFile.write(line + os.EOL);
-                    if (typeError.test(line)) {
-                        typeErrorCount++;
-                    }
-                    else if (debugError.test(line)) {
-                        debugErrorCount++;
-                    }
-                }
-                return;
-            }
-
-            testCount++;
-
-            var percentComplete = testCount * 100 / expectedTestCount;
-            updateProgress(percentComplete);
-        });
-
-        p.on("exit", function (status) {
-            totalReportedTestCount += reportedTestCount;
-            totalReportedPassCount += reportedPassCount;
-            totalReportedFailCount += reportedFailCount;
-            totalTypeErrorCount += typeErrorCount;
-            totalDebugErrorCount += debugErrorCount;
-
-            var duration = end - start;
-            var summary =
-                "pass: " + reportedPassCount + "/" + reportedTestCount +
-                ", duration: " + (duration / 1000).toFixed(2) + "s";
-
-            updateProgress(100, summary);
-
-            if (subsetRegexes.length !== 1) {
-                outFile.close();
-            }
-
-            if (status && !errorStatus) {
-                errorStatus = status;
-            }
-
-            counter--;
-            if (counter === 0) {
-                if (subsetRegexes.length !== 1) {
-                    concatenate();
-                }
-                else {
-                    finish();
-                }
-            }
-        });
-
-        function updateProgress(percentComplete, status) {
-            var title = status || (percentComplete < 100 ? "running..." : "done");
-            if (subsetRegexes.length !== 1) {
-                title = "[" + subsets[i] + "] " + title;
-            }
-
-            progress.update(percentComplete,
-                /*foregroundColor*/ failureCount > 0
-                    ? "red"
-                    : successCount === expectedTestCount
-                        ? "green"
-                        : "cyan",
-                /*backgroundColor*/ "gray",
-                title,
-                i
-            );
-        }
-    });
-
-    function concatenate() {
-        if (outFileNames.length > 0) {
-            var outFileName = outFileNames.shift();
-            var outFile = fs.createReadStream(outFileName);
-            outFile.pipe(out, { end: false });
-            outFile.on("end", function () {
-                fs.unlinkSync(outFileName);
-                concatenate();
-            });
-            return;
-        }
-
-        finish();
-    }
-
-    function finish() {
-        out.write(
-            "# tests " + totalReportedTestCount + os.EOL +
-            "# pass " + totalReportedPassCount + os.EOL +
-            "# fail " + totalReportedFailCount + os.EOL);
-        console.log("# tests " + totalReportedTestCount);
-        console.log("# pass " + totalReportedPassCount);
-        console.log("# fail " + totalReportedFailCount);
-
-        if (totalTypeErrorCount) {
-            console.log("# type errors " + totalTypeErrorCount);
-        }
-
-        if (totalDebugErrorCount) {
-            console.log("# debug errors " + totalDebugErrorCount);
-        }
-
-        deleteTemporaryProjectOutput();
-        if (totalReportedFailCount) {
-            fail("Test failures reported: " + totalReportedFailCount);
-        }
-        else {
-            complete();
-        }
-    }
-}
-
-function runConsoleTests(defaultReporter, runInParallel, dirty) {
+function runConsoleTests(defaultReporter, runInParallel) {
+    var dirty = process.env.dirty;
     if (!dirty) {
         cleanTestDirs();
     }
@@ -1016,7 +736,7 @@ function runConsoleTests(defaultReporter, runInParallel, dirty) {
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
-    var stackTraceLimit = process.env.stackTraceLimit || 1;
+    var stackTraceLimit = process.env.stackTraceLimit;
     var testConfigFile = 'test.config';
     if (fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
@@ -1134,32 +854,10 @@ task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], functio
     runConsoleTests('min', /*runInParallel*/ true);
 }, {async: true});
 
-desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true.");
+desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true dirty=false.");
 task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
     runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);
 }, {async: true});
-
-task("runtests-file", ["build-rules", "tests", builtLocalDirectory], function () {
-    var subsets = [];
-    var cores = os.cpus().length;
-    if (cores > 1) {
-        subsets.push({ name: "conformance", pattern: "^conformance\\b" });
-        subsets.push({ name: "compiler", pattern: "^compiler\\b" });
-        subsets.push({ name: "projects", pattern: "^Projects\\b" });
-        if (cores > 4) {
-            subsets.push({ name: "fourslash", pattern: "^fourslash\\b" });
-            subsets.push({ name: "fourslash (shims, shims-pp, server)", pattern: "^fourslash-" });
-        }
-        else {
-            subsets.push({ name: "fourslash", pattern: "^fourslash" });
-        }
-    }
-    runTestsAndWriteOutput("tests/baselines/local/testresults.tap", subsets);
-}, { async: true });
-
-task("runtests-dirty", ["build-rules", "tests", builtLocalDirectory], function () {
-    runConsoleTests("mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*dirty*/ true);
-}, { async: true });
 
 desc("Generates code coverage data via instanbul");
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
@@ -1441,94 +1139,6 @@ task("lint-server", ["build-rules"], function() {
         lintWatchFile(lintTargets[i]);
     }
 });
-
-function ProgressBar() {
-    this._progress = [];
-    this._lineCount = 0;
-}
-ProgressBar.prototype = {
-    progressChars: ["\u0020", "\u2591", "\u2592", "\u2593", "\u2588"],
-    colors: {
-        foreground: {
-            black: "\u001b[90m",
-            red: "\u001b[91m",
-            green: "\u001b[92m",
-            yellow: "\u001b[93m",
-            blue: "\u001b[94m",
-            magenta: "\u001b[95m",
-            cyan: "\u001b[96m",
-            white: "\u001b[97m",
-            gray: "\u001b[37m"
-        },
-        background: {
-            black: "\u001b[40m",
-            red: "\u001b[41m",
-            green: "\u001b[42m",
-            yellow: "\u001b[43m",
-            blue: "\u001b[44m",
-            magenta: "\u001b[45m",
-            cyan: "\u001b[46m",
-            white: "\u001b[47m",
-            gray: "\u001b[100m"
-        },
-        reset: "\u001b[0m"
-    },
-    update: function (percentComplete, foregroundColor, backgroundColor, title, index) {
-        if (index === undefined) index = 0;
-
-        var progress = "";
-        for (var i = 0; i < 100; i += 4) {
-            progress += this.progressChars[Math.floor(Math.max(0, Math.min(4, percentComplete - i)))];
-        }
-
-        foregroundColor = foregroundColor && this.colors.foreground[foregroundColor];
-        backgroundColor = backgroundColor && this.colors.background[backgroundColor];
-        if (foregroundColor || backgroundColor) {
-            if (foregroundColor) {
-                progress = foregroundColor + progress;
-            }
-            if (backgroundColor) {
-                progress = backgroundColor + progress;
-            }
-
-            progress += this.colors.reset;
-        }
-
-        if (title) {
-            progress += " " + title;
-        }
-
-        if (this._progress[index] !== progress) {
-            this._progress[index] = progress;
-            this._print(index);
-        }
-    },
-    clear: function () {
-        if (this._lastProgress) {
-            readline.moveCursor(process.stdout, -process.stdout.columns, 0);
-            readline.clearLine(process.stdout, 1);
-            this._lastProgress = undefined;
-            this.visible = false;
-        }
-    },
-    _print: function (index) {
-        readline.moveCursor(process.stdout, -process.stdout.columns, -this._lineCount);
-        var lineCount = 0;
-        for (var i = 0; i < this._progress.length; i++) {
-            if (i === index) {
-                readline.clearLine(process.stdout, 1);
-                process.stdout.write(this._progress[i] + os.EOL);
-            }
-            else {
-                readline.moveCursor(process.stdout, -process.stdout.columns, +1);
-            }
-
-            lineCount++;
-        }
-
-        this._lineCount = lineCount;
-    }
-};
 
 function environmentVariableIsEnabled(name) {
     return /^(y(es)?|t(rue)?|on|enabled?|1|\+)$/.test(process.env[name]);
