@@ -424,16 +424,6 @@ namespace ts.server {
                 script.svc.reloadFromFile(tmpfilename, cb);
             }
         }
-
-        editScript(filename: string, start: number, end: number, newText: string) {
-            const script = this.getScriptInfo(filename);
-            if (script) {
-                script.editContent(start, end, newText);
-                return;
-            }
-
-            throw new Error("No script with name '" + filename + "'");
-        }
     }
 
     class InferredProject extends Project {
@@ -453,21 +443,19 @@ namespace ts.server {
         }
     }
 
-    interface Delta {
-        addedFiles: string[];
-        removedFiles: string[];
-        replacedFiles: string[];
-        projectName: string;
-        version: number;
+    function findVersionedProjectByFileName<T extends VersionedProject>(projectFileName: string, projects: T[]): T {
+        for (const proj of projects) {
+            if (proj.getProjectFileName() === projectFileName) {
+                return proj;
+            }
+        }
     }
-
-    const id = (x: any) => x;
 
     abstract class VersionedProject extends Project {
 
         private lastReportedFileNames: Map<string>;
         private lastReportedVersion: number = 0;
-        private currentVersion: number = 1;
+        currentVersion: number = 1;
 
         updateGraph() {
             const oldProgram = this.program;
@@ -479,55 +467,41 @@ namespace ts.server {
             }
         }
 
-        getDeltaFromVersion(lastKnownVersion?: number): Delta {
+        getChangesSinceVersion(lastKnownVersion?: number): protocol.ExternalProjectFiles {
+            const info = {
+                projectFileName: this.getProjectFileName(),
+                version: this.currentVersion
+            };
             if (this.lastReportedVersion === this.currentVersion) {
-                return {
-                    projectName: this.getProjectFileName(),
-                    addedFiles: [],
-                    removedFiles: [],
-                    version: this.currentVersion,
-                    replacedFiles: []
-                };
+                return { info };
             }
             if (this.lastReportedFileNames && lastKnownVersion === this.lastReportedVersion) {
                 const lastReportedFileNames = this.lastReportedFileNames;
-                const currentFiles = arrayToMap(this.getFileNames(), id);
+                const currentFiles = arrayToMap(this.getFileNames(), x => x);
 
-                const addedFiles: string[] = [];
-                const removedFiles: string[] = [];
+                const added: string[] = [];
+                const removed: string[] = [];
                 for (const id in currentFiles) {
                     if (hasProperty(currentFiles, id) && !hasProperty(lastReportedFileNames, id)) {
-                        addedFiles.push(id);
+                        added.push(id);
                     }
                 }
                 for (const id in lastReportedFileNames) {
                     if (hasProperty(lastReportedFileNames, id) && !hasProperty(currentFiles, id)) {
-                        removedFiles.push(id);
+                        removed.push(id);
                     }
                 }
                 this.lastReportedFileNames = currentFiles;
 
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.currentVersion;
-                return {
-                    projectName: this.getProjectFileName(),
-                    addedFiles,
-                    removedFiles,
-                    version: this.currentVersion,
-                    replacedFiles: []
-                };
+                return { info, changes: { added, removed } };
             }
             else {
                 // unknown version - return everything
                 const projectFileNames = this.getFileNames();
-                this.lastReportedFileNames = arrayToMap(projectFileNames, id);
-                return {
-                    projectName: this.getProjectFileName(),
-                    addedFiles: [],
-                    removedFiles: [],
-                    version: this.currentVersion,
-                    replacedFiles: projectFileNames
-                };
+                this.lastReportedFileNames = arrayToMap(projectFileNames, x => x);
+                return { info, files: projectFileNames };
             }
         }
     }
@@ -626,6 +600,11 @@ namespace ts.server {
          * open, non-configured root files 
          **/
         openFileRoots: ScriptInfo[] = [];
+
+        /**
+         * maps external project file name to list of config files that were the part of this project
+         */
+        externalProjectToConfiguredProjectMap: ts.Map<string[]> = {};
 
         /**
          * external projects (configuration and list of root files is not controlled by tsserver)
@@ -1078,12 +1057,11 @@ namespace ts.server {
         }
 
         private findConfiguredProjectByConfigFile(configFileName: string) {
-            for (const configuredProject of this.configuredProjects) {
-                if (configuredProject.configFileName === configFileName) {
-                    return configuredProject;
-                }
-            }
-            return undefined;
+            return findVersionedProjectByFileName(configFileName, this.configuredProjects);
+        }
+
+        private findExternalProjectByProjectFileName(projectFileName: string) {
+            return findVersionedProjectByFileName(projectFileName, this.externalProjects);
         }
 
         private configFileToProjectOptions(configFilename: string): { succeeded: boolean, projectOptions?: ProjectOptions, errors?: Diagnostic[] } {
@@ -1284,13 +1262,6 @@ namespace ts.server {
             return info;
         }
 
-        openExternalProject(proj: protocol.ExternalProject) {
-        }
-
-        closeExternalProject(proj: protocol.ExternalProject) {
-            // TODO: save mapping from external project name to set of configured projects
-        }
-
         log(msg: string, type = "Err") {
             this.psLogger.msg(msg, type);
         }
@@ -1475,11 +1446,70 @@ namespace ts.server {
             }
         }
 
-        loadExternalProject(externalProject: protocol.ExternalProject): Delta[] {
+        private addExternalProjectFilesForVersionedProjects(knownProjects: protocol.ExternalProjectInfo[], projects: VersionedProject[], result: protocol.ExternalProjectFiles[]): void {
+            for (const proj of projects) {
+                const knownProject = ts.forEach(knownProjects, p => p.projectFileName === proj.getProjectFileName() && p);
+                result.push(proj.getChangesSinceVersion(knownProjects && knownProject.version));
+            }
+        }
+
+        synchronizeProjectList(knownProjects: protocol.ExternalProjectInfo[]): protocol.ExternalProjectFiles[] {
+            const files: protocol.ExternalProjectFiles[] = [];
+            this.addExternalProjectFilesForVersionedProjects(knownProjects, this.externalProjects, files);
+            this.addExternalProjectFilesForVersionedProjects(knownProjects, this.configuredProjects, files);
+            for (const inferredProject of this.inferredProjects) {
+                files.push({ files: inferredProject.getFileNames() });
+            }
+            return files;
+        }
+
+        applyChangesInOpenFiles(openFiles: protocol.OpenFile[], closedFiles: string[]): void {
+            for (const file of openFiles) {
+                const scriptInfo = this.getScriptInfo(file.fileName);
+                if (!scriptInfo) {
+                    Debug.assert(!!file.content);
+                    this.openClientFile(file.fileName, file.content);
+                }
+                else {
+                    Debug.assert(!!file.textChanges);
+                    for (const change of file.textChanges) {
+                        scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
+                    }
+                }
+            }
+
+            for (const file of closedFiles) {
+                this.closeClientFile(file);
+            }
+
+            this.updateProjectStructure();
+        }
+
+        closeExternalProject(fileName: string): void {
+            fileName = normalizePath(fileName);
+            const configFiles = this.externalProjectToConfiguredProjectMap[fileName];
+            if (configFiles) {
+                for (const configFile of configFiles) {
+                    const configuredProject = this.findConfiguredProjectByConfigFile(configFile);
+                    if (configuredProject) {
+                        this.removeProject(configuredProject);
+                    }
+                }
+            }
+            else {
+                // close external project
+                const externalProject = this.findExternalProjectByProjectFileName(fileName);
+                if (externalProject) {
+                    this.removeProject(externalProject);
+                }
+            }
+            this.updateProjectStructure();
+        }
+
+        openExternalProject(externalProject: protocol.ExternalProject): void {
             const project = this.findConfiguredProjectByConfigFile(externalProject.projectFileName);
             if (project) {
                 this.updateConfiguredProjectWorker(project, externalProject.rootFiles, externalProject.options);
-                return [project.getDeltaFromVersion()];
             }
             else {
                 let tsConfigFiles: string[];
@@ -1493,32 +1523,18 @@ namespace ts.server {
                     }
                 }
                 if (tsConfigFiles) {
-                    const deltas: Delta[] = [];
                     for (const tsconfigFile of tsConfigFiles) {
                         const { success, project, errors } = this.openConfigFile(tsconfigFile);
                         if (success) {
                             // keep project alive
                             project.addOpenRef();
-                            deltas.push(project.getDeltaFromVersion());
                         }
                     }
-                    return deltas;
                 }
                 else {
-                    const { project, errors } = this.createAndAddExternalProject(externalProject.projectFileName, externalProject.rootFiles, externalProject.options);
-                    return [project.getDeltaFromVersion()];
+                    this.createAndAddExternalProject(externalProject.projectFileName, externalProject.rootFiles, externalProject.options);
                 }
             }
-        }
-
-        loadExternalProjects(externalProjects: protocol.ExternalProject[], openFiles: protocol.OpenFile[]): void {
-            for (const project of externalProjects) {
-                this.loadExternalProject(project);
-            }
-            for (const openFile of openFiles) {
-                this.getOrCreateScriptInfo(openFile.fileName, /*openedByClient*/ true, openFile.content);
-            }
-            // TODO: return diff
         }
     }
 }

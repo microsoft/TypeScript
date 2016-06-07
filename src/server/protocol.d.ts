@@ -424,9 +424,37 @@ declare namespace ts.server.protocol {
         options: CompilerOptions;
     }
 
+    export interface ExternalProjectInfo {
+        projectFileName: string;
+        version: number;
+    }
+
+    export interface ExternalProjectChanges {
+        added: string[];
+        removed: string[];
+    }
+
+    /**
+     * Describes set of files in the project.
+     * info might be omitted in case of inferred projects
+     * if files is set - then this is the entire set of files in the project
+     * if changes is set - then this is the set of changes that should be applied to existing project
+     * otherwise - assume that nothing is changed
+     */
+    export interface ExternalProjectFiles {
+        info?: ExternalProjectInfo;
+        files?: string[];
+        changes?: ExternalProjectChanges;
+    }
+
+    /**
+     * Represents a set of changes for open document with a given file name.
+     * Either content of textChanges should be present.
+     */
     export interface OpenFile {
         fileName: string;
         content?: string;
+        textChanges?: ts.TextChange[];
     }
 
     /**
@@ -548,14 +576,35 @@ declare namespace ts.server.protocol {
         arguments: OpenRequestArgs;
     }
 
-    type LoadExternalProjectArgs = ExternalProject;
+    type OpenExternalProjectArgs = ExternalProject;
 
-    export interface LoadExternalProject extends Request {
-        arguments: LoadExternalProjectArgs;
+    export interface OpenExternalProjectRequest extends Request {
+        arguments: OpenExternalProjectArgs;
     }
 
-    interface LoadExternalProjectResponse extends Response {
-        files: string[];
+    export interface CloseExternalProjectRequestArgs {
+        projectFileName: string;
+    }
+
+    export interface CloseExternalProjectRequest extends Request {
+        arguments: CloseExternalProjectRequestArgs;
+    }
+
+    export interface SynchronizeProjectListRequest extends Request {
+        arguments: SynchronizeProjectListRequestArgs;
+    }
+
+    export interface SynchronizeProjectListRequestArgs {
+        knownProjects: protocol.ExternalProjectInfo[];
+    }
+
+    export interface ApplyChangedToOpenFilesRequest extends Request {
+        arguments: ApplyChangedToOpenFilesRequestArgs;
+    }
+
+    export interface ApplyChangedToOpenFilesRequestArgs {
+        openFiles: OpenFile[];
+        closedFiles: string[];
     }
 
     /**

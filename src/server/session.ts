@@ -127,7 +127,10 @@ namespace ts.server {
         export const ProjectInfo = "projectInfo";
         export const ReloadProjects = "reloadProjects";
         export const Unknown = "unknown";
-        export const LoadExternalProject = "loadExternalProject";
+        export const OpenExternalProject = "openExternalProject";
+        export const CloseExternalProject = "closeExternalProject";
+        export const SynchronizeProjectList = "synchronizeProjectList";
+        export const ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
     }
 
     namespace Errors {
@@ -268,7 +271,7 @@ namespace ts.server {
         }
 
         private updateProjectStructure(seq: number, matchSeq: (seq: number) => boolean, ms = 1500) {
-            setTimeout(() => {
+            this.host.setTimeout(() => {
                 if (matchSeq(seq)) {
                     this.projectService.updateProjectStructure();
                 }
@@ -298,7 +301,7 @@ namespace ts.server {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);
                             this.immediateId = undefined;
                             if (checkList.length > index) {
-                                this.errorTimer = setTimeout(checkOne, followMs);
+                                this.errorTimer = this.host.setTimeout(checkOne, followMs);
                             }
                             else {
                                 this.errorTimer = undefined;
@@ -308,7 +311,7 @@ namespace ts.server {
                 }
             };
             if ((checkList.length > index) && (matchSeq(seq))) {
-                this.errorTimer = setTimeout(checkOne, ms);
+                this.errorTimer = this.host.setTimeout(checkOne, ms);
             }
         }
 
@@ -1028,30 +1031,50 @@ namespace ts.server {
         exit() {
         }
 
+        private notRequired() {
+            return { responseRequired: false };
+        }
+
+        private requiredResponse(response: any) {
+            return { response, responseRequired: true };
+        }
+
         private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
-            [CommandNames.LoadExternalProject]: (request: protocol.Request) => {
-                const deltas = this.projectService.loadExternalProject(request.arguments);
-                return { responseRequired: true, response: { files: deltas } };
+            [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
+                const deltas = this.projectService.openExternalProject(request.arguments);
+                return this.notRequired();
+            },
+            [CommandNames.CloseExternalProject]: (request: protocol.CloseExternalProjectRequest) => {
+                this.projectService.closeExternalProject(request.arguments.projectFileName);
+                return this.notRequired();
+            },
+            [CommandNames.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
+                const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects);
+                return this.requiredResponse(result);
+            },
+            [CommandNames.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
+                this.projectService.applyChangesInOpenFiles(request.arguments.openFiles, request.arguments.closedFiles);
+                return this.notRequired();
             },
             [CommandNames.Exit]: () => {
                 this.exit();
-                return { responseRequired: false };
+                return this.notRequired();
             },
             [CommandNames.Definition]: (request: protocol.Request) => {
                 const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                return { response: this.getDefinition(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true };
+                return this.requiredResponse(this.getDefinition(defArgs.line, defArgs.offset, defArgs.file));
             },
             [CommandNames.TypeDefinition]: (request: protocol.Request) => {
                 const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                return { response: this.getTypeDefinition(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true };
+                return this.requiredResponse(this.getTypeDefinition(defArgs.line, defArgs.offset, defArgs.file));
             },
             [CommandNames.References]: (request: protocol.Request) => {
                 const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                return { response: this.getReferences(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true };
+                return this.requiredResponse(this.getReferences(defArgs.line, defArgs.offset, defArgs.file));
             },
             [CommandNames.Rename]: (request: protocol.Request) => {
                 const renameArgs = <protocol.RenameRequestArgs>request.arguments;
-                return { response: this.getRenameLocations(renameArgs.line, renameArgs.offset, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings), responseRequired: true };
+                return this.requiredResponse(this.getRenameLocations(renameArgs.line, renameArgs.offset, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings));
             },
             [CommandNames.Open]: (request: protocol.Request) => {
                 const openArgs = <protocol.OpenRequestArgs>request.arguments;
@@ -1071,7 +1094,7 @@ namespace ts.server {
                         break;
                 }
                 this.openClientFile(openArgs.file, openArgs.fileContent, scriptKind);
-                return { responseRequired: false };
+                return this.notRequired();
             },
             [CommandNames.Quickinfo]: (request: protocol.Request) => {
                 const quickinfoArgs = <protocol.FileLocationRequestArgs>request.arguments;
