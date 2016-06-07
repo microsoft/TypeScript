@@ -526,15 +526,15 @@ namespace ts {
             const file1: FileOrFolder = {
                 path: "/a/b/file1.ts",
                 content: `import { T } from "module1";`
-            }
+            };
             const nodeModuleFile: FileOrFolder = {
                 path: "/a/b/node_modules/module1.ts",
                 content: `export interface T {}`
-            }
+            };
             const classicModuleFile: FileOrFolder = {
                 path: "/a/module1.ts",
                 content: `export interface T {}`
-            }
+            };
             const configFile: FileOrFolder = {
                 path: "/a/b/tsconfig.json",
                 content: `{
@@ -566,6 +566,6 @@ namespace ts {
             host.triggerFileWatcherCallback(configFile.path);
             checkConfiguredProjectActualFiles(project, [file1.path, classicModuleFile.path]);
             checkNumberOfInferredProjects(projectService, 1);
-        })
+        });
     });
 }
