@@ -67,3 +67,13 @@ function f4(x: number) {
     if (x <= undefined) {
     }
 }
+function f5(x: string) {
+    switch(x) {
+        case null:
+            break;
+        case undefined:
+            break;
+        default:
+            return;
+    }
+}
