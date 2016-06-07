@@ -712,7 +712,7 @@ namespace ts.server {
             }
         }
 
-        handleDeletedFile(info: ScriptInfo) {
+        private handleDeletedFile(info: ScriptInfo) {
             this.psLogger.info(info.fileName + " deleted");
 
             if (info.fileWatcher) {
@@ -769,7 +769,7 @@ namespace ts.server {
             );
         }
 
-        handleChangeInSourceFileForConfiguredProject(project: ConfiguredProject) {
+        private handleChangeInSourceFileForConfiguredProject(project: ConfiguredProject) {
             const { projectOptions } = this.configFileToProjectOptions(project.configFileName);
 
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
@@ -797,7 +797,7 @@ namespace ts.server {
         /**
          * This is the callback function when a watched directory has an added tsconfig file.
          */
-        onConfigChangeForInferredProject(fileName: string) {
+        private onConfigChangeForInferredProject(fileName: string) {
             if (ts.getBaseFileName(fileName) != "tsconfig.json") {
                 this.log(fileName + " is not tsconfig.json");
                 return;
@@ -823,60 +823,7 @@ namespace ts.server {
             return ts.normalizePath(name);
         }
 
-        log(msg: string, type = "Err") {
-            this.psLogger.msg(msg, type);
-        }
-
-        setHostConfiguration(args: ts.server.protocol.ConfigureRequestArguments) {
-            if (args.file) {
-                const info = this.filenameToScriptInfo[args.file];
-                if (info) {
-                    info.setFormatOptions(args.formatOptions);
-                    this.log("Host configuration update for file " + args.file, "Info");
-                }
-            }
-            else {
-                if (args.hostInfo !== undefined) {
-                    this.hostConfiguration.hostInfo = args.hostInfo;
-                    this.log("Host information " + args.hostInfo, "Info");
-                }
-                if (args.formatOptions) {
-                    mergeFormatOptions(this.hostConfiguration.formatCodeOptions, args.formatOptions);
-                    this.log("Format host information updated", "Info");
-                }
-            }
-        }
-
-        closeLog() {
-            this.psLogger.close();
-        }
-
-        createInferredProject(root: ScriptInfo) {
-            const project = new InferredProject(this, this.documentRegistry);
-            project.addRoot(root);
-
-            let currentPath = ts.getDirectoryPath(root.fileName);
-            let parentPath = ts.getDirectoryPath(currentPath);
-            while (currentPath != parentPath) {
-                if (!this.directoryWatchersForTsconfig[currentPath]) {
-                    this.log("Add watcher for: " + currentPath);
-                    this.directoryWatchersForTsconfig[currentPath] = this.host.watchDirectory(currentPath, fileName => this.onConfigChangeForInferredProject(fileName));
-                    this.directoryWatchersRefCount[currentPath] = 1;
-                }
-                else {
-                    this.directoryWatchersRefCount[currentPath] += 1;
-                }
-                project.directoriesWatchedForTsconfig.push(currentPath);
-                currentPath = parentPath;
-                parentPath = ts.getDirectoryPath(parentPath);
-            }
-
-            project.updateGraph();
-            this.inferredProjects.push(project);
-            return project;
-        }
-
-        refreshConfiguredProjects() {
+        private refreshConfiguredProjects() {
             const configuredProjects: ConfiguredProject[] = [];
             for (let i = 0, len = this.configuredProjects.length; i < len; i++) {
                 const proj = this.configuredProjects[i];
@@ -890,7 +837,7 @@ namespace ts.server {
             this.configuredProjects = configuredProjects;
         }
 
-        removeProject(project: Project) {
+       private removeProject(project: Project) {
             this.log("remove project: " + project.getRootFiles().toString());
 
             project.close();
@@ -915,7 +862,7 @@ namespace ts.server {
             }
         }
 
-        findContainingConfiguredProject(info: ScriptInfo): ConfiguredProject {
+        private findContainingConfiguredProject(info: ScriptInfo): ConfiguredProject {
             for (const proj of this.configuredProjects) {
                 if (proj.isRoot(info)) {
                     return proj;
@@ -924,7 +871,7 @@ namespace ts.server {
             return undefined;
         }
 
-        addOpenFile(info: ScriptInfo) {
+        private addOpenFile(info: ScriptInfo) {
             const configuredProject = this.findContainingConfiguredProject(info);
             if (configuredProject) {
                 info.defaultProject = configuredProject;
@@ -941,7 +888,7 @@ namespace ts.server {
             }
             else {
                 // create new inferred project p with the newly opened file as root
-                info.defaultProject = this.createInferredProject(info);
+                info.defaultProject = this.createAndAddInferredProject(info);
                 const openFileRoots: ScriptInfo[] = [];
                 // for each inferred project root r
                 for (const rootFile of this.openFileRoots) {
@@ -968,7 +915,7 @@ namespace ts.server {
           * Remove this file from the set of open, non-configured files.
           * @param info The file that has been closed or newly configured
           */
-        closeOpenFile(info: ScriptInfo) {
+        private closeOpenFile(info: ScriptInfo) {
             // Closing file should trigger re-reading the file content from disk. This is
             // because the user may chose to discard the buffer content before saving
             // to the disk, and the server's version of the file can be out of sync.
@@ -1030,6 +977,346 @@ namespace ts.server {
                 this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
             }
             info.close();
+        }
+
+        /**
+         * This function tries to search for a tsconfig.json for the given file. If we found it,
+         * we first detect if there is already a configured project created for it: if so, we re-read
+         * the tsconfig file content and update the project; otherwise we create a new one.
+         */
+        private openOrUpdateConfiguredProjectForFile(fileName: string): { configFileName?: string, configFileErrors?: Diagnostic[] } {
+            const searchPath = ts.normalizePath(getDirectoryPath(fileName));
+            this.log("Search path: " + searchPath, "Info");
+            // check if this file is already included in one of external projects
+            const configFileName = this.findConfigFile(searchPath);
+            if (configFileName) {
+                this.log("Config file name: " + configFileName, "Info");
+                const project = this.findConfiguredProjectByConfigFile(configFileName);
+                if (!project) {
+                    const { success, errors } = this.openConfigFile(configFileName, fileName);
+                    if (!success) {
+                        return { configFileName, configFileErrors: errors };
+                    }
+                    else {
+                        // even if opening config file was successful, it could still
+                        // contain errors that were tolerated.
+                        this.log("Opened configuration file " + configFileName, "Info");
+                        if (errors && errors.length > 0) {
+                            return { configFileName, configFileErrors: errors };
+                        }
+                    }
+                }
+                else {
+                    this.updateConfiguredProject(project);
+                }
+            }
+            else {
+                this.log("No config files found.");
+            }
+            return configFileName ? { configFileName } : {};
+        }
+
+        // This is different from the method the compiler uses because
+        // the compiler can assume it will always start searching in the
+        // current directory (the directory in which tsc was invoked).
+        // The server must start searching from the directory containing
+        // the newly opened file.
+        private findConfigFile(searchPath: string): string {
+            while (true) {
+                const tsconfigFileName = ts.combinePaths(searchPath, "tsconfig.json");
+                if (this.host.fileExists(tsconfigFileName)) {
+                    return tsconfigFileName;
+                }
+
+                const jsconfigFileName = ts.combinePaths(searchPath, "jsconfig.json");
+                if (this.host.fileExists(jsconfigFileName)) {
+                    return jsconfigFileName;
+                }
+
+                const parentPath = ts.getDirectoryPath(searchPath);
+                if (parentPath === searchPath) {
+                    break;
+                }
+                searchPath = parentPath;
+            }
+            return undefined;
+        }
+
+        private printProjects() {
+            if (!this.psLogger.isVerbose()) {
+                return;
+            }
+            this.psLogger.startGroup();
+            for (let i = 0, len = this.inferredProjects.length; i < len; i++) {
+                const project = this.inferredProjects[i];
+                project.updateGraph();
+                this.psLogger.info("Project " + i.toString());
+                this.psLogger.info(project.filesToString());
+                this.psLogger.info("-----------------------------------------------");
+            }
+            for (let i = 0, len = this.configuredProjects.length; i < len; i++) {
+                const project = this.configuredProjects[i];
+                project.updateGraph();
+                this.psLogger.info("Project (configured) " + (i + this.inferredProjects.length).toString());
+                this.psLogger.info(project.filesToString());
+                this.psLogger.info("-----------------------------------------------");
+            }
+            this.psLogger.info("Open file roots of inferred projects: ");
+            for (let i = 0, len = this.openFileRoots.length; i < len; i++) {
+                this.psLogger.info(this.openFileRoots[i].fileName);
+            }
+            this.psLogger.info("Open files referenced by inferred or configured projects: ");
+            for (const referencedFile of this.openFilesReferenced) {
+                const fileInfo = `${referencedFile.fileName} ${ProjectKind[referencedFile.defaultProject.projectKind]}`;
+                this.psLogger.info(fileInfo);
+            }
+            this.psLogger.info("Open file roots of configured projects: ");
+            for (let i = 0, len = this.openFileRootsConfigured.length; i < len; i++) {
+                this.psLogger.info(this.openFileRootsConfigured[i].fileName);
+            }
+            this.psLogger.endGroup();
+        }
+
+        private findConfiguredProjectByConfigFile(configFileName: string) {
+            for (const configuredProject of this.configuredProjects) {
+                if (configuredProject.configFileName === configFileName) {
+                    return configuredProject;
+                }
+            }
+            return undefined;
+        }
+
+        private configFileToProjectOptions(configFilename: string): { succeeded: boolean, projectOptions?: ProjectOptions, errors?: Diagnostic[] } {
+            configFilename = ts.normalizePath(configFilename);
+            // file references will be relative to dirPath (or absolute)
+            const dirPath = ts.getDirectoryPath(configFilename);
+            const contents = this.host.readFile(configFilename);
+            const rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileTextToJson(configFilename, contents);
+            if (rawConfig.error) {
+                return { succeeded: false, errors: [rawConfig.error] };
+            }
+            else {
+                const configHasFilesProperty = rawConfig.config["files"] !== undefined;
+                const parsedCommandLine = ts.parseJsonConfigFileContent(rawConfig.config, this.host, dirPath, /*existingOptions*/ {}, configFilename);
+                Debug.assert(!!parsedCommandLine.fileNames);
+
+                if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
+                    return { succeeded: false, errors: parsedCommandLine.errors };
+                }
+                else if (parsedCommandLine.fileNames.length === 0) {
+                    const error = createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename);
+                    return { succeeded: false, errors: [error] };
+                }
+                else {
+                    const projectOptions: ProjectOptions = {
+                        files: parsedCommandLine.fileNames,
+                        compilerOptions: parsedCommandLine.options,
+                        configHasFilesProperty
+                    };
+                    return { succeeded: true, projectOptions };
+                }
+            }
+
+        }
+
+        private createAndAddExternalProject(projectFileName: string, files: string[], compilerOptions: CompilerOptions, clientFileName?: string) {
+            const project = new ExternalProject(projectFileName, this, this.documentRegistry, compilerOptions);
+            const errors = this.addFilesToProject(project, files, clientFileName);
+            this.externalProjects.push(project);
+            return { project, errors };
+        }
+
+        private createAndAddConfiguredProject(configFileName: string, projectOptions: ProjectOptions, clientFileName?: string) {
+            const project = new ConfiguredProject(configFileName, this, this.documentRegistry, projectOptions.configHasFilesProperty, projectOptions.compilerOptions);
+            const errors = this.addFilesToProject(project, projectOptions.files, clientFileName);
+            project.watchConfigFile(project => this.onConfigChangedForConfiguredProject(project));
+            if (!projectOptions.configHasFilesProperty) {
+                project.watchConfigDirectory((project, path) => this.onSourceFileInDirectoryChangedForConfiguredProject(project, path));
+            }
+            this.configuredProjects.push(project);
+            return { project, errors };
+        }
+
+        private addFilesToProject(project: ConfiguredProject | ExternalProject, files: string[], clientFileName: string): Diagnostic[] {
+            let errors: Diagnostic[];
+            for (const rootFilename of files) {
+                if (this.host.fileExists(rootFilename)) {
+                    const info = this.getOrCreateScriptInfo(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
+                    project.addRoot(info);
+                }
+                else {
+                    (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.File_0_not_found, rootFilename));
+                }
+            }
+            project.updateGraph();
+            return errors;
+        }
+
+        private openConfigFile(configFileName: string, clientFileName?: string): { success: boolean, project?: ConfiguredProject, errors?: Diagnostic[] } {
+            const { succeeded, projectOptions, errors } = this.configFileToProjectOptions(configFileName);
+            if (!succeeded) {
+                return { success: false, errors };
+            }
+            else {
+                const { project, errors } = this.createAndAddConfiguredProject(configFileName, projectOptions, clientFileName);
+                return { success: true, project, errors };
+            }
+        }
+
+        private updateConfiguredProjectWorker(project: ConfiguredProject, newRootFiles: string[], newOptions: CompilerOptions) {
+            const oldRootFiles = project.getRootFiles();
+            const newFileNames = ts.filter(newRootFiles, f => this.host.fileExists(f));
+            const fileNamesToRemove = oldRootFiles.filter(f => !contains(newFileNames, f));
+            const fileNamesToAdd = newFileNames.filter(f => !contains(oldRootFiles, f));
+
+            for (const fileName of fileNamesToRemove) {
+                const info = this.getScriptInfo(fileName);
+                if (info) {
+                    project.removeRoot(info);
+                }
+            }
+
+            for (const fileName of fileNamesToAdd) {
+                let info = this.getScriptInfo(fileName);
+                if (!info) {
+                    info = this.getOrCreateScriptInfo(fileName, /*openedByClient*/ false);
+                }
+                else {
+                    // if the root file was opened by client, it would belong to either
+                    // openFileRoots or openFileReferenced.
+                    if (info.isOpen) {
+                        if (contains(this.openFileRoots, info)) {
+                            this.openFileRoots = copyListRemovingItem(info, this.openFileRoots);
+                            if (info.defaultProject && info.defaultProject.projectKind === ProjectKind.Inferred) {
+                                this.removeProject(info.defaultProject);
+                            }
+                        }
+                        if (contains(this.openFilesReferenced, info)) {
+                            this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
+                        }
+                        this.openFileRootsConfigured.push(info);
+                        info.defaultProject = project;
+                    }
+                }
+                project.addRoot(info);
+            }
+
+            project.setCompilerOptions(newOptions);
+            project.updateGraph();
+        }
+
+        private updateConfiguredProject(project: ConfiguredProject) {
+            if (!this.host.fileExists(project.configFileName)) {
+                this.log("Config file deleted");
+                this.removeProject(project);
+            }
+            else {
+                const { succeeded, projectOptions, errors } = this.configFileToProjectOptions(project.configFileName);
+                if (!succeeded) {
+                    return errors;
+                }
+                else {
+                    this.updateConfiguredProjectWorker(project, projectOptions.files, projectOptions.compilerOptions);
+                }
+            }
+        }
+
+        createAndAddInferredProject(root: ScriptInfo) {
+            const project = new InferredProject(this, this.documentRegistry);
+            project.addRoot(root);
+
+            let currentPath = ts.getDirectoryPath(root.fileName);
+            let parentPath = ts.getDirectoryPath(currentPath);
+            while (currentPath != parentPath) {
+                if (!this.directoryWatchersForTsconfig[currentPath]) {
+                    this.log("Add watcher for: " + currentPath);
+                    this.directoryWatchersForTsconfig[currentPath] = this.host.watchDirectory(currentPath, fileName => this.onConfigChangeForInferredProject(fileName));
+                    this.directoryWatchersRefCount[currentPath] = 1;
+                }
+                else {
+                    this.directoryWatchersRefCount[currentPath] += 1;
+                }
+                project.directoriesWatchedForTsconfig.push(currentPath);
+                currentPath = parentPath;
+                parentPath = ts.getDirectoryPath(parentPath);
+            }
+
+            project.updateGraph();
+            this.inferredProjects.push(project);
+            return project;
+        }
+
+        /**
+         * @param filename is absolute pathname
+         * @param fileContent is a known version of the file content that is more up to date than the one on disk
+         */
+        getOrCreateScriptInfo(fileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
+            fileName = ts.normalizePath(fileName);
+            let info = ts.lookUp(this.filenameToScriptInfo, fileName);
+            if (!info) {
+                let content: string;
+                if (this.host.fileExists(fileName)) {
+                    content = fileContent || this.host.readFile(fileName);
+                }
+                if (!content) {
+                    if (openedByClient) {
+                        content = "";
+                    }
+                }
+                if (content !== undefined) {
+                    info = new ScriptInfo(this.host, fileName, content, openedByClient);
+                    info.scriptKind = scriptKind;
+                    info.setFormatOptions(this.getFormatCodeOptions());
+                    this.filenameToScriptInfo[fileName] = info;
+                    if (!info.isOpen) {
+                        info.fileWatcher = this.host.watchFile(fileName, _ => { this.onSourceFileChanged(fileName); });
+                    }
+                }
+            }
+            if (info) {
+                if (fileContent) {
+                    info.svc.reload(fileContent);
+                }
+                if (openedByClient) {
+                    info.isOpen = true;
+                }
+            }
+            return info;
+        }
+
+        openExternalProject(proj: protocol.ExternalProject) {
+        }
+
+        closeExternalProject(proj: protocol.ExternalProject) {
+            // TODO: save mapping from external project name to set of configured projects
+        }
+
+        log(msg: string, type = "Err") {
+            this.psLogger.msg(msg, type);
+        }
+
+        setHostConfiguration(args: ts.server.protocol.ConfigureRequestArguments) {
+            if (args.file) {
+                const info = this.filenameToScriptInfo[args.file];
+                if (info) {
+                    info.setFormatOptions(args.formatOptions);
+                    this.log("Host configuration update for file " + args.file, "Info");
+                }
+            }
+            else {
+                if (args.hostInfo !== undefined) {
+                    this.hostConfiguration.hostInfo = args.hostInfo;
+                    this.log("Host information " + args.hostInfo, "Info");
+                }
+                if (args.formatOptions) {
+                    mergeFormatOptions(this.hostConfiguration.formatCodeOptions, args.formatOptions);
+                    this.log("Format host information updated", "Info");
+                }
+            }
+        }
+
+        closeLog() {
+            this.psLogger.close();
         }
 
         findReferencingProjects(info: ScriptInfo, excludedProject?: Project) {
@@ -1156,70 +1443,6 @@ namespace ts.server {
         }
 
         /**
-         * @param filename is absolute pathname
-         * @param fileContent is a known version of the file content that is more up to date than the one on disk
-         */
-        getOrCreateScriptInfo(fileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
-            fileName = ts.normalizePath(fileName);
-            let info = ts.lookUp(this.filenameToScriptInfo, fileName);
-            if (!info) {
-                let content: string;
-                if (this.host.fileExists(fileName)) {
-                    content = fileContent || this.host.readFile(fileName);
-                }
-                if (!content) {
-                    if (openedByClient) {
-                        content = "";
-                    }
-                }
-                if (content !== undefined) {
-                    info = new ScriptInfo(this.host, fileName, content, openedByClient);
-                    info.scriptKind = scriptKind;
-                    info.setFormatOptions(this.getFormatCodeOptions());
-                    this.filenameToScriptInfo[fileName] = info;
-                    if (!info.isOpen) {
-                        info.fileWatcher = this.host.watchFile(fileName, _ => { this.onSourceFileChanged(fileName); });
-                    }
-                }
-            }
-            if (info) {
-                if (fileContent) {
-                    info.svc.reload(fileContent);
-                }
-                if (openedByClient) {
-                    info.isOpen = true;
-                }
-            }
-            return info;
-        }
-
-        // This is different from the method the compiler uses because
-        // the compiler can assume it will always start searching in the
-        // current directory (the directory in which tsc was invoked).
-        // The server must start searching from the directory containing
-        // the newly opened file.
-        findConfigFile(searchPath: string): string {
-            while (true) {
-                const tsconfigFileName = ts.combinePaths(searchPath, "tsconfig.json");
-                if (this.host.fileExists(tsconfigFileName)) {
-                    return tsconfigFileName;
-                }
-
-                const jsconfigFileName = ts.combinePaths(searchPath, "jsconfig.json");
-                if (this.host.fileExists(jsconfigFileName)) {
-                    return jsconfigFileName;
-                }
-
-                const parentPath = ts.getDirectoryPath(searchPath);
-                if (parentPath === searchPath) {
-                    break;
-                }
-                searchPath = parentPath;
-            }
-            return undefined;
-        }
-
-        /**
          * Open file whose contents is managed by the client
          * @param filename is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
@@ -1230,43 +1453,6 @@ namespace ts.server {
             this.addOpenFile(info);
             this.printProjects();
             return { configFileName, configFileErrors };
-        }
-
-        /**
-         * This function tries to search for a tsconfig.json for the given file. If we found it,
-         * we first detect if there is already a configured project created for it: if so, we re-read
-         * the tsconfig file content and update the project; otherwise we create a new one.
-         */
-        openOrUpdateConfiguredProjectForFile(fileName: string): { configFileName?: string, configFileErrors?: Diagnostic[] } {
-            const searchPath = ts.normalizePath(getDirectoryPath(fileName));
-            this.log("Search path: " + searchPath, "Info");
-            // check if this file is already included in one of external projects
-            const configFileName = this.findConfigFile(searchPath);
-            if (configFileName) {
-                this.log("Config file name: " + configFileName, "Info");
-                const project = this.findConfiguredProjectByConfigFile(configFileName);
-                if (!project) {
-                    const { success, errors } = this.openConfigFile(configFileName, fileName);
-                    if (!success) {
-                        return { configFileName, configFileErrors: errors };
-                    }
-                    else {
-                        // even if opening config file was successful, it could still
-                        // contain errors that were tolerated.
-                        this.log("Opened configuration file " + configFileName, "Info");
-                        if (errors && errors.length > 0) {
-                            return { configFileName, configFileErrors: errors };
-                        }
-                    }
-                }
-                else {
-                    this.updateConfiguredProject(project);
-                }
-            }
-            else {
-                this.log("No config files found.");
-            }
-            return configFileName ? { configFileName } : {};
         }
 
         /**
@@ -1287,57 +1473,6 @@ namespace ts.server {
             if (scriptInfo) {
                 return scriptInfo.defaultProject;
             }
-        }
-
-        printProjectsForFile(filename: string) {
-            const scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
-            if (scriptInfo) {
-                this.psLogger.startGroup();
-                this.psLogger.info("Projects for " + filename);
-                const projects = this.findReferencingProjects(scriptInfo);
-                for (let i = 0, len = projects.length; i < len; i++) {
-                    this.psLogger.info("Project " + i.toString());
-                }
-                this.psLogger.endGroup();
-            }
-            else {
-                this.psLogger.info(filename + " not in any project");
-            }
-        }
-
-        printProjects() {
-            if (!this.psLogger.isVerbose()) {
-                return;
-            }
-            this.psLogger.startGroup();
-            for (let i = 0, len = this.inferredProjects.length; i < len; i++) {
-                const project = this.inferredProjects[i];
-                project.updateGraph();
-                this.psLogger.info("Project " + i.toString());
-                this.psLogger.info(project.filesToString());
-                this.psLogger.info("-----------------------------------------------");
-            }
-            for (let i = 0, len = this.configuredProjects.length; i < len; i++) {
-                const project = this.configuredProjects[i];
-                project.updateGraph();
-                this.psLogger.info("Project (configured) " + (i + this.inferredProjects.length).toString());
-                this.psLogger.info(project.filesToString());
-                this.psLogger.info("-----------------------------------------------");
-            }
-            this.psLogger.info("Open file roots of inferred projects: ");
-            for (let i = 0, len = this.openFileRoots.length; i < len; i++) {
-                this.psLogger.info(this.openFileRoots[i].fileName);
-            }
-            this.psLogger.info("Open files referenced by inferred or configured projects: ");
-            for (const referencedFile of this.openFilesReferenced) {
-                const fileInfo = `${referencedFile.fileName} ${ProjectKind[referencedFile.defaultProject.projectKind]}`;
-                this.psLogger.info(fileInfo);
-            }
-            this.psLogger.info("Open file roots of configured projects: ");
-            for (let i = 0, len = this.openFileRootsConfigured.length; i < len; i++) {
-                this.psLogger.info(this.openFileRootsConfigured[i].fileName);
-            }
-            this.psLogger.endGroup();
         }
 
         loadExternalProject(externalProject: protocol.ExternalProject): Delta[] {
@@ -1384,150 +1519,6 @@ namespace ts.server {
                 this.getOrCreateScriptInfo(openFile.fileName, /*openedByClient*/ true, openFile.content);
             }
             // TODO: return diff
-        }
-
-        findConfiguredProjectByConfigFile(configFileName: string) {
-            for (const configuredProject of this.configuredProjects) {
-                if (configuredProject.configFileName === configFileName) {
-                    return configuredProject;
-                }
-            }
-            return undefined;
-        }
-
-        configFileToProjectOptions(configFilename: string): { succeeded: boolean, projectOptions?: ProjectOptions, errors?: Diagnostic[] } {
-            configFilename = ts.normalizePath(configFilename);
-            // file references will be relative to dirPath (or absolute)
-            const dirPath = ts.getDirectoryPath(configFilename);
-            const contents = this.host.readFile(configFilename);
-            const rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileTextToJson(configFilename, contents);
-            if (rawConfig.error) {
-                return { succeeded: false, errors: [rawConfig.error] };
-            }
-            else {
-                const configHasFilesProperty = rawConfig.config["files"] !== undefined;
-                const parsedCommandLine = ts.parseJsonConfigFileContent(rawConfig.config, this.host, dirPath, /*existingOptions*/ {}, configFilename);
-                Debug.assert(!!parsedCommandLine.fileNames);
-
-                if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
-                    return { succeeded: false, errors: parsedCommandLine.errors };
-                }
-                else if (parsedCommandLine.fileNames.length === 0) {
-                    const error = createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename);
-                    return { succeeded: false, errors: [error] };
-                }
-                else {
-                    const projectOptions: ProjectOptions = {
-                        files: parsedCommandLine.fileNames,
-                        compilerOptions: parsedCommandLine.options,
-                        configHasFilesProperty
-                    };
-                    return { succeeded: true, projectOptions };
-                }
-            }
-
-        }
-
-        private createAndAddExternalProject(projectFileName: string, files: string[], compilerOptions: CompilerOptions, clientFileName?: string) {
-            const project = new ExternalProject(projectFileName, this, this.documentRegistry, compilerOptions);
-            const errors = this.addFilesToProject(project, files, clientFileName);
-            this.externalProjects.push(project);
-            return { project, errors };
-        }
-
-        private createAndAddConfiguredProject(configFileName: string, projectOptions: ProjectOptions, clientFileName?: string) {
-            const project = new ConfiguredProject(configFileName, this, this.documentRegistry, projectOptions.configHasFilesProperty, projectOptions.compilerOptions);
-            const errors = this.addFilesToProject(project, projectOptions.files, clientFileName);
-            project.watchConfigFile(project => this.onConfigChangedForConfiguredProject(project));
-            if (!projectOptions.configHasFilesProperty) {
-                project.watchConfigDirectory((project, path) => this.onSourceFileInDirectoryChangedForConfiguredProject(project, path));
-            }
-            this.configuredProjects.push(project);
-            return { project, errors };
-        }
-
-        private addFilesToProject(project: ConfiguredProject | ExternalProject, files: string[], clientFileName: string): Diagnostic[] {
-            let errors: Diagnostic[];
-            for (const rootFilename of files) {
-                if (this.host.fileExists(rootFilename)) {
-                    const info = this.getOrCreateScriptInfo(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
-                    project.addRoot(info);
-                }
-                else {
-                    (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.File_0_not_found, rootFilename));
-                }
-            }
-            project.updateGraph();
-            return errors;
-        }
-
-        openConfigFile(configFileName: string, clientFileName?: string): { success: boolean, project?: ConfiguredProject, errors?: Diagnostic[] } {
-            const { succeeded, projectOptions, errors } = this.configFileToProjectOptions(configFileName);
-            if (!succeeded) {
-                return { success: false, errors };
-            }
-            else {
-                const { project, errors } = this.createAndAddConfiguredProject(configFileName, projectOptions, clientFileName);
-                return { success: true, project, errors };
-            }
-        }
-
-        updateConfiguredProjectWorker(project: ConfiguredProject, newRootFiles: string[], newOptions: CompilerOptions) {
-            const oldRootFiles = project.getRootFiles();
-            const newFileNames = ts.filter(newRootFiles, f => this.host.fileExists(f));
-            const fileNamesToRemove = oldRootFiles.filter(f => !contains(newFileNames, f));
-            const fileNamesToAdd = newFileNames.filter(f => !contains(oldRootFiles, f));
-
-            for (const fileName of fileNamesToRemove) {
-                const info = this.getScriptInfo(fileName);
-                if (info) {
-                    project.removeRoot(info);
-                }
-            }
-
-            for (const fileName of fileNamesToAdd) {
-                let info = this.getScriptInfo(fileName);
-                if (!info) {
-                    info = this.getOrCreateScriptInfo(fileName, /*openedByClient*/ false);
-                }
-                else {
-                    // if the root file was opened by client, it would belong to either
-                    // openFileRoots or openFileReferenced.
-                    if (info.isOpen) {
-                        if (contains(this.openFileRoots, info)) {
-                            this.openFileRoots = copyListRemovingItem(info, this.openFileRoots);
-                            if (info.defaultProject && info.defaultProject.projectKind === ProjectKind.Inferred) {
-                                this.removeProject(info.defaultProject);
-                            }
-                        }
-                        if (contains(this.openFilesReferenced, info)) {
-                            this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
-                        }
-                        this.openFileRootsConfigured.push(info);
-                        info.defaultProject = project;
-                    }
-                }
-                project.addRoot(info);
-            }
-
-            project.setCompilerOptions(newOptions);
-            project.updateGraph();
-        }
-
-        updateConfiguredProject(project: ConfiguredProject) {
-            if (!this.host.fileExists(project.configFileName)) {
-                this.log("Config file deleted");
-                this.removeProject(project);
-            }
-            else {
-                const { succeeded, projectOptions, errors } = this.configFileToProjectOptions(project.configFileName);
-                if (!succeeded) {
-                    return errors;
-                }
-                else {
-                    this.updateConfiguredProjectWorker(project, projectOptions.files, projectOptions.compilerOptions);
-                }
-            }
         }
     }
 }

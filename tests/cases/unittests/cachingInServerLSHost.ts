@@ -81,7 +81,7 @@ namespace ts {
 
         const projectService = new server.ProjectService(serverHost, logger);
         const rootScriptInfo = projectService.getOrCreateScriptInfo(rootFile, /* openedByClient */true);
-        const project = projectService.createInferredProject(rootScriptInfo);
+        const project = projectService.createAndAddInferredProject(rootScriptInfo);
         project.setCompilerOptions({ module: ts.ModuleKind.AMD } );
         return {
             project,
