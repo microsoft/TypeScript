@@ -2657,7 +2657,7 @@ namespace ts {
         return false;
     }
 
-    /** 
+    /**
      * Returns the containing object literal property declaration given a possible name node, e.g. "a" in x = { "a": 1 }
      */
     function getContainingObjectLiteralElement(node: Node): ObjectLiteralElement {
@@ -7606,11 +7606,11 @@ namespace ts {
 
         function isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
 
-            // '<' is currently not supported, figuring out if we're in a Generic Type vs. a comparison is too 
+            // '<' is currently not supported, figuring out if we're in a Generic Type vs. a comparison is too
             // expensive to do during typing scenarios
             // i.e. whether we're dealing with:
             //      var x = new foo<| ( with class foo<T>{} )
-            // or 
+            // or
             //      var y = 3 <|
             if (openingBrace === CharacterCodes.lessThan) {
                 return false;
