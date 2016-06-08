@@ -945,7 +945,7 @@ namespace Harness {
                     fileMap.forEachValue((key, value) => {
                         if (key.indexOf(path) === 0 && key.lastIndexOf("/") > path.length) {
                             let dirName = key.substr(path.length, key.indexOf("/", path.length + 1) - path.length);
-                            if (dirName[0] === '/') {
+                            if (dirName[0] === "/") {
                                 dirName = dirName.substr(1);
                             }
                             if (result.indexOf(dirName) < 0) {
