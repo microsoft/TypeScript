@@ -7656,6 +7656,21 @@ namespace ts {
                 getInitialTypeOfBindingElement(<BindingElement>node);
         }
 
+        function getReferenceFromExpression(node: Expression): Expression {
+            switch (node.kind) {
+                case SyntaxKind.ParenthesizedExpression:
+                    return getReferenceFromExpression((<ParenthesizedExpression>node).expression);
+                case SyntaxKind.BinaryExpression:
+                    switch ((<BinaryExpression>node).operatorToken.kind) {
+                        case SyntaxKind.EqualsToken:
+                            return getReferenceFromExpression((<BinaryExpression>node).left);
+                        case SyntaxKind.CommaToken:
+                            return getReferenceFromExpression((<BinaryExpression>node).right);
+                    }
+            }
+            return node;
+        }
+
         function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, includeOuterFunctions: boolean) {
             let key: string;
             if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
@@ -7876,7 +7891,7 @@ namespace ts {
                 if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
-                if (!strictNullChecks || !isMatchingReference(reference, expr.left)) {
+                if (!strictNullChecks || !isMatchingReference(reference, getReferenceFromExpression(expr.left))) {
                     return type;
                 }
                 const doubleEquals = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken;
@@ -7891,12 +7906,12 @@ namespace ts {
             function narrowTypeByTypeof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 // We have '==', '!=', '====', or !==' operator with 'typeof xxx' on the left
                 // and string literal on the right
-                const left = <TypeOfExpression>expr.left;
+                const left = getReferenceFromExpression((<TypeOfExpression>expr.left).expression);
                 const right = <LiteralExpression>expr.right;
-                if (!isMatchingReference(reference, left.expression)) {
+                if (!isMatchingReference(reference, left)) {
                     // For a reference of the form 'x.y', a 'typeof x === ...' type guard resets the
                     // narrowed type of 'y' to its declared type.
-                    if (containsMatchingReference(reference, left.expression)) {
+                    if (containsMatchingReference(reference, left)) {
                         return declaredType;
                     }
                     return type;
@@ -7921,10 +7936,11 @@ namespace ts {
             }
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
-                if (!isMatchingReference(reference, expr.left)) {
+                const left = getReferenceFromExpression(expr.left);
+                if (!isMatchingReference(reference, left)) {
                     // For a reference of the form 'x.y', an 'x instanceof T' type guard resets the
                     // narrowed type of 'y' to its declared type.
-                    if (containsMatchingReference(reference, expr.left)) {
+                    if (containsMatchingReference(reference, left)) {
                         return declaredType;
                     }
                     return type;
