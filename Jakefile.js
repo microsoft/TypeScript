@@ -226,7 +226,10 @@ var es2016LibrarySourceMap = es2016LibrarySource.map(function (source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
 });
 
-var es2017LibrarySource = ["es2017.object.d.ts"];
+var es2017LibrarySource = [
+    "es2017.object.d.ts",
+    "es2017.sharedmemory.d.ts"
+];
 
 var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
@@ -351,6 +354,8 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             if (!opts.noMapRoot) {
                 options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
             }
+        } else {
+            options += " --newLine LF";
         }
 
         if (opts.stripInternal) {

@@ -412,12 +412,11 @@ namespace ts {
                     const sourceFileOfDeclaration = getSourceFileOfNode(declaration);
                     // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
                     if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
-                        ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                            const cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
-                            if (cleanedParamJsDocComment) {
-                                addRange(jsDocCommentParts, cleanedParamJsDocComment);
-                            }
-                        });
+                        if ((declaration.parent.kind === SyntaxKind.FunctionExpression || declaration.parent.kind === SyntaxKind.ArrowFunction) &&
+                            declaration.parent.parent.kind === SyntaxKind.VariableDeclaration) {
+                            addCommentParts(declaration.parent.parent.parent, sourceFileOfDeclaration, getCleanedParamJsDocComment);
+                        }
+                        addCommentParts(declaration.parent, sourceFileOfDeclaration, getCleanedParamJsDocComment);
                     }
 
                     // If this is left side of dotted module declaration, there is no doc comments associated with this node
@@ -425,23 +424,43 @@ namespace ts {
                         return;
                     }
 
+                    if ((declaration.kind === SyntaxKind.FunctionExpression || declaration.kind === SyntaxKind.ArrowFunction) &&
+                        declaration.parent.kind === SyntaxKind.VariableDeclaration) {
+                        addCommentParts(declaration.parent.parent, sourceFileOfDeclaration, getCleanedJsDocComment);
+                    }
+
                     // If this is dotted module name, get the doc comments from the parent
                     while (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.parent.kind === SyntaxKind.ModuleDeclaration) {
                         declaration = <ModuleDeclaration>declaration.parent;
                     }
+                    addCommentParts(declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration,
+                                    sourceFileOfDeclaration,
+                                    getCleanedJsDocComment);
 
-                    // Get the cleaned js doc comment text from the declaration
-                    ts.forEach(getJsDocCommentTextRange(
-                        declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                            const cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
-                            if (cleanedJsDocComment) {
-                                addRange(jsDocCommentParts, cleanedJsDocComment);
-                            }
-                        });
+                    if (declaration.kind === SyntaxKind.VariableDeclaration) {
+                        const init = (declaration as VariableDeclaration).initializer;
+                        if (init && (init.kind === SyntaxKind.FunctionExpression || init.kind === SyntaxKind.ArrowFunction)) {
+                            // Get the cleaned js doc comment text from the initializer
+                            addCommentParts(init, sourceFileOfDeclaration, getCleanedJsDocComment);
+                        }
+                    }
                 }
             });
 
             return jsDocCommentParts;
+
+            function addCommentParts(commented: Node,
+                                     sourceFileOfDeclaration: SourceFile,
+                                     getCommentPart: (pos: number, end: number, file: SourceFile) => SymbolDisplayPart[]): void {
+                const ranges = getJsDocCommentTextRange(commented, sourceFileOfDeclaration);
+                // Get the cleaned js doc comment text from the declaration
+                ts.forEach(ranges, jsDocCommentTextRange => {
+                    const cleanedComment = getCommentPart(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                    if (cleanedComment) {
+                        addRange(jsDocCommentParts, cleanedComment);
+                    }
+                });
+            }
 
             function getJsDocCommentTextRange(node: Node, sourceFile: SourceFile): TextRange[] {
                 return ts.map(getJsDocComments(node, sourceFile),
@@ -1051,10 +1070,10 @@ namespace ts {
         getCancellationToken?(): HostCancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: CompilerOptions): string;
-        log? (s: string): void;
-        trace? (s: string): void;
-        error? (s: string): void;
-        useCaseSensitiveFileNames? (): boolean;
+        log?(s: string): void;
+        trace?(s: string): void;
+        error?(s: string): void;
+        useCaseSensitiveFileNames?(): boolean;
 
         /*
          * LS host can optionally implement this method if it wants to be completely in charge of module name resolution.
@@ -2486,7 +2505,7 @@ namespace ts {
                 }
 
                 // should be start of dependency list
-                if (token !== SyntaxKind.OpenBracketToken)  {
+                if (token !== SyntaxKind.OpenBracketToken) {
                     return true;
                 }
 
@@ -4019,9 +4038,14 @@ namespace ts {
             }
         }
 
-
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             synchronizeHostData();
+
+            const sourceFile = getValidSourceFile(fileName);
+
+            if (isInString(sourceFile, position)) {
+                return getStringLiteralCompletionEntries(sourceFile, position);
+            }
 
             const completionData = getCompletionData(fileName, position);
             if (!completionData) {
@@ -4035,12 +4059,10 @@ namespace ts {
                 return { isMemberCompletion: false, isNewIdentifierLocation: false, entries: getAllJsDocCompletionEntries() };
             }
 
-            const sourceFile = getValidSourceFile(fileName);
-
             const entries: CompletionEntry[] = [];
 
             if (isSourceFileJavaScript(sourceFile)) {
-                const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries);
+                const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ false);
                 addRange(entries, getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames));
             }
             else {
@@ -4064,7 +4086,7 @@ namespace ts {
                     }
                 }
 
-                getCompletionEntriesFromSymbols(symbols, entries);
+                getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true);
             }
 
             // Add keywords if this is not a member completion list
@@ -4114,11 +4136,11 @@ namespace ts {
                 }));
             }
 
-            function createCompletionEntry(symbol: Symbol, location: Node): CompletionEntry {
+            function createCompletionEntry(symbol: Symbol, location: Node, performCharacterChecks: boolean): CompletionEntry {
                 // Try to get a valid display name for this symbol, if we could not find one, then ignore it.
                 // We would like to only show things that can be added after a dot, so for instance numeric properties can
                 // not be accessed with a dot (a.1 <- invalid)
-                const displayName = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, /*performCharacterChecks*/ true, location);
+                const displayName = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, performCharacterChecks, location);
                 if (!displayName) {
                     return undefined;
                 }
@@ -4139,12 +4161,12 @@ namespace ts {
                 };
             }
 
-            function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[]): Map<string> {
+            function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[], location: Node, performCharacterChecks: boolean): Map<string> {
                 const start = new Date().getTime();
                 const uniqueNames: Map<string> = {};
                 if (symbols) {
                     for (const symbol of symbols) {
-                        const entry = createCompletionEntry(symbol, location);
+                        const entry = createCompletionEntry(symbol, location, performCharacterChecks);
                         if (entry) {
                             const id = escapeIdentifier(entry.name);
                             if (!lookUp(uniqueNames, id)) {
@@ -4157,6 +4179,93 @@ namespace ts {
 
                 log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
                 return uniqueNames;
+            }
+
+            function getStringLiteralCompletionEntries(sourceFile: SourceFile, position: number) {
+                const node = findPrecedingToken(position, sourceFile);
+                if (!node || node.kind !== SyntaxKind.StringLiteral) {
+                    return undefined;
+                }
+
+                const argumentInfo = SignatureHelp.getContainingArgumentInfo(node, position, sourceFile);
+                if (argumentInfo) {
+                    // Get string literal completions from specialized signatures of the target
+                    return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo);
+                }
+                else if (isElementAccessExpression(node.parent) && node.parent.argumentExpression === node) {
+                    // Get all names of properties on the expression
+                    return getStringLiteralCompletionEntriesFromElementAccess(node.parent);
+                }
+                else {
+                    // Otherwise, get the completions from the contextual type if one exists
+                    return getStringLiteralCompletionEntriesFromContextualType(<StringLiteral>node);
+                }
+            }
+
+            function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo) {
+                const typeChecker = program.getTypeChecker();
+                const candidates: Signature[] = [];
+                const entries: CompletionEntry[] = [];
+
+                typeChecker.getResolvedSignature(argumentInfo.invocation, candidates);
+
+                for (const candidate of candidates) {
+                    if (candidate.parameters.length > argumentInfo.argumentIndex) {
+                        const parameter = candidate.parameters[argumentInfo.argumentIndex];
+                        addStringLiteralCompletionsFromType(typeChecker.getTypeAtLocation(parameter.valueDeclaration), entries);
+                    }
+                }
+
+                if (entries.length) {
+                    return { isMemberCompletion: false, isNewIdentifierLocation: true, entries };
+                }
+
+                return undefined;
+            }
+
+            function getStringLiteralCompletionEntriesFromElementAccess(node: ElementAccessExpression) {
+                const typeChecker = program.getTypeChecker();
+                const type = typeChecker.getTypeAtLocation(node.expression);
+                const entries: CompletionEntry[] = [];
+                if (type) {
+                    getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, node, /*performCharacterChecks*/false);
+                    if (entries.length) {
+                        return { isMemberCompletion: true, isNewIdentifierLocation: true, entries };
+                    }
+                }
+                return undefined;
+            }
+
+            function getStringLiteralCompletionEntriesFromContextualType(node: StringLiteral) {
+                const typeChecker = program.getTypeChecker();
+                const type = typeChecker.getContextualType(node);
+                if (type) {
+                    const entries: CompletionEntry[] = [];
+                    addStringLiteralCompletionsFromType(type, entries);
+                    if (entries.length) {
+                        return { isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+                    }
+                }
+                return undefined;
+            }
+
+            function addStringLiteralCompletionsFromType(type: Type, result: CompletionEntry[]): void {
+                if (!type) {
+                    return;
+                }
+                if (type.flags & TypeFlags.Union) {
+                    forEach((<UnionType>type).types, t => addStringLiteralCompletionsFromType(t, result));
+                }
+                else {
+                    if (type.flags & TypeFlags.StringLiteral) {
+                        result.push({
+                            name: (<StringLiteralType>type).text,
+                            kindModifiers: ScriptElementKindModifier.none,
+                            kind: ScriptElementKind.variableElement,
+                            sortText: "0"
+                        });
+                    }
+                }
             }
         }
 
@@ -4322,7 +4431,7 @@ namespace ts {
                     // try get the call/construct signature from the type if it matches
                     let callExpression: CallExpression;
                     if (location.kind === SyntaxKind.CallExpression || location.kind === SyntaxKind.NewExpression) {
-                        callExpression = <CallExpression> location;
+                        callExpression = <CallExpression>location;
                     }
                     else if (isCallExpressionTarget(location) || isNewExpressionTarget(location)) {
                         callExpression = <CallExpression>location.parent;
