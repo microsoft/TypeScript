@@ -851,6 +851,11 @@ namespace ts.server {
         }
 
         private addOpenFile(info: ScriptInfo) {
+            const externalProject = this.findContainingExternalProject(info.fileName);
+            if (externalProject) {
+                info.defaultProject = externalProject;
+                return;
+            }
             const configuredProject = this.findContainingConfiguredProject(info);
             if (configuredProject) {
                 info.defaultProject = configuredProject;
@@ -956,6 +961,16 @@ namespace ts.server {
                 this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
             }
             info.close();
+        }
+
+        private findContainingExternalProject(fileName: string): ExternalProject {
+            fileName = normalizePath(fileName);
+            for (const proj of this.externalProjects) {
+                if (proj.containsFile(fileName)) {
+                    return proj;
+                }
+            }
+            return undefined;
         }
 
         /**
@@ -1141,7 +1156,7 @@ namespace ts.server {
             }
         }
 
-        private updateConfiguredProjectWorker(project: ConfiguredProject, newRootFiles: string[], newOptions: CompilerOptions) {
+        private updateVersionedProjectWorker(project: VersionedProject, newRootFiles: string[], newOptions: CompilerOptions) {
             const oldRootFiles = project.getRootFiles();
             const newFileNames = ts.filter(newRootFiles, f => this.host.fileExists(f));
             const fileNamesToRemove = oldRootFiles.filter(f => !contains(newFileNames, f));
@@ -1172,7 +1187,9 @@ namespace ts.server {
                         if (contains(this.openFilesReferenced, info)) {
                             this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
                         }
-                        this.openFileRootsConfigured.push(info);
+                        if (project.projectKind === ProjectKind.Configured)  {
+                            this.openFileRootsConfigured.push(info);
+                        }
                         info.defaultProject = project;
                     }
                 }
@@ -1194,7 +1211,7 @@ namespace ts.server {
                     return errors;
                 }
                 else {
-                    this.updateConfiguredProjectWorker(project, projectOptions.files, projectOptions.compilerOptions);
+                    this.updateVersionedProjectWorker(project, projectOptions.files, projectOptions.compilerOptions);
                 }
             }
         }
@@ -1419,7 +1436,11 @@ namespace ts.server {
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
         openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind): { configFileName?: string, configFileErrors?: Diagnostic[] } {
-            const { configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName);
+            let configFileName: string;
+            let configFileErrors: Diagnostic[];
+            if (!this.findContainingExternalProject(fileName)) {
+                ({ configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName));
+            }
             const info = this.getOrCreateScriptInfo(fileName, /*openedByClient*/ true, fileContent, scriptKind);
             this.addOpenFile(info);
             this.printProjects();
@@ -1493,6 +1514,7 @@ namespace ts.server {
                     const configuredProject = this.findConfiguredProjectByConfigFile(configFile);
                     if (configuredProject) {
                         this.removeProject(configuredProject);
+                        this.updateProjectStructure();
                     }
                 }
             }
@@ -1501,20 +1523,20 @@ namespace ts.server {
                 const externalProject = this.findExternalProjectByProjectFileName(fileName);
                 if (externalProject) {
                     this.removeProject(externalProject);
+                    this.updateProjectStructure();
                 }
             }
-            this.updateProjectStructure();
         }
 
-        openExternalProject(externalProject: protocol.ExternalProject): void {
-            const project = this.findConfiguredProjectByConfigFile(externalProject.projectFileName);
-            if (project) {
-                this.updateConfiguredProjectWorker(project, externalProject.rootFiles, externalProject.options);
+        openExternalProject(proj: protocol.ExternalProject): void {
+            const externalProject = this.findExternalProjectByProjectFileName(proj.projectFileName);
+            if (proj) {
+                this.updateVersionedProjectWorker(externalProject, proj.rootFiles, proj.options);
             }
             else {
                 let tsConfigFiles: string[];
                 const rootFiles: string[] = [];
-                for (const file of externalProject.rootFiles) {
+                for (const file of proj.rootFiles) {
                     if (getBaseFileName(file) === "tsconfig.json") {
                         (tsConfigFiles || (tsConfigFiles = [])).push(file);
                     }
@@ -1523,16 +1545,18 @@ namespace ts.server {
                     }
                 }
                 if (tsConfigFiles) {
+                    // store the list of tsconfig files that belong to the external project
+                    this.externalProjectToConfiguredProjectMap[proj.projectFileName] = tsConfigFiles;
                     for (const tsconfigFile of tsConfigFiles) {
                         const { success, project, errors } = this.openConfigFile(tsconfigFile);
                         if (success) {
-                            // keep project alive
+                            // keep project alive - its lifetime is bound to the lifetime of containing external project
                             project.addOpenRef();
                         }
                     }
                 }
                 else {
-                    this.createAndAddExternalProject(externalProject.projectFileName, externalProject.rootFiles, externalProject.options);
+                    this.createAndAddExternalProject(proj.projectFileName, proj.rootFiles, proj.options);
                 }
             }
         }
