@@ -133,6 +133,8 @@ namespace ts.server {
     }
 
     export interface ServerHost extends ts.System {
+        setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
+        clearTimeout(timeoutId: any): void;
     }
 
     export class Session {
@@ -870,7 +872,8 @@ namespace ts.server {
                     start: compilerService.host.positionToLineOffset(fileName, span.start),
                     end: compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(span))
                 })),
-                childItems: this.decorateNavigationBarItem(project, fileName, item.childItems)
+                childItems: this.decorateNavigationBarItem(project, fileName, item.childItems),
+                indent: item.indent
             }));
         }
 

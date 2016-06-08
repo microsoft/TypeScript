@@ -1,15 +1,34 @@
 /// <reference path="fourslash.ts"/>
 
-////{| "itemName": "I", "kind": "interface", "parentName": "" |}
 ////interface I {
-////    {| "itemName": "[Symbol.isRegExp]", "kind": "property", "parentName": "I" |}
 ////    [Symbol.isRegExp]: string;
-////    {| "itemName": "[Symbol.iterator]", "kind": "method", "parentName": "I" |}
 ////    [Symbol.iterator](): string;
 ////}
 
-test.markers().forEach(marker => {
-    verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
-});
-
-verify.getScriptLexicalStructureListCount(test.markers().length);
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "I",
+                "kind": "interface"
+            }
+        ]
+    },
+    {
+        "text": "I",
+        "kind": "interface",
+        "childItems": [
+            {
+                "text": "[Symbol.isRegExp]",
+                "kind": "property"
+            },
+            {
+                "text": "[Symbol.iterator]",
+                "kind": "method"
+            }
+        ],
+        "indent": 1
+    }
+]);
