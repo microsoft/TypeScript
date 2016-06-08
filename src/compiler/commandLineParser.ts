@@ -38,6 +38,11 @@ namespace ts {
             description: Diagnostics.Print_this_message,
         },
         {
+            name: "help",
+            shortName: "?",
+            type: "boolean"
+        },
+        {
             name: "init",
             type: "boolean",
             description: Diagnostics.Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file,
@@ -138,6 +143,11 @@ namespace ts {
         {
             name: "skipDefaultLibCheck",
             type: "boolean",
+        },
+        {
+            name: "skipLibCheck",
+            type: "boolean",
+            description: Diagnostics.Skip_type_checking_of_declaration_files,
         },
         {
             name: "out",
@@ -375,6 +385,7 @@ namespace ts {
                     "es2015": "lib.es2015.d.ts",
                     "es7": "lib.es2016.d.ts",
                     "es2016": "lib.es2016.d.ts",
+                    "es2017": "lib.es2017.d.ts",
                     // Host only
                     "dom": "lib.dom.d.ts",
                     "webworker": "lib.webworker.d.ts",
@@ -389,7 +400,8 @@ namespace ts {
                     "es2015.reflect": "lib.es2015.reflect.d.ts",
                     "es2015.symbol": "lib.es2015.symbol.d.ts",
                     "es2015.symbol.wellknown": "lib.es2015.symbol.wellknown.d.ts",
-                    "es2016.array.include": "lib.es2016.array.include.d.ts"
+                    "es2016.array.include": "lib.es2016.array.include.d.ts",
+                    "es2017.object": "lib.es2017.object.d.ts"
                 },
             },
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
@@ -699,11 +711,11 @@ namespace ts {
                 }
                 else {
                     // by default exclude node_modules, and any specificied output directory
-                    exclude = ["node_modules"];
-                    const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
-                    if (outDir) {
-                        exclude.push(outDir);
-                    }
+                    exclude = ["node_modules", "bower_components", "jspm_packages"];
+                }
+                const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
+                if (outDir) {
+                    exclude.push(outDir);
                 }
                 exclude = map(exclude, normalizeSlashes);
 

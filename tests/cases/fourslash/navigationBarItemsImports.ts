@@ -1,25 +1,56 @@
 /// <reference path="fourslash.ts"/>
 
 
-////import {| "itemName": "d1", "kind": "alias", "parentName": "" |}d1 from "a";
+////import d1 from "a";
 ////
-////import { {| "itemName": "a", "kind": "alias", "parentName": "" |}a } from "a";
+////import { a } from "a";
 ////
-////import { {| "itemName": "B", "kind": "alias", "parentName": "" |}b as B } from "a" 
+////import { b as B } from "a" 
 ////
-////import {| "itemName": "d2", "kind": "alias", "parentName": "" |}d2,
-////            { {| "itemName": "c", "kind": "alias", "parentName": "" |}c,
-////            {| "itemName": "D", "kind": "alias", "parentName": "" |} d as D } from "a" 
+////import d2, { c, d as D } from "a" 
 ////
-////{| "itemName": "e", "kind": "alias", "parentName": "" |}import e = require("a");
+////import e = require("a");
 ////
-////import {| "itemName": "ns", "kind": "alias", "parentName": "" |}* as ns from "a";
+////import * as ns from "a";
 
 
-test.markers().forEach((marker) => {
-    if (marker.data) {
-        verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
+verify.navigationBar([
+    {
+        "text": "\"navigationBarItemsImports\"",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "a",
+                "kind": "alias"
+            },
+            {
+                "text": "B",
+                "kind": "alias"
+            },
+            {
+                "text": "c",
+                "kind": "alias"
+            },
+            {
+                "text": "D",
+                "kind": "alias"
+            },
+            {
+                "text": "d1",
+                "kind": "alias"
+            },
+            {
+                "text": "d2",
+                "kind": "alias"
+            },
+            {
+                "text": "e",
+                "kind": "alias"
+            },
+            {
+                "text": "ns",
+                "kind": "alias"
+            }
+        ]
     }
-});
-
-verify.getScriptLexicalStructureListCount(9);
+]);

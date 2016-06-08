@@ -3,11 +3,11 @@
 namespace ts.SignatureHelp {
 
     // A partially written generic type expression is not guaranteed to have the correct syntax tree. the expression could be parsed as less than/greater than expression or a comma expression
-    // or some other combination depending on what the user has typed so far. For the purposes of signature help we need to consider any location after "<" as a possible generic type reference. 
-    // To do this, the method will back parse the expression starting at the position required. it will try to parse the current expression as a generic type expression, if it did succeed it 
-    // will return the generic identifier that started the expression (e.g. "foo" in "foo<any, |"). It is then up to the caller to ensure that this is a valid generic expression through 
+    // or some other combination depending on what the user has typed so far. For the purposes of signature help we need to consider any location after "<" as a possible generic type reference.
+    // To do this, the method will back parse the expression starting at the position required. it will try to parse the current expression as a generic type expression, if it did succeed it
+    // will return the generic identifier that started the expression (e.g. "foo" in "foo<any, |"). It is then up to the caller to ensure that this is a valid generic expression through
     // looking up the type. The method will also keep track of the parameter index inside the expression.
-    //public static isInPartiallyWrittenTypeArgumentList(syntaxTree: TypeScript.SyntaxTree, position: number): any {
+    // public static isInPartiallyWrittenTypeArgumentList(syntaxTree: TypeScript.SyntaxTree, position: number): any {
     //    let token = Syntax.findTokenOnLeft(syntaxTree.sourceUnit(), position, /*includeSkippedTokens*/ true);
 
     //    if (token && TypeScript.Syntax.hasAncestorOfKind(token, TypeScript.SyntaxKind.TypeParameterList)) {
@@ -125,9 +125,9 @@ namespace ts.SignatureHelp {
     //    }
 
     //    return null;
-    //}
+    // }
 
-    //private static moveBackUpTillMatchingTokenKind(token: TypeScript.ISyntaxToken, tokenKind: TypeScript.SyntaxKind, matchingTokenKind: TypeScript.SyntaxKind): TypeScript.ISyntaxToken {
+    // private static moveBackUpTillMatchingTokenKind(token: TypeScript.ISyntaxToken, tokenKind: TypeScript.SyntaxKind, matchingTokenKind: TypeScript.SyntaxKind): TypeScript.ISyntaxToken {
     //    if (!token || token.kind() !== tokenKind) {
     //        throw TypeScript.Errors.invalidOperation();
     //    }
@@ -161,7 +161,8 @@ namespace ts.SignatureHelp {
 
     //    // Did not find matching token
     //    return null;
-    //}
+    // }
+
     const emptyArray: any[] = [];
 
     const enum ArgumentListKind {
@@ -189,6 +190,7 @@ namespace ts.SignatureHelp {
         }
 
         const argumentInfo = getContainingArgumentInfo(startingToken, position, sourceFile);
+
         cancellationToken.throwIfCancellationRequested();
 
         // Semantic filtering of signature help
@@ -202,7 +204,7 @@ namespace ts.SignatureHelp {
         cancellationToken.throwIfCancellationRequested();
 
         if (!candidates.length) {
-            // We didn't have any sig help items produced by the TS compiler.  If this is a JS 
+            // We didn't have any sig help items produced by the TS compiler.  If this is a JS
             // file, then see if we can figure out anything better.
             if (isSourceFileJavaScript(sourceFile)) {
                 return createJavaScriptSignatureHelpItems(argumentInfo, program);
@@ -316,6 +318,7 @@ namespace ts.SignatureHelp {
                     argumentCount: argumentCount
                 };
             }
+            return undefined;
         }
         else if (node.kind === SyntaxKind.NoSubstitutionTemplateLiteral && node.parent.kind === SyntaxKind.TaggedTemplateExpression) {
             // Check if we're actually inside the template;
@@ -542,7 +545,7 @@ namespace ts.SignatureHelp {
         const isTypeParameterList = argumentListInfo.kind === ArgumentListKind.TypeArguments;
 
         const invocation = argumentListInfo.invocation;
-        const callTarget = getInvokedExpression(invocation)
+        const callTarget = getInvokedExpression(invocation);
         const callTargetSymbol = typeChecker.getSymbolAtLocation(callTarget);
         const callTargetDisplayParts = callTargetSymbol && symbolToDisplayParts(typeChecker, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
         const items: SignatureHelpItem[] = map(candidates, candidateSignature => {

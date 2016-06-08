@@ -1242,6 +1242,11 @@ declare namespace ts.server.protocol {
           * Optional children.
           */
         childItems?: NavigationBarItem[];
+
+        /**
+          * Number of levels deep this item should appear.
+          */
+        indent: number;
     }
 
     export interface NavBarResponse extends Response {
