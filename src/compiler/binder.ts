@@ -612,7 +612,7 @@ namespace ts {
                     if (isNarrowingExpression(expr.left) && (expr.right.kind === SyntaxKind.NullKeyword || expr.right.kind === SyntaxKind.Identifier)) {
                         return true;
                     }
-                    if (expr.left.kind === SyntaxKind.TypeOfExpression && isNarrowingExpression((<TypeOfExpression>expr.left).expression) && expr.right.kind === SyntaxKind.StringLiteral) {
+                    if (isTypeOfNarrowingBinaryExpression(expr)) {
                         return true;
                     }
                     return false;
@@ -622,6 +622,20 @@ namespace ts {
                     return isNarrowingExpression(expr.right);
             }
             return false;
+        }
+
+        function isTypeOfNarrowingBinaryExpression(expr: BinaryExpression) {
+            let typeOf: Expression;
+            if (expr.left.kind === SyntaxKind.StringLiteral) {
+                typeOf = expr.right;
+            }
+            else if (expr.right.kind === SyntaxKind.StringLiteral) {
+                typeOf = expr.left;
+            }
+            else {
+                typeOf = undefined;;
+            }
+            return typeOf && typeOf.kind === SyntaxKind.TypeOfExpression && isNarrowingExpression((<TypeOfExpression>typeOf).expression);
         }
 
         function createBranchLabel(): FlowLabel {
