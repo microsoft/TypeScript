@@ -201,7 +201,7 @@ function identifyBeast(beast: Beast) {
 >hasWings : (x: Beast) => x is Winged
 >beast : Legged
 
-            if (beast.legs === 4) { // ERROR TS2339: Property 'legs' does not exist on type 'Winged'.
+            if (beast.legs === 4) {
 >beast.legs === 4 : boolean
 >beast.legs : number
 >beast : Legged & Winged
@@ -213,7 +213,7 @@ function identifyBeast(beast: Beast) {
 >log : (s: string) => void
 >`pegasus - 4 legs, wings` : string
             }
-            else if (beast.legs === 2) { // ERROR TS2339...
+            else if (beast.legs === 2) {
 >beast.legs === 2 : boolean
 >beast.legs : number
 >beast : Legged & Winged
@@ -226,7 +226,7 @@ function identifyBeast(beast: Beast) {
 >`bird - 2 legs, wings` : string
             }
             else {
-                log(`unknown - ${beast.legs} legs, wings`); // ERROR TS2339...
+                log(`unknown - ${beast.legs} legs, wings`);
 >log(`unknown - ${beast.legs} legs, wings`) : void
 >log : (s: string) => void
 >`unknown - ${beast.legs} legs, wings` : string
@@ -283,13 +283,11 @@ function beastFoo(beast: Object) {
 >hasLegs : (x: Beast) => x is Legged
 >beast : Winged
 
-        beast // beast is Legged
+        beast;  // Winged & Legged
 >beast : Winged & Legged
-
-        // ideally, beast would be Winged && Legged here...
     }
     else {
-         beast
+        beast;
 >beast : Object
     }
 
@@ -302,9 +300,7 @@ function beastFoo(beast: Object) {
 >hasWings : (x: Beast) => x is Winged
 >beast : Legged
 
-        beast // beast is Winged
+        beast;  // Legged & Winged
 >beast : Legged & Winged
-
-        // ideally, beast would be Legged && Winged here...
     }
 }

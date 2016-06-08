@@ -71,14 +71,14 @@ function identifyBeast(beast: Beast) {
 
         // All winged beasts with legs
         if (hasWings(beast)) {
-            if (beast.legs === 4) { // ERROR TS2339: Property 'legs' does not exist on type 'Winged'.
+            if (beast.legs === 4) {
                 log(`pegasus - 4 legs, wings`);
             }
-            else if (beast.legs === 2) { // ERROR TS2339...
+            else if (beast.legs === 2) {
                 log(`bird - 2 legs, wings`);
             }
             else {
-                log(`unknown - ${beast.legs} legs, wings`); // ERROR TS2339...
+                log(`unknown - ${beast.legs} legs, wings`);
             }
         }
 
@@ -101,16 +101,14 @@ function identifyBeast(beast: Beast) {
 
 function beastFoo(beast: Object) {
     if (hasWings(beast) && hasLegs(beast)) {
-        beast // beast is Legged
-        // ideally, beast would be Winged && Legged here...
+        beast;  // Winged & Legged
     }
     else {
-         beast
+        beast;
     }
 
     if (hasLegs(beast) && hasWings(beast)) {
-        beast // beast is Winged
-        // ideally, beast would be Legged && Winged here...
+        beast;  // Legged & Winged
     }
 }
 
@@ -152,7 +150,7 @@ function identifyBeast(beast) {
                 log("bird - 2 legs, wings");
             }
             else {
-                log("unknown - " + beast.legs + " legs, wings"); // ERROR TS2339...
+                log("unknown - " + beast.legs + " legs, wings");
             }
         }
         else {
@@ -170,12 +168,12 @@ function identifyBeast(beast) {
 }
 function beastFoo(beast) {
     if (hasWings(beast) && hasLegs(beast)) {
-        beast; // beast is Legged
+        beast; // Winged & Legged
     }
     else {
         beast;
     }
     if (hasLegs(beast) && hasWings(beast)) {
-        beast; // beast is Winged
+        beast; // Legged & Winged
     }
 }
