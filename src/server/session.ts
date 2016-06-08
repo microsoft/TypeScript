@@ -1043,17 +1043,20 @@ namespace ts.server {
         private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
                 this.projectService.openExternalProject(request.arguments);
-                return this.notRequired();
+                // TODO: report errors
+                return this.requiredResponse(true);
             },
             [CommandNames.OpenExternalProjects]: (request: protocol.OpenExternalProjectsRequest) => {
                 for (const proj of request.arguments.projects) {
                     this.projectService.openExternalProject(proj);
                 }
-                return this.notRequired();
+                // TODO: report errors
+                return this.requiredResponse(true);
             },
             [CommandNames.CloseExternalProject]: (request: protocol.CloseExternalProjectRequest) => {
                 this.projectService.closeExternalProject(request.arguments.projectFileName);
-                return this.notRequired();
+                // TODO: report errors
+                return this.requiredResponse(true);
             },
             [CommandNames.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
                 const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects);
@@ -1061,7 +1064,8 @@ namespace ts.server {
             },
             [CommandNames.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
                 this.projectService.applyChangesInOpenFiles(request.arguments.openFiles, request.arguments.closedFiles);
-                return this.notRequired();
+                // TODO: report errors
+                return this.requiredResponse(true);
             },
             [CommandNames.Exit]: () => {
                 this.exit();

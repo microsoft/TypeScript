@@ -1530,7 +1530,7 @@ namespace ts.server {
 
         openExternalProject(proj: protocol.ExternalProject): void {
             const externalProject = this.findExternalProjectByProjectFileName(proj.projectFileName);
-            if (proj) {
+            if (externalProject) {
                 this.updateVersionedProjectWorker(externalProject, proj.rootFiles, proj.options);
             }
             else {
