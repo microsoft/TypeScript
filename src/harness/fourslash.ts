@@ -1824,10 +1824,19 @@ namespace FourSlash {
             const errorCode = diagnostics[0].code;
             const position = diagnostics[0].start;
 
+            const markers = this.getMarkers();
+            const start = markers[0].position;
+            const end = markers[1].position;
+
             const actual = this.languageService.getCodeFixAtPosition(this.activeFile.fileName, position, position, [`TS${errorCode}`]);
 
             if (actual.textChanges[0].newText !== expectedChange.newText) {
-                this.raiseError(`Not the expected text change.`);
+                this.raiseError("Not the expected text change.");
+            }
+
+            if (actual.textChanges[0].span.start !== start ||
+                (actual.textChanges[0].span.start + actual.textChanges[0].span.length) !== end) {
+                this.raiseError("Not the expected span range.");
             }
         }
 

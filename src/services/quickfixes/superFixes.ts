@@ -37,4 +37,13 @@ namespace ts.quickFix {
             throw new Error("Not implemented");
         }
     });
+
+    registerQuickFix({
+        name: `Remove Unused Local Variable`,
+        errorCode: "TS6132",
+        getFix: (sourceFile: SourceFile, start: number, end: number): [{ newText: string; span: { start: number, length: number } }] => {
+            const token = getTokenAtPosition(sourceFile, start);
+            throw new Error("Not implemented");
+        }
+    });
 }
