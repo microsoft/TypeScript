@@ -732,13 +732,14 @@ function runConsoleTests(defaultReporter, runInParallel) {
     colors = process.env.colors || process.env.color;
     colors = colors ? ' --no-colors ' : ' --colors ';
     reporter = process.env.reporter || process.env.r || defaultReporter;
+    var bail = (process.env.bail || process.env.b) ? "--bail" : "";
     var lintFlag = process.env.lint !== 'false';
 
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     if(!runInParallel) {
         tests = tests ? ' -g "' + tests + '"' : '';
-        var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
+        var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + bail + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
         exec(cmd, function () {
             runLinter();
@@ -760,13 +761,18 @@ function runConsoleTests(defaultReporter, runInParallel) {
             // schedule work for chunks
             configFiles.forEach(function (f) {
                 var configPath = path.join(taskConfigsFolder, f);
-                var workerCmd = "mocha" + " -t " + testTimeout + " -R " + reporter + " " + colors + " " + run + " --config='" + configPath + "'";
+                var workerCmd = "mocha" + " -t " + testTimeout + " -R " + reporter + " " + colors + bail + " " + run + " --config='" + configPath + "'";
                 console.log(workerCmd);
                 exec(workerCmd,  finishWorker, finishWorker)
             });
 
             function finishWorker(e, errorStatus) {
                 counter--;
+
+                if (bail && errorStatus !== undefined) {
+                    failWithStatus(errorStatus);
+                }
+
                 if (firstErrorStatus === undefined && errorStatus !== undefined) {
                     firstErrorStatus = errorStatus;
                 }
@@ -815,12 +821,12 @@ function runConsoleTests(defaultReporter, runInParallel) {
 }
 
 var testTimeout = 20000;
-desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
+desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true bail=false.");
 task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function() {
     runConsoleTests('min', /*runInParallel*/ true);
 }, {async: true});
 
-desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true.");
+desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true bail=false.");
 task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
     runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);
 }, {async: true});
