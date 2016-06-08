@@ -10,12 +10,16 @@ namespace ts {
             expectedDiagnosticTexts?: string[];
         }
 
-        function checkDiagnostics(diagnostics: Diagnostic[], expectedDiagnosticCodes: number[] = [], expectedDiagnosticTexts: string[] = []) {
+        function checkDiagnostics(diagnostics: Diagnostic[], expectedDiagnosticCodes: number[] = [], expectedDiagnosticTexts?: string[]) {
             const n = expectedDiagnosticCodes.length;
-            assert.equal(n, expectedDiagnosticTexts.length);
+            if (expectedDiagnosticTexts) {
+                assert.equal(n, expectedDiagnosticTexts.length);
+            }
             for (let i = 0; i < n; i++) {
                 assert.equal(expectedDiagnosticCodes[i], diagnostics[i] && diagnostics[i].code, `Could not find expected diagnostic.`);
-                assert.equal(expectedDiagnosticTexts[i], diagnostics[i] && diagnostics[i].messageText);
+                if (expectedDiagnosticTexts) {
+                    assert.equal(expectedDiagnosticTexts[i], diagnostics[i] && diagnostics[i].messageText);
+                }
             }
             assert.equal(diagnostics.length, n, "Resuting diagnostics count does not match expected");
         }
