@@ -17,48 +17,48 @@ and limitations under the License.
 declare type PropertyKey = string | number | symbol;
 
 interface Array<T> {
-    /** 
-      * Returns the value of the first element in the array where predicate is true, and undefined 
+    /**
+      * Returns the value of the first element in the array where predicate is true, and undefined
       * otherwise.
-      * @param predicate find calls predicate once for each element of the array, in ascending 
-      * order, until it finds one where predicate returns true. If such an element is found, find 
+      * @param predicate find calls predicate once for each element of the array, in ascending
+      * order, until it finds one where predicate returns true. If such an element is found, find
       * immediately returns that element value. Otherwise, find returns undefined.
-      * @param thisArg If provided, it will be used as the this value for each invocation of 
+      * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
     find(predicate: (value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): T | undefined;
 
-    /** 
-      * Returns the index of the first element in the array where predicate is true, and undefined 
+    /**
+      * Returns the index of the first element in the array where predicate is true, and undefined
       * otherwise.
-      * @param predicate find calls predicate once for each element of the array, in ascending 
-      * order, until it finds one where predicate returns true. If such an element is found, find 
-      * immediately returns that element value. Otherwise, find returns undefined.
-      * @param thisArg If provided, it will be used as the this value for each invocation of 
+      * @param predicate find calls predicate once for each element of the array, in ascending
+      * order, until it finds one where predicate returns true. If such an element is found, 
+      * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
+      * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: T) => boolean, thisArg?: any): number | undefined;
+    findIndex(predicate: (value: T) => boolean, thisArg?: any): number;
 
     /**
       * Returns the this object after filling the section identified by start and end with value
       * @param value value to fill array section with
-      * @param start index to start filling the array at. If start is negative, it is treated as 
-      * length+start where length is the length of the array. 
-      * @param end index to stop filling the array at. If end is negative, it is treated as 
+      * @param start index to start filling the array at. If start is negative, it is treated as
+      * length+start where length is the length of the array.
+      * @param end index to stop filling the array at. If end is negative, it is treated as
       * length+end.
       */
-    fill(value: T, start?: number, end?: number): T[];
+    fill(value: T, start?: number, end?: number): this;
 
-    /** 
+    /**
       * Returns the this object after copying a section of the array identified by start and end
       * to the same array starting at position target
-      * @param target If target is negative, it is treated as length+target where length is the 
-      * length of the array. 
-      * @param start If start is negative, it is treated as length+start. If end is negative, it 
+      * @param target If target is negative, it is treated as length+target where length is the
+      * length of the array.
+      * @param start If start is negative, it is treated as length+start. If end is negative, it
       * is treated as length+end.
-      * @param end If not specified, length of the this object is used as its default value. 
+      * @param end If not specified, length of the this object is used as its default value.
       */
-    copyWithin(target: number, start: number, end?: number): T[];
+    copyWithin(target: number, start: number, end?: number): this;
 }
 
 interface ArrayConstructor {
@@ -130,7 +130,7 @@ interface Math {
     log1p(x: number): number;
 
     /**
-      * Returns the result of (e^x - 1) of x (e raised to the power of x, where e is the base of 
+      * Returns the result of (e^x - 1) of x (e raised to the power of x, where e is the base of
       * the natural logarithms).
       * @param x A numeric expression.
       */
@@ -206,14 +206,14 @@ interface Math {
 interface NumberConstructor {
     /**
       * The value of Number.EPSILON is the difference between 1 and the smallest value greater than 1
-      * that is representable as a Number value, which is approximately: 
+      * that is representable as a Number value, which is approximately:
       * 2.2204460492503130808472633361816 x 10‍−‍16.
       */
     readonly EPSILON: number;
 
     /**
       * Returns true if passed value is finite.
-      * Unlike the global isFininte, Number.isFinite doesn't forcibly convert the parameter to a 
+      * Unlike the global isFininte, Number.isFinite doesn't forcibly convert the parameter to a
       * number. Only finite values of the type number, result in true.
       * @param number A numeric value.
       */
@@ -226,7 +226,7 @@ interface NumberConstructor {
     isInteger(number: number): boolean;
 
     /**
-      * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a 
+      * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a
       * number). Unlike the global isNaN(), Number.isNaN() doesn't forcefully convert the parameter
       * to a number. Only values of the type number, that are also NaN, result in true.
       * @param number A numeric value.
@@ -239,30 +239,30 @@ interface NumberConstructor {
       */
     isSafeInteger(number: number): boolean;
 
-    /** 
-      * The value of the largest integer n such that n and n + 1 are both exactly representable as 
-      * a Number value. 
+    /**
+      * The value of the largest integer n such that n and n + 1 are both exactly representable as
+      * a Number value.
       * The value of Number.MIN_SAFE_INTEGER is 9007199254740991 2^53 − 1.
       */
     readonly MAX_SAFE_INTEGER: number;
 
-    /** 
-      * The value of the smallest integer n such that n and n − 1 are both exactly representable as 
-      * a Number value. 
+    /**
+      * The value of the smallest integer n such that n and n − 1 are both exactly representable as
+      * a Number value.
       * The value of Number.MIN_SAFE_INTEGER is −9007199254740991 (−(2^53 − 1)).
       */
     readonly MIN_SAFE_INTEGER: number;
 
     /**
-      * Converts a string to a floating-point number. 
-      * @param string A string that contains a floating-point number. 
+      * Converts a string to a floating-point number.
+      * @param string A string that contains a floating-point number.
       */
     parseFloat(string: string): number;
 
     /**
       * Converts A string to an integer.
       * @param s A string to convert into a number.
-      * @param radix A value between 2 and 36 that specifies the base of the number in numString. 
+      * @param radix A value between 2 and 36 that specifies the base of the number in numString.
       * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
       * All other strings are considered decimal.
       */
@@ -271,12 +271,12 @@ interface NumberConstructor {
 
 interface Object {
     /**
-      * Determines whether an object has a property with the specified name. 
+      * Determines whether an object has a property with the specified name.
       * @param v A property name.
       */
     hasOwnProperty(v: PropertyKey): boolean
 
-    /** 
+    /**
       * Determines whether a specified property is enumerable.
       * @param v A property name.
       */
@@ -285,7 +285,7 @@ interface Object {
 
 interface ObjectConstructor {
     /**
-      * Copy the values of all of the enumerable own properties from one or more source objects to a 
+      * Copy the values of all of the enumerable own properties from one or more source objects to a
       * target object. Returns the target object.
       * @param target The target object to copy to.
       * @param source The source object from which to copy properties.
@@ -293,7 +293,7 @@ interface ObjectConstructor {
     assign<T, U>(target: T, source: U): T & U;
 
     /**
-      * Copy the values of all of the enumerable own properties from one or more source objects to a 
+      * Copy the values of all of the enumerable own properties from one or more source objects to a
       * target object. Returns the target object.
       * @param target The target object to copy to.
       * @param source1 The first source object from which to copy properties.
@@ -302,7 +302,7 @@ interface ObjectConstructor {
     assign<T, U, V>(target: T, source1: U, source2: V): T & U & V;
 
     /**
-      * Copy the values of all of the enumerable own properties from one or more source objects to a 
+      * Copy the values of all of the enumerable own properties from one or more source objects to a
       * target object. Returns the target object.
       * @param target The target object to copy to.
       * @param source1 The first source object from which to copy properties.
@@ -312,7 +312,7 @@ interface ObjectConstructor {
     assign<T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
 
     /**
-      * Copy the values of all of the enumerable own properties from one or more source objects to a 
+      * Copy the values of all of the enumerable own properties from one or more source objects to a
       * target object. Returns the target object.
       * @param target The target object to copy to.
       * @param sources One or more source objects from which to copy properties
@@ -340,17 +340,17 @@ interface ObjectConstructor {
     setPrototypeOf(o: any, proto: any): any;
 
     /**
-      * Gets the own property descriptor of the specified object. 
-      * An own property descriptor is one that is defined directly on the object and is not 
-      * inherited from the object's prototype. 
+      * Gets the own property descriptor of the specified object.
+      * An own property descriptor is one that is defined directly on the object and is not
+      * inherited from the object's prototype.
       * @param o Object that contains the property.
       * @param p Name of the property.
     */
     getOwnPropertyDescriptor(o: any, propertyKey: PropertyKey): PropertyDescriptor;
 
     /**
-      * Adds a property to an object, or modifies attributes of an existing property. 
-      * @param o Object on which to add or modify the property. This can be a native JavaScript 
+      * Adds a property to an object, or modifies attributes of an existing property.
+      * @param o Object on which to add or modify the property. This can be a native JavaScript
       * object (that is, a user-defined object or a built in object) or a DOM object.
       * @param p The property name.
       * @param attributes Descriptor for the property. It can be for a data property or an accessor
@@ -374,47 +374,60 @@ interface RegExp {
       */
     readonly flags: string;
 
-    /** 
-      * Returns a Boolean value indicating the state of the sticky flag (y) used with a regular 
-      * expression. Default is false. Read-only. 
+    /**
+      * Returns a Boolean value indicating the state of the sticky flag (y) used with a regular
+      * expression. Default is false. Read-only.
       */
     readonly sticky: boolean;
 
-    /** 
-      * Returns a Boolean value indicating the state of the Unicode flag (u) used with a regular 
-      * expression. Default is false. Read-only. 
+    /**
+      * Returns a Boolean value indicating the state of the Unicode flag (u) used with a regular
+      * expression. Default is false. Read-only.
       */
     readonly unicode: boolean;
 }
 
+interface RegExpConstructor {
+    new (pattern: RegExp, flags?: string): RegExp;
+    (pattern: RegExp, flags?: string): RegExp;
+}
+
 interface String {
     /**
-      * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point 
-      * value of the UTF-16 encoded code point starting at the string element at position pos in 
-      * the String resulting from converting this object to a String. 
-      * If there is no element at that position, the result is undefined. 
+      * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point
+      * value of the UTF-16 encoded code point starting at the string element at position pos in
+      * the String resulting from converting this object to a String.
+      * If there is no element at that position, the result is undefined.
       * If a valid UTF-16 surrogate pair does not begin at pos, the result is the code unit at pos.
       */
     codePointAt(pos: number): number | undefined;
 
     /**
-      * Returns true if searchString appears as a substring of the result of converting this 
-      * object to a String, at one or more positions that are 
+      * Returns true if searchString appears as a substring of the result of converting this
+      * object to a String, at one or more positions that are
       * greater than or equal to position; otherwise, returns false.
-      * @param searchString search string 
+      * @param searchString search string
       * @param position If position is undefined, 0 is assumed, so as to search all of the String.
       */
     includes(searchString: string, position?: number): boolean;
 
     /**
-      * Returns true if the sequence of elements of searchString converted to a String is the 
-      * same as the corresponding elements of this object (converted to a String) starting at 
+      * Returns true if the sequence of elements of searchString converted to a String is the
+      * same as the corresponding elements of this object (converted to a String) starting at
       * endPosition – length(this). Otherwise returns false.
       */
     endsWith(searchString: string, endPosition?: number): boolean;
 
     /**
-      * Returns the String value result of normalizing the string into the normalization form 
+      * Returns the String value result of normalizing the string into the normalization form
+      * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
+      * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
+      * is "NFC"
+      */
+    normalize(form: "NFC" | "NFD" | "NFKC" | "NFKD"): string;
+
+    /**
+      * Returns the String value result of normalizing the string into the normalization form
       * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
       * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
       * is "NFC"
@@ -422,15 +435,15 @@ interface String {
     normalize(form?: string): string;
 
     /**
-      * Returns a String value that is made from count copies appended together. If count is 0, 
+      * Returns a String value that is made from count copies appended together. If count is 0,
       * T is the empty String is returned.
       * @param count number of copies to append
       */
     repeat(count: number): string;
 
     /**
-      * Returns true if the sequence of elements of searchString converted to a String is the 
-      * same as the corresponding elements of this object (converted to a String) starting at 
+      * Returns true if the sequence of elements of searchString converted to a String is the
+      * same as the corresponding elements of this object (converted to a String) starting at
       * position. Otherwise returns false.
       */
     startsWith(searchString: string, position?: number): boolean;
@@ -490,7 +503,7 @@ interface StringConstructor {
 
     /**
       * String.raw is intended for use as a tag function of a Tagged Template String. When called
-      * as such the first argument will be a well formed template call site object and the rest 
+      * as such the first argument will be a well formed template call site object and the rest
       * parameter will contain the substitution values.
       * @param template A well-formed template string call site representation.
       * @param substitutions A set of substitution values.

@@ -30,15 +30,51 @@
 ////}
 
 goTo.marker("file1");
-verify.getScriptLexicalStructureListCount(0);
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module"
+    }
+]);
 
 goTo.marker("file2");
-verify.getScriptLexicalStructureListContains("<global>", "module");
-verify.getScriptLexicalStructureListContains("x", "var");
-verify.getScriptLexicalStructureListCount(2);
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "x",
+                "kind": "var"
+            }
+        ]
+    }
+]);
 
 goTo.marker("file3");
-verify.getScriptLexicalStructureListContains("<global>", "module");
-verify.getScriptLexicalStructureListContains("foo", "function");
-verify.getScriptLexicalStructureListContains("bar", "function");
-verify.getScriptLexicalStructureListCount(5);
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "bar",
+                "kind": "function"
+            },
+            {
+                "text": "foo",
+                "kind": "function"
+            }
+        ]
+    },
+    {
+        "text": "bar",
+        "kind": "function",
+        "indent": 1
+    },
+    {
+        "text": "foo",
+        "kind": "function",
+        "indent": 1
+    }
+]);

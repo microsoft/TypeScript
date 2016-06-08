@@ -21,10 +21,6 @@ var v = {
 >a : Symbol(a, Decl(commentsOnObjectLiteral3.ts, 8, 13), Decl(commentsOnObjectLiteral3.ts, 12, 18))
 
   return this.prop;
->this.prop : Symbol(prop, Decl(commentsOnObjectLiteral3.ts, 1, 9))
->this : Symbol(, Decl(commentsOnObjectLiteral3.ts, 1, 7))
->prop : Symbol(prop, Decl(commentsOnObjectLiteral3.ts, 1, 9))
-
  } /*trailing 1*/,
  //setter
  set a(value) {
@@ -32,9 +28,6 @@ var v = {
 >value : Symbol(value, Decl(commentsOnObjectLiteral3.ts, 14, 7))
 
   this.prop = value;
->this.prop : Symbol(prop, Decl(commentsOnObjectLiteral3.ts, 1, 9))
->this : Symbol(, Decl(commentsOnObjectLiteral3.ts, 1, 7))
->prop : Symbol(prop, Decl(commentsOnObjectLiteral3.ts, 1, 9))
 >value : Symbol(value, Decl(commentsOnObjectLiteral3.ts, 14, 7))
 
  } // trailing 2

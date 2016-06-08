@@ -34,6 +34,8 @@
 {
     var v;
     function foo() { }
+    var ambient_2 = require("ambient");
+    exports.b = ambient_2.baz;
     exports["default"] = v;
     var C = (function () {
         function C() {

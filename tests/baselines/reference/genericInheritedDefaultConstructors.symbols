@@ -1,0 +1,35 @@
+=== tests/cases/compiler/genericInheritedDefaultConstructors.ts ===
+// repro from #8166
+interface Constructor<T> {
+>Constructor : Symbol(Constructor, Decl(genericInheritedDefaultConstructors.ts, 0, 0))
+>T : Symbol(T, Decl(genericInheritedDefaultConstructors.ts, 1, 22))
+
+    new(...args: any[]): T;
+>args : Symbol(args, Decl(genericInheritedDefaultConstructors.ts, 2, 8))
+>T : Symbol(T, Decl(genericInheritedDefaultConstructors.ts, 1, 22))
+
+    prototype: T;
+>prototype : Symbol(Constructor.prototype, Decl(genericInheritedDefaultConstructors.ts, 2, 27))
+>T : Symbol(T, Decl(genericInheritedDefaultConstructors.ts, 1, 22))
+}
+
+class A<U> { a: U; }
+>A : Symbol(A, Decl(genericInheritedDefaultConstructors.ts, 4, 1))
+>U : Symbol(U, Decl(genericInheritedDefaultConstructors.ts, 6, 8))
+>a : Symbol(A.a, Decl(genericInheritedDefaultConstructors.ts, 6, 12))
+>U : Symbol(U, Decl(genericInheritedDefaultConstructors.ts, 6, 8))
+
+class B<V> extends A<V> { b: V; }
+>B : Symbol(B, Decl(genericInheritedDefaultConstructors.ts, 6, 20))
+>V : Symbol(V, Decl(genericInheritedDefaultConstructors.ts, 7, 8))
+>A : Symbol(A, Decl(genericInheritedDefaultConstructors.ts, 4, 1))
+>V : Symbol(V, Decl(genericInheritedDefaultConstructors.ts, 7, 8))
+>b : Symbol(B.b, Decl(genericInheritedDefaultConstructors.ts, 7, 25))
+>V : Symbol(V, Decl(genericInheritedDefaultConstructors.ts, 7, 8))
+
+var c:Constructor<B<boolean>> = B; // shouldn't error here
+>c : Symbol(c, Decl(genericInheritedDefaultConstructors.ts, 8, 3))
+>Constructor : Symbol(Constructor, Decl(genericInheritedDefaultConstructors.ts, 0, 0))
+>B : Symbol(B, Decl(genericInheritedDefaultConstructors.ts, 6, 20))
+>B : Symbol(B, Decl(genericInheritedDefaultConstructors.ts, 6, 20))
+

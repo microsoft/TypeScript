@@ -275,6 +275,8 @@ function_module_1.a;
 class_1.a;
 class_module_1.a;
 // named export
+var interface_2 = require("interface");
+exports.a1 = interface_2.a;
 var variable_2 = require("variable");
 exports.a2 = variable_2.a;
 var interface_variable_2 = require("interface-variable");
@@ -285,8 +287,12 @@ var interface_module_2 = require("interface-module");
 exports.a5 = interface_module_2.a;
 var variable_module_2 = require("variable-module");
 exports.a6 = variable_module_2.a;
+var function_2 = require("function");
+exports.a7 = function_2.a;
 var function_module_2 = require("function-module");
 exports.a8 = function_module_2.a;
+var class_2 = require("class");
+exports.a9 = class_2.a;
 var class_module_2 = require("class-module");
 exports.a0 = class_module_2.a;
 // export-star

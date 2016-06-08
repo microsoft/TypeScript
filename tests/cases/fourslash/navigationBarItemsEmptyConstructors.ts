@@ -5,8 +5,26 @@
 ////    }
 ////}
 
-verify.getScriptLexicalStructureListContains("Test", "class");
-verify.getScriptLexicalStructureListContains("constructor", "constructor");
-
-// no other items
-verify.getScriptLexicalStructureListCount(2);
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "Test",
+                "kind": "class"
+            }
+        ]
+    },
+    {
+        "text": "Test",
+        "kind": "class",
+        "childItems": [
+            {
+                "text": "constructor",
+                "kind": "constructor"
+            }
+        ],
+        "indent": 1
+    }
+]);

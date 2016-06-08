@@ -47,11 +47,10 @@ var a: {
     [x: string]: string;
 >x : string
 }
-var b: { [x: number]: string; } = { foo: '' };
+var b: { [x: number]: string; } = { 0: '' };
 >b : { [x: number]: string; }
 >x : number
->{ foo: '' } : { foo: string; }
->foo : string
+>{ 0: '' } : { 0: string; }
 >'' : string
 
 function foo1(x: A);

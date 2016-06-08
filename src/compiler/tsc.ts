@@ -391,9 +391,21 @@ namespace ts {
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }
-            if (isWatchSet(configParseResult.options) && !sys.watchFile) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* compilerHost */ undefined);
-                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            if (isWatchSet(configParseResult.options)) {
+                if (!sys.watchFile) {
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* compilerHost */ undefined);
+                    sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                }
+
+                if (!directoryWatcher && sys.watchDirectory && configFileName) {
+                    const directory = ts.getDirectoryPath(configFileName);
+                    directoryWatcher = sys.watchDirectory(
+                        // When the configFileName is just "tsconfig.json", the watched directory should be
+                        // the current directory; if there is a given "project" parameter, then the configFileName
+                        // is an absolute file name.
+                        directory == "" ? "." : directory,
+                        watchedDirectoryChanged, /*recursive*/ true);
+                };
             }
             return configParseResult;
         }

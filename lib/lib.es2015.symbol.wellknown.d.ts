@@ -29,12 +29,6 @@ interface SymbolConstructor {
       */
     readonly isConcatSpreadable: symbol;
 
-    /** 
-      * A method that returns the default iterator for an object. Called by the semantics of the 
-      * for-of statement.
-      */
-    readonly iterator: symbol;
-
     /**
       * A regular expression method that matches the regular expression against a string. Called 
       * by the String.prototype.match method. 
@@ -89,9 +83,6 @@ interface Symbol {
 }
 
 interface Array<T> {
-    /** Iterator */
-    [Symbol.iterator](): IterableIterator<T>;
-
     /**
      * Returns an object whose properties have the value 'true'
      * when they will be absent when used in a 'with' statement.
@@ -132,12 +123,19 @@ interface Date {
 }
 
 interface Map<K, V> {
-    [Symbol.iterator]():IterableIterator<[K,V]>;
     readonly [Symbol.toStringTag]: "Map";
 }
 
 interface WeakMap<K, V>{
     readonly [Symbol.toStringTag]: "WeakMap";
+}
+
+interface Set<T> {
+    readonly [Symbol.toStringTag]: "Set";
+}
+
+interface WeakSet<T> {
+    readonly [Symbol.toStringTag]: "WeakSet";
 }
 
 interface JSON {
@@ -157,21 +155,6 @@ interface Function {
 
 interface GeneratorFunction extends Function {
     readonly [Symbol.toStringTag]: "GeneratorFunction";
-}
-
-interface IArguments {
-    /** Iterator */
-    [Symbol.iterator](): IterableIterator<any>;
-}
-
-interface Iterator<T> { }
-
-interface Iterable<T> {
-    [Symbol.iterator](): Iterator<T>;
-}
-
-interface IterableIterator<T> extends Iterator<T> {
-    [Symbol.iterator](): IterableIterator<T>;
 }
 
 interface Math {
@@ -239,9 +222,6 @@ interface RegExpConstructor {
 }
 
 interface String {
-    /** Iterator */
-    [Symbol.iterator](): IterableIterator<string>;
-   
     /**
       * Matches a string an object that supports being matched against, and returns an array containing the results of that search.
       * @param matcher An object that supports being matched against.
@@ -295,7 +275,6 @@ interface DataView {
   * number of bytes could not be allocated an exception is raised.
   */
 interface Int8Array {
-    [Symbol.iterator](): IterableIterator<number>;
     readonly [Symbol.toStringTag]: "Int8Array";
 }
 
@@ -304,7 +283,6 @@ interface Int8Array {
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint8Array {
-    [Symbol.iterator](): IterableIterator<number>;
     readonly [Symbol.toStringTag]: "UInt8Array";
 }
 
@@ -313,7 +291,6 @@ interface Uint8Array {
   * If the requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint8ClampedArray {
-    [Symbol.iterator](): IterableIterator<number>;
     readonly [Symbol.toStringTag]: "Uint8ClampedArray";
 }
 
@@ -322,7 +299,6 @@ interface Uint8ClampedArray {
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Int16Array {
-    [Symbol.iterator](): IterableIterator<number>;
     readonly [Symbol.toStringTag]: "Int16Array";
 }
 
@@ -331,7 +307,6 @@ interface Int16Array {
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint16Array {
-    [Symbol.iterator](): IterableIterator<number>;
     readonly [Symbol.toStringTag]: "Uint16Array";
 }
 
@@ -340,7 +315,6 @@ interface Uint16Array {
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Int32Array {
-    [Symbol.iterator](): IterableIterator<number>;
     readonly [Symbol.toStringTag]: "Int32Array";
 }
 
@@ -349,7 +323,6 @@ interface Int32Array {
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint32Array {
-    [Symbol.iterator](): IterableIterator<number>;
     readonly [Symbol.toStringTag]: "Uint32Array";
 }
 
@@ -358,7 +331,6 @@ interface Uint32Array {
   * of bytes could not be allocated an exception is raised.
   */
 interface Float32Array {
-    [Symbol.iterator](): IterableIterator<number>;
     readonly [Symbol.toStringTag]: "Float32Array";
 }
 
@@ -367,6 +339,5 @@ interface Float32Array {
   * number of bytes could not be allocated an exception is raised.
   */
 interface Float64Array {
-    [Symbol.iterator](): IterableIterator<number>;
     readonly [Symbol.toStringTag]: "Float64Array";
 }

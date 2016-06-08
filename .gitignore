@@ -46,5 +46,6 @@ coverage/
 internal/
 **/.DS_Store
 .settings
-.vscode/*
-!.vscode/tasks.json
+**/.vs
+**/.vscode
+!**/.vscode/tasks.json

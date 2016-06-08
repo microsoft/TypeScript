@@ -1,16 +1,28 @@
 ////export function
-/////**
-//// * This is a class.
-//// */
-////{| "itemName": "C", "kind": "class" |} class C {
-////    {| "itemName": "foo", "kind": "method" |} foo() {
-////    }
+////class C {
+////    foo() {}
 ////}
 
-
-test.markers().forEach((marker) => {
-    verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
-});
-
-/// Only have two named elements.
-verify.getScriptLexicalStructureListCount(2);
+verify.navigationBar([
+    {
+        "text": "\"navigationBarItemsMissingName1\"",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "C",
+                "kind": "class"
+            }
+        ]
+    },
+    {
+        "text": "C",
+        "kind": "class",
+        "childItems": [
+            {
+                "text": "foo",
+                "kind": "method"
+            }
+        ],
+        "indent": 1
+    }
+]);

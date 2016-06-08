@@ -26,39 +26,39 @@ function apply(func, thisArg, args) {
 >length : Symbol(length, Decl(_apply.js, 12, 7))
 
         case 0: return func.call(thisArg);
->func.call : Symbol(Function.call, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>func.call : Symbol(Function.call, Decl(lib.d.ts, --, --))
 >func : Symbol(func, Decl(_apply.js, 11, 15))
->call : Symbol(Function.call, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>call : Symbol(Function.call, Decl(lib.d.ts, --, --))
 >thisArg : Symbol(thisArg, Decl(_apply.js, 11, 20))
 
         case 1: return func.call(thisArg, args[0]);
->func.call : Symbol(Function.call, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>func.call : Symbol(Function.call, Decl(lib.d.ts, --, --))
 >func : Symbol(func, Decl(_apply.js, 11, 15))
->call : Symbol(Function.call, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>call : Symbol(Function.call, Decl(lib.d.ts, --, --))
 >thisArg : Symbol(thisArg, Decl(_apply.js, 11, 20))
 >args : Symbol(args, Decl(_apply.js, 11, 29))
 
         case 2: return func.call(thisArg, args[0], args[1]);
->func.call : Symbol(Function.call, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>func.call : Symbol(Function.call, Decl(lib.d.ts, --, --))
 >func : Symbol(func, Decl(_apply.js, 11, 15))
->call : Symbol(Function.call, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>call : Symbol(Function.call, Decl(lib.d.ts, --, --))
 >thisArg : Symbol(thisArg, Decl(_apply.js, 11, 20))
 >args : Symbol(args, Decl(_apply.js, 11, 29))
 >args : Symbol(args, Decl(_apply.js, 11, 29))
 
         case 3: return func.call(thisArg, args[0], args[1], args[2]);
->func.call : Symbol(Function.call, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>func.call : Symbol(Function.call, Decl(lib.d.ts, --, --))
 >func : Symbol(func, Decl(_apply.js, 11, 15))
->call : Symbol(Function.call, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>call : Symbol(Function.call, Decl(lib.d.ts, --, --))
 >thisArg : Symbol(thisArg, Decl(_apply.js, 11, 20))
 >args : Symbol(args, Decl(_apply.js, 11, 29))
 >args : Symbol(args, Decl(_apply.js, 11, 29))
 >args : Symbol(args, Decl(_apply.js, 11, 29))
     }
     return func.apply(thisArg, args);
->func.apply : Symbol(Function.apply, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>func.apply : Symbol(Function.apply, Decl(lib.d.ts, --, --))
 >func : Symbol(func, Decl(_apply.js, 11, 15))
->apply : Symbol(Function.apply, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>apply : Symbol(Function.apply, Decl(lib.d.ts, --, --))
 >thisArg : Symbol(thisArg, Decl(_apply.js, 11, 20))
 >args : Symbol(args, Decl(_apply.js, 11, 29))
 }
