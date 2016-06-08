@@ -165,7 +165,7 @@ namespace ts.SignatureHelp {
 
     const emptyArray: any[] = [];
 
-    const enum ArgumentListKind {
+    export const enum ArgumentListKind {
         TypeArguments,
         CallArguments,
         TaggedTemplateArguments
