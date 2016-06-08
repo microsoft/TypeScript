@@ -1,6 +1,6 @@
 {
   "scenario": "Verify project option",
-  "projectRoot": "tests/cases/projects/projectOption/Test",
+  "projectRoot": "tests/cases/projects/projectOption/SpecifyInputFiles",
   "baselineCheck": true,
   "declaration": true
 }

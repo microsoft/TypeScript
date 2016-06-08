@@ -3,5 +3,5 @@
   "projectRoot": "tests/cases/projects/projectOption",
   "baselineCheck": true,
   "declaration": true,
-  "project": "Test"
+  "project": "SpecifyInputFiles"
 }

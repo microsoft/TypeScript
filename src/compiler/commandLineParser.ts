@@ -717,14 +717,18 @@ namespace ts {
                 if (outDir) {
                     exclude.push(outDir);
                 }
-                exclude = map(exclude, normalizeSlashes);
+
+                const resolvedExclude: string[] = [];
+                forEach(exclude, (excludePath) => {
+                    resolvedExclude.push(getNormalizedAbsolutePath(excludePath, basePath));
+                });
 
                 const supportedExtensions = getSupportedExtensions(options);
                 Debug.assert(indexOf(supportedExtensions, ".ts") < indexOf(supportedExtensions, ".d.ts"), "Changed priority of extensions to pick");
 
                 // Get files of supported extensions in their order of resolution
                 for (const extension of supportedExtensions) {
-                    const filesInDirWithExtension = host.readDirectory(basePath, extension, exclude);
+                    const filesInDirWithExtension = host.readDirectory(basePath, extension, resolvedExclude);
                     for (const fileName of filesInDirWithExtension) {
                         // .ts extension would read the .d.ts extension files too but since .d.ts is lower priority extension,
                         // lets pick them when its turn comes up
