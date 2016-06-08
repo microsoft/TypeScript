@@ -1,0 +1,17 @@
+tests/cases/compiler/unusedTypeParameters3.ts(2,15): message TS6132: Variable 'typeparameter1' has never been used.
+tests/cases/compiler/unusedTypeParameters3.ts(2,47): message TS6132: Variable 'typeparameter3' has never been used.
+
+
+==== tests/cases/compiler/unusedTypeParameters3.ts (2 errors) ====
+    
+    class greeter<typeparameter1, typeparameter2, typeparameter3> {
+                  ~~~~~~~~~~~~~~
+!!! message TS6132: Variable 'typeparameter1' has never been used.
+                                                  ~~~~~~~~~~~~~~
+!!! message TS6132: Variable 'typeparameter3' has never been used.
+        private x: typeparameter2;
+    
+        public function1() {
+            this.x;
+        }
+    }

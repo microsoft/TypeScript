@@ -1,0 +1,21 @@
+tests/cases/compiler/unusedPrivateMethodInClass2.ts(3,13): message TS6132: Variable 'function1' has never been used.
+tests/cases/compiler/unusedPrivateMethodInClass2.ts(8,13): message TS6132: Variable 'function2' has never been used.
+
+
+==== tests/cases/compiler/unusedPrivateMethodInClass2.ts (2 errors) ====
+    
+    class greeter {
+        private function1() {
+                ~~~~~~~~~
+!!! message TS6132: Variable 'function1' has never been used.
+            var y = 10;
+            y++;
+        }
+    
+        private function2() {
+                ~~~~~~~~~
+!!! message TS6132: Variable 'function2' has never been used.
+            var y = 10;
+            y++;
+        }
+    }

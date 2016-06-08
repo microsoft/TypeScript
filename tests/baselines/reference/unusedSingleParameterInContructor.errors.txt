@@ -1,0 +1,15 @@
+tests/cases/compiler/unusedSingleParameterInContructor.ts(3,17): message TS6133: Parameter 'person' has never been used.
+tests/cases/compiler/unusedSingleParameterInContructor.ts(4,13): message TS6132: Variable 'unused' has never been used.
+
+
+==== tests/cases/compiler/unusedSingleParameterInContructor.ts (2 errors) ====
+    
+    class Dummy {
+        constructor(person: string) {
+                    ~~~~~~~~~~~~~~
+!!! message TS6133: Parameter 'person' has never been used.
+            var unused = 20;
+                ~~~~~~
+!!! message TS6132: Variable 'unused' has never been used.
+        }
+    }
