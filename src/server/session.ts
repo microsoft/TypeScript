@@ -128,6 +128,7 @@ namespace ts.server {
         export const ReloadProjects = "reloadProjects";
         export const Unknown = "unknown";
         export const OpenExternalProject = "openExternalProject";
+        export const OpenExternalProjects = "openExternalProjects";
         export const CloseExternalProject = "closeExternalProject";
         export const SynchronizeProjectList = "synchronizeProjectList";
         export const ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
@@ -1041,7 +1042,13 @@ namespace ts.server {
 
         private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
-                const deltas = this.projectService.openExternalProject(request.arguments);
+                this.projectService.openExternalProject(request.arguments);
+                return this.notRequired();
+            },
+            [CommandNames.OpenExternalProjects]: (request: protocol.OpenExternalProjectsRequest) => {
+                for (const proj of request.arguments.projects) {
+                    this.projectService.openExternalProject(proj);
+                }
                 return this.notRequired();
             },
             [CommandNames.CloseExternalProject]: (request: protocol.CloseExternalProjectRequest) => {

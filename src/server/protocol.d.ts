@@ -586,6 +586,14 @@ declare namespace ts.server.protocol {
         projectFileName: string;
     }
 
+    export interface OpenExternalProjectsRequest extends Request {
+        arguments: OpenExternalProjectsArgs;
+    }
+
+    export interface OpenExternalProjectsArgs {
+        projects: ExternalProject[];
+    }
+
     export interface CloseExternalProjectRequest extends Request {
         arguments: CloseExternalProjectRequestArgs;
     }
