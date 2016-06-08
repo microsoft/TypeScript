@@ -964,6 +964,12 @@ declare namespace ts.server.protocol {
           * errors for the files in the file list
           */
         delay: number;
+
+        /**
+         * Specify if the host wants the errors to be returned as normal responses
+         * or to be returned asynchronously as events
+         */
+        responseRequired?: boolean;
     }
 
     /**
