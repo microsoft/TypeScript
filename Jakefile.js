@@ -313,6 +313,8 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             if (!opts.noMapRoot) {
                 options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
             }
+        } else {
+            options += " --newLine LF";
         }
 
         if (opts.stripInternal) {
