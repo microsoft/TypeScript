@@ -4164,12 +4164,15 @@ namespace ts {
 
                 const argumentInfo = SignatureHelp.getContainingArgumentInfo(node, position, sourceFile);
                 if (argumentInfo) {
+                    // Get string literal completions from specialized signatures of the target
                     return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo);
                 }
                 else if (isElementAccessExpression(node.parent) && node.parent.argumentExpression === node) {
+                    // Get all names of properties on the expression
                     return getStringLiteralCompletionEntriesFromElementAccess(node.parent);
                 }
                 else {
+                    // Otherwise, get the completions from the contextual type if one exists
                     return getStringLiteralCompletionEntriesFromContextualType(<StringLiteral>node);
                 }
             }
