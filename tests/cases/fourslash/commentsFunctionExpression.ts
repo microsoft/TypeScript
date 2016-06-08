@@ -1,7 +1,4 @@
 /// <reference path='fourslash.ts' />
-// TODO: Salsa test! With types!
-// TODO: Renumber!!!!
-// TODO:Remove some duplicate tests
 
 // test arrow doc comments
 /////** lamdaFoo var comment*/
