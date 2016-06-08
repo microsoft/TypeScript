@@ -538,6 +538,7 @@ namespace ts.server {
         // number becomes 0 for a watcher, then we should close it.
         directoryWatchersRefCount: ts.Map<number> = {};
         hostConfiguration: HostConfiguration;
+        errorCheckMode: ErrorCheckMode = ErrorCheckMode.Manual;
         timerForDetectingProjectFileListChanges: Map<any> = {};
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
@@ -682,6 +683,10 @@ namespace ts.server {
                 if (args.formatOptions) {
                     mergeFormatOptions(this.hostConfiguration.formatCodeOptions, args.formatOptions);
                     this.log("Format host information updated", "Info");
+                }
+                if (args.errorCheckMode !== undefined) {
+                    this.errorCheckMode = args.errorCheckMode;
+                    this.log(`Error check mode was set to ${ErrorCheckMode[args.errorCheckMode]}`, "info");
                 }
             }
         }
@@ -1429,6 +1434,11 @@ namespace ts.server {
         Mid,
         End,
         PostEnd
+    }
+
+    enum ErrorCheckMode {
+        Auto,
+        Manual
     }
 
     export interface ILineIndexWalker {

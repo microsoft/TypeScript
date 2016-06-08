@@ -472,6 +472,11 @@ declare namespace ts.server.protocol {
         [key: string]: string | number | boolean;
     }
 
+    export enum ErrorCheckMode {
+        Auto,
+        Manual
+    }
+
     /**
       * Information found in a configure request.
       */
@@ -492,6 +497,11 @@ declare namespace ts.server.protocol {
          * The format options to use during formatting and other code editing features.
          */
         formatOptions?: FormatOptions;
+
+        /**
+         * Specifies if the host wants the server to decide when to check errors.
+         */
+        errorCheckMode?: ErrorCheckMode;
     }
 
     /**
