@@ -1,0 +1,45 @@
+=== tests/cases/compiler/es6modulekindWithES5Target.ts ===
+
+export class C {
+>C : C
+
+    static s = 0;
+>s : number
+>0 : number
+
+    p = 1;
+>p : number
+>1 : number
+
+    method() { }
+>method : () => void
+}
+
+declare function foo(...args: any[]): any;
+>foo : (...args: any[]) => any
+>args : any[]
+
+@foo
+>foo : (...args: any[]) => any
+
+export class D {
+>D : D
+
+    static s = 0;
+>s : number
+>0 : number
+
+    p = 1;
+>p : number
+>1 : number
+
+    method() { }
+>method : () => void
+}
+
+class E { }
+>E : E
+
+export {E};
+>E : typeof E
+

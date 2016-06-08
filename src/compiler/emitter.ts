@@ -5559,7 +5559,11 @@ const _super = (function (geti, seti) {
             }
 
             function emitClassLikeDeclarationBelowES6(node: ClassLikeDeclaration) {
+                const isES6ExportedClass = isES6ExportedDeclaration(node);
                 if (node.kind === SyntaxKind.ClassDeclaration) {
+                    if (isES6ExportedClass && !(node.flags & NodeFlags.Default)) {
+                        write("export ");
+                    }
                     // source file level classes in system modules are hoisted so 'var's for them are already defined
                     if (!shouldHoistDeclarationInSystemJsModule(node)) {
                         write("var ");
@@ -5629,8 +5633,14 @@ const _super = (function (geti, seti) {
                 }
                 emitEnd(node);
 
-                if (node.kind === SyntaxKind.ClassDeclaration) {
+                if (node.kind === SyntaxKind.ClassDeclaration && !isES6ExportedClass) {
                     emitExportMemberAssignment(<ClassDeclaration>node);
+                }
+                else if (isES6ExportedClass && (node.flags & NodeFlags.Default)) {
+                    writeLine();
+                    write("export default ");
+                    emitDeclarationName(node);
+                    write(";");
                 }
             }
 
