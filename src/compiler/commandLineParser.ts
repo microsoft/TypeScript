@@ -717,7 +717,7 @@ namespace ts {
                 if (outDir) {
                     exclude.push(outDir);
                 }
-                exclude = map(exclude, normalizeSlashes);
+                exclude = map(exclude, e => getNormalizedAbsolutePath(e, basePath));
 
                 const supportedExtensions = getSupportedExtensions(options);
                 Debug.assert(indexOf(supportedExtensions, ".ts") < indexOf(supportedExtensions, ".d.ts"), "Changed priority of extensions to pick");
