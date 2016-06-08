@@ -1,18 +1,19 @@
 // @noImplicitReferences: true
 // @traceResolution: true
+// @currentDirectory: test
 
 // load type declarations from types section of tsconfig
 
-// @filename: /a/tsconfig.json
+// @filename: a/tsconfig.json
 {
     "compilerOptions": {
         "types": [ "jquery" ]
     }
 }
 
-// @filename: /a/types/jquery/index.d.ts
+// @filename: a/types/jquery/index.d.ts
 declare var $: { foo(): void };
 
 
-// @filename: /a/b/consumer.ts
+// @filename: a/b/consumer.ts
 $.foo();

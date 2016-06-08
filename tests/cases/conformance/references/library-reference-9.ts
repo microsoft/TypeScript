@@ -1,5 +1,6 @@
 // @noImplicitReferences: true
 // @traceResolution: true
+// @currentDirectory: test
 
 // Use types search path
 

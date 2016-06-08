@@ -944,12 +944,16 @@ namespace Harness {
                     const result: string[] = [];
                     fileMap.forEachValue((key, value) => {
                         if (key.indexOf(path) === 0 && key.lastIndexOf("/") > path.length) {
-                            const dirName = key.substr(path.length, key.indexOf("/", path.length + 1) - path.length);
+                            let dirName = key.substr(path.length, key.indexOf("/", path.length + 1) - path.length);
+                            if (dirName[0] === '/') {
+                                dirName = dirName.substr(1);
+                            }
                             if (result.indexOf(dirName) < 0) {
                                 result.push(dirName);
                             }
                         }
                     });
+                    console.log('gd = ' + JSON.stringify(result));
                     return result;
                 }
             };
@@ -1050,7 +1054,9 @@ namespace Harness {
             options.noErrorTruncation = true;
             options.skipDefaultLibCheck = true;
 
-            currentDirectory = currentDirectory || Harness.IO.getCurrentDirectory();
+            if (typeof currentDirectory === "undefined") {
+                currentDirectory = Harness.IO.getCurrentDirectory();
+            }
 
             // Parse settings
             if (harnessSettings) {

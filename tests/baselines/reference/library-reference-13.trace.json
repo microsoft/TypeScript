@@ -1,7 +1,7 @@
 [
-    "======== Resolving type reference directive 'jquery', containing file '/a/b/__inferred type names__.ts', root directory '/a'. ========",
-    "Resolving with primary search path '/a/types/'",
-    "File '/a/types/jquery/package.json' does not exist.",
-    "File '/a/types/jquery/index.d.ts' exist - use it as a name resolution result.",
-    "======== Type reference directive 'jquery' was successfully resolved to '/a/types/jquery/index.d.ts', primary: true. ========"
+    "======== Resolving type reference directive 'jquery', containing file 'test/tests/cases/conformance/references/a/b/__inferred type names__.ts', root directory 'tests/cases/conformance/references/a'. ========",
+    "Resolving with primary search path 'tests/cases/conformance/references/a/types/'",
+    "File 'tests/cases/conformance/references/a/types/jquery/package.json' does not exist.",
+    "File 'tests/cases/conformance/references/a/types/jquery/index.d.ts' exist - use it as a name resolution result.",
+    "======== Type reference directive 'jquery' was successfully resolved to 'tests/cases/conformance/references/a/types/jquery/index.d.ts', primary: true. ========"
 ]

@@ -1,8 +1,6 @@
-error TS2304: Cannot find name '/lib'.
 /main.ts(1,14): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
 
 
-!!! error TS2304: Cannot find name '/lib'.
 ==== /mod2.ts (0 errors) ====
     import { Cls } from "./main";
     import "./mod1";
