@@ -472,7 +472,7 @@ declare namespace ts.server.protocol {
         [key: string]: string | number | boolean;
     }
 
-    export enum ErrorCheckMode {
+    export const enum ErrorCheckMode {
         Auto,
         Manual
     }
