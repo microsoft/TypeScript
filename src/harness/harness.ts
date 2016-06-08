@@ -953,7 +953,6 @@ namespace Harness {
                             }
                         }
                     });
-                    console.log('gd = ' + JSON.stringify(result));
                     return result;
                 }
             };
