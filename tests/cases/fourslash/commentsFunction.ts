@@ -153,5 +153,5 @@ goTo.marker('35');
 verify.completionListContains("assigned", "var assigned: (s: string) => number", "On variable\n@returns the parameter's length\nSummary on expression\n@returns return on expression");
 goTo.marker('36');
 verify.currentSignatureHelpDocCommentIs("On variable\n@returns the parameter's length\nSummary on expression\n@returns return on expression");
-verify.currentParameterHelpArgumentDocCommentIs("param on expression\nthe first parameter!\nOn parameter ");
+verify.currentParameterHelpArgumentDocCommentIs("the first parameter!\nparam on expression\nOn parameter ");
 
