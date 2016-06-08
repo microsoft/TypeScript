@@ -2490,7 +2490,7 @@ namespace ts {
         allowUnusedLabels?: boolean;
         baseUrl?: string;
         charset?: string;
-        /* @internal */ configFilePath?: string;           // When options come from a config file, its path is recorded here
+        /* @internal */ configFilePath?: string;
         declaration?: boolean;
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;
@@ -2542,12 +2542,12 @@ namespace ts {
         /* @internal */ stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
-        /* @internal */ suppressOutputPathCheck?: boolean;         // Do not perform validation of output file name in transpile scenarios
+        /* @internal */ suppressOutputPathCheck?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
         types?: string[];
         /* @internal */ typesRoot?: string;
-        typesSearchPaths?: string[];             // Path used to used to compute primary search locations
+        typesSearchPaths?: string[];
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
 
