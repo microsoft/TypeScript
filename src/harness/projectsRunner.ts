@@ -36,11 +36,19 @@ interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
 }
 
 class ProjectRunner extends RunnerBase {
+
+    public enumerateTestFiles() {
+        return this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
+    }
+
+    public kind(): TestRunnerKind {
+        return "project";
+    }
+
     public initializeTests() {
         if (this.tests.length === 0) {
-            const testFiles = this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
+            const testFiles = this.enumerateTestFiles();
             testFiles.forEach(fn => {
-                fn = fn.replace(/\\/g, "/");
                 this.runProjectTestCase(fn);
             });
         }
@@ -236,7 +244,7 @@ class ProjectRunner extends RunnerBase {
                     mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? Harness.IO.resolvePath(testCase.mapRoot) : testCase.mapRoot,
                     sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? Harness.IO.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
                     module: moduleKind,
-                    moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future 
+                    moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future
                 };
                 // Set the values specified using json
                 const optionNameMap: ts.Map<ts.CommandLineOption> = {};

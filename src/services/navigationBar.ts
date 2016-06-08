@@ -9,16 +9,10 @@ namespace ts.NavigationBar {
             return getJsNavigationBarItems(sourceFile, compilerOptions);
         }
 
-        // If the source file has any child items, then it included in the tree
-        // and takes lexical ownership of all other top-level items.
-        let hasGlobalNode = false;
-
         return getItemsWorker(getTopLevelNodes(sourceFile), createTopLevelItem);
 
         function getIndent(node: Node): number {
-            // If we have a global node in the tree,
-            // then it adds an extra layer of depth to all subnodes.
-            let indent = hasGlobalNode ? 1 : 0;
+            let indent = 1; // Global node is the only one with indent 0.
 
             let current = node.parent;
             while (current) {
@@ -141,7 +135,7 @@ namespace ts.NavigationBar {
         function sortNodes(nodes: Node[]): Node[] {
             return nodes.slice(0).sort((n1: Declaration, n2: Declaration) => {
                 if (n1.name && n2.name) {
-                    return getPropertyNameForPropertyNameNode(n1.name).localeCompare(getPropertyNameForPropertyNameNode(n2.name));
+                    return localeCompareFix(getPropertyNameForPropertyNameNode(n1.name), getPropertyNameForPropertyNameNode(n2.name));
                 }
                 else if (n1.name) {
                     return 1;
@@ -153,6 +147,16 @@ namespace ts.NavigationBar {
                     return n1.kind - n2.kind;
                 }
             });
+
+            // node 0.10 treats "a" as greater than "B".
+            // For consistency, sort alphabetically, falling back to which is lower-case.
+            function localeCompareFix(a: string, b: string) {
+                const cmp = a.toLowerCase().localeCompare(b.toLowerCase());
+                if (cmp !== 0)
+                    return cmp;
+                // Return the *opposite* of the `<` operator, which works the same in node 0.10 and 6.0.
+                return a < b ? 1 : a > b ? -1 : 0;
+            }
         }
 
         function addTopLevelNodes(nodes: Node[], topLevelNodes: Node[]): void {
@@ -511,11 +515,6 @@ namespace ts.NavigationBar {
             function createSourceFileItem(node: SourceFile): ts.NavigationBarItem {
                 const childItems = getItemsWorker(getChildNodes(node.statements), createChildItem);
 
-                if (childItems === undefined || childItems.length === 0) {
-                    return undefined;
-                }
-
-                hasGlobalNode = true;
                 const rootName = isExternalModule(node)
                     ? "\"" + escapeString(getBaseFileName(removeFileExtension(normalizePath(node.fileName)))) + "\""
                     : "<global>";
@@ -653,6 +652,12 @@ namespace ts.NavigationBar {
                 topItem.childItems.push(newItem);
             }
 
+            if (node.jsDocComments && node.jsDocComments.length > 0) {
+                for (const jsDocComment of node.jsDocComments) {
+                    visitNode(jsDocComment);
+                }
+            }
+
             // Add a level if traversing into a container
             if (newItem && (isFunctionLike(node) || isClassLike(node))) {
                 const lastTop = topItem;
@@ -732,6 +737,27 @@ namespace ts.NavigationBar {
                     }
                     const declName = declarationNameToString(decl.name);
                     return getNavBarItem(declName, ScriptElementKind.constElement, [getNodeSpan(node)]);
+                case SyntaxKind.JSDocTypedefTag:
+                    if ((<JSDocTypedefTag>node).name) {
+                        return getNavBarItem(
+                            (<JSDocTypedefTag>node).name.text,
+                            ScriptElementKind.typeElement,
+                            [getNodeSpan(node)]);
+                    }
+                    else {
+                        const parentNode = node.parent && node.parent.parent;
+                        if (parentNode && parentNode.kind === SyntaxKind.VariableStatement) {
+                            if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
+                                const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
+                                if (nameIdentifier.kind === SyntaxKind.Identifier) {
+                                    return getNavBarItem(
+                                        (<Identifier>nameIdentifier).text,
+                                        ScriptElementKind.typeElement,
+                                        [getNodeSpan(node)]);
+                                }
+                            }
+                        }
+                    }
                 default:
                     return undefined;
             }
@@ -802,7 +828,7 @@ namespace ts.NavigationBar {
         }
 
         function getNodeSpan(node: Node) {
-            return node.kind === SyntaxKind.SourceFile
+           return node.kind === SyntaxKind.SourceFile
                 ? createTextSpanFromBounds(node.getFullStart(), node.getEnd())
                 : createTextSpanFromBounds(node.getStart(), node.getEnd());
         }

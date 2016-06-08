@@ -268,7 +268,7 @@ namespace ts.server {
         }
 
         removeRoot(info: ScriptInfo) {
-            if (!this.filenameToScript.contains(info.path)) {
+            if (this.filenameToScript.contains(info.path)) {
                 this.filenameToScript.remove(info.path);
                 this.roots = copyListRemovingItem(info, this.roots);
                 this.resolvedModuleNames.remove(info.path);
@@ -1138,7 +1138,7 @@ namespace ts.server {
             else {
                 this.log("No config files found.");
             }
-            return {};
+            return configFileName ? { configFileName } : {};
         }
 
         /**

@@ -746,7 +746,7 @@ namespace FourSlash {
             }
 
             const missingItem = { fileName: fileName, start: start, end: end, isWriteAccess: isWriteAccess };
-            this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${JSON.stringify(missingItem, undefined, 2)} in the returned list: (${JSON.stringify(references, undefined, 2)})`);
+            this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(references)})`);
         }
 
         public verifyReferencesCountIs(count: number, localFilesOnly = true) {
@@ -800,7 +800,7 @@ namespace FourSlash {
 
         private testDiagnostics(expected: string, diagnostics: ts.Diagnostic[]) {
             const realized = ts.realizeDiagnostics(diagnostics, "\r\n");
-            const actual = JSON.stringify(realized, undefined, 2);
+            const actual = stringify(realized);
             assert.equal(actual, expected);
         }
 
@@ -875,7 +875,7 @@ namespace FourSlash {
                 }
 
                 if (ranges.length !== references.length) {
-                    this.raiseError("Rename location count does not match result.\n\nExpected: " + JSON.stringify(ranges, undefined, 2) + "\n\nActual:" + JSON.stringify(references, undefined, 2));
+                    this.raiseError("Rename location count does not match result.\n\nExpected: " + stringify(ranges) + "\n\nActual:" + stringify(references));
                 }
 
                 ranges = ranges.sort((r1, r2) => r1.start - r2.start);
@@ -888,7 +888,7 @@ namespace FourSlash {
                     if (reference.textSpan.start !== range.start ||
                         ts.textSpanEnd(reference.textSpan) !== range.end) {
 
-                        this.raiseError("Rename location results do not match.\n\nExpected: " + JSON.stringify(ranges, undefined, 2) + "\n\nActual:" + JSON.stringify(references, undefined, 2));
+                        this.raiseError("Rename location results do not match.\n\nExpected: " + stringify(ranges) + "\n\nActual:" + JSON.stringify(references));
                     }
                 }
             }
@@ -972,7 +972,7 @@ namespace FourSlash {
             }
             else {
                 if (actual) {
-                    this.raiseError(`Expected no signature help, but got "${JSON.stringify(actual, undefined, 2)}"`);
+                    this.raiseError(`Expected no signature help, but got "${stringify(actual)}"`);
                 }
             }
         }
@@ -1176,7 +1176,7 @@ namespace FourSlash {
 
         public printCurrentParameterHelp() {
             const help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
-            Harness.IO.log(JSON.stringify(help, undefined, 2));
+            Harness.IO.log(stringify(help));
         }
 
         public printCurrentQuickInfo() {
@@ -1218,7 +1218,7 @@ namespace FourSlash {
 
         public printCurrentSignatureHelp() {
             const sigHelp = this.getActiveSignatureHelpItem();
-            Harness.IO.log(JSON.stringify(sigHelp, undefined, 2));
+            Harness.IO.log(stringify(sigHelp));
         }
 
         public printMemberListMembers() {
@@ -1248,7 +1248,7 @@ namespace FourSlash {
         public printReferences() {
             const references = this.getReferencesAtCaret();
             ts.forEach(references, entry => {
-                Harness.IO.log(JSON.stringify(entry, undefined, 2));
+                Harness.IO.log(stringify(entry));
             });
         }
 
@@ -1482,6 +1482,12 @@ namespace FourSlash {
 
         public formatSelection(start: number, end: number) {
             const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, end, this.formatCodeOptions);
+            this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+            this.fixCaretPosition();
+        }
+
+        public formatOnType(pos: number, key: string) {
+            const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, pos, key, this.formatCodeOptions);
             this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
             this.fixCaretPosition();
         }
@@ -1739,8 +1745,8 @@ namespace FourSlash {
 
             function jsonMismatchString() {
                 return Harness.IO.newLine() +
-                    "expected: '" + Harness.IO.newLine() + JSON.stringify(expected, undefined, 2) + "'" + Harness.IO.newLine() +
-                    "actual:   '" + Harness.IO.newLine() + JSON.stringify(actual, undefined, 2) + "'";
+                    "expected: '" + Harness.IO.newLine() + stringify(expected) + "'" + Harness.IO.newLine() +
+                    "actual:   '" + Harness.IO.newLine() + stringify(actual) + "'";
             }
         }
 
@@ -1955,73 +1961,27 @@ namespace FourSlash {
             // if there was an explicit match kind specified, then it should be validated.
             if (matchKind !== undefined) {
                 const missingItem = { name: name, kind: kind, searchValue: searchValue, matchKind: matchKind, fileName: fileName, parentName: parentName };
-                this.raiseError(`verifyNavigationItemsListContains failed - could not find the item: ${JSON.stringify(missingItem, undefined, 2)} in the returned list: (${JSON.stringify(items, undefined, 2)})`);
+                this.raiseError(`verifyNavigationItemsListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(items)})`);
             }
         }
 
-        public verifyNavigationBarCount(expected: number) {
+        public verifyNavigationBar(json: any) {
             const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
-            const actual = this.getNavigationBarItemsCount(items);
-
-            if (expected !== actual) {
-                this.raiseError(`verifyNavigationBarCount failed - found: ${actual} navigation items, expected: ${expected}.`);
-            }
-        }
-
-        private getNavigationBarItemsCount(items: ts.NavigationBarItem[]) {
-            let result = 0;
-            if (items) {
-                for (let i = 0, n = items.length; i < n; i++) {
-                    result++;
-                    result += this.getNavigationBarItemsCount(items[i].childItems);
-                }
+            if (JSON.stringify(items, replacer) !== JSON.stringify(json)) {
+                this.raiseError(`verifyNavigationBar failed - expected: ${stringify(json)}, got: ${stringify(items, replacer)}`);
             }
 
-            return result;
-        }
-
-        public verifyNavigationBarContains(name: string, kind: string, fileName?: string, parentName?: string, isAdditionalSpan?: boolean, markerPosition?: number) {
-            fileName = fileName || this.activeFile.fileName;
-            const items = this.languageService.getNavigationBarItems(fileName);
-
-            if (!items || items.length === 0) {
-                this.raiseError("verifyNavigationBarContains failed - found 0 navigation items, expected at least one.");
-            }
-
-            if (this.navigationBarItemsContains(items, name, kind, parentName)) {
-                return;
-            }
-
-            const missingItem = { name, kind, parentName };
-            this.raiseError(`verifyNavigationBarContains failed - could not find the item: ${JSON.stringify(missingItem, undefined, 2)} in the returned list: (${JSON.stringify(items, undefined, 2)})`);
-        }
-
-        private navigationBarItemsContains(items: ts.NavigationBarItem[], name: string, kind: string, parentName?: string) {
-            function recur(items: ts.NavigationBarItem[], curParentName: string) {
-                for (let i = 0; i < items.length; i++) {
-                    const item = items[i];
-                    if (item && item.text === name && item.kind === kind && (!parentName || curParentName === parentName)) {
-                        return true;
-                    }
-                    if (recur(item.childItems, item.text)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            return recur(items, "");
-        }
-
-        public verifyNavigationBarChildItem(parent: string, name: string, kind: string) {
-            const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
-
-            for (let i = 0; i < items.length; i++) {
-                const item = items[i];
-                if (item.text === parent) {
-                    if (this.navigationBarItemsContains(item.childItems, name, kind))
-                        return;
-                    const missingItem = { name, kind };
-                    this.raiseError(`verifyNavigationBarChildItem failed - could not find the item: ${JSON.stringify(missingItem)} in the children list: (${JSON.stringify(item.childItems, undefined, 2)})`);
+            // Make the data easier to read.
+            function replacer(key: string, value: any) {
+                switch (key) {
+                    case "spans":
+                        // We won't ever check this.
+                        return undefined;
+                    case "childItems":
+                        return value.length === 0 ? undefined : value;
+                    default:
+                        // Omit falsy values, those are presumed to be the default.
+                        return value || undefined;
                 }
             }
         }
@@ -2071,7 +2031,7 @@ namespace FourSlash {
             }
 
             const missingItem = { fileName: fileName, start: start, end: end, isWriteAccess: isWriteAccess };
-            this.raiseError(`verifyOccurrencesAtPositionListContains failed - could not find the item: ${JSON.stringify(missingItem, undefined, 2)} in the returned list: (${JSON.stringify(occurrences, undefined, 2)})`);
+            this.raiseError(`verifyOccurrencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(occurrences)})`);
         }
 
         public verifyOccurrencesAtPositionListCount(expectedCount: number) {
@@ -2110,7 +2070,7 @@ namespace FourSlash {
             }
 
             const missingItem = { fileName: fileName, start: start, end: end, kind: kind };
-            this.raiseError(`verifyDocumentHighlightsAtPositionListContains failed - could not find the item: ${JSON.stringify(missingItem, undefined, 2)} in the returned list: (${JSON.stringify(documentHighlights, undefined, 2)})`);
+            this.raiseError(`verifyDocumentHighlightsAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(documentHighlights)})`);
         }
 
         public verifyDocumentHighlightsAtPositionListCount(expectedCount: number, fileNamesToSearch: string[]) {
@@ -2176,9 +2136,9 @@ namespace FourSlash {
                 }
             }
 
-            const itemsString = items.map((item) => JSON.stringify({ name: item.name, kind: item.kind }, undefined, 2)).join(",\n");
+            const itemsString = items.map(item => stringify({ name: item.name, kind: item.kind })).join(",\n");
 
-            this.raiseError(`Expected "${JSON.stringify({ name, text, documentation, kind }, undefined, 2)}" to be in list [${itemsString}]`);
+            this.raiseError(`Expected "${stringify({ name, text, documentation, kind })}" to be in list [${itemsString}]`);
         }
 
         private findFile(indexOrName: any) {
@@ -2741,6 +2701,10 @@ ${code}
         }
         return result;
     }
+
+    function stringify(data: any, replacer?: (key: string, value: any) => any): string {
+        return JSON.stringify(data, replacer, 2);
+    }
 }
 
 namespace FourSlashInterface {
@@ -3042,23 +3006,8 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
-        public navigationBarCount(count: number) {
-            this.state.verifyNavigationBarCount(count);
-        }
-
-        // TODO: figure out what to do with the unused arguments.
-        public navigationBarContains(
-            name: string,
-            kind: string,
-            fileName?: string,
-            parentName?: string,
-            isAdditionalSpan?: boolean,
-            markerPosition?: number) {
-            this.state.verifyNavigationBarContains(name, kind, fileName, parentName, isAdditionalSpan, markerPosition);
-        }
-
-        public navigationBarChildItem(parent: string, name: string, kind: string) {
-            this.state.verifyNavigationBarChildItem(parent, name, kind);
+        public navigationBar(json: any) {
+            this.state.verifyNavigationBar(json);
         }
 
         public navigationItemsListCount(count: number, searchValue: string, matchKind?: string) {
@@ -3282,6 +3231,10 @@ namespace FourSlashInterface {
 
         public selection(startMarker: string, endMarker: string) {
             this.state.formatSelection(this.state.getMarkerByName(startMarker).position, this.state.getMarkerByName(endMarker).position);
+        }
+
+        public onType(posMarker: string, key: string) {
+            this.state.formatOnType(this.state.getMarkerByName(posMarker).position, key);
         }
 
         public setOption(name: string, value: number): void;

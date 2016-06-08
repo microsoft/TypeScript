@@ -20,7 +20,7 @@ namespace ts {
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
         getChildren(sourceFile?: SourceFile): Node[];
-        getStart(sourceFile?: SourceFile): number;
+        getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
         getFullStart(): number;
         getEnd(): number;
         getWidth(sourceFile?: SourceFile): number;
@@ -172,6 +172,9 @@ namespace ts {
         "static",
         "throws",
         "type",
+        "typedef",
+        "property",
+        "prop",
         "version"
     ];
     let jsDocCompletionEntries: CompletionEntry[];
@@ -189,6 +192,7 @@ namespace ts {
         public end: number;
         public flags: NodeFlags;
         public parent: Node;
+        public jsDocComments: JSDocComment[];
         private _children: Node[];
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
@@ -203,8 +207,8 @@ namespace ts {
             return getSourceFileOfNode(this);
         }
 
-        public getStart(sourceFile?: SourceFile): number {
-            return getTokenPosOfNode(this, sourceFile);
+        public getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number {
+            return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
         }
 
         public getFullStart(): number {
@@ -235,12 +239,14 @@ namespace ts {
             return (sourceFile || this.getSourceFile()).text.substring(this.getStart(), this.getEnd());
         }
 
-        private addSyntheticNodes(nodes: Node[], pos: number, end: number): number {
+        private addSyntheticNodes(nodes: Node[], pos: number, end: number, useJSDocScanner?: boolean): number {
             scanner.setTextPos(pos);
             while (pos < end) {
-                const token = scanner.scan();
+                const token = useJSDocScanner ? scanner.scanJSDocToken() : scanner.scan();
                 const textPos = scanner.getTextPos();
-                nodes.push(createNode(token, pos, textPos, 0, this));
+                if (textPos <= end) {
+                    nodes.push(createNode(token, pos, textPos, 0, this));
+                }
                 pos = textPos;
             }
             return pos;
@@ -270,20 +276,27 @@ namespace ts {
                 scanner.setText((sourceFile || this.getSourceFile()).text);
                 children = [];
                 let pos = this.pos;
+                const useJSDocScanner = this.kind >= SyntaxKind.FirstJSDocTagNode && this.kind <= SyntaxKind.LastJSDocTagNode;
                 const processNode = (node: Node) => {
                     if (pos < node.pos) {
-                        pos = this.addSyntheticNodes(children, pos, node.pos);
+                        pos = this.addSyntheticNodes(children, pos, node.pos, useJSDocScanner);
                     }
                     children.push(node);
                     pos = node.end;
                 };
                 const processNodes = (nodes: NodeArray<Node>) => {
                     if (pos < nodes.pos) {
-                        pos = this.addSyntheticNodes(children, pos, nodes.pos);
+                        pos = this.addSyntheticNodes(children, pos, nodes.pos, useJSDocScanner);
                     }
                     children.push(this.createSyntaxList(<NodeArray<Node>>nodes));
                     pos = nodes.end;
                 };
+                // jsDocComments need to be the first children
+                if (this.jsDocComments) {
+                    for (const jsDocComment of this.jsDocComments) {
+                        processNode(jsDocComment);
+                    }
+                }
                 forEachChild(this, processNode, processNodes);
                 if (pos < this.end) {
                     this.addSyntheticNodes(children, pos, this.end);
@@ -2644,7 +2657,7 @@ namespace ts {
         return false;
     }
 
-    /** 
+    /**
      * Returns the containing object literal property declaration given a possible name node, e.g. "a" in x = { "a": 1 }
      */
     function getContainingObjectLiteralElement(node: Node): ObjectLiteralElement {
@@ -2906,6 +2919,7 @@ namespace ts {
             const changesInCompilationSettingsAffectSyntax = oldSettings &&
                 (oldSettings.target !== newSettings.target ||
                  oldSettings.module !== newSettings.module ||
+                 oldSettings.moduleResolution !== newSettings.moduleResolution ||
                  oldSettings.noResolve !== newSettings.noResolve ||
                  oldSettings.jsx !== newSettings.jsx ||
                  oldSettings.allowJs !== newSettings.allowJs);
@@ -5637,7 +5651,7 @@ namespace ts {
 
             const sourceFile = getValidSourceFile(fileName);
 
-            const node = getTouchingPropertyName(sourceFile, position);
+            const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
             if (node === sourceFile) {
                 return undefined;
             }
@@ -5999,7 +6013,8 @@ namespace ts {
                 const sourceFile = container.getSourceFile();
                 const tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</;
 
-                const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, container.getStart(), container.getEnd());
+                const start = findInComments ? container.getFullStart() : container.getStart();
+                const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, start, container.getEnd());
 
                 if (possiblePositions.length) {
                     // Build the set of symbols to search for, initially it has only the current symbol
@@ -7590,11 +7605,11 @@ namespace ts {
 
         function isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
 
-            // '<' is currently not supported, figuring out if we're in a Generic Type vs. a comparison is too 
+            // '<' is currently not supported, figuring out if we're in a Generic Type vs. a comparison is too
             // expensive to do during typing scenarios
             // i.e. whether we're dealing with:
             //      var x = new foo<| ( with class foo<T>{} )
-            // or 
+            // or
             //      var y = 3 <|
             if (openingBrace === CharacterCodes.lessThan) {
                 return false;
@@ -7829,7 +7844,7 @@ namespace ts {
             const defaultLibFileName = host.getDefaultLibFileName(host.getCompilationSettings());
             const canonicalDefaultLibName = getCanonicalFileName(ts.normalizePath(defaultLibFileName));
 
-            const node = getTouchingWord(sourceFile, position);
+            const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
 
             // Can only rename an identifier.
             if (node) {
@@ -7999,6 +8014,11 @@ namespace ts {
                     break;
                 default:
                     forEachChild(node, walk);
+                    if (node.jsDocComments) {
+                        for (const jsDocComment of node.jsDocComments) {
+                            forEachChild(jsDocComment, walk);
+                        }
+                    }
             }
         }
     }
