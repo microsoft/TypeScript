@@ -2772,6 +2772,10 @@
         "category": "Error",
         "code": 6131
     },
+    "File name '{0}' has a '{1}' extension - stripping it": {
+        "category": "Message",
+        "code": 6132
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
