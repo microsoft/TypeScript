@@ -1,7 +1,7 @@
 // @noImplicitReferences: true
 // @traceResolution: true
 // @declaration: true
-// @typesRoot: /
+// @typesRoot: /types
 
 // @filename: /ref.d.ts
 export interface $ { x }

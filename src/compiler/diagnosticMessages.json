@@ -1935,6 +1935,10 @@
         "category": "Error",
         "code": 2687
     },
+    "Cannot find type definition file for '{0}'.": {
+        "category": "Error",
+        "code": 2688
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

@@ -1,6 +1,6 @@
 // @noImplicitReferences: true
 // @traceResolution: true
-// @typesRoot: /test
+// @typesRoot: /test/types
 // @currentDirectory: /test
 
 // Don't crash in circular library reference situations

@@ -1,6 +1,7 @@
 // @noImplicitReferences: true
 // @traceResolution: true
 // @currentDirectory: /src
+// @typesRoot: types
 
 // We can find typings in the ./types folder
 

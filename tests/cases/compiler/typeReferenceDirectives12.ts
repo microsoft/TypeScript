@@ -1,6 +1,6 @@
 // @noImplicitReferences: true
 // @declaration: true
-// @typesRoot: /
+// @typesRoot: /types
 // @traceResolution: true
 // @out: output.js
 

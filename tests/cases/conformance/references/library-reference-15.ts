@@ -2,10 +2,14 @@
 // @traceResolution: true
 // @types: jquery
 // @currentDirectory: /a
+// @typesRoot: types
 
 // @filename: /a/types/jquery/index.d.ts
 declare var $: { foo(): void };
 
+// @filename: /a/types/jquery2/index.d.ts
+declare var $2: { foo(): void };
 
 // @filename: /a/b/consumer.ts
-$.foo();
+$.foo(); // should OK
+$2.foo(); // should error

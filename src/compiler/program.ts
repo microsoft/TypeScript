@@ -13,13 +13,6 @@ namespace ts {
 
     const emptyArray: any[] = [];
 
-    const defaultTypesFolderName = "types";
-    const defaultLibrarySearchPaths = [
-        "types/",
-        "node_modules/",
-        "node_modules/@types/",
-    ];
-
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
         while (true) {
             const fileName = combinePaths(searchPath, "tsconfig.json");
@@ -196,24 +189,22 @@ namespace ts {
             traceEnabled
         };
 
-        // use typesRoot and fallback to directory that contains tsconfig or current directory if typesRoot is not set
-        const rootDir = options.typesRoot || (options.configFilePath ? getDirectoryPath(options.configFilePath) : (host.getCurrentDirectory && host.getCurrentDirectory()));
-
+        const typesRoot = options.typesRoot;
         if (traceEnabled) {
             if (containingFile === undefined) {
-                if (rootDir === undefined) {
+                if (typesRoot === undefined) {
                     trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_not_set, typeReferenceDirectiveName);
                 }
                 else {
-                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_1, typeReferenceDirectiveName, rootDir);
+                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_1, typeReferenceDirectiveName, typesRoot);
                 }
             }
             else {
-                if (rootDir === undefined) {
+                if (typesRoot === undefined) {
                     trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_not_set, typeReferenceDirectiveName, containingFile);
                 }
                 else {
-                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2, typeReferenceDirectiveName, containingFile, rootDir);
+                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2, typeReferenceDirectiveName, containingFile, typesRoot);
                 }
             }
         }
@@ -221,27 +212,23 @@ namespace ts {
         const failedLookupLocations: string[] = [];
 
         // Check primary library paths
-        if (rootDir !== undefined) {
-            const effectivePrimarySearchPaths = options.typesSearchPaths || defaultLibrarySearchPaths;
-            for (const searchPath of effectivePrimarySearchPaths) {
-                const primaryPath = combinePaths(rootDir, searchPath);
-                if (traceEnabled) {
-                    trace(host, Diagnostics.Resolving_with_primary_search_path_0, primaryPath);
-                }
-                const candidate = combinePaths(primaryPath, typeReferenceDirectiveName);
-                const candidateDirectory = getDirectoryPath(candidate);
-                const resolvedFile = loadNodeModuleFromDirectory(typeReferenceExtensions, candidate, failedLookupLocations,
-                    !directoryProbablyExists(candidateDirectory, host), moduleResolutionState);
+        if (typesRoot !== undefined) {
+            if (traceEnabled) {
+                trace(host, Diagnostics.Resolving_with_primary_search_path_0, typesRoot);
+            }
+            const candidate = combinePaths(typesRoot, typeReferenceDirectiveName);
+            const candidateDirectory = getDirectoryPath(candidate);
+            const resolvedFile = loadNodeModuleFromDirectory(typeReferenceExtensions, candidate, failedLookupLocations,
+                !directoryProbablyExists(candidateDirectory, host), moduleResolutionState);
 
-                if (resolvedFile) {
-                    if (traceEnabled) {
-                        trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFile, true);
-                    }
-                    return {
-                        resolvedTypeReferenceDirective: { primary: true, resolvedFileName: resolvedFile },
-                        failedLookupLocations
-                    };
+            if (resolvedFile) {
+                if (traceEnabled) {
+                    trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFile, true);
                 }
+                return {
+                    resolvedTypeReferenceDirective: { primary: true, resolvedFileName: resolvedFile },
+                    failedLookupLocations
+                };
             }
         }
         else {
@@ -256,7 +243,7 @@ namespace ts {
             initialLocationForSecondaryLookup = getDirectoryPath(containingFile);
         }
         else {
-            initialLocationForSecondaryLookup = rootDir;
+            initialLocationForSecondaryLookup = typesRoot;
         }
 
         if (initialLocationForSecondaryLookup !== undefined) {
@@ -959,49 +946,6 @@ namespace ts {
         return resolutions;
     }
 
-
-    /**
-      * Computes the types folder, a.k.a. the primary types lookup location.
-      * This is commonly './types' relative to whatever the compilation root is.
-      */
-    function getTypesFolderLocation(options: CompilerOptions, host: CompilerHost, inferredRoot: string): Path {
-        // Openish question: When tsconfig specifies a rootDir *and* a relative typesRoot, is the typesRoot
-        // relative to the tsconfig file path, or the rootDir path?
-
-        // If typesRoot came from tsconfig, then it's relative the config file path.
-        // Otherwise, it's relative to the current folder.
-        if (options.typesRoot) {
-            // true case is e.g. tsconfig { typesRoot: './foo' }, so types is [tsconfigPath]/foo
-            // false case is e.g. tsc a.ts --typesRoot foo, so types is [cwd]/foo
-            const typesRootParent = options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory();
-            return toPath(combinePaths(options.typesRoot, defaultTypesFolderName), typesRootParent, f => host.getCanonicalFileName(f));
-        }
-
-        // If we have an explicit rootDir, use that
-        // This could be relative to the tsconfig file path, or absolute
-        if (options.rootDir) {
-            if (isRootedDiskPath(options.rootDir)) {
-                // e.g. root dir is given as C:/src/foo, so types is C:/src/foo/types
-                return toPath(defaultTypesFolderName, options.rootDir, f => host.getCanonicalFileName(f));
-            }
-            else {
-                // e.g. root dir is ../foo from tsconfig, so types is [tsconfig path]/../foo/types
-                //   or root dir is ../foo from commandline, so types is [cwd]/types
-                const rootDirParent = options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory();
-                return toPath(defaultTypesFolderName, rootDirParent, f => host.getCanonicalFileName(f));
-            }
-        }
-
-        // No typesRoot specified and no rootDir specified, so use the inferredRoot as the place to start
-        // if there's no tsconfig file
-        const inferredParent = options.configFilePath ? getDirectoryPath(options.configFilePath) : inferredRoot;
-        if (inferredParent === undefined) {
-            // There's no common compilation root, so there is no types folder. Sad!
-            return undefined;
-        }
-        return toPath(defaultTypesFolderName, inferredParent, f => host.getCanonicalFileName(f));
-    }
-
     function getInferredTypesRoot(options: CompilerOptions, rootFiles: string[], host: CompilerHost) {
         return computeCommonSourceDirectoryOfFilenames(rootFiles, host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
     }
@@ -1022,7 +966,7 @@ namespace ts {
 
         // This is the primary lookup location
         const inferredRoot = getInferredTypesRoot(options, rootFiles, host);
-        const primaryLocation = getTypesFolderLocation(options, host, inferredRoot);
+        const primaryLocation = options.typesRoot;
         if (host.directoryExists) {
             let result = primaryLocation && host.directoryExists(primaryLocation) && host.getDirectories(primaryLocation);
 
@@ -1210,7 +1154,6 @@ namespace ts {
                 (oldOptions.jsx !== options.jsx) ||
                 (oldOptions.allowJs !== options.allowJs) ||
                 (oldOptions.rootDir !== options.rootDir) ||
-                (oldOptions.typesSearchPaths !== options.typesSearchPaths) ||
                 (oldOptions.configFilePath !== options.configFilePath) ||
                 (oldOptions.baseUrl !== options.baseUrl) ||
                 (oldOptions.typesRoot !== options.typesRoot) ||
@@ -1965,7 +1908,7 @@ namespace ts {
                 }
             }
             else {
-                fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd, Diagnostics.Cannot_find_name_0, typeReferenceDirective));
+                fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd, Diagnostics.Cannot_find_type_definition_file_for_0, typeReferenceDirective));
             }
 
             if (saveResolution) {

@@ -1,16 +1,19 @@
 // @noImplicitReferences: true
 // @traceResolution: true
-// @currentDirectory: test
+// @currentDirectory: /
 
 // The primary lookup folder is relative to tsconfig.json, if present
 
-// @filename: types/alpha/index.d.ts
+// @filename: /types/alpha/index.d.ts
 declare var alpha: { a: string };
 
-// @filename: src/foo.ts
+// @filename: /src/foo.ts
 /// <reference types="alpha" />
 var x: string = alpha.a;
 
-// @filename: tsconfig.json
+// @filename: /tsconfig.json
 {
+	"compilerOptions": {
+		"typesRoot": "types"
+	}
 }

@@ -1,7 +1,7 @@
 // @noImplicitReferences: true
 // @traceResolution: true
 // @declaration: true
-// @typesRoot: /
+// @typesRoot: /types
 
 // $ comes from d.ts file - no need to add type reference directive
 
