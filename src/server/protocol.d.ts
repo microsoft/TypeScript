@@ -451,10 +451,14 @@ declare namespace ts.server.protocol {
      * Represents a set of changes for open document with a given file name.
      * Either content of textChanges should be present.
      */
-    export interface OpenFile {
+    export interface NewOpenFile {
         fileName: string;
-        content?: string;
-        textChanges?: ts.TextChange[];
+        content: string;
+    }
+
+    export interface ChangedOpenFile {
+        fileName: string;
+        changes: ts.TextChange[];
     }
 
     /**
@@ -611,7 +615,8 @@ declare namespace ts.server.protocol {
     }
 
     export interface ApplyChangedToOpenFilesRequestArgs {
-        openFiles: OpenFile[];
+        openFiles: NewOpenFile[];
+        changedFiles: ChangedOpenFile[];
         closedFiles: string[];
     }
 

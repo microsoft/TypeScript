@@ -1063,7 +1063,7 @@ namespace ts.server {
                 return this.requiredResponse(result);
             },
             [CommandNames.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
-                this.projectService.applyChangesInOpenFiles(request.arguments.openFiles, request.arguments.closedFiles);
+                this.projectService.applyChangesInOpenFiles(request.arguments.openFiles, request.arguments.changedFiles, request.arguments.closedFiles);
                 // TODO: report errors
                 return this.requiredResponse(true);
             },

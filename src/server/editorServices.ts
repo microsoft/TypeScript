@@ -1484,18 +1484,18 @@ namespace ts.server {
             return files;
         }
 
-        applyChangesInOpenFiles(openFiles: protocol.OpenFile[], closedFiles: string[]): void {
+        applyChangesInOpenFiles(openFiles: protocol.NewOpenFile[], changedFiles: protocol.ChangedOpenFile[], closedFiles: string[]): void {
             for (const file of openFiles) {
                 const scriptInfo = this.getScriptInfo(file.fileName);
-                if (!scriptInfo || !scriptInfo.isOpen) {
-                    Debug.assert(!!file.content);
-                    this.openClientFile(file.fileName, file.content);
-                }
-                else {
-                    Debug.assert(!!file.textChanges);
-                    for (const change of file.textChanges) {
-                        scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
-                    }
+                Debug.assert(!scriptInfo || !scriptInfo.isOpen);
+                this.openClientFile(file.fileName, file.content);
+            }
+
+            for (const file of changedFiles) {
+                const scriptInfo = this.getScriptInfo(file.fileName);
+                Debug.assert(!!scriptInfo);
+                for (const change of file.changes) {
+                    scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
                 }
             }
 
