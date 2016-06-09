@@ -1487,7 +1487,7 @@ namespace ts.server {
         applyChangesInOpenFiles(openFiles: protocol.OpenFile[], closedFiles: string[]): void {
             for (const file of openFiles) {
                 const scriptInfo = this.getScriptInfo(file.fileName);
-                if (!scriptInfo) {
+                if (!scriptInfo || !scriptInfo.isOpen) {
                     Debug.assert(!!file.content);
                     this.openClientFile(file.fileName, file.content);
                 }
