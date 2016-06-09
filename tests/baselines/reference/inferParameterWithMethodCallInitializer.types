@@ -1,0 +1,30 @@
+=== tests/cases/compiler/inferParameterWithMethodCallInitializer.ts ===
+function getNumber(): number {
+>getNumber : () => number
+
+    return 1;
+>1 : number
+}
+class Example {
+>Example : Example
+
+    getNumber(): number {
+>getNumber : () => number
+
+        return 1;
+>1 : number
+    }
+    doSomething(a = this.getNumber()): typeof a {
+>doSomething : (a?: number) => number
+>a : number
+>this.getNumber() : number
+>this.getNumber : () => number
+>this : this
+>getNumber : () => number
+>a : number
+
+        return a;
+>a : number
+    }
+}
+

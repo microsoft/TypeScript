@@ -8392,7 +8392,7 @@ namespace ts {
             if (needToCaptureLexicalThis) {
                 captureLexicalThis(node, container);
             }
-            if (isFunctionLike(container)) {
+            if (isFunctionLike(container) && !isInParameterInitializerBeforeContainingFunction(node)) {
                 // If this is a function in a JS file, it might be a class method. Check if it's the RHS
                 // of a x.prototype.y = function [name]() { .... }
                 if (container.kind === SyntaxKind.FunctionExpression &&
