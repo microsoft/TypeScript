@@ -2260,7 +2260,7 @@
         "category": "Error",
         "code": 5047
     },
-    "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
+    "Option '{0} can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
         "code": 5051
     },
@@ -2771,6 +2771,10 @@
     "Cannot compile modules using option '{0}' unless the '--module' flag is 'amd' or 'system'.": {
         "category": "Error",
         "code": 6131
+    },
+    "File name '{0}' has a '{1}' extension - stripping it": {
+        "category": "Message",
+        "code": 6132
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

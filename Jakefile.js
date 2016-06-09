@@ -5,6 +5,7 @@ var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
 var Linter = require("tslint");
+var runTestsInParallel = require("./scripts/mocha-parallel").runTestsInParallel;
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -312,10 +313,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         }
 
         if (useDebugMode) {
-            options += " -sourcemap";
-            if (!opts.noMapRoot) {
-                options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
-            }
+            options += " --inlineSourceMap --inlineSources";
         } else {
             options += " --newLine LF";
         }
@@ -485,7 +483,6 @@ var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
-var servicesFileInBrowserTest = path.join(builtLocalDirectory, "typescriptServicesInBrowserTest.js");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
 var nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
@@ -515,16 +512,6 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 // 'ts' namespace with '"typescript"' as a module.
                 var nodeStandaloneDefinitionsFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
                 fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
-            });
-
-compileFile(servicesFileInBrowserTest, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
-            /*prefixes*/ [copyright],
-            /*useBuiltCompiler*/ true,
-            { noOutFile: false, generateDeclarations: true, preserveConstEnums: true, keepComments: true, noResolve: false, stripInternal: true, noMapRoot: true },
-            /*callback*/ function () {
-                var content = fs.readFileSync(servicesFileInBrowserTest).toString();
-                var i = content.lastIndexOf("\n");
-                fs.writeFileSync(servicesFileInBrowserTest, content.substring(0, i) + "\r\n//# sourceURL=../built/local/typeScriptServices.js" + content.substring(i));
             });
 
 
@@ -688,7 +675,6 @@ function cleanTestDirs() {
 // used to pass data from jake command line directly to run.js
 function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount) {
     var testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light: light, workerCount: workerCount, taskConfigsFolder: taskConfigsFolder });
-    console.log('Running tests with config: ' + testConfigContents);
     fs.writeFileSync('test.config', testConfigContents);
 }
 
@@ -749,42 +735,16 @@ function runConsoleTests(defaultReporter, runInParallel) {
 
     }
     else {
-        // run task to load all tests and partition them between workers
-        var cmd = "mocha " + " -R min " + colors + run;
-        console.log(cmd);
-        exec(cmd, function() {
-            // read all configuration files and spawn a worker for every config
-            var configFiles = fs.readdirSync(taskConfigsFolder);
-            var counter = configFiles.length;
-            var firstErrorStatus;
-            // schedule work for chunks
-            configFiles.forEach(function (f) {
-                var configPath = path.join(taskConfigsFolder, f);
-                var workerCmd = "mocha" + " -t " + testTimeout + " -R " + reporter + " " + colors + " " + run + " --config='" + configPath + "'";
-                console.log(workerCmd);
-                exec(workerCmd,  finishWorker, finishWorker)
-            });
-
-            function finishWorker(e, errorStatus) {
-                counter--;
-                if (firstErrorStatus === undefined && errorStatus !== undefined) {
-                    firstErrorStatus = errorStatus;
-                }
-                if (counter !== 0) {
-                    complete();
-                }
-                else {
-                    // last worker clean everything and runs linter in case if there were no errors
-                    deleteTemporaryProjectOutput();
-                    jake.rmRf(taskConfigsFolder);
-                    if (firstErrorStatus === undefined) {
-                        runLinter();
-                        complete();
-                    }
-                    else {
-                        failWithStatus(firstErrorStatus);
-                    }
-                }
+        runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function (err) {
+            // last worker clean everything and runs linter in case if there were no errors
+            deleteTemporaryProjectOutput();
+            jake.rmRf(taskConfigsFolder);
+            if (err) {
+                fail(err);
+            }
+            else {
+                runLinter();
+                complete();
             }
         });
     }
@@ -839,12 +799,12 @@ compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile
 
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
 task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
-    var cmd = 'browserify built/local/run.js -o built/local/bundle.js';
+    var cmd = 'browserify built/local/run.js -d -o built/local/bundle.js';
     exec(cmd);
 }, {async: true});
 
 desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], port=, browser=[chrome|IE]");
-task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFileInBrowserTest], function() {
+task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFile], function() {
     cleanTestDirs();
     host = "node";
     port = process.env.port || process.env.p || '8888';

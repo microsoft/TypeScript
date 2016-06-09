@@ -6,7 +6,7 @@
 
 namespace ts {
     /* @internal */
-    export let optionDeclarations: CommandLineOption[] = [
+    export const optionDeclarations: CommandLineOption[] = [
         {
             name: "charset",
             type: "string",

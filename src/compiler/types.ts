@@ -1658,6 +1658,7 @@ namespace ts {
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
+        /* @internal */ patternAmbientModules?: PatternAmbientModule[];
     }
 
     export interface ScriptReferenceHost {
@@ -2135,6 +2136,20 @@ namespace ts {
         [index: string]: Symbol;
     }
 
+    /** Represents a "prefix*suffix" pattern. */
+    /* @internal */
+    export interface Pattern {
+        prefix: string;
+        suffix: string;
+    }
+
+    /** Used to track a `declare module "foo*"`-like declaration. */
+    /* @internal */
+    export interface PatternAmbientModule {
+        pattern: Pattern;
+        symbol: Symbol;
+    }
+
     /* @internal */
     export const enum NodeCheckFlags {
         TypeChecked                         = 0x00000001,  // Node has been type checked
@@ -2209,6 +2224,7 @@ namespace ts {
 
         /* @internal */
         Nullable = Undefined | Null,
+        Falsy = String | Number | Boolean | Void | Undefined | Null,
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
