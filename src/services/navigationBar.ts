@@ -13,8 +13,8 @@ namespace ts.NavigationBar {
      */
     interface NavNode {
         node: Node;
-        additionalNodes: Node[]; // May be missing
-        parent: NavNode; // Missing for root decl
+        additionalNodes?: Node[];
+        parent?: NavNode; // Missing for root decl
         children: NavNode[];
         indent: number; // # of parents
     }
@@ -32,8 +32,7 @@ namespace ts.NavigationBar {
             additionalNodes: undefined,
             parent,
             children: [],
-            indent:
-            parent ? parent.indent + 1 : 0
+            indent: parent ? parent.indent + 1 : 0
         };
         if (parent) {
             parent.children.push(navNode);
