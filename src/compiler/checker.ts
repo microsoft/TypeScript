@@ -8392,7 +8392,10 @@ namespace ts {
             if (needToCaptureLexicalThis) {
                 captureLexicalThis(node, container);
             }
-            if (isFunctionLike(container) && !isInParameterInitializerBeforeContainingFunction(node)) {
+            if (isFunctionLike(container) &&
+                (!isInParameterInitializerBeforeContainingFunction(node) || getFunctionLikeThisParameter(container))) {
+                // Note: a parameter initializer should refer to class-this unless function-this is explicitly annotated.
+
                 // If this is a function in a JS file, it might be a class method. Check if it's the RHS
                 // of a x.prototype.y = function [name]() { .... }
                 if (container.kind === SyntaxKind.FunctionExpression &&
@@ -18470,6 +18473,14 @@ namespace ts {
                 accessor.parameters[0].name.kind === SyntaxKind.Identifier &&
                 (<Identifier>accessor.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword) {
                 return accessor.parameters[0];
+            }
+        }
+
+        function getFunctionLikeThisParameter(func: FunctionLikeDeclaration) {
+            if (func.parameters.length &&
+                func.parameters[0].name.kind === SyntaxKind.Identifier &&
+                (<Identifier>func.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword) {
+                return func.parameters[0];
             }
         }
 

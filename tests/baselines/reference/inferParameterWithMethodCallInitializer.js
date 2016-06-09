@@ -10,6 +10,14 @@ class Example {
         return a;
     }
 }
+function weird(this: Example, a = this.getNumber()) {
+    return a;
+}
+class Weird {
+    doSomething(this: Example, a = this.getNumber()) {
+        return a;
+    }
+}
 
 
 //// [inferParameterWithMethodCallInitializer.js]
@@ -27,4 +35,17 @@ var Example = (function () {
         return a;
     };
     return Example;
+}());
+function weird(a) {
+    if (a === void 0) { a = this.getNumber(); }
+    return a;
+}
+var Weird = (function () {
+    function Weird() {
+    }
+    Weird.prototype.doSomething = function (a) {
+        if (a === void 0) { a = this.getNumber(); }
+        return a;
+    };
+    return Weird;
 }());

@@ -10,3 +10,11 @@ class Example {
         return a;
     }
 }
+function weird(this: Example, a = this.getNumber()) {
+    return a;
+}
+class Weird {
+    doSomething(this: Example, a = this.getNumber()) {
+        return a;
+    }
+}

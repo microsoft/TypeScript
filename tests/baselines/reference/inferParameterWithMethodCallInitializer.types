@@ -27,4 +27,34 @@ class Example {
 >a : number
     }
 }
+function weird(this: Example, a = this.getNumber()) {
+>weird : (this: Example, a?: number) => number
+>this : Example
+>Example : Example
+>a : number
+>this.getNumber() : number
+>this.getNumber : () => number
+>this : Example
+>getNumber : () => number
+
+    return a;
+>a : number
+}
+class Weird {
+>Weird : Weird
+
+    doSomething(this: Example, a = this.getNumber()) {
+>doSomething : (this: Example, a?: number) => number
+>this : Example
+>Example : Example
+>a : number
+>this.getNumber() : number
+>this.getNumber : () => number
+>this : Example
+>getNumber : () => number
+
+        return a;
+>a : number
+    }
+}
 
