@@ -1,7 +1,6 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 /// <reference path="core.ts" />
-/// <reference path="printer.ts" />
 
 namespace ts {
     /** The version of the TypeScript compiler release */
@@ -1338,14 +1337,7 @@ namespace ts {
 
             const emitStart = performance.mark();
 
-            // TODO(rbuckton): remove USE_TRANSFORMS condition when we switch to transforms permanently.
-            let useLegacyEmitter = options.useLegacyEmitter;
-            if (/^(no?|f(alse)?|0|-)$/i.test(getEnvironmentVariable("USE_TRANSFORMS", host))) {
-                useLegacyEmitter = true;
-            }
-
-            const fileEmitter = useLegacyEmitter ? emitFiles : printFiles;
-            const emitResult = fileEmitter(
+            const emitResult = emitFiles(
                 emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile);

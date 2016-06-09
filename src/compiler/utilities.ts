@@ -2426,6 +2426,18 @@ namespace ts {
         };
     }
 
+    export function getResolvedExternalModuleName(host: EmitHost, file: SourceFile): string {
+        return file.moduleName || getExternalModuleNameFromPath(host, file.fileName);
+    }
+
+    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): string {
+        const file = resolver.getExternalModuleFileFromDeclaration(declaration);
+        if (!file || isDeclarationFile(file)) {
+            return undefined;
+        }
+        return getResolvedExternalModuleName(host, file);
+    }
+
     /**
      * Resolves a local path to a path which is absolute to the base of the emit
      */
