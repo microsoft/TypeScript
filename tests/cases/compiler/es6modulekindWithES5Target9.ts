@@ -9,6 +9,10 @@ import * as M from "mod";
 
 export {a};
 
+export {M};
+
+export {d};
+
 export * from "mod";
 
 export {b} from "mod"

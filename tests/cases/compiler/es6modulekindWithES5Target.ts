@@ -7,6 +7,7 @@ export class C {
     p = 1;
     method() { }
 }
+export { C as C2 };
 
 declare function foo(...args: any[]): any;
 @foo
@@ -15,6 +16,7 @@ export class D {
     p = 1;
     method() { }
 }
+export { D as D2 };
 
 class E { }
 export {E};
