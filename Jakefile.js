@@ -312,10 +312,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         }
 
         if (useDebugMode) {
-            options += " -sourcemap";
-            if (!opts.noMapRoot) {
-                options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
-            }
+            options += " --inlineSourceMap --inlineSources";
         } else {
             options += " --newLine LF";
         }
@@ -485,7 +482,6 @@ var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
-var servicesFileInBrowserTest = path.join(builtLocalDirectory, "typescriptServicesInBrowserTest.js");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
 var nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
@@ -515,16 +511,6 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 // 'ts' namespace with '"typescript"' as a module.
                 var nodeStandaloneDefinitionsFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
                 fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
-            });
-
-compileFile(servicesFileInBrowserTest, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
-            /*prefixes*/ [copyright],
-            /*useBuiltCompiler*/ true,
-            { noOutFile: false, generateDeclarations: true, preserveConstEnums: true, keepComments: true, noResolve: false, stripInternal: true, noMapRoot: true },
-            /*callback*/ function () {
-                var content = fs.readFileSync(servicesFileInBrowserTest).toString();
-                var i = content.lastIndexOf("\n");
-                fs.writeFileSync(servicesFileInBrowserTest, content.substring(0, i) + "\r\n//# sourceURL=../built/local/typeScriptServices.js" + content.substring(i));
             });
 
 
@@ -839,12 +825,12 @@ compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile
 
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
 task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
-    var cmd = 'browserify built/local/run.js -o built/local/bundle.js';
+    var cmd = 'browserify built/local/run.js -d -o built/local/bundle.js';
     exec(cmd);
 }, {async: true});
 
 desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], port=, browser=[chrome|IE]");
-task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFileInBrowserTest], function() {
+task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFile], function() {
     cleanTestDirs();
     host = "node";
     port = process.env.port || process.env.p || '8888';
