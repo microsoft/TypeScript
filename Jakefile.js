@@ -5,6 +5,7 @@ var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
 var Linter = require("tslint");
+var runTestsInParallel = require("./scripts/mocha-parallel").runTestsInParallel;
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -688,7 +689,6 @@ function cleanTestDirs() {
 // used to pass data from jake command line directly to run.js
 function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount) {
     var testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light: light, workerCount: workerCount, taskConfigsFolder: taskConfigsFolder });
-    console.log('Running tests with config: ' + testConfigContents);
     fs.writeFileSync('test.config', testConfigContents);
 }
 
@@ -749,42 +749,16 @@ function runConsoleTests(defaultReporter, runInParallel) {
 
     }
     else {
-        // run task to load all tests and partition them between workers
-        var cmd = "mocha " + " -R min " + colors + run;
-        console.log(cmd);
-        exec(cmd, function() {
-            // read all configuration files and spawn a worker for every config
-            var configFiles = fs.readdirSync(taskConfigsFolder);
-            var counter = configFiles.length;
-            var firstErrorStatus;
-            // schedule work for chunks
-            configFiles.forEach(function (f) {
-                var configPath = path.join(taskConfigsFolder, f);
-                var workerCmd = "mocha" + " -t " + testTimeout + " -R " + reporter + " " + colors + " " + run + " --config='" + configPath + "'";
-                console.log(workerCmd);
-                exec(workerCmd,  finishWorker, finishWorker)
-            });
-
-            function finishWorker(e, errorStatus) {
-                counter--;
-                if (firstErrorStatus === undefined && errorStatus !== undefined) {
-                    firstErrorStatus = errorStatus;
-                }
-                if (counter !== 0) {
-                    complete();
-                }
-                else {
-                    // last worker clean everything and runs linter in case if there were no errors
-                    deleteTemporaryProjectOutput();
-                    jake.rmRf(taskConfigsFolder);
-                    if (firstErrorStatus === undefined) {
-                        runLinter();
-                        complete();
-                    }
-                    else {
-                        failWithStatus(firstErrorStatus);
-                    }
-                }
+        runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function (err) {
+            // last worker clean everything and runs linter in case if there were no errors
+            deleteTemporaryProjectOutput();
+            jake.rmRf(taskConfigsFolder);
+            if (err) {
+                fail(err);
+            }
+            else {
+                runLinter();
+                complete();
             }
         });
     }
