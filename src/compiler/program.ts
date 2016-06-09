@@ -95,7 +95,8 @@ namespace ts {
         return compilerOptions.traceResolution && host.trace !== undefined;
     }
 
-    function hasZeroOrOneAsteriskCharacter(str: string): boolean {
+    /* @internal */
+    export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
         let seenAsterisk = false;
         for (let i = 0; i < str.length; i++) {
             if (str.charCodeAt(i) === CharacterCodes.asterisk) {
@@ -496,48 +497,23 @@ namespace ts {
             trace(state.host, Diagnostics.baseUrl_option_is_set_to_0_using_this_value_to_resolve_non_relative_module_name_1, state.compilerOptions.baseUrl, moduleName);
         }
 
-        let longestMatchPrefixLength = -1;
-        let matchedPattern: string;
-        let matchedStar: string;
-
+        // string is for exact match
+        let matchedPattern: Pattern | string | undefined = undefined;
         if (state.compilerOptions.paths) {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
             }
-
-            for (const key in state.compilerOptions.paths) {
-                const pattern: string = key;
-                const indexOfStar = pattern.indexOf("*");
-                if (indexOfStar !== -1) {
-                    const prefix = pattern.substr(0, indexOfStar);
-                    const suffix = pattern.substr(indexOfStar + 1);
-                    if (moduleName.length >= prefix.length + suffix.length &&
-                        startsWith(moduleName, prefix) &&
-                        endsWith(moduleName, suffix)) {
-
-                        // use length of prefix as betterness criteria
-                        if (prefix.length > longestMatchPrefixLength) {
-                            longestMatchPrefixLength = prefix.length;
-                            matchedPattern = pattern;
-                            matchedStar = moduleName.substr(prefix.length, moduleName.length - suffix.length);
-                        }
-                    }
-                }
-                else if (pattern === moduleName) {
-                    // pattern was matched as is - no need to search further
-                    matchedPattern = pattern;
-                    matchedStar = undefined;
-                    break;
-                }
-            }
+            matchedPattern = matchPatternOrExact(getKeys(state.compilerOptions.paths), moduleName);
         }
 
         if (matchedPattern) {
+            const matchedStar = typeof matchedPattern === "string" ? undefined : matchedText(matchedPattern, moduleName);
+            const matchedPatternText = typeof matchedPattern === "string" ? matchedPattern : patternText(matchedPattern);
             if (state.traceEnabled) {
-                trace(state.host, Diagnostics.Module_name_0_matched_pattern_1, moduleName, matchedPattern);
+                trace(state.host, Diagnostics.Module_name_0_matched_pattern_1, moduleName, matchedPatternText);
             }
-            for (const subst of state.compilerOptions.paths[matchedPattern]) {
-                const path = matchedStar ? subst.replace("\*", matchedStar) : subst;
+            for (const subst of state.compilerOptions.paths[matchedPatternText]) {
+                const path = matchedStar ? subst.replace("*", matchedStar) : subst;
                 const candidate = normalizePath(combinePaths(state.compilerOptions.baseUrl, path));
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.Trying_substitution_0_candidate_module_location_Colon_1, subst, path);
@@ -558,6 +534,75 @@ namespace ts {
 
             return loader(candidate, supportedExtensions, failedLookupLocations, !directoryProbablyExists(getDirectoryPath(candidate), state.host), state);
         }
+    }
+
+    /**
+     * patternStrings contains both pattern strings (containing "*") and regular strings.
+     * Return an exact match if possible, or a pattern match, or undefined.
+     * (These are verified by verifyCompilerOptions to have 0 or 1 "*" characters.)
+     */
+    function matchPatternOrExact(patternStrings: string[], candidate: string): string | Pattern | undefined {
+        const patterns: Pattern[] = [];
+        for (const patternString of patternStrings) {
+            const pattern = tryParsePattern(patternString);
+            if (pattern) {
+                patterns.push(pattern);
+            }
+            else if (patternString === candidate) {
+                // pattern was matched as is - no need to search further
+                return patternString;
+            }
+        }
+
+        return findBestPatternMatch(patterns, _ => _, candidate);
+    }
+
+    function patternText({prefix, suffix}: Pattern): string {
+        return `${prefix}*${suffix}`;
+    }
+
+    /**
+     * Given that candidate matches pattern, returns the text matching the '*'.
+     * E.g.: matchedText(tryParsePattern("foo*baz"), "foobarbaz") === "bar"
+     */
+    function matchedText(pattern: Pattern, candidate: string): string {
+        Debug.assert(isPatternMatch(pattern, candidate));
+        return candidate.substr(pattern.prefix.length, candidate.length - pattern.suffix.length);
+    }
+
+    /** Return the object corresponding to the best pattern to match `candidate`. */
+    /* @internal */
+    export function findBestPatternMatch<T>(values: T[], getPattern: (value: T) => Pattern, candidate: string): T | undefined {
+        let matchedValue: T | undefined = undefined;
+        // use length of prefix as betterness criteria
+        let longestMatchPrefixLength = -1;
+
+        for (const v of values) {
+            const pattern = getPattern(v);
+            if (isPatternMatch(pattern, candidate) && pattern.prefix.length > longestMatchPrefixLength) {
+                longestMatchPrefixLength = pattern.prefix.length;
+                matchedValue = v;
+            }
+        }
+
+        return matchedValue;
+    }
+
+    function isPatternMatch({prefix, suffix}: Pattern, candidate: string) {
+        return candidate.length >= prefix.length + suffix.length &&
+               startsWith(candidate, prefix) &&
+               endsWith(candidate, suffix);
+    }
+
+    /* @internal */
+    export function tryParsePattern(pattern: string): Pattern | undefined {
+        // This should be verified outside of here and a proper error thrown.
+        Debug.assert(hasZeroOrOneAsteriskCharacter(pattern));
+        const indexOfStar = pattern.indexOf("*");
+        return indexOfStar === -1 ? undefined : {
+            prefix: pattern.substr(0, indexOfStar),
+            suffix: pattern.substr(indexOfStar + 1)
+        };
     }
 
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
