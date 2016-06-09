@@ -7,4 +7,5 @@ declare module "fs";
 ///<reference path="declarations.d.ts"/>
 import foo, {bar} from "jquery";
 import * as baz from "fs";
-foo(bar, baz);
+import boom = require("jquery");
+foo(bar, baz, boom);

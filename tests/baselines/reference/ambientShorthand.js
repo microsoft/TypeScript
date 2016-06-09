@@ -9,7 +9,8 @@ declare module "fs";
 ///<reference path="declarations.d.ts"/>
 import foo, {bar} from "jquery";
 import * as baz from "fs";
-foo(bar, baz);
+import boom = require("jquery");
+foo(bar, baz, boom);
 
 
 //// [user.js]
@@ -17,4 +18,5 @@ foo(bar, baz);
 ///<reference path="declarations.d.ts"/>
 var jquery_1 = require("jquery");
 var baz = require("fs");
-jquery_1["default"](jquery_1.bar, baz);
+var boom = require("jquery");
+jquery_1["default"](jquery_1.bar, baz, boom);

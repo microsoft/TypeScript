@@ -7,11 +7,15 @@ import foo, {bar} from "jquery";
 import * as baz from "fs";
 >baz : any
 
-foo(bar, baz);
->foo(bar, baz) : any
+import boom = require("jquery");
+>boom : any
+
+foo(bar, baz, boom);
+>foo(bar, baz, boom) : any
 >foo : any
 >bar : any
 >baz : any
+>boom : any
 
 === tests/cases/conformance/ambient/declarations.d.ts ===
 declare module "jquery"
