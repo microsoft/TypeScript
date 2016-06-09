@@ -1217,7 +1217,7 @@ namespace ts.server {
             else {
                 this.log("No config files found.");
             }
-	    this.log("end openOrUpdateConfiguredProjectForFile: " + new Date().getTime());
+            this.log("end openOrUpdateConfiguredProjectForFile: " + new Date().getTime());
             return configFileName ? { configFileName } : {};
         }
 
@@ -1398,7 +1398,7 @@ namespace ts.server {
             }
         }
 
-        updateConfiguredProject(project: Project) {
+        updateConfiguredProject(project: Project): Diagnostic[] {
             if (!this.host.fileExists(project.projectFilename)) {
                 this.log("Config file deleted");
                 this.removeProject(project);
@@ -1434,9 +1434,6 @@ namespace ts.server {
                                 const info = this.openFile(rootFilename, /*openedByClient*/ false);
                                 project.addRoot(info);
                             }
-                            else {
-                                return { errorMsg: "specified file " + rootFilename + " not found" };
-                            }
                         }
                         project.finishGraph();
                         return;
@@ -1460,9 +1457,6 @@ namespace ts.server {
                     for (const fileName of fileNamesToAdd) {
                         let info = this.getScriptInfo(fileName);
                         if (!info) {
-                            if (!this.host.fileExists(info.fileName)) {
-                                return { errorMsg: "specified file " + info.fileName + " not found" };
-                            }
                             info = this.openFile(fileName, /*openedByClient*/ false);
                         }
                         else {

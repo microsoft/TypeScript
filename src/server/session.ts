@@ -444,11 +444,12 @@ namespace ts.server {
             const file = ts.normalizePath(fileName);
             const info = this.projectService.getScriptInfo(file);
             const projects = this.projectService.findReferencingProjects(info);
-            if (!projects.length) {
+            const projectsWithLanguageServiceEnabeld = ts.filter(projects, p => !p.languageServiceDiabled);
+            if (projects.length === 0 || projectsWithLanguageServiceEnabeld.length === 0) {
                 throw Errors.NoProject;
             }
 
-            const defaultProject = projects[0];
+            const defaultProject = projectsWithLanguageServiceEnabeld[0];
             // The rename info should be the same for every project
             const defaultProjectCompilerService = defaultProject.compilerService;
             const position = defaultProjectCompilerService.host.lineOffsetToPosition(file, line, offset);
@@ -465,7 +466,7 @@ namespace ts.server {
             }
 
             const fileSpans = combineProjectOutput(
-                projects,
+                projectsWithLanguageServiceEnabeld,
                 (project: Project) => {
                     const compilerService = project.compilerService;
                     const renameLocations = compilerService.languageService.findRenameLocations(file, position, findInStrings, findInComments);
@@ -526,11 +527,12 @@ namespace ts.server {
             const file = ts.normalizePath(fileName);
             const info = this.projectService.getScriptInfo(file);
             const projects = this.projectService.findReferencingProjects(info);
-            if (!projects.length) {
+            const projectsWithLanguageServiceEnabeld = ts.filter(projects, p => !p.languageServiceDiabled);
+            if (projects.length === 0 || projectsWithLanguageServiceEnabeld.length === 0) {
                 throw Errors.NoProject;
             }
 
-            const defaultProject = projects[0];
+            const defaultProject = projectsWithLanguageServiceEnabeld[0];
             const position = defaultProject.compilerService.host.lineOffsetToPosition(file, line, offset);
             const nameInfo = defaultProject.compilerService.languageService.getQuickInfoAtPosition(file, position);
             if (!nameInfo) {
@@ -542,7 +544,7 @@ namespace ts.server {
             const nameColStart = defaultProject.compilerService.host.positionToLineOffset(file, nameSpan.start).offset;
             const nameText = defaultProject.compilerService.host.getScriptSnapshot(file).getText(nameSpan.start, ts.textSpanEnd(nameSpan));
             const refs = combineProjectOutput<protocol.ReferencesResponseItem>(
-                projects,
+                projectsWithLanguageServiceEnabeld,
                 (project: Project) => {
                     const compilerService = project.compilerService;
                     const references = compilerService.languageService.getReferencesAtPosition(file, position);
@@ -902,13 +904,13 @@ namespace ts.server {
             const file = ts.normalizePath(fileName);
             const info = this.projectService.getScriptInfo(file);
             const projects = this.projectService.findReferencingProjects(info);
-            const defaultProject = projects[0];
-            if (!defaultProject) {
+            const projectsWithLanguageServiceEnabeld = ts.filter(projects, p => !p.languageServiceDiabled);
+            if (projects.length === 0 || projectsWithLanguageServiceEnabeld.length === 0) {
                 throw Errors.NoProject;
             }
 
             const allNavToItems = combineProjectOutput(
-                projects,
+                projectsWithLanguageServiceEnabeld,
                 (project: Project) => {
                     const compilerService = project.compilerService;
                     const navItems = compilerService.languageService.getNavigateToItems(searchValue, maxResultCount);

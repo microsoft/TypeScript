@@ -28,7 +28,7 @@ namespace ts {
         getDirectories(path: string): string[];
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         readDirectoryWithMultipleExtensions?(path: string, extensions: string[], exclude?: string[]): string[];
-	getModifiedTime?(path: string): Date;
+        getModifiedTime?(path: string): Date;
         createHash?(data: string): string;
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
@@ -549,7 +549,7 @@ namespace ts {
                 getDirectories,
                 readDirectory,
                 readDirectoryWithMultipleExtensions,
-		getModifiedTime(path) {
+                getModifiedTime(path) {
                     try {
                         return _fs.statSync(path).mtime;
                     }

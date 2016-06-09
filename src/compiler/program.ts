@@ -1219,7 +1219,7 @@ namespace ts {
                 (oldOptions.noLib !== options.noLib) ||
                 (oldOptions.jsx !== options.jsx) ||
                 (oldOptions.allowJs !== options.allowJs) ||
-		(oldOptions.disableSizeLimit !== options.disableSizeLimit) ||
+                (oldOptions.disableSizeLimit !== options.disableSizeLimit) ||
                 (oldOptions.rootDir !== options.rootDir) ||
                 (oldOptions.typesSearchPaths !== options.typesSearchPaths) ||
                 (oldOptions.configFilePath !== options.configFilePath) ||
