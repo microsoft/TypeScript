@@ -619,8 +619,25 @@ namespace ts {
      * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
      */
     function loadModuleFromFile(candidate: string, extensions: string[], failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
+        // First try to keep/add an extension: importing "./foo.ts" can be matched by a file "./foo.ts", and "./foo" by "./foo.d.ts"
+        const resolvedByAddingOrKeepingExtension = loadModuleFromFileWorker(candidate, extensions, failedLookupLocation, onlyRecordFailures, state);
+        if (resolvedByAddingOrKeepingExtension) {
+            return resolvedByAddingOrKeepingExtension;
+        }
+        // Then try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one, e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
+        if (hasJavaScriptFileExtension(candidate)) {
+            const extensionless = removeFileExtension(candidate);
+            if (state.traceEnabled) {
+                const extension = candidate.substring(extensionless.length);
+                trace(state.host, Diagnostics.File_name_0_has_a_1_extension_stripping_it, candidate, extension);
+            }
+            return loadModuleFromFileWorker(extensionless, extensions, failedLookupLocation, onlyRecordFailures, state);
+        }
+    }
+
+    function loadModuleFromFileWorker(candidate: string, extensions: string[], failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
         if (!onlyRecordFailures) {
-            // check if containig folder exists - if it doesn't then just record failures for all supported extensions without disk probing
+            // check if containing folder exists - if it doesn't then just record failures for all supported extensions without disk probing
             const directory = getDirectoryPath(candidate);
             if (directory) {
                 onlyRecordFailures = !directoryProbablyExists(directory, state.host);
@@ -629,7 +646,7 @@ namespace ts {
         return forEach(extensions, tryLoad);
 
         function tryLoad(ext: string): string {
-            if (ext === ".tsx" && state.skipTsx) {
+            if (state.skipTsx && isJsxOrTsxExtension(ext)) {
                 return undefined;
             }
             const fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
@@ -1143,6 +1160,7 @@ namespace ts {
             // if any of these properties has changed - structure cannot be reused
             const oldOptions = oldProgram.getCompilerOptions();
             if ((oldOptions.module !== options.module) ||
+                (oldOptions.moduleResolution !== options.moduleResolution) ||
                 (oldOptions.noResolve !== options.noResolve) ||
                 (oldOptions.target !== options.target) ||
                 (oldOptions.noLib !== options.noLib) ||

@@ -7,17 +7,21 @@ namespace ts {
             options?: TranspileOptions;
             expectedOutput?: string;
             expectedDiagnosticCodes?: number[];
+            expectedDiagnosticTexts?: string[];
         }
 
-        function checkDiagnostics(diagnostics: Diagnostic[], expectedDiagnosticCodes?: number[]) {
-            if (!expectedDiagnosticCodes) {
-                return;
+        function checkDiagnostics(diagnostics: Diagnostic[], expectedDiagnosticCodes: number[] = [], expectedDiagnosticTexts?: string[]) {
+            const n = expectedDiagnosticCodes.length;
+            if (expectedDiagnosticTexts) {
+                assert.equal(n, expectedDiagnosticTexts.length);
             }
-
-            for (let i = 0; i < expectedDiagnosticCodes.length; i++) {
-                assert.equal(expectedDiagnosticCodes[i], diagnostics[i] && diagnostics[i].code, `Could not find expeced diagnostic.`);
-            }
-            assert.equal(diagnostics.length, expectedDiagnosticCodes.length, "Resuting diagnostics count does not match expected");
+            for (let i = 0; i < n; i++) {
+                assert.equal(expectedDiagnosticCodes[i], diagnostics[i] && diagnostics[i].code, `Could not find expected diagnostic.`);
+                if (expectedDiagnosticTexts) {
+                    assert.equal(expectedDiagnosticTexts[i], diagnostics[i] && diagnostics[i].messageText);
+                }
+            };
+            assert.equal(diagnostics.length, n, "Resuting diagnostics count does not match expected");
         }
 
         function test(input: string, testSettings: TranspileTestSettings): void {
@@ -26,7 +30,7 @@ namespace ts {
             if (!transpileOptions.compilerOptions) {
                 transpileOptions.compilerOptions = {};
             }
-            if (transpileOptions.compilerOptions.newLine === undefined) { // 
+            if (transpileOptions.compilerOptions.newLine === undefined) {
                 // use \r\n as default new line
                 transpileOptions.compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
             }
@@ -36,7 +40,7 @@ namespace ts {
             transpileOptions.reportDiagnostics = true;
             const transpileModuleResult = transpileModule(input, transpileOptions);
 
-            checkDiagnostics(transpileModuleResult.diagnostics, testSettings.expectedDiagnosticCodes);
+            checkDiagnostics(transpileModuleResult.diagnostics, testSettings.expectedDiagnosticCodes, testSettings.expectedDiagnosticTexts);
 
             if (testSettings.expectedOutput !== undefined) {
                 assert.equal(transpileModuleResult.outputText, testSettings.expectedOutput);
@@ -45,7 +49,7 @@ namespace ts {
             if (canUseOldTranspile) {
                 const diagnostics: Diagnostic[] = [];
                 const transpileResult = transpile(input, transpileOptions.compilerOptions, transpileOptions.fileName, diagnostics, transpileOptions.moduleName);
-                checkDiagnostics(diagnostics, testSettings.expectedDiagnosticCodes);
+                checkDiagnostics(diagnostics, testSettings.expectedDiagnosticCodes, testSettings.expectedDiagnosticTexts);
                 if (testSettings.expectedOutput) {
                     assert.equal(transpileResult, testSettings.expectedOutput);
                 }
@@ -292,13 +296,37 @@ var x = 0;`,
             const output = `"use strict";\nvar a = 10;\n`;
             test(input, {
                 expectedOutput: output,
-                options: { compilerOptions: { newLine: NewLineKind.LineFeed, module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true },
-                expectedDiagnosticCodes: []
+                options: { compilerOptions: { newLine: NewLineKind.LineFeed, module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
             });
         });
 
         it("Supports urls in file name", () => {
             test("var x", { expectedOutput: `"use strict";\r\nvar x;\r\n`, options: { fileName: "http://somewhere/directory//directory2/file.ts" } });
+        });
+
+        describe("String values for enums", () => {
+            it("Accepts strings instead of enum values", () => {
+                test(`export const x = 0`, {
+                    options: {
+                        compilerOptions: {
+                            module: <ModuleKind><any>"es6",
+                            // Capitalization and spaces ignored
+                            target: <ScriptTarget><any>" Es6 "
+                        }
+                    },
+                    expectedOutput: "export const x = 0;\r\n"
+                });
+            });
+
+            it("Fails on bad value", () => {
+                for (const value in [123, {}, ""]) {
+                    test(``, {
+                        options: { compilerOptions: { module: <ModuleKind><any>value } },
+                        expectedDiagnosticCodes: [6046],
+                        expectedDiagnosticTexts: ["Argument for '--module' option must be:  'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015'"]
+                    });
+                }
+            });
         });
     });
 }

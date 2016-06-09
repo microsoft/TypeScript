@@ -5,6 +5,7 @@ var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
 var Linter = require("tslint");
+var runTestsInParallel = require("./scripts/mocha-parallel").runTestsInParallel;
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -153,7 +154,8 @@ var harnessSources = harnessCoreSources.concat([
     "tsconfigParsing.ts",
     "commandLineParsing.ts",
     "convertCompilerOptionsFromJson.ts",
-    "convertTypingOptionsFromJson.ts"
+    "convertTypingOptionsFromJson.ts",
+    "tsserverProjectSystem.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -187,7 +189,10 @@ var es2016LibrarySourceMap = es2016LibrarySource.map(function (source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
 });
 
-var es2017LibrarySource = ["es2017.object.d.ts"];
+var es2017LibrarySource = [
+    "es2017.object.d.ts",
+    "es2017.sharedmemory.d.ts"
+];
 
 var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
@@ -207,7 +212,7 @@ var librarySourceMap = [
         { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
         { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
         { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
-        
+
         // JavaScript + all host library
         { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
         { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") }
@@ -312,6 +317,8 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             if (!opts.noMapRoot) {
                 options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
             }
+        } else {
+            options += " --newLine LF";
         }
 
         if (opts.stripInternal) {
@@ -520,7 +527,7 @@ compileFile(servicesFileInBrowserTest, servicesSources,[builtLocalDirectory, cop
                 var i = content.lastIndexOf("\n");
                 fs.writeFileSync(servicesFileInBrowserTest, content.substring(0, i) + "\r\n//# sourceURL=../built/local/typeScriptServices.js" + content.substring(i));
             });
-    
+
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
@@ -682,7 +689,6 @@ function cleanTestDirs() {
 // used to pass data from jake command line directly to run.js
 function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount) {
     var testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light: light, workerCount: workerCount, taskConfigsFolder: taskConfigsFolder });
-    console.log('Running tests with config: ' + testConfigContents);
     fs.writeFileSync('test.config', testConfigContents);
 }
 
@@ -740,53 +746,27 @@ function runConsoleTests(defaultReporter, runInParallel) {
         }, function(e, status) {
             finish(status);
         });
-        
+
     }
     else {
-        // run task to load all tests and partition them between workers 
-        var cmd = "mocha " + " -R min " + colors + run;
-        console.log(cmd);
-        exec(cmd, function() {
-            // read all configuration files and spawn a worker for every config
-            var configFiles = fs.readdirSync(taskConfigsFolder);
-            var counter = configFiles.length;
-            var firstErrorStatus;
-            // schedule work for chunks
-            configFiles.forEach(function (f) {
-                var configPath = path.join(taskConfigsFolder, f);
-                var workerCmd = "mocha" + " -t " + testTimeout + " -R " + reporter + " " + colors + " " + run + " --config='" + configPath + "'";
-                console.log(workerCmd);
-                exec(workerCmd,  finishWorker, finishWorker) 
-            });
-            
-            function finishWorker(e, errorStatus) {
-                counter--;
-                if (firstErrorStatus === undefined && errorStatus !== undefined) {
-                    firstErrorStatus = errorStatus;
-                }
-                if (counter !== 0) {
-                    complete();
-                }
-                else {
-                    // last worker clean everything and runs linter in case if there were no errors
-                    deleteTemporaryProjectOutput();
-                    jake.rmRf(taskConfigsFolder);
-                    if (firstErrorStatus === undefined) {
-                        runLinter();
-                        complete();
-                    }
-                    else {
-                        failWithStatus(firstErrorStatus);
-                    }
-                }
+        runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function (err) {
+            // last worker clean everything and runs linter in case if there were no errors
+            deleteTemporaryProjectOutput();
+            jake.rmRf(taskConfigsFolder);
+            if (err) {
+                fail(err);
+            }
+            else {
+                runLinter();
+                complete();
             }
         });
     }
-    
+
     function failWithStatus(status) {
         fail("Process exited with code " + status);
     }
-    
+
     function finish(errorStatus) {
         deleteTemporaryProjectOutput();
         if (errorStatus !== undefined) {
@@ -854,7 +834,7 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFi
     }
 
     tests = tests ? tests : '';
-    var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + tests;
+    var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + JSON.stringify(tests);
     console.log(cmd);
     exec(cmd);
 }, {async: true});

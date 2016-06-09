@@ -746,7 +746,7 @@ namespace FourSlash {
             }
 
             const missingItem = { fileName: fileName, start: start, end: end, isWriteAccess: isWriteAccess };
-            this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${JSON.stringify(missingItem, undefined, 2)} in the returned list: (${JSON.stringify(references, undefined, 2)})`);
+            this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(references)})`);
         }
 
         public verifyReferencesCountIs(count: number, localFilesOnly = true) {
@@ -800,7 +800,7 @@ namespace FourSlash {
 
         private testDiagnostics(expected: string, diagnostics: ts.Diagnostic[]) {
             const realized = ts.realizeDiagnostics(diagnostics, "\r\n");
-            const actual = JSON.stringify(realized, undefined, 2);
+            const actual = stringify(realized);
             assert.equal(actual, expected);
         }
 
@@ -875,7 +875,7 @@ namespace FourSlash {
                 }
 
                 if (ranges.length !== references.length) {
-                    this.raiseError("Rename location count does not match result.\n\nExpected: " + JSON.stringify(ranges, undefined, 2) + "\n\nActual:" + JSON.stringify(references, undefined, 2));
+                    this.raiseError("Rename location count does not match result.\n\nExpected: " + stringify(ranges) + "\n\nActual:" + stringify(references));
                 }
 
                 ranges = ranges.sort((r1, r2) => r1.start - r2.start);
@@ -888,7 +888,7 @@ namespace FourSlash {
                     if (reference.textSpan.start !== range.start ||
                         ts.textSpanEnd(reference.textSpan) !== range.end) {
 
-                        this.raiseError("Rename location results do not match.\n\nExpected: " + JSON.stringify(ranges, undefined, 2) + "\n\nActual:" + JSON.stringify(references, undefined, 2));
+                        this.raiseError("Rename location results do not match.\n\nExpected: " + stringify(ranges) + "\n\nActual:" + JSON.stringify(references));
                     }
                 }
             }
@@ -972,7 +972,7 @@ namespace FourSlash {
             }
             else {
                 if (actual) {
-                    this.raiseError(`Expected no signature help, but got "${JSON.stringify(actual, undefined, 2)}"`);
+                    this.raiseError(`Expected no signature help, but got "${stringify(actual)}"`);
                 }
             }
         }
@@ -1176,7 +1176,7 @@ namespace FourSlash {
 
         public printCurrentParameterHelp() {
             const help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
-            Harness.IO.log(JSON.stringify(help, undefined, 2));
+            Harness.IO.log(stringify(help));
         }
 
         public printCurrentQuickInfo() {
@@ -1218,7 +1218,7 @@ namespace FourSlash {
 
         public printCurrentSignatureHelp() {
             const sigHelp = this.getActiveSignatureHelpItem();
-            Harness.IO.log(JSON.stringify(sigHelp, undefined, 2));
+            Harness.IO.log(stringify(sigHelp));
         }
 
         public printMemberListMembers() {
@@ -1248,7 +1248,7 @@ namespace FourSlash {
         public printReferences() {
             const references = this.getReferencesAtCaret();
             ts.forEach(references, entry => {
-                Harness.IO.log(JSON.stringify(entry, undefined, 2));
+                Harness.IO.log(stringify(entry));
             });
         }
 
@@ -1745,8 +1745,8 @@ namespace FourSlash {
 
             function jsonMismatchString() {
                 return Harness.IO.newLine() +
-                    "expected: '" + Harness.IO.newLine() + JSON.stringify(expected, undefined, 2) + "'" + Harness.IO.newLine() +
-                    "actual:   '" + Harness.IO.newLine() + JSON.stringify(actual, undefined, 2) + "'";
+                    "expected: '" + Harness.IO.newLine() + stringify(expected) + "'" + Harness.IO.newLine() +
+                    "actual:   '" + Harness.IO.newLine() + stringify(actual) + "'";
             }
         }
 
@@ -1961,14 +1961,14 @@ namespace FourSlash {
             // if there was an explicit match kind specified, then it should be validated.
             if (matchKind !== undefined) {
                 const missingItem = { name: name, kind: kind, searchValue: searchValue, matchKind: matchKind, fileName: fileName, parentName: parentName };
-                this.raiseError(`verifyNavigationItemsListContains failed - could not find the item: ${JSON.stringify(missingItem, undefined, 2)} in the returned list: (${JSON.stringify(items, undefined, 2)})`);
+                this.raiseError(`verifyNavigationItemsListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(items)})`);
             }
         }
 
         public verifyNavigationBar(json: any) {
             const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
             if (JSON.stringify(items, replacer) !== JSON.stringify(json)) {
-                this.raiseError(`verifyNavigationBar failed - expected: ${JSON.stringify(json, undefined, 2)}, got: ${JSON.stringify(items, replacer, 2)}`);
+                this.raiseError(`verifyNavigationBar failed - expected: ${stringify(json)}, got: ${stringify(items, replacer)}`);
             }
 
             // Make the data easier to read.
@@ -2031,7 +2031,7 @@ namespace FourSlash {
             }
 
             const missingItem = { fileName: fileName, start: start, end: end, isWriteAccess: isWriteAccess };
-            this.raiseError(`verifyOccurrencesAtPositionListContains failed - could not find the item: ${JSON.stringify(missingItem, undefined, 2)} in the returned list: (${JSON.stringify(occurrences, undefined, 2)})`);
+            this.raiseError(`verifyOccurrencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(occurrences)})`);
         }
 
         public verifyOccurrencesAtPositionListCount(expectedCount: number) {
@@ -2070,7 +2070,7 @@ namespace FourSlash {
             }
 
             const missingItem = { fileName: fileName, start: start, end: end, kind: kind };
-            this.raiseError(`verifyDocumentHighlightsAtPositionListContains failed - could not find the item: ${JSON.stringify(missingItem, undefined, 2)} in the returned list: (${JSON.stringify(documentHighlights, undefined, 2)})`);
+            this.raiseError(`verifyDocumentHighlightsAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(documentHighlights)})`);
         }
 
         public verifyDocumentHighlightsAtPositionListCount(expectedCount: number, fileNamesToSearch: string[]) {
@@ -2136,9 +2136,9 @@ namespace FourSlash {
                 }
             }
 
-            const itemsString = items.map((item) => JSON.stringify({ name: item.name, kind: item.kind }, undefined, 2)).join(",\n");
+            const itemsString = items.map(item => stringify({ name: item.name, kind: item.kind })).join(",\n");
 
-            this.raiseError(`Expected "${JSON.stringify({ name, text, documentation, kind }, undefined, 2)}" to be in list [${itemsString}]`);
+            this.raiseError(`Expected "${stringify({ name, text, documentation, kind })}" to be in list [${itemsString}]`);
         }
 
         private findFile(indexOrName: any) {
@@ -2700,6 +2700,10 @@ ${code}
             result += char;
         }
         return result;
+    }
+
+    function stringify(data: any, replacer?: (key: string, value: any) => any): string {
+        return JSON.stringify(data, replacer, 2);
     }
 }
 
