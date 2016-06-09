@@ -50,7 +50,7 @@ function union(a: A): A & B | null {
   }
 }
 
-// Repro from #9011
+// Repro from #9016
 
 declare function log(s: string): void;
 

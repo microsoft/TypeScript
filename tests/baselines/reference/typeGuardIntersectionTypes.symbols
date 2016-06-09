@@ -117,7 +117,7 @@ function union(a: A): A & B | null {
   }
 }
 
-// Repro from #9011
+// Repro from #9016
 
 declare function log(s: string): void;
 >log : Symbol(log, Decl(typeGuardIntersectionTypes.ts, 49, 1))
