@@ -17782,6 +17782,8 @@ namespace ts {
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.ExportDeclaration:
                 case SyntaxKind.ExportAssignment:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
                 case SyntaxKind.Parameter:
                     break;
                 case SyntaxKind.FunctionDeclaration:
