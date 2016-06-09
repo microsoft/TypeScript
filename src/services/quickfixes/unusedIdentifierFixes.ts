@@ -19,7 +19,7 @@ namespace ts.quickFix {
                     }
                 }
             }
-            throw new Error("Not implemented");
+            throw new Error("No Quick Fix for found");
         }
     });
 
@@ -47,7 +47,8 @@ namespace ts.quickFix {
                 if (token.parent.kind === SyntaxKind.FunctionDeclaration  ||
                     token.parent.kind === SyntaxKind.ClassDeclaration     ||
                     token.parent.kind === SyntaxKind.InterfaceDeclaration ||
-                    token.parent.kind === SyntaxKind.MethodDeclaration) {
+                    token.parent.kind === SyntaxKind.MethodDeclaration    ||
+                    token.parent.kind === SyntaxKind.ArrowFunction) {
                     return [{ newText: "", span: { start: token.parent.pos, length: token.parent.end - token.parent.pos}}];
                 }
 
@@ -68,6 +69,8 @@ namespace ts.quickFix {
             if(token.kind === SyntaxKind.PrivateKeyword && token.parent.kind === SyntaxKind.PropertyDeclaration) {
                 return [{ newText: "", span: { start: token.parent.pos, length: token.parent.end - token.parent.pos}}];
             }
+
+            throw new Error("No Quick Fix for found");
         }
     });
 }
