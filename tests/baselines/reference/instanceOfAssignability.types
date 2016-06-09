@@ -133,8 +133,8 @@ function fn5(x: Derived1) {
 		// 1.5: y: Derived1
 		// Want: ???
 		let y = x;
->y : never
->x : never
+>y : Derived1 & Derived2
+>x : Derived1 & Derived2
 	}
 }
 
