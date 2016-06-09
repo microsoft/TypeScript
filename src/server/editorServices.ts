@@ -27,6 +27,8 @@ namespace ts.server {
         });
     }
 
+    export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
+
     export class ScriptInfo {
         svc: ScriptVersionCache;
         children: ScriptInfo[] = [];     // files referenced by this file
@@ -384,7 +386,7 @@ namespace ts.server {
         constructor(
             public projectService: ProjectService,
             public projectOptions?: ProjectOptions,
-            public languageServiceDiabled?: boolean) {
+            public languageServiceDiabled = false) {
             if (projectOptions && projectOptions.files) {
                 // If files are listed explicitly, allow all extensions
                 projectOptions.compilerOptions.allowNonTsExtensions = true;
@@ -430,7 +432,16 @@ namespace ts.server {
 
         getFileNames() {
             if (this.languageServiceDiabled) {
-                return this.projectOptions ? this.projectOptions.files : undefined;
+                if (!this.projectOptions) {
+                    return undefined;
+                }
+
+                const fileNames: string[] = [];
+                if (this.projectOptions && this.projectOptions.compilerOptions) {
+                    fileNames.push(getDefaultLibFilePath(this.projectOptions.compilerOptions));
+                }
+                ts.addRange(fileNames, this.projectOptions.files);
+                return fileNames;
             }
 
             const sourceFiles = this.program.getSourceFiles();
@@ -1340,6 +1351,10 @@ namespace ts.server {
 
         private exceedTotalNonTsFileSizeLimit(fileNames: string[]) {
             let totalNonTsFileSize = 0;
+            if (!this.host.getFileSize) {
+                return false;
+            }
+
             for (const fileName of fileNames) {
                 if (hasTypeScriptFileExtension(fileName)) {
                     continue;
@@ -1409,14 +1424,17 @@ namespace ts.server {
                     return errors;
                 }
                 else {
-                    if (this.exceedTotalNonTsFileSizeLimit(projectOptions.files)) {
+                    if (this.exceedTotalNonTsFileSizeLimit(projectOptions.files) && projectOptions.compilerOptions && !projectOptions.compilerOptions.disableSizeLimit) {
                         project.setProjectOptions(projectOptions);
                         if (project.languageServiceDiabled) {
                             return;
                         }
 
                         project.disableLanguageService();
-                        project.directoryWatcher.close();
+                        if (project.directoryWatcher) {
+                            project.directoryWatcher.close();
+                            project.directoryWatcher = undefined;
+                        }
                         return;
                     }
 
