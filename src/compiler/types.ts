@@ -439,7 +439,7 @@ namespace ts {
         Default =            1 << 9,  // Function/Class (export default declaration)
         Const =              1 << 11, // Variable declaration
 
-        HasComputedFlags =   1 << 31, // Modifier flags have been computed
+        HasComputedFlags =   1 << 29, // Modifier flags have been computed
 
         AccessibilityModifier = Public | Private | Protected,
         // Accessibility modifiers and 'readonly' can be attached to a parameter in a constructor to make it a property.
@@ -2980,7 +2980,7 @@ namespace ts {
         ContainsBlockScopedBinding = 1 << 18,
         ContainsBindingPattern = 1 << 19,
 
-        HasComputedFlags = 1 << 30, // Transform flags have been computed.
+        HasComputedFlags = 1 << 29, // Transform flags have been computed.
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
