@@ -16883,10 +16883,7 @@ namespace ts {
                         return getIntrinsicTagSymbol(<JsxOpeningLikeElement>entityName.parent);
                     }
 
-                    // Include aliases in the meaning, this ensures that we do not follow aliases to where they point and instead
-                    // return the alias symbol.
-                    const meaning: SymbolFlags = SymbolFlags.Value | SymbolFlags.Alias;
-                    return resolveEntityName(<Identifier>entityName, meaning);
+                    return resolveEntityName(<Identifier>entityName, SymbolFlags.Value, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
                 }
                 else if (entityName.kind === SyntaxKind.PropertyAccessExpression) {
                     const symbol = getNodeLinks(entityName).resolvedSymbol;
@@ -16904,11 +16901,8 @@ namespace ts {
                 }
             }
             else if (isTypeReferenceIdentifier(<EntityName>entityName)) {
-                let meaning = (entityName.parent.kind === SyntaxKind.TypeReference || entityName.parent.kind === SyntaxKind.JSDocTypeReference) ? SymbolFlags.Type : SymbolFlags.Namespace;
-                // Include aliases in the meaning, this ensures that we do not follow aliases to where they point and instead
-                // return the alias symbol.
-                meaning |= SymbolFlags.Alias;
-                return resolveEntityName(<EntityName>entityName, meaning);
+                const meaning = (entityName.parent.kind === SyntaxKind.TypeReference || entityName.parent.kind === SyntaxKind.JSDocTypeReference) ? SymbolFlags.Type : SymbolFlags.Namespace;
+                return resolveEntityName(<EntityName>entityName, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/true);
             }
             else if (entityName.parent.kind === SyntaxKind.JsxAttribute) {
                 return getJsxAttributePropertySymbol(<JsxAttribute>entityName.parent);
