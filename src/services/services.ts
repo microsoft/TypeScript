@@ -180,8 +180,10 @@ namespace ts {
     ];
     let jsDocCompletionEntries: CompletionEntry[];
 
-    function createNode(kind: SyntaxKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject {
-        const node = kind >= SyntaxKind.FirstNode ? new NodeObject(kind, pos, end) : new TokenObject(kind, pos, end);
+    function createNode(kind: SyntaxKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject | IdentifierObject {
+        const node = kind >= SyntaxKind.FirstNode ? new NodeObject(kind, pos, end) :
+            kind === SyntaxKind.Identifier ? new IdentifierObject(kind, pos, end) :
+                new TokenObject(kind, pos, end);
         node.parent = parent;
         return node;
     }
@@ -343,7 +345,7 @@ namespace ts {
         }
     }
 
-    class TokenObject implements Token {
+    class TokenOrIdentifierObject implements Token {
         public kind: SyntaxKind;
         public pos: number;
         public end: number;
@@ -351,11 +353,9 @@ namespace ts {
         public parent: Node;
         public jsDocComments: JSDocComment[];
 
-        constructor(kind: SyntaxKind, pos: number, end: number) {
-            this.kind = kind;
+        constructor(pos: number, end: number) {
             this.pos = pos;
             this.end = end;
-            this.flags = NodeFlags.None;
             this.parent = undefined;
         }
 
@@ -415,6 +415,21 @@ namespace ts {
             return undefined;
         }
     }
+
+    class TokenObject extends TokenOrIdentifierObject {
+        constructor(kind: SyntaxKind, pos: number, end: number) {
+            super(pos, end);
+            this.kind = kind;
+            this.flags = NodeFlags.None;
+        }
+    }
+
+    class IdentifierObject extends TokenOrIdentifierObject {
+        constructor(kind: SyntaxKind, pos: number, end: number) {
+            super(pos, end);
+        }
+    }
+    IdentifierObject.prototype.kind = SyntaxKind.Identifier;
 
     class SymbolObject implements Symbol {
         flags: SymbolFlags;
@@ -8768,6 +8783,7 @@ namespace ts {
         objectAllocator = {
             getNodeConstructor: () => NodeObject,
             getTokenConstructor: () => TokenObject,
+            getIdentifierConstructor: () => IdentifierObject,
             getSourceFileConstructor: () => SourceFileObject,
             getSymbolConstructor: () => SymbolObject,
             getTypeConstructor: () => TypeObject,
