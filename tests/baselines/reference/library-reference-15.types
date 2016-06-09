@@ -1,14 +1,11 @@
-=== /src/consumer.ts ===
-/// <reference types="jquery" />
+=== /a/b/consumer.ts ===
 $.foo();
 >$.foo() : void
 >$.foo : () => void
 >$ : { foo(): void; }
 >foo : () => void
 
-=== /src/types/jquery/index.d.ts ===
-
-// We can find typings in the ./types folder
+=== /a/types/jquery/index.d.ts ===
 
 declare var $: { foo(): void };
 >$ : { foo(): void; }

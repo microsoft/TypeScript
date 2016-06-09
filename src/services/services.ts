@@ -1077,6 +1077,7 @@ namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
+        getDirectories?(directoryName: string): string[];
     }
 
     //
@@ -2038,7 +2039,8 @@ namespace ts {
             getNewLine: () => newLine,
             fileExists: (fileName): boolean => fileName === inputFileName,
             readFile: (fileName): string => "",
-            directoryExists: directoryExists => true
+            directoryExists: directoryExists => true,
+            getDirectories: (path: string) => []
         };
 
         const program = createProgram([inputFileName], options, compilerHost);
@@ -2999,8 +3001,10 @@ namespace ts {
                     return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
                 },
                 directoryExists: directoryName => {
-                    Debug.assert(!host.resolveModuleNames || !host.resolveTypeReferenceDirectives);
                     return directoryProbablyExists(directoryName, host);
+                },
+                getDirectories: path => {
+                    return host.getDirectories ? host.getDirectories(path) : [];
                 }
             };
             if (host.trace) {

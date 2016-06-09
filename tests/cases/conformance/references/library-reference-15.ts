@@ -1,7 +1,7 @@
 // @noImplicitReferences: true
 // @traceResolution: true
 // @types: jquery
-// @currentDirectory: /
+// @currentDirectory: /a
 
 // @filename: /a/types/jquery/index.d.ts
 declare var $: { foo(): void };

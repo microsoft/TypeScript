@@ -1,7 +1,12 @@
 [
-    "======== Resolving type reference directive 'alpha', containing file '/src/foo.ts', root directory '/'. ========",
-    "Resolving with primary search path '/types/'",
-    "File '/types/alpha/package.json' does not exist.",
-    "File '/types/alpha/index.d.ts' exist - use it as a name resolution result.",
-    "======== Type reference directive 'alpha' was successfully resolved to '/types/alpha/index.d.ts', primary: true. ========"
+    "======== Resolving type reference directive 'alpha', containing file 'tests/cases/conformance/references/src/foo.ts', root directory 'tests/cases/conformance/references'. ========",
+    "Resolving with primary search path 'tests/cases/conformance/references/types/'",
+    "File 'tests/cases/conformance/references/types/alpha/package.json' does not exist.",
+    "File 'tests/cases/conformance/references/types/alpha/index.d.ts' exist - use it as a name resolution result.",
+    "======== Type reference directive 'alpha' was successfully resolved to 'tests/cases/conformance/references/types/alpha/index.d.ts', primary: true. ========",
+    "======== Resolving type reference directive 'alpha', containing file 'test/tests/cases/conformance/references/src/__inferred type names__.ts', root directory 'tests/cases/conformance/references'. ========",
+    "Resolving with primary search path 'tests/cases/conformance/references/types/'",
+    "File 'tests/cases/conformance/references/types/alpha/package.json' does not exist.",
+    "File 'tests/cases/conformance/references/types/alpha/index.d.ts' exist - use it as a name resolution result.",
+    "======== Type reference directive 'alpha' was successfully resolved to 'tests/cases/conformance/references/types/alpha/index.d.ts', primary: true. ========"
 ]
