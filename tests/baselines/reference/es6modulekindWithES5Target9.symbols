@@ -1,0 +1,12 @@
+=== tests/cases/compiler/es6modulekindWithES5Target9.ts ===
+
+export var {a, b } = { a: 0, b: 1 };
+>a : Symbol(a, Decl(es6modulekindWithES5Target9.ts, 1, 12))
+>b : Symbol(b, Decl(es6modulekindWithES5Target9.ts, 1, 14))
+>a : Symbol(a, Decl(es6modulekindWithES5Target9.ts, 1, 22))
+>b : Symbol(b, Decl(es6modulekindWithES5Target9.ts, 1, 28))
+
+export var [d, e] = [1, 2];
+>d : Symbol(d, Decl(es6modulekindWithES5Target9.ts, 2, 12))
+>e : Symbol(e, Decl(es6modulekindWithES5Target9.ts, 2, 14))
+

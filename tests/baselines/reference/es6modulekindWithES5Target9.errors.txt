@@ -1,0 +1,33 @@
+tests/cases/compiler/es6modulekindWithES5Target9.ts(2,15): error TS2307: Cannot find module 'mod'.
+tests/cases/compiler/es6modulekindWithES5Target9.ts(4,17): error TS2307: Cannot find module 'mod'.
+tests/cases/compiler/es6modulekindWithES5Target9.ts(6,20): error TS2307: Cannot find module 'mod'.
+tests/cases/compiler/es6modulekindWithES5Target9.ts(10,15): error TS2307: Cannot find module 'mod'.
+tests/cases/compiler/es6modulekindWithES5Target9.ts(12,17): error TS2307: Cannot find module 'mod'.
+
+
+==== tests/cases/compiler/es6modulekindWithES5Target9.ts (5 errors) ====
+    
+    import d from "mod";
+                  ~~~~~
+!!! error TS2307: Cannot find module 'mod'.
+    
+    import {a} from "mod";
+                    ~~~~~
+!!! error TS2307: Cannot find module 'mod'.
+    
+    import * as M from "mod";
+                       ~~~~~
+!!! error TS2307: Cannot find module 'mod'.
+    
+    export {a};
+    
+    export * from "mod";
+                  ~~~~~
+!!! error TS2307: Cannot find module 'mod'.
+    
+    export {b} from "mod"
+                    ~~~~~
+!!! error TS2307: Cannot find module 'mod'.
+    
+    export default d;
+    
