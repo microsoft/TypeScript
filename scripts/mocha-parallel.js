@@ -43,7 +43,7 @@ function discoverTests(run, options, cb) {
 
     p.on("exit", function (status) {
         if (status) {
-            cb(new Error("Process exited width code " + status));
+            cb(new Error("Process exited with code " + status));
         }
         else {
             cb();
