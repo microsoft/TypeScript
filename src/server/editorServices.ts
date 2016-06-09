@@ -1470,7 +1470,7 @@ namespace ts.server {
         private addExternalProjectFilesForVersionedProjects(knownProjects: protocol.ExternalProjectInfo[], projects: VersionedProject[], result: protocol.ExternalProjectFiles[]): void {
             for (const proj of projects) {
                 const knownProject = ts.forEach(knownProjects, p => p.projectFileName === proj.getProjectFileName() && p);
-                result.push(proj.getChangesSinceVersion(knownProjects && knownProject.version));
+                result.push(proj.getChangesSinceVersion(knownProject && knownProject.version));
             }
         }
 
