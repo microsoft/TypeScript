@@ -28,12 +28,17 @@ namespace ts {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
         context.enableSubstitution(SyntaxKind.Identifier);
+        context.enableSubstitution(SyntaxKind.BinaryExpression);
+        context.enableSubstitution(SyntaxKind.PrefixUnaryExpression);
+        context.enableSubstitution(SyntaxKind.PostfixUnaryExpression);
         context.enableSubstitution(SyntaxKind.ShorthandPropertyAssignment);
 
         let currentSourceFile: SourceFile;
         let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
         let exportSpecifiers: Map<ExportSpecifier[]>;
         let exportEquals: ExportAssignment;
+        // Subset of exportSpecifiers that is binding-name. This is to reduce amount of memory we have to keep around even after we done with module.ts transformer
+        let bindingNameExportSpecifiers: Map<Map<ExportSpecifier[]>>;
         let hasExportStarsToExportValues: boolean;
 
         return transformSourceFile;
@@ -653,7 +658,17 @@ namespace ts {
                 }
             }
             else {
-                addExportMemberAssignments(resultStatements, name);
+                if (!exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
+                    if (!bindingNameExportSpecifiers) {
+                        bindingNameExportSpecifiers = {};
+                    }
+                    const sourceFileName = currentSourceFile.fileName;
+                    if (!bindingNameExportSpecifiers[sourceFileName]) {
+                        bindingNameExportSpecifiers[sourceFileName];
+                    }
+                    bindingNameExportSpecifiers[sourceFileName][name.text] = exportSpecifiers[name.text];
+                    addExportMemberAssignments(resultStatements, name);
+                }
             }
         }
 
@@ -833,8 +848,15 @@ namespace ts {
         }
 
         function substituteExpression(node: Expression) {
-            if (isIdentifier(node)) {
-                return substituteExpressionIdentifier(node);
+            debugger;
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    return substituteExpressionIdentifier(<Identifier>node);
+                case SyntaxKind.BinaryExpression:
+                    return substituteBinaryExpression(<BinaryExpression>node);
+                case SyntaxKind.PostfixUnaryExpression:
+                case SyntaxKind.PrefixUnaryExpression:
+                    return substituteUnaryExpression(<PrefixUnaryExpression | PostfixUnaryExpression>node);
             }
 
             return node;
@@ -844,6 +866,59 @@ namespace ts {
             return trySubstituteExportedName(node)
                 || trySubstituteImportedName(node)
                 || node;
+        }
+
+        function substituteBinaryExpression(node: BinaryExpression): Expression {
+            const left = node.left;
+            // If the left-hand-side of the binaryExpression is an identifier and its is export through export Specifier
+            if (isIdentifier(left) && isAssignmentOperator(node.operatorToken.kind)) {
+               const sourceFile = getSourceFileOfNode(node);
+               const sourceFileName = sourceFile ? sourceFile.fileName : undefined;
+                if (bindingNameExportSpecifiers && bindingNameExportSpecifiers[sourceFileName] && hasProperty(bindingNameExportSpecifiers[sourceFileName], left.text)) {
+                    setNodeEmitFlags(node, NodeEmitFlags.NoSubstitution);
+                    let nestedExportAssignment: BinaryExpression;
+                    for (const specifier of bindingNameExportSpecifiers[sourceFileName][left.text]) {
+                        nestedExportAssignment = nestedExportAssignment ?
+                            createExportAssignment(specifier.name, nestedExportAssignment) :
+                            createExportAssignment(specifier.name, node);
+                    }
+                    return nestedExportAssignment;
+                }
+            }
+            return node;
+        }
+
+        function substituteUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression): Expression {
+            // Because how the compiler only parse plusplus and minusminus to be either prefixUnaryExpression or postFixUnaryExpression depended on where they are
+            // We don't need to check that the operator has SyntaxKind.plusplus or SyntaxKind.minusminus
+            const operator = node.operator;
+            const operand = node.operand;
+            if (isIdentifier(operand) && bindingNameExportSpecifiers) {
+                const sourceFile = getSourceFileOfNode(node);
+               const sourceFileName = sourceFile ? sourceFile.fileName : undefined;
+                if (bindingNameExportSpecifiers && bindingNameExportSpecifiers[sourceFileName] && hasProperty(bindingNameExportSpecifiers[sourceFileName], operand.text)) {
+                    setNodeEmitFlags(node, NodeEmitFlags.NoSubstitution);
+                    let transformedUnaryExpression: BinaryExpression;
+                    if (node.kind === SyntaxKind.PostfixUnaryExpression) {
+                        transformedUnaryExpression = createBinaryWithOperatorToken(
+                            operand,
+                            createNode(operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusEqualsToken : SyntaxKind.MinusEqualsToken),
+                            createIdentifier("1"),
+                        /*location*/ node
+                        );
+                        // We have to set no substitution flag here to prevent visit the binary expression and substitute it again as we will preform all necessary substitution in here
+                        setNodeEmitFlags(transformedUnaryExpression, NodeEmitFlags.NoSubstitution);
+                    }
+                    let nestedExportAssignment: BinaryExpression;
+                    for (const specifier of bindingNameExportSpecifiers[sourceFileName][operand.text]) {
+                        nestedExportAssignment = nestedExportAssignment ?
+                            createExportAssignment(specifier.name, nestedExportAssignment) :
+                            createExportAssignment(specifier.name, transformedUnaryExpression || node);
+                    }
+                    return nestedExportAssignment;
+                }
+            }
+            return node;
         }
 
         function trySubstituteExportedName(node: Identifier) {
