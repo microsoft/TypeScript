@@ -20,7 +20,7 @@ namespace ts {
                 if (expectedDiagnosticTexts) {
                     assert.equal(expectedDiagnosticTexts[i], diagnostics[i] && diagnostics[i].messageText);
                 }
-            }
+            };
             assert.equal(diagnostics.length, n, "Resuting diagnostics count does not match expected");
         }
 
@@ -319,11 +319,13 @@ var x = 0;`,
             });
 
             it("Fails on bad value", () => {
-                test(``, {
-                    options: { compilerOptions: { module: <ModuleKind><any>{} } },
-                    expectedDiagnosticCodes: [6046],
-                    expectedDiagnosticTexts: ["Argument for '--module' option must be:  'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015'"]
-                });
+                for (const value in [123, {}, ""]) {
+                    test(``, {
+                        options: { compilerOptions: { module: <ModuleKind><any>value } },
+                        expectedDiagnosticCodes: [6046],
+                        expectedDiagnosticTexts: ["Argument for '--module' option must be:  'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015'"]
+                    });
+                }
             });
         });
     });
