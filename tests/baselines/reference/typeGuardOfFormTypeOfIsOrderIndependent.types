@@ -29,7 +29,6 @@ if ("string" === typeof strOrNum) {
 >typeof strOrNum : string
 >strOrNum : string | number
 
-// if (typeof strOrNum === "string") {
     str = strOrNum;
 >str = strOrNum : string
 >str : string

@@ -26,7 +26,6 @@ var func: () => void;
 if ("string" === typeof strOrNum) {
 >strOrNum : Symbol(strOrNum, Decl(typeGuardOfFormTypeOfIsOrderIndependent.ts, 0, 3))
 
-// if (typeof strOrNum === "string") {
     str = strOrNum;
 >str : Symbol(str, Decl(typeGuardOfFormTypeOfIsOrderIndependent.ts, 4, 3))
 >strOrNum : Symbol(strOrNum, Decl(typeGuardOfFormTypeOfIsOrderIndependent.ts, 0, 3))

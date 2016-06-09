@@ -609,7 +609,8 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    if (isNarrowingExpression(expr.left) && (expr.right.kind === SyntaxKind.NullKeyword || expr.right.kind === SyntaxKind.Identifier)) {
+                    if ((isNarrowingExpression(expr.left) && (expr.right.kind === SyntaxKind.NullKeyword || expr.right.kind === SyntaxKind.Identifier)) ||
+                        (isNarrowingExpression(expr.right) && (expr.left.kind === SyntaxKind.NullKeyword || expr.left.kind === SyntaxKind.Identifier))) {
                         return true;
                     }
                     if (isTypeOfNarrowingBinaryExpression(expr)) {
@@ -633,7 +634,7 @@ namespace ts {
                 typeOf = expr.left;
             }
             else {
-                typeOf = undefined;;
+                typeOf = undefined;
             }
             return typeOf && typeOf.kind === SyntaxKind.TypeOfExpression && isNarrowingExpression((<TypeOfExpression>typeOf).expression);
         }

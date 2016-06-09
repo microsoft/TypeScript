@@ -8,7 +8,6 @@ var bool: boolean;
 var func: () => void;
 
 if ("string" === typeof strOrNum) {
-// if (typeof strOrNum === "string") {
     str = strOrNum;
 }
 else {
