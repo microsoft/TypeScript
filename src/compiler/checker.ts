@@ -14216,7 +14216,7 @@ namespace ts {
         }
 
         function checkSourceFileADefinitionFile(node: Node): boolean {
-            return getSourceFileOfNode(node).fileName.indexOf(".d.ts") > 0;
+            return getSourceFileOfNode(node).fileName.match(/\.d\.ts$/) != null;
         }
 
         function checkUnusedLocals(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction): void {
