@@ -2105,12 +2105,12 @@ namespace ts {
                 }
             }
 
-            if (options.inlineSources) {
-                if (!options.sourceMap && !options.inlineSourceMap) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_inlineSources_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided));
+            if (!options.sourceMap && !options.inlineSourceMap) {
+                if (options.inlineSources) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided, "inlineSources"));
                 }
                 if (options.sourceRoot) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "sourceRoot", "inlineSources"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided, "sourceRoot"));
                 }
             }
 
@@ -2118,14 +2118,9 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "outFile"));
             }
 
-            if (!options.sourceMap && (options.mapRoot || options.sourceRoot)) {
-                // Error to specify --mapRoot or --sourceRoot without mapSourceFiles
-                if (options.mapRoot) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "mapRoot", "sourceMap"));
-                }
-                if (options.sourceRoot && !options.inlineSourceMap) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "sourceRoot", "sourceMap"));
-                }
+            if (options.mapRoot && !options.sourceMap) {
+                // Error to specify --mapRoot without --sourcemap
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "mapRoot", "sourceMap"));
             }
 
             if (options.declarationDir) {
