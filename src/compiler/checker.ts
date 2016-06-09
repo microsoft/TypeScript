@@ -17737,7 +17737,7 @@ namespace ts {
                     mergeSymbolTable(globals, file.locals);
                 }
                 if (file.patternAmbientModules && file.patternAmbientModules.length) {
-                    (patternAmbientModules || (patternAmbientModules = [])).push(...file.patternAmbientModules);
+                    patternAmbientModules = concatenate(patternAmbientModules, file.patternAmbientModules);
                 }
 
                 if (file.moduleAugmentations.length) {
