@@ -25,7 +25,7 @@ class PB extends B {
 var a: {
     [x: string]: string;
 }
-var b: { [x: number]: string; } = { foo: '' };
+var b: { [x: number]: string; } = { 0: '' };
 
 function foo1(x: A);
 function foo1(x: A); // error

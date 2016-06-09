@@ -91,10 +91,10 @@ namespace ts {
         return undefined;
     }
 
-    export function contains<T>(array: T[], value: T): boolean {
+    export function contains<T>(array: T[], value: T, areEqual?: (a: T, b: T) => boolean): boolean {
         if (array) {
             for (const v of array) {
-                if (v === value) {
+                if (areEqual ? areEqual(v, value) : v === value) {
                     return true;
                 }
             }
@@ -156,12 +156,12 @@ namespace ts {
         return array1.concat(array2);
     }
 
-    export function deduplicate<T>(array: T[]): T[] {
+    export function deduplicate<T>(array: T[], areEqual?: (a: T, b: T) => boolean): T[] {
         let result: T[];
         if (array) {
             result = [];
             for (const item of array) {
-                if (!contains(result, item)) {
+                if (!contains(result, item, areEqual)) {
                     result.push(item);
                 }
             }
@@ -849,11 +849,20 @@ namespace ts {
     const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
         for (const ext of extensionsToRemove) {
-            if (fileExtensionIs(path, ext)) {
-                return path.substr(0, path.length - ext.length);
+            const extensionless = tryRemoveExtension(path, ext);
+            if (extensionless !== undefined) {
+                return extensionless;
             }
         }
         return path;
+    }
+
+    export function tryRemoveExtension(path: string, extension: string): string {
+        return fileExtensionIs(path, extension) ? path.substring(0, path.length - extension.length) : undefined;
+    }
+
+    export function isJsxOrTsxExtension(ext: string): boolean {
+        return ext === ".jsx" || ext === ".tsx";
     }
 
     export interface ObjectAllocator {

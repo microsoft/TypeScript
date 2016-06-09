@@ -437,7 +437,7 @@ var log = _.bind((message?: string, ...rest: string[]) => { }, Date);
 >bind : Symbol(Underscore.Static.bind, Decl(underscoreTest1_underscore.ts, 548, 68), Decl(underscoreTest1_underscore.ts, 550, 58))
 >message : Symbol(message, Decl(underscoreTest1_underscoreTests.ts, 108, 18))
 >rest : Symbol(rest, Decl(underscoreTest1_underscoreTests.ts, 108, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 _.delay(log, 1000, 'logged later');
 >_.delay : Symbol(Underscore.Static.delay, Decl(underscoreTest1_underscore.ts, 557, 73))
@@ -782,7 +782,7 @@ _.isDate(new Date());
 >_.isDate : Symbol(Underscore.Static.isDate, Decl(underscoreTest1_underscore.ts, 611, 40))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 645, 11))
 >isDate : Symbol(Underscore.Static.isDate, Decl(underscoreTest1_underscore.ts, 611, 40))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 _.isRegExp(/moe/);
 >_.isRegExp : Symbol(Underscore.Static.isRegExp, Decl(underscoreTest1_underscore.ts, 612, 37))

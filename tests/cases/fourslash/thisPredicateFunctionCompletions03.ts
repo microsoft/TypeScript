@@ -38,20 +38,6 @@
 ////     b./*8*/;
 //// }
 ////
-//// if (((a.isLeader)())) {
-////     a./*9*/;
-//// }
-//// else if (((a).isFollower())) {
-////     a./*10*/;
-//// }
-////
-//// if (((a["isLeader"])())) {
-////     a./*11*/;
-//// }
-//// else if (((a)["isFollower"]())) {
-////     a./*12*/;
-//// }
-////
 //// let leader/*13*/Status = a.isLeader();
 //// function isLeaderGuard(g: RoyalGuard) {
 ////    return g.isLeader();
@@ -67,14 +53,4 @@ verify.completionListContains("follow");
 goTo.marker("6");
 verify.completionListContains("lead");
 goTo.marker("8");
-verify.completionListContains("follow");
-
-goTo.marker("9");
-verify.completionListContains("lead");
-goTo.marker("10");
-verify.completionListContains("follow");
-
-goTo.marker("11");
-verify.completionListContains("lead");
-goTo.marker("12");
 verify.completionListContains("follow");

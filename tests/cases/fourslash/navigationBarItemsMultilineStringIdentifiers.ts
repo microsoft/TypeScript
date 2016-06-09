@@ -1,31 +1,22 @@
 
-////{| "itemName": "\"Multiline\\r\\nMadness\"", "kind": "module" |}
 ////declare module "Multiline\r\nMadness" {
 ////}
 ////
-////{| "itemName": "\"Multiline\\\nMadness\"", "kind": "module" |}
 ////declare module "Multiline\
 ////Madness" {
 ////}
-////{| "itemName": "\"MultilineMadness\"", "kind": "module" |}
 ////declare module "MultilineMadness" {}
 ////
-////{| "itemName": "Foo", "kind": "interface" |}
 ////interface Foo {
-////    {| "itemName": "\"a1\\\\\\r\\nb\"", "kind": "property", "parentName": "Foo" |}
 ////    "a1\\\r\nb";
-////    {| "itemName": "\"a2\\\n    \\\n    b\"", "kind": "method", "parentName": "Foo" |}
 ////    "a2\
 ////    \
 ////    b"(): Foo;
 ////}
 ////
-////{| "itemName": "Bar", "kind": "class" |}
 ////class Bar implements Foo {
-////    {| "itemName": "'a1\\\\\\r\\nb'", "kind": "property", "parentName": "Bar" |}
 ////    'a1\\\r\nb': Foo;
 ////
-////    {| "itemName": "'a2\\\n    \\\n    b'", "kind": "method", "parentName": "Bar" |}
 ////    'a2\
 ////    \
 ////    b'(): Foo {
@@ -33,9 +24,82 @@
 ////    }
 ////}
 
-
-test.markers().forEach((marker) => {
-    verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
-});
-
-verify.getScriptLexicalStructureListCount(9); // interface w/ 2 properties, class w/ 2 properties, 3 modules
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "Bar",
+                "kind": "class"
+            },
+            {
+                "text": "Foo",
+                "kind": "interface"
+            },
+            {
+                "text": "\"Multiline\\r\\nMadness\"",
+                "kind": "module",
+                "kindModifiers": "declare"
+            },
+            {
+                "text": "\"Multiline\\\nMadness\"",
+                "kind": "module",
+                "kindModifiers": "declare"
+            },
+            {
+                "text": "\"MultilineMadness\"",
+                "kind": "module",
+                "kindModifiers": "declare"
+            }
+        ]
+    },
+    {
+        "text": "Bar",
+        "kind": "class",
+        "childItems": [
+            {
+                "text": "'a1\\\\\\r\\nb'",
+                "kind": "property"
+            },
+            {
+                "text": "'a2\\\n    \\\n    b'",
+                "kind": "method"
+            }
+        ],
+        "indent": 1
+    },
+    {
+        "text": "Foo",
+        "kind": "interface",
+        "childItems": [
+            {
+                "text": "\"a1\\\\\\r\\nb\"",
+                "kind": "property"
+            },
+            {
+                "text": "\"a2\\\n    \\\n    b\"",
+                "kind": "method"
+            }
+        ],
+        "indent": 1
+    },
+    {
+        "text": "\"Multiline\\r\\nMadness\"",
+        "kind": "module",
+        "kindModifiers": "declare",
+        "indent": 1
+    },
+    {
+        "text": "\"Multiline\\\nMadness\"",
+        "kind": "module",
+        "kindModifiers": "declare",
+        "indent": 1
+    },
+    {
+        "text": "\"MultilineMadness\"",
+        "kind": "module",
+        "kindModifiers": "declare",
+        "indent": 1
+    }
+]);

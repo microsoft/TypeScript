@@ -9,7 +9,8 @@ class B extends A {
 
 var x: {
     [idx: number]: A;
-} = { data: new B() }
+} = { 0: new B() }
+
 
 //// [numericIndexerConstraint4.js]
 var __extends = (this && this.__extends) || function (d, b) {
@@ -29,4 +30,4 @@ var B = (function (_super) {
     }
     return B;
 }(A));
-var x = { data: new B() };
+var x = { 0: new B() };

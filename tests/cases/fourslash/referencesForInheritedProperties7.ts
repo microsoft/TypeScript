@@ -18,7 +18,7 @@
 //// v./*8*/doStuff();
 
 goTo.marker("1");
-verify.referencesCountIs(1);
+verify.referencesCountIs(3);
 
 goTo.marker("2");
 verify.referencesCountIs(3);
@@ -30,7 +30,7 @@ goTo.marker("4");
 verify.referencesCountIs(3);
 
 goTo.marker("5");
-verify.referencesCountIs(3);
+verify.referencesCountIs(4);
 
 goTo.marker("6");
 verify.referencesCountIs(4);
@@ -39,4 +39,4 @@ goTo.marker("7");
 verify.referencesCountIs(4);
 
 goTo.marker("8");
-verify.referencesCountIs(3);
+verify.referencesCountIs(4);

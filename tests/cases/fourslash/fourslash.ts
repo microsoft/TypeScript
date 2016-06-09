@@ -52,13 +52,13 @@ declare module ts {
         None = 0,
         Block = 1,
         Smart = 2,
-    }  
+    }
 
     interface OutputFile {
         name: string;
         writeByteOrderMark: boolean;
         text: string;
-    }  
+    }
 }
 
 declare namespace FourSlashInterface {
@@ -110,8 +110,8 @@ declare namespace FourSlashInterface {
         type(definitionIndex?: number): void;
         position(position: number, fileIndex?: number): any;
         position(position: number, fileName?: string): any;
-        file(index: number, content?: string): any;
-        file(name: string, content?: string): any;
+        file(index: number, content?: string, scriptKindName?: string): any;
+        file(name: string, content?: string, scriptKindName?: string): any;
     }
     class verifyNegatable {
         private negative;
@@ -136,9 +136,10 @@ declare namespace FourSlashInterface {
         typeDefinitionCountIs(expectedCount: number): void;
         definitionLocationExists(): void;
         verifyDefinitionsName(name: string, containerName: string): void;
+        isValidBraceCompletionAtPostion(openingBrace?: string): void;
     }
     class verify extends verifyNegatable {
-        assertHasRanges(ranges: FourSlash.Range[]): void;
+        assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
         indentationIs(numberOfSpaces: number): void;
         indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle): void;
@@ -173,8 +174,8 @@ declare namespace FourSlashInterface {
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
-        getScriptLexicalStructureListCount(count: number): void;
-        getScriptLexicalStructureListContains(name: string, kind: string, fileName?: string, parentName?: string, isAdditionalSpan?: boolean, markerPosition?: number): void;
+
+        navigationBar(json: any): void;
         navigationItemsListCount(count: number, searchValue: string, matchKind?: string): void;
         navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
@@ -234,6 +235,7 @@ declare namespace FourSlashInterface {
         printBreakpointAtCurrentLocation(): void;
         printNameOrDottedNameSpans(pos: number): void;
         printErrorList(): void;
+        printNavigationBar(): void;
         printNavigationItems(searchValue?: string): void;
         printScriptLexicalStructureItems(): void;
         printReferences(): void;
@@ -244,6 +246,7 @@ declare namespace FourSlashInterface {
         copyFormatOptions(): FormatCodeOptions;
         setFormatOptions(options: FormatCodeOptions): any;
         selection(startMarker: string, endMarker: string): void;
+        onType(posMarker: string, key: string): void;
         setOption(name: string, value: number): any;
         setOption(name: string, value: string): any;
         setOption(name: string, value: boolean): any;
