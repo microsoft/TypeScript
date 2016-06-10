@@ -635,10 +635,6 @@
         "category": "Error",
         "code": 1203
     },
-    "Cannot compile modules into 'es2015' when targeting 'ES5' or lower.": {
-        "category": "Error",
-        "code": 1204
-    },
     "Decorators are not valid here.": {
         "category": "Error",
         "code": 1206

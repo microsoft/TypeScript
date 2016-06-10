@@ -5613,7 +5613,11 @@ const _super = (function (geti, seti) {
             }
 
             function emitClassLikeDeclarationBelowES6(node: ClassLikeDeclaration) {
+                const isES6ExportedClass = isES6ExportedDeclaration(node);
                 if (node.kind === SyntaxKind.ClassDeclaration) {
+                    if (isES6ExportedClass && !(node.flags & NodeFlags.Default)) {
+                        write("export ");
+                    }
                     // source file level classes in system modules are hoisted so 'var's for them are already defined
                     if (!shouldHoistDeclarationInSystemJsModule(node)) {
                         write("var ");
@@ -5683,8 +5687,14 @@ const _super = (function (geti, seti) {
                 }
                 emitEnd(node);
 
-                if (node.kind === SyntaxKind.ClassDeclaration) {
+                if (node.kind === SyntaxKind.ClassDeclaration && !isES6ExportedClass) {
                     emitExportMemberAssignment(<ClassDeclaration>node);
+                }
+                else if (isES6ExportedClass && (node.flags & NodeFlags.Default)) {
+                    writeLine();
+                    write("export default ");
+                    emitDeclarationName(node);
+                    write(";");
                 }
             }
 
@@ -6300,7 +6310,7 @@ const _super = (function (geti, seti) {
             }
 
             function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration {
-                if (moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
+                if (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
                     const recursiveInnerModule = getInnerMostModuleDeclarationFromDottedModule(<ModuleDeclaration>moduleDeclaration.body);
                     return recursiveInnerModule || <ModuleDeclaration>moduleDeclaration.body;
                 }
@@ -6349,6 +6359,7 @@ const _super = (function (geti, seti) {
                 write(getGeneratedNameForNode(node));
                 emitEnd(node.name);
                 write(") ");
+                Debug.assert(node.body !== undefined); // node.body must exist, as this is a non-ambient module
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
                     const saveConvertedLoopState = convertedLoopState;
                     const saveTempFlags = tempFlags;
