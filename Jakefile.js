@@ -276,6 +276,7 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
     * @param {boolean} opts.noResolve: true if compiler should not include non-rooted files in compilation
     * @param {boolean} opts.stripInternal: true if compiler should remove declarations marked as @internal
     * @param {boolean} opts.noMapRoot: true if compiler omit mapRoot option
+    * @param {boolean} opts.inlineSourceMap: true if compiler should inline sourceMap
     * @param callback: a function to execute after the compilation process ends
     */
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts, callback) {
@@ -313,7 +314,14 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         }
 
         if (useDebugMode) {
-            options += " --inlineSourceMap --inlineSources";
+            if (opts.inlineSoureMap) {
+                options += " --inlineSourceMap --inlineSources";
+            } else {
+                options += " -sourcemap";
+                if (!opts.noMapRoot) {
+                    options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
+                }
+            }
         } else {
             options += " --newLine LF";
         }
@@ -483,6 +491,7 @@ var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
+var servicesFileInBrowserTest = path.join(builtLocalDirectory, "typescriptServicesInBrowserTest.js");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
 var nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
@@ -491,7 +500,13 @@ var nodeStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescript_s
 compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
             /*prefixes*/ [copyright],
             /*useBuiltCompiler*/ true,
-            { noOutFile: false, generateDeclarations: true, preserveConstEnums: true, keepComments: true, noResolve: false, stripInternal: true },
+            /*opts*/ { noOutFile: false,
+                generateDeclarations: true,
+                preserveConstEnums: true,
+                keepComments: true,
+                noResolve: false,
+                stripInternal: true
+            },
             /*callback*/ function () {
                 jake.cpR(servicesFile, nodePackageFile, {silent: true});
 
@@ -514,6 +529,21 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
             });
 
+compileFile(
+    servicesFileInBrowserTest,
+    servicesSources,
+    [builtLocalDirectory, copyright].concat(servicesSources),
+    /*prefixes*/ [copyright],
+    /*useBuiltCompiler*/ true,
+    { noOutFile: false,
+      generateDeclarations: true,
+      preserveConstEnums: true,
+      keepComments: true,
+      noResolve: false,
+      stripInternal: true,
+      noMapRoot: true,
+      inlineSoureMap: true
+     });
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
@@ -614,7 +644,13 @@ directory(builtLocalDirectory);
 
 // Task to build the tests infrastructure using the built compiler
 var run = path.join(builtLocalDirectory, "run.js");
-compileFile(run, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources), [], /*useBuiltCompiler:*/ true);
+compileFile(
+    /*outFile*/ run,
+    /*source*/ harnessSources,
+    /*prereqs*/ [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources),
+    /*prefixes*/ [],
+    /*useBuiltCompiler:*/ true,
+    /*opts*/ { inlineSoureMap: true });
 
 var internalTests = "internal/";
 
@@ -813,7 +849,7 @@ task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function()
 }, {async: true});
 
 desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], port=, browser=[chrome|IE]");
-task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFile], function() {
+task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFileInBrowserTest], function() {
     cleanTestDirs();
     host = "node";
     port = process.env.port || process.env.p || '8888';
