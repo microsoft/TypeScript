@@ -1,8 +1,6 @@
-error TS1204: Cannot compile modules into 'es2015' when targeting 'ES5' or lower.
 tests/cases/compiler/test.ts(2,19): error TS2307: Cannot find module './foo'.
 
 
-!!! error TS1204: Cannot compile modules into 'es2015' when targeting 'ES5' or lower.
 ==== tests/cases/compiler/test.ts (1 errors) ====
     
     import {foo} from './foo';

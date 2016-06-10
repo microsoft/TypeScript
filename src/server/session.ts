@@ -1207,7 +1207,11 @@ namespace ts.server {
                     // Handle cancellation exceptions
                 }
                 this.logError(err, message);
-                this.output(undefined, request ? request.command : CommandNames.Unknown, request ? request.seq : 0, "Error processing request. " + err.message);
+                this.output(
+                    undefined,
+                    request ? request.command : CommandNames.Unknown,
+                    request ? request.seq : 0,
+                    "Error processing request. " + (<StackTraceError>err).message + "\n" + (<StackTraceError>err).stack);
             }
         }
     }
