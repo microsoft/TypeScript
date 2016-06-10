@@ -608,18 +608,22 @@ namespace ts.server {
             }
         }
 
-        private getQuickInfo(line: number, offset: number, fileName: string): protocol.QuickInfoResponseBody {
-            const file = ts.normalizePath(fileName);
+        private getQuickInfo(args: protocol.FileLocationRequestArgs): protocol.QuickInfoResponseBody {
+            const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
             if (!project) {
                 throw Errors.NoProject;
             }
 
             const scriptInfo = project.getScriptInfo(file);
-            const position = scriptInfo.lineOffsetToPosition(line, offset);
+            const position = args.position !== undefined ? args.position : scriptInfo.lineOffsetToPosition(args.line, args.offset);
             const quickInfo = project.languageService.getQuickInfoAtPosition(file, position);
             if (!quickInfo) {
                 return undefined;
+            }
+            if (args.position !== undefined) {
+                // TODO: fixme
+                return <any>quickInfo;
             }
 
             const displayString = ts.displayPartsToString(quickInfo.displayParts);
@@ -1107,9 +1111,8 @@ namespace ts.server {
                 this.openClientFile(openArgs.file, openArgs.fileContent, scriptKind);
                 return this.notRequired();
             },
-            [CommandNames.Quickinfo]: (request: protocol.Request) => {
-                const quickinfoArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                return { response: this.getQuickInfo(quickinfoArgs.line, quickinfoArgs.offset, quickinfoArgs.file), responseRequired: true };
+            [CommandNames.Quickinfo]: (request: protocol.QuickInfoRequest) => {
+                return this.requiredResponse(this.getQuickInfo(request.arguments));
             },
             [CommandNames.Format]: (request: protocol.Request) => {
                 const formatArgs = <protocol.FormatRequestArgs>request.arguments;

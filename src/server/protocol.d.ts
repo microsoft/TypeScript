@@ -147,12 +147,17 @@ declare namespace ts.server.protocol {
         /**
           * The line number for the request (1-based).
           */
-        line: number;
+        line?: number;
 
         /**
           * The character offset (on the line) for the request (1-based).
           */
-        offset: number;
+        offset?: number;
+
+        /**
+         * Position (can be specified instead of line/offset pair) 
+         */
+        position?: number;
     }
 
     /**
