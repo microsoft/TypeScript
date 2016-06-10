@@ -1,6 +1,6 @@
 // @moduleResolution: node
 // @module: commonjs
-// @traceModuleResolution: true
+// @traceResolution: true
 
 // baseUrl set via command line
 

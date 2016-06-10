@@ -1,5 +1,5 @@
 // @module: commonjs
-// @traceModuleResolution: true
+// @traceResolution: true
 
 // paths is defined in tsconfig.json
 // @filename: c:/root/tsconfig.json

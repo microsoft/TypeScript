@@ -38,7 +38,7 @@
         "no-internal-module": true,
         "no-trailing-whitespace": true,
         "no-inferrable-types": true,
-        "no-null": true,
+        "no-null-keyword": true,
         "no-unused-variable": true,
         "boolean-trivia": true,
         "type-operator-spacing": true,

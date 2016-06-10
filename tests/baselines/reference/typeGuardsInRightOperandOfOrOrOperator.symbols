@@ -92,11 +92,10 @@ function foo7(x: number | string | boolean) {
 >z : Symbol(z, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 35, 7))
 
     // Mixing typeguard narrowing
-    // Assigning value to x deep inside another guard stops narrowing of type too
     return typeof x === "string"
 >x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
 
-        || ((z = x) // string | number | boolean - x changed deeper in conditional expression
+        || ((z = x) // number | boolean
 >z : Symbol(z, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 35, 7))
 >x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
 
@@ -104,40 +103,18 @@ function foo7(x: number | string | boolean) {
 >x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
 
         // change value of x
-        ? (x = 10 && x.toString()) // number | boolean | string
+        ? ((x = 10) && x.toString()) // number | boolean | string
 >x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
->x.toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
->toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 
         // do not change value
-        : (y = x && x.toString()))); // number | boolean | string
+        : ((y = x) && x.toString()))); // number | boolean | string
 >y : Symbol(y, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 34, 7))
 >x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
->x.toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>x.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
->toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 }
-function foo8(x: number | string) {
->foo8 : Symbol(foo8, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 45, 1))
->x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 46, 14))
 
-    // Mixing typeguard 
-    // Assigning value to x in outer guard shouldn't stop narrowing in the inner expression
-    return typeof x === "string"
->x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 46, 14))
-
-        || (x = 10) // change x - number| string
->x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 46, 14))
-
-        || (typeof x === "number"
->x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 46, 14))
-
-        ? x // number
->x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 46, 14))
-
-        : x.length); // string
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->x : Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 46, 14))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
-}

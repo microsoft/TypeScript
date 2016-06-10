@@ -36,12 +36,12 @@ var r = c.fn();
 var r2 = r[1];
 >r2 : Symbol(r2, Decl(indexersInClassType.ts, 13, 3))
 >r : Symbol(r, Decl(indexersInClassType.ts, 12, 3))
->1 : Symbol(C.1, Decl(indexersInClassType.ts, 2, 24))
+>1 : Symbol(C[1], Decl(indexersInClassType.ts, 2, 24))
 
 var r3 = r.a
 >r3 : Symbol(r3, Decl(indexersInClassType.ts, 14, 3))
->r.a : Symbol(C.'a', Decl(indexersInClassType.ts, 3, 12))
+>r.a : Symbol(C['a'], Decl(indexersInClassType.ts, 3, 12))
 >r : Symbol(r, Decl(indexersInClassType.ts, 12, 3))
->a : Symbol(C.'a', Decl(indexersInClassType.ts, 3, 12))
+>a : Symbol(C['a'], Decl(indexersInClassType.ts, 3, 12))
 
 

@@ -1,0 +1,11 @@
+=== tests/cases/conformance/typings/a.ts ===
+$.x;
+>$.x : any
+>$ : { x: any; }
+>x : any
+
+=== tests/cases/conformance/typings/node_modules/@types/jquery/index.d.ts ===
+declare var $: { x: any };
+>$ : { x: any; }
+>x : any
+

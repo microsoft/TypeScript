@@ -5,9 +5,10 @@ var v = {
   * @type {number}
   */
  get bar(): number {
-  return this._bar;
+  return 12;
  }
 }
+
 
 //// [commentsOnObjectLiteral4.js]
 var v = {
@@ -15,6 +16,6 @@ var v = {
      * @type {number}
      */
     get bar() {
-        return this._bar;
+        return 12;
     }
 };
