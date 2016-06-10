@@ -472,10 +472,10 @@ namespace ts.server {
                 projectFileName: this.getProjectFileName(),
                 version: this.currentVersion
             };
-            if (this.lastReportedVersion === this.currentVersion) {
-                return { info };
-            }
             if (this.lastReportedFileNames && lastKnownVersion === this.lastReportedVersion) {
+                if (this.currentVersion == this.lastReportedVersion) {
+                    return { info };
+                }
                 const lastReportedFileNames = this.lastReportedFileNames;
                 const currentFiles = arrayToMap(this.getFileNames(), x => x);
 
@@ -501,6 +501,7 @@ namespace ts.server {
                 // unknown version - return everything
                 const projectFileNames = this.getFileNames();
                 this.lastReportedFileNames = arrayToMap(projectFileNames, x => x);
+                this.lastReportedVersion = this.currentVersion;
                 return { info, files: projectFileNames };
             }
         }
