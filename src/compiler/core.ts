@@ -138,6 +138,17 @@ namespace ts {
         return result;
     }
 
+    export function filterMutate<T>(array: T[], f: (x: T) => boolean): void {
+        let outIndex = 0;
+        for (const item of array) {
+            if (f(item)) {
+                array[outIndex] = item;
+                outIndex++;
+            }
+        }
+        array.length = outIndex;
+    }
+
     export function map<T, U>(array: T[], f: (x: T) => U): U[] {
         let result: U[];
         if (array) {
