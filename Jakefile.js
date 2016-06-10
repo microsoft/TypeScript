@@ -740,16 +740,25 @@ function runConsoleTests(defaultReporter, runInParallel) {
         tests = tests ? ' -g "' + tests + '"' : '';
         var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
+
+        var savedNodeEnv = process.env.NODE_ENV;
+        process.env.NODE_ENV = "development";
         exec(cmd, function () {
+            process.env.NODE_ENV = savedNodeEnv;
             runLinter();
             finish();
         }, function(e, status) {
+            process.env.NODE_ENV = savedNodeEnv;
             finish(status);
         });
 
     }
     else {
+        var savedNodeEnv = process.env.NODE_ENV;
+        process.env.NODE_ENV = "development";
         runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function (err) {
+            process.env.NODE_ENV = savedNodeEnv;
+
             // last worker clean everything and runs linter in case if there were no errors
             deleteTemporaryProjectOutput();
             jake.rmRf(taskConfigsFolder);
