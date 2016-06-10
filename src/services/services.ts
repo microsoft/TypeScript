@@ -1164,6 +1164,11 @@ namespace ts {
         newText: string;
     }
 
+    export interface SuggestedFix {
+        name: string;
+        textChanges: TextChange[];
+    }
+
     export interface TextInsertion {
         newText: string;
         /** The position in newText the caret should point to after the insertion. */

@@ -6,11 +6,6 @@ namespace ts {
         getFix(sourceFile: SourceFile, start: number, end: number): TextChange[];
     }
 
-    export interface SuggestedFix {
-        name: string;
-        textChanges: TextChange[];
-    }
-
     export namespace quickFix {
         export const enum FixPriority {
             AboveNormal,
