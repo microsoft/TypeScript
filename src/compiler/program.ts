@@ -9,16 +9,11 @@ namespace ts {
     /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
+    export const version = "1.9.0";
 
     const emptyArray: any[] = [];
 
-    const defaultLibrarySearchPaths = [
-        "types/",
-        "node_modules/",
-        "node_modules/@types/",
-    ];
-
-    export const version = "1.9.0";
+    const defaultTypeRoots = ["node_modules/@types"];
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
         while (true) {
@@ -196,24 +191,22 @@ namespace ts {
             traceEnabled
         };
 
-        // use typesRoot and fallback to directory that contains tsconfig or current directory if typesRoot is not set
-        const rootDir = options.typesRoot || (options.configFilePath ? getDirectoryPath(options.configFilePath) : (host.getCurrentDirectory && host.getCurrentDirectory()));
-
+        const typeRoots = options.typeRoots || defaultTypeRoots;
         if (traceEnabled) {
             if (containingFile === undefined) {
-                if (rootDir === undefined) {
+                if (typeRoots === undefined) {
                     trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_not_set, typeReferenceDirectiveName);
                 }
                 else {
-                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_1, typeReferenceDirectiveName, rootDir);
+                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_1, typeReferenceDirectiveName, typeRoots);
                 }
             }
             else {
-                if (rootDir === undefined) {
+                if (typeRoots === undefined) {
                     trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_not_set, typeReferenceDirectiveName, containingFile);
                 }
                 else {
-                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2, typeReferenceDirectiveName, containingFile, rootDir);
+                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2, typeReferenceDirectiveName, containingFile, typeRoots);
                 }
             }
         }
@@ -221,14 +214,13 @@ namespace ts {
         const failedLookupLocations: string[] = [];
 
         // Check primary library paths
-        if (rootDir !== undefined) {
-            const effectivePrimarySearchPaths = options.typesSearchPaths || defaultLibrarySearchPaths;
-            for (const searchPath of effectivePrimarySearchPaths) {
-                const primaryPath = combinePaths(rootDir, searchPath);
-                if (traceEnabled) {
-                    trace(host, Diagnostics.Resolving_with_primary_search_path_0, primaryPath);
-                }
-                const candidate = combinePaths(primaryPath, typeReferenceDirectiveName);
+        if (typeRoots.length) {
+            if (traceEnabled) {
+                trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(', '));
+            }
+            const primarySearchPaths = options.typeRoots || defaultTypeRoots;
+            for (const typeRoot of primarySearchPaths) {
+                const candidate = combinePaths(typeRoot, typeReferenceDirectiveName);
                 const candidateDirectory = getDirectoryPath(candidate);
                 const resolvedFile = loadNodeModuleFromDirectory(typeReferenceExtensions, candidate, failedLookupLocations,
                     !directoryProbablyExists(candidateDirectory, host), moduleResolutionState);
@@ -254,9 +246,6 @@ namespace ts {
         let initialLocationForSecondaryLookup: string;
         if (containingFile) {
             initialLocationForSecondaryLookup = getDirectoryPath(containingFile);
-        }
-        else {
-            initialLocationForSecondaryLookup = rootDir;
         }
 
         if (initialLocationForSecondaryLookup !== undefined) {
@@ -875,19 +864,6 @@ namespace ts {
             }
         }
 
-        function getDefaultTypeDirectiveNames(rootPath: string): string[] {
-            const localTypes = combinePaths(rootPath, "types");
-            const npmTypes = combinePaths(rootPath, "node_modules/@types");
-            let result: string[] = [];
-            if (sys.directoryExists(localTypes)) {
-                result = result.concat(sys.getDirectories(localTypes));
-            }
-            if (sys.directoryExists(npmTypes)) {
-                result = result.concat(sys.getDirectories(npmTypes));
-            }
-            return result;
-        }
-
         function getDefaultLibLocation(): string {
             return getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
         }
@@ -896,7 +872,6 @@ namespace ts {
         const realpath = sys.realpath && ((path: string) => sys.realpath(path));
 
         return {
-            getDefaultTypeDirectiveNames,
             getSourceFile,
             getDefaultLibLocation,
             getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
@@ -909,6 +884,7 @@ namespace ts {
             readFile: fileName => sys.readFile(fileName),
             trace: (s: string) => sys.write(s + newLine),
             directoryExists: directoryName => sys.directoryExists(directoryName),
+            getDirectories: (path: string) => sys.getDirectories(path),
             realpath
         };
     }
@@ -972,21 +948,34 @@ namespace ts {
         return resolutions;
     }
 
-    export function getDefaultTypeDirectiveNames(options: CompilerOptions, rootFiles: string[], host: CompilerHost): string[] {
+    function getInferredTypesRoot(options: CompilerOptions, rootFiles: string[], host: CompilerHost) {
+        return computeCommonSourceDirectoryOfFilenames(rootFiles, host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
+    }
+
+    /**
+      * Given a set of options and a set of root files, returns the set of type directive names
+      *   that should be included for this program automatically.
+      * This list could either come from the config file,
+      *   or from enumerating the types root + initial secondary types lookup location.
+      * More type directives might appear in the program later as a result of loading actual source files;
+      *   this list is only the set of defaults that are implicitly included.
+      */
+    export function getAutomaticTypeDirectiveNames(options: CompilerOptions, rootFiles: string[], host: CompilerHost): string[] {
         // Use explicit type list from tsconfig.json
         if (options.types) {
             return options.types;
         }
 
-        // or load all types from the automatic type import fields
-        if (host && host.getDefaultTypeDirectiveNames) {
-            const commonRoot = computeCommonSourceDirectoryOfFilenames(rootFiles, host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
-            if (commonRoot) {
-                return host.getDefaultTypeDirectiveNames(commonRoot);
+        // Walk the primary type lookup locations
+        let result: string[] = [];
+        if (host.directoryExists && host.getDirectories) {
+            for (const root of options.typeRoots || defaultTypeRoots) {
+                if (host.directoryExists(root)) {
+                    result = result.concat(host.getDirectories(root));
+                }
             }
         }
-
-        return undefined;
+        return result;
     }
 
     export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
@@ -1038,11 +1027,13 @@ namespace ts {
         if (!tryReuseStructureFromOldProgram()) {
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
 
-            // load type declarations specified via 'types' argument
-            const typeReferences: string[] = getDefaultTypeDirectiveNames(options, rootNames, host);
+            // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
+            const typeReferences: string[] = getAutomaticTypeDirectiveNames(options, rootNames, host);
 
             if (typeReferences) {
-                const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, /*containingFile*/ undefined);
+                const inferredRoot = getInferredTypesRoot(options, rootNames, host);
+                const containingFilename = combinePaths(inferredRoot, "__inferred type names__.ts");
+                const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, containingFilename);
                 for (let i = 0; i < typeReferences.length; i++) {
                     processTypeReferenceDirective(typeReferences[i], resolutions[i]);
                 }
@@ -1149,10 +1140,9 @@ namespace ts {
                 (oldOptions.jsx !== options.jsx) ||
                 (oldOptions.allowJs !== options.allowJs) ||
                 (oldOptions.rootDir !== options.rootDir) ||
-                (oldOptions.typesSearchPaths !== options.typesSearchPaths) ||
                 (oldOptions.configFilePath !== options.configFilePath) ||
                 (oldOptions.baseUrl !== options.baseUrl) ||
-                (oldOptions.typesRoot !== options.typesRoot) ||
+                (oldOptions.typeRoots !== options.typeRoots) ||
                 !arrayIsEqualTo(oldOptions.rootDirs, options.rootDirs) ||
                 !mapIsEqualTo(oldOptions.paths, options.paths)) {
                 return false;
@@ -1904,7 +1894,7 @@ namespace ts {
                 }
             }
             else {
-                fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd, Diagnostics.Cannot_find_name_0, typeReferenceDirective));
+                fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd, Diagnostics.Cannot_find_type_definition_file_for_0, typeReferenceDirective));
             }
 
             if (saveResolution) {

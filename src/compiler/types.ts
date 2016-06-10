@@ -2496,7 +2496,6 @@ namespace ts {
         jsx?: JsxEmit;
         reactNamespace?: string;
         listFiles?: boolean;
-        typesSearchPaths?: string[];
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
@@ -2555,8 +2554,8 @@ namespace ts {
         // When options come from a config file, its path is recorded here
         configFilePath?: string;
         /* @internal */
-        // Path used to used to compute primary search locations
-        typesRoot?: string;
+        // Paths used to used to compute primary types search locations
+        typeRoots?: string[];
         types?: string[];
 
         list?: string[];
@@ -2861,9 +2860,9 @@ namespace ts {
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
-        getDefaultTypeDirectiveNames?(rootPath: string): string[];
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;

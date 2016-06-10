@@ -117,6 +117,9 @@ namespace ts {
             getCurrentDirectory(): string {
                 return "";
             },
+            getDirectories(path: string): string[] {
+                return [];
+            },
             getCanonicalFileName(fileName): string {
                 return sys && sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
             },
@@ -336,7 +339,7 @@ namespace ts {
                 { name: "/a.ts", text: SourceText.New("/// <reference types='typedefs'/>", "", "var x = $") },
                 { name: "/types/typedefs/index.d.ts", text: SourceText.New("", "", "declare var $: number") },
             ];
-            const options: CompilerOptions = { target, typesRoot: "/" };
+            const options: CompilerOptions = { target, typeRoots: ["/types"] };
 
             const program_1 = newProgram(files, ["/a.ts"], options);
             checkResolvedTypeDirectivesCache(program_1, "/a.ts", { "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } });

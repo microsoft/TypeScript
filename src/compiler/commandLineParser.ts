@@ -337,8 +337,12 @@ namespace ts {
             }
         },
         {
-            name: "typesRoot",
-            type: "string"
+            name: "typeRoots",
+            type: "list",
+            element: {
+                name: "typeRoots",
+                type: "string"
+            }            
         },
         {
             name: "types",
