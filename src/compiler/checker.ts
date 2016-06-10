@@ -5160,7 +5160,6 @@ namespace ts {
             if (hasProperty(stringLiteralTypes, text)) {
                 return stringLiteralTypes[text];
             }
-
             const type = stringLiteralTypes[text] = <StringLiteralType>createType(TypeFlags.StringLiteral);
             type.text = text;
             return type;
@@ -5623,6 +5622,10 @@ namespace ts {
          */
         function isTypeComparableTo(source: Type, target: Type): boolean {
             return checkTypeComparableTo(source, target, /*errorNode*/ undefined);
+        }
+
+        function areTypesComparable(type1: Type, type2: Type): boolean {
+            return isTypeComparableTo(type1, type2) || isTypeComparableTo(type2, type1);
         }
 
         function checkTypeSubtypeOf(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
@@ -6805,8 +6808,10 @@ namespace ts {
             return !!getPropertyOfType(type, "0");
         }
 
-        function isStringLiteralType(type: Type) {
-            return type.flags & TypeFlags.StringLiteral;
+        function isStringLiteralUnionType(type: Type): boolean {
+            return type.flags & TypeFlags.StringLiteral ? true :
+                type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isStringLiteralUnionType) :
+                false;
         }
 
         /**
@@ -7873,6 +7878,9 @@ namespace ts {
                         if (isNullOrUndefinedLiteral(expr.right)) {
                             return narrowTypeByNullCheck(type, expr, assumeTrue);
                         }
+                        if (expr.left.kind === SyntaxKind.PropertyAccessExpression) {
+                            return narrowTypeByDiscriminant(type, expr, assumeTrue);
+                        }
                         if (expr.left.kind === SyntaxKind.TypeOfExpression && expr.right.kind === SyntaxKind.StringLiteral) {
                             return narrowTypeByTypeof(type, expr, assumeTrue);
                         }
@@ -7901,6 +7909,33 @@ namespace ts {
                         assumeTrue ? TypeFacts.EQNull : TypeFacts.NENull :
                         assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
                 return getTypeWithFacts(type, facts);
+            }
+
+            function narrowTypeByDiscriminant(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
+                // We have '==', '!=', '===', or '!==' operator with property access on left
+                if (!(type.flags & TypeFlags.Union) || !isMatchingReference(reference, (<PropertyAccessExpression>expr.left).expression)) {
+                    return type;
+                }
+                const propName = (<PropertyAccessExpression>expr.left).name.text;
+                const propType = getTypeOfPropertyOfType(type, propName);
+                if (!propType || !isStringLiteralUnionType(propType)) {
+                    return type;
+                }
+                const discriminantType = expr.right.kind === SyntaxKind.StringLiteral ? getStringLiteralTypeForText((<StringLiteral>expr.right).text) : checkExpression(expr.right);
+                if (!isStringLiteralUnionType(discriminantType)) {
+                    return type;
+                }
+                if (expr.operatorToken.kind === SyntaxKind.ExclamationEqualsToken ||
+                    expr.operatorToken.kind === SyntaxKind.ExclamationEqualsEqualsToken) {
+                    assumeTrue = !assumeTrue;
+                }
+                if (assumeTrue) {
+                    return getUnionType(filter((<UnionType>type).types, t => areTypesComparable(getTypeOfPropertyOfType(t, propName), discriminantType)));
+                }
+                if (discriminantType.flags & TypeFlags.StringLiteral) {
+                    return getUnionType(filter((<UnionType>type).types, t => getTypeOfPropertyOfType(t, propName) !== discriminantType));
+                }
+                return type;
             }
 
             function narrowTypeByTypeof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -8890,10 +8925,6 @@ namespace ts {
 
         function getIndexTypeOfContextualType(type: Type, kind: IndexKind) {
             return applyToContextualType(type, t => getIndexTypeOfStructuredType(t, kind));
-        }
-
-        function contextualTypeIsStringLiteralType(type: Type): boolean {
-            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isStringLiteralType) : isStringLiteralType(type));
         }
 
         // Return true if the given contextual type is a tuple-like type
@@ -12557,7 +12588,7 @@ namespace ts {
 
         function checkStringLiteralExpression(node: StringLiteral): Type {
             const contextualType = getContextualType(node);
-            if (contextualType && contextualTypeIsStringLiteralType(contextualType)) {
+            if (contextualType && isStringLiteralUnionType(contextualType)) {
                 return getStringLiteralTypeForText(node.text);
             }
 
