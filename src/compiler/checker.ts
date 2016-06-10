@@ -140,6 +140,12 @@ namespace ts {
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
         const globals: SymbolTable = {};
+        /**
+         * List of every ambient module with a "*" wildcard.
+         * Unlike other ambient modules, these can't be stored in `globals` because symbol tables only deal with exact matches.
+         * This is only used if there is no exact match.
+        */
+        let patternAmbientModules: PatternAmbientModule[];
 
         let getGlobalESSymbolConstructorSymbol: () => Symbol;
 
@@ -986,7 +992,9 @@ namespace ts {
             const moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);
 
             if (moduleSymbol) {
-                const exportDefaultSymbol = moduleSymbol.exports["export="] ?
+                const exportDefaultSymbol = isShorthandAmbientModule(moduleSymbol.valueDeclaration) ?
+                    moduleSymbol :
+                    moduleSymbol.exports["export="] ?
                     getPropertyOfType(getTypeOfSymbol(moduleSymbol.exports["export="]), "default") :
                     resolveSymbol(moduleSymbol.exports["default"]);
 
@@ -1060,6 +1068,10 @@ namespace ts {
             if (targetSymbol) {
                 const name = specifier.propertyName || specifier.name;
                 if (name.text) {
+                    if (isShorthandAmbientModule(moduleSymbol.valueDeclaration)) {
+                        return moduleSymbol;
+                    }
+
                     let symbolFromVariable: Symbol;
                     // First check if module was specified with "export=". If so, get the member from the resolved type
                     if (moduleSymbol && moduleSymbol.exports && moduleSymbol.exports["export="]) {
@@ -1285,6 +1297,14 @@ namespace ts {
                 }
                 return undefined;
             }
+
+            if (patternAmbientModules) {
+                const pattern = findBestPatternMatch(patternAmbientModules, _ => _.pattern, moduleName);
+                if (pattern) {
+                    return getMergedSymbol(pattern.symbol);
+                }
+            }
+
             if (moduleNotFoundError) {
                 // report errors only if it was requested
                 error(moduleReferenceLiteral, moduleNotFoundError, moduleName);
@@ -3220,9 +3240,14 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
-                const type = createObjectType(TypeFlags.Anonymous, symbol);
-                links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ?
-                    addTypeKind(type, TypeFlags.Undefined) : type;
+                if (symbol.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && isShorthandAmbientModule(<ModuleDeclaration>symbol.valueDeclaration)) {
+                    links.type = anyType;
+                }
+                else {
+                    const type = createObjectType(TypeFlags.Anonymous, symbol);
+                    links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ?
+                        addTypeKind(type, TypeFlags.Undefined) : type;
+                }
             }
             return links.type;
         }
@@ -8007,7 +8032,7 @@ namespace ts {
                 const targetType = type.flags & TypeFlags.TypeParameter ? getApparentType(type) : type;
                 return isTypeAssignableTo(candidate, targetType) ? candidate :
                     isTypeAssignableTo(type, candidate) ? type :
-                    neverType;
+                    getIntersectionType([type, candidate]);
             }
 
             function narrowTypeByTypePredicate(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
@@ -8402,7 +8427,10 @@ namespace ts {
             if (needToCaptureLexicalThis) {
                 captureLexicalThis(node, container);
             }
-            if (isFunctionLike(container)) {
+            if (isFunctionLike(container) &&
+                (!isInParameterInitializerBeforeContainingFunction(node) || getFunctionLikeThisParameter(container))) {
+                // Note: a parameter initializer should refer to class-this unless function-this is explicitly annotated.
+
                 // If this is a function in a JS file, it might be a class method. Check if it's the RHS
                 // of a x.prototype.y = function [name]() { .... }
                 if (container.kind === SyntaxKind.FunctionExpression &&
@@ -8756,6 +8784,16 @@ namespace ts {
 
         function getContextualTypeForReturnExpression(node: Expression): Type {
             const func = getContainingFunction(node);
+
+            if (isAsyncFunctionLike(func)) {
+                const contextualReturnType = getContextualReturnType(func);
+                if (contextualReturnType) {
+                    return getPromisedType(contextualReturnType);
+                }
+
+                return undefined;
+            }
+
             if (func && !func.asteriskToken) {
                 return getContextualReturnType(func);
             }
@@ -16025,7 +16063,7 @@ namespace ts {
                         // - augmentation for a global scope is always applied
                         // - augmentation for some external module is applied if symbol for augmentation is merged (it was combined with target module).
                         const checkBody = isGlobalAugmentation || (getSymbolOfNode(node).flags & SymbolFlags.Merged);
-                        if (checkBody) {
+                        if (checkBody && node.body) {
                             // body of ambient external module is always a module block
                             for (const statement of (<ModuleBlock>node.body).statements) {
                                 checkModuleAugmentationElement(statement, isGlobalAugmentation);
@@ -16052,7 +16090,15 @@ namespace ts {
                     }
                 }
             }
-            checkSourceElement(node.body);
+
+            if (compilerOptions.noImplicitAny && !node.body) {
+                // Ambient shorthand module is an implicit any
+                reportImplicitAnyError(node, anyType);
+            }
+
+            if (node.body) {
+                checkSourceElement(node.body);
+            }
         }
 
         function checkModuleAugmentationElement(node: Node, isGlobalAugmentation: boolean): void {
@@ -16237,7 +16283,7 @@ namespace ts {
                 else {
                     if (modulekind === ModuleKind.ES6 && !isInAmbientContext(node)) {
                         // Import equals declaration is deprecated in es6 or above
-                        grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
+                        grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_2015_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                     }
                 }
             }
@@ -16323,7 +16369,7 @@ namespace ts {
             if (node.isExportEquals && !isInAmbientContext(node)) {
                 if (modulekind === ModuleKind.ES6) {
                     // export assignment is not supported in es6 modules
-                    grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_modules_Consider_using_export_default_or_another_module_format_instead);
+                    grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_2015_modules_Consider_using_export_default_or_another_module_format_instead);
                 }
                 else if (modulekind === ModuleKind.System) {
                     // system modules does not support export assignment
@@ -16873,10 +16919,7 @@ namespace ts {
                         return getIntrinsicTagSymbol(<JsxOpeningLikeElement>entityName.parent);
                     }
 
-                    // Include aliases in the meaning, this ensures that we do not follow aliases to where they point and instead
-                    // return the alias symbol.
-                    const meaning: SymbolFlags = SymbolFlags.Value | SymbolFlags.Alias;
-                    return resolveEntityName(<Identifier>entityName, meaning);
+                    return resolveEntityName(<Identifier>entityName, SymbolFlags.Value, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
                 }
                 else if (entityName.kind === SyntaxKind.PropertyAccessExpression) {
                     const symbol = getNodeLinks(entityName).resolvedSymbol;
@@ -16894,11 +16937,8 @@ namespace ts {
                 }
             }
             else if (isTypeReferenceIdentifier(<EntityName>entityName)) {
-                let meaning = (entityName.parent.kind === SyntaxKind.TypeReference || entityName.parent.kind === SyntaxKind.JSDocTypeReference) ? SymbolFlags.Type : SymbolFlags.Namespace;
-                // Include aliases in the meaning, this ensures that we do not follow aliases to where they point and instead
-                // return the alias symbol.
-                meaning |= SymbolFlags.Alias;
-                return resolveEntityName(<EntityName>entityName, meaning);
+                const meaning = (entityName.parent.kind === SyntaxKind.TypeReference || entityName.parent.kind === SyntaxKind.JSDocTypeReference) ? SymbolFlags.Type : SymbolFlags.Namespace;
+                return resolveEntityName(<EntityName>entityName, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/true);
             }
             else if (entityName.parent.kind === SyntaxKind.JsxAttribute) {
                 return getJsxAttributePropertySymbol(<JsxAttribute>entityName.parent);
@@ -17642,6 +17682,10 @@ namespace ts {
                 if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals);
                 }
+                if (file.patternAmbientModules && file.patternAmbientModules.length) {
+                    patternAmbientModules = concatenate(patternAmbientModules, file.patternAmbientModules);
+                }
+
                 if (file.moduleAugmentations.length) {
                     (augmentations || (augmentations = [])).push(file.moduleAugmentations);
                 }
@@ -17772,6 +17816,8 @@ namespace ts {
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.ExportDeclaration:
                 case SyntaxKind.ExportAssignment:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
                 case SyntaxKind.Parameter:
                     break;
                 case SyntaxKind.FunctionDeclaration:
@@ -18003,7 +18049,7 @@ namespace ts {
 
         function checkGrammarAsyncModifier(node: Node, asyncModifier: Node): boolean {
             if (languageVersion < ScriptTarget.ES6) {
-                return grammarErrorOnNode(asyncModifier, Diagnostics.Async_functions_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                return grammarErrorOnNode(asyncModifier, Diagnostics.Async_functions_are_only_available_when_targeting_ECMAScript_2015_or_higher);
             }
 
             switch (node.kind) {
@@ -18261,7 +18307,7 @@ namespace ts {
                     return grammarErrorOnNode(node.asteriskToken, Diagnostics.An_overload_signature_cannot_be_declared_as_a_generator);
                 }
                 if (languageVersion < ScriptTarget.ES6) {
-                    return grammarErrorOnNode(node.asteriskToken, Diagnostics.Generators_are_only_available_when_targeting_ECMAScript_6_or_higher);
+                    return grammarErrorOnNode(node.asteriskToken, Diagnostics.Generators_are_only_available_when_targeting_ECMAScript_2015_or_higher);
                 }
             }
         }
@@ -18480,6 +18526,14 @@ namespace ts {
                 accessor.parameters[0].name.kind === SyntaxKind.Identifier &&
                 (<Identifier>accessor.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword) {
                 return accessor.parameters[0];
+            }
+        }
+
+        function getFunctionLikeThisParameter(func: FunctionLikeDeclaration) {
+            if (func.parameters.length &&
+                func.parameters[0].name.kind === SyntaxKind.Identifier &&
+                (<Identifier>func.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword) {
+                return func.parameters[0];
             }
         }
 

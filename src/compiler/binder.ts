@@ -53,7 +53,8 @@ namespace ts {
             return state;
         }
         else if (node.kind === SyntaxKind.ModuleDeclaration) {
-            return getModuleInstanceState((<ModuleDeclaration>node).body);
+            const body = (<ModuleDeclaration>node).body;
+            return body ? getModuleInstanceState(body) : ModuleInstanceState.Instantiated;
         }
         else {
             return ModuleInstanceState.Instantiated;
@@ -1183,9 +1184,9 @@ namespace ts {
             lastContainer = next;
         }
 
-        function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): void {
+        function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
             // Just call this directly so that the return type of this function stays "void".
-            declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes);
+            return declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes);
         }
 
         function declareSymbolAndAddToSymbolTableWorker(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
@@ -1258,7 +1259,7 @@ namespace ts {
 
         function hasExportDeclarations(node: ModuleDeclaration | SourceFile): boolean {
             const body = node.kind === SyntaxKind.SourceFile ? node : (<ModuleDeclaration>node).body;
-            if (body.kind === SyntaxKind.SourceFile || body.kind === SyntaxKind.ModuleBlock) {
+            if (body && (body.kind === SyntaxKind.SourceFile || body.kind === SyntaxKind.ModuleBlock)) {
                 for (const stat of (<Block>body).statements) {
                     if (stat.kind === SyntaxKind.ExportDeclaration || stat.kind === SyntaxKind.ExportAssignment) {
                         return true;
@@ -1289,7 +1290,22 @@ namespace ts {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
                 }
                 else {
-                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                    let pattern: Pattern | undefined;
+                    if (node.name.kind === SyntaxKind.StringLiteral) {
+                        const text = (<StringLiteral>node.name).text;
+                        if (hasZeroOrOneAsteriskCharacter(text)) {
+                            pattern = tryParsePattern(text);
+                        }
+                        else {
+                            errorOnFirstToken(node.name, Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, text);
+                        }
+                    }
+
+                    const symbol = declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+
+                    if (pattern) {
+                        (file.patternAmbientModules || (file.patternAmbientModules = [])).push({ pattern, symbol });
+                    }
                 }
             }
             else {
@@ -2067,10 +2083,10 @@ namespace ts {
             checkStrictModeFunctionName(<FunctionDeclaration>node);
             if (inStrictMode) {
                 checkStrictModeFunctionDeclaration(node);
-                return bindBlockScopedDeclaration(node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+                bindBlockScopedDeclaration(node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
             }
             else {
-                return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+                declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
             }
         }
 

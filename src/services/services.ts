@@ -414,7 +414,7 @@ namespace ts {
                     }
 
                     // If this is left side of dotted module declaration, there is no doc comments associated with this node
-                    if (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).body.kind === SyntaxKind.ModuleDeclaration) {
+                    if (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).body && (<ModuleDeclaration>declaration).body.kind === SyntaxKind.ModuleDeclaration) {
                         return;
                     }
 
@@ -1939,6 +1939,40 @@ namespace ts {
         sourceMapText?: string;
     }
 
+
+
+    let commandLineOptions_stringToEnum: CommandLineOptionOfCustomType[];
+
+    /** JS users may pass in string values for enum compiler options (such as ModuleKind), so convert. */
+    function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
+        // Lazily create this value to fix module loading errors.
+        commandLineOptions_stringToEnum = commandLineOptions_stringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
+            typeof o.type === "object" && !forEachValue(<Map<any>> o.type, v => typeof v !== "number"));
+
+        options = clone(options);
+
+        for (const opt of commandLineOptions_stringToEnum) {
+            if (!hasProperty(options, opt.name)) {
+                continue;
+            }
+
+            const value = options[opt.name];
+            // Value should be a key of opt.type
+            if (typeof value === "string") {
+                // If value is not a string, this will fail
+                options[opt.name] = parseCustomTypeOption(opt, value, diagnostics);
+            }
+            else {
+                if (!forEachValue(opt.type, v => v === value)) {
+                    // Supplied value isn't a valid enum value.
+                    diagnostics.push(createCompilerDiagnosticForInvalidCustomType(opt));
+                }
+            }
+        }
+
+        return options;
+    }
+
     /*
      * This function will compile source text from 'input' argument using specified compiler options.
      * If not options are provided - it will use a set of default compiler options.
@@ -1949,7 +1983,9 @@ namespace ts {
      * - noResolve = true
      */
     export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
-        const options = transpileOptions.compilerOptions ? clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
+        const diagnostics: Diagnostic[] = [];
+
+        const options: CompilerOptions = transpileOptions.compilerOptions ? fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics) : getDefaultCompilerOptions();
 
         options.isolatedModules = true;
 
@@ -2007,9 +2043,7 @@ namespace ts {
 
         const program = createProgram([inputFileName], options, compilerHost);
 
-        let diagnostics: Diagnostic[];
         if (transpileOptions.reportDiagnostics) {
-            diagnostics = [];
             addRange(/*to*/ diagnostics, /*from*/ program.getSyntacticDiagnostics(sourceFile));
             addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
         }
