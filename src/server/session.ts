@@ -421,7 +421,6 @@ namespace ts.server {
         }
 
         private getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {
-            this.logger.info("start getProjectInfo:" + new Date().getTime());
             fileName = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(fileName);
             if (!project) {
@@ -436,7 +435,6 @@ namespace ts.server {
             if (needFileNameList) {
                 projectInfo.fileNames = project.getFileNames();
             }
-            this.logger.info("end getProjectInfo:" + new Date().getTime());
             return projectInfo;
         }
 

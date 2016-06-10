@@ -1184,12 +1184,10 @@ namespace ts.server {
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
         openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind): { configFileName?: string, configFileErrors?: Diagnostic[] } {
-            this.log("start openClientFile: " + new Date().getTime());
             const { configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName);
             const info = this.openFile(fileName, /*openedByClient*/ true, fileContent, scriptKind);
             this.addOpenFile(info);
             this.printProjects();
-            this.log("end openClientFile: " + new Date().getTime());
             return { configFileName, configFileErrors };
         }
 
@@ -1199,7 +1197,6 @@ namespace ts.server {
          * the tsconfig file content and update the project; otherwise we create a new one.
          */
         openOrUpdateConfiguredProjectForFile(fileName: string): { configFileName?: string, configFileErrors?: Diagnostic[] } {
-            this.log("start openOrUpdateConfiguredProjectForFile: " + new Date().getTime());
             const searchPath = ts.normalizePath(getDirectoryPath(fileName));
             this.log("Search path: " + searchPath, "Info");
             const configFileName = this.findConfigFile(searchPath);
@@ -1228,7 +1225,6 @@ namespace ts.server {
             else {
                 this.log("No config files found.");
             }
-            this.log("end openOrUpdateConfiguredProjectForFile: " + new Date().getTime());
             return configFileName ? { configFileName } : {};
         }
 
@@ -1368,11 +1364,8 @@ namespace ts.server {
         }
 
         openConfigFile(configFilename: string, clientFileName?: string): { success: boolean, project?: Project, errors?: Diagnostic[] } {
-            this.log("start openConfigFile: " + new Date().getTime());
             const { succeeded, projectOptions, errors } = this.configFileToProjectOptions(configFilename);
-            this.log("finish reading config file: " + new Date().getTime());
             if (!succeeded) {
-                this.log("finish openConfigFile: " + new Date().getTime());
                 return { success: false, errors };
             }
             else {
@@ -1408,7 +1401,6 @@ namespace ts.server {
                     path => this.directoryWatchedForSourceFilesChanged(project, path),
                     /*recursive*/ true
                 );
-                this.log("finish openConfigFile: " + new Date().getTime());
                 return { success: true, project: project, errors };
             }
         }

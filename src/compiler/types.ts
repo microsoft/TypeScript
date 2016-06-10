@@ -1670,7 +1670,6 @@ namespace ts {
 
     export interface ParseConfigHost {
         readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
-        readDirectoryWithMultipleExtensions?(rootDir: string, extensions: string[], exclude: string[]): string[];
     }
 
     export interface WriteFileCallback {

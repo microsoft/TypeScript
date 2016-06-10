@@ -27,7 +27,6 @@ namespace ts {
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
-        readDirectoryWithMultipleExtensions?(path: string, extensions: string[], exclude?: string[]): string[];
         getModifiedTime?(path: string): Date;
         createHash?(data: string): string;
         getMemoryUsage?(): number;
@@ -416,23 +415,25 @@ namespace ts {
                 return filter<string>(_fs.readdirSync(path), p => fileSystemEntryExists(combinePaths(path, p), FileSystemEntryKind.Directory));
             }
 
-            function visitDirectory(path: string, result: string[], extension: string | string[], exclude: string[]) {
-                const files = _fs.readdirSync(path || ".").sort();
-                const directories: string[] = [];
-                for (const current of files) {
+            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
+                const result: string[] = [];
+                exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
+                visitDirectory(path);
+                return result;
+                function visitDirectory(path: string) {
+                    const files = _fs.readdirSync(path || ".").sort();
+                    const directories: string[] = [];
+                    for (const current of files) {
                         // This is necessary because on some file system node fails to exclude
                         // "." and "..". See https://github.com/nodejs/node/issues/4002
                         if (current === "." || current === "..") {
                             continue;
                         }
-                    const name = combinePaths(path, current);
-                    if (!contains(exclude, getCanonicalPath(name))) {
-                        // fs.statSync would throw an exception if the file is a symlink
-                        // whose linked file doesn't exist.
-                        try {
+                        const name = combinePaths(path, current);
+                        if (!contains(exclude, getCanonicalPath(name))) {
                             const stat = _fs.statSync(name);
                             if (stat.isFile()) {
-                                if (checkExtension(name)) {
+                                if (!extension || fileExtensionIs(name, extension)) {
                                     result.push(name);
                                 }
                             }
@@ -440,38 +441,11 @@ namespace ts {
                                 directories.push(name);
                             }
                         }
-                        catch (e) { }
+                    }
+                    for (const current of directories) {
+                        visitDirectory(current);
                     }
                 }
-                for (const current of directories) {
-                    visitDirectory(current, result, extension, exclude);
-                }
-
-                function checkExtension(name: string) {
-                    if (!extension) {
-                        return true;
-                    }
-                    if (typeof extension === "string") {
-                        return fileExtensionIs(name, extension);
-                    }
-                    else {
-                        return forEach(extension, ext => fileExtensionIs(name, ext));
-                    }
-                }
-            }
-
-            function readDirectoryWithMultipleExtensions(path: string, extensions: string[], exclude?: string[]): string[] {
-                const result: string[] = [];
-                exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
-                visitDirectory(path, result, extensions, exclude);
-                return result;
-            }
-
-            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
-                const result: string[] = [];
-                exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
-                visitDirectory(path, result, extension, exclude);
-                return result;
             }
 
             return {
@@ -548,7 +522,6 @@ namespace ts {
                 },
                 getDirectories,
                 readDirectory,
-                readDirectoryWithMultipleExtensions,
                 getModifiedTime(path) {
                     try {
                         return _fs.statSync(path).mtime;

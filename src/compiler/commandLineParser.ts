@@ -727,22 +727,10 @@ namespace ts {
                 const supportedExtensions = getSupportedExtensions(options);
                 Debug.assert(indexOf(supportedExtensions, ".ts") < indexOf(supportedExtensions, ".d.ts"), "Changed priority of extensions to pick");
 
-                const potentialFiles: string[] = [];
-                if (host.readDirectoryWithMultipleExtensions) {
-                    addRange(potentialFiles, host.readDirectoryWithMultipleExtensions(basePath, supportedExtensions, exclude));
-                }
-                else {
-                    for (const extension of supportedExtensions) {
-                        addRange(potentialFiles, host.readDirectory(basePath, extension, exclude));
-                    }
-                }
                 // Get files of supported extensions in their order of resolution
                 for (const extension of supportedExtensions) {
-                    for (const fileName of potentialFiles) {
-                        if (!fileExtensionIs(fileName, extension)) {
-                            continue;
-                        }
-
+                    const filesInDirWithExtension = host.readDirectory(basePath, extension, exclude);
+                    for (const fileName of filesInDirWithExtension) {
                         // .ts extension would read the .d.ts extension files too but since .d.ts is lower priority extension,
                         // lets pick them when its turn comes up
                         if (extension === ".ts" && fileExtensionIs(fileName, ".d.ts")) {

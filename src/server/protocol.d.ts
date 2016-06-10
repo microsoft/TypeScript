@@ -124,8 +124,8 @@ declare namespace ts.server.protocol {
           */
         fileNames?: string[];
         /**
-         * Indicates if the project has a active language service instance
-         */
+          * Indicates if the project has a active language service instance
+          */
         languageServiceDisabled?: boolean;
     }
 

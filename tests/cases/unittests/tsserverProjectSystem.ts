@@ -25,6 +25,7 @@ namespace ts {
     interface FileOrFolder {
         path: string;
         content?: string;
+        fileSize?: number;
     }
 
     interface FSEntry {
@@ -34,6 +35,7 @@ namespace ts {
 
     interface File extends FSEntry {
         content: string;
+        fileSize?: number;
     }
 
     interface Folder extends FSEntry {
@@ -157,7 +159,7 @@ namespace ts {
                 const path = this.toPath(fileOrFolder.path);
                 const fullPath = getNormalizedAbsolutePath(fileOrFolder.path, this.currentDirectory);
                 if (typeof fileOrFolder.content === "string") {
-                    const entry = { path, content: fileOrFolder.content, fullPath };
+                    const entry = { path, content: fileOrFolder.content, fullPath, fileSize: fileOrFolder.fileSize };
                     this.fs.set(path, entry);
                     addFolder(getDirectoryPath(fullPath), this.toPath, this.fs).entries.push(entry);
                 }
@@ -171,6 +173,17 @@ namespace ts {
             const path = this.toPath(s);
             return this.fs.contains(path) && isFile(this.fs.get(path));
         };
+
+        getFileSize(s: string) {
+            const path = this.toPath(s);
+            if (this.fs.contains(path)) {
+                const entry = this.fs.get(path);
+                if (isFile(entry)) {
+                    return entry.fileSize ? entry.fileSize : entry.content.length;
+                }
+            }
+            return undefined;
+        }
 
         directoryExists(s: string) {
             const path = this.toPath(s);
@@ -566,6 +579,39 @@ namespace ts {
             host.triggerFileWatcherCallback(configFile.path);
             checkConfiguredProjectActualFiles(project, [file1.path, classicModuleFile.path]);
             checkNumberOfInferredProjects(projectService, 1);
+        });
+
+        it("should disable language service for project with too many non-ts files", () => {
+            const jsFiles: FileOrFolder[] = [];
+            const configFile: FileOrFolder = {
+                path: `/a/b/jsconfig.json`,
+                content: "{}"
+            };
+            jsFiles.push(configFile);
+            for (let i = 0; i < 1000; i++) {
+                jsFiles.push({
+                    path: `/a/b/file${i}.js`,
+                    content: "",
+                    fileSize: 50000
+                });
+            }
+
+            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", jsFiles);
+            const projectService = new server.ProjectService(host, nullLogger);
+            projectService.openClientFile(jsFiles[1].path);
+            projectService.openClientFile(jsFiles[2].path);
+            checkNumberOfConfiguredProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 0);
+
+            const project = projectService.configuredProjects[0];
+            assert(project.languageServiceDiabled, "the project's language service is expected to be disabled");
+
+            configFile.content = `{
+                "files": ["/a/b/file1.js", "/a/b/file2.js", "/a/b/file3.js"]
+            }`;
+            host.reloadFS(jsFiles);
+            host.triggerFileWatcherCallback(configFile.path);
+            assert(!project.languageServiceDiabled, "after the config file change, the project's language service is expected to be enabled.");
         });
     });
 }
