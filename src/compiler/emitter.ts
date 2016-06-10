@@ -6300,7 +6300,7 @@ const _super = (function (geti, seti) {
             }
 
             function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration {
-                if (moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
+                if (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
                     const recursiveInnerModule = getInnerMostModuleDeclarationFromDottedModule(<ModuleDeclaration>moduleDeclaration.body);
                     return recursiveInnerModule || <ModuleDeclaration>moduleDeclaration.body;
                 }
@@ -6349,6 +6349,7 @@ const _super = (function (geti, seti) {
                 write(getGeneratedNameForNode(node));
                 emitEnd(node.name);
                 write(") ");
+                Debug.assert(node.body !== undefined); // node.body must exist, as this is a non-ambient module
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
                     const saveConvertedLoopState = convertedLoopState;
                     const saveTempFlags = tempFlags;
