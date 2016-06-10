@@ -29,7 +29,6 @@
         "node": ">=0.8.0"
     },
     "devDependencies": {
-        "@types/Q": "latest",
         "@types/del": "latest",
         "@types/glob": "latest",
         "@types/gulp": "latest",

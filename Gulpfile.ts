@@ -16,7 +16,8 @@ import * as minimist from "minimist";
 import * as os from "os";
 import * as Linter from "tslint";
 const gulp = helpMaker(originalGulp);
-import {runTestsInParallel} from "./scripts/mocha-parallel";
+const mochaParallel = require("./scripts/mocha-parallel.js");
+const {runTestsInParallel} = mochaParallel;
 
 const cmdLineOptions = minimist(process.argv.slice(2), {
     boolean: ["debug", "light", "colors", "lint", "soft"],
