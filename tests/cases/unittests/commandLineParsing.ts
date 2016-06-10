@@ -224,7 +224,6 @@ namespace ts {
                 });
         });
 
-        
         it("Parse empty string of --lib ", () => {
             // 0.ts --lib
             // This test is an error because the empty string is falsey
