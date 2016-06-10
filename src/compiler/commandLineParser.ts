@@ -493,7 +493,7 @@ namespace ts {
         if (startsWith(value, "-")) {
             return undefined;
         }
-        if (value === "" || value === ",") {
+        if (value === "") {
             return [];
         }
         const values = value.split(",");

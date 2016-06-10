@@ -246,18 +246,6 @@ namespace ts {
                 });
         });
 
-        it("Parse single comma of --lib ", () => {
-            // 0.ts --lib
-            assertParseResult(["0.ts", "--lib", ","],
-                {
-                    errors: [],
-                    fileNames: ["0.ts"],
-                    options: {
-                        lib: []
-                    }
-                });
-        });
-
         it("Parse immediately following command line argument of --lib ", () => {
             // 0.ts --lib
             assertParseResult(["0.ts", "--lib", "--sourcemap"],
