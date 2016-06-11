@@ -1519,13 +1519,13 @@ namespace ts {
         function addOldTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
             if (compilerOptions.emitDecoratorMetadata) {
                 if (shouldAddTypeMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper(currentSourceFileTslib,"design:type", serializeTypeOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(currentSourceFileTslib, "design:type", serializeTypeOfNode(node)));
                 }
                 if (shouldAddParamTypesMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper(currentSourceFileTslib,"design:paramtypes", serializeParameterTypesOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(currentSourceFileTslib, "design:paramtypes", serializeParameterTypesOfNode(node)));
                 }
                 if (shouldAddReturnTypeMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper(currentSourceFileTslib,"design:returntype", serializeReturnTypeOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(currentSourceFileTslib, "design:returntype", serializeReturnTypeOfNode(node)));
                 }
             }
         }
@@ -1543,7 +1543,7 @@ namespace ts {
                     (properties || (properties = [])).push(createPropertyAssignment("returnType", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, /*equalsGreaterThanToken*/ undefined, serializeReturnTypeOfNode(node))));
                 }
                 if (properties) {
-                    decoratorExpressions.push(createMetadataHelper(currentSourceFileTslib,"design:typeinfo", createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)));
+                    decoratorExpressions.push(createMetadataHelper(currentSourceFileTslib, "design:typeinfo", createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)));
                 }
             }
         }
