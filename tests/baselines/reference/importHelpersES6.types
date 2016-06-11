@@ -1,0 +1,9 @@
+=== tests/cases/compiler/a.ts ===
+declare var dec: any;
+>dec : any
+
+@dec export class A {
+>dec : any
+>A : A
+
+}

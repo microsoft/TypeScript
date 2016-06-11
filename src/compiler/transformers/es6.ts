@@ -702,7 +702,7 @@ namespace ts {
             if (extendsClauseElement) {
                 statements.push(
                     createStatement(
-                        createExtendsHelper(getDeclarationName(node)),
+                        createExtendsHelper(currentSourceFile.tslib, getDeclarationName(node)),
                         /*location*/ extendsClauseElement
                     )
                 );

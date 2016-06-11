@@ -1,0 +1,28 @@
+tests/cases/compiler/script.ts(1,1): error TS1208: Cannot compile namespaces when the '--isolatedModules' flag is provided.
+
+
+==== tests/cases/compiler/external.ts (0 errors) ====
+    export class A { }
+    export class B extends A { }
+    
+    declare var dec: any;
+    
+    @dec
+    class C {
+        method(@dec x: number) {
+        }
+    }
+    
+==== tests/cases/compiler/script.ts (1 errors) ====
+    class A { }
+    ~~~~~
+!!! error TS1208: Cannot compile namespaces when the '--isolatedModules' flag is provided.
+    class B extends A { }
+    
+    declare var dec: any;
+    
+    @dec
+    class C {
+        method(@dec x: number) {
+        }
+    }

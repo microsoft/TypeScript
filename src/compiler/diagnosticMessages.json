@@ -2772,6 +2772,10 @@
         "category": "Error",
         "code": 6131
     },
+    "Import emit helpers from 'tslib'.": {
+        "category": "Message",
+        "code": 6132
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

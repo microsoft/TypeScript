@@ -17385,6 +17385,11 @@ namespace ts {
 
         function isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean {
             node = getParseTreeNode(node);
+            // Purely synthesized nodes are always emitted.
+            if (node === undefined) {
+                return true;
+            }
+
             if (isAliasSymbolDeclaration(node)) {
                 const symbol = getSymbolOfNode(node);
                 if (symbol && getSymbolLinks(symbol).referenced) {

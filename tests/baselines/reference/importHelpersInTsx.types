@@ -1,0 +1,26 @@
+=== tests/cases/compiler/external.tsx ===
+declare var React: any;
+>React : any
+
+declare var o: any;
+>o : any
+
+export const x = <span {...o} />
+>x : any
+><span {...o} /> : any
+>span : any
+>o : any
+
+=== tests/cases/compiler/internal.tsx ===
+declare var React: any;
+>React : any
+
+declare var o: any;
+>o : any
+
+const x = <span {...o} />
+>x : any
+><span {...o} /> : any
+>span : any
+>o : any
+

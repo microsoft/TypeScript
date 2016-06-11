@@ -415,7 +415,7 @@ namespace ts {
         BlockScoped = Let | Const,
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
-        EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions,
+        EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions | HasJsxSpreadAttribute,
         ReachabilityAndEmitFlags = ReachabilityCheckFlags | EmitHelperFlags,
 
         // Parsing context flags
@@ -1725,6 +1725,8 @@ namespace ts {
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
+        // The synthesized identifier for an imported tslib helpers runtime.
+        /* @internal */ tslib?: Identifier;
     }
 
     export interface ScriptReferenceHost {
@@ -2558,6 +2560,7 @@ namespace ts {
         init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
+        importHelpers?: boolean;
         jsx?: JsxEmit;
         reactNamespace?: string;
         listFiles?: boolean;
