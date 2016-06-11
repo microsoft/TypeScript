@@ -314,7 +314,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         }
 
         if (useDebugMode) {
-            if (opts.inlineSoureMap) {
+            if (opts.inlineSourceMap) {
                 options += " --inlineSourceMap --inlineSources";
             } else {
                 options += " -sourcemap";
@@ -542,7 +542,7 @@ compileFile(
       noResolve: false,
       stripInternal: true,
       noMapRoot: true,
-      inlineSoureMap: true
+      inlineSourceMap: true
      });
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
@@ -650,7 +650,7 @@ compileFile(
     /*prereqs*/ [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources),
     /*prefixes*/ [],
     /*useBuiltCompiler:*/ true,
-    /*opts*/ { inlineSoureMap: true });
+    /*opts*/ { inlineSourceMap: true });
 
 var internalTests = "internal/";
 
