@@ -199,5 +199,9 @@ var x = 0;`, {
         transpilesCorrectly("transpile .js files", "const a = 10;", {
             options: { compilerOptions: { newLine: NewLineKind.LineFeed, module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
         });
+
+        transpilesCorrectly("Supports urls in file name", "var x", {
+            options: { fileName: "http://somewhere/directory//directory2/file.ts" }
+        });
     });
 }
