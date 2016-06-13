@@ -13,10 +13,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
+var _this = this;
 function foo() {
     return __awaiter(this, void 0, void 0, function* () { return 42; });
 } // ERROR: Async functions are only available in ES6+
 var bar = function () {
     return __awaiter(this, void 0, void 0, function* () { return 42; });
 }; // OK, but should be an error
-var baz = function () __awaiter(this, void 0, void 0, function* () { return 42; }); // OK, but should be an error
+var baz = function () { return __awaiter(_this, void 0, void 0, function* () { return 42; }); }; // OK, but should be an error
