@@ -1363,8 +1363,8 @@ namespace ts {
 
     // @kind(SyntaxKind.ModuleDeclaration)
     export interface ModuleDeclaration extends DeclarationStatement {
-        name: ModuleName;
-        body: ModuleBlock | ModuleDeclaration;
+        name: Identifier | LiteralExpression;
+        body?: ModuleBlock | ModuleDeclaration;
     }
 
     // @kind(SyntaxKind.ModuleBlock)

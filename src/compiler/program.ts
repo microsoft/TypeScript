@@ -659,8 +659,25 @@ namespace ts {
      * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
      */
     function loadModuleFromFile(candidate: string, extensions: string[], failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
+        // First try to keep/add an extension: importing "./foo.ts" can be matched by a file "./foo.ts", and "./foo" by "./foo.d.ts"
+        const resolvedByAddingOrKeepingExtension = loadModuleFromFileWorker(candidate, extensions, failedLookupLocation, onlyRecordFailures, state);
+        if (resolvedByAddingOrKeepingExtension) {
+            return resolvedByAddingOrKeepingExtension;
+        }
+        // Then try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one, e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
+        if (hasJavaScriptFileExtension(candidate)) {
+            const extensionless = removeFileExtension(candidate);
+            if (state.traceEnabled) {
+                const extension = candidate.substring(extensionless.length);
+                trace(state.host, Diagnostics.File_name_0_has_a_1_extension_stripping_it, candidate, extension);
+            }
+            return loadModuleFromFileWorker(extensionless, extensions, failedLookupLocation, onlyRecordFailures, state);
+        }
+    }
+
+    function loadModuleFromFileWorker(candidate: string, extensions: string[], failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
         if (!onlyRecordFailures) {
-            // check if containig folder exists - if it doesn't then just record failures for all supported extensions without disk probing
+            // check if containing folder exists - if it doesn't then just record failures for all supported extensions without disk probing
             const directory = getDirectoryPath(candidate);
             if (directory) {
                 onlyRecordFailures = !directoryProbablyExists(directory, state.host);
@@ -669,7 +686,7 @@ namespace ts {
         return forEach(extensions, tryLoad);
 
         function tryLoad(ext: string): string {
-            if (ext === ".tsx" && state.skipTsx) {
+            if (state.skipTsx && isJsxOrTsxExtension(ext)) {
                 return undefined;
             }
             const fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
@@ -1755,9 +1772,12 @@ namespace ts {
                                 // The StringLiteral must specify a top - level external module name.
                                 // Relative external module names are not permitted
 
-                                // NOTE: body of ambient module is always a module block
-                                for (const statement of (<ModuleBlock>(<ModuleDeclaration>node).body).statements) {
-                                    collectModuleReferences(statement, /*inAmbientModule*/ true);
+                                // NOTE: body of ambient module is always a module block, if it exists
+                                const body = <ModuleBlock>(<ModuleDeclaration>node).body;
+                                if (body) {
+                                    for (const statement of body.statements) {
+                                        collectModuleReferences(statement, /*inAmbientModule*/ true);
+                                    }
                                 }
                             }
                         }
@@ -2085,12 +2105,12 @@ namespace ts {
                 }
             }
 
-            if (options.inlineSources) {
-                if (!options.sourceMap && !options.inlineSourceMap) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_inlineSources_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided));
+            if (!options.sourceMap && !options.inlineSourceMap) {
+                if (options.inlineSources) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided, "inlineSources"));
                 }
                 if (options.sourceRoot) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "sourceRoot", "inlineSources"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided, "sourceRoot"));
                 }
             }
 
@@ -2098,14 +2118,9 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "outFile"));
             }
 
-            if (!options.sourceMap && (options.mapRoot || options.sourceRoot)) {
-                // Error to specify --mapRoot or --sourceRoot without mapSourceFiles
-                if (options.mapRoot) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "mapRoot", "sourceMap"));
-                }
-                if (options.sourceRoot && !options.inlineSourceMap) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "sourceRoot", "sourceMap"));
-                }
+            if (options.mapRoot && !options.sourceMap) {
+                // Error to specify --mapRoot without --sourcemap
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "mapRoot", "sourceMap"));
             }
 
             if (options.declarationDir) {
@@ -2140,11 +2155,6 @@ namespace ts {
                 // We cannot use createDiagnosticFromNode because nodes do not have parents yet
                 const span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
                 programDiagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_use_imports_exports_or_module_augmentations_when_module_is_none));
-            }
-
-            // Cannot specify module gen target of es6 when below es6
-            if (options.module === ModuleKind.ES6 && languageVersion < ScriptTarget.ES6) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_es2015_when_targeting_ES5_or_lower));
             }
 
             // Cannot specify module gen that isn't amd or system with --out
