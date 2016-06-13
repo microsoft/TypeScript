@@ -11,6 +11,8 @@ namespace ts.server {
     const path: typeof NodeJS.path = require("path");
     const crypto = require("crypto");
 
+    /* tslint:disable */ const nullValue: any = null; /* tslint:enable */
+
     export interface BuilderHost {
         logError(err: Error, cmd: string): void;
         event(info: any, eventName: string): void;
@@ -417,7 +419,7 @@ namespace ts.server {
         private tail: Item<T>;
 
         constructor() {
-            this.map = Object.create(null);
+            this.map = Object.create(nullValue);
             this.head = undefined;
             this.tail = undefined;
         }
@@ -447,7 +449,7 @@ namespace ts.server {
                     this.addItemFirst(item);
                 }
                 else {
-                    this.addItemLast(item)
+                    this.addItemLast(item);
                 }
                 this.map[key] = item;
             }
@@ -465,12 +467,10 @@ namespace ts.server {
 
         private addItemFirst(item: Item<T>): void {
             // First time Insert
-            if (!this.head && !this.tail)
-            {
+            if (!this.head && !this.tail) {
                 this.tail = item;
             }
-            else
-            {
+            else {
                 item.next = this.head;
                 this.head.previous = item;
             }
@@ -558,7 +558,7 @@ namespace ts.server {
             if (changedFile) {
                 const fileInfo = this.fileInfos[changedFile];
                 if (fileInfo) {
-                    this.queue.add(fileInfo.fileName(), fileInfo, true);
+                    this.queue.add(fileInfo.fileName(), fileInfo, /*touch*/ true);
                     this.processQueue();
                 }
             }
@@ -585,7 +585,7 @@ namespace ts.server {
             if (this.fileInfos) {
                 return;
             }
-            this.fileInfos = Object.create(null);
+            this.fileInfos = Object.create(nullValue);
             const fileNames = this.project.getFileNames();
             const fileInfos = fileNames.reduce<FileInfo[]>((memo, file) => {
                 const basename = path.basename(file);
