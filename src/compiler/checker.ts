@@ -11808,10 +11808,42 @@ namespace ts {
             return aggregatedTypes;
         }
 
+        function isExhaustiveSwitchStatement(node: SwitchStatement): boolean {
+            const expr = node.expression;
+            if (!node.possiblyExhaustive || expr.kind !== SyntaxKind.PropertyAccessExpression) {
+                return false;
+            }
+            const type = checkExpression((<PropertyAccessExpression>expr).expression);
+            if (!(type.flags & TypeFlags.Union)) {
+                return false;
+            }
+            const propName = (<PropertyAccessExpression>expr).name.text;
+            const propType = getTypeOfPropertyOfType(type, propName);
+            if (!propType || !isStringLiteralUnionType(propType)) {
+                return false;
+            }
+            const switchTypes = getSwitchClauseTypes(node);
+            if (!switchTypes.length) {
+                return false;
+            }
+            return eachTypeContainedIn(propType, switchTypes);
+        }
+
+        function functionHasImplicitReturn(func: FunctionLikeDeclaration) {
+            if (!(func.flags & NodeFlags.HasImplicitReturn)) {
+                return false;
+            }
+            const lastStatement = lastOrUndefined((<Block>func.body).statements);
+            if (lastStatement && lastStatement.kind === SyntaxKind.SwitchStatement && isExhaustiveSwitchStatement(<SwitchStatement>lastStatement)) {
+                return false;
+            }
+            return true;
+        }
+
         function checkAndAggregateReturnExpressionTypes(func: FunctionLikeDeclaration, contextualMapper: TypeMapper): Type[] {
             const isAsync = isAsyncFunctionLike(func);
             const aggregatedTypes: Type[] = [];
-            let hasReturnWithNoExpression = !!(func.flags & NodeFlags.HasImplicitReturn);
+            let hasReturnWithNoExpression = functionHasImplicitReturn(func);
             let hasReturnOfTypeNever = false;
             forEachReturnStatement(<Block>func.body, returnStatement => {
                 const expr = returnStatement.expression;
@@ -11868,7 +11900,7 @@ namespace ts {
 
             // If all we have is a function signature, or an arrow function with an expression body, then there is nothing to check.
             // also if HasImplicitReturn flag is not set this means that all codepaths in function body end with return or throw
-            if (nodeIsMissing(func.body) || func.body.kind !== SyntaxKind.Block || !(func.flags & NodeFlags.HasImplicitReturn)) {
+            if (nodeIsMissing(func.body) || func.body.kind !== SyntaxKind.Block || !functionHasImplicitReturn(func)) {
                 return;
             }
 

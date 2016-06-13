@@ -650,6 +650,11 @@ namespace ts {
             return isNarrowableReference(expr);
         }
 
+        function isNarrowingSwitchStatement(switchStatement: SwitchStatement) {
+            const expr = switchStatement.expression;
+            return expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
+        }
+
         function createBranchLabel(): FlowLabel {
             return {
                 flags: FlowFlags.BranchLabel,
@@ -699,8 +704,7 @@ namespace ts {
         }
 
         function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
-            const expr = switchStatement.expression;
-            if (expr.kind !== SyntaxKind.PropertyAccessExpression || !isNarrowableReference((<PropertyAccessExpression>expr).expression)) {
+            if (!isNarrowingSwitchStatement(switchStatement)) {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
@@ -939,6 +943,9 @@ namespace ts {
             bind(node.caseBlock);
             addAntecedent(postSwitchLabel, currentFlow);
             const hasDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause);
+            // We mark a switch statement as possibly exhaustive if it has no default clause and if all
+            // case clauses have unreachable end points (e.g. they all return).
+            node.possiblyExhaustive = !hasDefault && !postSwitchLabel.antecedents;
             if (!hasDefault) {
                 addAntecedent(postSwitchLabel, createFlowSwitchClause(preSwitchCaseFlow, node, 0, 0));
             }

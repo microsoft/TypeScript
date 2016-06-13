@@ -1188,6 +1188,7 @@ namespace ts {
     export interface SwitchStatement extends Statement {
         expression: Expression;
         caseBlock: CaseBlock;
+        possiblyExhaustive?: boolean;
     }
 
     // @kind(SyntaxKind.CaseBlock)
