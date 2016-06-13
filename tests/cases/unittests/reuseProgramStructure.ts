@@ -259,6 +259,22 @@ namespace ts {
             assert.isTrue(!program_1.structureIsReused);
         });
 
+        it("fails if change affects type references", () => {
+            const program_1 = newProgram(files, ["a.ts"], { types: ["a"] });
+            updateProgram(program_1, ["a.ts"], { types: ["b"] }, files => {
+
+            });
+            assert.isTrue(!program_1.structureIsReused);
+        });
+
+        it("succeeds if change doesn't affect type references", () => {
+            const program_1 = newProgram(files, ["a.ts"], { types: ["a"] });
+            updateProgram(program_1, ["a.ts"], { types: ["a"] },afiles => {
+
+            });
+            assert.isTrue(program_1.structureIsReused);
+        });
+
         it("fails if change affects imports", () => {
             const program_1 = newProgram(files, ["a.ts"], { target });
             updateProgram(program_1, ["a.ts"], { target }, files => {
