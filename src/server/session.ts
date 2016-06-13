@@ -152,14 +152,14 @@ namespace ts.server {
             private byteLength: (buf: string, encoding?: string) => number,
             private hrtime: (start?: number[]) => number[],
             private logger: Logger,
-            enableAutoDiagnostics: boolean = false
+            enableAutoDiagnostics = false
         ) {
             this.projectService =
-                new ProjectService(host, logger, 
+                new ProjectService(host, logger,
                     {
                         event: (info, eventName) => this.event(info, eventName)
                     },
-                    enableAutoDiagnostics, 
+                    enableAutoDiagnostics,
                     (eventName, project, fileName) => {
                         this.handleEvent(eventName, project, fileName);
                     }
@@ -601,7 +601,7 @@ namespace ts.server {
             if (configFileErrors) {
                 this.configFileDiagnosticEvent(fileName, configFileName, configFileErrors);
             }
-            let project = this.projectService.getProjectForFile(file);
+            const project = this.projectService.getProjectForFile(file);
             if (project) {
                 project.fileOpened(file);
             }

@@ -399,7 +399,7 @@ namespace ts.server {
             });
             // ToDo@dirk need to better understand when a project is ready so we can
             // request diagnostics.
-            setTimeout(()=> {
+            setTimeout(() => {
                 this.builder.computeDiagnostics();
             }, 300);
         }
@@ -562,7 +562,7 @@ namespace ts.server {
         hostConfiguration: HostConfiguration;
         timerForDetectingProjectFileListChanges: Map<any> = {};
 
-        constructor(public host: ServerHost, public psLogger: Logger, public channel: Channel, public enableAutoDiagnostics: boolean = false, public eventHandler?: ProjectServiceEventHandler) {
+        constructor(public host: ServerHost, public psLogger: Logger, public channel: Channel, public enableAutoDiagnostics = false, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
             this.addDefaultHostConfiguration();
         }
