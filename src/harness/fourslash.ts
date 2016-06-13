@@ -728,7 +728,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyReferencesAtPositionListContains(fileName: string, start: number, end: number, isWriteAccess?: boolean) {
+        public verifyReferencesAtPositionListContains(fileName: string, start: number, end: number, isWriteAccess?: boolean, isDefinition?: boolean) {
             const references = this.getReferencesAtCaret();
 
             if (!references || references.length === 0) {
@@ -741,11 +741,14 @@ namespace FourSlash {
                     if (typeof isWriteAccess !== "undefined" && reference.isWriteAccess !== isWriteAccess) {
                         this.raiseError(`verifyReferencesAtPositionListContains failed - item isWriteAccess value does not match, actual: ${reference.isWriteAccess}, expected: ${isWriteAccess}.`);
                     }
+                    if (typeof isDefinition !== "undefined" && reference.isDefinition !== isDefinition) {
+                        this.raiseError(`verifyReferencesAtPositionListContains failed - item isDefinition value does not match, actual: ${reference.isDefinition}, expected: ${isDefinition}.`);
+                    }
                     return;
                 }
             }
 
-            const missingItem = { fileName: fileName, start: start, end: end, isWriteAccess: isWriteAccess };
+            const missingItem = { fileName, start, end, isWriteAccess, isDefinition };
             this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(references)})`);
         }
 
@@ -2835,8 +2838,8 @@ namespace FourSlashInterface {
             this.state.verifyReferencesCountIs(count, /*localFilesOnly*/ false);
         }
 
-        public referencesAtPositionContains(range: FourSlash.Range, isWriteAccess?: boolean) {
-            this.state.verifyReferencesAtPositionListContains(range.fileName, range.start, range.end, isWriteAccess);
+        public referencesAtPositionContains(range: FourSlash.Range, isWriteAccess?: boolean, isDefinition?: boolean) {
+            this.state.verifyReferencesAtPositionListContains(range.fileName, range.start, range.end, isWriteAccess, isDefinition);
         }
 
         public signatureHelpPresent() {
