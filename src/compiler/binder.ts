@@ -2484,6 +2484,7 @@ namespace ts {
         const modifierFlags = getModifierFlags(node);
         const body = node.body;
         const typeParameters = node.typeParameters;
+        const asteriskToken = node.asteriskToken;
 
         // A MethodDeclaration is TypeScript syntax if it is either async, abstract, overloaded,
         // generic, or has a decorator.
@@ -2495,7 +2496,7 @@ namespace ts {
         }
 
         // Currently, we only support generators that were originally async function bodies.
-        if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+        if (asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
             transformFlags |= TransformFlags.AssertGenerator;
         }
 
@@ -2546,7 +2547,7 @@ namespace ts {
             transformFlags = TransformFlags.AssertTypeScript;
         }
         else {
-            transformFlags = subtreeFlags;
+            transformFlags = subtreeFlags | TransformFlags.ContainsHoistedDeclaration;
 
             // If a FunctionDeclaration is exported, then it is either ES6 or TypeScript syntax.
             if (modifierFlags & ModifierFlags.Export) {
@@ -2566,7 +2567,7 @@ namespace ts {
             }
 
             // Currently, we only support generators that were originally async function bodies.
-            if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+            if (asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
                 transformFlags |= TransformFlags.AssertGenerator;
             }
         }
@@ -2592,7 +2593,7 @@ namespace ts {
         }
 
         // Currently, we only support generators that were originally async function bodies.
-        if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+        if (asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
             transformFlags |= TransformFlags.AssertGenerator;
         }
 
@@ -2725,7 +2726,7 @@ namespace ts {
     }
 
     function computeVariableDeclarationList(node: VariableDeclarationList, subtreeFlags: TransformFlags) {
-        let transformFlags = subtreeFlags;
+        let transformFlags = subtreeFlags | TransformFlags.ContainsHoistedDeclaration;
 
         if (subtreeFlags & TransformFlags.ContainsBindingPattern) {
             transformFlags |= TransformFlags.AssertES6;

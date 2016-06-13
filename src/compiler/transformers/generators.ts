@@ -137,12 +137,11 @@ namespace ts {
         Endfinally              // Marks the end of a `finally` block
     }
 
-    type OperationArguments =
-        [Label] |
-        [Label, Expression] |
-        [Statement] |
-        [Expression] |
-        [Expression, Expression];
+    type OperationArguments = [Label]
+                            | [Label, Expression]
+                            | [Statement]
+                            | [Expression]
+                            | [Expression, Expression];
 
     // whether a generated code block is opening or closing at the current operation for a FunctionBuilder
     const enum BlockAction {
@@ -394,8 +393,16 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     return visitAccessorDeclaration(<AccessorDeclaration>node);
+                case SyntaxKind.VariableStatement:
+                    return visitVariableStatement(<VariableStatement>node);
+                case SyntaxKind.BreakStatement:
+                    return visitBreakStatement(<BreakStatement>node);
+                case SyntaxKind.ContinueStatement:
+                    return visitContinueStatement(<ContinueStatement>node);
+                case SyntaxKind.ReturnStatement:
+                    return visitReturnStatement(<ReturnStatement>node);
                 default:
-                    if (node.transformFlags & (TransformFlags.ContainsGenerator | TransformFlags.ContainsYield)) {
+                    if (node.transformFlags & (TransformFlags.ContainsGenerator | TransformFlags.ContainsYield | TransformFlags.ContainsHoistedDeclaration)) {
                         return visitEachChild(node, visitor, context);
                     }
                     else {
@@ -943,19 +950,20 @@ namespace ts {
             //          _a);
 
             const properties = node.properties;
-            const numInitialProperties = countInitialNodesWithoutYield(node.properties);
+            const multiLine = node.multiLine;
+            const numInitialProperties = countInitialNodesWithoutYield(properties);
 
             const temp = declareLocal();
             emitAssignment(temp,
                 createObjectLiteral(
-                    visitNodes(node.properties, visitor, isObjectLiteralElement, 0, numInitialProperties),
+                    visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialProperties),
                     /*location*/ undefined,
-                    node.multiLine
+                    multiLine
                 )
             );
 
-            const expressions = reduceLeft(node.properties, reduceProperty, <Expression[]>[], numInitialProperties);
-            addNode(expressions, getMutableClone(temp), node.multiLine);
+            const expressions = reduceLeft(properties, reduceProperty, <Expression[]>[], numInitialProperties);
+            addNode(expressions, getMutableClone(temp), multiLine);
             return inlineExpressions(expressions);
 
             function reduceProperty(expressions: Expression[], property: ObjectLiteralElement) {
@@ -965,7 +973,7 @@ namespace ts {
                 }
 
                 const expression = createExpressionForObjectLiteralElement(node, property, temp);
-                addNode(expressions, visitNode(expression, visitor, isExpression), node.multiLine);
+                addNode(expressions, visitNode(expression, visitor, isExpression), multiLine);
                 return expressions;
             }
         }
@@ -1867,7 +1875,8 @@ namespace ts {
                 labelOffsets = [];
             }
 
-            const label = nextLabelId++;
+            const label = nextLabelId;
+            nextLabelId++;
             labelOffsets[label] = -1;
             return label;
         }
@@ -2023,7 +2032,6 @@ namespace ts {
             const exception = <ExceptionBlock>peekBlock();
             Debug.assert(exception.state < ExceptionBlockState.Finally);
 
-            const state = exception.state;
             const endLabel = exception.endLabel;
             emitBreak(endLabel);
 
@@ -2345,14 +2353,6 @@ namespace ts {
         }
 
         /**
-         * Emits a NOP (no operation). This is often used to ensure a new operation location exists
-         * when marking labels.
-         */
-        function emitNop(): void {
-            emitWorker(OpCode.Nop);
-        }
-
-        /**
          * Emits a Statement.
          *
          * @param node A statement.
@@ -2419,16 +2419,6 @@ namespace ts {
          */
         function emitYield(expression?: Expression, location?: TextRange): void {
             emitWorker(OpCode.Yield, [expression], location);
-        }
-
-        /**
-         * Emits a YieldStar operation for the provided expression.
-         *
-         * @param expression A value for the operation.
-         * @param location An optional source map location for the assignment.
-         */
-        function emitYieldStar(expression: Expression, location?: TextRange): void {
-            emitWorker(OpCode.YieldStar, [expression], location);
         }
 
         /**
@@ -2651,7 +2641,6 @@ namespace ts {
                 return;
             }
 
-            let isLabel: boolean = false;
             for (let label = 0; label < labelOffsets.length; label++) {
                 if (labelOffsets[label] === operationIndex) {
                     flushLabel();
@@ -2659,7 +2648,7 @@ namespace ts {
                         labelNumbers = [];
                     }
                     if (labelNumbers[labelNumber] === undefined) {
-                        labelNumbers[labelNumber] = [label]
+                        labelNumbers[labelNumber] = [label];
                     }
                     else {
                         labelNumbers[labelNumber].push(label);
