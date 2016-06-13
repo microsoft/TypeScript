@@ -1945,11 +1945,15 @@ namespace ts {
         sourceMapText?: string;
     }
 
+    const commandLineOptions_stringToEnum = <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o => {
+        return typeof o.type === "object" && !forEachValue(<Map<any>> o.type, v => typeof v !== "number");
+    });
+
     /** JS users may pass in string values for enum compiler options (such as ModuleKind), so convert. */
     function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]) {
         options = clone(options);
 
-        for (const opt of stringValuedEnums) {
+        for (const opt of commandLineOptions_stringToEnum) {
             if (!hasProperty(options, opt.name)) {
                 continue;
             }
@@ -1970,10 +1974,6 @@ namespace ts {
 
         return options;
     }
-
-    const stringValuedEnums = <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o => {
-        return typeof o.type === "object" && !forEachValue(<Map<any>> o.type, v => typeof v !== "number");
-    });
 
     /*
      * This function will compile source text from 'input' argument using specified compiler options.
