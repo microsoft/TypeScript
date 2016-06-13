@@ -89,7 +89,15 @@ namespace ts {
 
                 it("Correct output for " + justName, () => {
                     Harness.Baseline.runBaseline("Correct output", justName.replace(/\.tsx?$/, ".js"), () => {
-                        return transpileResult.outputText;
+                        if (transpileResult.outputText) {
+                            return transpileResult.outputText;
+                        }
+                        else {
+                            // This can happen if compiler recieve invalid compiler-options
+                            /* tslint:disable:no-null-keyword */
+                            return null;
+                            /* tslint:enable:no-null-keyword */
+                        }
                     });
                 });
 
@@ -202,6 +210,30 @@ var x = 0;`, {
 
         transpilesCorrectly("Supports urls in file name", "var x", {
             options: { fileName: "http://somewhere/directory//directory2/file.ts" }
+        });
+
+        transpilesCorrectly("Accepts string as enum values for compile-options", "export const x = 0", {
+            options: { compilerOptions: {
+                module: <ModuleKind><any>"es6",
+                 // Capitalization and spaces ignored
+                target: <ScriptTarget><any>" Es6 "
+            }}
+        });
+
+        transpilesCorrectly("Report an error when compiler-options module-kind is out-of-range", "", {
+            options: { compilerOptions: { module: <ModuleKind><any>123 }}
+        });
+
+        transpilesCorrectly("Report an error when compiler-options target-script is out-of-range", "", {
+            options: { compilerOptions: { module: <ModuleKind><any>123 }}
+        });
+
+        transpilesCorrectly("Report an error when compiler-options input is empty object", "", {
+            options: { compilerOptions: { module: <ModuleKind><any>{} }}
+        });
+
+        transpilesCorrectly("Report an error when compiler-options input is empty string", "", {
+            options: { compilerOptions: { module: <ModuleKind><any>"" }}
         });
     });
 }

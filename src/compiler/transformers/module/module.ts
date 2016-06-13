@@ -848,7 +848,6 @@ namespace ts {
         }
 
         function substituteExpression(node: Expression) {
-            debugger;
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return substituteExpressionIdentifier(<Identifier>node);
