@@ -3,7 +3,7 @@ namespace ts.quickFix {
     registerQuickFix({
         name: "Remove Unused Parameters",
         errorCode: "TS6133",
-        getFix: (sourceFile: SourceFile, start: number, end: number): [{ newText: string; span: { start: number, length: number } }] => {
+        getFix: (sourceFile: SourceFile, start: number, end: number): { newText: string; span: { start: number, length: number } }[] => {
             const token = getTokenAtPosition(sourceFile, start);
             if (token.kind === ts.SyntaxKind.Identifier) {
                 if (token.parent.kind === ts.SyntaxKind.Parameter) {
@@ -19,14 +19,14 @@ namespace ts.quickFix {
                     }
                 }
             }
-            throw new Error("No Quick Fix for found");
+            throw new Error("No Quick Fix found");
         }
     });
 
     registerQuickFix({
         name: "Remove Unused Identifiers",
         errorCode: "TS6132",
-        getFix: (sourceFile: SourceFile, start: number, end: number): [{ newText: string; span: { start: number, length: number } }] => {
+        getFix: (sourceFile: SourceFile, start: number, end: number): { newText: string; span: { start: number, length: number } }[] => {
             const token = getTokenAtPosition(sourceFile, start);
             if (token.kind === ts.SyntaxKind.Identifier) {
 
@@ -70,7 +70,7 @@ namespace ts.quickFix {
                 return [{ newText: "", span: { start: token.parent.pos, length: token.parent.end - token.parent.pos}}];
             }
 
-            throw new Error("No Quick Fix for found");
+            throw new Error("No Quick Fix found");
         }
     });
 }
