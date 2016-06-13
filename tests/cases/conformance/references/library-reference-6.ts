@@ -13,7 +13,4 @@ var x: string = alpha.a;
 
 // @filename: /tsconfig.json
 {
-	"compilerOptions": {
-		"typesRoot": "types"
-	}
 }

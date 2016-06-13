@@ -1031,7 +1031,9 @@ namespace ts {
         // Walk the primary type lookup locations
         let result: string[] = [];
         if (host.directoryExists && host.getDirectories) {
-            for (const root of options.typeRoots || defaultTypeRoots) {
+            const typeRoots = options.typeRoots ||
+                defaultTypeRoots.map(d => combinePaths(options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory(), d));
+            for (const root of typeRoots) {
                 if (host.directoryExists(root)) {
                     result = result.concat(host.getDirectories(root));
                 }
