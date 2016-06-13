@@ -118,6 +118,7 @@ namespace ts.server {
         export const DocumentHighlights = "documentHighlights";
         export const Open = "open";
         export const Quickinfo = "quickinfo";
+        export const QuickinfoFull = "quickinfo-full";
         export const References = "references";
         export const Reload = "reload";
         export const Rename = "rename";
@@ -608,7 +609,7 @@ namespace ts.server {
             }
         }
 
-        private getQuickInfo(args: protocol.FileLocationRequestArgs): protocol.QuickInfoResponseBody {
+        private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplified: boolean): protocol.QuickInfoResponseBody | QuickInfo {
             const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -621,21 +622,22 @@ namespace ts.server {
             if (!quickInfo) {
                 return undefined;
             }
-            if (args.position !== undefined) {
-                // TODO: fixme
-                return <any>quickInfo;
-            }
 
-            const displayString = ts.displayPartsToString(quickInfo.displayParts);
-            const docString = ts.displayPartsToString(quickInfo.documentation);
-            return {
-                kind: quickInfo.kind,
-                kindModifiers: quickInfo.kindModifiers,
-                start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
-                end: scriptInfo.positionToLineOffset(ts.textSpanEnd(quickInfo.textSpan)),
-                displayString: displayString,
-                documentation: docString,
-            };
+            if (simplified) {
+                const displayString = ts.displayPartsToString(quickInfo.displayParts);
+                const docString = ts.displayPartsToString(quickInfo.documentation);
+                return {
+                    kind: quickInfo.kind,
+                    kindModifiers: quickInfo.kindModifiers,
+                    start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
+                    end: scriptInfo.positionToLineOffset(ts.textSpanEnd(quickInfo.textSpan)),
+                    displayString: displayString,
+                    documentation: docString,
+                };
+            }
+            else {
+                return quickInfo;
+            }
         }
 
         private getFormattingEditsForRange(line: number, offset: number, endLine: number, endOffset: number, fileName: string): protocol.CodeEdit[] {
@@ -1112,7 +1114,10 @@ namespace ts.server {
                 return this.notRequired();
             },
             [CommandNames.Quickinfo]: (request: protocol.QuickInfoRequest) => {
-                return this.requiredResponse(this.getQuickInfo(request.arguments));
+                return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplified*/ true));
+            },
+            [CommandNames.QuickinfoFull]: (request: protocol.QuickInfoRequest) => {
+                return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplified*/ false));
             },
             [CommandNames.Format]: (request: protocol.Request) => {
                 const formatArgs = <protocol.FormatRequestArgs>request.arguments;
