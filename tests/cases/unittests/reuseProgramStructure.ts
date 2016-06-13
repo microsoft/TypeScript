@@ -269,7 +269,7 @@ namespace ts {
 
         it("succeeds if change doesn't affect type references", () => {
             const program_1 = newProgram(files, ["a.ts"], { types: ["a"] });
-            updateProgram(program_1, ["a.ts"], { types: ["a"] },afiles => {
+            updateProgram(program_1, ["a.ts"], { types: ["a"] }, files => {
 
             });
             assert.isTrue(program_1.structureIsReused);
