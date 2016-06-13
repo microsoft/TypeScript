@@ -9,6 +9,7 @@
     "files": [
         "node.d.ts",
         "editorServices.ts",
+        "builder.ts",
         "protocol.d.ts",
         "server.ts",
         "session.ts"

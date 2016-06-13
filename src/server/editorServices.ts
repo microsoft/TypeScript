@@ -365,6 +365,7 @@ namespace ts.server {
     export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
+        autoDiagnostics?: boolean;
         compilerOptions?: ts.CompilerOptions;
     }
 
@@ -381,12 +382,38 @@ namespace ts.server {
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
 
-        constructor(public projectService: ProjectService, public projectOptions?: ProjectOptions) {
+        changeSequence = 0;
+        builder: Builder;
+
+        constructor(public projectService: ProjectService, host: ServerHost, psLogger: Logger, channel: Channel, projectFileName?: string, public projectOptions?: ProjectOptions) {
+            this.projectFilename = projectFileName;
             if (projectOptions && projectOptions.files) {
                 // If files are listed explicitly, allow all extensions
                 projectOptions.compilerOptions.allowNonTsExtensions = true;
             }
             this.compilerService = new CompilerService(this, projectOptions && projectOptions.compilerOptions);
+            this.builder = createBuilder(this, {
+                event: (info, eventName) => channel.event(info, eventName),
+                useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames,
+                logError: (err: Error, cmd: string) => {}
+            });
+            // ToDo@dirk need to better understand when a project is ready so we can
+            // request diagnostics.
+            setTimeout(()=> {
+                this.builder.computeDiagnostics();
+            }, 300);
+        }
+
+        fileOpened(file: string): void {
+            this.builder.computeDiagnostics(file);
+        }
+
+        fileChanged(file: string): void {
+            this.changeSequence++;
+            this.builder.computeDiagnostics(file);
+        }
+
+        fileClosed(file: string): void {
         }
 
         addOpenRef() {
@@ -535,7 +562,7 @@ namespace ts.server {
         hostConfiguration: HostConfiguration;
         timerForDetectingProjectFileListChanges: Map<any> = {};
 
-        constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
+        constructor(public host: ServerHost, public psLogger: Logger, public channel: Channel, public enableAutoDiagnostics: boolean, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
             this.addDefaultHostConfiguration();
         }
@@ -686,7 +713,7 @@ namespace ts.server {
         }
 
         createInferredProject(root: ScriptInfo) {
-            const project = new Project(this);
+            const project = new Project(this, this.host, this.psLogger, this.channel);
             project.addRoot(root);
 
             let currentPath = ts.getDirectoryPath(root.fileName);
@@ -1251,6 +1278,7 @@ namespace ts.server {
                 else {
                     const projectOptions: ProjectOptions = {
                         files: parsedCommandLine.fileNames,
+                        autoDiagnostics: rawConfig.config.autoDiagnostics,
                         compilerOptions: parsedCommandLine.options
                     };
                     return { succeeded: true, projectOptions };
@@ -1343,11 +1371,9 @@ namespace ts.server {
         }
 
         createProject(projectFilename: string, projectOptions?: ProjectOptions) {
-            const project = new Project(this, projectOptions);
-            project.projectFilename = projectFilename;
+            const project = new Project(this, this.host, this.psLogger, this.channel, projectFilename, projectOptions);
             return project;
         }
-
     }
 
     export class CompilerService {

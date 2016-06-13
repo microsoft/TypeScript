@@ -137,6 +137,10 @@ namespace ts.server {
         clearTimeout(timeoutId: any): void;
     }
 
+    export interface Channel {
+        event(info: any, eventName: string): void;
+    }
+
     export class Session {
         protected projectService: ProjectService;
         private errorTimer: any; /*NodeJS.Timer | number*/
@@ -147,12 +151,19 @@ namespace ts.server {
             private host: ServerHost,
             private byteLength: (buf: string, encoding?: string) => number,
             private hrtime: (start?: number[]) => number[],
-            private logger: Logger
+            private logger: Logger,
+            enableAutoDiagnostics: boolean
         ) {
             this.projectService =
-                new ProjectService(host, logger, (eventName, project, fileName) => {
-                    this.handleEvent(eventName, project, fileName);
-                });
+                new ProjectService(host, logger, 
+                    {
+                        event: (info, eventName) => this.event(info, eventName)
+                    },
+                    enableAutoDiagnostics, 
+                    (eventName, project, fileName) => {
+                        this.handleEvent(eventName, project, fileName);
+                    }
+                );
         }
 
         private handleEvent(eventName: string, project: Project, fileName: string) {
@@ -590,6 +601,10 @@ namespace ts.server {
             if (configFileErrors) {
                 this.configFileDiagnosticEvent(fileName, configFileName, configFileErrors);
             }
+            let project = this.projectService.getProjectForFile(file);
+            if (project) {
+                project.fileOpened(file);
+            }
         }
 
         private getQuickInfo(line: number, offset: number, fileName: string): protocol.QuickInfoResponseBody {
@@ -823,6 +838,7 @@ namespace ts.server {
                     this.changeSeq++;
                 }
                 this.updateProjectStructure(this.changeSeq, (n) => n === this.changeSeq);
+                project.fileChanged(file);
             }
         }
 
