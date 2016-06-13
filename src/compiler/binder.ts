@@ -693,8 +693,23 @@ namespace ts {
             setFlowNodeReferenced(antecedent);
             return <FlowCondition>{
                 flags,
-                antecedent,
                 expression,
+                antecedent
+            };
+        }
+
+        function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
+            const expr = switchStatement.expression;
+            if (expr.kind !== SyntaxKind.PropertyAccessExpression || !isNarrowableReference((<PropertyAccessExpression>expr).expression)) {
+                return antecedent;
+            }
+            setFlowNodeReferenced(antecedent);
+            return <FlowSwitchClause>{
+                flags: FlowFlags.SwitchClause,
+                switchStatement,
+                clauseStart,
+                clauseEnd,
+                antecedent
             };
         }
 
@@ -923,9 +938,9 @@ namespace ts {
             preSwitchCaseFlow = currentFlow;
             bind(node.caseBlock);
             addAntecedent(postSwitchLabel, currentFlow);
-            const hasNonEmptyDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause && c.statements.length);
-            if (!hasNonEmptyDefault) {
-                addAntecedent(postSwitchLabel, preSwitchCaseFlow);
+            const hasDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause);
+            if (!hasDefault) {
+                addAntecedent(postSwitchLabel, createFlowSwitchClause(preSwitchCaseFlow, node, 0, 0));
             }
             currentBreakTarget = saveBreakTarget;
             preSwitchCaseFlow = savePreSwitchCaseFlow;
@@ -934,25 +949,22 @@ namespace ts {
 
         function bindCaseBlock(node: CaseBlock): void {
             const clauses = node.clauses;
+            let fallthroughFlow = unreachableFlow;
             for (let i = 0; i < clauses.length; i++) {
-                const clause = clauses[i];
-                if (clause.statements.length) {
-                    if (currentFlow.flags & FlowFlags.Unreachable) {
-                        currentFlow = preSwitchCaseFlow;
-                    }
-                    else {
-                        const preCaseLabel = createBranchLabel();
-                        addAntecedent(preCaseLabel, preSwitchCaseFlow);
-                        addAntecedent(preCaseLabel, currentFlow);
-                        currentFlow = finishFlowLabel(preCaseLabel);
-                    }
-                    bind(clause);
-                    if (!(currentFlow.flags & FlowFlags.Unreachable) && i !== clauses.length - 1 && options.noFallthroughCasesInSwitch) {
-                        errorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
-                    }
+                const clauseStart = i;
+                while (!clauses[i].statements.length && i + 1 < clauses.length) {
+                    bind(clauses[i]);
+                    i++;
                 }
-                else {
-                    bind(clause);
+                const preCaseLabel = createBranchLabel();
+                addAntecedent(preCaseLabel, createFlowSwitchClause(preSwitchCaseFlow, <SwitchStatement>node.parent, clauseStart, i + 1));
+                addAntecedent(preCaseLabel, fallthroughFlow);
+                currentFlow = finishFlowLabel(preCaseLabel);
+                const clause = clauses[i];
+                bind(clause);
+                fallthroughFlow = currentFlow;
+                if (!(currentFlow.flags & FlowFlags.Unreachable) && i !== clauses.length - 1 && options.noFallthroughCasesInSwitch) {
+                    errorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
                 }
             }
         }

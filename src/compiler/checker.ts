@@ -7676,6 +7676,29 @@ namespace ts {
             return node;
         }
 
+        function getTypeOfSwitchClause(clause: CaseClause | DefaultClause) {
+            if (clause.kind === SyntaxKind.CaseClause) {
+                const expr = (<CaseClause>clause).expression;
+                return expr.kind === SyntaxKind.StringLiteral ? getStringLiteralTypeForText((<StringLiteral>expr).text) : checkExpression(expr);
+            }
+            return undefined;
+        }
+
+        function getSwitchClauseTypes(switchStatement: SwitchStatement): Type[] {
+            const links = getNodeLinks(switchStatement);
+            if (!links.switchTypes) {
+                // If all case clauses specify expressions that have unit types, we return an array
+                // of those unit types. Otherwise we return an empty array.
+                const types = map(switchStatement.caseBlock.clauses, getTypeOfSwitchClause);
+                links.switchTypes = forEach(types, t => !t || t.flags & TypeFlags.StringLiteral) ? types : emptyArray;
+            }
+            return links.switchTypes;
+        }
+
+        function eachTypeContainedIn(source: Type, types: Type[]) {
+            return source.flags & TypeFlags.Union ? !forEach((<UnionType>source).types, t => !contains(types, t)) : contains(types, source);
+        }
+
         function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, includeOuterFunctions: boolean) {
             let key: string;
             if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
@@ -7712,6 +7735,9 @@ namespace ts {
                     }
                     else if (flow.flags & FlowFlags.Condition) {
                         type = getTypeAtFlowCondition(<FlowCondition>flow);
+                    }
+                    else if (flow.flags & FlowFlags.SwitchClause) {
+                        type = getTypeAtSwitchClause(<FlowSwitchClause>flow);
                     }
                     else if (flow.flags & FlowFlags.Label) {
                         if ((<FlowLabel>flow).antecedents.length === 1) {
@@ -7794,6 +7820,11 @@ namespace ts {
                     }
                 }
                 return type;
+            }
+
+            function getTypeAtSwitchClause(flow: FlowSwitchClause) {
+                const type = getTypeAtFlowNode(flow.antecedent);
+                return narrowTypeBySwitchOnDiscriminant(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
             }
 
             function getTypeAtFlowBranchLabel(flow: FlowLabel) {
@@ -7936,6 +7967,33 @@ namespace ts {
                     return getUnionType(filter((<UnionType>type).types, t => getTypeOfPropertyOfType(t, propName) !== discriminantType));
                 }
                 return type;
+            }
+
+            function narrowTypeBySwitchOnDiscriminant(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
+                // We have switch statement with property access expression
+                if (!(type.flags & TypeFlags.Union) || !isMatchingReference(reference, (<PropertyAccessExpression>switchStatement.expression).expression)) {
+                    return type;
+                }
+                const propName = (<PropertyAccessExpression>switchStatement.expression).name.text;
+                const propType = getTypeOfPropertyOfType(type, propName);
+                if (!propType || !isStringLiteralUnionType(propType)) {
+                    return type;
+                }
+                const switchTypes = getSwitchClauseTypes(switchStatement);
+                if (!switchTypes.length) {
+                    return type;
+                }
+                const types = (<UnionType>type).types;
+                const clauseTypes = switchTypes.slice(clauseStart, clauseEnd);
+                const hasDefaultClause = clauseStart === clauseEnd || contains(clauseTypes, undefined);
+                const caseTypes = hasDefaultClause ? filter(clauseTypes, t => !!t) : clauseTypes;
+                const discriminantType = caseTypes.length ? getUnionType(caseTypes) : undefined;
+                const caseType = discriminantType && getUnionType(filter(types, t => isTypeComparableTo(discriminantType, getTypeOfPropertyOfType(t, propName))));
+                if (!hasDefaultClause) {
+                    return caseType;
+                }
+                const defaultType = getUnionType(filter(types, t => !eachTypeContainedIn(getTypeOfPropertyOfType(t, propName), switchTypes)));
+                return caseType ? getUnionType([caseType, defaultType]) : defaultType;
             }
 
             function narrowTypeByTypeof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
