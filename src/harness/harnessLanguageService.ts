@@ -163,7 +163,7 @@ namespace Harness.LanguageService {
             throw new Error("No script with name '" + fileName + "'");
         }
 
-        public openFile(fileName: string, content?: string): void {
+        public openFile(fileName: string, content?: string, scriptKindName?: string): void {
         }
 
         /**
@@ -172,7 +172,7 @@ namespace Harness.LanguageService {
           */
         public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
             const script: ScriptInfo = this.fileNameToScript[fileName];
-            assert.isNotNull(script);
+            assert.isOk(script);
 
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
         }
@@ -182,6 +182,7 @@ namespace Harness.LanguageService {
     class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost {
         getCompilationSettings() { return this.settings; }
         getCancellationToken() { return this.cancellationToken; }
+        getDirectories(path: string): string[] { return []; }
         getCurrentDirectory(): string { return ""; }
         getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
         getScriptFileNames(): string[] { return this.getFilenames(); }
@@ -268,6 +269,7 @@ namespace Harness.LanguageService {
         getCompilationSettings(): string { return JSON.stringify(this.nativeHost.getCompilationSettings()); }
         getCancellationToken(): ts.HostCancellationToken { return this.nativeHost.getCancellationToken(); }
         getCurrentDirectory(): string { return this.nativeHost.getCurrentDirectory(); }
+        getDirectories(path: string) { return this.nativeHost.getDirectories(path); }
         getDefaultLibFileName(): string { return this.nativeHost.getDefaultLibFileName(); }
         getScriptFileNames(): string { return JSON.stringify(this.nativeHost.getScriptFileNames()); }
         getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
@@ -528,9 +530,9 @@ namespace Harness.LanguageService {
             this.client = client;
         }
 
-        openFile(fileName: string, content?: string): void {
-            super.openFile(fileName, content);
-            this.client.openFile(fileName, content);
+        openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
+            super.openFile(fileName, content, scriptKindName);
+            this.client.openFile(fileName, content, scriptKindName);
         }
 
         editScript(fileName: string, start: number, end: number, newText: string) {
@@ -600,6 +602,10 @@ namespace Harness.LanguageService {
             return this.host.getCurrentDirectory();
         }
 
+        getDirectories(path: string): string[] {
+            return [];
+        }
+
         getEnvironmentVariable(name: string): string {
             return ts.sys.getEnvironmentVariable(name);
         }
@@ -644,6 +650,14 @@ namespace Harness.LanguageService {
         }
 
         startGroup(): void {
+        }
+
+        setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
+            return setTimeout(callback, ms, args);
+        }
+
+        clearTimeout(timeoutId: any): void {
+            clearTimeout(timeoutId);
         }
     }
 

@@ -164,7 +164,7 @@ namespace ts {
         let currentNode: Node;
         let enclosingBlockScopeContainer: Node;
         let enclosingBlockScopeContainerParent: Node;
-        let containingNonArrowFunction: FunctionLikeDeclaration;
+        let containingNonArrowFunction: FunctionLikeDeclaration | ClassElement;
 
         /**
          * Used to track if we are emitting body of the converted loop
@@ -557,6 +557,7 @@ namespace ts {
                 createVariableDeclarationList([
                     createVariableDeclaration(
                         getDeclarationName(node, /*allowComments*/ true),
+                        /*type*/ undefined,
                         transformClassLikeDeclarationToExpression(node)
                     )
                 ]),
@@ -624,7 +625,9 @@ namespace ts {
             const classFunction = createFunctionExpression(
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
+                /*typeParameters*/ undefined,
                 extendsClauseElement ? [createParameter("_super")] : [],
+                /*type*/ undefined,
                 transformClassBody(node, extendsClauseElement)
             );
 
@@ -648,6 +651,7 @@ namespace ts {
             return createParen(
                 createCall(
                     outer,
+                    /*typeArguments*/ undefined,
                     extendsClauseElement
                         ? [visitNode(extendsClauseElement.expression, visitor, isExpression)]
                         : []
@@ -720,10 +724,13 @@ namespace ts {
             const hasSynthesizedSuper = hasSynthesizedDefaultSuperCall(constructor, extendsClauseElement !== undefined);
             statements.push(
                 createFunctionDeclaration(
+                    /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     getDeclarationName(node),
+                    /*typeParameters*/ undefined,
                     transformConstructorParameters(constructor, hasSynthesizedSuper),
+                    /*type*/ undefined,
                     transformConstructorBody(constructor, node, extendsClauseElement, hasSynthesizedSuper),
                     /*location*/ constructor || node
                 )
@@ -952,6 +959,7 @@ namespace ts {
          * @param initializer The initializer for the parameter.
          */
         function addDefaultValueAssignmentForInitializer(statements: Statement[], parameter: ParameterDeclaration, name: Identifier, initializer: Expression): void {
+            initializer = visitNode(initializer, visitor, isExpression);
             const statement = createIf(
                 createStrictEquality(
                     getSynthesizedClone(name),
@@ -962,7 +970,7 @@ namespace ts {
                         createStatement(
                             createAssignment(
                                 setNodeEmitFlags(getMutableClone(name), NodeEmitFlags.NoSourceMap),
-                                setNodeEmitFlags(visitNode(initializer, visitor, isExpression), NodeEmitFlags.NoSourceMap | NodeEmitFlags.Merge),
+                                setNodeEmitFlags(initializer, NodeEmitFlags.NoSourceMap | getNodeEmitFlags(initializer)),
                                 /*location*/ parameter
                             )
                         )
@@ -970,10 +978,9 @@ namespace ts {
                     NodeEmitFlags.SingleLine | NodeEmitFlags.NoTrailingSourceMap | NodeEmitFlags.NoTokenSourceMaps
                 ),
                 /*elseStatement*/ undefined,
-                /*location*/ parameter,
-                { startOnNewLine: true }
+                /*location*/ parameter
             );
-
+            statement.startsOnNewLine = true;
             setNodeEmitFlags(statement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoTrailingSourceMap);
             statements.push(statement);
         }
@@ -1006,7 +1013,7 @@ namespace ts {
             }
 
             // `declarationName` is the name of the local declaration for the parameter.
-            const declarationName = getUniqueClone(<Identifier>parameter.name);
+            const declarationName = getMutableClone(<Identifier>parameter.name);
             setNodeEmitFlags(declarationName, NodeEmitFlags.NoSourceMap);
 
             // `expressionName` is the name of the parameter used in expressions.
@@ -1021,6 +1028,7 @@ namespace ts {
                     createVariableDeclarationList([
                         createVariableDeclaration(
                             declarationName,
+                            /*type*/ undefined,
                             createArrayLiteral([])
                         )
                     ]),
@@ -1033,7 +1041,7 @@ namespace ts {
             // }
             const forStatement = createFor(
                 createVariableDeclarationList([
-                    createVariableDeclaration(temp, createLiteral(restIndex))
+                    createVariableDeclaration(temp, /*type*/ undefined, createLiteral(restIndex))
                 ], /*location*/ parameter),
                 createLessThan(
                     temp,
@@ -1076,6 +1084,7 @@ namespace ts {
                     createVariableDeclarationList([
                         createVariableDeclaration(
                             "_this",
+                            /*type*/ undefined,
                             createThis()
                         )
                     ])
@@ -1230,6 +1239,7 @@ namespace ts {
 
             return createCall(
                 createPropertyAccess(createIdentifier("Object"), "defineProperty"),
+                /*typeArguments*/ undefined,
                 [
                     target,
                     propertyName,
@@ -1273,15 +1283,19 @@ namespace ts {
          * @param node a FunctionDeclaration node.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): FunctionDeclaration {
-            return createFunctionDeclaration(
-                /*modifiers*/ undefined,
-                node.asteriskToken,
-                node.name,
-                visitNodes(node.parameters, visitor, isParameter),
-                transformFunctionBody(node),
-                /*location*/ node,
-                /*original*/ node
-            );
+            return setOriginalNode(
+                createFunctionDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    node.asteriskToken,
+                    node.name,
+                    /*typeParameters*/ undefined,
+                    visitNodes(node.parameters, visitor, isParameter),
+                    /*type*/ undefined,
+                    transformFunctionBody(node),
+                    /*location*/ node
+                ),
+                /*original*/ node);
         }
 
         /**
@@ -1297,12 +1311,16 @@ namespace ts {
                 containingNonArrowFunction = node;
             }
 
-            const expression = createFunctionExpression(
-                node.asteriskToken,
-                name,
-                visitNodes(node.parameters, visitor, isParameter),
-                saveStateAndInvoke(node, transformFunctionBody),
-                location,
+            const expression = setOriginalNode(
+                createFunctionExpression(
+                    node.asteriskToken,
+                    name,
+                    /*typeParameters*/ undefined,
+                    visitNodes(node.parameters, visitor, isParameter),
+                    /*type*/ undefined,
+                    saveStateAndInvoke(node, transformFunctionBody),
+                    location
+                ),
                 /*original*/ node
             );
 
@@ -1409,15 +1427,13 @@ namespace ts {
             // If we are here it is most likely because our expression is a destructuring assignment.
             switch (node.expression.kind) {
                 case SyntaxKind.ParenthesizedExpression:
-                    return createStatement(
-                        visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false),
-                        /*location*/ node
+                    return updateStatement(node,
+                        visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false)
                     );
 
                 case SyntaxKind.BinaryExpression:
-                    return createStatement(
-                        visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false),
-                        /*location*/ node
+                    return updateStatement(node,
+                        visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false)
                     );
             }
 
@@ -1510,6 +1526,7 @@ namespace ts {
 
             const declarationList = createVariableDeclarationList(declarations, /*location*/ node);
             setOriginalNode(declarationList, node);
+            setCommentRange(declarationList, node);
 
             if (node.transformFlags & TransformFlags.ContainsBindingPattern
                 && (isBindingPattern(node.declarations[0].name)
@@ -1518,7 +1535,7 @@ namespace ts {
                 // the source map range for the declaration list.
                 const firstDeclaration = firstOrUndefined(declarations);
                 const lastDeclaration = lastOrUndefined(declarations);
-                setSourceMapRange(node, createRange(firstDeclaration.pos, lastDeclaration.end));
+                setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
             }
 
             return declarationList;
@@ -1870,6 +1887,7 @@ namespace ts {
                             createVariableDeclarationList([
                                 createVariableDeclaration(
                                     firstOriginalDeclaration ? firstOriginalDeclaration.name : createTempVariable(/*recordTempVariable*/ undefined),
+                                    /*type*/ undefined,
                                     createElementAccess(rhsReference, counter)
                                 )
                             ], /*location*/ moveRangePos(initializer, -1)),
@@ -1933,8 +1951,8 @@ namespace ts {
 
             const forStatement = createFor(
                 createVariableDeclarationList([
-                    createVariableDeclaration(counter, createLiteral(0), /*location*/ moveRangePos(node.expression, -1)),
-                    createVariableDeclaration(rhsReference, expression, /*location*/ node.expression)
+                    createVariableDeclaration(counter, /*type*/ undefined, createLiteral(0), /*location*/ moveRangePos(node.expression, -1)),
+                    createVariableDeclaration(rhsReference, /*type*/ undefined, expression, /*location*/ node.expression)
                 ], /*location*/ node.expression),
                 createLessThan(
                     counter,
@@ -2113,11 +2131,14 @@ namespace ts {
                         [
                             createVariableDeclaration(
                                 functionName,
+                                /*type*/ undefined,
                                 setNodeEmitFlags(
                                     createFunctionExpression(
                                         /*asteriskToken*/ undefined,
                                         /*name*/ undefined,
+                                        /*typeParameters*/ undefined,
                                         loopParameters,
+                                        /*type*/ undefined,
                                         <Block>loopBody
                                     ),
                                     currentState.containsLexicalThis
@@ -2144,6 +2165,7 @@ namespace ts {
                     (extraVariableDeclarations || (extraVariableDeclarations = [])).push(
                         createVariableDeclaration(
                             currentState.argumentsName,
+                            /*type*/ undefined,
                             createIdentifier("arguments")
                         )
                     );
@@ -2164,8 +2186,9 @@ namespace ts {
                     (extraVariableDeclarations || (extraVariableDeclarations = [])).push(
                         createVariableDeclaration(
                             currentState.thisName,
+                            /*type*/ undefined,
                             createIdentifier("this")
-                            )
+                        )
                     );
                 }
             }
@@ -2257,7 +2280,7 @@ namespace ts {
                 !state.labeledNonLocalBreaks &&
                 !state.labeledNonLocalContinues;
 
-            const call = createCall(loopFunctionExpressionName, map(parameters, p => <Identifier>p.name));
+            const call = createCall(loopFunctionExpressionName, /*typeArguments*/ undefined, map(parameters, p => <Identifier>p.name));
             if (isSimpleLoop) {
                 statements.push(createStatement(call));
                 copyOutParameters(state.loopOutParameters, CopyDirection.ToOriginal, statements);
@@ -2267,7 +2290,7 @@ namespace ts {
                 const stateVariable = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList(
-                        [createVariableDeclaration(loopResultName, call)]
+                        [createVariableDeclaration(loopResultName, /*type*/ undefined, call)]
                     )
                 );
                 statements.push(stateVariable);
@@ -2598,6 +2621,7 @@ namespace ts {
                     thisArg,
                     transformAndSpreadElements(createNodeArray([createVoidZero(), ...node.arguments]), /*needsUniqueCopy*/ false, /*multiLine*/ false, /*hasTrailingComma*/ false)
                 ),
+                /*typeArguments*/ undefined,
                 []
             );
         }
@@ -2710,7 +2734,7 @@ namespace ts {
                 inlineExpressions([
                     createAssignment(temp, createArrayLiteral(cookedStrings)),
                     createAssignment(createPropertyAccess(temp, "raw"), createArrayLiteral(rawStrings)),
-                    createCall(tag, templateArguments)
+                    createCall(tag, /*typeArguments*/ undefined, templateArguments)
                 ])
             );
         }
@@ -2929,7 +2953,7 @@ namespace ts {
             // Only substitute the identifier if we have enabled substitutions for block-scoped
             // bindings.
             if (enabledSubstitutions & ES6SubstitutionFlags.BlockScopedBindings) {
-                const original = getSourceTreeNodeOfType(node, isIdentifier);
+                const original = getParseTreeNode(node, isIdentifier);
                 if (original && isNameOfDeclarationWithCollidingName(original)) {
                     return getGeneratedNameForNode(original);
                 }
@@ -3019,20 +3043,6 @@ namespace ts {
         }
 
         /**
-         * Gets the export name for a declaration for use in expressions.
-         *
-         * An export name will *always* be prefixed with an module or namespace export modifier
-         * like "exports." if one is required.
-         *
-         * @param node The declaration.
-         * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
-         */
-        function getExportName(node: ClassDeclaration | ClassExpression | FunctionDeclaration, allowComments?: boolean, allowSourceMaps?: boolean) {
-            return getDeclarationName(node, allowComments, allowSourceMaps, NodeEmitFlags.ExportName);
-        }
-
-        /**
          * Gets the name of a declaration, without source map or comments.
          *
          * @param node The declaration.
@@ -3040,7 +3050,7 @@ namespace ts {
          */
         function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: NodeEmitFlags) {
             if (node.name && !isGeneratedIdentifier(node.name)) {
-                const name = getUniqueClone(node.name);
+                const name = getMutableClone(node.name);
                 emitFlags |= getNodeEmitFlags(node.name);
                 if (!allowSourceMaps) {
                     emitFlags |= NodeEmitFlags.NoSourceMap;

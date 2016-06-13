@@ -2,7 +2,7 @@
 
 ////class Test {
 ////    private search1: number;
-////    constructor(public search2: boolean, search3: string) {
+////    constructor(public search2: boolean, readonly search3: string, search4: string) {
 ////    }
 ////}
 
@@ -10,3 +10,4 @@
 var searchValue = "search";
 verify.navigationItemsListContains("search1", "property", searchValue, "prefix");
 verify.navigationItemsListContains("search2", "property", searchValue, "prefix");
+verify.navigationItemsListContains("search3", "property", searchValue, "prefix");

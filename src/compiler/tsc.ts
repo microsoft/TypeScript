@@ -6,6 +6,11 @@ namespace ts {
         fileWatcher?: FileWatcher;
     }
 
+    interface Statistic {
+        name: string;
+        value: string;
+    }
+
     let reportDiagnostic = reportDiagnosticSimply;
 
     function reportDiagnostics(diagnostics: Diagnostic[], host: CompilerHost): void {
@@ -44,11 +49,9 @@ namespace ts {
         const territory = matchResult[3];
 
         // First try the entire locale, then fall back to just language if that's all we have.
-        if (!trySetLanguageAndTerritory(language, territory, errors) &&
-            !trySetLanguageAndTerritory(language, undefined, errors)) {
-
-            errors.push(createCompilerDiagnostic(Diagnostics.Unsupported_locale_0, locale));
-            return false;
+        // Either ways do not fail, and fallback to the English diagnostic strings.
+        if (!trySetLanguageAndTerritory(language, territory, errors)) {
+            trySetLanguageAndTerritory(language, undefined, errors);
         }
 
         return true;
@@ -237,18 +240,6 @@ namespace ts {
         return s;
     }
 
-    function reportStatisticalValue(name: string, value: string) {
-        sys.write(padRight(name + ":", 12) + padLeft(value.toString(), 10) + sys.newLine);
-    }
-
-    function reportCountStatistic(name: string, count: number) {
-        reportStatisticalValue(name, "" + count);
-    }
-
-    function reportTimeStatistic(name: string, time: number) {
-        reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
-    }
-
     function isJSONSupported() {
         return typeof JSON === "object" && typeof JSON.parse === "function";
     }
@@ -393,9 +384,21 @@ namespace ts {
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }
-            if (isWatchSet(configParseResult.options) && !sys.watchFile) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* compilerHost */ undefined);
-                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            if (isWatchSet(configParseResult.options)) {
+                if (!sys.watchFile) {
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* compilerHost */ undefined);
+                    sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                }
+
+                if (!directoryWatcher && sys.watchDirectory && configFileName) {
+                    const directory = ts.getDirectoryPath(configFileName);
+                    directoryWatcher = sys.watchDirectory(
+                        // When the configFileName is just "tsconfig.json", the watched directory should be
+                        // the current directory; if there is a given "project" parameter, then the configFileName
+                        // is an absolute file name.
+                        directory == "" ? "." : directory,
+                        watchedDirectoryChanged, /*recursive*/ true);
+                };
             }
             return configParseResult;
         }
@@ -544,12 +547,11 @@ namespace ts {
     }
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
-        ioReadTime = 0;
-        ioWriteTime = 0;
-        programTime = 0;
-        bindTime = 0;
-        checkTime = 0;
-        emitTime = 0;
+        let statistics: Statistic[];
+        if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
+            performance.enable();
+            statistics = [];
+        }
 
         const program = createProgram(fileNames, compilerOptions, compilerHost);
         const exitStatus = compileProgram();
@@ -560,7 +562,7 @@ namespace ts {
             });
         }
 
-        if (compilerOptions.diagnostics) {
+        if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
@@ -573,17 +575,30 @@ namespace ts {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
 
+            if (compilerOptions.extendedDiagnostics) {
+                reportTimeStatistic("Print time", performance.getDuration("printTime"));
+                reportTimeStatistic("Comment time", performance.getDuration("commentTime"));
+                reportTimeStatistic("SourceMap time", performance.getDuration("sourceMapTime"));
+            }
+
             // Individual component times.
             // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
             // I/O read time and processing time for triple-slash references and module imports, and the reported
             // emit time includes I/O write time. We preserve this behavior so we can accurately compare times.
-            reportTimeStatistic("I/O read", ioReadTime);
-            reportTimeStatistic("I/O write", ioWriteTime);
+            reportTimeStatistic("I/O read", performance.getDuration("ioReadTime"));
+            reportTimeStatistic("I/O write", performance.getDuration("ioWriteTime"));
+            const programTime = performance.getDuration("programTime");
+            const bindTime = performance.getDuration("bindTime");
+            const checkTime = performance.getDuration("checkTime");
+            const emitTime = performance.getDuration("emitTime");
             reportTimeStatistic("Parse time", programTime);
             reportTimeStatistic("Bind time", bindTime);
             reportTimeStatistic("Check time", checkTime);
             reportTimeStatistic("Emit time", emitTime);
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+            reportStatistics();
+
+            performance.disable();
         }
 
         return { program, exitStatus };
@@ -622,6 +637,36 @@ namespace ts {
                 return ExitStatus.DiagnosticsPresent_OutputsGenerated;
             }
             return ExitStatus.Success;
+        }
+
+        function reportStatistics() {
+            let nameSize = 0;
+            let valueSize = 0;
+            for (const { name, value } of statistics) {
+                if (name.length > nameSize) {
+                    nameSize = name.length;
+                }
+
+                if (value.length > valueSize) {
+                    valueSize = value.length;
+                }
+            }
+
+            for (const { name, value } of statistics) {
+                sys.write(padRight(name + ":", nameSize + 2) + padLeft(value.toString(), valueSize) + sys.newLine);
+            }
+        }
+
+        function reportStatisticalValue(name: string, value: string) {
+            statistics.push({ name, value });
+        }
+
+        function reportCountStatistic(name: string, count: number) {
+            reportStatisticalValue(name, "" + count);
+        }
+
+        function reportTimeStatistic(name: string, time: number) {
+            reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
         }
     }
 

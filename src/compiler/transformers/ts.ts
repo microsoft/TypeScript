@@ -228,9 +228,7 @@ namespace ts {
             if (hasModifier(node, ModifierFlags.Ambient) && isStatement(node)) {
                 // TypeScript ambient declarations are elided, but some comments may be preserved.
                 // See the implementation of `getLeadingComments` in comments.ts for more details.
-                return isStatement(node)
-                    ? createNotEmittedStatement(node)
-                    : undefined;
+                return createNotEmittedStatement(node);
             }
 
             switch (node.kind) {
@@ -246,7 +244,8 @@ namespace ts {
                 case SyntaxKind.AsyncKeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.DeclareKeyword:
-                    // TypeScript accessibility modifiers are elided.
+                case SyntaxKind.ReadonlyKeyword:
+                    // TypeScript accessibility and readonly modifiers are elided.
 
                 case SyntaxKind.ArrayType:
                 case SyntaxKind.TupleType:
@@ -257,6 +256,7 @@ namespace ts {
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
+                case SyntaxKind.NeverKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.ConstructorType:
@@ -430,14 +430,17 @@ namespace ts {
 
             const constructor = getFirstConstructorWithBody(node);
             if (constructor) {
-                for (const parameter of constructor.parameters) {
-                    if (parameter.decorators && parameter.decorators.length > 0) {
-                        return true;
-                    }
-                }
+                return forEach(constructor.parameters, shouldEmitDecorateCallForParameter);
             }
 
             return false;
+        }
+
+        /**
+         * Tests whether we should emit a __decorate call for a parameter declaration.
+         */
+        function shouldEmitDecorateCallForParameter(parameter: ParameterDeclaration) {
+            return parameter.decorators !== undefined && parameter.decorators.length > 0;
         }
 
         /**
@@ -567,17 +570,17 @@ namespace ts {
             //  ---------------------------------------------------------------------
             //  TypeScript                      | Javascript
             //  ---------------------------------------------------------------------
-            //  @dec                            | let C_1;
-            //  class C {                       | let C = C_1 = class C {
-            //    static x() { return C.y; }    |   static x() { return C_1.y; }
-            //    static y = 1;                 | }
+            //  @dec                            | let C_1 = class C {
+            //  class C {                       |   static x() { return C_1.y; }
+            //    static x() { return C.y; }    | }
+            //    static y = 1;                 | let C = C_1;
             //  }                               | C.y = 1;
             //                                  | C = C_1 = __decorate([dec], C);
             //  ---------------------------------------------------------------------
-            //  @dec                            | let C_1;
-            //  export class C {                | let C = C_1 = class C {
-            //    static x() { return C.y; }    |   static x() { return C_1.y; }
-            //    static y = 1;                 | }
+            //  @dec                            | let C_1 = class C {
+            //  export class C {                |   static x() { return C_1.y; }
+            //    static x() { return C.y; }    | }
+            //    static y = 1;                 | let C = C_1;
             //  }                               | C.y = 1;
             //                                  | C = C_1 = __decorate([dec], C);
             //                                  | export { C };
@@ -609,10 +612,10 @@ namespace ts {
             //  ---------------------------------------------------------------------
             //  TypeScript                      | Javascript
             //  ---------------------------------------------------------------------
-            //  @dec                            | let C_1;
-            //  export default class C {        | let C = C_1 = class C {
-            //    static x() { return C.y; }    |   static x() { return C_1.y; }
-            //    static y = 1;                 | }
+            //  @dec                            | let C_1 = class C {
+            //  export default class C {        |   static x() { return C_1.y; }
+            //    static x() { return C.y; }    | }
+            //    static y = 1;                 | let C = C_1;
             //  }                               | C.y = 1;
             //                                  | C = C_1 = __decorate([dec], C);
             //                                  | export default C;
@@ -624,7 +627,7 @@ namespace ts {
             //  ... = class ${name} ${heritageClauses} {
             //      ${members}
             //  }
-            let classExpression: Expression = setOriginalNode(
+            const classExpression: Expression = setOriginalNode(
                 createClassExpression(
                     name,
                     visitNodes(node.heritageClauses, visitor, isHeritageClause),
@@ -644,35 +647,20 @@ namespace ts {
                 enableSubstitutionForDecoratedClasses();
                 decoratedClassAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? node.name.text : "default");
                 decoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAlias;
-
-                // We emit the class alias as a `let` declaration here so that it has the same
-                // TDZ as the class.
-
-                //  let ${decoratedClassAlias};
-                addNode(statements,
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createLetDeclarationList([
-                            createVariableDeclaration(decoratedClassAlias)
-                        ])
-                    )
-                );
-
-                //  ${decoratedClassAlias} = ${classExpression}
-                classExpression = createAssignment(
-                    decoratedClassAlias,
-                    classExpression,
-                    /*location*/ location);
             }
 
-            //  let ${name} = ${classExpression};
+            const declaredName = getDeclarationName(node, /*allowComments*/ true);
+
+            //  let ${name} = ${classExpression} where name is either declaredName if the class doesn't contain self-reference
+            //                                         or decoratedClassAlias if the class contain self-reference.
             addNode(statements,
                 setOriginalNode(
                     createVariableStatement(
                         /*modifiers*/ undefined,
                         createLetDeclarationList([
                             createVariableDeclaration(
-                                getDeclarationName(node, /*allowComments*/ true),
+                                decoratedClassAlias || declaredName,
+                                /*type*/ undefined,
                                 classExpression
                             )
                         ]),
@@ -681,6 +669,29 @@ namespace ts {
                     /*original*/ node
                 )
             );
+
+            if (decoratedClassAlias) {
+                // We emit the class alias as a `let` declaration here so that it has the same
+                // TDZ as the class.
+
+                // let ${declaredName} = ${decoratedClassAlias}
+                addNode(statements,
+                    setOriginalNode(
+                        createVariableStatement(
+                            /*modifiers*/ undefined,
+                            createLetDeclarationList([
+                                createVariableDeclaration(
+                                    declaredName,
+                                    /*type*/ undefined,
+                                    decoratedClassAlias
+                                )
+                            ]),
+                            /*location*/ location
+                        ),
+                        /*original*/ node
+                    )
+                );
+            }
 
             return decoratedClassAlias;
         }
@@ -767,6 +778,8 @@ namespace ts {
             return startOnNewLine(
                 setOriginalNode(
                     createConstructor(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
                         parameters,
                         body,
                         /*location*/ constructor || node
@@ -834,6 +847,7 @@ namespace ts {
                     createStatement(
                         createCall(
                             createSuper(),
+                            /*typeArguments*/ undefined,
                             [createSpread(<Identifier>parameters[0].name)]
                         )
                     )
@@ -915,7 +929,7 @@ namespace ts {
          * @param parameter The parameter node.
          */
         function isParameterWithPropertyAssignment(parameter: ParameterDeclaration) {
-            return hasModifier(parameter, ModifierFlags.AccessibilityModifier)
+            return hasModifier(parameter, ModifierFlags.ParameterPropertyModifier)
                 && isIdentifier(parameter.name);
         }
 
@@ -1476,13 +1490,13 @@ namespace ts {
             if (compilerOptions.emitDecoratorMetadata) {
                 let properties: ObjectLiteralElement[];
                 if (shouldAddTypeMetadata(node)) {
-                    (properties || (properties = [])).push(createPropertyAssignment("type", createArrowFunction([], serializeTypeOfNode(node))));
+                    (properties || (properties = [])).push(createPropertyAssignment("type", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, /*equalsGreaterThanToken*/ undefined, serializeTypeOfNode(node))));
                 }
                 if (shouldAddParamTypesMetadata(node)) {
-                    (properties || (properties = [])).push(createPropertyAssignment("paramTypes", createArrowFunction([], serializeParameterTypesOfNode(node))));
+                    (properties || (properties = [])).push(createPropertyAssignment("paramTypes", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, /*equalsGreaterThanToken*/ undefined, serializeParameterTypesOfNode(node))));
                 }
                 if (shouldAddReturnTypeMetadata(node)) {
-                    (properties || (properties = [])).push(createPropertyAssignment("returnType", createArrowFunction([], serializeReturnTypeOfNode(node))));
+                    (properties || (properties = [])).push(createPropertyAssignment("returnType", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, /*equalsGreaterThanToken*/ undefined, serializeReturnTypeOfNode(node))));
                 }
                 if (properties) {
                     decoratorExpressions.push(createMetadataHelper("design:typeinfo", createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)));
@@ -1752,7 +1766,10 @@ namespace ts {
         function serializeEntityNameAsExpression(node: EntityName, useFallback: boolean): Expression {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
+                    // Create a clone of the name with a new parent, and treat it as if it were
+                    // a source tree node for the purposes of the checker.
                     const name = getMutableClone(<Identifier>node);
+                    name.flags &= ~NodeFlags.Synthesized;
                     name.original = undefined;
                     name.parent = currentScope;
                     if (useFallback) {
@@ -1928,10 +1945,13 @@ namespace ts {
             }
 
             const method = createMethod(
+                /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
                 node.asteriskToken,
                 visitPropertyNameOfClassElement(node),
+                /*typeParameters*/ undefined,
                 visitNodes(node.parameters, visitor, isParameter),
+                /*type*/ undefined,
                 transformFunctionBody(node),
                 /*location*/ node
             );
@@ -1970,9 +1990,11 @@ namespace ts {
             }
 
             const accessor = createGetAccessor(
+                /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
                 visitPropertyNameOfClassElement(node),
                 visitNodes(node.parameters, visitor, isParameter),
+                /*type*/ undefined,
                 node.body ? visitEachChild(node.body, visitor, context) : createBlock([]),
                 /*location*/ node
             );
@@ -2001,6 +2023,7 @@ namespace ts {
             }
 
             const accessor = createSetAccessor(
+                /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
                 visitPropertyNameOfClassElement(node),
                 visitNodes(node.parameters, visitor, isParameter),
@@ -2033,10 +2056,13 @@ namespace ts {
             }
 
             const func = createFunctionDeclaration(
+                /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
                 node.asteriskToken,
                 node.name,
+                /*typeParameters*/ undefined,
                 visitNodes(node.parameters, visitor, isParameter),
+                /*type*/ undefined,
                 transformFunctionBody(node),
                 /*location*/ node
             );
@@ -2067,7 +2093,9 @@ namespace ts {
             const func = createFunctionExpression(
                 node.asteriskToken,
                 node.name,
+                /*typeParameters*/ undefined,
                 visitNodes(node.parameters, visitor, isParameter),
+                /*type*/ undefined,
                 transformFunctionBody(node),
                 /*location*/ node
             );
@@ -2084,7 +2112,11 @@ namespace ts {
          */
         function visitArrowFunction(node: ArrowFunction) {
             const func = createArrowFunction(
+                /*modifiers*/ undefined,
+                /*typeParameters*/ undefined,
                 visitNodes(node.parameters, visitor, isParameter),
+                /*type*/ undefined,
+                node.equalsGreaterThanToken,
                 transformConciseBody(node),
                 /*location*/ node
             );
@@ -2206,19 +2238,23 @@ namespace ts {
                 return undefined;
             }
 
-            const parameter = createParameterWithDotDotDotToken(
+            const parameter = createParameterDeclaration(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
                 node.dotDotDotToken,
                 visitNode(node.name, visitor, isBindingName),
+                /*questionToken*/ undefined,
+                /*type*/ undefined,
                 visitNode(node.initializer, visitor, isExpression),
                 /*location*/ moveRangePastModifiers(node)
             );
 
             // While we emit the source map for the node after skipping decorators and modifiers,
             // we need to emit the comments for the original range.
+            setOriginalNode(parameter, node);
             setCommentRange(parameter, node);
             setSourceMapRange(parameter, moveRangePastModifiers(node));
             setNodeEmitFlags(parameter.name, NodeEmitFlags.NoTrailingSourceMap);
-            setOriginalNode(parameter, node);
 
             return parameter;
         }
@@ -2348,16 +2384,16 @@ namespace ts {
          * Adds a trailing VariableStatement for an enum or module declaration.
          */
         function addVarForEnumExportedFromNamespace(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
-            statements.push(
-                createVariableStatement(
-                    /*modifiers*/ undefined,
-                    [createVariableDeclaration(
-                        getDeclarationName(node),
-                        getExportName(node)
-                    )],
-                    /*location*/ node
-                )
+            const statement = createVariableStatement(
+                /*modifiers*/ undefined,
+                [createVariableDeclaration(
+                    getDeclarationName(node),
+                    /*type*/ undefined,
+                    getExportName(node)
+                )]
             );
+            setSourceMapRange(statement, node);
+            statements.push(statement);
         }
 
         /**
@@ -2373,44 +2409,61 @@ namespace ts {
             }
 
             const statements: Statement[] = [];
+
+            // We request to be advised when the printer is about to print this node. This allows
+            // us to set up the correct state for later substitutions.
+            let emitFlags = NodeEmitFlags.AdviseOnEmitNode;
+
+            // If needed, we should emit a variable declaration for the enum. If we emit
+            // a leading variable declaration, we should not emit leading comments for the
+            // enum body.
             if (shouldEmitVarForEnumDeclaration(node)) {
                 addVarForEnumOrModuleDeclaration(statements, node);
+
+                // We should still emit the comments if we are emitting a system module.
+                if (moduleKind !== ModuleKind.System || currentScope !== currentSourceFile) {
+                    emitFlags |= NodeEmitFlags.NoLeadingComments;
+                }
             }
 
-            const innerName = getNamespaceContainerName(node);
-            const paramName = getNamespaceParameterName(node);
+            // `parameterName` is the declaration name used inside of the enum.
+            const parameterName = getNamespaceParameterName(node);
+
+            // `containerName` is the expression used inside of the enum for assignments.
+            const containerName = getNamespaceContainerName(node);
+
+            // `exportName` is the expression used within this node's container for any exported references.
             const exportName = getExportName(node);
 
             //  (function (x) {
             //      x[x["y"] = 0] = "y";
             //      ...
             //  })(x || (x = {}));
-            statements.push(
-                setNodeEmitFlags(
-                    setOriginalNode(
-                        createStatement(
-                            createCall(
-                                createFunctionExpression(
-                                    /*asteriskToken*/ undefined,
-                                    /*name*/ undefined,
-                                    [createParameter(paramName)],
-                                    transformEnumBody(node, innerName)
-                                ),
-                                [createLogicalOr(
-                                    exportName,
-                                    createAssignment(
-                                        exportName,
-                                        createObjectLiteral()
-                                    )
-                                )]
-                            ),
-                            /*location*/ node
-                        ),
-                        /*original*/ node
+            const enumStatement = createStatement(
+                createCall(
+                    createFunctionExpression(
+                        /*asteriskToken*/ undefined,
+                        /*name*/ undefined,
+                        /*typeParameters*/ undefined,
+                        [createParameter(parameterName)],
+                        /*type*/ undefined,
+                        transformEnumBody(node, containerName)
                     ),
-                    NodeEmitFlags.AdviseOnEmitNode
-                )
+                    /*typeArguments*/ undefined,
+                    [createLogicalOr(
+                        exportName,
+                        createAssignment(
+                            exportName,
+                            createObjectLiteral()
+                        )
+                    )]
+                ),
+                /*location*/ node
             );
+
+            setOriginalNode(enumStatement, node);
+            setNodeEmitFlags(enumStatement, emitFlags);
+            statements.push(enumStatement);
 
             if (isNamespaceExport(node)) {
                 addVarForEnumExportedFromNamespace(statements, node);
@@ -2527,11 +2580,12 @@ namespace ts {
                     : undefined,
                 [
                     createVariableDeclaration(
-                        getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true),
-                        /*initializer*/ undefined
+                        getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)
                     )
                 ]
             );
+
+            setOriginalNode(statement, /*original*/ node);
 
             // Adjust the source map emit to match the old emitter.
             if (node.kind === SyntaxKind.EnumDeclaration) {
@@ -2561,7 +2615,6 @@ namespace ts {
             //
             setCommentRange(statement, node);
             setNodeEmitFlags(statement, NodeEmitFlags.NoTrailingComments);
-            setOriginalNode(statement, /*original*/ node);
             statements.push(statement);
         }
 
@@ -2582,8 +2635,19 @@ namespace ts {
 
             const statements: Statement[] = [];
 
+            // We request to be advised when the printer is about to print this node. This allows
+            // us to set up the correct state for later substitutions.
+            let emitFlags = NodeEmitFlags.AdviseOnEmitNode;
+
+            // If needed, we should emit a variable declaration for the module. If we emit
+            // a leading variable declaration, we should not emit leading comments for the
+            // module body.
             if (shouldEmitVarForModuleDeclaration(node)) {
                 addVarForEnumOrModuleDeclaration(statements, node);
+                // We should still emit the comments if we are emitting a system module.
+                if (moduleKind !== ModuleKind.System || currentScope !== currentSourceFile) {
+                    emitFlags |= NodeEmitFlags.NoLeadingComments;
+                }
             }
 
             // `parameterName` is the declaration name used inside of the namespace.
@@ -2617,27 +2681,25 @@ namespace ts {
             //  (function (x_1) {
             //      x_1.y = ...;
             //  })(x || (x = {}));
-            statements.push(
-                setNodeEmitFlags(
-                    setOriginalNode(
-                        createStatement(
-                            createCall(
-                                createFunctionExpression(
-                                    /*asteriskToken*/ undefined,
-                                    /*name*/ undefined,
-                                    [createParameter(parameterName)],
-                                    transformModuleBody(node, containerName)
-                                ),
-                                [moduleArg]
-                            ),
-                            /*location*/ node
-                        ),
-                        /*original*/ node
+            const moduleStatement = createStatement(
+                createCall(
+                    createFunctionExpression(
+                        /*asteriskToken*/ undefined,
+                        /*name*/ undefined,
+                        /*typeParameters*/ undefined,
+                        [createParameter(parameterName)],
+                        /*type*/ undefined,
+                        transformModuleBody(node, containerName)
                     ),
-                    NodeEmitFlags.AdviseOnEmitNode
-                )
+                    /*typeArguments*/ undefined,
+                    [moduleArg]
+                ),
+                /*location*/ node
             );
 
+            setOriginalNode(moduleStatement, node);
+            setNodeEmitFlags(moduleStatement, emitFlags);
+            statements.push(moduleStatement);
             return statements;
         }
 
@@ -2727,7 +2789,9 @@ namespace ts {
                 return undefined;
             }
 
-            const moduleReference = createExpressionFromEntityName(<EntityName>node.moduleReference, { flags: NodeEmitFlags.NoComments });
+            const moduleReference = createExpressionFromEntityName(<EntityName>node.moduleReference);
+            setNodeEmitFlags(moduleReference, NodeEmitFlags.NoComments | NodeEmitFlags.NoNestedComments);
+
             if (isNamedExternalModuleExport(node) || !isNamespaceExport(node)) {
                 //  export var ${name} = ${moduleReference};
                 //  var ${name} = ${moduleReference};
@@ -2737,6 +2801,7 @@ namespace ts {
                         createVariableDeclarationList([
                             createVariableDeclaration(
                                 node.name,
+                                /*type*/ undefined,
                                 moduleReference
                             )
                         ]),
@@ -2804,16 +2869,15 @@ namespace ts {
         }
 
         function addExportMemberAssignment(statements: Statement[], node: DeclarationStatement) {
-            statements.push(
-                createStatement(
-                    createAssignment(
-                        getExportName(node),
-                        getLocalName(node, /*noSourceMaps*/ true),
-                        /*location*/ createRange(node.name.pos, node.end)
-                    ),
-                    /*location*/ createRange(-1, node.end)
-                )
+            const expression = createAssignment(
+                getExportName(node),
+                getLocalName(node, /*noSourceMaps*/ true)
             );
+            setSourceMapRange(expression, createRange(node.name.pos, node.end));
+
+            const statement = createStatement(expression);
+            setSourceMapRange(statement, createRange(-1, node.end));
+            statements.push(statement);
         }
 
         function createNamespaceExport(exportName: Identifier, exportValue: Expression, location?: TextRange) {
@@ -2912,7 +2976,7 @@ namespace ts {
          */
         function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: NodeEmitFlags) {
             if (node.name) {
-                const name = getUniqueClone(node.name);
+                const name = getMutableClone(node.name);
                 emitFlags |= getNodeEmitFlags(node.name);
                 if (!allowSourceMaps) {
                     emitFlags |= NodeEmitFlags.NoSourceMap;
@@ -2930,19 +2994,6 @@ namespace ts {
             }
             else {
                 return getGeneratedNameForNode(node);
-            }
-        }
-
-        function getDeclarationNameExpression(node: DeclarationStatement) {
-            const name = getDeclarationName(node);
-            if (isNamespaceExport(node)) {
-                return getNamespaceMemberName(name);
-            }
-            else {
-                // We set the "ExportName" flag to indicate to any module transformer
-                // downstream that any `exports.` prefix should be added.
-                setNodeEmitFlags(name, getNodeEmitFlags(name) | NodeEmitFlags.ExportName);
-                return name;
             }
         }
 
@@ -3049,7 +3100,7 @@ namespace ts {
                     currentDecoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAliases[getOriginalNodeId(node)];
                 }
                 else if (node.kind === SyntaxKind.Identifier) {
-                    const declaration = resolver.getReferencedValueDeclaration(<Identifier>node)
+                    const declaration = resolver.getReferencedValueDeclaration(<Identifier>node);
                     if (declaration && isClassWithDecorators(declaration)) {
                         currentDecoratedClassAliases[getOriginalNodeId(declaration)] = decoratedClassAliases[getOriginalNodeId(declaration)];
                     }
@@ -3149,9 +3200,12 @@ namespace ts {
                     // behavior of class names in ES6.
                     const declaration = resolver.getReferencedValueDeclaration(node);
                     if (declaration) {
-                        const classAlias = currentDecoratedClassAliases[getNodeId(declaration)];
+                        const classAlias = currentDecoratedClassAliases[getOriginalNodeId(declaration)];
                         if (classAlias) {
-                            return getSynthesizedClone(classAlias, { sourceMapRange: node, commentRange: node });
+                            const clone = getSynthesizedClone(classAlias);
+                            setSourceMapRange(clone, node);
+                            setCommentRange(clone, node);
+                            return clone;
                         }
                     }
                 }
@@ -3189,6 +3243,7 @@ namespace ts {
                         : substituteElementAccessExpression(expression);
                     return createCall(
                         createPropertyAccess(argumentExpression, "call"),
+                        /*typeArguments*/ undefined,
                         [
                             createThis(),
                             ...node.arguments
@@ -3234,6 +3289,7 @@ namespace ts {
                 return createPropertyAccess(
                     createCall(
                         createIdentifier("_super"),
+                        /*typeArguments*/ undefined,
                         [argumentExpression]
                     ),
                     "value",
@@ -3243,6 +3299,7 @@ namespace ts {
             else {
                 return createCall(
                     createIdentifier("_super"),
+                    /*typeArguments*/ undefined,
                     [argumentExpression],
                     location
                 );

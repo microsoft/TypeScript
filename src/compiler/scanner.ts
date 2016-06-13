@@ -91,6 +91,7 @@ namespace ts {
         "let": SyntaxKind.LetKeyword,
         "module": SyntaxKind.ModuleKeyword,
         "namespace": SyntaxKind.NamespaceKeyword,
+        "never": SyntaxKind.NeverKeyword,
         "new": SyntaxKind.NewKeyword,
         "null": SyntaxKind.NullKeyword,
         "number": SyntaxKind.NumberKeyword,
@@ -433,7 +434,7 @@ namespace ts {
       }
 
       /* @internal */
-      export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
+      export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean, stopAtComments = false): number {
           if (positionIsSynthesized(pos)) {
               return pos;
           }
@@ -459,6 +460,9 @@ namespace ts {
                       pos++;
                       continue;
                   case CharacterCodes.slash:
+                      if (stopAtComments) {
+                          break;
+                      }
                       if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
                           pos += 2;
                           while (pos < text.length) {
@@ -580,20 +584,34 @@ namespace ts {
     }
 
     /**
-     * Extract comments from text prefixing the token closest following `pos`.
-     * The return value is an array containing a TextRange for each comment.
-     * Single-line comment ranges include the beginning '//' characters but not the ending line break.
-     * Multi - line comment ranges include the beginning '/* and ending '<asterisk>/' characters.
-     * The return value is undefined if no comments were found.
-     * @param trailing
-     * If false, whitespace is skipped until the first line break and comments between that location
-     * and the next token are returned.
-     * If true, comments occurring between the given position and the next line break are returned.
+     * Invokes a callback for each comment range following the provided position.
+     *
+     * Single-line comment ranges include the leading double-slash characters but not the ending
+     * line break. Multi-line comment ranges include the leading slash-asterisk and trailing
+     * asterisk-slash characters.
+     *
+     * @param reduce If true, accumulates the result of calling the callback in a fashion similar
+     *      to reduceLeft. If false, iteration stops when the callback returns a truthy value.
+     * @param text The source text to scan.
+     * @param pos The position at which to start scanning.
+     * @param trailing If false, whitespace is skipped until the first line break and comments
+     *      between that location and the next token are returned. If true, comments occurring
+     *      between the given position and the next line break are returned.
+     * @param cb The callback to execute as each comment range is encountered.
+     * @param state A state value to pass to each iteration of the callback.
+     * @param initial An initial value to pass when accumulating results (when "reduce" is true).
+     * @returns If "reduce" is true, the accumulated value. If "reduce" is false, the first truthy
+     *      return value of the callback.
      */
-    function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
-        let result: CommentRange[];
+    function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, trailing: boolean, cb: (pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial?: U): U {
+        let pendingPos: number;
+        let pendingEnd: number;
+        let pendingKind: SyntaxKind;
+        let pendingHasTrailingNewLine: boolean;
+        let hasPendingCommentRange = false;
         let collecting = trailing || pos === 0;
-        while (pos < text.length) {
+        let accumulator = initial;
+        scan: while (pos >= 0 && pos < text.length) {
             const ch = text.charCodeAt(pos);
             switch (ch) {
                 case CharacterCodes.carriageReturn:
@@ -603,12 +621,14 @@ namespace ts {
                 case CharacterCodes.lineFeed:
                     pos++;
                     if (trailing) {
-                        return result;
+                        break scan;
                     }
+
                     collecting = true;
-                    if (result && result.length) {
-                        lastOrUndefined(result).hasTrailingNewLine = true;
+                    if (hasPendingCommentRange) {
+                        pendingHasTrailingNewLine = true;
                     }
+
                     continue;
                 case CharacterCodes.tab:
                 case CharacterCodes.verticalTab:
@@ -643,37 +663,76 @@ namespace ts {
                         }
 
                         if (collecting) {
-                            if (!result) {
-                                result = [];
+                            if (hasPendingCommentRange) {
+                                accumulator = cb(pendingPos, pendingEnd, pendingKind, pendingHasTrailingNewLine, state, accumulator);
+                                if (!reduce && accumulator) {
+                                    // If we are not reducing and we have a truthy result, return it.
+                                    return accumulator;
+                                }
+
+                                hasPendingCommentRange = false;
                             }
 
-                            result.push({ pos: startPos, end: pos, hasTrailingNewLine, kind });
+                            pendingPos = startPos;
+                            pendingEnd = pos;
+                            pendingKind = kind;
+                            pendingHasTrailingNewLine = hasTrailingNewLine;
+                            hasPendingCommentRange = true;
                         }
+
                         continue;
                     }
-                    break;
+                    break scan;
                 default:
                     if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
-                        if (result && result.length && isLineBreak(ch)) {
-                            lastOrUndefined(result).hasTrailingNewLine = true;
+                        if (hasPendingCommentRange && isLineBreak(ch)) {
+                            pendingHasTrailingNewLine = true;
                         }
                         pos++;
                         continue;
                     }
-                    break;
+                    break scan;
             }
-            return result;
         }
 
-        return result;
+        if (hasPendingCommentRange) {
+            accumulator = cb(pendingPos, pendingEnd, pendingKind, pendingHasTrailingNewLine, state, accumulator);
+        }
+
+        return accumulator;
+    }
+
+    export function forEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: T) => U, state?: T) {
+        return iterateCommentRanges(/*reduce*/ false, text, pos, /*trailing*/ false, cb, state);
+    }
+
+    export function forEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: T) => U, state?: T) {
+        return iterateCommentRanges(/*reduce*/ false, text, pos, /*trailing*/ true, cb, state);
+    }
+
+    export function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U) {
+        return iterateCommentRanges(/*reduce*/ true, text, pos, /*trailing*/ false, cb, state, initial);
+    }
+
+    export function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U) {
+        return iterateCommentRanges(/*reduce*/ true, text, pos, /*trailing*/ true, cb, state, initial);
+    }
+
+    function appendCommentRange(pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: any, comments: CommentRange[]) {
+        if (!comments) {
+            comments = [];
+        }
+
+        comments.push({ pos, end, hasTrailingNewLine, kind });
+        return comments;
     }
 
     export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] {
-        return getCommentRanges(text, pos, /*trailing*/ false);
+        return reduceEachLeadingCommentRange(text, pos, appendCommentRange, undefined, undefined);
     }
 
     export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] {
-        return getCommentRanges(text, pos, /*trailing*/ true);
+        return reduceEachTrailingCommentRange(text, pos, appendCommentRange, undefined, undefined);
     }
 
     /** Optionally, get the shebang */

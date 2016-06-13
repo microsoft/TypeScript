@@ -28,6 +28,11 @@ namespace ts {
             type: "boolean",
         },
         {
+            name: "extendedDiagnostics",
+            type: "boolean",
+            experimental: true,
+        },
+        {
             name: "emitBOM",
             type: "boolean"
         },
@@ -36,6 +41,11 @@ namespace ts {
             shortName: "h",
             type: "boolean",
             description: Diagnostics.Print_this_message,
+        },
+        {
+            name: "help",
+            shortName: "?",
+            type: "boolean"
         },
         {
             name: "init",
@@ -140,10 +150,15 @@ namespace ts {
             type: "boolean",
         },
         {
+            name: "skipLibCheck",
+            type: "boolean",
+            description: Diagnostics.Skip_type_checking_of_declaration_files,
+        },
+        {
             name: "out",
             type: "string",
             isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
-                               // for correct behaviour, please use outFile
+            // for correct behaviour, please use outFile
             paramType: Diagnostics.FILE,
         },
         {
@@ -360,12 +375,6 @@ namespace ts {
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
         },
         {
-            name: "useLegacyEmitter",
-            type: "boolean",
-            experimental: true,
-            description: Diagnostics.Use_the_legacy_emitter_instead_of_the_transforming_emitter
-        },
-        {
             name: "listEmittedFiles",
             type: "boolean"
         },
@@ -381,6 +390,7 @@ namespace ts {
                     "es2015": "lib.es2015.d.ts",
                     "es7": "lib.es2016.d.ts",
                     "es2016": "lib.es2016.d.ts",
+                    "es2017": "lib.es2017.d.ts",
                     // Host only
                     "dom": "lib.dom.d.ts",
                     "webworker": "lib.webworker.d.ts",
@@ -395,7 +405,8 @@ namespace ts {
                     "es2015.reflect": "lib.es2015.reflect.d.ts",
                     "es2015.symbol": "lib.es2015.symbol.d.ts",
                     "es2015.symbol.wellknown": "lib.es2015.symbol.wellknown.d.ts",
-                    "es2016.array.include": "lib.es2016.array.include.d.ts"
+                    "es2016.array.include": "lib.es2016.array.include.d.ts",
+                    "es2017.object": "lib.es2017.object.d.ts"
                 },
             },
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
@@ -470,7 +481,7 @@ namespace ts {
 
     /* @internal */
     export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
-        const key = (value || "").trim().toLowerCase();
+        const key = trimString((value || "")).toLowerCase();
         const map = opt.type;
         if (hasProperty(map, key)) {
             return map[key];
@@ -482,7 +493,7 @@ namespace ts {
 
     /* @internal */
     export function parseListTypeOption(opt: CommandLineOptionOfListType, value: string, errors: Diagnostic[]): (string | number)[] {
-        const values = (value || "").trim().split(",");
+        const values = trimString((value || "")).split(",");
         switch (opt.element.type) {
             case "number":
                 return ts.map(values, parseInt);
@@ -607,7 +618,7 @@ namespace ts {
       * Read tsconfig.json file
       * @param fileName The path to the config file
       */
-    export function readConfigFile(fileName: string, readFile: (path: string) => string): { config?: any; error?: Diagnostic }  {
+    export function readConfigFile(fileName: string, readFile: (path: string) => string): { config?: any; error?: Diagnostic } {
         let text = "";
         try {
             text = readFile(fileName);
@@ -658,6 +669,9 @@ namespace ts {
         return output;
     }
 
+    // Skip over any minified JavaScript files (ending in ".min.js")
+    // Skip over dotted files and folders as well
+    const IgnoreFileNamePattern = /(\.min\.js$)|([\\/]\.[\w.])/;
     /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
@@ -670,6 +684,7 @@ namespace ts {
         const compilerOptions: CompilerOptions = convertCompilerOptionsFromJsonWorker(json["compilerOptions"], basePath, errors, configFileName);
         const options = extend(existingOptions, compilerOptions);
         const typingOptions: TypingOptions = convertTypingOptionsFromJsonWorker(json["typingOptions"], basePath, errors, configFileName);
+
         options.configFilePath = configFileName;
 
         const fileNames = getFileNames(errors);
@@ -678,6 +693,7 @@ namespace ts {
             options,
             fileNames,
             typingOptions,
+            raw: json,
             errors
         };
 
@@ -700,11 +716,11 @@ namespace ts {
                 }
                 else {
                     // by default exclude node_modules, and any specificied output directory
-                    exclude = ["node_modules"];
-                    const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
-                    if (outDir) {
-                        exclude.push(outDir);
-                    }
+                    exclude = ["node_modules", "bower_components", "jspm_packages"];
+                }
+                const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
+                if (outDir) {
+                    exclude.push(outDir);
                 }
                 exclude = map(exclude, normalizeSlashes);
 
@@ -721,8 +737,7 @@ namespace ts {
                             continue;
                         }
 
-                        // Skip over any minified JavaScript files (ending in ".min.js")
-                        if (/\.min\.js$/.test(fileName)) {
+                        if (IgnoreFileNamePattern.test(fileName)) {
                             continue;
                         }
 
@@ -781,7 +796,7 @@ namespace ts {
         defaultOptions: CompilerOptions | TypingOptions, diagnosticMessage: DiagnosticMessage, errors: Diagnostic[]) {
 
         if (!jsonOptions) {
-            return ;
+            return;
         }
 
         const optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
@@ -834,5 +849,9 @@ namespace ts {
 
     function convertJsonOptionOfListType(option: CommandLineOptionOfListType, values: any[], basePath: string, errors: Diagnostic[]): any[] {
         return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => !!v);
+    }
+
+    function trimString(s: string) {
+        return typeof s.trim === "function" ? s.trim() : s.replace(/^[\s]+|[\s]+$/g, "");
     }
 }

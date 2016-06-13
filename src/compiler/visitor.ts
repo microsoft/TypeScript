@@ -1,5 +1,6 @@
 /// <reference path="checker.ts" />
 /// <reference path="factory.ts" />
+/// <reference path="utilities.ts" />
 
 /* @internal */
 namespace ts {
@@ -606,10 +607,392 @@ namespace ts {
      * @param context A lexical environment context for the visitor.
      */
     export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): T;
-    export function visitEachChild<T extends Node>(node: T & Map<any>, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): T {
+    export function visitEachChild(node: Node, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): Node {
         if (node === undefined) {
             return undefined;
         }
+
+        const kind = node.kind;
+        // No need to visit nodes with no children.
+        if ((kind > SyntaxKind.FirstToken && kind <= SyntaxKind.LastToken)) {
+            return node;
+        }
+
+        // Special cases for frequent visitors to improve performance.
+        let visited: Node;
+        switch (kind) {
+            case SyntaxKind.ThisType:
+            case SyntaxKind.StringLiteralType:
+            case SyntaxKind.SemicolonClassElement:
+            case SyntaxKind.EmptyStatement:
+            case SyntaxKind.OmittedExpression:
+            case SyntaxKind.DebuggerStatement:
+                // No need to visit nodes with no children.
+                return node;
+
+            // Signature elements
+
+            case SyntaxKind.Parameter:
+                visited = visitEachChildOfParameter(<ParameterDeclaration>node, visitor);
+                break;
+
+            // Type member
+
+            case SyntaxKind.MethodDeclaration:
+                visited = visitEachChildOfMethod(<MethodDeclaration>node, visitor, context);
+                break;
+
+            case SyntaxKind.Constructor:
+                visited = visitEachChildOfConstructor(<ConstructorDeclaration>node, visitor, context);
+                break;
+
+            case SyntaxKind.GetAccessor:
+                visited = visitEachChildOfGetAccessor(<GetAccessorDeclaration>node, visitor, context);
+                break;
+
+            case SyntaxKind.SetAccessor:
+                visited = visitEachChildOfSetAccessor(<SetAccessorDeclaration>node, visitor, context);
+                break;
+
+            // Expression
+
+            case SyntaxKind.PropertyAccessExpression:
+                visited = visitEachChildOfPropertyAccess(<PropertyAccessExpression>node, visitor);
+                break;
+
+            case SyntaxKind.CallExpression:
+                visited = visitEachChildOfCall(<CallExpression>node, visitor);
+                break;
+
+            case SyntaxKind.NewExpression:
+                visited = visitEachChildOfNew(<NewExpression>node, visitor);
+                break;
+
+            case SyntaxKind.BinaryExpression:
+                visited = visitEachChildOfBinary(<BinaryExpression>node, visitor);
+                break;
+
+            case SyntaxKind.FunctionExpression:
+                visited = visitEachChildOfFunctionExpression(<FunctionExpression>node, visitor, context);
+                break;
+
+            case SyntaxKind.ArrowFunction:
+                visited = visitEachChildOfArrowFunction(<ArrowFunction>node, visitor, context);
+                break;
+
+            // Element
+
+            case SyntaxKind.Block:
+                visited = visitEachChildOfBlock(<Block>node, visitor);
+                break;
+
+            case SyntaxKind.VariableStatement:
+                visited = visitEachChildOfVaribleStatement(<VariableStatement>node, visitor);
+                break;
+
+            case SyntaxKind.ExpressionStatement:
+                visited = visitEachChildOfStatement(<ExpressionStatement>node, visitor);
+                break;
+
+            case SyntaxKind.IfStatement:
+                visited = visitEachChildOfIf(<IfStatement>node, visitor);
+                break;
+
+            case SyntaxKind.ReturnStatement:
+                visited = visitEachChildOfReturn(<ReturnStatement>node, visitor);
+                break;
+
+            case SyntaxKind.VariableDeclaration:
+                visited = visitEachChildOfVariableDeclaration(<VariableDeclaration>node, visitor);
+                break;
+
+            case SyntaxKind.VariableDeclarationList:
+                visited = visitEachChildOfVariableDeclarationList(<VariableDeclarationList>node, visitor);
+                break;
+
+            case SyntaxKind.FunctionDeclaration:
+                visited = visitEachChildOfFunctionDeclaration(<FunctionDeclaration>node, visitor, context);
+                break;
+
+            // Top-level nodes
+
+            case SyntaxKind.SourceFile:
+                visited = visitEachChildOfSourceFile(<SourceFile>node, visitor, context);
+                break;
+
+            default:
+                visited = visitEachChildOfNode(node, visitor, context);
+                break;
+        }
+
+        if (visited !== node) {
+            aggregateTransformFlags(visited);
+        }
+
+        return visited;
+    }
+
+    function visitEachChildOfSourceFile(node: SourceFile, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment) {
+        context.startLexicalEnvironment();
+        const statements = visitNodes(node.statements, visitor, isStatement);
+        const declarations = context.endLexicalEnvironment();
+        return updateSourceFileNode(node,
+            createNodeArray(concatenate(statements, declarations), statements)
+        );
+    }
+
+    function visitEachChildOfCall(node: CallExpression, visitor: (node: Node) => VisitResult<Node>) {
+        return updateCall(node,
+            visitNode(node.expression, visitor, isExpression),
+            visitNodes(node.typeArguments, visitor, isTypeNode),
+            visitNodes(node.arguments, visitor, isExpression)
+        );
+    }
+
+    function visitEachChildOfParameter(node: ParameterDeclaration, visitor: (node: Node) => VisitResult<Node>) {
+        return updateParameterDeclaration(node,
+            visitNodes(node.decorators, visitor, isDecorator),
+            visitNodes(node.modifiers, visitor, isModifier),
+            node.dotDotDotToken,
+            visitNode(node.name, visitor, isBindingName),
+            node.questionToken,
+            visitNode(node.type, visitor, isTypeNode, /*optional*/ true),
+            visitNode(node.initializer, visitor, isExpression, /*optional*/ true)
+        );
+    }
+
+    function visitEachChildOfStatement(node: ExpressionStatement, visitor: (node: Node) => VisitResult<Node>) {
+        return updateStatement(node,
+            visitNode(node.expression, visitor, isExpression)
+        );
+    }
+
+    function visitEachChildOfVaribleStatement(node: VariableStatement, visitor: (node: Node) => VisitResult<Node>) {
+        return updateVariableStatement(node,
+            visitNodes(node.modifiers, visitor, isModifier),
+            visitNode(node.declarationList, visitor, isVariableDeclarationList)
+        );
+    }
+
+    function visitEachChildOfVariableDeclarationList(node: VariableDeclarationList, visitor: (node: Node) => VisitResult<Node>) {
+        return updateVariableDeclarationList(node,
+            visitNodes(node.declarations, visitor, isVariableDeclaration)
+        );
+    }
+
+    function visitEachChildOfVariableDeclaration(node: VariableDeclaration, visitor: (node: Node) => VisitResult<Node>) {
+        return updateVariableDeclaration(node,
+            visitNode(node.name, visitor, isBindingName),
+            visitNode(node.type, visitor, isTypeNode, /*optional*/ true),
+            visitNode(node.initializer, visitor, isExpression, /*optional*/ true)
+        );
+    }
+
+    function visitEachChildOfConstructor(node: ConstructorDeclaration, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment) {
+        const decorators = visitNodes(node.decorators, visitor, isDecorator);
+        const modifiers = visitNodes(node.modifiers, visitor, isModifier);
+        context.startLexicalEnvironment();
+        const parameters = visitNodes(node.parameters, visitor, isParameter);
+        const body = visitNode(node.body, visitor, isFunctionBody, /*optional*/ true);
+        const declarations = context.endLexicalEnvironment();
+        return updateConstructor(node,
+            decorators,
+            modifiers,
+            parameters,
+            body ? updateBlock(body, createNodeArray(concatenate(body.statements, declarations), body.statements)) : undefined
+        );
+    }
+
+    function visitEachChildOfMethod(node: MethodDeclaration, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment) {
+        const decorators = visitNodes(node.decorators, visitor, isDecorator);
+        const modifiers = visitNodes(node.modifiers, visitor, isModifier);
+        const name = visitNode(node.name, visitor, isPropertyName);
+        const typeParameters = visitNodes(node.typeParameters, visitor, isTypeParameter);
+        context.startLexicalEnvironment();
+        const parameters = visitNodes(node.parameters, visitor, isParameter);
+        const type = visitNode(node.type, visitor, isTypeNode, /*optional*/ true);
+        const body = visitNode(node.body, visitor, isFunctionBody, /*optional*/ true);
+        const declarations = context.endLexicalEnvironment();
+        return updateMethod(node,
+            decorators,
+            modifiers,
+            node.asteriskToken,
+            name,
+            typeParameters,
+            parameters,
+            type,
+            body ? updateBlock(body, createNodeArray(concatenate(body.statements, declarations), body.statements)) : undefined
+        );
+    }
+
+    function visitEachChildOfGetAccessor(node: GetAccessorDeclaration, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment) {
+        const decorators = visitNodes(node.decorators, visitor, isDecorator);
+        const modifiers = visitNodes(node.modifiers, visitor, isModifier);
+        const name = visitNode(node.name, visitor, isPropertyName);
+        context.startLexicalEnvironment();
+        const parameters = visitNodes(node.parameters, visitor, isParameter);
+        const type = visitNode(node.type, visitor, isTypeNode, /*optional*/ true);
+        const body = visitNode(node.body, visitor, isFunctionBody, /*optional*/ true);
+        const declarations = context.endLexicalEnvironment();
+        return updateGetAccessor(node,
+            decorators,
+            modifiers,
+            name,
+            parameters,
+            type,
+            body ? updateBlock(body, createNodeArray(concatenate(body.statements, declarations), body.statements)) : undefined
+        );
+    }
+
+    function visitEachChildOfSetAccessor(node: SetAccessorDeclaration, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment) {
+        const decorators = visitNodes(node.decorators, visitor, isDecorator);
+        const modifiers = visitNodes(node.modifiers, visitor, isModifier);
+        const name = visitNode(node.name, visitor, isPropertyName);
+        context.startLexicalEnvironment();
+        const parameters = visitNodes(node.parameters, visitor, isParameter);
+        const body = visitNode(node.body, visitor, isFunctionBody, /*optional*/ true);
+        const declarations = context.endLexicalEnvironment();
+        return updateSetAccessor(node,
+            decorators,
+            modifiers,
+            name,
+            parameters,
+            body ? updateBlock(body, createNodeArray(concatenate(body.statements, declarations), body.statements)) : undefined
+        );
+    }
+
+    function visitEachChildOfBlock(node: Block, visitor: (node: Node) => VisitResult<Node>) {
+        return updateBlock(node,
+            visitNodes(node.statements, visitor, isStatement)
+        );
+    }
+
+    function visitEachChildOfPropertyAccess(node: PropertyAccessExpression, visitor: (node: Node) => VisitResult<Node>) {
+        return updatePropertyAccess(node,
+            visitNode(node.expression, visitor, isExpression),
+            visitNode(node.name, visitor, isIdentifier)
+        );
+    }
+
+    function visitEachChildOfIf(node: IfStatement, visitor: (node: Node) => VisitResult<Node>) {
+        return updateIf(node,
+            visitNode(node.expression, visitor, isExpression),
+            visitNode(node.thenStatement, visitor, isStatement, /*optional*/ false, liftToBlock),
+            visitNode(node.elseStatement, visitor, isStatement, /*optional*/ true, liftToBlock)
+        );
+    }
+
+    function visitEachChildOfBinary(node: BinaryExpression, visitor: (node: Node) => VisitResult<Node>) {
+        return updateBinary(node,
+            visitNode(node.left, visitor, isExpression),
+            visitNode(node.right, visitor, isExpression)
+        );
+    }
+
+    function visitEachChildOfReturn(node: ReturnStatement, visitor: (node: Node) => VisitResult<Node>) {
+        return updateReturn(node,
+            visitNode(node.expression, visitor, isExpression, /*optional*/ true)
+        );
+    }
+
+    function visitEachChildOfFunctionDeclaration(node: FunctionDeclaration, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment) {
+        const decorators = visitNodes(node.decorators, visitor, isDecorator);
+        const modifiers = visitNodes(node.modifiers, visitor, isModifier);
+        const name = visitNode(node.name, visitor, isIdentifier, /*optional*/ true);
+        const typeParameters = visitNodes(node.typeParameters, visitor, isTypeParameter);
+        context.startLexicalEnvironment();
+        const parameters = visitNodes(node.parameters, visitor, isParameter);
+        const type = visitNode(node.type, visitor, isTypeNode, /*optional*/ true);
+        const body = visitNode(node.body, visitor, isFunctionBody, /*optional*/ true);
+        const declarations = context.endLexicalEnvironment();
+        return updateFunctionDeclaration(node,
+            decorators,
+            modifiers,
+            name,
+            typeParameters,
+            parameters,
+            type,
+            body ? updateBlock(body, createNodeArray(concatenate(body.statements, declarations), body.statements)) : undefined
+        );
+    }
+
+    function visitEachChildOfFunctionExpression(node: FunctionExpression, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment) {
+        const name = visitNode(node.name, visitor, isIdentifier, /*optional*/ true);
+        const typeParameters = visitNodes(node.typeParameters, visitor, isTypeParameter);
+        context.startLexicalEnvironment();
+        const parameters = visitNodes(node.parameters, visitor, isParameter);
+        const type = visitNode(node.type, visitor, isTypeNode, /*optional*/ true);
+        const body = visitNode(node.body, visitor, isFunctionBody, /*optional*/ true);
+        const declarations = context.endLexicalEnvironment();
+        return updateFunctionExpression(node,
+            name,
+            typeParameters,
+            parameters,
+            type,
+            body ? updateBlock(body, createNodeArray(concatenate(body.statements, declarations), body.statements)) : undefined
+        );
+    }
+
+    function visitEachChildOfArrowFunction(node: ArrowFunction, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment) {
+        const modifiers = visitNodes(node.modifiers, visitor, isModifier);
+        const typeParameters = visitNodes(node.typeParameters, visitor, isTypeParameter);
+        context.startLexicalEnvironment();
+        const parameters = visitNodes(node.parameters, visitor, isParameter);
+        const type = visitNode(node.type, visitor, isTypeNode, /*optional*/ true);
+        let body = visitNode(node.body, visitor, isConciseBody, /*optional*/ true);
+        const declarations = context.endLexicalEnvironment();
+        if (declarations && declarations.length) {
+            const statements: Statement[] = [];
+            let statementsLocation: TextRange;
+            let multiLine = false;
+            if (isBlock(body)) {
+                addRange(statements, body.statements);
+                statementsLocation = body.statements;
+                multiLine = body.multiLine;
+            }
+            else {
+                statements.push(createReturn(body, /*location*/ body));
+                statementsLocation = body;
+                multiLine = true;
+            }
+
+            addRange(statements, declarations);
+            body = createBlock(
+                createNodeArray(statements, statementsLocation),
+                /*location*/ body,
+                multiLine
+            );
+        }
+
+        return updateArrowFunction(node,
+            modifiers,
+            typeParameters,
+            parameters,
+            type,
+            body
+        );
+    }
+
+    function visitEachChildOfNew(node: NewExpression, visitor: (node: Node) => VisitResult<Node>) {
+        return updateNew(node,
+            visitNode(node.expression, visitor, isExpression),
+            visitNodes(node.typeArguments, visitor, isTypeNode),
+            visitNodes(node.arguments, visitor, isExpression)
+        );
+    }
+
+    /**
+     * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
+     *
+     * @param node The Node whose children will be visited.
+     * @param visitor The callback used to visit each child.
+     * @param context A lexical environment context for the visitor.
+     */
+    function visitEachChildOfNode<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): T;
+    function visitEachChildOfNode<T extends Node>(node: T & Map<any>, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): T {
+        // const markName = `visitEachChild-${formatSyntaxKind(node.kind)}`;
+        // const measureName = `visitEachChildTime-${formatSyntaxKind(node.kind)}`;
+        // performance.mark(markName);
 
         let updated: T & Map<any>;
 
@@ -625,6 +1008,8 @@ namespace ts {
                 const value = <Node | NodeArray<Node>>node[edge.name];
                 if (value !== undefined) {
                     let visited: Node | NodeArray<Node>;
+                    // performance.measure(measureName, markName);
+
                     if (isArray(value)) {
                         const visitedArray = visitNodesWorker(value, visitor, edge.test, edge.parenthesize, node, 0, value.length);
                         visited = visitedArray;
@@ -633,6 +1018,7 @@ namespace ts {
                         visited = visitNodeWorker(<Node>value, visitor, edge.test, edge.optional, edge.lift, edge.parenthesize, node);
                     }
 
+                    // performance.mark(markName);
                     if (updated !== undefined || visited !== value) {
                         if (updated === undefined) {
                             updated = getMutableClone(node);
@@ -658,10 +1044,10 @@ namespace ts {
         }
 
         if (updated !== node) {
-            aggregateTransformFlags(updated);
-            updated.original = node;
+            updateNode(updated, node);
         }
 
+        // performance.measure(measureName, markName);
         return updated;
     }
 
@@ -893,7 +1279,7 @@ namespace ts {
             return TransformFlags.None;
         }
         else if (node.transformFlags & TransformFlags.HasComputedFlags) {
-            return node.transformFlags & ~node.excludeTransformFlags;
+            return node.transformFlags & ~getTransformFlagsSubtreeExclusions(node.kind);
         }
         else {
             const subtreeFlags = aggregateTransformFlagsForSubtree(node);
@@ -921,6 +1307,66 @@ namespace ts {
      */
     function aggregateTransformFlagsForChildNode(transformFlags: TransformFlags, child: Node): TransformFlags {
         return transformFlags | aggregateTransformFlagsForNode(child);
+    }
+
+    /**
+     * Gets the transform flags to exclude when unioning the transform flags of a subtree.
+     *
+     * NOTE: This needs to be kept up-to-date with the exclusions used in `computeTransformFlagsForNode`.
+     *       For performance reasons, `computeTransformFlagsForNode` uses local constant values rather
+     *       than calling this function.
+     */
+    function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
+        if (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode) {
+            return TransformFlags.TypeExcludes;
+        }
+
+        switch (kind) {
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.NewExpression:
+            case SyntaxKind.ArrayLiteralExpression:
+                return TransformFlags.ArrayLiteralOrCallOrNewExcludes;
+            case SyntaxKind.ModuleDeclaration:
+                return TransformFlags.ModuleExcludes;
+            case SyntaxKind.Parameter:
+                return TransformFlags.ParameterExcludes;
+            case SyntaxKind.ArrowFunction:
+                return TransformFlags.ArrowFunctionExcludes;
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.FunctionDeclaration:
+                return TransformFlags.FunctionExcludes;
+            case SyntaxKind.VariableDeclarationList:
+                return TransformFlags.VariableDeclarationListExcludes;
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+                return TransformFlags.ClassExcludes;
+            case SyntaxKind.Constructor:
+                return TransformFlags.ConstructorExcludes;
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return TransformFlags.MethodOrAccessorExcludes;
+            case SyntaxKind.AnyKeyword:
+            case SyntaxKind.NumberKeyword:
+            case SyntaxKind.NeverKeyword:
+            case SyntaxKind.StringKeyword:
+            case SyntaxKind.BooleanKeyword:
+            case SyntaxKind.SymbolKeyword:
+            case SyntaxKind.VoidKeyword:
+            case SyntaxKind.TypeParameter:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.IndexSignature:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                return TransformFlags.TypeExcludes;
+            case SyntaxKind.ObjectLiteralExpression:
+                return TransformFlags.ObjectLiteralExcludes;
+            default:
+                return TransformFlags.NodeExcludes;
+        }
     }
 
     export namespace Debug {

@@ -1,11 +1,17 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap2_ES5.ts ===
 var v = {
->v : { ["hello"](): void; }
->{    ["hello"]() {        debugger;    }} : { ["hello"](): void; }
+>v : { ["hello"](): void; readonly ["goodbye"]: number; }
+>{    ["hello"]() {        debugger;	},    get ["goodbye"]() {		return 0;	}} : { ["hello"](): void; readonly ["goodbye"]: number; }
 
     ["hello"]() {
 >"hello" : string
 
         debugger;
-    }
+	},
+    get ["goodbye"]() {
+>"goodbye" : string
+
+		return 0;
+>0 : number
+	}
 }

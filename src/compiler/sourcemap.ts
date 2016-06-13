@@ -170,6 +170,20 @@ namespace ts {
         getSourceMappingURL(): string;
     }
 
+    export function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
+        const compilerOptions = host.getCompilerOptions();
+        if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
+            if (compilerOptions.extendedDiagnostics) {
+                return createSourceMapWriterWithExtendedDiagnostics(host, writer);
+            }
+
+            return createSourceMapWriterWorker(host, writer);
+        }
+        else {
+            return getNullSourceMapWriter();
+        }
+    }
+
     let nullSourceMapWriter: SourceMapWriter;
 
     export function getNullSourceMapWriter(): SourceMapWriter {
@@ -182,8 +196,8 @@ namespace ts {
                 emitPos(pos: number): void { },
                 emitStart(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void { },
                 emitEnd(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void { },
-                emitTokenStart(token: SyntaxKind, pos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind, pos: number) => TextRange): number { return -1; },
-                emitTokenEnd(token: SyntaxKind, end: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind, pos: number) => TextRange): number { return -1; },
+                emitTokenStart(token: SyntaxKind, pos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number { return -1; },
+                emitTokenEnd(token: SyntaxKind, end: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number { return -1; },
                 changeEmitSourcePos(): void { },
                 stopOverridingSpan(): void { },
                 getText(): string { return undefined; },
@@ -203,7 +217,7 @@ namespace ts {
         sourceIndex: 0
     };
 
-    export function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
+    function createSourceMapWriterWorker(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
         const compilerOptions = host.getCompilerOptions();
         let currentSourceFile: SourceFile;
         let currentSourceText: string;
@@ -494,10 +508,6 @@ namespace ts {
             return skipTrivia(currentSourceText, rangeHasDecorators ? (range as Node).decorators.end : range.pos);
         }
 
-        function getStartPos(range: TextRange) {
-            return skipTrivia(currentSourceText, range.pos);
-        }
-
         /**
          * Emits a mapping for the start of a range.
          *
@@ -687,7 +697,7 @@ namespace ts {
          */
         function setSourceFile(sourceFile: SourceFile) {
             currentSourceFile = sourceFile;
-            currentSourceText = sourceFile.text;
+            currentSourceText = currentSourceFile.text;
 
             // Add the file to tsFilePaths
             // If sourceroot option: Use the relative path corresponding to the common directory path
@@ -706,10 +716,10 @@ namespace ts {
                 sourceMapData.sourceMapSources.push(source);
 
                 // The one that can be used from program to get the actual source file
-                sourceMapData.inputSourceFileNames.push(sourceFile.fileName);
+                sourceMapData.inputSourceFileNames.push(currentSourceFile.fileName);
 
                 if (compilerOptions.inlineSources) {
-                    sourceMapData.sourceMapSourcesContent.push(sourceFile.text);
+                    sourceMapData.sourceMapSourcesContent.push(currentSourceFile.text);
                 }
             }
         }
@@ -744,6 +754,61 @@ namespace ts {
                 return sourceMapData.jsSourceMappingURL;
             }
         }
+    }
+
+    function createSourceMapWriterWithExtendedDiagnostics(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
+        const {
+            initialize,
+            reset,
+            getSourceMapData,
+            setSourceFile,
+            emitPos,
+            emitStart,
+            emitEnd,
+            emitTokenStart,
+            emitTokenEnd,
+            changeEmitSourcePos,
+            stopOverridingSpan,
+            getText,
+            getSourceMappingURL,
+        } = createSourceMapWriterWorker(host, writer);
+        return {
+            initialize,
+            reset,
+            getSourceMapData,
+            setSourceFile,
+            emitPos(pos: number): void {
+                const sourcemapStart = performance.mark();
+                emitPos(pos);
+                performance.measure("sourceMapTime", sourcemapStart);
+            },
+            emitStart(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void {
+                const sourcemapStart = performance.mark();
+                emitStart(range, contextNode, ignoreNodeCallback, ignoreChildrenCallback, getTextRangeCallback);
+                performance.measure("sourceMapTime", sourcemapStart);
+            },
+            emitEnd(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void {
+                const sourcemapStart = performance.mark();
+                emitEnd(range, contextNode, ignoreNodeCallback, ignoreChildrenCallback, getTextRangeCallback);
+                performance.measure("sourceMapTime", sourcemapStart);
+            },
+            emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
+                const sourcemapStart = performance.mark();
+                tokenStartPos = emitTokenStart(token, tokenStartPos, contextNode, ignoreTokenCallback, getTokenTextRangeCallback);
+                performance.measure("sourceMapTime", sourcemapStart);
+                return tokenStartPos;
+            },
+            emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
+                const sourcemapStart = performance.mark();
+                tokenEndPos = emitTokenEnd(token, tokenEndPos, contextNode, ignoreTokenCallback, getTokenTextRangeCallback);
+                performance.measure("sourceMapTime", sourcemapStart);
+                return tokenEndPos;
+            },
+            changeEmitSourcePos,
+            stopOverridingSpan,
+            getText,
+            getSourceMappingURL,
+        };
     }
 
     const base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";

@@ -1,9 +1,7 @@
 tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicates02.ts(9,10): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
-tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicates02.ts(10,19): error TS2352: Type '{ m(): this is Foo; }' cannot be converted to type 'Foo'.
-  Property 'a' is missing in type '{ m(): this is Foo; }'.
 
 
-==== tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicates02.ts (2 errors) ====
+==== tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicates02.ts (1 errors) ====
     
     export interface Foo {
         a: string;
@@ -16,9 +14,6 @@ tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredic
              ~~~~
 !!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
             let dis = this as Foo;
-                      ~~~~~~~~~~~
-!!! error TS2352: Type '{ m(): this is Foo; }' cannot be converted to type 'Foo'.
-!!! error TS2352:   Property 'a' is missing in type '{ m(): this is Foo; }'.
             return dis.a != null && dis.b != null && dis.c != null;
         }
     }

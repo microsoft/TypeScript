@@ -3,27 +3,17 @@
 
 /* @internal */
 namespace ts {
-    export let bindTime = 0;
-
     export const enum ModuleInstanceState {
         NonInstantiated = 0,
         Instantiated = 1,
         ConstEnumOnly = 2
     }
 
-    const enum Reachability {
-        Uninitialized       = 1 << 0,
-        Reachable           = 1 << 1,
-        Unreachable         = 1 << 2,
-        ReportedUnreachable = 1 << 3
-    }
-
-    function or(state1: Reachability, state2: Reachability): Reachability {
-        return (state1 | state2) & Reachability.Reachable
-            ? Reachability.Reachable
-            : (state1 & state2) & Reachability.ReportedUnreachable
-                ? Reachability.ReportedUnreachable
-                : Reachability.Unreachable;
+    interface ActiveLabel {
+        name: string;
+        breakTarget: FlowLabel;
+        continueTarget: FlowLabel;
+        referenced: boolean;
     }
 
     export function getModuleInstanceState(node: Node): ModuleInstanceState {
@@ -85,20 +75,22 @@ namespace ts {
         //      Blocks (when not parented by functions), Catch clauses, For/For-in/For-of statements...
         IsBlockScopedContainer = 1 << 1,
 
-        HasLocals = 1 << 2,
+        // The current node is the container of a control flow path. The current control flow should
+        // be saved and restored, and a new control flow initialized within the container.
+        IsControlFlowContainer = 1 << 2,
 
-        // If the current node is a container that also container that also contains locals.  Examples:
-        //
-        //      Functions, Methods, Modules, Source-files.
-        IsContainerWithLocals = IsContainer | HasLocals
+        IsFunctionLike = 1 << 3,
+        IsFunctionExpression = 1 << 4,
+        HasLocals = 1 << 5,
+        IsInterface = 1 << 6,
     }
 
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
-        const start = new Date().getTime();
+        const bindStart = performance.mark();
         binder(file, options);
-        bindTime += new Date().getTime() - start;
+        performance.measure("bindTime", bindStart);
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
@@ -111,19 +103,19 @@ namespace ts {
         let lastContainer: Node;
         let seenThisKeyword: boolean;
 
-        // state used by reachability checks
+        // state used by control flow analysis
+        let currentFlow: FlowNode;
+        let currentBreakTarget: FlowLabel;
+        let currentContinueTarget: FlowLabel;
+        let currentReturnTarget: FlowLabel;
+        let currentTrueTarget: FlowLabel;
+        let currentFalseTarget: FlowLabel;
+        let preSwitchCaseFlow: FlowNode;
+        let activeLabels: ActiveLabel[];
         let hasExplicitReturn: boolean;
-        let currentReachabilityState: Reachability;
-        let labelStack: Reachability[];
-        let labelIndexMap: Map<number>;
-        let implicitLabels: number[];
 
         // state used for emit helpers
-        let hasClassExtends: boolean;
-        let hasAsyncFunctions: boolean;
-        let hasDecorators: boolean;
-        let hasParameterDecorators: boolean;
-        let hasJsxSpreadAttribute: boolean;
+        let emitFlags: NodeFlags;
 
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
@@ -133,6 +125,9 @@ namespace ts {
         let symbolCount = 0;
         let Symbol: { new (flags: SymbolFlags, name: string): Symbol };
         let classifiableNames: Map<string>;
+
+        const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
+        const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
 
         // state used to aggregate transform flags during bind.
         let subtreeTransformFlags: TransformFlags = TransformFlags.None;
@@ -144,6 +139,7 @@ namespace ts {
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = !!file.externalModuleIndicator;
             classifiableNames = {};
+            symbolCount = 0;
             skipTransformFlagAggregation = isDeclarationFile(file);
 
             Symbol = objectAllocator.getSymbolConstructor();
@@ -162,16 +158,16 @@ namespace ts {
             blockScopeContainer = undefined;
             lastContainer = undefined;
             seenThisKeyword = false;
+            currentFlow = undefined;
+            currentBreakTarget = undefined;
+            currentContinueTarget = undefined;
+            currentReturnTarget = undefined;
+            currentTrueTarget = undefined;
+            currentFalseTarget = undefined;
+            activeLabels = undefined;
             hasExplicitReturn = false;
-            labelStack = undefined;
-            labelIndexMap = undefined;
-            implicitLabels = undefined;
-            hasClassExtends = false;
-            hasAsyncFunctions = false;
-            hasDecorators = false;
-            hasParameterDecorators = false;
+            emitFlags = NodeFlags.None;
             subtreeTransformFlags = TransformFlags.None;
-            hasJsxSpreadAttribute = false;
         }
 
         return bindSourceFile;
@@ -271,6 +267,18 @@ namespace ts {
                     let functionType = <JSDocFunctionType>node.parent;
                     let index = indexOf(functionType.parameters, node);
                     return "p" + index;
+                case SyntaxKind.JSDocTypedefTag:
+                    const parentNode = node.parent && node.parent.parent;
+                    let nameFromParentNode: string;
+                    if (parentNode && parentNode.kind === SyntaxKind.VariableStatement) {
+                        if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
+                            const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
+                            if (nameIdentifier.kind === SyntaxKind.Identifier) {
+                                nameFromParentNode = (<Identifier>nameIdentifier).text;
+                            }
+                        }
+                    }
+                    return nameFromParentNode;
             }
         }
 
@@ -404,16 +412,12 @@ namespace ts {
         // All container nodes are kept on a linked list in declaration order. This list is used by
         // the getLocalNameOfContainer function in the type checker to validate that the local name
         // used for a container is unique.
-        function bindChildren(node: Node) {
+        function bindContainer(node: Node, containerFlags: ContainerFlags) {
             // Before we recurse into a node's children, we first save the existing parent, container
             // and block-container.  Then after we pop out of processing the children, we restore
             // these saved values.
-            const saveParent = parent;
             const saveContainer = container;
             const savedBlockScopeContainer = blockScopeContainer;
-
-            // This node will now be set as the parent of all of its children as we recurse into them.
-            parent = node;
 
             // Depending on what kind of node this is, we may have to adjust the current container
             // and block-container.   If the current node is a container, then it is automatically
@@ -432,113 +436,107 @@ namespace ts {
             // reusing a node from a previous compilation, that node may have had 'locals' created
             // for it.  We must clear this so we don't accidentally move any stale data forward from
             // a previous compilation.
-            const containerFlags = getContainerFlags(node);
             if (containerFlags & ContainerFlags.IsContainer) {
                 container = blockScopeContainer = node;
-
                 if (containerFlags & ContainerFlags.HasLocals) {
                     container.locals = {};
                 }
-
                 addToContainerChain(container);
             }
             else if (containerFlags & ContainerFlags.IsBlockScopedContainer) {
                 blockScopeContainer = node;
                 blockScopeContainer.locals = undefined;
             }
-
-            let savedReachabilityState: Reachability;
-            let savedLabelStack: Reachability[];
-            let savedLabels: Map<number>;
-            let savedImplicitLabels: number[];
-            let savedHasExplicitReturn: boolean;
-
-            const kind = node.kind;
-            let flags = node.flags;
-
-            // reset all reachability check related flags on node (for incremental scenarios)
-            flags &= ~NodeFlags.ReachabilityCheckFlags;
-
-            // reset all emit helper flags on node (for incremental scenarios)
-            flags &= ~NodeFlags.EmitHelperFlags;
-
-            if (kind === SyntaxKind.InterfaceDeclaration) {
-                seenThisKeyword = false;
-            }
-
-            const saveState = kind === SyntaxKind.SourceFile || kind === SyntaxKind.ModuleBlock || isFunctionLikeKind(kind);
-            if (saveState) {
-                savedReachabilityState = currentReachabilityState;
-                savedLabelStack = labelStack;
-                savedLabels = labelIndexMap;
-                savedImplicitLabels = implicitLabels;
-                savedHasExplicitReturn = hasExplicitReturn;
-
-                currentReachabilityState = Reachability.Reachable;
+            if (containerFlags & ContainerFlags.IsControlFlowContainer) {
+                const saveCurrentFlow = currentFlow;
+                const saveBreakTarget = currentBreakTarget;
+                const saveContinueTarget = currentContinueTarget;
+                const saveReturnTarget = currentReturnTarget;
+                const saveActiveLabels = activeLabels;
+                const saveHasExplicitReturn = hasExplicitReturn;
+                const isIIFE = containerFlags & ContainerFlags.IsFunctionExpression && !!getImmediatelyInvokedFunctionExpression(node);
+                // An IIFE is considered part of the containing control flow. Return statements behave
+                // similarly to break statements that exit to a label just past the statement body.
+                if (isIIFE) {
+                    currentReturnTarget = createBranchLabel();
+                }
+                else {
+                    currentFlow = { flags: FlowFlags.Start };
+                    if (containerFlags & ContainerFlags.IsFunctionExpression) {
+                        (<FlowStart>currentFlow).container = <FunctionExpression | ArrowFunction>node;
+                    }
+                    currentReturnTarget = undefined;
+                }
+                currentBreakTarget = undefined;
+                currentContinueTarget = undefined;
+                activeLabels = undefined;
                 hasExplicitReturn = false;
-                labelStack = labelIndexMap = implicitLabels = undefined;
-            }
-
-            if (isInJavaScriptFile(node) && node.jsDocComment) {
-                bind(node.jsDocComment);
-            }
-
-            bindReachableStatement(node);
-
-            if (currentReachabilityState === Reachability.Reachable && isFunctionLikeKind(kind) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
-                flags |= NodeFlags.HasImplicitReturn;
-                if (hasExplicitReturn) {
-                    flags |= NodeFlags.HasExplicitReturn;
+                bindChildren(node);
+                // Reset all reachability check related flags on node (for incremental scenarios)
+                // Reset all emit helper flags on node (for incremental scenarios)
+                node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
+                if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
+                    node.flags |= NodeFlags.HasImplicitReturn;
+                    if (hasExplicitReturn) node.flags |= NodeFlags.HasExplicitReturn;
                 }
+                if (node.kind === SyntaxKind.SourceFile) {
+                    node.flags |= emitFlags;
+                }
+                if (isIIFE) {
+                    addAntecedent(currentReturnTarget, currentFlow);
+                    currentFlow = finishFlowLabel(currentReturnTarget);
+                }
+                else {
+                    currentFlow = saveCurrentFlow;
+                }
+                currentBreakTarget = saveBreakTarget;
+                currentContinueTarget = saveContinueTarget;
+                currentReturnTarget = saveReturnTarget;
+                activeLabels = saveActiveLabels;
+                hasExplicitReturn = saveHasExplicitReturn;
             }
-
-            if (kind === SyntaxKind.InterfaceDeclaration) {
-                flags = seenThisKeyword ? flags | NodeFlags.ContainsThis : flags & ~NodeFlags.ContainsThis;
+            else if (containerFlags & ContainerFlags.IsInterface) {
+                seenThisKeyword = false;
+                bindChildren(node);
+                node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
             }
-
-            if (kind === SyntaxKind.SourceFile) {
-                if (hasClassExtends) {
-                    flags |= NodeFlags.HasClassExtends;
-                }
-                if (hasDecorators) {
-                    flags |= NodeFlags.HasDecorators;
-                }
-                if (hasParameterDecorators) {
-                    flags |= NodeFlags.HasParamDecorators;
-                }
-                if (hasAsyncFunctions) {
-                    flags |= NodeFlags.HasAsyncFunctions;
-                }
-                if (hasJsxSpreadAttribute) {
-                    flags |= NodeFlags.HasJsxSpreadAttribute;
-                }
+            else {
+                bindChildren(node);
             }
-
-            node.flags = flags;
-
-            if (saveState) {
-                hasExplicitReturn = savedHasExplicitReturn;
-                currentReachabilityState = savedReachabilityState;
-                labelStack = savedLabelStack;
-                labelIndexMap = savedLabels;
-                implicitLabels = savedImplicitLabels;
-            }
-
             container = saveContainer;
-            parent = saveParent;
             blockScopeContainer = savedBlockScopeContainer;
         }
 
-        /**
-         * Returns true if node and its subnodes were successfully traversed.
-         * Returning false means that node was not examined and caller needs to dive into the node himself.
-         */
-        function bindReachableStatement(node: Node): void {
+        function bindChildren(node: Node): void {
+            if (skipTransformFlagAggregation) {
+                bindChildrenWorker(node);
+            }
+            else if (node.transformFlags & TransformFlags.HasComputedFlags) {
+                skipTransformFlagAggregation = true;
+                bindChildrenWorker(node);
+                skipTransformFlagAggregation = false;
+            }
+            else {
+                const savedSubtreeTransformFlags = subtreeTransformFlags;
+                subtreeTransformFlags = 0;
+                bindChildrenWorker(node);
+                subtreeTransformFlags = savedSubtreeTransformFlags | computeTransformFlagsForNode(node, subtreeTransformFlags);
+            }
+        }
+
+        function bindChildrenWorker(node: Node): void {
+            // Binding of JsDocComment should be done before the current block scope container changes.
+            // because the scope of JsDocComment should not be affected by whether the current node is a
+            // container or not.
+            if (isInJavaScriptFile(node) && node.jsDocComments) {
+                for (const jsDocComment of node.jsDocComments) {
+                    bind(jsDocComment);
+                }
+            }
             if (checkUnreachable(node)) {
                 forEachChild(node, bind);
                 return;
             }
-
             switch (node.kind) {
                 case SyntaxKind.WhileStatement:
                     bindWhileStatement(<WhileStatement>node);
@@ -576,174 +574,551 @@ namespace ts {
                 case SyntaxKind.LabeledStatement:
                     bindLabeledStatement(<LabeledStatement>node);
                     break;
+                case SyntaxKind.PrefixUnaryExpression:
+                    bindPrefixUnaryExpressionFlow(<PrefixUnaryExpression>node);
+                    break;
+                case SyntaxKind.BinaryExpression:
+                    bindBinaryExpressionFlow(<BinaryExpression>node);
+                    break;
+                case SyntaxKind.DeleteExpression:
+                    bindDeleteExpressionFlow(<DeleteExpression>node);
+                    break;
+                case SyntaxKind.ConditionalExpression:
+                    bindConditionalExpressionFlow(<ConditionalExpression>node);
+                    break;
+                case SyntaxKind.VariableDeclaration:
+                    bindVariableDeclarationFlow(<VariableDeclaration>node);
+                    break;
+                case SyntaxKind.CallExpression:
+                    bindCallExpressionFlow(<CallExpression>node);
+                    break;
                 default:
                     forEachChild(node, bind);
                     break;
             }
         }
 
-        function bindWhileStatement(n: WhileStatement): void {
-            const preWhileState =
-                n.expression.kind === SyntaxKind.FalseKeyword ? Reachability.Unreachable : currentReachabilityState;
-            const postWhileState =
-                n.expression.kind === SyntaxKind.TrueKeyword ? Reachability.Unreachable : currentReachabilityState;
-
-            // bind expressions (don't affect reachability)
-            bind(n.expression);
-
-            currentReachabilityState = preWhileState;
-            const postWhileLabel = pushImplicitLabel();
-            bind(n.statement);
-            popImplicitLabel(postWhileLabel, postWhileState);
+        function isNarrowableReference(expr: Expression): boolean {
+            return expr.kind === SyntaxKind.Identifier ||
+                expr.kind === SyntaxKind.ThisKeyword ||
+                expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
         }
 
-        function bindDoStatement(n: DoStatement): void {
-            const preDoState = currentReachabilityState;
-
-            const postDoLabel = pushImplicitLabel();
-            bind(n.statement);
-            const postDoState = n.expression.kind === SyntaxKind.TrueKeyword ? Reachability.Unreachable : preDoState;
-            popImplicitLabel(postDoLabel, postDoState);
-
-            // bind expressions (don't affect reachability)
-            bind(n.expression);
-        }
-
-        function bindForStatement(n: ForStatement): void {
-            const preForState = currentReachabilityState;
-            const postForLabel = pushImplicitLabel();
-
-            // bind expressions (don't affect reachability)
-            bind(n.initializer);
-            bind(n.condition);
-            bind(n.incrementor);
-
-            bind(n.statement);
-
-            // for statement is considered infinite when it condition is either omitted or is true keyword
-            // - for(..;;..)
-            // - for(..;true;..)
-            const isInfiniteLoop = (!n.condition || n.condition.kind === SyntaxKind.TrueKeyword);
-            const postForState = isInfiniteLoop ? Reachability.Unreachable : preForState;
-            popImplicitLabel(postForLabel, postForState);
-        }
-
-        function bindForInOrForOfStatement(n: ForInStatement | ForOfStatement): void {
-            const preStatementState = currentReachabilityState;
-            const postStatementLabel = pushImplicitLabel();
-
-            // bind expressions (don't affect reachability)
-            bind(n.initializer);
-            bind(n.expression);
-
-            bind(n.statement);
-            popImplicitLabel(postStatementLabel, preStatementState);
-        }
-
-        function bindIfStatement(n: IfStatement): void {
-            // denotes reachability state when entering 'thenStatement' part of the if statement:
-            // i.e. if condition is false then thenStatement is unreachable
-            const ifTrueState = n.expression.kind === SyntaxKind.FalseKeyword ? Reachability.Unreachable : currentReachabilityState;
-            // denotes reachability state when entering 'elseStatement':
-            // i.e. if condition is true then elseStatement is unreachable
-            const ifFalseState = n.expression.kind === SyntaxKind.TrueKeyword ? Reachability.Unreachable : currentReachabilityState;
-
-            currentReachabilityState = ifTrueState;
-
-            // bind expression (don't affect reachability)
-            bind(n.expression);
-
-            bind(n.thenStatement);
-            if (n.elseStatement) {
-                const preElseState = currentReachabilityState;
-                currentReachabilityState = ifFalseState;
-                bind(n.elseStatement);
-                currentReachabilityState = or(currentReachabilityState, preElseState);
+        function isNarrowingExpression(expr: Expression): boolean {
+            switch (expr.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.PropertyAccessExpression:
+                    return isNarrowableReference(expr);
+                case SyntaxKind.CallExpression:
+                    return true;
+                case SyntaxKind.ParenthesizedExpression:
+                    return isNarrowingExpression((<ParenthesizedExpression>expr).expression);
+                case SyntaxKind.BinaryExpression:
+                    return isNarrowingBinaryExpression(<BinaryExpression>expr);
+                case SyntaxKind.PrefixUnaryExpression:
+                    return (<PrefixUnaryExpression>expr).operator === SyntaxKind.ExclamationToken && isNarrowingExpression((<PrefixUnaryExpression>expr).operand);
             }
-            else {
-                currentReachabilityState = or(currentReachabilityState, ifFalseState);
+            return false;
+        }
+
+        function isNarrowingBinaryExpression(expr: BinaryExpression) {
+            switch (expr.operatorToken.kind) {
+                case SyntaxKind.EqualsToken:
+                    return isNarrowableReference(expr.left);
+                case SyntaxKind.EqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsToken:
+                case SyntaxKind.EqualsEqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsEqualsToken:
+                    if (isNarrowingExpression(expr.left) && (expr.right.kind === SyntaxKind.NullKeyword || expr.right.kind === SyntaxKind.Identifier)) {
+                        return true;
+                    }
+                    if (expr.left.kind === SyntaxKind.TypeOfExpression && isNarrowingExpression((<TypeOfExpression>expr.left).expression) && expr.right.kind === SyntaxKind.StringLiteral) {
+                        return true;
+                    }
+                    return false;
+                case SyntaxKind.InstanceOfKeyword:
+                    return isNarrowingExpression(expr.left);
+                case SyntaxKind.CommaToken:
+                    return isNarrowingExpression(expr.right);
+            }
+            return false;
+        }
+
+        function createBranchLabel(): FlowLabel {
+            return {
+                flags: FlowFlags.BranchLabel,
+                antecedents: undefined
+            };
+        }
+
+        function createLoopLabel(): FlowLabel {
+            return {
+                flags: FlowFlags.LoopLabel,
+                antecedents: undefined
+            };
+        }
+
+        function setFlowNodeReferenced(flow: FlowNode) {
+            // On first reference we set the Referenced flag, thereafter we set the Shared flag
+            flow.flags |= flow.flags & FlowFlags.Referenced ? FlowFlags.Shared : FlowFlags.Referenced;
+        }
+
+        function addAntecedent(label: FlowLabel, antecedent: FlowNode): void {
+            if (!(antecedent.flags & FlowFlags.Unreachable) && !contains(label.antecedents, antecedent)) {
+                (label.antecedents || (label.antecedents = [])).push(antecedent);
+                setFlowNodeReferenced(antecedent);
             }
         }
 
-        function bindReturnOrThrow(n: ReturnStatement | ThrowStatement): void {
-            // bind expression (don't affect reachability)
-            bind(n.expression);
-            if (n.kind === SyntaxKind.ReturnStatement) {
-                hasExplicitReturn = true;
+        function createFlowCondition(flags: FlowFlags, antecedent: FlowNode, expression: Expression): FlowNode {
+            if (antecedent.flags & FlowFlags.Unreachable) {
+                return antecedent;
             }
-            currentReachabilityState = Reachability.Unreachable;
-        }
-
-        function bindBreakOrContinueStatement(n: BreakOrContinueStatement): void {
-            // call bind on label (don't affect reachability)
-            bind(n.label);
-            // for continue case touch label so it will be marked a used
-            const isValidJump = jumpToLabel(n.label, n.kind === SyntaxKind.BreakStatement ? currentReachabilityState : Reachability.Unreachable);
-            if (isValidJump) {
-                currentReachabilityState = Reachability.Unreachable;
+            if (!expression) {
+                return flags & FlowFlags.TrueCondition ? antecedent : unreachableFlow;
             }
+            if (expression.kind === SyntaxKind.TrueKeyword && flags & FlowFlags.FalseCondition ||
+                expression.kind === SyntaxKind.FalseKeyword && flags & FlowFlags.TrueCondition) {
+                return unreachableFlow;
+            }
+            if (!isNarrowingExpression(expression)) {
+                return antecedent;
+            }
+            setFlowNodeReferenced(antecedent);
+            return <FlowCondition>{
+                flags,
+                antecedent,
+                expression,
+            };
         }
 
-        function bindTryStatement(n: TryStatement): void {
-            // catch\finally blocks has the same reachability as try block
-            const preTryState = currentReachabilityState;
-            bind(n.tryBlock);
-            const postTryState = currentReachabilityState;
-
-            currentReachabilityState = preTryState;
-            bind(n.catchClause);
-            const postCatchState = currentReachabilityState;
-
-            currentReachabilityState = preTryState;
-            bind(n.finallyBlock);
-
-            // post catch/finally state is reachable if
-            // - post try state is reachable - control flow can fall out of try block
-            // - post catch state is reachable - control flow can fall out of catch block
-            currentReachabilityState = n.catchClause ? or(postTryState, postCatchState) : postTryState;
+        function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
+            setFlowNodeReferenced(antecedent);
+            return <FlowAssignment>{
+                flags: FlowFlags.Assignment,
+                antecedent,
+                node
+            };
         }
 
-        function bindSwitchStatement(n: SwitchStatement): void {
-            const preSwitchState = currentReachabilityState;
-            const postSwitchLabel = pushImplicitLabel();
-
-            // bind expression (don't affect reachability)
-            bind(n.expression);
-
-            bind(n.caseBlock);
-
-            const hasDefault = forEach(n.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause);
-
-            // post switch state is unreachable if switch is exhaustive (has a default case ) and does not have fallthrough from the last case
-            const postSwitchState = hasDefault && currentReachabilityState !== Reachability.Reachable ? Reachability.Unreachable : preSwitchState;
-
-            popImplicitLabel(postSwitchLabel, postSwitchState);
+        function finishFlowLabel(flow: FlowLabel): FlowNode {
+            const antecedents = flow.antecedents;
+            if (!antecedents) {
+                return unreachableFlow;
+            }
+            if (antecedents.length === 1) {
+                return antecedents[0];
+            }
+            return flow;
         }
 
-        function bindCaseBlock(n: CaseBlock): void {
-            const startState = currentReachabilityState;
+        function isStatementCondition(node: Node) {
+            const parent = node.parent;
+            switch (parent.kind) {
+                case SyntaxKind.IfStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.DoStatement:
+                    return (<IfStatement | WhileStatement | DoStatement>parent).expression === node;
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ConditionalExpression:
+                    return (<ForStatement | ConditionalExpression>parent).condition === node;
+            }
+            return false;
+        }
 
-            for (let i = 0; i < n.clauses.length; i++) {
-                const clause = n.clauses[i];
-                currentReachabilityState = startState;
-                bind(clause);
-                if (clause.statements.length &&
-                    i !== n.clauses.length - 1 && // allow fallthrough from the last case
-                    currentReachabilityState === Reachability.Reachable &&
-                    options.noFallthroughCasesInSwitch) {
-                    errorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
+        function isLogicalExpression(node: Node) {
+            while (true) {
+                if (node.kind === SyntaxKind.ParenthesizedExpression) {
+                    node = (<ParenthesizedExpression>node).expression;
+                }
+                else if (node.kind === SyntaxKind.PrefixUnaryExpression && (<PrefixUnaryExpression>node).operator === SyntaxKind.ExclamationToken) {
+                    node = (<PrefixUnaryExpression>node).operand;
+                }
+                else {
+                    return node.kind === SyntaxKind.BinaryExpression && (
+                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken ||
+                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken);
                 }
             }
         }
 
-        function bindLabeledStatement(n: LabeledStatement): void {
-            // call bind on label (don't affect reachability)
-            bind(n.label);
+        function isTopLevelLogicalExpression(node: Node): boolean {
+            while (node.parent.kind === SyntaxKind.ParenthesizedExpression ||
+                node.parent.kind === SyntaxKind.PrefixUnaryExpression &&
+                (<PrefixUnaryExpression>node.parent).operator === SyntaxKind.ExclamationToken) {
+                node = node.parent;
+            }
+            return !isStatementCondition(node) && !isLogicalExpression(node.parent);
+        }
 
-            const ok = pushNamedLabel(n.label);
-            bind(n.statement);
-            if (ok) {
-                popNamedLabel(n.label, currentReachabilityState);
+        function bindCondition(node: Expression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+            const saveTrueTarget = currentTrueTarget;
+            const saveFalseTarget = currentFalseTarget;
+            currentTrueTarget = trueTarget;
+            currentFalseTarget = falseTarget;
+            bind(node);
+            currentTrueTarget = saveTrueTarget;
+            currentFalseTarget = saveFalseTarget;
+            if (!node || !isLogicalExpression(node)) {
+                addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
+                addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
+            }
+        }
+
+        function bindIterativeStatement(node: Statement, breakTarget: FlowLabel, continueTarget: FlowLabel): void {
+            const saveBreakTarget = currentBreakTarget;
+            const saveContinueTarget = currentContinueTarget;
+            currentBreakTarget = breakTarget;
+            currentContinueTarget = continueTarget;
+            bind(node);
+            currentBreakTarget = saveBreakTarget;
+            currentContinueTarget = saveContinueTarget;
+        }
+
+        function bindWhileStatement(node: WhileStatement): void {
+            const preWhileLabel = createLoopLabel();
+            const preBodyLabel = createBranchLabel();
+            const postWhileLabel = createBranchLabel();
+            addAntecedent(preWhileLabel, currentFlow);
+            currentFlow = preWhileLabel;
+            bindCondition(node.expression, preBodyLabel, postWhileLabel);
+            currentFlow = finishFlowLabel(preBodyLabel);
+            bindIterativeStatement(node.statement, postWhileLabel, preWhileLabel);
+            addAntecedent(preWhileLabel, currentFlow);
+            currentFlow = finishFlowLabel(postWhileLabel);
+        }
+
+        function bindDoStatement(node: DoStatement): void {
+            const preDoLabel = createLoopLabel();
+            const preConditionLabel = createBranchLabel();
+            const postDoLabel = createBranchLabel();
+            addAntecedent(preDoLabel, currentFlow);
+            currentFlow = preDoLabel;
+            bindIterativeStatement(node.statement, postDoLabel, preConditionLabel);
+            addAntecedent(preConditionLabel, currentFlow);
+            currentFlow = finishFlowLabel(preConditionLabel);
+            bindCondition(node.expression, preDoLabel, postDoLabel);
+            currentFlow = finishFlowLabel(postDoLabel);
+        }
+
+        function bindForStatement(node: ForStatement): void {
+            const preLoopLabel = createLoopLabel();
+            const preBodyLabel = createBranchLabel();
+            const postLoopLabel = createBranchLabel();
+            bind(node.initializer);
+            addAntecedent(preLoopLabel, currentFlow);
+            currentFlow = preLoopLabel;
+            bindCondition(node.condition, preBodyLabel, postLoopLabel);
+            currentFlow = finishFlowLabel(preBodyLabel);
+            bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
+            bind(node.incrementor);
+            addAntecedent(preLoopLabel, currentFlow);
+            currentFlow = finishFlowLabel(postLoopLabel);
+        }
+
+        function bindForInOrForOfStatement(node: ForInStatement | ForOfStatement): void {
+            const preLoopLabel = createLoopLabel();
+            const postLoopLabel = createBranchLabel();
+            addAntecedent(preLoopLabel, currentFlow);
+            currentFlow = preLoopLabel;
+            bind(node.expression);
+            addAntecedent(postLoopLabel, currentFlow);
+            bind(node.initializer);
+            if (node.initializer.kind !== SyntaxKind.VariableDeclarationList) {
+                bindAssignmentTargetFlow(<Expression>node.initializer);
+            }
+            bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
+            addAntecedent(preLoopLabel, currentFlow);
+            currentFlow = finishFlowLabel(postLoopLabel);
+        }
+
+        function bindIfStatement(node: IfStatement): void {
+            const thenLabel = createBranchLabel();
+            const elseLabel = createBranchLabel();
+            const postIfLabel = createBranchLabel();
+            bindCondition(node.expression, thenLabel, elseLabel);
+            currentFlow = finishFlowLabel(thenLabel);
+            bind(node.thenStatement);
+            addAntecedent(postIfLabel, currentFlow);
+            currentFlow = finishFlowLabel(elseLabel);
+            bind(node.elseStatement);
+            addAntecedent(postIfLabel, currentFlow);
+            currentFlow = finishFlowLabel(postIfLabel);
+        }
+
+        function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
+            bind(node.expression);
+            if (node.kind === SyntaxKind.ReturnStatement) {
+                hasExplicitReturn = true;
+                if (currentReturnTarget) {
+                    addAntecedent(currentReturnTarget, currentFlow);
+                }
+            }
+            currentFlow = unreachableFlow;
+        }
+
+        function findActiveLabel(name: string) {
+            if (activeLabels) {
+                for (const label of activeLabels) {
+                    if (label.name === name) {
+                        return label;
+                    }
+                }
+            }
+            return undefined;
+        }
+
+        function bindbreakOrContinueFlow(node: BreakOrContinueStatement, breakTarget: FlowLabel, continueTarget: FlowLabel) {
+            const flowLabel = node.kind === SyntaxKind.BreakStatement ? breakTarget : continueTarget;
+            if (flowLabel) {
+                addAntecedent(flowLabel, currentFlow);
+                currentFlow = unreachableFlow;
+            }
+        }
+
+        function bindBreakOrContinueStatement(node: BreakOrContinueStatement): void {
+            bind(node.label);
+            if (node.label) {
+                const activeLabel = findActiveLabel(node.label.text);
+                if (activeLabel) {
+                    activeLabel.referenced = true;
+                    bindbreakOrContinueFlow(node, activeLabel.breakTarget, activeLabel.continueTarget);
+                }
+            }
+            else {
+                bindbreakOrContinueFlow(node, currentBreakTarget, currentContinueTarget);
+            }
+        }
+
+        function bindTryStatement(node: TryStatement): void {
+            const postFinallyLabel = createBranchLabel();
+            const preTryFlow = currentFlow;
+            // TODO: Every statement in try block is potentially an exit point!
+            bind(node.tryBlock);
+            addAntecedent(postFinallyLabel, currentFlow);
+            if (node.catchClause) {
+                currentFlow = preTryFlow;
+                bind(node.catchClause);
+                addAntecedent(postFinallyLabel, currentFlow);
+            }
+            if (node.finallyBlock) {
+                currentFlow = preTryFlow;
+                bind(node.finallyBlock);
+            }
+            currentFlow = finishFlowLabel(postFinallyLabel);
+        }
+
+        function bindSwitchStatement(node: SwitchStatement): void {
+            const postSwitchLabel = createBranchLabel();
+            bind(node.expression);
+            const saveBreakTarget = currentBreakTarget;
+            const savePreSwitchCaseFlow = preSwitchCaseFlow;
+            currentBreakTarget = postSwitchLabel;
+            preSwitchCaseFlow = currentFlow;
+            bind(node.caseBlock);
+            addAntecedent(postSwitchLabel, currentFlow);
+            const hasNonEmptyDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause && c.statements.length);
+            if (!hasNonEmptyDefault) {
+                addAntecedent(postSwitchLabel, preSwitchCaseFlow);
+            }
+            currentBreakTarget = saveBreakTarget;
+            preSwitchCaseFlow = savePreSwitchCaseFlow;
+            currentFlow = finishFlowLabel(postSwitchLabel);
+        }
+
+        function bindCaseBlock(node: CaseBlock): void {
+            const clauses = node.clauses;
+            for (let i = 0; i < clauses.length; i++) {
+                const clause = clauses[i];
+                if (clause.statements.length) {
+                    if (currentFlow.flags & FlowFlags.Unreachable) {
+                        currentFlow = preSwitchCaseFlow;
+                    }
+                    else {
+                        const preCaseLabel = createBranchLabel();
+                        addAntecedent(preCaseLabel, preSwitchCaseFlow);
+                        addAntecedent(preCaseLabel, currentFlow);
+                        currentFlow = finishFlowLabel(preCaseLabel);
+                    }
+                    bind(clause);
+                    if (!(currentFlow.flags & FlowFlags.Unreachable) && i !== clauses.length - 1 && options.noFallthroughCasesInSwitch) {
+                        errorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
+                    }
+                }
+                else {
+                    bind(clause);
+                }
+            }
+        }
+
+        function pushActiveLabel(name: string, breakTarget: FlowLabel, continueTarget: FlowLabel): ActiveLabel {
+            const activeLabel = {
+                name,
+                breakTarget,
+                continueTarget,
+                referenced: false
+            };
+            (activeLabels || (activeLabels = [])).push(activeLabel);
+            return activeLabel;
+        }
+
+        function popActiveLabel() {
+            activeLabels.pop();
+        }
+
+        function bindLabeledStatement(node: LabeledStatement): void {
+            const preStatementLabel = createLoopLabel();
+            const postStatementLabel = createBranchLabel();
+            bind(node.label);
+            addAntecedent(preStatementLabel, currentFlow);
+            const activeLabel = pushActiveLabel(node.label.text, postStatementLabel, preStatementLabel);
+            bind(node.statement);
+            popActiveLabel();
+            if (!activeLabel.referenced && !options.allowUnusedLabels) {
+                file.bindDiagnostics.push(createDiagnosticForNode(node.label, Diagnostics.Unused_label));
+            }
+            addAntecedent(postStatementLabel, currentFlow);
+            currentFlow = finishFlowLabel(postStatementLabel);
+        }
+
+        function bindDestructuringTargetFlow(node: Expression) {
+            if (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken) {
+                bindAssignmentTargetFlow((<BinaryExpression>node).left);
+            }
+            else {
+                bindAssignmentTargetFlow(node);
+            }
+        }
+
+        function bindAssignmentTargetFlow(node: Expression) {
+            if (isNarrowableReference(node)) {
+                currentFlow = createFlowAssignment(currentFlow, node);
+            }
+            else if (node.kind === SyntaxKind.ArrayLiteralExpression) {
+                for (const e of (<ArrayLiteralExpression>node).elements) {
+                    if (e.kind === SyntaxKind.SpreadElementExpression) {
+                        bindAssignmentTargetFlow((<SpreadElementExpression>e).expression);
+                    }
+                    else {
+                        bindDestructuringTargetFlow(e);
+                    }
+                }
+            }
+            else if (node.kind === SyntaxKind.ObjectLiteralExpression) {
+                for (const p of (<ObjectLiteralExpression>node).properties) {
+                    if (p.kind === SyntaxKind.PropertyAssignment) {
+                        bindDestructuringTargetFlow((<PropertyAssignment>p).initializer);
+                    }
+                    else if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                        bindAssignmentTargetFlow((<ShorthandPropertyAssignment>p).name);
+                    }
+                }
+            }
+        }
+
+        function bindLogicalExpression(node: BinaryExpression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+            const preRightLabel = createBranchLabel();
+            if (node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+                bindCondition(node.left, preRightLabel, falseTarget);
+            }
+            else {
+                bindCondition(node.left, trueTarget, preRightLabel);
+            }
+            currentFlow = finishFlowLabel(preRightLabel);
+            bind(node.operatorToken);
+            bindCondition(node.right, trueTarget, falseTarget);
+        }
+
+        function bindPrefixUnaryExpressionFlow(node: PrefixUnaryExpression) {
+            if (node.operator === SyntaxKind.ExclamationToken) {
+                const saveTrueTarget = currentTrueTarget;
+                currentTrueTarget = currentFalseTarget;
+                currentFalseTarget = saveTrueTarget;
+                forEachChild(node, bind);
+                currentFalseTarget = currentTrueTarget;
+                currentTrueTarget = saveTrueTarget;
+            }
+            else {
+                forEachChild(node, bind);
+            }
+        }
+
+        function bindBinaryExpressionFlow(node: BinaryExpression) {
+            const operator = node.operatorToken.kind;
+            if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken) {
+                if (isTopLevelLogicalExpression(node)) {
+                    const postExpressionLabel = createBranchLabel();
+                    bindLogicalExpression(node, postExpressionLabel, postExpressionLabel);
+                    currentFlow = finishFlowLabel(postExpressionLabel);
+                }
+                else {
+                    bindLogicalExpression(node, currentTrueTarget, currentFalseTarget);
+                }
+            }
+            else {
+                forEachChild(node, bind);
+                if (operator === SyntaxKind.EqualsToken && !isAssignmentTarget(node)) {
+                    bindAssignmentTargetFlow(node.left);
+                }
+            }
+        }
+
+        function bindDeleteExpressionFlow(node: DeleteExpression) {
+            forEachChild(node, bind);
+            if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
+                bindAssignmentTargetFlow(node.expression);
+            }
+        }
+
+        function bindConditionalExpressionFlow(node: ConditionalExpression) {
+            const trueLabel = createBranchLabel();
+            const falseLabel = createBranchLabel();
+            const postExpressionLabel = createBranchLabel();
+            bindCondition(node.condition, trueLabel, falseLabel);
+            currentFlow = finishFlowLabel(trueLabel);
+            bind(node.whenTrue);
+            addAntecedent(postExpressionLabel, currentFlow);
+            currentFlow = finishFlowLabel(falseLabel);
+            bind(node.whenFalse);
+            addAntecedent(postExpressionLabel, currentFlow);
+            currentFlow = finishFlowLabel(postExpressionLabel);
+        }
+
+        function bindInitializedVariableFlow(node: VariableDeclaration | BindingElement) {
+            const name = node.name;
+            if (isBindingPattern(name)) {
+                for (const child of name.elements) {
+                    bindInitializedVariableFlow(child);
+                }
+            }
+            else {
+                currentFlow = createFlowAssignment(currentFlow, node);
+            }
+        }
+
+        function bindVariableDeclarationFlow(node: VariableDeclaration) {
+            forEachChild(node, bind);
+            if (node.initializer || node.parent.parent.kind === SyntaxKind.ForInStatement || node.parent.parent.kind === SyntaxKind.ForOfStatement) {
+                bindInitializedVariableFlow(node);
+            }
+        }
+
+        function bindCallExpressionFlow(node: CallExpression) {
+            // If the target of the call expression is a function expression or arrow function we have
+            // an immediately invoked function expression (IIFE). Initialize the flowNode property to
+            // the current control flow (which includes evaluation of the IIFE arguments).
+            let expr: Expression = node.expression;
+            while (expr.kind === SyntaxKind.ParenthesizedExpression) {
+                expr = (<ParenthesizedExpression>expr).expression;
+            }
+            if (expr.kind === SyntaxKind.FunctionExpression || expr.kind === SyntaxKind.ArrowFunction) {
+                forEach(node.typeArguments, bind);
+                forEach(node.arguments, bind);
+                bind(node.expression);
+            }
+            else {
+                forEachChild(node, bind);
             }
         }
 
@@ -751,31 +1126,45 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JSDocRecordType:
                     return ContainerFlags.IsContainer;
 
+                case SyntaxKind.InterfaceDeclaration:
+                    return ContainerFlags.IsContainer | ContainerFlags.IsInterface;
+
+                case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                    return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
+
+                case SyntaxKind.SourceFile:
+                    return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
+
+                case SyntaxKind.Constructor:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.Constructor:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
                 case SyntaxKind.FunctionType:
-                case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.ConstructorType:
+                    return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
+
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.SourceFile:
-                case SyntaxKind.TypeAliasDeclaration:
-                    return ContainerFlags.IsContainerWithLocals;
+                    return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsFunctionExpression;
+
+                case SyntaxKind.ModuleBlock:
+                    return ContainerFlags.IsControlFlowContainer;
+                case SyntaxKind.PropertyDeclaration:
+                    return (<PropertyDeclaration>node).initializer ? ContainerFlags.IsControlFlowContainer : 0;
 
                 case SyntaxKind.CatchClause:
                 case SyntaxKind.ForStatement:
@@ -843,6 +1232,7 @@ namespace ts {
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.JSDocRecordType:
+                case SyntaxKind.JSDocTypeLiteral:
                     // Interface/Object-types always have their children added to the 'members' of
                     // their container. They are only accessible through an instance of their
                     // container, and are never in scope otherwise (even inside the body of the
@@ -871,7 +1261,7 @@ namespace ts {
                     // their container in the tree.  To accomplish this, we simply add their declared
                     // symbol to the 'locals' of the container.  These symbols can then be found as
                     // the type checker walks up the containers, checking them for matching names.
-                    return declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
+                    return declareSymbol(container.locals, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
             }
         }
 
@@ -1045,7 +1435,8 @@ namespace ts {
             if (inStrictMode &&
                 node.originalKeywordKind >= SyntaxKind.FirstFutureReservedWord &&
                 node.originalKeywordKind <= SyntaxKind.LastFutureReservedWord &&
-                !isIdentifierName(node)) {
+                !isIdentifierName(node) &&
+                !isInAmbientContext(node)) {
 
                 // Report error only if there are no parse errors in file
                 if (!file.parseDiagnostics.length) {
@@ -1208,15 +1599,9 @@ namespace ts {
             if (!node) {
                 return;
             }
-
             node.parent = parent;
-
-            const savedInStrictMode = inStrictMode;
-            if (!savedInStrictMode) {
-                updateStrictMode(node);
-            }
-
-            // First we bind declaration nodes to a symbol if possible.  We'll both create a symbol
+            const saveInStrictMode = inStrictMode;
+            // First we bind declaration nodes to a symbol if possible. We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
             // destination symbol tables are:
             //
@@ -1224,60 +1609,43 @@ namespace ts {
             //  2) The 'members' table of the current container's symbol.
             //  3) The 'locals' table of the current container.
             //
-            // However, not all symbols will end up in any of these tables.  'Anonymous' symbols
+            // However, not all symbols will end up in any of these tables. 'Anonymous' symbols
             // (like TypeLiterals for example) will not be put in any table.
             bindWorker(node);
-
-            // Then we recurse into the children of the node to bind them as well.  For certain
-            // symbols we do specialized work when we recurse.  For example, we'll keep track of
-            // the current 'container' node when it changes.  This helps us know which symbol table
-            // a local should go into for example.
-            if (skipTransformFlagAggregation) {
-                bindChildren(node);
+            // Then we recurse into the children of the node to bind them as well. For certain
+            // symbols we do specialized work when we recurse. For example, we'll keep track of
+            // the current 'container' node when it changes. This helps us know which symbol table
+            // a local should go into for example. Since terminal nodes are known not to have
+            // children, as an optimization we don't process those.
+            if (node.kind > SyntaxKind.LastToken) {
+                const saveParent = parent;
+                parent = node;
+                const containerFlags = getContainerFlags(node);
+                if (containerFlags === ContainerFlags.None) {
+                    bindChildren(node);
+                }
+                else {
+                    bindContainer(node, containerFlags);
+                }
+                parent = saveParent;
             }
-            else if (node.transformFlags & TransformFlags.HasComputedFlags) {
-                skipTransformFlagAggregation = true;
-                bindChildren(node);
-                skipTransformFlagAggregation = false;
+            else if (!skipTransformFlagAggregation && (node.transformFlags & TransformFlags.HasComputedFlags) === 0) {
+                subtreeTransformFlags |= computeTransformFlagsForNode(node, 0);
             }
-            else {
-                const savedSubtreeTransformFlags = subtreeTransformFlags;
-                subtreeTransformFlags = 0;
-                bindChildren(node);
-                subtreeTransformFlags = savedSubtreeTransformFlags | computeTransformFlagsForNode(node, subtreeTransformFlags);
-            }
-
-            inStrictMode = savedInStrictMode;
-        }
-
-        function updateStrictMode(node: Node) {
-            switch (node.kind) {
-                case SyntaxKind.SourceFile:
-                case SyntaxKind.ModuleBlock:
-                    updateStrictModeStatementList((<SourceFile | ModuleBlock>node).statements);
-                    return;
-                case SyntaxKind.Block:
-                    if (isFunctionLike(node.parent)) {
-                        updateStrictModeStatementList((<Block>node).statements);
-                    }
-                    return;
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                    // All classes are automatically in strict mode in ES6.
-                    inStrictMode = true;
-                    return;
-            }
+            inStrictMode = saveInStrictMode;
         }
 
         function updateStrictModeStatementList(statements: NodeArray<Statement>) {
-            for (const statement of statements) {
-                if (!isPrologueDirective(statement)) {
-                    return;
-                }
+            if (!inStrictMode) {
+                for (const statement of statements) {
+                    if (!isPrologueDirective(statement)) {
+                        return;
+                    }
 
-                if (isUseStrictPrologueDirective(<ExpressionStatement>statement)) {
-                    inStrictMode = true;
-                    return;
+                    if (isUseStrictPrologueDirective(<ExpressionStatement>statement)) {
+                        inStrictMode = true;
+                        return;
+                    }
                 }
             }
         }
@@ -1295,7 +1663,16 @@ namespace ts {
             switch (node.kind) {
                 /* Strict mode checks */
                 case SyntaxKind.Identifier:
+                case SyntaxKind.ThisKeyword:
+                    if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
+                        node.flowNode = currentFlow;
+                    }
                     return checkStrictModeIdentifier(<Identifier>node);
+                case SyntaxKind.PropertyAccessExpression:
+                    if (currentFlow && isNarrowableReference(<Expression>node)) {
+                        node.flowNode = currentFlow;
+                    }
+                    break;
                 case SyntaxKind.BinaryExpression:
                     if (isInJavaScriptFile(node)) {
                         const specialKind = getSpecialPropertyAssignmentKind(node);
@@ -1348,6 +1725,8 @@ namespace ts {
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.JSDocRecordMember:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property | ((<PropertyDeclaration>node).questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
+                case SyntaxKind.JSDocPropertyTag:
+                    return bindJSDocProperty(<JSDocPropertyTag>node);
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
@@ -1355,7 +1734,7 @@ namespace ts {
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes);
 
                 case SyntaxKind.JsxSpreadAttribute:
-                    hasJsxSpreadAttribute = true;
+                    emitFlags |= NodeFlags.HasJsxSpreadAttribute;
                     return;
 
                 case SyntaxKind.CallSignature:
@@ -1383,6 +1762,7 @@ namespace ts {
                 case SyntaxKind.JSDocFunctionType:
                     return bindFunctionOrConstructorType(<SignatureDeclaration>node);
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JSDocRecordType:
                     return bindAnonymousDeclaration(<TypeLiteralNode>node, SymbolFlags.TypeLiteral, "__type");
                 case SyntaxKind.ObjectLiteralExpression:
@@ -1400,9 +1780,12 @@ namespace ts {
                 // Members of classes, interfaces, and modules
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
+                    // All classes are automatically in strict mode in ES6.
+                    inStrictMode = true;
                     return bindClassLikeDeclaration(<ClassLikeDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
+                case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.TypeAliasDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                 case SyntaxKind.EnumDeclaration:
@@ -1416,8 +1799,8 @@ namespace ts {
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
-                case SyntaxKind.GlobalModuleExportDeclaration:
-                    return bindGlobalModuleExportDeclaration(<GlobalModuleExportDeclaration>node);
+                case SyntaxKind.NamespaceExportDeclaration:
+                    return bindNamespaceExportDeclaration(<NamespaceExportDeclaration>node);
                 case SyntaxKind.ImportClause:
                     return bindImportClause(<ImportClause>node);
                 case SyntaxKind.ExportDeclaration:
@@ -1425,7 +1808,15 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                     return bindExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.SourceFile:
+                    updateStrictModeStatementList((<SourceFile>node).statements);
                     return bindSourceFileIfExternalModule();
+                case SyntaxKind.Block:
+                    if (!isFunctionLike(node.parent)) {
+                        return;
+                    }
+                    // Fall through
+                case SyntaxKind.ModuleBlock:
+                    return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
             }
         }
 
@@ -1467,7 +1858,7 @@ namespace ts {
             }
         }
 
-        function bindGlobalModuleExportDeclaration(node: GlobalModuleExportDeclaration) {
+        function bindNamespaceExportDeclaration(node: NamespaceExportDeclaration) {
             if (node.modifiers && node.modifiers.length) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Modifiers_cannot_appear_here));
             }
@@ -1532,12 +1923,20 @@ namespace ts {
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression) {
-            // Declare a 'member' in case it turns out the container was an ES5 class
-            if (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) {
-                container.symbol.members = container.symbol.members || {};
-                // It's acceptable for multiple 'this' assignments of the same identifier to occur
-                declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+            // Declare a 'member' in case it turns out the container was an ES5 class or ES6 constructor
+            let assignee: Node;
+            if (container.kind === SyntaxKind.FunctionDeclaration || container.kind === SyntaxKind.FunctionDeclaration) {
+                assignee = container;
             }
+            else if (container.kind === SyntaxKind.Constructor) {
+                assignee = container.parent;
+            }
+            else {
+                return;
+            }
+            assignee.symbol.members = assignee.symbol.members || {};
+            // It's acceptable for multiple 'this' assignments of the same identifier to occur
+            declareSymbol(assignee.symbol.members, assignee.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
         }
 
         function bindPrototypePropertyAssignment(node: BinaryExpression) {
@@ -1579,10 +1978,10 @@ namespace ts {
         function bindClassLikeDeclaration(node: ClassLikeDeclaration) {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
                 if (getClassExtendsHeritageClauseElement(node) !== undefined) {
-                    hasClassExtends = true;
+                    emitFlags |= NodeFlags.HasClassExtends;
                 }
                 if (nodeIsDecorated(node)) {
-                    hasDecorators = true;
+                    emitFlags |= NodeFlags.HasDecorators;
                 }
             }
 
@@ -1658,8 +2057,7 @@ namespace ts {
             if (!isDeclarationFile(file) &&
                 !isInAmbientContext(node) &&
                 nodeIsDecorated(node)) {
-                hasDecorators = true;
-                hasParameterDecorators = true;
+                emitFlags |= (NodeFlags.HasDecorators | NodeFlags.HasParamDecorators);
             }
 
             if (inStrictMode) {
@@ -1679,14 +2077,14 @@ namespace ts {
             // containing class.
             if (isParameterPropertyDeclaration(node)) {
                 const classDeclaration = <ClassLikeDeclaration>node.parent.parent;
-                declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property | (node.questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
             }
         }
 
         function bindFunctionDeclaration(node: FunctionDeclaration) {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
                 if (isAsyncFunctionLike(node)) {
-                    hasAsyncFunctions = true;
+                    emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
             }
 
@@ -1703,10 +2101,12 @@ namespace ts {
         function bindFunctionExpression(node: FunctionExpression) {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
                 if (isAsyncFunctionLike(node)) {
-                    hasAsyncFunctions = true;
+                    emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
             }
-
+            if (currentFlow) {
+                node.flowNode = currentFlow;
+            }
             checkStrictModeFunctionName(<FunctionExpression>node);
             const bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
             return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
@@ -1715,10 +2115,10 @@ namespace ts {
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
                 if (isAsyncFunctionLike(node)) {
-                    hasAsyncFunctions = true;
+                    emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
                 if (nodeIsDecorated(node)) {
-                    hasDecorators = true;
+                    emitFlags |= NodeFlags.HasDecorators;
                 }
             }
 
@@ -1727,136 +2127,59 @@ namespace ts {
                 : declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
         }
 
+        function bindJSDocProperty(node: JSDocPropertyTag) {
+            return declareSymbolAndAddToSymbolTable(node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+        }
+
         // reachability checks
 
-        function pushNamedLabel(name: Identifier): boolean {
-            initializeReachabilityStateIfNecessary();
-
-            if (hasProperty(labelIndexMap, name.text)) {
-                return false;
-            }
-            labelIndexMap[name.text] = labelStack.push(Reachability.Uninitialized) - 1;
-            return true;
-        }
-
-        function pushImplicitLabel(): number {
-            initializeReachabilityStateIfNecessary();
-
-            const index = labelStack.push(Reachability.Uninitialized) - 1;
-            implicitLabels.push(index);
-            return index;
-        }
-
-        function popNamedLabel(label: Identifier, outerState: Reachability): void {
-            const index = labelIndexMap[label.text];
-            Debug.assert(index !== undefined);
-            Debug.assert(labelStack.length == index + 1);
-
-            labelIndexMap[label.text] = undefined;
-
-            setCurrentStateAtLabel(labelStack.pop(), outerState, label);
-        }
-
-        function popImplicitLabel(implicitLabelIndex: number, outerState: Reachability): void {
-            if (labelStack.length !== implicitLabelIndex + 1) {
-                Debug.assert(false, `Label stack: ${labelStack.length}, index:${implicitLabelIndex}`);
-            }
-
-            const i = implicitLabels.pop();
-
-            if (implicitLabelIndex !== i) {
-                Debug.assert(false, `i: ${i}, index: ${implicitLabelIndex}`);
-            }
-
-            setCurrentStateAtLabel(labelStack.pop(), outerState, /*name*/ undefined);
-        }
-
-        function setCurrentStateAtLabel(innerMergedState: Reachability, outerState: Reachability, label: Identifier): void {
-            if (innerMergedState === Reachability.Uninitialized) {
-                if (label && !options.allowUnusedLabels) {
-                    file.bindDiagnostics.push(createDiagnosticForNode(label, Diagnostics.Unused_label));
-                }
-                currentReachabilityState = outerState;
-            }
-            else {
-                currentReachabilityState = or(innerMergedState, outerState);
-            }
-        }
-
-        function jumpToLabel(label: Identifier, outerState: Reachability): boolean {
-            initializeReachabilityStateIfNecessary();
-
-            const index = label ? labelIndexMap[label.text] : lastOrUndefined(implicitLabels);
-            if (index === undefined) {
-                // reference to unknown label or
-                // break/continue used outside of loops
-                return false;
-            }
-            const stateAtLabel = labelStack[index];
-            labelStack[index] = stateAtLabel === Reachability.Uninitialized ? outerState : or(stateAtLabel, outerState);
-            return true;
+        function shouldReportErrorOnModuleDeclaration(node: ModuleDeclaration): boolean {
+            const instanceState = getModuleInstanceState(node);
+            return instanceState === ModuleInstanceState.Instantiated || (instanceState === ModuleInstanceState.ConstEnumOnly && options.preserveConstEnums);
         }
 
         function checkUnreachable(node: Node): boolean {
-            switch (currentReachabilityState) {
-                case Reachability.Unreachable:
-                    const reportError =
-                        // report error on all statements except empty ones
-                        (isStatementButNotDeclaration(node) && node.kind !== SyntaxKind.EmptyStatement) ||
-                        // report error on ExportAssignment
-                        node.kind === SyntaxKind.ExportAssignment ||
-                        // report error on class declarations
-                        node.kind === SyntaxKind.ClassDeclaration ||
-                        // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
-                        (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(<ModuleDeclaration>node)) ||
-                        // report error on regular enums and const enums if preserveConstEnums is set
-                        (node.kind === SyntaxKind.EnumDeclaration && (!isConstEnumDeclaration(node) || options.preserveConstEnums));
+            if (!(currentFlow.flags & FlowFlags.Unreachable)) {
+                return false;
+            }
+            if (currentFlow === unreachableFlow) {
+                const reportError =
+                    // report error on all statements except empty ones
+                    (isStatementButNotDeclaration(node) && node.kind !== SyntaxKind.EmptyStatement) ||
+                    // report error on class declarations
+                    node.kind === SyntaxKind.ClassDeclaration ||
+                    // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
+                    (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(<ModuleDeclaration>node)) ||
+                    // report error on regular enums and const enums if preserveConstEnums is set
+                    (node.kind === SyntaxKind.EnumDeclaration && (!isConstEnumDeclaration(node) || options.preserveConstEnums));
 
-                    if (reportError) {
-                        currentReachabilityState = Reachability.ReportedUnreachable;
+                if (reportError) {
+                    currentFlow = reportedUnreachableFlow;
 
-                        // unreachable code is reported if
-                        // - user has explicitly asked about it AND
-                        // - statement is in not ambient context (statements in ambient context is already an error
-                        //   so we should not report extras) AND
-                        //   - node is not variable statement OR
-                        //   - node is block scoped variable statement OR
-                        //   - node is not block scoped variable statement and at least one variable declaration has initializer
-                        //   Rationale: we don't want to report errors on non-initialized var's since they are hoisted
-                        //   On the other side we do want to report errors on non-initialized 'lets' because of TDZ
-                        const reportUnreachableCode =
-                            !options.allowUnreachableCode &&
-                            !isInAmbientContext(node) &&
-                            (
-                                node.kind !== SyntaxKind.VariableStatement ||
-                                getCombinedNodeFlags((<VariableStatement>node).declarationList) & NodeFlags.BlockScoped ||
-                                forEach((<VariableStatement>node).declarationList.declarations, d => d.initializer)
-                            );
+                    // unreachable code is reported if
+                    // - user has explicitly asked about it AND
+                    // - statement is in not ambient context (statements in ambient context is already an error
+                    //   so we should not report extras) AND
+                    //   - node is not variable statement OR
+                    //   - node is block scoped variable statement OR
+                    //   - node is not block scoped variable statement and at least one variable declaration has initializer
+                    //   Rationale: we don't want to report errors on non-initialized var's since they are hoisted
+                    //   On the other side we do want to report errors on non-initialized 'lets' because of TDZ
+                    const reportUnreachableCode =
+                        !options.allowUnreachableCode &&
+                        !isInAmbientContext(node) &&
+                        (
+                            node.kind !== SyntaxKind.VariableStatement ||
+                            getCombinedNodeFlags((<VariableStatement>node).declarationList) & NodeFlags.BlockScoped ||
+                            forEach((<VariableStatement>node).declarationList.declarations, d => d.initializer)
+                        );
 
-                        if (reportUnreachableCode) {
-                            errorOnFirstToken(node, Diagnostics.Unreachable_code_detected);
-                        }
+                    if (reportUnreachableCode) {
+                        errorOnFirstToken(node, Diagnostics.Unreachable_code_detected);
                     }
-                case Reachability.ReportedUnreachable:
-                    return true;
-                default:
-                    return false;
+                }
             }
-
-            function shouldReportErrorOnModuleDeclaration(node: ModuleDeclaration): boolean {
-                const instanceState = getModuleInstanceState(node);
-                return instanceState === ModuleInstanceState.Instantiated || (instanceState === ModuleInstanceState.ConstEnumOnly && options.preserveConstEnums);
-            }
-        }
-
-        function initializeReachabilityStateIfNecessary(): void {
-            if (labelIndexMap) {
-                return;
-            }
-            currentReachabilityState = Reachability.Reachable;
-            labelIndexMap = {};
-            labelStack = [];
-            implicitLabels = [];
+            return true;
         }
     }
 
@@ -1867,10 +2190,547 @@ namespace ts {
      * @param subtreeFlags Transform flags computed for this node's subtree
      */
     export function computeTransformFlagsForNode(node: Node, subtreeFlags: TransformFlags): TransformFlags {
+        const kind = node.kind;
+        switch (kind) {
+            case SyntaxKind.CallExpression:
+                return computeCallExpression(<CallExpression>node, subtreeFlags);
+
+            case SyntaxKind.ModuleDeclaration:
+                return computeModuleDeclaration(<ModuleDeclaration>node, subtreeFlags);
+
+            case SyntaxKind.ParenthesizedExpression:
+                return computeParenthesizedExpression(<ParenthesizedExpression>node, subtreeFlags);
+
+            case SyntaxKind.BinaryExpression:
+                return computeBinaryExpression(<BinaryExpression>node, subtreeFlags);
+
+            case SyntaxKind.ExpressionStatement:
+                return computeExpressionStatement(<ExpressionStatement>node, subtreeFlags);
+
+            case SyntaxKind.Parameter:
+                return computeParameter(<ParameterDeclaration>node, subtreeFlags);
+
+            case SyntaxKind.ArrowFunction:
+                return computeArrowFunction(<ArrowFunction>node, subtreeFlags);
+
+            case SyntaxKind.FunctionExpression:
+                return computeFunctionExpression(<FunctionExpression>node, subtreeFlags);
+
+            case SyntaxKind.FunctionDeclaration:
+                return computeFunctionDeclaration(<FunctionDeclaration>node, subtreeFlags);
+
+            case SyntaxKind.VariableDeclaration:
+                return computeVariableDeclaration(<VariableDeclaration>node, subtreeFlags);
+
+            case SyntaxKind.VariableDeclarationList:
+                return computeVariableDeclarationList(<VariableDeclarationList>node, subtreeFlags);
+
+            case SyntaxKind.VariableStatement:
+                return computeVariableStatement(<VariableStatement>node, subtreeFlags);
+
+            case SyntaxKind.LabeledStatement:
+                return computeLabeledStatement(<LabeledStatement>node, subtreeFlags);
+
+            case SyntaxKind.ClassDeclaration:
+                return computeClassDeclaration(<ClassDeclaration>node, subtreeFlags);
+
+            case SyntaxKind.ClassExpression:
+                return computeClassExpression(<ClassExpression>node, subtreeFlags);
+
+            case SyntaxKind.HeritageClause:
+                return computeHeritageClause(<HeritageClause>node, subtreeFlags);
+
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return computeExpressionWithTypeArguments(<ExpressionWithTypeArguments>node, subtreeFlags);
+
+            case SyntaxKind.Constructor:
+                return computeConstructor(<ConstructorDeclaration>node, subtreeFlags);
+
+            case SyntaxKind.PropertyDeclaration:
+                return computePropertyDeclaration(<PropertyDeclaration>node, subtreeFlags);
+
+            case SyntaxKind.MethodDeclaration:
+                return computeMethod(<MethodDeclaration>node, subtreeFlags);
+
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return computeAccessor(<AccessorDeclaration>node, subtreeFlags);
+
+            case SyntaxKind.ImportEqualsDeclaration:
+                return computeImportEquals(<ImportEqualsDeclaration>node, subtreeFlags);
+
+            case SyntaxKind.PropertyAccessExpression:
+                return computePropertyAccess(<PropertyAccessExpression>node, subtreeFlags);
+
+            default:
+                return computeOther(node, kind, subtreeFlags);
+        }
+    }
+
+    function computeCallExpression(node: CallExpression, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+        const expression = node.expression;
+        const expressionKind = expression.kind;
+
+        if (subtreeFlags & TransformFlags.ContainsSpreadElementExpression
+            || isSuperOrSuperProperty(expression, expressionKind)) {
+            // If the this node contains a SpreadElementExpression, or is a super call, then it is an ES6
+            // node.
+            transformFlags |= TransformFlags.AssertES6;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.ArrayLiteralOrCallOrNewExcludes;
+    }
+
+    function isSuperOrSuperProperty(node: Node, kind: SyntaxKind) {
+        switch (kind) {
+            case SyntaxKind.SuperKeyword:
+                return true;
+
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ElementAccessExpression:
+                const expression = (<PropertyAccessExpression | ElementAccessExpression>node).expression;
+                const expressionKind = expression.kind;
+                return expressionKind === SyntaxKind.SuperKeyword;
+        }
+
+        return false;
+    }
+
+    function computeBinaryExpression(node: BinaryExpression, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+        const operatorTokenKind = node.operatorToken.kind;
+        const leftKind = node.left.kind;
+
+        if (operatorTokenKind === SyntaxKind.EqualsToken
+            && (leftKind === SyntaxKind.ObjectLiteralExpression
+                || leftKind === SyntaxKind.ArrayLiteralExpression)) {
+            // Destructuring assignments are ES6 syntax.
+            transformFlags |= TransformFlags.AssertES6 | TransformFlags.DestructuringAssignment;
+        }
+        else if (operatorTokenKind === SyntaxKind.AsteriskAsteriskToken
+            || operatorTokenKind === SyntaxKind.AsteriskAsteriskEqualsToken) {
+            // Exponentiation is ES7 syntax.
+            transformFlags |= TransformFlags.AssertES7;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
+    }
+
+    function computeParameter(node: ParameterDeclaration, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+        const modifierFlags = getModifierFlags(node);
+        const name = node.name;
+        const initializer = node.initializer;
+        const dotDotDotToken = node.dotDotDotToken;
+
+        // If the parameter has a question token, then it is TypeScript syntax.
+        if (node.questionToken) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        // If the parameter's name is 'this', then it is TypeScript syntax.
+        if (subtreeFlags & TransformFlags.ContainsDecorators
+            || (name && isIdentifier(name) && name.originalKeywordKind === SyntaxKind.ThisKeyword)) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        // If a parameter has an accessibility modifier, then it is TypeScript syntax.
+        if (modifierFlags & ModifierFlags.ParameterPropertyModifier) {
+            transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsParameterPropertyAssignments;
+        }
+
+        // If a parameter has an initializer, a binding pattern or a dotDotDot token, then
+        // it is ES6 syntax and its container must emit default value assignments or parameter destructuring downlevel.
+        if (subtreeFlags & TransformFlags.ContainsBindingPattern || initializer || dotDotDotToken) {
+            transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsDefaultValueAssignments;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.ParameterExcludes;
+    }
+
+    function computeParenthesizedExpression(node: ParenthesizedExpression, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+        const expression = node.expression;
+        const expressionKind = expression.kind;
+        const expressionTransformFlags = expression.transformFlags;
+
+        // If the node is synthesized, it means the emitter put the parentheses there,
+        // not the user. If we didn't want them, the emitter would not have put them
+        // there.
+        if (expressionKind === SyntaxKind.AsExpression
+            || expressionKind === SyntaxKind.TypeAssertionExpression) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        // If the expression of a ParenthesizedExpression is a destructuring assignment,
+        // then the ParenthesizedExpression is a destructuring assignment.
+        if (expressionTransformFlags & TransformFlags.DestructuringAssignment) {
+            transformFlags |= TransformFlags.DestructuringAssignment;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
+    }
+
+    function computeClassDeclaration(node: ClassDeclaration, subtreeFlags: TransformFlags) {
+        let transformFlags: TransformFlags;
+        const modifierFlags = getModifierFlags(node);
+
+        if (modifierFlags & ModifierFlags.Ambient) {
+            // An ambient declaration is TypeScript syntax.
+            transformFlags = TransformFlags.AssertTypeScript;
+        }
+        else {
+            // A ClassDeclaration is ES6 syntax.
+            transformFlags = subtreeFlags | TransformFlags.AssertES6;
+
+            // A class with a parameter property assignment, property initializer, or decorator is
+            // TypeScript syntax.
+            // An exported declaration may be TypeScript syntax.
+            if ((subtreeFlags & TransformFlags.TypeScriptClassSyntaxMask)
+                || (modifierFlags & ModifierFlags.Export)) {
+                transformFlags |= TransformFlags.AssertTypeScript;
+            }
+
+            if (subtreeFlags & TransformFlags.ContainsLexicalThisInComputedPropertyName) {
+                // A computed property name containing `this` might need to be rewritten,
+                // so propagate the ContainsLexicalThis flag upward.
+                transformFlags |= TransformFlags.ContainsLexicalThis;
+            }
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.ClassExcludes;
+    }
+
+    function computeClassExpression(node: ClassExpression, subtreeFlags: TransformFlags) {
+        // A ClassExpression is ES6 syntax.
+        let transformFlags = subtreeFlags | TransformFlags.AssertES6;
+
+        // A class with a parameter property assignment, property initializer, or decorator is
+        // TypeScript syntax.
+        if (subtreeFlags & TransformFlags.TypeScriptClassSyntaxMask) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        if (subtreeFlags & TransformFlags.ContainsLexicalThisInComputedPropertyName) {
+            // A computed property name containing `this` might need to be rewritten,
+            // so propagate the ContainsLexicalThis flag upward.
+            transformFlags |= TransformFlags.ContainsLexicalThis;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.ClassExcludes;
+    }
+
+    function computeHeritageClause(node: HeritageClause, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+
+        switch (node.token) {
+            case SyntaxKind.ExtendsKeyword:
+                // An `extends` HeritageClause is ES6 syntax.
+                transformFlags |= TransformFlags.AssertES6;
+                break;
+
+            case SyntaxKind.ImplementsKeyword:
+                // An `implements` HeritageClause is TypeScript syntax.
+                transformFlags |= TransformFlags.AssertTypeScript;
+                break;
+
+            default:
+                Debug.fail("Unexpected token for heritage clause");
+                break;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
+    }
+
+    function computeExpressionWithTypeArguments(node: ExpressionWithTypeArguments, subtreeFlags: TransformFlags) {
+        // An ExpressionWithTypeArguments is ES6 syntax, as it is used in the
+        // extends clause of a class.
+        let transformFlags = subtreeFlags | TransformFlags.AssertES6;
+
+        // If an ExpressionWithTypeArguments contains type arguments, then it
+        // is TypeScript syntax.
+        if (node.typeArguments) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
+    }
+
+    function computeConstructor(node: ConstructorDeclaration, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+        const body = node.body;
+
+        if (body === undefined) {
+            // An overload constructor is TypeScript syntax.
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.ConstructorExcludes;
+    }
+
+    function computeMethod(node: MethodDeclaration, subtreeFlags: TransformFlags) {
+        // A MethodDeclaration is ES6 syntax.
+        let transformFlags = subtreeFlags | TransformFlags.AssertES6;
+        const modifierFlags = getModifierFlags(node);
+        const body = node.body;
+        const typeParameters = node.typeParameters;
+
+        // A MethodDeclaration is TypeScript syntax if it is either async, abstract, overloaded,
+        // generic, or has a decorator.
+        if (!body
+            || typeParameters
+            || (modifierFlags & (ModifierFlags.Async | ModifierFlags.Abstract))
+            || (subtreeFlags & TransformFlags.ContainsDecorators)) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.MethodOrAccessorExcludes;
+    }
+
+    function computeAccessor(node: AccessorDeclaration, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+        const modifierFlags = getModifierFlags(node);
+        const body = node.body;
+
+        // A MethodDeclaration is TypeScript syntax if it is either async, abstract, overloaded,
+        // generic, or has a decorator.
+        if (!body
+            || (modifierFlags & (ModifierFlags.Async | ModifierFlags.Abstract))
+            || (subtreeFlags & TransformFlags.ContainsDecorators)) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.MethodOrAccessorExcludes;
+    }
+
+    function computePropertyDeclaration(node: PropertyDeclaration, subtreeFlags: TransformFlags) {
+        // A PropertyDeclaration is TypeScript syntax.
+        let transformFlags = subtreeFlags | TransformFlags.AssertTypeScript;
+
+        // If the PropertyDeclaration has an initializer, we need to inform its ancestor
+        // so that it handle the transformation.
+        if (node.initializer) {
+            transformFlags |= TransformFlags.ContainsPropertyInitializer;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
+    }
+
+    function computeFunctionDeclaration(node: FunctionDeclaration, subtreeFlags: TransformFlags) {
+        let transformFlags: TransformFlags;
+        const modifierFlags = getModifierFlags(node);
+        const body = node.body;
+        const asteriskToken = node.asteriskToken;
+
+        if (!body || (modifierFlags & ModifierFlags.Ambient)) {
+            // An ambient declaration is TypeScript syntax.
+            // A FunctionDeclaration without a body is an overload and is TypeScript syntax.
+            transformFlags = TransformFlags.AssertTypeScript;
+        }
+        else {
+            transformFlags = subtreeFlags;
+
+            // If a FunctionDeclaration is exported, then it is either ES6 or TypeScript syntax.
+            if (modifierFlags & ModifierFlags.Export) {
+                transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES6;
+            }
+
+            // If a FunctionDeclaration is async, then it is TypeScript syntax.
+            if (modifierFlags & ModifierFlags.Async) {
+                transformFlags |= TransformFlags.AssertTypeScript;
+            }
+
+            // If a FunctionDeclaration has an asterisk token, is exported, or its
+            // subtree has marked the container as needing to capture the lexical `this`,
+            // then this node is ES6 syntax.
+            if (asteriskToken || (subtreeFlags & TransformFlags.ES6FunctionSyntaxMask)) {
+                transformFlags |= TransformFlags.AssertES6;
+            }
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.FunctionExcludes;
+    }
+
+    function computeFunctionExpression(node: FunctionExpression, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+        const modifierFlags = getModifierFlags(node);
+        const asteriskToken = node.asteriskToken;
+
+        // An async function expression is TypeScript syntax.
+        if (modifierFlags & ModifierFlags.Async) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        // If a FunctionExpression contains an asterisk token, or its subtree has marked the container
+        // as needing to capture the lexical this, then this node is ES6 syntax.
+        if (asteriskToken || (subtreeFlags & TransformFlags.ES6FunctionSyntaxMask)) {
+            transformFlags |= TransformFlags.AssertES6;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.FunctionExcludes;
+    }
+
+    function computeArrowFunction(node: ArrowFunction, subtreeFlags: TransformFlags) {
+        // An ArrowFunction is ES6 syntax, and excludes markers that should not escape the scope of an ArrowFunction.
+        let transformFlags = subtreeFlags | TransformFlags.AssertES6;
+        const modifierFlags = getModifierFlags(node);
+
+        // An async arrow function is TypeScript syntax.
+        if (modifierFlags & ModifierFlags.Async) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        // If an ArrowFunction contains a lexical this, its container must capture the lexical this.
+        if (subtreeFlags & TransformFlags.ContainsLexicalThis) {
+            transformFlags |= TransformFlags.ContainsCapturedLexicalThis;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.ArrowFunctionExcludes;
+    }
+
+    function computePropertyAccess(node: PropertyAccessExpression, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+        const expression = node.expression;
+        const expressionKind = expression.kind;
+
+        // If a PropertyAccessExpression starts with a super keyword, then it is
+        // ES6 syntax, and requires a lexical `this` binding.
+        if (expressionKind === SyntaxKind.SuperKeyword) {
+            transformFlags |= TransformFlags.ContainsLexicalThis;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
+    }
+
+    function computeVariableDeclaration(node: VariableDeclaration, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+        const nameKind = node.name.kind;
+
+        // A VariableDeclaration with a binding pattern is ES6 syntax.
+        if (nameKind === SyntaxKind.ObjectBindingPattern || nameKind === SyntaxKind.ArrayBindingPattern) {
+            transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsBindingPattern;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
+    }
+
+    function computeVariableStatement(node: VariableStatement, subtreeFlags: TransformFlags) {
+        let transformFlags: TransformFlags;
+        const modifierFlags = getModifierFlags(node);
+        const declarationListTransformFlags = node.declarationList.transformFlags;
+
+        // An ambient declaration is TypeScript syntax.
+        if (modifierFlags & ModifierFlags.Ambient) {
+            transformFlags = TransformFlags.AssertTypeScript;
+        }
+        else {
+            transformFlags = subtreeFlags;
+
+            // If a VariableStatement is exported, then it is either ES6 or TypeScript syntax.
+            if (modifierFlags & ModifierFlags.Export) {
+                transformFlags |= TransformFlags.AssertES6 | TransformFlags.AssertTypeScript;
+            }
+
+            if (declarationListTransformFlags & TransformFlags.ContainsBindingPattern) {
+                transformFlags |= TransformFlags.AssertES6;
+            }
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
+    }
+
+    function computeLabeledStatement(node: LabeledStatement, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+
+        // A labeled statement containing a block scoped binding *may* need to be transformed from ES6.
+        if (subtreeFlags & TransformFlags.ContainsBlockScopedBinding
+            && isIterationStatement(node, /*lookInLabeledStatements*/ true)) {
+            transformFlags |= TransformFlags.AssertES6;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
+    }
+
+    function computeImportEquals(node: ImportEqualsDeclaration, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+
+        // An ImportEqualsDeclaration with a namespace reference is TypeScript.
+        if (!isExternalModuleImportEqualsDeclaration(node)) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
+    }
+
+    function computeExpressionStatement(node: ExpressionStatement, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+
+        // If the expression of an expression statement is a destructuring assignment,
+        // then we treat the statement as ES6 so that we can indicate that we do not
+        // need to hold on to the right-hand side.
+        if (node.expression.transformFlags & TransformFlags.DestructuringAssignment) {
+            transformFlags |= TransformFlags.AssertES6;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
+    }
+
+    function computeModuleDeclaration(node: ModuleDeclaration, subtreeFlags: TransformFlags) {
+        let transformFlags = TransformFlags.AssertTypeScript;
+        const modifierFlags = getModifierFlags(node);
+
+        if ((modifierFlags & ModifierFlags.Ambient) === 0) {
+            transformFlags |= subtreeFlags;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.ModuleExcludes;
+    }
+
+    function computeVariableDeclarationList(node: VariableDeclarationList, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags;
+
+        if (subtreeFlags & TransformFlags.ContainsBindingPattern) {
+            transformFlags |= TransformFlags.AssertES6;
+        }
+
+        // If a VariableDeclarationList is `let` or `const`, then it is ES6 syntax.
+        if (node.flags & NodeFlags.BlockScoped) {
+            transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsBlockScopedBinding;
+        }
+
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.VariableDeclarationListExcludes;
+    }
+
+    function computeOther(node: Node, kind: SyntaxKind, subtreeFlags: TransformFlags) {
         // Mark transformations needed for each node
-        let transformFlags = TransformFlags.None;
-        let excludeFlags = TransformFlags.None;
-        switch (node.kind) {
+        let transformFlags = subtreeFlags;
+        let excludeFlags = TransformFlags.NodeExcludes;
+
+        switch (kind) {
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
@@ -1886,7 +2746,7 @@ namespace ts {
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.ReadonlyKeyword:
                 // These nodes are TypeScript syntax.
-                transformFlags = TransformFlags.AssertTypeScript;
+                transformFlags |= TransformFlags.AssertTypeScript;
                 break;
 
             case SyntaxKind.JsxElement:
@@ -1898,12 +2758,12 @@ namespace ts {
             case SyntaxKind.JsxSpreadAttribute:
             case SyntaxKind.JsxExpression:
                 // These nodes are Jsx syntax.
-                transformFlags = TransformFlags.AssertJsx;
+                transformFlags |= TransformFlags.AssertJsx;
                 break;
 
             case SyntaxKind.ExportKeyword:
                 // This node is both ES6 and TypeScript syntax.
-                transformFlags = TransformFlags.AssertES6 | TransformFlags.TypeScript;
+                transformFlags |= TransformFlags.AssertES6 | TransformFlags.AssertTypeScript;
                 break;
 
             case SyntaxKind.DefaultKeyword:
@@ -1916,7 +2776,7 @@ namespace ts {
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.ForOfStatement:
                 // These nodes are ES6 syntax.
-                transformFlags = TransformFlags.AssertES6;
+                transformFlags |= TransformFlags.AssertES6;
                 break;
             case SyntaxKind.YieldExpression:
                 // This node is ES6 syntax.
@@ -1925,6 +2785,7 @@ namespace ts {
 
             case SyntaxKind.AnyKeyword:
             case SyntaxKind.NumberKeyword:
+            case SyntaxKind.NeverKeyword:
             case SyntaxKind.StringKeyword:
             case SyntaxKind.BooleanKeyword:
             case SyntaxKind.SymbolKeyword:
@@ -1951,16 +2812,15 @@ namespace ts {
             case SyntaxKind.ThisType:
             case SyntaxKind.StringLiteralType:
                 // Types and signatures are TypeScript syntax, and exclude all other facts.
-                subtreeFlags = TransformFlags.None;
-                excludeFlags = TransformFlags.TypeExcludes;
                 transformFlags = TransformFlags.AssertTypeScript;
+                excludeFlags = TransformFlags.TypeExcludes;
                 break;
 
             case SyntaxKind.ComputedPropertyName:
                 // Even though computed property names are ES6, we don't treat them as such.
                 // This is so that they can flow through PropertyName transforms unaffected.
                 // Instead, we mark the container as ES6, so that it can properly handle the transform.
-                transformFlags = TransformFlags.ContainsComputedPropertyName;
+                transformFlags |= TransformFlags.ContainsComputedPropertyName;
                 if (subtreeFlags & TransformFlags.ContainsLexicalThis) {
                     // A computed method name like `[this.getName()](x: string) { ... }` needs to
                     // distinguish itself from the normal case of a method body containing `this`:
@@ -1976,28 +2836,28 @@ namespace ts {
 
             case SyntaxKind.SpreadElementExpression:
                 // This node is ES6 syntax, but is handled by a containing node.
-                transformFlags = TransformFlags.ContainsSpreadElementExpression;
+                transformFlags |= TransformFlags.ContainsSpreadElementExpression;
                 break;
 
             case SyntaxKind.SuperKeyword:
                 // This node is ES6 syntax.
-                transformFlags = TransformFlags.AssertES6;
+                transformFlags |= TransformFlags.AssertES6;
                 break;
 
             case SyntaxKind.ThisKeyword:
                 // Mark this node and its ancestors as containing a lexical `this` keyword.
-                transformFlags = TransformFlags.ContainsLexicalThis;
+                transformFlags |= TransformFlags.ContainsLexicalThis;
                 break;
 
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
                 // These nodes are ES6 syntax.
-                transformFlags = TransformFlags.AssertES6 | TransformFlags.ContainsBindingPattern;
+                transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsBindingPattern;
                 break;
 
             case SyntaxKind.Decorator:
                 // This node is TypeScript syntax, and marks its container as also being TypeScript syntax.
-                transformFlags = TransformFlags.AssertTypeScript | TransformFlags.ContainsDecorators;
+                transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsDecorators;
                 break;
 
             case SyntaxKind.ObjectLiteralExpression:
@@ -2005,17 +2865,16 @@ namespace ts {
                 if (subtreeFlags & TransformFlags.ContainsComputedPropertyName) {
                     // If an ObjectLiteralExpression contains a ComputedPropertyName, then it
                     // is an ES6 node.
-                    transformFlags = TransformFlags.AssertES6;
+                    transformFlags |= TransformFlags.AssertES6;
                 }
+
                 if (subtreeFlags & TransformFlags.ContainsLexicalThisInComputedPropertyName) {
                     // A computed property name containing `this` might need to be rewritten,
                     // so propagate the ContainsLexicalThis flag upward.
                     transformFlags |= TransformFlags.ContainsLexicalThis;
                 }
-                break;
 
-            case SyntaxKind.CallExpression:
-                return computeCallExpression(<CallExpression>node, subtreeFlags);
+                break;
 
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.NewExpression:
@@ -2023,71 +2882,10 @@ namespace ts {
                 if (subtreeFlags & TransformFlags.ContainsSpreadElementExpression) {
                     // If the this node contains a SpreadElementExpression, then it is an ES6
                     // node.
-                    transformFlags = TransformFlags.AssertES6;
-                }
-
-                break;
-
-            case SyntaxKind.ModuleDeclaration:
-                // An ambient declaration is TypeScript syntax.
-                if (hasModifier(node, ModifierFlags.Ambient)) {
-                    subtreeFlags = TransformFlags.None;
-                }
-
-                // This node is TypeScript syntax, and excludes markers that should not escape the module scope.
-                excludeFlags = TransformFlags.ModuleExcludes;
-                transformFlags = TransformFlags.AssertTypeScript;
-                break;
-
-            case SyntaxKind.ParenthesizedExpression:
-                return computeParenthesizedExpression(<ParenthesizedExpression>node, subtreeFlags);
-
-            case SyntaxKind.BinaryExpression:
-                return computeBinaryExpression(<BinaryExpression>node, subtreeFlags);
-
-            case SyntaxKind.ExpressionStatement:
-                // If the expression of an expression statement is a destructuring assignment,
-                // then we treat the statement as ES6 so that we can indicate that we do not
-                // need to hold on to the right-hand side.
-                if ((<ExpressionStatement>node).expression.transformFlags & TransformFlags.DestructuringAssignment) {
-                    transformFlags = TransformFlags.AssertES6;
-                }
-
-                break;
-
-            case SyntaxKind.Parameter:
-                return computeParameter(<ParameterDeclaration>node, subtreeFlags);
-
-            case SyntaxKind.ArrowFunction:
-                return computeArrowFunction(<ArrowFunction>node, subtreeFlags);
-
-            case SyntaxKind.FunctionExpression:
-                return computeFunctionExpression(<FunctionExpression>node, subtreeFlags);
-
-            case SyntaxKind.FunctionDeclaration:
-                return computeFunctionDeclaration(<FunctionDeclaration>node, subtreeFlags);
-
-            case SyntaxKind.VariableDeclaration:
-                return computeVariableDeclaration(<VariableDeclaration>node, subtreeFlags);
-
-            case SyntaxKind.VariableDeclarationList:
-                excludeFlags = TransformFlags.VariableDeclarationListExcludes;
-                if (subtreeFlags & TransformFlags.ContainsBindingPattern) {
                     transformFlags |= TransformFlags.AssertES6;
                 }
 
-                // If a VariableDeclarationList is `let` or `const`, then it is ES6 syntax.
-                if (node.flags & NodeFlags.BlockScoped) {
-                    transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsBlockScopedBinding;
-                }
-
                 break;
-
-            case SyntaxKind.VariableStatement:
-                return computeVariableStatement(<VariableStatement>node, subtreeFlags);
-
-            case SyntaxKind.LabeledStatement:
-                return computeLabeledStatement(<LabeledStatement>node, subtreeFlags);
 
             case SyntaxKind.DoStatement:
             case SyntaxKind.WhileStatement:
@@ -2095,397 +2893,20 @@ namespace ts {
             case SyntaxKind.ForInStatement:
                 // A loop containing a block scoped binding *may* need to be transformed from ES6.
                 if (subtreeFlags & TransformFlags.ContainsBlockScopedBinding) {
-                    transformFlags = TransformFlags.AssertES6;
-                }
-
-                break;
-
-            case SyntaxKind.ClassDeclaration:
-                return computeClassDeclaration(<ClassDeclaration>node, subtreeFlags);
-
-            case SyntaxKind.ClassExpression:
-                return computeClassExpression(<ClassExpression>node, subtreeFlags);
-
-            case SyntaxKind.HeritageClause:
-                if ((<HeritageClause>node).token === SyntaxKind.ExtendsKeyword) {
-                    // An `extends` HeritageClause is ES6 syntax.
-                    transformFlags = TransformFlags.AssertES6;
-                }
-                else {
-                    // An `implements` HeritageClause is TypeScript syntax.
-                    Debug.assert((<HeritageClause>node).token === SyntaxKind.ImplementsKeyword);
-                    transformFlags = TransformFlags.AssertTypeScript;
-                }
-
-                break;
-
-            case SyntaxKind.ExpressionWithTypeArguments:
-                // An ExpressionWithTypeArguments is ES6 syntax, as it is used in the
-                // extends clause of a class.
-                transformFlags = TransformFlags.AssertES6;
-
-                // If an ExpressionWithTypeArguments contains type arguments, then it
-                // is TypeScript syntax.
-                if ((<ExpressionWithTypeArguments>node).typeArguments) {
-                    transformFlags |= TransformFlags.AssertTypeScript;
-                }
-
-                break;
-
-            case SyntaxKind.Constructor:
-                // A Constructor is ES6 syntax.
-                excludeFlags = TransformFlags.ConstructorExcludes;
-                transformFlags = TransformFlags.AssertES6;
-
-                // An overload constructor is TypeScript syntax.
-                if (!(<ConstructorDeclaration>node).body) {
-                    transformFlags |= TransformFlags.AssertTypeScript;
-                }
-
-                break;
-
-            case SyntaxKind.PropertyDeclaration:
-                // A PropertyDeclaration is TypeScript syntax.
-                transformFlags = TransformFlags.AssertTypeScript;
-
-                // If the PropertyDeclaration has an initializer, we need to inform its ancestor
-                // so that it handle the transformation.
-                if ((<PropertyDeclaration>node).initializer) {
-                    transformFlags |= TransformFlags.ContainsPropertyInitializer;
-                }
-
-                break;
-
-            case SyntaxKind.MethodDeclaration:
-                // A MethodDeclaration is ES6 syntax.
-                excludeFlags = TransformFlags.MethodOrAccessorExcludes;
-                transformFlags = TransformFlags.AssertES6;
-
-                if ((<MethodDeclaration>node).asteriskToken) {
-                    transformFlags |= TransformFlags.ContainsGenerators;
-                }
-
-                // A MethodDeclaration is TypeScript syntax if it is either async, abstract, overloaded,
-                // generic, or has a decorator.
-                if ((<MethodDeclaration>node).body === undefined
-                    || (<MethodDeclaration>node).typeParameters !== undefined
-                    || hasModifier(node, ModifierFlags.Async | ModifierFlags.Abstract)
-                    || subtreeFlags & TransformFlags.ContainsDecorators) {
-                    transformFlags |= TransformFlags.AssertTypeScript;
-                }
-
-                break;
-
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-                // A GetAccessor or SetAccessor is ES5 syntax.
-                excludeFlags = TransformFlags.MethodOrAccessorExcludes;
-
-                // A GetAccessor or SetAccessor is TypeScript syntax if it is either abstract,
-                // or has a decorator.
-                if ((<AccessorDeclaration>node).body === undefined
-                    || hasModifier(node, ModifierFlags.Async | ModifierFlags.Abstract)
-                    || subtreeFlags & TransformFlags.ContainsDecorators) {
-                    transformFlags = TransformFlags.AssertTypeScript;
-                }
-
-                break;
-
-            case SyntaxKind.ImportEqualsDeclaration:
-                // An ImportEqualsDeclaration with a namespace reference is TypeScript.
-                if (!isExternalModuleImportEqualsDeclaration(node)) {
-                    transformFlags = TransformFlags.AssertTypeScript;
-                }
-
-                break;
-
-            case SyntaxKind.PropertyAccessExpression:
-                // If a PropertyAccessExpression starts with a super keyword, then it is
-                // ES6 syntax, and requires a lexical `this` binding.
-                if ((<PropertyAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword) {
-                    transformFlags = TransformFlags.ContainsLexicalThis;
+                    transformFlags |= TransformFlags.AssertES6;
                 }
 
                 break;
 
             case SyntaxKind.SourceFile:
                 if (subtreeFlags & TransformFlags.ContainsCapturedLexicalThis) {
-                    transformFlags = TransformFlags.AssertES6;
+                    transformFlags |= TransformFlags.AssertES6;
                 }
 
                 break;
         }
 
-        return updateTransformFlags(node, subtreeFlags, transformFlags, excludeFlags);
-    }
-
-    function computeCallExpression(node: CallExpression, subtreeFlags: TransformFlags) {
-        let transformFlags = TransformFlags.None;
-        if (subtreeFlags & TransformFlags.ContainsSpreadElementExpression
-            || isSuperCall(node)
-            || isSuperPropertyCall(node)) {
-            // If the this node contains a SpreadElementExpression, or is a super call, then it is an ES6
-            // node.
-            transformFlags = TransformFlags.AssertES6;
-        }
-
-        return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.ArrayLiteralOrCallOrNewExcludes);
-    }
-
-    function computeBinaryExpression(node: BinaryExpression, subtreeFlags: TransformFlags) {
-        let transformFlags = TransformFlags.None;
-        if (isDestructuringAssignment(node)) {
-            // Destructuring assignments are ES6 syntax.
-            transformFlags = TransformFlags.AssertES6 | TransformFlags.DestructuringAssignment;
-        }
-        else if (isExponentiation(node.operatorToken)) {
-            // Exponentiation is ES7 syntax.
-            transformFlags = TransformFlags.AssertES7;
-        }
-
-        return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.None);
-    }
-
-    function isDestructuringAssignment(node: BinaryExpression) {
-        return node.operatorToken.kind === SyntaxKind.EqualsToken
-            && isObjectOrArrayLiteral(node.left);
-    }
-
-    function isObjectOrArrayLiteral(node: Node) {
-        switch (node.kind) {
-            case SyntaxKind.ObjectLiteralExpression:
-            case SyntaxKind.ArrayLiteralExpression:
-                return true;
-        }
-
-        return false;
-    }
-
-    function isExponentiation(operatorToken: Node) {
-        switch (operatorToken.kind) {
-            case SyntaxKind.AsteriskAsteriskToken:
-            case SyntaxKind.AsteriskAsteriskEqualsToken:
-                return true;
-        }
-
-        return false;
-    }
-
-    function computeParameter(node: ParameterDeclaration, subtreeFlags: TransformFlags) {
-        let transformFlags = TransformFlags.None;
-        // If the parameter has a question token, then it is TypeScript syntax.
-        if (isDefined(node.questionToken)) {
-            transformFlags |= TransformFlags.AssertTypeScript;
-        }
-
-        // If the parameter's name is 'this', then it is TypeScript syntax.
-        if (subtreeFlags & TransformFlags.ContainsDecorators
-            || (node.name && isIdentifier(node.name) && node.name.originalKeywordKind === SyntaxKind.ThisKeyword)) {
-            transformFlags |= TransformFlags.AssertTypeScript;
-        }
-
-        // If a parameter has an accessibility modifier, then it is TypeScript syntax.
-        if (hasModifier(node, ModifierFlags.AccessibilityModifier)) {
-            transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsParameterPropertyAssignments;
-        }
-
-        // If a parameter has an initializer, a binding pattern or a dotDotDot token, then
-        // it is ES6 syntax and its container must emit default value assignments or parameter destructuring downlevel.
-        if (subtreeFlags & TransformFlags.ContainsBindingPattern || isDefined(node.initializer) || isDefined(node.dotDotDotToken)) {
-            transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsDefaultValueAssignments;
-        }
-
-        return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.ParameterExcludes);
-    }
-
-    function computeParenthesizedExpression(node: ParenthesizedExpression, subtreeFlags: TransformFlags) {
-        let transformFlags = TransformFlags.None;
-        // If the node is synthesized, it means the emitter put the parentheses there,
-        // not the user. If we didn't want them, the emitter would not have put them
-        // there.
-        if (node.expression.kind === SyntaxKind.AsExpression
-            || node.expression.kind === SyntaxKind.TypeAssertionExpression) {
-            transformFlags = TransformFlags.AssertTypeScript;
-        }
-
-        // If the expression of a ParenthesizedExpression is a destructuring assignment,
-        // then the ParenthesizedExpression is a destructuring assignment.
-        if (node.expression.transformFlags & TransformFlags.DestructuringAssignment) {
-            transformFlags |= TransformFlags.DestructuringAssignment;
-        }
-
-        return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.None);
-    }
-
-    function computeClassDeclaration(node: ClassDeclaration, subtreeFlags: TransformFlags) {
-        // An ambient declaration is TypeScript syntax.
-        if (hasModifier(node, ModifierFlags.Ambient)) {
-            return updateTransformFlags(node, TransformFlags.None, TransformFlags.TypeScript, TransformFlags.ClassExcludes);
-        }
-
-        // A ClassDeclaration is ES6 syntax.
-        let transformFlags = TransformFlags.AssertES6;
-
-        // A class with a parameter property assignment, property initializer, or decorator is
-        // TypeScript syntax.
-        // An exported declaration may be TypeScript syntax.
-        if (subtreeFlags
-            & (TransformFlags.ContainsParameterPropertyAssignments
-                | TransformFlags.ContainsPropertyInitializer
-                | TransformFlags.ContainsDecorators)
-            || hasModifier(node, ModifierFlags.Export)) {
-            transformFlags |= TransformFlags.AssertTypeScript;
-        }
-        if (subtreeFlags & TransformFlags.ContainsLexicalThisInComputedPropertyName) {
-            // A computed property name containing `this` might need to be rewritten,
-            // so propagate the ContainsLexicalThis flag upward.
-            transformFlags |= TransformFlags.ContainsLexicalThis;
-        }
-
-        return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.ClassExcludes);
-    }
-
-    function computeClassExpression(node: ClassExpression, subtreeFlags: TransformFlags) {
-        // A ClassExpression is ES6 syntax.
-        let transformFlags = TransformFlags.AssertES6;
-
-        // A class with a parameter property assignment, property initializer, or decorator is
-        // TypeScript syntax.
-        if (subtreeFlags
-            & (TransformFlags.ContainsParameterPropertyAssignments
-                | TransformFlags.ContainsPropertyInitializer
-                | TransformFlags.ContainsDecorators)) {
-            transformFlags |= TransformFlags.AssertTypeScript;
-        }
-        if (subtreeFlags & TransformFlags.ContainsLexicalThisInComputedPropertyName) {
-            // A computed property name containing `this` might need to be rewritten,
-            // so propagate the ContainsLexicalThis flag upward.
-            transformFlags |= TransformFlags.ContainsLexicalThis;
-        }
-
-        return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.ClassExcludes);
-    }
-
-    function computeFunctionDeclaration(node: FunctionDeclaration, subtreeFlags: TransformFlags) {
-        const modifiers = getModifierFlags(node);
-
-        // An ambient declaration is TypeScript syntax.
-        // A FunctionDeclaration without a body is an overload and is TypeScript syntax.
-        if (!node.body || modifiers & ModifierFlags.Ambient) {
-            return updateTransformFlags(node, TransformFlags.None, TransformFlags.AssertTypeScript, TransformFlags.FunctionExcludes);
-        }
-
-        let transformFlags = TransformFlags.None;
-
-        // If a FunctionDeclaration is exported, then it is either ES6 or TypeScript syntax.
-        if (modifiers & ModifierFlags.Export) {
-            transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES6;
-        }
-
-        // If a FunctionDeclaration is async, then it is TypeScript syntax.
-        if (modifiers & ModifierFlags.Async) {
-            transformFlags |= TransformFlags.AssertTypeScript;
-        }
-
-        // If a FunctionDeclaration has an asterisk token, is exported, or its
-        // subtree has marked the container as needing to capture the lexical `this`,
-        // then this node is ES6 syntax.
-        if (subtreeFlags & (TransformFlags.ContainsCapturedLexicalThis | TransformFlags.ContainsDefaultValueAssignments)) {
-            transformFlags |= TransformFlags.AssertES6;
-        }
-
-        if ((<FunctionDeclaration>node).asteriskToken) {
-            transformFlags |= TransformFlags.ContainsGenerators;
-        }
-
-        return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.FunctionExcludes);
-    }
-
-    function computeFunctionExpression(node: FunctionExpression, subtreeFlags: TransformFlags) {
-        let transformFlags = TransformFlags.None;
-
-        // An async function expression is TypeScript syntax.
-        if (hasModifier(node, ModifierFlags.Async)) {
-            transformFlags |= TransformFlags.AssertTypeScript;
-        }
-
-        // If a FunctionExpression contains an asterisk token, or its subtree has marked the container
-        // as needing to capture the lexical this, then this node is ES6 syntax.
-        if (subtreeFlags & (TransformFlags.ContainsCapturedLexicalThis | TransformFlags.ContainsDefaultValueAssignments)) {
-            transformFlags |= TransformFlags.AssertES6;
-        }
-
-        if ((<FunctionExpression>node).asteriskToken) {
-            transformFlags |= TransformFlags.ContainsGenerators;
-        }
-
-        return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.FunctionExcludes);
-    }
-
-    function computeArrowFunction(node: ArrowFunction, subtreeFlags: TransformFlags) {
-        // An ArrowFunction is ES6 syntax, and excludes markers that should not escape the scope of an ArrowFunction.
-        let transformFlags = TransformFlags.AssertES6;
-
-        // An async arrow function is TypeScript syntax.
-        if (hasModifier(node, ModifierFlags.Async)) {
-            transformFlags |= TransformFlags.AssertTypeScript;
-        }
-
-        // If an ArrowFunction contains a lexical this, its container must capture the lexical this.
-        if (subtreeFlags & TransformFlags.ContainsLexicalThis) {
-            transformFlags |= TransformFlags.ContainsCapturedLexicalThis;
-        }
-
-        return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.ArrowFunctionExcludes);
-    }
-
-    function computeVariableDeclaration(node: VariableDeclaration, subtreeFlags: TransformFlags) {
-        let transformFlags = TransformFlags.None;
-
-        // A VariableDeclaration with a binding pattern is ES6 syntax.
-        if (isBindingPattern(node.name)) {
-            transformFlags = TransformFlags.AssertES6 | TransformFlags.ContainsBindingPattern;
-        }
-
-        return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.None);
-    }
-
-    function computeVariableStatement(node: VariableStatement, subtreeFlags: TransformFlags) {
-        const modifiers = getModifierFlags(node);
-        // An ambient declaration is TypeScript syntax.
-        if (modifiers & ModifierFlags.Ambient) {
-            return updateTransformFlags(node, TransformFlags.None, TransformFlags.AssertTypeScript, TransformFlags.None);
-        }
-
-        let transformFlags = TransformFlags.None;
-
-        // If a VariableStatement is exported, then it is either ES6 or TypeScript syntax.
-        if (modifiers & ModifierFlags.Export) {
-            transformFlags = TransformFlags.AssertES6 | TransformFlags.AssertTypeScript;
-        }
-
-        if (node.declarationList.transformFlags & TransformFlags.ContainsBindingPattern) {
-            transformFlags |= TransformFlags.AssertES6;
-        }
-
-        return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.None);
-    }
-
-    function computeLabeledStatement(node: LabeledStatement, subtreeFlags: TransformFlags) {
-        let transformFlags = TransformFlags.None;
-
-        // A labeled statement containing a block scoped binding *may* need to be transformed from ES6.
-        if (subtreeFlags & TransformFlags.ContainsBlockScopedBinding
-            && isIterationStatement(this, /*lookInLabeledStatements*/ true)) {
-            transformFlags = TransformFlags.AssertES6;
-        }
-
-        return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.None);
-    }
-
-    function updateTransformFlags(node: Node, subtreeFlags: TransformFlags, transformFlags: TransformFlags, excludeFlags: TransformFlags) {
-        node.transformFlags = transformFlags | subtreeFlags | TransformFlags.HasComputedFlags;
-        node.excludeTransformFlags = excludeFlags | TransformFlags.NodeExcludes;
-        return node.transformFlags & ~node.excludeTransformFlags;
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~excludeFlags;
     }
 }

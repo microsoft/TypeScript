@@ -32,8 +32,9 @@ namespace ts.server {
         children: ScriptInfo[] = [];     // files referenced by this file
         defaultProject: Project;      // project to use by default for file
         fileWatcher: FileWatcher;
-        formatCodeOptions = ts.clone(CompilerService.defaultFormatCodeOptions);
+        formatCodeOptions = ts.clone(CompilerService.getDefaultFormatCodeOptions(this.host));
         path: Path;
+        scriptKind: ScriptKind;
 
         constructor(private host: ServerHost, public fileName: string, public content: string, public isOpen = false) {
             this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
@@ -215,8 +216,16 @@ namespace ts.server {
             return this.roots.map(root => root.fileName);
         }
 
-        getScriptKind() {
-            return ScriptKind.Unknown;
+        getScriptKind(fileName: string) {
+            const info = this.getScriptInfo(fileName);
+            if (!info) {
+                return undefined;
+            }
+
+            if (!info.scriptKind) {
+                info.scriptKind = getScriptKindFromFileName(fileName);
+            }
+            return info.scriptKind;
         }
 
         getScriptVersion(filename: string) {
@@ -489,6 +498,14 @@ namespace ts.server {
         return copiedList;
     }
 
+    /**
+     * This helper funciton processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
+     */
+    export function combineProjectOutput<T>(projects: Project[], action: (project: Project) => T[], comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
+        const result = projects.reduce<T[]>((previous, current) => concatenate(previous, action(current)), []).sort(comparer);
+        return projects.length > 1 ? deduplicate(result, areEqual) : result;
+    }
+
     export interface ProjectServiceEventHandler {
         (eventName: string, project: Project, fileName: string): void;
     }
@@ -516,7 +533,7 @@ namespace ts.server {
         // number becomes 0 for a watcher, then we should close it.
         directoryWatchersRefCount: ts.Map<number> = {};
         hostConfiguration: HostConfiguration;
-        timerForDetectingProjectFileListChanges: Map<NodeJS.Timer> = {};
+        timerForDetectingProjectFileListChanges: Map<any> = {};
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
@@ -525,7 +542,7 @@ namespace ts.server {
 
         addDefaultHostConfiguration() {
             this.hostConfiguration = {
-                formatCodeOptions: ts.clone(CompilerService.defaultFormatCodeOptions),
+                formatCodeOptions: ts.clone(CompilerService.getDefaultFormatCodeOptions(this.host)),
                 hostInfo: "Unknown host"
             };
         }
@@ -576,9 +593,9 @@ namespace ts.server {
 
         startTimerForDetectingProjectFileListChanges(project: Project) {
             if (this.timerForDetectingProjectFileListChanges[project.projectFilename]) {
-                clearTimeout(this.timerForDetectingProjectFileListChanges[project.projectFilename]);
+                this.host.clearTimeout(this.timerForDetectingProjectFileListChanges[project.projectFilename]);
             }
-            this.timerForDetectingProjectFileListChanges[project.projectFilename] = setTimeout(
+            this.timerForDetectingProjectFileListChanges[project.projectFilename] = this.host.setTimeout(
                 () => this.handleProjectFileListChanges(project),
                 250
             );
@@ -902,6 +919,7 @@ namespace ts.server {
                 configuredProject.updateGraph();
                 if (configuredProject.getSourceFile(info)) {
                     info.defaultProject = configuredProject;
+                    referencingProjects.push(configuredProject);
                 }
             }
             return referencingProjects;
@@ -1013,7 +1031,7 @@ namespace ts.server {
          * @param filename is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        openFile(fileName: string, openedByClient: boolean, fileContent?: string) {
+        openFile(fileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
             fileName = ts.normalizePath(fileName);
             let info = ts.lookUp(this.filenameToScriptInfo, fileName);
             if (!info) {
@@ -1028,6 +1046,7 @@ namespace ts.server {
                 }
                 if (content !== undefined) {
                     info = new ScriptInfo(this.host, fileName, content, openedByClient);
+                    info.scriptKind = scriptKind;
                     info.setFormatOptions(this.getFormatCodeOptions());
                     this.filenameToScriptInfo[fileName] = info;
                     if (!info.isOpen) {
@@ -1077,12 +1096,12 @@ namespace ts.server {
          * @param filename is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        openClientFile(fileName: string, fileContent?: string) {
-            this.openOrUpdateConfiguredProjectForFile(fileName);
-            const info = this.openFile(fileName, /*openedByClient*/ true, fileContent);
+        openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind): { configFileName?: string, configFileErrors?: Diagnostic[] } {
+            const { configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName);
+            const info = this.openFile(fileName, /*openedByClient*/ true, fileContent, scriptKind);
             this.addOpenFile(info);
             this.printProjects();
-            return info;
+            return { configFileName, configFileErrors };
         }
 
         /**
@@ -1090,7 +1109,7 @@ namespace ts.server {
          * we first detect if there is already a configured project created for it: if so, we re-read
          * the tsconfig file content and update the project; otherwise we create a new one.
          */
-        openOrUpdateConfiguredProjectForFile(fileName: string) {
+        openOrUpdateConfiguredProjectForFile(fileName: string): { configFileName?: string, configFileErrors?: Diagnostic[] } {
             const searchPath = ts.normalizePath(getDirectoryPath(fileName));
             this.log("Search path: " + searchPath, "Info");
             const configFileName = this.findConfigFile(searchPath);
@@ -1100,11 +1119,16 @@ namespace ts.server {
                 if (!project) {
                     const configResult = this.openConfigFile(configFileName, fileName);
                     if (!configResult.success) {
-                        this.log("Error opening config file " + configFileName + " " + configResult.errorMsg);
+                        return { configFileName, configFileErrors: configResult.errors };
                     }
                     else {
+                        // even if opening config file was successful, it could still
+                        // contain errors that were tolerated.
                         this.log("Opened configuration file " + configFileName, "Info");
                         this.configuredProjects.push(configResult.project);
+                        if (configResult.errors && configResult.errors.length > 0) {
+                            return { configFileName, configFileErrors: configResult.errors };
+                        }
                     }
                 }
                 else {
@@ -1114,6 +1138,7 @@ namespace ts.server {
             else {
                 this.log("No config files found.");
             }
+            return configFileName ? { configFileName } : {};
         }
 
         /**
@@ -1203,24 +1228,25 @@ namespace ts.server {
             return undefined;
         }
 
-        configFileToProjectOptions(configFilename: string): { succeeded: boolean, projectOptions?: ProjectOptions, error?: ProjectOpenResult } {
+        configFileToProjectOptions(configFilename: string): { succeeded: boolean, projectOptions?: ProjectOptions, errors?: Diagnostic[] } {
             configFilename = ts.normalizePath(configFilename);
             // file references will be relative to dirPath (or absolute)
             const dirPath = ts.getDirectoryPath(configFilename);
             const contents = this.host.readFile(configFilename);
             const rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileTextToJson(configFilename, contents);
             if (rawConfig.error) {
-                return { succeeded: false, error: rawConfig.error };
+                return { succeeded: false, errors: [rawConfig.error] };
             }
             else {
                 const parsedCommandLine = ts.parseJsonConfigFileContent(rawConfig.config, this.host, dirPath, /*existingOptions*/ {}, configFilename);
                 Debug.assert(!!parsedCommandLine.fileNames);
 
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
-                    return { succeeded: false, error: { errorMsg: "tsconfig option errors" } };
+                    return { succeeded: false, errors: parsedCommandLine.errors };
                 }
                 else if (parsedCommandLine.fileNames.length === 0) {
-                    return { succeeded: false, error: { errorMsg: "no files found" } };
+                    const error = createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename);
+                    return { succeeded: false, errors: [error] };
                 }
                 else {
                     const projectOptions: ProjectOptions = {
@@ -1233,20 +1259,21 @@ namespace ts.server {
 
         }
 
-        openConfigFile(configFilename: string, clientFileName?: string): ProjectOpenResult {
-            const { succeeded, projectOptions, error } = this.configFileToProjectOptions(configFilename);
+        openConfigFile(configFilename: string, clientFileName?: string): { success: boolean, project?: Project, errors?: Diagnostic[] } {
+            const { succeeded, projectOptions, errors } = this.configFileToProjectOptions(configFilename);
             if (!succeeded) {
-                return error;
+                return { success: false, errors };
             }
             else {
                 const project = this.createProject(configFilename, projectOptions);
+                let errors: Diagnostic[];
                 for (const rootFilename of projectOptions.files) {
                     if (this.host.fileExists(rootFilename)) {
                         const info = this.openFile(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
                         project.addRoot(info);
                     }
                     else {
-                        return { errorMsg: "specified file " + rootFilename + " not found" };
+                        (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.File_0_not_found, rootFilename));
                     }
                 }
                 project.finishGraph();
@@ -1257,7 +1284,7 @@ namespace ts.server {
                     path => this.directoryWatchedForSourceFilesChanged(project, path),
                     /*recursive*/ true
                 );
-                return { success: true, project: project };
+                return { success: true, project: project, errors };
             }
         }
 
@@ -1267,13 +1294,13 @@ namespace ts.server {
                 this.removeProject(project);
             }
             else {
-                const { succeeded, projectOptions, error } = this.configFileToProjectOptions(project.projectFilename);
+                const { succeeded, projectOptions, errors } = this.configFileToProjectOptions(project.projectFilename);
                 if (!succeeded) {
-                    return error;
+                    return errors;
                 }
                 else {
                     const oldFileNames = project.compilerService.host.roots.map(info => info.fileName);
-                    const newFileNames = projectOptions.files;
+                    const newFileNames = ts.filter(projectOptions.files, f => this.host.fileExists(f));
                     const fileNamesToRemove = oldFileNames.filter(f => newFileNames.indexOf(f) < 0);
                     const fileNamesToAdd = newFileNames.filter(f => oldFileNames.indexOf(f) < 0);
 
@@ -1355,23 +1382,25 @@ namespace ts.server {
             return ts.isExternalModule(sourceFile);
         }
 
-        static defaultFormatCodeOptions: ts.FormatCodeOptions = {
-            IndentSize: 4,
-            TabSize: 4,
-            NewLineCharacter: ts.sys ? ts.sys.newLine : "\n",
-            ConvertTabsToSpaces: true,
-            IndentStyle: ts.IndentStyle.Smart,
-            InsertSpaceAfterCommaDelimiter: true,
-            InsertSpaceAfterSemicolonInForStatements: true,
-            InsertSpaceBeforeAndAfterBinaryOperators: true,
-            InsertSpaceAfterKeywordsInControlFlowStatements: true,
-            InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-            InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-            InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-            InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-            PlaceOpenBraceOnNewLineForFunctions: false,
-            PlaceOpenBraceOnNewLineForControlBlocks: false,
-        };
+        static getDefaultFormatCodeOptions(host: ServerHost): ts.FormatCodeOptions {
+            return ts.clone({
+                IndentSize: 4,
+                TabSize: 4,
+                NewLineCharacter: host.newLine || "\n",
+                ConvertTabsToSpaces: true,
+                IndentStyle: ts.IndentStyle.Smart,
+                InsertSpaceAfterCommaDelimiter: true,
+                InsertSpaceAfterSemicolonInForStatements: true,
+                InsertSpaceBeforeAndAfterBinaryOperators: true,
+                InsertSpaceAfterKeywordsInControlFlowStatements: true,
+                InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
+                InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+                InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+                InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
+                PlaceOpenBraceOnNewLineForFunctions: false,
+                PlaceOpenBraceOnNewLineForControlBlocks: false,
+            });
+        }
     }
 
     export interface LineCollection {
@@ -1666,7 +1695,12 @@ namespace ts.server {
         }
 
         reloadFromFile(filename: string, cb?: () => any) {
-            const content = this.host.readFile(filename);
+            let content = this.host.readFile(filename);
+            // If the file doesn't exist or cannot be read, we should
+            // wipe out its cached content on the server to avoid side effects.
+            if (!content) {
+                content = "";
+            }
             this.reload(content);
             if (cb)
                 cb();

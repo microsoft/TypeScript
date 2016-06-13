@@ -416,10 +416,13 @@ namespace ts {
             if (node.asteriskToken) {
                 node = setOriginalNode(
                     createFunctionDeclaration(
+                        /*decorators*/ undefined,
                         /*modifiers*/ undefined,
                         /*asteriskToken*/ undefined,
                         node.name,
+                        /*typeParameters*/ undefined,
                         node.parameters,
+                        /*type*/ undefined,
                         transformGeneratorFunctionBody(node.body),
                         /*location*/ node
                     ),
@@ -462,7 +465,9 @@ namespace ts {
                     createFunctionExpression(
                         /*asteriskToken*/ undefined,
                         node.name,
+                        /*typeParameters*/ undefined,
                         node.parameters,
+                        /*type*/ undefined,
                         transformGeneratorFunctionBody(node.body),
                         /*location*/ node
                     ),
@@ -841,6 +846,7 @@ namespace ts {
                 emitYieldStar(
                     createCall(
                         createIdentifier("__values"),
+                        /*typeParameters*/ undefined,
                         [visitNode(node.expression, visitor, isExpression)]
                     ),
                     /*location*/ node
@@ -1032,6 +1038,7 @@ namespace ts {
                             thisArg,
                             visitElements(node.arguments, /*multiLine*/ false)
                         ),
+                        /*typeArguments*/ undefined,
                         [],
                         /*location*/ node
                     ),
@@ -1425,7 +1432,7 @@ namespace ts {
                 }
 
                 emitAssignment(keysIterator,
-                    createCall("__keys", [
+                    createCall(createIdentifier("__keys"), /*typeArguments*/ undefined, [
                         visitNode(node.expression, visitor, isExpression)
                     ])
                 );
@@ -1436,7 +1443,7 @@ namespace ts {
 
                 beginExceptionBlock();
                 markLabel(incrementLabel);
-                emitAssignment(iteratorResult, createCall(createPropertyAccess(iteratorResult, "next"), []));
+                emitAssignment(iteratorResult, createCall(createPropertyAccess(iteratorResult, "next"), /*typeArguments*/ undefined, []));
                 emitBreakWhenTrue(cleanupLabel, createPropertyAccess(iteratorResult, "done"));
                 emitAssignment(variable, createPropertyAccess(iteratorResult, "value"));
                 transformAndEmitEmbeddedStatement(node.statement);
@@ -1457,7 +1464,7 @@ namespace ts {
                             )
                         ),
                         createStatement(
-                            createCall(createPropertyAccess(keysIterator, "return"), [])
+                            createCall(createPropertyAccess(keysIterator, "return"), /*typeArguments*/ undefined, [])
                         )
                     )
                 );
@@ -2354,7 +2361,7 @@ namespace ts {
          * Creates an expression that can be used to resume from a Yield operation.
          */
         function createGeneratorResume(location?: TextRange): LeftHandSideExpression {
-            return createCall(createPropertyAccess(getState(), "sent"), [], location);
+            return createCall(createPropertyAccess(getState(), "sent"), /*typeArguments*/ undefined, [], location);
         }
 
         /**
@@ -2523,10 +2530,13 @@ namespace ts {
 
             return createCall(
                 createIdentifier("__generator"),
+                /*typeArguments*/ undefined,
                 [createFunctionExpression(
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
+                    /*typeParameters*/ undefined,
                     [createParameter(getState())],
+                    /*type*/ undefined,
                     createBlock(
                         buildStatements()
                     )
@@ -2640,6 +2650,7 @@ namespace ts {
                         createStatement(
                             createCall(
                                 createPropertyAccess(createPropertyAccess(getState(), "trys"), "push"),
+                                /*typeArguments*/ undefined,
                                 [
                                     createArrayLiteral([
                                         createLabel(startLabel),

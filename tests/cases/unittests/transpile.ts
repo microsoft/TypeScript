@@ -1,6 +1,6 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
-module ts {
+namespace ts {
     describe("Transpile", () => {
 
         interface TranspileTestSettings {
@@ -64,7 +64,9 @@ module ts {
                 it("Correct errors for " + justName, () => {
                     Harness.Baseline.runBaseline("Correct errors", justName.replace(/\.tsx?$/, ".errors.txt"), () => {
                         if (transpileResult.diagnostics.length === 0) {
+                            /* tslint:disable:no-null-keyword */
                             return null;
+                            /* tslint:enable:no-null-keyword */
                         }
 
                         return Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics);
@@ -75,7 +77,9 @@ module ts {
                     it("Correct errors (old transpile) for " + justName, () => {
                         Harness.Baseline.runBaseline("Correct errors", justName.replace(/\.tsx?$/, ".oldTranspile.errors.txt"), () => {
                             if (oldTranspileDiagnostics.length === 0) {
+                                /* tslint:disable:no-null-keyword */
                                 return null;
+                                /* tslint:enable:no-null-keyword */
                             }
 
                             return Harness.Compiler.getErrorBaseline(toBeCompiled, oldTranspileDiagnostics);

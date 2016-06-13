@@ -134,7 +134,7 @@ false = Math.pow(false, value);
 }
 value;
 // array literals
-_a = Math.pow(['', ''], value), "" = _a[0], "" = _a[1];
+_a = Math.pow(['', ''], value), '' = _a[0], '' = _a[1];
 // super
 var Derived = (function (_super) {
     __extends(Derived, _super);

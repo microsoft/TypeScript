@@ -98,7 +98,7 @@ namespace ts {
         return declarations;
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange) {
-            const declaration = createVariableDeclaration(name, value, location);
+            const declaration = createVariableDeclaration(name, /*type*/ undefined, value, location);
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
@@ -134,7 +134,7 @@ namespace ts {
         return declarations;
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange, original: Node) {
-            const declaration = createVariableDeclaration(name, value, location);
+            const declaration = createVariableDeclaration(name, /*type*/ undefined, value, location);
             declaration.original = original;
 
             // NOTE: this completely disables source maps, but aligns with the behavior of
@@ -251,7 +251,9 @@ namespace ts {
                 emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value, location);
             }
             else {
-                const name = getSynthesizedClone(<Identifier>target, { sourceMapRange: target, commentRange: target });
+                const name = getMutableClone(<Identifier>target);
+                context.setSourceMapRange(name, target);
+                context.setCommentRange(name, target);
                 emitAssignment(name, value, location, /*original*/ undefined);
             }
         }

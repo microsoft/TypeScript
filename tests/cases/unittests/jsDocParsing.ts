@@ -3,12 +3,12 @@
 /// <reference path="..\..\..\src\compiler\parser.ts" />
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
-module ts {
+namespace ts {
     describe("JSDocParsing", () => {
         describe("TypeExpressions", () => {
             function parsesCorrectly(name: string, content: string) {
                 it(name, () => {
-                    let typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
+                    const typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
                     assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0);
 
                     Harness.Baseline.runBaseline("parseCorrectly", "JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json",
@@ -18,7 +18,7 @@ module ts {
 
             function parsesIncorrectly(name: string, content: string) {
                 it(name, () => {
-                    let type = ts.parseJSDocTypeExpressionForTests(content);
+                    const type = ts.parseJSDocTypeExpressionForTests(content);
                     assert.isTrue(!type || type.diagnostics.length > 0);
                 });
             }
@@ -93,12 +93,12 @@ module ts {
         describe("DocComments", () => {
             function parsesCorrectly(name: string, content: string) {
                 it(name, () => {
-                    let comment = parseIsolatedJSDocComment(content);
+                    const comment = parseIsolatedJSDocComment(content);
                     if (!comment) {
-                        Debug.fail('Comment failed to parse entirely');
+                        Debug.fail("Comment failed to parse entirely");
                     }
                     if (comment.diagnostics.length > 0) {
-                        Debug.fail('Comment has at least one diagnostic: ' + comment.diagnostics[0].messageText);
+                        Debug.fail("Comment has at least one diagnostic: " + comment.diagnostics[0].messageText);
                     }
 
                     Harness.Baseline.runBaseline("parseCorrectly", "JSDocParsing/DocComments.parsesCorrectly." + name + ".json",
@@ -109,7 +109,7 @@ module ts {
 
             function parsesIncorrectly(name: string, content: string) {
                 it(name, () => {
-                    let type = parseIsolatedJSDocComment(content);
+                    const type = parseIsolatedJSDocComment(content);
                     assert.isTrue(!type || type.diagnostics.length > 0);
                 });
             }
@@ -118,29 +118,29 @@ module ts {
                 parsesIncorrectly("emptyComment", "/***/");
                 parsesIncorrectly("threeAsterisks", "/*** */");
                 parsesIncorrectly("asteriskAfterPreamble", "/** * @type {number} */");
-                parsesIncorrectly("multipleTypes", 
+                parsesIncorrectly("multipleTypes",
                         `/**
   * @type {number}
   * @type {string}
   */`);
-                parsesIncorrectly("multipleReturnTypes", 
+                parsesIncorrectly("multipleReturnTypes",
                         `/**
   * @return {number}
   * @return {string}
   */`);
-                parsesIncorrectly("noTypeParameters", 
+                parsesIncorrectly("noTypeParameters",
                         `/**
   * @template
   */`);
-                parsesIncorrectly("trailingTypeParameterComma", 
+                parsesIncorrectly("trailingTypeParameterComma",
                         `/**
   * @template T,
   */`);
-                parsesIncorrectly("paramWithoutName", 
+                parsesIncorrectly("paramWithoutName",
                         `/**
   * @param {number}
   */`);
-                parsesIncorrectly("paramWithoutTypeOrName", 
+                parsesIncorrectly("paramWithoutTypeOrName",
                         `/**
   * @param
   */`);

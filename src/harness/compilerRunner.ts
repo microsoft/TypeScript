@@ -1,6 +1,7 @@
 /// <reference path="harness.ts" />
 /// <reference path="runnerbase.ts" />
 /// <reference path="typeWriter.ts" />
+// In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
 /* tslint:disable:no-null-keyword */
 
 const enum CompilerTestType {
@@ -11,7 +12,7 @@ const enum CompilerTestType {
 
 class CompilerBaselineRunner extends RunnerBase {
     private basePath = "tests/cases";
-    private testSuiteName: string;
+    private testSuiteName: TestRunnerKind;
     private errors: boolean;
     private emit: boolean;
     private decl: boolean;
@@ -38,6 +39,14 @@ class CompilerBaselineRunner extends RunnerBase {
             this.testSuiteName = "compiler"; // default to this for historical reasons
         }
         this.basePath += "/" + this.testSuiteName;
+    }
+
+    public kind() {
+        return this.testSuiteName;
+    }
+
+    public enumerateTestFiles() {
+        return this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true });
     }
 
     private makeUnitName(name: string, root: string) {
@@ -89,16 +98,16 @@ class CompilerBaselineRunner extends RunnerBase {
                 otherFiles = [];
 
                 if (testCaseContent.settings["noImplicitReferences"] || /require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
-                    toBeCompiled.push({ unitName: this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content });
+                    toBeCompiled.push({ unitName: this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content, fileOptions: lastUnit.fileOptions });
                     units.forEach(unit => {
                         if (unit.name !== lastUnit.name) {
-                            otherFiles.push({ unitName: this.makeUnitName(unit.name, rootDir), content: unit.content });
+                            otherFiles.push({ unitName: this.makeUnitName(unit.name, rootDir), content: unit.content, fileOptions: unit.fileOptions });
                         }
                     });
                 }
                 else {
                     toBeCompiled = units.map(unit => {
-                        return { unitName: this.makeUnitName(unit.name, rootDir), content: unit.content };
+                        return { unitName: this.makeUnitName(unit.name, rootDir), content: unit.content, fileOptions: unit.fileOptions };
                     });
                 }
 
@@ -107,7 +116,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
 
                 const output = Harness.Compiler.compileFiles(
-                    toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ undefined);
+                    toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ harnessSettings["currentDirectory"]);
 
                 options = output.options;
                 result = output.result;
@@ -156,7 +165,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 if (options.sourceMap || options.inlineSourceMap) {
                     Harness.Baseline.runBaseline("Correct sourcemap content for " + fileName, justName.replace(/\.tsx?$/, ".sourcemap.txt"), () => {
                         const record = result.getSourceMapRecord();
-                        if (options.noEmitOnError && result.errors.length !== 0 && record === undefined) {
+                        if ((options.noEmitOnError && result.errors.length !== 0) || record === undefined) {
                             // Because of the noEmitOnError option no files are created. We need to return null because baselining isn"t required.
                             return null;
                         }
@@ -232,7 +241,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     }
 
                     Harness.Baseline.runBaseline("Correct Sourcemap output for " + fileName, justName.replace(/\.tsx?/, ".js.map"), () => {
-                        if (options.noEmitOnError && result.errors.length !== 0 && result.sourceMaps.length === 0) {
+                        if ((options.noEmitOnError && result.errors.length !== 0) || result.sourceMaps.length === 0) {
                             // We need to return null here or the runBaseLine will actually create a empty file.
                             // Baselining isn't required here because there is no output.
                             return null;
@@ -390,7 +399,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
             // this will set up a series of describe/it blocks to run between the setup and cleanup phases
             if (this.tests.length === 0) {
-                const testFiles = this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true });
+                const testFiles = this.enumerateTestFiles();
                 testFiles.forEach(fn => {
                     fn = fn.replace(/\\/g, "/");
                     this.checkTestCodeOutput(fn);
