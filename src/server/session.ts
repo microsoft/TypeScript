@@ -118,6 +118,7 @@ namespace ts.server {
         export const Navto = "navto";
         export const Occurrences = "occurrences";
         export const DocumentHighlights = "documentHighlights";
+        export const DocumentHighlightsFull = "documentHighlights-full";
         export const Open = "open";
         export const Quickinfo = "quickinfo";
         export const QuickinfoFull = "quickinfo-full";
@@ -406,8 +407,8 @@ namespace ts.server {
             });
         }
 
-        private getDocumentHighlights(line: number, offset: number, fileName: string, filesToSearch: string[]): protocol.DocumentHighlightsItem[] {
-            fileName = ts.normalizePath(fileName);
+        private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): protocol.DocumentHighlightsItem[] | DocumentHighlights[] {
+            const fileName = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(fileName);
 
             if (!project) {
@@ -415,15 +416,20 @@ namespace ts.server {
             }
 
             const scriptInfo = project.getScriptInfo(fileName);
-            const position = scriptInfo.lineOffsetToPosition(line, offset);
+            const position =  this.getPosition(args, scriptInfo);
 
-            const documentHighlights = project.languageService.getDocumentHighlights(fileName, position, filesToSearch);
+            const documentHighlights = project.languageService.getDocumentHighlights(fileName, position, args.filesToSearch);
 
             if (!documentHighlights) {
                 return undefined;
             }
 
-            return documentHighlights.map(convertToDocumentHighlightsItem);
+            if (simplifiedResult) {
+                return documentHighlights.map(convertToDocumentHighlightsItem);
+            }
+            else {
+                return documentHighlights;
+            }
 
             function convertToDocumentHighlightsItem(documentHighlights: ts.DocumentHighlights): ts.server.protocol.DocumentHighlightsItem {
                 const { fileName, highlightSpans } = documentHighlights;
@@ -749,7 +755,7 @@ namespace ts.server {
             });
         }
 
-        private getCompletionsWorker(args: protocol.CompletionsRequestArgs, simplifiedResult: boolean): protocol.CompletionEntry[] | CompletionInfo {
+        private getCompletions(args: protocol.CompletionsRequestArgs, simplifiedResult: boolean): protocol.CompletionEntry[] | CompletionInfo {
             const prefix = args.prefix || "";
             const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
@@ -1145,10 +1151,10 @@ namespace ts.server {
                 return { response: this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.offset, formatOnKeyArgs.key, formatOnKeyArgs.file), responseRequired: true };
             },
             [CommandNames.Completions]: (request: protocol.CompletionDetailsRequest) => {
-                return this.requiredResponse(this.getCompletionsWorker(request.arguments, /*simplifiedResult*/ true));
+                return this.requiredResponse(this.getCompletions(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.CompletionsFull]: (request: protocol.CompletionDetailsRequest) => {
-                return this.requiredResponse(this.getCompletionsWorker(request.arguments, /*simplifiedResult*/ false));
+                return this.requiredResponse(this.getCompletions(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
                 return this.requiredResponse(this.getCompletionEntryDetails(request.arguments))
@@ -1210,9 +1216,11 @@ namespace ts.server {
                 const { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
                 return { response: this.getOccurrences(line, offset, fileName), responseRequired: true };
             },
-            [CommandNames.DocumentHighlights]: (request: protocol.Request) => {
-                const { line, offset, file: fileName, filesToSearch } = <protocol.DocumentHighlightsRequestArgs>request.arguments;
-                return { response: this.getDocumentHighlights(line, offset, fileName, filesToSearch), responseRequired: true };
+            [CommandNames.DocumentHighlights]: (request: protocol.DocumentHighlightsRequest) => {
+                return this.requiredResponse(this.getDocumentHighlights(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.DocumentHighlightsFull]: (request: protocol.DocumentHighlightsRequest) => {
+                return this.requiredResponse(this.getDocumentHighlights(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.ProjectInfo]: (request: protocol.Request) => {
                 const { file, needFileNameList } = <protocol.ProjectInfoRequestArgs>request.arguments;
