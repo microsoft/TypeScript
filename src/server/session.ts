@@ -108,6 +108,7 @@ namespace ts.server {
         export const CompletionDetails = "completionEntryDetails";
         export const Configure = "configure";
         export const Definition = "definition";
+        export const DefinitionFull = "definition-full";
         export const Exit = "exit";
         export const Format = "format";
         export const Formatonkey = "formatonkey";
@@ -319,29 +320,34 @@ namespace ts.server {
             }
         }
 
-        private getDefinition(line: number, offset: number, fileName: string): protocol.FileSpan[] {
-            const file = ts.normalizePath(fileName);
+        private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.FileSpan[] | DefinitionInfo[] {
+            const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
             if (!project) {
                 throw Errors.NoProject;
             }
 
             const scriptInfo = project.getScriptInfo(file);
-            const position = scriptInfo.lineOffsetToPosition(line, offset);
+            const position = this.getPosition(args, scriptInfo);;
 
             const definitions = project.languageService.getDefinitionAtPosition(file, position);
             if (!definitions) {
                 return undefined;
             }
 
-            return definitions.map(def => {
-                const defScriptInfo = project.getScriptInfo(def.fileName);
-                return {
-                    file: def.fileName,
-                    start: defScriptInfo.positionToLineOffset(def.textSpan.start),
-                    end: defScriptInfo.positionToLineOffset(ts.textSpanEnd(def.textSpan))
-                };
-            });
+            if (simplifiedResult) {
+                return definitions.map(def => {
+                    const defScriptInfo = project.getScriptInfo(def.fileName);
+                    return {
+                        file: def.fileName,
+                        start: defScriptInfo.positionToLineOffset(def.textSpan.start),
+                        end: defScriptInfo.positionToLineOffset(ts.textSpanEnd(def.textSpan))
+                    };
+                });
+            }
+            else {
+                return definitions;
+            }
         }
 
         private getTypeDefinition(line: number, offset: number, fileName: string): protocol.FileSpan[] {
@@ -1086,9 +1092,11 @@ namespace ts.server {
                 this.exit();
                 return this.notRequired();
             },
-            [CommandNames.Definition]: (request: protocol.Request) => {
-                const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                return this.requiredResponse(this.getDefinition(defArgs.line, defArgs.offset, defArgs.file));
+            [CommandNames.Definition]: (request: protocol.DefinitionRequest) => {
+                return this.requiredResponse(this.getDefinition(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.DefinitionFull]: (request: protocol.DefinitionRequest) => {
+                return this.requiredResponse(this.getDefinition(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.TypeDefinition]: (request: protocol.Request) => {
                 const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
