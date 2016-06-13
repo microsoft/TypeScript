@@ -178,6 +178,11 @@ namespace ts {
 
     const typeReferenceExtensions = [".d.ts"];
 
+    function getEffectiveTypeRoots(options: CompilerOptions, host: ModuleResolutionHost) {
+        return options.typeRoots ||
+            defaultTypeRoots.map(d => combinePaths(options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory(), d));
+    }
+
     /**
      * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
      * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
@@ -192,8 +197,7 @@ namespace ts {
             traceEnabled
         };
 
-        const typeRoots = options.typeRoots ||
-            defaultTypeRoots.map(d => combinePaths(options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory(), d));
+        const typeRoots = getEffectiveTypeRoots(options, host);
         if (traceEnabled) {
             if (containingFile === undefined) {
                 if (typeRoots === undefined) {
@@ -1032,8 +1036,7 @@ namespace ts {
         // Walk the primary type lookup locations
         let result: string[] = [];
         if (host.directoryExists && host.getDirectories) {
-            const typeRoots = options.typeRoots ||
-                defaultTypeRoots.map(d => combinePaths(options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory(), d));
+            const typeRoots = getEffectiveTypeRoots(options, host);
             for (const root of typeRoots) {
                 if (host.directoryExists(root)) {
                     result = result.concat(host.getDirectories(root));
@@ -1208,7 +1211,7 @@ namespace ts {
                 (oldOptions.rootDir !== options.rootDir) ||
                 (oldOptions.configFilePath !== options.configFilePath) ||
                 (oldOptions.baseUrl !== options.baseUrl) ||
-                (oldOptions.typeRoots !== options.typeRoots) ||
+                !arrayIsEqualTo(oldOptions.typeRoots, oldOptions.typeRoots) ||
                 !arrayIsEqualTo(oldOptions.rootDirs, options.rootDirs) ||
                 !mapIsEqualTo(oldOptions.paths, options.paths)) {
                 return false;
