@@ -1834,9 +1834,16 @@ namespace FourSlash {
                 this.raiseError("Not the expected text change.");
             }
 
-            if (actual.textChanges[0].span.start !== start ||
-                (actual.textChanges[0].span.start + actual.textChanges[0].span.length) !== end) {
-                this.raiseError("Not the expected span range.");
+            if (expectedChange.newText.length === 0) {
+                if (actual.textChanges[0].span.start !== start ||
+                    (actual.textChanges[0].span.start + actual.textChanges[0].span.length) !== end) {
+                    this.raiseError("Not the expected span range.");
+                }
+            }
+            else {
+                if (actual.textChanges[0].span.start !== start) {
+                    this.raiseError("Not the expected span range.");
+                }
             }
         }
 

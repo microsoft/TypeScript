@@ -30,7 +30,7 @@ namespace ts.quickFix {
                                     if (interfaceMembers[j].name && classMembers.indexOf(interfaceMembers[j].name.getText()) === -1) {
                                         if (interfaceMembers[j].kind === SyntaxKind.PropertySignature) {
                                             let interfaceProperty = <PropertySignature>interfaceMembers[j];
-                                            let propertyText = interfaceProperty.getText() + "sys.newLine";
+                                            let propertyText = interfaceProperty.getText() + " sys.newLine";
                                             changesArray.push({ newText: propertyText, span: { start: startPos, length: 0 } });
 
                                         } else if (interfaceMembers[j].kind === SyntaxKind.MethodSignature) {
@@ -42,7 +42,7 @@ namespace ts.quickFix {
                                                 methodText = methodText.substr(0, methodText.length - 1);
                                             }
 
-                                            methodText = methodText.concat("{sys.newLine");
+                                            methodText = methodText.concat("{sys.newLine ");
                                             methodText = methodText.concat(methodBody, "sys.newLine");
                                             methodText = methodText.concat("}sys.newLine");
                                             changesArray.push({ newText: methodText, span: { start: startPos, length: 0 } });
