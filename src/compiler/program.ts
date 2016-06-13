@@ -192,7 +192,8 @@ namespace ts {
             traceEnabled
         };
 
-        const typeRoots = options.typeRoots || defaultTypeRoots;
+        const typeRoots = options.typeRoots ||
+            defaultTypeRoots.map(d => combinePaths(options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory(), d));
         if (traceEnabled) {
             if (containingFile === undefined) {
                 if (typeRoots === undefined) {
