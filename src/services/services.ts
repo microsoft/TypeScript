@@ -1941,17 +1941,17 @@ namespace ts {
 
 
 
-    let commandLineOptions_stringToEnum: CommandLineOptionOfCustomType[];
+    let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
 
     /** JS users may pass in string values for enum compiler options (such as ModuleKind), so convert. */
     function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
-        commandLineOptions_stringToEnum = commandLineOptions_stringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
+        commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
             typeof o.type === "object" && !forEachValue(<Map<any>> o.type, v => typeof v !== "number"));
 
         options = clone(options);
 
-        for (const opt of commandLineOptions_stringToEnum) {
+        for (const opt of commandLineOptionsStringToEnum) {
             if (!hasProperty(options, opt.name)) {
                 continue;
             }
