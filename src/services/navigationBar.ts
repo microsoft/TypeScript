@@ -2,32 +2,32 @@
 
 /* @internal */
 namespace ts.NavigationBar {
-    export function getNavigationBarItems(sourceFile: SourceFile): NavigationBarItem[] {
-        const root = createNavNode(undefined, sourceFile);
-        return map(topLevelItems(root), convertToTopLevelItem);
-    }
-
     /**
      * Represents a navBar item and its children.
      * The returned NavigationBarItem is more complicated and doesn't include 'parent', so we use these to do work before converting.
      */
-    interface NavNode {
+    interface NavigationBarNode {
         node: Node;
         additionalNodes?: Node[];
-        parent?: NavNode; // Missing for root decl
-        children: NavNode[];
+        parent?: NavigationBarNode; // Missing for root
+        children: NavigationBarNode[];
         indent: number; // # of parents
     }
-    function navKind(n: NavNode): SyntaxKind {
+    function navKind(n: NavigationBarNode): SyntaxKind {
         return n.node.kind;
     }
-    function navModifiers(n: NavNode): string {
+    function navModifiers(n: NavigationBarNode): string {
         return getNodeModifiers(n.node);
     }
 
+    export function getNavigationBarItems(sourceFile: SourceFile): NavigationBarItem[] {
+        const root = createNavigationBarNode(/*parent*/ undefined, sourceFile);
+        return map(topLevelItems(root), convertToTopLevelItem);
+    }
+
     /** Creates a child node and adds it to parent. */
-    function createNavNode(parent: NavNode, node: Node): NavNode {
-        const navNode: NavNode = {
+    function createNavigationBarNode(parent: NavigationBarNode, node: Node): NavigationBarNode {
+        const navNode: NavigationBarNode = {
             node,
             additionalNodes: undefined,
             parent,
@@ -42,16 +42,16 @@ namespace ts.NavigationBar {
     }
 
     /** Traverse through parent.node's descendants and find declarations to add as parent's children. */
-    function addChildren(parent: NavNode): void {
+    function addChildren(parent: NavigationBarNode): void {
         function recur(node: Node): void {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
                     // Get parameter properties, and treat them as being on the *same* level as the constructor, not under it.
                     const ctr = <ConstructorDeclaration>node;
-                    createNavNode(parent, ctr);
+                    createNavigationBarNode(parent, ctr);
                     for (const param of ctr.parameters) {
                         if (isParameterPropertyDeclaration(param)) {
-                            createNavNode(parent, param);
+                            createNavigationBarNode(parent, param);
                         }
                     }
                     break;
@@ -63,13 +63,13 @@ namespace ts.NavigationBar {
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                     if (!hasDynamicName((<ClassElement | TypeElement> node))) {
-                        createNavNode(parent, node);
+                        createNavigationBarNode(parent, node);
                     }
                     break;
 
                 case SyntaxKind.EnumMember:
                     if (!isComputedProperty(<EnumMember>node)) {
-                        createNavNode(parent, node);
+                        createNavigationBarNode(parent, node);
                     }
                     break;
 
@@ -78,7 +78,7 @@ namespace ts.NavigationBar {
                     // Handle default import case e.g.:
                     //    import d from "mod";
                     if (importClause.name) {
-                        createNavNode(parent, importClause);
+                        createNavigationBarNode(parent, importClause);
                     }
 
                     // Handle named bindings in imports e.g.:
@@ -86,7 +86,7 @@ namespace ts.NavigationBar {
                     //    import {a, b as B} from "mod";
                     if (importClause.namedBindings) {
                         if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                            createNavNode(parent, <NamespaceImport>importClause.namedBindings);
+                            createNavigationBarNode(parent, <NamespaceImport>importClause.namedBindings);
                         }
                         else {
                             forEach((<NamedImports>importClause.namedBindings).elements, recur);
@@ -106,7 +106,7 @@ namespace ts.NavigationBar {
                         recur(decl.initializer);
                     }
                     else {
-                        createNavNode(parent, node);
+                        createNavigationBarNode(parent, node);
                     }
                     break;
 
@@ -128,7 +128,7 @@ namespace ts.NavigationBar {
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
-                    createNavNode(parent, node);
+                    createNavigationBarNode(parent, node);
                     break;
 
                 default:
@@ -153,8 +153,8 @@ namespace ts.NavigationBar {
     }
 
     /** Merge declarations of the same kind. */
-    function mergeChildren(children: NavNode[]): void {
-        const nameToNavNodes: Map<NavNode[]> = {};
+    function mergeChildren(children: NavigationBarNode[]): void {
+        const nameToNavNodes: Map<NavigationBarNode[]> = {};
         filterMutate(children, child => {
             const decl = <Declaration>child.node;
             const name = decl.name && decl.name.getText();
@@ -196,7 +196,7 @@ namespace ts.NavigationBar {
         }
 
         /** Merge source into target. Source should be thrown away after this is called. */
-        function merge(target: NavNode, source: NavNode): void {
+        function merge(target: NavigationBarNode, source: NavigationBarNode): void {
             target.additionalNodes = target.additionalNodes || [];
             target.additionalNodes.push(source.node);
             if (source.additionalNodes) {
@@ -210,7 +210,7 @@ namespace ts.NavigationBar {
     }
 
     /** Recursively ensure that each NavNode's children are in sorted order. */
-    function sortChildren(children: NavNode[]): void {
+    function sortChildren(children: NavigationBarNode[]): void {
         children.sort((child1, child2) => {
             const name1 = tryGetName(child1.node), name2 = tryGetName(child2.node);
             if (name1 && name2) {
@@ -239,7 +239,7 @@ namespace ts.NavigationBar {
                 if (chA === "'" && chB === "\"") {
                     return -1;
                 }
-                const cmp = chA.toLowerCase().localeCompare(chB.toLowerCase());
+                const cmp = chA.toLocaleLowerCase().localeCompare(chB.toLocaleLowerCase());
                 if (cmp !== 0) {
                     return cmp;
                 }
@@ -336,9 +336,9 @@ namespace ts.NavigationBar {
     }
 
     /** Flattens the NavNode tree to a list, keeping only the top-level items. */
-    function topLevelItems(root: NavNode): NavNode[] {
-        const topLevel: NavNode[] = [];
-        function recur(item: NavNode) {
+    function topLevelItems(root: NavigationBarNode): NavigationBarNode[] {
+        const topLevel: NavigationBarNode[] = [];
+        function recur(item: NavigationBarNode) {
             if (isTopLevel(item)) {
                 topLevel.push(item);
                 for (const child of item.children) {
@@ -349,7 +349,7 @@ namespace ts.NavigationBar {
         recur(root);
         return topLevel;
 
-        function isTopLevel(item: NavNode): boolean {
+        function isTopLevel(item: NavigationBarNode): boolean {
             switch (navKind(item)) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
@@ -375,7 +375,7 @@ namespace ts.NavigationBar {
                 default:
                     return false;
             }
-            function isTopLevelFunctionDeclaration(item: NavNode): boolean {
+            function isTopLevelFunctionDeclaration(item: NavigationBarNode): boolean {
                 if (!(<FunctionDeclaration>item.node).body) {
                     return false;
                 }
@@ -390,7 +390,7 @@ namespace ts.NavigationBar {
                         return hasSomeImportantChild(item);
                 }
             }
-            function hasSomeImportantChild(item: NavNode) {
+            function hasSomeImportantChild(item: NavigationBarNode) {
                 return forEach(item.children, child => {
                     const childKind = navKind(child);
                     return childKind !== SyntaxKind.VariableDeclaration && childKind !== SyntaxKind.BindingElement;
@@ -399,7 +399,7 @@ namespace ts.NavigationBar {
         }
     }
 
-    function convertToTopLevelItem(n: NavNode): NavigationBarItem {
+    function convertToTopLevelItem(n: NavigationBarNode): NavigationBarItem {
         const spans = [getNodeSpan(n.node)];
         return {
             text: getItemName(n.node),
@@ -412,7 +412,7 @@ namespace ts.NavigationBar {
             grayed: false
         };
 
-        function convertToChildItem(n: NavNode): NavigationBarItem {
+        function convertToChildItem(n: NavigationBarNode): NavigationBarItem {
             const nodes = [n.node];
             if (n.additionalNodes) {
                 nodes.push(...n.additionalNodes);
