@@ -104,6 +104,7 @@ namespace ts.server {
         export const Change = "change";
         export const Close = "close";
         export const Completions = "completions";
+        export const CompletionsFull = "completions-full";
         export const CompletionDetails = "completionEntryDetails";
         export const Configure = "configure";
         export const Definition = "definition";
@@ -609,6 +610,10 @@ namespace ts.server {
             }
         }
 
+        private getPosition(args: protocol.FileLocationRequestArgs, scriptInfo: ScriptInfo): number {
+            return args.position !== undefined ? args.position : scriptInfo.lineOffsetToPosition(args.line, args.offset);
+        }
+
         private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplified: boolean): protocol.QuickInfoResponseBody | QuickInfo {
             const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
@@ -617,8 +622,7 @@ namespace ts.server {
             }
 
             const scriptInfo = project.getScriptInfo(file);
-            const position = args.position !== undefined ? args.position : scriptInfo.lineOffsetToPosition(args.line, args.offset);
-            const quickInfo = project.languageService.getQuickInfoAtPosition(file, position);
+            const quickInfo = project.languageService.getQuickInfoAtPosition(file, this.getPosition(args, scriptInfo));
             if (!quickInfo) {
                 return undefined;
             }
@@ -738,44 +742,46 @@ namespace ts.server {
             });
         }
 
-        private getCompletions(line: number, offset: number, prefix: string, fileName: string): protocol.CompletionEntry[] {
-            if (!prefix) {
-                prefix = "";
-            }
-            const file = ts.normalizePath(fileName);
+        private getCompletionsWorker(args: protocol.CompletionsRequestArgs, simplifiedResult: boolean): protocol.CompletionEntry[] | CompletionInfo {
+            const prefix = args.prefix || "";
+            const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
             if (!project) {
                 throw Errors.NoProject;
             }
 
             const scriptInfo = project.getScriptInfo(file);
-            const position = scriptInfo.lineOffsetToPosition(line, offset);
+            const position = this.getPosition(args, scriptInfo)
 
             const completions = project.languageService.getCompletionsAtPosition(file, position);
             if (!completions) {
                 return undefined;
             }
+            if (!simplifiedResult) {
+                return completions;
+            }
+            else {
+                return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
+                    if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
+                        result.push(entry);
+                    }
+                    return result;
+                }, []).sort((a, b) => a.name.localeCompare(b.name));
+            }
 
-            return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
-                if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                    result.push(entry);
-                }
-                return result;
-            }, []).sort((a, b) => a.name.localeCompare(b.name));
         }
 
-        private getCompletionEntryDetails(line: number, offset: number,
-            entryNames: string[], fileName: string): protocol.CompletionEntryDetails[] {
-            const file = ts.normalizePath(fileName);
+        private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs): protocol.CompletionEntryDetails[] {
+            const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
             if (!project) {
                 throw Errors.NoProject;
             }
 
             const scriptInfo = project.getScriptInfo(file);
-            const position = scriptInfo.lineOffsetToPosition(line, offset);
+            const position = this.getPosition(args, scriptInfo);
 
-            return entryNames.reduce((accum: protocol.CompletionEntryDetails[], entryName: string) => {
+            return args.entryNames.reduce((accum: protocol.CompletionEntryDetails[], entryName: string) => {
                 const details = project.languageService.getCompletionEntryDetails(file, position, entryName);
                 if (details) {
                     accum.push(details);
@@ -1127,16 +1133,14 @@ namespace ts.server {
                 const formatOnKeyArgs = <protocol.FormatOnKeyRequestArgs>request.arguments;
                 return { response: this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.offset, formatOnKeyArgs.key, formatOnKeyArgs.file), responseRequired: true };
             },
-            [CommandNames.Completions]: (request: protocol.Request) => {
-                const completionsArgs = <protocol.CompletionsRequestArgs>request.arguments;
-                return { response: this.getCompletions(completionsArgs.line, completionsArgs.offset, completionsArgs.prefix, completionsArgs.file), responseRequired: true };
+            [CommandNames.Completions]: (request: protocol.CompletionDetailsRequest) => {
+                return this.requiredResponse(this.getCompletionsWorker(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.CompletionDetails]: (request: protocol.Request) => {
-                const completionDetailsArgs = <protocol.CompletionDetailsRequestArgs>request.arguments;
-                return {
-                    response: this.getCompletionEntryDetails(completionDetailsArgs.line, completionDetailsArgs.offset,
-                        completionDetailsArgs.entryNames, completionDetailsArgs.file), responseRequired: true
-                };
+            [CommandNames.CompletionsFull]: (request: protocol.CompletionDetailsRequest) => {
+                return this.requiredResponse(this.getCompletionsWorker(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
+                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments))
             },
             [CommandNames.SignatureHelp]: (request: protocol.Request) => {
                 const signatureHelpArgs = <protocol.SignatureHelpRequestArgs>request.arguments;
