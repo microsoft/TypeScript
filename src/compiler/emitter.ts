@@ -6133,10 +6133,10 @@ const _super = (function (geti, seti) {
 
                                 if (parameters[i].dotDotDotToken) {
                                     let parameterType = parameters[i].type;
-                                    if (parameterType.kind === SyntaxKind.ArrayType) {
+                                    if (parameterType && parameterType.kind === SyntaxKind.ArrayType) {
                                         parameterType = (<ArrayTypeNode>parameterType).elementType;
                                     }
-                                    else if (parameterType.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>parameterType).typeArguments && (<TypeReferenceNode>parameterType).typeArguments.length === 1) {
+                                    else if (parameterType && parameterType.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>parameterType).typeArguments && (<TypeReferenceNode>parameterType).typeArguments.length === 1) {
                                         parameterType = (<TypeReferenceNode>parameterType).typeArguments[0];
                                     }
                                     else {
