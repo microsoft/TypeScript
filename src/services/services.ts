@@ -7511,9 +7511,9 @@ namespace ts {
 
         function getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): SuggestedFix {
             synchronizeHostData();
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const sourceFile = getValidSourceFile(fileName);
 
-            return quickFixProvider.fix(errorCodes[0], sourceFile, start, end);
+            return quickFixProvider.fix(errorCodes[0], sourceFile, start, end, program);
         }
 
         /**

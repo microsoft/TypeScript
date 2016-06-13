@@ -15,6 +15,7 @@
         "../compiler/utilities.ts",
         "../compiler/binder.ts",
         "../compiler/checker.ts",
+        "../compiler/utilities.ts",
         "../compiler/emitter.ts",
         "../compiler/program.ts",
         "../compiler/declarationEmitter.ts",

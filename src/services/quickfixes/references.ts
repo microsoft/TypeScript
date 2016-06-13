@@ -2,3 +2,4 @@
 ///<reference path='quickFixProvider.ts' />
 ///<reference path='superFixes.ts' />
 ///<reference path='unusedIdentifierFixes.ts' />
+///<reference path='interfaceFixes.ts' />

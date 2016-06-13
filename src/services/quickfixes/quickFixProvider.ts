@@ -4,7 +4,7 @@ namespace ts {
     export interface QuickFix {
         name: string;
         errorCode: string;
-        getFix(sourceFile: SourceFile, start: number, end: number): TextChange[];
+        getFix(sourceFile: SourceFile, start: number, end: number, program?: Program): TextChange[];
     }
 
     export interface SuggestedFix {
@@ -36,14 +36,14 @@ namespace ts {
                 return getKeys(quickFixes);
             }
 
-            public fix(errorCode: string, sourceFile: SourceFile, start: number, end: number): SuggestedFix{
+            public fix(errorCode: string, sourceFile: SourceFile, start: number, end: number, program: Program): SuggestedFix{
                 const fix = quickFixes[errorCode];
 
                 if (!fix) {
                     throw new Error(`No fix found for error: '${errorCode}'`);
                 }
 
-                return { name: fix.name, textChanges: fix.getFix(sourceFile, start, end) };
+                return { name: fix.name, textChanges: fix.getFix(sourceFile, start, end, program) };
             }
         }
     }
