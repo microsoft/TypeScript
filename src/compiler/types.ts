@@ -2970,22 +2970,23 @@ namespace ts {
         ES6 = 1 << 6,
         ContainsES6 = 1 << 7,
         DestructuringAssignment = 1 << 8,
-        ContainsGenerators = 1 << 9,
+        Generator = 1 << 9,
+        ContainsGenerator = 1 << 10,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsDecorators = 1 << 10,
-        ContainsPropertyInitializer = 1 << 11,
-        ContainsLexicalThis = 1 << 12,
-        ContainsCapturedLexicalThis = 1 << 13,
-        ContainsLexicalThisInComputedPropertyName = 1 << 14,
-        ContainsDefaultValueAssignments = 1 << 15,
-        ContainsParameterPropertyAssignments = 1 << 16,
-        ContainsSpreadElementExpression = 1 << 17,
-        ContainsComputedPropertyName = 1 << 18,
-        ContainsBlockScopedBinding = 1 << 19,
-        ContainsBindingPattern = 1 << 20,
-        ContainsYield = 1 << 21,
+        ContainsDecorators = 1 << 11,
+        ContainsPropertyInitializer = 1 << 12,
+        ContainsLexicalThis = 1 << 13,
+        ContainsCapturedLexicalThis = 1 << 14,
+        ContainsLexicalThisInComputedPropertyName = 1 << 15,
+        ContainsDefaultValueAssignments = 1 << 16,
+        ContainsParameterPropertyAssignments = 1 << 17,
+        ContainsSpreadElementExpression = 1 << 18,
+        ContainsComputedPropertyName = 1 << 19,
+        ContainsBlockScopedBinding = 1 << 20,
+        ContainsBindingPattern = 1 << 21,
+        ContainsYield = 1 << 22,
 
         HasComputedFlags = 1 << 29, // Transform flags have been computed.
 
@@ -2995,6 +2996,7 @@ namespace ts {
         AssertJsx = Jsx | ContainsJsx,
         AssertES7 = ES7 | ContainsES7,
         AssertES6 = ES6 | ContainsES6,
+        AssertGenerator = Generator | ContainsGenerator,
 
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
@@ -3043,13 +3045,14 @@ namespace ts {
         ExportName = 1 << 17,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
         LocalName = 1 << 18,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
         Indented = 1 << 19,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        AsyncFunctionBody = 1 << 20,
 
         // SourceMap Specialization.
         // TODO(rbuckton): These should be removed once source maps are aligned with the old
         //                 emitter and new baselines are taken. This exists solely to
         //                 align with the old emitter.
-        SourceMapEmitOpenBraceAsToken = 1 << 20,        // Emits the open brace of a block function body as a source mapped token.
-        SourceMapAdjustRestParameterLoop = 1 << 21,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
+        SourceMapEmitOpenBraceAsToken = 1 << 21,        // Emits the open brace of a block function body as a source mapped token.
+        SourceMapAdjustRestParameterLoop = 1 << 22,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
     }
 
     /** Additional context provided to `visitEachChild` */

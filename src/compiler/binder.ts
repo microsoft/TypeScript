@@ -2494,6 +2494,11 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
+        // Currently, we only support generators that were originally async function bodies.
+        if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+            transformFlags |= TransformFlags.AssertGenerator;
+        }
+
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
         return transformFlags & ~TransformFlags.MethodOrAccessorExcludes;
     }
@@ -2556,8 +2561,13 @@ namespace ts {
             // If a FunctionDeclaration has an asterisk token, is exported, or its
             // subtree has marked the container as needing to capture the lexical `this`,
             // then this node is ES6 syntax.
-            if (asteriskToken || (subtreeFlags & TransformFlags.ES6FunctionSyntaxMask)) {
+            if (subtreeFlags & TransformFlags.ES6FunctionSyntaxMask) {
                 transformFlags |= TransformFlags.AssertES6;
+            }
+
+            // Currently, we only support generators that were originally async function bodies.
+            if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+                transformFlags |= TransformFlags.AssertGenerator;
             }
         }
 
@@ -2577,8 +2587,13 @@ namespace ts {
 
         // If a FunctionExpression contains an asterisk token, or its subtree has marked the container
         // as needing to capture the lexical this, then this node is ES6 syntax.
-        if (asteriskToken || (subtreeFlags & TransformFlags.ES6FunctionSyntaxMask)) {
+        if (subtreeFlags & TransformFlags.ES6FunctionSyntaxMask) {
             transformFlags |= TransformFlags.AssertES6;
+        }
+
+        // Currently, we only support generators that were originally async function bodies.
+        if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+            transformFlags |= TransformFlags.AssertGenerator;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;

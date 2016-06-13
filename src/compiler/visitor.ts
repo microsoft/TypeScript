@@ -698,6 +698,14 @@ namespace ts {
                 visited = visitEachChildOfIf(<IfStatement>node, visitor);
                 break;
 
+            case SyntaxKind.ForStatement:
+                visited = visitEachChildOfFor(<ForStatement>node, visitor);
+                break;
+
+            case SyntaxKind.ForInStatement:
+                visited = visitEachChildOfForIn(<ForInStatement>node, visitor);
+                break;
+
             case SyntaxKind.ReturnStatement:
                 visited = visitEachChildOfReturn(<ReturnStatement>node, visitor);
                 break;
@@ -978,6 +986,23 @@ namespace ts {
             visitNode(node.expression, visitor, isExpression),
             visitNodes(node.typeArguments, visitor, isTypeNode),
             visitNodes(node.arguments, visitor, isExpression)
+        );
+    }
+
+    function visitEachChildOfFor(node: ForStatement, visitor: (node: Node) => VisitResult<Node>) {
+        return updateFor(node,
+            visitNode(node.initializer, visitor, isForInitializer, /*optional*/ true),
+            visitNode(node.condition, visitor, isExpression, /*optional*/ true),
+            visitNode(node.incrementor, visitor, isExpression, /*optional*/ true),
+            visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock)
+        );
+    }
+
+    function visitEachChildOfForIn(node: ForInStatement, visitor: (node: Node) => VisitResult<Node>) {
+        return updateForIn(node,
+            visitNode(node.initializer, visitor, isForInitializer),
+            visitNode(node.expression, visitor, isExpression),
+            visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock)
         );
     }
 

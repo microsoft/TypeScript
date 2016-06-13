@@ -131,7 +131,7 @@ namespace ts {
         BreakWhenTrue,          // A break instruction used to jump to a label if a condition evaluates to true
         BreakWhenFalse,         // A break instruction used to jump to a label if a condition evaluates to false
         Yield,                  // A completion instruction for the `yield` keyword
-        YieldStar,              // A completion instruction for the `yield*` keyword
+        YieldStar,              // A completion instruction for the `yield*` keyword (not implemented, but reserved for future use)
         Return,                 // A completion instruction for the `return` keyword
         Throw,                  // A completion instruction for the `throw` keyword
         Endfinally              // Marks the end of a `finally` block
@@ -249,9 +249,6 @@ namespace ts {
         let inGeneratorFunctionBody: boolean;
         let inStatementContainingYield: boolean;
 
-        // Indicates whether the builder contains any exception blocks.
-        let hasProtectedRegions: boolean;
-
         // The following three arrays store information about generated code blocks.
         // All three arrays are correlated by their index. This approach is used over allocating
         // objects to store the same information to avoid GC overhead.
@@ -297,7 +294,7 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            if (node.transformFlags & TransformFlags.ContainsGenerators) {
+            if (node.transformFlags & TransformFlags.ContainsGenerator) {
                 return visitEachChild(node, visitor, context);
             }
 
@@ -309,8 +306,9 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitor(node: Node): Node {
-            if (containsYield(node)) {
+        function visitor(node: Node): VisitResult<Node> {
+            const transformFlags = node.transformFlags;
+            if (transformFlags & TransformFlags.ContainsYield) {
                 return visitJavaScriptContainingYield(node);
             }
             else if (inStatementContainingYield) {
@@ -319,7 +317,10 @@ namespace ts {
             else if (inGeneratorFunctionBody) {
                 return visitJavaScriptInGeneratorFunctionBody(node);
             }
-            else if (node.transformFlags & TransformFlags.ContainsGenerators) {
+            else if (node.transformFlags & TransformFlags.Generator) {
+                return visitGenerator(node);
+            }
+            else if (node.transformFlags & TransformFlags.ContainsGenerator) {
                 return visitEachChild(node, visitor, context);
             }
             else {
@@ -332,7 +333,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitJavaScriptContainingYield(node: Node): Node {
+        function visitJavaScriptContainingYield(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.BinaryExpression:
                     return visitBinaryExpression(<BinaryExpression>node);
@@ -360,7 +361,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitJavaScriptInStatementContainingYield(node: Node): Node {
+        function visitJavaScriptInStatementContainingYield(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.DoStatement:
                     return visitDoStatement(<DoStatement>node);
@@ -384,7 +385,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitJavaScriptInGeneratorFunctionBody(node: Node): Node {
+        function visitJavaScriptInGeneratorFunctionBody(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.FunctionDeclaration:
                     return visitFunctionDeclaration(<FunctionDeclaration>node);
@@ -394,12 +395,31 @@ namespace ts {
                 case SyntaxKind.SetAccessor:
                     return visitAccessorDeclaration(<AccessorDeclaration>node);
                 default:
-                    if (node.transformFlags & TransformFlags.ContainsGenerators || containsYield(node)) {
+                    if (node.transformFlags & (TransformFlags.ContainsGenerator | TransformFlags.ContainsYield)) {
                         return visitEachChild(node, visitor, context);
                     }
                     else {
                         return node;
                     }
+            }
+        }
+
+        /**
+         * Visits a generator function.
+         *
+         * @param node The node to visit.
+         */
+        function visitGenerator(node: Node): VisitResult<Node> {
+            switch (node.kind) {
+                case SyntaxKind.FunctionDeclaration:
+                    return visitFunctionDeclaration(<FunctionDeclaration>node);
+
+                case SyntaxKind.FunctionExpression:
+                    return visitFunctionExpression(<FunctionExpression>node);
+
+                default:
+                    Debug.failBadSyntaxKind(node);
+                    return visitEachChild(node, visitor, context);
             }
         }
 
@@ -413,7 +433,8 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): Statement {
-            if (node.asteriskToken) {
+            // Currently, we only support generators that were originally async functions.
+            if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
                 node = setOriginalNode(
                     createFunctionDeclaration(
                         /*decorators*/ undefined,
@@ -460,7 +481,8 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
-            if (node.asteriskToken) {
+            // Currently, we only support generators that were originally async functions.
+            if (node.asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
                 node = setOriginalNode(
                     createFunctionExpression(
                         /*asteriskToken*/ undefined,
@@ -516,7 +538,6 @@ namespace ts {
             const statements: Statement[] = [];
             const savedInGeneratorFunctionBody = inGeneratorFunctionBody;
             const savedInStatementContainingYield = inStatementContainingYield;
-            const savedHasProtectedRegions = hasProtectedRegions;
             const savedBlocks = blocks;
             const savedBlockOffsets = blockOffsets;
             const savedBlockActions = blockActions;
@@ -531,7 +552,6 @@ namespace ts {
             // Initialize generator state
             inGeneratorFunctionBody = true;
             inStatementContainingYield = false;
-            hasProtectedRegions = false;
             blocks = undefined;
             blockOffsets = undefined;
             blockActions = undefined;
@@ -541,7 +561,7 @@ namespace ts {
             operations = undefined;
             operationArguments = undefined;
             operationLocations = undefined;
-            state = undefined;
+            state = createUniqueName("state");
 
             // Build the generator
             startLexicalEnvironment();
@@ -555,7 +575,6 @@ namespace ts {
             // Restore previous generator state
             inGeneratorFunctionBody = savedInGeneratorFunctionBody;
             inStatementContainingYield = savedInStatementContainingYield;
-            hasProtectedRegions = savedHasProtectedRegions;
             blocks = savedBlocks;
             blockOffsets = savedBlockOffsets;
             blockActions = savedBlockActions;
@@ -579,7 +598,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitVariableStatement(node: VariableStatement): Statement {
-            if (containsYield(node)) {
+            if (node.transformFlags & TransformFlags.ContainsYield) {
                 transformAndEmitVariableDeclarationList(node.declarationList);
                 return undefined;
             }
@@ -841,21 +860,9 @@ namespace ts {
             //  .mark resumeLabel
             //      x = %sent%;
 
+            // NOTE: we are explicitly not handling YieldStar at this time.
             const resumeLabel = defineLabel();
-            if (node.asteriskToken) {
-                emitYieldStar(
-                    createCall(
-                        createIdentifier("__values"),
-                        /*typeParameters*/ undefined,
-                        [visitNode(node.expression, visitor, isExpression)]
-                    ),
-                    /*location*/ node
-                );
-            }
-            else {
-                emitYield(visitNode(node.expression, visitor, isExpression), /*location*/ node);
-            }
-
+            emitYield(visitNode(node.expression, visitor, isExpression), /*location*/ node);
             markLabel(resumeLabel);
             return createGeneratorResume();
         }
@@ -1353,21 +1360,15 @@ namespace ts {
                     hoistVariableDeclaration(<Identifier>variable.name);
                 }
 
-                node = getMutableClone(node);
-
                 const variables = getInitializedVariables(initializer);
-                if (variables.length === 0) {
-                    node.initializer = undefined;
-                }
-                else {
-                    node.initializer = inlineExpressions(
-                        map(variables, transformInitializedVariable)
-                    );
-                }
-
-                node.condition = visitNode(node.condition, visitor, isExpression, /*optional*/ true);
-                node.incrementor = visitNode(node.incrementor, visitor, isExpression, /*optional*/ true);
-                node.statement = visitNode(node.statement, visitor, isStatement);
+                node = updateFor(node,
+                    variables.length > 0
+                        ? inlineExpressions(map(variables, transformInitializedVariable))
+                        : undefined,
+                    visitNode(node.condition, visitor, isExpression, /*optional*/ true),
+                    visitNode(node.incrementor, visitor, isExpression, /*optional*/ true),
+                    visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock)
+                );
             }
             else {
                 node = visitEachChild(node, visitor, context);
@@ -1389,34 +1390,47 @@ namespace ts {
                 //      }
                 //
                 // [intermediate]
-                //  .local _a, _b, p
-                //      _a = __keys(o);
+                //  .local _a, _b, _c
+                //      _a = [];
+                //      for (_b in o) _a.push(_b);
+                //      _c = 0;
                 //  .loop incrementLabel, endLoopLabel
-                //  .try tryLabel, , finallyLabel, endTryLabel
-                //  .mark tryLabel
-                //  .nop
-                //  .mark incrementLabel
-                //      _b = _a.next();
-                //  .brtrue cleanupLabel, (_b.done)
-                //      p = _b.value;
+                //  .mark conditionLabel
+                //  .brfalse endLoopLabel, (_c < _a.length)
+                //      p = _a[_c];
                 //      /*body*/
-                //  .br incrementLabel
-                //  .mark cleanupLabel
-                //      _b = _a = void 0;
-                //  .br endLoopLabel
-                //  .finally
-                //  .mark finallyLabel
-                //      if (_a && typeof _a.return === "function")
-                //          _a.return();
-                //  .endfinally
-                //  .endtry
-                //  .mark endTryLabel
+                //  .mark incrementLabel
+                //      _b++;
+                //  .br conditionLabel
                 //  .endloop
                 //  .mark endLoopLabel
 
-                const keysIterator = declareLocal(); // _a
-                const iteratorResult = declareLocal(); // _b
+                const keysArray = declareLocal(); // _a
+                const key = declareLocal(); // _b
+                const keysIndex = declareLocal(); // _c
                 const initializer = node.initializer;
+
+                emitAssignment(keysArray, createArrayLiteral());
+
+                emitStatement(
+                    createForIn(
+                        key,
+                        visitNode(node.expression, visitor, isExpression),
+                        createStatement(
+                            createCall(
+                                createPropertyAccess(keysArray, "push"),
+                                /*typeArguments*/ undefined,
+                                [key]
+                            )
+                        )
+                    )
+                );
+
+                emitAssignment(keysIndex, createLiteral(0));
+
+                const conditionLabel = defineLabel();
+                const incrementLabel = defineLabel();
+                const endLabel = beginLoopBlock(incrementLabel);
 
                 let variable: Expression;
                 if (isVariableDeclarationList(initializer)) {
@@ -1431,45 +1445,16 @@ namespace ts {
                     Debug.assert(isLeftHandSideExpression(variable));
                 }
 
-                emitAssignment(keysIterator,
-                    createCall(createIdentifier("__keys"), /*typeArguments*/ undefined, [
-                        visitNode(node.expression, visitor, isExpression)
-                    ])
-                );
+                markLabel(conditionLabel);
+                emitBreakWhenFalse(endLabel, createLessThan(keysIndex, createPropertyAccess(keysArray, "length")));
 
-                const incrementLabel = defineLabel();
-                const cleanupLabel = defineLabel();
-                const endLabel = beginLoopBlock(incrementLabel);
-
-                beginExceptionBlock();
-                markLabel(incrementLabel);
-                emitAssignment(iteratorResult, createCall(createPropertyAccess(iteratorResult, "next"), /*typeArguments*/ undefined, []));
-                emitBreakWhenTrue(cleanupLabel, createPropertyAccess(iteratorResult, "done"));
-                emitAssignment(variable, createPropertyAccess(iteratorResult, "value"));
+                emitAssignment(variable, createElementAccess(keysArray, keysIndex));
                 transformAndEmitEmbeddedStatement(node.statement);
-                emitBreak(incrementLabel);
-                markLabel(cleanupLabel);
-                emitAssignment(keysIterator, createAssignment(iteratorResult, createVoidZero()));
-                emitBreak(endLabel);
-                beginFinallyBlock();
-                emitStatement(
-                    createIf(
-                        createLogicalAnd(
-                            keysIterator,
-                            createStrictEquality(
-                                createTypeOf(
-                                    createPropertyAccess(keysIterator, "return")
-                                ),
-                                createLiteral("function")
-                            )
-                        ),
-                        createStatement(
-                            createCall(createPropertyAccess(keysIterator, "return"), /*typeArguments*/ undefined, [])
-                        )
-                    )
-                );
-                emitEndfinally();
-                endExceptionBlock();
+
+                markLabel(incrementLabel);
+                emitStatement(createStatement(createPostfixIncrement(keysIndex)));
+
+                emitBreak(conditionLabel);
                 endLoopBlock();
             }
             else {
@@ -1501,12 +1486,11 @@ namespace ts {
                     hoistVariableDeclaration(<Identifier>variable.name);
                 }
 
-                node = getMutableClone(node);
-
-                const variable = initializer.declarations[0];
-                node.initializer = <Identifier>variable.name;
-                node.expression = visitNode(node.expression, visitor, isExpression);
-                node.statement = visitNode(node.statement, visitor, isStatement);
+                node = updateForIn(node,
+                    <Identifier>initializer.declarations[0].name,
+                    visitNode(node.expression, visitor, isExpression),
+                    visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock)
+                );
             }
             else {
                 node = visitEachChild(node, visitor, context);
@@ -1552,7 +1536,6 @@ namespace ts {
 
             return visitEachChild(node, visitor, context);
         }
-
 
         function transformAndEmitReturnStatement(node: ReturnStatement): void {
             emitReturn(
@@ -1992,7 +1975,6 @@ namespace ts {
                 endLabel
             });
             emitWorker(OpCode.Nop);
-            hasProtectedRegions = true;
             return endLabel;
         }
 
@@ -2028,7 +2010,6 @@ namespace ts {
             exception.catchVariable = name;
             exception.catchLabel = catchLabel;
 
-            const state = getState();
             emitAssignment(name, createPropertyAccess(state, "error"));
             emitWorker(OpCode.Nop);
         }
@@ -2133,7 +2114,6 @@ namespace ts {
                 breakLabel: -1
             });
         }
-
 
         /**
          * Begins a code block that supports `break` statements that are defined in generated code.
@@ -2361,18 +2341,7 @@ namespace ts {
          * Creates an expression that can be used to resume from a Yield operation.
          */
         function createGeneratorResume(location?: TextRange): LeftHandSideExpression {
-            return createCall(createPropertyAccess(getState(), "sent"), /*typeArguments*/ undefined, [], location);
-        }
-
-        /**
-         * Gets the identifier for the runtime `state` variable.
-         */
-        function getState(): Identifier {
-            if (state === undefined) {
-                state = createUniqueName("state");
-            }
-
-            return state;
+            return createCall(createPropertyAccess(state, "sent"), /*typeArguments*/ undefined, [], location);
         }
 
         /**
@@ -2535,7 +2504,7 @@ namespace ts {
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
-                    [createParameter(getState())],
+                    [createParameter(state)],
                     /*type*/ undefined,
                     createBlock(
                         buildStatements()
@@ -2548,10 +2517,6 @@ namespace ts {
          * Builds the statements for the generator function body.
          */
         function buildStatements(): Statement[] {
-            if (hasProtectedRegions) {
-                initializeProtectedRegions();
-            }
-
             if (operations) {
                 for (let operationIndex = 0; operationIndex < operations.length; operationIndex++) {
                     writeOperation(operationIndex);
@@ -2564,7 +2529,6 @@ namespace ts {
             }
 
             if (clauses) {
-                const state = getState();
                 const labelExpression = createPropertyAccess(state, "label");
                 const switchStatement = createSwitch(labelExpression, createCaseBlock(clauses));
                 return [switchStatement];
@@ -2575,17 +2539,6 @@ namespace ts {
             }
 
             return [];
-        }
-
-        /**
-         * Initializes protected region information for the generator.
-         *
-         * This assigns an array to `state.trys` that will be used to capture when execution
-         * enters or exits a protected region (i.e. an exception block).
-         */
-        function initializeProtectedRegions(): void {
-            writeAssign(createPropertyAccess(getState(), "trys"), createArrayLiteral(), /*operationLocation*/ undefined);
-            flushLabel();
         }
 
         /**
@@ -2649,7 +2602,7 @@ namespace ts {
                     statements.unshift(
                         createStatement(
                             createCall(
-                                createPropertyAccess(createPropertyAccess(getState(), "trys"), "push"),
+                                createPropertyAccess(createPropertyAccess(state, "trys"), "push"),
                                 /*typeArguments*/ undefined,
                                 [
                                     createArrayLiteral([
@@ -2672,7 +2625,7 @@ namespace ts {
                     statements.push(
                         createStatement(
                             createAssignment(
-                                createPropertyAccess(getState(), "label"),
+                                createPropertyAccess(state, "label"),
                                 createLiteral(labelNumber + 1)
                             )
                         )

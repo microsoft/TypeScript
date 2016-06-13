@@ -659,6 +659,13 @@ namespace ts {
         return node;
     }
 
+    export function updateFor(node: ForStatement, initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement) {
+        if (node.initializer !== initializer || node.condition !== condition || node.incrementor !== incrementor || node.statement !== statement) {
+            return updateNode(createFor(initializer, condition, incrementor, statement, node), node);
+        }
+        return node;
+    }
+
     export function createLabel(label: string | Identifier, statement: Statement, location?: TextRange) {
         const node = <LabeledStatement>createNode(SyntaxKind.LabeledStatement, location);
         node.label = typeof label === "string" ? createIdentifier(label) : label;
@@ -666,17 +673,17 @@ namespace ts {
         return node;
     }
 
-    export function createDo(expression: Expression, statement: Statement, location?: TextRange) {
+    export function createDo(statement: Statement, expression: Expression, location?: TextRange) {
         const node = <DoStatement>createNode(SyntaxKind.DoStatement, location);
-        node.expression = expression;
         node.statement = statement;
+        node.expression = expression;
         return node;
     }
 
-    export function createWhile(statement: Statement, expression: Expression, location?: TextRange) {
+    export function createWhile(expression: Expression, statement: Statement, location?: TextRange) {
         const node = <WhileStatement>createNode(SyntaxKind.WhileStatement, location);
-        node.statement = statement;
         node.expression = expression;
+        node.statement = statement;
         return node;
     }
 
@@ -685,6 +692,13 @@ namespace ts {
         node.initializer = initializer;
         node.expression = expression;
         node.statement = statement;
+        return node;
+    }
+
+    export function updateForIn(node: ForInStatement, initializer: ForInitializer, expression: Expression, statement: Statement) {
+        if (node.initializer !== initializer || node.expression !== expression || node.statement !== statement) {
+            return updateNode(createForIn(initializer, expression, statement, node), node);
+        }
         return node;
     }
 
@@ -1147,6 +1161,18 @@ namespace ts {
     }
 
     export function createAwaiterHelper(hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
+        const generatorFunc = createFunctionExpression(
+            createNode(SyntaxKind.AsteriskToken),
+            /*name*/ undefined,
+            /*typeParameters*/ undefined,
+            /*parameters*/ [],
+            /*type*/ undefined,
+            body
+        );
+
+        // Mark this node as originally an async function
+        generatorFunc.emitFlags |= NodeEmitFlags.AsyncFunctionBody;
+
         return createCall(
             createIdentifier("__awaiter"),
             /*typeArguments*/ undefined,
@@ -1154,14 +1180,7 @@ namespace ts {
                 createThis(),
                 hasLexicalArguments ? createIdentifier("arguments") : createVoidZero(),
                 promiseConstructor ? createExpressionFromEntityName(promiseConstructor) : createVoidZero(),
-                createFunctionExpression(
-                    createNode(SyntaxKind.AsteriskToken),
-                    /*name*/ undefined,
-                    /*typeParameters*/ undefined,
-                    /*parameters*/ [],
-                    /*type*/ undefined,
-                    body
-                )
+                generatorFunc
             ]
         );
     }
