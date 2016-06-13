@@ -316,7 +316,7 @@ namespace ts.server {
         }
 
         getDirectories(path: string): string[] {
-            return this.host.getDirectories ? this.host.getDirectories(path) : [];
+            return this.host.getDirectories(path);
         }
 
         /**

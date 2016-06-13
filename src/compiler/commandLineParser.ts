@@ -341,8 +341,9 @@ namespace ts {
             type: "list",
             element: {
                 name: "typeRoots",
-                type: "string"
-            }            
+                type: "string",
+                isFilePath: true
+            }
         },
         {
             name: "types",

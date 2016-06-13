@@ -2562,7 +2562,7 @@ namespace ts {
         target?: ScriptTarget;
         traceResolution?: boolean;
         types?: string[];
-        // Paths used to used to compute primary types search locations
+        /** Paths used to used to compute primary types search locations */
         typeRoots?: string[];
         typesSearchPaths?: string[];
         /*@internal*/ version?: boolean;

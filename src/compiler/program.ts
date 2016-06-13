@@ -217,9 +217,9 @@ namespace ts {
         // Check primary library paths
         if (typeRoots.length) {
             if (traceEnabled) {
-                trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(', '));
+                trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(", "));
             }
-            const primarySearchPaths = options.typeRoots || defaultTypeRoots;
+            const primarySearchPaths = typeRoots;
             for (const typeRoot of primarySearchPaths) {
                 const candidate = combinePaths(typeRoot, typeReferenceDirectiveName);
                 const candidateDirectory = getDirectoryPath(candidate);
