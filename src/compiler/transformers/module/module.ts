@@ -40,10 +40,10 @@ namespace ts {
         let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
         let exportSpecifiers: Map<ExportSpecifier[]>;
         let exportEquals: ExportAssignment;
-        let currentSourceFileIdDuringSubstitution: number;
+        let bindingNameExportSpecifiersMap: Map<ExportSpecifier[]>;
         // Subset of exportSpecifiers that is a binding-name.
         // This is to reduce amount of memory we have to keep around even after we done with module-transformer
-        let bindingNameExportSpecifiersForFileMap: Map<Map<ExportSpecifier[]>>;
+        const bindingNameExportSpecifiersForFileMap: Map<Map<ExportSpecifier[]>> = {};
         let hasExportStarsToExportValues: boolean;
 
         return transformSourceFile;
@@ -664,9 +664,6 @@ namespace ts {
             }
             else {
                 if (!exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
-                    if (!bindingNameExportSpecifiersForFileMap) {
-                        bindingNameExportSpecifiersForFileMap = {};
-                    }
                     const sourceFileId = getOriginalNodeId(currentSourceFile);
                     if (!bindingNameExportSpecifiersForFileMap[sourceFileId]) {
                         bindingNameExportSpecifiersForFileMap[sourceFileId] = {};
@@ -821,10 +818,9 @@ namespace ts {
 
         function onEmitNode(node: Node, emit: (node: Node) => void): void {
             if (node.kind === SyntaxKind.SourceFile) {
-                const savedCurrentSourceFileIdDuringSubstitution = currentSourceFileIdDuringSubstitution;
-                currentSourceFileIdDuringSubstitution = getOriginalNodeId(node);
+                bindingNameExportSpecifiersMap = bindingNameExportSpecifiersForFileMap[getOriginalNodeId(node)];
                 previousOnEmitNode(node, emit);
-                currentSourceFileIdDuringSubstitution = savedCurrentSourceFileIdDuringSubstitution;
+                bindingNameExportSpecifiersMap = undefined;
             }
             else {
                 previousOnEmitNode(node, emit);
@@ -888,13 +884,10 @@ namespace ts {
             const left = node.left;
             // If the left-hand-side of the binaryExpression is an identifier and its is export through export Specifier
             if (isIdentifier(left) && isAssignmentOperator(node.operatorToken.kind)) {
-                if (bindingNameExportSpecifiersForFileMap &&
-                    bindingNameExportSpecifiersForFileMap[currentSourceFileIdDuringSubstitution] &&
-                    hasProperty(bindingNameExportSpecifiersForFileMap[currentSourceFileIdDuringSubstitution], left.text)) {
-
+                if (bindingNameExportSpecifiersMap && hasProperty(bindingNameExportSpecifiersMap, left.text)) {
                     setNodeEmitFlags(node, NodeEmitFlags.NoSubstitution);
                     let nestedExportAssignment: BinaryExpression;
-                    for (const specifier of bindingNameExportSpecifiersForFileMap[currentSourceFileIdDuringSubstitution][left.text]) {
+                    for (const specifier of bindingNameExportSpecifiersMap[left.text]) {
                         nestedExportAssignment = nestedExportAssignment ?
                             createExportAssignment(specifier.name, nestedExportAssignment) :
                             createExportAssignment(specifier.name, node);
@@ -911,10 +904,7 @@ namespace ts {
             const operator = node.operator;
             const operand = node.operand;
             if (isIdentifier(operand) && bindingNameExportSpecifiersForFileMap) {
-                if (bindingNameExportSpecifiersForFileMap &&
-                    bindingNameExportSpecifiersForFileMap[currentSourceFileIdDuringSubstitution] &&
-                    hasProperty(bindingNameExportSpecifiersForFileMap[currentSourceFileIdDuringSubstitution], operand.text)) {
-
+                if (bindingNameExportSpecifiersMap && hasProperty(bindingNameExportSpecifiersMap, operand.text)) {
                     setNodeEmitFlags(node, NodeEmitFlags.NoSubstitution);
                     let transformedUnaryExpression: BinaryExpression;
                     if (node.kind === SyntaxKind.PostfixUnaryExpression) {
@@ -928,7 +918,7 @@ namespace ts {
                         setNodeEmitFlags(transformedUnaryExpression, NodeEmitFlags.NoSubstitution);
                     }
                     let nestedExportAssignment: BinaryExpression;
-                    for (const specifier of bindingNameExportSpecifiersForFileMap[currentSourceFileIdDuringSubstitution][operand.text]) {
+                    for (const specifier of bindingNameExportSpecifiersMap[operand.text]) {
                         nestedExportAssignment = nestedExportAssignment ?
                             createExportAssignment(specifier.name, nestedExportAssignment) :
                             createExportAssignment(specifier.name, transformedUnaryExpression || node);
