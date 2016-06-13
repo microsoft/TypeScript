@@ -383,9 +383,9 @@ namespace ts.server {
             FileInfo.removeElement(this.referencedBy, this.finalized, file);
         }
 
-        public queueReferencedBy(queue: FileInfo[]): void {
+        public queueReferencedBy(queue: CompileQueue<FileInfo>): void {
             if (this.referencedBy) {
-                this.referencedBy.forEach((fileInfo) => queue.push(fileInfo));
+                this.referencedBy.forEach((fileInfo) => queue.add(fileInfo.fileName(), fileInfo));
             }
         }
 
@@ -403,12 +403,142 @@ namespace ts.server {
         }
     }
 
+    interface Item<T> {
+        previous: Item<T>;
+        next: Item<T>;
+        key: string;
+        value: T;
+    }
+
+    class CompileQueue<T> {
+
+        private map: Map<Item<T>>;
+        private head: Item<T>;
+        private tail: Item<T>;
+
+        constructor() {
+            this.map = Object.create(null);
+            this.head = undefined;
+            this.tail = undefined;
+        }
+
+        public isEmpty(): boolean {
+            return !this.head && !this.tail;
+        }
+
+        public get(key: string): T {
+            const item = this.map[key];
+            if (!item) {
+                return undefined;
+            }
+            return item.value;
+        }
+
+        public add(key: string, value: T, touch = false): void {
+            let item = this.map[key];
+            if (item) {
+                if (touch) {
+                    this.touch(item);
+                }
+            }
+            else {
+                item = { key, value, next: undefined, previous: undefined };
+                if (touch) {
+                    this.addItemFirst(item);
+                }
+                else {
+                    this.addItemLast(item)
+                }
+                this.map[key] = item;
+            }
+        }
+
+        public shift(): T {
+            if (!this.head && !this.tail) {
+                return undefined;
+            }
+            const item = this.head;
+            delete this.map[item.key];
+            this.removeItem(item);
+            return item.value;
+        }
+
+        private addItemFirst(item: Item<T>): void {
+            // First time Insert
+            if (!this.head && !this.tail)
+            {
+                this.tail = item;
+            }
+            else
+            {
+                item.next = this.head;
+                this.head.previous = item;
+            }
+            this.head = item;
+        }
+
+        private addItemLast(item: Item<T>): void {
+            // First time Insert
+            if (!this.head && !this.tail) {
+                this.head = item;
+            }
+            else {
+                item.previous = this.tail;
+                this.tail.next = item;
+            }
+            this.tail = item;
+        }
+
+        private removeItem(item: Item<T>): void {
+            if (item === this.head && item === this.tail) {
+                this.head = undefined;
+                this.tail = undefined;
+            }
+            else if (item === this.head) {
+                this.head = item.next;
+            }
+            else if (item === this.tail) {
+                this.tail = item.previous;
+            }
+            else {
+                const next = item.next;
+                const previous = item.previous;
+                next.previous = previous;
+                previous.next = next;
+            }
+        }
+
+        private touch(item: Item<T>): void {
+            if (item === this.head)
+                return;
+
+            const next = item.next;
+            const previous = item.previous;
+
+            // Unlink the item
+            if (item === this.tail) {
+                this.tail = previous;
+            }
+            else {
+                // Both next and previous are not null since item was neither head nor tail.
+                next.previous = previous;
+                previous.next = next;
+            }
+
+            // Insert the node at head
+            item.previous = undefined;
+            item.next = this.head;
+            this.head.previous = item;
+            this.head = item;
+        }
+    }
+
     class ModuleBuilder extends AbstractBuilder implements Builder {
 
         private fileInfos: Map<FileInfo>;
         private provider: FileInfoProvider;
 
-        private queue: FileInfo[];
+        private queue: CompileQueue<FileInfo>;
 
         constructor(project: Project, host: BuilderHost) {
             super(project, host);
@@ -420,7 +550,7 @@ namespace ts.server {
                     return this.fileInfos[fileName];
                 }
             };
-            this.queue = [];
+            this.queue = new CompileQueue<FileInfo>();
         }
 
         public computeDiagnostics(changedFile: string, delay: number): void {
@@ -428,7 +558,7 @@ namespace ts.server {
             if (changedFile) {
                 const fileInfo = this.fileInfos[changedFile];
                 if (fileInfo) {
-                    this.queue.push(fileInfo);
+                    this.queue.add(fileInfo.fileName(), fileInfo, true);
                     this.processQueue();
                 }
             }
@@ -436,7 +566,7 @@ namespace ts.server {
 
         private processQueue(): void {
             setImmediate(() => {
-                if (this.queue.length === 0) {
+                if (this.queue.isEmpty()) {
                     return;
                 }
                 const fileInfo = this.queue.shift();
@@ -455,7 +585,7 @@ namespace ts.server {
             if (this.fileInfos) {
                 return;
             }
-            this.fileInfos = Object.create(undefined);
+            this.fileInfos = Object.create(null);
             const fileNames = this.project.getFileNames();
             const fileInfos = fileNames.reduce<FileInfo[]>((memo, file) => {
                 const basename = path.basename(file);
