@@ -282,6 +282,10 @@ namespace ts {
         readonly exit = () => notImplemented();
     }
 
+    const nullChannel = {
+        event: (info: any, eventName: string) => {}
+    };
+
     describe("tsserver-project-system", () => {
         const commonFile1: FileOrFolder = {
             path: "/a/b/commonFile1.ts",
@@ -310,7 +314,7 @@ namespace ts {
                 content: `export let x: number`
             };
             const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [appFile, moduleFile, libFile]);
-            const projectService = new server.ProjectService(host, nullLogger);
+            const projectService = new server.ProjectService(host, nullLogger, nullChannel);
             const { configFileName } = projectService.openClientFile(appFile.path);
 
             assert(!configFileName, `should not find config, got: '${configFileName}`);
@@ -348,7 +352,7 @@ namespace ts {
             };
 
             const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [ configFile, libFile, file1, file2, file3 ]);
-            const projectService = new server.ProjectService(host, nullLogger);
+            const projectService = new server.ProjectService(host, nullLogger, nullChannel);
             const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
 
             assert(configFileName, "should find config file");
@@ -374,7 +378,7 @@ namespace ts {
             const filesWithoutConfig = [ libFile, commonFile1, commonFile2 ];
             const filesWithConfig = [ libFile, commonFile1, commonFile2, configFile ];
             const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", filesWithoutConfig);
-            const projectService = new server.ProjectService(host, nullLogger);
+            const projectService = new server.ProjectService(host, nullLogger, nullChannel);
             projectService.openClientFile(commonFile1.path);
             projectService.openClientFile(commonFile2.path);
 
@@ -405,7 +409,7 @@ namespace ts {
                 content: `{}`
             };
             const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [commonFile1, libFile, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger);
+            const projectService = new server.ProjectService(host, nullLogger, nullChannel);
             projectService.openClientFile(commonFile1.path);
             checkWatchedDirectories(host, ["/a/b"]);
             checkNumberOfConfiguredProjects(projectService, 1);
@@ -433,7 +437,7 @@ namespace ts {
                 }`
             };
             const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [commonFile1, commonFile2, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger);
+            const projectService = new server.ProjectService(host, nullLogger, nullChannel);
             projectService.openClientFile(commonFile1.path);
             projectService.openClientFile(commonFile2.path);
 
@@ -449,7 +453,7 @@ namespace ts {
                 content: `{}`
             };
             const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [commonFile1, commonFile2, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger);
+            const projectService = new server.ProjectService(host, nullLogger, nullChannel);
             projectService.openClientFile(commonFile1.path);
 
             checkNumberOfConfiguredProjects(projectService, 1);
@@ -479,7 +483,7 @@ namespace ts {
             };
             const files = [commonFile1, commonFile2, configFile];
             const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", files);
-            const projectService = new server.ProjectService(host, nullLogger);
+            const projectService = new server.ProjectService(host, nullLogger, nullChannel);
             projectService.openClientFile(commonFile1.path);
 
             const project = projectService.configuredProjects[0];
@@ -512,7 +516,7 @@ namespace ts {
             };
 
             const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [commonFile1, commonFile2, excludedFile1, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger);
+            const projectService = new server.ProjectService(host, nullLogger, nullChannel);
 
             projectService.openClientFile(commonFile1.path);
             checkNumberOfConfiguredProjects(projectService, 1);
@@ -546,7 +550,7 @@ namespace ts {
             };
             const files = [file1, nodeModuleFile, classicModuleFile, configFile];
             const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", files);
-            const projectService = new server.ProjectService(host, nullLogger);
+            const projectService = new server.ProjectService(host, nullLogger, nullChannel);
             projectService.openClientFile(file1.path);
             projectService.openClientFile(nodeModuleFile.path);
             projectService.openClientFile(classicModuleFile.path);

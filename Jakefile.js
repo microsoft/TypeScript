@@ -163,7 +163,8 @@ var harnessSources = harnessCoreSources.concat([
     "protocol.d.ts",
     "session.ts",
     "client.ts",
-    "editorServices.ts"
+    "editorServices.ts",
+    "builder.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
 }));

@@ -79,7 +79,11 @@ namespace ts {
             msg: (s: string, type?: string) => { }
         };
 
-        const projectService = new server.ProjectService(serverHost, logger);
+        const nullChannel = {
+            event: (info: any, eventName: string) => {}
+        };
+
+        const projectService = new server.ProjectService(serverHost, logger, nullChannel);
         const rootScriptInfo = projectService.openFile(rootFile, /* openedByClient */true);
         const project = projectService.createInferredProject(rootScriptInfo);
         project.setProjectOptions({ files: [rootScriptInfo.fileName], compilerOptions: { module: ts.ModuleKind.AMD } });

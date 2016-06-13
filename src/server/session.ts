@@ -152,7 +152,7 @@ namespace ts.server {
             private byteLength: (buf: string, encoding?: string) => number,
             private hrtime: (start?: number[]) => number[],
             private logger: Logger,
-            enableAutoDiagnostics: boolean
+            enableAutoDiagnostics: boolean = false
         ) {
             this.projectService =
                 new ProjectService(host, logger, 
