@@ -11975,6 +11975,10 @@ namespace ts {
             // Variables declared with 'const'
             // Get accessors without matching set accessors
             // Enum members
+            // Unions and intersections of the above
+            if (symbol.flags & SymbolFlags.SyntheticProperty) {
+                return forEach(symbol.declarations, decl => isReadonlySymbol(getSymbolOfNode(decl)));
+            }
             return symbol.flags & SymbolFlags.Property && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Readonly) !== 0 ||
                 symbol.flags & SymbolFlags.Variable && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0 ||
                 symbol.flags & SymbolFlags.Accessor && !(symbol.flags & SymbolFlags.SetAccessor) ||
