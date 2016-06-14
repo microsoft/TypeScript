@@ -7999,7 +7999,7 @@ namespace ts {
 
             // Can only rename an identifier.
             if (node) {
-                if (node.kind === SyntaxKind.Identifier ||
+                if ((node.kind === SyntaxKind.Identifier && (node as Identifier).originalKeywordKind !== SyntaxKind.ThisKeyword) ||
                     node.kind === SyntaxKind.StringLiteral ||
                     isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
                     const symbol = typeChecker.getSymbolAtLocation(node);
