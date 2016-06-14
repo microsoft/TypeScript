@@ -1065,13 +1065,13 @@ namespace ts {
 
     // Helpers
 
-    export function createHelperName(tslib: Identifier, name: string) {
+    export function createHelperName(tslib: Identifier | undefined, name: string) {
         return tslib
             ? createPropertyAccess(tslib, name)
             : createIdentifier(name);
     }
 
-    export function createExtendsHelper(tslib: Identifier, name: Identifier) {
+    export function createExtendsHelper(tslib: Identifier | undefined, name: Identifier) {
         return createCall(
             createHelperName(tslib, "__extends"),
             /*typeArguments*/ undefined,
@@ -1082,7 +1082,7 @@ namespace ts {
         );
     }
 
-    export function createAssignHelper(tslib: Identifier, attributesSegments: Expression[]) {
+    export function createAssignHelper(tslib: Identifier | undefined, attributesSegments: Expression[]) {
         return createCall(
             createHelperName(tslib, "__assign"),
             /*typeArguments*/ undefined,
@@ -1090,7 +1090,7 @@ namespace ts {
         );
     }
 
-    export function createParamHelper(tslib: Identifier, expression: Expression, parameterOffset: number, location?: TextRange) {
+    export function createParamHelper(tslib: Identifier | undefined, expression: Expression, parameterOffset: number, location?: TextRange) {
         return createCall(
             createHelperName(tslib, "__param"),
             /*typeArguments*/ undefined,
@@ -1102,7 +1102,7 @@ namespace ts {
         );
     }
 
-    export function createMetadataHelper(tslib: Identifier, metadataKey: string, metadataValue: Expression) {
+    export function createMetadataHelper(tslib: Identifier | undefined, metadataKey: string, metadataValue: Expression) {
         return createCall(
             createHelperName(tslib, "__metadata"),
             /*typeArguments*/ undefined,
@@ -1113,7 +1113,7 @@ namespace ts {
         );
     }
 
-    export function createDecorateHelper(tslib: Identifier, decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression, location?: TextRange) {
+    export function createDecorateHelper(tslib: Identifier | undefined, decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression, location?: TextRange) {
         const argumentsArray: Expression[] = [];
         argumentsArray.push(createArrayLiteral(decoratorExpressions, /*location*/ undefined, /*multiLine*/ true));
         argumentsArray.push(target);
@@ -1127,7 +1127,7 @@ namespace ts {
         return createCall(createHelperName(tslib, "__decorate"), /*typeArguments*/ undefined, argumentsArray, location);
     }
 
-    export function createAwaiterHelper(tslib: Identifier, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
+    export function createAwaiterHelper(tslib: Identifier | undefined, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
         return createCall(
             createHelperName(tslib, "__awaiter"),
             /*typeArguments*/ undefined,
