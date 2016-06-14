@@ -2150,9 +2150,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             // Return true if identifier resolves to an exported member of a namespace
-            function isNamespaceExportReference(node: Identifier) {
+            function isExportReference(node: Identifier) {
                 const container = resolver.getReferencedExportContainer(node);
-                return container && container.kind !== SyntaxKind.SourceFile;
+                return !!container;
             }
 
             // Return true if identifier resolves to an imported identifier
@@ -2185,10 +2185,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 //   const foo_1 = require('./foo');
                 //   exports.baz = { foo: foo_1.foo };
                 //
-                if (languageVersion < ScriptTarget.ES6 || (modulekind !== ModuleKind.ES6 && isImportedReference(node.name)) || isNamespaceExportReference(node.name) ) {
+                if (languageVersion < ScriptTarget.ES6 || (modulekind !== ModuleKind.ES6 && isImportedReference(node.name)) || isExportReference(node.name)) {
                     // Emit identifier as an identifier
                     write(": ");
-                    emit(node.name);
+                    emitExpressionIdentifier(node.name);
                 }
 
                 if (languageVersion >= ScriptTarget.ES6 && node.objectAssignmentInitializer) {
