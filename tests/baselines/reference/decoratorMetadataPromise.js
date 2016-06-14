@@ -40,20 +40,20 @@ class A {
     baz(n) { return n; }
 }
 __decorate([
-    decorator, 
-    __metadata('design:type', Function), 
-    __metadata('design:paramtypes', []), 
-    __metadata('design:returntype', Promise)
+    decorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
 ], A.prototype, "foo", null);
 __decorate([
-    decorator, 
-    __metadata('design:type', Function), 
-    __metadata('design:paramtypes', []), 
-    __metadata('design:returntype', Promise)
+    decorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
 ], A.prototype, "bar", null);
 __decorate([
-    decorator, 
-    __metadata('design:type', Function), 
-    __metadata('design:paramtypes', [Promise]), 
-    __metadata('design:returntype', Promise)
+    decorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Promise]),
+    __metadata("design:returntype", Promise)
 ], A.prototype, "baz", null);
