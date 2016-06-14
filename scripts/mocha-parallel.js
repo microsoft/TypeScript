@@ -34,13 +34,7 @@ function discoverTests(run, options, cb) {
     console.log("Discovering tests...");
 
     var cmd = "mocha -R " + require.resolve("./mocha-none-reporter.js") + " " + run;
-    var p = child_process.spawn(
-        process.platform === "win32" ? "cmd" : "/bin/sh",
-        process.platform === "win32" ? ["/c", cmd] : ["-c", cmd], {
-            windowsVerbatimArguments: true,
-            env: { NODE_ENV: "development" }
-        });
-
+    var p = spawnProcess(cmd);
     p.on("exit", function (status) {
         if (status) {
             cb(new Error("Process exited with code " + status));
@@ -87,18 +81,11 @@ function runTests(taskConfigsFolder, run, options, cb) {
 
         // Start the background process.
         var cmd = "mocha -t " + (options.testTimeout || 20000) + " -R tap --no-colors " + run + " --config='" + partition.file + "'";
-        var p = child_process.spawn(
-            process.platform === "win32" ? "cmd" : "/bin/sh",
-            process.platform === "win32" ? ["/c", cmd] : ["-c", cmd], {
-                windowsVerbatimArguments: true,
-                env: { NODE_ENV: "development" }
-            });
-
+        var p = spawnProcess(cmd);
         var rl = readline.createInterface({
             input: p.stdout,
             terminal: false
         });
-
         rl.on("line", onmessage);
         p.on("exit", onexit)
 
@@ -206,7 +193,6 @@ function runTests(taskConfigsFolder, run, options, cb) {
         counter--;
 
         if (counter <= 0) {
-            var failed = 0;
             var reporter = new Base(),
                 stats = reporter.stats,
                 failures = reporter.failures;
@@ -237,8 +223,8 @@ function runTests(taskConfigsFolder, run, options, cb) {
                 reporter.epilogue();
             }
 
-            if (failed) {
-                return cb(new Error("Test failures reported: " + failed));
+            if (stats.failures) {
+                return cb(new Error("Test failures reported: " + stats.failures));
             }
             else {
                 return cb();
@@ -257,6 +243,12 @@ function runTests(taskConfigsFolder, run, options, cb) {
             }
         };
     }
+}
+
+function spawnProcess(cmd, options) {
+    var shell = process.platform === "win32" ? "cmd" : "/bin/sh";
+    var prefix = process.platform === "win32" ? "/c" : "-c";
+    return child_process.spawn(shell, [prefix, cmd], { windowsVerbatimArguments: true });
 }
 
 function ProgressBars(options) {

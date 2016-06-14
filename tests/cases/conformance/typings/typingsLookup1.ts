@@ -1,10 +1,12 @@
+// @traceResolution: true
 // @noImplicitReferences: true
 
-// @filename: tsconfig.json
+// @filename: /tsconfig.json
 { "files": "a.ts" }
 
-// @filename: node_modules/@types/jquery/index.d.ts
+// @filename: /node_modules/@types/jquery/index.d.ts
 declare var $: { x: any };
 
-// @filename: a.ts
+// @filename: /a.ts
+/// <reference types="jquery" />
 $.x;

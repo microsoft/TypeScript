@@ -2150,9 +2150,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             // Return true if identifier resolves to an exported member of a namespace
-            function isNamespaceExportReference(node: Identifier) {
+            function isExportReference(node: Identifier) {
                 const container = resolver.getReferencedExportContainer(node);
-                return container && container.kind !== SyntaxKind.SourceFile;
+                return !!container;
             }
 
             // Return true if identifier resolves to an imported identifier
@@ -2185,10 +2185,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 //   const foo_1 = require('./foo');
                 //   exports.baz = { foo: foo_1.foo };
                 //
-                if (languageVersion < ScriptTarget.ES6 || (modulekind !== ModuleKind.ES6 && isImportedReference(node.name)) || isNamespaceExportReference(node.name) ) {
+                if (languageVersion < ScriptTarget.ES6 || (modulekind !== ModuleKind.ES6 && isImportedReference(node.name)) || isExportReference(node.name)) {
                     // Emit identifier as an identifier
                     write(": ");
-                    emit(node.name);
+                    emitExpressionIdentifier(node.name);
                 }
 
                 if (languageVersion >= ScriptTarget.ES6 && node.objectAssignmentInitializer) {
@@ -5613,7 +5613,11 @@ const _super = (function (geti, seti) {
             }
 
             function emitClassLikeDeclarationBelowES6(node: ClassLikeDeclaration) {
+                const isES6ExportedClass = isES6ExportedDeclaration(node);
                 if (node.kind === SyntaxKind.ClassDeclaration) {
+                    if (isES6ExportedClass && !(node.flags & NodeFlags.Default)) {
+                        write("export ");
+                    }
                     // source file level classes in system modules are hoisted so 'var's for them are already defined
                     if (!shouldHoistDeclarationInSystemJsModule(node)) {
                         write("var ");
@@ -5683,8 +5687,14 @@ const _super = (function (geti, seti) {
                 }
                 emitEnd(node);
 
-                if (node.kind === SyntaxKind.ClassDeclaration) {
+                if (node.kind === SyntaxKind.ClassDeclaration && !isES6ExportedClass) {
                     emitExportMemberAssignment(<ClassDeclaration>node);
+                }
+                else if (isES6ExportedClass && (node.flags & NodeFlags.Default)) {
+                    writeLine();
+                    write("export default ");
+                    emitDeclarationName(node);
+                    write(";");
                 }
             }
 
@@ -6123,10 +6133,10 @@ const _super = (function (geti, seti) {
 
                                 if (parameters[i].dotDotDotToken) {
                                     let parameterType = parameters[i].type;
-                                    if (parameterType.kind === SyntaxKind.ArrayType) {
+                                    if (parameterType && parameterType.kind === SyntaxKind.ArrayType) {
                                         parameterType = (<ArrayTypeNode>parameterType).elementType;
                                     }
-                                    else if (parameterType.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>parameterType).typeArguments && (<TypeReferenceNode>parameterType).typeArguments.length === 1) {
+                                    else if (parameterType && parameterType.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>parameterType).typeArguments && (<TypeReferenceNode>parameterType).typeArguments.length === 1) {
                                         parameterType = (<TypeReferenceNode>parameterType).typeArguments[0];
                                     }
                                     else {
@@ -6146,9 +6156,15 @@ const _super = (function (geti, seti) {
 
             /** Serializes the return type of function. Used by the __metadata decorator for a method. */
             function emitSerializedReturnTypeOfNode(node: Node) {
-                if (node && isFunctionLike(node) && (<FunctionLikeDeclaration>node).type) {
-                    emitSerializedTypeNode((<FunctionLikeDeclaration>node).type);
-                    return;
+                if (node && isFunctionLike(node)) {
+                    if ((<FunctionLikeDeclaration>node).type) {
+                        emitSerializedTypeNode((<FunctionLikeDeclaration>node).type);
+                        return;
+                    }
+                    else if (isAsyncFunctionLike(<FunctionLikeDeclaration>node)) {
+                        write("Promise");
+                        return;
+                    }
                 }
 
                 write("void 0");
@@ -6300,7 +6316,7 @@ const _super = (function (geti, seti) {
             }
 
             function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration {
-                if (moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
+                if (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
                     const recursiveInnerModule = getInnerMostModuleDeclarationFromDottedModule(<ModuleDeclaration>moduleDeclaration.body);
                     return recursiveInnerModule || <ModuleDeclaration>moduleDeclaration.body;
                 }
@@ -6349,6 +6365,7 @@ const _super = (function (geti, seti) {
                 write(getGeneratedNameForNode(node));
                 emitEnd(node.name);
                 write(") ");
+                Debug.assert(node.body !== undefined); // node.body must exist, as this is a non-ambient module
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
                     const saveConvertedLoopState = convertedLoopState;
                     const saveTempFlags = tempFlags;

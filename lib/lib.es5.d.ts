@@ -153,11 +153,23 @@ interface ObjectConstructor {
     getOwnPropertyNames(o: any): string[];
 
     /**
+      * Creates an object that has null prototype.
+      * @param o Object to use as a prototype. May be null
+      */
+    create(o: null): any;
+
+    /**
+      * Creates an object that has the specified prototype, and that optionally contains specified properties.
+      * @param o Object to use as a prototype. May be null
+      */
+    create<T>(o: T): T;
+
+    /**
       * Creates an object that has the specified prototype, and that optionally contains specified properties.
       * @param o Object to use as a prototype. May be null
       * @param properties JavaScript object that contains one or more property descriptors.
       */
-    create(o: any, properties?: PropertyDescriptorMap): any;
+    create(o: any, properties: PropertyDescriptorMap): any;
 
     /**
       * Adds a property to an object, or modifies attributes of an existing property.
