@@ -7699,6 +7699,12 @@ namespace ts {
             return source.flags & TypeFlags.Union ? !forEach((<UnionType>source).types, t => !contains(types, t)) : contains(types, source);
         }
 
+        function filterType(type: Type, f: (t: Type) => boolean): Type {
+            return type.flags & TypeFlags.Union ?
+                getUnionType(filter((<UnionType>type).types, f)) :
+                f(type) ? type : neverType;
+        }
+
         function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, includeOuterFunctions: boolean) {
             let key: string;
             if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
@@ -7944,7 +7950,7 @@ namespace ts {
 
             function narrowTypeByDiscriminant(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 // We have '==', '!=', '===', or '!==' operator with property access on left
-                if (!(type.flags & TypeFlags.Union) || !isMatchingReference(reference, (<PropertyAccessExpression>expr.left).expression)) {
+                if (!isMatchingReference(reference, (<PropertyAccessExpression>expr.left).expression)) {
                     return type;
                 }
                 const propName = (<PropertyAccessExpression>expr.left).name.text;
@@ -7961,17 +7967,17 @@ namespace ts {
                     assumeTrue = !assumeTrue;
                 }
                 if (assumeTrue) {
-                    return getUnionType(filter((<UnionType>type).types, t => areTypesComparable(getTypeOfPropertyOfType(t, propName), discriminantType)));
+                    return filterType(type, t => areTypesComparable(getTypeOfPropertyOfType(t, propName), discriminantType));
                 }
                 if (discriminantType.flags & TypeFlags.StringLiteral) {
-                    return getUnionType(filter((<UnionType>type).types, t => getTypeOfPropertyOfType(t, propName) !== discriminantType));
+                    return filterType(type, t => getTypeOfPropertyOfType(t, propName) !== discriminantType);
                 }
                 return type;
             }
 
             function narrowTypeBySwitchOnDiscriminant(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
                 // We have switch statement with property access expression
-                if (!(type.flags & TypeFlags.Union) || !isMatchingReference(reference, (<PropertyAccessExpression>switchStatement.expression).expression)) {
+                if (!isMatchingReference(reference, (<PropertyAccessExpression>switchStatement.expression).expression)) {
                     return type;
                 }
                 const propName = (<PropertyAccessExpression>switchStatement.expression).name.text;
@@ -7983,16 +7989,15 @@ namespace ts {
                 if (!switchTypes.length) {
                     return type;
                 }
-                const types = (<UnionType>type).types;
                 const clauseTypes = switchTypes.slice(clauseStart, clauseEnd);
                 const hasDefaultClause = clauseStart === clauseEnd || contains(clauseTypes, undefined);
                 const caseTypes = hasDefaultClause ? filter(clauseTypes, t => !!t) : clauseTypes;
                 const discriminantType = caseTypes.length ? getUnionType(caseTypes) : undefined;
-                const caseType = discriminantType && getUnionType(filter(types, t => isTypeComparableTo(discriminantType, getTypeOfPropertyOfType(t, propName))));
+                const caseType = discriminantType && filterType(type, t => isTypeComparableTo(discriminantType, getTypeOfPropertyOfType(t, propName)));
                 if (!hasDefaultClause) {
                     return caseType;
                 }
-                const defaultType = getUnionType(filter(types, t => !eachTypeContainedIn(getTypeOfPropertyOfType(t, propName), switchTypes)));
+                const defaultType = filterType(type, t => !eachTypeContainedIn(getTypeOfPropertyOfType(t, propName), switchTypes));
                 return caseType ? getUnionType([caseType, defaultType]) : defaultType;
             }
 
