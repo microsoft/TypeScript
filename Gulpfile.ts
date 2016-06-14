@@ -26,7 +26,7 @@ import mkdirP = require("mkdirP");
 import merge = require("merge-stream");
 import minimist = require("minimist");
 import browserify = require("browserify");
-import transform = require("vinyl-transform";)
+import transform = require("vinyl-transform");
 import * as os from "os";
 import Linter = require("tslint");
 const gulp = helpMaker(originalGulp);
