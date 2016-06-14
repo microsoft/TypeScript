@@ -6741,7 +6741,7 @@ namespace ts {
                 fileName: node.getSourceFile().fileName,
                 textSpan: createTextSpanFromBounds(start, end),
                 isWriteAccess: isWriteAccess(node),
-                isDefinition: isDeclarationName(node)
+                isDefinition: isDeclarationName(node) || node.parent.kind === SyntaxKind.ComputedPropertyName
             };
         }
 
