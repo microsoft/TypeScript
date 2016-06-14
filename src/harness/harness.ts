@@ -486,6 +486,7 @@ namespace Harness {
         readFile(path: string): string;
         writeFile(path: string, contents: string): void;
         directoryName(path: string): string;
+        getDirectories(path: string): string[];
         createDirectory(path: string): void;
         fileExists(fileName: string): boolean;
         directoryExists(path: string): boolean;
@@ -533,6 +534,7 @@ namespace Harness {
             export const readFile: typeof IO.readFile = path => ts.sys.readFile(path);
             export const writeFile: typeof IO.writeFile = (path, content) => ts.sys.writeFile(path, content);
             export const directoryName: typeof IO.directoryName = fso.GetParentFolderName;
+            export const getDirectories: typeof IO.getDirectories = dir => ts.sys.getDirectories(dir);
             export const directoryExists: typeof IO.directoryExists = fso.FolderExists;
             export const fileExists: typeof IO.fileExists = fso.FileExists;
             export const log: typeof IO.log = global.WScript && global.WScript.StdOut.WriteLine;
@@ -600,6 +602,7 @@ namespace Harness {
             export const args = () => ts.sys.args;
             export const getExecutingFilePath = () => ts.sys.getExecutingFilePath();
             export const exit = (exitCode: number) => ts.sys.exit(exitCode);
+            export const getDirectories: typeof IO.getDirectories = path => ts.sys.getDirectories(path);
 
             export const readFile: typeof IO.readFile = path => ts.sys.readFile(path);
             export const writeFile: typeof IO.writeFile = (path, content) => ts.sys.writeFile(path, content);
@@ -680,6 +683,7 @@ namespace Harness {
             export const args = () => <string[]>[];
             export const getExecutingFilePath = () => "";
             export const exit = (exitCode: number) => { };
+            export const getDirectories = () => <string[]>[];
 
             export let log = (s: string) => console.log(s);
 
@@ -936,7 +940,7 @@ namespace Harness {
             // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
             const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames);
 
-            let realPathMap: ts.FileMap<string>;
+            const realPathMap: ts.FileMap<string> = ts.createFileMap<string>();
             const fileMap: ts.FileMap<() => ts.SourceFile> = ts.createFileMap<() => ts.SourceFile>();
             for (const file of inputFiles) {
                 if (file.content !== undefined) {
@@ -945,9 +949,6 @@ namespace Harness {
                     if (file.fileOptions && file.fileOptions["symlink"]) {
                         const link = file.fileOptions["symlink"];
                         const linkPath = ts.toPath(link, currentDirectory, getCanonicalFileName);
-                        if (!realPathMap) {
-                            realPathMap = ts.createFileMap<string>();
-                        }
                         realPathMap.set(linkPath, fileName);
                         fileMap.set(path, (): ts.SourceFile => { throw new Error("Symlinks should always be resolved to a realpath first"); });
                     }
@@ -981,20 +982,6 @@ namespace Harness {
 
 
             return {
-                getDefaultTypeDirectiveNames: (path: string) => {
-                    const results: string[] = [];
-                    fileMap.forEachValue((key, value) => {
-                        const rx = /node_modules\/@types\/(\w+)/;
-                        const typeNameResult = rx.exec(key);
-                        if (typeNameResult) {
-                            const typeName = typeNameResult[1];
-                            if (results.indexOf(typeName) < 0) {
-                                results.push(typeName);
-                            }
-                        }
-                    });
-                    return results;
-                },
                 getCurrentDirectory: () => currentDirectory,
                 getSourceFile,
                 getDefaultLibFileName,
@@ -1012,7 +999,37 @@ namespace Harness {
                 realpath: realPathMap && ((f: string) => {
                     const path = ts.toPath(f, currentDirectory, getCanonicalFileName);
                     return realPathMap.contains(path) ? realPathMap.get(path) : path;
-                })
+                }),
+                directoryExists: dir => {
+                    let path = ts.toPath(dir, currentDirectory, getCanonicalFileName);
+                    // Strip trailing /, which may exist if the path is a drive root
+                    if (path[path.length - 1] === "/") {
+                        path = <ts.Path>path.substr(0, path.length - 1);
+                    }
+                    let exists = false;
+                    fileMap.forEachValue(key => {
+                        if (key.indexOf(path) === 0 && key[path.length] === "/") {
+                            exists = true;
+                        }
+                    });
+                    return exists;
+                },
+                getDirectories: d => {
+                    const path = ts.toPath(d, currentDirectory, getCanonicalFileName);
+                    const result: string[] = [];
+                    fileMap.forEachValue((key, value) => {
+                        if (key.indexOf(path) === 0 && key.lastIndexOf("/") > path.length) {
+                            let dirName = key.substr(path.length, key.indexOf("/", path.length + 1) - path.length);
+                            if (dirName[0] === "/") {
+                                dirName = dirName.substr(1);
+                            }
+                            if (result.indexOf(dirName) < 0) {
+                                result.push(dirName);
+                            }
+                        }
+                    });
+                    return result;
+                }
             };
         }
 
@@ -1111,7 +1128,9 @@ namespace Harness {
             options.noErrorTruncation = true;
             options.skipDefaultLibCheck = true;
 
-            currentDirectory = currentDirectory || Harness.IO.getCurrentDirectory();
+            if (typeof currentDirectory === "undefined") {
+                currentDirectory = Harness.IO.getCurrentDirectory();
+            }
 
             // Parse settings
             if (harnessSettings) {

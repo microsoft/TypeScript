@@ -1,11 +1,11 @@
-=== /consumer.ts ===
+=== /src/consumer.ts ===
 /// <reference types="jquery" />
 $.foo();
 >$.foo : Symbol(foo, Decl(index.d.ts, 3, 16))
 >$ : Symbol($, Decl(index.d.ts, 3, 11))
 >foo : Symbol(foo, Decl(index.d.ts, 3, 16))
 
-=== /types/jquery/index.d.ts ===
+=== /src/types/jquery/index.d.ts ===
 
 // We can find typings in the ./types folder
 
