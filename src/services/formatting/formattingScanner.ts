@@ -268,9 +268,9 @@ namespace ts.formatting {
             return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
         }
 
-        // when containing node in the tree is token 
+        // when containing node in the tree is token
         // but its kind differs from the kind that was returned by the scanner,
-        // then kind needs to be fixed. This might happen in cases 
+        // then kind needs to be fixed. This might happen in cases
         // when parser interprets token differently, i.e keyword treated as identifier
         function fixTokenKind(tokenInfo: TokenInfo, container: Node): TokenInfo {
             if (isToken(container) && tokenInfo.token.kind !== container.kind) {

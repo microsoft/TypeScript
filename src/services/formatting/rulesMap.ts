@@ -95,9 +95,9 @@ namespace ts.formatting {
             ////    4- Context rules with any token combination
             ////    5- Non-context rules with specific token combination
             ////    6- Non-context rules with any token combination
-            //// 
+            ////
             //// The member rulesInsertionIndexBitmap is used to describe the number of rules
-            //// in each sub-bucket (above) hence can be used to know the index of where to insert 
+            //// in each sub-bucket (above) hence can be used to know the index of where to insert
             //// the next rule. It's a bitmap which contains 6 different sections each is given 5 bits.
             ////
             //// Example:
