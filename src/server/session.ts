@@ -379,7 +379,7 @@ namespace ts.server {
                     start,
                     end,
                     file: fileName,
-                    isWriteAccess
+                    isWriteAccess,
                 };
             });
         }
@@ -555,7 +555,8 @@ namespace ts.server {
                             start: start,
                             lineText: lineText,
                             end: compilerService.host.positionToLineOffset(ref.fileName, ts.textSpanEnd(ref.textSpan)),
-                            isWriteAccess: ref.isWriteAccess
+                            isWriteAccess: ref.isWriteAccess,
+                            isDefinition: ref.isDefinition
                         };
                     });
                 },

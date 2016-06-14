@@ -1209,6 +1209,7 @@ namespace ts {
         textSpan: TextSpan;
         fileName: string;
         isWriteAccess: boolean;
+        isDefinition: boolean;
     }
 
     export interface DocumentHighlights {
@@ -5753,7 +5754,8 @@ namespace ts {
                         result.push({
                             fileName: entry.fileName,
                             textSpan: highlightSpan.textSpan,
-                            isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference
+                            isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
+                            isDefinition: false
                         });
                     }
                 }
@@ -6187,7 +6189,8 @@ namespace ts {
                                     references: [{
                                         fileName: sourceFile.fileName,
                                         textSpan: createTextSpan(position, searchText.length),
-                                        isWriteAccess: false
+                                        isWriteAccess: false,
+                                        isDefinition: false
                                     }]
                                 });
                             }
@@ -6741,7 +6744,8 @@ namespace ts {
             return {
                 fileName: node.getSourceFile().fileName,
                 textSpan: createTextSpanFromBounds(start, end),
-                isWriteAccess: isWriteAccess(node)
+                isWriteAccess: isWriteAccess(node),
+                isDefinition: isDeclarationName(node) || isLiteralComputedPropertyDeclarationName(node)
             };
         }
 
