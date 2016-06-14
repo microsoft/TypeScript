@@ -1363,8 +1363,8 @@ namespace ts {
 
     // @kind(SyntaxKind.ModuleDeclaration)
     export interface ModuleDeclaration extends DeclarationStatement {
-        name: ModuleName;
-        body: ModuleBlock | ModuleDeclaration;
+        name: Identifier | LiteralExpression;
+        body?: ModuleBlock | ModuleDeclaration;
     }
 
     // @kind(SyntaxKind.ModuleBlock)
@@ -1725,6 +1725,7 @@ namespace ts {
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
+        /* @internal */ patternAmbientModules?: PatternAmbientModule[];
     }
 
     export interface ScriptReferenceHost {
@@ -2202,6 +2203,20 @@ namespace ts {
         [index: string]: Symbol;
     }
 
+    /** Represents a "prefix*suffix" pattern. */
+    /* @internal */
+    export interface Pattern {
+        prefix: string;
+        suffix: string;
+    }
+
+    /** Used to track a `declare module "foo*"`-like declaration. */
+    /* @internal */
+    export interface PatternAmbientModule {
+        pattern: Pattern;
+        symbol: Symbol;
+    }
+
     /* @internal */
     export const enum NodeCheckFlags {
         TypeChecked                         = 0x00000001,  // Node has been type checked
@@ -2276,6 +2291,7 @@ namespace ts {
 
         /* @internal */
         Nullable = Undefined | Null,
+        Falsy = String | Number | Boolean | Void | Undefined | Null,
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
@@ -2285,7 +2301,10 @@ namespace ts {
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
-        Narrowable = Any | ObjectType | Union | TypeParameter,
+
+        // 'Narrowable' types are types where narrowing actually narrows.
+        // This *should* be every type other than null, undefined, void, and never
+        Narrowable = Any | StructuredType | TypeParameter | StringLike | NumberLike | Boolean | ESSymbol,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
@@ -2547,85 +2566,77 @@ namespace ts {
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | TsConfigOnlyOptions;
 
     export interface CompilerOptions {
-        allowNonTsExtensions?: boolean;
+        allowJs?: boolean;
+        /*@internal*/ allowNonTsExtensions?: boolean;
+        allowSyntheticDefaultImports?: boolean;
+        allowUnreachableCode?: boolean;
+        allowUnusedLabels?: boolean;
+        baseUrl?: string;
         charset?: string;
+        /* @internal */ configFilePath?: string;
         declaration?: boolean;
         declarationDir?: string;
-        diagnostics?: boolean;
+        /* @internal */ diagnostics?: boolean;
         /*@internal*/ extendedDiagnostics?: boolean;
         emitBOM?: boolean;
-        help?: boolean;
-        init?: boolean;
+        emitDecoratorMetadata?: boolean;
+        experimentalDecorators?: boolean;
+        forceConsistentCasingInFileNames?: boolean;
+        /*@internal*/help?: boolean;
+        /*@internal*/init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
+        isolatedModules?: boolean;
         jsx?: JsxEmit;
-        reactNamespace?: string;
-        listFiles?: boolean;
-        typesSearchPaths?: string[];
+        lib?: string[];
+        /*@internal*/listEmittedFiles?: boolean;
+        /*@internal*/listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+        moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
+        noFallthroughCasesInSwitch?: boolean;
         noImplicitAny?: boolean;
+        noImplicitReturns?: boolean;
         noImplicitThis?: boolean;
+        noImplicitUseStrict?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
         out?: string;
-        outFile?: string;
         outDir?: string;
+        outFile?: string;
+        paths?: PathSubstitutions;
         preserveConstEnums?: boolean;
-        /* @internal */ pretty?: DiagnosticStyle;
         project?: string;
+        /* @internal */ pretty?: DiagnosticStyle;
+        reactNamespace?: string;
         removeComments?: boolean;
         rootDir?: string;
+        rootDirs?: RootPaths;
+        skipLibCheck?: boolean;
+        skipDefaultLibCheck?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
+        strictNullChecks?: boolean;
+        /* @internal */ stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
-        target?: ScriptTarget;
-        version?: boolean;
-        watch?: boolean;
-        isolatedModules?: boolean;
-        experimentalDecorators?: boolean;
-        emitDecoratorMetadata?: boolean;
-        moduleResolution?: ModuleResolutionKind;
-        allowUnusedLabels?: boolean;
-        allowUnreachableCode?: boolean;
-        noImplicitReturns?: boolean;
-        noFallthroughCasesInSwitch?: boolean;
-        forceConsistentCasingInFileNames?: boolean;
-        baseUrl?: string;
-        paths?: PathSubstitutions;
-        rootDirs?: RootPaths;
-        traceResolution?: boolean;
-        allowSyntheticDefaultImports?: boolean;
-        allowJs?: boolean;
-        noImplicitUseStrict?: boolean;
-        strictNullChecks?: boolean;
-        skipLibCheck?: boolean;
-        listEmittedFiles?: boolean;
-        lib?: string[];
-        /* @internal */ stripInternal?: boolean;
-        /* @internal */ useLegacyEmitter?: boolean;
-
-        // Skip checking lib.d.ts to help speed up tests.
-        /* @internal */ skipDefaultLibCheck?: boolean;
-        // Do not perform validation of output file name in transpile scenarios
         /* @internal */ suppressOutputPathCheck?: boolean;
-
-        /* @internal */
-        // When options come from a config file, its path is recorded here
-        configFilePath?: string;
-        /* @internal */
-        // Path used to used to compute primary search locations
-        typesRoot?: string;
+        target?: ScriptTarget;
+        traceResolution?: boolean;
         types?: string[];
+        /** Paths used to used to compute primary types search locations */
+        typeRoots?: string[];
+        typesSearchPaths?: string[];
+        /* @internal */ useLegacyEmitter?: boolean;
+        /*@internal*/ version?: boolean;
+        /*@internal*/ watch?: boolean;
 
-        list?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
 
@@ -2930,6 +2941,7 @@ namespace ts {
         getDefaultTypeDirectiveNames?(rootPath: string): string[];
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;

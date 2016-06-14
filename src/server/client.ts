@@ -459,7 +459,7 @@ namespace ts.server {
                 kindModifiers: item.kindModifiers || "",
                 spans: item.spans.map(span => createTextSpanFromBounds(this.lineOffsetToPosition(fileName, span.start), this.lineOffsetToPosition(fileName, span.end))),
                 childItems: this.decodeNavigationBarItems(item.childItems, fileName),
-                indent: 0,
+                indent: item.indent,
                 bolded: false,
                 grayed: false
             }));

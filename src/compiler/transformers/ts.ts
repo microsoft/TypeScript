@@ -1575,10 +1575,10 @@ namespace ts {
          * @param node The type node.
          */
         function getRestParameterElementType(node: TypeNode) {
-            if (node.kind === SyntaxKind.ArrayType) {
+            if (node && node.kind === SyntaxKind.ArrayType) {
                 return (<ArrayTypeNode>node).elementType;
             }
-            else if (node.kind === SyntaxKind.TypeReference) {
+            else if (node && node.kind === SyntaxKind.TypeReference) {
                 return singleOrUndefined((<TypeReferenceNode>node).typeArguments);
             }
             else {
@@ -1622,6 +1622,11 @@ namespace ts {
         function serializeReturnTypeOfNode(node: Node): Expression {
             if (isFunctionLike(node) && node.type) {
                 return serializeTypeNode(node.type);
+            }
+            else if (isAsyncFunctionLike(node)) {
+                // We still need to serialize  return type of async function to be "Promise"
+                // even though there is no return type given by users.
+                return createIdentifier("Promise");
             }
 
             return createVoidZero();

@@ -5332,7 +5332,14 @@ namespace ts {
             else {
                 node.name = parseLiteralNode(/*internName*/ true);
             }
-            node.body = parseModuleBlock();
+
+            if (token === SyntaxKind.OpenBraceToken) {
+                node.body = parseModuleBlock();
+            }
+            else {
+                parseSemicolon();
+            }
+
             return finishNode(node);
         }
 

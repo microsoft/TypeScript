@@ -52,13 +52,13 @@ declare module ts {
         None = 0,
         Block = 1,
         Smart = 2,
-    }  
+    }
 
     interface OutputFile {
         name: string;
         writeByteOrderMark: boolean;
         text: string;
-    }  
+    }
 }
 
 declare namespace FourSlashInterface {
@@ -139,7 +139,7 @@ declare namespace FourSlashInterface {
         isValidBraceCompletionAtPostion(openingBrace?: string): void;
     }
     class verify extends verifyNegatable {
-        assertHasRanges(ranges: FourSlash.Range[]): void;
+        assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
         indentationIs(numberOfSpaces: number): void;
         indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle): void;

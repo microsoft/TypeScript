@@ -185,7 +185,8 @@ class ProjectRunner extends RunnerBase {
                     useCaseSensitiveFileNames: () => Harness.IO.useCaseSensitiveFileNames(),
                     getNewLine: () => Harness.IO.newLine(),
                     fileExists: fileName => fileName === Harness.Compiler.defaultLibFileName ||  getSourceFileText(fileName) !== undefined,
-                    readFile: fileName => Harness.IO.readFile(fileName)
+                    readFile: fileName => Harness.IO.readFile(fileName),
+                    getDirectories: path => Harness.IO.getDirectories(path)
                 };
             }
         }
@@ -244,7 +245,7 @@ class ProjectRunner extends RunnerBase {
                     mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? Harness.IO.resolvePath(testCase.mapRoot) : testCase.mapRoot,
                     sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? Harness.IO.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
                     module: moduleKind,
-                    moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future 
+                    moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future
                 };
                 // Set the values specified using json
                 const optionNameMap: ts.Map<ts.CommandLineOption> = {};
