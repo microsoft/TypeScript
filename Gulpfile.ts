@@ -30,7 +30,8 @@ import transform = require("vinyl-transform");
 import * as os from "os";
 import Linter = require("tslint");
 const gulp = helpMaker(originalGulp);
-import {runTestsInParallel} from "./scripts/mocha-parallel.js";
+const mochaParallel = require("./scripts/mocha-parallel.js");
+const {runTestsInParallel} = mochaParallel;
 
 const cmdLineOptions = minimist(process.argv.slice(2), {
     boolean: ["debug", "light", "colors", "lint", "soft"],
@@ -464,8 +465,8 @@ gulp.task(importDefinitelyTypedTestsJs, false, [], () => {
     return gulp.src(importDefinitelyTypedTestsTs)
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
-        .pipe(sourcemaps.write(path.dirname(importDefinitelyTypedTestsTs)))
-        .pipe(gulp.dest(path.dirname(importDefinitelyTypedTestsTs)))
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("."))
 });
 
 gulp.task("importDefinitelyTypedTests", "Runs scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.ts to copy DT's tests to the TS-internal RWC tests", [importDefinitelyTypedTestsJs], (done) => {
@@ -490,13 +491,13 @@ gulp.task(processDiagnosticMessagesJs, false, [], () => {
         removeComments: true,
         noResolve: false,
         stripInternal: false,
-        outFile: importDefinitelyTypedTestsJs
+        outFile: processDiagnosticMessagesJs
     }, /*useBuiltCompiler*/ false);
-    return gulp.src(importDefinitelyTypedTestsTs)
+    return gulp.src(processDiagnosticMessagesTs)
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
-        .pipe(sourcemaps.write(path.dirname(importDefinitelyTypedTestsTs)))
-        .pipe(gulp.dest(path.dirname(importDefinitelyTypedTestsTs)))
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("."))
 });
 
 // The generated diagnostics map; built for the compiler and for the "generate-diagnostics" task
@@ -529,8 +530,8 @@ gulp.task(builtLocalCompiler, false, ["lib", "generate-diagnostics"], () => {
     if (!useDebugMode) {
         result = result.pipe(insert.prepend(fs.readFileSync(copyright)));
     }
-    return result.pipe(sourcemaps.write(path.dirname(builtLocalCompiler)))
-        .pipe(gulp.dest(path.dirname(builtLocalCompiler)));
+    return result.pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("."));
 });
 
 const servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
@@ -539,7 +540,7 @@ const nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
 const nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
 const nodeStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescript_standalone.d.ts");
 
-gulp.task(servicesFile, false, [], (done) => {
+gulp.task(servicesFile, false, [builtLocalCompiler], (done) => {
     const settings: tsc.Settings = getCompilerSettings({
         declaration: true,
         preserveConstEnums: true,
@@ -554,8 +555,8 @@ gulp.task(servicesFile, false, [], (done) => {
     if (!useDebugMode) {
         result = result.pipe(insert.prepend(fs.readFileSync(copyright)));
     }
-    result.pipe(sourcemaps.write(path.dirname(builtLocalCompiler)))
-        .pipe(gulp.dest(path.dirname(builtLocalCompiler)))
+    result.pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("."))
         .on("end", () => {
             gulp.src(servicesFile).pipe(gulp.dest(nodePackageFile)).on("end", () => {
                 // Stanalone/web definition file using global 'ts' namespace
@@ -582,7 +583,7 @@ gulp.task(servicesFile, false, [], (done) => {
 
 const serverFile = path.join(builtLocalDirectory, "tsserver.js");
 
-gulp.task(serverFile, false, [], () => {
+gulp.task(serverFile, false, [builtLocalCompiler], () => {
     const settings: tsc.Settings = getCompilerSettings({
         outFile: serverFile
     }, /*useBuiltCompiler*/ true);
@@ -592,14 +593,14 @@ gulp.task(serverFile, false, [], () => {
     if (!useDebugMode) {
         result = result.pipe(insert.prepend(fs.readFileSync(copyright)));
     }
-    return result.pipe(sourcemaps.write(path.dirname(serverFile)))
-        .pipe(gulp.dest(path.dirname(serverFile)));
+    return result.pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("."));
 });
 
 const tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 const tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 
-gulp.task(tsserverLibraryFile, false, [], () => {
+gulp.task(tsserverLibraryFile, false, [builtLocalCompiler], () => {
     const settings: tsc.Settings = getCompilerSettings({
         declaration: true,
         outFile: tsserverLibraryFile
@@ -610,8 +611,8 @@ gulp.task(tsserverLibraryFile, false, [], () => {
     if (!useDebugMode) {
         result = result.pipe(insert.prepend(fs.readFileSync(copyright)));
     }
-    return result.pipe(sourcemaps.write(path.dirname(tsserverLibraryFile)))
-        .pipe(gulp.dest(path.dirname(tsserverLibraryFile)));
+    return result.pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("."));
 });
 
 gulp.task("lssl", "Builds language service server library", [tsserverLibraryFile]);
@@ -632,8 +633,8 @@ gulp.task(word2mdJs, false, [], () => {
     return gulp.src(word2mdTs)
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
-        .pipe(sourcemaps.write(path.dirname(word2mdJs)))
-        .pipe(gulp.dest(path.dirname(word2mdJs)));
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("."));
 });
 
 gulp.task(specMd, false, [word2mdJs], (done) => {
@@ -675,15 +676,15 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", [], () => {
 
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
-gulp.task(run, false, [], () => {
+gulp.task(run, false, [builtLocalCompiler], () => {
     const settings: tsc.Settings = getCompilerSettings({
         outFile: run
     }, /*useBuiltCompiler*/ true);
     return gulp.src(harnessSources)
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
-        .pipe(sourcemaps.write(path.dirname(run)))
-        .pipe(gulp.dest(path.dirname(run)));
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("."));
 });
 
 const internalTests = "internal/";
@@ -698,7 +699,7 @@ const localTest262Baseline = path.join(internalTests, "baselines/test262/local")
 const refTest262Baseline = path.join(internalTests, "baselines/test262/reference");
 
 
-gulp.task("tests", "Builds the test infrastructure using the built compiler", ["local", run]);
+gulp.task("tests", "Builds the test infrastructure using the built compiler", [run]);
 gulp.task("tests-debug", "Builds the test sources and automation in debug mode", () => {
     return runSequence("useDebugMode", "tests");
 });
@@ -848,16 +849,16 @@ gulp.task("runtests",
 
 const nodeServerOutFile = "tests/webTestServer.js";
 const nodeServerInFile = "tests/webTestServer.ts";
-gulp.task(run, false, [], () => {
+gulp.task(nodeServerOutFile, false, [builtLocalCompiler], () => {
     const settings: tsc.Settings = getCompilerSettings({}, /*useBuiltCompiler*/ true);
     return gulp.src(nodeServerInFile)
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
-        .pipe(sourcemaps.write(path.dirname(nodeServerOutFile)))
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(path.dirname(nodeServerOutFile)));
 });
 
-gulp.task("browserify", "Runs browserify on run.js to produce a file suitable for running tests in the browser", ["tests", run, nodeServerOutFile], (done) => {
+gulp.task("browserify", "Runs browserify on run.js to produce a file suitable for running tests in the browser", [builtLocalCompiler, nodeServerOutFile], (done) => {
     // TODO (weswig): Use browserify JS api with gulp streams and correctly manage sourcemaps
     //exec(browserify, [run, "-d", "-o", "built/local/bundle.js"], done, done);
     const settings: tsc.Settings = getCompilerSettings({
@@ -869,8 +870,8 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
         .pipe(transform((filename) => {
             return browserify(filename).bundle();
         }))
-        .pipe(sourcemaps.write(path.dirname(run)))
-        .pipe(gulp.dest(path.dirname(run)));
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("."));
 });
 
 
@@ -979,14 +980,14 @@ gulp.task("baseline-accept-test262", "Makes the most recent test262 test results
 // Webhost
 const webhostPath = "tests/webhost/webtsc.ts";
 const webhostJsPath = "tests/webhost/webtsc.js";
-gulp.task(run, false, [], () => {
+gulp.task(webhostJsPath, false, [builtLocalCompiler], () => {
     const settings: tsc.Settings = getCompilerSettings({
         outFile: webhostJsPath
     }, /*useBuiltCompiler*/ true);
     return gulp.src(webhostPath)
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
-        .pipe(sourcemaps.write(path.dirname(webhostJsPath)))
+        .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(path.dirname(webhostJsPath)));
 });
 
@@ -998,15 +999,15 @@ gulp.task("webhost", "Builds the tsc web host", [webhostJsPath], () => {
 // Perf compiler
 const perftscPath = "tests/perftsc.ts";
 const perftscJsPath = "built/local/perftsc.js";
-gulp.task(run, false, [], () => {
+gulp.task(perftscJsPath, false, [builtLocalCompiler], () => {
     const settings: tsc.Settings = getCompilerSettings({
         outFile: perftscJsPath
     }, /*useBuiltCompiler*/ true);
     return gulp.src(perftscPath)
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
-        .pipe(sourcemaps.write(path.dirname(perftscJsPath)))
-        .pipe(gulp.dest(path.dirname(perftscJsPath)));
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("."));
 });
 
 gulp.task("perftsc", "Builds augmented version of the compiler for perf tests", [perftscJsPath]);
@@ -1028,15 +1029,15 @@ gulp.task(loggedIOJsPath, false, [], (done) => {
 
 const instrumenterPath = path.join(harnessDirectory, "instrumenter.ts");
 const instrumenterJsPath = path.join(builtLocalDirectory, "instrumenter.js");
-gulp.task(run, false, [], () => {
+gulp.task(instrumenterJsPath, false, [builtLocalCompiler], () => {
     const settings: tsc.Settings = getCompilerSettings({
         outFile: instrumenterJsPath
     }, /*useBuiltCompiler*/ true);
     return gulp.src(instrumenterPath)
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
-        .pipe(sourcemaps.write(path.dirname(instrumenterJsPath)))
-        .pipe(gulp.dest(path.dirname(instrumenterJsPath)));
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("."));
 });
 
 gulp.task("tsc-instrumented", "Builds an instrumented tsc.js", [loggedIOJsPath, instrumenterJsPath, builtLocalCompiler], (done) => {
@@ -1067,8 +1068,8 @@ const tslintRulesOutFiles = tslintRules.map(function(p, i) {
         return gulp.src(tslintRulesFiles[i])
             .pipe(sourcemaps.init())
             .pipe(tsc(settings))
-            .pipe(sourcemaps.write('.'))
-            .pipe(gulp.dest('.'));
+            .pipe(sourcemaps.write("."))
+            .pipe(gulp.dest("."));
     });
     return pathname;
 });
