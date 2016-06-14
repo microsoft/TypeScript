@@ -537,6 +537,7 @@ namespace ts.server {
                     fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
                     isWriteAccess: entry.isWriteAccess,
+                    isDefinition: false
                 };
             });
         }

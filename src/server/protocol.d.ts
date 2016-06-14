@@ -308,7 +308,7 @@ declare namespace ts.server.protocol {
         /**
          * True if reference is a definition, false otherwise.
          */
-        isDefinition?: boolean;
+        isDefinition: boolean;
     }
 
     /**

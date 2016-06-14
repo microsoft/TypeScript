@@ -1208,7 +1208,7 @@ namespace ts {
         textSpan: TextSpan;
         fileName: string;
         isWriteAccess: boolean;
-        isDefinition?: boolean;
+        isDefinition: boolean;
     }
 
     export interface DocumentHighlights {
@@ -5750,7 +5750,8 @@ namespace ts {
                         result.push({
                             fileName: entry.fileName,
                             textSpan: highlightSpan.textSpan,
-                            isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference
+                            isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
+                            isDefinition: false
                         });
                     }
                 }
