@@ -3234,7 +3234,7 @@ namespace ts {
                 }
             }
 
-            return name;
+            return unescapeIdentifier(name);
         }
 
         function getCompletionData(fileName: string, position: number) {
