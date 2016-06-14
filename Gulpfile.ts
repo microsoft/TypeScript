@@ -14,6 +14,7 @@ declare module "gulp-typescript" {
         stripInternal?: boolean;
         newLine?: number;
     }
+    interface CompileStream extends NodeJS.ReadWriteStream {} // Either gulp or gulp-typescript has some odd typings which don't reflect reality, making this required
 }
 import * as insert from "gulp-insert";
 import * as sourcemaps from "gulp-sourcemaps";
