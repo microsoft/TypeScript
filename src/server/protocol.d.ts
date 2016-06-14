@@ -1187,6 +1187,8 @@ declare namespace ts.server.protocol {
           *  Optional limit on the number of items to return.
           */
         maxResultCount?: number;
+
+        projectFileName?: string;
     }
 
     /**

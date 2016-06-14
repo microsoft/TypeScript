@@ -14,12 +14,14 @@ namespace ts.server {
     });
 
     class Logger implements ts.server.Logger {
-        fd = -1;
-        seq = 0;
-        inGroup = false;
-        firstInGroup = true;
+        private fd = -1;
+        private seq = 0;
+        private inGroup = false;
+        private firstInGroup = true;
 
-        constructor(public logFilename: string, public level: string) {
+        constructor(private readonly logFilename: string,
+            private readonly traceToConsole: boolean,
+            private readonly level: string) {
         }
 
         static padStringRight(str: string, padding: string) {
@@ -52,7 +54,7 @@ namespace ts.server {
         }
 
         loggingEnabled() {
-            return !!this.logFilename;
+            return !!this.logFilename || this.traceToConsole;
         }
 
         isVerbose() {
@@ -66,7 +68,7 @@ namespace ts.server {
                     this.fd = fs.openSync(this.logFilename, "w");
                 }
             }
-            if (this.fd >= 0) {
+            if (this.fd >= 0 || this.traceToConsole) {
                 s = s + "\n";
                 const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
                 if (this.firstInGroup) {
@@ -78,7 +80,13 @@ namespace ts.server {
                     this.firstInGroup = true;
                 }
                 const buf = new Buffer(s);
-                fs.writeSync(this.fd, buf, 0, buf.length, null);
+                if (this.fd >= 0) {
+                    fs.writeSync(this.fd, buf, 0, buf.length, null);
+                }
+                if (this.traceToConsole)
+                {
+                    console.warn(s);
+                }
             }
         }
     }
@@ -109,6 +117,7 @@ namespace ts.server {
     interface LogOptions {
         file?: string;
         detailLevel?: string;
+        traceToConsole?: boolean;
     }
 
     function parseLoggingEnvironmentString(logEnvStr: string): LogOptions {
@@ -125,6 +134,9 @@ namespace ts.server {
                     case "-level":
                         logEnv.detailLevel = value;
                         break;
+                    case "-traceToConsole":
+                        logEnv.traceToConsole = value.toLowerCase() === "true";
+                        break;
                 }
             }
         }
@@ -135,6 +147,7 @@ namespace ts.server {
     function createLoggerFromEnv() {
         let fileName: string = undefined;
         let detailLevel = "normal";
+        let traceToConsole = false;
         const logEnvStr = process.env["TSS_LOG"];
         if (logEnvStr) {
             const logEnv = parseLoggingEnvironmentString(logEnvStr);
@@ -147,8 +160,9 @@ namespace ts.server {
             if (logEnv.detailLevel) {
                 detailLevel = logEnv.detailLevel;
             }
+            traceToConsole = logEnv.traceToConsole;
         }
-        return new Logger(fileName, detailLevel);
+        return new Logger(fileName, traceToConsole,  detailLevel);
     }
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable

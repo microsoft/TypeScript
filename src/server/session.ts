@@ -104,9 +104,11 @@ namespace ts.server {
         export const Change = "change";
         export const Close = "close";
         export const Completions = "completions";
+        export const CompletionsFull = "completions-full";
         export const CompletionDetails = "completionEntryDetails";
         export const Configure = "configure";
         export const Definition = "definition";
+        export const DefinitionFull = "definition-full";
         export const Exit = "exit";
         export const Format = "format";
         export const Formatonkey = "formatonkey";
@@ -116,13 +118,16 @@ namespace ts.server {
         export const Navto = "navto";
         export const Occurrences = "occurrences";
         export const DocumentHighlights = "documentHighlights";
+        export const DocumentHighlightsFull = "documentHighlights-full";
         export const Open = "open";
         export const Quickinfo = "quickinfo";
+        export const QuickinfoFull = "quickinfo-full";
         export const References = "references";
         export const Reload = "reload";
         export const Rename = "rename";
         export const Saveto = "saveto";
         export const SignatureHelp = "signatureHelp";
+        export const SignatureHelpFull = "signatureHelp-full";
         export const TypeDefinition = "typeDefinition";
         export const ProjectInfo = "projectInfo";
         export const ReloadProjects = "reloadProjects";
@@ -316,29 +321,34 @@ namespace ts.server {
             }
         }
 
-        private getDefinition(line: number, offset: number, fileName: string): protocol.FileSpan[] {
-            const file = ts.normalizePath(fileName);
+        private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.FileSpan[] | DefinitionInfo[] {
+            const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
             if (!project) {
                 throw Errors.NoProject;
             }
 
             const scriptInfo = project.getScriptInfo(file);
-            const position = scriptInfo.lineOffsetToPosition(line, offset);
+            const position = this.getPosition(args, scriptInfo);;
 
             const definitions = project.languageService.getDefinitionAtPosition(file, position);
             if (!definitions) {
                 return undefined;
             }
 
-            return definitions.map(def => {
-                const defScriptInfo = project.getScriptInfo(def.fileName);
-                return {
-                    file: def.fileName,
-                    start: defScriptInfo.positionToLineOffset(def.textSpan.start),
-                    end: defScriptInfo.positionToLineOffset(ts.textSpanEnd(def.textSpan))
-                };
-            });
+            if (simplifiedResult) {
+                return definitions.map(def => {
+                    const defScriptInfo = project.getScriptInfo(def.fileName);
+                    return {
+                        file: def.fileName,
+                        start: defScriptInfo.positionToLineOffset(def.textSpan.start),
+                        end: defScriptInfo.positionToLineOffset(ts.textSpanEnd(def.textSpan))
+                    };
+                });
+            }
+            else {
+                return definitions;
+            }
         }
 
         private getTypeDefinition(line: number, offset: number, fileName: string): protocol.FileSpan[] {
@@ -397,8 +407,8 @@ namespace ts.server {
             });
         }
 
-        private getDocumentHighlights(line: number, offset: number, fileName: string, filesToSearch: string[]): protocol.DocumentHighlightsItem[] {
-            fileName = ts.normalizePath(fileName);
+        private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): protocol.DocumentHighlightsItem[] | DocumentHighlights[] {
+            const fileName = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(fileName);
 
             if (!project) {
@@ -406,15 +416,20 @@ namespace ts.server {
             }
 
             const scriptInfo = project.getScriptInfo(fileName);
-            const position = scriptInfo.lineOffsetToPosition(line, offset);
+            const position =  this.getPosition(args, scriptInfo);
 
-            const documentHighlights = project.languageService.getDocumentHighlights(fileName, position, filesToSearch);
+            const documentHighlights = project.languageService.getDocumentHighlights(fileName, position, args.filesToSearch);
 
             if (!documentHighlights) {
                 return undefined;
             }
 
-            return documentHighlights.map(convertToDocumentHighlightsItem);
+            if (simplifiedResult) {
+                return documentHighlights.map(convertToDocumentHighlightsItem);
+            }
+            else {
+                return documentHighlights;
+            }
 
             function convertToDocumentHighlightsItem(documentHighlights: ts.DocumentHighlights): ts.server.protocol.DocumentHighlightsItem {
                 const { fileName, highlightSpans } = documentHighlights;
@@ -608,7 +623,11 @@ namespace ts.server {
             }
         }
 
-        private getQuickInfo(args: protocol.FileLocationRequestArgs): protocol.QuickInfoResponseBody {
+        private getPosition(args: protocol.FileLocationRequestArgs, scriptInfo: ScriptInfo): number {
+            return args.position !== undefined ? args.position : scriptInfo.lineOffsetToPosition(args.line, args.offset);
+        }
+
+        private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.QuickInfoResponseBody | QuickInfo {
             const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -616,26 +635,26 @@ namespace ts.server {
             }
 
             const scriptInfo = project.getScriptInfo(file);
-            const position = args.position !== undefined ? args.position : scriptInfo.lineOffsetToPosition(args.line, args.offset);
-            const quickInfo = project.languageService.getQuickInfoAtPosition(file, position);
+            const quickInfo = project.languageService.getQuickInfoAtPosition(file, this.getPosition(args, scriptInfo));
             if (!quickInfo) {
                 return undefined;
             }
-            if (args.position !== undefined) {
-                // TODO: fixme
-                return <any>quickInfo;
-            }
 
-            const displayString = ts.displayPartsToString(quickInfo.displayParts);
-            const docString = ts.displayPartsToString(quickInfo.documentation);
-            return {
-                kind: quickInfo.kind,
-                kindModifiers: quickInfo.kindModifiers,
-                start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
-                end: scriptInfo.positionToLineOffset(ts.textSpanEnd(quickInfo.textSpan)),
-                displayString: displayString,
-                documentation: docString,
-            };
+            if (simplifiedResult) {
+                const displayString = ts.displayPartsToString(quickInfo.displayParts);
+                const docString = ts.displayPartsToString(quickInfo.documentation);
+                return {
+                    kind: quickInfo.kind,
+                    kindModifiers: quickInfo.kindModifiers,
+                    start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
+                    end: scriptInfo.positionToLineOffset(ts.textSpanEnd(quickInfo.textSpan)),
+                    displayString: displayString,
+                    documentation: docString,
+                };
+            }
+            else {
+                return quickInfo;
+            }
         }
 
         private getFormattingEditsForRange(line: number, offset: number, endLine: number, endOffset: number, fileName: string): protocol.CodeEdit[] {
@@ -736,44 +755,45 @@ namespace ts.server {
             });
         }
 
-        private getCompletions(line: number, offset: number, prefix: string, fileName: string): protocol.CompletionEntry[] {
-            if (!prefix) {
-                prefix = "";
-            }
-            const file = ts.normalizePath(fileName);
+        private getCompletions(args: protocol.CompletionsRequestArgs, simplifiedResult: boolean): protocol.CompletionEntry[] | CompletionInfo {
+            const prefix = args.prefix || "";
+            const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
             if (!project) {
                 throw Errors.NoProject;
             }
 
             const scriptInfo = project.getScriptInfo(file);
-            const position = scriptInfo.lineOffsetToPosition(line, offset);
+            const position = this.getPosition(args, scriptInfo)
 
             const completions = project.languageService.getCompletionsAtPosition(file, position);
             if (!completions) {
                 return undefined;
             }
-
-            return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
-                if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                    result.push(entry);
-                }
-                return result;
-            }, []).sort((a, b) => a.name.localeCompare(b.name));
+            if (simplifiedResult) {
+                return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
+                    if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
+                        result.push(entry);
+                    }
+                    return result;
+                }, []).sort((a, b) => a.name.localeCompare(b.name));
+            }
+            else {
+                return completions;
+            }
         }
 
-        private getCompletionEntryDetails(line: number, offset: number,
-            entryNames: string[], fileName: string): protocol.CompletionEntryDetails[] {
-            const file = ts.normalizePath(fileName);
+        private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs): protocol.CompletionEntryDetails[] {
+            const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
             if (!project) {
                 throw Errors.NoProject;
             }
 
             const scriptInfo = project.getScriptInfo(file);
-            const position = scriptInfo.lineOffsetToPosition(line, offset);
+            const position = this.getPosition(args, scriptInfo);
 
-            return entryNames.reduce((accum: protocol.CompletionEntryDetails[], entryName: string) => {
+            return args.entryNames.reduce((accum: protocol.CompletionEntryDetails[], entryName: string) => {
                 const details = project.languageService.getCompletionEntryDetails(file, position, entryName);
                 if (details) {
                     accum.push(details);
@@ -782,33 +802,36 @@ namespace ts.server {
             }, []);
         }
 
-        private getSignatureHelpItems(line: number, offset: number, fileName: string): protocol.SignatureHelpItems {
-            const file = ts.normalizePath(fileName);
+        private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems {
+            const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
             if (!project) {
                 throw Errors.NoProject;
             }
 
             const scriptInfo = project.getScriptInfo(file);
-            const position = scriptInfo.lineOffsetToPosition(line, offset);
+            const position = this.getPosition(args, scriptInfo);
             const helpItems = project.languageService.getSignatureHelpItems(file, position);
             if (!helpItems) {
                 return undefined;
             }
 
-            const span = helpItems.applicableSpan;
-            const result: protocol.SignatureHelpItems = {
-                items: helpItems.items,
-                applicableSpan: {
-                    start: scriptInfo.positionToLineOffset(span.start),
-                    end: scriptInfo.positionToLineOffset(span.start + span.length)
-                },
-                selectedItemIndex: helpItems.selectedItemIndex,
-                argumentIndex: helpItems.argumentIndex,
-                argumentCount: helpItems.argumentCount,
-            };
-
-            return result;
+            if (simplifiedResult) {
+                const span = helpItems.applicableSpan;
+                return {
+                    items: helpItems.items,
+                    applicableSpan: {
+                        start: scriptInfo.positionToLineOffset(span.start),
+                        end: scriptInfo.positionToLineOffset(span.start + span.length)
+                    },
+                    selectedItemIndex: helpItems.selectedItemIndex,
+                    argumentIndex: helpItems.argumentIndex,
+                    argumentCount: helpItems.argumentCount,
+                };
+            }
+            else {
+                return helpItems;
+            }
         }
 
         private getDiagnostics(delay: number, fileNames: string[]) {
@@ -1075,9 +1098,11 @@ namespace ts.server {
                 this.exit();
                 return this.notRequired();
             },
-            [CommandNames.Definition]: (request: protocol.Request) => {
-                const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                return this.requiredResponse(this.getDefinition(defArgs.line, defArgs.offset, defArgs.file));
+            [CommandNames.Definition]: (request: protocol.DefinitionRequest) => {
+                return this.requiredResponse(this.getDefinition(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.DefinitionFull]: (request: protocol.DefinitionRequest) => {
+                return this.requiredResponse(this.getDefinition(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.TypeDefinition]: (request: protocol.Request) => {
                 const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
@@ -1112,7 +1137,10 @@ namespace ts.server {
                 return this.notRequired();
             },
             [CommandNames.Quickinfo]: (request: protocol.QuickInfoRequest) => {
-                return this.requiredResponse(this.getQuickInfo(request.arguments));
+                return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.QuickinfoFull]: (request: protocol.QuickInfoRequest) => {
+                return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.Format]: (request: protocol.Request) => {
                 const formatArgs = <protocol.FormatRequestArgs>request.arguments;
@@ -1122,20 +1150,20 @@ namespace ts.server {
                 const formatOnKeyArgs = <protocol.FormatOnKeyRequestArgs>request.arguments;
                 return { response: this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.offset, formatOnKeyArgs.key, formatOnKeyArgs.file), responseRequired: true };
             },
-            [CommandNames.Completions]: (request: protocol.Request) => {
-                const completionsArgs = <protocol.CompletionsRequestArgs>request.arguments;
-                return { response: this.getCompletions(completionsArgs.line, completionsArgs.offset, completionsArgs.prefix, completionsArgs.file), responseRequired: true };
+            [CommandNames.Completions]: (request: protocol.CompletionDetailsRequest) => {
+                return this.requiredResponse(this.getCompletions(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.CompletionDetails]: (request: protocol.Request) => {
-                const completionDetailsArgs = <protocol.CompletionDetailsRequestArgs>request.arguments;
-                return {
-                    response: this.getCompletionEntryDetails(completionDetailsArgs.line, completionDetailsArgs.offset,
-                        completionDetailsArgs.entryNames, completionDetailsArgs.file), responseRequired: true
-                };
+            [CommandNames.CompletionsFull]: (request: protocol.CompletionDetailsRequest) => {
+                return this.requiredResponse(this.getCompletions(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.SignatureHelp]: (request: protocol.Request) => {
-                const signatureHelpArgs = <protocol.SignatureHelpRequestArgs>request.arguments;
-                return { response: this.getSignatureHelpItems(signatureHelpArgs.line, signatureHelpArgs.offset, signatureHelpArgs.file), responseRequired: true };
+            [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
+                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments))
+            },
+            [CommandNames.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
+                return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.SignatureHelpFull]: (request: protocol.SignatureHelpRequest) => {
+                return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.Geterr]: (request: protocol.Request) => {
                 const geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
@@ -1188,9 +1216,11 @@ namespace ts.server {
                 const { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
                 return { response: this.getOccurrences(line, offset, fileName), responseRequired: true };
             },
-            [CommandNames.DocumentHighlights]: (request: protocol.Request) => {
-                const { line, offset, file: fileName, filesToSearch } = <protocol.DocumentHighlightsRequestArgs>request.arguments;
-                return { response: this.getDocumentHighlights(line, offset, fileName, filesToSearch), responseRequired: true };
+            [CommandNames.DocumentHighlights]: (request: protocol.DocumentHighlightsRequest) => {
+                return this.requiredResponse(this.getDocumentHighlights(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.DocumentHighlightsFull]: (request: protocol.DocumentHighlightsRequest) => {
+                return this.requiredResponse(this.getDocumentHighlights(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.ProjectInfo]: (request: protocol.Request) => {
                 const { file, needFileNameList } = <protocol.ProjectInfoRequestArgs>request.arguments;
