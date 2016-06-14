@@ -11,7 +11,7 @@ export function foo () {
 "use strict";
 exports.test = "test";
 function foo() {
-    const x = { test };
+    const x = { test: exports.test };
 }
 exports.foo = foo;
 
