@@ -1575,10 +1575,10 @@ namespace ts {
          * @param node The type node.
          */
         function getRestParameterElementType(node: TypeNode) {
-            if (node.kind === SyntaxKind.ArrayType) {
+            if (node && node.kind === SyntaxKind.ArrayType) {
                 return (<ArrayTypeNode>node).elementType;
             }
-            else if (node.kind === SyntaxKind.TypeReference) {
+            else if (node && node.kind === SyntaxKind.TypeReference) {
                 return singleOrUndefined((<TypeReferenceNode>node).typeArguments);
             }
             else {
