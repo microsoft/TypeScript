@@ -1951,17 +1951,11 @@ namespace ts {
 
     let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
 
-    /**
-     * Convert an option's string name of enum-value in compiler-options, "options", into its corresponding enum value if possible.
-     * This is necessary because JS users may pass in string values for enum compiler options (e.g. ModuleKind).
-     *
-     * @param options   a compiler-options used in transpilation which can contain string value to specify instead of enum values
-     * @param diagnostics   a list of Diagnostic which occur during conversion (e.g invalid option's value)
-     */
-    function ConvertStringForEnumNameInCompilerOptionsToEnumValue(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
+    /** JS users may pass in string values for enum compiler options (such as ModuleKind), so convert. */
+    function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
         commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
-            typeof o.type === "object" && !forEachValue(<Map<number | string>> o.type, v => typeof v !== "number"));
+            typeof o.type === "object" && !forEachValue(<Map<any>> o.type, v => typeof v !== "number"));
 
         options = clone(options);
 
@@ -1999,7 +1993,7 @@ namespace ts {
     export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
         const diagnostics: Diagnostic[] = [];
 
-        const options: CompilerOptions = transpileOptions.compilerOptions ? ConvertStringForEnumNameInCompilerOptionsToEnumValue(transpileOptions.compilerOptions, diagnostics) : getDefaultCompilerOptions();
+        const options: CompilerOptions = transpileOptions.compilerOptions ? fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics) : getDefaultCompilerOptions();
 
         options.isolatedModules = true;
 
