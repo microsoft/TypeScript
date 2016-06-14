@@ -900,7 +900,7 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
     });
 });
 
-gulp.task("generate-code-coverage", "Generates code coverage data via instanbul", ["tests"], (done) => {
+gulp.task("generate-code-coverage", "Generates code coverage data via istanbul", ["tests"], (done) => {
     exec("istanbul", ["cover", "node_modules/mocha/bin/_mocha", "--", "-R", "min", "-t", testTimeout.toString(), run], done, done);
 });
 
@@ -908,16 +908,16 @@ gulp.task("generate-code-coverage", "Generates code coverage data via instanbul"
 function getDiffTool() {
     const program = process.env["DIFF"];
     if (!program) {
-        console.error("Add the 'DIFF' environment constiable to the path of the program you want to use.");
+        console.error("Add the 'DIFF' environment variable to the path of the program you want to use.");
         process.exit(1);
     }
     return program;
 }
 
-gulp.task("diff", "Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment constiable", (done) => {
+gulp.task("diff", "Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable", (done) => {
     exec(getDiffTool(), [refBaseline, localBaseline], done, done);
 });
-gulp.task("diff-rwc", "Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment constiable", (done) => {
+gulp.task("diff-rwc", "Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable", (done) => {
     exec(getDiffTool(), [refRwcBaseline, localRwcBaseline], done, done);
 });
 
