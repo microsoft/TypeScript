@@ -6156,9 +6156,15 @@ const _super = (function (geti, seti) {
 
             /** Serializes the return type of function. Used by the __metadata decorator for a method. */
             function emitSerializedReturnTypeOfNode(node: Node) {
-                if (node && isFunctionLike(node) && (<FunctionLikeDeclaration>node).type) {
-                    emitSerializedTypeNode((<FunctionLikeDeclaration>node).type);
-                    return;
+                if (node && isFunctionLike(node)) {
+                    if ((<FunctionLikeDeclaration>node).type) {
+                        emitSerializedTypeNode((<FunctionLikeDeclaration>node).type);
+                        return;
+                    }
+                    else if (isAsyncFunctionLike(<FunctionLikeDeclaration>node)) {
+                        write("Promise");
+                        return;
+                    }
                 }
 
                 write("void 0");
