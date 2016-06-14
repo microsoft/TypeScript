@@ -1,87 +1,88 @@
 {
-    "name": "typescript",
-    "author": "Microsoft Corp.",
-    "homepage": "http://typescriptlang.org/",
-    "version": "1.9.0",
-    "license": "Apache-2.0",
-    "description": "TypeScript is a language for application scale JavaScript development",
-    "keywords": [
-        "TypeScript",
-        "Microsoft",
-        "compiler",
-        "language",
-        "javascript"
-    ],
-    "bugs": {
-        "url": "https://github.com/Microsoft/TypeScript/issues"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Microsoft/TypeScript.git"
-    },
-    "main": "./lib/typescript.js",
-    "typings": "./lib/typescript.d.ts",
-    "bin": {
-        "tsc": "./bin/tsc",
-        "tsserver": "./bin/tsserver"
-    },
-    "engines": {
-        "node": ">=0.8.0"
-    },
-    "devDependencies": {
-        "@types/browserify": "^12.0.23-alpha",
-        "@types/del": "latest",
-        "@types/glob": "latest",
-        "@types/gulp": "latest",
-        "@types/gulp-concat": "latest",
-        "@types/gulp-help": "latest",
-        "@types/gulp-sourcemaps": "0.0.22-alpha",
-        "@types/gulp-typescript": "0.0.22-alpha",
-        "@types/merge-stream": "^1.0.21-alpha",
-        "@types/minimatch": "latest",
-        "@types/minimist": "latest",
-        "@types/mkdirp": "^0.3.22-alpha",
-        "@types/node": "latest",
-        "@types/q": "0.0.21-alpha",
-        "@types/run-sequence": "latest",
-        "browserify": "latest",
-        "chai": "latest",
-        "del": "latest",
-        "gulp": "latest",
-        "gulp-concat": "latest",
-        "gulp-help": "latest",
-        "gulp-insert": "^0.5.0",
-        "gulp-sourcemaps": "^1.6.0",
-        "gulp-typescript": "^2.13.6",
-        "istanbul": "latest",
-        "merge-stream": "^1.0.0",
-        "minimist": "latest",
-        "mkdirp": "latest",
-        "mocha": "latest",
-        "mocha-fivemat-progress-reporter": "latest",
-        "run-sequence": "latest",
-        "ts-node": "latest",
-        "tsd": "latest",
-        "tslint": "next",
-        "typescript": "next",
-        "vinyl-transform": "^1.0.0"
-    },
-    "scripts": {
-        "pretest": "gulp tests",
-        "test": "gulp runtests",
-        "build": "npm run build:compiler && npm run build:tests",
-        "build:compiler": "gulp local",
-        "build:tests": "gulp tests",
-        "start": "node lib/tsc",
-        "clean": "gulp clean",
-        "gulp": "gulp",
-        "lint": "gulp lint",
-        "setup-hooks": "node scripts/link-hooks.js"
-    },
-    "browser": {
-        "buffer": false,
-        "fs": false,
-        "os": false,
-        "path": false
-    }
+  "name": "typescript",
+  "author": "Microsoft Corp.",
+  "homepage": "http://typescriptlang.org/",
+  "version": "1.9.0",
+  "license": "Apache-2.0",
+  "description": "TypeScript is a language for application scale JavaScript development",
+  "keywords": [
+    "TypeScript",
+    "Microsoft",
+    "compiler",
+    "language",
+    "javascript"
+  ],
+  "bugs": {
+    "url": "https://github.com/Microsoft/TypeScript/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft/TypeScript.git"
+  },
+  "main": "./lib/typescript.js",
+  "typings": "./lib/typescript.d.ts",
+  "bin": {
+    "tsc": "./bin/tsc",
+    "tsserver": "./bin/tsserver"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "devDependencies": {
+    "@types/browserify": "^12.0.23-alpha",
+    "@types/del": "latest",
+    "@types/glob": "latest",
+    "@types/gulp": "latest",
+    "@types/gulp-concat": "latest",
+    "@types/gulp-help": "latest",
+    "@types/gulp-sourcemaps": "0.0.22-alpha",
+    "@types/gulp-typescript": "0.0.22-alpha",
+    "@types/minimatch": "latest",
+    "@types/minimist": "latest",
+    "@types/mkdirp": "^0.3.22-alpha",
+    "@types/node": "latest",
+    "@types/q": "0.0.21-alpha",
+    "@types/run-sequence": "latest",
+    "@types/through2": "0.0.21-alpha",
+    "browserify": "latest",
+    "chai": "latest",
+    "del": "latest",
+    "gulp": "latest",
+    "gulp-clone": "^1.0.0",
+    "gulp-concat": "latest",
+    "gulp-help": "latest",
+    "gulp-insert": "^0.5.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-typescript": "^2.13.6",
+    "into-stream": "^2.0.1",
+    "istanbul": "latest",
+    "minimist": "latest",
+    "mkdirp": "latest",
+    "mocha": "latest",
+    "mocha-fivemat-progress-reporter": "latest",
+    "run-sequence": "latest",
+    "through2": "^2.0.1",
+    "ts-node": "latest",
+    "tsd": "latest",
+    "tslint": "next",
+    "typescript": "next"
+  },
+  "scripts": {
+    "pretest": "gulp tests",
+    "test": "gulp runtests",
+    "build": "npm run build:compiler && npm run build:tests",
+    "build:compiler": "gulp local",
+    "build:tests": "gulp tests",
+    "start": "node lib/tsc",
+    "clean": "gulp clean",
+    "gulp": "gulp",
+    "lint": "gulp lint",
+    "setup-hooks": "node scripts/link-hooks.js"
+  },
+  "browser": {
+    "buffer": false,
+    "fs": false,
+    "os": false,
+    "path": false
+  }
 }
