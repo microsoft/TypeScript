@@ -1264,10 +1264,13 @@ namespace ts {
             }
 
             const moduleReferenceLiteral = <LiteralExpression>moduleReferenceExpression;
+            return resolveExternalModule(location, moduleReferenceLiteral.text, moduleNotFoundError, moduleReferenceLiteral);
+        }
 
+        function resolveExternalModule(location: Node, moduleReference: string, moduleNotFoundError: DiagnosticMessage, errorNode: Node): Symbol {
             // Module names are escaped in our symbol table.  However, string literal values aren't.
             // Escape the name in the "require(...)" clause to ensure we find the right symbol.
-            const moduleName = escapeIdentifier(moduleReferenceLiteral.text);
+            const moduleName = escapeIdentifier(moduleReference);
 
             if (moduleName === undefined) {
                 return;
@@ -1282,7 +1285,7 @@ namespace ts {
                 }
             }
 
-            const resolvedModule = getResolvedModule(getSourceFileOfNode(location), moduleReferenceLiteral.text);
+            const resolvedModule = getResolvedModule(getSourceFileOfNode(location), moduleReference);
             const sourceFile = resolvedModule && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
@@ -1291,7 +1294,7 @@ namespace ts {
                 }
                 if (moduleNotFoundError) {
                     // report errors only if it was requested
-                    error(moduleReferenceLiteral, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
+                    error(errorNode, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
                 }
                 return undefined;
             }
@@ -1305,7 +1308,7 @@ namespace ts {
 
             if (moduleNotFoundError) {
                 // report errors only if it was requested
-                error(moduleReferenceLiteral, moduleNotFoundError, moduleName);
+                error(errorNode, moduleNotFoundError, moduleName);
             }
             return undefined;
         }
@@ -17843,6 +17846,46 @@ namespace ts {
             const symbol = getGlobalSymbol("ReadonlyArray", SymbolFlags.Type, /*diagnostic*/ undefined);
             globalReadonlyArrayType = symbol && <GenericType>getTypeOfGlobalSymbol(symbol, /*arity*/ 1);
             anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
+
+            // If we have specified that we are importing helpers, we should report global
+            // errors if we cannot resolve the helpers external module, or if it does not have
+            // the necessary helpers exported.
+            if (compilerOptions.importHelpers) {
+                forEach(host.getSourceFiles(), sourceFile => {
+                    const requestedHelpers = sourceFile.flags & NodeFlags.EmitHelperFlags;
+                    if (requestedHelpers && (compilerOptions.isolatedModules || isExternalModule(sourceFile))) {
+                        const helpers = resolveExternalModule(sourceFile, externalHelpersModuleNameText, Diagnostics.Cannot_find_module_0, /*errorNode*/ undefined);
+                        if (helpers) {
+                            const exports = helpers.exports;
+                            if (requestedHelpers & NodeFlags.HasClassExtends && languageVersion < ScriptTarget.ES6) {
+                                verifyHelperSymbol(exports, "__extends", SymbolFlags.Function);
+                            }
+                            if (requestedHelpers & NodeFlags.HasJsxSpreadAttributes && compilerOptions.jsx !== JsxEmit.Preserve) {
+                                verifyHelperSymbol(exports, "__assign", SymbolFlags.Value);
+                            }
+                            if (requestedHelpers & NodeFlags.HasDecorators) {
+                                verifyHelperSymbol(exports, "__decorate", SymbolFlags.Value);
+                                if (compilerOptions.emitDecoratorMetadata) {
+                                    verifyHelperSymbol(exports, "__metadata", SymbolFlags.Value);
+                                }
+                            }
+                            if (requestedHelpers & NodeFlags.HasParamDecorators) {
+                                verifyHelperSymbol(exports, "__param", SymbolFlags.Value);
+                            }
+                            if (requestedHelpers & NodeFlags.HasAsyncFunctions) {
+                                verifyHelperSymbol(exports, "__awaiter", SymbolFlags.Value);
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function verifyHelperSymbol(symbols: SymbolTable, name: string, meaning: SymbolFlags) {
+            const symbol = getSymbol(symbols, escapeIdentifier(name), meaning);
+            if (!symbol) {
+                error(/*location*/ undefined, Diagnostics.Module_0_has_no_exported_member_1, externalHelpersModuleNameText, name);
+            }
         }
 
         function createInstantiatedPromiseLikeType(): ObjectType {

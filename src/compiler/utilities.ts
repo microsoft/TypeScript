@@ -2,6 +2,8 @@
 
 /* @internal */
 namespace ts {
+    export const externalHelpersModuleNameText = "tslib";
+
     export interface ReferencePathMatchResult {
         fileReference?: FileReference;
         diagnosticMessage?: DiagnosticMessage;

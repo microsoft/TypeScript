@@ -106,7 +106,7 @@ namespace ts {
                 // Either emit one big object literal (no spread attribs), or
                 // a call to the __assign helper.
                 objectProperties = singleOrUndefined(segments)
-                    || createAssignHelper(currentSourceFile.tslib, segments);
+                    || createAssignHelper(currentSourceFile.externalHelpersModuleName, segments);
             }
 
             const element = createReactCreateElement(

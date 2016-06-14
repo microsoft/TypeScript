@@ -1726,8 +1726,8 @@ namespace ts {
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
-        // The synthesized identifier for an imported tslib helpers runtime.
-        /* @internal */ tslib?: Identifier;
+        // The synthesized identifier for an imported external helpers module.
+        /* @internal */ externalHelpersModuleName?: Identifier;
     }
 
     export interface ScriptReferenceHost {

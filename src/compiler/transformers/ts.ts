@@ -51,7 +51,7 @@ namespace ts {
         let currentNamespace: ModuleDeclaration;
         let currentNamespaceContainerName: Identifier;
         let currentScope: SourceFile | Block | ModuleBlock | CaseBlock;
-        let currentSourceFileTslib: Identifier;
+        let currentSourceFileExternalHelpersModuleName: Identifier;
 
         /**
          * Keeps track of whether expression substitution has been enabled for specific edge cases.
@@ -432,22 +432,22 @@ namespace ts {
                 startLexicalEnvironment();
                 const statements: Statement[] = [];
                 const statementOffset = addPrologueDirectives(statements, node.statements);
-                const tslib = createUniqueName("tslib");
-                const tslibImport = createImportDeclaration(
-                    createImportClause(/*name*/ undefined, createNamespaceImport(tslib)),
-                    createLiteral("tslib")
+                const externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText);
+                const externalHelpersModuleImport = createImportDeclaration(
+                    createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
+                    createLiteral(externalHelpersModuleNameText)
                 );
-                tslibImport.parent = node;
-                tslibImport.flags &= ~NodeFlags.Synthesized;
-                statements.push(tslibImport);
+                externalHelpersModuleImport.parent = node;
+                externalHelpersModuleImport.flags &= ~NodeFlags.Synthesized;
+                statements.push(externalHelpersModuleImport);
 
-                currentSourceFileTslib = tslib;
+                currentSourceFileExternalHelpersModuleName = externalHelpersModuleName;
                 addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
                 addRange(statements, endLexicalEnvironment());
-                currentSourceFileTslib = undefined;
+                currentSourceFileExternalHelpersModuleName = undefined;
 
                 node = updateSourceFileNode(node, createNodeArray(statements, node.statements));
-                node.tslib = tslib;
+                node.externalHelpersModuleName = externalHelpersModuleName;
             }
             else {
                 node = visitEachChild(node, visitor, context);
@@ -1382,7 +1382,7 @@ namespace ts {
                 : undefined;
 
             const helper = createDecorateHelper(
-                currentSourceFileTslib,
+                currentSourceFileExternalHelpersModuleName,
                 decoratorExpressions,
                 prefix,
                 memberName,
@@ -1432,7 +1432,7 @@ namespace ts {
                 const expression = createAssignment(
                     decoratedClassAlias,
                     createDecorateHelper(
-                        currentSourceFileTslib,
+                        currentSourceFileExternalHelpersModuleName,
                         decoratorExpressions,
                         getDeclarationName(node)
                     )
@@ -1456,7 +1456,7 @@ namespace ts {
                 const result = createAssignment(
                     getDeclarationName(node),
                     createDecorateHelper(
-                        currentSourceFileTslib,
+                        currentSourceFileExternalHelpersModuleName,
                         decoratorExpressions,
                         getDeclarationName(node)
                     ),
@@ -1489,7 +1489,7 @@ namespace ts {
                 expressions = [];
                 for (const decorator of decorators) {
                     const helper = createParamHelper(
-                        currentSourceFileTslib,
+                        currentSourceFileExternalHelpersModuleName,
                         transformDecorator(decorator),
                         parameterOffset,
                         /*location*/ decorator.expression);
@@ -1519,13 +1519,13 @@ namespace ts {
         function addOldTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
             if (compilerOptions.emitDecoratorMetadata) {
                 if (shouldAddTypeMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper(currentSourceFileTslib, "design:type", serializeTypeOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(currentSourceFileExternalHelpersModuleName, "design:type", serializeTypeOfNode(node)));
                 }
                 if (shouldAddParamTypesMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper(currentSourceFileTslib, "design:paramtypes", serializeParameterTypesOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(currentSourceFileExternalHelpersModuleName, "design:paramtypes", serializeParameterTypesOfNode(node)));
                 }
                 if (shouldAddReturnTypeMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper(currentSourceFileTslib, "design:returntype", serializeReturnTypeOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(currentSourceFileExternalHelpersModuleName, "design:returntype", serializeReturnTypeOfNode(node)));
                 }
             }
         }
@@ -1543,7 +1543,7 @@ namespace ts {
                     (properties || (properties = [])).push(createPropertyAssignment("returnType", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, /*equalsGreaterThanToken*/ undefined, serializeReturnTypeOfNode(node))));
                 }
                 if (properties) {
-                    decoratorExpressions.push(createMetadataHelper(currentSourceFileTslib, "design:typeinfo", createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)));
+                    decoratorExpressions.push(createMetadataHelper(currentSourceFileExternalHelpersModuleName, "design:typeinfo", createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)));
                 }
             }
         }
@@ -2234,7 +2234,7 @@ namespace ts {
                 statements.push(
                     createReturn(
                         createAwaiterHelper(
-                            currentSourceFileTslib,
+                            currentSourceFileExternalHelpersModuleName,
                             hasLexicalArguments,
                             promiseConstructor,
                             transformFunctionBodyWorker(<Block>node.body)
@@ -2261,7 +2261,7 @@ namespace ts {
             }
             else {
                 return createAwaiterHelper(
-                    currentSourceFileTslib,
+                    currentSourceFileExternalHelpersModuleName,
                     hasLexicalArguments,
                     promiseConstructor,
                     <Block>transformConciseBodyWorker(node.body, /*forceBlockFunctionBody*/ true)
