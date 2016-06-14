@@ -1623,6 +1623,11 @@ namespace ts {
             if (isFunctionLike(node) && node.type) {
                 return serializeTypeNode(node.type);
             }
+            else if (isAsyncFunctionLike(node)) {
+                // We still need to serialize  return type of async function to be "Promise"
+                // even though there is no return type given by users.
+                return createIdentifier("Promise");
+            }
 
             return createVoidZero();
         }
