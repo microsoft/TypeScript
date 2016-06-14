@@ -29,11 +29,15 @@
         "node": ">=0.8.0"
     },
     "devDependencies": {
+        "@types/browserify": "^12.0.23-alpha",
         "@types/del": "latest",
         "@types/glob": "latest",
         "@types/gulp": "latest",
         "@types/gulp-concat": "latest",
         "@types/gulp-help": "latest",
+        "@types/gulp-sourcemaps": "0.0.22-alpha",
+        "@types/gulp-typescript": "0.0.22-alpha",
+        "@types/merge-stream": "^1.0.21-alpha",
         "@types/minimatch": "latest",
         "@types/minimist": "latest",
         "@types/mkdirp": "^0.3.22-alpha",
@@ -46,7 +50,11 @@
         "gulp": "latest",
         "gulp-concat": "latest",
         "gulp-help": "latest",
+        "gulp-insert": "^0.5.0",
+        "gulp-sourcemaps": "^1.6.0",
+        "gulp-typescript": "^2.13.6",
         "istanbul": "latest",
+        "merge-stream": "^1.0.0",
         "minimist": "latest",
         "mkdirp": "latest",
         "mocha": "latest",
@@ -55,7 +63,8 @@
         "ts-node": "latest",
         "tsd": "latest",
         "tslint": "next",
-        "typescript": "next"
+        "typescript": "next",
+        "vinyl-transform": "^1.0.0"
     },
     "scripts": {
         "pretest": "gulp tests",
