@@ -382,7 +382,6 @@ namespace ts.server {
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
 
-        changeSequence = 0;
         builder: Builder;
 
         constructor(public projectService: ProjectService, host: ServerHost, psLogger: Logger, channel: Channel, projectFileName?: string, public projectOptions?: ProjectOptions) {
@@ -397,23 +396,18 @@ namespace ts.server {
                 useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames,
                 logError: (err: Error, cmd: string) => {}
             });
-            // ToDo@dirk need to better understand when a project is ready so we can
-            // request diagnostics.
-            setTimeout(() => {
-                this.builder.computeDiagnostics();
-            }, 300);
         }
 
         fileOpened(file: string): void {
-            this.builder.computeDiagnostics(file);
+            this.builder.fileOpened(file);
         }
 
         fileChanged(file: string): void {
-            this.changeSequence++;
-            this.builder.computeDiagnostics(file);
+            this.builder.fileChanged(file);
         }
 
         fileClosed(file: string): void {
+            this.builder.fileClosed(file);
         }
 
         addOpenRef() {

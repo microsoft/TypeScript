@@ -11,7 +11,11 @@ namespace ts.server {
     const path: typeof NodeJS.path = require("path");
     const crypto = require("crypto");
 
-    /* tslint:disable */ const nullValue: any = null; /* tslint:enable */
+    /* tslint:disable */
+    function createMap<T>(): Map<T> {
+        return Object.create(null);
+    }
+    /* tslint:enable */
 
     export interface BuilderHost {
         logError(err: Error, cmd: string): void;
@@ -20,388 +24,25 @@ namespace ts.server {
     }
 
     export interface Builder {
-        computeDiagnostics(changedFile?: string, delay?: number): void;
+        fileCreated(file: string): void;
+        fileOpened(file: string): void;
+        fileChanged(file: string): void;
+        fileClosed(file: string): void;
+        fileDeleted(file: string): void;
     }
 
     class NullBuilder implements Builder  {
-        computeDiagnostics(changedFile?: string, delay?: number): void {
+        constructor(private project: Project, host: BuilderHost) {
         }
-    }
-
-    abstract class AbstractBuilder {
-        constructor(protected project: Project, protected host: BuilderHost) {
+        public fileCreated(file: string): void {
         }
-
-        getCanonicalFileName(file: string) {
-            const name = this.host.useCaseSensitiveFileNames() ? file : file.toLowerCase();
-            return ts.normalizePath(name);
+        public fileOpened(file: string): void {
         }
-
-        private formatDiagnostics(file: string, diagnostic: ts.Diagnostic): protocol.Diagnostic {
-            return {
-                start: this.project.compilerService.host.positionToLineOffset(file, diagnostic.start),
-                end: this.project.compilerService.host.positionToLineOffset(file, diagnostic.start + diagnostic.length),
-                text: ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")
-            };
+        public fileChanged(file: string): void {
         }
-
-        public semanticCheck(file: string) {
-            try {
-                const diagnostics = this.project.compilerService.languageService.getSemanticDiagnostics(file);
-
-                if (diagnostics) {
-                    this.host.event({
-                        file: file,
-                        diagnostics: diagnostics.map(diagnostic => this.formatDiagnostics(file, diagnostic))
-                    }, "semanticDiag");
-                }
-            }
-            catch (err) {
-                this.host.logError(err, "semantic check");
-            }
+        public fileClosed(file: string): void {
         }
-
-        public syntacticCheck(file: string) {
-            try {
-                const diagnostics = this.project.compilerService.languageService.getSyntacticDiagnostics(file);
-                if (diagnostics) {
-                    this.host.event({
-                        file: file,
-                        diagnostics: diagnostics.map(diagnostic => this.formatDiagnostics(file, diagnostic))
-                    }, "syntaxDiag");
-                }
-            }
-            catch (err) {
-                this.host.logError(err, "syntactic check");
-            }
-        }
-    }
-
-    abstract class NaiveBuilder extends AbstractBuilder {
-
-        private diagnosticImmediate: any;
-        private diagnosticTimer: NodeJS.Timer;
-
-        protected checkMany(files: string[], changeSequence: number, delay: number): void {
-            if (this.diagnosticImmediate) {
-                clearImmediate(this.diagnosticImmediate);
-                this.diagnosticImmediate = undefined;
-            }
-            if (this.diagnosticTimer) {
-                clearTimeout(this.diagnosticTimer);
-                this.diagnosticTimer = undefined;
-            }
-            let index = 0;
-            const checkOne = () => {
-                if (this.project.changeSequence !== changeSequence) {
-                    return;
-                }
-                const toCheck = files[index];
-                index++;
-                const sourceFile = this.project.getSourceFileFromName(toCheck, false);
-                if (sourceFile) {
-                    this.syntacticCheck(toCheck);
-                    setImmediate(() => {
-                        this.semanticCheck(toCheck);
-                        if (files.length > index) {
-                            if (delay === -1) {
-                                this.diagnosticImmediate = setImmediate(checkOne);
-                            }
-                            else {
-                                this.diagnosticTimer = setTimeout(checkOne, delay);
-                            }
-                        }
-                    });
-                }
-            };
-            if (files.length > index && this.project.changeSequence === changeSequence) {
-                if (delay === -1) {
-                    this.diagnosticImmediate = setImmediate(checkOne);
-                }
-                else {
-                    this.diagnosticTimer = setTimeout(checkOne, delay);
-                }
-            }
-        }
-
-    }
-
-    class AllFilesBuilder extends NaiveBuilder implements Builder {
-
-        constructor(project: Project, channel: BuilderHost, private delay = -1, private limit = 100) {
-            super(project, channel);
-        }
-
-        public computeDiagnostics(changedFile?: string, delay?: number): void {
-            const fileNames = this.project.getFileNames();
-            // No need to analyze lib.d.ts
-            let fileNamesInProject = fileNames.filter((value, index, array) => path.basename(value) !== "lib.d.ts");
-
-            // Sort the file name list to make the recently touched files come first
-            const highPriorityFiles: string[] = [];
-            const mediumPriorityFiles: string[] = [];
-            const lowPriorityFiles: string[] = [];
-            const veryLowPriorityFiles: string[] = [];
-            for (const fileNameInProject of fileNamesInProject) {
-                if (changedFile && this.getCanonicalFileName(fileNameInProject) == this.getCanonicalFileName(changedFile)) {
-                    highPriorityFiles.push(fileNameInProject);
-                }
-                else {
-                    const info = this.project.projectService.getScriptInfo(fileNameInProject);
-                    if (!info.isOpen) {
-                        if (fileNameInProject.indexOf(".d.ts") > 0)
-                            veryLowPriorityFiles.push(fileNameInProject);
-                        else
-                            lowPriorityFiles.push(fileNameInProject);
-                    }
-                    else {
-                        mediumPriorityFiles.push(fileNameInProject);
-                    }
-                }
-            }
-
-            fileNamesInProject = highPriorityFiles.concat(mediumPriorityFiles).concat(lowPriorityFiles).concat(veryLowPriorityFiles);
-
-            if (fileNamesInProject.length > 0) {
-                this.checkMany(fileNamesInProject, this.project.changeSequence, delay ? delay : this.delay);
-            }
-        }
-    }
-
-    class OpenFilesBuilder extends NaiveBuilder implements Builder {
-        constructor(project: Project, channel: BuilderHost, private delay = -1, private limit = 100) {
-            super(project, channel);
-        }
-
-        public computeDiagnostics(changedFile?: string, delay?: number): void {
-            const fileNames = this.project.getFileNames();
-            const toCheck = fileNames.reduce<string[]>((memo, file) => {
-                const info = this.project.projectService.getScriptInfo(file);
-                if (info.isOpen && file !== changedFile && path.basename(file) !== "lib.d.ts") {
-                    memo.push(file);
-                }
-                return memo;
-            }, changedFile ? [changedFile] : []);
-            if (toCheck.length > 0) {
-                this.checkMany(toCheck, this.project.changeSequence, delay ? delay : this.delay);
-            }
-        }
-    }
-
-    interface FileInfoProvider {
-        get(fileName: string): FileInfo;
-    }
-
-    class FileInfo {
-
-        private finalized: boolean;
-        private references: FileInfo[];
-        private referencedBy: FileInfo[];
-        private signature: string;
-
-        constructor(private sourceFile: SourceFile) {
-            this.finalized = false;
-            this.references = undefined;
-            this.referencedBy = undefined;
-            this.signature = undefined;
-        }
-
-        private static binarySearch(array: FileInfo[], value: string): number {
-            if (!array) {
-                return -1;
-            }
-            let low = 0;
-            let high = array.length - 1;
-
-            while (low <= high) {
-                const middle = ((low + high) / 2) | 0;
-                const midValue = array[middle].sourceFile.fileName;
-                if (midValue === value) {
-                    return middle;
-                }
-                else if (midValue > value) {
-                    high = middle - 1;
-                }
-                else {
-                    low = middle + 1;
-                }
-            }
-            return ~low;
-        }
-
-        private static compareFileInfos(lf: FileInfo, rf: FileInfo): number {
-            const l = lf.sourceFile.fileName;
-            const r = rf.sourceFile.fileName;
-            return (l < r ? -1 : (l > r ? 1 : 0));
-        };
-
-        private static addElement(array: FileInfo[], finalized: boolean, file: FileInfo): void {
-            if (finalized) {
-                const insertIndex = FileInfo.binarySearch(array, file.sourceFile.fileName);
-                if (insertIndex < 0) {
-                    array.splice(~insertIndex, 0, file);
-                }
-            }
-            else {
-                array.push(file);
-            }
-        }
-
-        private static removeElement(array: FileInfo[], finalized: boolean, file: FileInfo): void {
-            if (!array) {
-                return;
-            }
-            if (finalized) {
-                const index = FileInfo.binarySearch(array, file.sourceFile.fileName);
-                if (index >= 0) {
-                    array.splice(index, 1);
-                }
-            }
-            else {
-                const fileName = file.sourceFile.fileName;
-                for (let i = 0; i < array.length; i++) {
-                    if (fileName === array[i].sourceFile.fileName) {
-                        array.splice(i, 1);
-                        break;
-                    }
-                }
-            }
-        }
-
-        public fileName(): string {
-            return this.sourceFile.fileName;
-        }
-
-        public buildDependencies(provider: FileInfoProvider): void {
-            const modules = this.sourceFile.resolvedModules;
-            if (modules) {
-                Object.keys(modules).forEach((key) => {
-                    const module = modules[key];
-                    const fileInfo = provider.get(module.resolvedFileName);
-                    if (fileInfo) {
-                        fileInfo.addReferencedBy(this);
-                        this.addReferences(fileInfo);
-                    }
-                });
-            }
-        }
-
-        public finalize(): void {
-            if (this.references) {
-                this.references.sort(FileInfo.compareFileInfos);
-            }
-            if (this.referencedBy) {
-                this.referencedBy.sort(FileInfo.compareFileInfos);
-            }
-            this.finalized = true;
-        }
-
-        public update(project: Project, provider: FileInfoProvider): boolean {
-            const modules = this.sourceFile.resolvedModules;
-            let newReferences: FileInfo[] = undefined;
-            if (modules) {
-                newReferences = Object.keys(modules).map((key) => modules[key].resolvedFileName).reduce<FileInfo[]>((memo, fileName) => {
-                    const fileInfo = provider.get(fileName);
-                    if (fileInfo) {
-                        memo.push(fileInfo);
-                    }
-                    return memo;
-                }, []);
-                newReferences.sort(FileInfo.compareFileInfos);
-            }
-            else {
-                newReferences = [];
-            }
-
-            const currentReferences = this.references || [];
-            const end = Math.max(currentReferences.length, newReferences.length);
-            let currentIndex = 0;
-            let newIndex = 0;
-            while (currentIndex < end && newIndex < end) {
-                const currentInfo = currentReferences[currentIndex];
-                const newInfo = newReferences[newIndex];
-                const compare = FileInfo.compareFileInfos(currentInfo, newInfo);
-                if (compare < 0) {
-                    // New reference is greater then current reference. That means
-                    // the current reference doesn't exist anymore after parsing. So delete
-                    // references.
-                    currentInfo.removeReferencedBy(this);
-                    currentIndex++;
-                }
-                else if (compare > 0) {
-                    // new new info. Add dependy
-                    newInfo.addReferencedBy(this);
-                    newIndex++;
-                }
-                else {
-                    // Equal. Go to next
-                    currentIndex++;
-                    newIndex++;
-                }
-            }
-            // Clean old references
-            for (let i = currentIndex; i < currentReferences.length; i++) {
-                currentReferences[i].removeReferencedBy(this);
-            }
-            // Update new references
-            for (let i = newIndex; i < newReferences.length; i++) {
-                newReferences[i].addReferencedBy(this);
-            }
-            this.references = newReferences.length > 0 ? newReferences : undefined;
-
-            const fileName = this.sourceFile.fileName;
-            const lastSignature: string = this.signature;
-            this.signature = undefined;
-            if (this.sourceFile.isDeclarationFile) {
-                this.signature = crypto.createHash("md5")
-                    .update(this.sourceFile.text)
-                    .digest("base64");
-            }
-            else {
-                // ToDo@dirkb for now we can only get the declaration file if we emit all files.
-                // We need to get better here since we can't emit JS files on type. Or ???
-                const emitOutput = project.compilerService.languageService.getEmitOutput(fileName);
-                for (const file of emitOutput.outputFiles) {
-                    if (/\.d\.ts$/.test(file.name)) {
-                        this.signature = crypto.createHash("md5")
-                            .update(file.text)
-                            .digest("base64");
-                    }
-                }
-            }
-            return !this.signature || lastSignature !== this.signature;
-        }
-
-        public addReferencedBy(file: FileInfo): void {
-            if (!this.referencedBy) {
-                this.referencedBy = [];
-                this.referencedBy.push(file);
-                return;
-            }
-            FileInfo.addElement(this.referencedBy, this.finalized, file);
-        }
-
-        public removeReferencedBy(file: FileInfo): void {
-            FileInfo.removeElement(this.referencedBy, this.finalized, file);
-        }
-
-        public queueReferencedBy(queue: CompileQueue<FileInfo>): void {
-            if (this.referencedBy) {
-                this.referencedBy.forEach((fileInfo) => queue.add(fileInfo.fileName(), fileInfo));
-            }
-        }
-
-        private addReferences(file: FileInfo): void {
-            if (!this.references) {
-                this.references = [];
-                this.references.push(file);
-                return;
-            }
-            FileInfo.addElement(this.references, this.finalized, file);
-        }
-
-        public removeReferences(file: FileInfo): void {
-            FileInfo.removeElement(this.references, this.finalized, file);
+        public fileDeleted(file: string): void {
         }
     }
 
@@ -419,7 +60,7 @@ namespace ts.server {
         private tail: Item<T>;
 
         constructor() {
-            this.map = Object.create(nullValue);
+            this.map = createMap<Item<T>>();
             this.head = undefined;
             this.tail = undefined;
         }
@@ -439,6 +80,7 @@ namespace ts.server {
         public add(key: string, value: T, touch = false): void {
             let item = this.map[key];
             if (item) {
+                item.value = value;
                 if (touch) {
                     this.touch(item);
                 }
@@ -453,6 +95,16 @@ namespace ts.server {
                 }
                 this.map[key] = item;
             }
+        }
+
+        public remove(key: string): T {
+            const item = this.map[key];
+            if (!item) {
+                return undefined;
+            }
+            delete this.map[key];
+            this.removeItem(item);
+            return item.value;
         }
 
         public shift(): T {
@@ -533,91 +185,494 @@ namespace ts.server {
         }
     }
 
-    class ModuleBuilder extends AbstractBuilder implements Builder {
+    interface BuilderAccessor<T extends FileInfo> {
+        getProject(): Project;
+        getFileInfo(fileName: string): T;
+    }
 
-        private fileInfos: Map<FileInfo>;
-        private provider: FileInfoProvider;
+    interface FileInfo {
+        fileName(): string;
+        update(builder: BuilderAccessor<FileInfo>): boolean;
+    }
 
-        private queue: CompileQueue<FileInfo>;
+    abstract class AbstractFileInfo {
 
-        constructor(project: Project, host: BuilderHost) {
-            super(project, host);
-            this.provider = {
-                get: (fileName: string): FileInfo => {
-                    if (!this.fileInfos) {
-                        return undefined;
-                    }
-                    return this.fileInfos[fileName];
-                }
-            };
-            this.queue = new CompileQueue<FileInfo>();
+        protected signature: string;
+
+        constructor(protected _fileName: string) {
+            this.signature = undefined;
         }
 
-        public computeDiagnostics(changedFile: string, delay: number): void {
-            this.ensureDependencyGraph();
-            if (changedFile) {
-                const fileInfo = this.fileInfos[changedFile];
-                if (fileInfo) {
-                    this.queue.add(fileInfo.fileName(), fileInfo, /*touch*/ true);
-                    this.processQueue();
+        public fileName(): string {
+            return this._fileName;
+        }
+
+        protected getSourceFile(builder: BuilderAccessor<FileInfo>): SourceFile {
+            return builder.getProject().compilerService.languageService.getProgram().getSourceFile(this._fileName);
+        }
+
+        protected updateSignature(builder: BuilderAccessor<FileInfo>): boolean {
+            const lastSignature: string = this.signature;
+            this.signature = undefined;
+            const sourceFile = this.getSourceFile(builder);
+            if (sourceFile.isDeclarationFile) {
+                this.signature = crypto.createHash("md5")
+                    .update(sourceFile.text)
+                    .digest("base64");
+            }
+            else {
+                // ToDo@dirkb for now we can only get the declaration file if we emit all files.
+                // We need to get better here since we can't emit JS files on type. Or ???
+                const emitOutput = builder.getProject().compilerService.languageService.getEmitOutput(this._fileName);
+                for (const file of emitOutput.outputFiles) {
+                    if (/\.d\.ts$/.test(file.name)) {
+                        this.signature = crypto.createHash("md5")
+                            .update(file.text)
+                            .digest("base64");
+                    }
+                }
+            }
+            return !this.signature || lastSignature !== this.signature;
+        }
+    }
+
+    abstract class AbstractBuilder<T extends FileInfo> {
+
+        protected compileQueue: CompileQueue<T>;
+
+        constructor(protected project: Project, protected host: BuilderHost, private delay: number) {
+            this.compileQueue = new CompileQueue<T>();
+        }
+
+        public getProject(): Project {
+            return this.project;
+        }
+
+        public getCanonicalFileName(file: string) {
+            const name = this.host.useCaseSensitiveFileNames() ? file : file.toLowerCase();
+            return ts.normalizePath(name);
+        }
+
+        private formatDiagnostics(file: string, diagnostic: ts.Diagnostic): protocol.Diagnostic {
+            return {
+                start: this.project.compilerService.host.positionToLineOffset(file, diagnostic.start),
+                end: this.project.compilerService.host.positionToLineOffset(file, diagnostic.start + diagnostic.length),
+                text: ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")
+            };
+        }
+
+        protected semanticCheck(file: string) {
+            try {
+                const diagnostics = this.project.compilerService.languageService.getSemanticDiagnostics(file);
+
+                if (diagnostics) {
+                    this.host.event({
+                        file: file,
+                        diagnostics: diagnostics.map(diagnostic => this.formatDiagnostics(file, diagnostic))
+                    }, "semanticDiag");
+                }
+            }
+            catch (err) {
+                this.host.logError(err, "semantic check");
+            }
+        }
+
+        protected syntacticCheck(file: string) {
+            try {
+                const diagnostics = this.project.compilerService.languageService.getSyntacticDiagnostics(file);
+                if (diagnostics) {
+                    this.host.event({
+                        file: file,
+                        diagnostics: diagnostics.map(diagnostic => this.formatDiagnostics(file, diagnostic))
+                    }, "syntaxDiag");
+                }
+            }
+            catch (err) {
+                this.host.logError(err, "syntactic check");
+            }
+        }
+
+        public fileCreated(file: string): void {
+        }
+
+        public fileOpened(file: string): void {
+        }
+
+        public fileChanged(file: string): void {
+        }
+
+        public fileClosed(file: string): void {
+        }
+
+        public fileDeleted(file: string): void {
+        }
+
+        protected processCompileQueue() {
+            if (this.compileQueue.isEmpty()) {
+                return;
+            }
+            setImmediate(() => {
+                if (this.compileQueue.isEmpty()) {
+                    return;
+                }
+                const fileInfo = this.compileQueue.shift();
+                this.syntacticCheck(fileInfo.fileName());
+                setImmediate(() => {
+                    this.semanticCheck(fileInfo.fileName());
+                    this.updateCompileQueue(fileInfo);
+                    if (!this.compileQueue.isEmpty) {
+                        this.processCompileQueue();
+                    }
+                });
+            });
+        }
+
+        protected abstract updateCompileQueue(fileInfo: T): void;
+    }
+
+    class SimpleFileInfo extends AbstractFileInfo implements FileInfo {
+
+        constructor(fileName: string) {
+            super(fileName);
+        }
+
+        public update(builder: BuilderAccessor<FileInfo>): boolean {
+            return this.updateSignature(builder);
+        }
+    }
+
+    class SingleFileInfo implements FileInfo {
+
+        constructor(private info: FileInfo) {
+        }
+
+        public fileName(): string {
+            return this.info.fileName();
+        }
+
+        public update(builder: BuilderAccessor<FileInfo>): boolean {
+            return false;
+        }
+    }
+
+    class OpenFilesBuilder extends AbstractBuilder<FileInfo> implements Builder, BuilderAccessor<FileInfo> {
+
+        private openFiles: Map<SimpleFileInfo>;
+
+        constructor(project: Project, channel: BuilderHost, delay = -1, private limit = -1) {
+            super(project, channel, delay);
+            this.openFiles = createMap<SimpleFileInfo>();
+        }
+
+        public getFileInfo(file: string): SimpleFileInfo {
+            return this.openFiles[file];
+        }
+
+        public fileOpened(file: string): void {
+            this.fileChanged(file);
+        }
+
+        public fileChanged(file: string): void {
+            if (path.basename(file) === "lib.d.ts") {
+                return;
+            }
+            let fileInfo = this.openFiles[file];
+            if (!fileInfo) {
+                const sourceFile = this.project.compilerService.languageService.getProgram().getSourceFile(file);
+                if (sourceFile) {
+                    fileInfo = new SimpleFileInfo(file);
+                }
+            }
+            if (!fileInfo) {
+                return;
+            }
+            this.openFiles[file] = fileInfo;
+        }
+
+        public fileClosed(file: string): void {
+            delete this.openFiles[file];
+            this.compileQueue.remove(file);
+        }
+
+        protected updateCompileQueue(fileInfo: SimpleFileInfo): void {
+            if (!fileInfo.update(this)) {
+                return;
+            }
+            Object.keys(this.openFiles).forEach((key) => {
+                if (key === fileInfo.fileName()) {
+                    return;
+                }
+                this.compileQueue.add(key, new SingleFileInfo(this.openFiles[key]));
+            });
+        }
+    }
+
+    class ModuleFileInfo extends AbstractFileInfo implements FileInfo {
+
+        private finalized: boolean;
+        private references: ModuleFileInfo[];
+        private referencedBy: ModuleFileInfo[];
+
+        constructor(filename: string) {
+            super(filename);
+            this.finalized = false;
+            this.references = undefined;
+            this.referencedBy = undefined;
+        }
+
+        private static binarySearch(array: ModuleFileInfo[], value: string): number {
+            if (!array) {
+                return -1;
+            }
+            let low = 0;
+            let high = array.length - 1;
+
+            while (low <= high) {
+                const middle = ((low + high) / 2) | 0;
+                const midValue = array[middle].fileName();
+                if (midValue === value) {
+                    return middle;
+                }
+                else if (midValue > value) {
+                    high = middle - 1;
+                }
+                else {
+                    low = middle + 1;
+                }
+            }
+            return ~low;
+        }
+
+        private static compareFileInfos(lf: ModuleFileInfo, rf: ModuleFileInfo): number {
+            const l = lf.fileName();
+            const r = rf.fileName();
+            return (l < r ? -1 : (l > r ? 1 : 0));
+        };
+
+        private static addElement(array: ModuleFileInfo[], finalized: boolean, file: ModuleFileInfo): void {
+            if (finalized) {
+                const insertIndex = ModuleFileInfo.binarySearch(array, file.fileName());
+                if (insertIndex < 0) {
+                    array.splice(~insertIndex, 0, file);
+                }
+            }
+            else {
+                array.push(file);
+            }
+        }
+
+        private static removeElement(array: ModuleFileInfo[], finalized: boolean, file: ModuleFileInfo): void {
+            if (!array) {
+                return;
+            }
+            if (finalized) {
+                const index = ModuleFileInfo.binarySearch(array, file.fileName());
+                if (index >= 0) {
+                    array.splice(index, 1);
+                }
+            }
+            else {
+                const fileName = file.fileName();
+                for (let i = 0; i < array.length; i++) {
+                    if (fileName === array[i].fileName()) {
+                        array.splice(i, 1);
+                        break;
+                    }
                 }
             }
         }
 
-        private processQueue(): void {
-            setImmediate(() => {
-                if (this.queue.isEmpty()) {
-                    return;
-                }
-                const fileInfo = this.queue.shift();
-                this.syntacticCheck(fileInfo.fileName());
-                setImmediate(() => {
-                    this.semanticCheck(fileInfo.fileName());
-                    if (fileInfo.update(this.project, this.provider)) {
-                        fileInfo.queueReferencedBy(this.queue);
-                        this.processQueue();
-                    }
-                });
+        public buildDependencies(builder: BuilderAccessor<ModuleFileInfo>): void {
+            this.getReferencedFileInfos(builder).forEach((fileInfo) => {
+                fileInfo.addReferencedBy(this);
+                this.addReferences(fileInfo);
             });
+        }
+
+        private getReferencedFileInfos(builder: BuilderAccessor<ModuleFileInfo>): ModuleFileInfo[] {
+            const program = builder.getProject().compilerService.languageService.getProgram();
+            const modules = program.getSourceFile(this.fileName()).resolvedModules;
+            const result: ModuleFileInfo[] = [];
+            if (modules) {
+                // We need to use a set here since the code can contain the same import twice,
+                // but that will only be one dependency.
+                const referencedModules = createMap<boolean>();
+                for (const key of Object.keys(modules)) {
+                    const module = modules[key];
+                    // ToDo@dirkb the resolved modules contain keys with undefined values for 
+                    // modules declared as declare module "fs" { .... }. Ignore for now.
+                    if (!module || !module.resolvedFileName) {
+                        continue;
+                    }
+                    referencedModules[module.resolvedFileName] = true;
+                }
+                for (const key of Object.keys(referencedModules)) {
+                    const fileInfo = builder.getFileInfo(key);
+                    if (fileInfo) {
+                        result.push(fileInfo);
+                    }
+                }
+            }
+            return result;
+        }
+
+        public finalize(): void {
+            if (this.references) {
+                this.references.sort(ModuleFileInfo.compareFileInfos);
+            }
+            if (this.referencedBy) {
+                this.referencedBy.sort(ModuleFileInfo.compareFileInfos);
+            }
+            this.finalized = true;
+        }
+
+        public update(builder: BuilderAccessor<ModuleFileInfo>): boolean {
+            const newReferences: ModuleFileInfo[] = this.getReferencedFileInfos(builder);
+            newReferences.sort(ModuleFileInfo.compareFileInfos);
+
+            const currentReferences = this.references || [];
+            const end = Math.max(currentReferences.length, newReferences.length);
+            let currentIndex = 0;
+            let newIndex = 0;
+            while (currentIndex < end && newIndex < end) {
+                const currentInfo = currentReferences[currentIndex];
+                const newInfo = newReferences[newIndex];
+                const compare = ModuleFileInfo.compareFileInfos(currentInfo, newInfo);
+                if (compare < 0) {
+                    // New reference is greater then current reference. That means
+                    // the current reference doesn't exist anymore after parsing. So delete
+                    // references.
+                    currentInfo.removeReferencedBy(this);
+                    currentIndex++;
+                }
+                else if (compare > 0) {
+                    // new new info. Add dependy
+                    newInfo.addReferencedBy(this);
+                    newIndex++;
+                }
+                else {
+                    // Equal. Go to next
+                    currentIndex++;
+                    newIndex++;
+                }
+            }
+            // Clean old references
+            for (let i = currentIndex; i < currentReferences.length; i++) {
+                currentReferences[i].removeReferencedBy(this);
+            }
+            // Update new references
+            for (let i = newIndex; i < newReferences.length; i++) {
+                newReferences[i].addReferencedBy(this);
+            }
+            this.references = newReferences.length > 0 ? newReferences : undefined;
+
+            return this.updateSignature(builder);
+        }
+
+        public addReferencedBy(file: ModuleFileInfo): void {
+            if (!this.referencedBy) {
+                this.referencedBy = [];
+                this.referencedBy.push(file);
+                return;
+            }
+            ModuleFileInfo.addElement(this.referencedBy, this.finalized, file);
+        }
+
+        public removeReferencedBy(file: ModuleFileInfo): void {
+            ModuleFileInfo.removeElement(this.referencedBy, this.finalized, file);
+        }
+
+        public queueReferencedBy(queue: CompileQueue<ModuleFileInfo>): void {
+            if (this.referencedBy) {
+                this.referencedBy.forEach((fileInfo) => queue.add(fileInfo.fileName(), fileInfo));
+            }
+        }
+
+        private addReferences(file: ModuleFileInfo): void {
+            if (!this.references) {
+                this.references = [];
+                this.references.push(file);
+                return;
+            }
+            ModuleFileInfo.addElement(this.references, this.finalized, file);
+        }
+
+        public removeReferences(file: ModuleFileInfo): void {
+            ModuleFileInfo.removeElement(this.references, this.finalized, file);
+        }
+    }
+
+    class ModuleBuilder extends AbstractBuilder<ModuleFileInfo> implements Builder, BuilderAccessor<ModuleFileInfo> {
+
+        private fileInfos: Map<ModuleFileInfo>;
+
+        constructor(project: Project, host: BuilderHost) {
+            super(project, host, -1);
+        }
+
+        public getFileInfo(file: string): ModuleFileInfo {
+            if (!this.fileInfos) {
+                return undefined;
+            }
+            return this.fileInfos[file];
+        }
+
+        public fileOpened(file: string): void {
+            this.computeDiagnostics(file);
+        }
+
+        public fileChanged(file: string): void {
+            this.computeDiagnostics(file);
+        }
+
+        protected updateCompileQueue(fileInfo: ModuleFileInfo): void {
+            if (fileInfo.update(this)) {
+                fileInfo.queueReferencedBy(this.compileQueue);
+                this.processCompileQueue();
+            }
+        }
+
+        private computeDiagnostics(changedFile: string): void {
+            this.ensureDependencyGraph();
+            if (changedFile) {
+                const fileInfo = this.fileInfos[changedFile];
+                if (fileInfo) {
+                    this.compileQueue.add(fileInfo.fileName(), fileInfo, /*touch*/ true);
+                    this.processCompileQueue();
+                }
+            }
         }
 
         private ensureDependencyGraph(): void {
             if (this.fileInfos) {
                 return;
             }
-            this.fileInfos = Object.create(nullValue);
+            this.fileInfos = createMap<ModuleFileInfo>();
             const fileNames = this.project.getFileNames();
-            const fileInfos = fileNames.reduce<FileInfo[]>((memo, file) => {
+            const fileInfos = fileNames.reduce<ModuleFileInfo[]>((memo, file) => {
                 const basename = path.basename(file);
                 if (basename === "lib.d.ts") {
                     return memo;
                 }
                 const sourceFile = this.project.compilerService.languageService.getProgram().getSourceFile(file);
-                const fileInfo = new FileInfo(sourceFile);
-                this.fileInfos[fileInfo.fileName()] = fileInfo;
-                memo.push(fileInfo);
+                if (sourceFile) {
+                    const fileInfo = new ModuleFileInfo(file);
+                    this.fileInfos[fileInfo.fileName()] = fileInfo;
+                    memo.push(fileInfo);
+                }
                 return memo;
             }, []);
-            fileInfos.forEach((fileInfo) => fileInfo.buildDependencies(this.provider));
+            fileInfos.forEach((fileInfo) => fileInfo.buildDependencies(this));
             fileInfos.forEach((fileInfo) => fileInfo.finalize());
-        }
-    }
-
-    class VirtualProjectBuilder extends AbstractBuilder implements Builder {
-        constructor(project: Project, host: BuilderHost) {
-            super(project, host);
-        }
-
-        public computeDiagnostics(changedFile: string, delay: number): void {
         }
     }
 
     export function createBuilder(project: Project, builderHost: BuilderHost): Builder {
         if (!project.projectService.enableAutoDiagnostics) {
-            return new NullBuilder();
+            return new NullBuilder(project, builderHost);
         }
         if (!project.isConfiguredProject()) {
-            return new VirtualProjectBuilder(project, builderHost);
+            return new OpenFilesBuilder(project, builderHost);
         }
         const options = project.projectOptions;
         if (!options || !options.autoDiagnostics) {
@@ -633,7 +688,7 @@ namespace ts.server {
                 case ModuleKind.System:
                     return new ModuleBuilder(project, builderHost);
                 default:
-                    return new AllFilesBuilder(project, builderHost);
+                    return new OpenFilesBuilder(project, builderHost);
             }
         }
         else {
