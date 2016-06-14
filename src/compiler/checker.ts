@@ -17858,7 +17858,7 @@ namespace ts {
                         if (helpers) {
                             const exports = helpers.exports;
                             if (requestedHelpers & NodeFlags.HasClassExtends && languageVersion < ScriptTarget.ES6) {
-                                verifyHelperSymbol(exports, "__extends", SymbolFlags.Function);
+                                verifyHelperSymbol(exports, "__extends", SymbolFlags.Value);
                             }
                             if (requestedHelpers & NodeFlags.HasJsxSpreadAttributes && compilerOptions.jsx !== JsxEmit.Preserve) {
                                 verifyHelperSymbol(exports, "__assign", SymbolFlags.Value);
