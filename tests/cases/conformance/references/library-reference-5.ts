@@ -1,6 +1,7 @@
 // @noImplicitReferences: true
 // @traceResolution: true
 // @currentDirectory: /
+// @typeRoots: types
 
 // Secondary references may not be duplicated if they disagree in content
 

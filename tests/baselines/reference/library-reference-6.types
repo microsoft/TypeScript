@@ -6,7 +6,7 @@ var x: string = alpha.a;
 >alpha : { a: string; }
 >a : string
 
-=== /types/alpha/index.d.ts ===
+=== /node_modules/@types/alpha/index.d.ts ===
 
 // The primary lookup folder is relative to tsconfig.json, if present
 

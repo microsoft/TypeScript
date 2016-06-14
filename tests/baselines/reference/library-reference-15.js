@@ -4,10 +4,13 @@
 
 declare var $: { foo(): void };
 
+//// [index.d.ts]
+declare var $2: { foo(): void };
 
 //// [consumer.ts]
-$.foo();
-
+$.foo(); // should OK
+$2.foo(); // should error
 
 //// [consumer.js]
-$.foo();
+$.foo(); // should OK
+$2.foo(); // should error

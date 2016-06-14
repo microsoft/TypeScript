@@ -193,7 +193,6 @@ function runTests(taskConfigsFolder, run, options, cb) {
         counter--;
 
         if (counter <= 0) {
-            var failed = 0;
             var reporter = new Base(),
                 stats = reporter.stats,
                 failures = reporter.failures;
@@ -224,8 +223,8 @@ function runTests(taskConfigsFolder, run, options, cb) {
                 reporter.epilogue();
             }
 
-            if (failed) {
-                return cb(new Error("Test failures reported: " + failed));
+            if (stats.failures) {
+                return cb(new Error("Test failures reported: " + stats.failures));
             }
             else {
                 return cb();
