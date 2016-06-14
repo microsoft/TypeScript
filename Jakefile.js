@@ -794,13 +794,14 @@ function runConsoleTests(defaultReporter, runInParallel) {
     colors = process.env.colors || process.env.color;
     colors = colors ? ' --no-colors ' : ' --colors ';
     reporter = process.env.reporter || process.env.r || defaultReporter;
+    var bail = (process.env.bail || process.env.b) ? "--bail" : "";
     var lintFlag = process.env.lint !== 'false';
 
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     if(!runInParallel) {
         tests = tests ? ' -g "' + tests + '"' : '';
-        var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
+        var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + bail + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
 
         var savedNodeEnv = process.env.NODE_ENV;
@@ -865,7 +866,7 @@ task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], functio
     runConsoleTests('min', /*runInParallel*/ true);
 }, {async: true});
 
-desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true dirty=false.");
+desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true dirty=false bail=false.");
 task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
     runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);
 }, {async: true});

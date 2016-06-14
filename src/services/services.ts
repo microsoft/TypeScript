@@ -1083,6 +1083,7 @@ namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
+        getDirectories?(directoryName: string): string[];
     }
 
     //
@@ -2050,7 +2051,8 @@ namespace ts {
             getNewLine: () => newLine,
             fileExists: (fileName): boolean => fileName === inputFileName,
             readFile: (fileName): string => "",
-            directoryExists: directoryExists => true
+            directoryExists: directoryExists => true,
+            getDirectories: (path: string) => []
         };
 
         // If there is an error from converting string in compiler-options to its corresponding enum value,
@@ -2156,7 +2158,7 @@ namespace ts {
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
-            return <DocumentRegistryBucketKey>`_${settings.target}|${settings.module}|${settings.noResolve}|${settings.jsx}|${settings.allowJs}|${settings.baseUrl}|${settings.typesRoot}|${settings.typesSearchPaths}|${JSON.stringify(settings.rootDirs)}|${JSON.stringify(settings.paths)}`;
+            return <DocumentRegistryBucketKey>`_${settings.target}|${settings.module}|${settings.noResolve}|${settings.jsx}|${settings.allowJs}|${settings.baseUrl}|${JSON.stringify(settings.typeRoots)}|${JSON.stringify(settings.rootDirs)}|${JSON.stringify(settings.paths)}`;
         }
 
         function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
@@ -3016,8 +3018,10 @@ namespace ts {
                     return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
                 },
                 directoryExists: directoryName => {
-                    Debug.assert(!host.resolveModuleNames || !host.resolveTypeReferenceDirectives);
                     return directoryProbablyExists(directoryName, host);
+                },
+                getDirectories: path => {
+                    return host.getDirectories ? host.getDirectories(path) : [];
                 }
             };
             if (host.trace) {
