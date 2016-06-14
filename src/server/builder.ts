@@ -320,7 +320,7 @@ namespace ts.server {
                 setImmediate(() => {
                     this.semanticCheck(fileInfo.fileName());
                     this.updateCompileQueue(fileInfo);
-                    if (!this.compileQueue.isEmpty) {
+                    if (!this.compileQueue.isEmpty()) {
                         this.processCompileQueue();
                     }
                 });
@@ -482,15 +482,14 @@ namespace ts.server {
             }
         }
 
-        public buildDependencies(builder: BuilderAccessor<ModuleFileInfo>): void {
-            this.getReferencedFileInfos(builder).forEach((fileInfo) => {
+        public buildDependencies(builder: BuilderAccessor<ModuleFileInfo>, program: Program): void {
+            this.getReferencedFileInfos(builder, program).forEach((fileInfo) => {
                 fileInfo.addReferencedBy(this);
                 this.addReferences(fileInfo);
             });
         }
 
-        private getReferencedFileInfos(builder: BuilderAccessor<ModuleFileInfo>): ModuleFileInfo[] {
-            const program = builder.getProject().compilerService.languageService.getProgram();
+        private getReferencedFileInfos(builder: BuilderAccessor<ModuleFileInfo>, program: Program): ModuleFileInfo[] {
             const modules = program.getSourceFile(this.fileName()).resolvedModules;
             const result: ModuleFileInfo[] = [];
             if (modules) {
@@ -527,7 +526,7 @@ namespace ts.server {
         }
 
         public update(builder: BuilderAccessor<ModuleFileInfo>): boolean {
-            const newReferences: ModuleFileInfo[] = this.getReferencedFileInfos(builder);
+            const newReferences: ModuleFileInfo[] = this.getReferencedFileInfos(builder, builder.getProject().compilerService.languageService.getProgram());
             newReferences.sort(ModuleFileInfo.compareFileInfos);
 
             const currentReferences = this.references || [];
@@ -628,7 +627,6 @@ namespace ts.server {
         protected updateCompileQueue(fileInfo: ModuleFileInfo): void {
             if (fileInfo.update(this)) {
                 fileInfo.queueReferencedBy(this.compileQueue);
-                this.processCompileQueue();
             }
         }
 
@@ -649,12 +647,13 @@ namespace ts.server {
             }
             this.fileInfos = createMap<ModuleFileInfo>();
             const fileNames = this.project.getFileNames();
+            const program = this.project.compilerService.languageService.getProgram();
             const fileInfos = fileNames.reduce<ModuleFileInfo[]>((memo, file) => {
                 const basename = path.basename(file);
                 if (basename === "lib.d.ts") {
                     return memo;
                 }
-                const sourceFile = this.project.compilerService.languageService.getProgram().getSourceFile(file);
+                const sourceFile = program.getSourceFile(file);
                 if (sourceFile) {
                     const fileInfo = new ModuleFileInfo(file);
                     this.fileInfos[fileInfo.fileName()] = fileInfo;
@@ -662,7 +661,7 @@ namespace ts.server {
                 }
                 return memo;
             }, []);
-            fileInfos.forEach((fileInfo) => fileInfo.buildDependencies(this));
+            fileInfos.forEach((fileInfo) => fileInfo.buildDependencies(this, program));
             fileInfos.forEach((fileInfo) => fileInfo.finalize());
         }
     }
