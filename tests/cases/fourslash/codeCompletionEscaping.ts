@@ -2,7 +2,8 @@
 
 // @Filename: a.js
 // @allowJs: true
-////__foo;/**/
+////___foo; __foo;/**/
 
 goTo.marker();
 verify.completionListContains("__foo", undefined, undefined, "warning");
+verify.completionListContains("___foo", undefined, undefined, "warning");
