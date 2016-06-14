@@ -647,7 +647,7 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", [], () => {
 
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
-gulp.task(run, false, [builtLocalCompiler], () => {
+gulp.task(run, false, [servicesFile], () => {
     const settings: tsc.Settings = getCompilerSettings({
         outFile: run
     }, /*useBuiltCompiler*/ true);
