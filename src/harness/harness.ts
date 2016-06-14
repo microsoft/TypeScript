@@ -1771,10 +1771,3 @@ namespace Harness {
 
     if (Error) (<any>Error).stackTraceLimit = 1;
 }
-
-if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable("NODE_ENV"))) {
-    Harness.IO.tryEnableSourceMapsForHost();
-}
-
-// TODO: not sure why Utils.evalFile isn't working with this, eventually will concat it like old compiler instead of eval
-eval(Harness.tcServicesFile);
