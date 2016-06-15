@@ -807,6 +807,7 @@ namespace ts.server {
             else {
                 this.findReferencingProjects(info);
                 if (info.defaultProject) {
+                    info.defaultProject.addOpenRef();
                     this.openFilesReferenced.push(info);
                 }
                 else {
