@@ -268,7 +268,7 @@ namespace ts.server {
         }
 
         removeRoot(info: ScriptInfo) {
-            if (!this.filenameToScript.contains(info.path)) {
+            if (this.filenameToScript.contains(info.path)) {
                 this.filenameToScript.remove(info.path);
                 this.roots = copyListRemovingItem(info, this.roots);
                 this.resolvedModuleNames.remove(info.path);
@@ -313,6 +313,10 @@ namespace ts.server {
 
         directoryExists(path: string): boolean {
             return this.host.directoryExists(path);
+        }
+
+        getDirectories(path: string): string[] {
+            return this.host.getDirectories(path);
         }
 
         /**

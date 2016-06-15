@@ -117,6 +117,9 @@ namespace ts {
             getCurrentDirectory(): string {
                 return "";
             },
+            getDirectories(path: string): string[] {
+                return [];
+            },
             getCanonicalFileName(fileName): string {
                 return sys && sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
             },
@@ -256,6 +259,22 @@ namespace ts {
             assert.isTrue(!program_1.structureIsReused);
         });
 
+        it("fails if change affects type references", () => {
+            const program_1 = newProgram(files, ["a.ts"], { types: ["a"] });
+            updateProgram(program_1, ["a.ts"], { types: ["b"] }, files => {
+
+            });
+            assert.isTrue(!program_1.structureIsReused);
+        });
+
+        it("succeeds if change doesn't affect type references", () => {
+            const program_1 = newProgram(files, ["a.ts"], { types: ["a"] });
+            updateProgram(program_1, ["a.ts"], { types: ["a"] }, files => {
+
+            });
+            assert.isTrue(program_1.structureIsReused);
+        });
+
         it("fails if change affects imports", () => {
             const program_1 = newProgram(files, ["a.ts"], { target });
             updateProgram(program_1, ["a.ts"], { target }, files => {
@@ -336,7 +355,7 @@ namespace ts {
                 { name: "/a.ts", text: SourceText.New("/// <reference types='typedefs'/>", "", "var x = $") },
                 { name: "/types/typedefs/index.d.ts", text: SourceText.New("", "", "declare var $: number") },
             ];
-            const options: CompilerOptions = { target, typesRoot: "/" };
+            const options: CompilerOptions = { target, typeRoots: ["/types"] };
 
             const program_1 = newProgram(files, ["/a.ts"], options);
             checkResolvedTypeDirectivesCache(program_1, "/a.ts", { "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } });

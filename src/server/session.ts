@@ -379,7 +379,7 @@ namespace ts.server {
                     start,
                     end,
                     file: fileName,
-                    isWriteAccess
+                    isWriteAccess,
                 };
             });
         }
@@ -555,7 +555,8 @@ namespace ts.server {
                             start: start,
                             lineText: lineText,
                             end: compilerService.host.positionToLineOffset(ref.fileName, ts.textSpanEnd(ref.textSpan)),
-                            isWriteAccess: ref.isWriteAccess
+                            isWriteAccess: ref.isWriteAccess,
+                            isDefinition: ref.isDefinition
                         };
                     });
                 },
@@ -872,7 +873,8 @@ namespace ts.server {
                     start: compilerService.host.positionToLineOffset(fileName, span.start),
                     end: compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(span))
                 })),
-                childItems: this.decorateNavigationBarItem(project, fileName, item.childItems)
+                childItems: this.decorateNavigationBarItem(project, fileName, item.childItems),
+                indent: item.indent
             }));
         }
 
@@ -1206,7 +1208,11 @@ namespace ts.server {
                     // Handle cancellation exceptions
                 }
                 this.logError(err, message);
-                this.output(undefined, request ? request.command : CommandNames.Unknown, request ? request.seq : 0, "Error processing request. " + err.message);
+                this.output(
+                    undefined,
+                    request ? request.command : CommandNames.Unknown,
+                    request ? request.seq : 0,
+                    "Error processing request. " + (<StackTraceError>err).message + "\n" + (<StackTraceError>err).stack);
             }
         }
     }

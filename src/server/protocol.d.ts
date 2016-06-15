@@ -304,6 +304,11 @@ declare namespace ts.server.protocol {
           * True if reference is a write location, false otherwise.
           */
         isWriteAccess: boolean;
+
+        /**
+         * True if reference is a definition, false otherwise.
+         */
+        isDefinition: boolean;
     }
 
     /**
@@ -1242,6 +1247,11 @@ declare namespace ts.server.protocol {
           * Optional children.
           */
         childItems?: NavigationBarItem[];
+
+        /**
+          * Number of levels deep this item should appear.
+          */
+        indent: number;
     }
 
     export interface NavBarResponse extends Response {

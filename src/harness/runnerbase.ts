@@ -24,7 +24,7 @@ abstract class RunnerBase {
 
     abstract enumerateTestFiles(): string[];
 
-    /** Setup the runner's tests so that they are ready to be executed by the harness 
+    /** Setup the runner's tests so that they are ready to be executed by the harness
      *  The first test should be a describe/it block that sets up the harness's compiler instance appropriately
      */
     public abstract initializeTests(): void;
