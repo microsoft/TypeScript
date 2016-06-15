@@ -17892,6 +17892,9 @@ namespace ts {
                     }
                     if (requestedExternalEmitHelpers & NodeFlags.HasAsyncFunctions) {
                         verifyHelperSymbol(exports, "__awaiter", SymbolFlags.Value);
+                        if (languageVersion < ScriptTarget.ES6) {
+                            verifyHelperSymbol(exports, "__generator", SymbolFlags.Value);
+                        }
                     }
                 }
             }

@@ -73,51 +73,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
         const generatorHelper = `
 var __generator = (this && this.__generator) || function (body) {
-    var _ = { label: 0, sent: function() { if (sent[0] === 1 /*throw*/) throw sent[1]; return sent[1]; }, trys: [], stack: [] }, sent;
+    var _ = { label: 0, sent: function() { if (sent[0] === 1) throw sent[1]; return sent[1]; }, trys: [], stack: [] }, sent, f;
     function step(op) {
-        if (_.flag) throw new TypeError("Generator is already executing.");
-        while (true) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (1) {
             if (_.done) switch (op[0]) {
-                case 0 /*next*/: return { value: void 0, done: true };
-                case 1 /*throw*/: case 6 /*catch*/: throw op[1];
-                case 2 /*return*/: return { value: op[1], done: true };
+                case 0: return { value: void 0, done: true };
+                case 1: case 6: throw op[1];
+                case 2: return { value: op[1], done: true };
             }
             try {
-                switch (_.flag = true, op[0]) {
-                    case 0 /*next*/: case 1 /*throw*/: sent = op; break;
-                    case 4 /*yield*/: return _.label++, { value: op[1], done: false };
-                    case 7 /*endfinally*/: op = _.stack.pop(), _.trys.pop(); continue;
+                switch (f = 1, op[0]) {
+                    case 0: case 1: sent = op; break;
+                    case 4: return _.label++, { value: op[1], done: false };
+                    case 7: op = _.stack.pop(), _.trys.pop(); continue;
                     default:
                         var r = _.trys.length > 0 && _.trys[_.trys.length - 1];
-                        if (!r && (op[0] === 1 /*throw*/ || op[0] === 6 /*catch*/ || op[0] === 2 /*return*/)) {
-                            _.done = true;
-                            continue;
-                        }
-                        if (op[0] === 3 /*break*/ && (!r || (op[1] > r[0] && op[1] < r[3]))) {
-                            _.label = op[1];
-                        }
-                        else if (op[0] === 6 /*catch*/ && r && _.label < r[1]) {
-                            _.label = r[1], sent = op;
-                        }
-                        else if (r && _.label < r[2]) {
-                            _.label = r[2], _.stack.push(op);
-                        }
-                        else {
-                            if (r[2]) _.stack.pop();
-                            _.trys.pop();
-                            continue;
-                        }
+                        if (!r && (op[0] === 6 || op[0] === 2)) { _.done = 1; continue; }
+                        if (op[0] === 3 && (!r || (op[1] > r[0] && op[1] < r[3]))) { _.label = op[1]; break; }
+                        if (op[0] === 6 && _.label < r[1]) { _.label = r[1], sent = op; break; }
+                        if (r && _.label < r[2]) { _.label = r[2], _.stack.push(op); break; }
+                        if (r[2]) { _.stack.pop(); }
+                        _.trys.pop();
+                        continue;
                 }
                 op = body(_);
             }
-            catch (e) { op = [6 /*catch*/, e]; }
-            finally { _.flag = false, sent = void 0; }
+            catch (e) { op = [6, e]; }
+            finally { f = 0, sent = void 0; }
         }
     }
     return {
-        next: function (v) { return step([0 /*next*/, v]); },
-        "throw": function (v) { return step([1 /*throw*/, v]); },
-        "return": function (v) { return step([2 /*return*/, v]); }
+        next: function (v) { return step([0, v]); },
+        "throw": function (v) { return step([1, v]); },
+        "return": function (v) { return step([2, v]); }
     };
 };`;
 

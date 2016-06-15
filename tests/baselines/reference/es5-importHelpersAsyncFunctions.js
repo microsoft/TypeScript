@@ -1,14 +1,34 @@
-//// [es5-asyncFunction.ts]
-declare var x;
+//// [tests/cases/compiler/es5-importHelpersAsyncFunctions.ts] ////
 
-async function empty() {
+//// [external.ts]
+export async function foo() {
 }
 
-async function singleAwait() {
-    await x;
+//// [script.ts]
+async function foo() {
 }
 
-//// [es5-asyncFunction.js]
+//// [tslib.d.ts]
+export declare function __extends(d: Function, b: Function): void;
+export declare function __assign(t: any, ...sources: any[]): any;
+export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
+export declare function __param(paramIndex: number, decorator: Function): Function;
+export declare function __metadata(metadataKey: any, metadataValue: any): Function;
+export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
+export declare function __generator(body: Function): any;
+
+//// [external.js]
+"use strict";
+var tslib_1 = require("tslib");
+function foo() {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return tslib_1.__generator(function (_a) {
+            return [2 /*return*/];
+        });
+    });
+}
+exports.foo = foo;
+//// [script.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -54,22 +74,10 @@ var __generator = (this && this.__generator) || function (body) {
         "return": function (v) { return step([2, v]); }
     };
 };
-function empty() {
+function foo() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(function (_a) {
             return [2 /*return*/];
-        });
-    });
-}
-function singleAwait() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
         });
     });
 }

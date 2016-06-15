@@ -137,11 +137,7 @@ namespace ts {
         Endfinally              // Marks the end of a `finally` block
     }
 
-    type OperationArguments = [Label]
-                            | [Label, Expression]
-                            | [Statement]
-                            | [Expression]
-                            | [Expression, Expression];
+    type OperationArguments = [Label] | [Label, Expression] | [Statement] | [Expression] | [Expression, Expression];
 
     // whether a generated code block is opening or closing at the current operation for a FunctionBuilder
     const enum BlockAction {
@@ -245,6 +241,7 @@ namespace ts {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
 
+        let currentSourceFile: SourceFile;
         let renamedCatchVariables: Map<boolean>;
         let renamedCatchVariableDeclarations: Map<Identifier>;
 
@@ -297,7 +294,9 @@ namespace ts {
 
         function transformSourceFile(node: SourceFile) {
             if (node.transformFlags & TransformFlags.ContainsGenerator) {
-                return visitEachChild(node, visitor, context);
+                currentSourceFile = node;
+                node = visitEachChild(node, visitor, context);
+                currentSourceFile = undefined;
             }
 
             return node;
@@ -2550,7 +2549,7 @@ namespace ts {
 
             const buildResult = buildStatements();
             return createCall(
-                createIdentifier("__generator"),
+                createHelperName(currentSourceFile.externalHelpersModuleName, "__generator"),
                 /*typeArguments*/ undefined,
                 [setNodeEmitFlags(
                     createFunctionExpression(
