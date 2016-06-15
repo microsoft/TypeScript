@@ -304,6 +304,24 @@ var x = 0;`,
             test("var x", { expectedOutput: `"use strict";\r\nvar x;\r\n`, options: { fileName: "http://somewhere/directory//directory2/file.ts" } });
         });
 
+        it("Support options with lib values", () => {
+            const input = "const a = 10;";
+            const output = `"use strict";\r\nvar a = 10;\r\n`;
+            test(input, {
+                expectedOutput: output,
+                options: { compilerOptions: { lib: ["es6", "dom"], module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
+            });
+        });
+
+        it("Support options with types values", () => {
+            const input = "const a = 10;";
+            const output = `"use strict";\r\nvar a = 10;\r\n`;
+            test(input, {
+                expectedOutput: output,
+                options: { compilerOptions: { types: ["jquery", "typescript"], module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
+            });
+        });
+
         describe("String values for enums", () => {
             it("Accepts strings instead of enum values", () => {
                 test(`export const x = 0`, {
