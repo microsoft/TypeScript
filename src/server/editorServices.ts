@@ -275,6 +275,10 @@ namespace ts.server {
         readFile(fileName: string): string {
             return this.host.readFile(fileName);
         }
+
+        getDirectories(path: string): string[] {
+            return this.host.getDirectories(path);
+        }
     }
 
     export interface ProjectOptions {

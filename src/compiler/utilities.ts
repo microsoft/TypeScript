@@ -830,6 +830,8 @@ namespace ts {
             case SyntaxKind.ConstructorType:
                 return true;
         }
+
+        return false;
     }
 
     export function introducesArgumentsExoticObject(node: Node) {
@@ -1260,6 +1262,18 @@ namespace ts {
 
     export function isSingleOrDoubleQuote(charCode: number) {
         return charCode === CharacterCodes.singleQuote || charCode === CharacterCodes.doubleQuote;
+    }
+
+    /**
+     * Returns true if the node is a variable declaration whose initializer is a function expression.
+     * This function does not test if the node is in a JavaScript file or not.
+     */
+    export function isDeclarationOfFunctionExpression(s: Symbol) {
+        if (s.valueDeclaration && s.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
+            const declaration = s.valueDeclaration as VariableDeclaration;
+            return declaration.initializer && declaration.initializer.kind === SyntaxKind.FunctionExpression;
+        }
+        return false;
     }
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
