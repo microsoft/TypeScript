@@ -571,19 +571,32 @@ gulp.task(serverFile, false, [servicesFile], () => {
 const tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 const tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 
-gulp.task(tsserverLibraryFile, false, [servicesFile], () => {
+gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
     const settings: tsc.Settings = getCompilerSettings({
         declaration: true,
         outFile: tsserverLibraryFile
     }, /*useBuiltCompiler*/ true);
-    let result: NodeJS.ReadWriteStream = gulp.src(languageServiceLibrarySources)
+    let {js, dts}: {js: NodeJS.ReadableStream, dts: NodeJS.ReadableStream} = gulp.src(languageServiceLibrarySources)
         .pipe(sourcemaps.init())
         .pipe(tsc(settings));
     if (!useDebugMode) {
-        result = result.pipe(insert.prepend(fs.readFileSync(copyright)));
+        const copyrightText = fs.readFileSync(copyright);
+        js = js.pipe(insert.prepend(copyrightText));
+        dts = dts.pipe(insert.prepend(copyrightText));
     }
-    return result.pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("."));
+    js.pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("."))
+        .on("end", complete);
+    dts.pipe(gulp.dest("."))
+        .on("end", complete);
+    
+    let completed = 0;
+    function complete() {
+        completed++;
+        if (completed >= 2) {
+            done();
+        }
+    }
 });
 
 gulp.task("lssl", "Builds language service server library", [tsserverLibraryFile]);
