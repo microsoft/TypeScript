@@ -17767,27 +17767,37 @@ namespace ts {
 
         function initializeTypeChecker() {
             // Bind all source files and propagate errors
-            forEach(host.getSourceFiles(), file => {
+            for (const file of host.getSourceFiles()) {
                 bindSourceFile(file, compilerOptions);
-            });
+            }
 
-            let augmentations: LiteralExpression[][];
             // Initialize global symbol table
-            forEach(host.getSourceFiles(), file => {
+            let augmentations: LiteralExpression[][];
+            let requestedExternalEmitHelpers: NodeFlags = 0;
+            let firstFileRequestingExternalHelpers: SourceFile;
+            for (const file of host.getSourceFiles()) {
                 if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals);
                 }
                 if (file.patternAmbientModules && file.patternAmbientModules.length) {
                     patternAmbientModules = concatenate(patternAmbientModules, file.patternAmbientModules);
                 }
-
                 if (file.moduleAugmentations.length) {
                     (augmentations || (augmentations = [])).push(file.moduleAugmentations);
                 }
                 if (file.symbol && file.symbol.globalExports) {
                     mergeSymbolTable(globals, file.symbol.globalExports);
                 }
-            });
+                if ((compilerOptions.isolatedModules || isExternalModule(file)) && !file.isDeclarationFile) {
+                    const fileRequestedExternalEmitHelpers = file.flags & NodeFlags.EmitHelperFlags;
+                    if (fileRequestedExternalEmitHelpers) {
+                        requestedExternalEmitHelpers |= fileRequestedExternalEmitHelpers;
+                        if (firstFileRequestingExternalHelpers === undefined) {
+                            firstFileRequestingExternalHelpers = file;
+                        }
+                    }
+                }
+            }
 
             if (augmentations) {
                 // merge module augmentations.
@@ -17854,34 +17864,36 @@ namespace ts {
             // If we have specified that we are importing helpers, we should report global
             // errors if we cannot resolve the helpers external module, or if it does not have
             // the necessary helpers exported.
-            if (compilerOptions.importHelpers) {
-                forEach(host.getSourceFiles(), sourceFile => {
-                    const requestedHelpers = sourceFile.flags & NodeFlags.EmitHelperFlags;
-                    if (requestedHelpers && (compilerOptions.isolatedModules || isExternalModule(sourceFile))) {
-                        const helpers = resolveExternalModule(sourceFile, externalHelpersModuleNameText, Diagnostics.Cannot_find_module_0, /*errorNode*/ undefined);
-                        if (helpers) {
-                            const exports = helpers.exports;
-                            if (requestedHelpers & NodeFlags.HasClassExtends && languageVersion < ScriptTarget.ES6) {
-                                verifyHelperSymbol(exports, "__extends", SymbolFlags.Value);
-                            }
-                            if (requestedHelpers & NodeFlags.HasJsxSpreadAttributes && compilerOptions.jsx !== JsxEmit.Preserve) {
-                                verifyHelperSymbol(exports, "__assign", SymbolFlags.Value);
-                            }
-                            if (requestedHelpers & NodeFlags.HasDecorators) {
-                                verifyHelperSymbol(exports, "__decorate", SymbolFlags.Value);
-                                if (compilerOptions.emitDecoratorMetadata) {
-                                    verifyHelperSymbol(exports, "__metadata", SymbolFlags.Value);
-                                }
-                            }
-                            if (requestedHelpers & NodeFlags.HasParamDecorators) {
-                                verifyHelperSymbol(exports, "__param", SymbolFlags.Value);
-                            }
-                            if (requestedHelpers & NodeFlags.HasAsyncFunctions) {
-                                verifyHelperSymbol(exports, "__awaiter", SymbolFlags.Value);
-                            }
+            if (compilerOptions.importHelpers && firstFileRequestingExternalHelpers) {
+                // Find the first reference to the helpers module.
+                const helpersModule = resolveExternalModule(
+                    firstFileRequestingExternalHelpers,
+                    externalHelpersModuleNameText,
+                    Diagnostics.Cannot_find_module_0,
+                    /*errorNode*/ undefined);
+
+                // If we found the module, report errors if it does not have the necessary exports.
+                if (helpersModule) {
+                    const exports = helpersModule.exports;
+                    if (requestedExternalEmitHelpers & NodeFlags.HasClassExtends && languageVersion < ScriptTarget.ES6) {
+                        verifyHelperSymbol(exports, "__extends", SymbolFlags.Value);
+                    }
+                    if (requestedExternalEmitHelpers & NodeFlags.HasJsxSpreadAttributes && compilerOptions.jsx !== JsxEmit.Preserve) {
+                        verifyHelperSymbol(exports, "__assign", SymbolFlags.Value);
+                    }
+                    if (requestedExternalEmitHelpers & NodeFlags.HasDecorators) {
+                        verifyHelperSymbol(exports, "__decorate", SymbolFlags.Value);
+                        if (compilerOptions.emitDecoratorMetadata) {
+                            verifyHelperSymbol(exports, "__metadata", SymbolFlags.Value);
                         }
                     }
-                });
+                    if (requestedExternalEmitHelpers & NodeFlags.HasParamDecorators) {
+                        verifyHelperSymbol(exports, "__param", SymbolFlags.Value);
+                    }
+                    if (requestedExternalEmitHelpers & NodeFlags.HasAsyncFunctions) {
+                        verifyHelperSymbol(exports, "__awaiter", SymbolFlags.Value);
+                    }
+                }
             }
         }
 
