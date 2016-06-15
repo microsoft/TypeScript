@@ -9,13 +9,4 @@
 // @Filename: user2.ts
 ////import {[|x|]} from "jquery";
 
-let ranges = test.ranges();
-for (let range of ranges) {
-    goTo.file(range.fileName);
-    goTo.position(range.start);
-
-    verify.referencesCountIs(ranges.length);
-    for (let expectedRange of ranges) {
-        verify.referencesAtPositionContains(expectedRange);
-    }
-}
+verify.rangesReferenceEachOther();
