@@ -656,8 +656,10 @@ gulp.task("VerifyLKG", false, [], () => {
     return gulp.src(expectedFiles).pipe(gulp.dest(LKGDirectory));
 });
 
-gulp.task("LKG", "Makes a new LKG out of the built js files", [], () => {
-    return runSequence("dontUseDebugMode", "lib", "local", "lssl", "VerifyLKG");
+gulp.task("LKGInternal", false, ["lib", "local", "lssl"]);
+
+gulp.task("LKG", "Makes a new LKG out of the built js files", ["dontUseDebugMode"], () => {
+    return runSequence("LKGInternal", "VerifyLKG");
 });
 
 
