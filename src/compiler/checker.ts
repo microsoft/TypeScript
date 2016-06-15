@@ -5027,7 +5027,6 @@ namespace ts {
         function getTypeFromTupleTypeNode(node: TupleTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                checkTupleType(node);
                 links.resolvedType = createTupleType(map(node.elementTypes, getTypeFromTypeNode));
             }
             return links.resolvedType;
@@ -11521,7 +11520,10 @@ namespace ts {
 
         function checkAssertion(node: AssertionExpression) {
             const exprType = getRegularTypeOfObjectLiteral(checkExpression(node.expression));
+
+            checkSourceElement(node.type);
             const targetType = getTypeFromTypeNode(node.type);
+
             if (produceDiagnostics && targetType !== unknownType) {
                 const widenedType = getWidenedType(exprType);
                 if (!isTypeComparableTo(targetType, widenedType)) {
