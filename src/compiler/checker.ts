@@ -14235,7 +14235,7 @@ namespace ts {
                     if (hasProperty(node.locals, key) && !node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
                         if (node.locals[key].valueDeclaration.kind === SyntaxKind.Parameter && node.parent.kind !== SyntaxKind.InterfaceDeclaration) {
                             if (node.locals[key].valueDeclaration.modifiers) {
-                                if (!checkModifiersForPublicAccess(node.locals[key].valueDeclaration.modifiers)) {
+                                if (checkModifiersForPrivateAccess(node.locals[key].valueDeclaration.modifiers)) {
                                     error(node.locals[key].valueDeclaration, Diagnostics.Parameter_0_has_never_been_used, key);
                                 }
                             } else {
@@ -14293,9 +14293,9 @@ namespace ts {
             return false;
         }
 
-        function checkModifiersForPublicAccess(modifiers: ModifiersArray): boolean {
+        function checkModifiersForPrivateAccess(modifiers: ModifiersArray): boolean {
             for (let i = 0; i < modifiers.length; i++) {
-                if (modifiers[i].kind === SyntaxKind.PublicKeyword) {
+                if (modifiers[i].kind === SyntaxKind.PrivateKeyword) {
                     return true;
                 }
             }
