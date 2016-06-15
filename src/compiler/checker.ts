@@ -14221,7 +14221,9 @@ namespace ts {
 
         function checkUnusedLocals(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction): void {
             checkUnusedIdentifiers(node);
-            checkUnusedParameters(node);
+            if (node.kind !== SyntaxKind.Constructor) {
+                checkUnusedParameters(node);
+            }            
         }
 
         function checkUnusedIdentifiers(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction): void {
