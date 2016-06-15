@@ -852,7 +852,8 @@ namespace ts {
 
             if (!result) {
                 if (nameNotFoundMessage) {
-                    if (!checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg)) {
+                    if (!checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg) &&
+                       !checkAndReportErrorForExtendingInterface(errorLocation, name)) {
                         error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
                     }
                 }
@@ -935,6 +936,25 @@ namespace ts {
             }
             return false;
         }
+
+
+        function checkAndReportErrorForExtendingInterface(errorLocation: Node, name: string): boolean {
+            if (!errorLocation || errorLocation.kind !== SyntaxKind.Identifier ||
+                !errorLocation.parent || !errorLocation.parent.parent ||
+                errorLocation.parent.parent.kind !== SyntaxKind.HeritageClause) {
+                return false;
+            }
+            const heritageClause = <HeritageClause>errorLocation.parent.parent;
+            if (heritageClause.token !== SyntaxKind.ExtendsKeyword) {
+                return false;
+            }
+            const enclosingScope = heritageClause.parent.parent.locals;
+            if (enclosingScope && getSymbol(enclosingScope, name, SymbolFlags.Interface)) {
+                error(errorLocation, Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements, name);
+                return true;
+            }
+            return false;
+         }
 
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
             Debug.assert((result.flags & SymbolFlags.BlockScopedVariable) !== 0);
