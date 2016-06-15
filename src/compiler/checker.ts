@@ -11524,7 +11524,10 @@ namespace ts {
 
         function checkAssertion(node: AssertionExpression) {
             const exprType = getRegularTypeOfObjectLiteral(checkExpression(node.expression));
+
+            checkSourceElement(node.type);
             const targetType = getTypeFromTypeNode(node.type);
+
             if (produceDiagnostics && targetType !== unknownType) {
                 const widenedType = getWidenedType(exprType);
                 if (!isTypeComparableTo(targetType, widenedType)) {
