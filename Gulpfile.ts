@@ -279,6 +279,9 @@ for (const i in libraryTargets) {
         return path.join(libraryDirectory, s);
     }));
     gulp.task(target, false, [], function() {
+        if (!needsUpdate(sources, target)) {
+            return gulp.src(target);
+        }
         return gulp.src(sources).pipe(concat(target, {newLine: ""})).pipe(gulp.dest("."));
     });
 }
