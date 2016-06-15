@@ -1000,7 +1000,7 @@ namespace ts.server {
          * the tsconfig file content and update the project; otherwise we create a new one.
          */
         private openOrUpdateConfiguredProjectForFile(fileName: string): { configFileName?: string, configFileErrors?: Diagnostic[] } {
-            const searchPath = ts.normalizePath(getDirectoryPath(fileName));
+            const searchPath = getDirectoryPath(normalizePath(fileName));
             this.log("Search path: " + searchPath, "Info");
             // check if this file is already included in one of external projects
             const configFileName = this.findConfigFile(searchPath);
