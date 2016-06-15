@@ -1765,7 +1765,7 @@ namespace ts {
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes);
 
                 case SyntaxKind.JsxSpreadAttribute:
-                    emitFlags |= NodeFlags.HasJsxSpreadAttribute;
+                    emitFlags |= NodeFlags.HasJsxSpreadAttributes;
                     return;
 
                 case SyntaxKind.CallSignature:

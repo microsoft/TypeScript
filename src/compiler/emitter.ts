@@ -2171,52 +2171,60 @@ const _super = (function (geti, seti) {
         }
 
         function emitEmitHelpers(node: SourceFile) {
+            // Only emit helpers if the user did not say otherwise.
+            if (compilerOptions.noEmitHelpers) {
+                return false;
+            }
+
+            // Don't emit helpers if we can import them.
+            if (compilerOptions.importHelpers
+                && (isExternalModule(node) || compilerOptions.isolatedModules)) {
+                return false;
+            }
+
             let helpersEmitted = false;
 
-            // Only emit helpers if the user did not say otherwise.
-            if (!compilerOptions.noEmitHelpers) {
-                // Only Emit __extends function when target ES5.
-                // For target ES6 and above, we can emit classDeclaration as is.
-                if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && node.flags & NodeFlags.HasClassExtends)) {
-                    writeLines(extendsHelper);
-                    extendsEmitted = true;
-                    helpersEmitted = true;
+            // Only Emit __extends function when target ES5.
+            // For target ES6 and above, we can emit classDeclaration as is.
+            if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && node.flags & NodeFlags.HasClassExtends)) {
+                writeLines(extendsHelper);
+                extendsEmitted = true;
+                helpersEmitted = true;
+            }
+
+            if (compilerOptions.jsx !== JsxEmit.Preserve && !assignEmitted && (node.flags & NodeFlags.HasJsxSpreadAttributes)) {
+                writeLines(assignHelper);
+                assignEmitted = true;
+            }
+
+            if (!decorateEmitted && node.flags & NodeFlags.HasDecorators) {
+                writeLines(decorateHelper);
+                if (compilerOptions.emitDecoratorMetadata) {
+                    writeLines(metadataHelper);
                 }
 
-                if (compilerOptions.jsx !== JsxEmit.Preserve && !assignEmitted && (node.flags & NodeFlags.HasJsxSpreadAttribute)) {
-                    writeLines(assignHelper);
-                    assignEmitted = true;
+                decorateEmitted = true;
+                helpersEmitted = true;
+            }
+
+            if (!paramEmitted && node.flags & NodeFlags.HasParamDecorators) {
+                writeLines(paramHelper);
+                paramEmitted = true;
+                helpersEmitted = true;
+            }
+
+            if (!awaiterEmitted && node.flags & NodeFlags.HasAsyncFunctions) {
+                writeLines(awaiterHelper);
+                if (languageVersion < ScriptTarget.ES6) {
+                    writeLines(generatorHelper);
                 }
 
-                if (!decorateEmitted && node.flags & NodeFlags.HasDecorators) {
-                    writeLines(decorateHelper);
-                    if (compilerOptions.emitDecoratorMetadata) {
-                        writeLines(metadataHelper);
-                    }
+                awaiterEmitted = true;
+                helpersEmitted = true;
+            }
 
-                    decorateEmitted = true;
-                    helpersEmitted = true;
-                }
-
-                if (!paramEmitted && node.flags & NodeFlags.HasParamDecorators) {
-                    writeLines(paramHelper);
-                    paramEmitted = true;
-                    helpersEmitted = true;
-                }
-
-                if (!awaiterEmitted && node.flags & NodeFlags.HasAsyncFunctions) {
-                    writeLines(awaiterHelper);
-                    if (languageVersion < ScriptTarget.ES6) {
-                        writeLines(generatorHelper);
-                    }
-
-                    awaiterEmitted = true;
-                    helpersEmitted = true;
-                }
-
-                if (helpersEmitted) {
-                    writeLine();
-                }
+            if (helpersEmitted) {
+                writeLine();
             }
 
             return helpersEmitted;

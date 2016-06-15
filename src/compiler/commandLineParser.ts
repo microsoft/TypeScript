@@ -421,6 +421,11 @@ namespace ts {
             name: "strictNullChecks",
             type: "boolean",
             description: Diagnostics.Enable_strict_null_checks
+        },
+        {
+            name: "importHelpers",
+            type: "boolean",
+            description: Diagnostics.Import_emit_helpers_from_tslib
         }
     ];
 

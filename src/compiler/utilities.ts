@@ -2,6 +2,8 @@
 
 /* @internal */
 namespace ts {
+    export const externalHelpersModuleNameText = "tslib";
+
     export interface ReferencePathMatchResult {
         fileReference?: FileReference;
         diagnosticMessage?: DiagnosticMessage;
@@ -117,7 +119,7 @@ namespace ts {
     }
 
     export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
-        return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
+        return sourceFile && sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
     }
 
     export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModule {

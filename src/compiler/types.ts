@@ -390,34 +390,34 @@ namespace ts {
 
     export const enum NodeFlags {
         None =               0,
-        Let =                1 << 0,   // Variable declaration
-        Const =              1 << 1,   // Variable declaration
-        NestedNamespace =    1 << 2,   // Namespace declaration
-        Synthesized =        1 << 3,   // Node was synthesized during transformation
-        Namespace =          1 << 12,  // Namespace declaration
-        ExportContext =      1 << 13,  // Export context (initialized by binding)
-        ContainsThis =       1 << 14,  // Interface contains references to "this"
-        HasImplicitReturn =  1 << 15,  // If function implicitly returns on one of codepaths (initialized by binding)
-        HasExplicitReturn =  1 << 16,  // If function has explicit reachable return on one of codepaths (initialized by binding)
-        GlobalAugmentation = 1 << 17,  // Set if module declaration is an augmentation for the global scope
-        HasClassExtends =    1 << 18,  // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
-        HasDecorators =      1 << 19,  // If the file has decorators (initialized by binding)
-        HasParamDecorators = 1 << 20,  // If the file has parameter decorators (initialized by binding)
-        HasAsyncFunctions =  1 << 21,  // If the file has async functions (initialized by binding)
-        DisallowInContext =  1 << 22,  // If node was parsed in a context where 'in-expressions' are not allowed
-        YieldContext =       1 << 23,  // If node was parsed in the 'yield' context created when parsing a generator
-        DecoratorContext =   1 << 24,  // If node was parsed as part of a decorator
-        AwaitContext =       1 << 25,  // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError =   1 << 26,  // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile =     1 << 27,  // If node was parsed in a JavaScript
-        ThisNodeOrAnySubNodesHasError = 1 << 28,  // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 29,  // If we've computed data from children and cached it in this node
-        HasJsxSpreadAttribute = 1 << 30,
+        Let =                1 << 0,  // Variable declaration
+        Const =              1 << 1,  // Variable declaration
+        NestedNamespace =    1 << 2,  // Namespace declaration
+        Synthesized =        1 << 3,  // Node was synthesized during transformation
+        Namespace =          1 << 4,  // Namespace declaration
+        ExportContext =      1 << 5,  // Export context (initialized by binding)
+        ContainsThis =       1 << 6,  // Interface contains references to "this"
+        HasImplicitReturn =  1 << 7,  // If function implicitly returns on one of codepaths (initialized by binding)
+        HasExplicitReturn =  1 << 8,  // If function has explicit reachable return on one of codepaths (initialized by binding)
+        GlobalAugmentation = 1 << 9,  // Set if module declaration is an augmentation for the global scope
+        HasClassExtends =    1 << 10, // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
+        HasDecorators =      1 << 11, // If the file has decorators (initialized by binding)
+        HasParamDecorators = 1 << 12, // If the file has parameter decorators (initialized by binding)
+        HasAsyncFunctions =  1 << 13, // If the file has async functions (initialized by binding)
+        HasJsxSpreadAttributes = 1 << 14, // If the file as JSX spread attributes (initialized by binding)
+        DisallowInContext =  1 << 15, // If node was parsed in a context where 'in-expressions' are not allowed
+        YieldContext =       1 << 16, // If node was parsed in the 'yield' context created when parsing a generator
+        DecoratorContext =   1 << 17, // If node was parsed as part of a decorator
+        AwaitContext =       1 << 18, // If node was parsed in the 'await' context created when parsing an async function
+        ThisNodeHasError =   1 << 19, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile =     1 << 20, // If node was parsed in a JavaScript
+        ThisNodeOrAnySubNodesHasError = 1 << 21, // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 22, // If we've computed data from children and cached it in this node
 
         BlockScoped = Let | Const,
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
-        EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions,
+        EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions | HasJsxSpreadAttributes,
         ReachabilityAndEmitFlags = ReachabilityCheckFlags | EmitHelperFlags,
 
         // Parsing context flags
@@ -1733,6 +1733,8 @@ namespace ts {
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
+        // The synthesized identifier for an imported external helpers module.
+        /* @internal */ externalHelpersModuleName?: Identifier;
     }
 
     export interface ScriptReferenceHost {
@@ -2590,6 +2592,7 @@ namespace ts {
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/help?: boolean;
+        importHelpers?: boolean;
         /*@internal*/init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;

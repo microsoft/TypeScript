@@ -705,7 +705,7 @@ namespace ts {
             if (extendsClauseElement) {
                 statements.push(
                     createStatement(
-                        createExtendsHelper(getDeclarationName(node)),
+                        createExtendsHelper(currentSourceFile.externalHelpersModuleName, getDeclarationName(node)),
                         /*location*/ extendsClauseElement
                     )
                 );
