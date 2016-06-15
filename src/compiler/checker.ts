@@ -8103,15 +8103,6 @@ namespace ts {
             return container === declarationContainer;
         }
 
-        function updateReferences(node: Identifier): void {
-            if (!isSourceFileADefinitionFile) {
-                const symbol = getReferencedValueSymbol(node);
-                if (symbol) {
-                    symbol.hasReference = true;
-                }
-            }
-        }
-
         function updateReferencesForTypedParameters(node: TypeNode): void {
             const symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol) {
@@ -8131,7 +8122,9 @@ namespace ts {
 
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
-            updateReferences(node);
+            if (symbol && !isSourceFileADefinitionFile) {
+                symbol.hasReference = true;
+            }
 
             // As noted in ECMAScript 6 language spec, arrow functions never have an arguments objects.
             // Although in down-level emit of arrow function, we emit it using function expression which means that
@@ -14216,14 +14209,14 @@ namespace ts {
         }
 
         function checkSourceFileADefinitionFile(node: Node): boolean {
-            return getSourceFileOfNode(node).fileName.indexOf(".d.ts") > 0;
+            return /\.d\.ts$/.test(getSourceFileOfNode(node).fileName);
         }
 
         function checkUnusedLocals(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction): void {
             checkUnusedIdentifiers(node);
             if (node.kind !== SyntaxKind.Constructor) {
                 checkUnusedParameters(node);
-            }            
+            }
         }
 
         function checkUnusedIdentifiers(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction): void {
@@ -14241,7 +14234,7 @@ namespace ts {
         function checkUnusedParameters(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction): void {
             if (compilerOptions.noUnusedParameters && !isSourceFileADefinitionFile) {
                 for (const key in node.locals) {
-                    if (!node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
+                    if (hasProperty(node.locals, key) && !node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
                         if (node.locals[key].valueDeclaration.kind === SyntaxKind.Parameter && node.parent.kind !== SyntaxKind.InterfaceDeclaration) {
                             error(node.locals[key].valueDeclaration, Diagnostics.Parameter_0_has_never_been_used, key);
                         }
@@ -14253,7 +14246,7 @@ namespace ts {
         function checkUnusedModulePrivates(node: ModuleDeclaration): void {
             if (compilerOptions.noUnusedLocals && !isSourceFileADefinitionFile) {
                 for (const key in node.locals) {
-                    if (!node.locals[key].hasReference && !node.locals[key].exportSymbol) {
+                    if (hasProperty(node.locals, key) && !node.locals[key].hasReference && !node.locals[key].exportSymbol) {
                         if ((node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind)) {
                             error(node.locals[key].valueDeclaration, Diagnostics.Variable_0_has_never_been_used, key);
                         }
