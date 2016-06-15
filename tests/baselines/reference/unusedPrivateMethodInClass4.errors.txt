@@ -1,4 +1,4 @@
-tests/cases/compiler/unusedPrivateMethodInClass4.ts(3,13): error TS6132: Variable 'function1' has never been used.
+tests/cases/compiler/unusedPrivateMethodInClass4.ts(3,13): error TS6133: Variable 'function1' has never been used.
 
 
 ==== tests/cases/compiler/unusedPrivateMethodInClass4.ts (1 errors) ====
@@ -6,7 +6,7 @@ tests/cases/compiler/unusedPrivateMethodInClass4.ts(3,13): error TS6132: Variabl
     class greeter {
         private function1() {
                 ~~~~~~~~~
-!!! error TS6132: Variable 'function1' has never been used.
+!!! error TS6133: Variable 'function1' has never been used.
             var y = 10;
             y++;
         }

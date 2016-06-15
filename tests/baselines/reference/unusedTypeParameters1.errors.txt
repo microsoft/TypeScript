@@ -1,10 +1,10 @@
-tests/cases/compiler/unusedTypeParameters1.ts(2,15): error TS6132: Variable 'typeparameter1' has never been used.
+tests/cases/compiler/unusedTypeParameters1.ts(2,15): error TS6133: Variable 'typeparameter1' has never been used.
 
 
 ==== tests/cases/compiler/unusedTypeParameters1.ts (1 errors) ====
     
     class greeter<typeparameter1> {
                   ~~~~~~~~~~~~~~
-!!! error TS6132: Variable 'typeparameter1' has never been used.
+!!! error TS6133: Variable 'typeparameter1' has never been used.
     
     }

@@ -1,4 +1,4 @@
-tests/cases/compiler/unusedFunctionsinNamespaces1.ts(3,14): error TS6132: Variable 'function1' has never been used.
+tests/cases/compiler/unusedFunctionsinNamespaces1.ts(3,14): error TS6133: Variable 'function1' has never been used.
 
 
 ==== tests/cases/compiler/unusedFunctionsinNamespaces1.ts (1 errors) ====
@@ -6,6 +6,6 @@ tests/cases/compiler/unusedFunctionsinNamespaces1.ts(3,14): error TS6132: Variab
     namespace Validation {
         function function1() {
                  ~~~~~~~~~
-!!! error TS6132: Variable 'function1' has never been used.
+!!! error TS6133: Variable 'function1' has never been used.
         }
     }

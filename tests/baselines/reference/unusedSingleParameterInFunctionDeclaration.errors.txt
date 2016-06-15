@@ -1,13 +1,13 @@
-tests/cases/compiler/unusedSingleParameterInFunctionDeclaration.ts(2,18): error TS6133: Parameter 'person' has never been used.
-tests/cases/compiler/unusedSingleParameterInFunctionDeclaration.ts(3,9): error TS6132: Variable 'unused' has never been used.
+tests/cases/compiler/unusedSingleParameterInFunctionDeclaration.ts(2,18): error TS6134: Parameter 'person' has never been used.
+tests/cases/compiler/unusedSingleParameterInFunctionDeclaration.ts(3,9): error TS6133: Variable 'unused' has never been used.
 
 
 ==== tests/cases/compiler/unusedSingleParameterInFunctionDeclaration.ts (2 errors) ====
     
     function greeter(person: string) {
                      ~~~~~~~~~~~~~~
-!!! error TS6133: Parameter 'person' has never been used.
+!!! error TS6134: Parameter 'person' has never been used.
         var unused = 20;
             ~~~~~~
-!!! error TS6132: Variable 'unused' has never been used.
+!!! error TS6133: Variable 'unused' has never been used.
     }

@@ -1,35 +1,35 @@
-tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(2,18): error TS6133: Parameter 'person' has never been used.
-tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(3,9): error TS6132: Variable 'unused' has never been used.
-tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(4,9): error TS6132: Variable 'maker' has never been used.
-tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(4,26): error TS6133: Parameter 'child' has never been used.
-tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(5,13): error TS6132: Variable 'unused2' has never been used.
-tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(7,27): error TS6133: Parameter 'child2' has never been used.
-tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(8,13): error TS6132: Variable 'unused3' has never been used.
+tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(2,18): error TS6134: Parameter 'person' has never been used.
+tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(3,9): error TS6133: Variable 'unused' has never been used.
+tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(4,9): error TS6133: Variable 'maker' has never been used.
+tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(4,26): error TS6134: Parameter 'child' has never been used.
+tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(5,13): error TS6133: Variable 'unused2' has never been used.
+tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(7,27): error TS6134: Parameter 'child2' has never been used.
+tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(8,13): error TS6133: Variable 'unused3' has never been used.
 
 
 ==== tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts (7 errors) ====
     
     function greeter(person: string, person2: string) {
                      ~~~~~~~~~~~~~~
-!!! error TS6133: Parameter 'person' has never been used.
+!!! error TS6134: Parameter 'person' has never been used.
         var unused = 20;
             ~~~~~~
-!!! error TS6132: Variable 'unused' has never been used.
+!!! error TS6133: Variable 'unused' has never been used.
         var maker = function(child: string): void {
             ~~~~~
-!!! error TS6132: Variable 'maker' has never been used.
+!!! error TS6133: Variable 'maker' has never been used.
                              ~~~~~~~~~~~~~
-!!! error TS6133: Parameter 'child' has never been used.
+!!! error TS6134: Parameter 'child' has never been used.
             var unused2 = 22;
                 ~~~~~~~
-!!! error TS6132: Variable 'unused2' has never been used.
+!!! error TS6133: Variable 'unused2' has never been used.
         }
         var maker2 = function(child2: string): void {
                               ~~~~~~~~~~~~~~
-!!! error TS6133: Parameter 'child2' has never been used.
+!!! error TS6134: Parameter 'child2' has never been used.
             var unused3 = 23;
                 ~~~~~~~
-!!! error TS6132: Variable 'unused3' has never been used.
+!!! error TS6133: Variable 'unused3' has never been used.
         }
         maker2(person2);
     }
