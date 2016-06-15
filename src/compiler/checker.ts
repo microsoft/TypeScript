@@ -14214,9 +14214,7 @@ namespace ts {
 
         function checkUnusedLocals(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction): void {
             checkUnusedIdentifiers(node);
-            if (node.kind !== SyntaxKind.Constructor) {
-                checkUnusedParameters(node);
-            }
+            checkUnusedParameters(node);
         }
 
         function checkUnusedIdentifiers(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction): void {
@@ -14236,7 +14234,13 @@ namespace ts {
                 for (const key in node.locals) {
                     if (hasProperty(node.locals, key) && !node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
                         if (node.locals[key].valueDeclaration.kind === SyntaxKind.Parameter && node.parent.kind !== SyntaxKind.InterfaceDeclaration) {
-                            error(node.locals[key].valueDeclaration, Diagnostics.Parameter_0_has_never_been_used, key);
+                            if (node.locals[key].valueDeclaration.modifiers) {
+                                if (!checkModifiersForPublicAccess(node.locals[key].valueDeclaration.modifiers)) {
+                                    error(node.locals[key].valueDeclaration, Diagnostics.Parameter_0_has_never_been_used, key);
+                                }
+                            } else {
+                                error(node.locals[key].valueDeclaration, Diagnostics.Parameter_0_has_never_been_used, key);
+                            }                            
                         }
                     }
                 }
@@ -14285,6 +14289,15 @@ namespace ts {
             for (let i = 0; node.modifiers && i < node.modifiers.length; i++) {
                 if (node.modifiers[i].kind === SyntaxKind.PrivateKeyword)
                     return true;
+            }
+            return false;
+        }
+
+        function checkModifiersForPublicAccess(modifiers: ModifiersArray): boolean {
+            for (let i = 0; i < modifiers.length; i++) {
+                if (modifiers[i].kind === SyntaxKind.PublicKeyword) {
+                    return true;
+                }
             }
             return false;
         }
