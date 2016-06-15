@@ -2001,6 +2001,10 @@ namespace ts {
         // so pass --noLib to avoid reporting a file not found error.
         options.noLib = true;
 
+        // Clear out the lib and types option as well
+        options.lib = undefined;
+        options.types = undefined;
+
         // We are not doing a full typecheck, we are not resolving the whole context,
         // so pass --noResolve to avoid reporting missing file errors.
         options.noResolve = true;
