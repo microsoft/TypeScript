@@ -52,13 +52,13 @@ declare module ts {
         None = 0,
         Block = 1,
         Smart = 2,
-    }  
+    }
 
     interface OutputFile {
         name: string;
         writeByteOrderMark: boolean;
         text: string;
-    }  
+    }
 }
 
 declare namespace FourSlashInterface {
@@ -124,8 +124,6 @@ declare namespace FourSlashInterface {
         completionListIsEmpty(): void;
         completionListAllowsNewIdentifier(): void;
         memberListIsEmpty(): void;
-        referencesCountIs(count: number): void;
-        referencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
         signatureHelpPresent(): void;
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
         errorExistsAfterMarker(markerName?: string): void;
@@ -139,7 +137,7 @@ declare namespace FourSlashInterface {
         isValidBraceCompletionAtPostion(openingBrace?: string): void;
     }
     class verify extends verifyNegatable {
-        assertHasRanges(ranges: FourSlash.Range[]): void;
+        assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
         indentationIs(numberOfSpaces: number): void;
         indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle): void;
@@ -154,6 +152,24 @@ declare namespace FourSlashInterface {
         currentFileContentIs(text: string): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
+        referencesCountIs(count: number): void;
+        /**
+         * Asserts that the given ranges are the references from the current position.
+         * If ranges have markers, those markers may have "isDefinition" and "isWriteAccess" data
+         * (otherwise these properties pf the reference are not tested).
+         * Order of ranges does not matter.
+         */
+        referencesAre(ranges: Range[]): void;
+        /**
+         * Like `referencesAre`, but goes to `start` first.
+         * `start` should be included in `references`.
+         */
+        referencesOf(start: Range, references: Range[]): void;
+        /**
+         * Performs `referencesOf` for every range on the whole set.
+         * If `ranges` is omitted, this is `test.ranges()`.
+         */
+        rangesReferenceEachOther(ranges?: Range[]): void;
         currentParameterHelpArgumentNameIs(name: string): void;
         currentParameterSpanIs(parameter: string): void;
         currentParameterHelpArgumentDocCommentIs(docComment: string): void;
