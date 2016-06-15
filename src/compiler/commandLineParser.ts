@@ -342,8 +342,13 @@ namespace ts {
             }
         },
         {
-            name: "typesRoot",
-            type: "string"
+            name: "typeRoots",
+            type: "list",
+            element: {
+                name: "typeRoots",
+                type: "string",
+                isFilePath: true
+            }
         },
         {
             name: "types",
@@ -498,13 +503,20 @@ namespace ts {
     }
 
     /* @internal */
-    export function parseListTypeOption(opt: CommandLineOptionOfListType, value: string, errors: Diagnostic[]): (string | number)[] {
-        const values = trimString((value || "")).split(",");
+    export function parseListTypeOption(opt: CommandLineOptionOfListType, value = "", errors: Diagnostic[]): (string | number)[] | undefined {
+        value = trimString(value);
+        if (startsWith(value, "-")) {
+            return undefined;
+        }
+        if (value === "") {
+            return [];
+        }
+        const values = value.split(",");
         switch (opt.element.type) {
             case "number":
-                return ts.map(values, parseInt);
+                return map(values, parseInt);
             case "string":
-                return ts.map(values, v => v || "");
+                return map(values, v => v || "");
             default:
                 return filter(map(values, v => parseCustomTypeOption(<CommandLineOptionOfCustomType>opt.element, v, errors)), v => !!v);
         }
@@ -565,8 +577,11 @@ namespace ts {
                                     i++;
                                     break;
                                 case "list":
-                                    options[opt.name] = parseListTypeOption(<CommandLineOptionOfListType>opt, args[i], errors);
-                                    i++;
+                                    const result = parseListTypeOption(<CommandLineOptionOfListType>opt, args[i], errors);
+                                    options[opt.name] = result || [];
+                                    if (result) {
+                                        i++;
+                                    }
                                     break;
                                 // If not a primitive, the possible types are specified in what is effectively a map of options.
                                 default:

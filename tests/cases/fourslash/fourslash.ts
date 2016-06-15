@@ -125,7 +125,7 @@ declare namespace FourSlashInterface {
         completionListAllowsNewIdentifier(): void;
         memberListIsEmpty(): void;
         referencesCountIs(count: number): void;
-        referencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
+        referencesAtPositionContains(range: Range, isWriteAccess?: boolean, isDefinition?: boolean): void;
         signatureHelpPresent(): void;
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
         errorExistsAfterMarker(markerName?: string): void;

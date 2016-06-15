@@ -1083,6 +1083,7 @@ namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
+        getDirectories?(directoryName: string): string[];
     }
 
     //
@@ -1214,6 +1215,7 @@ namespace ts {
         textSpan: TextSpan;
         fileName: string;
         isWriteAccess: boolean;
+        isDefinition: boolean;
     }
 
     export interface DocumentHighlights {
@@ -1949,17 +1951,11 @@ namespace ts {
 
     let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
 
-    /**
-     * Convert an option's string name of enum-value in compiler-options, "options", into its corresponding enum value if possible.
-     * This is necessary because JS users may pass in string values for enum compiler options (e.g. ModuleKind).
-     *
-     * @param options   a compiler-options used in transpilation which can contain string value to specify instead of enum values
-     * @param diagnostics   a list of Diagnostic which occur during conversion (e.g invalid option's value)
-     */
-    function ConvertStringForEnumNameInCompilerOptionsToEnumValue(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
+    /** JS users may pass in string values for enum compiler options (such as ModuleKind), so convert. */
+    function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
         commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
-            typeof o.type === "object" && !forEachValue(<Map<number | string>> o.type, v => typeof v !== "number"));
+            typeof o.type === "object" && !forEachValue(<Map<any>> o.type, v => typeof v !== "number"));
 
         options = clone(options);
 
@@ -1997,7 +1993,7 @@ namespace ts {
     export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
         const diagnostics: Diagnostic[] = [];
 
-        const options: CompilerOptions = transpileOptions.compilerOptions ? ConvertStringForEnumNameInCompilerOptionsToEnumValue(transpileOptions.compilerOptions, diagnostics) : getDefaultCompilerOptions();
+        const options: CompilerOptions = transpileOptions.compilerOptions ? fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics) : getDefaultCompilerOptions();
 
         options.isolatedModules = true;
 
@@ -2050,7 +2046,8 @@ namespace ts {
             getNewLine: () => newLine,
             fileExists: (fileName): boolean => fileName === inputFileName,
             readFile: (fileName): string => "",
-            directoryExists: directoryExists => true
+            directoryExists: directoryExists => true,
+            getDirectories: (path: string) => []
         };
 
         // If there is an error from converting string in compiler-options to its corresponding enum value,
@@ -2156,7 +2153,7 @@ namespace ts {
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
-            return <DocumentRegistryBucketKey>`_${settings.target}|${settings.module}|${settings.noResolve}|${settings.jsx}|${settings.allowJs}|${settings.baseUrl}|${settings.typesRoot}|${settings.typesSearchPaths}|${JSON.stringify(settings.rootDirs)}|${JSON.stringify(settings.paths)}`;
+            return <DocumentRegistryBucketKey>`_${settings.target}|${settings.module}|${settings.noResolve}|${settings.jsx}|${settings.allowJs}|${settings.baseUrl}|${JSON.stringify(settings.typeRoots)}|${JSON.stringify(settings.rootDirs)}|${JSON.stringify(settings.paths)}`;
         }
 
         function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
@@ -3016,8 +3013,10 @@ namespace ts {
                     return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
                 },
                 directoryExists: directoryName => {
-                    Debug.assert(!host.resolveModuleNames || !host.resolveTypeReferenceDirectives);
                     return directoryProbablyExists(directoryName, host);
+                },
+                getDirectories: path => {
+                    return host.getDirectories ? host.getDirectories(path) : [];
                 }
             };
             if (host.trace) {
@@ -4154,7 +4153,7 @@ namespace ts {
 
                     if (!uniqueNames[name]) {
                         uniqueNames[name] = name;
-                        const displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks*/ true);
+                        const displayName = getCompletionEntryDisplayName(unescapeIdentifier(name), target, /*performCharacterChecks*/ true);
                         if (displayName) {
                             const entry = {
                                 name: displayName,
@@ -5766,7 +5765,8 @@ namespace ts {
                         result.push({
                             fileName: entry.fileName,
                             textSpan: highlightSpan.textSpan,
-                            isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference
+                            isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
+                            isDefinition: false
                         });
                     }
                 }
@@ -6200,7 +6200,8 @@ namespace ts {
                                     references: [{
                                         fileName: sourceFile.fileName,
                                         textSpan: createTextSpan(position, searchText.length),
-                                        isWriteAccess: false
+                                        isWriteAccess: false,
+                                        isDefinition: false
                                     }]
                                 });
                             }
@@ -6754,7 +6755,8 @@ namespace ts {
             return {
                 fileName: node.getSourceFile().fileName,
                 textSpan: createTextSpanFromBounds(start, end),
-                isWriteAccess: isWriteAccess(node)
+                isWriteAccess: isWriteAccess(node),
+                isDefinition: isDeclarationName(node) || isLiteralComputedPropertyDeclarationName(node)
             };
         }
 

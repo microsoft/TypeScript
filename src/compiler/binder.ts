@@ -1985,7 +1985,7 @@ namespace ts {
             classPrototype.parent = leftSideOfAssignment;
 
             const funcSymbol = container.locals[constructorFunction.text];
-            if (!funcSymbol || !(funcSymbol.flags & SymbolFlags.Function)) {
+            if (!funcSymbol || !(funcSymbol.flags & SymbolFlags.Function || isDeclarationOfFunctionExpression(funcSymbol))) {
                 return;
             }
 
