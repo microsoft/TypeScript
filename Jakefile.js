@@ -110,6 +110,12 @@ var serverCoreSources = [
     return path.join(serverDirectory, f);
 });
 
+var cancellationTokenSources = [
+    "cancellationToken.ts"
+].map(function (f) {
+    return path.join(serverDirectory, f);
+});
+
 var serverSources = serverCoreSources.concat(servicesSources);
 
 var languageServiceLibrarySources = [
@@ -517,8 +523,11 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
             });
 
 
+var cancellationTokenFile = path.join(builtLocalDirectory, "cancellationToken.js");
+compileFile(cancellationTokenFile, cancellationTokenSources, [builtLocalDirectory].concat(cancellationTokenSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { outDir: builtLocalDirectory, noOutFile: true });
+
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
-compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
+compileFile(serverFile, serverSources,[builtLocalDirectory, copyright, cancellationTokenFile].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
 
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");

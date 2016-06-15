@@ -129,7 +129,7 @@ namespace ts.server {
         private resolvedTypeReferenceDirectives: ts.FileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>;
         private getCanonicalFileName: (fileName: string) => string;
 
-        constructor(private host: ServerHost, private project: Project) {
+        constructor(private host: ServerHost, private project: Project, private cancellationToken: HostCancellationToken) {
             this.getCanonicalFileName = ts.createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.resolvedModuleNames = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
             this.resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
@@ -186,6 +186,10 @@ namespace ts.server {
                 // after all there is no point to invalidate it if we have no idea where to look for the module.
                 return resolution.failedLookupLocations.length === 0;
             }
+        }
+
+        getCancellationToken() {
+            return this.cancellationToken;
         }
 
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
@@ -316,7 +320,7 @@ namespace ts.server {
                 compilerOptions.allowNonTsExtensions = true;
             }
 
-            this.lsHost = new LSHost(this.projectService.host, this);
+            this.lsHost = new LSHost(this.projectService.host, this, this.projectService.cancellationToken);
             this.lsHost.setCompilationSettings(compilerOptions);
             this.languageService = ts.createLanguageService(this.lsHost, documentRegistry);
         }
@@ -642,7 +646,10 @@ namespace ts.server {
 
         private documentRegistry: ts.DocumentRegistry;
 
-        constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
+        constructor(public host: ServerHost,
+            public psLogger: Logger,
+            public cancellationToken: HostCancellationToken,
+            public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
             this.setDefaultHostConfiguration();
             this.documentRegistry = ts.createDocumentRegistry(host.useCaseSensitiveFileNames, host.getCurrentDirectory());

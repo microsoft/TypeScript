@@ -156,12 +156,12 @@ namespace ts.server {
 
         constructor(
             private host: ServerHost,
+            private cancellationToken: HostCancellationToken,
             private byteLength: (buf: string, encoding?: string) => number,
             private hrtime: (start?: number[]) => number[],
-            private logger: Logger
-        ) {
+            private logger: Logger) {
             this.projectService =
-                new ProjectService(host, logger, (eventName, project, fileName) => {
+                new ProjectService(host, logger, cancellationToken, (eventName, project, fileName) => {
                     this.handleEvent(eventName, project, fileName);
                 });
         }
@@ -1067,6 +1067,10 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
+        private canceledResponse() {
+            return { canceled: true, responseRequired: true };
+        }
+
         private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
                 this.projectService.openExternalProject(request.arguments);
@@ -1282,6 +1286,8 @@ namespace ts.server {
             catch (err) {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
+                    this.output({ canceled: true }, request.command, request.seq);
+                    return;
                 }
                 this.logError(err, message);
                 this.output(
