@@ -1719,6 +1719,17 @@ namespace ts {
             let imports: LiteralExpression[];
             let moduleAugmentations: LiteralExpression[];
 
+            // If we are importing helpers, we need to add a synthetic reference to resolve the
+            // helpers library.
+            if (options.importHelpers
+                && (options.isolatedModules || isExternalModuleFile)
+                && !file.isDeclarationFile) {
+                const externalHelpersModuleReference = <StringLiteral>createNode(SyntaxKind.StringLiteral);
+                externalHelpersModuleReference.text = externalHelpersModuleNameText;
+                externalHelpersModuleReference.parent = file;
+                imports = [externalHelpersModuleReference];
+            }
+
             for (const node of file.statements) {
                 collectModuleReferences(node, /*inAmbientModule*/ false);
                 if (isJavaScriptFile) {

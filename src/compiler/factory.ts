@@ -800,30 +800,31 @@ namespace ts {
             updated.fileName = node.fileName;
             updated.path = node.path;
             updated.text = node.text;
-            updated.amdDependencies = node.amdDependencies;
-            updated.moduleName = node.moduleName;
-            updated.referencedFiles = node.referencedFiles;
-            updated.typeReferenceDirectives = node.typeReferenceDirectives;
-            updated.languageVariant = node.languageVariant;
-            updated.isDeclarationFile = node.isDeclarationFile;
-            updated.renamedDependencies = node.renamedDependencies;
-            updated.hasNoDefaultLib = node.hasNoDefaultLib;
-            updated.languageVersion = node.languageVersion;
-            updated.scriptKind = node.scriptKind;
-            updated.externalModuleIndicator = node.externalModuleIndicator;
-            updated.commonJsModuleIndicator = node.commonJsModuleIndicator;
-            updated.identifiers = node.identifiers;
-            updated.nodeCount = node.nodeCount;
-            updated.identifierCount = node.identifierCount;
-            updated.symbolCount = node.symbolCount;
-            updated.parseDiagnostics = node.parseDiagnostics;
-            updated.bindDiagnostics = node.bindDiagnostics;
-            updated.lineMap = node.lineMap;
-            updated.classifiableNames = node.classifiableNames;
-            updated.resolvedModules = node.resolvedModules;
-            updated.resolvedTypeReferenceDirectiveNames = node.resolvedTypeReferenceDirectiveNames;
-            updated.imports = node.imports;
-            updated.moduleAugmentations = node.moduleAugmentations;
+            if (node.amdDependencies !== undefined) updated.amdDependencies = node.amdDependencies;
+            if (node.moduleName !== undefined) updated.moduleName = node.moduleName;
+            if (node.referencedFiles !== undefined) updated.referencedFiles = node.referencedFiles;
+            if (node.typeReferenceDirectives !== undefined) updated.typeReferenceDirectives = node.typeReferenceDirectives;
+            if (node.languageVariant !== undefined) updated.languageVariant = node.languageVariant;
+            if (node.isDeclarationFile !== undefined) updated.isDeclarationFile = node.isDeclarationFile;
+            if (node.renamedDependencies !== undefined) updated.renamedDependencies = node.renamedDependencies;
+            if (node.hasNoDefaultLib !== undefined) updated.hasNoDefaultLib = node.hasNoDefaultLib;
+            if (node.languageVersion !== undefined) updated.languageVersion = node.languageVersion;
+            if (node.scriptKind !== undefined) updated.scriptKind = node.scriptKind;
+            if (node.externalModuleIndicator !== undefined) updated.externalModuleIndicator = node.externalModuleIndicator;
+            if (node.commonJsModuleIndicator !== undefined) updated.commonJsModuleIndicator = node.commonJsModuleIndicator;
+            if (node.identifiers !== undefined) updated.identifiers = node.identifiers;
+            if (node.nodeCount !== undefined) updated.nodeCount = node.nodeCount;
+            if (node.identifierCount !== undefined) updated.identifierCount = node.identifierCount;
+            if (node.symbolCount !== undefined) updated.symbolCount = node.symbolCount;
+            if (node.parseDiagnostics !== undefined) updated.parseDiagnostics = node.parseDiagnostics;
+            if (node.bindDiagnostics !== undefined) updated.bindDiagnostics = node.bindDiagnostics;
+            if (node.lineMap !== undefined) updated.lineMap = node.lineMap;
+            if (node.classifiableNames !== undefined) updated.classifiableNames = node.classifiableNames;
+            if (node.resolvedModules !== undefined) updated.resolvedModules = node.resolvedModules;
+            if (node.resolvedTypeReferenceDirectiveNames !== undefined) updated.resolvedTypeReferenceDirectiveNames = node.resolvedTypeReferenceDirectiveNames;
+            if (node.imports !== undefined) updated.imports = node.imports;
+            if (node.moduleAugmentations !== undefined) updated.moduleAugmentations = node.moduleAugmentations;
+            if (node.externalHelpersModuleName !== undefined) updated.externalHelpersModuleName = node.externalHelpersModuleName;
             return updateNode(updated, node);
         }
 
@@ -920,6 +921,12 @@ namespace ts {
         const node = <ImportClause>createNode(SyntaxKind.ImportClause, location);
         node.name = name;
         node.namedBindings = namedBindings;
+        return node;
+    }
+
+    export function createNamespaceImport(name: Identifier): NamespaceImport {
+        const node = <NamespaceImport>createNode(SyntaxKind.NamespaceImport);
+        node.name = name;
         return node;
     }
 
@@ -1058,9 +1065,15 @@ namespace ts {
 
     // Helpers
 
-    export function createExtendsHelper(name: Identifier) {
+    export function createHelperName(externalHelpersModuleName: Identifier | undefined, name: string) {
+        return externalHelpersModuleName
+            ? createPropertyAccess(externalHelpersModuleName, name)
+            : createIdentifier(name);
+    }
+
+    export function createExtendsHelper(externalHelpersModuleName: Identifier | undefined, name: Identifier) {
         return createCall(
-            createIdentifier("__extends"),
+            createHelperName(externalHelpersModuleName, "__extends"),
             /*typeArguments*/ undefined,
             [
                 name,
@@ -1069,17 +1082,17 @@ namespace ts {
         );
     }
 
-    export function createAssignHelper(attributesSegments: Expression[]) {
+    export function createAssignHelper(externalHelpersModuleName: Identifier | undefined, attributesSegments: Expression[]) {
         return createCall(
-            createIdentifier("__assign"),
+            createHelperName(externalHelpersModuleName, "__assign"),
             /*typeArguments*/ undefined,
             attributesSegments
         );
     }
 
-    export function createParamHelper(expression: Expression, parameterOffset: number, location?: TextRange) {
+    export function createParamHelper(externalHelpersModuleName: Identifier | undefined, expression: Expression, parameterOffset: number, location?: TextRange) {
         return createCall(
-            createIdentifier("__param"),
+            createHelperName(externalHelpersModuleName, "__param"),
             /*typeArguments*/ undefined,
             [
                 createLiteral(parameterOffset),
@@ -1089,9 +1102,9 @@ namespace ts {
         );
     }
 
-    export function createMetadataHelper(metadataKey: string, metadataValue: Expression) {
+    export function createMetadataHelper(externalHelpersModuleName: Identifier | undefined, metadataKey: string, metadataValue: Expression) {
         return createCall(
-            createIdentifier("__metadata"),
+            createHelperName(externalHelpersModuleName, "__metadata"),
             /*typeArguments*/ undefined,
             [
                 createLiteral(metadataKey),
@@ -1100,7 +1113,7 @@ namespace ts {
         );
     }
 
-    export function createDecorateHelper(decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression, location?: TextRange) {
+    export function createDecorateHelper(externalHelpersModuleName: Identifier | undefined, decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression, location?: TextRange) {
         const argumentsArray: Expression[] = [];
         argumentsArray.push(createArrayLiteral(decoratorExpressions, /*location*/ undefined, /*multiLine*/ true));
         argumentsArray.push(target);
@@ -1111,12 +1124,12 @@ namespace ts {
             }
         }
 
-        return createCall(createIdentifier("__decorate"), /*typeArguments*/ undefined, argumentsArray, location);
+        return createCall(createHelperName(externalHelpersModuleName, "__decorate"), /*typeArguments*/ undefined, argumentsArray, location);
     }
 
-    export function createAwaiterHelper(hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
+    export function createAwaiterHelper(externalHelpersModuleName: Identifier | undefined, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
         return createCall(
-            createIdentifier("__awaiter"),
+            createHelperName(externalHelpersModuleName, "__awaiter"),
             /*typeArguments*/ undefined,
             [
                 createThis(),
@@ -1920,7 +1933,8 @@ namespace ts {
     export function getLocalNameForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, sourceFile: SourceFile): Identifier {
         const namespaceDeclaration = getNamespaceDeclarationNode(node);
         if (namespaceDeclaration && !isDefaultImport(node)) {
-            return createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, namespaceDeclaration.name));
+            const name = namespaceDeclaration.name;
+            return isGeneratedIdentifier(name) ? name : createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, namespaceDeclaration.name));
         }
         if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause) {
             return getGeneratedNameForNode(node);

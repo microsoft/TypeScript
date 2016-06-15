@@ -7,6 +7,7 @@ namespace ts {
 
     export function transformJsx(context: TransformationContext) {
         const compilerOptions = context.getCompilerOptions();
+        let currentSourceFile: SourceFile;
         return transformSourceFile;
 
         /**
@@ -15,7 +16,10 @@ namespace ts {
          * @param node A SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            return visitEachChild(node, visitor, context);
+            currentSourceFile = node;
+            node = visitEachChild(node, visitor, context);
+            currentSourceFile = undefined;
+            return node;
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -102,7 +106,7 @@ namespace ts {
                 // Either emit one big object literal (no spread attribs), or
                 // a call to the __assign helper.
                 objectProperties = singleOrUndefined(segments)
-                    || createAssignHelper(segments);
+                    || createAssignHelper(currentSourceFile.externalHelpersModuleName, segments);
             }
 
             const element = createReactCreateElement(
