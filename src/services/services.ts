@@ -1,4 +1,5 @@
 /// <reference path="..\compiler\program.ts"/>
+/// <reference path="..\compiler\commandLineParser.ts"/>
 
 /// <reference path='breakpoints.ts' />
 /// <reference path='outliningElementsCollector.ts' />
