@@ -1,9 +1,5 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
-interface ObjectConstructor {
-    assign<T, U>(target: T, source: U): T & U;
-}
-
 namespace ts {
     describe("Transpile", () => {
 
@@ -102,7 +98,7 @@ namespace ts {
             test(input, {
                 expectedOutput: output,
                 options: {
-                    compilerOptions: Object.assign({ module: ModuleKind.CommonJS, newLine: NewLineKind.CarriageReturnLineFeed }, options),
+                    compilerOptions: extend(options, { module: ModuleKind.CommonJS, newLine: NewLineKind.CarriageReturnLineFeed }),
                     fileName: "input.js",
                     reportDiagnostics: true
                 }
