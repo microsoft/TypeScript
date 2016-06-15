@@ -1,5 +1,9 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
+interface ObjectConstructor {
+    assign<T, U>(target: T, source: U): T & U;
+}
+
 namespace ts {
     describe("Transpile", () => {
 
@@ -21,6 +25,9 @@ namespace ts {
                     assert.equal(expectedDiagnosticTexts[i], diagnostics[i] && diagnostics[i].messageText);
                 }
             };
+            if (diagnostics.length !== n && diagnostics.length) {
+                console.log(JSON.stringify(diagnostics, undefined, 2));
+            }
             assert.equal(diagnostics.length, n, "Resuting diagnostics count does not match expected");
         }
 
@@ -87,6 +94,19 @@ namespace ts {
                 }
             }
 
+        }
+
+        function testCompilerOption(options: CompilerOptions, input?: string, output?: string): void {
+            input = input || "x = 0;";
+            output = output || `"use strict";\r\nx = 0;\r\n`;
+            test(input, {
+                expectedOutput: output,
+                options: {
+                    compilerOptions: Object.assign({ module: ModuleKind.CommonJS, newLine: NewLineKind.CarriageReturnLineFeed }, options),
+                    fileName: "input.js",
+                    reportDiagnostics: true
+                }
+            });
         }
 
         it("Generates no diagnostics with valid inputs", () => {
@@ -304,21 +324,198 @@ var x = 0;`,
             test("var x", { expectedOutput: `"use strict";\r\nvar x;\r\n`, options: { fileName: "http://somewhere/directory//directory2/file.ts" } });
         });
 
-        it("Support options with lib values", () => {
-            const input = "const a = 10;";
-            const output = `"use strict";\r\nvar a = 10;\r\n`;
-            test(input, {
-                expectedOutput: output,
-                options: { compilerOptions: { lib: ["es6", "dom"], module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
-            });
-        });
+        describe("Works with all compiler options", () => {
 
-        it("Support options with types values", () => {
-            const input = "const a = 10;";
-            const output = `"use strict";\r\nvar a = 10;\r\n`;
-            test(input, {
-                expectedOutput: output,
-                options: { compilerOptions: { types: ["jquery", "typescript"], module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
+            it("Supports setting 'allowJs'", () => {
+                testCompilerOption({ allowJs: true });
+            });
+
+            it("Supports setting 'allowSyntheticDefaultImports'", () => {
+                testCompilerOption({ allowSyntheticDefaultImports: true });
+            });
+
+            it("Supports setting 'allowUnreachableCode'", () => {
+                testCompilerOption({ allowUnreachableCode: true });
+            });
+
+            it("Supports setting 'allowUnusedLabels'", () => {
+                testCompilerOption({ allowUnusedLabels: true });
+            });
+
+            it("Supports setting 'baseUrl'", () => {
+                testCompilerOption({ baseUrl: "./folder/baseUrl" });
+            });
+
+            it("Supports setting 'charset'", () => {
+                testCompilerOption({ charset: "en-us" });
+            });
+
+            it("Supports setting 'declaration'", () => {
+                testCompilerOption({ declaration: true });
+            });
+
+            it("Supports setting 'declarationDir'", () => {
+                testCompilerOption({ declarationDir: "out/declarations" });
+            });
+
+            it("Supports setting 'emitBOM'", () => {
+                testCompilerOption({ emitBOM: true });
+            });
+
+            it("Supports setting 'emitDecoratorMetadata'", () => {
+                testCompilerOption({ emitDecoratorMetadata: true, experimentalDecorators: true });
+            });
+
+            it("Supports setting 'experimentalDecorators'", () => {
+                testCompilerOption({ experimentalDecorators: true });
+            });
+
+            it("Supports setting 'forceConsistentCasingInFileNames'", () => {
+                testCompilerOption({ forceConsistentCasingInFileNames: true });
+            });
+
+            it("Supports setting 'isolatedModules'", () => {
+                testCompilerOption({ isolatedModules: true });
+            });
+
+            it("Supports setting 'jsx'", () => {
+                testCompilerOption({ jsx: 1 });
+            });
+
+            it("Supports setting 'lib'", () => {
+                testCompilerOption({ lib: ["es2015", "dom"] });
+            });
+
+            it("Supports setting 'locale'", () => {
+                testCompilerOption({ locale: "en-us" });
+            });
+
+            it("Supports setting 'module'", () => {
+                testCompilerOption({ module: 1 });
+            });
+
+            it("Supports setting 'moduleResolution'", () => {
+                testCompilerOption({ moduleResolution: 2 });
+            });
+
+            it("Supports setting 'newLine'", () => {
+                testCompilerOption({ newLine: 0 });
+            });
+
+            it("Supports setting 'noEmit'", () => {
+                testCompilerOption({ noEmit: true });
+            });
+
+            it("Supports setting 'noEmitHelpers'", () => {
+                testCompilerOption({ noEmitHelpers: true });
+            });
+
+            it("Supports setting 'noEmitOnError'", () => {
+                testCompilerOption({ noEmitOnError: true });
+            });
+
+            it("Supports setting 'noErrorTruncation'", () => {
+                testCompilerOption({ noErrorTruncation: true });
+            });
+
+            it("Supports setting 'noFallthroughCasesInSwitch'", () => {
+                testCompilerOption({ noFallthroughCasesInSwitch: true });
+            });
+
+            it("Supports setting 'noImplicitAny'", () => {
+                testCompilerOption({ noImplicitAny: true });
+            });
+
+            it("Supports setting 'noImplicitReturns'", () => {
+                testCompilerOption({ noImplicitReturns: true });
+            });
+
+            it("Supports setting 'noImplicitThis'", () => {
+                testCompilerOption({ noImplicitThis: true });
+            });
+
+            it("Supports setting 'noImplicitUseStrict'", () => {
+                testCompilerOption({ noImplicitUseStrict: true }, "x;", "x;\r\n");
+            });
+
+            it("Supports setting 'noLib'", () => {
+                testCompilerOption({ noLib: true });
+            });
+
+            it("Supports setting 'noResolve'", () => {
+                testCompilerOption({ noResolve: true });
+            });
+
+            it("Supports setting 'out'", () => {
+                testCompilerOption({ out: "./out" });
+            });
+
+            it("Supports setting 'outDir'", () => {
+                testCompilerOption({ outDir: "./outDir" });
+            });
+
+            it("Supports setting 'outFile'", () => {
+                testCompilerOption({ outFile: "./outFile" });
+            });
+
+            it("Supports setting 'paths'", () => {
+                testCompilerOption({ paths: { "*": ["./generated*"] } });
+            });
+
+            it("Supports setting 'preserveConstEnums'", () => {
+                testCompilerOption({ preserveConstEnums: true });
+            });
+
+            it("Supports setting 'reactNamespace'", () => {
+                testCompilerOption({ reactNamespace: "react" });
+            });
+
+            it("Supports setting 'removeComments'", () => {
+                testCompilerOption({ removeComments: true });
+            });
+
+            it("Supports setting 'rootDir'", () => {
+                testCompilerOption({ rootDir: "./rootDir" });
+            });
+
+            it("Supports setting 'rootDirs'", () => {
+                testCompilerOption({ rootDirs: ["./a", "./b"] });
+            });
+
+            it("Supports setting 'skipLibCheck'", () => {
+                testCompilerOption({ skipLibCheck: true });
+            });
+
+            it("Supports setting 'skipDefaultLibCheck'", () => {
+                testCompilerOption({ skipDefaultLibCheck: true });
+            });
+
+            it("Supports setting 'strictNullChecks'", () => {
+                testCompilerOption({ strictNullChecks: true });
+            });
+
+            it("Supports setting 'stripInternal'", () => {
+                testCompilerOption({ stripInternal: true });
+            });
+
+            it("Supports setting 'suppressExcessPropertyErrors'", () => {
+                testCompilerOption({ suppressExcessPropertyErrors: true });
+            });
+
+            it("Supports setting 'suppressImplicitAnyIndexErrors'", () => {
+                testCompilerOption({ suppressImplicitAnyIndexErrors: true });
+            });
+
+            it("Supports setting 'target'", () => {
+                testCompilerOption({ target: 2 });
+            });
+
+            it("Supports setting 'types'", () => {
+                testCompilerOption({ types: ["jquery", "jasmine"] });
+            });
+
+            it("Supports setting 'typeRoots'", () => {
+                testCompilerOption({ typeRoots: ["./folder"] });
             });
         });
 
