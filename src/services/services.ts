@@ -2001,7 +2001,7 @@ namespace ts {
         // so pass --noLib to avoid reporting a file not found error.
         options.noLib = true;
 
-        // Clear out other settings that would not be participate in transpiling this module
+        // Clear out other settings that would not be used in transpiling this module
         options.lib = undefined;
         options.types = undefined;
         options.noEmit = undefined;
