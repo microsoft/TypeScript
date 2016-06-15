@@ -676,6 +676,15 @@ namespace ts.server {
             }
         }
 
+        getProject(projectFileName: string): Project {
+            // TODO: fixme
+            if (!projectFileName) {
+                // TODO: fixme
+                return this.inferredProjects.length ? this.inferredProjects[0] : undefined;
+            }
+            return this.findExternalProjectByProjectFileName(projectFileName) || this.findConfiguredProjectByConfigFile(projectFileName);
+        }
+
         getFormatCodeOptions(file?: string) {
             if (file) {
                 const info = this.filenameToScriptInfo[file];

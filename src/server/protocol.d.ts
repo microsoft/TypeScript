@@ -91,6 +91,11 @@ declare namespace ts.server.protocol {
           * The file for the request (absolute pathname required).
           */
         file: string;
+
+        /*
+         * Optional name of project that contains file
+         */
+        projectFileName?: string;
     }
 
     /**
@@ -123,6 +128,16 @@ declare namespace ts.server.protocol {
           * The list of normalized file name in the project, including 'lib.d.ts'
           */
         fileNames?: string[];
+    }
+
+    export interface DiagnosticWithLinePosition {
+        message: string;
+        start: number;
+        length: number;
+        startLocation: Location;
+        endLocation: Location;
+        category: string;
+        code: number;
     }
 
     /**

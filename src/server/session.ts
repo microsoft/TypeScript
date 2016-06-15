@@ -114,6 +114,7 @@ namespace ts.server {
         export const Formatonkey = "formatonkey";
         export const Geterr = "geterr";
         export const GeterrForProject = "geterrForProject";
+        export const SemanticDiagnosticsFull = "semanticDiagnostics-full";
         export const NavBar = "navbar";
         export const Navto = "navto";
         export const Occurrences = "occurrences";
@@ -243,6 +244,29 @@ namespace ts.server {
 
         public output(body: any, commandName: string, requestSequence = 0, errorMessage?: string) {
             this.response(body, commandName, requestSequence, errorMessage);
+        }
+
+        private getLocation(position: number, scriptInfo: ScriptInfo): protocol.Location {
+            const { line, offset } = scriptInfo.positionToLineOffset(position);
+            return { line, offset: offset + 1 };
+        }
+
+        private getSemanticDiagnostics(args: protocol.FileRequestArgs): protocol.DiagnosticWithLinePosition[] {
+            var project = this.projectService.getProject(args.projectFileName) || this.projectService.getProjectForFile(args.file);
+            if (!project) {
+                return [];
+            }
+            const scriptInfo = project.getScriptInfo(args.file);
+            const diagnostics = project.languageService.getSemanticDiagnostics(args.file);
+            return diagnostics.map(d => <protocol.DiagnosticWithLinePosition>{
+                message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
+                start: d.start,
+                length: d.length,
+                category: DiagnosticCategory[d.category].toLowerCase(),
+                code: d.code,
+                startLocation: this.getLocation(d.start, scriptInfo),
+                endLocation: this.getLocation(d.start + d.length, scriptInfo)
+            });
         }
 
         private semanticCheck(file: string, project: Project) {
@@ -1169,6 +1193,9 @@ namespace ts.server {
             },
             [CommandNames.SignatureHelpFull]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.SemanticDiagnosticsFull]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getSemanticDiagnostics(request.arguments));
             },
             [CommandNames.Geterr]: (request: protocol.Request) => {
                 const geterrArgs = <protocol.GeterrRequestArgs>request.arguments;

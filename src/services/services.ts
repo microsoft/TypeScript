@@ -124,12 +124,28 @@ namespace ts {
             return new StringScriptSnapshot(text);
         }
     }
+
     export interface PreProcessedFileInfo {
         referencedFiles: FileReference[];
         typeReferenceDirectives: FileReference[];
         importedFiles: FileReference[];
         ambientExternalModules: string[];
         isLibFile: boolean;
+    }
+
+    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; code: number; }[] {
+        return diagnostics.map(d => realizeDiagnostic(d, newLine));
+    }
+
+    export function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; code: number; } {
+        return {
+            message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
+            start: diagnostic.start,
+            length: diagnostic.length,
+            /// TODO: no need for the tolowerCase call
+            category: DiagnosticCategory[diagnostic.category].toLowerCase(),
+            code: diagnostic.code
+        };
     }
 
     const scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
