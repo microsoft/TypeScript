@@ -478,8 +478,15 @@ gulp.task(builtGeneratedDiagnosticMessagesJSON, [diagnosticInfoMapTs], (done) =>
 
 gulp.task("generate-diagnostics", "Generates a diagnostic file in TypeScript based on an input JSON file", [diagnosticInfoMapTs]);
 
-const localCompilerProject = tsc.createProject("src/compiler/tsconfig.json", {typescript: require("./lib/typescript.js")});
-gulp.task(builtLocalCompiler, false, ["lib", "generate-diagnostics"], () => {
+
+const servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
+const standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
+const nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
+const nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
+const nodeStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescript_standalone.d.ts");
+
+gulp.task(builtLocalCompiler, false, [servicesFile], () => {
+    const localCompilerProject = tsc.createProject("src/compiler/tsconfig.json", {typescript: require("./built/local/typescript.js")});
     let result: NodeJS.ReadWriteStream = localCompilerProject.src()
         .pipe(sourcemaps.init())
         .pipe(tsc(localCompilerProject));
@@ -489,12 +496,6 @@ gulp.task(builtLocalCompiler, false, ["lib", "generate-diagnostics"], () => {
     return result.pipe(sourcemaps.write("."))
         .pipe(gulp.dest(builtLocalDirectory));
 });
-
-const servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
-const standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
-const nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
-const nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
-const nodeStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescript_standalone.d.ts");
 
 gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], (done) => {
     const settings: tsc.Settings = getCompilerSettings({
