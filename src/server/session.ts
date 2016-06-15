@@ -443,7 +443,7 @@ namespace ts.server {
             const info = this.projectService.getScriptInfo(file);
             const projects = this.projectService.findReferencingProjects(info);
             const projectsWithLanguageServiceEnabeld = ts.filter(projects, p => !p.languageServiceDiabled);
-            if (projects.length === 0 || projectsWithLanguageServiceEnabeld.length === 0) {
+            if (projectsWithLanguageServiceEnabeld.length === 0) {
                 throw Errors.NoProject;
             }
 
@@ -526,7 +526,7 @@ namespace ts.server {
             const info = this.projectService.getScriptInfo(file);
             const projects = this.projectService.findReferencingProjects(info);
             const projectsWithLanguageServiceEnabeld = ts.filter(projects, p => !p.languageServiceDiabled);
-            if (projects.length === 0 || projectsWithLanguageServiceEnabeld.length === 0) {
+            if (projectsWithLanguageServiceEnabeld.length === 0) {
                 throw Errors.NoProject;
             }
 
@@ -904,7 +904,7 @@ namespace ts.server {
             const info = this.projectService.getScriptInfo(file);
             const projects = this.projectService.findReferencingProjects(info);
             const projectsWithLanguageServiceEnabeld = ts.filter(projects, p => !p.languageServiceDiabled);
-            if (projects.length === 0 || projectsWithLanguageServiceEnabeld.length === 0) {
+            if (projectsWithLanguageServiceEnabeld.length === 0) {
                 throw Errors.NoProject;
             }
 

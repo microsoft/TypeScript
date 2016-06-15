@@ -475,10 +475,7 @@ namespace ts.server {
 
         isRoot(info: ScriptInfo) {
             if (this.languageServiceDiabled) {
-                if (!this.projectOptions) {
-                    return undefined;
-                }
-                return forEach(this.projectOptions.files, file => toPath(file, file, createGetCanonicalFileName(this.projectService.host.useCaseSensitiveFileNames)) === info.path);
+                return undefined;
             }
 
             return this.compilerService.host.roots.some(root => root === info);
@@ -1421,7 +1418,7 @@ namespace ts.server {
                     return errors;
                 }
                 else {
-                    if (this.exceedTotalNonTsFileSizeLimit(projectOptions.files) && projectOptions.compilerOptions && !projectOptions.compilerOptions.disableSizeLimit) {
+                    if (projectOptions.compilerOptions && !projectOptions.compilerOptions.disableSizeLimit && this.exceedTotalNonTsFileSizeLimit(projectOptions.files)) {
                         project.setProjectOptions(projectOptions);
                         if (project.languageServiceDiabled) {
                             return;
