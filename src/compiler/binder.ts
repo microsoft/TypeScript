@@ -2547,7 +2547,7 @@ namespace ts {
             transformFlags = TransformFlags.AssertTypeScript;
         }
         else {
-            transformFlags = subtreeFlags | TransformFlags.ContainsHoistedDeclaration;
+            transformFlags = subtreeFlags | TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
             // If a FunctionDeclaration is exported, then it is either ES6 or TypeScript syntax.
             if (modifierFlags & ModifierFlags.Export) {
@@ -2726,7 +2726,7 @@ namespace ts {
     }
 
     function computeVariableDeclarationList(node: VariableDeclarationList, subtreeFlags: TransformFlags) {
-        let transformFlags = subtreeFlags | TransformFlags.ContainsHoistedDeclaration;
+        let transformFlags = subtreeFlags | TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
         if (subtreeFlags & TransformFlags.ContainsBindingPattern) {
             transformFlags |= TransformFlags.AssertES6;
@@ -2794,6 +2794,7 @@ namespace ts {
                 // These nodes are ES6 syntax.
                 transformFlags |= TransformFlags.AssertES6;
                 break;
+
             case SyntaxKind.YieldExpression:
                 // This node is ES6 syntax.
                 transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsYield;
@@ -2919,6 +2920,12 @@ namespace ts {
                     transformFlags |= TransformFlags.AssertES6;
                 }
 
+                break;
+
+            case SyntaxKind.ReturnStatement:
+            case SyntaxKind.ContinueStatement:
+            case SyntaxKind.BreakStatement:
+                transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;
                 break;
         }
 

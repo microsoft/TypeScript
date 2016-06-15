@@ -139,7 +139,7 @@ namespace ts {
         return node;
     }
 
-    export function createTempVariable(recordTempVariable: (node: Identifier) => void, location?: TextRange): Identifier {
+    export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, location?: TextRange): Identifier {
         const name = <Identifier>createNode(SyntaxKind.Identifier, location);
         name.text = "";
         name.originalKeywordKind = SyntaxKind.Unknown;
@@ -363,6 +363,13 @@ namespace ts {
         const node = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, location);
         node.expression = parenthesizeForAccess(expression);
         node.argumentExpression = typeof index === "number" ? createLiteral(index) : index;
+        return node;
+    }
+
+    export function updateElementAccess(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression) {
+        if (node.expression !== expression || node.argumentExpression !== argumentExpression) {
+            return updateNode(createElementAccess(expression, argumentExpression, node), node);
+        }
         return node;
     }
 
@@ -1378,19 +1385,29 @@ namespace ts {
         thisArg: Expression;
     }
 
-    function shouldBeCapturedInTempVariable(node: Expression): boolean {
-        switch (skipParentheses(node).kind) {
+    function shouldBeCapturedInTempVariable(node: Expression, cacheIdentifiers: boolean): boolean {
+        const target = skipParentheses(node);
+        switch (target.kind) {
             case SyntaxKind.Identifier:
+                return cacheIdentifiers;
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
                 return false;
+            case SyntaxKind.ArrayLiteralExpression:
+                const elements = (<ArrayLiteralExpression>target).elements;
+                if (elements.length === 0) {
+                    return false;
+                }
+                return true;
+            case SyntaxKind.ObjectLiteralExpression:
+                return (<ObjectLiteralExpression>target).properties.length > 0;
             default:
                 return true;
         }
     }
 
-    export function createCallBinding(expression: Expression, recordTempVariable: (temp: Identifier) => void, languageVersion?: ScriptTarget): CallBinding {
+    export function createCallBinding(expression: Expression, recordTempVariable: (temp: Identifier) => void, languageVersion?: ScriptTarget, cacheIdentifiers?: boolean): CallBinding {
         const callee = skipOuterExpressions(expression, OuterExpressionKinds.All);
         let thisArg: Expression;
         let target: LeftHandSideExpression;
@@ -1405,7 +1422,7 @@ namespace ts {
         else {
             switch (callee.kind) {
                 case SyntaxKind.PropertyAccessExpression: {
-                    if (shouldBeCapturedInTempVariable((<PropertyAccessExpression>callee).expression)) {
+                    if (shouldBeCapturedInTempVariable((<PropertyAccessExpression>callee).expression, cacheIdentifiers)) {
                         // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
                         thisArg = createTempVariable(recordTempVariable);
                         target = createPropertyAccess(
@@ -1426,7 +1443,7 @@ namespace ts {
                 }
 
                 case SyntaxKind.ElementAccessExpression: {
-                    if (shouldBeCapturedInTempVariable((<ElementAccessExpression>callee).expression)) {
+                    if (shouldBeCapturedInTempVariable((<ElementAccessExpression>callee).expression, cacheIdentifiers)) {
                         // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
                         thisArg = createTempVariable(recordTempVariable);
                         target = createElementAccess(

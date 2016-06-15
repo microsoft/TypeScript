@@ -1,0 +1,101 @@
+=== tests/cases/compiler/es5-asyncFunctionHoisting.ts ===
+declare var y;
+>y : any
+
+async function hoisting() {
+>hoisting : () => Promise<void>
+
+    var a0, a1 = 1;
+>a0 : any
+>a1 : number
+>1 : number
+
+    function z() {
+>z : () => void
+
+        var b0, b1 = 1;
+>b0 : any
+>b1 : number
+>1 : number
+    }
+
+    if (true) {
+>true : boolean
+
+        var c0, c1 = 1;
+>c0 : any
+>c1 : number
+>1 : number
+    }
+
+    for (var a = 0; y;) {
+>a : number
+>0 : number
+>y : any
+
+    }
+
+    for (var b in y) {
+>b : string
+>y : any
+
+    }
+
+    for (var c of y) {
+>c : any
+>y : any
+
+    }
+}
+
+async function hoistingWithAwait() {
+>hoistingWithAwait : () => Promise<void>
+
+    var a0, a1 = 1;
+>a0 : any
+>a1 : number
+>1 : number
+
+    function z() {
+>z : () => void
+
+        var b0, b1 = 1;
+>b0 : any
+>b1 : number
+>1 : number
+    }
+
+    await 0;
+>await 0 : number
+>0 : number
+
+    if (true) {
+>true : boolean
+
+        var c0, c1 = 1;
+>c0 : any
+>c1 : number
+>1 : number
+    }
+
+    for (var a = 0; y;) {
+>a : number
+>0 : number
+>y : any
+
+    }
+
+    for (var b in y) {
+>b : string
+>y : any
+
+    }
+
+    for (var c of y) {
+>c : any
+>y : any
+
+    }
+}
+
+

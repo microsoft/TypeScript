@@ -235,9 +235,12 @@ namespace ts {
             hoistFunctionDeclaration,
             hoistVariableDeclaration,
             setSourceMapRange,
-            setCommentRange
+            setCommentRange,
+            setNodeEmitFlags
         } = context;
 
+        const compilerOptions = context.getCompilerOptions();
+        const languageVersion = getEmitScriptTarget(compilerOptions);
         const resolver = context.getEmitResolver();
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
@@ -316,10 +319,10 @@ namespace ts {
             else if (inGeneratorFunctionBody) {
                 return visitJavaScriptInGeneratorFunctionBody(node);
             }
-            else if (node.transformFlags & TransformFlags.Generator) {
+            else if (transformFlags & TransformFlags.Generator) {
                 return visitGenerator(node);
             }
-            else if (node.transformFlags & TransformFlags.ContainsGenerator) {
+            else if (transformFlags & TransformFlags.ContainsGenerator) {
                 return visitEachChild(node, visitor, context);
             }
             else {
@@ -366,10 +369,6 @@ namespace ts {
                     return visitDoStatement(<DoStatement>node);
                 case SyntaxKind.WhileStatement:
                     return visitWhileStatement(<WhileStatement>node);
-                case SyntaxKind.ForStatement:
-                    return visitForStatement(<ForStatement>node);
-                case SyntaxKind.ForInStatement:
-                    return visitForInStatement(<ForInStatement>node);
                 case SyntaxKind.SwitchStatement:
                     return visitSwitchStatement(<SwitchStatement>node);
                 case SyntaxKind.LabeledStatement:
@@ -395,6 +394,10 @@ namespace ts {
                     return visitAccessorDeclaration(<AccessorDeclaration>node);
                 case SyntaxKind.VariableStatement:
                     return visitVariableStatement(<VariableStatement>node);
+                case SyntaxKind.ForStatement:
+                    return visitForStatement(<ForStatement>node);
+                case SyntaxKind.ForInStatement:
+                    return visitForInStatement(<ForInStatement>node);
                 case SyntaxKind.BreakStatement:
                     return visitBreakStatement(<BreakStatement>node);
                 case SyntaxKind.ContinueStatement:
@@ -402,7 +405,7 @@ namespace ts {
                 case SyntaxKind.ReturnStatement:
                     return visitReturnStatement(<ReturnStatement>node);
                 default:
-                    if (node.transformFlags & (TransformFlags.ContainsGenerator | TransformFlags.ContainsYield | TransformFlags.ContainsHoistedDeclaration)) {
+                    if (node.transformFlags & (TransformFlags.ContainsGenerator | TransformFlags.ContainsYield | TransformFlags.ContainsHoistedDeclarationOrCompletion)) {
                         return visitEachChild(node, visitor, context);
                     }
                     else {
@@ -568,7 +571,7 @@ namespace ts {
             operations = undefined;
             operationArguments = undefined;
             operationLocations = undefined;
-            state = createUniqueName("state");
+            state = createTempVariable(/*recordTempVariable*/ undefined);
 
             // Build the generator
             startLexicalEnvironment();
@@ -646,54 +649,98 @@ namespace ts {
             }
         }
 
+        function isCompoundAssignment(kind: SyntaxKind) {
+            return kind >= SyntaxKind.FirstCompoundAssignment
+                && kind <= SyntaxKind.LastCompoundAssignment;
+        }
+
+        function getOperatorForCompoundAssignment(kind: SyntaxKind) {
+            switch (kind) {
+                case SyntaxKind.PlusEqualsToken: return SyntaxKind.PlusToken;
+                case SyntaxKind.MinusEqualsToken: return SyntaxKind.MinusToken;
+                case SyntaxKind.AsteriskEqualsToken: return SyntaxKind.AsteriskToken;
+                case SyntaxKind.AsteriskAsteriskEqualsToken: return SyntaxKind.AsteriskAsteriskToken;
+                case SyntaxKind.SlashEqualsToken: return SyntaxKind.SlashToken;
+                case SyntaxKind.PercentEqualsToken: return SyntaxKind.PercentToken;
+                case SyntaxKind.LessThanLessThanEqualsToken: return SyntaxKind.LessThanLessThanToken;
+                case SyntaxKind.GreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanToken;
+                case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
+                case SyntaxKind.AmpersandEqualsToken: return SyntaxKind.AmpersandToken;
+                case SyntaxKind.BarEqualsToken: return SyntaxKind.BarToken;
+                case SyntaxKind.CaretEqualsToken: return SyntaxKind.CaretToken;
+            }
+        }
+
         /**
          * Visits a right-associative binary expression containing `yield`.
          *
          * @param node The node to visit.
          */
         function visitRightAssociativeBinaryExpression(node: BinaryExpression) {
-            switch (node.left.kind) {
-                case SyntaxKind.PropertyAccessExpression: {
-                    // [source]
-                    //      a.b = yield;
-                    //
-                    // [intermediate]
-                    //  .local _a
-                    //      _a = a;
-                    //  .yield resumeLabel
-                    //  .mark resumeLabel
-                    //      _a.b = %sent%;
+            const { left, right } = node;
+            if (containsYield(right)) {
+                let target: Expression;
+                switch (left.kind) {
+                    case SyntaxKind.PropertyAccessExpression:
+                        // [source]
+                        //      a.b = yield;
+                        //
+                        // [intermediate]
+                        //  .local _a
+                        //      _a = a;
+                        //  .yield resumeLabel
+                        //  .mark resumeLabel
+                        //      _a.b = %sent%;
 
-                    const clone = getMutableClone(node);
-                    const propertyAccess = <PropertyAccessExpression>node.left;
-                    const propertyAccessClone = getMutableClone(propertyAccess);
-                    propertyAccessClone.expression = cacheExpression(visitNode(propertyAccess.expression, visitor, isLeftHandSideExpression));
-                    clone.left = propertyAccessClone;
-                    clone.right = visitNode(node.right, visitor, isExpression);
-                    return clone;
+                        target = updatePropertyAccess(
+                            <PropertyAccessExpression>left,
+                            cacheExpression(visitNode((<PropertyAccessExpression>left).expression, visitor, isLeftHandSideExpression)),
+                            (<PropertyAccessExpression>left).name
+                        );
+                        break;
+
+                    case SyntaxKind.ElementAccessExpression:
+                        // [source]
+                        //      a[b] = yield;
+                        //
+                        // [intermediate]
+                        //  .local _a, _b
+                        //      _a = a;
+                        //      _b = b;
+                        //  .yield resumeLabel
+                        //  .mark resumeLabel
+                        //      _a[_b] = %sent%;
+
+                        target = updateElementAccess(<ElementAccessExpression>left,
+                            cacheExpression(visitNode((<ElementAccessExpression>left).expression, visitor, isLeftHandSideExpression)),
+                            cacheExpression(visitNode((<ElementAccessExpression>left).argumentExpression, visitor, isExpression))
+                        );
+                        break;
+
+                    default:
+                        target = visitNode(left, visitor, isExpression);
+                        break;
                 }
-                case SyntaxKind.ElementAccessExpression: {
-                    // [source]
-                    //      a[b] = yield;
-                    //
-                    // [intermediate]
-                    //  .local _a, _b
-                    //      _a = a;
-                    //      _b = b;
-                    //  .yield resumeLabel
-                    //  .mark resumeLabel
-                    //      _a[_b] = %sent%;
 
-                    const clone = getMutableClone(node);
-                    const elementAccess = <ElementAccessExpression>node.left;
-                    const elementAccessClone = getMutableClone(elementAccess);
-                    elementAccessClone.expression = cacheExpression(visitNode(elementAccess.expression, visitor, isLeftHandSideExpression));
-                    elementAccessClone.argumentExpression = cacheExpression(visitNode(elementAccess.argumentExpression, visitor, isExpression));
-                    clone.left = elementAccessClone;
-                    clone.right = visitNode(node.right, visitor, isExpression);
-                    return clone;
+                const operator = node.operatorToken.kind;
+                if (isCompoundAssignment(operator)) {
+                    return createBinary(
+                        target,
+                        SyntaxKind.EqualsToken,
+                        createBinary(
+                            cacheExpression(target),
+                            getOperatorForCompoundAssignment(operator),
+                            visitNode(right, visitor, isExpression),
+                            node
+                        ),
+                        node
+                    );
+                }
+                else {
+                    return updateBinary(node, target, visitNode(right, visitor, isExpression));
                 }
             }
+
             return visitEachChild(node, visitor, context);
         }
 
@@ -902,26 +949,34 @@ namespace ts {
             //      ar = _a.concat([%sent%, 2]);
 
             const numInitialElements = countInitialNodesWithoutYield(elements);
-
             const temp = declareLocal();
-            emitAssignment(temp,
-                createArrayLiteral(
-                    visitNodes(elements, visitor, isExpression, 0, numInitialElements)
-                )
-            );
+            let hasAssignedTemp = false;
+            if (numInitialElements > 0) {
+                emitAssignment(temp,
+                    createArrayLiteral(
+                        visitNodes(elements, visitor, isExpression, 0, numInitialElements)
+                    )
+                );
+                hasAssignedTemp = true;
+            }
 
             const expressions = reduceLeft(elements, reduceElement, <Expression[]>[], numInitialElements);
-            return createArrayConcat(temp, [createArrayLiteral(expressions)]);
+            return hasAssignedTemp
+                ? createArrayConcat(temp, [createArrayLiteral(expressions)])
+                : createArrayLiteral(expressions);
 
             function reduceElement(expressions: Expression[], element: Expression) {
                 if (containsYield(element) && expressions.length > 0) {
                     emitAssignment(
                         temp,
-                        createArrayConcat(
-                            temp,
-                            [createArrayLiteral(expressions)]
-                        )
+                        hasAssignedTemp
+                            ? createArrayConcat(
+                                temp,
+                                [createArrayLiteral(expressions)]
+                            )
+                            : createArrayLiteral(expressions)
                     );
+                    hasAssignedTemp = true;
                     expressions = [];
                 }
 
@@ -1017,7 +1072,7 @@ namespace ts {
                 //  .mark resumeLabel
                 //      _b.apply(_a, _c.concat([%sent%, 2]));
 
-                const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration);
+                const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration, languageVersion, /*cacheIdentifiers*/ true);
                 return setOriginalNode(
                     createFunctionApply(
                         cacheExpression(visitNode(target, visitor, isLeftHandSideExpression)),
@@ -1121,7 +1176,7 @@ namespace ts {
                 case SyntaxKind.TryStatement:
                     return transformAndEmitTryStatement(<TryStatement>node);
                 default:
-                    return emitStatement(visitEachChild(node, visitor, context));
+                    return emitStatement(visitNode(node, visitor, isStatement, /*optional*/ true));
             }
         }
 
@@ -1398,14 +1453,14 @@ namespace ts {
                 //      }
                 //
                 // [intermediate]
-                //  .local _a, _b, _c
+                //  .local _a, _b, _i
                 //      _a = [];
                 //      for (_b in o) _a.push(_b);
-                //      _c = 0;
+                //      _i = 0;
                 //  .loop incrementLabel, endLoopLabel
                 //  .mark conditionLabel
-                //  .brfalse endLoopLabel, (_c < _a.length)
-                //      p = _a[_c];
+                //  .brfalse endLoopLabel, (_i < _a.length)
+                //      p = _a[_i];
                 //      /*body*/
                 //  .mark incrementLabel
                 //      _b++;
@@ -1415,9 +1470,9 @@ namespace ts {
 
                 const keysArray = declareLocal(); // _a
                 const key = declareLocal(); // _b
-                const keysIndex = declareLocal(); // _c
+                const keysIndex = createLoopVariable(); // _i
                 const initializer = node.initializer;
-
+                hoistVariableDeclaration(keysIndex);
                 emitAssignment(keysArray, createArrayLiteral());
 
                 emitStatement(
@@ -1440,6 +1495,9 @@ namespace ts {
                 const incrementLabel = defineLabel();
                 const endLabel = beginLoopBlock(incrementLabel);
 
+                markLabel(conditionLabel);
+                emitBreakWhenFalse(endLabel, createLessThan(keysIndex, createPropertyAccess(keysArray, "length")));
+
                 let variable: Expression;
                 if (isVariableDeclarationList(initializer)) {
                     for (const variable of initializer.declarations) {
@@ -1449,12 +1507,9 @@ namespace ts {
                     variable = <Identifier>getSynthesizedClone(initializer.declarations[0].name);
                 }
                 else {
-                    variable = initializer;
+                    variable = visitNode(initializer, visitor, isExpression);
                     Debug.assert(isLeftHandSideExpression(variable));
                 }
-
-                markLabel(conditionLabel);
-                emitBreakWhenFalse(endLabel, createLessThan(keysIndex, createPropertyAccess(keysArray, "length")));
 
                 emitAssignment(variable, createElementAccess(keysArray, keysIndex));
                 transformAndEmitEmbeddedStatement(node.statement);
@@ -1580,7 +1635,7 @@ namespace ts {
         }
 
         function transformAndEmitSwitchStatement(node: SwitchStatement) {
-            if (containsYield(node)) {
+            if (containsYield(node.caseBlock)) {
                 // [source]
                 //      switch (x) {
                 //          case a:
@@ -1636,6 +1691,7 @@ namespace ts {
                 let clausesWritten = 0;
                 let pendingClauses: CaseClause[] = [];
                 while (clausesWritten < numClauses) {
+                    let defaultClausesSkipped = 0;
                     for (let i = clausesWritten; i < numClauses; i++) {
                         const clause = caseBlock.clauses[i];
                         if (clause.kind === SyntaxKind.CaseClause) {
@@ -1653,12 +1709,19 @@ namespace ts {
                                 )
                             );
                         }
+                        else {
+                            defaultClausesSkipped++;
+                        }
                     }
 
                     if (pendingClauses.length) {
                         emitStatement(createSwitch(expression, createCaseBlock(pendingClauses)));
                         clausesWritten += pendingClauses.length;
                         pendingClauses = [];
+                    }
+                    if (defaultClausesSkipped > 0) {
+                        clausesWritten += defaultClausesSkipped;
+                        defaultClausesSkipped = 0;
                     }
                 }
 
@@ -1772,10 +1835,6 @@ namespace ts {
                 beginExceptionBlock();
                 transformAndEmitEmbeddedStatement(node.tryBlock);
                 if (node.catchClause) {
-                    if (!renamedCatchVariables) {
-                        renamedCatchVariables = {};
-                    }
-
                     beginCatchBlock(node.catchClause.variableDeclaration);
                     transformAndEmitEmbeddedStatement(node.catchClause.block);
                 }
@@ -1844,17 +1903,11 @@ namespace ts {
 
         function cacheExpression(node: Expression): Identifier {
             let temp: Identifier;
-            if (isIdentifier(node)) {
-                if (nodeIsSynthesized(node) || isGeneratedIdentifier(node)) {
-                    return node;
-                }
-
-                temp = createUniqueName(node.text);
-            }
-            else {
-                temp = createTempVariable(hoistVariableDeclaration);
+            if (isGeneratedIdentifier(node)) {
+                return node;
             }
 
+            temp = createTempVariable(hoistVariableDeclaration);
             emitAssignment(temp, node, /*location*/ node);
             return temp;
         }
@@ -1862,7 +1915,7 @@ namespace ts {
         function declareLocal(name?: string): Identifier {
             const temp = name
                 ? createUniqueName(name)
-                : createTempVariable(hoistVariableDeclaration);
+                : createTempVariable(/*recordTempVariable*/ undefined);
             hoistVariableDeclaration(temp);
             return temp;
         }
@@ -1983,7 +2036,7 @@ namespace ts {
                 startLabel,
                 endLabel
             });
-            emitWorker(OpCode.Nop);
+            emitNop();
             return endLabel;
         }
 
@@ -1996,7 +2049,7 @@ namespace ts {
             Debug.assert(peekBlockKind() === CodeBlockKind.Exception);
 
             const text = (<Identifier>variable.name).text;
-            const name = createUniqueName(text);
+            const name = declareLocal(text);
 
             if (!renamedCatchVariables) {
                 renamedCatchVariables = {};
@@ -2019,8 +2072,8 @@ namespace ts {
             exception.catchVariable = name;
             exception.catchLabel = catchLabel;
 
-            emitAssignment(name, createPropertyAccess(state, "error"));
-            emitWorker(OpCode.Nop);
+            emitAssignment(name, createCall(createPropertyAccess(state, "sent"), /*typeArguments*/ undefined, []));
+            emitNop();
         }
 
         /**
@@ -2056,6 +2109,7 @@ namespace ts {
             }
 
             markLabel(exception.endLabel);
+            emitNop();
             exception.state = ExceptionBlockState.Done;
         }
 
@@ -2353,6 +2407,13 @@ namespace ts {
         }
 
         /**
+         * Emits an empty instruction.
+         */
+        function emitNop() {
+            emitWorker(OpCode.Nop);
+        }
+
+        /**
          * Emits a Statement.
          *
          * @param node A statement.
@@ -2362,7 +2423,7 @@ namespace ts {
                 emitWorker(OpCode.Statement, [node]);
             }
             else {
-                emitWorker(OpCode.Nop);
+                emitNop();
             }
         }
 
@@ -2487,18 +2548,24 @@ namespace ts {
             currentExceptionBlock = undefined;
             withBlockStack = undefined;
 
+            const buildResult = buildStatements();
             return createCall(
                 createIdentifier("__generator"),
                 /*typeArguments*/ undefined,
-                [createFunctionExpression(
-                    /*asteriskToken*/ undefined,
-                    /*name*/ undefined,
-                    /*typeParameters*/ undefined,
-                    [createParameter(state)],
-                    /*type*/ undefined,
-                    createBlock(
-                        buildStatements()
-                    )
+                [setNodeEmitFlags(
+                    createFunctionExpression(
+                        /*asteriskToken*/ undefined,
+                        /*name*/ undefined,
+                        /*typeParameters*/ undefined,
+                        [createParameter(state)],
+                        /*type*/ undefined,
+                        createBlock(
+                            buildResult,
+                            /*location*/ undefined,
+                            /*multiLine*/ buildResult.length > 0
+                        )
+                    ),
+                    NodeEmitFlags.ReuseTempVariableScope
                 )]
             );
         }
@@ -2521,6 +2588,7 @@ namespace ts {
             if (clauses) {
                 const labelExpression = createPropertyAccess(state, "label");
                 const switchStatement = createSwitch(labelExpression, createCaseBlock(clauses));
+                switchStatement.startsOnNewLine = true;
                 return [switchStatement];
             }
 
@@ -2552,6 +2620,7 @@ namespace ts {
         function flushFinalLabel(operationIndex: number): void {
             if (!lastOperationWasCompletion) {
                 tryEnterLabel(operationIndex);
+                withBlockStack = undefined;
                 writeReturn(/*expression*/ undefined, /*operationLocation*/ undefined);
             }
 

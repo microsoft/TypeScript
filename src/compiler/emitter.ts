@@ -73,99 +73,52 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
         const generatorHelper = `
 var __generator = (this && this.__generator) || function (body) {
-    var done, finallyStack, executing, yieldStar, trys = [], state = { label: 0, trys: trys };
+    var _ = { label: 0, sent: function() { if (sent[0] === 1 /*throw*/) throw sent[1]; return sent[1]; }, trys: [], stack: [] }, sent;
     function step(op) {
-        if (executing) throw new TypeError("Generator is already executing.");
+        if (_.flag) throw new TypeError("Generator is already executing.");
         while (true) {
-            if (done) {
-                switch (op[0]) {
-                    case 0 /*next*/: return { value: void 0, done: true };
-                    case 6 /*catch*/:
-                    case 1 /*throw*/: throw op[1];
-                    case 2 /*return*/: return { value: op[1], done: true };
-                }
+            if (_.done) switch (op[0]) {
+                case 0 /*next*/: return { value: void 0, done: true };
+                case 1 /*throw*/: case 6 /*catch*/: throw op[1];
+                case 2 /*return*/: return { value: op[1], done: true };
             }
             try {
-                executing = true;
-                if (yieldStar) {
-                    var verb = yieldStar[op[0] === 2 ? "return" : op[0] === 1 ? "throw" : "next"];
-                    if (verb) {
-                        var yielded = verb.call(yieldStar, op[1]);
-                        if (!yielded.done) return { value: yielded.value, done: false };
-                        op = [0 /*next*/, yielded.value];
-                    }
-
-                    yieldStar = void 0;
-                    continue;
-                }
-
-                switch (op[0]) {
-                    case 0 /*next*/:
-                        state.sent = function() { return op[1]; };
-                        break;
-
-                    case 1 /*throw*/:
-                        state.sent = function() { throw op[1]; };
-                        break;
-
-                    case 4 /*yield*/:
-                        state.label++;
-                        return { value: op[1], done: false };
-
-                    case 5 /*yieldstar*/:
-                        state.label++;
-                        yieldStar = op[1];
-                        op = [0 /*next*/, void 0];
-                        continue;
-
-                    case 7 /*endfinally*/:
-                        op = finallyStack.pop();
-                        trys.pop();
-                        continue;
-
+                switch (_.flag = true, op[0]) {
+                    case 0 /*next*/: case 1 /*throw*/: sent = op; break;
+                    case 4 /*yield*/: return _.label++, { value: op[1], done: false };
+                    case 7 /*endfinally*/: op = _.stack.pop(), _.trys.pop(); continue;
                     default:
-                        var rgn = trys.length && trys[trys.length - 1];
-                        if (!rgn && (op[0] === 6 /*catch*/ || op[0] === 1 /*throw*/ || op[0] === 2 /*return*/)) {
-                            done = true;
-                            finallyStack = void 0;
+                        var r = _.trys.length > 0 && _.trys[_.trys.length - 1];
+                        if (!r && (op[0] === 1 /*throw*/ || op[0] === 6 /*catch*/ || op[0] === 2 /*return*/)) {
+                            _.done = true;
                             continue;
                         }
-                        else if (op[0] === 3 /*break*/ && (!rgn || (op[1] > rgn[0] && op[1] < rgn[3]))) {
-                            state.label = op[1];
+                        if (op[0] === 3 /*break*/ && (!r || (op[1] > r[0] && op[1] < r[3]))) {
+                            _.label = op[1];
                         }
-                        else if (op[0] === 6 /*catch*/ && rgn && state.label < rgn[1]) {
-                            state.error = op[1];
-                            state.label = rgn[1];
+                        else if (op[0] === 6 /*catch*/ && r && _.label < r[1]) {
+                            _.label = r[1], sent = op;
                         }
-                        else if (rgn && state.label < rgn[2]) {
-                            (finallyStack || []).push(op);
-                            state.label = rgn[2];
+                        else if (r && _.label < r[2]) {
+                            _.label = r[2], _.stack.push(op);
                         }
                         else {
-                            if (rgn[2]) finallyStack.pop();
-                            trys.pop();
+                            if (r[2]) _.stack.pop();
+                            _.trys.pop();
                             continue;
                         }
                 }
-
-                op = body(state);
+                op = body(_);
             }
-            catch (e) {
-                op = [6 /*catch*/, e];
-                yieldStar = void 0;
-            }
-            finally {
-                executing = false;
-                verb = yielded = void 0;
-            }
+            catch (e) { op = [6 /*catch*/, e]; }
+            finally { _.flag = false, sent = void 0; }
         }
     }
-    var g = {
+    return {
         next: function (v) { return step([0 /*next*/, v]); },
         "throw": function (v) { return step([1 /*throw*/, v]); },
         "return": function (v) { return step([2 /*return*/, v]); }
     };
-    return g;
 };`;
 
         // emit output for the __export helper function
@@ -782,6 +735,8 @@ const _super = (function (geti, seti) {
             switch (kind) {
                 // Literals
                 case SyntaxKind.NumericLiteral:
+                    return emitNumericLiteral(<NumericLiteral>node);
+
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.RegularExpressionLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -870,6 +825,13 @@ const _super = (function (geti, seti) {
         //
 
         // SyntaxKind.NumericLiteral
+        function emitNumericLiteral(node: NumericLiteral) {
+            emitLiteral(node);
+            if (node.trailingComment) {
+                write(` /*${node.trailingComment}*/`);
+            }
+        }
+
         // SyntaxKind.StringLiteral
         // SyntaxKind.RegularExpressionLiteral
         // SyntaxKind.NoSubstitutionTemplateLiteral
@@ -1653,15 +1615,21 @@ const _super = (function (geti, seti) {
                         increaseIndent();
                     }
 
-                    const savedTempFlags = tempFlags;
-                    tempFlags = 0;
-                    emitSignatureHead(node);
-                    emitBlockFunctionBody(node, body);
+                    if (node.emitFlags & NodeEmitFlags.ReuseTempVariableScope) {
+                        emitSignatureHead(node);
+                        emitBlockFunctionBody(node, body);
+                    }
+                    else {
+                        const savedTempFlags = tempFlags;
+                        tempFlags = 0;
+                        emitSignatureHead(node);
+                        emitBlockFunctionBody(node, body);
+                        tempFlags = savedTempFlags;
+                    }
+
                     if (indentedFlag) {
                         decreaseIndent();
                     }
-
-                    tempFlags = savedTempFlags;
                 }
                 else {
                     emitSignatureHead(node);
