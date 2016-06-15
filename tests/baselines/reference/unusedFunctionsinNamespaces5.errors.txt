@@ -1,5 +1,5 @@
-tests/cases/compiler/unusedFunctionsinNamespaces5.ts(10,14): message TS6132: Variable 'function3' has never been used.
-tests/cases/compiler/unusedFunctionsinNamespaces5.ts(14,14): message TS6132: Variable 'function4' has never been used.
+tests/cases/compiler/unusedFunctionsinNamespaces5.ts(10,14): error TS6132: Variable 'function3' has never been used.
+tests/cases/compiler/unusedFunctionsinNamespaces5.ts(14,14): error TS6132: Variable 'function4' has never been used.
 
 
 ==== tests/cases/compiler/unusedFunctionsinNamespaces5.ts (2 errors) ====
@@ -14,13 +14,13 @@ tests/cases/compiler/unusedFunctionsinNamespaces5.ts(14,14): message TS6132: Var
     
         function function3() {
                  ~~~~~~~~~
-!!! message TS6132: Variable 'function3' has never been used.
+!!! error TS6132: Variable 'function3' has never been used.
             function1();
         }
     
         function function4() {
                  ~~~~~~~~~
-!!! message TS6132: Variable 'function4' has never been used.
+!!! error TS6132: Variable 'function4' has never been used.
     
         }
     }

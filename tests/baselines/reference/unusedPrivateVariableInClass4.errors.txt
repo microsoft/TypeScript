@@ -1,4 +1,4 @@
-tests/cases/compiler/unusedPrivateVariableInClass4.ts(4,5): message TS6132: Variable 'y' has never been used.
+tests/cases/compiler/unusedPrivateVariableInClass4.ts(4,5): error TS6132: Variable 'y' has never been used.
 
 
 ==== tests/cases/compiler/unusedPrivateVariableInClass4.ts (1 errors) ====
@@ -7,7 +7,7 @@ tests/cases/compiler/unusedPrivateVariableInClass4.ts(4,5): message TS6132: Vari
         private x: string;
         private y: string;
         ~~~~~~~~~~~~~~~~~~
-!!! message TS6132: Variable 'y' has never been used.
+!!! error TS6132: Variable 'y' has never been used.
         public  z: string;
     
         public method1() {

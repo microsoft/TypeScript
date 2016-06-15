@@ -1,26 +1,26 @@
-tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts(2,18): message TS6133: Parameter 'person' has never been used.
-tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts(3,9): message TS6132: Variable 'unused' has never been used.
-tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts(4,9): message TS6132: Variable 'maker' has never been used.
-tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts(4,27): message TS6133: Parameter 'child' has never been used.
-tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts(5,13): message TS6132: Variable 'unused2' has never been used.
+tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts(2,18): error TS6133: Parameter 'person' has never been used.
+tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts(3,9): error TS6132: Variable 'unused' has never been used.
+tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts(4,9): error TS6132: Variable 'maker' has never been used.
+tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts(4,27): error TS6133: Parameter 'child' has never been used.
+tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts(5,13): error TS6132: Variable 'unused2' has never been used.
 
 
 ==== tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts (5 errors) ====
     
     function greeter(person: string, person2: string) {
                      ~~~~~~~~~~~~~~
-!!! message TS6133: Parameter 'person' has never been used.
+!!! error TS6133: Parameter 'person' has never been used.
         var unused = 20;
             ~~~~~~
-!!! message TS6132: Variable 'unused' has never been used.
+!!! error TS6132: Variable 'unused' has never been used.
         var maker = function (child: string): void {
             ~~~~~
-!!! message TS6132: Variable 'maker' has never been used.
+!!! error TS6132: Variable 'maker' has never been used.
                               ~~~~~~~~~~~~~
-!!! message TS6133: Parameter 'child' has never been used.
+!!! error TS6133: Parameter 'child' has never been used.
             var unused2 = 22;
                 ~~~~~~~
-!!! message TS6132: Variable 'unused2' has never been used.
+!!! error TS6132: Variable 'unused2' has never been used.
         }
         person2 = "dummy value";
     }

@@ -1,4 +1,4 @@
-tests/cases/compiler/unusedClassesinNamespace4.ts(11,11): message TS6132: Variable 'c3' has never been used.
+tests/cases/compiler/unusedClassesinNamespace4.ts(11,11): error TS6132: Variable 'c3' has never been used.
 
 
 ==== tests/cases/compiler/unusedClassesinNamespace4.ts (1 errors) ====
@@ -14,7 +14,7 @@ tests/cases/compiler/unusedClassesinNamespace4.ts(11,11): message TS6132: Variab
     
         class c3 extends c1 {
               ~~
-!!! message TS6132: Variable 'c3' has never been used.
+!!! error TS6132: Variable 'c3' has never been used.
     
         }
     }

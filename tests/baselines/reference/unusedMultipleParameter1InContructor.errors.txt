@@ -1,5 +1,5 @@
-tests/cases/compiler/unusedMultipleParameter1InContructor.ts(3,17): message TS6133: Parameter 'person' has never been used.
-tests/cases/compiler/unusedMultipleParameter1InContructor.ts(4,13): message TS6132: Variable 'unused' has never been used.
+tests/cases/compiler/unusedMultipleParameter1InContructor.ts(3,17): error TS6133: Parameter 'person' has never been used.
+tests/cases/compiler/unusedMultipleParameter1InContructor.ts(4,13): error TS6132: Variable 'unused' has never been used.
 
 
 ==== tests/cases/compiler/unusedMultipleParameter1InContructor.ts (2 errors) ====
@@ -7,10 +7,10 @@ tests/cases/compiler/unusedMultipleParameter1InContructor.ts(4,13): message TS61
     class Dummy {
         constructor(person: string, person2: string) {
                     ~~~~~~~~~~~~~~
-!!! message TS6133: Parameter 'person' has never been used.
+!!! error TS6133: Parameter 'person' has never been used.
             var unused = 20;
                 ~~~~~~
-!!! message TS6132: Variable 'unused' has never been used.
+!!! error TS6132: Variable 'unused' has never been used.
             person2 = "Dummy value";
         }
     }

@@ -1,4 +1,4 @@
-tests/cases/compiler/unusedVariablesinNamespaces3.ts(4,11): message TS6132: Variable 'numberRegexp' has never been used.
+tests/cases/compiler/unusedVariablesinNamespaces3.ts(4,11): error TS6132: Variable 'numberRegexp' has never been used.
 
 
 ==== tests/cases/compiler/unusedVariablesinNamespaces3.ts (1 errors) ====
@@ -7,7 +7,7 @@ tests/cases/compiler/unusedVariablesinNamespaces3.ts(4,11): message TS6132: Vari
         const lettersRegexp = /^[A-Za-z]+$/;
         const numberRegexp = /^[0-9]+$/;
               ~~~~~~~~~~~~
-!!! message TS6132: Variable 'numberRegexp' has never been used.
+!!! error TS6132: Variable 'numberRegexp' has never been used.
         export const anotherUnusedVariable = "Dummy value";
     
         export class LettersOnlyValidator {

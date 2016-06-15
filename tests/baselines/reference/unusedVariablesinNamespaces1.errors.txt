@@ -1,4 +1,4 @@
-tests/cases/compiler/unusedVariablesinNamespaces1.ts(3,11): message TS6132: Variable 'lettersRegexp' has never been used.
+tests/cases/compiler/unusedVariablesinNamespaces1.ts(3,11): error TS6132: Variable 'lettersRegexp' has never been used.
 
 
 ==== tests/cases/compiler/unusedVariablesinNamespaces1.ts (1 errors) ====
@@ -6,5 +6,5 @@ tests/cases/compiler/unusedVariablesinNamespaces1.ts(3,11): message TS6132: Vari
     namespace Validation {
         const lettersRegexp = /^[A-Za-z]+$/;
               ~~~~~~~~~~~~~
-!!! message TS6132: Variable 'lettersRegexp' has never been used.
+!!! error TS6132: Variable 'lettersRegexp' has never been used.
     }

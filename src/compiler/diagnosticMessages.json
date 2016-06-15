@@ -2773,12 +2773,20 @@
         "code": 6131
     },
     "Variable '{0}' has never been used.": {
-        "category": "Message",
+        "category": "Error",
         "code": 6132
     },
     "Parameter '{0}' has never been used.": {
-        "category": "Message",
+        "category": "Error",
         "code": 6133
+    },
+    "Report Errors on Unused Locals.": {
+        "category": "Message",
+        "code": 6134
+    },
+    "Report Errors on Unused Parameters.": {
+        "category": "Message",
+        "code": 6135
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

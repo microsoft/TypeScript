@@ -135,12 +135,12 @@ namespace ts {
         {
             name: "noUnusedLocals",
             type: "boolean",
-            description: Diagnostics.Variable_0_has_never_been_used,
+            description: Diagnostics.Report_Errors_on_Unused_Locals,
         },
         {
             name: "noUnusedParameters",
             type: "boolean",
-            description: Diagnostics.Parameter_0_has_never_been_used
+            description: Diagnostics.Report_Errors_on_Unused_Parameters
         },
         {
             name: "noLib",
