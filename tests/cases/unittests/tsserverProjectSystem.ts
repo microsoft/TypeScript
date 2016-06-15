@@ -581,37 +581,58 @@ namespace ts {
             checkNumberOfInferredProjects(projectService, 1);
         });
 
-        it("should disable language service for project with too many non-ts files", () => {
-            const jsFiles: FileOrFolder[] = [];
-            const configFile: FileOrFolder = {
-                path: `/a/b/jsconfig.json`,
-                content: "{}"
+        it("should keep the configured project when the opened file is referenced by the project but not its root", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/main.ts",
+                content: "import { objA } from './obj-a';"
             };
-            jsFiles.push(configFile);
-            for (let i = 0; i < 1000; i++) {
-                jsFiles.push({
-                    path: `/a/b/file${i}.js`,
-                    content: "",
-                    fileSize: 50000
-                });
-            }
-
-            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", jsFiles);
+            const file2: FileOrFolder = {
+                path: "/a/b/obj-a.ts",
+                content: `export const objA = Object.assign({foo: "bar"}, {bar: "baz"});`
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "target": "es6"
+                    }, 
+                    "files": [ "main.ts" ]
+                }`
+            };
+            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [file1, file2, configFile]);
             const projectService = new server.ProjectService(host, nullLogger);
-            projectService.openClientFile(jsFiles[1].path);
-            projectService.openClientFile(jsFiles[2].path);
+            projectService.openClientFile(file1.path);
+            projectService.closeClientFile(file1.path);
+            projectService.openClientFile(file2.path);
             checkNumberOfConfiguredProjects(projectService, 1);
             checkNumberOfInferredProjects(projectService, 0);
+        });
 
-            const project = projectService.configuredProjects[0];
-            assert(project.languageServiceDiabled, "the project's language service is expected to be disabled");
-
-            configFile.content = `{
-                "files": ["/a/b/file1.js", "/a/b/file2.js", "/a/b/file3.js"]
-            }`;
-            host.reloadFS(jsFiles);
-            host.triggerFileWatcherCallback(configFile.path);
-            assert(!project.languageServiceDiabled, "after the config file change, the project's language service is expected to be enabled.");
+        it("should keep the configured project when the opened file is referenced by the project but not its root", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/main.ts",
+                content: "import { objA } from './obj-a';"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/obj-a.ts",
+                content: `export const objA = Object.assign({foo: "bar"}, {bar: "baz"});`
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "target": "es6"
+                    }, 
+                    "files": [ "main.ts" ]
+                }`
+            };
+            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [file1, file2, configFile]);
+            const projectService = new server.ProjectService(host, nullLogger);
+            projectService.openClientFile(file1.path);
+            projectService.closeClientFile(file1.path);
+            projectService.openClientFile(file2.path);
+            checkNumberOfConfiguredProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 0);
         });
     });
 }

@@ -1301,7 +1301,7 @@ namespace ts {
     // @kind(SyntaxKind.ModuleDeclaration)
     export interface ModuleDeclaration extends DeclarationStatement {
         name: Identifier | LiteralExpression;
-        body: ModuleBlock | ModuleDeclaration;
+        body?: ModuleBlock | ModuleDeclaration;
     }
 
     // @kind(SyntaxKind.ModuleBlock)
@@ -2224,7 +2224,8 @@ namespace ts {
 
         /* @internal */
         Nullable = Undefined | Null,
-        Falsy = String | Number | Boolean | Void | Undefined | Null,
+        /* @internal */
+        Falsy = Void | Undefined | Null,       // TODO: Add false, 0, and ""
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
@@ -2563,7 +2564,8 @@ namespace ts {
         traceResolution?: boolean;
         disableSizeLimit?: boolean;
         types?: string[];
-        /* @internal */ typesRoot?: string;
+        /** Paths used to used to compute primary types search locations */
+        typeRoots?: string[];
         typesSearchPaths?: string[];
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
@@ -2872,6 +2874,7 @@ namespace ts {
         getDefaultTypeDirectiveNames?(rootPath: string): string[];
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;

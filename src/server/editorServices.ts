@@ -317,6 +317,10 @@ namespace ts.server {
             return this.host.directoryExists(path);
         }
 
+        getDirectories(path: string): string[] {
+            return this.host.getDirectories(path);
+        }
+
         /**
          *  @param line 1 based index
          */
@@ -890,6 +894,7 @@ namespace ts.server {
             else {
                 this.findReferencingProjects(info);
                 if (info.defaultProject) {
+                    info.defaultProject.addOpenRef();
                     this.openFilesReferenced.push(info);
                 }
                 else {
