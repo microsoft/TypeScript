@@ -329,7 +329,7 @@ namespace ts.server {
             }
 
             const scriptInfo = project.getScriptInfo(file);
-            const position = this.getPosition(args, scriptInfo);;
+            const position = this.getPosition(args, scriptInfo);
 
             const definitions = project.languageService.getDefinitionAtPosition(file, position);
             if (!definitions) {
@@ -764,7 +764,7 @@ namespace ts.server {
             }
 
             const scriptInfo = project.getScriptInfo(file);
-            const position = this.getPosition(args, scriptInfo)
+            const position = this.getPosition(args, scriptInfo);
 
             const completions = project.languageService.getCompletionsAtPosition(file, position);
             if (!completions) {
@@ -1161,7 +1161,7 @@ namespace ts.server {
                 return this.requiredResponse(this.getCompletions(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
-                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments))
+                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments));
             },
             [CommandNames.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true));

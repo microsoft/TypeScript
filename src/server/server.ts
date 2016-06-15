@@ -83,8 +83,7 @@ namespace ts.server {
                 if (this.fd >= 0) {
                     fs.writeSync(this.fd, buf, 0, buf.length, null);
                 }
-                if (this.traceToConsole)
-                {
+                if (this.traceToConsole) {
                     console.warn(s);
                 }
             }
@@ -296,17 +295,14 @@ namespace ts.server {
 
     let cancellationToken: HostCancellationToken;
     try {
-        let cancellationPipeName: string;
-        if (cancellationPipeName) {
-            const factory = require("./cancellationToken");
-            cancellationToken = factory(sys.args);
-        }
+        const factory = require("./cancellationToken");
+        cancellationToken = factory(sys.args);
     }
-    catch(e) {
+    catch (e) {
         cancellationToken = {
             isCancellationRequested: () => false
-        }
-    }
+        };
+    };
 
     const ioSession = new IOSession(sys, cancellationToken, logger);
     process.on("uncaughtException", function(err: Error) {
