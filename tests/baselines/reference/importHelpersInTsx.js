@@ -5,16 +5,25 @@ declare var React: any;
 declare var o: any;
 export const x = <span {...o} />
 
-//// [internal.tsx]
+//// [script.tsx]
 declare var React: any;
 declare var o: any;
 const x = <span {...o} />
+
+//// [tslib.d.ts]
+export declare function __extends(d: Function, b: Function): void;
+export declare function __assign(t: any, ...sources: any[]): any;
+export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
+export declare function __param(paramIndex: number, decorator: Function): Function;
+export declare function __metadata(metadataKey: any, metadataValue: any): Function;
+export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
+
 
 //// [external.js]
 "use strict";
 var tslib_1 = require("tslib");
 exports.x = React.createElement("span", tslib_1.__assign({}, o));
-//// [internal.js]
+//// [script.js]
 var __assign = (this && this.__assign) || Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
         s = arguments[i];
