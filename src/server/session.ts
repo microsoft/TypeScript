@@ -252,12 +252,13 @@ namespace ts.server {
         }
 
         private getSemanticDiagnostics(args: protocol.FileRequestArgs): protocol.DiagnosticWithLinePosition[] {
-            var project = this.projectService.getProject(args.projectFileName) || this.projectService.getProjectForFile(args.file);
+            const file = normalizePath(args.file);
+            var project = (args.projectFileName && this.projectService.getProject(normalizePath(args.projectFileName))) || this.projectService.getProjectForFile(file);
             if (!project) {
                 return [];
             }
-            const scriptInfo = project.getScriptInfo(args.file);
-            const diagnostics = project.languageService.getSemanticDiagnostics(args.file);
+            const scriptInfo = project.getScriptInfo(file);
+            const diagnostics = project.languageService.getSemanticDiagnostics(file);
             return diagnostics.map(d => <protocol.DiagnosticWithLinePosition>{
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
                 start: d.start,
