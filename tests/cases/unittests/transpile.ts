@@ -242,6 +242,6 @@ var x = 0;`, {
 
         transpilesCorrectly("Support options with types values", "const a = 10;", {
             options: { compilerOptions: { types: ["jquery", "typescript"], module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
-        })
+        });
     });
 }
