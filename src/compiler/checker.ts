@@ -13635,7 +13635,7 @@ namespace ts {
 
             // Abstract methods can't have an implementation -- in particular, they don't need one.
             if (lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body &&
-                !(lastSeenNonAmbientDeclaration.flags & ModifierFlags.Abstract) && !lastSeenNonAmbientDeclaration.questionToken) {
+                !(getModifierFlags(lastSeenNonAmbientDeclaration) & ModifierFlags.Abstract) && !lastSeenNonAmbientDeclaration.questionToken) {
                 reportImplementationExpectedError(lastSeenNonAmbientDeclaration);
             }
 
