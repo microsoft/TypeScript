@@ -853,7 +853,7 @@ namespace ts {
             if (!result) {
                 if (nameNotFoundMessage) {
                     if (!checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg) &&
-                       !checkAndReportErrorForExtendingInterface(errorLocation, name)) {
+                       !checkAndReportErrorForExtendingInterface(errorLocation)) {
                         error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
                     }
                 }
@@ -938,21 +938,30 @@ namespace ts {
         }
 
 
-        function checkAndReportErrorForExtendingInterface(errorLocation: Node, name: string): boolean {
-            if (!errorLocation || errorLocation.kind !== SyntaxKind.Identifier ||
-                !errorLocation.parent || !errorLocation.parent.parent ||
-                errorLocation.parent.parent.kind !== SyntaxKind.HeritageClause) {
+        function checkAndReportErrorForExtendingInterface(errorLocation: Node): boolean {
+            const container = getContainingClass(errorLocation);
+            const heritageClause = <HeritageClause>getAncestor(errorLocation, SyntaxKind.HeritageClause);
+            if (!container || !heritageClause || heritageClause.token !== SyntaxKind.ExtendsKeyword) {
                 return false;
             }
-            const heritageClause = <HeritageClause>errorLocation.parent.parent;
-            if (heritageClause.token !== SyntaxKind.ExtendsKeyword) {
-                return false;
+            if (errorLocation.kind === SyntaxKind.Identifier) {
+                const name = (<Identifier>errorLocation).text;
+                const interfaceOrModule = resolveName(
+                    errorLocation, name,
+                    SymbolFlags.Interface | SymbolFlags.HasExports,
+                    /*errorMessage*/ undefined, /*nameArg*/ undefined)
+                if (!interfaceOrModule) {
+                    return false;
+                }
+                if (interfaceOrModule.flags & SymbolFlags.Interface) {
+                    error(errorLocation, Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements, name);
+                    return true;
+                }
             }
-            const enclosingScope = heritageClause.parent.parent.locals;
-            if (enclosingScope && getSymbol(enclosingScope, name, SymbolFlags.Interface)) {
-                error(errorLocation, Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements, name);
-                return true;
+            else if (errorLocation.kind === SyntaxKind.PropertyAccessExpression) {
+                // todo
             }
+
             return false;
          }
 
@@ -10058,7 +10067,7 @@ namespace ts {
             }
             const prop = getPropertyOfType(apparentType, right.text);
             if (!prop) {
-                if (right.text) {
+                if (right.text && !checkAndReportErrorForExtendingInterface(node)) {
                     error(right, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(right), typeToString(type.flags & TypeFlags.ThisType ? apparentType : type));
                 }
                 return unknownType;
