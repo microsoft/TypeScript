@@ -138,6 +138,7 @@ namespace ts.server {
         export const CloseExternalProject = "closeExternalProject";
         export const SynchronizeProjectList = "synchronizeProjectList";
         export const ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
+        export const EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
     }
 
     namespace Errors {
@@ -251,25 +252,6 @@ namespace ts.server {
             return { line, offset: offset + 1 };
         }
 
-        private getSemanticDiagnostics(args: protocol.FileRequestArgs): protocol.DiagnosticWithLinePosition[] {
-            const file = normalizePath(args.file);
-            var project = (args.projectFileName && this.projectService.getProject(normalizePath(args.projectFileName))) || this.projectService.getProjectForFile(file);
-            if (!project) {
-                return [];
-            }
-            const scriptInfo = project.getScriptInfo(file);
-            const diagnostics = project.languageService.getSemanticDiagnostics(file);
-            return diagnostics.map(d => <protocol.DiagnosticWithLinePosition>{
-                message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
-                start: d.start,
-                length: d.length,
-                category: DiagnosticCategory[d.category].toLowerCase(),
-                code: d.code,
-                startLocation: this.getLocation(d.start, scriptInfo),
-                endLocation: this.getLocation(d.start + d.length, scriptInfo)
-            });
-        }
-
         private semanticCheck(file: string, project: Project) {
             try {
                 const diags = project.languageService.getSemanticDiagnostics(file);
@@ -344,6 +326,34 @@ namespace ts.server {
             if ((checkList.length > index) && (matchSeq(seq))) {
                 this.errorTimer = this.host.setTimeout(checkOne, ms);
             }
+        }
+
+        private getEncodedSemanticClassifications(args: protocol.FileSpanRequestArgs) {
+            const file = normalizePath(args.file);
+            const project = this.projectService.getProjectForFile(file);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+            return project.languageService.getEncodedSemanticClassifications(file, args);
+        }
+
+        private getSemanticDiagnostics(args: protocol.FileRequestArgs): protocol.DiagnosticWithLinePosition[] {
+            const file = normalizePath(args.file);
+            var project = (args.projectFileName && this.projectService.getProject(normalizePath(args.projectFileName))) || this.projectService.getProjectForFile(file);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+            const scriptInfo = project.getScriptInfo(file);
+            const diagnostics = project.languageService.getSemanticDiagnostics(file);
+            return diagnostics.map(d => <protocol.DiagnosticWithLinePosition>{
+                message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
+                start: d.start,
+                length: d.length,
+                category: DiagnosticCategory[d.category].toLowerCase(),
+                code: d.code,
+                startLocation: this.getLocation(d.start, scriptInfo),
+                endLocation: this.getLocation(d.start + d.length, scriptInfo)
+            });
         }
 
         private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.FileSpan[] | DefinitionInfo[] {
@@ -1197,6 +1207,9 @@ namespace ts.server {
             },
             [CommandNames.SemanticDiagnosticsFull]: (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getSemanticDiagnostics(request.arguments));
+            },
+            [CommandNames.EncodedSemanticClassificationsFull]: (request: protocol.FileSpanRequest) => {
+                return this.requiredResponse(this.getEncodedSemanticClassifications(request.arguments));
             },
             [CommandNames.Geterr]: (request: protocol.Request) => {
                 const geterrArgs = <protocol.GeterrRequestArgs>request.arguments;

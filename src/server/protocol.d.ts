@@ -182,6 +182,15 @@ declare namespace ts.server.protocol {
         arguments: FileLocationRequestArgs;
     }
 
+    export interface FileSpanRequestArgs extends FileRequestArgs {
+        start: number;
+        length: number;
+    }
+
+    export interface FileSpanRequest extends FileRequest {
+        arguments: FileSpanRequestArgs;
+    }
+
     /**
       * Arguments in document highlight request; include: filesToSearch, file,
       * line, offset.
