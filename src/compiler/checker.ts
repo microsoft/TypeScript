@@ -560,7 +560,8 @@ namespace ts {
             const declarationFile = getSourceFileOfNode(declaration);
             const useFile = getSourceFileOfNode(usage);
             if (declarationFile !== useFile) {
-                if (modulekind || (!compilerOptions.outFile && !compilerOptions.out)) {
+                if ((modulekind && (declarationFile.externalModuleIndicator || useFile.externalModuleIndicator)) ||
+                    (!compilerOptions.outFile && !compilerOptions.out)) {
                     // nodes are in different files and order cannot be determines
                     return true;
                 }
@@ -11529,7 +11530,10 @@ namespace ts {
 
         function checkAssertion(node: AssertionExpression) {
             const exprType = getRegularTypeOfObjectLiteral(checkExpression(node.expression));
+
+            checkSourceElement(node.type);
             const targetType = getTypeFromTypeNode(node.type);
+
             if (produceDiagnostics && targetType !== unknownType) {
                 const widenedType = getWidenedType(exprType);
                 if (!isTypeComparableTo(targetType, widenedType)) {
@@ -13564,9 +13568,6 @@ namespace ts {
                 }
             }
 
-            // when checking exported function declarations across modules check only duplicate implementations
-            // names and consistency of modifiers are verified when we check local symbol
-            const isExportSymbolInsideModule = symbol.parent && symbol.parent.flags & SymbolFlags.Module;
             let duplicateFunctionDeclaration = false;
             let multipleConstructorImplementation = false;
             for (const current of declarations) {
@@ -13599,7 +13600,7 @@ namespace ts {
                             duplicateFunctionDeclaration = true;
                         }
                     }
-                    else if (!isExportSymbolInsideModule && previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.pos) {
+                    else if (previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.pos) {
                         reportImplementationExpectedError(previousDeclaration);
                     }
 
@@ -13633,8 +13634,8 @@ namespace ts {
             }
 
             // Abstract methods can't have an implementation -- in particular, they don't need one.
-            if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body &&
-                !hasModifier(lastSeenNonAmbientDeclaration, ModifierFlags.Abstract) && !lastSeenNonAmbientDeclaration.questionToken) {
+            if (lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body &&
+                !(lastSeenNonAmbientDeclaration.flags & ModifierFlags.Abstract) && !lastSeenNonAmbientDeclaration.questionToken) {
                 reportImplementationExpectedError(lastSeenNonAmbientDeclaration);
             }
 

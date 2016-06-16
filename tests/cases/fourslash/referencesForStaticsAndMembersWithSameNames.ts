@@ -3,12 +3,12 @@
 ////module FindRef4 {
 ////	module MixedStaticsClassTest {
 ////		export class Foo {
-////			b/*3*/ar: Foo;
-////			static b/*4*/ar: Foo;
+////			[|bar|]: Foo;
+////			static [|bar|]: Foo;
 ////
-////			public f/*1*/oo(): void {
+////			public [|foo|](): void {
 ////			}
-////			public static f/*2*/oo(): void {
+////			public static [|foo|](): void {
 ////			}
 ////		}
 ////	}
@@ -16,34 +16,25 @@
 ////	function test() {
 ////		// instance function
 ////		var x = new MixedStaticsClassTest.Foo();
-////		x.foo();
-////		x.bar;
-////
-////		var y = new MixedStaticsClassTest.Foo();
-////		y.foo();
-////		y.bar;
+////		x.[|foo|]();
+////		x.[|bar|];
 ////
 ////		// static function
-////		MixedStaticsClassTest.Foo.foo();
-////		MixedStaticsClassTest.Foo.bar;
+////		MixedStaticsClassTest.Foo.[|foo|]();
+////		MixedStaticsClassTest.Foo.[|bar|];
 ////	}
 ////}
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
+const [fooBar, fooStaticBar, fooFoo, fooStaticFoo, xFoo, xBar, staticFoo, staticBar] = test.ranges();
 
 // References to a member method with the same name as a static.
-goTo.marker("1");
-verify.referencesCountIs(3);
+verify.referencesOf(fooFoo, [fooFoo, xFoo]);
 
 // References to a static method with the same name as a member.
-goTo.marker("2");
-verify.referencesCountIs(2);
+verify.referencesOf(fooStaticFoo, [fooStaticFoo, staticFoo]);
 
 // References to a member property with the same name as a static.
-goTo.marker("3");
-verify.referencesCountIs(3);
+verify.referencesOf(fooBar, [fooBar, xBar]);
 
 // References to a static property with the same name as a member.
-goTo.marker("4");
-verify.referencesCountIs(2);
+verify.referencesOf(fooStaticBar, [fooStaticBar, staticBar]);

@@ -1,4 +1,5 @@
 /// <reference path="..\compiler\program.ts"/>
+/// <reference path="..\compiler\commandLineParser.ts"/>
 
 /// <reference path='breakpoints.ts' />
 /// <reference path='outliningElementsCollector.ts' />
@@ -2007,6 +2008,10 @@ namespace ts {
         // so pass --noLib to avoid reporting a file not found error.
         options.noLib = true;
 
+        // Clear out the lib and types option as well
+        options.lib = undefined;
+        options.types = undefined;
+
         // We are not doing a full typecheck, we are not resolving the whole context,
         // so pass --noResolve to avoid reporting missing file errors.
         options.noResolve = true;
@@ -2989,7 +2994,8 @@ namespace ts {
                  oldSettings.moduleResolution !== newSettings.moduleResolution ||
                  oldSettings.noResolve !== newSettings.noResolve ||
                  oldSettings.jsx !== newSettings.jsx ||
-                 oldSettings.allowJs !== newSettings.allowJs);
+                 oldSettings.allowJs !== newSettings.allowJs ||
+                 oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit);
 
             // Now create a new compiler
             const compilerHost: CompilerHost = {
