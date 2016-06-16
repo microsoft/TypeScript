@@ -84,8 +84,8 @@ namespace ts.server {
     }
 
     class IOSession extends Session {
-        constructor(host: ServerHost, logger: ts.server.Logger, enableAutoDiagnostics: boolean) {
-            super(host, Buffer.byteLength, process.hrtime, logger, enableAutoDiagnostics);
+        constructor(host: ServerHost, logger: ts.server.Logger) {
+            super(host, Buffer.byteLength, process.hrtime, logger);
         }
 
         exit() {
@@ -280,8 +280,7 @@ namespace ts.server {
     sys.setTimeout = setTimeout;
     sys.clearTimeout = clearTimeout;
 
-    // ToDo@dirkb: read program args for auto diagnostics.
-    const ioSession = new IOSession(sys, logger, true);
+    const ioSession = new IOSession(sys, logger);
     process.on("uncaughtException", function(err: Error) {
         ioSession.logError(err, "unknown");
     });

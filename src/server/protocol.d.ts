@@ -484,6 +484,20 @@ declare namespace ts.server.protocol {
         hostInfo?: string;
 
         /**
+         * Sets a folder that can be used by the tsserver to store 
+         * meta data information.
+         */
+        metaDataDirectory?: string;
+
+        /**
+         * Turns the tsserver into auto build mode. When in 
+         * auto build mode the server will automatically generate
+         * diagnostics and emit JS files without corresponding 
+         * requests
+         */
+        autoBuild?: boolean;
+
+        /**
           * If present, tab settings apply only to this file.
           */
         file?: string;

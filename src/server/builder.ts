@@ -4,12 +4,12 @@
 /// <reference path="session.ts" />
 /// <reference path="node.d.ts" />
 
-
 namespace ts.server {
 
-    // Todo@dirk ask why the node.d.ts is so minimal. The tsserver run in node only anyways.
     const path: typeof NodeJS.path = require("path");
-    const crypto = require("crypto");
+    const crypto: any = require("crypto");
+    const fs: any = require("fs");
+
 
     /* tslint:disable */
     function createMap<T>(): Map<T> {
@@ -197,26 +197,30 @@ namespace ts.server {
 
     abstract class AbstractFileInfo {
 
-        protected signature: string;
+        protected _shapeSignature: string;
 
         constructor(protected _fileName: string) {
-            this.signature = undefined;
+            this._shapeSignature = undefined;
         }
 
         public fileName(): string {
             return this._fileName;
         }
 
+        public shapeSignature(): string {
+            return this._shapeSignature;
+        }
+
         protected getSourceFile(builder: BuilderAccessor<FileInfo>): SourceFile {
             return builder.getProject().compilerService.languageService.getProgram().getSourceFile(this._fileName);
         }
 
-        protected updateSignature(builder: BuilderAccessor<FileInfo>): boolean {
-            const lastSignature: string = this.signature;
-            this.signature = undefined;
+        protected updateShapeSignature(builder: BuilderAccessor<FileInfo>): boolean {
+            const lastSignature: string = this._shapeSignature;
+            this._shapeSignature = undefined;
             const sourceFile = this.getSourceFile(builder);
             if (sourceFile.isDeclarationFile) {
-                this.signature = crypto.createHash("md5")
+                this._shapeSignature = crypto.createHash("md5")
                     .update(sourceFile.text)
                     .digest("base64");
             }
@@ -226,13 +230,13 @@ namespace ts.server {
                 const emitOutput = builder.getProject().compilerService.languageService.getEmitOutput(this._fileName);
                 for (const file of emitOutput.outputFiles) {
                     if (/\.d\.ts$/.test(file.name)) {
-                        this.signature = crypto.createHash("md5")
+                        this._shapeSignature = crypto.createHash("md5")
                             .update(file.text)
                             .digest("base64");
                     }
                 }
             }
-            return !this.signature || lastSignature !== this.signature;
+            return !this._shapeSignature || lastSignature !== this._shapeSignature;
         }
     }
 
@@ -309,10 +313,12 @@ namespace ts.server {
 
         protected processCompileQueue() {
             if (this.compileQueue.isEmpty()) {
+                this.compileQueueIsEmpty();
                 return;
             }
             setImmediate(() => {
                 if (this.compileQueue.isEmpty()) {
+                    this.compileQueueIsEmpty();
                     return;
                 }
                 const fileInfo = this.compileQueue.shift();
@@ -320,14 +326,14 @@ namespace ts.server {
                 setImmediate(() => {
                     this.semanticCheck(fileInfo.fileName());
                     this.updateCompileQueue(fileInfo);
-                    if (!this.compileQueue.isEmpty()) {
-                        this.processCompileQueue();
-                    }
+                    this.processCompileQueue();
                 });
             });
         }
 
         protected abstract updateCompileQueue(fileInfo: T): void;
+
+        protected abstract compileQueueIsEmpty(): void;
     }
 
     class SimpleFileInfo extends AbstractFileInfo implements FileInfo {
@@ -337,7 +343,7 @@ namespace ts.server {
         }
 
         public update(builder: BuilderAccessor<FileInfo>): boolean {
-            return this.updateSignature(builder);
+            return this.updateShapeSignature(builder);
         }
     }
 
@@ -405,6 +411,9 @@ namespace ts.server {
                 this.compileQueue.add(key, new SingleFileInfo(this.openFiles[key]));
             });
         }
+
+        protected compileQueueIsEmpty(): void {
+        }
     }
 
     class ModuleFileInfo extends AbstractFileInfo implements FileInfo {
@@ -413,7 +422,7 @@ namespace ts.server {
         private references: ModuleFileInfo[];
         private referencedBy: ModuleFileInfo[];
 
-        constructor(filename: string) {
+        constructor(filename: string, private version: string, private _contentSignature: string) {
             super(filename);
             this.finalized = false;
             this.references = undefined;
@@ -482,6 +491,16 @@ namespace ts.server {
             }
         }
 
+        public contentSignature(): string {
+            return this._contentSignature;
+        }
+
+        public initializeShapeSignature(lastSeenContentSignature: string, shapeSignature: string): void {
+            if (lastSeenContentSignature === this._contentSignature) {
+                this._shapeSignature = shapeSignature;
+            }
+        }
+
         public buildDependencies(builder: BuilderAccessor<ModuleFileInfo>, program: Program): void {
             this.getReferencedFileInfos(builder, program).forEach((fileInfo) => {
                 fileInfo.addReferencedBy(this);
@@ -526,7 +545,8 @@ namespace ts.server {
         }
 
         public update(builder: BuilderAccessor<ModuleFileInfo>): boolean {
-            const newReferences: ModuleFileInfo[] = this.getReferencedFileInfos(builder, builder.getProject().compilerService.languageService.getProgram());
+            const program = builder.getProject().compilerService.languageService.getProgram();
+            const newReferences: ModuleFileInfo[] = this.getReferencedFileInfos(builder, program);
             newReferences.sort(ModuleFileInfo.compareFileInfos);
 
             const currentReferences = this.references || [];
@@ -545,7 +565,7 @@ namespace ts.server {
                     currentIndex++;
                 }
                 else if (compare > 0) {
-                    // new new info. Add dependy
+                    // A new reference info. Add it.
                     newInfo.addReferencedBy(this);
                     newIndex++;
                 }
@@ -565,10 +585,10 @@ namespace ts.server {
             }
             this.references = newReferences.length > 0 ? newReferences : undefined;
 
-            return this.updateSignature(builder);
+            return this.updateShapeSignature(builder);
         }
 
-        public addReferencedBy(file: ModuleFileInfo): void {
+        protected addReferencedBy(file: ModuleFileInfo): void {
             if (!this.referencedBy) {
                 this.referencedBy = [];
                 this.referencedBy.push(file);
@@ -577,7 +597,7 @@ namespace ts.server {
             ModuleFileInfo.addElement(this.referencedBy, this.finalized, file);
         }
 
-        public removeReferencedBy(file: ModuleFileInfo): void {
+        protected removeReferencedBy(file: ModuleFileInfo): void {
             ModuleFileInfo.removeElement(this.referencedBy, this.finalized, file);
         }
 
@@ -587,7 +607,11 @@ namespace ts.server {
             }
         }
 
-        private addReferences(file: ModuleFileInfo): void {
+        public hasReferences(): boolean {
+            return this.references ? this.references.length > 0 : false;
+        }
+
+        protected addReferences(file: ModuleFileInfo): void {
             if (!this.references) {
                 this.references = [];
                 this.references.push(file);
@@ -596,7 +620,7 @@ namespace ts.server {
             ModuleFileInfo.addElement(this.references, this.finalized, file);
         }
 
-        public removeReferences(file: ModuleFileInfo): void {
+        protected removeReferences(file: ModuleFileInfo): void {
             ModuleFileInfo.removeElement(this.references, this.finalized, file);
         }
     }
@@ -604,9 +628,11 @@ namespace ts.server {
     class ModuleBuilder extends AbstractBuilder<ModuleFileInfo> implements Builder, BuilderAccessor<ModuleFileInfo> {
 
         private fileInfos: Map<ModuleFileInfo>;
+        private compileRuns: number;
 
         constructor(project: Project, host: BuilderHost) {
             super(project, host, -1);
+            this.compileRuns = 0;
         }
 
         public getFileInfo(file: string): ModuleFileInfo {
@@ -627,6 +653,13 @@ namespace ts.server {
         protected updateCompileQueue(fileInfo: ModuleFileInfo): void {
             if (fileInfo.update(this)) {
                 fileInfo.queueReferencedBy(this.compileQueue);
+            }
+        }
+
+        protected compileQueueIsEmpty(): void {
+            this.compileRuns++;
+            if (this.compileRuns === 1) {
+                this.saveState();
             }
         }
 
@@ -655,19 +688,185 @@ namespace ts.server {
                 }
                 const sourceFile = program.getSourceFile(file);
                 if (sourceFile) {
-                    const fileInfo = new ModuleFileInfo(file);
+                    const fileInfo = new ModuleFileInfo(file, sourceFile.version, crypto.createHash("md5")
+                        .update(sourceFile.text)
+                        .digest("base64"));
                     this.fileInfos[fileInfo.fileName()] = fileInfo;
                     memo.push(fileInfo);
                 }
                 return memo;
             }, []);
-            fileInfos.forEach((fileInfo) => fileInfo.buildDependencies(this, program));
+            const [needsCompile] = this.readState();
+            const roots: ModuleFileInfo[] = [];
+            fileInfos.forEach((fileInfo) => {
+                fileInfo.buildDependencies(this, program);
+                if (!fileInfo.hasReferences()) {
+                    roots.push(fileInfo);
+                }
+            });
             fileInfos.forEach((fileInfo) => fileInfo.finalize());
+            if (!needsCompile) {
+                roots.forEach(fileInfo => this.compileQueue.add(fileInfo.fileName(), fileInfo));
+            }
+            else {
+                needsCompile.forEach(fileInfo => this.compileQueue.add(fileInfo.fileName(), fileInfo));
+            }
+        }
+
+        private saveState(): void {
+            const metaDataDirectory = this.project.projectService.metaDataDirectory;
+            const projectFilename = this.project.projectFilename;
+            if (!metaDataDirectory || !projectFilename) {
+                return;
+            }
+            const fileNameHash = crypto.createHash("md5").update(projectFilename).digest("hex");
+            const stateDirectory = path.join(this.project.projectService.metaDataDirectory, fileNameHash);
+            try {
+                fs.mkdirSync(stateDirectory);
+            }
+            catch (err) {
+            }
+            const stateFileName = `c-${Date.now().toString()}`;
+            const content: string[] = [];
+            Object.keys(this.fileInfos).forEach((key) => {
+                const fileInfo = this.fileInfos[key];
+                content.push(JSON.stringify([fileInfo.fileName(), fileInfo.contentSignature(), fileInfo.shapeSignature(), false]));
+            });
+            function write(fd: any, index: number) {
+                if (index < content.length) {
+                    fs.write(fd, content[index] + "\n", undefined, "utf8", (err: Error, written: any, str: any) => {
+                        if (err) {
+                            return;
+                        }
+                        write(fd, index + 1);
+                    });
+                }
+                else {
+                    fs.close(fd, (err: Error) => {
+
+                    });
+                }
+            }
+            if (content.length > 0) {
+                fs.open(path.join(stateDirectory, stateFileName), "w", (err: Error, fd: any) => {
+                    if (err) {
+                        return;
+                    }
+                    write(fd, 0);
+                });
+            }
+        }
+
+        private readState(): [ModuleFileInfo[], string[]] {
+            const metaDataDirectory = this.project.projectService.metaDataDirectory;
+            const projectFilename = this.project.projectFilename;
+            if (!metaDataDirectory || !projectFilename) {
+                return [undefined, undefined];
+            }
+            const needsCompile: ModuleFileInfo[] = [];
+            const deleted: string[] = [];
+            const fileNameHash = crypto.createHash("md5").update(projectFilename).digest("hex");
+            const stateDirectory = path.join(this.project.projectService.metaDataDirectory, fileNameHash);
+            try {
+                if (!fs.existsSync(stateDirectory)) {
+                    return [undefined, undefined];
+                }
+                const files: string[] = fs.readdirSync(stateDirectory);
+                const toDelete: string[] = [];
+                let latestCompleteStateFile: string;
+                let latestCompleteStateTime: number;
+                let latestDeltaStateFile: string;
+                let latestDeltaStateTime: number;
+                for (const file of files) {
+                    if (file === "." || file === "..") {
+                        continue;
+                    }
+                    if (file.length > 1 && file.charAt(1) === "-") {
+                        if (file.charAt(0) === "c") {
+                            const stateTime = Number(file.substr(2));
+                            if (!latestCompleteStateFile) {
+                                latestCompleteStateFile = file;
+                                latestCompleteStateTime = stateTime;
+                            }
+                            else {
+                                if (stateTime > latestCompleteStateTime) {
+                                    toDelete.push(latestCompleteStateFile);
+                                    latestCompleteStateFile = file;
+                                    latestCompleteStateTime = stateTime;
+                                }
+                            }
+                        }
+                        else if (file.charAt(0) === "d") {
+                            const stateTime = Number(file.substr(2));
+                            if (!latestDeltaStateFile) {
+                                latestDeltaStateFile = file;
+                                latestDeltaStateTime = stateTime;
+                            }
+                            else {
+                                if (stateTime > latestDeltaStateTime) {
+                                    toDelete.push(latestDeltaStateFile);
+                                    latestDeltaStateFile = file;
+                                    latestDeltaStateTime = stateTime;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (latestCompleteStateFile && latestDeltaStateFile && latestCompleteStateTime > latestDeltaStateTime) {
+                    toDelete.push(latestDeltaStateFile);
+                    latestDeltaStateFile = undefined;
+                    latestDeltaStateTime = undefined;
+                }
+                if (!latestCompleteStateFile) {
+                    return [undefined, undefined];
+                }
+                const parseContent = (content: string) => {
+                    let start = 0;
+                    for (let index = 0; index < content.length; index++) {
+                        if (content.charAt(index) === "\n") {
+                            try {
+                                // A line in a state file has the follwing structure
+                                // filename, contentHash, shapeHash, hadErrors
+                                const values: [string, string, string, boolean] = JSON.parse(content.substring(start, index));
+                                start = index + 1;
+                                const fileInfo = this.fileInfos[values[0]];
+                                if (fileInfo) {
+                                    fileInfo.initializeShapeSignature(values[1], values[2]);
+                                    if (fileInfo.contentSignature() !== values[1] || values[3]) {
+                                        needsCompile.push(fileInfo);
+                                    }
+                                }
+                                else {
+                                    deleted.push(values[0]);
+                                }
+                            }
+                            catch (err) {
+                            }
+                        }
+                    }
+                };
+                if (latestCompleteStateFile) {
+                    parseContent(fs.readFileSync(latestCompleteStateFile));
+                }
+                if (latestDeltaStateFile) {
+                    parseContent(fs.readFileSync(latestDeltaStateFile));
+                }
+                // Cleanup unneeded files.
+                toDelete.forEach(file => {
+                    // Can be done async. If an unlink fails we clean it up the next round.
+                    fs.unlink(file, (err: Error) => {});
+                });
+            }
+            catch (err) {
+                // We couldn't read the state directory. Start with a fresh state.
+                return [undefined, undefined];
+            }
+            return [needsCompile, deleted];
         }
     }
 
     export function createBuilder(project: Project, builderHost: BuilderHost): Builder {
-        if (!project.projectService.enableAutoDiagnostics) {
+        if (!project.projectService.autoBuild) {
             return new NullBuilder(project, builderHost);
         }
         if (!project.isConfiguredProject()) {

@@ -151,15 +151,13 @@ namespace ts.server {
             private host: ServerHost,
             private byteLength: (buf: string, encoding?: string) => number,
             private hrtime: (start?: number[]) => number[],
-            private logger: Logger,
-            enableAutoDiagnostics = false
+            private logger: Logger
         ) {
             this.projectService =
                 new ProjectService(host, logger,
                     {
                         event: (info, eventName) => this.event(info, eventName)
                     },
-                    enableAutoDiagnostics,
                     (eventName, project, fileName) => {
                         this.handleEvent(eventName, project, fileName);
                     }

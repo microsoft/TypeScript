@@ -556,7 +556,10 @@ namespace ts.server {
         hostConfiguration: HostConfiguration;
         timerForDetectingProjectFileListChanges: Map<any> = {};
 
-        constructor(public host: ServerHost, public psLogger: Logger, public channel: Channel, public enableAutoDiagnostics = false, public eventHandler?: ProjectServiceEventHandler) {
+        autoBuild: boolean = false;
+        metaDataDirectory: string;
+
+        constructor(public host: ServerHost, public psLogger: Logger, public channel: Channel, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
             this.addDefaultHostConfiguration();
         }
@@ -694,6 +697,12 @@ namespace ts.server {
                 if (args.hostInfo !== undefined) {
                     this.hostConfiguration.hostInfo = args.hostInfo;
                     this.log("Host information " + args.hostInfo, "Info");
+                }
+                if (args.autoBuild !== undefined) {
+                    this.autoBuild = !!args.autoBuild;
+                }
+                if (args.metaDataDirectory !== undefined) {
+                    this.metaDataDirectory = args.metaDataDirectory;
                 }
                 if (args.formatOptions) {
                     mergeFormatOptions(this.hostConfiguration.formatCodeOptions, args.formatOptions);
