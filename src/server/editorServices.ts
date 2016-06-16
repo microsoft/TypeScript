@@ -129,7 +129,7 @@ namespace ts.server {
         private resolvedTypeReferenceDirectives: ts.FileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>;
         private getCanonicalFileName: (fileName: string) => string;
 
-        constructor(private host: ServerHost, private project: Project) {
+        constructor(private host: ServerHost, private project: Project, private cancellationToken: HostCancellationToken) {
             this.getCanonicalFileName = ts.createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.resolvedModuleNames = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
             this.resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
@@ -186,6 +186,10 @@ namespace ts.server {
                 // after all there is no point to invalidate it if we have no idea where to look for the module.
                 return resolution.failedLookupLocations.length === 0;
             }
+        }
+
+        getCancellationToken() {
+            return this.cancellationToken;
         }
 
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
@@ -271,6 +275,10 @@ namespace ts.server {
         readFile(fileName: string): string {
             return this.host.readFile(fileName);
         }
+
+        getDirectories(path: string): string[] {
+            return this.host.getDirectories(path);
+        }
     }
 
     export interface ProjectOptions {
@@ -316,7 +324,7 @@ namespace ts.server {
                 compilerOptions.allowNonTsExtensions = true;
             }
 
-            this.lsHost = new LSHost(this.projectService.host, this);
+            this.lsHost = new LSHost(this.projectService.host, this, this.projectService.cancellationToken);
             this.lsHost.setCompilationSettings(compilerOptions);
             this.languageService = ts.createLanguageService(this.lsHost, documentRegistry);
         }
@@ -642,7 +650,10 @@ namespace ts.server {
 
         private documentRegistry: ts.DocumentRegistry;
 
-        constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
+        constructor(public host: ServerHost,
+            public psLogger: Logger,
+            public cancellationToken: HostCancellationToken,
+            public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
             this.setDefaultHostConfiguration();
             this.documentRegistry = ts.createDocumentRegistry(host.useCaseSensitiveFileNames, host.getCurrentDirectory());
@@ -663,6 +674,15 @@ namespace ts.server {
                 this.directoryWatchersForTsconfig[directory].close();
                 delete this.directoryWatchersForTsconfig[directory];
             }
+        }
+
+        getProject(projectFileName: string): Project {
+            // TODO: fixme
+            if (!projectFileName) {
+                // TODO: fixme
+                return this.inferredProjects.length ? this.inferredProjects[0] : undefined;
+            }
+            return this.findExternalProjectByProjectFileName(projectFileName) || this.findConfiguredProjectByConfigFile(projectFileName);
         }
 
         getFormatCodeOptions(file?: string) {
@@ -980,7 +1000,7 @@ namespace ts.server {
          * the tsconfig file content and update the project; otherwise we create a new one.
          */
         private openOrUpdateConfiguredProjectForFile(fileName: string): { configFileName?: string, configFileErrors?: Diagnostic[] } {
-            const searchPath = ts.normalizePath(getDirectoryPath(fileName));
+            const searchPath = getDirectoryPath(normalizePath(fileName));
             this.log("Search path: " + searchPath, "Info");
             // check if this file is already included in one of external projects
             const configFileName = this.findConfigFile(searchPath);

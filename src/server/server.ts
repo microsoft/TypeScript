@@ -83,8 +83,7 @@ namespace ts.server {
                 if (this.fd >= 0) {
                     fs.writeSync(this.fd, buf, 0, buf.length, null);
                 }
-                if (this.traceToConsole)
-                {
+                if (this.traceToConsole) {
                     console.warn(s);
                 }
             }
@@ -92,8 +91,8 @@ namespace ts.server {
     }
 
     class IOSession extends Session {
-        constructor(host: ServerHost, logger: ts.server.Logger) {
-            super(host, Buffer.byteLength, process.hrtime, logger);
+        constructor(host: ServerHost, cancellationToken: HostCancellationToken, logger: ts.server.Logger) {
+            super(host, cancellationToken, Buffer.byteLength, process.hrtime, logger);
         }
 
         exit() {
@@ -294,7 +293,18 @@ namespace ts.server {
     sys.setTimeout = setTimeout;
     sys.clearTimeout = clearTimeout;
 
-    const ioSession = new IOSession(sys, logger);
+    let cancellationToken: HostCancellationToken;
+    try {
+        const factory = require("./cancellationToken");
+        cancellationToken = factory(sys.args);
+    }
+    catch (e) {
+        cancellationToken = {
+            isCancellationRequested: () => false
+        };
+    };
+
+    const ioSession = new IOSession(sys, cancellationToken, logger);
     process.on("uncaughtException", function(err: Error) {
         ioSession.logError(err, "unknown");
     });

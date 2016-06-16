@@ -164,7 +164,7 @@ namespace ts {
 
         /**
          * Returns a JSON-encoded value of the type:
-         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
+         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean, isDefinition?: boolean }[]
          */
         getReferencesAtPosition(fileName: string, position: number): string;
 
@@ -515,21 +515,6 @@ namespace ts {
         public dispose(dummy: any): void {
             this.factory.unregisterShim(this);
         }
-    }
-
-    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; code: number; }[] {
-        return diagnostics.map(d => realizeDiagnostic(d, newLine));
-    }
-
-    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; code: number; } {
-        return {
-            message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
-            start: diagnostic.start,
-            length: diagnostic.length,
-            /// TODO: no need for the tolowerCase call
-            category: DiagnosticCategory[diagnostic.category].toLowerCase(),
-            code: diagnostic.code
-        };
     }
 
     class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim {

@@ -91,6 +91,11 @@ declare namespace ts.server.protocol {
           * The file for the request (absolute pathname required).
           */
         file: string;
+
+        /*
+         * Optional name of project that contains file
+         */
+        projectFileName?: string;
     }
 
     /**
@@ -123,6 +128,16 @@ declare namespace ts.server.protocol {
           * The list of normalized file name in the project, including 'lib.d.ts'
           */
         fileNames?: string[];
+    }
+
+    export interface DiagnosticWithLinePosition {
+        message: string;
+        start: number;
+        length: number;
+        startLocation: Location;
+        endLocation: Location;
+        category: string;
+        code: number;
     }
 
     /**
@@ -165,6 +180,15 @@ declare namespace ts.server.protocol {
       */
     export interface FileLocationRequest extends FileRequest {
         arguments: FileLocationRequestArgs;
+    }
+
+    export interface FileSpanRequestArgs extends FileRequestArgs {
+        start: number;
+        length: number;
+    }
+
+    export interface FileSpanRequest extends FileRequest {
+        arguments: FileSpanRequestArgs;
     }
 
     /**
@@ -309,6 +333,11 @@ declare namespace ts.server.protocol {
           * True if reference is a write location, false otherwise.
           */
         isWriteAccess: boolean;
+
+        /**
+         * True if reference is a definition, false otherwise.
+         */
+        isDefinition: boolean;
     }
 
     /**

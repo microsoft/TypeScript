@@ -114,6 +114,7 @@ namespace ts.server {
         export const Formatonkey = "formatonkey";
         export const Geterr = "geterr";
         export const GeterrForProject = "geterrForProject";
+        export const SemanticDiagnosticsFull = "semanticDiagnostics-full";
         export const NavBar = "navbar";
         export const Navto = "navto";
         export const Occurrences = "occurrences";
@@ -137,6 +138,7 @@ namespace ts.server {
         export const CloseExternalProject = "closeExternalProject";
         export const SynchronizeProjectList = "synchronizeProjectList";
         export const ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
+        export const EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
     }
 
     namespace Errors {
@@ -156,12 +158,12 @@ namespace ts.server {
 
         constructor(
             private host: ServerHost,
+            private cancellationToken: HostCancellationToken,
             private byteLength: (buf: string, encoding?: string) => number,
             private hrtime: (start?: number[]) => number[],
-            private logger: Logger
-        ) {
+            private logger: Logger) {
             this.projectService =
-                new ProjectService(host, logger, (eventName, project, fileName) => {
+                new ProjectService(host, logger, cancellationToken, (eventName, project, fileName) => {
                     this.handleEvent(eventName, project, fileName);
                 });
         }
@@ -245,6 +247,11 @@ namespace ts.server {
             this.response(body, commandName, requestSequence, errorMessage);
         }
 
+        private getLocation(position: number, scriptInfo: ScriptInfo): protocol.Location {
+            const { line, offset } = scriptInfo.positionToLineOffset(position);
+            return { line, offset: offset + 1 };
+        }
+
         private semanticCheck(file: string, project: Project) {
             try {
                 const diags = project.languageService.getSemanticDiagnostics(file);
@@ -321,6 +328,34 @@ namespace ts.server {
             }
         }
 
+        private getEncodedSemanticClassifications(args: protocol.FileSpanRequestArgs) {
+            const file = normalizePath(args.file);
+            const project = this.projectService.getProjectForFile(file);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+            return project.languageService.getEncodedSemanticClassifications(file, args);
+        }
+
+        private getSemanticDiagnostics(args: protocol.FileRequestArgs): protocol.DiagnosticWithLinePosition[] {
+            const file = normalizePath(args.file);
+            var project = (args.projectFileName && this.projectService.getProject(normalizePath(args.projectFileName))) || this.projectService.getProjectForFile(file);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+            const scriptInfo = project.getScriptInfo(file);
+            const diagnostics = project.languageService.getSemanticDiagnostics(file);
+            return diagnostics.map(d => <protocol.DiagnosticWithLinePosition>{
+                message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
+                start: d.start,
+                length: d.length,
+                category: DiagnosticCategory[d.category].toLowerCase(),
+                code: d.code,
+                startLocation: this.getLocation(d.start, scriptInfo),
+                endLocation: this.getLocation(d.start + d.length, scriptInfo)
+            });
+        }
+
         private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.FileSpan[] | DefinitionInfo[] {
             const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
@@ -329,7 +364,7 @@ namespace ts.server {
             }
 
             const scriptInfo = project.getScriptInfo(file);
-            const position = this.getPosition(args, scriptInfo);;
+            const position = this.getPosition(args, scriptInfo);
 
             const definitions = project.languageService.getDefinitionAtPosition(file, position);
             if (!definitions) {
@@ -402,7 +437,7 @@ namespace ts.server {
                     start,
                     end,
                     file: fileName,
-                    isWriteAccess
+                    isWriteAccess,
                 };
             });
         }
@@ -586,7 +621,8 @@ namespace ts.server {
                             start: start,
                             lineText: lineText,
                             end: refScriptInfo.positionToLineOffset(ts.textSpanEnd(ref.textSpan)),
-                            isWriteAccess: ref.isWriteAccess
+                            isWriteAccess: ref.isWriteAccess,
+                            isDefinition: ref.isDefinition
                         };
                     });
                 },
@@ -764,7 +800,7 @@ namespace ts.server {
             }
 
             const scriptInfo = project.getScriptInfo(file);
-            const position = this.getPosition(args, scriptInfo)
+            const position = this.getPosition(args, scriptInfo);
 
             const completions = project.languageService.getCompletionsAtPosition(file, position);
             if (!completions) {
@@ -1067,6 +1103,10 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
+        private canceledResponse() {
+            return { canceled: true, responseRequired: true };
+        }
+
         private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
                 this.projectService.openExternalProject(request.arguments);
@@ -1157,13 +1197,19 @@ namespace ts.server {
                 return this.requiredResponse(this.getCompletions(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
-                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments))
+                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments));
             },
             [CommandNames.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.SignatureHelpFull]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.SemanticDiagnosticsFull]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getSemanticDiagnostics(request.arguments));
+            },
+            [CommandNames.EncodedSemanticClassificationsFull]: (request: protocol.FileSpanRequest) => {
+                return this.requiredResponse(this.getEncodedSemanticClassifications(request.arguments));
             },
             [CommandNames.Geterr]: (request: protocol.Request) => {
                 const geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
@@ -1282,6 +1328,8 @@ namespace ts.server {
             catch (err) {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
+                    this.output({ canceled: true }, request.command, request.seq);
+                    return;
                 }
                 this.logError(err, message);
                 this.output(

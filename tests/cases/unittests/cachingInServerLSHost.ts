@@ -79,7 +79,7 @@ namespace ts {
             msg: (s: string, type?: string) => { }
         };
 
-        const projectService = new server.ProjectService(serverHost, logger);
+        const projectService = new server.ProjectService(serverHost, logger, { isCancellationRequested: () => false });
         const rootScriptInfo = projectService.getOrCreateScriptInfo(rootFile, /* openedByClient */true);
         const project = projectService.createAndAddInferredProject(rootScriptInfo);
         project.setCompilerOptions({ module: ts.ModuleKind.AMD } );
