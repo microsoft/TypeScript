@@ -10,7 +10,7 @@
 /// <reference path='jsTyping.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
-/// <reference path='quickfixes\references.ts' />
+/// <reference path='codefixes\references.ts' />
 
 namespace ts {
     /** The version of the language service API */
@@ -1762,7 +1762,7 @@ namespace ts {
     }
 
     export function getSupportedCodeFixes() {
-        return quickFix.QuickFixProvider.getSupportedErrorCodes();
+        return codeFix.CodeFixProvider.getSupportedErrorCodes();
     }
 
     // Cache host information about script Should be refreshed
@@ -2837,7 +2837,7 @@ namespace ts {
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
-        const quickFixProvider: quickFix.QuickFixProvider = new quickFix.QuickFixProvider();
+        const codeFixProvider: codeFix.CodeFixProvider = new codeFix.CodeFixProvider();
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
         let lastProjectVersion: string;
@@ -7494,7 +7494,7 @@ namespace ts {
             synchronizeHostData();
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-            return [quickFixProvider.getFixes(errorCodes[0], sourceFile, start, end)];
+            return [codeFixProvider.getFixes(errorCodes[0], sourceFile, start, end)];
         }
 
         /**

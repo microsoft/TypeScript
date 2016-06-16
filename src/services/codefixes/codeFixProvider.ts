@@ -1,36 +1,36 @@
 /* @internal */
 namespace ts {
-    export interface QuickFix {
+    export interface CodeAction {
         name: string;
         errorCodes: string[];
         getFix(sourceFile: SourceFile, start: number, end: number): TextChange[];
     }
 
-    export namespace quickFix {
-        var quickFixes: Map<QuickFix[]> = {};
+    export namespace codeFix {
+        var codeActions: Map<CodeAction[]> = {};
 
-        export function registerQuickFix(fix: QuickFix) {
+        export function registerCodeFix(fix: CodeAction) {
             fix.errorCodes.forEach(error => {
-                let fixes = quickFixes[error];
+                let fixes = codeActions[error];
                 if (!fixes) {
                     fixes = [];
-                    quickFixes[error] = fixes;
+                    codeActions[error] = fixes;
                 }
                 fixes.push(fix);
             });
         }
 
-        export class QuickFixProvider {
+        export class CodeFixProvider {
 
             public static getSupportedErrorCodes() {
-                return getKeys(quickFixes);
+                return getKeys(codeActions);
             }
 
             public getFixes(errorCode: string, sourceFile: SourceFile, start: number, end: number): CodeFix {
-                const fix = quickFixes[errorCode];
+                const fix = codeActions[errorCode];
 
                 if (!fix || fix.length == 0) {
-                    throw new Error(`No fixes found for error: '${errorCode}'.`);
+                    throw new Error("No fixes found for error: '${errorCode}'.");
                 }
 
                 return { name: fix[0].name, textChanges: fix[0].getFix(sourceFile, start, end) };

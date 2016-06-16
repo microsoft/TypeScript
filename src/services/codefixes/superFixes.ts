@@ -1,13 +1,13 @@
 ﻿/* @internal */
-namespace ts.quickFix {
+namespace ts.codeFix {
 
     function getOpenBraceEnd(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
         // First token is the open curly, this is where we want to put the 'super' call.
         return constructor.body.getFirstToken(sourceFile).getEnd();
     }
 
-    registerQuickFix({
-        name: `Add missing 'super()' call.`,
+    registerCodeFix({
+        name: getLocaleSpecificMessage(Diagnostics.Add_missing_super_call),
         errorCodes: ["TS2377"],
         getFix: (sourceFile: SourceFile, start: number, end: number) => {
             const token = getTokenAtPosition(sourceFile, start);
@@ -22,7 +22,7 @@ namespace ts.quickFix {
         }
     });
 
-    registerQuickFix({
+    registerCodeFix({
         name: `Make super call the first statement in the constructor.`,
         errorCodes: ["TS17009"],
         getFix: (sourceFile: SourceFile, start: number, end: number): TextChange[] => {
@@ -36,7 +36,7 @@ namespace ts.quickFix {
             const superCall = findSuperCall((<ConstructorDeclaration>constructor).body);
 
             if (!superCall) {
-                throw new Error(`Failed to find super call.`);
+                throw new Error("Failed to find super call.");
             }
 
             const newPosition = getOpenBraceEnd(<ConstructorDeclaration>constructor, sourceFile);
@@ -59,15 +59,6 @@ namespace ts.quickFix {
                 }
                 return forEachChild(n, findSuperCall);
             }
-        }
-    });
-
-    registerQuickFix({
-        name: `Add Type to static member access.`,
-        errorCodes: ["TS2662"],
-        getFix: (sourceFile: SourceFile, start: number, end: number): TextChange[] => {
-
-            throw new Error("Not implemented");
         }
     });
 }
