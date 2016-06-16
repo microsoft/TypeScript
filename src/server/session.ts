@@ -339,7 +339,7 @@ namespace ts.server {
 
         private getSemanticDiagnostics(args: protocol.FileRequestArgs): protocol.DiagnosticWithLinePosition[] {
             const file = normalizePath(args.file);
-            var project = (args.projectFileName && this.projectService.getProject(normalizePath(args.projectFileName))) || this.projectService.getProjectForFile(file);
+            const project = (args.projectFileName && this.projectService.getProject(normalizePath(args.projectFileName))) || this.projectService.getProjectForFile(file);
             if (!project) {
                 throw Errors.NoProject;
             }
@@ -1101,10 +1101,6 @@ namespace ts.server {
 
         private requiredResponse(response: any) {
             return { response, responseRequired: true };
-        }
-
-        private canceledResponse() {
-            return { canceled: true, responseRequired: true };
         }
 
         private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {

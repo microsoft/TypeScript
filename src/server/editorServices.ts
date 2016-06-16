@@ -397,7 +397,11 @@ namespace ts.server {
         }
 
         getScriptInfo(fileName: string) {
-            return this.projectService.getOrCreateScriptInfo(fileName, /*openedByClient*/ false);
+            const scriptInfo = this.projectService.getOrCreateScriptInfo(fileName, /*openedByClient*/ false);
+            if (!scriptInfo.defaultProject) {
+                scriptInfo.defaultProject = this;
+            }
+            return scriptInfo;
         }
 
         filesToString() {
