@@ -2768,6 +2768,10 @@ namespace ts {
             return type && (type.flags & TypeFlags.Any) !== 0;
         }
 
+        function isTypeNever(type: Type) {
+            return type && (type.flags & TypeFlags.Never) !== 0;
+        }
+
         // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
         // assigned by contextual typing.
         function getTypeForBindingElementParent(node: VariableLikeDeclaration) {
@@ -11655,6 +11659,16 @@ namespace ts {
             return emptyObjectType;
         }
 
+        function createPromiseReturnType(func: FunctionLikeDeclaration, promisedType: Type) {
+            const promiseType = createPromiseType(promisedType);
+            if (promiseType === emptyObjectType) {
+                error(func, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+                return unknownType;
+            }
+
+            return promiseType;
+        }
+
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
             const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
             if (!func.body) {
@@ -11690,19 +11704,12 @@ namespace ts {
                 else {
                     types = checkAndAggregateReturnExpressionTypes(func, contextualMapper);
                     if (!types) {
-                        return neverType;
+                        // For an async function, the return type will not be never, but rather a Promise for never.
+                        return isAsync ? createPromiseReturnType(func, neverType) : neverType;
                     }
                     if (types.length === 0) {
-                        if (isAsync) {
-                            // For an async function, the return type will not be void, but rather a Promise for void.
-                            const promiseType = createPromiseType(voidType);
-                            if (promiseType === emptyObjectType) {
-                                error(func, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
-                                return unknownType;
-                            }
-                            return promiseType;
-                        }
-                        return voidType;
+                        // For an async function, the return type will not be void, but rather a Promise for void.
+                        return isAsync ? createPromiseReturnType(func, voidType): voidType;
                     }
                 }
                 // When yield/return statements are contextually typed we allow the return type to be a union type.
@@ -11716,7 +11723,7 @@ namespace ts {
                     else {
                         error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
                         // Defer to unioning the return types so we get a) downstream errors earlier and b) better Salsa experience
-                        return getUnionType(types);
+                        return isAsync ? createPromiseReturnType(func, getUnionType(types)) : getUnionType(types);
                     }
                 }
 
@@ -11729,21 +11736,10 @@ namespace ts {
             }
 
             const widenedType = getWidenedType(type);
-            if (isAsync) {
-                // From within an async function you can return either a non-promise value or a promise. Any
-                // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
-                // return type of the body is awaited type of the body, wrapped in a native Promise<T> type.
-                const promiseType = createPromiseType(widenedType);
-                if (promiseType === emptyObjectType) {
-                    error(func, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
-                    return unknownType;
-                }
-
-                return promiseType;
-            }
-            else {
-                return widenedType;
-            }
+            // From within an async function you can return either a non-promise value or a promise. Any
+            // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
+            // return type of the body is awaited type of the body, wrapped in a native Promise<T> type.
+            return isAsync ? createPromiseReturnType(func, widenedType) : widenedType;
         }
 
         function checkAndAggregateYieldOperandTypes(func: FunctionLikeDeclaration, contextualMapper: TypeMapper): Type[] {
@@ -13740,7 +13736,7 @@ namespace ts {
 
         function checkNonThenableType(type: Type, location?: Node, message?: DiagnosticMessage) {
             type = getWidenedType(type);
-            if (!isTypeAny(type) && isTypeAssignableTo(type, getGlobalThenableType())) {
+            if (!isTypeAny(type) && !isTypeNever(type) && isTypeAssignableTo(type, getGlobalThenableType())) {
                 if (location) {
                     if (!message) {
                         message = Diagnostics.Operand_for_await_does_not_have_a_valid_callable_then_member;
@@ -13771,12 +13767,15 @@ namespace ts {
             //  }
             //
 
-            if (promise.flags & TypeFlags.Any) {
+            if (isTypeAny(promise)) {
                 return undefined;
             }
 
-            if ((promise.flags & TypeFlags.Reference) && (<GenericType>promise).target === tryGetGlobalPromiseType()) {
-                return (<GenericType>promise).typeArguments[0];
+            if (promise.flags & TypeFlags.Reference) {
+                if ((<GenericType>promise).target === tryGetGlobalPromiseType()
+                    || (<GenericType>promise).target === getGlobalPromiseLikeType()) {
+                    return (<GenericType>promise).typeArguments[0];
+                }
             }
 
             const globalPromiseLikeType = getInstantiatedGlobalPromiseLikeType();
@@ -13785,17 +13784,17 @@ namespace ts {
             }
 
             const thenFunction = getTypeOfPropertyOfType(promise, "then");
-            if (thenFunction && (thenFunction.flags & TypeFlags.Any)) {
+            if (!thenFunction || isTypeAny(thenFunction)) {
                 return undefined;
             }
 
-            const thenSignatures = thenFunction ? getSignaturesOfType(thenFunction, SignatureKind.Call) : emptyArray;
+            const thenSignatures = getSignaturesOfType(thenFunction, SignatureKind.Call);
             if (thenSignatures.length === 0) {
                 return undefined;
             }
 
             const onfulfilledParameterType = getTypeWithFacts(getUnionType(map(thenSignatures, getTypeOfFirstParameterOfSignature)), TypeFacts.NEUndefined);
-            if (onfulfilledParameterType.flags & TypeFlags.Any) {
+            if (isTypeAny(onfulfilledParameterType)) {
                 return undefined;
             }
 
@@ -13804,12 +13803,11 @@ namespace ts {
                 return undefined;
             }
 
-            const valueParameterType = getUnionType(map(onfulfilledParameterSignatures, getTypeOfFirstParameterOfSignature));
-            return valueParameterType;
+            return getUnionType(map(onfulfilledParameterSignatures, getTypeOfFirstParameterOfSignature));
         }
 
         function getTypeOfFirstParameterOfSignature(signature: Signature) {
-            return getTypeAtPosition(signature, 0);
+            return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : neverType;
         }
 
         /**
