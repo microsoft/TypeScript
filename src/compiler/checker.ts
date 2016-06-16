@@ -8872,11 +8872,13 @@ namespace ts {
         function getContextualTypeForBinaryOperand(node: Expression): Type {
             const binaryExpression = <BinaryExpression>node.parent;
             const operator = binaryExpression.operatorToken.kind;
-            if (operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment) {
+
+            if (SyntaxKind.FirstAssignment <= operator && operator <= SyntaxKind.LastAssignment) {
                 // In an assignment expression, the right operand is contextually typed by the type of the left operand.
                 if (node === binaryExpression.right) {
                     return checkExpression(binaryExpression.left);
                 }
+                return undefined;
             }
             else if (operator === SyntaxKind.BarBarToken) {
                 // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
@@ -9043,6 +9045,7 @@ namespace ts {
          * @returns the contextual type of an expression.
          */
         function getContextualType(node: Expression): Type {
+
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
@@ -9090,6 +9093,75 @@ namespace ts {
             }
             return undefined;
         }
+
+        function shouldAcquireLiteralType(literalNode: LiteralExpression) {
+            if (isEqualityComparisonOperand(literalNode)) {
+                return true;
+            }
+
+            const contextualType = getContextualType(literalNode);
+            return !!contextualType && contextualTypeIsStringLiteralType(contextualType);
+        }
+
+        /**
+         * Returns true if an expression might be evaluated as part of an equality comparison.
+         * This includes inequality (e.g. '!==') and 'switch'/'case' equality.
+         */
+        function isEqualityComparisonOperand(expression: Expression): boolean {
+            const parent = expression.parent;
+
+            switch (parent.kind) {
+                // The operand of a 'switch' should get a literal type.
+                case SyntaxKind.SwitchStatement:
+                    return expression === (parent as SwitchStatement).expression;
+
+                // The tested expression of a 'case' clause should get a literal type.
+                case SyntaxKind.CaseClause:
+                    return expression === (parent as CaseClause).expression;
+
+                case SyntaxKind.BinaryExpression:
+                    const binaryExpr = parent as BinaryExpression;
+                    switch (binaryExpr.operatorToken.kind) {
+                        // Either operand of an equality/inequality comparison
+                        // should get a literal type.
+                        case SyntaxKind.EqualsEqualsEqualsToken:
+                        case SyntaxKind.ExclamationEqualsEqualsToken:
+                        case SyntaxKind.EqualsEqualsToken:
+                        case SyntaxKind.ExclamationEqualsToken:
+                            return true;
+
+                        case SyntaxKind.AmpersandAmpersandToken:
+                        case SyntaxKind.CommaToken:
+                            if (expression === binaryExpr.right) {
+                                return isEqualityComparisonOperand(binaryExpr);
+                            }
+                            return false;
+
+                        case SyntaxKind.BarBarToken:
+                            return isEqualityComparisonOperand(binaryExpr);
+                    }
+
+                    // No binary operators apply.
+                    return false;
+
+                case SyntaxKind.ConditionalExpression:
+                    const conditional = parent as ConditionalExpression;
+                    if (expression === conditional.whenTrue || expression === conditional.whenFalse) {
+                        return isEqualityComparisonOperand(conditional);
+                    }
+                    return false;
+
+                case SyntaxKind.ParenthesizedExpression:
+                    return isEqualityComparisonOperand(parent as ParenthesizedExpression);
+
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.AsExpression:
+                    return isEqualityComparisonOperand(parent as TypeAssertion);
+            }
+
+            return false;
+        }
+
 
         // If the given type is an object or union type, if that type has a single signature, and if
         // that signature is non-generic, return the signature. Otherwise return undefined.
@@ -11531,6 +11603,7 @@ namespace ts {
 
             if (produceDiagnostics && targetType !== unknownType) {
                 const widenedType = getWidenedType(exprType);
+
                 if (!isTypeComparableTo(targetType, widenedType)) {
                     checkTypeComparableTo(exprType, targetType, node, Diagnostics.Type_0_cannot_be_converted_to_type_1);
                 }
@@ -12605,8 +12678,7 @@ namespace ts {
         }
 
         function checkStringLiteralExpression(node: StringLiteral): Type {
-            const contextualType = getContextualType(node);
-            if (contextualType && contextualTypeIsStringLiteralType(contextualType)) {
+            if (shouldAcquireLiteralType(node)) {
                 return getStringLiteralTypeForText(node.text);
             }
 

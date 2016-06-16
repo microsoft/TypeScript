@@ -1,0 +1,33 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements04.ts ===
+let x: "foo";
+>x : Symbol(x, Decl(stringLiteralsWithSwitchStatements04.ts, 0, 3))
+
+let y: "foo" | "bar"; 
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements04.ts, 1, 3))
+
+declare function randBool(): boolean;
+>randBool : Symbol(randBool, Decl(stringLiteralsWithSwitchStatements04.ts, 1, 21))
+
+switch (randBool() ? "foo" : "bar") {
+>randBool : Symbol(randBool, Decl(stringLiteralsWithSwitchStatements04.ts, 1, 21))
+
+    case "foo":
+        break;
+    case "bar":
+        break;
+    case x:
+>x : Symbol(x, Decl(stringLiteralsWithSwitchStatements04.ts, 0, 3))
+
+        x;
+>x : Symbol(x, Decl(stringLiteralsWithSwitchStatements04.ts, 0, 3))
+
+        break;
+    case y:
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements04.ts, 1, 3))
+
+        y;
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements04.ts, 1, 3))
+
+        break;
+}
+

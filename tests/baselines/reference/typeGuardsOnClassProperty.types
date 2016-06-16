@@ -24,7 +24,7 @@ class D {
 >typeof data === "string" : boolean
 >typeof data : string
 >data : string | string[]
->"string" : string
+>"string" : "string"
 >data : string
 >data.join(" ") : string
 >data.join : (separator?: string) => string
@@ -43,7 +43,7 @@ class D {
 >this.data : string | string[]
 >this : this
 >data : string | string[]
->"string" : string
+>"string" : "string"
 >this.data : string
 >this : this
 >data : string
@@ -85,7 +85,7 @@ if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
 >o.prop1 : number | string
 >o : { prop1: number | string; prop2: boolean | string; }
 >prop1 : number | string
->"string" : string
+>"string" : "string"
 >o.prop1.toLowerCase() : string
 >o.prop1.toLowerCase : () => string
 >o.prop1 : string
@@ -104,7 +104,7 @@ if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 >typeof prop1 === "string" : boolean
 >typeof prop1 : string
 >prop1 : number | string
->"string" : string
+>"string" : "string"
 >prop1.toLocaleLowerCase() : string
 >prop1.toLocaleLowerCase : () => string
 >prop1 : string

@@ -1,0 +1,36 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06.ts(11,10): error TS2678: Type '"baz"' is not comparable to type '"foo" | "bar"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06.ts(17,10): error TS2678: Type '"baz"' is not comparable to type '"foo" | "bar"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06.ts(17,24): error TS1005: ':' expected.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06.ts (3 errors) ====
+    let x: "foo";
+    let y: "foo" | "bar"; 
+    
+    declare function randBool(): boolean;
+    
+    switch (y) {
+        case "foo", x:
+            break;
+        case x, "foo":
+            break;
+        case x, "baz":
+             ~~~~~~~~
+!!! error TS2678: Type '"baz"' is not comparable to type '"foo" | "bar"'.
+            break;
+        case "baz", x:
+            break;
+        case "baz" && "bar":
+            break;
+        case "bar" && "baz";
+             ~~~~~~~~~~~~~~
+!!! error TS2678: Type '"baz"' is not comparable to type '"foo" | "bar"'.
+                           ~
+!!! error TS1005: ':' expected.
+            break;
+        case "baz" && ("foo" || "bar"):
+            break;
+        case "bar" && ("baz" || "bar"):
+            break;
+    }
+    

@@ -19,10 +19,10 @@ function isS(t: T): t is S {
 >t === "a" || t === "b" : boolean
 >t === "a" : boolean
 >t : ("a" | "b")[] | "a" | "b"
->"a" : string
+>"a" : "a"
 >t === "b" : boolean
 >t : ("a" | "b")[] | "a" | "b"
->"b" : string
+>"b" : "b"
 }
 
 function f(foo: T) {

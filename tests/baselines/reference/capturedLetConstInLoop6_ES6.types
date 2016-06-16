@@ -47,14 +47,14 @@ for (let x in []) {
     if (x == "1") {
 >x == "1" : boolean
 >x : string
->"1" : string
+>"1" : "1"
 
         break;
     }
     if (x == "2") {
 >x == "2" : boolean
 >x : string
->"2" : string
+>"2" : "2"
 
         continue;
     }
@@ -412,14 +412,14 @@ for (const x in []) {
     if (x == "1") {
 >x == "1" : boolean
 >x : string
->"1" : string
+>"1" : "1"
 
         break;
     }
     if (x == "2") {
 >x == "2" : boolean
 >x : string
->"2" : string
+>"2" : "2"
 
         continue;
     }
