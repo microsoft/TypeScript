@@ -729,7 +729,7 @@ namespace ts.server {
             if (!project) {
                 throw Errors.NoProject;
             }
-            
+
             return project.languageService.getFormattingEditsForRange(file, args.position, args.endPosition, args.options);
         }
 
@@ -739,7 +739,7 @@ namespace ts.server {
             if (!project) {
                 throw Errors.NoProject;
             }
-            
+
             return project.languageService.getFormattingEditsForDocument(file, args.options);
         }
 
@@ -749,7 +749,6 @@ namespace ts.server {
             if (!project) {
                 throw Errors.NoProject;
             }
-
             return project.languageService.getFormattingEditsAfterKeystroke(file, args.position, args.key, args.options);
         }
 

@@ -1894,7 +1894,6 @@ namespace ts {
         }
     }
 
-    let x = 1;
     class SyntaxTreeCache {
         // For our syntactic only features, we also keep a cache of the syntax tree for the
         // currently edited file.
@@ -1927,7 +1926,7 @@ namespace ts {
                 sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, editRange);
             }
 
-            if (sourceFile) {                
+            if (sourceFile) {
                 // All done, ensure state is up to date
                 this.currentFileVersion = version;
                 this.currentFileName = fileName;
