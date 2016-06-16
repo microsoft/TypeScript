@@ -863,7 +863,7 @@ namespace ts.server {
             this.projectService.closeClientFile(file);
         }
 
-        private decorateNavigationBarItem(project: Project, fileName: string, items: ts.NavigationBarItem[]): protocol.NavigationBarItem[] {
+        private decorateNavigationBarItem(project: Project, fileName: string, items: ts.NavigationBarItem[], lineIndex: LineIndex): protocol.NavigationBarItem[] {
             if (!items) {
                 return undefined;
             }
@@ -875,10 +875,10 @@ namespace ts.server {
                 kind: item.kind,
                 kindModifiers: item.kindModifiers,
                 spans: item.spans.map(span => ({
-                    start: compilerService.host.positionToLineOffset(fileName, span.start),
-                    end: compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(span))
+                    start: compilerService.host.positionToLineOffset(fileName, span.start, lineIndex),
+                    end: compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(span), lineIndex)
                 })),
-                childItems: this.decorateNavigationBarItem(project, fileName, item.childItems),
+                childItems: this.decorateNavigationBarItem(project, fileName, item.childItems, lineIndex),
                 indent: item.indent
             }));
         }
@@ -896,7 +896,7 @@ namespace ts.server {
                 return undefined;
             }
 
-            return this.decorateNavigationBarItem(project, fileName, items);
+            return this.decorateNavigationBarItem(project, fileName, items, compilerService.host.getLineIndex(fileName));
         }
 
         private getNavigateToItems(searchValue: string, fileName: string, maxResultCount?: number): protocol.NavtoItem[] {

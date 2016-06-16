@@ -17,19 +17,19 @@ namespace ts {
     }
 
     function visitNode<T>(cbNode: (node: Node) => T, node: Node): T {
-        if (node) {
+        if (node !== void 0) {
             return cbNode(node);
         }
     }
 
     function visitNodeArray<T>(cbNodes: (nodes: Node[]) => T, nodes: Node[]) {
-        if (nodes) {
+        if (nodes !== void 0) {
             return cbNodes(nodes);
         }
     }
 
     function visitEachNode<T>(cbNode: (node: Node) => T, nodes: Node[]) {
-        if (nodes) {
+        if (nodes !== void 0) {
             for (const node of nodes) {
                 const result = cbNode(node);
                 if (result) {
@@ -44,7 +44,7 @@ namespace ts {
     // embedded arrays are flattened and the 'cbNode' callback is invoked for each element. If a callback returns
     // a truthy value, iteration stops and that value is returned. Otherwise, undefined is returned.
     export function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T {
-        if (!node) {
+        if (node === void 0) {
             return;
         }
         // The visitXXX functions could be written as local functions that close over the cbNode and cbNodeArray

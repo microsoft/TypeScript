@@ -7039,7 +7039,7 @@ namespace ts {
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-            return NavigationBar.getNavigationBarItems(sourceFile, host.getCompilationSettings());
+            return NavigationBar.getNavigationBarItems(sourceFile);
         }
 
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
