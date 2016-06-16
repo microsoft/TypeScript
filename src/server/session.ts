@@ -112,6 +112,9 @@ namespace ts.server {
         export const Exit = "exit";
         export const Format = "format";
         export const Formatonkey = "formatonkey";
+        export const FormatFull = "format-full";
+        export const FormatonkeyFull = "formatonkey-full";
+        export const FormatRangeFull = "formatRange-full";
         export const Geterr = "geterr";
         export const GeterrForProject = "geterrForProject";
         export const SemanticDiagnosticsFull = "semanticDiagnostics-full";
@@ -720,6 +723,36 @@ namespace ts.server {
             });
         }
 
+        private getFormattingEditsForRangeFull(args: protocol.FormatRequestArgs) {
+            const file = ts.normalizePath(args.file);
+            const project = this.projectService.getProjectForFile(file);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+            
+            return project.languageService.getFormattingEditsForRange(file, args.position, args.endPosition, args.options);
+        }
+
+        private getFormattingEditsForDocumentFull(args: protocol.FormatRequestArgs) {
+            const file = ts.normalizePath(args.file);
+            const project = this.projectService.getProjectForFile(file);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+            
+            return project.languageService.getFormattingEditsForDocument(file, args.options);
+        }
+
+        private getFormattingEditsAfterKeystrokeFull(args: protocol.FormatOnKeyRequestArgs) {
+            const file = ts.normalizePath(args.file);
+            const project = this.projectService.getProjectForFile(file);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+
+            return project.languageService.getFormattingEditsAfterKeystroke(file, args.position, args.key, args.options);
+        }
+
         private getFormattingEditsAfterKeystroke(line: number, offset: number, key: string, fileName: string): protocol.CodeEdit[] {
             const file = ts.normalizePath(fileName);
 
@@ -1180,11 +1213,20 @@ namespace ts.server {
             },
             [CommandNames.Format]: (request: protocol.Request) => {
                 const formatArgs = <protocol.FormatRequestArgs>request.arguments;
-                return { response: this.getFormattingEditsForRange(formatArgs.line, formatArgs.offset, formatArgs.endLine, formatArgs.endOffset, formatArgs.file), responseRequired: true };
+                return this.requiredResponse(this.getFormattingEditsForRange(formatArgs.line, formatArgs.offset, formatArgs.endLine, formatArgs.endOffset, formatArgs.file));
             },
             [CommandNames.Formatonkey]: (request: protocol.Request) => {
                 const formatOnKeyArgs = <protocol.FormatOnKeyRequestArgs>request.arguments;
-                return { response: this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.offset, formatOnKeyArgs.key, formatOnKeyArgs.file), responseRequired: true };
+                return this.requiredResponse(this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.offset, formatOnKeyArgs.key, formatOnKeyArgs.file));
+            },
+            [CommandNames.FormatFull]: (request: protocol.FormatRequest) => {
+                return this.requiredResponse(this.getFormattingEditsForDocumentFull(request.arguments));
+            },
+            [CommandNames.FormatonkeyFull]: (request: protocol.FormatOnKeyRequest) => {
+                return this.requiredResponse(this.getFormattingEditsAfterKeystrokeFull(request.arguments));
+            },
+            [CommandNames.FormatRangeFull]: (request: protocol.FormatRequest) => {
+                return this.requiredResponse(this.getFormattingEditsForRangeFull(request.arguments));
             },
             [CommandNames.Completions]: (request: protocol.CompletionDetailsRequest) => {
                 return this.requiredResponse(this.getCompletions(request.arguments, /*simplifiedResult*/ true));

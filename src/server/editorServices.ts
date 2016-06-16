@@ -1519,7 +1519,8 @@ namespace ts.server {
             for (const file of changedFiles) {
                 const scriptInfo = this.getScriptInfo(file.fileName);
                 Debug.assert(!!scriptInfo);
-                for (const change of file.changes) {
+                for (let i = file.changes.length - 1; i >= 0; i--) {
+                    const change = file.changes[i];
                     scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
                 }
             }

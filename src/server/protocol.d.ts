@@ -735,6 +735,9 @@ declare namespace ts.server.protocol {
           * Character offset on last line of range for which to format text in file.
           */
         endOffset: number;
+
+        endPosition?: number;
+        options?: ts.FormatCodeOptions;
     }
 
     /**
@@ -788,6 +791,8 @@ declare namespace ts.server.protocol {
           * Key pressed (';', '\n', or '}').
           */
         key: string;
+
+        options?: ts.FormatCodeOptions;
     }
 
     /**
