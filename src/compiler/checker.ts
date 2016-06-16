@@ -11709,7 +11709,7 @@ namespace ts {
                     }
                     if (types.length === 0) {
                         // For an async function, the return type will not be void, but rather a Promise for void.
-                        return isAsync ? createPromiseReturnType(func, voidType): voidType;
+                        return isAsync ? createPromiseReturnType(func, voidType) : voidType;
                     }
                 }
                 // When yield/return statements are contextually typed we allow the return type to be a union type.
