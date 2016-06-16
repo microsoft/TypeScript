@@ -7,12 +7,6 @@ namespace ts {
     }
 
     export namespace quickFix {
-        export const enum FixPriority {
-            AboveNormal,
-            Normal,
-            BelowNormal,
-        }
-
         var quickFixes: Map<QuickFix[]> = {};
 
         export function registerQuickFix(fix: QuickFix) {
@@ -32,7 +26,7 @@ namespace ts {
                 return getKeys(quickFixes);
             }
 
-            public getFixes(errorCode: string, sourceFile: SourceFile, start: number, end: number): SuggestedFix {
+            public getFixes(errorCode: string, sourceFile: SourceFile, start: number, end: number): CodeFix {
                 const fix = quickFixes[errorCode];
 
                 if (!fix || fix.length == 0) {

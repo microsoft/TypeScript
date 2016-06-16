@@ -572,7 +572,7 @@ namespace ts.server {
             throw new Error("Not Implemented Yet."); 
         }
 
-        getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): ts.SuggestedFix {
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): ts.CodeFix[] {
             throw new Error("Not Implemented Yet.");
         }
 

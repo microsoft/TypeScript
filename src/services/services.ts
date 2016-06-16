@@ -10,7 +10,7 @@
 /// <reference path='jsTyping.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
-/// <reference path='quickfixes/references.ts' />
+/// <reference path='quickfixes\references.ts' />
 
 namespace ts {
     /** The version of the language service API */
@@ -1116,7 +1116,7 @@ namespace ts {
 
         isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean;
 
-        getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): SuggestedFix;
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeFix[];
 
         getEmitOutput(fileName: string): EmitOutput;
 
@@ -1164,7 +1164,7 @@ namespace ts {
         newText: string;
     }
 
-    export interface SuggestedFix {
+    export interface CodeFix {
         name: string;
         textChanges: TextChange[];
     }
@@ -7490,11 +7490,11 @@ namespace ts {
             return [];
         }
 
-        function getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): SuggestedFix {
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeFix[] {
             synchronizeHostData();
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-            return quickFixProvider.getFixes(errorCodes[0], sourceFile, start, end);
+            return [quickFixProvider.getFixes(errorCodes[0], sourceFile, start, end)];
         }
 
         /**
@@ -7967,7 +7967,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPostion,
-            getCodeFixAtPosition,
+            getCodeFixesAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
             getProgram
