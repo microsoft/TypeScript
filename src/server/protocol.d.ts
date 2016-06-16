@@ -473,8 +473,8 @@ declare namespace ts.server.protocol {
     }
 
     export const enum ErrorCheckMode {
-        Auto,
-        Manual
+        Manual,
+        AutoCheckOpenedFiles
     }
 
     /**

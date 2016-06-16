@@ -861,7 +861,7 @@ namespace ts.server {
                     this.changeSeq++;
                     this.updateProjectStructure(this.changeSeq, (n) => n === this.changeSeq);
 
-                    if (this.projectService.errorCheckMode === protocol.ErrorCheckMode.Auto) {
+                    if (this.projectService.errorCheckMode === protocol.ErrorCheckMode.AutoCheckOpenedFiles) {
                         this.getDiagnostics(/*delay*/ 1000, project.getOpenedFileNames());
                     }
                 }
@@ -879,7 +879,7 @@ namespace ts.server {
                     this.output(undefined, CommandNames.Reload, reqSeq);
                 });
 
-                if (this.projectService.errorCheckMode === protocol.ErrorCheckMode.Auto) {
+                if (this.projectService.errorCheckMode === protocol.ErrorCheckMode.AutoCheckOpenedFiles) {
                     this.getDiagnostics(/*delay*/ 1000, project.getOpenedFileNames());
                 }
             }
