@@ -17,19 +17,19 @@ namespace ts {
     }
 
     function visitNode<T>(cbNode: (node: Node) => T, node: Node): T {
-        if (node) {
+        if (node !== void 0) {
             return cbNode(node);
         }
     }
 
     function visitNodeArray<T>(cbNodes: (nodes: Node[]) => T, nodes: Node[]) {
-        if (nodes) {
+        if (nodes !== void 0) {
             return cbNodes(nodes);
         }
     }
 
     function visitEachNode<T>(cbNode: (node: Node) => T, nodes: Node[]) {
-        if (nodes) {
+        if (nodes !== void 0) {
             for (const node of nodes) {
                 const result = cbNode(node);
                 if (result) {

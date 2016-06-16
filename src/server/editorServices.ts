@@ -353,12 +353,16 @@ namespace ts.server {
          * @param line 1-based index
          * @param offset 1-based index
          */
-        positionToLineOffset(filename: string, position: number): ILineInfo {
+        positionToLineOffset(filename: string, position: number, lineIndex?: LineIndex): ILineInfo {
+            lineIndex = lineIndex || this.getLineIndex(filename);
+            const lineOffset = lineIndex.charOffsetToLineNumberAndPos(position);
+            return { line: lineOffset.line, offset: lineOffset.offset + 1 };
+        }
+
+        getLineIndex(filename: string): LineIndex {
             const path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const script: ScriptInfo = this.filenameToScript.get(path);
-            const index = script.snap().index;
-            const lineOffset = index.charOffsetToLineNumberAndPos(position);
-            return { line: lineOffset.line, offset: lineOffset.offset + 1 };
+            return script.snap().index;
         }
     }
 
