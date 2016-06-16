@@ -2076,7 +2076,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             function createPropertyAccessExpression(expression: Expression, name: Identifier): PropertyAccessExpression {
                 const result = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
                 result.expression = parenthesizeForAccess(expression);
-                result.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
                 result.name = name;
                 return result;
             }
@@ -2223,11 +2222,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             // Returns 'true' if the code was actually indented, false otherwise.
             // If the code is not indented, an optional valueToWriteWhenNotIndenting will be
             // emitted instead.
-            function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node, valueToWriteWhenNotIndenting?: string): boolean {
+            function indentIfOnDifferentLines(parent: Node, node1: TextRange, node2: TextRange, valueToWriteWhenNotIndenting?: string): boolean {
                 const realNodesAreOnDifferentLines = !nodeIsSynthesized(parent) && !nodeEndIsOnSameLineAsNodeStart(node1, node2);
 
                 // Always use a newline for synthesized code if the synthesizer desires it.
-                const synthesizedNodeIsOnDifferentLine = synthesizedNodeStartsOnNewLine(node2);
+                const synthesizedNodeIsOnDifferentLine = synthesizedNodeStartsOnNewLine(node2 as Node);
 
                 if (realNodesAreOnDifferentLines || synthesizedNodeIsOnDifferentLine) {
                     increaseIndent();
@@ -2257,7 +2256,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
 
                 emit(node.expression);
-                const indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
+                const dotRangeStart = nodeIsSynthesized(node.expression) ? -1 : node.expression.end;
+                const dotRangeEnd = nodeIsSynthesized(node.expression) ? -1 : skipTrivia(currentText, node.expression.end) + 1;
+                const dotToken = <TextRange>{ pos: dotRangeStart, end: dotRangeEnd };
+                const indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, dotToken);
 
                 // 1 .toString is a valid property access, emit a space after the literal
                 // Also emit a space if expression is a integer const enum value - it will appear in generated code as numeric literal
@@ -2283,7 +2285,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write(".");
                 }
 
-                const indentedAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
+                const indentedAfterDot = indentIfOnDifferentLines(node, dotToken, node.name);
                 emit(node.name);
                 decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
             }
@@ -2780,7 +2782,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         const identifier = emitTempVariableAssignment(leftHandSideExpression.expression, /*canDefineTempVariablesInPlace*/ false, /*shouldEmitCommaBeforeAssignment*/ false);
                         synthesizedLHS.expression = identifier;
 
-                        (<PropertyAccessExpression>synthesizedLHS).dotToken = leftHandSideExpression.dotToken;
                         (<PropertyAccessExpression>synthesizedLHS).name = leftHandSideExpression.name;
                         write(", ");
                     }
@@ -3758,7 +3759,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     getLineOfLocalPositionFromLineMap(currentLineMap, node2.end);
             }
 
-            function nodeEndIsOnSameLineAsNodeStart(node1: Node, node2: Node) {
+            function nodeEndIsOnSameLineAsNodeStart(node1: TextRange, node2: TextRange) {
                 return getLineOfLocalPositionFromLineMap(currentLineMap, node1.end) ===
                     getLineOfLocalPositionFromLineMap(currentLineMap, skipTrivia(currentText, node2.pos));
             }
