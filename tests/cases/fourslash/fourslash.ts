@@ -216,7 +216,7 @@ declare namespace FourSlashInterface {
         }[]): void;
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string): void;
         renameInfoFailed(message?: string): void;
-        renameLocations(findInStrings: boolean, findInComments: boolean): void;
+        renameLocations(findInStrings: boolean, findInComments: boolean, ranges?: Range[]): void;
         verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: {
             start: number;
             length: number;
