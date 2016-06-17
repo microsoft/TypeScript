@@ -778,10 +778,10 @@ namespace ts.server {
                     if (lineText.search("\\S") < 0) {
                         // TODO: get these options from host
                         const editorOptions: ts.EditorOptions = {
-                            IndentSize: formatOptions.IndentSize,
-                            TabSize: formatOptions.TabSize,
-                            NewLineCharacter: formatOptions.NewLineCharacter,
-                            ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces,
+                            IndentSize: formatOptions.indentSize,
+                            TabSize: formatOptions.tabSize,
+                            NewLineCharacter: formatOptions.newLineCharacter,
+                            ConvertTabsToSpaces: formatOptions.convertTabsToSpaces,
                             IndentStyle: ts.IndentStyle.Smart,
                         };
                         const preferredIndent = project.languageService.getIndentationAtPosition(file, position, editorOptions);

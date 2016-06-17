@@ -544,9 +544,6 @@ declare namespace ts.server.protocol {
 
         /** Defines whether an open brace is put onto a new line for control blocks or not. Default value is false. */
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
-
-        /** Index operator */
-        [key: string]: string | number | boolean;
     }
 
     /**

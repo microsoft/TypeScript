@@ -16,53 +16,51 @@ namespace ts.server {
         msg(s: string, type?: string): void;
     }
 
-    function getDefaultFormatCodeOptions(host: ServerHost): ts.FormatCodeOptions {
-        return ts.clone(<ts.FormatCodeOptions>{
-            IndentSize: 4,
-            TabSize: 4,
-            NewLineCharacter: host.newLine || "\n",
-            ConvertTabsToSpaces: true,
-            IndentStyle: ts.IndentStyle.Smart,
-            InsertSpaceAfterCommaDelimiter: true,
-            InsertSpaceAfterSemicolonInForStatements: true,
-            InsertSpaceBeforeAndAfterBinaryOperators: true,
-            InsertSpaceAfterKeywordsInControlFlowStatements: true,
-            InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-            InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-            InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-            InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-            PlaceOpenBraceOnNewLineForFunctions: false,
-            PlaceOpenBraceOnNewLineForControlBlocks: false,
+    function getDefaultFormatCodeSettings(host: ServerHost): ts.FormatCodeSettings {
+        return ts.clone(<ts.FormatCodeSettings>{
+            indentSize: 4,
+            tabSize: 4,
+            newLineCharacter: host.newLine || "\n",
+            convertTabsToSpaces: true,
+            indentStyle: ts.IndentStyle.Smart,
+            insertSpaceAfterCommaDelimiter: true,
+            insertSpaceAfterSemicolonInForStatements: true,
+            insertSpaceBeforeAndAfterBinaryOperators: true,
+            insertSpaceAfterKeywordsInControlFlowStatements: true,
+            insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
+            insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+            insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+            insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
+            placeOpenBraceOnNewLineForFunctions: false,
+            placeOpenBraceOnNewLineForControlBlocks: false,
         });
     }
 
-    function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
-        const hasOwnProperty = Object.prototype.hasOwnProperty;
-        Object.keys(formatOptions).forEach((key) => {
-            const codeKey = key.charAt(0).toUpperCase() + key.substring(1);
-            if (hasOwnProperty.call(formatCodeOptions, codeKey)) {
-                formatCodeOptions[codeKey] = formatOptions[key];
+    function mergeMaps(target: Map<any>, source: Map<any>): void {
+        for (const key in source) {
+            if (hasProperty(source, key)) {
+                target[key] = source[key];
             }
-        });
+        }
     }
 
     export class ScriptInfo {
         svc: ScriptVersionCache;
         defaultProject: Project;      // project to use by default for file
         fileWatcher: FileWatcher;
-        formatCodeOptions: ts.FormatCodeOptions;
+        formatCodeSettings: ts.FormatCodeSettings;
         path: Path;
         scriptKind: ScriptKind;
 
         constructor(private host: ServerHost, public fileName: string, public content: string, public isOpen = false) {
             this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
             this.svc = ScriptVersionCache.fromString(host, content);
-            this.formatCodeOptions = getDefaultFormatCodeOptions(this.host);
+            this.formatCodeSettings = getDefaultFormatCodeSettings(this.host);
         }
 
-        setFormatOptions(formatOptions: protocol.FormatOptions): void {
-            if (formatOptions) {
-                mergeFormatOptions(this.formatCodeOptions, formatOptions);
+        setFormatOptions(formatSettings: protocol.FormatOptions): void {
+            if (formatSettings) {
+                mergeMaps(this.formatCodeSettings, formatSettings);
             }
         }
 
@@ -603,7 +601,7 @@ namespace ts.server {
     }
 
     export interface HostConfiguration {
-        formatCodeOptions: ts.FormatCodeOptions;
+        formatCodeOptions: ts.FormatCodeSettings;
         hostInfo: string;
     }
 
@@ -665,7 +663,7 @@ namespace ts.server {
 
         private setDefaultHostConfiguration() {
             this.hostConfiguration = {
-                formatCodeOptions: getDefaultFormatCodeOptions(this.host),
+                formatCodeOptions: getDefaultFormatCodeSettings(this.host),
                 hostInfo: "Unknown host"
             };
         }
@@ -693,7 +691,7 @@ namespace ts.server {
             if (file) {
                 const info = this.filenameToScriptInfo[file];
                 if (info) {
-                    return info.formatCodeOptions;
+                    return info.formatCodeSettings;
                 }
             }
             return this.hostConfiguration.formatCodeOptions;
@@ -1286,7 +1284,7 @@ namespace ts.server {
                 if (content !== undefined) {
                     info = new ScriptInfo(this.host, fileName, content, openedByClient);
                     info.scriptKind = scriptKind;
-                    info.setFormatOptions(this.getFormatCodeOptions());
+                    info.setFormatOptions(toEditorSettings(this.getFormatCodeOptions()));
                     this.filenameToScriptInfo[fileName] = info;
                     if (!info.isOpen) {
                         info.fileWatcher = this.host.watchFile(fileName, _ => { this.onSourceFileChanged(fileName); });
@@ -1322,7 +1320,7 @@ namespace ts.server {
                     this.log("Host information " + args.hostInfo, "Info");
                 }
                 if (args.formatOptions) {
-                    mergeFormatOptions(this.hostConfiguration.formatCodeOptions, args.formatOptions);
+                    mergeMaps(this.hostConfiguration.formatCodeOptions, args.formatOptions);
                     this.log("Format host information updated", "Info");
                 }
             }
