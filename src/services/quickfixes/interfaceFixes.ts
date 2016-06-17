@@ -83,90 +83,9 @@ namespace ts.quickFix {
                             changesArray.push({ newText: propertyText, span: { start: startPos, length: 0 } });
                             trackingAddedMembers.push(interfaceProperty.name.getText());
                         }
-                    } else if (interfaceMembers[j].kind === SyntaxKind.MethodSignature) {
+                    } else if (interfaceMembers[j].kind === SyntaxKind.MethodSignature || interfaceMembers[j].kind === SyntaxKind.MethodDeclaration) {
                         let interfaceMethod = <MethodSignature>interfaceMembers[j];
-                        if (trackingAddedMembers.indexOf(interfaceMethod.name.getText())) {
-                            let methodName = interfaceMethod.name.getText();
-                            let typeParameterArray: Array<string> = [];
-                            for (let k = 0; interfaceMethod.typeParameters && k < interfaceMethod.typeParameters.length; k++) {
-                                typeParameterArray.push(interfaceMethod.typeParameters[k].getText());
-                            }
-                            let parameterArray: Array<string> = [];
-                            for (let k = 0; interfaceMethod.parameters && k < interfaceMethod.parameters.length; k++) {
-                                parameterArray.push(interfaceMethod.parameters[k].getText());
-                            }
-                            let methodBody = "throw new Error('Method not Implemented');";
-
-                            let methodText: string = methodName;
-                            if (typeParameterArray.length > 0) {
-                                methodText += "<"
-                            }
-                            for (let k = 0; k < typeParameterArray.length; k++) {
-                                methodText += typeParameterArray[k];
-                                if(k !== typeParameterArray.length - 1) {
-                                    methodText += ",";
-                                }
-                            }
-                            if (typeParameterArray.length > 0) {
-                                methodText += ">"
-                            }
-                            methodText += "(";
-                            for (let k = 0; k < parameterArray.length; k++) {
-                                methodText += parameterArray[k];
-                                if (k !== parameterArray.length - 1) {
-                                    methodText += ",";
-                                }
-                            }
-                            methodText += ")";
-                            methodText += "{sys.newLine ";
-                            methodText += methodBody;
-                            methodText += "sys.newLine";
-                            methodText = reference ? methodText.concat("},sys.newLine") : methodText.concat("}sys.newLine");
-                            changesArray.push({ newText: methodText, span: { start: startPos, length: 0 } });
-                            trackingAddedMembers.push(interfaceMethod.name.getText());
-                        }
-                    } else if (interfaceMembers[j].kind === SyntaxKind.MethodDeclaration) {
-                        let classMethod = <MethodSignature>interfaceMembers[j];
-                        if (trackingAddedMembers.indexOf(classMethod.name.getText())) {
-                            let methodName = classMethod.name.getText();
-                            let typeParameterArray: Array<string> = [];
-                            for (let k = 0; classMethod.typeParameters && k < classMethod.typeParameters.length; k++) {
-                                typeParameterArray.push(classMethod.typeParameters[k].getText());
-                            }
-                            let parameterArray: Array<string> = [];
-                            for (let k = 0; classMethod.parameters && k < classMethod.parameters.length; k++) {
-                                parameterArray.push(classMethod.parameters[k].getText());
-                            }
-                            let methodBody = "throw new Error('Method not Implemented');";
-
-                            let methodText: string = methodName;
-                            if (typeParameterArray.length > 0) {
-                                methodText += "<"
-                            }
-                            for (let k = 0; k < typeParameterArray.length; k++) {
-                                methodText += typeParameterArray[k];
-                                if (k !== typeParameterArray.length - 1) {
-                                    methodText += ",";
-                                }
-                            }
-                            if (typeParameterArray.length > 0) {
-                                methodText += ">"
-                            }
-                            methodText += "(";
-                            for (let k = 0; k < parameterArray.length;k++) {
-                                methodText += parameterArray[k];
-                                if(k !== parameterArray.length -1) {
-                                    methodText += ",";
-                                }
-                            }
-                            methodText += ")";
-                            methodText += "{sys.newLine ";
-                            methodText += methodBody;
-                            methodText += "sys.newLine";
-                            methodText = reference ? methodText.concat("},sys.newLine") : methodText.concat("}sys.newLine");
-                            changesArray.push({ newText: methodText, span: { start: startPos, length: 0 } });
-                            trackingAddedMembers.push(classMethod.name.getText());
-                        }
+                        handleMethods(interfaceMethod, startPos, reference, trackingAddedMembers, changesArray);
                     }
                 }
             }
@@ -239,5 +158,48 @@ namespace ts.quickFix {
                 return "0";
         }
         return "null";
+    }
+
+    function handleMethods(interfaceMethod: MethodSignature, startPos: number, reference: boolean, trackingAddedMembers: Array<string>, changesArray: { newText: string; span: { start: number, length: number } }[]) {
+        if (trackingAddedMembers.indexOf(interfaceMethod.name.getText())) {
+            let methodName = interfaceMethod.name.getText();
+            let typeParameterArray: Array<string> = [];
+            for (let k = 0; interfaceMethod.typeParameters && k < interfaceMethod.typeParameters.length; k++) {
+                typeParameterArray.push(interfaceMethod.typeParameters[k].getText());
+            }
+            let parameterArray: Array<string> = [];
+            for (let k = 0; interfaceMethod.parameters && k < interfaceMethod.parameters.length; k++) {
+                parameterArray.push(interfaceMethod.parameters[k].getText());
+            }
+            let methodBody = "throw new Error('Method not Implemented');";
+
+            let methodText: string = methodName;
+            if (typeParameterArray.length > 0) {
+                methodText += "<"
+            }
+            for (let k = 0; k < typeParameterArray.length; k++) {
+                methodText += typeParameterArray[k];
+                if (k !== typeParameterArray.length - 1) {
+                    methodText += ",";
+                }
+            }
+            if (typeParameterArray.length > 0) {
+                methodText += ">"
+            }
+            methodText += "(";
+            for (let k = 0; k < parameterArray.length; k++) {
+                methodText += parameterArray[k];
+                if (k !== parameterArray.length - 1) {
+                    methodText += ",";
+                }
+            }
+            methodText += ")";
+            methodText += "{sys.newLine ";
+            methodText += methodBody;
+            methodText += "sys.newLine";
+            methodText = reference ? methodText.concat("},sys.newLine") : methodText.concat("}sys.newLine");
+            changesArray.push({ newText: methodText, span: { start: startPos, length: 0 } });
+            trackingAddedMembers.push(interfaceMethod.name.getText());
+        }
     }
 }
