@@ -1598,8 +1598,19 @@ namespace ts {
                             }
                             break;
                         case SyntaxKind.PropertyDeclaration:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.property_declarations_can_only_be_used_in_a_ts_file));
-                            return true;
+                            const propertyDeclaration = <PropertyDeclaration>node;
+                            if (propertyDeclaration.modifiers) {
+                                for (const modifier of propertyDeclaration.modifiers) {
+                                    if (modifier.kind !== SyntaxKind.StaticKeyword) {
+                                        diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_a_ts_file, tokenToString(modifier.kind)));
+                                        return true;
+                                    }
+                                }
+                            }
+                            if (checkTypeAnnotation((<PropertyDeclaration>node).type)) {
+                                return true;
+                            }
+                            break;
                         case SyntaxKind.EnumDeclaration:
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_a_ts_file));
                             return true;
