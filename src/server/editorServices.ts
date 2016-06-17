@@ -27,6 +27,8 @@ namespace ts.server {
         });
     }
 
+    export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
+
     export class ScriptInfo {
         svc: ScriptVersionCache;
         children: ScriptInfo[] = [];     // files referenced by this file
@@ -315,6 +317,10 @@ namespace ts.server {
             return this.host.directoryExists(path);
         }
 
+        getDirectories(path: string): string[] {
+            return this.host.getDirectories(path);
+        }
+
         /**
          *  @param line 1 based index
          */
@@ -381,32 +387,62 @@ namespace ts.server {
         updateGraphSeq = 0;
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
-
         builder: Builder;
 
-        constructor(public projectService: ProjectService, host: ServerHost, psLogger: Logger, channel: Channel, projectFileName?: string, public projectOptions?: ProjectOptions) {
-            this.projectFilename = projectFileName;
+        constructor(
+            public projectService: ProjectService,
+            host: ServerHost, 
+            psLogger: Logger, 
+            channel: Channel, 
+            projectFileName?: string, 
+            public projectOptions?: ProjectOptions,
+            public languageServiceDiabled = false) {
+                
             if (projectOptions && projectOptions.files) {
                 // If files are listed explicitly, allow all extensions
                 projectOptions.compilerOptions.allowNonTsExtensions = true;
             }
-            this.compilerService = new CompilerService(this, projectOptions && projectOptions.compilerOptions);
-            this.builder = createBuilder(this, {
-                event: (info, eventName) => channel.event(info, eventName),
-                useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames,
-                logError: (err: Error, cmd: string) => {}
-            });
+
+            if (!languageServiceDiabled) {
+                this.compilerService = new CompilerService(this, projectOptions && projectOptions.compilerOptions);
+                this.builder = createBuilder(this, {
+                    event: (info, eventName) => channel.event(info, eventName),
+                    useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames,
+                    logError: (err: Error, cmd: string) => {}
+                });
+            }
+        }
+
+        enableLanguageService() {
+            // if the language service was disabled, we should re-initiate the compiler service
+            if (this.languageServiceDiabled) {
+                this.compilerService = new CompilerService(this, this.projectOptions && this.projectOptions.compilerOptions);
+            }
+            this.languageServiceDiabled = false;
+        }
+
+        disableLanguageService() {
+            this.languageServiceDiabled = true;
         }
 
         fileOpened(file: string): void {
+            if (this.languageServiceDiabled) {
+                return;
+            }
             this.builder.fileOpened(file);
         }
 
         fileChanged(file: string): void {
+            if (this.languageServiceDiabled) {
+                return;
+            }
             this.builder.fileChanged(file);
         }
 
         fileClosed(file: string): void {
+            if (this.languageServiceDiabled) {
+                return;
+            }
             this.builder.fileClosed(file);
         }
 
@@ -424,19 +460,45 @@ namespace ts.server {
         }
 
         getRootFiles() {
+            if (this.languageServiceDiabled) {
+                // When the languageService was disabled, only return file list if it is a configured project
+                return this.projectOptions ? this.projectOptions.files : undefined;
+            }
+
             return this.compilerService.host.roots.map(info => info.fileName);
         }
 
         getFileNames() {
+            if (this.languageServiceDiabled) {
+                if (!this.projectOptions) {
+                    return undefined;
+                }
+
+                const fileNames: string[] = [];
+                if (this.projectOptions && this.projectOptions.compilerOptions) {
+                    fileNames.push(getDefaultLibFilePath(this.projectOptions.compilerOptions));
+                }
+                ts.addRange(fileNames, this.projectOptions.files);
+                return fileNames;
+            }
+
             const sourceFiles = this.program.getSourceFiles();
             return sourceFiles.map(sourceFile => sourceFile.fileName);
         }
 
         getSourceFile(info: ScriptInfo) {
+            if (this.languageServiceDiabled) {
+                return undefined;
+            }
+
             return this.filenameToSourceFile[info.fileName];
         }
 
         getSourceFileFromName(filename: string, requireOpen?: boolean) {
+            if (this.languageServiceDiabled) {
+                return undefined;
+            }
+
             const info = this.projectService.getScriptInfo(filename);
             if (info) {
                 if ((!requireOpen) || info.isOpen) {
@@ -446,15 +508,27 @@ namespace ts.server {
         }
 
         isRoot(info: ScriptInfo) {
+            if (this.languageServiceDiabled) {
+                return undefined;
+            }
+
             return this.compilerService.host.roots.some(root => root === info);
         }
 
         removeReferencedFile(info: ScriptInfo) {
+            if (this.languageServiceDiabled) {
+                return;
+            }
+
             this.compilerService.host.removeReferencedFile(info);
             this.updateGraph();
         }
 
         updateFileMap() {
+            if (this.languageServiceDiabled) {
+                return;
+            }
+
             this.filenameToSourceFile = {};
             const sourceFiles = this.program.getSourceFiles();
             for (let i = 0, len = sourceFiles.length; i < len; i++) {
@@ -464,11 +538,19 @@ namespace ts.server {
         }
 
         finishGraph() {
+            if (this.languageServiceDiabled) {
+                return;
+            }
+
             this.updateGraph();
             this.compilerService.languageService.getNavigateToItems(".*");
         }
 
         updateGraph() {
+            if (this.languageServiceDiabled) {
+                return;
+            }
+
             this.program = this.compilerService.languageService.getProgram();
             this.updateFileMap();
         }
@@ -479,15 +561,32 @@ namespace ts.server {
 
         // add a root file to project
         addRoot(info: ScriptInfo) {
+            if (this.languageServiceDiabled) {
+                return;
+            }
+
             this.compilerService.host.addRoot(info);
         }
 
         // remove a root file from project
         removeRoot(info: ScriptInfo) {
+            if (this.languageServiceDiabled) {
+                return;
+            }
+
             this.compilerService.host.removeRoot(info);
         }
 
         filesToString() {
+            if (this.languageServiceDiabled) {
+                if (this.projectOptions) {
+                    let strBuilder = "";
+                    ts.forEach(this.projectOptions.files,
+                        file => { strBuilder += file + "\n"; });
+                    return strBuilder;
+                }
+            }
+
             let strBuilder = "";
             ts.forEachValue(this.filenameToSourceFile,
                 sourceFile => { strBuilder += sourceFile.fileName + "\n"; });
@@ -498,7 +597,9 @@ namespace ts.server {
             this.projectOptions = projectOptions;
             if (projectOptions.compilerOptions) {
                 projectOptions.compilerOptions.allowNonTsExtensions = true;
-                this.compilerService.setCompilerOptions(projectOptions.compilerOptions);
+                if (!this.languageServiceDiabled) {
+                    this.compilerService.setCompilerOptions(projectOptions.compilerOptions);
+                }
             }
         }
     }
@@ -833,6 +934,7 @@ namespace ts.server {
             else {
                 this.findReferencingProjects(info);
                 if (info.defaultProject) {
+                    info.defaultProject.addOpenRef();
                     this.openFilesReferenced.push(info);
                 }
                 else {
@@ -1287,7 +1389,24 @@ namespace ts.server {
                     return { succeeded: true, projectOptions };
                 }
             }
+        }
 
+        private exceedTotalNonTsFileSizeLimit(fileNames: string[]) {
+            let totalNonTsFileSize = 0;
+            if (!this.host.getFileSize) {
+                return false;
+            }
+
+            for (const fileName of fileNames) {
+                if (hasTypeScriptFileExtension(fileName)) {
+                    continue;
+                }
+                totalNonTsFileSize += this.host.getFileSize(fileName);
+                if (totalNonTsFileSize > maxProgramSizeForNonTsFiles) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         openConfigFile(configFilename: string, clientFileName?: string): { success: boolean, project?: Project, errors?: Diagnostic[] } {
@@ -1296,6 +1415,19 @@ namespace ts.server {
                 return { success: false, errors };
             }
             else {
+                if (!projectOptions.compilerOptions.disableSizeLimit && projectOptions.compilerOptions.allowJs) {
+                    if (this.exceedTotalNonTsFileSizeLimit(projectOptions.files)) {
+                        const project = this.createProject(configFilename, projectOptions, /*languageServiceDisabled*/ true);
+
+                        // for configured projects with languageService disabled, we only watch its config file,
+                        // do not care about the directory changes in the folder.
+                        project.projectFileWatcher = this.host.watchFile(
+                            toPath(configFilename, configFilename, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
+                            _ => this.watchedProjectConfigFileChanged(project));
+                        return { success: true, project };
+                    }
+                }
+
                 const project = this.createProject(configFilename, projectOptions);
                 let errors: Diagnostic[];
                 for (const rootFilename of projectOptions.files) {
@@ -1319,7 +1451,7 @@ namespace ts.server {
             }
         }
 
-        updateConfiguredProject(project: Project) {
+        updateConfiguredProject(project: Project): Diagnostic[] {
             if (!this.host.fileExists(project.projectFilename)) {
                 this.log("Config file deleted");
                 this.removeProject(project);
@@ -1330,7 +1462,43 @@ namespace ts.server {
                     return errors;
                 }
                 else {
-                    const oldFileNames = project.compilerService.host.roots.map(info => info.fileName);
+                    if (projectOptions.compilerOptions && !projectOptions.compilerOptions.disableSizeLimit && this.exceedTotalNonTsFileSizeLimit(projectOptions.files)) {
+                        project.setProjectOptions(projectOptions);
+                        if (project.languageServiceDiabled) {
+                            return;
+                        }
+
+                        project.disableLanguageService();
+                        if (project.directoryWatcher) {
+                            project.directoryWatcher.close();
+                            project.directoryWatcher = undefined;
+                        }
+                        return;
+                    }
+
+                    if (project.languageServiceDiabled) {
+                        project.setProjectOptions(projectOptions);
+                        project.enableLanguageService();
+                        project.directoryWatcher = this.host.watchDirectory(
+                            ts.getDirectoryPath(project.projectFilename),
+                            path => this.directoryWatchedForSourceFilesChanged(project, path),
+                            /*recursive*/ true
+                        );
+
+                        for (const rootFilename of projectOptions.files) {
+                            if (this.host.fileExists(rootFilename)) {
+                                const info = this.openFile(rootFilename, /*openedByClient*/ false);
+                                project.addRoot(info);
+                            }
+                        }
+                        project.finishGraph();
+                        return;
+                    }
+
+                    // if the project is too large, the root files might not have been all loaded if the total
+                    // program size reached the upper limit. In that case project.projectOptions.files should 
+                    // be more precise. However this would only happen for configured project.
+                    const oldFileNames = project.projectOptions ? project.projectOptions.files : project.compilerService.host.roots.map(info => info.fileName);
                     const newFileNames = ts.filter(projectOptions.files, f => this.host.fileExists(f));
                     const fileNamesToRemove = oldFileNames.filter(f => newFileNames.indexOf(f) < 0);
                     const fileNamesToAdd = newFileNames.filter(f => oldFileNames.indexOf(f) < 0);
@@ -1373,8 +1541,8 @@ namespace ts.server {
             }
         }
 
-        createProject(projectFilename: string, projectOptions?: ProjectOptions) {
-            const project = new Project(this, this.host, this.psLogger, this.channel, projectFilename, projectOptions);
+        createProject(projectFilename: string, projectOptions?: ProjectOptions, languageServiceDisabled?: boolean) {
+            const project = new Project(this, this.host, this.psLogger, this.channel, projectFilename, projectOptions, languageServiceDisabled);
             return project;
         }
     }

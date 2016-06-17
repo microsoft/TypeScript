@@ -246,8 +246,8 @@ namespace FourSlash {
             // Create a new Services Adapter
             this.cancellationToken = new TestCancellationToken();
             const compilationOptions = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
-            if (compilationOptions.typesRoot) {
-                compilationOptions.typesRoot = ts.getNormalizedAbsolutePath(compilationOptions.typesRoot, this.basePath);
+            if (compilationOptions.typeRoots) {
+                compilationOptions.typeRoots = compilationOptions.typeRoots.map(p => ts.getNormalizedAbsolutePath(p, this.basePath));
             }
 
             const languageServiceAdapter = this.getLanguageServiceAdapter(testType, this.cancellationToken, compilationOptions);
@@ -717,6 +717,8 @@ namespace FourSlash {
         public verifyCompletionEntryDetails(entryName: string, expectedText: string, expectedDocumentation?: string, kind?: string) {
             const details = this.getCompletionEntryDetails(entryName);
 
+            assert(details, "no completion entry available");
+
             assert.equal(ts.displayPartsToString(details.displayParts), expectedText, this.assertionMessageAtLastKnownMarker("completion entry details text"));
 
             if (expectedDocumentation !== undefined) {
@@ -726,27 +728,6 @@ namespace FourSlash {
             if (kind !== undefined) {
                 assert.equal(details.kind, kind, this.assertionMessageAtLastKnownMarker("completion entry kind"));
             }
-        }
-
-        public verifyReferencesAtPositionListContains(fileName: string, start: number, end: number, isWriteAccess?: boolean) {
-            const references = this.getReferencesAtCaret();
-
-            if (!references || references.length === 0) {
-                this.raiseError("verifyReferencesAtPositionListContains failed - found 0 references, expected at least one.");
-            }
-
-            for (let i = 0; i < references.length; i++) {
-                const reference = references[i];
-                if (reference && reference.fileName === fileName && reference.textSpan.start === start && ts.textSpanEnd(reference.textSpan) === end) {
-                    if (typeof isWriteAccess !== "undefined" && reference.isWriteAccess !== isWriteAccess) {
-                        this.raiseError(`verifyReferencesAtPositionListContains failed - item isWriteAccess value does not match, actual: ${reference.isWriteAccess}, expected: ${isWriteAccess}.`);
-                    }
-                    return;
-                }
-            }
-
-            const missingItem = { fileName: fileName, start: start, end: end, isWriteAccess: isWriteAccess };
-            this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(references)})`);
         }
 
         public verifyReferencesCountIs(count: number, localFilesOnly = true) {
@@ -770,6 +751,73 @@ namespace FourSlash {
                 const condition = localFilesOnly ? "excluding libs" : "including libs";
                 this.raiseError("Expected references count (" + condition + ") to be " + count + ", but is actually " + referencesCount);
             }
+        }
+
+        public verifyReferencesAre(expectedReferences: Range[]) {
+            const actualReferences = this.getReferencesAtCaret() || [];
+
+            if (actualReferences.length > expectedReferences.length) {
+                // Find the unaccounted-for reference.
+                for (const actual of actualReferences) {
+                    if (!ts.forEach(expectedReferences, r => r.start === actual.textSpan.start)) {
+                        this.raiseError(`A reference ${actual} is unaccounted for.`);
+                    }
+                }
+                // Probably will never reach here.
+                this.raiseError(`There are ${actualReferences.length} references but only ${expectedReferences.length} were expected.`);
+            }
+
+            for (const reference of expectedReferences) {
+                const {fileName, start, end} = reference;
+                if (reference.marker) {
+                    const {isWriteAccess, isDefinition} = reference.marker.data;
+                    this.verifyReferencesWorker(actualReferences, fileName, start, end, isWriteAccess, isDefinition);
+                }
+                else {
+                    this.verifyReferencesWorker(actualReferences, fileName, start, end);
+                }
+            }
+        }
+
+        public verifyReferencesOf({fileName, start}: Range, references: Range[]) {
+            this.openFile(fileName);
+            this.goToPosition(start);
+            this.verifyReferencesAre(references);
+        }
+
+        public verifyRangesReferenceEachOther(ranges?: Range[]) {
+            ranges = ranges || this.getRanges();
+            assert(ranges.length);
+            for (const range of ranges) {
+                this.verifyReferencesOf(range, ranges);
+            }
+        }
+
+        public verifyReferencesAtPositionListContains(fileName: string, start: number, end: number, isWriteAccess?: boolean, isDefinition?: boolean) {
+            const references = this.getReferencesAtCaret();
+            if (!references || references.length === 0) {
+                this.raiseError("verifyReferencesAtPositionListContains failed - found 0 references, expected at least one.");
+            }
+            this.verifyReferencesWorker(references, fileName, start, end, isWriteAccess, isDefinition);
+        }
+
+        private verifyReferencesWorker(references: ts.ReferenceEntry[], fileName: string, start: number, end: number, isWriteAccess?: boolean, isDefinition?: boolean) {
+            for (let i = 0; i < references.length; i++) {
+                const reference = references[i];
+                if (reference && reference.fileName === fileName && reference.textSpan.start === start && ts.textSpanEnd(reference.textSpan) === end) {
+                    if (typeof isWriteAccess !== "undefined" && reference.isWriteAccess !== isWriteAccess) {
+                        this.raiseError(`verifyReferencesAtPositionListContains failed - item isWriteAccess value does not match, actual: ${reference.isWriteAccess}, expected: ${isWriteAccess}.`);
+                    }
+                    if (typeof isDefinition !== "undefined" && reference.isDefinition !== isDefinition) {
+                        this.raiseError(`verifyReferencesAtPositionListContains failed - item isDefinition value does not match, actual: ${reference.isDefinition}, expected: ${isDefinition}.`);
+                    }
+                    return;
+                }
+            }
+
+            const missingItem = { fileName, start, end, isWriteAccess, isDefinition };
+            this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(references)})`);
+
         }
 
         private getMemberListAtCaret() {
@@ -2831,14 +2879,6 @@ namespace FourSlashInterface {
             this.state.verifyMemberListIsEmpty(this.negative);
         }
 
-        public referencesCountIs(count: number) {
-            this.state.verifyReferencesCountIs(count, /*localFilesOnly*/ false);
-        }
-
-        public referencesAtPositionContains(range: FourSlash.Range, isWriteAccess?: boolean) {
-            this.state.verifyReferencesAtPositionListContains(range.fileName, range.start, range.end, isWriteAccess);
-        }
-
         public signatureHelpPresent() {
             this.state.verifySignatureHelpPresent(!this.negative);
         }
@@ -2928,6 +2968,22 @@ namespace FourSlashInterface {
 
         public verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void {
             this.state.verifyGetEmitOutputContentsForCurrentFile(expected);
+        }
+
+        public referencesCountIs(count: number) {
+            this.state.verifyReferencesCountIs(count, /*localFilesOnly*/ false);
+        }
+
+        public referencesAre(ranges: FourSlash.Range[]) {
+            this.state.verifyReferencesAre(ranges);
+        }
+
+        public referencesOf(start: FourSlash.Range, references: FourSlash.Range[]) {
+            this.state.verifyReferencesOf(start, references);
+        }
+
+        public rangesReferenceEachOther(ranges?: FourSlash.Range[]) {
+            this.state.verifyRangesReferenceEachOther(ranges);
         }
 
         public currentParameterHelpArgumentNameIs(name: string) {

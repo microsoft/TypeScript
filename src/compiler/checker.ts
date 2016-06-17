@@ -562,7 +562,8 @@ namespace ts {
             const declarationFile = getSourceFileOfNode(declaration);
             const useFile = getSourceFileOfNode(usage);
             if (declarationFile !== useFile) {
-                if (modulekind || (!compilerOptions.outFile && !compilerOptions.out)) {
+                if ((modulekind && (declarationFile.externalModuleIndicator || useFile.externalModuleIndicator)) ||
+                    (!compilerOptions.outFile && !compilerOptions.out)) {
                     // nodes are in different files and order cannot be determines
                     return true;
                 }
@@ -7895,10 +7896,11 @@ namespace ts {
                     case SyntaxKind.ExclamationEqualsToken:
                     case SyntaxKind.EqualsEqualsEqualsToken:
                     case SyntaxKind.ExclamationEqualsEqualsToken:
-                        if (isNullOrUndefinedLiteral(expr.right)) {
+                        if (isNullOrUndefinedLiteral(expr.left) || isNullOrUndefinedLiteral(expr.right)) {
                             return narrowTypeByNullCheck(type, expr, assumeTrue);
                         }
-                        if (expr.left.kind === SyntaxKind.TypeOfExpression && expr.right.kind === SyntaxKind.StringLiteral) {
+                        if (expr.left.kind === SyntaxKind.TypeOfExpression && expr.right.kind === SyntaxKind.StringLiteral ||
+                            expr.left.kind === SyntaxKind.StringLiteral && expr.right.kind === SyntaxKind.TypeOfExpression) {
                             return narrowTypeByTypeof(type, expr, assumeTrue);
                         }
                         break;
@@ -7911,18 +7913,20 @@ namespace ts {
             }
 
             function narrowTypeByNullCheck(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
-                // We have '==', '!=', '===', or '!==' operator with 'null' or 'undefined' on the right
+                // We have '==', '!=', '===', or '!==' operator with 'null' or 'undefined' on one side
                 const operator = expr.operatorToken.kind;
+                const nullLike = isNullOrUndefinedLiteral(expr.left) ? expr.left : expr.right;
+                const narrowed = isNullOrUndefinedLiteral(expr.left) ? expr.right : expr.left;
                 if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
-                if (!strictNullChecks || !isMatchingReference(reference, getReferenceFromExpression(expr.left))) {
+                if (!strictNullChecks || !isMatchingReference(reference, getReferenceFromExpression(narrowed))) {
                     return type;
                 }
                 const doubleEquals = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken;
                 const facts = doubleEquals ?
                     assumeTrue ? TypeFacts.EQUndefinedOrNull : TypeFacts.NEUndefinedOrNull :
-                    expr.right.kind === SyntaxKind.NullKeyword ?
+                    nullLike.kind === SyntaxKind.NullKeyword ?
                         assumeTrue ? TypeFacts.EQNull : TypeFacts.NENull :
                         assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
                 return getTypeWithFacts(type, facts);
@@ -7931,12 +7935,12 @@ namespace ts {
             function narrowTypeByTypeof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 // We have '==', '!=', '====', or !==' operator with 'typeof xxx' on the left
                 // and string literal on the right
-                const left = getReferenceFromExpression((<TypeOfExpression>expr.left).expression);
-                const right = <LiteralExpression>expr.right;
-                if (!isMatchingReference(reference, left)) {
+                const narrowed = getReferenceFromExpression((<TypeOfExpression>(expr.left.kind === SyntaxKind.TypeOfExpression ? expr.left : expr.right)).expression);
+                const literal = <LiteralExpression>(expr.right.kind === SyntaxKind.StringLiteral ? expr.right : expr.left);
+                if (!isMatchingReference(reference, narrowed)) {
                     // For a reference of the form 'x.y', a 'typeof x === ...' type guard resets the
                     // narrowed type of 'y' to its declared type.
-                    if (containsMatchingReference(reference, left)) {
+                    if (containsMatchingReference(reference, narrowed)) {
                         return declaredType;
                     }
                     return type;
@@ -7949,14 +7953,14 @@ namespace ts {
                     // We narrow a non-union type to an exact primitive type if the non-union type
                     // is a supertype of that primtive type. For example, type 'any' can be narrowed
                     // to one of the primitive types.
-                    const targetType = getProperty(typeofTypesByName, right.text);
+                    const targetType = getProperty(typeofTypesByName, literal.text);
                     if (targetType && isTypeSubtypeOf(targetType, type)) {
                         return targetType;
                     }
                 }
                 const facts = assumeTrue ?
-                    getProperty(typeofEQFacts, right.text) || TypeFacts.TypeofEQHostObject :
-                    getProperty(typeofNEFacts, right.text) || TypeFacts.TypeofNEHostObject;
+                    getProperty(typeofEQFacts, literal.text) || TypeFacts.TypeofEQHostObject :
+                    getProperty(typeofNEFacts, literal.text) || TypeFacts.TypeofNEHostObject;
                 return getTypeWithFacts(type, facts);
             }
 
@@ -11492,8 +11496,12 @@ namespace ts {
                     // When resolved signature is a call signature (and not a construct signature) the result type is any, unless
                     // the declaring function had members created through 'x.prototype.y = expr' or 'this.y = expr' psuedodeclarations
                     // in a JS file
-                    const funcSymbol = checkExpression(node.expression).symbol;
-                    if (funcSymbol && funcSymbol.members && (funcSymbol.flags & SymbolFlags.Function)) {
+                    // Note:JS inferred classes might come from a variable declaration instead of a function declaration.
+                    // In this case, using getResolvedSymbol directly is required to avoid losing the members from the declaration.
+                    const funcSymbol = node.expression.kind === SyntaxKind.Identifier ?
+                        getResolvedSymbol(node.expression as Identifier) :
+                        checkExpression(node.expression).symbol;
+                    if (funcSymbol && funcSymbol.members && (funcSymbol.flags & SymbolFlags.Function || isDeclarationOfFunctionExpression(funcSymbol))) {
                         return getInferredClassType(funcSymbol);
                     }
                     else if (compilerOptions.noImplicitAny) {
@@ -11517,7 +11525,10 @@ namespace ts {
 
         function checkAssertion(node: AssertionExpression) {
             const exprType = getRegularTypeOfObjectLiteral(checkExpression(node.expression));
+
+            checkSourceElement(node.type);
             const targetType = getTypeFromTypeNode(node.type);
+
             if (produceDiagnostics && targetType !== unknownType) {
                 const widenedType = getWidenedType(exprType);
                 if (!isTypeComparableTo(targetType, widenedType)) {
@@ -13552,9 +13563,6 @@ namespace ts {
                 }
             }
 
-            // when checking exported function declarations across modules check only duplicate implementations
-            // names and consistency of modifiers are verified when we check local symbol
-            const isExportSymbolInsideModule = symbol.parent && symbol.parent.flags & SymbolFlags.Module;
             let duplicateFunctionDeclaration = false;
             let multipleConstructorImplementation = false;
             for (const current of declarations) {
@@ -13587,7 +13595,7 @@ namespace ts {
                             duplicateFunctionDeclaration = true;
                         }
                     }
-                    else if (!isExportSymbolInsideModule && previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.pos) {
+                    else if (previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.pos) {
                         reportImplementationExpectedError(previousDeclaration);
                     }
 
@@ -13621,7 +13629,7 @@ namespace ts {
             }
 
             // Abstract methods can't have an implementation -- in particular, they don't need one.
-            if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body &&
+            if (lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body &&
                 !(lastSeenNonAmbientDeclaration.flags & NodeFlags.Abstract) && !lastSeenNonAmbientDeclaration.questionToken) {
                 reportImplementationExpectedError(lastSeenNonAmbientDeclaration);
             }

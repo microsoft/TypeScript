@@ -610,10 +610,11 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    if (isNarrowingExpression(expr.left) && (expr.right.kind === SyntaxKind.NullKeyword || expr.right.kind === SyntaxKind.Identifier)) {
+                    if ((isNarrowingExpression(expr.left) && (expr.right.kind === SyntaxKind.NullKeyword || expr.right.kind === SyntaxKind.Identifier)) ||
+                        (isNarrowingExpression(expr.right) && (expr.left.kind === SyntaxKind.NullKeyword || expr.left.kind === SyntaxKind.Identifier))) {
                         return true;
                     }
-                    if (expr.left.kind === SyntaxKind.TypeOfExpression && isNarrowingExpression((<TypeOfExpression>expr.left).expression) && expr.right.kind === SyntaxKind.StringLiteral) {
+                    if (isTypeOfNarrowingBinaryExpression(expr)) {
                         return true;
                     }
                     return false;
@@ -623,6 +624,20 @@ namespace ts {
                     return isNarrowingExpression(expr.right);
             }
             return false;
+        }
+
+        function isTypeOfNarrowingBinaryExpression(expr: BinaryExpression) {
+            let typeOf: Expression;
+            if (expr.left.kind === SyntaxKind.StringLiteral) {
+                typeOf = expr.right;
+            }
+            else if (expr.right.kind === SyntaxKind.StringLiteral) {
+                typeOf = expr.left;
+            }
+            else {
+                typeOf = undefined;
+            }
+            return typeOf && typeOf.kind === SyntaxKind.TypeOfExpression && isNarrowingExpression((<TypeOfExpression>typeOf).expression);
         }
 
         function createBranchLabel(): FlowLabel {
@@ -1946,7 +1961,7 @@ namespace ts {
             classPrototype.parent = leftSideOfAssignment;
 
             const funcSymbol = container.locals[constructorFunction.text];
-            if (!funcSymbol || !(funcSymbol.flags & SymbolFlags.Function)) {
+            if (!funcSymbol || !(funcSymbol.flags & SymbolFlags.Function || isDeclarationOfFunctionExpression(funcSymbol))) {
                 return;
             }
 
