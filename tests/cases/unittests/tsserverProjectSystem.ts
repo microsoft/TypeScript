@@ -90,23 +90,6 @@ namespace ts {
         }
     }
 
-    function readDirectory(folder: FSEntry, ext: string, excludes: Path[], result: string[]): void {
-        if (!folder || !isFolder(folder) || contains(excludes, folder.path)) {
-            return;
-        }
-        for (const entry of folder.entries) {
-            if (contains(excludes, entry.path)) {
-                continue;
-            }
-            if (isFolder(entry)) {
-                readDirectory(entry, ext, excludes, result);
-            }
-            else if (fileExtensionIs(entry.path, ext)) {
-                result.push(entry.fullPath);
-            }
-        }
-    }
-
     function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
         assert.equal(projectService.configuredProjects.length, expected, `expected ${expected} configured project(s)`);
     }
@@ -188,10 +171,26 @@ namespace ts {
             }
         }
 
-        readDirectory(path: string, ext: string, excludes: string[]): string[] {
-            const result: string[] = [];
-            readDirectory(this.fs.get(this.toPath(path)), ext, map(excludes, e => toPath(e, path, this.getCanonicalFileName)), result);
-            return result;
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
+            const that = this;
+            return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), (dir) => {
+                const result: FileSystemEntries = {
+                    directories: [],
+                    files : []
+                };
+                const dirEntry = that.fs.get(that.toPath(dir));
+                if (isFolder(dirEntry)) {
+                    dirEntry.entries.forEach((entry) => {
+                        if (isFolder(entry)) {
+                            result.directories.push(entry.fullPath);
+                        }
+                        else if (isFile(entry)) {
+                            result.files.push(entry.fullPath);
+                        }
+                    });
+                }
+                return result;
+            });
         }
 
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
