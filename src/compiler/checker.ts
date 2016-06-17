@@ -955,7 +955,7 @@ namespace ts {
                 return false;
             }
             const expression = (<ExpressionWithTypeArguments>parentClassExpression).expression;
-            if (resolveEntityName(expression, SymbolFlags.Interface, true)) {
+            if (resolveEntityName(expression, SymbolFlags.Interface, /*ignoreErrors*/ true)) {
                 error(errorLocation, Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements, getTextOfNode(expression));
                 return true;
             }
