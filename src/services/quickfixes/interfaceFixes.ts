@@ -99,6 +99,32 @@ namespace ts.quickFix {
                             changesArray.push({ newText: methodText, span: { start: startPos, length: 0 } });
                             trackingAddedMembers.push(interfaceMethod.name.getText());
                         }
+                    } else if (interfaceMembers[j].kind === SyntaxKind.MethodDeclaration) {
+                        let classMethod = <MethodSignature>interfaceMembers[j];
+                        if (trackingAddedMembers.indexOf(classMethod.name.getText())) {
+                            let methodName = classMethod.name.getText();
+                            let parameterArray: Array<string> = [];
+                            for (let k = 0; classMethod.parameters && k < classMethod.parameters.length; k++) {
+                                parameterArray.push(classMethod.parameters[k].getText());
+                            }
+                            let methodBody = "throw new Error('Method not Implemented');";
+
+                            let methodText: string = methodName;
+                            methodText += "(";
+                            for (let k = 0; k < parameterArray.length;k++) {
+                                methodText += parameterArray[k];
+                                if(k !== parameterArray.length -1) {
+                                    methodText += ",";
+                                }
+                            }
+                            methodText += ")";
+                            methodText += "{sys.newLine ";
+                            methodText += methodBody;
+                            methodText += "sys.newLine";
+                            methodText += "} sys.newLine";
+                            changesArray.push({ newText: methodText, span: { start: startPos, length: 0 } });
+                            trackingAddedMembers.push(classMethod.name.getText());
+                        }
                     }
                 }
             }
