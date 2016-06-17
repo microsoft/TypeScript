@@ -1,7 +1,7 @@
 interface A {}
 
 function factory(a: any): {new(): Object} {
-  return null
+  return null;
 }
 
 class C extends factory(A) {}

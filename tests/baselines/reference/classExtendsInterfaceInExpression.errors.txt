@@ -5,7 +5,7 @@ tests/cases/compiler/classExtendsInterfaceInExpression.ts(7,25): error TS2304: C
     interface A {}
     
     function factory(a: any): {new(): Object} {
-      return null
+      return null;
     }
     
     class C extends factory(A) {}
