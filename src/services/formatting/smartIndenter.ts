@@ -10,24 +10,24 @@ namespace ts.formatting {
 
         export function getIndentation(position: number, sourceFile: SourceFile, options: EditorOptions): number {
             if (position > sourceFile.text.length) {
-                return 0; // past EOF
+                return getBaseIndentation(options); // past EOF
             }
 
             // no indentation when the indent style is set to none,
             // so we can return fast
             if (options.IndentStyle === IndentStyle.None) {
-                return 0;
+                return getBaseIndentation(options);
             }
 
             const precedingToken = findPrecedingToken(position, sourceFile);
             if (!precedingToken) {
-                return 0;
+                return getBaseIndentation(options);
             }
 
             // no indentation in string \regex\template literals
             const precedingTokenIsLiteral = isStringOrRegularExpressionOrTemplateLiteral(precedingToken.kind);
             if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position && precedingToken.end > position) {
-                return 0;
+                return getBaseIndentation(options);
             }
 
             const lineAtPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
@@ -96,11 +96,15 @@ namespace ts.formatting {
             }
 
             if (!current) {
-                // no parent was found - return 0 to be indented on the level of SourceFile
-                return 0;
+                // no parent was found - return the base indentation of the SourceFile
+                return getBaseIndentation(options);
             }
 
             return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
+        }
+
+        function getBaseIndentation(options: EditorOptions) {
+            return options.BaseIndentSize || 0;
         }
 
         export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: FormatCodeOptions): number {
@@ -162,7 +166,7 @@ namespace ts.formatting {
                 parent = current.parent;
             }
 
-            return indentationDelta;
+            return indentationDelta + getBaseIndentation(options);
         }
 
 

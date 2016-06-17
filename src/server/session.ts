@@ -674,6 +674,7 @@ namespace ts.server {
                         if (lineText.search("\\S") < 0) {
                             // TODO: get these options from host
                             const editorOptions: ts.EditorOptions = {
+                                BaseIndentSize: formatOptions.BaseIndentSize,
                                 IndentSize: formatOptions.IndentSize,
                                 TabSize: formatOptions.TabSize,
                                 NewLineCharacter: formatOptions.NewLineCharacter,

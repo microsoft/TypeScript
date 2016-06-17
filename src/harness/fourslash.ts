@@ -310,6 +310,7 @@ namespace FourSlash {
             }
 
             this.formatCodeOptions = {
+                BaseIndentSize: 0,
                 IndentSize: 4,
                 TabSize: 4,
                 NewLineCharacter: Harness.IO.newLine(),

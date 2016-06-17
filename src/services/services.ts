@@ -1244,6 +1244,7 @@ namespace ts {
     }
 
     export interface EditorOptions {
+        BaseIndentSize?: number;
         IndentSize: number;
         TabSize: number;
         NewLineCharacter: string;
@@ -1268,7 +1269,7 @@ namespace ts {
         InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-        [s: string]: boolean | number | string;
+        [s: string]: boolean | number | string | undefined;
     }
 
     export interface DefinitionInfo {
