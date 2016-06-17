@@ -939,29 +939,26 @@ namespace ts {
 
 
         function checkAndReportErrorForExtendingInterface(errorLocation: Node): boolean {
-            const container = getContainingClass(errorLocation);
-            const heritageClause = <HeritageClause>getAncestor(errorLocation, SyntaxKind.HeritageClause);
-            if (!container || !heritageClause || heritageClause.token !== SyntaxKind.ExtendsKeyword) {
+            let parentClassExpression = errorLocation;
+            while (parentClassExpression) {
+                const kind = parentClassExpression.kind;
+                if (kind === SyntaxKind.Identifier || kind === SyntaxKind.PropertyAccessExpression) {
+                    parentClassExpression = parentClassExpression.parent;
+                    continue;
+                }
+                if (kind === SyntaxKind.ExpressionWithTypeArguments) {
+                    break;
+                }
                 return false;
             }
-            if (errorLocation.kind === SyntaxKind.Identifier) {
-                const name = (<Identifier>errorLocation).text;
-                const interfaceOrModule = resolveName(
-                    errorLocation, name,
-                    SymbolFlags.Interface | SymbolFlags.HasExports,
-                    /*errorMessage*/ undefined, /*nameArg*/ undefined)
-                if (!interfaceOrModule) {
-                    return false;
-                }
-                if (interfaceOrModule.flags & SymbolFlags.Interface) {
-                    error(errorLocation, Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements, name);
-                    return true;
-                }
+            if (!parentClassExpression) {
+                return false;
             }
-            else if (errorLocation.kind === SyntaxKind.PropertyAccessExpression) {
-                // todo
+            const expression = (<ExpressionWithTypeArguments>parentClassExpression).expression;
+            if (resolveEntityName(expression, SymbolFlags.Interface, true)) {
+                error(errorLocation, Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements, getTextOfNode(expression));
+                return true;
             }
-
             return false;
          }
 
