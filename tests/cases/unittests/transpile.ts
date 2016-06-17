@@ -255,6 +255,7 @@ var x = 0;`, {
                 compilerOptions: {
                     target: ScriptTarget.ES5,
                     module: ModuleKind.CommonJS,
+                    moduleResolution: ModuleResolutionKind.NodeJs,
                     emitDecoratorMetadata: true,
                     experimentalDecorators: true,
                     isolatedModules: true,
@@ -273,6 +274,7 @@ var x = 0;`, {
                 compilerOptions: {
                     target: ScriptTarget.ES5,
                     module: ModuleKind.System,
+                    moduleResolution: ModuleResolutionKind.NodeJs,
                     emitDecoratorMetadata: true,
                     experimentalDecorators: true,
                     isolatedModules: true,
