@@ -1187,6 +1187,7 @@ namespace ts {
     export interface SwitchStatement extends Statement {
         expression: Expression;
         caseBlock: CaseBlock;
+        possiblyExhaustive?: boolean;
     }
 
     // @kind(SyntaxKind.CaseBlock)
@@ -1553,8 +1554,9 @@ namespace ts {
         Assignment     = 1 << 4,  // Assignment
         TrueCondition  = 1 << 5,  // Condition known to be true
         FalseCondition = 1 << 6,  // Condition known to be false
-        Referenced     = 1 << 7,  // Referenced as antecedent once
-        Shared         = 1 << 8,  // Referenced as antecedent more than once
+        SwitchClause   = 1 << 7,  // Switch statement clause
+        Referenced     = 1 << 8,  // Referenced as antecedent once
+        Shared         = 1 << 9,  // Referenced as antecedent more than once
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }
@@ -1587,6 +1589,13 @@ namespace ts {
     // node's location in the control flow.
     export interface FlowCondition extends FlowNode {
         expression: Expression;
+        antecedent: FlowNode;
+    }
+
+    export interface FlowSwitchClause extends FlowNode {
+        switchStatement: SwitchStatement;
+        clauseStart: number;   // Start index of case/default clause range
+        clauseEnd: number;     // End index of case/default clause range
         antecedent: FlowNode;
     }
 
@@ -2184,6 +2193,7 @@ namespace ts {
         resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
         superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
+        switchTypes?: Type[];             // Cached array of switch case expression types
     }
 
     export const enum TypeFlags {

@@ -578,12 +578,6 @@ namespace ts {
             }
         }
 
-        function isNarrowableReference(expr: Expression): boolean {
-            return expr.kind === SyntaxKind.Identifier ||
-                expr.kind === SyntaxKind.ThisKeyword ||
-                expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
-        }
-
         function isNarrowingExpression(expr: Expression): boolean {
             switch (expr.kind) {
                 case SyntaxKind.Identifier:
@@ -591,7 +585,7 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                     return isNarrowableReference(expr);
                 case SyntaxKind.CallExpression:
-                    return true;
+                    return hasNarrowableArgument(<CallExpression>expr);
                 case SyntaxKind.ParenthesizedExpression:
                     return isNarrowingExpression((<ParenthesizedExpression>expr).expression);
                 case SyntaxKind.BinaryExpression:
@@ -602,6 +596,39 @@ namespace ts {
             return false;
         }
 
+        function isNarrowableReference(expr: Expression): boolean {
+            return expr.kind === SyntaxKind.Identifier ||
+                expr.kind === SyntaxKind.ThisKeyword ||
+                expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
+        }
+
+        function hasNarrowableArgument(expr: CallExpression) {
+            if (expr.arguments) {
+                for (const argument of expr.arguments) {
+                    if (isNarrowableReference(argument)) {
+                        return true;
+                    }
+                }
+            }
+            if (expr.expression.kind === SyntaxKind.PropertyAccessExpression &&
+                isNarrowableReference((<PropertyAccessExpression>expr.expression).expression)) {
+                return true;
+            }
+            return false;
+        }
+
+        function isNarrowingNullCheckOperands(expr1: Expression, expr2: Expression) {
+            return (expr1.kind === SyntaxKind.NullKeyword || expr1.kind === SyntaxKind.Identifier && (<Identifier>expr1).text === "undefined") && isNarrowableOperand(expr2);
+        }
+
+        function isNarrowingTypeofOperands(expr1: Expression, expr2: Expression) {
+            return expr1.kind === SyntaxKind.TypeOfExpression && isNarrowableOperand((<TypeOfExpression>expr1).expression) && expr2.kind === SyntaxKind.StringLiteral;
+        }
+
+        function isNarrowingDiscriminant(expr: Expression) {
+            return expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
+        }
+
         function isNarrowingBinaryExpression(expr: BinaryExpression) {
             switch (expr.operatorToken.kind) {
                 case SyntaxKind.EqualsToken:
@@ -610,34 +637,35 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    if ((isNarrowingExpression(expr.left) && (expr.right.kind === SyntaxKind.NullKeyword || expr.right.kind === SyntaxKind.Identifier)) ||
-                        (isNarrowingExpression(expr.right) && (expr.left.kind === SyntaxKind.NullKeyword || expr.left.kind === SyntaxKind.Identifier))) {
-                        return true;
-                    }
-                    if (isTypeOfNarrowingBinaryExpression(expr)) {
-                        return true;
-                    }
-                    return false;
+                    return isNarrowingNullCheckOperands(expr.right, expr.left) || isNarrowingNullCheckOperands(expr.left, expr.right) ||
+                        isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right) ||
+                        isNarrowingDiscriminant(expr.left) || isNarrowingDiscriminant(expr.right);
                 case SyntaxKind.InstanceOfKeyword:
-                    return isNarrowingExpression(expr.left);
+                    return isNarrowableOperand(expr.left);
                 case SyntaxKind.CommaToken:
                     return isNarrowingExpression(expr.right);
             }
             return false;
         }
 
-        function isTypeOfNarrowingBinaryExpression(expr: BinaryExpression) {
-            let typeOf: Expression;
-            if (expr.left.kind === SyntaxKind.StringLiteral) {
-                typeOf = expr.right;
+        function isNarrowableOperand(expr: Expression): boolean {
+            switch (expr.kind) {
+                case SyntaxKind.ParenthesizedExpression:
+                    return isNarrowableOperand((<ParenthesizedExpression>expr).expression);
+                case SyntaxKind.BinaryExpression:
+                    switch ((<BinaryExpression>expr).operatorToken.kind) {
+                        case SyntaxKind.EqualsToken:
+                            return isNarrowableOperand((<BinaryExpression>expr).left);
+                        case SyntaxKind.CommaToken:
+                            return isNarrowableOperand((<BinaryExpression>expr).right);
+                    }
             }
-            else if (expr.right.kind === SyntaxKind.StringLiteral) {
-                typeOf = expr.left;
-            }
-            else {
-                typeOf = undefined;
-            }
-            return typeOf && typeOf.kind === SyntaxKind.TypeOfExpression && isNarrowingExpression((<TypeOfExpression>typeOf).expression);
+            return isNarrowableReference(expr);
+        }
+
+        function isNarrowingSwitchStatement(switchStatement: SwitchStatement) {
+            const expr = switchStatement.expression;
+            return expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
         }
 
         function createBranchLabel(): FlowLabel {
@@ -683,8 +711,22 @@ namespace ts {
             setFlowNodeReferenced(antecedent);
             return <FlowCondition>{
                 flags,
-                antecedent,
                 expression,
+                antecedent
+            };
+        }
+
+        function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
+            if (!isNarrowingSwitchStatement(switchStatement)) {
+                return antecedent;
+            }
+            setFlowNodeReferenced(antecedent);
+            return <FlowSwitchClause>{
+                flags: FlowFlags.SwitchClause,
+                switchStatement,
+                clauseStart,
+                clauseEnd,
+                antecedent
             };
         }
 
@@ -913,9 +955,12 @@ namespace ts {
             preSwitchCaseFlow = currentFlow;
             bind(node.caseBlock);
             addAntecedent(postSwitchLabel, currentFlow);
-            const hasNonEmptyDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause && c.statements.length);
-            if (!hasNonEmptyDefault) {
-                addAntecedent(postSwitchLabel, preSwitchCaseFlow);
+            const hasDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause);
+            // We mark a switch statement as possibly exhaustive if it has no default clause and if all
+            // case clauses have unreachable end points (e.g. they all return).
+            node.possiblyExhaustive = !hasDefault && !postSwitchLabel.antecedents;
+            if (!hasDefault) {
+                addAntecedent(postSwitchLabel, createFlowSwitchClause(preSwitchCaseFlow, node, 0, 0));
             }
             currentBreakTarget = saveBreakTarget;
             preSwitchCaseFlow = savePreSwitchCaseFlow;
@@ -924,25 +969,22 @@ namespace ts {
 
         function bindCaseBlock(node: CaseBlock): void {
             const clauses = node.clauses;
+            let fallthroughFlow = unreachableFlow;
             for (let i = 0; i < clauses.length; i++) {
-                const clause = clauses[i];
-                if (clause.statements.length) {
-                    if (currentFlow.flags & FlowFlags.Unreachable) {
-                        currentFlow = preSwitchCaseFlow;
-                    }
-                    else {
-                        const preCaseLabel = createBranchLabel();
-                        addAntecedent(preCaseLabel, preSwitchCaseFlow);
-                        addAntecedent(preCaseLabel, currentFlow);
-                        currentFlow = finishFlowLabel(preCaseLabel);
-                    }
-                    bind(clause);
-                    if (!(currentFlow.flags & FlowFlags.Unreachable) && i !== clauses.length - 1 && options.noFallthroughCasesInSwitch) {
-                        errorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
-                    }
+                const clauseStart = i;
+                while (!clauses[i].statements.length && i + 1 < clauses.length) {
+                    bind(clauses[i]);
+                    i++;
                 }
-                else {
-                    bind(clause);
+                const preCaseLabel = createBranchLabel();
+                addAntecedent(preCaseLabel, createFlowSwitchClause(preSwitchCaseFlow, <SwitchStatement>node.parent, clauseStart, i + 1));
+                addAntecedent(preCaseLabel, fallthroughFlow);
+                currentFlow = finishFlowLabel(preCaseLabel);
+                const clause = clauses[i];
+                bind(clause);
+                fallthroughFlow = currentFlow;
+                if (!(currentFlow.flags & FlowFlags.Unreachable) && i !== clauses.length - 1 && options.noFallthroughCasesInSwitch) {
+                    errorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
                 }
             }
         }
