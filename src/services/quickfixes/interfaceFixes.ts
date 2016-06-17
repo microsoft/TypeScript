@@ -86,15 +86,41 @@ namespace ts.quickFix {
                     } else if (interfaceMembers[j].kind === SyntaxKind.MethodSignature) {
                         let interfaceMethod = <MethodSignature>interfaceMembers[j];
                         if (trackingAddedMembers.indexOf(interfaceMethod.name.getText())) {
+                            let methodName = interfaceMethod.name.getText();
+                            let typeParameterArray: Array<string> = [];
+                            for (let k = 0; interfaceMethod.typeParameters && k < interfaceMethod.typeParameters.length; k++) {
+                                typeParameterArray.push(interfaceMethod.typeParameters[k].getText());
+                            }
+                            let parameterArray: Array<string> = [];
+                            for (let k = 0; interfaceMethod.parameters && k < interfaceMethod.parameters.length; k++) {
+                                parameterArray.push(interfaceMethod.parameters[k].getText());
+                            }
                             let methodBody = "throw new Error('Method not Implemented');";
 
-                            let methodText: string = interfaceMethod.getText();
-                            if (methodText.match(/;$/)) {
-                                methodText = methodText.substr(0, methodText.length - 1);
+                            let methodText: string = methodName;
+                            if (typeParameterArray.length > 0) {
+                                methodText += "<"
                             }
-
-                            methodText = methodText.concat("{sys.newLine ");
-                            methodText = methodText.concat(methodBody, "sys.newLine");
+                            for (let k = 0; k < typeParameterArray.length; k++) {
+                                methodText += typeParameterArray[k];
+                                if(k !== typeParameterArray.length - 1) {
+                                    methodText += ",";
+                                }
+                            }
+                            if (typeParameterArray.length > 0) {
+                                methodText += ">"
+                            }
+                            methodText += "(";
+                            for (let k = 0; k < parameterArray.length; k++) {
+                                methodText += parameterArray[k];
+                                if (k !== parameterArray.length - 1) {
+                                    methodText += ",";
+                                }
+                            }
+                            methodText += ")";
+                            methodText += "{sys.newLine ";
+                            methodText += methodBody;
+                            methodText += "sys.newLine";
                             methodText = reference ? methodText.concat("},sys.newLine") : methodText.concat("}sys.newLine");
                             changesArray.push({ newText: methodText, span: { start: startPos, length: 0 } });
                             trackingAddedMembers.push(interfaceMethod.name.getText());
@@ -103,6 +129,10 @@ namespace ts.quickFix {
                         let classMethod = <MethodSignature>interfaceMembers[j];
                         if (trackingAddedMembers.indexOf(classMethod.name.getText())) {
                             let methodName = classMethod.name.getText();
+                            let typeParameterArray: Array<string> = [];
+                            for (let k = 0; classMethod.typeParameters && k < classMethod.typeParameters.length; k++) {
+                                typeParameterArray.push(classMethod.typeParameters[k].getText());
+                            }
                             let parameterArray: Array<string> = [];
                             for (let k = 0; classMethod.parameters && k < classMethod.parameters.length; k++) {
                                 parameterArray.push(classMethod.parameters[k].getText());
@@ -110,6 +140,18 @@ namespace ts.quickFix {
                             let methodBody = "throw new Error('Method not Implemented');";
 
                             let methodText: string = methodName;
+                            if (typeParameterArray.length > 0) {
+                                methodText += "<"
+                            }
+                            for (let k = 0; k < typeParameterArray.length; k++) {
+                                methodText += typeParameterArray[k];
+                                if (k !== typeParameterArray.length - 1) {
+                                    methodText += ",";
+                                }
+                            }
+                            if (typeParameterArray.length > 0) {
+                                methodText += ">"
+                            }
                             methodText += "(";
                             for (let k = 0; k < parameterArray.length;k++) {
                                 methodText += parameterArray[k];
@@ -121,7 +163,7 @@ namespace ts.quickFix {
                             methodText += "{sys.newLine ";
                             methodText += methodBody;
                             methodText += "sys.newLine";
-                            methodText += "} sys.newLine";
+                            methodText = reference ? methodText.concat("},sys.newLine") : methodText.concat("}sys.newLine");
                             changesArray.push({ newText: methodText, span: { start: startPos, length: 0 } });
                             trackingAddedMembers.push(classMethod.name.getText());
                         }
