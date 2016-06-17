@@ -9,7 +9,7 @@ namespace ts.codeFix {
     registerCodeFix({
         name: getLocaleSpecificMessage(Diagnostics.Add_missing_super_call),
         errorCodes: ["TS2377"],
-        getFix: (sourceFile: SourceFile, start: number, end: number) => {
+        getTextChanges: (sourceFile: SourceFile, start: number, end: number) => {
             const token = getTokenAtPosition(sourceFile, start);
             if (token.kind !== SyntaxKind.ConstructorKeyword) {
                 // wait why are we not a on a constructor?
@@ -25,7 +25,7 @@ namespace ts.codeFix {
     registerCodeFix({
         name: `Make super call the first statement in the constructor.`,
         errorCodes: ["TS17009"],
-        getFix: (sourceFile: SourceFile, start: number, end: number): TextChange[] => {
+        getTextChanges: (sourceFile: SourceFile, start: number, end: number): TextChange[] => {
             const token = getTokenAtPosition(sourceFile, start);
             const constructor = getContainingFunction(token);
 

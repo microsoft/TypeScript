@@ -7492,9 +7492,18 @@ namespace ts {
 
         function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeFix[] {
             synchronizeHostData();
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const sourceFile = getValidSourceFile(fileName);
 
-            return [codeFixProvider.getFixes(errorCodes[0], sourceFile, start, end)];
+            let fixes: CodeFix[] = [];
+
+            errorCodes.forEach(error => {
+                const fix = codeFixProvider.getFixes(error, sourceFile, start, end);
+                if (fix) {
+                    fixes = fixes.concat(fix);
+                }
+            });
+
+            return fixes;
         }
 
         /**

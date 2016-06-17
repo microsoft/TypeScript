@@ -3,7 +3,7 @@ namespace ts {
     export interface CodeAction {
         name: string;
         errorCodes: string[];
-        getFix(sourceFile: SourceFile, start: number, end: number): TextChange[];
+        getTextChanges(sourceFile: SourceFile, start: number, end: number): TextChange[];
     }
 
     export namespace codeFix {
@@ -26,14 +26,22 @@ namespace ts {
                 return getKeys(codeActions);
             }
 
-            public getFixes(errorCode: string, sourceFile: SourceFile, start: number, end: number): CodeFix {
-                const fix = codeActions[errorCode];
+            public getFixes(errorCode: string, sourceFile: SourceFile, start: number, end: number): CodeFix[] {
+                const actions = codeActions[errorCode];
+                const fixes: CodeFix[] = [];
 
-                if (!fix || fix.length == 0) {
+                if (!actions || actions.length == 0) {
                     throw new Error("No fixes found for error: '${errorCode}'.");
                 }
 
-                return { name: fix[0].name, textChanges: fix[0].getFix(sourceFile, start, end) };
+                actions.forEach(a => {
+                    const textChanges = a.getTextChanges(sourceFile, start, end);
+                    if (textChanges && textChanges.length > 0) {
+                        fixes.push({ name: a.name, textChanges: textChanges });
+                    }
+                });
+
+                return fixes;
             }
         }
     }
