@@ -5,11 +5,15 @@ namespace ts {
     /* @internal */ export let parseTime = 0;
 
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
     export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
         if (kind === SyntaxKind.SourceFile) {
             return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, pos, end);
+        }
+        else if (kind < SyntaxKind.FirstNode) {
+            return new (TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor()))(kind, pos, end);
         }
         else {
             return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, pos, end);
@@ -466,6 +470,7 @@ namespace ts {
 
         // capture constructors in 'initializeState' to avoid null checks
         let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+        let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
         let sourceFile: SourceFile;
@@ -576,6 +581,7 @@ namespace ts {
 
         function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, scriptKind: ScriptKind) {
             NodeConstructor = objectAllocator.getNodeConstructor();
+            TokenConstructor = objectAllocator.getTokenConstructor();
             SourceFileConstructor = objectAllocator.getSourceFileConstructor();
 
             sourceText = _sourceText;
@@ -1024,7 +1030,9 @@ namespace ts {
                 pos = scanner.getStartPos();
             }
 
-            return new NodeConstructor(kind, pos, pos);
+            return kind >= SyntaxKind.FirstNode ?
+                new NodeConstructor(kind, pos, pos) :
+                new TokenConstructor(kind, pos, pos);
         }
 
         function finishNode<T extends Node>(node: T, end?: number): T {

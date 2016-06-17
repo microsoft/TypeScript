@@ -472,6 +472,8 @@ namespace ts {
         flags: NodeFlags;
     }
 
+    export interface Token extends Node { }
+
     // @kind(SyntaxKind.AbstractKeyword)
     // @kind(SyntaxKind.AsyncKeyword)
     // @kind(SyntaxKind.ConstKeyword)
@@ -482,7 +484,7 @@ namespace ts {
     // @kind(SyntaxKind.PrivateKeyword)
     // @kind(SyntaxKind.ProtectedKeyword)
     // @kind(SyntaxKind.StaticKeyword)
-    export interface Modifier extends Node { }
+    export interface Modifier extends Token { }
 
     // @kind(SyntaxKind.Identifier)
     export interface Identifier extends PrimaryExpression {
