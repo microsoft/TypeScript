@@ -391,13 +391,15 @@ namespace ts.server {
 
         constructor(
             public projectService: ProjectService,
-            host: ServerHost, 
-            psLogger: Logger, 
-            channel: Channel, 
-            projectFileName?: string, 
+            host: ServerHost,
+            psLogger: Logger,
+            channel: Channel,
+            projectFileName?: string,
             public projectOptions?: ProjectOptions,
             public languageServiceDiabled = false) {
-                
+
+            this.projectFilename = projectFileName;
+
             if (projectOptions && projectOptions.files) {
                 // If files are listed explicitly, allow all extensions
                 projectOptions.compilerOptions.allowNonTsExtensions = true;

@@ -604,7 +604,7 @@ namespace ts {
                 }`
             };
             const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [file1, file2, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger);
+            const projectService = new server.ProjectService(host, nullLogger, nullChannel);
             projectService.openClientFile(file1.path);
             projectService.closeClientFile(file1.path);
             projectService.openClientFile(file2.path);
@@ -631,7 +631,7 @@ namespace ts {
                 }`
             };
             const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [file1, file2, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger);
+            const projectService = new server.ProjectService(host, nullLogger, nullChannel);
             projectService.openClientFile(file1.path);
             projectService.closeClientFile(file1.path);
             projectService.openClientFile(file2.path);

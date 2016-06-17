@@ -846,15 +846,15 @@ namespace ts.server {
                     }
                 };
                 if (latestCompleteStateFile) {
-                    parseContent(fs.readFileSync(latestCompleteStateFile));
+                    parseContent(fs.readFileSync(path.join(stateDirectory, latestCompleteStateFile), { encoding: "utf8" }));
                 }
                 if (latestDeltaStateFile) {
-                    parseContent(fs.readFileSync(latestDeltaStateFile));
+                    parseContent(fs.readFileSync(path.join(stateDirectory, latestDeltaStateFile), { encoding: "utf8" }));
                 }
                 // Cleanup unneeded files.
                 toDelete.forEach(file => {
                     // Can be done async. If an unlink fails we clean it up the next round.
-                    fs.unlink(file, (err: Error) => {});
+                    fs.unlink(path.join(stateDirectory, file), (err: Error) => {});
                 });
             }
             catch (err) {
