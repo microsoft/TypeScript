@@ -110,6 +110,6 @@ if (!hasKind(x, "B")) {
 }
 else {
     let d = x;
->d : never
->x : never
+>d : A & B
+>x : A & B
 }

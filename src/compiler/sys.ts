@@ -2,7 +2,7 @@
 
 namespace ts {
     export type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
-    export type DirectoryWatcherCallback = (directoryName: string) => void;
+    export type DirectoryWatcherCallback = (fileName: string) => void;
     export interface WatchedFile {
         fileName: string;
         callback: FileWatcherCallback;

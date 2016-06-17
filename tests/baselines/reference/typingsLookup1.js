@@ -4,8 +4,10 @@
 declare var $: { x: any };
 
 //// [a.ts]
+/// <reference types="jquery" />
 $.x;
 
 
 //// [a.js]
+/// <reference types="jquery" />
 $.x;

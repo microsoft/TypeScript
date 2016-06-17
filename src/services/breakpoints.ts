@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0.
 // See LICENSE.txt in the project root for complete license information.
 
 /// <reference path='services.ts' />
@@ -19,8 +19,8 @@ namespace ts.BreakpointResolver {
         if (sourceFile.getLineAndCharacterOfPosition(tokenAtLocation.getStart(sourceFile)).line > lineOfPosition) {
             // Get previous token if the token is returned starts on new line
             // eg: let x =10; |--- cursor is here
-            //     let y = 10; 
-            // token at position will return let keyword on second line as the token but we would like to use 
+            //     let y = 10;
+            // token at position will return let keyword on second line as the token but we would like to use
             // token on same line if trailing trivia (comments or white spaces on same line) part of the last token on that line
             tokenAtLocation = findPrecedingToken(tokenAtLocation.pos, sourceFile);
 
@@ -261,7 +261,7 @@ namespace ts.BreakpointResolver {
                         }
 
                         // Set breakpoint on identifier element of destructuring pattern
-                        // a or ...c  or d: x from 
+                        // a or ...c  or d: x from
                         // [a, b, ...c] or { a, b } or { d: x } from destructuring pattern
                         if ((node.kind === SyntaxKind.Identifier ||
                             node.kind == SyntaxKind.SpreadElementExpression ||
@@ -275,7 +275,7 @@ namespace ts.BreakpointResolver {
                             const binaryExpression = <BinaryExpression>node;
                             // Set breakpoint in destructuring pattern if its destructuring assignment
                             // [a, b, c] or {a, b, c} of
-                            // [a, b, c] = expression or 
+                            // [a, b, c] = expression or
                             // {a, b, c} = expression
                             if (isArrayLiteralOrObjectLiteralDestructuringPattern(binaryExpression.left)) {
                                 return spanInArrayLiteralOrObjectLiteralDestructuringPattern(
@@ -285,8 +285,8 @@ namespace ts.BreakpointResolver {
                             if (binaryExpression.operatorToken.kind === SyntaxKind.EqualsToken &&
                                 isArrayLiteralOrObjectLiteralDestructuringPattern(binaryExpression.parent)) {
                                 // Set breakpoint on assignment expression element of destructuring pattern
-                                // a = expression of 
-                                // [a = expression, b, c] = someExpression or 
+                                // a = expression of
+                                // [a = expression, b, c] = someExpression or
                                 // { a = expression, b, c } = someExpression
                                 return textSpan(node);
                             }
@@ -403,7 +403,7 @@ namespace ts.BreakpointResolver {
                 const declarations = variableDeclaration.parent.declarations;
                 if (declarations && declarations[0] !== variableDeclaration) {
                     // If we cannot set breakpoint on this declaration, set it on previous one
-                    // Because the variable declaration may be binding pattern and 
+                    // Because the variable declaration may be binding pattern and
                     // we would like to set breakpoint in last binding element if that's the case,
                     // use preceding token instead
                     return spanInNode(findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent));
@@ -549,7 +549,7 @@ namespace ts.BreakpointResolver {
                     return spanInNode(firstBindingElement);
                 }
 
-                // Could be ArrayLiteral from destructuring assignment or 
+                // Could be ArrayLiteral from destructuring assignment or
                 // just nested element in another destructuring assignment
                 // set breakpoint on assignment when parent is destructuring assignment
                 // Otherwise set breakpoint for this element
@@ -722,5 +722,5 @@ namespace ts.BreakpointResolver {
                 return spanInNode(node.parent);
             }
         }
-   }
+    }
 }

@@ -1196,13 +1196,22 @@ namespace ts {
     const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
         for (const ext of extensionsToRemove) {
-            if (fileExtensionIs(path, ext)) {
-                return path.substr(0, path.length - ext.length);
+            const extensionless = tryRemoveExtension(path, ext);
+            if (extensionless !== undefined) {
+                return extensionless;
             }
         }
         return path;
     }
 
+    export function tryRemoveExtension(path: string, extension: string): string {
+        return fileExtensionIs(path, extension) ? path.substring(0, path.length - extension.length) : undefined;
+    }
+
+    export function isJsxOrTsxExtension(ext: string): boolean {
+        return ext === ".jsx" || ext === ".tsx";
+    }
+    
     export function changeExtension<T extends string | Path>(path: T, newExtension: string): T {
         return <T>(removeFileExtension(path) + newExtension);
     }

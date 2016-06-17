@@ -1,4 +1,4 @@
-=== /consumer.ts ===
+=== /foo/consumer.ts ===
 /// <reference types="jquery" />
 $.foo();
 >$.foo() : void
@@ -6,7 +6,7 @@ $.foo();
 >$ : { foo(): void; }
 >foo : () => void
 
-=== /types/jquery/jquery.d.ts ===
+=== /foo/types/jquery/jquery.d.ts ===
 declare var $: { foo(): void };
 >$ : { foo(): void; }
 >foo : () => void

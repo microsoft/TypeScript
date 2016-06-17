@@ -1,6 +1,5 @@
 ///<reference path="harness.ts" />
 ///<reference path="runnerbase.ts" />
-/* tslint:disable:no-null-keyword */
 
 // Test case is json of below type in tests/cases/project/
 interface ProjectRunnerTestCase {
@@ -37,11 +36,19 @@ interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
 }
 
 class ProjectRunner extends RunnerBase {
+
+    public enumerateTestFiles() {
+        return this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
+    }
+
+    public kind(): TestRunnerKind {
+        return "project";
+    }
+
     public initializeTests() {
         if (this.tests.length === 0) {
-            const testFiles = this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
+            const testFiles = this.enumerateTestFiles();
             testFiles.forEach(fn => {
-                fn = fn.replace(/\\/g, "/");
                 this.runProjectTestCase(fn);
             });
         }
@@ -53,7 +60,7 @@ class ProjectRunner extends RunnerBase {
     private runProjectTestCase(testCaseFileName: string) {
         let testCase: ProjectRunnerTestCase & ts.CompilerOptions;
 
-        let testFileText: string = null;
+        let testFileText: string;
         try {
             testFileText = Harness.IO.readFile(testCaseFileName);
         }
@@ -178,7 +185,8 @@ class ProjectRunner extends RunnerBase {
                     useCaseSensitiveFileNames: () => Harness.IO.useCaseSensitiveFileNames(),
                     getNewLine: () => Harness.IO.newLine(),
                     fileExists: fileName => fileName === Harness.Compiler.defaultLibFileName ||  getSourceFileText(fileName) !== undefined,
-                    readFile: fileName => Harness.IO.readFile(fileName)
+                    readFile: fileName => Harness.IO.readFile(fileName),
+                    getDirectories: path => Harness.IO.getDirectories(path)
                 };
             }
         }
