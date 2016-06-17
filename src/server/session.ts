@@ -142,6 +142,7 @@ namespace ts.server {
         export const SynchronizeProjectList = "synchronizeProjectList";
         export const ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
         export const EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
+        export const Cleanup = "cleanup";
     }
 
     namespace Errors {
@@ -328,6 +329,28 @@ namespace ts.server {
             };
             if ((checkList.length > index) && (matchSeq(seq))) {
                 this.errorTimer = this.host.setTimeout(checkOne, ms);
+            }
+        }
+
+        private cleanProjects(caption: string, projects: Project[]) {
+            if (!projects) {
+                return;
+            }
+            this.projectService.log(`cleaning ${caption}`);
+            for (const p of projects) {
+                p.languageService.cleanupSemanticCache();
+            }
+        }
+
+        private cleanup() {
+            this.cleanProjects("inferred projects", this.projectService.inferredProjects);
+            this.cleanProjects("configured projects", this.projectService.configuredProjects);
+            this.cleanProjects("external projects", this.projectService.externalProjects);
+            if (typeof global !== "undefined" && global.gc) {
+                this.projectService.log(`global.gc()`);
+                global.gc();
+                global.gc();
+                global.gc();
             }
         }
 
@@ -1248,6 +1271,10 @@ namespace ts.server {
             [CommandNames.EncodedSemanticClassificationsFull]: (request: protocol.FileSpanRequest) => {
                 return this.requiredResponse(this.getEncodedSemanticClassifications(request.arguments));
             },
+            [CommandNames.Cleanup]: (request: protocol.Request) => {
+                this.cleanup();
+                return this.requiredResponse(true);
+            },            
             [CommandNames.Geterr]: (request: protocol.Request) => {
                 const geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
                 return { response: this.getDiagnostics(geterrArgs.delay, geterrArgs.files), responseRequired: false };

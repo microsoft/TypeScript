@@ -3212,6 +3212,7 @@ namespace ts {
 
         function cleanupSemanticCache(): void {
             // TODO: Should we jettison the program (or it's type checker) here?
+            program.dropDiagnosticsProducingTypeChecker();
         }
 
         function dispose(): void {

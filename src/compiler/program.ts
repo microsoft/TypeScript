@@ -1151,7 +1151,8 @@ namespace ts {
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
-            getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives
+            getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
+            dropDiagnosticsProducingTypeChecker
         };
 
         verifyCompilerOptions();
@@ -1343,6 +1344,10 @@ namespace ts {
 
         function getDiagnosticsProducingTypeChecker() {
             return diagnosticsProducingTypeChecker || (diagnosticsProducingTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ true));
+        }
+
+        function dropDiagnosticsProducingTypeChecker() {
+            diagnosticsProducingTypeChecker = undefined;
         }
 
         function getTypeChecker() {
