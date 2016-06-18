@@ -143,6 +143,7 @@ namespace ts.server {
         export const ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
         export const EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
         export const Cleanup = "cleanup";
+        export const OutliningSpans = "outliningSpans";
     }
 
     namespace Errors {
@@ -689,6 +690,15 @@ namespace ts.server {
             return args.position !== undefined ? args.position : scriptInfo.lineOffsetToPosition(args.line, args.offset);
         }
 
+        private getOutliningSpans(args: protocol.FileRequestArgs) {
+            const file = ts.normalizePath(args.file);
+            const project = this.projectService.getProjectForFile(file);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+            return project.languageService.getOutliningSpans(file);
+        }
+
         private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.QuickInfoResponseBody | QuickInfo {
             const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
@@ -1232,6 +1242,9 @@ namespace ts.server {
             },
             [CommandNames.QuickinfoFull]: (request: protocol.QuickInfoRequest) => {
                 return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.OutliningSpans]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getOutliningSpans(request.arguments));
             },
             [CommandNames.Format]: (request: protocol.Request) => {
                 const formatArgs = <protocol.FormatRequestArgs>request.arguments;
