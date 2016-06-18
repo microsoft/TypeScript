@@ -1051,7 +1051,7 @@ namespace Harness {
             options.target = options.target || ts.ScriptTarget.ES3;
             options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
             options.noErrorTruncation = true;
-            options.skipDefaultLibCheck = true;
+            options.skipDefaultLibCheck = typeof options.skipDefaultLibCheck === "undefined" ? true : options.skipDefaultLibCheck;
 
             if (typeof currentDirectory === "undefined") {
                 currentDirectory = Harness.IO.getCurrentDirectory();
