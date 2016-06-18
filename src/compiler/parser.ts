@@ -128,6 +128,8 @@ namespace ts {
                 return visitNodes(cbNodes, (<UnionOrIntersectionTypeNode>node).types);
             case SyntaxKind.ParenthesizedType:
                 return visitNode(cbNode, (<ParenthesizedTypeNode>node).type);
+            case SyntaxKind.LiteralType:
+                return visitNode(cbNode, (<LiteralTypeNode>node).literal);
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
                 return visitNodes(cbNodes, (<BindingPattern>node).elements);
@@ -1918,10 +1920,6 @@ namespace ts {
             return finishNode(span);
         }
 
-        function parseStringLiteralTypeNode(): StringLiteralTypeNode {
-            return <StringLiteralTypeNode>parseLiteralLikeNode(SyntaxKind.StringLiteralType, /*internName*/ true);
-        }
-
         function parseLiteralNode(internName?: boolean): LiteralExpression {
             return <LiteralExpression>parseLiteralLikeNode(token, internName);
         }
@@ -2387,6 +2385,17 @@ namespace ts {
             return token === SyntaxKind.DotToken ? undefined : node;
         }
 
+        function parseLiteralTypeNode(): LiteralTypeNode {
+            const node = <LiteralTypeNode>createNode(SyntaxKind.LiteralType);
+            node.literal = parseSimpleUnaryExpression();
+            finishNode(node);
+            return node;
+        }
+
+        function nextTokenIsNumericLiteral() {
+            return nextToken() === SyntaxKind.NumericLiteral;
+        }
+
         function parseNonArrayType(): TypeNode {
             switch (token) {
                 case SyntaxKind.AnyKeyword:
@@ -2400,7 +2409,12 @@ namespace ts {
                     const node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReference();
                 case SyntaxKind.StringLiteral:
-                    return parseStringLiteralTypeNode();
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                    return parseLiteralTypeNode();
+                case SyntaxKind.MinusToken:
+                    return lookAhead(nextTokenIsNumericLiteral) ? parseLiteralTypeNode() : parseTypeReference();
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.NullKeyword:
                     return parseTokenNode<TypeNode>();
@@ -2444,7 +2458,12 @@ namespace ts {
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.NewKeyword:
                 case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
                     return true;
+                case SyntaxKind.MinusToken:
+                    return lookAhead(nextTokenIsNumericLiteral);
                 case SyntaxKind.OpenParenToken:
                     // Only consider '(' the start of a type if followed by ')', '...', an identifier, a modifier,
                     // or something that starts a type. We don't want to consider things like '(1)' a type.

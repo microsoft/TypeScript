@@ -114,6 +114,8 @@ namespace ts {
         const stringType = createIntrinsicType(TypeFlags.String, "string");
         const numberType = createIntrinsicType(TypeFlags.Number, "number");
         const booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean");
+        const trueType = createIntrinsicType(TypeFlags.BooleanLiteral, "true");
+        const falseType = createIntrinsicType(TypeFlags.BooleanLiteral, "false");
         const esSymbolType = createIntrinsicType(TypeFlags.ESSymbol, "symbol");
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
         const undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
@@ -134,8 +136,8 @@ namespace ts {
 
         const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
-        const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
-        const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
+        const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
@@ -195,7 +197,8 @@ namespace ts {
         const tupleTypes: Map<TupleType> = {};
         const unionTypes: Map<UnionType> = {};
         const intersectionTypes: Map<IntersectionType> = {};
-        const stringLiteralTypes: Map<StringLiteralType> = {};
+        const stringLiteralTypes: Map<LiteralType> = {};
+        const numericLiteralTypes: Map<LiteralType> = {};
 
         const resolutionTargets: TypeSystemEntity[] = [];
         const resolutionResults: boolean[] = [];
@@ -2060,7 +2063,10 @@ namespace ts {
                         writeAnonymousType(<ObjectType>type, flags);
                     }
                     else if (type.flags & TypeFlags.StringLiteral) {
-                        writer.writeStringLiteral(`"${escapeString((<StringLiteralType>type).text)}"`);
+                        writer.writeStringLiteral(`"${escapeString((<LiteralType>type).text)}"`);
+                    }
+                    else if (type.flags & TypeFlags.NumberLiteral) {
+                        writer.writeStringLiteral((<LiteralType>type).text);
                     }
                     else {
                         // Should never get here
@@ -3718,7 +3724,7 @@ namespace ts {
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.NeverKeyword:
-                case SyntaxKind.StringLiteralType:
+                case SyntaxKind.LiteralType:
                     return true;
                 case SyntaxKind.ArrayType:
                     return isIndependentType((<ArrayTypeNode>node).elementType);
@@ -3863,7 +3869,7 @@ namespace ts {
         }
 
         function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisType: Type, parameters: Symbol[],
-            resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasStringLiterals: boolean): Signature {
+            resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature {
             const sig = new Signature(checker);
             sig.declaration = declaration;
             sig.typeParameters = typeParameters;
@@ -3873,20 +3879,20 @@ namespace ts {
             sig.typePredicate = typePredicate;
             sig.minArgumentCount = minArgumentCount;
             sig.hasRestParameter = hasRestParameter;
-            sig.hasStringLiterals = hasStringLiterals;
+            sig.hasLiteralTypes = hasLiteralTypes;
             return sig;
         }
 
         function cloneSignature(sig: Signature): Signature {
             return createSignature(sig.declaration, sig.typeParameters, sig.thisType, sig.parameters, sig.resolvedReturnType,
-                sig.typePredicate, sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
+                sig.typePredicate, sig.minArgumentCount, sig.hasRestParameter, sig.hasLiteralTypes);
         }
 
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
             const baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
             if (baseSignatures.length === 0) {
-                return [createSignature(undefined, classType.localTypeParameters, undefined, emptyArray, classType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false)];
+                return [createSignature(undefined, classType.localTypeParameters, undefined, emptyArray, classType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false)];
             }
             const baseTypeNode = getBaseTypeNodeOfClass(classType);
             const typeArguments = map(baseTypeNode.typeArguments, getTypeFromTypeNode);
@@ -4184,7 +4190,7 @@ namespace ts {
             else if (type.flags & TypeFlags.NumberLike) {
                 type = globalNumberType;
             }
-            else if (type.flags & TypeFlags.Boolean) {
+            else if (type.flags & TypeFlags.BooleanLike) {
                 type = globalBooleanType;
             }
             else if (type.flags & TypeFlags.ESSymbol) {
@@ -4426,7 +4432,7 @@ namespace ts {
             const links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
                 const parameters: Symbol[] = [];
-                let hasStringLiterals = false;
+                let hasLiteralTypes = false;
                 let minArgumentCount = -1;
                 let thisType: Type = undefined;
                 let hasThisParameter: boolean;
@@ -4452,8 +4458,8 @@ namespace ts {
                         parameters.push(paramSymbol);
                     }
 
-                    if (param.type && param.type.kind === SyntaxKind.StringLiteralType) {
-                        hasStringLiterals = true;
+                    if (param.type && param.type.kind === SyntaxKind.LiteralType) {
+                        hasLiteralTypes = true;
                     }
 
                     if (param.initializer || param.questionToken || param.dotDotDotToken) {
@@ -4494,7 +4500,7 @@ namespace ts {
                     createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode) :
                     undefined;
 
-                links.resolvedSignature = createSignature(declaration, typeParameters, thisType, parameters, returnType, typePredicate, minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
+                links.resolvedSignature = createSignature(declaration, typeParameters, thisType, parameters, returnType, typePredicate, minArgumentCount, hasRestParameter(declaration), hasLiteralTypes);
             }
             return links.resolvedSignature;
         }
@@ -5182,19 +5188,53 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getStringLiteralTypeForText(text: string): StringLiteralType {
+        function getStringLiteralTypeForText(text: string): LiteralType {
             if (hasProperty(stringLiteralTypes, text)) {
                 return stringLiteralTypes[text];
             }
-            const type = stringLiteralTypes[text] = <StringLiteralType>createType(TypeFlags.StringLiteral);
+            const type = stringLiteralTypes[text] = <LiteralType>createType(TypeFlags.StringLiteral);
             type.text = text;
             return type;
         }
 
-        function getTypeFromStringLiteralTypeNode(node: StringLiteralTypeNode): Type {
+        function createLiteralType(flags: TypeFlags, text: string) {
+            const type = <LiteralType>createType(flags);
+            type.text = text;
+            return type;
+        }
+
+        function getLiteralTypeForText(flags: TypeFlags, text: string) {
+            const map = flags & TypeFlags.StringLiteral ? stringLiteralTypes : numericLiteralTypes;
+            return hasProperty(map, text) ? map[text] : map[text] = createLiteralType(flags, text);
+        }
+
+        function getTypeFromLiteralExpression(node: Expression): Type {
+            switch (node.kind) {
+                case SyntaxKind.StringLiteral:
+                    return getLiteralTypeForText(TypeFlags.StringLiteral, (<LiteralExpression>node).text);
+                case SyntaxKind.NumericLiteral:
+                    return getLiteralTypeForText(TypeFlags.NumberLiteral, (<LiteralExpression>node).text);
+                case SyntaxKind.TrueKeyword:
+                    return trueType;
+                case SyntaxKind.FalseKeyword:
+                    return falseType;
+                case SyntaxKind.PrefixUnaryExpression:
+                    if ((<PrefixUnaryExpression>node).operator === SyntaxKind.MinusToken &&
+                        (<PrefixUnaryExpression>node).operand.kind === SyntaxKind.NumericLiteral) {
+                        return getLiteralTypeForText(TypeFlags.NumberLiteral, "" + -(<LiteralExpression>(<PrefixUnaryExpression>node).operand).text);
+                    }
+            }
+            return undefined;
+        }
+
+        function getTypeOfLiteralOrExpression(node: Expression): Type {
+            return getTypeFromLiteralExpression(node) || checkExpression(node);
+        }
+
+        function getTypeFromLiteralTypeNode(node: LiteralTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getStringLiteralTypeForText(unescapeIdentifier(node.text));
+                links.resolvedType = getTypeFromLiteralExpression(node.literal);
             }
             return links.resolvedType;
         }
@@ -5263,8 +5303,8 @@ namespace ts {
                 case SyntaxKind.ThisType:
                 case SyntaxKind.ThisKeyword:
                     return getTypeFromThisTypeNode(node);
-                case SyntaxKind.StringLiteralType:
-                    return getTypeFromStringLiteralTypeNode(<StringLiteralTypeNode>node);
+                case SyntaxKind.LiteralType:
+                    return getTypeFromLiteralTypeNode(<LiteralTypeNode>node);
                 case SyntaxKind.TypeReference:
                 case SyntaxKind.JSDocTypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);
@@ -5431,7 +5471,7 @@ namespace ts {
                 instantiateList(signature.parameters, mapper, instantiateSymbol),
                 instantiateType(signature.resolvedReturnType, mapper),
                 freshTypePredicate,
-                signature.minArgumentCount, signature.hasRestParameter, signature.hasStringLiterals);
+                signature.minArgumentCount, signature.hasRestParameter, signature.hasLiteralTypes);
             result.target = signature;
             result.mapper = mapper;
             return result;
@@ -5918,18 +5958,18 @@ namespace ts {
                     if (source.flags & TypeFlags.Null) {
                         if (!strictNullChecks || target.flags & TypeFlags.Null) return Ternary.True;
                     }
-                    if (source.flags & TypeFlags.Enum && target === numberType) return Ternary.True;
+                    if (source.flags & TypeFlags.NumberLike && target === numberType) return Ternary.True;
                     if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum) {
                         if (result = enumRelatedTo(source, target, reportErrors)) {
                             return result;
                         }
                     }
-                    if (source.flags & TypeFlags.StringLiteral && target === stringType) return Ternary.True;
+                    if (source.flags & TypeFlags.StringLike && target === stringType) return Ternary.True;
                     if (relation === assignableRelation || relation === comparableRelation) {
                         if (source.flags & TypeFlags.Any) return Ternary.True;
                         if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
                     }
-                    if (source.flags & TypeFlags.Boolean && target.flags & TypeFlags.Boolean) {
+                    if (source.flags & TypeFlags.BooleanLike && target.flags & TypeFlags.Boolean) {
                         return Ternary.True;
                     }
                 }
@@ -6834,9 +6874,9 @@ namespace ts {
             return !!getPropertyOfType(type, "0");
         }
 
-        function isStringLiteralUnionType(type: Type): boolean {
-            return type.flags & TypeFlags.StringLiteral ? true :
-                type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isStringLiteralUnionType) :
+        function isLiteralUnionType(type: Type): boolean {
+            return type.flags & TypeFlags.Literal ? true :
+                type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isLiteralUnionType) :
                 false;
         }
 
@@ -7528,7 +7568,7 @@ namespace ts {
             if (flags & TypeFlags.NumberLike) {
                 return strictNullChecks ? TypeFacts.NumberStrictFacts : TypeFacts.NumberFacts;
             }
-            if (flags & TypeFlags.Boolean) {
+            if (flags & TypeFlags.BooleanLike) {
                 return strictNullChecks ? TypeFacts.BooleanStrictFacts : TypeFacts.BooleanFacts;
             }
             if (flags & TypeFlags.ObjectType) {
@@ -7703,11 +7743,7 @@ namespace ts {
         }
 
         function getTypeOfSwitchClause(clause: CaseClause | DefaultClause) {
-            if (clause.kind === SyntaxKind.CaseClause) {
-                const expr = (<CaseClause>clause).expression;
-                return expr.kind === SyntaxKind.StringLiteral ? getStringLiteralTypeForText((<StringLiteral>expr).text) : checkExpression(expr);
-            }
-            return undefined;
+            return clause.kind === SyntaxKind.CaseClause ? getTypeOfLiteralOrExpression((<CaseClause>clause).expression) : undefined;
         }
 
         function getSwitchClauseTypes(switchStatement: SwitchStatement): Type[] {
@@ -8021,11 +8057,11 @@ namespace ts {
                 }
                 const propName = propAccess.name.text;
                 const propType = getTypeOfPropertyOfType(type, propName);
-                if (!propType || !isStringLiteralUnionType(propType)) {
+                if (!propType || !isLiteralUnionType(propType)) {
                     return type;
                 }
-                const discriminantType = value.kind === SyntaxKind.StringLiteral ? getStringLiteralTypeForText((<StringLiteral>value).text) : checkExpression(value);
-                if (!isStringLiteralUnionType(discriminantType)) {
+                const discriminantType = getTypeOfLiteralOrExpression(value);
+                if (!isLiteralUnionType(discriminantType)) {
                     return type;
                 }
                 if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
@@ -8047,7 +8083,7 @@ namespace ts {
                 }
                 const propName = (<PropertyAccessExpression>switchStatement.expression).name.text;
                 const propType = getTypeOfPropertyOfType(type, propName);
-                if (!propType || !isStringLiteralUnionType(propType)) {
+                if (!propType || !isLiteralUnionType(propType)) {
                     return type;
                 }
                 const switchTypes = getSwitchClauseTypes(switchStatement);
@@ -10446,7 +10482,7 @@ namespace ts {
 
                 // specialized signatures always need to be placed before non-specialized signatures regardless
                 // of the cutoff position; see GH#1133
-                if (signature.hasStringLiterals) {
+                if (signature.hasLiteralTypes) {
                     specializedIndex++;
                     spliceIndex = specializedIndex;
                     // The cutoff index always needs to be greater than or equal to the specialized signature index
@@ -10705,7 +10741,7 @@ namespace ts {
                     // for the argument. In that case, we should check the argument.
                     if (argType === undefined) {
                         argType = arg.kind === SyntaxKind.StringLiteral && !reportErrors
-                            ? getStringLiteralTypeForText((<StringLiteral>arg).text)
+                            ? getTypeFromLiteralExpression(arg)
                             : checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
                     }
 
@@ -11877,7 +11913,7 @@ namespace ts {
             }
             const propName = (<PropertyAccessExpression>expr).name.text;
             const propType = getTypeOfPropertyOfType(type, propName);
-            if (!propType || !isStringLiteralUnionType(propType)) {
+            if (!propType || !isLiteralUnionType(propType)) {
                 return false;
             }
             const switchTypes = getSwitchClauseTypes(node);
@@ -12217,6 +12253,9 @@ namespace ts {
 
         function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {
             const operandType = checkExpression(node.operand);
+            if (node.operator === SyntaxKind.MinusToken && node.operand.kind === SyntaxKind.NumericLiteral && hasLiteralContextualType(node)) {
+                return getTypeFromLiteralExpression(node);
+            }
             switch (node.operator) {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
@@ -12520,8 +12559,8 @@ namespace ts {
                     let suggestedOperator: SyntaxKind;
                     // if a user tries to apply a bitwise operator to 2 boolean operands
                     // try and return them a helpful suggestion
-                    if ((leftType.flags & TypeFlags.Boolean) &&
-                        (rightType.flags & TypeFlags.Boolean) &&
+                    if ((leftType.flags & TypeFlags.BooleanLike) &&
+                        (rightType.flags & TypeFlags.BooleanLike) &&
                         (suggestedOperator = getSuggestedBooleanOperator(operatorToken.kind)) !== undefined) {
                         error(errorNode || operatorToken, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead, tokenToString(operatorToken.kind), tokenToString(suggestedOperator));
                     }
@@ -12734,13 +12773,18 @@ namespace ts {
             return getUnionType([type1, type2]);
         }
 
-        function checkStringLiteralExpression(node: StringLiteral): Type {
-            const contextualType = getContextualType(node);
-            if (contextualType && isStringLiteralUnionType(contextualType)) {
-                return getStringLiteralTypeForText(node.text);
-            }
+        function hasLiteralContextualType(node: Expression) {
+            return isLiteralUnionType(getContextualType(node) || unknownType);
+        }
 
-            return stringType;
+        function checkLiteralExpression(node: Expression): Type {
+            const type = node.kind === SyntaxKind.StringLiteral ? stringType :
+                node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword ? booleanType :
+                numberType;
+            if (type === numberType) {
+                checkGrammarNumericLiteral(<LiteralExpression>node);
+            }
+            return hasLiteralContextualType(node) ? getTypeFromLiteralExpression(node) : type;
         }
 
         function checkTemplateExpression(node: TemplateExpression): Type {
@@ -12855,12 +12899,6 @@ namespace ts {
             return type;
         }
 
-        function checkNumericLiteral(node: LiteralExpression): Type {
-            // Grammar checking
-            checkGrammarNumericLiteral(node);
-            return numberType;
-        }
-
         function checkExpressionWorker(node: Expression, contextualMapper: TypeMapper): Type {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
@@ -12871,15 +12909,13 @@ namespace ts {
                     return checkSuperExpression(node);
                 case SyntaxKind.NullKeyword:
                     return nullWideningType;
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
-                    return booleanType;
-                case SyntaxKind.NumericLiteral:
-                    return checkNumericLiteral(<LiteralExpression>node);
+                    return checkLiteralExpression(node);
                 case SyntaxKind.TemplateExpression:
                     return checkTemplateExpression(<TemplateExpression>node);
-                case SyntaxKind.StringLiteral:
-                    return checkStringLiteralExpression(<StringLiteral>node);
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                     return stringType;
                 case SyntaxKind.RegularExpressionLiteral:
@@ -17605,7 +17641,7 @@ namespace ts {
             else if (isTypeOfKind(type, TypeFlags.Void)) {
                 return TypeReferenceSerializationKind.VoidType;
             }
-            else if (isTypeOfKind(type, TypeFlags.Boolean)) {
+            else if (isTypeOfKind(type, TypeFlags.BooleanLike)) {
                 return TypeReferenceSerializationKind.BooleanType;
             }
             else if (isTypeOfKind(type, TypeFlags.NumberLike)) {

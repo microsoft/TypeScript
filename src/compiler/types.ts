@@ -210,7 +210,7 @@ namespace ts {
         IntersectionType,
         ParenthesizedType,
         ThisType,
-        StringLiteralType,
+        LiteralType,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -361,7 +361,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = StringLiteralType,
+        LastTypeNode = LiteralType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -790,8 +790,9 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.StringLiteralType)
-    export interface StringLiteralTypeNode extends LiteralLikeNode, TypeNode {
+    export interface LiteralTypeNode extends TypeNode {
         _stringLiteralTypeBrand: any;
+        literal: Expression;
     }
 
     // @kind(SyntaxKind.StringLiteral)
@@ -2197,50 +2198,54 @@ namespace ts {
     }
 
     export const enum TypeFlags {
-        Any                     = 0x00000001,
-        String                  = 0x00000002,
-        Number                  = 0x00000004,
-        Boolean                 = 0x00000008,
-        Void                    = 0x00000010,
-        Undefined               = 0x00000020,
-        Null                    = 0x00000040,
-        Enum                    = 0x00000080,  // Enum type
-        StringLiteral           = 0x00000100,  // String literal type
-        TypeParameter           = 0x00000200,  // Type parameter
-        Class                   = 0x00000400,  // Class
-        Interface               = 0x00000800,  // Interface
-        Reference               = 0x00001000,  // Generic type reference
-        Tuple                   = 0x00002000,  // Tuple
-        Union                   = 0x00004000,  // Union (T | U)
-        Intersection            = 0x00008000,  // Intersection (T & U)
-        Anonymous               = 0x00010000,  // Anonymous
-        Instantiated            = 0x00020000,  // Instantiated anonymous type
+        Any                     = 1 << 0,
+        String                  = 1 << 1,
+        Number                  = 1 << 2,
+        Boolean                 = 1 << 3,
+        StringLiteral           = 1 << 4,   // String literal type
+        NumberLiteral           = 1 << 5,
+        BooleanLiteral          = 1 << 6,
+        ESSymbol                = 1 << 7,   // Type of symbol primitive introduced in ES6
+        Void                    = 1 << 8,
+        Undefined               = 1 << 9,
+        Null                    = 1 << 10,
+        Never                   = 1 << 11,  // Never type
+        Enum                    = 1 << 12,  // Enum type
+        TypeParameter           = 1 << 13,  // Type parameter
+        Class                   = 1 << 14,  // Class
+        Interface               = 1 << 15,  // Interface
+        Reference               = 1 << 16,  // Generic type reference
+        Tuple                   = 1 << 17,  // Tuple
+        Union                   = 1 << 18,  // Union (T | U)
+        Intersection            = 1 << 19,  // Intersection (T & U)
+        Anonymous               = 1 << 20,  // Anonymous
+        Instantiated            = 1 << 21,  // Instantiated anonymous type
         /* @internal */
-        FromSignature           = 0x00040000,  // Created for signature assignment check
-        ObjectLiteral           = 0x00080000,  // Originates in an object literal
+        FromSignature           = 1 << 22,  // Created for signature assignment check
+        ObjectLiteral           = 1 << 23,  // Originates in an object literal
         /* @internal */
-        FreshObjectLiteral      = 0x00100000,  // Fresh object literal type
+        FreshObjectLiteral      = 1 << 24,  // Fresh object literal type
         /* @internal */
-        ContainsWideningType    = 0x00200000,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 25,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 0x00400000,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 26,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
-        ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
-        ThisType                = 0x02000000,  // This type
-        ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
-        Never                   = 0x08000000,  // Never type
+        ContainsAnyFunctionType = 1 << 27,  // Type is or contains object literal type
+        ThisType                = 1 << 28,  // This type
+        ObjectLiteralPatternWithComputedProperties = 1 << 29,  // Object literal type implied by binding pattern has computed properties
 
         /* @internal */
         Nullable = Undefined | Null,
+        Literal = StringLiteral | NumberLiteral | BooleanLiteral,
         /* @internal */
         Falsy = Void | Undefined | Null,       // TODO: Add false, 0, and ""
         /* @internal */
-        Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null | Never,
+        Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
         Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
-        NumberLike = Number | Enum,
+        NumberLike = Number | NumberLiteral | Enum,
+        BooleanLike = Boolean | BooleanLiteral,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
@@ -2271,7 +2276,7 @@ namespace ts {
     }
 
     // String literal types (TypeFlags.StringLiteral)
-    export interface StringLiteralType extends Type {
+    export interface LiteralType extends Type {
         text: string;  // Text of string literal
     }
 
@@ -2394,7 +2399,7 @@ namespace ts {
         /* @internal */
         hasRestParameter: boolean;          // True if last parameter is rest parameter
         /* @internal */
-        hasStringLiterals: boolean;         // True if specialized
+        hasLiteralTypes: boolean;           // True if specialized
         /* @internal */
         target?: Signature;                 // Instantiation target
         /* @internal */

@@ -428,8 +428,7 @@ namespace ts {
 
     export function isInString(sourceFile: SourceFile, position: number): boolean {
         const previousToken = findPrecedingToken(position, sourceFile);
-        if (previousToken &&
-            (previousToken.kind === SyntaxKind.StringLiteral || previousToken.kind === SyntaxKind.StringLiteralType)) {
+        if (previousToken && previousToken.kind === SyntaxKind.StringLiteral) {
             const start = previousToken.getStart();
             const end = previousToken.getEnd();
 
@@ -627,7 +626,6 @@ namespace ts {
 
     export function isStringOrRegularExpressionOrTemplateLiteral(kind: SyntaxKind): boolean {
         if (kind === SyntaxKind.StringLiteral
-            || kind === SyntaxKind.StringLiteralType
             || kind === SyntaxKind.RegularExpressionLiteral
             || isTemplateLiteralKind(kind)) {
             return true;
