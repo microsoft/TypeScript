@@ -381,7 +381,15 @@ namespace ts {
                             continue;
                         }
                         const name = combinePaths(path, entry);
-                        const stat = _fs.statSync(name);
+
+                        let stat: any;
+                        try {
+                            stat = _fs.statSync(name);
+                        }
+                        catch (e) {
+                            continue;
+                        }
+
                         if (stat.isFile()) {
                             files.push(entry);
                         }

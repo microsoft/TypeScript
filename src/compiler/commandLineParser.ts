@@ -672,7 +672,7 @@ namespace ts {
 
     // Skip over any minified JavaScript files (ending in ".min.js")
     // Skip over dotted files and folders as well
-    const IgnoreFileNamePattern = /(\.min\.js$)|([\\/]\.[\w.])/;
+    const ignoreFileNamePattern = /(\.min\.js$)|([\\/]\.[\w.])/;
     /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
@@ -969,7 +969,7 @@ namespace ts {
                     continue;
                 }
 
-                if (IgnoreFileNamePattern.test(file)) {
+                if (ignoreFileNamePattern.test(file)) {
                     continue;
                 }
 
@@ -1055,8 +1055,8 @@ namespace ts {
             // Remove any subpaths under an existing recursively watched directory.
             for (const key in wildcardDirectories) {
                 if (hasProperty(wildcardDirectories, key)) {
-                    for (const recursiveKey in recursiveKeys) {
-                        if (containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
+                    for (const recursiveKey of recursiveKeys) {
+                        if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
                             delete wildcardDirectories[key];
                         }
                     }

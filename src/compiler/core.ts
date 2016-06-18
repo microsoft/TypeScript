@@ -1211,7 +1211,7 @@ namespace ts {
     export function isJsxOrTsxExtension(ext: string): boolean {
         return ext === ".jsx" || ext === ".tsx";
     }
-    
+
     export function changeExtension<T extends string | Path>(path: T, newExtension: string): T {
         return <T>(removeFileExtension(path) + newExtension);
     }
