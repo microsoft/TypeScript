@@ -98,6 +98,14 @@ declare namespace ts.server.protocol {
         projectFileName?: string;
     }
 
+    export interface TodoCommentRequest extends FileRequest {
+        arguments: TodoCommentRequestArgs;
+    }
+
+    export interface TodoCommentRequestArgs extends FileRequestArgs {
+        descriptors: TodoCommentDescriptor[];
+    }
+
     /**
       * Arguments for ProjectInfoRequest request.
       */

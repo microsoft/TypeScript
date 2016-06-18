@@ -144,6 +144,7 @@ namespace ts.server {
         export const EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
         export const Cleanup = "cleanup";
         export const OutliningSpans = "outliningSpans";
+        export const TodoComments = "todoComments";
     }
 
     namespace Errors {
@@ -699,6 +700,15 @@ namespace ts.server {
             return project.languageService.getOutliningSpans(file);
         }
 
+        private getTodoComments(args: protocol.TodoCommentRequestArgs) {
+            const file = ts.normalizePath(args.file);
+            const project = this.projectService.getProjectForFile(file);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+            return project.languageService.getTodoComments(file, args.descriptors);
+        }
+
         private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.QuickInfoResponseBody | QuickInfo {
             const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
@@ -1245,6 +1255,9 @@ namespace ts.server {
             },
             [CommandNames.OutliningSpans]: (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getOutliningSpans(request.arguments));
+            },
+            [CommandNames.TodoComments]: (request: protocol.TodoCommentRequest) => {
+                return this.requiredResponse(this.getTodoComments(request.arguments));
             },
             [CommandNames.Format]: (request: protocol.Request) => {
                 const formatArgs = <protocol.FormatRequestArgs>request.arguments;
