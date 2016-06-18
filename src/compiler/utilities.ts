@@ -1264,6 +1264,18 @@ namespace ts {
         return charCode === CharacterCodes.singleQuote || charCode === CharacterCodes.doubleQuote;
     }
 
+    /**
+     * Returns true if the node is a variable declaration whose initializer is a function expression.
+     * This function does not test if the node is in a JavaScript file or not.
+     */
+    export function isDeclarationOfFunctionExpression(s: Symbol) {
+        if (s.valueDeclaration && s.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
+            const declaration = s.valueDeclaration as VariableDeclaration;
+            return declaration.initializer && declaration.initializer.kind === SyntaxKind.FunctionExpression;
+        }
+        return false;
+    }
+
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
     export function getSpecialPropertyAssignmentKind(expression: Node): SpecialPropertyAssignmentKind {
@@ -2700,6 +2712,10 @@ namespace ts {
 
     export function hasJavaScriptFileExtension(fileName: string) {
         return forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
+    }
+
+    export function hasTypeScriptFileExtension(fileName: string) {
+        return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
     /**

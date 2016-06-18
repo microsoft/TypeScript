@@ -1935,6 +1935,10 @@
         "category": "Error",
         "code": 2688
     },
+    "Cannot extend an interface '{0}'. Did you mean 'implements'?": {
+        "category": "Error",
+        "code": 2689
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2928,10 +2932,6 @@
     "'parameter modifiers' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8012
-    },
-    "'property declarations' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8014
     },
     "'enum declarations' can only be used in a .ts file.": {
         "category": "Error",

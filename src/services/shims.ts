@@ -165,7 +165,7 @@ namespace ts {
 
         /**
          * Returns a JSON-encoded value of the type:
-         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
+         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean, isDefinition?: boolean }[]
          */
         getReferencesAtPosition(fileName: string, position: number): string;
 

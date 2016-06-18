@@ -15,6 +15,7 @@ namespace ts {
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
         readFile(path: string, encoding?: string): string;
+        getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
@@ -79,7 +80,7 @@ namespace ts {
         realpath(path: string): string;
     };
 
-    export var sys: System = (function () {
+    export var sys: System = (function() {
 
         function getWScriptSystem(): System {
 
@@ -494,7 +495,7 @@ namespace ts {
                         }
                     );
                 },
-                resolvePath: function (path: string): string {
+                resolvePath: function(path: string): string {
                     return _path.resolve(path);
                 },
                 fileExists,
@@ -530,6 +531,16 @@ namespace ts {
                         global.gc();
                     }
                     return process.memoryUsage().heapUsed;
+                },
+                getFileSize(path) {
+                    try {
+                        const stat = _fs.statSync(path);
+                        if (stat.isFile()) {
+                            return stat.size;
+                        }
+                    }
+                    catch (e) { }
+                    return 0;
                 },
                 exit(exitCode?: number): void {
                     process.exit(exitCode);
