@@ -7,4 +7,11 @@
 ////    }
 ////}
 
-verify.codeFixAtPosition({ span: { start: 0, end: 0 }, newText: "super();" });
+verify.codeFixAtPosition(`
+class Base {
+}
+class C extends Base {
+    constructor() {
+        super();
+    }
+}`);
