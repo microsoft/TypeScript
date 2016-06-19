@@ -106,6 +106,14 @@ declare namespace ts.server.protocol {
         descriptors: TodoCommentDescriptor[];
     }
 
+    export interface IndentationRequest extends FileLocationRequest {
+        arguments: IndentationRequestArgs;
+    }
+
+    export interface IndentationRequestArgs extends FileLocationRequestArgs {
+        options: EditorSettings;
+    }
+
     /**
       * Arguments for ProjectInfoRequest request.
       */

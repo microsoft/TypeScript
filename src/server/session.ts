@@ -145,6 +145,7 @@ namespace ts.server {
         export const Cleanup = "cleanup";
         export const OutliningSpans = "outliningSpans";
         export const TodoComments = "todoComments";
+        export const Indentation = "indentation";
     }
 
     namespace Errors {
@@ -691,22 +692,30 @@ namespace ts.server {
             return args.position !== undefined ? args.position : scriptInfo.lineOffsetToPosition(args.line, args.offset);
         }
 
-        private getOutliningSpans(args: protocol.FileRequestArgs) {
-            const file = ts.normalizePath(args.file);
+        private getFileAndProject(fileName: string) {
+            const file = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(file);
             if (!project) {
                 throw Errors.NoProject;
             }
+            return { file, project };
+        }
+
+        private getOutliningSpans(args: protocol.FileRequestArgs) {
+            const { file, project } = this.getFileAndProject(args.file);
             return project.languageService.getOutliningSpans(file);
         }
 
         private getTodoComments(args: protocol.TodoCommentRequestArgs) {
-            const file = ts.normalizePath(args.file);
-            const project = this.projectService.getProjectForFile(file);
-            if (!project) {
-                throw Errors.NoProject;
-            }
+            const { file, project } = this.getFileAndProject(args.file);
             return project.languageService.getTodoComments(file, args.descriptors);
+        }
+
+        private getIndentation(args: protocol.IndentationRequestArgs) {
+            const { file, project } = this.getFileAndProject(args.file);
+            const position = this.getPosition(args, project.getScriptInfo(file));
+            const indentation = project.languageService.getIndentationAtPosition(file, position, args.options);
+            return { position, indentation };
         }
 
         private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.QuickInfoResponseBody | QuickInfo {
@@ -1258,6 +1267,9 @@ namespace ts.server {
             },
             [CommandNames.TodoComments]: (request: protocol.TodoCommentRequest) => {
                 return this.requiredResponse(this.getTodoComments(request.arguments));
+            },
+            [CommandNames.Indentation]: (request: protocol.IndentationRequest) => {
+                return this.requiredResponse(this.getIndentation(request.arguments));
             },
             [CommandNames.Format]: (request: protocol.Request) => {
                 const formatArgs = <protocol.FormatRequestArgs>request.arguments;
