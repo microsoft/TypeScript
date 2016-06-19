@@ -101,6 +101,7 @@ namespace ts.server {
 
     export namespace CommandNames {
         export const Brace = "brace";
+        export const BraceFull = "brace-full";
         export const Change = "change";
         export const Close = "close";
         export const Completions = "completions";
@@ -1108,26 +1109,26 @@ namespace ts.server {
             }
         }
 
-        private getBraceMatching(line: number, offset: number, fileName: string): protocol.TextSpan[] {
-            const file = ts.normalizePath(fileName);
+        private getBraceMatching(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.TextSpan[] | TextSpan[] {
+            const { file, project } = this.getFileAndProject(args.file);
 
-            const project = this.projectService.getProjectForFile(file);
-            if (!project) {
-                throw Errors.NoProject;
-            }
-
-            const scriptInfo = project.getScriptInfo(fileName);
-            const position = scriptInfo.lineOffsetToPosition(line, offset);
+            const scriptInfo = project.getScriptInfo(file);
+            const position = this.getPosition(args, scriptInfo);
 
             const spans = project.languageService.getBraceMatchingAtPosition(file, position);
             if (!spans) {
                 return undefined;
             }
+            if (simplifiedResult) {
 
-            return spans.map(span => ({
-                start: scriptInfo.positionToLineOffset(span.start),
-                end: scriptInfo.positionToLineOffset(span.start + span.length)
-            }));
+                return spans.map(span => ({
+                    start: scriptInfo.positionToLineOffset(span.start),
+                    end: scriptInfo.positionToLineOffset(span.start + span.length)
+                }));
+            }
+            else {
+                return spans;
+            }
         }
 
         getDiagnosticsForProject(delay: number, fileName: string) {
@@ -1352,9 +1353,11 @@ namespace ts.server {
                 const navtoArgs = <protocol.NavtoRequestArgs>request.arguments;
                 return { response: this.getNavigateToItems(navtoArgs.searchValue, navtoArgs.file, navtoArgs.maxResultCount), responseRequired: true };
             },
-            [CommandNames.Brace]: (request: protocol.Request) => {
-                const braceArguments = <protocol.FileLocationRequestArgs>request.arguments;
-                return { response: this.getBraceMatching(braceArguments.line, braceArguments.offset, braceArguments.file), responseRequired: true };
+            [CommandNames.Brace]: (request: protocol.FileLocationRequest) => {
+                return this.requiredResponse(this.getBraceMatching(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.BraceFull]: (request: protocol.FileLocationRequest) => {
+                return this.requiredResponse(this.getBraceMatching(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.NavBar]: (request: protocol.Request) => {
                 const navBarArgs = <protocol.FileRequestArgs>request.arguments;
