@@ -1313,7 +1313,7 @@ namespace ts.server {
             [CommandNames.Cleanup]: (request: protocol.Request) => {
                 this.cleanup();
                 return this.requiredResponse(true);
-            },            
+            },
             [CommandNames.Geterr]: (request: protocol.Request) => {
                 const geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
                 return { response: this.getDiagnostics(geterrArgs.delay, geterrArgs.files), responseRequired: false };
