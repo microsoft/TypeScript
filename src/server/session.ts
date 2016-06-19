@@ -148,6 +148,7 @@ namespace ts.server {
         export const OutliningSpans = "outliningSpans";
         export const TodoComments = "todoComments";
         export const Indentation = "indentation";
+        export const DocCommentTemplate = "docCommentTemplate";
     }
 
     namespace Errors {
@@ -713,6 +714,13 @@ namespace ts.server {
             return project.languageService.getTodoComments(file, args.descriptors);
         }
 
+        private getDocCommentTemplate(args: protocol.FileLocationRequestArgs) {
+            const { file, project } = this.getFileAndProject(args.file);
+            const scriptInfo = project.getScriptInfo(file);
+            const position = this.getPosition(args, scriptInfo);
+            return project.languageService.getDocCommentTemplateAtPosition(file, position);
+        }
+
         private getIndentation(args: protocol.IndentationRequestArgs) {
             const { file, project } = this.getFileAndProject(args.file);
             const position = this.getPosition(args, project.getScriptInfo(file));
@@ -1270,6 +1278,9 @@ namespace ts.server {
             },
             [CommandNames.Indentation]: (request: protocol.IndentationRequest) => {
                 return this.requiredResponse(this.getIndentation(request.arguments));
+            },
+            [CommandNames.DocCommentTemplate]: (request: protocol.FileLocationRequest) => {
+                return this.requiredResponse(this.getDocCommentTemplate(request.arguments));
             },
             [CommandNames.Format]: (request: protocol.Request) => {
                 const formatArgs = <protocol.FormatRequestArgs>request.arguments;
