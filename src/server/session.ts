@@ -153,6 +153,7 @@ namespace ts.server {
         export const SyntacticDiagnosticsFull = "syntacticDiagnostics-full";
         export const CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
         export const NameOrDottedNameSpan = "nameOrDottedNameSpan";
+        export const BreakpointStatement = "breakpointStatement";
     }
 
     namespace Errors {
@@ -753,6 +754,12 @@ namespace ts.server {
             return { position, indentation };
         }
 
+        private getBreakpointStatement(args: protocol.FileLocationRequestArgs) {
+            const { file, project } = this.getFileAndProject(args.file);
+            const position = this.getPosition(args, project.getScriptInfo(file));
+            return project.languageService.getBreakpointStatementAtPosition(file, position);
+        }
+
         private getNameOrDottedNameSpan(args: protocol.FileLocationRequestArgs) {
             const { file, project } = this.getFileAndProject(args.file);
             const position = this.getPosition(args, project.getScriptInfo(file));
@@ -1318,6 +1325,9 @@ namespace ts.server {
             },
             [CommandNames.NameOrDottedNameSpan]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getNameOrDottedNameSpan(request.arguments));
+            },
+            [CommandNames.BreakpointStatement]: (request: protocol.FileLocationRequest) => {
+                return this.requiredResponse(this.getBreakpointStatement(request.arguments));
             },
             [CommandNames.BraceCompletion]: (request: protocol.BraceCompletionRequest) => {
                 return this.requiredResponse(this.isValidBraceCompletion(request.arguments));
