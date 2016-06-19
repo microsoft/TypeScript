@@ -152,6 +152,7 @@ namespace ts.server {
         export const DocCommentTemplate = "docCommentTemplate";
         export const SyntacticDiagnosticsFull = "syntacticDiagnostics-full";
         export const CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
+        export const NameOrDottedNameSpan = "nameOrDottedNameSpan";
     }
 
     namespace Errors {
@@ -752,6 +753,12 @@ namespace ts.server {
             return { position, indentation };
         }
 
+        private getNameOrDottedNameSpan(args: protocol.FileLocationRequestArgs) {
+            const { file, project } = this.getFileAndProject(args.file);
+            const position = this.getPosition(args, project.getScriptInfo(file));
+            return project.languageService.getNameOrDottedNameSpan(file, position, position);
+        }
+
         private isValidBraceCompletion(args: protocol.BraceCompletionRequestArgs) {
             const { file, project } = this.getFileAndProject(args.file);
             const position = this.getPosition(args, project.getScriptInfo(file));
@@ -1308,6 +1315,9 @@ namespace ts.server {
             },
             [CommandNames.Indentation]: (request: protocol.IndentationRequest) => {
                 return this.requiredResponse(this.getIndentation(request.arguments));
+            },
+            [CommandNames.NameOrDottedNameSpan]: (request: protocol.FileLocationRequest) => {
+                return this.requiredResponse(this.getNameOrDottedNameSpan(request.arguments));
             },
             [CommandNames.BraceCompletion]: (request: protocol.BraceCompletionRequest) => {
                 return this.requiredResponse(this.isValidBraceCompletion(request.arguments));
