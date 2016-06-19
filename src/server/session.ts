@@ -120,6 +120,7 @@ namespace ts.server {
         export const GeterrForProject = "geterrForProject";
         export const SemanticDiagnosticsFull = "semanticDiagnostics-full";
         export const NavBar = "navbar";
+        export const NavBarFull = "navbar-full";
         export const Navto = "navto";
         export const Occurrences = "occurrences";
         export const DocumentHighlights = "documentHighlights";
@@ -1036,19 +1037,17 @@ namespace ts.server {
             }));
         }
 
-        private getNavigationBarItems(fileName: string): protocol.NavigationBarItem[] {
-            const file = ts.normalizePath(fileName);
-            const project = this.projectService.getProjectForFile(file);
-            if (!project) {
-                throw Errors.NoProject;
-            }
+        private getNavigationBarItems(fileName: string, simplifiedResult: boolean): protocol.NavigationBarItem[] | NavigationBarItem[] {
+            const { file, project } = this.getFileAndProject(fileName);
 
             const items = project.languageService.getNavigationBarItems(file);
             if (!items) {
                 return undefined;
             }
 
-            return this.decorateNavigationBarItem(project, fileName, items);
+            return simplifiedResult
+                ? this.decorateNavigationBarItem(project, fileName, items)
+                : items;
         }
 
         private getNavigateToItems(searchValue: string, fileName: string, maxResultCount?: number): protocol.NavtoItem[] {
@@ -1359,9 +1358,11 @@ namespace ts.server {
             [CommandNames.BraceFull]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getBraceMatching(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.NavBar]: (request: protocol.Request) => {
-                const navBarArgs = <protocol.FileRequestArgs>request.arguments;
-                return { response: this.getNavigationBarItems(navBarArgs.file), responseRequired: true };
+            [CommandNames.NavBar]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getNavigationBarItems(request.arguments.file, /*simplifiedResult*/ true));
+            },
+            [CommandNames.NavBarFull]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getNavigationBarItems(request.arguments.file, /*simplifiedResult*/ false));
             },
             [CommandNames.Occurrences]: (request: protocol.Request) => {
                 const { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
