@@ -289,6 +289,14 @@ declare namespace ts.server.protocol {
         body?: FileSpan[];
     }
 
+    export interface BraceCompletionRequest extends FileLocationRequest {
+        arguments: BraceCompletionRequestArgs;
+    }
+
+    export interface BraceCompletionRequestArgs extends FileLocationRequestArgs {
+        openingBrace: string;
+    }
+
     /**
       * Get occurrences request; value of command field is
       * "occurrences". Return response giving spans that are relevant

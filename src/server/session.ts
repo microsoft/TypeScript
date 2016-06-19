@@ -102,6 +102,7 @@ namespace ts.server {
     export namespace CommandNames {
         export const Brace = "brace";
         export const BraceFull = "brace-full";
+        export const BraceCompletion = "braceCompletion";
         export const Change = "change";
         export const Close = "close";
         export const Completions = "completions";
@@ -751,6 +752,12 @@ namespace ts.server {
             return { position, indentation };
         }
 
+        private isValidBraceCompletion(args: protocol.BraceCompletionRequestArgs) {
+            const { file, project } = this.getFileAndProject(args.file);
+            const position = this.getPosition(args, project.getScriptInfo(file));
+            return project.languageService.isValidBraceCompletionAtPostion(file, position, args.openingBrace.charCodeAt(0));
+        }
+
         private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.QuickInfoResponseBody | QuickInfo {
             const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
@@ -1301,6 +1308,9 @@ namespace ts.server {
             },
             [CommandNames.Indentation]: (request: protocol.IndentationRequest) => {
                 return this.requiredResponse(this.getIndentation(request.arguments));
+            },
+            [CommandNames.BraceCompletion]: (request: protocol.BraceCompletionRequest) => {
+                return this.requiredResponse(this.isValidBraceCompletion(request.arguments));
             },
             [CommandNames.DocCommentTemplate]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getDocCommentTemplate(request.arguments));
