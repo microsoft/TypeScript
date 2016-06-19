@@ -131,6 +131,14 @@ declare namespace ts.server.protocol {
         arguments: ProjectInfoRequestArgs;
     }
 
+    export interface ProjectRequest extends Request {
+        arguments: ProjectRequestArgs;
+    }
+
+    export interface ProjectRequestArgs {
+        projectFileName: string;
+    }
+
     /**
       * Response message body for "projectInfo" request
       */

@@ -149,6 +149,8 @@ namespace ts.server {
         export const TodoComments = "todoComments";
         export const Indentation = "indentation";
         export const DocCommentTemplate = "docCommentTemplate";
+        export const SyntacticDiagnosticsFull = "syntacticDiagnostics-full";
+        export const CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
     }
 
     namespace Errors {
@@ -369,23 +371,44 @@ namespace ts.server {
             return project.languageService.getEncodedSemanticClassifications(file, args);
         }
 
-        private getSemanticDiagnostics(args: protocol.FileRequestArgs): protocol.DiagnosticWithLinePosition[] {
-            const file = normalizePath(args.file);
-            const project = (args.projectFileName && this.projectService.getProject(normalizePath(args.projectFileName))) || this.projectService.getProjectForFile(file);
-            if (!project) {
-                throw Errors.NoProject;
-            }
-            const scriptInfo = project.getScriptInfo(file);
-            const diagnostics = project.languageService.getSemanticDiagnostics(file);
+        private getProject(projectFileName: string) {
+            return projectFileName && this.projectService.getProject(normalizePath(projectFileName));
+        }
+
+        private getCompilerOptionsDiagnostics(args: protocol.ProjectRequestArgs) {
+            const project = this.getProject(args.projectFileName);
+            return this.convertDiagnostics(project.languageService.getCompilerOptionsDiagnostics(), /*scriptInfo*/ undefined);
+        }
+
+        private convertDiagnostics(diagnostics: Diagnostic[], scriptInfo: ScriptInfo) {
             return diagnostics.map(d => <protocol.DiagnosticWithLinePosition>{
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
                 start: d.start,
                 length: d.length,
                 category: DiagnosticCategory[d.category].toLowerCase(),
                 code: d.code,
-                startLocation: this.getLocation(d.start, scriptInfo),
-                endLocation: this.getLocation(d.start + d.length, scriptInfo)
+                startLocation: scriptInfo && this.getLocation(d.start, scriptInfo),
+                endLocation: scriptInfo && this.getLocation(d.start + d.length, scriptInfo)
             });
+        }
+
+        private getDiagnosticsWorker(args: protocol.FileRequestArgs, selector: (project: Project, file: string) => Diagnostic[]) {
+            const file = normalizePath(args.file);
+            const project = this.getProject(args.projectFileName) || this.projectService.getProjectForFile(file);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+            const scriptInfo = project.getScriptInfo(file);
+            const diagnostics = selector(project, file);
+            return this.convertDiagnostics(diagnostics, scriptInfo);
+        }
+
+        private getSyntacticDiagnostics(args: protocol.FileRequestArgs): protocol.DiagnosticWithLinePosition[] {
+            return this.getDiagnosticsWorker(args, (project, file) => project.languageService.getSyntacticDiagnostics(file));
+        }
+
+        private getSemanticDiagnostics(args: protocol.FileRequestArgs): protocol.DiagnosticWithLinePosition[] {
+            return this.getDiagnosticsWorker(args, (project, file) => project.languageService.getSemanticDiagnostics(file));
         }
 
         private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.FileSpan[] | DefinitionInfo[] {
@@ -1316,6 +1339,12 @@ namespace ts.server {
             },
             [CommandNames.SemanticDiagnosticsFull]: (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getSemanticDiagnostics(request.arguments));
+            },
+            [CommandNames.SyntacticDiagnosticsFull]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getSyntacticDiagnostics(request.arguments));
+            },
+            [CommandNames.CompilerOptionsDiagnosticsFull]: (request: protocol.ProjectRequest) => {
+                return this.requiredResponse(this.getCompilerOptionsDiagnostics(request.arguments));
             },
             [CommandNames.EncodedSemanticClassificationsFull]: (request: protocol.FileSpanRequest) => {
                 return this.requiredResponse(this.getEncodedSemanticClassifications(request.arguments));
