@@ -7541,7 +7541,8 @@ namespace ts {
                                 return;
                             case SyntaxKind.Parameter:
                                 if ((<ParameterDeclaration>token.parent).name === token) {
-                                    return ClassificationType.parameterName;
+                                    const isThis = token.kind === SyntaxKind.Identifier && (<Identifier>token).originalKeywordKind === SyntaxKind.ThisKeyword;
+                                    return isThis ? ClassificationType.keyword : ClassificationType.parameterName;
                                 }
                                 return;
                         }
