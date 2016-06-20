@@ -2331,7 +2331,7 @@ namespace ts {
     export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
         let sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
         const commonSourceDirectory = host.getCommonSourceDirectory();
-        const isSourceFileInCommonSourceDirectory = sourceFilePath.toLowerCase().indexOf(commonSourceDirectory.toLowerCase()) === 0;
+        const isSourceFileInCommonSourceDirectory = host.getCanonicalFileName(sourceFilePath).indexOf(host.getCanonicalFileName(commonSourceDirectory)) === 0;
         sourceFilePath = isSourceFileInCommonSourceDirectory ? sourceFilePath.substring(commonSourceDirectory.length) : sourceFilePath;
         return combinePaths(newDirPath, sourceFilePath);
     }
