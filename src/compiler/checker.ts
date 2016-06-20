@@ -562,7 +562,8 @@ namespace ts {
             const declarationFile = getSourceFileOfNode(declaration);
             const useFile = getSourceFileOfNode(usage);
             if (declarationFile !== useFile) {
-                if (modulekind || (!compilerOptions.outFile && !compilerOptions.out)) {
+                if ((modulekind && (declarationFile.externalModuleIndicator || useFile.externalModuleIndicator)) ||
+                    (!compilerOptions.outFile && !compilerOptions.out)) {
                     // nodes are in different files and order cannot be determines
                     return true;
                 }
@@ -852,7 +853,8 @@ namespace ts {
 
             if (!result) {
                 if (nameNotFoundMessage) {
-                    if (!checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg)) {
+                    if (!checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg) &&
+                       !checkAndReportErrorForExtendingInterface(errorLocation)) {
                         error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
                     }
                 }
@@ -935,6 +937,31 @@ namespace ts {
             }
             return false;
         }
+
+
+        function checkAndReportErrorForExtendingInterface(errorLocation: Node): boolean {
+            let parentClassExpression = errorLocation;
+            while (parentClassExpression) {
+                const kind = parentClassExpression.kind;
+                if (kind === SyntaxKind.Identifier || kind === SyntaxKind.PropertyAccessExpression) {
+                    parentClassExpression = parentClassExpression.parent;
+                    continue;
+                }
+                if (kind === SyntaxKind.ExpressionWithTypeArguments) {
+                    break;
+                }
+                return false;
+            }
+            if (!parentClassExpression) {
+                return false;
+            }
+            const expression = (<ExpressionWithTypeArguments>parentClassExpression).expression;
+            if (resolveEntityName(expression, SymbolFlags.Interface, /*ignoreErrors*/ true)) {
+                error(errorLocation, Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements, getTextOfNode(expression));
+                return true;
+            }
+            return false;
+         }
 
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
             Debug.assert((result.flags & SymbolFlags.BlockScopedVariable) !== 0);
@@ -5185,7 +5212,6 @@ namespace ts {
             if (hasProperty(stringLiteralTypes, text)) {
                 return stringLiteralTypes[text];
             }
-
             const type = stringLiteralTypes[text] = <StringLiteralType>createType(TypeFlags.StringLiteral);
             type.text = text;
             return type;
@@ -5648,6 +5674,10 @@ namespace ts {
          */
         function isTypeComparableTo(source: Type, target: Type): boolean {
             return checkTypeComparableTo(source, target, /*errorNode*/ undefined);
+        }
+
+        function areTypesComparable(type1: Type, type2: Type): boolean {
+            return isTypeComparableTo(type1, type2) || isTypeComparableTo(type2, type1);
         }
 
         function checkTypeSubtypeOf(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
@@ -6830,8 +6860,10 @@ namespace ts {
             return !!getPropertyOfType(type, "0");
         }
 
-        function isStringLiteralType(type: Type) {
-            return type.flags & TypeFlags.StringLiteral;
+        function isStringLiteralUnionType(type: Type): boolean {
+            return type.flags & TypeFlags.StringLiteral ? true :
+                type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isStringLiteralUnionType) :
+                false;
         }
 
         /**
@@ -7696,6 +7728,35 @@ namespace ts {
             return node;
         }
 
+        function getTypeOfSwitchClause(clause: CaseClause | DefaultClause) {
+            if (clause.kind === SyntaxKind.CaseClause) {
+                const expr = (<CaseClause>clause).expression;
+                return expr.kind === SyntaxKind.StringLiteral ? getStringLiteralTypeForText((<StringLiteral>expr).text) : checkExpression(expr);
+            }
+            return undefined;
+        }
+
+        function getSwitchClauseTypes(switchStatement: SwitchStatement): Type[] {
+            const links = getNodeLinks(switchStatement);
+            if (!links.switchTypes) {
+                // If all case clauses specify expressions that have unit types, we return an array
+                // of those unit types. Otherwise we return an empty array.
+                const types = map(switchStatement.caseBlock.clauses, getTypeOfSwitchClause);
+                links.switchTypes = forEach(types, t => !t || t.flags & TypeFlags.StringLiteral) ? types : emptyArray;
+            }
+            return links.switchTypes;
+        }
+
+        function eachTypeContainedIn(source: Type, types: Type[]) {
+            return source.flags & TypeFlags.Union ? !forEach((<UnionType>source).types, t => !contains(types, t)) : contains(types, source);
+        }
+
+        function filterType(type: Type, f: (t: Type) => boolean): Type {
+            return type.flags & TypeFlags.Union ?
+                getUnionType(filter((<UnionType>type).types, f)) :
+                f(type) ? type : neverType;
+        }
+
         function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, includeOuterFunctions: boolean) {
             let key: string;
             if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
@@ -7732,6 +7793,9 @@ namespace ts {
                     }
                     else if (flow.flags & FlowFlags.Condition) {
                         type = getTypeAtFlowCondition(<FlowCondition>flow);
+                    }
+                    else if (flow.flags & FlowFlags.SwitchClause) {
+                        type = getTypeAtSwitchClause(<FlowSwitchClause>flow);
                     }
                     else if (flow.flags & FlowFlags.Label) {
                         if ((<FlowLabel>flow).antecedents.length === 1) {
@@ -7816,6 +7880,11 @@ namespace ts {
                 return type;
             }
 
+            function getTypeAtSwitchClause(flow: FlowSwitchClause) {
+                const type = getTypeAtFlowNode(flow.antecedent);
+                return narrowTypeBySwitchOnDiscriminant(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
+            }
+
             function getTypeAtFlowBranchLabel(flow: FlowLabel) {
                 const antecedentTypes: Type[] = [];
                 for (const antecedent of flow.antecedents) {
@@ -7895,12 +7964,26 @@ namespace ts {
                     case SyntaxKind.ExclamationEqualsToken:
                     case SyntaxKind.EqualsEqualsEqualsToken:
                     case SyntaxKind.ExclamationEqualsEqualsToken:
-                        if (isNullOrUndefinedLiteral(expr.left) || isNullOrUndefinedLiteral(expr.right)) {
-                            return narrowTypeByNullCheck(type, expr, assumeTrue);
+                        const left = expr.left;
+                        const operator = expr.operatorToken.kind;
+                        const right = expr.right;
+                        if (isNullOrUndefinedLiteral(right)) {
+                            return narrowTypeByNullCheck(type, left, operator, right, assumeTrue);
                         }
-                        if (expr.left.kind === SyntaxKind.TypeOfExpression && expr.right.kind === SyntaxKind.StringLiteral ||
-                            expr.left.kind === SyntaxKind.StringLiteral && expr.right.kind === SyntaxKind.TypeOfExpression) {
-                            return narrowTypeByTypeof(type, expr, assumeTrue);
+                        if (isNullOrUndefinedLiteral(left)) {
+                            return narrowTypeByNullCheck(type, right, operator, left, assumeTrue);
+                        }
+                        if (left.kind === SyntaxKind.TypeOfExpression && right.kind === SyntaxKind.StringLiteral) {
+                            return narrowTypeByTypeof(type, <TypeOfExpression>left, operator, <LiteralExpression>right, assumeTrue);
+                        }
+                        if (right.kind === SyntaxKind.TypeOfExpression && left.kind === SyntaxKind.StringLiteral) {
+                            return narrowTypeByTypeof(type, <TypeOfExpression>right, operator, <LiteralExpression>left, assumeTrue);
+                        }
+                        if (left.kind === SyntaxKind.PropertyAccessExpression) {
+                            return narrowTypeByDiscriminant(type, <PropertyAccessExpression>left, operator, right, assumeTrue);
+                        }
+                        if (right.kind === SyntaxKind.PropertyAccessExpression) {
+                            return narrowTypeByDiscriminant(type, <PropertyAccessExpression>right, operator, left, assumeTrue);
                         }
                         break;
                     case SyntaxKind.InstanceOfKeyword:
@@ -7911,41 +7994,35 @@ namespace ts {
                 return type;
             }
 
-            function narrowTypeByNullCheck(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
-                // We have '==', '!=', '===', or '!==' operator with 'null' or 'undefined' on one side
-                const operator = expr.operatorToken.kind;
-                const nullLike = isNullOrUndefinedLiteral(expr.left) ? expr.left : expr.right;
-                const narrowed = isNullOrUndefinedLiteral(expr.left) ? expr.right : expr.left;
+            function narrowTypeByNullCheck(type: Type, target: Expression, operator: SyntaxKind, literal: Expression, assumeTrue: boolean): Type {
+                // We have '==', '!=', '===', or '!==' operator with 'null' or 'undefined' as value
                 if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
-                if (!strictNullChecks || !isMatchingReference(reference, getReferenceFromExpression(narrowed))) {
+                if (!strictNullChecks || !isMatchingReference(reference, getReferenceFromExpression(target))) {
                     return type;
                 }
                 const doubleEquals = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken;
                 const facts = doubleEquals ?
                     assumeTrue ? TypeFacts.EQUndefinedOrNull : TypeFacts.NEUndefinedOrNull :
-                    nullLike.kind === SyntaxKind.NullKeyword ?
+                    literal.kind === SyntaxKind.NullKeyword ?
                         assumeTrue ? TypeFacts.EQNull : TypeFacts.NENull :
                         assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
                 return getTypeWithFacts(type, facts);
             }
 
-            function narrowTypeByTypeof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
-                // We have '==', '!=', '====', or !==' operator with 'typeof xxx' on the left
-                // and string literal on the right
-                const narrowed = getReferenceFromExpression((<TypeOfExpression>(expr.left.kind === SyntaxKind.TypeOfExpression ? expr.left : expr.right)).expression);
-                const literal = <LiteralExpression>(expr.right.kind === SyntaxKind.StringLiteral ? expr.right : expr.left);
-                if (!isMatchingReference(reference, narrowed)) {
+            function narrowTypeByTypeof(type: Type, typeOfExpr: TypeOfExpression, operator: SyntaxKind, literal: LiteralExpression, assumeTrue: boolean): Type {
+                // We have '==', '!=', '====', or !==' operator with 'typeof xxx' and string literal operands
+                const target = getReferenceFromExpression(typeOfExpr.expression);
+                if (!isMatchingReference(reference, target)) {
                     // For a reference of the form 'x.y', a 'typeof x === ...' type guard resets the
                     // narrowed type of 'y' to its declared type.
-                    if (containsMatchingReference(reference, narrowed)) {
+                    if (containsMatchingReference(reference, target)) {
                         return declaredType;
                     }
                     return type;
                 }
-                if (expr.operatorToken.kind === SyntaxKind.ExclamationEqualsToken ||
-                    expr.operatorToken.kind === SyntaxKind.ExclamationEqualsEqualsToken) {
+                if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
                 if (assumeTrue && !(type.flags & TypeFlags.Union)) {
@@ -7961,6 +8038,58 @@ namespace ts {
                     getProperty(typeofEQFacts, literal.text) || TypeFacts.TypeofEQHostObject :
                     getProperty(typeofNEFacts, literal.text) || TypeFacts.TypeofNEHostObject;
                 return getTypeWithFacts(type, facts);
+            }
+
+            function narrowTypeByDiscriminant(type: Type, propAccess: PropertyAccessExpression, operator: SyntaxKind, value: Expression, assumeTrue: boolean): Type {
+                // We have '==', '!=', '===', or '!==' operator with property access as target
+                if (!isMatchingReference(reference, propAccess.expression)) {
+                    return type;
+                }
+                const propName = propAccess.name.text;
+                const propType = getTypeOfPropertyOfType(type, propName);
+                if (!propType || !isStringLiteralUnionType(propType)) {
+                    return type;
+                }
+                const discriminantType = value.kind === SyntaxKind.StringLiteral ? getStringLiteralTypeForText((<StringLiteral>value).text) : checkExpression(value);
+                if (!isStringLiteralUnionType(discriminantType)) {
+                    return type;
+                }
+                if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
+                    assumeTrue = !assumeTrue;
+                }
+                if (assumeTrue) {
+                    return filterType(type, t => areTypesComparable(getTypeOfPropertyOfType(t, propName), discriminantType));
+                }
+                if (discriminantType.flags & TypeFlags.StringLiteral) {
+                    return filterType(type, t => getTypeOfPropertyOfType(t, propName) !== discriminantType);
+                }
+                return type;
+            }
+
+            function narrowTypeBySwitchOnDiscriminant(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
+                // We have switch statement with property access expression
+                if (!isMatchingReference(reference, (<PropertyAccessExpression>switchStatement.expression).expression)) {
+                    return type;
+                }
+                const propName = (<PropertyAccessExpression>switchStatement.expression).name.text;
+                const propType = getTypeOfPropertyOfType(type, propName);
+                if (!propType || !isStringLiteralUnionType(propType)) {
+                    return type;
+                }
+                const switchTypes = getSwitchClauseTypes(switchStatement);
+                if (!switchTypes.length) {
+                    return type;
+                }
+                const clauseTypes = switchTypes.slice(clauseStart, clauseEnd);
+                const hasDefaultClause = clauseStart === clauseEnd || contains(clauseTypes, undefined);
+                const caseTypes = hasDefaultClause ? filter(clauseTypes, t => !!t) : clauseTypes;
+                const discriminantType = caseTypes.length ? getUnionType(caseTypes) : undefined;
+                const caseType = discriminantType && filterType(type, t => isTypeComparableTo(discriminantType, getTypeOfPropertyOfType(t, propName)));
+                if (!hasDefaultClause) {
+                    return caseType;
+                }
+                const defaultType = filterType(type, t => !eachTypeContainedIn(getTypeOfPropertyOfType(t, propName), switchTypes));
+                return caseType ? getUnionType([caseType, defaultType]) : defaultType;
             }
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -8931,10 +9060,6 @@ namespace ts {
 
         function getIndexTypeOfContextualType(type: Type, kind: IndexKind) {
             return applyToContextualType(type, t => getIndexTypeOfStructuredType(t, kind));
-        }
-
-        function contextualTypeIsStringLiteralType(type: Type): boolean {
-            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isStringLiteralType) : isStringLiteralType(type));
         }
 
         // Return true if the given contextual type is a tuple-like type
@@ -10038,7 +10163,7 @@ namespace ts {
             }
             const prop = getPropertyOfType(apparentType, right.text);
             if (!prop) {
-                if (right.text) {
+                if (right.text && !checkAndReportErrorForExtendingInterface(node)) {
                     error(right, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(right), typeToString(type.flags & TypeFlags.ThisType ? apparentType : type));
                 }
                 return unknownType;
@@ -11524,7 +11649,10 @@ namespace ts {
 
         function checkAssertion(node: AssertionExpression) {
             const exprType = getRegularTypeOfObjectLiteral(checkExpression(node.expression));
+
+            checkSourceElement(node.type);
             const targetType = getTypeFromTypeNode(node.type);
+
             if (produceDiagnostics && targetType !== unknownType) {
                 const widenedType = getWidenedType(exprType);
                 if (!isTypeComparableTo(targetType, widenedType)) {
@@ -11764,10 +11892,42 @@ namespace ts {
             return aggregatedTypes;
         }
 
+        function isExhaustiveSwitchStatement(node: SwitchStatement): boolean {
+            const expr = node.expression;
+            if (!node.possiblyExhaustive || expr.kind !== SyntaxKind.PropertyAccessExpression) {
+                return false;
+            }
+            const type = checkExpression((<PropertyAccessExpression>expr).expression);
+            if (!(type.flags & TypeFlags.Union)) {
+                return false;
+            }
+            const propName = (<PropertyAccessExpression>expr).name.text;
+            const propType = getTypeOfPropertyOfType(type, propName);
+            if (!propType || !isStringLiteralUnionType(propType)) {
+                return false;
+            }
+            const switchTypes = getSwitchClauseTypes(node);
+            if (!switchTypes.length) {
+                return false;
+            }
+            return eachTypeContainedIn(propType, switchTypes);
+        }
+
+        function functionHasImplicitReturn(func: FunctionLikeDeclaration) {
+            if (!(func.flags & NodeFlags.HasImplicitReturn)) {
+                return false;
+            }
+            const lastStatement = lastOrUndefined((<Block>func.body).statements);
+            if (lastStatement && lastStatement.kind === SyntaxKind.SwitchStatement && isExhaustiveSwitchStatement(<SwitchStatement>lastStatement)) {
+                return false;
+            }
+            return true;
+        }
+
         function checkAndAggregateReturnExpressionTypes(func: FunctionLikeDeclaration, contextualMapper: TypeMapper): Type[] {
             const isAsync = isAsyncFunctionLike(func);
             const aggregatedTypes: Type[] = [];
-            let hasReturnWithNoExpression = !!(func.flags & NodeFlags.HasImplicitReturn);
+            let hasReturnWithNoExpression = functionHasImplicitReturn(func);
             let hasReturnOfTypeNever = false;
             forEachReturnStatement(<Block>func.body, returnStatement => {
                 const expr = returnStatement.expression;
@@ -11824,7 +11984,7 @@ namespace ts {
 
             // If all we have is a function signature, or an arrow function with an expression body, then there is nothing to check.
             // also if HasImplicitReturn flag is not set this means that all codepaths in function body end with return or throw
-            if (nodeIsMissing(func.body) || func.body.kind !== SyntaxKind.Block || !(func.flags & NodeFlags.HasImplicitReturn)) {
+            if (nodeIsMissing(func.body) || func.body.kind !== SyntaxKind.Block || !functionHasImplicitReturn(func)) {
                 return;
             }
 
@@ -12602,7 +12762,7 @@ namespace ts {
 
         function checkStringLiteralExpression(node: StringLiteral): Type {
             const contextualType = getContextualType(node);
-            if (contextualType && contextualTypeIsStringLiteralType(contextualType)) {
+            if (contextualType && isStringLiteralUnionType(contextualType)) {
                 return getStringLiteralTypeForText(node.text);
             }
 
@@ -13559,9 +13719,6 @@ namespace ts {
                 }
             }
 
-            // when checking exported function declarations across modules check only duplicate implementations
-            // names and consistency of modifiers are verified when we check local symbol
-            const isExportSymbolInsideModule = symbol.parent && symbol.parent.flags & SymbolFlags.Module;
             let duplicateFunctionDeclaration = false;
             let multipleConstructorImplementation = false;
             for (const current of declarations) {
@@ -13594,7 +13751,7 @@ namespace ts {
                             duplicateFunctionDeclaration = true;
                         }
                     }
-                    else if (!isExportSymbolInsideModule && previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.pos) {
+                    else if (previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.pos) {
                         reportImplementationExpectedError(previousDeclaration);
                     }
 
@@ -13628,7 +13785,7 @@ namespace ts {
             }
 
             // Abstract methods can't have an implementation -- in particular, they don't need one.
-            if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body &&
+            if (lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body &&
                 !(lastSeenNonAmbientDeclaration.flags & NodeFlags.Abstract) && !lastSeenNonAmbientDeclaration.questionToken) {
                 reportImplementationExpectedError(lastSeenNonAmbientDeclaration);
             }

@@ -1,4 +1,5 @@
 /// <reference path="..\compiler\program.ts"/>
+/// <reference path="..\compiler\commandLineParser.ts"/>
 
 /// <reference path='breakpoints.ts' />
 /// <reference path='outliningElementsCollector.ts' />
@@ -2001,6 +2002,18 @@ namespace ts {
         // so pass --noLib to avoid reporting a file not found error.
         options.noLib = true;
 
+        // Clear out other settings that would not be used in transpiling this module
+        options.lib = undefined;
+        options.types = undefined;
+        options.noEmit = undefined;
+        options.noEmitOnError = undefined;
+        options.paths = undefined;
+        options.rootDirs = undefined;
+        options.declaration = undefined;
+        options.declarationDir = undefined;
+        options.out = undefined;
+        options.outFile = undefined;
+
         // We are not doing a full typecheck, we are not resolving the whole context,
         // so pass --noResolve to avoid reporting missing file errors.
         options.noResolve = true;
@@ -2978,7 +2991,8 @@ namespace ts {
                  oldSettings.moduleResolution !== newSettings.moduleResolution ||
                  oldSettings.noResolve !== newSettings.noResolve ||
                  oldSettings.jsx !== newSettings.jsx ||
-                 oldSettings.allowJs !== newSettings.allowJs);
+                 oldSettings.allowJs !== newSettings.allowJs ||
+                 oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit);
 
             // Now create a new compiler
             const compilerHost: CompilerHost = {
@@ -7033,7 +7047,7 @@ namespace ts {
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-            return NavigationBar.getNavigationBarItems(sourceFile, host.getCompilationSettings());
+            return NavigationBar.getNavigationBarItems(sourceFile);
         }
 
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
@@ -7527,7 +7541,8 @@ namespace ts {
                                 return;
                             case SyntaxKind.Parameter:
                                 if ((<ParameterDeclaration>token.parent).name === token) {
-                                    return ClassificationType.parameterName;
+                                    const isThis = token.kind === SyntaxKind.Identifier && (<Identifier>token).originalKeywordKind === SyntaxKind.ThisKeyword;
+                                    return isThis ? ClassificationType.keyword : ClassificationType.parameterName;
                                 }
                                 return;
                         }
