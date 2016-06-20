@@ -188,16 +188,22 @@ namespace ts.server {
     interface BuilderAccessor<T extends FileInfo> {
         getProject(): Project;
         getFileInfo(fileName: string): T;
+        sendEvent(info: any, eventName: string): void;
     }
 
     interface FileInfo {
         fileName(): string;
+        syntacticCheck(builder: BuilderAccessor<FileInfo>): boolean;
+        semanticCheck(builder: BuilderAccessor<FileInfo>): boolean;
         update(builder: BuilderAccessor<FileInfo>): boolean;
     }
 
     abstract class AbstractFileInfo {
 
         protected _shapeSignature: string;
+
+        protected _hasSyntacticProblems: boolean;
+        protected _hasSemanticProblems: boolean;
 
         constructor(protected _fileName: string) {
             this._shapeSignature = undefined;
@@ -209,6 +215,46 @@ namespace ts.server {
 
         public shapeSignature(): string {
             return this._shapeSignature;
+        }
+
+        private formatDiagnostics(builder: BuilderAccessor<FileInfo>, file: string, diagnostic: ts.Diagnostic): protocol.Diagnostic {
+            const host = builder.getProject().compilerService.host;
+            return {
+                start: host.positionToLineOffset(file, diagnostic.start),
+                end: host.positionToLineOffset(file, diagnostic.start + diagnostic.length),
+                text: ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")
+            };
+        }
+
+        public syntacticCheck(builder: BuilderAccessor<FileInfo>): boolean {
+            this._hasSyntacticProblems = undefined;
+            this._hasSemanticProblems = undefined;
+            const diagnostics = builder.getProject().compilerService.languageService.getSyntacticDiagnostics(this._fileName);
+            this._hasSyntacticProblems = diagnostics && diagnostics.length > 0;
+            if (diagnostics) {
+                builder.sendEvent({
+                    file: this._fileName,
+                    diagnostics: diagnostics.map(diagnostic => this.formatDiagnostics(builder, this._fileName, diagnostic))
+                }, "syntaxDiag");
+            }
+            return this._hasSyntacticProblems;
+        }
+
+        public semanticCheck(builder: BuilderAccessor<FileInfo>): boolean {
+            this._hasSemanticProblems = undefined;
+            const diagnostics = builder.getProject().compilerService.languageService.getSemanticDiagnostics(this._fileName);
+            this._hasSemanticProblems = diagnostics && diagnostics.length > 0;
+            if (diagnostics) {
+                builder.sendEvent({
+                    file: this._fileName,
+                    diagnostics: diagnostics.map(diagnostic => this.formatDiagnostics(builder, this._fileName, diagnostic))
+                }, "semanticDiag");
+            }
+            return this._hasSemanticProblems;
+        }
+
+        public needsCheck(): boolean {
+            return !(this._hasSyntacticProblems === false && this._hasSemanticProblems === false);
         }
 
         protected getSourceFile(builder: BuilderAccessor<FileInfo>): SourceFile {
@@ -240,8 +286,9 @@ namespace ts.server {
         }
     }
 
-    abstract class AbstractBuilder<T extends FileInfo> {
+    abstract class AbstractBuilder<T extends FileInfo> implements BuilderAccessor<T> {
 
+        private immediateId: any;
         protected compileQueue: CompileQueue<T>;
 
         constructor(protected project: Project, protected host: BuilderHost, private delay: number) {
@@ -252,48 +299,15 @@ namespace ts.server {
             return this.project;
         }
 
+        public sendEvent(info: any, eventName: string): void {
+            this.host.event(info, eventName);
+        }
+
+        public abstract getFileInfo(key: string): T;
+
         public getCanonicalFileName(file: string) {
             const name = this.host.useCaseSensitiveFileNames() ? file : file.toLowerCase();
             return ts.normalizePath(name);
-        }
-
-        private formatDiagnostics(file: string, diagnostic: ts.Diagnostic): protocol.Diagnostic {
-            return {
-                start: this.project.compilerService.host.positionToLineOffset(file, diagnostic.start),
-                end: this.project.compilerService.host.positionToLineOffset(file, diagnostic.start + diagnostic.length),
-                text: ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")
-            };
-        }
-
-        protected semanticCheck(file: string) {
-            try {
-                const diagnostics = this.project.compilerService.languageService.getSemanticDiagnostics(file);
-
-                if (diagnostics) {
-                    this.host.event({
-                        file: file,
-                        diagnostics: diagnostics.map(diagnostic => this.formatDiagnostics(file, diagnostic))
-                    }, "semanticDiag");
-                }
-            }
-            catch (err) {
-                this.host.logError(err, "semantic check");
-            }
-        }
-
-        protected syntacticCheck(file: string) {
-            try {
-                const diagnostics = this.project.compilerService.languageService.getSyntacticDiagnostics(file);
-                if (diagnostics) {
-                    this.host.event({
-                        file: file,
-                        diagnostics: diagnostics.map(diagnostic => this.formatDiagnostics(file, diagnostic))
-                    }, "syntaxDiag");
-                }
-            }
-            catch (err) {
-                this.host.logError(err, "syntactic check");
-            }
         }
 
         public fileCreated(file: string): void {
@@ -312,21 +326,39 @@ namespace ts.server {
         }
 
         protected processCompileQueue() {
+            if (this.immediateId) {
+                return;
+            }
             if (this.compileQueue.isEmpty()) {
                 this.compileQueueIsEmpty();
                 return;
             }
-            setImmediate(() => {
-                if (this.compileQueue.isEmpty()) {
+            this.immediateId = setImmediate(() => {
+                this.immediateId = undefined;
+                const fileInfo = this.compileQueue.shift();
+                if (!fileInfo) {
                     this.compileQueueIsEmpty();
                     return;
                 }
-                const fileInfo = this.compileQueue.shift();
-                this.syntacticCheck(fileInfo.fileName());
-                setImmediate(() => {
-                    this.semanticCheck(fileInfo.fileName());
-                    this.updateCompileQueue(fileInfo);
-                    this.processCompileQueue();
+                try {
+                    fileInfo.syntacticCheck(this);
+                }
+                catch (err) {
+                    this.host.logError(err, "syntactic check");
+                }
+                this.immediateId = setImmediate(() => {
+                    this.immediateId = undefined;
+                    try {
+                        fileInfo.semanticCheck(this);
+                    }
+                    catch (err) {
+                        this.host.logError(err, "semantic check");
+                    }
+                    try {
+                        this.updateCompileQueue(fileInfo);
+                    } finally {
+                        this.processCompileQueue();
+                    }
                 });
             });
         }
@@ -347,13 +379,21 @@ namespace ts.server {
         }
     }
 
-    class SingleFileInfo implements FileInfo {
+    class SingleRunFileInfo implements FileInfo {
 
         constructor(private info: FileInfo) {
         }
 
         public fileName(): string {
             return this.info.fileName();
+        }
+
+        public syntacticCheck(builder: BuilderAccessor<FileInfo>): boolean {
+            return this.info.syntacticCheck(builder);
+        }
+
+        public semanticCheck(builder: BuilderAccessor<FileInfo>): boolean {
+            return this.info.semanticCheck(builder);
         }
 
         public update(builder: BuilderAccessor<FileInfo>): boolean {
@@ -408,13 +448,15 @@ namespace ts.server {
                 if (key === fileInfo.fileName()) {
                     return;
                 }
-                this.compileQueue.add(key, new SingleFileInfo(this.openFiles[key]));
+                this.compileQueue.add(key, new SingleRunFileInfo(this.openFiles[key]));
             });
         }
 
         protected compileQueueIsEmpty(): void {
         }
     }
+
+    type ModuleFileInfoState = [string, string, string, boolean, boolean];
 
     class ModuleFileInfo extends AbstractFileInfo implements FileInfo {
 
@@ -495,10 +537,41 @@ namespace ts.server {
             return this._contentSignature;
         }
 
-        public initializeShapeSignature(lastSeenContentSignature: string, shapeSignature: string): void {
-            if (lastSeenContentSignature === this._contentSignature) {
-                this._shapeSignature = shapeSignature;
+        public getState(): ModuleFileInfoState {
+            if (this._contentSignature === undefined || this._shapeSignature === undefined || this._hasSyntacticProblems === undefined || this._hasSemanticProblems === undefined) {
+                return undefined;
             }
+            return [this._fileName, this._contentSignature, this._shapeSignature, this._hasSyntacticProblems, this._hasSemanticProblems];
+        }
+
+        public initializeFromState(state: ModuleFileInfoState): boolean {
+            const contentSignature = state[1];
+            if (contentSignature === this._contentSignature) {
+                this._shapeSignature = state[2];
+                this._hasSyntacticProblems = state[3];
+                this._hasSemanticProblems = state[4];
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        public needsInitialCompile(): boolean {
+            return !(this._hasSemanticProblems === false && this._hasSyntacticProblems === false);
+        }
+
+        public sameStateAs(state: ModuleFileInfoState): boolean {
+            const myState = this.getState();
+            if (!myState) {
+                return false;
+            }
+            for (let i = 0 ; i < myState.length; i++) {
+                if (myState[i] !== state[i]) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public buildDependencies(builder: BuilderAccessor<ModuleFileInfo>, program: Program): void {
@@ -627,12 +700,20 @@ namespace ts.server {
 
     class ModuleBuilder extends AbstractBuilder<ModuleFileInfo> implements Builder, BuilderAccessor<ModuleFileInfo> {
 
+        private static MinimalDeltaPackage = 16;
+
         private fileInfos: Map<ModuleFileInfo>;
         private compileRuns: number;
+
+        private stateDirectory: string;
+        private deltaState: Map<ModuleFileInfoState>;
+        private deltaStateFile: string;
+        private updatingDeltaState: boolean;
 
         constructor(project: Project, host: BuilderHost) {
             super(project, host, -1);
             this.compileRuns = 0;
+            this.deltaState = createMap<ModuleFileInfoState>();
         }
 
         public getFileInfo(file: string): ModuleFileInfo {
@@ -651,6 +732,7 @@ namespace ts.server {
         }
 
         protected updateCompileQueue(fileInfo: ModuleFileInfo): void {
+            this.deltaState[fileInfo.fileName()] = fileInfo.getState();
             if (fileInfo.update(this)) {
                 fileInfo.queueReferencedBy(this.compileQueue);
             }
@@ -659,7 +741,10 @@ namespace ts.server {
         protected compileQueueIsEmpty(): void {
             this.compileRuns++;
             if (this.compileRuns === 1) {
-                this.saveState();
+                this.saveFullState();
+            }
+            else {
+                this.updateDeltaState();
             }
         }
 
@@ -696,7 +781,7 @@ namespace ts.server {
                 }
                 return memo;
             }, []);
-            const [needsCompile] = this.readState();
+            const states = this.readState();
             const roots: ModuleFileInfo[] = [];
             fileInfos.forEach((fileInfo) => {
                 fileInfo.buildDependencies(this, program);
@@ -704,33 +789,57 @@ namespace ts.server {
                     roots.push(fileInfo);
                 }
             });
-            fileInfos.forEach((fileInfo) => fileInfo.finalize());
-            if (!needsCompile) {
-                roots.forEach(fileInfo => this.compileQueue.add(fileInfo.fileName(), fileInfo));
+
+            if (states) {
+                fileInfos.forEach((fileInfo) => {
+                    const state = states[fileInfo.fileName()];
+                    if (state) {
+                        fileInfo.initializeFromState(state);
+                    }
+                    fileInfo.finalize();
+                    if (fileInfo.needsInitialCompile()) {
+                        this.compileQueue.add(fileInfo.fileName(), fileInfo);
+                    }
+                });
             }
             else {
-                needsCompile.forEach(fileInfo => this.compileQueue.add(fileInfo.fileName(), fileInfo));
+                roots.forEach(fileInfo => this.compileQueue.add(fileInfo.fileName(), fileInfo));
             }
         }
 
-        private saveState(): void {
+        private getStateDirectory(): string {
             const metaDataDirectory = this.project.projectService.metaDataDirectory;
             const projectFilename = this.project.projectFilename;
             if (!metaDataDirectory || !projectFilename) {
-                return;
+                return undefined;
+            }
+            if (this.stateDirectory) {
+                return this.stateDirectory;
             }
             const fileNameHash = crypto.createHash("md5").update(projectFilename).digest("hex");
-            const stateDirectory = path.join(this.project.projectService.metaDataDirectory, fileNameHash);
+            this.stateDirectory = path.join(this.project.projectService.metaDataDirectory, fileNameHash);
+            return this.stateDirectory;
+        }
+
+        private saveFullState(): void {
+            const stateDirectory = this.getStateDirectory();
+            if (!stateDirectory) {
+                return;
+            }
+
             try {
                 fs.mkdirSync(stateDirectory);
             }
             catch (err) {
             }
-            const stateFileName = `c-${Date.now().toString()}`;
+            const stateFileName = `c-${Date.now().toString()}.state`;
             const content: string[] = [];
             Object.keys(this.fileInfos).forEach((key) => {
                 const fileInfo = this.fileInfos[key];
-                content.push(JSON.stringify([fileInfo.fileName(), fileInfo.contentSignature(), fileInfo.shapeSignature(), false]));
+                const state = fileInfo.getState();
+                if (state) {
+                    content.push(JSON.stringify(state));
+                }
             });
             function write(fd: any, index: number) {
                 if (index < content.length) {
@@ -743,7 +852,6 @@ namespace ts.server {
                 }
                 else {
                     fs.close(fd, (err: Error) => {
-
                     });
                 }
             }
@@ -757,19 +865,55 @@ namespace ts.server {
             }
         }
 
-        private readState(): [ModuleFileInfo[], string[]] {
+        private updateDeltaState(): void {
+            if (this.updatingDeltaState) {
+                return;
+            }
+            const stateDirectory = this.getStateDirectory();
+            if (!stateDirectory) {
+                return;
+            }
+            const keys = Object.keys(this.deltaState);
+            if (keys.length < ModuleBuilder.MinimalDeltaPackage) {
+                return;
+            }
+            const states: ModuleFileInfoState[] = [];
+            for (const key of keys) {
+                states.push(this.deltaState[key]);
+            }
+            if (!this.deltaStateFile) {
+                this.deltaStateFile = `d-${Date.now().toString()}.state`;
+            }
+            this.updatingDeltaState = true;
+            fs.appendFile(path.join(stateDirectory, this.deltaStateFile), states.map(state => JSON.stringify(state)).join("\n") + "\n", (err: Error) => {
+                this.updatingDeltaState = false;
+                if (err) {
+                    // Received an error. Don't clean written data.
+                    return;
+                }
+                for (const state of states) {
+                    const fileName = state[0];
+                    const fileInfo = this.fileInfos[fileName];
+                    if (fileInfo && fileInfo.sameStateAs(state)) {
+                        delete this.deltaState[fileName];
+                    }
+                }
+                // There might already be enough changes to do another save run.
+                this.updateDeltaState();
+            });
+        }
+
+        private readState(): Map<ModuleFileInfoState> {
             const metaDataDirectory = this.project.projectService.metaDataDirectory;
             const projectFilename = this.project.projectFilename;
             if (!metaDataDirectory || !projectFilename) {
-                return [undefined, undefined];
+                return undefined;
             }
-            const needsCompile: ModuleFileInfo[] = [];
-            const deleted: string[] = [];
             const fileNameHash = crypto.createHash("md5").update(projectFilename).digest("hex");
             const stateDirectory = path.join(this.project.projectService.metaDataDirectory, fileNameHash);
             try {
                 if (!fs.existsSync(stateDirectory)) {
-                    return [undefined, undefined];
+                    return undefined;
                 }
                 const files: string[] = fs.readdirSync(stateDirectory);
                 const toDelete: string[] = [];
@@ -783,7 +927,7 @@ namespace ts.server {
                     }
                     if (file.length > 1 && file.charAt(1) === "-") {
                         if (file.charAt(0) === "c") {
-                            const stateTime = Number(file.substr(2));
+                            const stateTime = Number(file.substring(2, file.length - 6));
                             if (!latestCompleteStateFile) {
                                 latestCompleteStateFile = file;
                                 latestCompleteStateTime = stateTime;
@@ -794,10 +938,13 @@ namespace ts.server {
                                     latestCompleteStateFile = file;
                                     latestCompleteStateTime = stateTime;
                                 }
+                                else {
+                                    toDelete.push(file);
+                                }
                             }
                         }
                         else if (file.charAt(0) === "d") {
-                            const stateTime = Number(file.substr(2));
+                            const stateTime = Number(path.basename(file.substring(2, file.length - 6)));
                             if (!latestDeltaStateFile) {
                                 latestDeltaStateFile = file;
                                 latestDeltaStateTime = stateTime;
@@ -808,60 +955,70 @@ namespace ts.server {
                                     latestDeltaStateFile = file;
                                     latestDeltaStateTime = stateTime;
                                 }
+                                else {
+                                    toDelete.push(file);
+                                }
                             }
                         }
                     }
                 }
+                // A delta file must always be never as the complete file we parse.
                 if (latestCompleteStateFile && latestDeltaStateFile && latestCompleteStateTime > latestDeltaStateTime) {
                     toDelete.push(latestDeltaStateFile);
                     latestDeltaStateFile = undefined;
                     latestDeltaStateTime = undefined;
                 }
                 if (!latestCompleteStateFile) {
-                    return [undefined, undefined];
+                    return undefined;
                 }
-                const parseContent = (content: string) => {
+                let result: Map<ModuleFileInfoState> = createMap<ModuleFileInfoState>();
+                const parseContent = (content: string, stateFileTime: number) => {
                     let start = 0;
                     for (let index = 0; index < content.length; index++) {
                         if (content.charAt(index) === "\n") {
                             try {
-                                // A line in a state file has the follwing structure
-                                // filename, contentHash, shapeHash, hadErrors
-                                const values: [string, string, string, boolean] = JSON.parse(content.substring(start, index));
+                                const state: ModuleFileInfoState = JSON.parse(content.substring(start, index));
                                 start = index + 1;
-                                const fileInfo = this.fileInfos[values[0]];
-                                if (fileInfo) {
-                                    fileInfo.initializeShapeSignature(values[1], values[2]);
-                                    if (fileInfo.contentSignature() !== values[1] || values[3]) {
-                                        needsCompile.push(fileInfo);
+                                const fileName = state[0];
+                                try {
+                                    const stat  = fs.statSync(fileName);
+                                    if (stat.mtime > stateFileTime) {
+                                        delete result[fileName];
+                                    }
+                                    else {
+                                        result[fileName] = state;
                                     }
                                 }
-                                else {
-                                    deleted.push(values[0]);
+                                catch (err) {
+                                    delete result[fileName];
                                 }
                             }
                             catch (err) {
+                                // The file seems to be corrupted. Stop processing and return.
+                                result = undefined;
+                                return;
                             }
                         }
                     }
                 };
                 if (latestCompleteStateFile) {
-                    parseContent(fs.readFileSync(path.join(stateDirectory, latestCompleteStateFile), { encoding: "utf8" }));
+                    parseContent(fs.readFileSync(path.join(stateDirectory, latestCompleteStateFile), { encoding: "utf8" }), latestCompleteStateTime);
                 }
-                if (latestDeltaStateFile) {
-                    parseContent(fs.readFileSync(path.join(stateDirectory, latestDeltaStateFile), { encoding: "utf8" }));
+                if (result && latestDeltaStateFile) {
+                    parseContent(fs.readFileSync(path.join(stateDirectory, latestDeltaStateFile), { encoding: "utf8" }), latestDeltaStateTime);
                 }
-                // Cleanup unneeded files.
+
+                // Cleanup unneeded state files files.
                 toDelete.forEach(file => {
                     // Can be done async. If an unlink fails we clean it up the next round.
                     fs.unlink(path.join(stateDirectory, file), (err: Error) => {});
                 });
+                return result;
             }
             catch (err) {
                 // We couldn't read the state directory. Start with a fresh state.
-                return [undefined, undefined];
+                return undefined;
             }
-            return [needsCompile, deleted];
         }
     }
 
