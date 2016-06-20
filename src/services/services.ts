@@ -4974,6 +4974,20 @@ namespace ts {
             };
         }
 
+        //todo: duplicate code, already in a nother branch
+        function isThis(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.ThisKeyword:
+                // case SyntaxKind.ThisType: TODO: GH#9267
+                    return true;
+                case SyntaxKind.Identifier:
+                    // 'this' as a parameter
+                    return (node as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword && node.parent.kind === SyntaxKind.Parameter;
+                default:
+                    return false;
+            }
+        }
+
         /// Goto definition
         function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
@@ -5018,6 +5032,25 @@ namespace ts {
             // Could not find a symbol e.g. node is string or number keyword,
             // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
             if (!symbol) {
+                //thises
+                /*if (isThis(node)) {
+                    const container = getThisContainer(node, /*includeArrowFunctions* /false);
+                    if (isFunctionLike(container)) {
+                        const siggy = typeChecker.getSignatureFromDeclaration(container);
+                        if (siggy.thisType) {
+                            const x = container.parameters[0];
+                            return {
+                                fileName: fileName,
+                                textSpan: getTextSpan(node),
+                                kind: ???,
+                                name: "this",
+                                containerKind: ???,
+                                containerName: ???,
+                            }
+                        }
+                    }
+                }*/
+                //TODO: handle shorthand property assignment
                 return undefined;
             }
 

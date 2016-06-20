@@ -133,6 +133,7 @@ namespace ts {
         const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
 
         function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
+            //console.log(f.fileName);
             file = f;
             options = opts;
             languageVersion = getEmitScriptTarget(options);
