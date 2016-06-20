@@ -131,6 +131,7 @@ namespace ts.server {
         export const Quickinfo = "quickinfo";
         export const QuickinfoFull = "quickinfo-full";
         export const References = "references";
+        export const ReferencesFull = "references-full";
         export const Reload = "reload";
         export const Rename = "rename";
         export const Saveto = "saveto";
@@ -642,59 +643,79 @@ namespace ts.server {
             }
         }
 
-        private getReferences(line: number, offset: number, fileName: string): protocol.ReferencesResponseBody {
-            const file = ts.normalizePath(fileName);
-            const info = this.projectService.getScriptInfo(file);
-            const projects = this.projectService.findReferencingProjects(info);
-            if (!projects.length) {
+        private getReferences(args: protocol.FileLocationRequestArgs,  simplifiedResult: boolean): protocol.ReferencesResponseBody | ReferencedSymbol[] {
+            const file = ts.normalizePath(args.file);
+            let projects: Project[];
+            if (args.projectFileName) {
+                const project = this.getProject(args.projectFileName);
+                if (project) {
+                    projects = [project];
+                }
+            }
+            else {
+                const info = this.projectService.getScriptInfo(file);
+                projects = this.projectService.findReferencingProjects(info);
+            }
+            if (!projects || !projects.length) {
                 throw Errors.NoProject;
             }
 
             const defaultProject = projects[0];
             const scriptInfo = defaultProject.getScriptInfo(file);
-            const position = scriptInfo.lineOffsetToPosition(line, offset);
-            const nameInfo = defaultProject.languageService.getQuickInfoAtPosition(file, position);
-            if (!nameInfo) {
-                return undefined;
+            const position = this.getPosition(args, scriptInfo);
+            if (simplifiedResult) {
+                const nameInfo = defaultProject.languageService.getQuickInfoAtPosition(file, position);
+                if (!nameInfo) {
+                    return undefined;
+                }
+
+                const displayString = ts.displayPartsToString(nameInfo.displayParts);
+                const nameSpan = nameInfo.textSpan;
+                const nameColStart = scriptInfo.positionToLineOffset(nameSpan.start).offset;
+                const nameText = scriptInfo.snap().getText(nameSpan.start, ts.textSpanEnd(nameSpan));
+                const refs = combineProjectOutput<protocol.ReferencesResponseItem>(
+                    projects,
+                    (project: Project) => {
+                        const references = project.languageService.getReferencesAtPosition(file, position);
+                        if (!references) {
+                            return [];
+                        }
+
+                        return references.map(ref => {
+                            const refScriptInfo = project.getScriptInfo(ref.fileName);
+                            const start = refScriptInfo.positionToLineOffset(ref.textSpan.start);
+                            const refLineSpan = refScriptInfo.lineToTextSpan(start.line - 1);
+                            const lineText = refScriptInfo.snap().getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
+                            return {
+                                file: ref.fileName,
+                                start: start,
+                                lineText: lineText,
+                                end: refScriptInfo.positionToLineOffset(ts.textSpanEnd(ref.textSpan)),
+                                isWriteAccess: ref.isWriteAccess,
+                                isDefinition: ref.isDefinition
+                            };
+                        });
+                    },
+                    compareFileStart,
+                    areReferencesResponseItemsForTheSameLocation
+                );
+
+                return {
+                    refs,
+                    symbolName: nameText,
+                    symbolStartOffset: nameColStart,
+                    symbolDisplayString: displayString
+                };
             }
-
-            const displayString = ts.displayPartsToString(nameInfo.displayParts);
-            const nameSpan = nameInfo.textSpan;
-            const nameColStart = scriptInfo.positionToLineOffset(nameSpan.start).offset;
-            const nameText = scriptInfo.snap().getText(nameSpan.start, ts.textSpanEnd(nameSpan));
-            const refs = combineProjectOutput<protocol.ReferencesResponseItem>(
-                projects,
-                (project: Project) => {
-                    const references = project.languageService.getReferencesAtPosition(file, position);
-                    if (!references) {
-                        return [];
-                    }
-
-                    return references.map(ref => {
-                        const refScriptInfo = project.getScriptInfo(ref.fileName);
-                        const start = refScriptInfo.positionToLineOffset(ref.textSpan.start);
-                        const refLineSpan = refScriptInfo.lineToTextSpan(start.line - 1);
-                        const lineText = refScriptInfo.snap().getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
-                        return {
-                            file: ref.fileName,
-                            start: start,
-                            lineText: lineText,
-                            end: refScriptInfo.positionToLineOffset(ts.textSpanEnd(ref.textSpan)),
-                            isWriteAccess: ref.isWriteAccess,
-                            isDefinition: ref.isDefinition
-                        };
-                    });
-                },
-                compareFileStart,
-                areReferencesResponseItemsForTheSameLocation
-            );
-
-            return {
-                refs,
-                symbolName: nameText,
-                symbolStartOffset: nameColStart,
-                symbolDisplayString: displayString
-            };
+            else {
+                return combineProjectOutput(
+                    projects,
+                    project => project.languageService.findReferences(file, position),
+                    undefined,
+                    // TODO: fixme
+                    undefined
+                )
+            }
 
             function areReferencesResponseItemsForTheSameLocation(a: protocol.ReferencesResponseItem, b: protocol.ReferencesResponseItem) {
                 if (a && b) {
@@ -1316,9 +1337,11 @@ namespace ts.server {
                 const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
                 return this.requiredResponse(this.getTypeDefinition(defArgs.line, defArgs.offset, defArgs.file));
             },
-            [CommandNames.References]: (request: protocol.Request) => {
-                const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                return this.requiredResponse(this.getReferences(defArgs.line, defArgs.offset, defArgs.file));
+            [CommandNames.References]: (request: protocol.FileLocationRequest) => {
+                return this.requiredResponse(this.getReferences(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.ReferencesFull]: (request: protocol.FileLocationRequest) => {
+                return this.requiredResponse(this.getReferences(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.Rename]: (request: protocol.Request) => {
                 const renameArgs = <protocol.RenameRequestArgs>request.arguments;
