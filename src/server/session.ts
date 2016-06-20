@@ -714,7 +714,7 @@ namespace ts.server {
                     undefined,
                     // TODO: fixme
                     undefined
-                )
+                );
             }
 
             function areReferencesResponseItemsForTheSameLocation(a: protocol.ReferencesResponseItem, b: protocol.ReferencesResponseItem) {
@@ -1185,7 +1185,7 @@ namespace ts.server {
                     projects,
                     project => project.languageService.getNavigateToItems(args.searchValue, args.maxResultCount),
                     /*comparer*/ undefined,
-                    navigateToItemIsEqualTo)
+                    navigateToItemIsEqualTo);
             }
 
             function navigateToItemIsEqualTo(a: NavigateToItem, b: NavigateToItem): boolean {
