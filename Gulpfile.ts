@@ -1048,3 +1048,7 @@ gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: 
 
 
 gulp.task("default", "Runs 'local'", ["local"]);
+
+gulp.task("watch", "Watches the src/ directory for changes and executes runtests-parallel.", [], () => {
+    gulp.watch("src/**/*.*", ["runtests-parallel"]);
+});
