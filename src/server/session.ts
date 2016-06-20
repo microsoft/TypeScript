@@ -134,6 +134,7 @@ namespace ts.server {
         export const ReferencesFull = "references-full";
         export const Reload = "reload";
         export const Rename = "rename";
+        export const RenameInfoFull = "rename-full";
         export const Saveto = "saveto";
         export const SignatureHelp = "signatureHelp";
         export const SignatureHelpFull = "signatureHelp-full";
@@ -557,6 +558,13 @@ namespace ts.server {
             }
 
             return projectInfo;
+        }
+
+        private getRenameInfo(args: protocol.FileLocationRequestArgs) {
+            const { file, project } = this.getFileAndProject(args.file);
+            const scriptInfo = project.getScriptInfo(file);
+            const position = this.getPosition(args, scriptInfo)
+            return project.languageService.getRenameInfo(file, position);
         }
 
         private getRenameLocations(line: number, offset: number, fileName: string, findInComments: boolean, findInStrings: boolean): protocol.RenameResponseBody {
@@ -1346,6 +1354,9 @@ namespace ts.server {
             [CommandNames.Rename]: (request: protocol.Request) => {
                 const renameArgs = <protocol.RenameRequestArgs>request.arguments;
                 return this.requiredResponse(this.getRenameLocations(renameArgs.line, renameArgs.offset, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings));
+            },
+            [CommandNames.RenameInfoFull]: (request: protocol.FileLocationRequest) => {
+                return this.requiredResponse(this.getRenameInfo(request.arguments));
             },
             [CommandNames.Open]: (request: protocol.Request) => {
                 const openArgs = <protocol.OpenRequestArgs>request.arguments;
