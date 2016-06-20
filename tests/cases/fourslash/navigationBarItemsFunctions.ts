@@ -32,6 +32,12 @@ verify.navigationBar([
     {
         "text": "baz",
         "kind": "function",
+        "childItems": [
+            {
+                "text": "v",
+                "kind": "var"
+            }
+        ],
         "indent": 1
     },
     {
@@ -41,6 +47,10 @@ verify.navigationBar([
             {
                 "text": "bar",
                 "kind": "function"
+            },
+            {
+                "text": "x",
+                "kind": "var"
             }
         ],
         "indent": 1
@@ -52,6 +62,10 @@ verify.navigationBar([
             {
                 "text": "biz",
                 "kind": "function"
+            },
+            {
+                "text": "y",
+                "kind": "var"
             }
         ],
         "indent": 2
