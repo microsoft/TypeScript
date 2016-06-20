@@ -375,6 +375,7 @@ namespace ts.server {
     export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
+        wildcardDirectories?: ts.Map<ts.WatchDirectoryFlags>;
         compilerOptions?: ts.CompilerOptions;
     }
 
@@ -383,6 +384,7 @@ namespace ts.server {
         projectFilename: string;
         projectFileWatcher: FileWatcher;
         directoryWatcher: FileWatcher;
+        directoriesWatchedForWildcards: Map<FileWatcher>;
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
         program: ts.Program;
@@ -852,6 +854,8 @@ namespace ts.server {
             if (project.isConfiguredProject()) {
                 project.projectFileWatcher.close();
                 project.directoryWatcher.close();
+                forEachValue(project.directoriesWatchedForWildcards, watcher => { watcher.close(); });
+                delete project.directoriesWatchedForWildcards;
                 this.configuredProjects = copyListRemovingItem(project, this.configuredProjects);
             }
             else {
@@ -1344,7 +1348,8 @@ namespace ts.server {
                 else {
                     const projectOptions: ProjectOptions = {
                         files: parsedCommandLine.fileNames,
-                        compilerOptions: parsedCommandLine.options
+                        wildcardDirectories: parsedCommandLine.wildcardDirectories,
+                        compilerOptions: parsedCommandLine.options,
                     };
                     return { succeeded: true, projectOptions };
                 }
@@ -1401,12 +1406,30 @@ namespace ts.server {
                 }
                 project.finishGraph();
                 project.projectFileWatcher = this.host.watchFile(configFilename, _ => this.watchedProjectConfigFileChanged(project));
-                this.log("Add recursive watcher for: " + ts.getDirectoryPath(configFilename));
+
+                const configDirectoryPath = ts.getDirectoryPath(configFilename);
+
+                this.log("Add recursive watcher for: " + configDirectoryPath);
                 project.directoryWatcher = this.host.watchDirectory(
-                    ts.getDirectoryPath(configFilename),
+                    configDirectoryPath,
                     path => this.directoryWatchedForSourceFilesChanged(project, path),
                     /*recursive*/ true
                 );
+
+                project.directoriesWatchedForWildcards = reduceProperties(projectOptions.wildcardDirectories, (watchers, flag, directory) => {
+                    if (comparePaths(configDirectoryPath, directory, ".", !this.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
+                        const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
+                        this.log(`Add ${ recursive ? "recursive " : ""}watcher for: ${directory}`);
+                        watchers[directory] = this.host.watchDirectory(
+                            directory,
+                            path => this.directoryWatchedForSourceFilesChanged(project, path),
+                            recursive
+                        );
+                    }
+
+                    return watchers;
+                }, <Map<FileWatcher>>{});
+
                 return { success: true, project: project, errors };
             }
         }
