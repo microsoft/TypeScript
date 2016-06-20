@@ -5188,15 +5188,6 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getStringLiteralTypeForText(text: string): LiteralType {
-            if (hasProperty(stringLiteralTypes, text)) {
-                return stringLiteralTypes[text];
-            }
-            const type = stringLiteralTypes[text] = <LiteralType>createType(TypeFlags.StringLiteral);
-            type.text = text;
-            return type;
-        }
-
         function createLiteralType(flags: TypeFlags, text: string) {
             const type = <LiteralType>createType(flags);
             type.text = text;
@@ -5208,33 +5199,10 @@ namespace ts {
             return hasProperty(map, text) ? map[text] : map[text] = createLiteralType(flags, text);
         }
 
-        function getTypeFromLiteralExpression(node: Expression): Type {
-            switch (node.kind) {
-                case SyntaxKind.StringLiteral:
-                    return getLiteralTypeForText(TypeFlags.StringLiteral, (<LiteralExpression>node).text);
-                case SyntaxKind.NumericLiteral:
-                    return getLiteralTypeForText(TypeFlags.NumberLiteral, (<LiteralExpression>node).text);
-                case SyntaxKind.TrueKeyword:
-                    return trueType;
-                case SyntaxKind.FalseKeyword:
-                    return falseType;
-                case SyntaxKind.PrefixUnaryExpression:
-                    if ((<PrefixUnaryExpression>node).operator === SyntaxKind.MinusToken &&
-                        (<PrefixUnaryExpression>node).operand.kind === SyntaxKind.NumericLiteral) {
-                        return getLiteralTypeForText(TypeFlags.NumberLiteral, "" + -(<LiteralExpression>(<PrefixUnaryExpression>node).operand).text);
-                    }
-            }
-            return undefined;
-        }
-
-        function getTypeOfLiteralOrExpression(node: Expression): Type {
-            return getTypeFromLiteralExpression(node) || checkExpression(node);
-        }
-
         function getTypeFromLiteralTypeNode(node: LiteralTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getTypeFromLiteralExpression(node.literal);
+                links.resolvedType = checkExpression(node.literal);
             }
             return links.resolvedType;
         }
@@ -6880,6 +6848,14 @@ namespace ts {
                 false;
         }
 
+        function getBaseTypeOfLiteralType(type: Type): Type {
+            return type.flags & TypeFlags.StringLiteral ? stringType :
+                type.flags & TypeFlags.NumberLiteral ? numberType :
+                type.flags & TypeFlags.BooleanLiteral ? booleanType :
+                type.flags & TypeFlags.Union ? getUnionType(map((<UnionType>type).types, getBaseTypeOfLiteralType)) :
+                type;
+        }
+
         /**
          * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
@@ -7743,7 +7719,7 @@ namespace ts {
         }
 
         function getTypeOfSwitchClause(clause: CaseClause | DefaultClause) {
-            return clause.kind === SyntaxKind.CaseClause ? getTypeOfLiteralOrExpression((<CaseClause>clause).expression) : undefined;
+            return clause.kind === SyntaxKind.CaseClause ? checkExpression((<CaseClause>clause).expression) : undefined;
         }
 
         function getSwitchClauseTypes(switchStatement: SwitchStatement): Type[] {
@@ -8060,7 +8036,7 @@ namespace ts {
                 if (!propType || !isLiteralUnionType(propType)) {
                     return type;
                 }
-                const discriminantType = getTypeOfLiteralOrExpression(value);
+                const discriminantType = checkExpression(value);
                 if (!isLiteralUnionType(discriminantType)) {
                     return type;
                 }
@@ -9223,6 +9199,31 @@ namespace ts {
                     return getContextualTypeForJsxAttribute(<JsxAttribute | JsxSpreadAttribute>parent);
             }
             return undefined;
+        }
+
+        function isLiteralTypeLocation(node: Node): boolean {
+            const parent = node.parent;
+            switch (parent.kind) {
+                case SyntaxKind.BinaryExpression:
+                    switch ((<BinaryExpression>parent).operatorToken.kind) {
+                        case SyntaxKind.EqualsEqualsEqualsToken:
+                        case SyntaxKind.ExclamationEqualsEqualsToken:
+                        case SyntaxKind.EqualsEqualsToken:
+                        case SyntaxKind.ExclamationEqualsToken:
+                            return true;
+                    }
+                    break;
+                case SyntaxKind.ConditionalExpression:
+                    return (node === (<ConditionalExpression>parent).whenTrue ||
+                        node === (<ConditionalExpression>parent).whenFalse) &&
+                        isLiteralTypeLocation(parent);
+                case SyntaxKind.ParenthesizedExpression:
+                    return isLiteralTypeLocation(parent);
+                case SyntaxKind.CaseClause:
+                case SyntaxKind.LiteralType:
+                    return true;
+            }
+            return false;
         }
 
         // If the given type is an object or union type, if that type has a single signature, and if
@@ -10740,9 +10741,7 @@ namespace ts {
                     // If the effective argument type is 'undefined', there is no synthetic type
                     // for the argument. In that case, we should check the argument.
                     if (argType === undefined) {
-                        argType = arg.kind === SyntaxKind.StringLiteral && !reportErrors
-                            ? getTypeFromLiteralExpression(arg)
-                            : checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                        argType = checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
                     }
 
                     // Use argument expression as error location when reporting errors
@@ -10950,7 +10949,7 @@ namespace ts {
                     case SyntaxKind.Identifier:
                     case SyntaxKind.NumericLiteral:
                     case SyntaxKind.StringLiteral:
-                        return getStringLiteralTypeForText((<Identifier | LiteralExpression>element.name).text);
+                        return getLiteralTypeForText(TypeFlags.StringLiteral, (<Identifier | LiteralExpression>element.name).text);
 
                     case SyntaxKind.ComputedPropertyName:
                         const nameType = checkComputedPropertyName(<ComputedPropertyName>element.name);
@@ -12253,8 +12252,8 @@ namespace ts {
 
         function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {
             const operandType = checkExpression(node.operand);
-            if (node.operator === SyntaxKind.MinusToken && node.operand.kind === SyntaxKind.NumericLiteral && hasLiteralContextualType(node)) {
-                return getTypeFromLiteralExpression(node);
+            if (node.operator === SyntaxKind.MinusToken && node.operand.kind === SyntaxKind.NumericLiteral && isLiteralTypeContext(node)) {
+                return getLiteralTypeForText(TypeFlags.NumberLiteral, "" + -(<LiteralExpression>node.operand).text);
             }
             switch (node.operator) {
                 case SyntaxKind.PlusToken:
@@ -12633,6 +12632,12 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
+                    const leftIsLiteral = isLiteralUnionType(leftType);
+                    const rightIsLiteral = isLiteralUnionType(rightType);
+                    if (!leftIsLiteral || !rightIsLiteral) {
+                        leftType = leftIsLiteral ? getBaseTypeOfLiteralType(leftType) : leftType;
+                        rightType = rightIsLiteral ? getBaseTypeOfLiteralType(rightType) : rightType;
+                    }
                     if (!isTypeEqualityComparableTo(leftType, rightType) && !isTypeEqualityComparableTo(rightType, leftType)) {
                         reportOperatorError();
                     }
@@ -12773,18 +12778,25 @@ namespace ts {
             return getUnionType([type1, type2]);
         }
 
-        function hasLiteralContextualType(node: Expression) {
-            return isLiteralUnionType(getContextualType(node) || unknownType);
+        function isLiteralTypeContext(node: Expression) {
+            return isLiteralTypeLocation(node) || isLiteralUnionType(getContextualType(node) || unknownType);
         }
 
         function checkLiteralExpression(node: Expression): Type {
-            const type = node.kind === SyntaxKind.StringLiteral ? stringType :
-                node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword ? booleanType :
-                numberType;
-            if (type === numberType) {
+            if (node.kind === SyntaxKind.NumericLiteral) {
                 checkGrammarNumericLiteral(<LiteralExpression>node);
             }
-            return hasLiteralContextualType(node) ? getTypeFromLiteralExpression(node) : type;
+            const hasLiteralType = isLiteralTypeContext(node);
+            switch (node.kind) {
+                case SyntaxKind.StringLiteral:
+                    return hasLiteralType ? getLiteralTypeForText(TypeFlags.StringLiteral, (<LiteralExpression>node).text) : stringType;
+                case SyntaxKind.NumericLiteral:
+                    return hasLiteralType ? getLiteralTypeForText(TypeFlags.NumberLiteral, (<LiteralExpression>node).text) : numberType;
+                case SyntaxKind.TrueKeyword:
+                    return hasLiteralType ? trueType : booleanType;
+                case SyntaxKind.FalseKeyword:
+                    return hasLiteralType ? falseType : booleanType;
+            }
         }
 
         function checkTemplateExpression(node: TemplateExpression): Type {
