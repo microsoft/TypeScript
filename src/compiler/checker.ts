@@ -14518,6 +14518,24 @@ namespace ts {
             return (node.flags & NodeFlags.Private) !== 0;
         }
 
+        function checkUnusedImports(node: SourceFile) {
+            if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
+                for (const local in node.locals) {
+                    if (hasProperty(node.locals, local)) {
+                        const localValue = node.locals[local];
+                        if (localValue.declarations && !localValue.exportSymbol) {
+                            for (const declaration of localValue.declarations) {
+                                const symbol = declaration.symbol;
+                                if (!symbol.hasReference) {
+                                    error(declaration, Diagnostics._0_is_declared_but_never_used, symbol.name);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         function checkBlock(node: Block) {
             // Grammar checking for SyntaxKind.Block
             if (node.kind === SyntaxKind.Block) {
@@ -16569,6 +16587,7 @@ namespace ts {
                         if (target.flags & SymbolFlags.Type) {
                             checkTypeNameIsReserved(node.name, Diagnostics.Import_name_cannot_be_0);
                         }
+                        target.hasReference = true;
                     }
                 }
                 else {
@@ -16911,6 +16930,7 @@ namespace ts {
 
                 deferredNodes = [];
                 forEach(node.statements, checkSourceElement);
+                checkUnusedImports(node);
                 checkDeferredNodes();
                 deferredNodes = undefined;
 
