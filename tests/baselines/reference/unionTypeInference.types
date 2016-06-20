@@ -94,11 +94,11 @@ function h<T>(x: string|boolean|T): T {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | boolean | T
->"string" : string
+>"string" : "string"
 >typeof x === "boolean" : boolean
 >typeof x : string
 >x : boolean | T
->"boolean" : string
+>"boolean" : "boolean"
 >undefined : undefined
 >x : T
 }

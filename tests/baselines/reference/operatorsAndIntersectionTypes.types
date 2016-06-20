@@ -110,7 +110,7 @@ const b1 = guid === "";
 >b1 : boolean
 >guid === "" : boolean
 >guid : string & { $Guid: any; }
->"" : string
+>"" : ""
 
 const b2 = guid === guid;
 >b2 : boolean
@@ -122,7 +122,7 @@ const b3 = serialNo === 0;
 >b3 : boolean
 >serialNo === 0 : boolean
 >serialNo : number & { $SerialNo: any; }
->0 : number
+>0 : 0
 
 const b4 = serialNo === serialNo;
 >b4 : boolean

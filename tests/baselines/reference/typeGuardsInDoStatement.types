@@ -24,7 +24,7 @@ function a(x: string | number | boolean) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number | boolean
->"string" : string
+>"string" : "string"
 
     x; // number | boolean
 >x : number | boolean
@@ -54,7 +54,7 @@ function b(x: string | number | boolean) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number | boolean
->"string" : string
+>"string" : "string"
 
     x; // number | boolean
 >x : number | boolean
@@ -84,7 +84,7 @@ function c(x: string | number) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number
->"string" : string
+>"string" : "string"
 
     x; // string | number
 >x : string | number

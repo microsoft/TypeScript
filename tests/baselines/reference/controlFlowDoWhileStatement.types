@@ -68,7 +68,7 @@ function c() {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number
->"string" : string
+>"string" : "string"
 
         break;
     } while (cond)

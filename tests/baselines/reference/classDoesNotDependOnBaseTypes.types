@@ -7,7 +7,7 @@ if (typeof x !== "string") {
 >typeof x !== "string" : boolean
 >typeof x : string
 >x : string | StringTreeCollection
->"string" : string
+>"string" : "string"
 
     x[0] = "";
 >x[0] = "" : string

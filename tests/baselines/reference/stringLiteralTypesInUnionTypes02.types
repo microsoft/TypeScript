@@ -15,7 +15,7 @@ var y: T = undefined;
 if (x === "foo") {
 >x === "foo" : boolean
 >x : string
->"foo" : string
+>"foo" : "foo"
 
     let a = x;
 >a : string
@@ -24,7 +24,7 @@ if (x === "foo") {
 else if (x !== "bar") {
 >x !== "bar" : boolean
 >x : string
->"bar" : string
+>"bar" : "bar"
 
     let b = x || y;
 >b : string

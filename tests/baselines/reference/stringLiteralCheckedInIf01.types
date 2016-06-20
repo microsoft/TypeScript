@@ -16,7 +16,7 @@ function f(foo: T) {
     if (foo === "a") {
 >foo === "a" : boolean
 >foo : ("a" | "b")[] | "a" | "b"
->"a" : string
+>"a" : "a"
 
         return foo;
 >foo : ("a" | "b")[] | "a" | "b"
@@ -24,7 +24,7 @@ function f(foo: T) {
     else if (foo === "b") {
 >foo === "b" : boolean
 >foo : ("a" | "b")[] | "a" | "b"
->"b" : string
+>"b" : "b"
 
         return foo;
 >foo : ("a" | "b")[] | "a" | "b"

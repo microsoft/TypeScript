@@ -149,7 +149,7 @@ var even = _.find([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >num % 2 : number
 >num : number
 >2 : number
->0 : number
+>0 : 0
 
 var evens = _.filter([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >evens : number[]
@@ -170,7 +170,7 @@ var evens = _.filter([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >num % 2 : number
 >num : number
 >2 : number
->0 : number
+>0 : 0
 
 var listOfPlays = [{ title: "Cymbeline", author: "Shakespeare", year: 1611 }, { title: "The Tempest", author: "Shakespeare", year: 1611 }, { title: "Other", author: "Not Shakespeare", year: 2012 }];
 >listOfPlays : { title: string; author: string; year: number; }[]
@@ -228,7 +228,7 @@ var odds = _.reject([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >num % 2 : number
 >num : number
 >2 : number
->0 : number
+>0 : 0
 
 _.all([true, 1, null, 'yes'], _.identity);
 >_.all([true, 1, null, 'yes'], _.identity) : boolean
@@ -425,7 +425,7 @@ _.countBy([1, 2, 3, 4, 5], (num) => num % 2 == 0 ? 'even' : 'odd');
 >num % 2 : number
 >num : number
 >2 : number
->0 : number
+>0 : 0
 >'even' : string
 >'odd' : string
 
@@ -1249,7 +1249,7 @@ _.chain([1, 2, 3, 200])
 >num % 2 : number
 >num : number
 >2 : number
->0 : number
+>0 : 0
 
     .tap(<any>alert)
 >tap : (interceptor: (object: number[]) => void) => Underscore.ChainedArray<number>
