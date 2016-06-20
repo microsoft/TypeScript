@@ -1,4 +1,4 @@
-tests/cases/compiler/unusedFunctionsinNamespaces6.ts(14,14): error TS6133: Variable 'function4' has never been used.
+tests/cases/compiler/unusedFunctionsinNamespaces6.ts(14,14): error TS6133: 'function4' is declared but never used.
 
 
 ==== tests/cases/compiler/unusedFunctionsinNamespaces6.ts (1 errors) ====
@@ -17,7 +17,7 @@ tests/cases/compiler/unusedFunctionsinNamespaces6.ts(14,14): error TS6133: Varia
     
         function function4() {
                  ~~~~~~~~~
-!!! error TS6133: Variable 'function4' has never been used.
+!!! error TS6133: 'function4' is declared but never used.
     
         }
     

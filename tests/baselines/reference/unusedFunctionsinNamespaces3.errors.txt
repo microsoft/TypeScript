@@ -1,5 +1,5 @@
-tests/cases/compiler/unusedFunctionsinNamespaces3.ts(3,9): error TS6133: Variable 'function1' has never been used.
-tests/cases/compiler/unusedFunctionsinNamespaces3.ts(3,30): error TS6134: Parameter 'param1' has never been used.
+tests/cases/compiler/unusedFunctionsinNamespaces3.ts(3,9): error TS6133: 'function1' is declared but never used.
+tests/cases/compiler/unusedFunctionsinNamespaces3.ts(3,30): error TS6133: 'param1' is declared but never used.
 
 
 ==== tests/cases/compiler/unusedFunctionsinNamespaces3.ts (2 errors) ====
@@ -7,8 +7,8 @@ tests/cases/compiler/unusedFunctionsinNamespaces3.ts(3,30): error TS6134: Parame
     namespace Validation {
         var function1 = function(param1:string) {
             ~~~~~~~~~
-!!! error TS6133: Variable 'function1' has never been used.
+!!! error TS6133: 'function1' is declared but never used.
                                  ~~~~~~~~~~~~~
-!!! error TS6134: Parameter 'param1' has never been used.
+!!! error TS6133: 'param1' is declared but never used.
         }
     }

@@ -8157,7 +8157,7 @@ namespace ts {
             }
         }
 
-        function updateReferencesForInterfaceImplementations(node: InterfaceDeclaration): void {
+        function updateReferencesForInterfaceHeritiageClauseTargets(node: InterfaceDeclaration): void {
             const extendedTypeNode = getClassExtendsHeritageClauseElement(node);
             if (extendedTypeNode) {
                 const t = getTypeFromTypeNode(extendedTypeNode);
@@ -14276,35 +14276,41 @@ namespace ts {
             }
         }
 
-        function checkUnusedLocals(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction): void {
+        function checkUnusedLocals(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction | ForInStatement | Block): void {
             checkUnusedIdentifiers(node);
             checkUnusedParameters(node);
         }
 
-        function checkUnusedIdentifiers(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction): void {
+        function checkUnusedIdentifiers(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction | ForInStatement | Block): void {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 for (const key in node.locals) {
-                    if (!node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
-                        if (node.locals[key].valueDeclaration.kind !== SyntaxKind.Parameter) {
-                            error(node.locals[key].valueDeclaration, Diagnostics.Variable_0_has_never_been_used, key);
+                    if (hasProperty(node.locals, key)) {
+                        const local = node.locals[key];
+                        if (!local.hasReference && local.valueDeclaration && local.valueDeclaration.kind) {
+                            if (local.valueDeclaration.kind !== SyntaxKind.Parameter) {
+                                error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
+                            }
                         }
                     }
                 }
             }
         }
 
-        function checkUnusedParameters(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction): void {
-            if (compilerOptions.noUnusedParameters && !isInAmbientContext(node)) {
+        function checkUnusedParameters(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction | ForInStatement | Block): void {
+            if (node.parent.kind !== SyntaxKind.InterfaceDeclaration && compilerOptions.noUnusedParameters && !isInAmbientContext(node)) {
                 for (const key in node.locals) {
-                    if (hasProperty(node.locals, key) && !node.locals[key].hasReference && node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind) {
-                        if (node.locals[key].valueDeclaration.kind === SyntaxKind.Parameter && node.parent.kind !== SyntaxKind.InterfaceDeclaration) {
-                            if (node.locals[key].valueDeclaration.modifiers) {
-                                if (checkModifiersForPrivateAccess(node.locals[key].valueDeclaration.modifiers)) {
-                                    error(node.locals[key].valueDeclaration, Diagnostics.Parameter_0_has_never_been_used, key);
+                    if (hasProperty(node.locals, key)) {
+                        const local = node.locals[key];
+                        if (!local.hasReference && local.valueDeclaration && local.valueDeclaration.kind) {
+                            if (local.valueDeclaration.kind === SyntaxKind.Parameter) {
+                                if (local.valueDeclaration.modifiers) {
+                                    if (getCombinedNodeFlags(local.valueDeclaration) & NodeFlags.Private) {
+                                        error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
+                                    }
                                 }
-                            }
-                            else {
-                                error(node.locals[key].valueDeclaration, Diagnostics.Parameter_0_has_never_been_used, key);
+                                else {
+                                    error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
+                                }
                             }
                         }
                     }
@@ -14315,12 +14321,15 @@ namespace ts {
         function checkUnusedModulePrivates(node: ModuleDeclaration): void {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 for (const key in node.locals) {
-                    if (hasProperty(node.locals, key) && !node.locals[key].hasReference && !node.locals[key].exportSymbol) {
-                        if ((node.locals[key].valueDeclaration && node.locals[key].valueDeclaration.kind)) {
-                            error(node.locals[key].valueDeclaration, Diagnostics.Variable_0_has_never_been_used, key);
-                        }
-                        else if (node.locals[key].declarations && node.locals[key].declarations[0].kind === SyntaxKind.InterfaceDeclaration) {
-                            error(node.locals[key].declarations[0], Diagnostics.Variable_0_has_never_been_used, key);
+                    if (hasProperty(node.locals, key)) {
+                        const local = node.locals[key];
+                        if (!local.hasReference && !local.exportSymbol) {
+                            if ((local.valueDeclaration && local.valueDeclaration.kind)) {
+                                error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
+                            }
+                            else if (local.declarations && local.declarations[0].kind === SyntaxKind.InterfaceDeclaration) {
+                                error(local.declarations[0], Diagnostics._0_is_declared_but_never_used, key);
+                            }
                         }
                     }
                 }
@@ -14329,42 +14338,28 @@ namespace ts {
 
         function checkUnusedPrivates(node: ClassDeclaration): void {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
-                for (let i = 0; node.members && i < node.members.length; i++) {
-                    switch (node.members[i].kind) {
-                        case SyntaxKind.MethodDeclaration:
-                        case SyntaxKind.PropertyDeclaration:
-                            if (isPrivateClassElement(node.members[i]) && !node.members[i].symbol.hasReference) {
-                                error(node.members[i], Diagnostics.Variable_0_has_never_been_used, node.members[i].symbol.name);
+                if (node.members) {
+                    for (const member of node.members) {
+                        if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.PropertyDeclaration) {
+                            if (isPrivateClassElement(member) && !member.symbol.hasReference) {
+                                error(member, Diagnostics._0_is_declared_but_never_used, member.symbol.name);
                             }
-                            break;
-                        default:
-                            break;
+                        }
                     }
                 }
 
-                for (let i = 0; node.typeParameters && i < node.typeParameters.length; i++) {
-                    if (!node.typeParameters[i].symbol.hasReference) {
-                        error(node.typeParameters[i], Diagnostics.Variable_0_has_never_been_used, node.typeParameters[i].symbol.name);
+                if (node.typeParameters) {
+                    for (const typeParameter of node.typeParameters) {
+                        if (!typeParameter.symbol.hasReference) {
+                            error(typeParameter, Diagnostics._0_is_declared_but_never_used, typeParameter.symbol.name);
+                        }
                     }
                 }
             }
         }
 
         function isPrivateClassElement(node: ClassElement): boolean {
-            for (let i = 0; node.modifiers && i < node.modifiers.length; i++) {
-                if (node.modifiers[i].kind === SyntaxKind.PrivateKeyword)
-                    return true;
-            }
-            return false;
-        }
-
-        function checkModifiersForPrivateAccess(modifiers: ModifiersArray): boolean {
-            for (let i = 0; i < modifiers.length; i++) {
-                if (modifiers[i].kind === SyntaxKind.PrivateKeyword) {
-                    return true;
-                }
-            }
-            return false;
+            return (node.flags & NodeFlags.Private) !== 0;
         }
 
         function checkBlock(node: Block) {
@@ -14373,6 +14368,7 @@ namespace ts {
                 checkGrammarStatementInAmbientContext(node);
             }
             forEach(node.statements, checkSourceElement);
+            checkUnusedLocals(node);
         }
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
@@ -14877,6 +14873,7 @@ namespace ts {
             }
 
             checkSourceElement(node.statement);
+            checkUnusedIdentifiers(node);
         }
 
         function checkForInStatement(node: ForInStatement) {
@@ -14924,6 +14921,7 @@ namespace ts {
             }
 
             checkSourceElement(node.statement);
+            checkUnusedIdentifiers(node);
         }
 
         function checkForInOrForOfVariableDeclaration(iterationStatement: ForInStatement | ForOfStatement): void {
@@ -15810,7 +15808,7 @@ namespace ts {
                 checkExportsOnMergedDeclarations(node);
                 const symbol = getSymbolOfNode(node);
                 checkTypeParameterListsIdentical(node, symbol);
-                updateReferencesForInterfaceImplementations(node);
+                updateReferencesForInterfaceHeritiageClauseTargets(node);
 
                 // Only check this symbol once
                 const firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);

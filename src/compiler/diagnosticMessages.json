@@ -2776,21 +2776,17 @@
         "category": "Message",
         "code": 6132
     },
-    "Variable '{0}' has never been used.": {
+    "'{0}' is declared but never used.": {
         "category": "Error",
         "code": 6133
     },
-    "Parameter '{0}' has never been used.": {
-        "category": "Error",
-        "code": 6134
-    },
     "Report Errors on Unused Locals.": {
         "category": "Message",
-        "code": 6135
+        "code": 6134
     },
     "Report Errors on Unused Parameters.": {
         "category": "Message",
-        "code": 6136
+        "code": 6135
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

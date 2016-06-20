@@ -1,56 +1,56 @@
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(2,18): error TS6134: Parameter 'person' has never been used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(3,9): error TS6133: Variable 'unused' has never been used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(6,32): error TS6133: Variable 'unusedtypeparameter' has never been used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(7,5): error TS6133: Variable 'unusedprivatevariable' has never been used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(12,17): error TS6134: Parameter 'message' has never been used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(13,13): error TS6133: Variable 'unused2' has never been used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(17,20): error TS6134: Parameter 'person' has never been used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(18,13): error TS6133: Variable 'unused' has never been used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(25,13): error TS6133: Variable 'unUsedPrivateFunction' has never been used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(38,11): error TS6133: Variable 'numberRegexp' has never been used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(45,17): error TS6133: Variable 'unUsedPrivateFunction' has never been used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(58,15): error TS6133: Variable 'usedLocallyInterface2' has never been used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(65,11): error TS6133: Variable 'dummy' has never been used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(68,15): error TS6133: Variable 'unusedInterface' has never been used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(80,11): error TS6133: Variable 'class3' has never been used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(100,15): error TS6133: Variable 'interface5' has never been used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(2,18): error TS6133: 'person' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(3,9): error TS6133: 'unused' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(6,32): error TS6133: 'unusedtypeparameter' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(7,5): error TS6133: 'unusedprivatevariable' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(12,17): error TS6133: 'message' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(13,13): error TS6133: 'unused2' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(17,20): error TS6133: 'person' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(18,13): error TS6133: 'unused' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(25,13): error TS6133: 'unUsedPrivateFunction' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(38,11): error TS6133: 'numberRegexp' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(45,17): error TS6133: 'unUsedPrivateFunction' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(58,15): error TS6133: 'usedLocallyInterface2' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(65,11): error TS6133: 'dummy' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(68,15): error TS6133: 'unusedInterface' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(80,11): error TS6133: 'class3' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(100,15): error TS6133: 'interface5' is declared but never used.
 
 
 ==== tests/cases/compiler/unusedIdentifiersConsolidated1.ts (16 errors) ====
     
     function greeter(person: string) {
                      ~~~~~~~~~~~~~~
-!!! error TS6134: Parameter 'person' has never been used.
+!!! error TS6133: 'person' is declared but never used.
         var unused = 20;
             ~~~~~~
-!!! error TS6133: Variable 'unused' has never been used.
+!!! error TS6133: 'unused' is declared but never used.
     }
     
     class Dummy<usedtypeparameter, unusedtypeparameter> {
                                    ~~~~~~~~~~~~~~~~~~~
-!!! error TS6133: Variable 'unusedtypeparameter' has never been used.
+!!! error TS6133: 'unusedtypeparameter' is declared but never used.
         private unusedprivatevariable: string;
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6133: Variable 'unusedprivatevariable' has never been used.
+!!! error TS6133: 'unusedprivatevariable' is declared but never used.
         private greeting: string;
         public unusedpublicvariable: string;
         public typedvariable: usedtypeparameter;
     
         constructor(message: string) {
                     ~~~~~~~~~~~~~~~
-!!! error TS6134: Parameter 'message' has never been used.
+!!! error TS6133: 'message' is declared but never used.
             var unused2 = 22;
                 ~~~~~~~
-!!! error TS6133: Variable 'unused2' has never been used.
+!!! error TS6133: 'unused2' is declared but never used.
             this.greeting = "Dummy Message";
         }
     
         public greeter(person: string) {
                        ~~~~~~~~~~~~~~
-!!! error TS6134: Parameter 'person' has never been used.
+!!! error TS6133: 'person' is declared but never used.
             var unused = 20;
                 ~~~~~~
-!!! error TS6133: Variable 'unused' has never been used.
+!!! error TS6133: 'unused' is declared but never used.
             this.usedPrivateFunction();
         }
     
@@ -59,7 +59,7 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(100,15): error TS6133: Va
     
         private unUsedPrivateFunction() {
                 ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6133: Variable 'unUsedPrivateFunction' has never been used.
+!!! error TS6133: 'unUsedPrivateFunction' is declared but never used.
         }
     }
     
@@ -74,7 +74,7 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(100,15): error TS6133: Va
         const lettersRegexp = /^[A-Za-z]+$/;
         const numberRegexp = /^[0-9]+$/;
               ~~~~~~~~~~~~
-!!! error TS6133: Variable 'numberRegexp' has never been used.
+!!! error TS6133: 'numberRegexp' is declared but never used.
     
         export class LettersOnlyValidator implements StringValidator {
             isAcceptable(s2: string) {
@@ -83,7 +83,7 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(100,15): error TS6133: Va
     
             private unUsedPrivateFunction() {
                     ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6133: Variable 'unUsedPrivateFunction' has never been used.
+!!! error TS6133: 'unUsedPrivateFunction' is declared but never used.
             }
         }
     
@@ -98,7 +98,7 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(100,15): error TS6133: Va
     
         interface usedLocallyInterface2 {
                   ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6133: Variable 'usedLocallyInterface2' has never been used.
+!!! error TS6133: 'usedLocallyInterface2' is declared but never used.
             someFunction(s1: string): void;
         }
     
@@ -107,12 +107,12 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(100,15): error TS6133: Va
     
         class dummy implements usedLocallyInterface {
               ~~~~~
-!!! error TS6133: Variable 'dummy' has never been used.
+!!! error TS6133: 'dummy' is declared but never used.
         }
     
         interface unusedInterface {
                   ~~~~~~~~~~~~~~~
-!!! error TS6133: Variable 'unusedInterface' has never been used.
+!!! error TS6133: 'unusedInterface' is declared but never used.
         }
     }
     
@@ -126,7 +126,7 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(100,15): error TS6133: Va
     
         class class3 {
               ~~~~~~
-!!! error TS6133: Variable 'class3' has never been used.
+!!! error TS6133: 'class3' is declared but never used.
         }
     
         export class class4 {
@@ -148,6 +148,6 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(100,15): error TS6133: Va
     
         interface interface5 {
                   ~~~~~~~~~~
-!!! error TS6133: Variable 'interface5' has never been used.
+!!! error TS6133: 'interface5' is declared but never used.
         }
     }
