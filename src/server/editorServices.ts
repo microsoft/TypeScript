@@ -1022,6 +1022,9 @@ namespace ts.server {
 
             this.findReferencingProjects(info);
             if (info.defaultProject) {
+                if (info.defaultProject.projectKind === ProjectKind.Configured) {
+                    (<ConfiguredProject>info.defaultProject).addOpenRef();
+                }
                 this.openFilesReferenced.push(info);
             }
             else {
