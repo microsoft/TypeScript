@@ -372,6 +372,11 @@ namespace ts {
             ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
     }
 
+    export function isShorthandAmbientModule(node: Node): boolean {
+        // The only kind of module that can be missing a body is a shorthand ambient module.
+        return node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
+    }
+
     export function isBlockScopedContainerTopLevel(node: Node): boolean {
         return node.kind === SyntaxKind.SourceFile ||
             node.kind === SyntaxKind.ModuleDeclaration ||
@@ -603,9 +608,11 @@ namespace ts {
     }
 
     export function getJsDocCommentsFromText(node: Node, text: string) {
-        const commentRanges = (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) ?
-            concatenate(getTrailingCommentRanges(text, node.pos),
-                getLeadingCommentRanges(text, node.pos)) :
+        const commentRanges = (node.kind === SyntaxKind.Parameter ||
+                               node.kind === SyntaxKind.TypeParameter ||
+                               node.kind === SyntaxKind.FunctionExpression ||
+                               node.kind === SyntaxKind.ArrowFunction) ?
+            concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) :
             getLeadingCommentRangesOfNodeFromText(node, text);
         return filter(commentRanges, isJsDocComment);
 
@@ -823,6 +830,8 @@ namespace ts {
             case SyntaxKind.ConstructorType:
                 return true;
         }
+
+        return false;
     }
 
     export function introducesArgumentsExoticObject(node: Node) {
@@ -876,15 +885,6 @@ namespace ts {
             node = node.parent;
             if (!node || isFunctionLike(node)) {
                 return <FunctionLikeDeclaration>node;
-            }
-        }
-    }
-
-    export function getContainingFunctionOrModule(node: Node): Node {
-        while (true) {
-            node = node.parent;
-            if (isFunctionLike(node) || node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.SourceFile) {
-                return node;
             }
         }
     }
@@ -1262,6 +1262,18 @@ namespace ts {
 
     export function isSingleOrDoubleQuote(charCode: number) {
         return charCode === CharacterCodes.singleQuote || charCode === CharacterCodes.doubleQuote;
+    }
+
+    /**
+     * Returns true if the node is a variable declaration whose initializer is a function expression.
+     * This function does not test if the node is in a JavaScript file or not.
+     */
+    export function isDeclarationOfFunctionExpression(s: Symbol) {
+        if (s.valueDeclaration && s.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
+            const declaration = s.valueDeclaration as VariableDeclaration;
+            return declaration.initializer && declaration.initializer.kind === SyntaxKind.FunctionExpression;
+        }
+        return false;
     }
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
@@ -2700,6 +2712,10 @@ namespace ts {
 
     export function hasJavaScriptFileExtension(fileName: string) {
         return forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
+    }
+
+    export function hasTypeScriptFileExtension(fileName: string) {
+        return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
     /**

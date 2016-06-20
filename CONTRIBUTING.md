@@ -91,10 +91,10 @@ These two files represent the DOM typings and are auto-generated. To make any mo
 
 ## Running the Tests
 
-To run all tests, invoke the `runtests` target using jake:
+To run all tests, invoke the `runtests-parallel` target using jake:
 
 ```Shell
-jake runtests
+jake runtests-parallel
 ```
 
 This run will all tests; to run only a specific subset of tests, use:

@@ -1,4 +1,4 @@
-tests/cases/compiler/unusedPrivateVariableInClass1.ts(3,5): message TS6132: Variable 'x' has never been used.
+tests/cases/compiler/unusedPrivateVariableInClass1.ts(3,5): error TS6133: 'x' is declared but never used.
 
 
 ==== tests/cases/compiler/unusedPrivateVariableInClass1.ts (1 errors) ====
@@ -6,5 +6,5 @@ tests/cases/compiler/unusedPrivateVariableInClass1.ts(3,5): message TS6132: Vari
     class greeter {
         private x: string;
         ~~~~~~~~~~~~~~~~~~
-!!! message TS6132: Variable 'x' has never been used.
+!!! error TS6133: 'x' is declared but never used.
     }

@@ -1,4 +1,4 @@
-tests/cases/compiler/unusedLocalsInMethod1.ts(4,13): message TS6132: Variable 'x' has never been used.
+tests/cases/compiler/unusedLocalsInMethod1.ts(4,13): error TS6133: 'x' is declared but never used.
 
 
 ==== tests/cases/compiler/unusedLocalsInMethod1.ts (1 errors) ====
@@ -7,6 +7,6 @@ tests/cases/compiler/unusedLocalsInMethod1.ts(4,13): message TS6132: Variable 'x
         public function1() {
             var x = 10;
                 ~
-!!! message TS6132: Variable 'x' has never been used.
+!!! error TS6133: 'x' is declared but never used.
         }
     }

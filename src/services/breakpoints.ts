@@ -722,5 +722,5 @@ namespace ts.BreakpointResolver {
                 return spanInNode(node.parent);
             }
         }
-   }
+    }
 }

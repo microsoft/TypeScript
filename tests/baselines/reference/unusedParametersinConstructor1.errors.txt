@@ -1,4 +1,4 @@
-tests/cases/compiler/unusedParametersinConstructor1.ts(3,17): message TS6133: Parameter 'param1' has never been used.
+tests/cases/compiler/unusedParametersinConstructor1.ts(3,17): error TS6133: 'param1' is declared but never used.
 
 
 ==== tests/cases/compiler/unusedParametersinConstructor1.ts (1 errors) ====
@@ -6,6 +6,6 @@ tests/cases/compiler/unusedParametersinConstructor1.ts(3,17): message TS6133: Pa
     class greeter {
         constructor(param1: string) {
                     ~~~~~~~~~~~~~~
-!!! message TS6133: Parameter 'param1' has never been used.
+!!! error TS6133: 'param1' is declared but never used.
         }
     }
