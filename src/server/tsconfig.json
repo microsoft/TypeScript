@@ -10,7 +10,7 @@
         "node.d.ts",
         "editorServices.ts",
         "protocol.d.ts",
-        "server.ts",
-        "session.ts"
+        "session.ts",
+        "server.ts"
     ]
 }
