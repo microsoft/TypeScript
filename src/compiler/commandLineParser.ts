@@ -423,6 +423,10 @@ namespace ts {
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
         },
         {
+            name: "disableProjectSizeLimit",
+            type: "boolean"
+        },
+        {
             name: "strictNullChecks",
             type: "boolean",
             description: Diagnostics.Enable_strict_null_checks
@@ -771,8 +775,10 @@ namespace ts {
                             }
                         }
 
-                        filesSeen[fileName] = true;
-                        fileNames.push(fileName);
+                        if (!filesSeen[fileName]) {
+                            filesSeen[fileName] = true;
+                            fileNames.push(fileName);
+                        }
                     }
                 }
             }
