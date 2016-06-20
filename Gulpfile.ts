@@ -592,7 +592,7 @@ gulp.task(run, false, [servicesFile], () => {
         .pipe(newer(run))
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
-        .pipe(sourcemaps.write("."))
+        .pipe(sourcemaps.write(".", {includeContent: false, sourceRoot: "../../"}))
         .pipe(gulp.dest("."));
 });
 
