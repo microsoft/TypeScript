@@ -152,6 +152,10 @@ declare namespace ts.server.protocol {
           * The list of normalized file name in the project, including 'lib.d.ts'
           */
         fileNames?: string[];
+        /**
+          * Indicates if the project has a active language service instance
+          */
+        languageServiceDisabled?: boolean;
     }
 
     export interface DiagnosticWithLinePosition {

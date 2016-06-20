@@ -44,6 +44,8 @@ namespace ts.server {
         }
     }
 
+    export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
+
     export class ScriptInfo {
         svc: ScriptVersionCache;
         defaultProject: Project;      // project to use by default for file
@@ -345,6 +347,19 @@ namespace ts.server {
         }
 
         getFileNames() {
+            if (this.languageServiceDiabled) {
+                if (!this.projectOptions) {
+                    return undefined;
+                }
+
+                const fileNames: string[] = [];
+                if (this.projectOptions && this.projectOptions.compilerOptions) {
+                    fileNames.push(getDefaultLibFilePath(this.projectOptions.compilerOptions));
+                }
+                ts.addRange(fileNames, this.projectOptions.files);
+                return fileNames;
+            }
+
             const sourceFiles = this.program.getSourceFiles();
             return sourceFiles.map(sourceFile => sourceFile.fileName);
         }
@@ -1132,7 +1147,24 @@ namespace ts.server {
                     return { succeeded: true, projectOptions };
                 }
             }
+        }
 
+        private exceedTotalNonTsFileSizeLimit(fileNames: string[]) {
+            let totalNonTsFileSize = 0;
+            if (!this.host.getFileSize) {
+                return false;
+            }
+
+            for (const fileName of fileNames) {
+                if (hasTypeScriptFileExtension(fileName)) {
+                    continue;
+                }
+                totalNonTsFileSize += this.host.getFileSize(fileName);
+                if (totalNonTsFileSize > maxProgramSizeForNonTsFiles) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private createAndAddExternalProject(projectFileName: string, files: string[], compilerOptions: CompilerOptions, clientFileName?: string) {

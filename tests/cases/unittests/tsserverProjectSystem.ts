@@ -29,6 +29,7 @@ namespace ts {
     interface FileOrFolder {
         path: string;
         content?: string;
+        fileSize?: number;
     }
 
     interface FSEntry {
@@ -38,6 +39,7 @@ namespace ts {
 
     interface File extends FSEntry {
         content: string;
+        fileSize?: number;
     }
 
     interface Folder extends FSEntry {
@@ -161,7 +163,7 @@ namespace ts {
                 const path = this.toPath(fileOrFolder.path);
                 const fullPath = getNormalizedAbsolutePath(fileOrFolder.path, this.currentDirectory);
                 if (typeof fileOrFolder.content === "string") {
-                    const entry = { path, content: fileOrFolder.content, fullPath };
+                    const entry = { path, content: fileOrFolder.content, fullPath, fileSize: fileOrFolder.fileSize };
                     this.fs.set(path, entry);
                     addFolder(getDirectoryPath(fullPath), this.toPath, this.fs).entries.push(entry);
                 }
@@ -175,6 +177,17 @@ namespace ts {
             const path = this.toPath(s);
             return this.fs.contains(path) && isFile(this.fs.get(path));
         };
+
+        getFileSize(s: string) {
+            const path = this.toPath(s);
+            if (this.fs.contains(path)) {
+                const entry = this.fs.get(path);
+                if (isFile(entry)) {
+                    return entry.fileSize ? entry.fileSize : entry.content.length;
+                }
+            }
+            return undefined;
+        }
 
         directoryExists(s: string) {
             const path = this.toPath(s);
@@ -570,6 +583,60 @@ namespace ts {
             host.triggerFileWatcherCallback(configFile.path);
             checkConfiguredProjectActualFiles(project, [file1.path, classicModuleFile.path]);
             checkNumberOfInferredProjects(projectService, 1);
+        });
+
+        it("should keep the configured project when the opened file is referenced by the project but not its root", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/main.ts",
+                content: "import { objA } from './obj-a';"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/obj-a.ts",
+                content: `export const objA = Object.assign({foo: "bar"}, {bar: "baz"});`
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "target": "es6"
+                    }, 
+                    "files": [ "main.ts" ]
+                }`
+            };
+            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [file1, file2, configFile]);
+            const projectService = new server.ProjectService(host, nullLogger);
+            projectService.openClientFile(file1.path);
+            projectService.closeClientFile(file1.path);
+            projectService.openClientFile(file2.path);
+            checkNumberOfConfiguredProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 0);
+        });
+
+        it("should keep the configured project when the opened file is referenced by the project but not its root", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/main.ts",
+                content: "import { objA } from './obj-a';"
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/obj-a.ts",
+                content: `export const objA = Object.assign({foo: "bar"}, {bar: "baz"});`
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "target": "es6"
+                    }, 
+                    "files": [ "main.ts" ]
+                }`
+            };
+            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [file1, file2, configFile]);
+            const projectService = new server.ProjectService(host, nullLogger);
+            projectService.openClientFile(file1.path);
+            projectService.closeClientFile(file1.path);
+            projectService.openClientFile(file2.path);
+            checkNumberOfConfiguredProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 0);
         });
     });
 }
