@@ -123,7 +123,66 @@ namespace ts.server {
         }
     }
 
-    export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost {
+
+    function throwLanguageServiceIsDisabledError() {;
+        throw new Error("LanguageService is disabled");
+    }
+
+    const nullLanguageService: ts.LanguageService = {
+        cleanupSemanticCache:           (): any => throwLanguageServiceIsDisabledError(),
+        getSyntacticDiagnostics:        (): any => throwLanguageServiceIsDisabledError(),
+        getSemanticDiagnostics:         (): any => throwLanguageServiceIsDisabledError(),
+        getCompilerOptionsDiagnostics:  (): any => throwLanguageServiceIsDisabledError(),
+        getSyntacticClassifications:    (): any => throwLanguageServiceIsDisabledError(),
+        getEncodedSyntacticClassifications: (): any => throwLanguageServiceIsDisabledError(),
+        getSemanticClassifications: 	(): any => throwLanguageServiceIsDisabledError(),
+        getEncodedSemanticClassifications:  (): any => throwLanguageServiceIsDisabledError(),
+        getCompletionsAtPosition:       (): any => throwLanguageServiceIsDisabledError(),
+        findReferences:                 (): any => throwLanguageServiceIsDisabledError(),
+        getCompletionEntryDetails:      (): any => throwLanguageServiceIsDisabledError(),
+        getQuickInfoAtPosition:         (): any => throwLanguageServiceIsDisabledError(),
+        findRenameLocations:            (): any => throwLanguageServiceIsDisabledError(),
+        getNameOrDottedNameSpan:        (): any => throwLanguageServiceIsDisabledError(),
+        getBreakpointStatementAtPosition:   (): any => throwLanguageServiceIsDisabledError(),
+        getBraceMatchingAtPosition:     (): any => throwLanguageServiceIsDisabledError(),
+        getSignatureHelpItems:          (): any => throwLanguageServiceIsDisabledError(),
+        getDefinitionAtPosition: 	    (): any => throwLanguageServiceIsDisabledError(),
+        getRenameInfo:                  (): any => throwLanguageServiceIsDisabledError(),
+        getTypeDefinitionAtPosition:    (): any => throwLanguageServiceIsDisabledError(),
+        getReferencesAtPosition:        (): any => throwLanguageServiceIsDisabledError(),
+        getDocumentHighlights:          (): any => throwLanguageServiceIsDisabledError(),
+        getOccurrencesAtPosition:       (): any => throwLanguageServiceIsDisabledError(),
+        getNavigateToItems:             (): any => throwLanguageServiceIsDisabledError(),
+        getNavigationBarItems:          (): any => throwLanguageServiceIsDisabledError(),
+        getOutliningSpans:              (): any => throwLanguageServiceIsDisabledError(),
+        getTodoComments:                (): any => throwLanguageServiceIsDisabledError(),
+        getIndentationAtPosition:       (): any => throwLanguageServiceIsDisabledError(),
+        getFormattingEditsForRange:     (): any => throwLanguageServiceIsDisabledError(),
+        getFormattingEditsForDocument:  (): any => throwLanguageServiceIsDisabledError(),
+        getFormattingEditsAfterKeystroke:   (): any => throwLanguageServiceIsDisabledError(),
+        getDocCommentTemplateAtPosition:    (): any => throwLanguageServiceIsDisabledError(),
+        isValidBraceCompletionAtPostion:    (): any => throwLanguageServiceIsDisabledError(),
+        getEmitOutput:                  (): any => throwLanguageServiceIsDisabledError(),
+        getProgram:                     (): any => throwLanguageServiceIsDisabledError(),
+        getNonBoundSourceFile:          (): any => throwLanguageServiceIsDisabledError(),
+        dispose:                        (): any => throwLanguageServiceIsDisabledError(),
+    };
+
+    interface ServerLanguageServiceHost {
+        getCompilationSettings(): CompilerOptions;
+        setCompilationSettings(options: CompilerOptions): void;
+        removeRoot(info: ScriptInfo): void;
+        removeReferencedFile(info: ScriptInfo): void;
+    }
+
+    const nullLanguageServiceHost: ServerLanguageServiceHost = {
+        getCompilationSettings: () => undefined,
+        setCompilationSettings: () => undefined,
+        removeRoot: () => undefined,
+        removeReferencedFile: () => undefined
+    };
+
+    export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost, ServerLanguageServiceHost {
         private compilationSettings: ts.CompilerOptions;
         private resolvedModuleNames: ts.FileMap<Map<ResolvedModuleWithFailedLookupLocations>>;
         private resolvedTypeReferenceDirectives: ts.FileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>;
@@ -302,31 +361,62 @@ namespace ts.server {
     export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
-        private readonly lsHost: LSHost;
+        private lsHost: ServerLanguageServiceHost;
 
-        readonly languageService: LanguageService;
+        languageService: LanguageService;
         protected program: ts.Program;
 
         constructor(
             readonly projectKind: ProjectKind,
             readonly projectService: ProjectService,
-            documentRegistry: ts.DocumentRegistry,
+            private documentRegistry: ts.DocumentRegistry,
             hasExplicitListOfFiles: boolean,
-            compilerOptions: CompilerOptions) {
+            public languageServiceEnabled: boolean,
+            private compilerOptions: CompilerOptions) {
 
-            if (!compilerOptions) {
-                compilerOptions = ts.getDefaultCompilerOptions();
-                compilerOptions.allowNonTsExtensions = true;
-                compilerOptions.allowJs = true;
+            if (!this.compilerOptions) {
+                this.compilerOptions = ts.getDefaultCompilerOptions();
+                this.compilerOptions.allowNonTsExtensions = true;
+                this.compilerOptions.allowJs = true;
             }
             else if (hasExplicitListOfFiles) {
                 // If files are listed explicitly, allow all extensions
-                compilerOptions.allowNonTsExtensions = true;
+                this.compilerOptions.allowNonTsExtensions = true;
             }
 
-            this.lsHost = new LSHost(this.projectService.host, this, this.projectService.cancellationToken);
-            this.lsHost.setCompilationSettings(compilerOptions);
-            this.languageService = ts.createLanguageService(this.lsHost, documentRegistry);
+            if (languageServiceEnabled) {
+                this.enableLanguageServiceWorker();
+            }
+            else {
+                this.disableLanguageServiceWorker();
+            }
+        }
+
+        enableLanguageService() {
+            if (!this.languageServiceEnabled) {
+                this.enableLanguageServiceWorker();
+            }
+        }
+
+        private enableLanguageServiceWorker() {
+            const lsHost = new LSHost(this.projectService.host, this, this.projectService.cancellationToken);
+            lsHost.setCompilationSettings(this.compilerOptions);
+            this.languageService = ts.createLanguageService(lsHost, this.documentRegistry);
+
+            this.lsHost = lsHost;
+            this.languageServiceEnabled = true;
+        }
+
+        disableLanguageService() {
+            if (this.languageServiceEnabled) {
+                this.disableLanguageServiceWorker();
+            }
+        }
+
+        private disableLanguageServiceWorker() {
+            this.languageService = nullLanguageService;
+            this.lsHost = nullLanguageServiceHost;
+            this.languageServiceEnabled = false;
         }
 
         getProjectFileName(): string {
@@ -343,29 +433,29 @@ namespace ts.server {
         }
 
         getRootFiles() {
+            if (!this.languageServiceEnabled && this.projectKind === ProjectKind.Inferred) {
+                return undefined;
+            }
             return this.rootFiles.map(info => info.fileName);
         }
 
         getFileNames() {
-            if (this.languageServiceDiabled) {
-                if (!this.projectOptions) {
-                    return undefined;
+            if (!this.languageServiceEnabled) {
+                let rootFiles = this.getRootFiles();
+                if (this.compilerOptions) {
+                    const defaultLibrary = getDefaultLibFilePath(this.compilerOptions);
+                    if (defaultLibrary) {
+                        (rootFiles || (rootFiles = [])).push(defaultLibrary);
+                    }
                 }
-
-                const fileNames: string[] = [];
-                if (this.projectOptions && this.projectOptions.compilerOptions) {
-                    fileNames.push(getDefaultLibFilePath(this.projectOptions.compilerOptions));
-                }
-                ts.addRange(fileNames, this.projectOptions.files);
-                return fileNames;
+                return rootFiles;
             }
-
             const sourceFiles = this.program.getSourceFiles();
             return sourceFiles.map(sourceFile => sourceFile.fileName);
         }
 
         containsScriptInfo(info: ScriptInfo): boolean {
-            return this.program.getSourceFileByPath(info.path) !== undefined;
+            return this.program && this.program.getSourceFileByPath(info.path) !== undefined;
         }
 
         containsFile(filename: string, requireOpen?: boolean) {
@@ -455,8 +545,13 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
-        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry) {
-            super(ProjectKind.Inferred, projectService, documentRegistry, /*files*/ undefined, /*compilerOptions*/ undefined);
+        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, languageServiceEnabled: boolean) {
+            super(ProjectKind.Inferred,
+                projectService,
+                documentRegistry,
+                /*files*/ undefined,
+                languageServiceEnabled,
+                /*compilerOptions*/ undefined);
         }
 
         close() {
@@ -483,6 +578,9 @@ namespace ts.server {
         currentVersion: number = 1;
 
         updateGraph() {
+            if (!this.languageServiceEnabled) {
+                return;
+            }
             const oldProgram = this.program;
 
             super.updateGraph();
@@ -538,8 +636,13 @@ namespace ts.server {
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
 
-        constructor(readonly configFileName: string, projectService: ProjectService, documentRegistry: ts.DocumentRegistry, hasExplicitListOfFiles: boolean, compilerOptions: CompilerOptions) {
-            super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, compilerOptions);
+        constructor(readonly configFileName: string,
+            projectService: ProjectService,
+            documentRegistry: ts.DocumentRegistry,
+            hasExplicitListOfFiles: boolean,
+            compilerOptions: CompilerOptions,
+            languageServiceEnabled: boolean) {
+            super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions);
         }
 
         getProjectFileName() {
@@ -551,9 +654,20 @@ namespace ts.server {
         }
 
         watchConfigDirectory(callback: (project: ConfiguredProject, path: string) => void) {
+            if (this.directoryWatcher) {
+                return;
+            }
+
             const directoryToWatch = ts.getDirectoryPath(this.configFileName);
             this.projectService.log(`Add recursive watcher for: ${directoryToWatch}`);
             this.directoryWatcher = this.projectService.host.watchDirectory(directoryToWatch, path => callback(this, path), /*recursive*/ true);
+        }
+
+        stopWatchingDirectory() {
+            if (this.directoryWatcher) {
+                this.directoryWatcher.close();
+                this.directoryWatcher = undefined;
+            }
         }
 
         close() {
@@ -562,9 +676,7 @@ namespace ts.server {
             if (this.projectFileWatcher) {
                 this.projectFileWatcher.close();
             }
-            if (this.directoryWatcher) {
-                this.directoryWatcher.close();
-            }
+            this.stopWatchingDirectory();
         }
 
         addOpenRef() {
@@ -578,8 +690,12 @@ namespace ts.server {
     }
 
     class ExternalProject extends VersionedProject {
-        constructor(readonly projectFileName: string, projectService: ProjectService, documentRegistry: ts.DocumentRegistry, compilerOptions: CompilerOptions) {
-            super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, compilerOptions);
+        constructor(readonly projectFileName: string,
+            projectService: ProjectService,
+            documentRegistry: ts.DocumentRegistry,
+            compilerOptions: CompilerOptions,
+            languageServiceEnabled: boolean) {
+            super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions);
         }
 
         getProjectFileName() {
@@ -1149,7 +1265,10 @@ namespace ts.server {
             }
         }
 
-        private exceedTotalNonTsFileSizeLimit(fileNames: string[]) {
+        private exceedTotalNonTsFileSizeLimit(options: CompilerOptions, fileNames: string[]) {
+            if (options && options.disableSizeLimit) {
+                return false;
+            }
             let totalNonTsFileSize = 0;
             if (!this.host.getFileSize) {
                 return false;
@@ -1168,21 +1287,36 @@ namespace ts.server {
         }
 
         private createAndAddExternalProject(projectFileName: string, files: string[], compilerOptions: CompilerOptions, clientFileName?: string) {
-            const project = new ExternalProject(projectFileName, this, this.documentRegistry, compilerOptions);
+            const sizeLimitExceeded = this.exceedTotalNonTsFileSizeLimit(compilerOptions, files);
+            const project = new ExternalProject(projectFileName, this, this.documentRegistry, compilerOptions, !sizeLimitExceeded);
             const errors = this.addFilesToProject(project, files, clientFileName);
             this.externalProjects.push(project);
             return { project, errors };
         }
 
         private createAndAddConfiguredProject(configFileName: string, projectOptions: ProjectOptions, clientFileName?: string) {
-            const project = new ConfiguredProject(configFileName, this, this.documentRegistry, projectOptions.configHasFilesProperty, projectOptions.compilerOptions);
+            const sizeLimitExceeded = this.exceedTotalNonTsFileSizeLimit(projectOptions.compilerOptions, projectOptions.files);
+            const project = new ConfiguredProject(
+                configFileName,
+                this,
+                this.documentRegistry,
+                projectOptions.configHasFilesProperty,
+                projectOptions.compilerOptions,
+                !sizeLimitExceeded);
+
             const errors = this.addFilesToProject(project, projectOptions.files, clientFileName);
             project.watchConfigFile(project => this.onConfigChangedForConfiguredProject(project));
-            if (!projectOptions.configHasFilesProperty) {
-                project.watchConfigDirectory((project, path) => this.onSourceFileInDirectoryChangedForConfiguredProject(project, path));
+            if (!sizeLimitExceeded) {
+                this.watchConfigDirectoryForProject(project, projectOptions);
             }
             this.configuredProjects.push(project);
             return { project, errors };
+        }
+
+        private watchConfigDirectoryForProject(project: ConfiguredProject, options: ProjectOptions) {
+            if (!options.configHasFilesProperty) {
+                project.watchConfigDirectory((project, path) => this.onSourceFileInDirectoryChangedForConfiguredProject(project, path));
+            }
         }
 
         private addFilesToProject(project: ConfiguredProject | ExternalProject, files: string[], clientFileName: string): Diagnostic[] {
@@ -1266,13 +1400,28 @@ namespace ts.server {
                     return errors;
                 }
                 else {
-                    this.updateVersionedProjectWorker(project, projectOptions.files, projectOptions.compilerOptions);
+                    if (this.exceedTotalNonTsFileSizeLimit(projectOptions.compilerOptions, projectOptions.files)) {
+                        project.setCompilerOptions(projectOptions.compilerOptions);
+                        if (!project.languageServiceEnabled) {
+                            // language service is already disabled
+                            return;
+                        }
+                        project.disableLanguageService();
+                        project.stopWatchingDirectory();
+                    }
+                    else {
+                        if (!project.languageServiceEnabled) {
+                            project.enableLanguageService();
+                        }
+                        this.watchConfigDirectoryForProject(project, projectOptions);
+                        this.updateVersionedProjectWorker(project, projectOptions.files, projectOptions.compilerOptions);
+                    }
                 }
             }
         }
 
         createAndAddInferredProject(root: ScriptInfo) {
-            const project = new InferredProject(this, this.documentRegistry);
+            const project = new InferredProject(this, this.documentRegistry, /*languageServiceEnabled*/ true);
             project.addRoot(root);
 
             let currentPath = ts.getDirectoryPath(root.fileName);

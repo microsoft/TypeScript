@@ -421,7 +421,7 @@ namespace ts.server {
         private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.FileSpan[] | DefinitionInfo[] {
             const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
-            if (!project || project.languageServiceDiabled) {
+            if (!project) {
                 throw Errors.NoProject;
             }
 
@@ -451,7 +451,7 @@ namespace ts.server {
         private getTypeDefinition(line: number, offset: number, fileName: string): protocol.FileSpan[] {
             const file = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(file);
-            if (!project || project.languageServiceDiabled) {
+            if (!project) {
                 throw Errors.NoProject;
             }
 
@@ -477,7 +477,7 @@ namespace ts.server {
             fileName = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(fileName);
 
-            if (!project || project.languageServiceDiabled) {
+            if (!project) {
                 throw Errors.NoProject;
             }
 
@@ -508,7 +508,7 @@ namespace ts.server {
             const fileName = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(fileName);
 
-            if (!project || project.languageServiceDiabled) {
+            if (!project) {
                 throw Errors.NoProject;
             }
 
@@ -554,7 +554,8 @@ namespace ts.server {
             }
 
             const projectInfo: protocol.ProjectInfo = {
-                configFileName: project.getProjectFileName()
+                configFileName: project.getProjectFileName(),
+                languageServiceDisabled: !project.languageServiceEnabled
             };
 
             if (needFileNameList) {
@@ -583,6 +584,7 @@ namespace ts.server {
                 const info = this.projectService.getScriptInfo(file);
                 projects = this.projectService.findReferencingProjects(info);
             }
+            projects = filter(projects, p => p.languageServiceEnabled);
             if (!projects || !projects.length) {
                 throw Errors.NoProject;
             }
@@ -781,7 +783,7 @@ namespace ts.server {
         private getFileAndProject(fileName: string) {
             const file = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(file);
-            if (!project || project.languageServiceDiabled) {
+            if (!project) {
                 throw Errors.NoProject;
             }
             return { file, project };
@@ -862,7 +864,7 @@ namespace ts.server {
         private getFormattingEditsForRange(line: number, offset: number, endLine: number, endOffset: number, fileName: string): protocol.CodeEdit[] {
             const file = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(file);
-            if (!project || project.languageServiceDiabled) {
+            if (!project) {
                 throw Errors.NoProject;
             }
 
@@ -919,7 +921,7 @@ namespace ts.server {
             const file = ts.normalizePath(fileName);
 
             const project = this.projectService.getProjectForFile(file);
-            if (!project || project.languageServiceDiabled) {
+            if (!project) {
                 throw Errors.NoProject;
             }
 
@@ -990,7 +992,7 @@ namespace ts.server {
             const prefix = args.prefix || "";
             const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
-            if (!project || project.languageServiceDiabled) {
+            if (!project) {
                 throw Errors.NoProject;
             }
 
@@ -1017,7 +1019,7 @@ namespace ts.server {
         private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs): protocol.CompletionEntryDetails[] {
             const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
-            if (!project || project.languageServiceDiabled) {
+            if (!project) {
                 throw Errors.NoProject;
             }
 
@@ -1036,7 +1038,7 @@ namespace ts.server {
         private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems {
             const file = ts.normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
-            if (!project || project.languageServiceDiabled) {
+            if (!project) {
                 throw Errors.NoProject;
             }
 
@@ -1069,7 +1071,7 @@ namespace ts.server {
             const checkList = fileNames.reduce((accum: PendingErrorCheck[], fileName: string) => {
                 fileName = ts.normalizePath(fileName);
                 const project = this.projectService.getProjectForFile(fileName);
-                if (project && !project.languageServiceDiabled) {
+                if (project) {
                     accum.push({ fileName, project });
                 }
                 return accum;
@@ -1099,7 +1101,7 @@ namespace ts.server {
             const file = ts.normalizePath(fileName);
             const tmpfile = ts.normalizePath(tempFileName);
             const project = this.projectService.getProjectForFile(file);
-            if (project && !project.languageServiceDiabled) {
+            if (project) {
                 this.changeSeq++;
                 // make sure no changes happen before this one is finished
                 project.reloadScript(file, tmpfile, () => {
@@ -1126,7 +1128,7 @@ namespace ts.server {
             this.projectService.closeClientFile(file);
         }
 
-        private decorateNavigationBarItem(project: Project, fileName: string, items: ts.NavigationBarItem[], lineIndex: LineIndex): protocol.NavigationBarItem[] {
+        private decorateNavigationBarItem(project: Project, fileName: string, items: ts.NavigationBarItem[]): protocol.NavigationBarItem[] {
             if (!items) {
                 return undefined;
             }
@@ -1141,7 +1143,7 @@ namespace ts.server {
                     start: scriptInfo.positionToLineOffset(span.start),
                     end: scriptInfo.positionToLineOffset(ts.textSpanEnd(span))
                 })),
-                childItems: this.decorateNavigationBarItem(project, fileName, item.childItems, lineIndex),
+                childItems: this.decorateNavigationBarItem(project, fileName, item.childItems),
                 indent: item.indent
             }));
         }
