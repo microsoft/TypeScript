@@ -123,6 +123,7 @@ namespace ts.server {
         export const NavBar = "navbar";
         export const NavBarFull = "navbar-full";
         export const Navto = "navto";
+        export const NavtoFull = "navto-full";
         export const Occurrences = "occurrences";
         export const DocumentHighlights = "documentHighlights";
         export const DocumentHighlightsFull = "documentHighlights-full";
@@ -375,7 +376,7 @@ namespace ts.server {
         }
 
         private getProject(projectFileName: string) {
-            return projectFileName && this.projectService.getProject(normalizePath(projectFileName));
+            return projectFileName && this.projectService.getProject(projectFileName);
         }
 
         private getCompilerOptionsDiagnostics(args: protocol.ProjectRequestArgs) {
@@ -1102,53 +1103,88 @@ namespace ts.server {
                 : items;
         }
 
-        private getNavigateToItems(searchValue: string, fileName: string, maxResultCount?: number): protocol.NavtoItem[] {
-            const file = ts.normalizePath(fileName);
-            const info = this.projectService.getScriptInfo(file);
-            const projects = this.projectService.findReferencingProjects(info);
-            const defaultProject = projects[0];
-            if (!defaultProject) {
+        private getNavigateToItems(args: protocol.NavtoRequestArgs, simplifiedResult: boolean): protocol.NavtoItem[] | NavigateToItem[] {
+            let projects: Project[];
+            if (args.projectFileName) {
+                const project = this.getProject(args.projectFileName);
+                if (project) {
+                    projects = [project];
+                }
+            }
+            else {
+                const file = normalizePath(args.file);
+                const info = this.projectService.getScriptInfo(file);
+                projects = this.projectService.findReferencingProjects(info);
+            }
+            if (!projects || !projects.length) {
                 throw Errors.NoProject;
             }
 
-            const allNavToItems = combineProjectOutput(
-                projects,
-                (project: Project) => {
-                    const navItems = project.languageService.getNavigateToItems(searchValue, maxResultCount);
-                    if (!navItems) {
-                        return [];
-                    }
+            if (simplifiedResult) {
+                return combineProjectOutput(
+                    projects,
+                    project => {
+                        const navItems = project.languageService.getNavigateToItems(args.searchValue, args.maxResultCount);
+                        if (!navItems) {
+                            return [];
+                        }
 
-                    return navItems.map((navItem) => {
-                        const scriptInfo = project.getScriptInfo(navItem.fileName);
-                        const start = scriptInfo.positionToLineOffset(navItem.textSpan.start);
-                        const end = scriptInfo.positionToLineOffset(ts.textSpanEnd(navItem.textSpan));
-                        const bakedItem: protocol.NavtoItem = {
-                            name: navItem.name,
-                            kind: navItem.kind,
-                            file: navItem.fileName,
-                            start: start,
-                            end: end,
-                        };
-                        if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
-                            bakedItem.kindModifiers = navItem.kindModifiers;
-                        }
-                        if (navItem.matchKind !== "none") {
-                            bakedItem.matchKind = navItem.matchKind;
-                        }
-                        if (navItem.containerName && (navItem.containerName.length > 0)) {
-                            bakedItem.containerName = navItem.containerName;
-                        }
-                        if (navItem.containerKind && (navItem.containerKind.length > 0)) {
-                            bakedItem.containerKind = navItem.containerKind;
-                        }
-                        return bakedItem;
-                    });
-                },
-                /*comparer*/ undefined,
-                areNavToItemsForTheSameLocation
-            );
-            return allNavToItems;
+                        return navItems.map((navItem) => {
+                            const scriptInfo = project.getScriptInfo(navItem.fileName);
+                            const start = scriptInfo.positionToLineOffset(navItem.textSpan.start);
+                            const end = scriptInfo.positionToLineOffset(ts.textSpanEnd(navItem.textSpan));
+                            const bakedItem: protocol.NavtoItem = {
+                                name: navItem.name,
+                                kind: navItem.kind,
+                                file: navItem.fileName,
+                                start: start,
+                                end: end,
+                            };
+                            if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
+                                bakedItem.kindModifiers = navItem.kindModifiers;
+                            }
+                            if (navItem.matchKind !== "none") {
+                                bakedItem.matchKind = navItem.matchKind;
+                            }
+                            if (navItem.containerName && (navItem.containerName.length > 0)) {
+                                bakedItem.containerName = navItem.containerName;
+                            }
+                            if (navItem.containerKind && (navItem.containerKind.length > 0)) {
+                                bakedItem.containerKind = navItem.containerKind;
+                            }
+                            return bakedItem;
+                        });
+                    },
+                    /*comparer*/ undefined,
+                    areNavToItemsForTheSameLocation
+                );
+            }
+            else {
+                return combineProjectOutput(
+                    projects,
+                    project => project.languageService.getNavigateToItems(args.searchValue, args.maxResultCount),
+                    /*comparer*/ undefined,
+                    navigateToItemIsEqualTo)
+            }
+
+            function navigateToItemIsEqualTo(a: NavigateToItem, b: NavigateToItem): boolean {
+                if (a === b) {
+                    return true;
+                }
+                if (!a || !b) {
+                    return false;
+                }
+                return a.containerKind === b.containerKind &&
+                    a.containerName === b.containerName &&
+                    a.fileName === b.fileName &&
+                    a.isCaseSensitive === b.isCaseSensitive &&
+                    a.kind === b.kind &&
+                    a.kindModifiers === b.containerName &&
+                    a.matchKind === b.matchKind &&
+                    a.name === b.name &&
+                    a.textSpan.start === b.textSpan.start &&
+                    a.textSpan.length === b.textSpan.length;
+            }
 
             function areNavToItemsForTheSameLocation(a: protocol.NavtoItem, b: protocol.NavtoItem) {
                 if (a && b) {
@@ -1418,9 +1454,11 @@ namespace ts.server {
                 this.closeClientFile(closeArgs.file);
                 return { responseRequired: false };
             },
-            [CommandNames.Navto]: (request: protocol.Request) => {
-                const navtoArgs = <protocol.NavtoRequestArgs>request.arguments;
-                return { response: this.getNavigateToItems(navtoArgs.searchValue, navtoArgs.file, navtoArgs.maxResultCount), responseRequired: true };
+            [CommandNames.Navto]: (request: protocol.NavtoRequest) => {
+                return this.requiredResponse(this.getNavigateToItems(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.NavtoFull]: (request: protocol.NavtoRequest) => {
+                return this.requiredResponse(this.getNavigateToItems(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.Brace]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getBraceMatching(request.arguments, /*simplifiedResult*/ true));

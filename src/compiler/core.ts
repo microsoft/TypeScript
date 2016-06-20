@@ -156,6 +156,7 @@ namespace ts {
         return array1.concat(array2);
     }
 
+    // TODO: fixme (N^2) - add optional comparer so collection can be sorted before deduplication.
     export function deduplicate<T>(array: T[], areEqual?: (a: T, b: T) => boolean): T[] {
         let result: T[];
         if (array) {

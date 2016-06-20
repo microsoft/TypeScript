@@ -684,7 +684,7 @@ namespace ts.server {
                 // TODO: fixme
                 return this.inferredProjects.length ? this.inferredProjects[0] : undefined;
             }
-            return this.findExternalProjectByProjectFileName(projectFileName) || this.findConfiguredProjectByConfigFile(projectFileName);
+            return this.findExternalProjectByProjectFileName(projectFileName) || this.findConfiguredProjectByConfigFile(normalizePath(projectFileName));
         }
 
         getFormatCodeOptions(file?: string) {
