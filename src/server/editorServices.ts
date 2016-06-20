@@ -359,12 +359,16 @@ namespace ts.server {
          * @param line 1-based index
          * @param offset 1-based index
          */
-        positionToLineOffset(filename: string, position: number): ILineInfo {
+        positionToLineOffset(filename: string, position: number, lineIndex?:  LineIndex): ILineInfo {
+            lineIndex = lineIndex || this.getLineIndex(filename);
+            const lineOffset = lineIndex.charOffsetToLineNumberAndPos(position);
+            return { line: lineOffset.line, offset: lineOffset.offset + 1 };
+        }
+
+        getLineIndex(filename: string): LineIndex {
             const path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const script: ScriptInfo = this.filenameToScript.get(path);
-            const index = script.snap().index;
-            const lineOffset = index.charOffsetToLineNumberAndPos(position);
-            return { line: lineOffset.line, offset: lineOffset.offset + 1 };
+            return script.snap().index;
         }
     }
 
@@ -1452,7 +1456,7 @@ namespace ts.server {
                     }
 
                     // if the project is too large, the root files might not have been all loaded if the total
-                    // program size reached the upper limit. In that case project.projectOptions.files should 
+                    // program size reached the upper limit. In that case project.projectOptions.files should
                     // be more precise. However this would only happen for configured project.
                     const oldFileNames = project.projectOptions ? project.projectOptions.files : project.compilerService.host.roots.map(info => info.fileName);
                     const newFileNames = ts.filter(projectOptions.files, f => this.host.fileExists(f));

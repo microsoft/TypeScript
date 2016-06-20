@@ -76,17 +76,17 @@ verify.navigationBar([
                 "kind": "property"
             }
         ],
-        "indent": 2
+        "indent": 3
     },
     {
         "text": "LocalFunctionInConstructor",
         "kind": "function",
-        "indent": 2
+        "indent": 3
     },
     {
         "text": "LocalInterfaceInConstrcutor",
         "kind": "interface",
-        "indent": 2
+        "indent": 3
     },
     {
         "text": "method",
@@ -116,7 +116,7 @@ verify.navigationBar([
                 "kind": "property"
             }
         ],
-        "indent": 2
+        "indent": 3
     },
     {
         "text": "LocalFunctionInMethod",
@@ -127,11 +127,11 @@ verify.navigationBar([
                 "kind": "function"
             }
         ],
-        "indent": 2
+        "indent": 3
     },
     {
         "text": "LocalInterfaceInMethod",
         "kind": "interface",
-        "indent": 2
+        "indent": 3
     }
 ]);

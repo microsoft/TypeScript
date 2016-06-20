@@ -7,7 +7,7 @@
 ////         }
 ////     }
 //// }
-//// 
+////
 //// declare module Windows {
 ////     export module Foundation {
 ////         export var B;
@@ -16,13 +16,13 @@
 ////         }
 ////     }
 //// }
-//// 
+////
 //// class ABC {
 ////     public foo() {
 ////         return 3;
 ////     }
 //// }
-//// 
+////
 //// module ABC {
 ////     export var x = 3;
 //// }
@@ -95,13 +95,13 @@ verify.navigationBar([
                 "kindModifiers": "export,declare"
             },
             {
-                "text": "Test",
-                "kind": "class",
+                "text": "B",
+                "kind": "var",
                 "kindModifiers": "export,declare"
             },
             {
-                "text": "B",
-                "kind": "var",
+                "text": "Test",
+                "kind": "class",
                 "kindModifiers": "export,declare"
             },
             {
