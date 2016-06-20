@@ -783,7 +783,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
                     next(undefined, file);
                 });
         }))
-        .pipe(sourcemaps.write("."))
+        .pipe(sourcemaps.write(".", {includeContent: false, sourceRoot: "../../"}))
         .pipe(gulp.dest("."));
 });
 
