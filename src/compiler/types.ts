@@ -2388,6 +2388,8 @@ namespace ts {
         parameters: Symbol[];               // Parameters
         thisType?: Type;                    // type of this-type
         /* @internal */
+        thisParameter?: Symbol;             // symbol of this-type parameter
+        /* @internal */
         resolvedReturnType: Type;           // Resolved return type
         /* @internal */
         minArgumentCount: number;           // Number of non-optional parameters

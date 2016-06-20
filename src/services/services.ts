@@ -779,6 +779,7 @@ namespace ts {
         declaration: SignatureDeclaration;
         typeParameters: TypeParameter[];
         parameters: Symbol[];
+        thisParameter: Symbol;
         thisType: Type;
         resolvedReturnType: Type;
         minArgumentCount: number;
@@ -8068,26 +8069,6 @@ namespace ts {
                                 };
                             }
                         }
-                    }
-                    else if (node.kind === SyntaxKind.ThisKeyword) {
-                        const container = ts.getThisContainer(node, /*includeArrowFunctions*/ false);
-                        // Only allow rename to change a function with a 'this' type to one with a regular parameter,
-                        // e.g. `function(this: number) { return this; }` to `function(x: number) { return x; }`
-                        if (isFunctionLike(container)) {
-                            const sig = typeChecker.getSignatureFromDeclaration(container);
-                            if (sig.thisType) {
-                                return {
-                                    canRename: true,
-                                    kind: ScriptElementKind.parameterElement,
-                                    displayName: "this",
-                                    localizedErrorMessage: undefined,
-                                    fullDisplayName: "this",
-                                    kindModifiers: "",
-                                    triggerSpan: createTriggerSpanForNode(node, sourceFile)
-                                };
-                            }
-                        }
-                        // fallthrough to error
                     }
                 }
             }

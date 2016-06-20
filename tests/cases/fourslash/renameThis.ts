@@ -12,7 +12,7 @@ for (let range of [r0, r1]) {
     verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false, [r0, r1]);
 }
 
-// Trying to rename a legitimate 'this' should fail
+// Trying to rename a non-parameter 'this' should fail
 goTo.marker();
 verify.renameInfoFailed("You cannot rename this element.");
 
