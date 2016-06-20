@@ -395,7 +395,7 @@ namespace ts.server {
         }
 
         getScriptInfo(fileName: string) {
-            const scriptInfo = this.projectService.getOrCreateScriptInfo(fileName, /*openedByClient*/ false);
+            const scriptInfo = this.projectService.getOrCreateScriptInfo(fileName, /*openedByClient*/ false, this);
             if (scriptInfo && !scriptInfo.defaultProject) {
                 scriptInfo.defaultProject = this;
             }
@@ -1157,7 +1157,7 @@ namespace ts.server {
             let errors: Diagnostic[];
             for (const rootFilename of files) {
                 if (this.host.fileExists(rootFilename)) {
-                    const info = this.getOrCreateScriptInfo(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
+                    const info = this.getOrCreateScriptInfo(rootFilename, /*openedByClient*/ clientFileName == rootFilename, project);
                     project.addRoot(info);
                 }
                 else {
@@ -1195,7 +1195,7 @@ namespace ts.server {
             for (const fileName of fileNamesToAdd) {
                 let info = this.getScriptInfo(fileName);
                 if (!info) {
-                    info = this.getOrCreateScriptInfo(fileName, /*openedByClient*/ false);
+                    info = this.getOrCreateScriptInfo(fileName, /*openedByClient*/ false, project);
                 }
                 else {
                     // if the root file was opened by client, it would belong to either
@@ -1268,7 +1268,7 @@ namespace ts.server {
          * @param filename is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        getOrCreateScriptInfo(fileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
+        getOrCreateScriptInfo(fileName: string, openedByClient: boolean, containingProject: Project, fileContent?: string, scriptKind?: ScriptKind) {
             fileName = ts.normalizePath(fileName);
             let info = ts.lookUp(this.filenameToScriptInfo, fileName);
             if (!info) {
@@ -1284,6 +1284,7 @@ namespace ts.server {
                 if (content !== undefined) {
                     info = new ScriptInfo(this.host, fileName, content, openedByClient);
                     info.scriptKind = scriptKind;
+                    info.defaultProject = containingProject;
                     info.setFormatOptions(toEditorSettings(this.getFormatCodeOptions()));
                     this.filenameToScriptInfo[fileName] = info;
                     if (!info.isOpen) {
@@ -1333,25 +1334,25 @@ namespace ts.server {
         findReferencingProjects(info: ScriptInfo, excludedProject?: Project) {
             const referencingProjects: Project[] = [];
             info.defaultProject = undefined;
-            for (let i = 0, len = this.inferredProjects.length; i < len; i++) {
-                const inferredProject = this.inferredProjects[i];
-                inferredProject.updateGraph();
-                if (inferredProject !== excludedProject) {
-                    if (inferredProject.containsScriptInfo(info)) {
-                        info.defaultProject = inferredProject;
-                        referencingProjects.push(inferredProject);
-                    }
-                }
-            }
-            for (let i = 0, len = this.configuredProjects.length; i < len; i++) {
-                const configuredProject = this.configuredProjects[i];
-                configuredProject.updateGraph();
-                if (configuredProject.containsScriptInfo(info)) {
-                    info.defaultProject = configuredProject;
-                    referencingProjects.push(configuredProject);
-                }
+            this.collectContainingProjects(info, referencingProjects, this.inferredProjects, excludedProject);
+            this.collectContainingProjects(info, referencingProjects, this.configuredProjects);
+            this.collectContainingProjects(info, referencingProjects, this.externalProjects);
+            if (referencingProjects.length) {
+                info.defaultProject = referencingProjects[0];
             }
             return referencingProjects;
+        }
+
+        private collectContainingProjects(info: ScriptInfo, result: Project[], projects: Project[], excludedProject?: Project) {
+            for (const p of projects) {
+                if (p === excludedProject) {
+                    continue;
+                }
+                p.updateGraph();
+                if (p.containsScriptInfo(info)) {
+                    result.push(p);
+                }
+            }
         }
 
         /**
@@ -1464,7 +1465,7 @@ namespace ts.server {
             if (!this.findContainingExternalProject(fileName)) {
                 ({ configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName));
             }
-            const info = this.getOrCreateScriptInfo(fileName, /*openedByClient*/ true, fileContent, scriptKind);
+            const info = this.getOrCreateScriptInfo(fileName, /*openedByClient*/ true, /*containingProject*/ undefined, fileContent, scriptKind);
             this.addOpenFile(info);
             this.printProjects();
             return { configFileName, configFileErrors };
