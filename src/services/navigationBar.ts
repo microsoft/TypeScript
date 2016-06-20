@@ -14,17 +14,17 @@ namespace ts.NavigationBar {
         indent: number; // # of parents
     }
 
-    export function getNavigationBarItems(sourceFile_: SourceFile): NavigationBarItem[] {
-        sourceFile = sourceFile_;
+    export function getNavigationBarItems(sourceFile: SourceFile): NavigationBarItem[] {
+        curSourceFile = sourceFile;
         const result = map(topLevelItems(rootNavigationBarNode(sourceFile)), convertToTopLevelItem);
-        sourceFile = void 0;
+        curSourceFile = undefined;
         return result;
     }
 
     // Keep sourceFile handy so we don't have to search for it every time we need to call `getText`.
-    let sourceFile: SourceFile;
+    let curSourceFile: SourceFile;
     function nodeText(node: Node): string {
-        return node.getText(sourceFile);
+        return node.getText(curSourceFile);
     }
 
     function navigationBarNodeKind(n: NavigationBarNode): SyntaxKind {
@@ -32,7 +32,7 @@ namespace ts.NavigationBar {
     }
 
     function pushChild(parent: NavigationBarNode, child: NavigationBarNode): void {
-        if (parent.children !== void 0) {
+        if (parent.children) {
             parent.children.push(child);
         }
         else {
@@ -50,13 +50,13 @@ namespace ts.NavigationBar {
 
     function rootNavigationBarNode(sourceFile: SourceFile): NavigationBarNode {
         Debug.assert(!parentsStack.length);
-        const root: NavigationBarNode = { node: sourceFile, additionalNodes: void 0, parent: void 0, children: void 0, indent: 0 };
+        const root: NavigationBarNode = { node: sourceFile, additionalNodes: undefined, parent: undefined, children: undefined, indent: 0 };
         parent = root;
         for (const statement of sourceFile.statements) {
             addChildrenRecursively(statement);
         }
         endNode();
-        Debug.assert(parent === void 0 && !parentsStack.length);
+        Debug.assert(!parent && !parentsStack.length);
         return root;
     }
 
@@ -67,9 +67,9 @@ namespace ts.NavigationBar {
     function emptyNavigationBarNode(node: Node): NavigationBarNode {
         return {
             node,
-            additionalNodes: void 0,
+            additionalNodes: undefined,
             parent,
-            children: void 0,
+            children: undefined,
             indent: parent.indent + 1
         };
     }
@@ -89,7 +89,7 @@ namespace ts.NavigationBar {
 
     /** Call after calling `startNode` and adding children to it. */
     function endNode(): void {
-        if (parent.children !== void 0) {
+        if (parent.children) {
             mergeChildren(parent.children);
             sortChildren(parent.children);
         }
@@ -104,7 +104,7 @@ namespace ts.NavigationBar {
 
     /** Look for navigation bar items in node's subtree, adding them to the current `parent`. */
     function addChildrenRecursively(node: Node): void {
-        if (node === void 0 || isToken(node)) {
+        if (!node || isToken(node)) {
             return;
         }
 
@@ -142,7 +142,7 @@ namespace ts.NavigationBar {
                 let importClause = <ImportClause>node;
                 // Handle default import case e.g.:
                 //    import d from "mod";
-                if (importClause.name !== void 0) {
+                if (importClause.name) {
                     addLeafNode(importClause);
                 }
 
@@ -150,7 +150,7 @@ namespace ts.NavigationBar {
                 //    import * as NS from "mod";
                 //    import {a, b as B} from "mod";
                 const {namedBindings} = importClause;
-                if (namedBindings !== void 0) {
+                if (namedBindings) {
                     if (namedBindings.kind === SyntaxKind.NamespaceImport) {
                         addLeafNode(<NamespaceImport>namedBindings);
                     }
@@ -169,7 +169,7 @@ namespace ts.NavigationBar {
                 if (isBindingPattern(name)) {
                     addChildrenRecursively(name);
                 }
-                else if (decl.initializer !== void 0 && isFunctionOrClassExpression(decl.initializer)) {
+                else if (decl.initializer && isFunctionOrClassExpression(decl.initializer)) {
                     // For `const x = function() {}`, just use the function node, not the const.
                     addChildrenRecursively(decl.initializer);
                 }
@@ -218,7 +218,7 @@ namespace ts.NavigationBar {
                 break;
 
             default:
-                if (node.jsDocComments !== void 0) {
+                if (node.jsDocComments) {
                     for (const jsDocComment of node.jsDocComments) {
                         for (const tag of jsDocComment.tags) {
                             if (tag.kind === SyntaxKind.JSDocTypedefTag) {
@@ -238,13 +238,13 @@ namespace ts.NavigationBar {
         filterMutate(children, child => {
             const decl = <Declaration>child.node;
             const name = decl.name && nodeText(decl.name);
-            if (name === void 0) {
+            if (!name) {
                 // Anonymous items are never merged.
                 return true;
             }
 
             const itemsWithSameName = getProperty(nameToItems, name);
-            if (itemsWithSameName === void 0) {
+            if (!itemsWithSameName) {
                 nameToItems[name] = child;
                 return true;
             }
@@ -297,12 +297,12 @@ namespace ts.NavigationBar {
         function merge(target: NavigationBarNode, source: NavigationBarNode): void {
             target.additionalNodes = target.additionalNodes || [];
             target.additionalNodes.push(source.node);
-            if (source.additionalNodes !== void 0) {
+            if (source.additionalNodes) {
                 target.additionalNodes.push(...source.additionalNodes);
             }
 
             target.children = concatenate(target.children, source.children);
-            if (target.children !== void 0) {
+            if (target.children) {
                 mergeChildren(target.children);
                 sortChildren(target.children);
             }
@@ -316,17 +316,17 @@ namespace ts.NavigationBar {
 
     function compareChildren(child1: NavigationBarNode, child2: NavigationBarNode): number {
         const name1 = tryGetName(child1.node), name2 = tryGetName(child2.node);
-        if (name1 !== void 0 && name2 !== void 0) {
+        if (name1 && name2) {
             const cmp = localeCompareFix(name1, name2);
             return cmp !== 0 ? cmp : navigationBarNodeKind(child1) - navigationBarNodeKind(child2);
         }
         else {
-            return name1 !== void 0 ? 1 : name2 !== void 0 ? -1 : navigationBarNodeKind(child1) - navigationBarNodeKind(child2);
+            return name1 ? 1 : name2 ? -1 : navigationBarNodeKind(child1) - navigationBarNodeKind(child2);
         }
     }
 
     // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
-    const collator: { compare(a: string, b: string): number } = typeof Intl === "undefined" ? void 0 : new Intl.Collator();
+    const collator: { compare(a: string, b: string): number } = typeof Intl === "undefined" ? undefined : new Intl.Collator();
     // Intl is missing in Safari, and node 0.10 treats "a" as greater than "B".
     const localeCompareIsCorrect = collator && collator.compare("a", "B") < 0;
     const localeCompareFix: (a: string, b: string) => number = localeCompareIsCorrect ? collator.compare : function(a, b) {
@@ -358,7 +358,7 @@ namespace ts.NavigationBar {
         }
 
         const decl = <Declaration>node;
-        if (decl.name !== void 0) {
+        if (decl.name) {
             return getPropertyNameForPropertyNameNode(decl.name);
         }
         switch (node.kind) {
@@ -369,7 +369,7 @@ namespace ts.NavigationBar {
             case SyntaxKind.JSDocTypedefTag:
                 return getJSDocTypedefTagName(<JSDocTypedefTag>node);
             default:
-                return void 0;
+                return undefined;
         }
     }
 
@@ -379,7 +379,7 @@ namespace ts.NavigationBar {
         }
 
         const name = (<Declaration>node).name;
-        if (name !== void 0) {
+        if (name) {
             const text = nodeText(name);
             if (text.length > 0) {
                 return text;
@@ -418,7 +418,7 @@ namespace ts.NavigationBar {
     }
 
     function getJSDocTypedefTagName(node: JSDocTypedefTag): string {
-        if (node.name !== void 0) {
+        if (node.name) {
             return node.name.text;
         }
         else {
@@ -441,7 +441,7 @@ namespace ts.NavigationBar {
         function recur(item: NavigationBarNode) {
             if (isTopLevel(item)) {
                 topLevel.push(item);
-                if (item.children !== void 0) {
+                if (item.children) {
                     for (const child of item.children) {
                         recur(child);
                     }
@@ -478,7 +478,7 @@ namespace ts.NavigationBar {
                     return false;
             }
             function isTopLevelFunctionDeclaration(item: NavigationBarNode): boolean {
-                if ((<FunctionDeclaration>item.node).body === void 0) {
+                if (!(<FunctionDeclaration>item.node).body) {
                     return false;
                 }
 
@@ -531,7 +531,7 @@ namespace ts.NavigationBar {
 
         function getSpans(n: NavigationBarNode): TextSpan[] {
             const spans = [getNodeSpan(n.node)];
-            if (n.additionalNodes !== void 0) {
+            if (n.additionalNodes) {
                 for (const node of n.additionalNodes) {
                     spans.push(getNodeSpan(node));
                 }
@@ -562,7 +562,7 @@ namespace ts.NavigationBar {
                     while (variableDeclarationNode && variableDeclarationNode.kind !== SyntaxKind.VariableDeclaration) {
                         variableDeclarationNode = variableDeclarationNode.parent;
                     }
-                    Debug.assert(variableDeclarationNode !== void 0);
+                    Debug.assert(!!variableDeclarationNode);
                 }
                 else {
                     Debug.assert(!isBindingPattern((<VariableDeclaration>node).name));
@@ -620,17 +620,17 @@ namespace ts.NavigationBar {
     }
 
     function isComputedProperty(member: EnumMember): boolean {
-        return member.name === void 0 || member.name.kind === SyntaxKind.ComputedPropertyName;
+        return !member.name || member.name.kind === SyntaxKind.ComputedPropertyName;
     }
 
     function getNodeSpan(node: Node): TextSpan {
         return node.kind === SyntaxKind.SourceFile
             ? createTextSpanFromBounds(node.getFullStart(), node.getEnd())
-            : createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
+            : createTextSpanFromBounds(node.getStart(curSourceFile), node.getEnd());
     }
 
     function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration | ArrowFunction | ClassLikeDeclaration): string {
-        if (node.name !== void 0 && getFullWidth(node.name) > 0) {
+        if (node.name && getFullWidth(node.name) > 0) {
             return declarationNameToString(node.name);
         }
         // See if it is a var initializer. If so, use the var name.
