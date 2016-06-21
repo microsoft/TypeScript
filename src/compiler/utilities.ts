@@ -2275,8 +2275,8 @@ namespace ts {
         else {
             const sourceFiles = targetSourceFile === undefined ? host.getSourceFiles() : [targetSourceFile];
             for (const sourceFile of sourceFiles) {
-                // Don't emit if source file is a declaration file, or was found by a search under 'node_modules'
-                if (!isDeclarationFile(sourceFile) && !sourceFile.nodeModuleSearchDistance) {
+                // Don't emit if source file is a declaration file, or TODO: was found by a search under 'node_modules'
+                if (!isDeclarationFile(sourceFile)) {
                     onSingleFileEmit(host, sourceFile);
                 }
             }
@@ -2310,10 +2310,10 @@ namespace ts {
         function onBundledEmit(host: EmitHost) {
             // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
             const bundledSources = filter(host.getSourceFiles(),
-                sourceFile => !isDeclarationFile(sourceFile) &&        // Not a declaration file
-                              !sourceFile.nodeModuleSearchDistance &&  // Not loaded from searching under node_modules
-                              (!isExternalModule(sourceFile) ||        // non module file
-                              (getEmitModuleKind(options) && isExternalModule(sourceFile)))); // module that can emit - note falsy value from getEmitModuleKind means the module kind that shouldn't be emitted
+                // TODO: Don't emit from source resolved by searching under node_modules
+                sourceFile => !isDeclarationFile(sourceFile) &&    // Not a declaration file
+                              (!isExternalModule(sourceFile) ||    // non module file
+                               !!getEmitModuleKind(options)));     // module that can emit - note falsy value from getEmitModuleKind means the module kind that shouldn't be emitted
             if (bundledSources.length) {
                 const jsFilePath = options.outFile || options.out;
                 const emitFileNames: EmitFileNames = {

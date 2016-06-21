@@ -1066,6 +1066,16 @@ namespace ts {
         let resolvedTypeReferenceDirectives: Map<ResolvedTypeReferenceDirective> = {};
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
+        // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
+        // This works as imported modules are discovered recursively in a depth first manner, specifically:
+        // - For each root file, findSourceFile is called.
+        // - This calls processImportedModules for each module imported in the source file.
+        // - This calls resolveModuleNames, and then calls findSourceFile for each resolved module.
+        // As all these operations happen - and are nested - within the createProgram call, they close over the below variables.
+        // The current resolution depth is tracked by incrementing/decrementing as the depth first search progresses.
+        const maxNodeModulesJsDepth = options.maxNodeModuleJsDepth || 2;
+        let currentNodeModulesJsDepth = 0;
+
         const start = new Date().getTime();
 
         host = host || createCompilerHost(options);
@@ -1869,7 +1879,7 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, isReference: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number, isFileFromNodeSearch?: boolean): SourceFile {
+        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, isReference: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
             if (filesByName.contains(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
@@ -1878,12 +1888,6 @@ namespace ts {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
                 }
 
-                // If this was a file found by a node_modules search, set the nodeModuleSearchDistance to parent distance + 1.
-                if (isFileFromNodeSearch) {
-                    const newDistance = (refFile && refFile.nodeModuleSearchDistance) === undefined ? 1 : refFile.nodeModuleSearchDistance + 1;
-                    // If already set on the file, don't overwrite if it was already found closer (which may be '0' if added as a root file)
-                    file.nodeModuleSearchDistance = (typeof file.nodeModuleSearchDistance === "number") ? Math.min(file.nodeModuleSearchDistance, newDistance) : newDistance;
-                }
                 return file;
             }
 
@@ -1901,12 +1905,6 @@ namespace ts {
             filesByName.set(path, file);
             if (file) {
                 file.path = path;
-
-                // Default to same distance as parent. Add one if found by a search.
-                file.nodeModuleSearchDistance = (refFile && refFile.nodeModuleSearchDistance) || 0;
-                if (isFileFromNodeSearch) {
-                    file.nodeModuleSearchDistance++;
-                }
 
                 if (host.useCaseSensitiveFileNames()) {
                     // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
@@ -2020,13 +2018,11 @@ namespace ts {
         }
 
         function processImportedModules(file: SourceFile, basePath: string) {
-            const maxJsNodeModuleSearchDistance = options.maxNodeModuleJsDepth || 0;
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
                 file.resolvedModules = {};
                 const moduleNames = map(concatenate(file.imports, file.moduleAugmentations), getTextOfLiteral);
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
-                file.nodeModuleSearchDistance = file.nodeModuleSearchDistance || 0;
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
@@ -2035,32 +2031,24 @@ namespace ts {
                     // - noResolve is falsy
                     // - module name comes from the list of imports
                     // - it's not a top level JavaScript module that exceeded the search max
-                    const exceedsJsSearchDepth = resolution && resolution.isExternalLibraryImport &&
-                                                 hasJavaScriptFileExtension(resolution.resolvedFileName) &&
-                                                 file.nodeModuleSearchDistance >= maxJsNodeModuleSearchDistance;
-                    const shouldAddFile = resolution && !options.noResolve && i < file.imports.length && !exceedsJsSearchDepth;
+                    let isJsFileUnderNodeModules = resolution && resolution.isExternalLibraryImport &&
+                                                 hasJavaScriptFileExtension(resolution.resolvedFileName);
+                    if (isJsFileUnderNodeModules) {
+                        currentNodeModulesJsDepth++;
+                    }
+                    const shouldAddFile = resolution && !options.noResolve && i < file.imports.length &&
+                            !(isJsFileUnderNodeModules && currentNodeModulesJsDepth > maxNodeModulesJsDepth);
 
                     if (shouldAddFile) {
-//                        const importedFile = findSourceFile(resolution.resolvedFileName,
-//                                                            toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName),
-//                                                            /*isDefaultLib*/ false, /*isReference*/ false,
-//                                                            file,
-//                                                            skipTrivia(file.text, file.imports[i].pos),
-//                                                            file.imports[i].end,
-//                                                            resolution.isExternalLibraryImport);
-//
-//                        // TODO (billti): Should we check here if a JavaScript file is a CommonJS file, or doesn't have /// references?
-//                        if (importedFile && resolution.isExternalLibraryImport && !hasJavaScriptFileExtension(importedFile.fileName)) {
-//                            if (!isExternalModule(importedFile) && importedFile.statements.length) {
-//                                const start = getTokenPosOfNode(file.imports[i], file);
-//                                fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
-//                            }
-//                            else if (importedFile.referencedFiles.length) {
-//                                const firstRef = importedFile.referencedFiles[0];
-//                                fileProcessingDiagnostics.add(createFileDiagnostic(importedFile, firstRef.pos, firstRef.end - firstRef.pos, Diagnostics.Exported_external_package_typings_file_cannot_contain_tripleslash_references_Please_contact_the_package_author_to_update_the_package_definition));
-//                            }
-//                        }
-                        findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, /*isReference*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
+                        findSourceFile(resolution.resolvedFileName,
+                                toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName),
+                                /*isDefaultLib*/ false, /*isReference*/ false,
+                                file,
+                                skipTrivia(file.text, file.imports[i].pos),
+                                file.imports[i].end);
+                    }
+                    if (isJsFileUnderNodeModules) {
+                        currentNodeModulesJsDepth--;
                     }
                 }
             }
