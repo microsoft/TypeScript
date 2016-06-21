@@ -1001,7 +1001,7 @@ namespace ts {
         directories: string[];
     }
 
-    interface FileMatcherPatterns {
+    export interface FileMatcherPatterns {
         includeFilePattern: string;
         includeDirectoryPattern: string;
         excludePattern: string;
