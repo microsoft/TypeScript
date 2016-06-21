@@ -1946,50 +1946,6 @@ namespace ts {
         }
     }
 
-    class SyntaxTreeCache {
-        // For our syntactic only features, we also keep a cache of the syntax tree for the
-        // currently edited file.
-        private currentFileName: string;
-        private currentFileVersion: string;
-        private currentFileScriptSnapshot: IScriptSnapshot;
-        private currentSourceFile: SourceFile;
-
-        constructor(private host: LanguageServiceHost) {
-        }
-
-        public getCurrentSourceFile(fileName: string): SourceFile {
-            const scriptSnapshot = this.host.getScriptSnapshot(fileName);
-            if (!scriptSnapshot) {
-                // The host does not know about this file.
-                throw new Error("Could not find file: '" + fileName + "'.");
-            }
-
-            const scriptKind = getScriptKind(fileName, this.host);
-            const version = this.host.getScriptVersion(fileName);
-            let sourceFile: SourceFile;
-
-            if (this.currentFileName !== fileName) {
-                // This is a new file, just parse it
-                sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents*/ true, scriptKind);
-            }
-            else if (this.currentFileVersion !== version) {
-                // This is the same file, just a newer version. Incrementally parse the file.
-                const editRange = scriptSnapshot.getChangeRange(this.currentFileScriptSnapshot);
-                sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, editRange);
-            }
-
-            if (sourceFile) {
-                // All done, ensure state is up to date
-                this.currentFileVersion = version;
-                this.currentFileName = fileName;
-                this.currentFileScriptSnapshot = scriptSnapshot;
-                this.currentSourceFile = sourceFile;
-            }
-
-            return this.currentSourceFile;
-        }
-    }
-
     function setSourceFileFields(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string) {
         sourceFile.version = version;
         sourceFile.scriptSnapshot = scriptSnapshot;
@@ -2983,7 +2939,7 @@ namespace ts {
     export function createLanguageService(host: LanguageServiceHost,
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
-        const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
+        const syntaxTreeCache = createSyntaxTreeCache();
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
         let lastProjectVersion: string;
@@ -3218,6 +3174,64 @@ namespace ts {
             }
         }
 
+        function createSyntaxTreeCache() {
+            let currentFileName: string;
+            let currentFileVersion: string;
+            let currentFileScriptSnapshot: IScriptSnapshot;
+            let currentSourceFile: SourceFile;
+            let currentScriptKind: ScriptKind;
+            let currentCompilerOptions: CompilerOptions;
+            return {
+                getCurrentSourceFile: function (fileName: string) {
+                    const scriptSnapshot = host.getScriptSnapshot(fileName);
+                    if (!scriptSnapshot) {
+                        // The host does not know about this file.
+                        throw new Error("Could not find file: '" + fileName + "'.");
+                    }
+                    const version = host.getScriptVersion(fileName);
+                    const scriptKind = ts.getScriptKind(fileName, host);
+                    const compilerOptions = host.getCompilationSettings();
+                    let sourceFile: SourceFile;
+                    if (currentFileName !== fileName) {
+                        // Release the current document
+                        if (currentFileName) {
+                            documentRegistry.releaseDocument(currentFileName, currentCompilerOptions);
+                        }
+                        // This is a new file, just parse it
+                        sourceFile = documentRegistry.acquireDocument(fileName, compilerOptions, scriptSnapshot, version, scriptKind);
+                    }
+                    else if (currentFileVersion !== version) {
+                        // This is the same file, just a newer version. Incrementally parse the file.
+                        sourceFile = documentRegistry.updateDocument(fileName, compilerOptions, scriptSnapshot, version, scriptKind);
+                    }
+                    if (sourceFile) {
+                        // All done, ensure state is up to date
+                        currentFileVersion = version;
+                        currentFileName = fileName;
+                        currentScriptKind = scriptKind;
+                        currentFileScriptSnapshot = scriptSnapshot;
+                        currentSourceFile = sourceFile;
+                        currentCompilerOptions = compilerOptions;
+                    }
+                    if (currentSourceFile && !currentSourceFile.locals) {
+                        fixupParentReferences(currentSourceFile);
+                    }
+                    return currentSourceFile;
+                },
+                dispose: function () {
+                    if (currentFileName) {
+                        documentRegistry.releaseDocument(currentFileName, currentCompilerOptions);
+                        currentFileVersion = undefined;
+                        currentFileName = undefined;
+                        currentScriptKind = undefined;
+                        currentFileScriptSnapshot = undefined;
+                        currentSourceFile = undefined;
+                        currentCompilerOptions = undefined;
+                    }
+                }
+            };
+        }
+
         function getProgram(): Program {
             synchronizeHostData();
 
@@ -3236,6 +3250,7 @@ namespace ts {
                     documentRegistry.releaseDocumentWithKey(file.path, key);
                 }
             }
+            syntaxTreeCache.dispose();
         }
 
         /// Diagnostics
