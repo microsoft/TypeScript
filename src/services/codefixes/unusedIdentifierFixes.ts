@@ -54,10 +54,33 @@ namespace ts.codeFix {
                         }
                     }
                 }
+
+                if (token.parent.kind === SyntaxKind.ImportSpecifier) {
+                    var namedImports = <NamedImports>token.parent.parent;
+                    var elements = namedImports.elements;
+                    if (elements.length === 1) {
+                        //Only 1 import and it is unused. So the entire line could be removed.
+                        return [{ newText: "", span: { start: token.parent.pos, length: token.parent.end - token.parent.pos } }];
+                    } else {
+                        if (elements[0] === token.parent) {
+                            return [{ newText: "", span: { start: token.parent.pos, length: token.parent.end - token.parent.pos + 1 } }];
+                        } else {
+                            return [{ newText: "", span: { start: token.parent.pos - 1, length: token.parent.end - token.parent.pos + 1 } }];
+                        }
+                    }
+                }
+
+                if(token.parent.kind === SyntaxKind.ImportClause) {
+                    return [{ newText: "{}", span: { start: token.parent.pos, length: token.parent.end - token.parent.pos } }];
+                }
             }
 
             if(token.kind === SyntaxKind.PrivateKeyword && token.parent.kind === SyntaxKind.PropertyDeclaration) {
                 return [{ newText: "", span: { start: token.parent.pos, length: token.parent.end - token.parent.pos}}];
+            }
+
+            if(token.kind === SyntaxKind.AsteriskToken && token.parent.kind === SyntaxKind.NamespaceImport) {
+                return [{ newText: "{}", span: { start: token.parent.pos, length: token.parent.end - token.parent.pos } }];
             }
 
             throw new Error("No Quick Fix found");
