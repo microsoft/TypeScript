@@ -8,4 +8,8 @@
 ////    }
 ////}
 
-verify.codeFixAtPosition({ span: { start: 0, end: 0 }, newText: "" });
+verify.codeFixAtPosition(`
+class greeter {
+    constructor() {
+    }
+}`);

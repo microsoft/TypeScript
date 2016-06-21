@@ -4,4 +4,6 @@
 ////function greeter(/*0*/ x/*1*/) {
 ////}
 
-verify.codeFixAtPosition({ span: { start: 0, end: 0 }, newText: "" });
+verify.codeFixAtPosition(`
+function greeter() {
+}`);

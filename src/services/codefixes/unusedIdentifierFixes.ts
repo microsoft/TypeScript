@@ -1,9 +1,9 @@
 /* @internal */
-namespace ts.quickFix {
-    registerQuickFix({
+namespace ts.codeFix {
+    registerCodeFix({
         name: "Remove Unused Identifiers",
-        errorCode: "TS6133",
-        getFix: (sourceFile: SourceFile, start: number, end: number): { newText: string; span: { start: number, length: number } }[] => {
+        errorCodes: ["TS6133"],
+        getTextChanges: (sourceFile: SourceFile, start: number, end: number) => {
             const token = getTokenAtPosition(sourceFile, start);
             if (token.kind === ts.SyntaxKind.Identifier) {
 

@@ -1892,7 +1892,7 @@ namespace FourSlash {
 
             // We expect the editor to do the final formatting, so we can strip the compare ignoring whitespace
             if (this.removeWhitespace(expectedText) !== this.removeWhitespace(actualText)) {
-                this.raiseError(`Expected insertion: '${expectedText}', actual insertion '${actualText}'.`)
+                this.raiseError(`Expected insertion: '${expectedText}', actual insertion '${actualText}'.`);
             }
         }
 

@@ -9,4 +9,10 @@
 ////    }
 ////}
 
-verify.codeFixAtPosition({ span: { start: 0, end: 0 }, newText: "" });
+verify.codeFixAtPosition(`
+class greeter {
+    public function1() {
+        var y = 10;
+        y++;
+    }
+}`);

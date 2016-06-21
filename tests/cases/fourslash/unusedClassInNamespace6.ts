@@ -16,4 +16,13 @@
 ////    }/*1*/
 ////}
 
-verify.codeFixAtPosition({ span: { start: 0, end: 0 }, newText: "" });
+verify.codeFixAtPosition(`
+namespace Validation {
+    class c1 {
+
+    }
+
+    export class c2 {
+
+    }
+}`);

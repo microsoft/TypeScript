@@ -9,4 +9,11 @@
 ////    }
 ////}
 
-verify.codeFixAtPosition({ span: { start: 0, end: 0 }, newText: "" });
+verify.codeFixAtPosition(`
+namespace greeter {
+    let a = "dummy entry", c = 0;
+    export function function1() {
+        a = "dummy";
+        c++;
+    }
+}`);
