@@ -3169,7 +3169,7 @@ namespace ts {
                 if (type === undefined) {
                     type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
                 }
-                
+
                 if (!popTypeResolution()) {
                     if ((<VariableLikeDeclaration>symbol.valueDeclaration).type) {
                         // Variable has type annotation that circularly references the variable itself
