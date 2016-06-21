@@ -780,7 +780,6 @@ namespace ts {
         typeParameters: TypeParameter[];
         parameters: Symbol[];
         thisParameter: Symbol;
-        thisType: Type;
         resolvedReturnType: Type;
         minArgumentCount: number;
         hasRestParameter: boolean;

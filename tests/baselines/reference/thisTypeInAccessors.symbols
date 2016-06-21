@@ -96,7 +96,7 @@ const copiedFromGetterUnannotated = {
 >this : Symbol(this, Decl(thisTypeInAccessors.ts, 23, 10))
 >n : Symbol(n, Decl(thisTypeInAccessors.ts, 23, 15))
 >this.n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
->this : Symbol(this, Decl(thisTypeInAccessors.ts, 22, 10))
+>this : Symbol(this, Decl(thisTypeInAccessors.ts, 23, 10))
 >n : Symbol(Foo.n, Decl(thisTypeInAccessors.ts, 0, 15))
 >n : Symbol(n, Decl(thisTypeInAccessors.ts, 23, 15))
 }
