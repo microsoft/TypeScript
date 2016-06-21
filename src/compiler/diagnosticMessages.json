@@ -571,7 +571,7 @@
         "category": "Error",
         "code": 1186
     },
-    "A parameter property may not be a binding pattern.": {
+    "A parameter property may not be declared using a binding pattern.": {
         "category": "Error",
         "code": 1187
     },
