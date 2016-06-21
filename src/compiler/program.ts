@@ -2031,7 +2031,7 @@ namespace ts {
                     // - noResolve is falsy
                     // - module name comes from the list of imports
                     // - it's not a top level JavaScript module that exceeded the search max
-                    let isJsFileUnderNodeModules = resolution && resolution.isExternalLibraryImport &&
+                    const isJsFileUnderNodeModules = resolution && resolution.isExternalLibraryImport &&
                                                  hasJavaScriptFileExtension(resolution.resolvedFileName);
                     if (isJsFileUnderNodeModules) {
                         currentNodeModulesJsDepth++;
