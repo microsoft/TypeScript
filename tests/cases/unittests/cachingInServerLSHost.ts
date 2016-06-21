@@ -47,7 +47,7 @@ namespace ts {
                 return "";
             },
             getDirectories: (path: string) => [],
-            readDirectory: (path: string, extension?: string, exclude?: string[]): string[] => {
+            readDirectory: (path: string, extension?: string[], exclude?: string[], include?: string[]): string[] => {
                 throw new Error("NYI");
             },
             exit: (exitCode?: number) => {
@@ -145,6 +145,7 @@ namespace ts {
                 catch (e) {
                     assert.isTrue(e.message.indexOf(`Could not find file: '${imported.name}'.`) === 0);
                 }
+
                 assert.isTrue(fileExistsIsCalled);
             }
             {

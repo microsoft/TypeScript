@@ -1677,7 +1677,15 @@ namespace ts {
     }
 
     export interface ParseConfigHost {
-        readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
+        useCaseSensitiveFileNames: boolean;
+
+        readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[]): string[];
+
+        /**
+          * Gets a value indicating whether the specified path exists and is a file.
+          * @param path The path to test.
+          */
+        fileExists(path: string): boolean;
     }
 
     export interface WriteFileCallback {
@@ -2661,6 +2669,17 @@ namespace ts {
         fileNames: string[];
         raw?: any;
         errors: Diagnostic[];
+        wildcardDirectories?: Map<WatchDirectoryFlags>;
+    }
+
+    export const enum WatchDirectoryFlags {
+        None = 0,
+        Recursive = 1 << 0,
+    }
+
+    export interface ExpandResult {
+        fileNames: string[];
+        wildcardDirectories: Map<WatchDirectoryFlags>;
     }
 
     /* @internal */
