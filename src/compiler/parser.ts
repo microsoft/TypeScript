@@ -1178,6 +1178,7 @@ namespace ts {
             return token === SyntaxKind.OpenBracketToken
                 || token === SyntaxKind.OpenBraceToken
                 || token === SyntaxKind.AsteriskToken
+                || token === SyntaxKind.DotDotDotToken
                 || isLiteralPropertyName();
         }
 
