@@ -630,11 +630,11 @@ namespace ts.server {
                     // If we have a shape signature prefer it over a version id
                     // since it triggers less compiles.
                     // ToDo@dirk: we need to switch between shape and version 
-                    let value = reference.version;
+                    const value = reference.version;
                     hash.update(value);
                 }
             }
-            return hash.digest('base64');
+            return hash.digest("base64");
         }
 
         public buildDependencies(builder: BuilderAccessor<ModuleFileInfo>, program: Program): void {
