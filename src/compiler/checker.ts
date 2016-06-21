@@ -4397,7 +4397,7 @@ namespace ts {
             return result;
         }
 
-        function isOptionalParameter(node: ParameterDeclaration) {
+        function isJSDocOptionalParameter(node: ParameterDeclaration) {
             if (node.flags & NodeFlags.JavaScriptFile) {
                 if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
                     return true;
@@ -4414,8 +4414,10 @@ namespace ts {
                     }
                 }
             }
+        }
 
-            if (hasQuestionToken(node)) {
+        function isOptionalParameter(node: ParameterDeclaration) {
+            if (isJSDocOptionalParameter(node) || hasQuestionToken(node)) {
                 return true;
             }
 
@@ -4482,7 +4484,7 @@ namespace ts {
                         hasStringLiterals = true;
                     }
 
-                    if (param.initializer || param.questionToken || param.dotDotDotToken) {
+                    if (param.initializer || param.questionToken || param.dotDotDotToken || isJSDocOptionalParameter(param)) {
                         if (minArgumentCount < 0) {
                             minArgumentCount = i - (hasThisParameter ? 1 : 0);
                         }
