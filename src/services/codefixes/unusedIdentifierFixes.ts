@@ -73,6 +73,10 @@ namespace ts.codeFix {
                 if(token.parent.kind === SyntaxKind.ImportClause) {
                     return [{ newText: "{}", span: { start: token.parent.pos, length: token.parent.end - token.parent.pos } }];
                 }
+
+                if(token.parent.kind === SyntaxKind.ImportEqualsDeclaration) {
+                    return [{ newText: "{}", span: { start: token.pos, length: token.end - token.pos } }];
+                }
             }
 
             if(token.kind === SyntaxKind.PrivateKeyword && token.parent.kind === SyntaxKind.PropertyDeclaration) {
