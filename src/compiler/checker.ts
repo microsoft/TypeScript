@@ -14484,8 +14484,11 @@ namespace ts {
                                 error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
                             }
                             else if (local.declarations &&
-                                (local.declarations[0].kind === SyntaxKind.InterfaceDeclaration || local.declarations[0].kind === SyntaxKind.ImportEqualsDeclaration || local.declarations[0].kind === SyntaxKind.ModuleDeclaration)) {
+                                (local.declarations[0].kind === SyntaxKind.InterfaceDeclaration || local.declarations[0].kind === SyntaxKind.ModuleDeclaration)) {
                                 error(local.declarations[0], Diagnostics._0_is_declared_but_never_used, key);
+                            }
+                            else if (local.declarations && local.declarations[0].kind === SyntaxKind.ImportEqualsDeclaration) {
+                                error(local.declarations[0].name, Diagnostics._0_is_declared_but_never_used, key);
                             }
                         }
                     }
