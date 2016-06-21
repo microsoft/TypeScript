@@ -2056,8 +2056,8 @@ namespace ts {
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
         Value = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
-        Type = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias,
-        Namespace = ValueModule | NamespaceModule,
+        Type = Class | Interface | Enum | EnumMember | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias,
+        Namespace = ValueModule | NamespaceModule | ConstEnum,
         Module = ValueModule | NamespaceModule,
         Accessor = GetAccessor | SetAccessor,
 
@@ -2071,7 +2071,7 @@ namespace ts {
 
         ParameterExcludes = Value,
         PropertyExcludes = None,
-        EnumMemberExcludes = Value,
+        EnumMemberExcludes = Value | Type,
         FunctionExcludes = Value & ~(Function | ValueModule),
         ClassExcludes = (Value | Type) & ~(ValueModule | Interface), // class-interface mergability done in checker.ts
         InterfaceExcludes = Type & ~(Interface | Class),
@@ -2221,18 +2221,17 @@ namespace ts {
         Anonymous               = 1 << 20,  // Anonymous
         Instantiated            = 1 << 21,  // Instantiated anonymous type
         /* @internal */
-        FromSignature           = 1 << 22,  // Created for signature assignment check
-        ObjectLiteral           = 1 << 23,  // Originates in an object literal
+        ObjectLiteral           = 1 << 22,  // Originates in an object literal
         /* @internal */
-        FreshObjectLiteral      = 1 << 24,  // Fresh object literal type
+        FreshObjectLiteral      = 1 << 23,  // Fresh object literal type
         /* @internal */
-        ContainsWideningType    = 1 << 25,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 24,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 26,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 25,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 27,  // Type is or contains object literal type
-        ThisType                = 1 << 28,  // This type
-        ObjectLiteralPatternWithComputedProperties = 1 << 29,  // Object literal type implied by binding pattern has computed properties
+        ContainsAnyFunctionType = 1 << 26,  // Type is or contains object literal type
+        ThisType                = 1 << 27,  // This type
+        ObjectLiteralPatternWithComputedProperties = 1 << 28,  // Object literal type implied by binding pattern has computed properties
 
         /* @internal */
         Nullable = Undefined | Null,

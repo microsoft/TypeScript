@@ -3686,7 +3686,7 @@ namespace ts {
             if (symbol.flags & SymbolFlags.TypeAlias) {
                 return getDeclaredTypeOfTypeAlias(symbol);
             }
-            if (symbol.flags & SymbolFlags.Enum) {
+            if (symbol.flags & (SymbolFlags.Enum | SymbolFlags.EnumMember)) {
                 return getDeclaredTypeOfEnum(symbol);
             }
             if (symbol.flags & SymbolFlags.TypeParameter) {
@@ -4643,7 +4643,7 @@ namespace ts {
             // will result in a different declaration kind.
             if (!signature.isolatedSignatureType) {
                 const isConstructor = signature.declaration.kind === SyntaxKind.Constructor || signature.declaration.kind === SyntaxKind.ConstructSignature;
-                const type = <ResolvedType>createObjectType(TypeFlags.Anonymous | TypeFlags.FromSignature);
+                const type = <ResolvedType>createObjectType(TypeFlags.Anonymous);
                 type.members = emptySymbols;
                 type.properties = emptyArray;
                 type.callSignatures = !isConstructor ? [signature] : emptyArray;
@@ -6569,9 +6569,12 @@ namespace ts {
             }
 
             function enumRelatedTo(source: Type, target: Type, reportErrors?: boolean) {
+                if (source.symbol.flags & SymbolFlags.EnumMember && source.symbol.parent === target.symbol) {
+                    return Ternary.True;
+                }
                 if (source.symbol.name !== target.symbol.name ||
-                    source.symbol.flags & SymbolFlags.ConstEnum ||
-                    target.symbol.flags & SymbolFlags.ConstEnum) {
+                    !(source.symbol.flags & SymbolFlags.RegularEnum) ||
+                    !(target.symbol.flags & SymbolFlags.RegularEnum)) {
                     return Ternary.False;
                 }
                 const targetEnumType = getTypeOfSymbol(target.symbol);
@@ -6844,6 +6847,7 @@ namespace ts {
 
         function isLiteralUnionType(type: Type): boolean {
             return type.flags & TypeFlags.Literal ? true :
+                type.flags & TypeFlags.Enum ? (type.symbol.flags & SymbolFlags.EnumMember) !== 0 :
                 type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isLiteralUnionType) :
                 false;
         }
@@ -6852,6 +6856,7 @@ namespace ts {
             return type.flags & TypeFlags.StringLiteral ? stringType :
                 type.flags & TypeFlags.NumberLiteral ? numberType :
                 type.flags & TypeFlags.BooleanLiteral ? booleanType :
+                type.flags & TypeFlags.Enum && type.symbol.flags & SymbolFlags.EnumMember ? getDeclaredTypeOfSymbol(getParentOfSymbol(type.symbol)) :
                 type.flags & TypeFlags.Union ? getUnionType(map((<UnionType>type).types, getBaseTypeOfLiteralType)) :
                 type;
         }
@@ -7728,7 +7733,7 @@ namespace ts {
                 // If all case clauses specify expressions that have unit types, we return an array
                 // of those unit types. Otherwise we return an empty array.
                 const types = map(switchStatement.caseBlock.clauses, getTypeOfSwitchClause);
-                links.switchTypes = forEach(types, t => !t || t.flags & TypeFlags.StringLiteral) ? types : emptyArray;
+                links.switchTypes = forEach(types, t => !t || isLiteralUnionType(t)) ? types : emptyArray;
             }
             return links.switchTypes;
         }
@@ -8046,7 +8051,7 @@ namespace ts {
                 if (assumeTrue) {
                     return filterType(type, t => areTypesComparable(getTypeOfPropertyOfType(t, propName), discriminantType));
                 }
-                if (discriminantType.flags & TypeFlags.StringLiteral) {
+                if (isLiteralUnionType(discriminantType) && !(discriminantType.flags & TypeFlags.Union)) {
                     return filterType(type, t => getTypeOfPropertyOfType(t, propName) !== discriminantType);
                 }
                 return type;
@@ -10186,7 +10191,8 @@ namespace ts {
                 checkClassPropertyAccess(node, left, apparentType, prop);
             }
 
-            const propType = getTypeOfSymbol(prop);
+            const propType = prop.flags & SymbolFlags.EnumMember && getParentOfSymbol(prop).flags & SymbolFlags.ConstEnum &&
+                isLiteralTypeContext(<Expression>node) ? getDeclaredTypeOfSymbol(prop) : getTypeOfSymbol(prop);
             // Only compute control flow type if this is a property access expression that isn't an
             // assignment target, and the referenced property was declared as a variable, property,
             // accessor, or optional method.
