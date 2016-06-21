@@ -4417,7 +4417,7 @@ namespace ts {
         }
 
         function isOptionalParameter(node: ParameterDeclaration) {
-            if (isJSDocOptionalParameter(node) || hasQuestionToken(node)) {
+            if (hasQuestionToken(node) || isJSDocOptionalParameter(node)) {
                 return true;
             }
 
