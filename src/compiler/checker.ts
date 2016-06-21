@@ -14526,11 +14526,13 @@ namespace ts {
                         const localValue = node.locals[local];
                         if (localValue.declarations && !localValue.exportSymbol) {
                             for (const declaration of localValue.declarations) {
-                                if (declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ImportClause
-                                    || declaration.kind === SyntaxKind.NamespaceImport || declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
-                                    const symbol = declaration.symbol;
-                                    if (!symbol.hasReference) {
+                                const symbol = declaration.symbol;
+                                if (!symbol.hasReference) {
+                                    if (declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ImportClause || declaration.kind === SyntaxKind.NamespaceImport) {
                                         error(declaration, Diagnostics._0_is_declared_but_never_used, symbol.name);
+                                    }
+                                    else if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
+                                        error(declaration.name, Diagnostics._0_is_declared_but_never_used, symbol.name);
                                     }
                                 }
                             }
