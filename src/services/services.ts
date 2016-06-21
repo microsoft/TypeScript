@@ -11,7 +11,7 @@
 /// <reference path='jsTyping.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
-/// <reference path='quickfixes/references.ts' />
+/// <reference path='codefixes\references.ts' />
 
 namespace ts {
     /** The version of the language service API */
@@ -1150,7 +1150,7 @@ namespace ts {
 
         isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean;
 
-        getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): SuggestedFix;
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeFix[];
 
         getEmitOutput(fileName: string): EmitOutput;
 
@@ -1196,6 +1196,11 @@ namespace ts {
     export class TextChange {
         span: TextSpan;
         newText: string;
+    }
+
+    export interface CodeFix {
+        name: string;
+        textChanges: TextChange[];
     }
 
     export interface TextInsertion {
@@ -1798,7 +1803,7 @@ namespace ts {
     }
 
     export function getSupportedCodeFixes() {
-        return quickFix.QuickFixProvider.getSupportedErrorCodes();
+        return codeFix.CodeFixProvider.getSupportedErrorCodes();
     }
 
     // Cache host information about script Should be refreshed
@@ -2924,7 +2929,7 @@ namespace ts {
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
-        const quickFixProvider: quickFix.QuickFixProvider = new quickFix.QuickFixProvider();
+        const codeFixProvider: codeFix.CodeFixProvider = new codeFix.CodeFixProvider();
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
         let lastProjectVersion: string;
@@ -7055,7 +7060,7 @@ namespace ts {
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-            return NavigationBar.getNavigationBarItems(sourceFile, host.getCompilationSettings());
+            return NavigationBar.getNavigationBarItems(sourceFile);
         }
 
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
@@ -7676,11 +7681,20 @@ namespace ts {
             return [];
         }
 
-        function getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): SuggestedFix {
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeFix[] {
             synchronizeHostData();
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const sourceFile = getValidSourceFile(fileName);
 
-            return quickFixProvider.fix(errorCodes[0], sourceFile, start, end);
+            let fixes: CodeFix[] = [];
+
+            errorCodes.forEach(error => {
+                const fix = codeFixProvider.getFixes(error, sourceFile, start, end);
+                if (fix) {
+                    fixes = fixes.concat(fix);
+                }
+            });
+
+            return fixes;
         }
 
         /**
@@ -8153,7 +8167,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPostion,
-            getCodeFixAtPosition,
+            getCodeFixesAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
             getProgram

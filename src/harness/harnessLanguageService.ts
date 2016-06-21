@@ -288,6 +288,12 @@ namespace Harness.LanguageService {
         readDirectory(rootDir: string, extension: string): string {
             throw new Error("NYI");
         }
+        readDirectoryNames(path: string): string {
+            throw new Error("Not implemented.");
+        }
+        readFileNames(path: string): string {
+            throw new Error("Not implemented.");
+        }
         fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
         readFile(fileName: string) {
             const snapshot = this.nativeHost.getScriptSnapshot(fileName);
@@ -447,8 +453,8 @@ namespace Harness.LanguageService {
         isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPostion(fileName, position, openingBrace));
         }
-        getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): ts.SuggestedFix {
-            return unwrapJSONCallResult(this.shim.getCodeFixAtPosition(fileName, start, end, errorCodes));
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): ts.CodeFix[] {
+            return unwrapJSONCallResult(this.shim.getCodeFixesAtPosition(fileName, start, end, JSON.stringify(errorCodes)));
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
@@ -614,7 +620,7 @@ namespace Harness.LanguageService {
             return [];
         }
 
-        readDirectory(path: string, extension?: string): string[] {
+        readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]): string[] {
             throw new Error("Not implemented Yet.");
         }
 
@@ -698,4 +704,3 @@ namespace Harness.LanguageService {
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { throw new Error("getPreProcessedFileInfo is not available using the server interface."); }
     }
 }
- 

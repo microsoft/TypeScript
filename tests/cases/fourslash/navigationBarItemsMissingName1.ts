@@ -9,6 +9,11 @@ verify.navigationBar([
         "kind": "module",
         "childItems": [
             {
+                "text": "<function>",
+                "kind": "function",
+                "kindModifiers": "export"
+            },
+            {
                 "text": "C",
                 "kind": "class"
             }

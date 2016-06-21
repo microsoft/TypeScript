@@ -80,8 +80,9 @@ namespace ts {
          * @param exclude A JSON encoded string[] containing the paths to exclude
          *  when enumerating the directory.
          */
-        readDirectory(rootDir: string, extension: string, exclude?: string, depth?: number): string;
-
+        readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
+        useCaseSensitiveFileNames?(): boolean;
+        getCurrentDirectory(): string;
         trace(s: string): void;
     }
 
@@ -229,7 +230,7 @@ namespace ts {
          */
         isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): string;
 
-        getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): string;
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string): string;
 
         getEmitOutput(fileName: string): string;
     }
@@ -440,8 +441,10 @@ namespace ts {
 
         public directoryExists: (directoryName: string) => boolean;
         public realpath: (path: string) => string;
+        public useCaseSensitiveFileNames: boolean;
 
         constructor(private shimHost: CoreServicesShimHost) {
+        this.useCaseSensitiveFileNames = this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
             if ("directoryExists" in this.shimHost) {
                 this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
             }
@@ -450,17 +453,34 @@ namespace ts {
             }
         }
 
-        public readDirectory(rootDir: string, extension: string, exclude: string[], depth?: number): string[] {
+        public readDirectory(rootDir: string, extensions: string[], exclude: string[], include: string[], depth?: number): string[] {
             // Wrap the API changes for 2.0 release. This try/catch
             // should be removed once TypeScript 2.0 has shipped.
-            let encoded: string;
             try {
-                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude), depth);
+                const pattern = getFileMatcherPatterns(rootDir, extensions, exclude, include,
+                    this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
+                return JSON.parse(this.shimHost.readDirectory(
+                    rootDir,
+                    JSON.stringify(extensions),
+                    JSON.stringify(pattern.basePaths),
+                    pattern.excludePattern,
+                    pattern.includeFilePattern,
+                    pattern.includeDirectoryPattern,
+                    depth
+                ));
             }
             catch (e) {
-                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+                const results: string[] = [];
+                for (const extension of extensions) {
+                    for (const file of this.readDirectoryFallback(rootDir, extension, exclude))
+                    {
+                        if (!contains(results, file)) {
+                            results.push(file);
+                        }
+                    }
+                }
+                return results;
             }
-            return JSON.parse(encoded);
         }
 
         public fileExists(fileName: string): boolean {
@@ -469,6 +489,10 @@ namespace ts {
 
         public readFile(fileName: string): string {
             return this.shimHost.readFile(fileName);
+        }
+
+        private readDirectoryFallback(rootDir: string, extension: string, exclude: string[]) {
+            return JSON.parse(this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude)));
         }
     }
 
@@ -859,10 +883,13 @@ namespace ts {
             );
         }
 
-        public getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): string {
+        public getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string): string {
             return this.forwardJSONCall(
-                `getCodeFixAtPosition( '${fileName}', ${start}, ${end}, '[${errorCodes.join(",")}]')`,
-                () => this.languageService.getCodeFixAtPosition(fileName, start, end, errorCodes)
+                `getCodeFixesAtPosition( '${fileName}', ${start}, ${end}, ${errorCodes}')`,
+                () => {
+                    const localErrors: string[] = JSON.parse(errorCodes);
+                    return this.languageService.getCodeFixesAtPosition(fileName, start, end, localErrors);
+                }
             );
         }
 

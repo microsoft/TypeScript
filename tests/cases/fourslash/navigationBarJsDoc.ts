@@ -7,15 +7,31 @@
 
 verify.navigationBar([
   {
+    "text": "<global>",
+    "kind": "module",
+    "childItems": [
+      {
+        "text": "NumberLike",
+        "kind": "type"
+      },
+      {
+        "text": "x",
+        "kind": "const"
+      },
+      {
+        "text": "x",
+        "kind": "type"
+      }
+    ]
+  },
+  {
     "text": "NumberLike",
-    "kind": "type"
+    "kind": "type",
+    "indent": 1,
   },
   {
     "text": "x",
-    "kind": "type"
-  },
-  {
-    "text": "x",
-    "kind": "var"
+    "kind": "type",
+    "indent": 1
   }
 ]);
