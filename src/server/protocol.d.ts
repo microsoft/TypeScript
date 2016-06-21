@@ -1023,6 +1023,11 @@ declare namespace ts.server.protocol {
           * An array of diagnostic information items.
           */
         diagnostics: Diagnostic[];
+
+        /**
+         * Information about the current length of the build queue.
+         */
+        queueLength?: number;
     }
 
     /**
