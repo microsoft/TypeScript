@@ -13,7 +13,7 @@ tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenc
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(18,23): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(18,27): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(18,38): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(20,17): error TS2304: Cannot find name 'I'.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(20,17): error TS2689: Cannot extend an interface 'I'. Did you mean 'implements'?
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(23,21): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(29,18): error TS2304: Cannot find name 'M'.
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(30,24): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
@@ -76,7 +76,7 @@ tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenc
     
     class D extends I {
                     ~
-!!! error TS2304: Cannot find name 'I'.
+!!! error TS2689: Cannot extend an interface 'I'. Did you mean 'implements'?
     }
     
     interface U extends I {}

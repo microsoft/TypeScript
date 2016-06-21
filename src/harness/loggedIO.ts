@@ -1,7 +1,6 @@
 /// <reference path="..\..\src\compiler\sys.ts" />
 /// <reference path="..\..\src\harness\harness.ts" />
 /// <reference path="..\..\src\harness\runnerbase.ts" />
-/* tslint:disable:no-null-keyword */
 
 interface FileInformation {
     contents: string;
@@ -62,8 +61,9 @@ interface IOLog {
     }[];
     directoriesRead: {
         path: string,
-        extension: string,
+        extension: string[],
         exclude: string[],
+        include: string[],
         result: string[]
     }[];
 }
@@ -94,7 +94,7 @@ namespace Playback {
             return lookup[s] = func(s);
         });
         run.reset = () => {
-            lookup = null;
+            lookup = undefined;
         };
 
         return run;
@@ -170,7 +170,8 @@ namespace Playback {
             path => callAndRecord(underlying.fileExists(path), recordLog.fileExists, { path }),
             memoize(path => {
                 // If we read from the file, it must exist
-                if (findResultByPath(wrapper, replayLog.filesRead, path, null) !== null) {
+                const noResult = {};
+                if (findResultByPath(wrapper, replayLog.filesRead, path, noResult) !== noResult) {
                     return true;
                 }
                 else {
@@ -217,24 +218,13 @@ namespace Playback {
             memoize(path => findResultByPath(wrapper, replayLog.filesRead, path).contents));
 
         wrapper.readDirectory = recordReplay(wrapper.readDirectory, underlying)(
-            (path, extension, exclude) => {
-                const result = (<ts.System>underlying).readDirectory(path, extension, exclude);
-                const logEntry = { path, extension, exclude, result };
+            (path, extension, exclude, include) => {
+                const result = (<ts.System>underlying).readDirectory(path, extension, exclude, include);
+                const logEntry = { path, extension, exclude, include, result };
                 recordLog.directoriesRead.push(logEntry);
                 return result;
             },
-            (path, extension, exclude) => findResultByPath(wrapper,
-                    replayLog.directoriesRead.filter(
-                        d => {
-                            if (d.extension === extension) {
-                                if (d.exclude) {
-                                    return ts.arrayIsEqualTo(d.exclude, exclude);
-                                }
-                                return true;
-                            }
-                            return false;
-                        }
-                    ), path));
+            (path, extension, exclude) => findResultByPath(wrapper, replayLog.directoriesRead, path));
 
         wrapper.writeFile = recordReplay(wrapper.writeFile, underlying)(
             (path: string, contents: string) => callAndRecord(underlying.writeFile(path, contents), recordLog.filesWritten, { path, contents, bom: false }),
