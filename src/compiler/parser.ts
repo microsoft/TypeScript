@@ -444,7 +444,7 @@ namespace ts {
         if (result && result.jsDocComment) {
             // because the jsDocComment was parsed out of the source file, it might
             // not be covered by the fixupParentReferences.
-            Parser.fixupParentReferences(result.jsDocComment);
+            fixupParentReferences(result.jsDocComment);
         }
 
         return result;
@@ -454,6 +454,39 @@ namespace ts {
     // Exposed only for testing.
     export function parseJSDocTypeExpressionForTests(content: string, start?: number, length?: number) {
         return Parser.JSDocParser.parseJSDocTypeExpressionForTests(content, start, length);
+    }
+
+    /* @internal */
+    export function fixupParentReferences(rootNode: Node) {
+        // normally parent references are set during binding. However, for clients that only need
+        // a syntax tree, and no semantic features, then the binding process is an unnecessary
+        // overhead.  This functions allows us to set all the parents, without all the expense of
+        // binding.
+
+        let parent: Node = rootNode;
+        forEachChild(rootNode, visitNode);
+        return;
+
+        function visitNode(n: Node): void {
+            // walk down setting parents that differ from the parent we think it should be.  This
+            // allows us to quickly bail out of setting parents for subtrees during incremental
+            // parsing
+            if (n.parent !== parent) {
+                n.parent = parent;
+
+                const saveParent = parent;
+                parent = n;
+                forEachChild(n, visitNode);
+                if (n.jsDocComments) {
+                    for (const jsDocComment of n.jsDocComments) {
+                        jsDocComment.parent = n;
+                        parent = jsDocComment;
+                        forEachChild(jsDocComment, visitNode);
+                    }
+                }
+                parent = saveParent;
+            }
+        }
     }
 
     // Implement the parser as a singleton module.  We do this for perf reasons because creating
@@ -657,38 +690,6 @@ namespace ts {
             }
 
             return node;
-        }
-
-        export function fixupParentReferences(rootNode: Node) {
-            // normally parent references are set during binding. However, for clients that only need
-            // a syntax tree, and no semantic features, then the binding process is an unnecessary
-            // overhead.  This functions allows us to set all the parents, without all the expense of
-            // binding.
-
-            let parent: Node = rootNode;
-            forEachChild(rootNode, visitNode);
-            return;
-
-            function visitNode(n: Node): void {
-                // walk down setting parents that differ from the parent we think it should be.  This
-                // allows us to quickly bail out of setting parents for subtrees during incremental
-                // parsing
-                if (n.parent !== parent) {
-                    n.parent = parent;
-
-                    const saveParent = parent;
-                    parent = n;
-                    forEachChild(n, visitNode);
-                    if (n.jsDocComments) {
-                        for (const jsDocComment of n.jsDocComments) {
-                            jsDocComment.parent = n;
-                            parent = jsDocComment;
-                            forEachChild(jsDocComment, visitNode);
-                        }
-                    }
-                    parent = saveParent;
-                }
-            }
         }
 
         function createSourceFile(fileName: string, languageVersion: ScriptTarget, scriptKind: ScriptKind): SourceFile {
