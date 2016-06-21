@@ -1,4 +1,5 @@
 /// <reference path="..\compiler\program.ts"/>
+/// <reference path="..\compiler\commandLineParser.ts"/>
 
 /// <reference path='breakpoints.ts' />
 /// <reference path='outliningElementsCollector.ts' />
@@ -1154,11 +1155,11 @@ namespace ts {
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
-        getIndentationAtPosition(fileName: string, position: number, options: EditorOptions): number;
+        getIndentationAtPosition(fileName: string, position: number, options: EditorOptions | EditorSettings): number;
 
-        getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[];
-        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[];
-        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
+        getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
+        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
+        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
 
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
 
@@ -1258,6 +1259,7 @@ namespace ts {
         containerKind: string;
     }
 
+    /* @deprecated - consider using EditorSettings instead */
     export interface EditorOptions {
         IndentSize: number;
         TabSize: number;
@@ -1266,12 +1268,21 @@ namespace ts {
         IndentStyle: IndentStyle;
     }
 
+    export interface EditorSettings {
+        indentSize: number;
+        tabSize: number;
+        newLineCharacter: string;
+        convertTabsToSpaces: boolean;
+        indentStyle: IndentStyle;
+    }
+
     export enum IndentStyle {
         None = 0,
         Block = 1,
         Smart = 2,
     }
 
+    /* @deprecated - consider using FormatCodeSettings instead */
     export interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
         InsertSpaceAfterSemicolonInForStatements: boolean;
@@ -1283,8 +1294,49 @@ namespace ts {
         InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-        [s: string]: boolean | number | string;
     }
+
+    export interface FormatCodeSettings extends EditorSettings {
+        insertSpaceAfterCommaDelimiter: boolean;
+        insertSpaceAfterSemicolonInForStatements: boolean;
+        insertSpaceBeforeAndAfterBinaryOperators: boolean;
+        insertSpaceAfterKeywordsInControlFlowStatements: boolean;
+        insertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
+        placeOpenBraceOnNewLineForFunctions: boolean;
+        placeOpenBraceOnNewLineForControlBlocks: boolean;
+    }
+
+    /* @internal */
+    export function toEditorSettings(options: FormatCodeOptions | FormatCodeSettings): FormatCodeSettings;
+    export function toEditorSettings(options: EditorOptions | EditorSettings): EditorSettings;
+    export function toEditorSettings(optionsAsMap: Map<any>): Map<any> {
+        let allPropertiesAreCamelCased = true;
+        for (const key in optionsAsMap) {
+            if (hasProperty(optionsAsMap, key) && !isCamelCase(key)) {
+                allPropertiesAreCamelCased = false;
+                break;
+            }
+        }
+        if (allPropertiesAreCamelCased) {
+            return optionsAsMap;
+        }
+        const settings: Map<any> = {};
+        for (const key in optionsAsMap) {
+            if (hasProperty(optionsAsMap, key)) {
+                const newKey = isCamelCase(key) ? key : key.charAt(0).toLowerCase() + key.substr(1);
+                settings[newKey] = optionsAsMap[key];
+            }
+        }
+        return settings;
+    }
+
+    function isCamelCase(s: string) {
+        return !s.length || s.charAt(0) === s.charAt(0).toLowerCase();
+    }
+
 
     export interface DefinitionInfo {
         fileName: string;
@@ -1972,6 +2024,18 @@ namespace ts {
         // We are not returning a sourceFile for lib file when asked by the program,
         // so pass --noLib to avoid reporting a file not found error.
         options.noLib = true;
+
+        // Clear out other settings that would not be used in transpiling this module
+        options.lib = undefined;
+        options.types = undefined;
+        options.noEmit = undefined;
+        options.noEmitOnError = undefined;
+        options.paths = undefined;
+        options.rootDirs = undefined;
+        options.declaration = undefined;
+        options.declarationDir = undefined;
+        options.out = undefined;
+        options.outFile = undefined;
 
         // We are not doing a full typecheck, we are not resolving the whole context,
         // so pass --noResolve to avoid reporting missing file errors.
@@ -2905,7 +2969,7 @@ namespace ts {
             return sourceFile;
         }
 
-        function getRuleProvider(options: FormatCodeOptions) {
+        function getRuleProvider(options: FormatCodeSettings) {
             // Ensure rules are initialized and up to date wrt to formatting options
             if (!ruleProvider) {
                 ruleProvider = new formatting.RulesProvider();
@@ -2950,7 +3014,8 @@ namespace ts {
                  oldSettings.moduleResolution !== newSettings.moduleResolution ||
                  oldSettings.noResolve !== newSettings.noResolve ||
                  oldSettings.jsx !== newSettings.jsx ||
-                 oldSettings.allowJs !== newSettings.allowJs);
+                 oldSettings.allowJs !== newSettings.allowJs ||
+                 oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit);
 
             // Now create a new compiler
             const compilerHost: CompilerHost = {
@@ -3175,6 +3240,7 @@ namespace ts {
 
         function cleanupSemanticCache(): void {
             // TODO: Should we jettison the program (or it's type checker) here?
+            program.dropDiagnosticsProducingTypeChecker();
         }
 
         function dispose(): void {
@@ -7066,7 +7132,7 @@ namespace ts {
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-            return NavigationBar.getNavigationBarItems(sourceFile, host.getCompilationSettings());
+            return NavigationBar.getNavigationBarItems(sourceFile);
         }
 
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
@@ -7560,7 +7626,8 @@ namespace ts {
                                 return;
                             case SyntaxKind.Parameter:
                                 if ((<ParameterDeclaration>token.parent).name === token) {
-                                    return ClassificationType.parameterName;
+                                    const isThis = token.kind === SyntaxKind.Identifier && (<Identifier>token).originalKeywordKind === SyntaxKind.ThisKeyword;
+                                    return isThis ? ClassificationType.keyword : ClassificationType.parameterName;
                                 }
                                 return;
                         }
@@ -7647,40 +7714,44 @@ namespace ts {
             }
         }
 
-        function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions) {
+        function getIndentationAtPosition(fileName: string, position: number, optionsOrSettings: EditorOptions | EditorSettings) {
             let start = new Date().getTime();
+            const settings = toEditorSettings(optionsOrSettings);
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             start = new Date().getTime();
 
-            const result = formatting.SmartIndenter.getIndentation(position, sourceFile, editorOptions);
+            const result = formatting.SmartIndenter.getIndentation(position, sourceFile, settings);
             log("getIndentationAtPosition: computeIndentation  : " + (new Date().getTime() - start));
 
             return result;
         }
 
-        function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[] {
+        function getFormattingEditsForRange(fileName: string, start: number, end: number, optionsOrSettings: FormatCodeOptions | FormatCodeSettings): TextChange[] {
+            const settings = toEditorSettings(optionsOrSettings);
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            return formatting.formatSelection(start, end, sourceFile, getRuleProvider(options), options);
+            return formatting.formatSelection(start, end, sourceFile, getRuleProvider(settings), settings);
         }
 
-        function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
+        function getFormattingEditsForDocument(fileName: string, optionsOrSettings: FormatCodeOptions | FormatCodeSettings): TextChange[] {
+            const settings = toEditorSettings(optionsOrSettings);
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            return formatting.formatDocument(sourceFile, getRuleProvider(options), options);
+            return formatting.formatDocument(sourceFile, getRuleProvider(settings), settings);
         }
 
-        function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[] {
+        function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, optionsOrSettings: FormatCodeOptions | FormatCodeSettings): TextChange[] {
+            const settings = toEditorSettings(optionsOrSettings);
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             if (key === "}") {
-                return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(options), options);
+                return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
             }
             else if (key === ";") {
-                return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(options), options);
+                return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(settings), settings);
             }
             else if (key === "\n") {
-                return formatting.formatOnEnter(position, sourceFile, getRuleProvider(options), options);
+                return formatting.formatOnEnter(position, sourceFile, getRuleProvider(settings), settings);
             }
 
             return [];

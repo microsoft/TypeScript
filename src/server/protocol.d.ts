@@ -98,6 +98,22 @@ declare namespace ts.server.protocol {
         projectFileName?: string;
     }
 
+    export interface TodoCommentRequest extends FileRequest {
+        arguments: TodoCommentRequestArgs;
+    }
+
+    export interface TodoCommentRequestArgs extends FileRequestArgs {
+        descriptors: TodoCommentDescriptor[];
+    }
+
+    export interface IndentationRequest extends FileLocationRequest {
+        arguments: IndentationRequestArgs;
+    }
+
+    export interface IndentationRequestArgs extends FileLocationRequestArgs {
+        options: EditorSettings;
+    }
+
     /**
       * Arguments for ProjectInfoRequest request.
       */
@@ -115,6 +131,14 @@ declare namespace ts.server.protocol {
         arguments: ProjectInfoRequestArgs;
     }
 
+    export interface ProjectRequest extends Request {
+        arguments: ProjectRequestArgs;
+    }
+
+    export interface ProjectRequestArgs {
+        projectFileName: string;
+    }
+
     /**
       * Response message body for "projectInfo" request
       */
@@ -128,6 +152,10 @@ declare namespace ts.server.protocol {
           * The list of normalized file name in the project, including 'lib.d.ts'
           */
         fileNames?: string[];
+        /**
+          * Indicates if the project has a active language service instance
+          */
+        languageServiceDisabled?: boolean;
     }
 
     export interface DiagnosticWithLinePosition {
@@ -263,6 +291,14 @@ declare namespace ts.server.protocol {
       */
     export interface TypeDefinitionResponse extends Response {
         body?: FileSpan[];
+    }
+
+    export interface BraceCompletionRequest extends FileLocationRequest {
+        arguments: BraceCompletionRequestArgs;
+    }
+
+    export interface BraceCompletionRequestArgs extends FileLocationRequestArgs {
+        openingBrace: string;
     }
 
     /**
@@ -544,9 +580,6 @@ declare namespace ts.server.protocol {
 
         /** Defines whether an open brace is put onto a new line for control blocks or not. Default value is false. */
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
-
-        /** Index operator */
-        [key: string]: string | number | boolean;
     }
 
     /**

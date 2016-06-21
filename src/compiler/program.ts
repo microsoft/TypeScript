@@ -180,7 +180,7 @@ namespace ts {
 
     function getEffectiveTypeRoots(options: CompilerOptions, host: ModuleResolutionHost) {
         return options.typeRoots ||
-            defaultTypeRoots.map(d => combinePaths(options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory(), d));
+            map(defaultTypeRoots, d => combinePaths(options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory(), d));
     }
 
     /**
@@ -1151,7 +1151,8 @@ namespace ts {
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
-            getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives
+            getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
+            dropDiagnosticsProducingTypeChecker
         };
 
         verifyCompilerOptions();
@@ -1343,6 +1344,10 @@ namespace ts {
 
         function getDiagnosticsProducingTypeChecker() {
             return diagnosticsProducingTypeChecker || (diagnosticsProducingTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ true));
+        }
+
+        function dropDiagnosticsProducingTypeChecker() {
+            diagnosticsProducingTypeChecker = undefined;
         }
 
         function getTypeChecker() {
@@ -1601,8 +1606,19 @@ namespace ts {
                             }
                             break;
                         case SyntaxKind.PropertyDeclaration:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.property_declarations_can_only_be_used_in_a_ts_file));
-                            return true;
+                            const propertyDeclaration = <PropertyDeclaration>node;
+                            if (propertyDeclaration.modifiers) {
+                                for (const modifier of propertyDeclaration.modifiers) {
+                                    if (modifier.kind !== SyntaxKind.StaticKeyword) {
+                                        diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_a_ts_file, tokenToString(modifier.kind)));
+                                        return true;
+                                    }
+                                }
+                            }
+                            if (checkTypeAnnotation((<PropertyDeclaration>node).type)) {
+                                return true;
+                            }
+                            break;
                         case SyntaxKind.EnumDeclaration:
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_a_ts_file));
                             return true;

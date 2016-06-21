@@ -23,6 +23,7 @@
 /// <reference path="external\chai.d.ts"/>
 /// <reference path="sourceMapRecorder.ts"/>
 /// <reference path="runnerbase.ts"/>
+/// <reference path="virtualFileSystem.ts" />
 
 // Block scoped definitions work poorly for global variables, temporarily enable var
 /* tslint:disable:no-var-keyword */
@@ -443,7 +444,7 @@ namespace Harness {
         args(): string[];
         getExecutingFilePath(): string;
         exit(exitCode?: number): void;
-        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]): string[];
     }
     export var IO: IO;
 
@@ -482,7 +483,7 @@ namespace Harness {
             export const directoryExists: typeof IO.directoryExists = fso.FolderExists;
             export const fileExists: typeof IO.fileExists = fso.FileExists;
             export const log: typeof IO.log = global.WScript && global.WScript.StdOut.WriteLine;
-            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude) => ts.sys.readDirectory(path, extension, exclude);
+            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude, include) => ts.sys.readDirectory(path, extension, exclude, include);
 
             export function createDirectory(path: string) {
                 if (directoryExists(path)) {
@@ -552,7 +553,7 @@ namespace Harness {
             export const fileExists: typeof IO.fileExists = fs.existsSync;
             export const log: typeof IO.log = s => console.log(s);
 
-            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude) => ts.sys.readDirectory(path, extension, exclude);
+            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude, include) => ts.sys.readDirectory(path, extension, exclude, include);
 
             export function createDirectory(path: string) {
                 if (!directoryExists(path)) {
@@ -740,8 +741,22 @@ namespace Harness {
                 Http.writeToServerSync(serverRoot + path, "WRITE", contents);
             }
 
-            export function readDirectory(path: string, extension?: string, exclude?: string[]) {
-                return listFiles(path).filter(f => !extension || ts.fileExtensionIs(f, extension));
+            export function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]) {
+                const fs = new Utils.VirtualFileSystem(path, useCaseSensitiveFileNames());
+                for (const file in listFiles(path)) {
+                    fs.addFile(file);
+                }
+                return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), path => {
+                    const entry = fs.traversePath(path);
+                    if (entry && entry.isDirectory()) {
+                        const directory = <Utils.VirtualDirectory>entry;
+                        return {
+                            files: ts.map(directory.getFiles(), f => f.name),
+                            directories: ts.map(directory.getDirectories(), d => d.name)
+                        };
+                    }
+                    return { files: [], directories: [] };
+                });
             }
         }
     }
@@ -1051,7 +1066,7 @@ namespace Harness {
             options.target = options.target || ts.ScriptTarget.ES3;
             options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
             options.noErrorTruncation = true;
-            options.skipDefaultLibCheck = true;
+            options.skipDefaultLibCheck = typeof options.skipDefaultLibCheck === "undefined" ? true : options.skipDefaultLibCheck;
 
             if (typeof currentDirectory === "undefined") {
                 currentDirectory = Harness.IO.getCurrentDirectory();
@@ -1531,7 +1546,9 @@ namespace Harness {
 
             // unit tests always list files explicitly
             const parseConfigHost: ts.ParseConfigHost = {
-                readDirectory: (name) => []
+                useCaseSensitiveFileNames: false,
+                readDirectory: (name) => [],
+                fileExists: (name) => true
             };
 
             // check if project has tsconfig.json in the list of files

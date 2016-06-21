@@ -11,20 +11,36 @@
 //// var numberLike;
 
 verify.navigationBar([
-  {
-    "text": "NumberLike",
-    "kind": "type"
-  },
-  {
-    "text": "NumberLike2",
-    "kind": "type"
-  },
-  {
-    "text": "NumberLike2",
-    "kind": "var"
-  },
-  {
-    "text": "numberLike",
-    "kind": "var"
-  }
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "numberLike",
+                "kind": "var"
+            },
+            {
+                "text": "NumberLike",
+                "kind": "type"
+            },
+            {
+                "text": "NumberLike2",
+                "kind": "var"
+            },
+            {
+                "text": "NumberLike2",
+                "kind": "type"
+            }
+        ]
+    },
+    {
+        "text": "NumberLike",
+        "kind": "type",
+        "indent": 1,
+    },
+    {
+        "text": "NumberLike2",
+        "kind": "type",
+        "indent": 1
+    }
 ]);

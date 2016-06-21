@@ -47,7 +47,7 @@ namespace ts {
                 return "";
             },
             getDirectories: (path: string) => [],
-            readDirectory: (path: string, extension?: string, exclude?: string[]): string[] => {
+            readDirectory: (path: string, extension?: string[], exclude?: string[], include?: string[]): string[] => {
                 throw new Error("NYI");
             },
             exit: (exitCode?: number) => {
@@ -80,7 +80,7 @@ namespace ts {
         };
 
         const projectService = new server.ProjectService(serverHost, logger, { isCancellationRequested: () => false });
-        const rootScriptInfo = projectService.getOrCreateScriptInfo(rootFile, /* openedByClient */true);
+        const rootScriptInfo = projectService.getOrCreateScriptInfo(rootFile, /* openedByClient */true, /*containingProject*/ undefined);
         const project = projectService.createAndAddInferredProject(rootScriptInfo);
         project.setCompilerOptions({ module: ts.ModuleKind.AMD } );
         return {
@@ -145,6 +145,7 @@ namespace ts {
                 catch (e) {
                     assert.isTrue(e.message.indexOf(`Could not find file: '${imported.name}'.`) === 0);
                 }
+
                 assert.isTrue(fileExistsIsCalled);
             }
             {

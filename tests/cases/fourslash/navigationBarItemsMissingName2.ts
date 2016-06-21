@@ -9,10 +9,16 @@
 verify.navigationBar([
     {
         "text": "<global>",
-        "kind": "module"
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "<class>",
+                "kind": "class"
+            }
+        ]
     },
     {
-        "text": "default",
+        "text": "<class>",
         "kind": "class",
         "childItems": [
             {
