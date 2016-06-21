@@ -1170,7 +1170,7 @@ namespace ts {
         // be returned by the TypeScript language service. If a plugin returns a defined results
         // (that is, is not undefined) then that result is used instead of invoking the
         // corresponding TypeScript method. If multiple plugins are registered, they are
-        // consulted in the order they are returned from the host. The first defined result
+        // consulted in the order they are returned from the program. The first defined result
         // returned by a plugin is used and no other plugin overrides are consulted.
 
         getProgramDiagnostics?(): Diagnostic[];
@@ -1208,7 +1208,7 @@ namespace ts {
         // prior to the host receiving it. The TypeScript language service is invoked and the
         // result is passed to the plugin as the value of the previous parameter. If more than one
         // plugin is registered, the plugins are consulted in the order they are returned from the
-        // host. The value passed in as previous is the result returned by the prior plugin. If a
+        // program. The value passed in as previous is the result returned by the prior plugin. If a
         // plugin returns undefined, the result passed in as previous is used and the undefined
         // result is ignored. All plugins are consulted before the result is returned to the host.
         // If a plugin overrides behavior of the method, no filter methods are consulted.
@@ -3003,28 +3003,35 @@ namespace ts {
             const baseService = createUnextendedLanguageService(host, documentRegistry);
             const extensions = baseService.getProgram().getCompilerExtensions()["language-service"];
             const instantiatedExtensions = map(extensions, extension => new extension.ctor(ts, host, baseService, documentRegistry, extension.args));
+            const extensionCount = instantiatedExtensions && instantiatedExtensions.length;
 
             function wrap(key: string): Function {
-                return (...args: any[]) => {
-                    if (instantiatedExtensions && instantiatedExtensions.length) {
-                        for (let i = 0; i < instantiatedExtensions.length; i++) {
+                if (extensionCount) {
+                    return (...args: any[]) => {
+                        for (let i = 0; i < extensionCount; i++) {
                             const extension = instantiatedExtensions[i];
                             if ((extension as any)[key]) {
-                                return (extension as any)[key](...args);
+                                const temp = (extension as any)[key](...args);
+                                if (temp !== undefined) {
+                                    return temp;
+                                }
                             }
                         }
                         let result: any = (baseService as any)[key](...args);
                         const filterKey = `${key}Filter`;
-                        for (let i = 0; i < instantiatedExtensions.length; i++) {
+                        for (let i = 0; i < extensionCount; i++) {
                             const extension = instantiatedExtensions[i];
                             if ((extension as any)[filterKey]) {
-                                result = (extension as any)[filterKey](...args, result);
+                                const temp = (extension as any)[filterKey](...args, result);
+                                if (temp !== undefined) {
+                                    result = temp;
+                                }
                             }
                         }
                         return result;
-                    }
-                    return (baseService as any)[key](...args);
-                };
+                    };
+                }
+                return (baseService as any)[key];
             }
 
             function buildWrappedService(underlyingMembers: Map<any>, wrappedMembers: string[]): LanguageService {
