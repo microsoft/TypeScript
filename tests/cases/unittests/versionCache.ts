@@ -12,9 +12,9 @@ namespace ts {
     }
 
     function validateEdit(lineIndex: server.LineIndex, sourceText: string, position: number, deleteLength: number, insertString: string): void {
-        let checkText = editFlat(position, deleteLength, insertString, sourceText);
-        let snapshot = lineIndex.edit(position, deleteLength, insertString);
-        let editedText = snapshot.getText(0, snapshot.getLength());
+        const checkText = editFlat(position, deleteLength, insertString, sourceText);
+        const snapshot = lineIndex.edit(position, deleteLength, insertString);
+        const editedText = snapshot.getText(0, snapshot.getLength());
 
         assert.equal(editedText, checkText);
     }
@@ -23,7 +23,7 @@ namespace ts {
         let validateEditAtLineCharIndex: (line: number, char: number, deleteLength: number, insertString: string) => void;
 
         before(() => {
-            let testContent = `/// <reference path="z.ts" />
+            const testContent = `/// <reference path="z.ts" />
 var x = 10;
 var y = { zebra: 12, giraffe: "ell" };
 z.a;
@@ -34,14 +34,14 @@ k=y;
 var p:Point=new Point();
 var q:Point=<Point>p;`;
 
-            let { lines } = server.LineIndex.linesFromText(testContent);
+            const { lines } = server.LineIndex.linesFromText(testContent);
             assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
-            let lineIndex = new server.LineIndex();
+            const lineIndex = new server.LineIndex();
             lineIndex.load(lines);
 
             validateEditAtLineCharIndex = (line: number, char: number, deleteLength: number, insertString: string) => {
-                let position = lineColToPosition(lineIndex, line, char);
+                const position = lineColToPosition(lineIndex, line, char);
                 validateEdit(lineIndex, testContent, position, deleteLength, insertString);
             };
         });
@@ -91,7 +91,7 @@ and grew 1cm per day`;
             ({ lines, lineMap } = server.LineIndex.linesFromText(testContent));
             assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
-            let lineIndex = new server.LineIndex();
+            const lineIndex = new server.LineIndex();
             lineIndex.load(lines);
 
             validateEditAtPosition = (position: number, deleteLength: number, insertString: string) => {
@@ -195,9 +195,9 @@ and grew 1cm per day`;
 
         before(() => {
             // Use scanner.ts, decent size, does not change frequently
-            let testFileName = "src/compiler/scanner.ts";
+            const testFileName = "src/compiler/scanner.ts";
             testContent = Harness.IO.readFile(testFileName);
-            let totalChars = testContent.length;
+            const totalChars = testContent.length;
             assert.isTrue(totalChars > 0, "Failed to read test file.");
 
             ({ lines, lineMap } = server.LineIndex.linesFromText(testContent));
@@ -246,41 +246,41 @@ and grew 1cm per day`;
 
         it("Range (average length 1/4 file size)", () => {
             for (let i = 0; i < iterationCount; i++) {
-                let s2 = lineIndex.getText(rsa[i], la[i]);
-                let s1 = testContent.substring(rsa[i], rsa[i] + la[i]);
+                const s2 = lineIndex.getText(rsa[i], la[i]);
+                const s1 = testContent.substring(rsa[i], rsa[i] + la[i]);
                 assert.equal(s1, s2);
             }
         });
 
         it("Range (average length 4 chars)", () => {
             for (let j = 0; j < iterationCount; j++) {
-                let s2 = lineIndex.getText(rsa[j], las[j]);
-                let s1 = testContent.substring(rsa[j], rsa[j] + las[j]);
+                const s2 = lineIndex.getText(rsa[j], las[j]);
+                const s1 = testContent.substring(rsa[j], rsa[j] + las[j]);
                 assert.equal(s1, s2);
             }
         });
 
         it("Edit (average length 4)", () => {
             for (let i = 0; i < iterationCount; i++) {
-                let insertString = testContent.substring(rsa[100000 - i], rsa[100000 - i] + las[100000 - i]);
-                let snapshot = lineIndex.edit(rsa[i], las[i], insertString);
-                let checkText = editFlat(rsa[i], las[i], insertString, testContent);
-                let snapText = snapshot.getText(0, checkText.length);
+                const insertString = testContent.substring(rsa[100000 - i], rsa[100000 - i] + las[100000 - i]);
+                const snapshot = lineIndex.edit(rsa[i], las[i], insertString);
+                const checkText = editFlat(rsa[i], las[i], insertString, testContent);
+                const snapText = snapshot.getText(0, checkText.length);
                 assert.equal(checkText, snapText);
             }
         });
 
         it("Edit ScriptVersionCache ", () => {
-            let svc = server.ScriptVersionCache.fromString(<server.ServerHost>ts.sys, testContent);
+            const svc = server.ScriptVersionCache.fromString(<server.ServerHost>ts.sys, testContent);
             let checkText = testContent;
 
             for (let i = 0; i < iterationCount; i++) {
-                let insertString = testContent.substring(rsa[i], rsa[i] + las[i]);
+                const insertString = testContent.substring(rsa[i], rsa[i] + las[i]);
                 svc.edit(ersa[i], elas[i], insertString);
                 checkText = editFlat(ersa[i], elas[i], insertString, checkText);
                 if (0 == (i % 4)) {
-                    let snap = svc.getSnapshot();
-                    let snapText = snap.getText(0, checkText.length);
+                    const snap = svc.getSnapshot();
+                    const snapText = snap.getText(0, checkText.length);
                     assert.equal(checkText, snapText);
                 }
             }
@@ -288,18 +288,18 @@ and grew 1cm per day`;
 
         it("Edit (average length 1/4th file size)", () => {
             for (let i = 0; i < iterationCount; i++) {
-                let insertString = testContent.substring(rsa[100000 - i], rsa[100000 - i] + la[100000 - i]);
-                let snapshot = lineIndex.edit(rsa[i], la[i], insertString);
-                let checkText = editFlat(rsa[i], la[i], insertString, testContent);
-                let snapText = snapshot.getText(0, checkText.length);
+                const insertString = testContent.substring(rsa[100000 - i], rsa[100000 - i] + la[100000 - i]);
+                const snapshot = lineIndex.edit(rsa[i], la[i], insertString);
+                const checkText = editFlat(rsa[i], la[i], insertString, testContent);
+                const snapText = snapshot.getText(0, checkText.length);
                 assert.equal(checkText, snapText);
             }
         });
 
         it("Line/offset from pos", () => {
             for (let i = 0; i < iterationCount; i++) {
-                let lp = lineIndex.charOffsetToLineNumberAndPos(rsa[i]);
-                let lac = ts.computeLineAndCharacterOfPosition(lineMap, rsa[i]);
+                const lp = lineIndex.charOffsetToLineNumberAndPos(rsa[i]);
+                const lac = ts.computeLineAndCharacterOfPosition(lineMap, rsa[i]);
                 assert.equal(lac.line + 1, lp.line, "Line number mismatch " + (lac.line + 1) + " " + lp.line + " " + i);
                 assert.equal(lac.character, (lp.offset), "Charachter offset mismatch " + lac.character + " " + lp.offset + " " + i);
             }
@@ -308,9 +308,9 @@ and grew 1cm per day`;
         it("Start pos from line", () => {
             for (let i = 0; i < iterationCount; i++) {
                 for (let j = 0, llen = lines.length; j < llen; j++) {
-                    let lineInfo = lineIndex.lineNumberToInfo(j + 1);
-                    let lineIndexOffset = lineInfo.offset;
-                    let lineMapOffset = lineMap[j];
+                    const lineInfo = lineIndex.lineNumberToInfo(j + 1);
+                    const lineIndexOffset = lineInfo.offset;
+                    const lineMapOffset = lineMap[j];
                     assert.equal(lineIndexOffset, lineMapOffset);
                 }
             }

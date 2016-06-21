@@ -153,11 +153,23 @@ interface ObjectConstructor {
     getOwnPropertyNames(o: any): string[];
 
     /**
+      * Creates an object that has null prototype.
+      * @param o Object to use as a prototype. May be null
+      */
+    create(o: null): any;
+
+    /**
+      * Creates an object that has the specified prototype, and that optionally contains specified properties.
+      * @param o Object to use as a prototype. May be null
+      */
+    create<T>(o: T): T;
+
+    /**
       * Creates an object that has the specified prototype, and that optionally contains specified properties.
       * @param o Object to use as a prototype. May be null
       * @param properties JavaScript object that contains one or more property descriptors.
       */
-    create(o: any, properties?: PropertyDescriptorMap): any;
+    create(o: any, properties: PropertyDescriptorMap): any;
 
     /**
       * Adds a property to an object, or modifies attributes of an existing property.
@@ -968,35 +980,19 @@ interface JSON {
     /**
       * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
       * @param value A JavaScript value, usually an object or array, to be converted.
-      */
-    stringify(value: any): string;
-    /**
-      * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
-      * @param value A JavaScript value, usually an object or array, to be converted.
-      * @param replacer A function that transforms the results.
-      */
-    stringify(value: any, replacer: (key: string, value: any) => any): string;
-    /**
-      * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
-      * @param value A JavaScript value, usually an object or array, to be converted.
-      * @param replacer Array that transforms the results.
-      */
-    stringify(value: any, replacer: any[]): string;
-    /**
-      * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
-      * @param value A JavaScript value, usually an object or array, to be converted.
       * @param replacer A function that transforms the results.
       * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
       */
-    stringify(value: any, replacer: (key: string, value: any) => any, space: string | number): string;
+    stringify(value: any, replacer?: (key: string, value: any) => any, space?: string | number): string;
     /**
       * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
       * @param value A JavaScript value, usually an object or array, to be converted.
-      * @param replacer Array that transforms the results.
+      * @param replacer An array of strings and numbers that acts as a white list for selecting the object properties that will be stringified.
       * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
       */
-    stringify(value: any, replacer: any[], space: string | number): string;
+    stringify(value: any, replacer?: (number | string)[] | null, space?: string | number): string;
 }
+
 /**
   * An intrinsic object that provides functions to convert JavaScript values to and from the JavaScript Object Notation (JSON) format.
   */

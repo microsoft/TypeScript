@@ -2,10 +2,30 @@
 //// * This is a class.
 //// */
 ////class /* But it has no name! */ {
-////    foo() {
-////    }
+////    foo() {}
 ////}
 
-
-// The class is unnamed, so its method is not included either.
-verify.navigationBarCount(2);
+// Anonymous classes are still included.
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "<class>",
+                "kind": "class"
+            }
+        ]
+    },
+    {
+        "text": "<class>",
+        "kind": "class",
+        "childItems": [
+            {
+                "text": "foo",
+                "kind": "method"
+            }
+        ],
+        "indent": 1
+    }
+]);

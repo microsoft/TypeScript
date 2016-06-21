@@ -7,8 +7,8 @@ namespace ts {
     }
 
     export function getLineStartPositionForPosition(position: number, sourceFile: SourceFile): number {
-        let lineStarts = sourceFile.getLineStarts();
-        let line = sourceFile.getLineAndCharacterOfPosition(position).line;
+        const lineStarts = sourceFile.getLineStarts();
+        const line = sourceFile.getLineAndCharacterOfPosition(position).line;
         return lineStarts[line];
     }
 
@@ -29,8 +29,8 @@ namespace ts {
     }
 
     export function startEndOverlapsWithStartEnd(start1: number, end1: number, start2: number, end2: number) {
-        let start = Math.max(start1, start2);
-        let end = Math.min(end1, end2);
+        const start = Math.max(start1, start2);
+        const end = Math.min(end1, end2);
         return start < end;
     }
 
@@ -131,7 +131,7 @@ namespace ts {
                 return isCompletedNode((<IterationStatement>n).statement, sourceFile);
             case SyntaxKind.DoStatement:
                 // rough approximation: if DoStatement has While keyword - then if node is completed is checking the presence of ')';
-                let hasWhileKeyword = findChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile);
+                const hasWhileKeyword = findChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile);
                 if (hasWhileKeyword) {
                     return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
                 }
@@ -145,13 +145,13 @@ namespace ts {
             case SyntaxKind.VoidExpression:
             case SyntaxKind.YieldExpression:
             case SyntaxKind.SpreadElementExpression:
-                let unaryWordExpression = (<TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElementExpression>n);
+                const unaryWordExpression = (<TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElementExpression>n);
                 return isCompletedNode(unaryWordExpression.expression, sourceFile);
 
             case SyntaxKind.TaggedTemplateExpression:
                 return isCompletedNode((<TaggedTemplateExpression>n).template, sourceFile);
             case SyntaxKind.TemplateExpression:
-                let lastSpan = lastOrUndefined((<TemplateExpression>n).templateSpans);
+                const lastSpan = lastOrUndefined((<TemplateExpression>n).templateSpans);
                 return isCompletedNode(lastSpan, sourceFile);
             case SyntaxKind.TemplateSpan:
                 return nodeIsPresent((<TemplateSpan>n).literal);
@@ -173,9 +173,9 @@ namespace ts {
      * If child at position 'length - 1' is 'SemicolonToken' it is skipped and 'expectedLastToken' is compared with child at position 'length - 2'.
      */
     function nodeEndsWith(n: Node, expectedLastToken: SyntaxKind, sourceFile: SourceFile): boolean {
-        let children = n.getChildren(sourceFile);
+        const children = n.getChildren(sourceFile);
         if (children.length) {
-            let last = lastOrUndefined(children);
+            const last = lastOrUndefined(children);
             if (last.kind === expectedLastToken) {
                 return true;
             }
@@ -187,7 +187,7 @@ namespace ts {
     }
 
     export function findListItemInfo(node: Node): ListItemInfo {
-        let list = findContainingList(node);
+        const list = findContainingList(node);
 
         // It is possible at this point for syntaxList to be undefined, either if
         // node.parent had no list child, or if none of its list children contained
@@ -197,8 +197,8 @@ namespace ts {
             return undefined;
         }
 
-        let children = list.getChildren();
-        let listItemIndex = indexOf(children, node);
+        const children = list.getChildren();
+        const listItemIndex = indexOf(children, node);
 
         return {
             listItemIndex,
@@ -219,7 +219,7 @@ namespace ts {
         // be parented by the container of the SyntaxList, not the SyntaxList itself.
         // In order to find the list item index, we first need to locate SyntaxList itself and then search
         // for the position of the relevant node (or comma).
-        let syntaxList = forEach(node.parent.getChildren(), c => {
+        const syntaxList = forEach(node.parent.getChildren(), c => {
             // find syntax list that covers the span of the node
             if (c.kind === SyntaxKind.SyntaxList && c.pos <= node.pos && c.end >= node.end) {
                 return c;
@@ -234,29 +234,29 @@ namespace ts {
     /* Gets the token whose text has range [start, end) and
      * position >= start and (position < end or (position === end && token is keyword or identifier))
      */
-    export function getTouchingWord(sourceFile: SourceFile, position: number): Node {
-        return getTouchingToken(sourceFile, position, n => isWord(n.kind));
+    export function getTouchingWord(sourceFile: SourceFile, position: number, includeJsDocComment = false): Node {
+        return getTouchingToken(sourceFile, position, n => isWord(n.kind), includeJsDocComment);
     }
 
     /* Gets the token whose text has range [start, end) and position >= start
      * and (position < end or (position === end && token is keyword or identifier or numeric/string literal))
      */
-    export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
-        return getTouchingToken(sourceFile, position, n => isPropertyName(n.kind));
+    export function getTouchingPropertyName(sourceFile: SourceFile, position: number, includeJsDocComment = false): Node {
+        return getTouchingToken(sourceFile, position, n => isPropertyName(n.kind), includeJsDocComment);
     }
 
     /** Returns the token if position is in [start, end) or if position === end and includeItemAtEndPosition(token) === true */
-    export function getTouchingToken(sourceFile: SourceFile, position: number, includeItemAtEndPosition?: (n: Node) => boolean): Node {
-        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includeItemAtEndPosition);
+    export function getTouchingToken(sourceFile: SourceFile, position: number, includeItemAtEndPosition?: (n: Node) => boolean, includeJsDocComment = false): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includeItemAtEndPosition, includeJsDocComment);
     }
 
     /** Returns a token if position is in [start-of-leading-trivia, end) */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number): Node {
-        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includeItemAtEndPosition*/ undefined);
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment = false): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includeItemAtEndPosition*/ undefined, includeJsDocComment);
     }
 
     /** Get the token whose text contains the position */
-    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean): Node {
+    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean, includeJsDocComment = false): Node {
         let current: Node = sourceFile;
         outer: while (true) {
             if (isToken(current)) {
@@ -264,24 +264,49 @@ namespace ts {
                 return current;
             }
 
+            if (includeJsDocComment) {
+                const jsDocChildren = ts.filter(current.getChildren(), isJSDocNode);
+                for (const jsDocChild of jsDocChildren) {
+                    const start = allowPositionInLeadingTrivia ? jsDocChild.getFullStart() : jsDocChild.getStart(sourceFile, includeJsDocComment);
+                    if (start <= position) {
+                        const end = jsDocChild.getEnd();
+                        if (position < end || (position === end && jsDocChild.kind === SyntaxKind.EndOfFileToken)) {
+                            current = jsDocChild;
+                            continue outer;
+                        }
+                        else if (includeItemAtEndPosition && end === position) {
+                            const previousToken = findPrecedingToken(position, sourceFile, jsDocChild);
+                            if (previousToken && includeItemAtEndPosition(previousToken)) {
+                                return previousToken;
+                            }
+                        }
+                    }
+                }
+            }
+
             // find the child that contains 'position'
             for (let i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
-                let child = current.getChildAt(i);
-                let start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile);
+                const child = current.getChildAt(i);
+                // all jsDocComment nodes were already visited
+                if (isJSDocNode(child)) {
+                    continue;
+                }
+                const start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile, includeJsDocComment);
                 if (start <= position) {
-                    let end = child.getEnd();
+                    const end = child.getEnd();
                     if (position < end || (position === end && child.kind === SyntaxKind.EndOfFileToken)) {
                         current = child;
                         continue outer;
                     }
                     else if (includeItemAtEndPosition && end === position) {
-                        let previousToken = findPrecedingToken(position, sourceFile, child);
+                        const previousToken = findPrecedingToken(position, sourceFile, child);
                         if (previousToken && includeItemAtEndPosition(previousToken)) {
                             return previousToken;
                         }
                     }
                 }
             }
+
             return current;
         }
     }
@@ -297,7 +322,7 @@ namespace ts {
     export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node {
         // Ideally, getTokenAtPosition should return a token. However, it is currently
         // broken, so we do a check to make sure the result was indeed a token.
-        let tokenAtPosition = getTokenAtPosition(file, position);
+        const tokenAtPosition = getTokenAtPosition(file, position);
         if (isToken(tokenAtPosition) && position > tokenAtPosition.getStart(file) && position < tokenAtPosition.getEnd()) {
             return tokenAtPosition;
         }
@@ -314,9 +339,9 @@ namespace ts {
                 return n;
             }
 
-            let children = n.getChildren();
-            for (let child of children) {
-                let shouldDiveInChildNode =
+            const children = n.getChildren();
+            for (const child of children) {
+                const shouldDiveInChildNode =
                     // previous token is enclosed somewhere in the child
                     (child.pos <= previousToken.pos && child.end > previousToken.end) ||
                     // previous token ends exactly at the beginning of child
@@ -339,8 +364,8 @@ namespace ts {
                 return n;
             }
 
-            let children = n.getChildren();
-            let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+            const children = n.getChildren();
+            const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
             return candidate && findRightmostToken(candidate);
 
         }
@@ -352,7 +377,7 @@ namespace ts {
 
             const children = n.getChildren();
             for (let i = 0, len = children.length; i < len; i++) {
-                let child = children[i];
+                const child = children[i];
                 // condition 'position < child.end' checks if child node end after the position
                 // in the example below this condition will be false for 'aaaa' and 'bbbb' and true for 'ccc'
                 // aaaa___bbbb___$__ccc
@@ -369,7 +394,7 @@ namespace ts {
 
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
-                        let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
+                        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
                         return candidate && findRightmostToken(candidate);
                     }
                     else {
@@ -386,14 +411,14 @@ namespace ts {
             // Try to find the rightmost token in the file without filtering.
             // Namely we are skipping the check: 'position < node.end'
             if (children.length) {
-                let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+                const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
                 return candidate && findRightmostToken(candidate);
             }
         }
 
         /// finds last node that is considered as candidate for search (isCandidate(node) === true) starting from 'exclusiveStartPosition'
         function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node {
-            for (let i = exclusiveStartPosition - 1; i >= 0; --i) {
+            for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
                 if (nodeHasTokens(children[i])) {
                     return children[i];
                 }
@@ -401,9 +426,27 @@ namespace ts {
         }
     }
 
-    export function isInString(sourceFile: SourceFile, position: number) {
-        let token = getTokenAtPosition(sourceFile, position);
-        return token && (token.kind === SyntaxKind.StringLiteral || token.kind === SyntaxKind.StringLiteralType) && position > token.getStart(sourceFile);
+    export function isInString(sourceFile: SourceFile, position: number): boolean {
+        const previousToken = findPrecedingToken(position, sourceFile);
+        if (previousToken &&
+            (previousToken.kind === SyntaxKind.StringLiteral || previousToken.kind === SyntaxKind.StringLiteralType)) {
+            const start = previousToken.getStart();
+            const end = previousToken.getEnd();
+
+            // To be "in" one of these literals, the position has to be:
+            //   1. entirely within the token text.
+            //   2. at the end position of an unterminated token.
+            //   3. at the end of a regular expression (due to trailing flags like '/foo/g').
+            if (start < position && position < end) {
+                return true;
+            }
+
+            if (position === end) {
+                return !!(<LiteralExpression>previousToken).isUnterminated;
+            }
+        }
+
+        return false;
     }
 
     export function isInComment(sourceFile: SourceFile, position: number) {
@@ -414,10 +457,14 @@ namespace ts {
      * returns true if the position is in between the open and close elements of an JSX expression.
      */
     export function isInsideJsxElementOrAttribute(sourceFile: SourceFile, position: number) {
-        let token = getTokenAtPosition(sourceFile, position);
+        const token = getTokenAtPosition(sourceFile, position);
 
         if (!token) {
             return false;
+        }
+
+        if (token.kind === SyntaxKind.JsxText) {
+            return true;
         }
 
         // <div>Hello |</div>
@@ -430,7 +477,7 @@ namespace ts {
             return true;
         }
 
-        // <div> { 
+        // <div> {
         // |
         // } < /div>
         if (token && token.kind === SyntaxKind.CloseBraceToken && token.parent.kind === SyntaxKind.JsxExpression) {
@@ -446,7 +493,7 @@ namespace ts {
     }
 
     export function isInTemplateString(sourceFile: SourceFile, position: number) {
-        let token = getTokenAtPosition(sourceFile, position);
+        const token = getTokenAtPosition(sourceFile, position);
         return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
     }
 
@@ -455,10 +502,10 @@ namespace ts {
      * satisfies predicate, and false otherwise.
      */
     export function isInCommentHelper(sourceFile: SourceFile, position: number, predicate?: (c: CommentRange) => boolean): boolean {
-        let token = getTokenAtPosition(sourceFile, position);
+        const token = getTokenAtPosition(sourceFile, position);
 
         if (token && position <= token.getStart(sourceFile)) {
-            let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+            const commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
 
             // The end marker of a single-line comment does not include the newline character.
             // In the following case, we are inside a comment (^ denotes the cursor position):
@@ -482,10 +529,10 @@ namespace ts {
     }
 
     export function hasDocComment(sourceFile: SourceFile, position: number) {
-        let token = getTokenAtPosition(sourceFile, position);
+        const token = getTokenAtPosition(sourceFile, position);
 
         // First, we have to see if this position actually landed in a comment.
-        let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+        const commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
 
         return forEach(commentRanges, jsDocPrefix);
 
@@ -515,11 +562,12 @@ namespace ts {
         }
 
         if (node) {
-            let jsDocComment = node.jsDocComment;
-            if (jsDocComment) {
-                for (let tag of jsDocComment.tags) {
-                    if (tag.pos <= position && position <= tag.end) {
-                        return tag;
+            if (node.jsDocComments) {
+                for (const jsDocComment of node.jsDocComments) {
+                    for (const tag of jsDocComment.tags) {
+                        if (tag.pos <= position && position <= tag.end) {
+                            return tag;
+                        }
                     }
                 }
             }
@@ -535,8 +583,8 @@ namespace ts {
     }
 
     export function getNodeModifiers(node: Node): string {
-        let flags = getCombinedNodeFlags(node);
-        let result: string[] = [];
+        const flags = getCombinedNodeFlags(node);
+        const result: string[] = [];
 
         if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
         if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
@@ -608,7 +656,7 @@ namespace ts {
     }
 
     export function compareDataObjects(dst: any, src: any): boolean {
-        for (let e in dst) {
+        for (const e in dst) {
             if (typeof dst[e] === "object") {
                 if (!compareDataObjects(dst[e], src[e])) {
                     return false;
@@ -643,7 +691,7 @@ namespace ts {
 
             // [a, b, c] of
             // [x, [a, b, c] ] = someExpression
-            // or 
+            // or
             // {x, a: {a, b, c} } = someExpression
             if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.kind === SyntaxKind.PropertyAssignment ? node.parent.parent : node.parent)) {
                 return true;
@@ -661,7 +709,7 @@ namespace ts {
         return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter;
     }
 
-    let displayPartWriter = getDisplayPartWriter();
+    const displayPartWriter = getDisplayPartWriter();
     function getDisplayPartWriter(): DisplayPartsSymbolWriter {
         let displayParts: SymbolDisplayPart[];
         let lineStart: boolean;
@@ -687,7 +735,7 @@ namespace ts {
 
         function writeIndent() {
             if (lineStart) {
-                let indentString = getIndentString(indent);
+                const indentString = getIndentString(indent);
                 if (indentString) {
                     displayParts.push(displayPart(indentString, SymbolDisplayPartKind.space));
                 }
@@ -721,7 +769,7 @@ namespace ts {
         return displayPart(text, displayPartKind(symbol), symbol);
 
         function displayPartKind(symbol: Symbol): SymbolDisplayPartKind {
-            let flags = symbol.flags;
+            const flags = symbol.flags;
 
             if (flags & SymbolFlags.Variable) {
                 return isFirstDeclarationOfSymbolParameter(symbol) ? SymbolDisplayPartKind.parameterName : SymbolDisplayPartKind.localName;
@@ -792,7 +840,7 @@ namespace ts {
 
     export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
         writeDisplayParts(displayPartWriter);
-        let result = displayPartWriter.displayParts();
+        const result = displayPartWriter.displayParts();
         displayPartWriter.clear();
         return result;
     }
@@ -828,9 +876,9 @@ namespace ts {
 
         // Try to get the local symbol if we're dealing with an 'export default'
         // since that symbol has the "true" name.
-        let localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
+        const localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
 
-        let name = typeChecker.symbolToString(localExportDefaultSymbol || symbol);
+        const name = typeChecker.symbolToString(localExportDefaultSymbol || symbol);
 
         return name;
     }
@@ -847,7 +895,7 @@ namespace ts {
      * @return non-quoted string
      */
     export function stripQuotes(name: string) {
-        let length = name.length;
+        const length = name.length;
         if (length >= 2 &&
             name.charCodeAt(0) === name.charCodeAt(length - 1) &&
             (name.charCodeAt(0) === CharacterCodes.doubleQuote || name.charCodeAt(0) === CharacterCodes.singleQuote)) {

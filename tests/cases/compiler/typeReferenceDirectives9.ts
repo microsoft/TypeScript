@@ -1,6 +1,6 @@
 // @noImplicitReferences: true
 // @declaration: true
-// @typesRoot: /
+// @typeRoots: /types
 // @traceResolution: true
 
 // @filename: /types/lib/index.d.ts

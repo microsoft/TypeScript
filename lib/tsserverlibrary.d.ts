@@ -247,7 +247,7 @@ declare namespace ts {
         ModuleDeclaration = 225,
         ModuleBlock = 226,
         CaseBlock = 227,
-        GlobalModuleExportDeclaration = 228,
+        NamespaceExportDeclaration = 228,
         ImportEqualsDeclaration = 229,
         ImportDeclaration = 230,
         ImportClause = 231,
@@ -298,8 +298,11 @@ declare namespace ts {
         JSDocReturnTag = 276,
         JSDocTypeTag = 277,
         JSDocTemplateTag = 278,
-        SyntaxList = 279,
-        Count = 280,
+        JSDocTypedefTag = 279,
+        JSDocPropertyTag = 280,
+        JSDocTypeLiteral = 281,
+        SyntaxList = 282,
+        Count = 283,
         FirstAssignment = 56,
         LastAssignment = 68,
         FirstReservedWord = 70,
@@ -323,6 +326,10 @@ declare namespace ts {
         FirstBinaryOperator = 25,
         LastBinaryOperator = 68,
         FirstNode = 139,
+        FirstJSDocNode = 257,
+        LastJSDocNode = 281,
+        FirstJSDocTagNode = 273,
+        LastJSDocTagNode = 281,
     }
     const enum NodeFlags {
         None = 0,
@@ -363,6 +370,7 @@ declare namespace ts {
         BlockScoped = 3072,
         ReachabilityCheckFlags = 98304,
         EmitHelperFlags = 3932160,
+        ReachabilityAndEmitFlags = 4030464,
         ContextFlags = 197132288,
         TypeExcludesFlags = 41943040,
     }
@@ -384,7 +392,7 @@ declare namespace ts {
         modifiers?: ModifiersArray;
         id?: number;
         parent?: Node;
-        jsDocComment?: JSDocComment;
+        jsDocComments?: JSDocComment[];
         symbol?: Symbol;
         locals?: SymbolTable;
         nextContainer?: Node;
@@ -925,7 +933,7 @@ declare namespace ts {
     interface NamespaceImport extends Declaration {
         name: Identifier;
     }
-    interface GlobalModuleExportDeclaration extends DeclarationStatement {
+    interface NamespaceExportDeclaration extends DeclarationStatement {
         name: Identifier;
         moduleReference: LiteralLikeNode;
     }
@@ -1031,6 +1039,19 @@ declare namespace ts {
     interface JSDocTypeTag extends JSDocTag {
         typeExpression: JSDocTypeExpression;
     }
+    interface JSDocTypedefTag extends JSDocTag, Declaration {
+        name?: Identifier;
+        typeExpression?: JSDocTypeExpression;
+        jsDocTypeLiteral?: JSDocTypeLiteral;
+    }
+    interface JSDocPropertyTag extends JSDocTag, TypeElement {
+        name: Identifier;
+        typeExpression: JSDocTypeExpression;
+    }
+    interface JSDocTypeLiteral extends JSDocType {
+        jsDocPropertyTags?: NodeArray<JSDocPropertyTag>;
+        jsDocTypeTag?: JSDocTypeTag;
+    }
     interface JSDocParameterTag extends JSDocTag {
         preParameterName?: Identifier;
         typeExpression?: JSDocTypeExpression;
@@ -1053,6 +1074,9 @@ declare namespace ts {
     interface FlowNode {
         flags: FlowFlags;
         id?: number;
+    }
+    interface FlowStart extends FlowNode {
+        container?: FunctionExpression | ArrowFunction;
     }
     interface FlowLabel extends FlowNode {
         antecedents: FlowNode[];
@@ -1087,7 +1111,6 @@ declare namespace ts {
         scriptKind: ScriptKind;
         externalModuleIndicator: Node;
         commonJsModuleIndicator: Node;
-        wasReferenced?: boolean;
         identifiers: Map<string>;
         nodeCount: number;
         identifierCount: number;
@@ -1100,6 +1123,7 @@ declare namespace ts {
         resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         imports: LiteralExpression[];
         moduleAugmentations: LiteralExpression[];
+        patternAmbientModules?: PatternAmbientModule[];
     }
     interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
@@ -1381,7 +1405,7 @@ declare namespace ts {
         FunctionScopedVariableExcludes = 107454,
         BlockScopedVariableExcludes = 107455,
         ParameterExcludes = 107455,
-        PropertyExcludes = 107455,
+        PropertyExcludes = 0,
         EnumMemberExcludes = 107455,
         FunctionExcludes = 106927,
         ClassExcludes = 899519,
@@ -1440,6 +1464,14 @@ declare namespace ts {
     interface SymbolTable {
         [index: string]: Symbol;
     }
+    interface Pattern {
+        prefix: string;
+        suffix: string;
+    }
+    interface PatternAmbientModule {
+        pattern: Pattern;
+        symbol: Symbol;
+    }
     const enum NodeCheckFlags {
         TypeChecked = 1,
         LexicalThis = 2,
@@ -1495,7 +1527,7 @@ declare namespace ts {
         FromSignature = 262144,
         ObjectLiteral = 524288,
         FreshObjectLiteral = 1048576,
-        ContainsUndefinedOrNull = 2097152,
+        ContainsWideningType = 2097152,
         ContainsObjectLiteral = 4194304,
         ContainsAnyFunctionType = 8388608,
         ESSymbol = 16777216,
@@ -1503,6 +1535,7 @@ declare namespace ts {
         ObjectLiteralPatternWithComputedProperties = 67108864,
         Never = 134217728,
         Nullable = 96,
+        Falsy = 126,
         Intrinsic = 150995071,
         Primitive = 16777726,
         StringLike = 258,
@@ -1510,7 +1543,7 @@ declare namespace ts {
         ObjectType = 80896,
         UnionOrIntersection = 49152,
         StructuredType = 130048,
-        Narrowable = 97793,
+        Narrowable = 16908175,
         RequiresWidening = 6291456,
         PropagatingFlags = 14680064,
     }
@@ -1677,73 +1710,73 @@ declare namespace ts {
     type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
     type CompilerOptionsValue = string | number | boolean | (string | number)[] | TsConfigOnlyOptions;
     interface CompilerOptions {
+        allowJs?: boolean;
         allowNonTsExtensions?: boolean;
+        allowSyntheticDefaultImports?: boolean;
+        allowUnreachableCode?: boolean;
+        allowUnusedLabels?: boolean;
+        baseUrl?: string;
         charset?: string;
+        configFilePath?: string;
         declaration?: boolean;
         declarationDir?: string;
         diagnostics?: boolean;
         emitBOM?: boolean;
+        emitDecoratorMetadata?: boolean;
+        experimentalDecorators?: boolean;
+        forceConsistentCasingInFileNames?: boolean;
         help?: boolean;
         init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
+        isolatedModules?: boolean;
         jsx?: JsxEmit;
-        reactNamespace?: string;
+        lib?: string[];
+        listEmittedFiles?: boolean;
         listFiles?: boolean;
-        typesSearchPaths?: string[];
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+        moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
+        noFallthroughCasesInSwitch?: boolean;
         noImplicitAny?: boolean;
+        noImplicitReturns?: boolean;
         noImplicitThis?: boolean;
+        noImplicitUseStrict?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
         out?: string;
-        outFile?: string;
         outDir?: string;
+        outFile?: string;
+        paths?: PathSubstitutions;
         preserveConstEnums?: boolean;
-        pretty?: DiagnosticStyle;
         project?: string;
+        pretty?: DiagnosticStyle;
+        reactNamespace?: string;
         removeComments?: boolean;
         rootDir?: string;
+        rootDirs?: RootPaths;
+        skipLibCheck?: boolean;
+        skipDefaultLibCheck?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
+        strictNullChecks?: boolean;
+        stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
+        suppressOutputPathCheck?: boolean;
         target?: ScriptTarget;
+        traceResolution?: boolean;
+        types?: string[];
+        typesRoot?: string;
+        typesSearchPaths?: string[];
         version?: boolean;
         watch?: boolean;
-        isolatedModules?: boolean;
-        experimentalDecorators?: boolean;
-        emitDecoratorMetadata?: boolean;
-        moduleResolution?: ModuleResolutionKind;
-        allowUnusedLabels?: boolean;
-        allowUnreachableCode?: boolean;
-        noImplicitReturns?: boolean;
-        noFallthroughCasesInSwitch?: boolean;
-        forceConsistentCasingInFileNames?: boolean;
-        baseUrl?: string;
-        paths?: PathSubstitutions;
-        rootDirs?: RootPaths;
-        traceResolution?: boolean;
-        allowSyntheticDefaultImports?: boolean;
-        allowJs?: boolean;
-        noImplicitUseStrict?: boolean;
-        strictNullChecks?: boolean;
-        listEmittedFiles?: boolean;
-        lib?: string[];
-        stripInternal?: boolean;
-        skipDefaultLibCheck?: boolean;
-        suppressOutputPathCheck?: boolean;
-        configFilePath?: string;
-        typesRoot?: string;
-        types?: string[];
-        list?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
     interface TypingOptions {
@@ -1967,6 +2000,7 @@ declare namespace ts {
         trace?(s: string): void;
         directoryExists?(directoryName: string): boolean;
         realpath?(path: string): string;
+        getCurrentDirectory?(): string;
     }
     interface ResolvedModule {
         resolvedFileName: string;
@@ -1990,6 +2024,7 @@ declare namespace ts {
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
+        getDefaultTypeDirectiveNames?(rootPath: string): string[];
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
@@ -2012,6 +2047,9 @@ declare namespace ts {
         getDiagnostics(fileName?: string): Diagnostic[];
         getModificationCount(): number;
         reattachFileDiagnostics(newFile: SourceFile): void;
+    }
+    interface SyntaxList extends Node {
+        _children: Node[];
     }
 }
 declare namespace ts {
@@ -2091,6 +2129,8 @@ declare namespace ts {
     function getSupportedExtensions(options?: CompilerOptions): string[];
     function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions): boolean;
     function removeFileExtension(path: string): string;
+    function tryRemoveExtension(path: string, extension: string): string;
+    function isJsxOrTsxExtension(ext: string): boolean;
     interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
         getSourceFileConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => SourceFile;
@@ -2115,7 +2155,7 @@ declare namespace ts {
 }
 declare namespace ts {
     type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
-    type DirectoryWatcherCallback = (directoryName: string) => void;
+    type DirectoryWatcherCallback = (fileName: string) => void;
     interface WatchedFile {
         fileName: string;
         callback: FileWatcherCallback;
@@ -2136,6 +2176,7 @@ declare namespace ts {
         createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         getModifiedTime?(path: string): Date;
         createHash?(data: string): string;
@@ -2820,7 +2861,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Cannot_compile_modules_unless_the_module_flag_is_provided_with_a_valid_module_type_Consider_setting_the_module_compiler_option_in_a_tsconfig_json_file: {
+        Cannot_use_imports_exports_or_module_augmentations_when_module_is_none: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -3096,13 +3137,13 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead: {
+        Import_assignment_cannot_be_used_when_targeting_ECMAScript_2015_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead: {
             code: number;
             category: DiagnosticCategory;
             key: string;
             message: string;
         };
-        Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_modules_Consider_using_export_default_or_another_module_format_instead: {
+        Export_assignment_cannot_be_used_when_targeting_ECMAScript_2015_modules_Consider_using_export_default_or_another_module_format_instead: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -3186,7 +3227,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Generators_are_only_available_when_targeting_ECMAScript_6_or_higher: {
+        Generators_are_only_available_when_targeting_ECMAScript_2015_or_higher: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -3384,6 +3425,12 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        _0_tag_cannot_be_used_independently_as_a_top_level_JSDoc_tag: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
         with_statements_are_not_allowed_in_an_async_function_block: {
             code: number;
             category: DiagnosticCategory;
@@ -3396,7 +3443,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Async_functions_are_only_available_when_targeting_ECMAScript_6_and_higher: {
+        Async_functions_are_only_available_when_targeting_ECMAScript_2015_or_higher: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -5040,6 +5087,18 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        Identifier_0_must_be_imported_from_a_module: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        All_declarations_of_0_must_have_identical_modifiers: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
         Import_declaration_0_is_using_private_name_1: {
             code: number;
             category: DiagnosticCategory;
@@ -5526,7 +5585,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Option_inlineSources_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided: {
+        Option_0_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -5598,7 +5657,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Substututions_for_pattern_0_should_be_an_array: {
+        Substitutions_for_pattern_0_should_be_an_array: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -5671,6 +5730,12 @@ declare namespace ts {
             message: string;
         };
         Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typechecking: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Skip_type_checking_of_declaration_files: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -6282,6 +6347,18 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        File_name_0_has_a_1_extension_stripping_it: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
         Variable_0_implicitly_has_an_1_type: {
             code: number;
             category: DiagnosticCategory;
@@ -6646,7 +6723,7 @@ declare namespace ts {
     function isLineBreak(ch: number): boolean;
     function isOctalDigit(ch: number): boolean;
     function couldStartTrivia(text: string, pos: number): boolean;
-    function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number;
+    function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean, stopAtComments?: boolean): number;
     function getLeadingCommentRanges(text: string, pos: number): CommentRange[];
     function getTrailingCommentRanges(text: string, pos: number): CommentRange[];
     function getShebang(text: string): string;
@@ -6656,7 +6733,7 @@ declare namespace ts {
     function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant?: LanguageVariant, text?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
 }
 declare namespace ts {
-    let optionDeclarations: CommandLineOption[];
+    const optionDeclarations: CommandLineOption[];
     let typingOptionDeclarations: CommandLineOption[];
     interface OptionNameMap {
         optionNameMap: Map<CommandLineOption>;
@@ -6730,7 +6807,8 @@ declare namespace ts {
     function getEndLinePosition(line: number, sourceFile: SourceFile): number;
     function nodeIsMissing(node: Node): boolean;
     function nodeIsPresent(node: Node): boolean;
-    function getTokenPosOfNode(node: Node, sourceFile?: SourceFile): number;
+    function getTokenPosOfNode(node: Node, sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
+    function isJSDocNode(node: Node): boolean;
     function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFile): number;
     function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia?: boolean): string;
     function getTextOfNodeFromSourceText(sourceText: string, node: Node): string;
@@ -6780,10 +6858,10 @@ declare namespace ts {
     function isIdentifierTypePredicate(predicate: TypePredicate): predicate is IdentifierTypePredicate;
     function isThisTypePredicate(predicate: TypePredicate): predicate is ThisTypePredicate;
     function getContainingFunction(node: Node): FunctionLikeDeclaration;
-    function getContainingFunctionOrModule(node: Node): Node;
     function getContainingClass(node: Node): ClassLikeDeclaration;
     function getThisContainer(node: Node, includeArrowFunctions: boolean): Node;
     function getSuperContainer(node: Node, stopOnFunctions: boolean): Node;
+    function getImmediatelyInvokedFunctionExpression(func: Node): CallExpression;
     function isSuperPropertyOrElementAccess(node: Node): boolean;
     function getEntityNameFromTypeNode(node: TypeNode): EntityName | Expression;
     function getInvokedExpression(node: CallLikeExpression): Expression;
@@ -7013,8 +7091,11 @@ declare namespace ts {
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
     function computeCommonSourceDirectoryOfFilenames(fileNames: string[], currentDirectory: string, getCanonicalFileName: (fileName: string) => string): string;
+    function hasZeroOrOneAsteriskCharacter(str: string): boolean;
     function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
     function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
+    function findBestPatternMatch<T>(values: T[], getPattern: (value: T) => Pattern, candidate: string): T | undefined;
+    function tryParsePattern(pattern: string): Pattern | undefined;
     function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
     function directoryProbablyExists(directoryName: string, host: {
         directoryExists?: (directoryName: string) => boolean;
@@ -7024,6 +7105,7 @@ declare namespace ts {
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
     function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
+    function getDefaultTypeDirectiveNames(options: CompilerOptions, rootFiles: string[], host: CompilerHost): string[];
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program;
 }
 declare namespace ts.BreakpointResolver {
@@ -7033,7 +7115,7 @@ declare namespace ts.OutliningElementsCollector {
     function collectElements(sourceFile: SourceFile): OutliningSpan[];
 }
 declare namespace ts.NavigateTo {
-    function getNavigateToItems(program: Program, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number): NavigateToItem[];
+    function getNavigateToItems(program: Program, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number): NavigateToItem[];
 }
 declare namespace ts.NavigationBar {
     function getNavigationBarItems(sourceFile: SourceFile, compilerOptions: CompilerOptions): ts.NavigationBarItem[];
@@ -7062,7 +7144,20 @@ declare namespace ts {
     function breakIntoWordSpans(identifier: string): TextSpan[];
 }
 declare namespace ts.SignatureHelp {
+    const enum ArgumentListKind {
+        TypeArguments = 0,
+        CallArguments = 1,
+        TaggedTemplateArguments = 2,
+    }
+    interface ArgumentListInfo {
+        kind: ArgumentListKind;
+        invocation: CallLikeExpression;
+        argumentsSpan: TextSpan;
+        argumentIndex?: number;
+        argumentCount: number;
+    }
     function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationToken): SignatureHelpItems;
+    function getContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile): ArgumentListInfo;
 }
 declare namespace ts {
     interface ListItemInfo {
@@ -7081,10 +7176,10 @@ declare namespace ts {
     function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): boolean;
     function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node;
     function findContainingList(node: Node): Node;
-    function getTouchingWord(sourceFile: SourceFile, position: number): Node;
-    function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node;
-    function getTouchingToken(sourceFile: SourceFile, position: number, includeItemAtEndPosition?: (n: Node) => boolean): Node;
-    function getTokenAtPosition(sourceFile: SourceFile, position: number): Node;
+    function getTouchingWord(sourceFile: SourceFile, position: number, includeJsDocComment?: boolean): Node;
+    function getTouchingPropertyName(sourceFile: SourceFile, position: number, includeJsDocComment?: boolean): Node;
+    function getTouchingToken(sourceFile: SourceFile, position: number, includeItemAtEndPosition?: (n: Node) => boolean, includeJsDocComment?: boolean): Node;
+    function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment?: boolean): Node;
     function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node;
     function findNextToken(previousToken: Node, parent: Node): Node;
     function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node): Node;
@@ -7226,7 +7321,7 @@ declare namespace ts.formatting {
     class RuleOperation {
         Context: RuleOperationContext;
         Action: RuleAction;
-        constructor();
+        constructor(Context: RuleOperationContext, Action: RuleAction);
         toString(): string;
         static create1(action: RuleAction): RuleOperation;
         static create2(context: RuleOperationContext, action: RuleAction): RuleOperation;
@@ -7431,7 +7526,7 @@ declare namespace ts.formatting {
     }
 }
 declare namespace ts.formatting {
-    module Shared {
+    namespace Shared {
         interface ITokenAccess {
             GetTokens(): SyntaxKind[];
             Contains(token: SyntaxKind): boolean;
@@ -7516,7 +7611,7 @@ declare namespace ts.formatting {
     function getIndentationString(indentation: number, options: FormatCodeOptions): string;
 }
 declare namespace ts.formatting {
-    module SmartIndenter {
+    namespace SmartIndenter {
         function getIndentation(position: number, sourceFile: SourceFile, options: EditorOptions): number;
         function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: FormatCodeOptions): number;
         function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFile): boolean;
@@ -7536,7 +7631,7 @@ declare namespace ts {
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
         getChildren(sourceFile?: SourceFile): Node[];
-        getStart(sourceFile?: SourceFile): number;
+        getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
         getFullStart(): number;
         getEnd(): number;
         getWidth(sourceFile?: SourceFile): number;
@@ -8487,6 +8582,7 @@ declare namespace ts {
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
         getProjectVersion?(): string;
@@ -8582,6 +8678,7 @@ declare namespace ts {
         getLocalizedDiagnosticMessages(): any;
         getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
         getDefaultLibFileName(options: CompilerOptions): string;
     }
     class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost {
