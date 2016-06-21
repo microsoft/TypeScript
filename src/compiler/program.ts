@@ -1213,8 +1213,7 @@ namespace ts {
                 let result: any;
                 let error: any;
                 if (host.loadExtension) {
-                    // TODO (weswig): @ts is taken on npm. Aquire it or use @tsc?
-                    const resolved = resolveModuleName(combinePaths("@ts", name), combinePaths(currentDirectory, "tsconfig.json"), options, host, /*loadJs*/true).resolvedModule;
+                    const resolved = resolveModuleName(name, combinePaths(currentDirectory, "tsconfig.json"), options, host, /*loadJs*/true).resolvedModule;
                     if (resolved) {
                         try {
                             result = host.loadExtension(resolved.resolvedFileName);

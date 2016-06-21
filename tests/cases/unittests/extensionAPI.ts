@@ -161,7 +161,7 @@ export abstract class SemanticLintWalker implements tsi.LintWalker {
         const extensions: Map<Map<string>> = {
             "test-syntactic-lint": {
                 "package.json": `{
-  "name": "@ts/test-syntactic-lint",
+  "name": "test-syntactic-lint",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -185,7 +185,7 @@ export default class IsNamedFoo extends SyntacticLintWalker {
             },
             "test-semantic-lint": {
                 "package.json": `{
-  "name": "@ts/test-semantic-lint",
+  "name": "test-semantic-lint",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -210,7 +210,7 @@ export default class IsValueFoo extends SemanticLintWalker {
             },
             "test-extension-arguments": {
                 "package.json": `{
-  "name": "@ts/test-extension-arguments",
+  "name": "test-extension-arguments",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -236,7 +236,7 @@ export default class IsNamedX extends SyntacticLintWalker {
             },
             "test-multi-extension": {
                 "package.json": `{
-  "name": "@ts/test-multi-extension",
+  "name": "test-multi-extension",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -308,7 +308,7 @@ export class IsValueBar extends SemanticLintWalker {
          * Setup a new test, where all extensions specified in the options hash are available in a node_modules folder, alongside the extension API
          */
         function test(sources: Map<string>, options: ExtensionTestOptions) {
-            forEach(options.availableExtensions, ext => loadSetIntoFsAt(extensions[ext], `/node_modules/@ts/${ext}`));
+            forEach(options.availableExtensions, ext => loadSetIntoFsAt(extensions[ext], `/node_modules/${ext}`));
             const diagnostics = buildMap(sources, sources, options.compilerOptions);
             checkDiagnostics(diagnostics, options.expectedDiagnostics);
         }
