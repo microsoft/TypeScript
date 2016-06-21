@@ -175,7 +175,7 @@ namespace ts {
 
     function getEffectiveTypeRoots(options: CompilerOptions, host: ModuleResolutionHost) {
         return options.typeRoots ||
-            defaultTypeRoots.map(d => combinePaths(options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory(), d));
+            map(defaultTypeRoots, d => combinePaths(options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory(), d));
     }
 
     /**
