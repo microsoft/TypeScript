@@ -1,3 +1,3 @@
 ///<reference path='..\services.ts' />
-///<reference path='quickFixProvider.ts' />
+///<reference path='codeFixProvider.ts' />
 ///<reference path='superFixes.ts' />

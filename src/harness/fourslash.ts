@@ -382,7 +382,7 @@ namespace FourSlash {
 
             if (exists !== negative) {
                 this.printErrorLog(negative, this.getAllDiagnostics());
-                throw new Error("Failure between markers: " + startMarkerName + ", " + endMarkerName);
+                throw new Error(`Failure between markers: '${startMarkerName}', '${endMarkerName}'`);
             }
         }
 
@@ -1509,6 +1509,10 @@ namespace FourSlash {
             }
         }
 
+        private removeWhitespace(text: string): string {
+            return text.replace(/[ \r\n\t]/g, "");
+        }
+
         public goToBOF() {
             this.goToPosition(0);
         }
@@ -1813,21 +1817,34 @@ namespace FourSlash {
             }
         }
 
-        public verifyCodeFixAtPosition(expectedChange: { span: ts.TextSpan, newText: string }) {
-            const diagnostics = this.getDiagnostics(this.activeFile.fileName);
+        public verifyCodeFixAtPosition(expectedText: string) {
+            const fileName = this.activeFile.fileName;
+            const diagnostics = this.getDiagnostics(fileName);
 
             if (diagnostics.length === 0) {
-                this.raiseError("Errors expected");
+                this.raiseError("Errors expected.");
             }
 
             // we expect a single error per file
             const errorCode = diagnostics[0].code;
             const position = diagnostics[0].start;
 
-            const actual = this.languageService.getCodeFixAtPosition(this.activeFile.fileName, position, position, [`TS${errorCode}`]);
+            const actual = this.languageService.getCodeFixesAtPosition(this.activeFile.fileName, position, position, [`TS${errorCode}`]);
 
-            if (actual.textChanges[0].newText !== expectedChange.newText) {
-                this.raiseError(`Not the expected text change.`);
+            if (!actual || actual.length == 0) {
+                this.raiseError("No codefixes returned.");
+            }
+
+            if (actual.length > 1) {
+                this.raiseError("More than 1 codefix returned.");
+            }
+
+            this.applyEdits(fileName, actual[0].textChanges, /*isFormattingEdit*/ false);
+            const actualText = this.getFileContent(fileName);
+
+            // We expect the editor to do the final formatting, so we can strip the compare ignoring whitespace
+            if (this.removeWhitespace(expectedText) !== this.removeWhitespace(actualText)) {
+                this.raiseError(`Expected insertion: '${expectedText}', actual insertion '${actualText}'.`)
             }
         }
 
@@ -3076,8 +3093,8 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
-        public codeFixAtPosition(expectedChange: { span: ts.TextSpan, newText: string }) {
-            this.state.verifyCodeFixAtPosition(expectedChange);
+        public codeFixAtPosition(expectedText: string) {
+            this.state.verifyCodeFixAtPosition(expectedText);
         }
 
         public getScriptLexicalStructureListCount(count: number) {

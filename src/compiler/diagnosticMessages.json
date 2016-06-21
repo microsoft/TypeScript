@@ -2980,5 +2980,9 @@
     "Unknown typing option '{0}'.": {
         "category": "Error",
         "code": 17010
+    },
+    "Add missing 'super()' call.": {
+        "category": "CodeFix",
+        "code": 90001
     }
 }

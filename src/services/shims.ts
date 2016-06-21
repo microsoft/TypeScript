@@ -229,7 +229,7 @@ namespace ts {
          */
         isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): string;
 
-        getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): string;
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string): string;
 
         getEmitOutput(fileName: string): string;
     }
@@ -859,10 +859,13 @@ namespace ts {
             );
         }
 
-        public getCodeFixAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): string {
+        public getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string): string {
             return this.forwardJSONCall(
-                `getCodeFixAtPosition( '${fileName}', ${start}, ${end}, '[${errorCodes.join(",")}]')`,
-                () => this.languageService.getCodeFixAtPosition(fileName, start, end, errorCodes)
+                `getCodeFixesAtPosition( '${fileName}', ${start}, ${end}, ${errorCodes}')`,
+                () => {
+                    const localErrors: string[] = JSON.parse(errorCodes);
+                    return this.languageService.getCodeFixesAtPosition(fileName, start, end, localErrors);
+                }
             );
         }
 
