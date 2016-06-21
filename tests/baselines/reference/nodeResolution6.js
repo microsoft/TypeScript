@@ -13,5 +13,7 @@ export declare var y;
 import y = require("a"); 
 
 
+//// [ref.js]
+var x = 1;
 //// [b.js]
 "use strict";
