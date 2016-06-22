@@ -15758,9 +15758,6 @@ namespace ts {
                     if (produceDiagnostics) {
                         const t = getTypeFromTypeNode(typeRefNode);
                         if (t !== unknownType) {
-                            if (t.symbol && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
-                                t.symbol.hasReference = true;
-                            }
                             const declaredType = (t.flags & TypeFlags.Reference) ? (<TypeReference>t).target : t;
                             if (declaredType.flags & (TypeFlags.Class | TypeFlags.Interface)) {
                                 checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(t, type.thisType), node.name || node, Diagnostics.Class_0_incorrectly_implements_interface_1);
