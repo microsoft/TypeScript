@@ -27,7 +27,7 @@ declare global {
 import del = require("del");
 import mkdirP = require("mkdirP");
 import minimist = require("minimist");
-import browserify = require("browserify");
+import browserify = require("browserify")
 import through2 = require("through2");
 import merge2 = require("merge2");
 import intoStream = require("into-stream");
@@ -312,9 +312,6 @@ function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): ts
     }
     else {
         copy.preserveConstEnums = true;
-    }
-    if (!copy.outFile) {
-        copy.module = "commonjs";
     }
     if (useBuiltCompiler === true) {
         copy.typescript = require("./built/local/typescript.js");
@@ -748,7 +745,7 @@ gulp.task("runtests",
 const nodeServerOutFile = "tests/webTestServer.js";
 const nodeServerInFile = "tests/webTestServer.ts";
 gulp.task(nodeServerOutFile, false, [servicesFile], () => {
-    const settings: tsc.Settings = getCompilerSettings({}, /*useBuiltCompiler*/ true);
+    const settings: tsc.Settings = getCompilerSettings({module: "commonjs"}, /*useBuiltCompiler*/ true);
     return gulp.src(nodeServerInFile)
         .pipe(newer(nodeServerOutFile))
         .pipe(sourcemaps.init())
@@ -970,7 +967,7 @@ const tslintRulesFiles = tslintRules.map(function(p) {
 const tslintRulesOutFiles = tslintRules.map(function(p, i) {
     const pathname = path.join(builtLocalDirectory, "tslint", p + ".js");
     gulp.task(pathname, false, [], () => {
-        const settings: tsc.Settings = getCompilerSettings({}, /*useBuiltCompiler*/ false);
+        const settings: tsc.Settings = getCompilerSettings({module: "commonjs"}, /*useBuiltCompiler*/ false);
         return gulp.src(tslintRulesFiles[i])
             .pipe(newer(pathname))
             .pipe(sourcemaps.init())

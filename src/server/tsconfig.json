@@ -4,7 +4,8 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "out": "../../built/local/tsserver.js",
-        "sourceMap": true
+        "sourceMap": true,
+        "stripInternal": true
     },
     "files": [
         "node.d.ts",

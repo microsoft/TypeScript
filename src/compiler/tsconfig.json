@@ -5,7 +5,8 @@
         "preserveConstEnums": true,
         "outFile": "../../built/local/tsc.js",
         "sourceMap": true,
-        "declaration": true
+        "declaration": true,
+        "stripInternal": true
     },
     "files": [
         "core.ts",
