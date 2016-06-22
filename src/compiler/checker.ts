@@ -13207,6 +13207,9 @@ namespace ts {
                         checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
                     }
                 }
+                if (node.kind === SyntaxKind.ConstructSignature) {
+                    checkUnusedTypeParameters(node);
+                }
             }
         }
 
@@ -14428,7 +14431,7 @@ namespace ts {
             }
         }
 
-        function checkUnusedIdentifiers(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction | ForInStatement | Block): void {
+        function checkUnusedIdentifiers(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction | ForInStatement | Block | CatchClause): void {
             if (node.parent.kind !== SyntaxKind.InterfaceDeclaration && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
                 for (const key in node.locals) {
                     if (hasProperty(node.locals, key)) {
@@ -14453,7 +14456,7 @@ namespace ts {
             }
         }
 
-        function checkUnusedModulePrivates(node: ModuleDeclaration): void {
+        function checkUnusedModuleLocals(node: ModuleDeclaration): void {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 for (const key in node.locals) {
                     if (hasProperty(node.locals, key)) {
@@ -14475,7 +14478,7 @@ namespace ts {
             }
         }
 
-        function checkUnusedPrivates(node: ClassDeclaration): void {
+        function checkUnusedClassLocals(node: ClassDeclaration): void {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 if (node.members) {
                     for (const member of node.members) {
@@ -14489,7 +14492,7 @@ namespace ts {
             }
         }
 
-        function checkUnusedTypeParameters(node: ClassDeclaration | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration) {
+        function checkUnusedTypeParameters(node: ClassDeclaration | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration) {
             if (compilerOptions.noUnusedLocals) {
                 if (node.typeParameters) {
                     for (const typeParameter of node.typeParameters) {
@@ -14506,7 +14509,7 @@ namespace ts {
         }
 
         function checkUnusedImports(node: SourceFile) {
-            if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
+            if (compilerOptions.noUnusedLocals) {
                 for (const local in node.locals) {
                     if (hasProperty(node.locals, local)) {
                         const localValue = node.locals[local];
@@ -15527,6 +15530,7 @@ namespace ts {
                 }
 
                 checkBlock(catchClause.block);
+                checkUnusedIdentifiers(catchClause);
             }
 
             if (node.finallyBlock) {
@@ -15688,7 +15692,7 @@ namespace ts {
             }
             checkClassLikeDeclaration(node);
             forEach(node.members, checkSourceElement);
-            checkUnusedPrivates(node);
+            checkUnusedClassLocals(node);
             checkUnusedTypeParameters(node);
         }
 
@@ -16399,7 +16403,7 @@ namespace ts {
 
             if (node.body) {
                 checkSourceElement(node.body);
-                checkUnusedModulePrivates(node);
+                checkUnusedModuleLocals(node);
             }
         }
 
@@ -16925,7 +16929,9 @@ namespace ts {
 
                 deferredNodes = [];
                 forEach(node.statements, checkSourceElement);
-                checkUnusedImports(node);
+                if (isExternalModule(node)) {
+                    checkUnusedImports(node);
+                }
                 checkDeferredNodes();
                 deferredNodes = undefined;
 
