@@ -456,12 +456,16 @@ namespace ts {
     export function createExtensionDiagnosticForNode(node: Node, extension: string, message: string): Diagnostic {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);
+        return createExtensionDiagnostic(extension, message, sourceFile, span.start, span.length);
+    }
+
+    export function createExtensionDiagnostic(extension: string, message: string, file?: SourceFile, start?: number, length?: number): Diagnostic {
         return {
-            file: sourceFile,
+            file: file,
             messageText: message,
             code: extension,
-            start: span.start,
-            length: span.length,
+            start: start,
+            length: length,
             category: DiagnosticCategory.Extension
         };
     }

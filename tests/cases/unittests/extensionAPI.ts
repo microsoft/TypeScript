@@ -122,13 +122,13 @@ import * as tsi from "typescript";
 export abstract class SyntacticLintWalker implements tsi.LintWalker {
     private static __tsCompilerExtensionKind: tsi.ExtensionKind.SyntacticLint = "syntactic-lint";
     constructor(protected ts: typeof tsi, protected args: any) {}
-    abstract visit(node: tsi.Node, accept: tsi.LintAcceptMethod, error: tsi.LintErrorMethod): void;
+    abstract visit(node: tsi.Node, stop: tsi.LintStopMethod, error: tsi.LintErrorMethod): void;
 }
 
 export abstract class SemanticLintWalker implements tsi.LintWalker {
     private static __tsCompilerExtensionKind: tsi.ExtensionKind.SemanticLint = "semantic-lint";
     constructor(protected ts: typeof tsi, protected checker: tsi.TypeChecker, protected args: any) {}
-    abstract visit(node: tsi.Node, accept: tsi.LintAcceptMethod, error: tsi.LintErrorMethod): void;
+    abstract visit(node: tsi.Node, stop: tsi.LintStopMethod, error: tsi.LintErrorMethod): void;
 }
 `
         };
@@ -172,13 +172,12 @@ import {SyntacticLintWalker} from "typescript-plugin-api";
 
 export default class IsNamedFoo extends SyntacticLintWalker {
     constructor(ts, args) { super(ts, args); }
-    visit(node, accept, error) {
+    visit(node, stop, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             if (node.text.toLowerCase() === "foo") {
                 error("Identifier 'foo' is forbidden.", node);
             }
         }
-        accept();
     }
 }
 `,
@@ -196,14 +195,13 @@ import {SemanticLintWalker} from "typescript-plugin-api";
 
 export default class IsValueFoo extends SemanticLintWalker {
     constructor(ts, checker, args) { super(ts, checker, args); }
-    visit(node, accept, error) {
+    visit(node, stop, error) {
         const type = this.checker.getTypeAtLocation(node);
         if (type.flags & this.ts.TypeFlags.StringLiteral) {
             if (node.text === "foo") {
                 error("String literal type 'foo' is forbidden.", node);
             }
         }
-        accept();
     }
 }
 `,
@@ -221,7 +219,7 @@ import {SyntacticLintWalker} from "typescript-plugin-api";
 
 export default class IsNamedX extends SyntacticLintWalker {
     constructor(ts, args) { super(ts, args); }
-    visit(node, accept, error) {
+    visit(node, stop, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             for (let i = 0; i<this.args.length; i++) {
                 if (node.text.toLowerCase() === this.args[i]) {
@@ -229,7 +227,6 @@ export default class IsNamedX extends SyntacticLintWalker {
                 }
             }
         }
-        accept();
     }
 }
                 `
@@ -247,51 +244,47 @@ import {SyntacticLintWalker, SemanticLintWalker} from "typescript-plugin-api";
 
 export class IsNamedFoo extends SyntacticLintWalker {
     constructor(ts, args) { super(ts, args); }
-    visit(node, accept, error) {
+    visit(node, stop, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             if (node.text.toLowerCase() === "foo") {
                 error("Identifier 'foo' is forbidden.", node);
             }
         }
-        accept();
     }
 }
 
 export class IsNamedBar extends SyntacticLintWalker {
     constructor(ts, args) { super(ts, args); }
-    visit(node, accept, error) {
+    visit(node, stop, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             if (node.text.toLowerCase() === "bar") {
                 error("Identifier 'bar' is forbidden.", node);
             }
         }
-        accept();
     }
 }
 
 export class IsValueFoo extends SemanticLintWalker {
     constructor(ts, checker, args) { super(ts, checker, args); }
-    visit(node, accept, error) {
+    visit(node, stop, error) {
         const type = this.checker.getTypeAtLocation(node);
         if (type.flags & this.ts.TypeFlags.StringLiteral) {
             if (node.text === "foo") {
                 error("String literal type 'foo' is forbidden.", node);
             }
         }
-        accept();
     }
 }
 
 export class IsValueBar extends SemanticLintWalker {
     constructor(ts, checker, args) { super(ts, checker, args); }
-    visit(node, accept, error) {
+    visit(node, stop, error) {
         const type = this.checker.getTypeAtLocation(node);
         if (type.flags & this.ts.TypeFlags.StringLiteral) {
             if (node.text === "bar") {
                 error("String literal type 'bar' is forbidden.", node);
             }
         }
-        accept();
     }
 }
 `
