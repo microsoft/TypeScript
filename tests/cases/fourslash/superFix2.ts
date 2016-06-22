@@ -4,10 +4,18 @@
 ////}
 ////class C extends Base{
 ////    private a:number;
-////    /*0*/constructor() {
+////    constructor() {
 ////        this.a = 12;
 ////        super();
 ////    }
 ////}
 
-verify.codeFixAtPosition({ span: { start: 0, end: 0 }, newText: "super();" });
+verify.codeFixAtPosition(`class Base {
+}
+class C extends Base {
+    private a: number;
+    constructor() {
+        super();
+        this.a = 12;
+    }
+}`);

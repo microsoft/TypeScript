@@ -853,21 +853,26 @@ namespace ts {
                     writeTextOfNode(currentText, node.name);
                 }
             }
-            while (node.body.kind !== SyntaxKind.ModuleBlock) {
+            while (node.body && node.body.kind !== SyntaxKind.ModuleBlock) {
                 node = <ModuleDeclaration>node.body;
                 write(".");
                 writeTextOfNode(currentText, node.name);
             }
             const prevEnclosingDeclaration = enclosingDeclaration;
-            enclosingDeclaration = node;
-            write(" {");
-            writeLine();
-            increaseIndent();
-            emitLines((<ModuleBlock>node.body).statements);
-            decreaseIndent();
-            write("}");
-            writeLine();
-            enclosingDeclaration = prevEnclosingDeclaration;
+            if (node.body) {
+                enclosingDeclaration = node;
+                write(" {");
+                writeLine();
+                increaseIndent();
+                emitLines((<ModuleBlock>node.body).statements);
+                decreaseIndent();
+                write("}");
+                writeLine();
+                enclosingDeclaration = prevEnclosingDeclaration;
+            }
+            else {
+                write(";");
+            }
         }
 
         function writeTypeAliasDeclaration(node: TypeAliasDeclaration) {
