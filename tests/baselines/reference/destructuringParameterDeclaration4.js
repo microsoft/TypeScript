@@ -27,7 +27,7 @@ a6([1, 2, "string"]);                   // Error, parameter type is number[]
 
 var temp = [1, 2, 3];
 class C {
-    constructor(public ...temp) { }  // Error, rest parameter can't have accessibilityModifier
+    constructor(public ...temp) { }  // Error, rest parameter can't have properties
 }
 
 // Rest parameter with generic
@@ -89,7 +89,7 @@ var C = (function () {
             temp[_i - 0] = arguments[_i];
         }
         this.temp = temp;
-    } // Error, rest parameter can't have accessibilityModifier
+    } // Error, rest parameter can't have properties
     return C;
 }());
 // Rest parameter with generic
