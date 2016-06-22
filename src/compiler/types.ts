@@ -2901,15 +2901,19 @@ namespace ts {
         failedLookupLocations: string[];
     }
 
-    export type LintErrorMethod = (err: string, span: Node) => void;
-    export type LintAcceptMethod = () => void;
+    export type LintErrorMethod = {
+        (err: string): void;
+        (err: string, span: Node): void;
+        (err: string, start: number, length: number): void;
+    };
+    export type LintStopMethod = () => void;
 
     /*
-    * Walkers call accept to decend into the node's children
+    * Walkers call stop to halt recursion into the node's children
     * Walkers call error to add errors to the output.
     */
     export interface LintWalker {
-        visit(node: Node, accept: LintAcceptMethod, error: LintErrorMethod): void;
+        visit(node: Node, stop: LintStopMethod, error: LintErrorMethod): void;
     }
 
     export interface SyntacticLintProviderStatic {

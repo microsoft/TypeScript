@@ -1605,13 +1605,12 @@ namespace ts {
             function visitNode(node: Node) {
                 let oneAccepted = false;
                 const oldParent = parent;
-                const needsReset: boolean[] = new Array(initializedLints.length);
+                const needsReset: Map<boolean> = {};
                 for (let i = 0; i < initializedLints.length; i++) {
                     if (initializedLints[i].accepted) {
                         activeLint = initializedLints[i];
-                        activeLint.accepted = false;
                         node.parent = parent;
-                        activeLint.walker.visit(node, accept, error);
+                        activeLint.walker.visit(node, stop, error);
                         if (activeLint.accepted) {
                             oneAccepted = true;
                         }
@@ -1633,12 +1632,23 @@ namespace ts {
                 }
             }
 
-            function accept() {
-                activeLint.accepted = true;
+            function stop() {
+                activeLint.accepted = false;
             }
 
-            function error(err: string, node: Node) {
-                diagnostics.push(createExtensionDiagnosticForNode(node, activeLint.name, err));
+            function error(err: string): void;
+            function error(err: string, node: Node): void;
+            function error(err: string, start: number, length: number): void;
+            function error(err: string, nodeOrStart?: Node | number, length?: number): void {
+                if (typeof nodeOrStart === "undefined") {
+                    diagnostics.push(createExtensionDiagnostic(activeLint.name, err, sourceFile));
+                }
+                else if (typeof nodeOrStart === "number") {
+                    diagnostics.push(createExtensionDiagnostic(activeLint.name, err, sourceFile, nodeOrStart, length));
+                }
+                else {
+                    diagnostics.push(createExtensionDiagnosticForNode(nodeOrStart, activeLint.name, err));
+                }
             }
         }
 
