@@ -86,7 +86,7 @@ namespace ts.server {
     }
 
     export interface PendingErrorCheck {
-        fileName: string;
+        fileName: NormalizedPath;
         project: Project;
     }
 
@@ -187,7 +187,7 @@ namespace ts.server {
                 });
         }
 
-        private handleEvent(eventName: string, project: Project, fileName: string) {
+        private handleEvent(eventName: string, project: Project, fileName: NormalizedPath) {
             if (eventName == "context") {
                 this.projectService.log("got context event, updating diagnostics for" + fileName, "Info");
                 this.updateErrorCheck([{ fileName, project }], this.changeSeq,
@@ -370,16 +370,12 @@ namespace ts.server {
         }
 
         private getEncodedSemanticClassifications(args: protocol.FileSpanRequestArgs) {
-            const file = normalizePath(args.file);
-            const project = this.projectService.getProjectForFile(file);
-            if (!project) {
-                throw Errors.NoProject;
-            }
+            const { file, project } = this.getFileAndProject(args);
             return project.languageService.getEncodedSemanticClassifications(file, args);
         }
 
         private getProject(projectFileName: string) {
-            return projectFileName && this.projectService.getProject(projectFileName);
+            return projectFileName && this.projectService.findProject(projectFileName);
         }
 
         private getCompilerOptionsDiagnostics(args: protocol.ProjectRequestArgs) {
@@ -400,11 +396,7 @@ namespace ts.server {
         }
 
         private getDiagnosticsWorker(args: protocol.FileRequestArgs, selector: (project: Project, file: string) => Diagnostic[]) {
-            const file = normalizePath(args.file);
-            const project = this.getProject(args.projectFileName) || this.projectService.getProjectForFile(file);
-            if (!project) {
-                throw Errors.NoProject;
-            }
+            const { project, file } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfo(file);
             const diagnostics = selector(project, file);
             return this.convertDiagnostics(diagnostics, scriptInfo);
@@ -419,11 +411,7 @@ namespace ts.server {
         }
 
         private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.FileSpan[] | DefinitionInfo[] {
-            const file = ts.normalizePath(args.file);
-            const project = this.projectService.getProjectForFile(file);
-            if (!project) {
-                throw Errors.NoProject;
-            }
+            const { file, project } = this.getFileAndProject(args);
 
             const scriptInfo = project.getScriptInfo(file);
             const position = this.getPosition(args, scriptInfo);
@@ -780,9 +768,9 @@ namespace ts.server {
             return args.position !== undefined ? args.position : scriptInfo.lineOffsetToPosition(args.line, args.offset);
         }
 
-        private getFileAndProject(fileName: string) {
-            const file = ts.normalizePath(fileName);
-            const project = this.projectService.getProjectForFile(file);
+        private getFileAndProject(args: protocol.FileLocationRequestArgs) {
+            const file = ts.normalizePath(args.file);
+            const project: Project = this.getProject(args.projectFileName) || this.projectService.getProjectForFile(file);
             if (!project) {
                 throw Errors.NoProject;
             }
@@ -790,54 +778,49 @@ namespace ts.server {
         }
 
         private getOutliningSpans(args: protocol.FileRequestArgs) {
-            const { file, project } = this.getFileAndProject(args.file);
+            const { file, project } = this.getFileAndProject(args);
             return project.languageService.getOutliningSpans(file);
         }
 
         private getTodoComments(args: protocol.TodoCommentRequestArgs) {
-            const { file, project } = this.getFileAndProject(args.file);
+            const { file, project } = this.getFileAndProject(args);
             return project.languageService.getTodoComments(file, args.descriptors);
         }
 
         private getDocCommentTemplate(args: protocol.FileLocationRequestArgs) {
-            const { file, project } = this.getFileAndProject(args.file);
+            const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfo(file);
             const position = this.getPosition(args, scriptInfo);
             return project.languageService.getDocCommentTemplateAtPosition(file, position);
         }
 
         private getIndentation(args: protocol.IndentationRequestArgs) {
-            const { file, project } = this.getFileAndProject(args.file);
+            const { file, project } = this.getFileAndProject(args);
             const position = this.getPosition(args, project.getScriptInfo(file));
             const indentation = project.languageService.getIndentationAtPosition(file, position, args.options);
             return { position, indentation };
         }
 
         private getBreakpointStatement(args: protocol.FileLocationRequestArgs) {
-            const { file, project } = this.getFileAndProject(args.file);
+            const { file, project } = this.getFileAndProject(args);
             const position = this.getPosition(args, project.getScriptInfo(file));
             return project.languageService.getBreakpointStatementAtPosition(file, position);
         }
 
         private getNameOrDottedNameSpan(args: protocol.FileLocationRequestArgs) {
-            const { file, project } = this.getFileAndProject(args.file);
+            const { file, project } = this.getFileAndProject(args);
             const position = this.getPosition(args, project.getScriptInfo(file));
             return project.languageService.getNameOrDottedNameSpan(file, position, position);
         }
 
         private isValidBraceCompletion(args: protocol.BraceCompletionRequestArgs) {
-            const { file, project } = this.getFileAndProject(args.file);
+            const { file, project } = this.getFileAndProject(args);
             const position = this.getPosition(args, project.getScriptInfo(file));
             return project.languageService.isValidBraceCompletionAtPostion(file, position, args.openingBrace.charCodeAt(0));
         }
 
         private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.QuickInfoResponseBody | QuickInfo {
-            const file = ts.normalizePath(args.file);
-            const project = this.projectService.getProjectForFile(file);
-            if (!project) {
-                throw Errors.NoProject;
-            }
-
+            const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfo(file);
             const quickInfo = project.languageService.getQuickInfoAtPosition(file, this.getPosition(args, scriptInfo));
             if (!quickInfo) {
@@ -889,31 +872,17 @@ namespace ts.server {
         }
 
         private getFormattingEditsForRangeFull(args: protocol.FormatRequestArgs) {
-            const file = ts.normalizePath(args.file);
-            const project = this.projectService.getProjectForFile(file);
-            if (!project) {
-                throw Errors.NoProject;
-            }
-
+            const { file, project } = this.getFileAndProject(args);
             return project.languageService.getFormattingEditsForRange(file, args.position, args.endPosition, args.options);
         }
 
         private getFormattingEditsForDocumentFull(args: protocol.FormatRequestArgs) {
-            const file = ts.normalizePath(args.file);
-            const project = this.projectService.getProjectForFile(file);
-            if (!project) {
-                throw Errors.NoProject;
-            }
-
+            const { file, project } = this.getFileAndProject(args);
             return project.languageService.getFormattingEditsForDocument(file, args.options);
         }
 
         private getFormattingEditsAfterKeystrokeFull(args: protocol.FormatOnKeyRequestArgs) {
-            const file = ts.normalizePath(args.file);
-            const project = this.projectService.getProjectForFile(file);
-            if (!project) {
-                throw Errors.NoProject;
-            }
+            const { file, project } = this.getFileAndProject(args);
             return project.languageService.getFormattingEditsAfterKeystroke(file, args.position, args.key, args.options);
         }
 
@@ -990,11 +959,7 @@ namespace ts.server {
 
         private getCompletions(args: protocol.CompletionsRequestArgs, simplifiedResult: boolean): protocol.CompletionEntry[] | CompletionInfo {
             const prefix = args.prefix || "";
-            const file = ts.normalizePath(args.file);
-            const project = this.projectService.getProjectForFile(file);
-            if (!project) {
-                throw Errors.NoProject;
-            }
+            const { file, project } = this.getFileAndProject(args);
 
             const scriptInfo = project.getScriptInfo(file);
             const position = this.getPosition(args, scriptInfo);
@@ -1017,12 +982,7 @@ namespace ts.server {
         }
 
         private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs): protocol.CompletionEntryDetails[] {
-            const file = ts.normalizePath(args.file);
-            const project = this.projectService.getProjectForFile(file);
-            if (!project) {
-                throw Errors.NoProject;
-            }
-
+            const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfo(file);
             const position = this.getPosition(args, scriptInfo);
 
@@ -1036,12 +996,7 @@ namespace ts.server {
         }
 
         private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems {
-            const file = ts.normalizePath(args.file);
-            const project = this.projectService.getProjectForFile(file);
-            if (!project) {
-                throw Errors.NoProject;
-            }
-
+            const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfo(file);
             const position = this.getPosition(args, scriptInfo);
             const helpItems = project.languageService.getSignatureHelpItems(file, position);
@@ -1069,6 +1024,7 @@ namespace ts.server {
 
         private getDiagnostics(delay: number, fileNames: string[]) {
             const checkList = fileNames.reduce((accum: PendingErrorCheck[], fileName: string) => {
+                
                 fileName = ts.normalizePath(fileName);
                 const project = this.projectService.getProjectForFile(fileName);
                 if (project) {

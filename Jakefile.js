@@ -101,7 +101,11 @@ var servicesSources = [
 
 var serverCoreSources = [
     "node.d.ts",
+    "utilities.ts",
     "scriptVersionCache.ts",
+    "scriptInfo.ts",
+    "lsHost.ts",
+    "project.ts",
     "editorServices.ts",
     "protocol.d.ts",
     "session.ts",

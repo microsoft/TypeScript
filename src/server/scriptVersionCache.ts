@@ -297,7 +297,7 @@ namespace ts.server {
             return this.currentVersion;
         }
 
-        reloadFromFile(filename: string, cb?: () => any) {
+        reloadFromFile(filename: string, cb?: () => void) {
             let content = this.host.readFile(filename);
             // If the file doesn't exist or cannot be read, we should
             // wipe out its cached content on the server to avoid side effects.

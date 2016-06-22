@@ -495,7 +495,7 @@ declare namespace ts.server.protocol {
     }
 
     export interface ExternalProjectInfo {
-        projectFileName: string;
+        projectName: string;
         version: number;
     }
 
