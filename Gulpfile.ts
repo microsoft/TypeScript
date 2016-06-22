@@ -350,12 +350,6 @@ gulp.task("publish-nightly", "Runs `npm publish --tag next` to create a new nigh
     });
 });
 
-const scriptsTsdJson = path.join(scriptsDirectory, "tsd.json");
-gulp.task("tsd-scripts", `Runs \`tsd --config ${scriptsTsdJson}\` install`, [], (done) => {
-    exec("tsd", ["--config", scriptsTsdJson, "install"], done, done);
-});
-
-
 const importDefinitelyTypedTestsDirectory = path.join(scriptsDirectory, "importDefinitelyTypedTests");
 const importDefinitelyTypedTestsJs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.js");
 const importDefinitelyTypedTestsTs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.ts");
