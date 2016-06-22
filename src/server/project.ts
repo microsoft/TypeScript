@@ -1,4 +1,5 @@
 /// <reference path="..\services\services.ts" />
+/// <reference path="utilities.ts"/>
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="lshost.ts"/>
 
@@ -11,12 +12,32 @@ namespace ts.server {
 
     export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
-        private rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
+        private readonly rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
         private lsHost: ServerLanguageServiceHost;
-        protected program: ts.Program;
-        private version = 0;
+        private program: ts.Program;
 
         languageService: LanguageService;
+
+        /**
+         * Set of files that was returned from the last call to getChangesSinceVersion.
+         */
+        private lastReportedFileNames: Map<string>;
+        /**
+         * Last version that was reported.
+         */
+        private lastReportedVersion = 0;
+        /**
+         * Current project structure version.
+         * This property is changed in 'updateGraph' based on the set of files in program
+         */
+        private projectStructureVersion = 0;
+        /**
+         * Current version of the project state. It is changed when:
+         * - new root file was added/removed
+         * - edit happen in some file that is currently included in the project.
+         * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
+         */
+        private projectStateVersion = 0;
 
         constructor(
             readonly projectKind: ProjectKind,
@@ -46,7 +67,7 @@ namespace ts.server {
         }
 
         getProjectVersion() {
-            return this.version.toString();
+            return this.projectStateVersion.toString();
         }
 
         enableLanguageService() {
@@ -68,8 +89,8 @@ namespace ts.server {
 
         close() {
             for (const fileName of this.getFileNames()) {
-                const info = this.projectKind.getScriptInfoForNormalizedPath(fileName);
-                info.detachFromProject(project);
+                const info = this.projectService.getScriptInfoForNormalizedPath(fileName);
+                info.detachFromProject(this);
             }
             // signal language service to release files acquired from document registry
             this.languageService.dispose();
@@ -85,6 +106,10 @@ namespace ts.server {
         }
 
         getFileNames() {
+            if (!this.program) {
+                return [];
+            }
+
             if (!this.languageServiceEnabled) {
                 // if language service is disabled assume that all files in program are root files + default library
                 let rootFiles = this.getRootFiles();
@@ -128,16 +153,18 @@ namespace ts.server {
             }
         }
 
-        removeFile(info: ScriptInfo) {
+        removeFile(info: ScriptInfo, detachFromProject: boolean = true) {
             if (!this.removeRoot(info)) {
                 this.removeReferencedFile(info)
             }
-            info.detachFromProject(this);
+            if (detachFromProject) {
+                info.detachFromProject(this);
+            }
             this.markAsDirty();
         }
 
         markAsDirty() {
-            this.version++;
+            this.projectStateVersion++;
         }
 
         // remove a root file from project
@@ -153,19 +180,34 @@ namespace ts.server {
 
         private removeReferencedFile(info: ScriptInfo) {
             this.lsHost.removeReferencedFile(info)
-            this.updateGraph();
         }
 
         updateGraph() {
+            if (!this.languageServiceEnabled) {
+                return;
+            }
+
+            const oldProgram = this.program;
             this.program = this.languageService.getProgram();
+
+            // bump up the version if
+            // - oldProgram is not set - this is a first time updateGraph is called
+            // - newProgram is different from the old program and structure of the old program was not reused.
+            if (!oldProgram || (this.program !== oldProgram && !oldProgram.structureIsReused)) {
+                this.projectStructureVersion++;
+            }
         }
 
-        getScriptInfo(uncheckedFileName: string) {
-            const scriptInfo = this.projectService.getOrCreateScriptInfo(toNormalizedPath(uncheckedFileName), /*openedByClient*/ false);
-            if (scriptInfo.attachToProject(this)) {
+        getScriptInfoFromNormalizedPath(fileName: NormalizedPath) {
+            const scriptInfo = this.projectService.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ false);
+            if (scriptInfo && scriptInfo.attachToProject(this)) {
                 this.markAsDirty();
             }
             return scriptInfo;
+        }
+
+        getScriptInfo(uncheckedFileName: string) {
+            return this.getScriptInfoFromNormalizedPath(toNormalizedPath(uncheckedFileName));
         }
 
         filesToString() {
@@ -197,19 +239,66 @@ namespace ts.server {
             }
         }
 
-        reloadScript(filename: string, tmpfilename: string, cb: () => void) {
-            const script = this.getScriptInfo(filename);
+        reloadScript(filename: NormalizedPath, cb: () => void) {
+            const script = this.getScriptInfoFromNormalizedPath(filename);
             if (script) {
                 script.reloadFromFile(filename, cb);
+            }
+        }
+
+        getChangesSinceVersion(lastKnownVersion?: number): protocol.ProjectFiles {
+            const info = {
+                projectName: this.getProjectName(),
+                version: this.projectStructureVersion,
+                isInferred: this.projectKind === ProjectKind.Inferred
+            };
+            // check if requested version is the same that we have reported last time
+            if (this.lastReportedFileNames && lastKnownVersion === this.lastReportedVersion) {
+                // if current structure version is the same - return info witout any changes
+                if (this.projectStructureVersion == this.lastReportedVersion) {
+                    return { info };
+                }
+                // compute and return the difference
+                const lastReportedFileNames = this.lastReportedFileNames;
+                const currentFiles = arrayToMap(this.getFileNames(), x => x);
+
+                const added: string[] = [];
+                const removed: string[] = [];
+                for (const id in currentFiles) {
+                    if (hasProperty(currentFiles, id) && !hasProperty(lastReportedFileNames, id)) {
+                        added.push(id);
+                    }
+                }
+                for (const id in lastReportedFileNames) {
+                    if (hasProperty(lastReportedFileNames, id) && !hasProperty(currentFiles, id)) {
+                        removed.push(id);
+                    }
+                }
+                this.lastReportedFileNames = currentFiles;
+
+                this.lastReportedFileNames = currentFiles;
+                this.lastReportedVersion = this.projectStructureVersion;
+                return { info, changes: { added, removed } };
+            }
+            else {
+                // unknown version - return everything
+                const projectFileNames = this.getFileNames();
+                this.lastReportedFileNames = arrayToMap(projectFileNames, x => x);
+                this.lastReportedVersion = this.projectStructureVersion;
+                return { info, files: projectFileNames };
             }
         }
     }
 
     export class InferredProject extends Project {
 
-        static NextId = 0;
+        private static NextId = 1;
 
-        readonly inferredProjectName;
+        /**
+         * Unique name that identifies this particular inferred project
+         */
+        private readonly inferredProjectName: string;
+
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
@@ -237,73 +326,14 @@ namespace ts.server {
         }
     }
 
-    export abstract class VersionedProject extends Project {
-
-        private lastReportedFileNames: Map<string>;
-        private lastReportedVersion: number = 0;
-        currentVersion: number = 1;
-
-        updateGraph() {
-            if (!this.languageServiceEnabled) {
-                return;
-            }
-            const oldProgram = this.program;
-
-            super.updateGraph();
-
-            if (!oldProgram || !oldProgram.structureIsReused) {
-                this.currentVersion++;
-            }
-        }
-
-        getChangesSinceVersion(lastKnownVersion?: number): protocol.ExternalProjectFiles {
-            const info = {
-                projectName: this.getProjectName(),
-                version: this.currentVersion
-            };
-            if (this.lastReportedFileNames && lastKnownVersion === this.lastReportedVersion) {
-                if (this.currentVersion == this.lastReportedVersion) {
-                    return { info };
-                }
-                const lastReportedFileNames = this.lastReportedFileNames;
-                const currentFiles = arrayToMap(this.getFileNames(), x => x);
-
-                const added: string[] = [];
-                const removed: string[] = [];
-                for (const id in currentFiles) {
-                    if (hasProperty(currentFiles, id) && !hasProperty(lastReportedFileNames, id)) {
-                        added.push(id);
-                    }
-                }
-                for (const id in lastReportedFileNames) {
-                    if (hasProperty(lastReportedFileNames, id) && !hasProperty(currentFiles, id)) {
-                        removed.push(id);
-                    }
-                }
-                this.lastReportedFileNames = currentFiles;
-
-                this.lastReportedFileNames = currentFiles;
-                this.lastReportedVersion = this.currentVersion;
-                return { info, changes: { added, removed } };
-            }
-            else {
-                // unknown version - return everything
-                const projectFileNames = this.getFileNames();
-                this.lastReportedFileNames = arrayToMap(projectFileNames, x => x);
-                this.lastReportedVersion = this.currentVersion;
-                return { info, files: projectFileNames };
-            }
-        }
-    }
-
-    export class ConfiguredProject extends VersionedProject {
+    export class ConfiguredProject extends Project {
         private projectFileWatcher: FileWatcher;
         private directoryWatcher: FileWatcher;
         private directoriesWatchedForWildcards: Map<FileWatcher>;
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
 
-        constructor(readonly configFileName: string,
+        constructor(readonly configFileName: NormalizedPath,
             projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,
             hasExplicitListOfFiles: boolean,
@@ -380,7 +410,7 @@ namespace ts.server {
         }
     }
 
-    export class ExternalProject extends VersionedProject {
+    export class ExternalProject extends Project {
         constructor(readonly externalProjectName: string,
             projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,

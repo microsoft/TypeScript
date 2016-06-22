@@ -1,5 +1,4 @@
 /// <reference path="..\services\services.ts" />
-/// <reference path="session.ts" />
 
 namespace ts.server {
     export interface Logger {
@@ -42,11 +41,14 @@ namespace ts.server {
     }
 
     export function removeItemFromSet<T>(items: T[], itemToRemove: T) {
+        if (items.length === 0) {
+            return;
+        }
         const index = items.indexOf(itemToRemove);
         if (index < 0) {
             return;
         }
-        if (items.length === 0) {
+        if (items.length === 1) {
             items.pop();
         }
         else {

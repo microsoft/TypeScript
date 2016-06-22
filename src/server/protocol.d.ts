@@ -494,12 +494,13 @@ declare namespace ts.server.protocol {
         options: CompilerOptions;
     }
 
-    export interface ExternalProjectInfo {
+    export interface ProjectVersionInfo {
         projectName: string;
+        isInferred: boolean;
         version: number;
     }
 
-    export interface ExternalProjectChanges {
+    export interface ProjectChanges {
         added: string[];
         removed: string[];
     }
@@ -511,10 +512,10 @@ declare namespace ts.server.protocol {
      * if changes is set - then this is the set of changes that should be applied to existing project
      * otherwise - assume that nothing is changed
      */
-    export interface ExternalProjectFiles {
-        info?: ExternalProjectInfo;
+    export interface ProjectFiles {
+        info?: ProjectVersionInfo;
         files?: string[];
-        changes?: ExternalProjectChanges;
+        changes?: ProjectChanges;
     }
 
     /**
@@ -674,7 +675,7 @@ declare namespace ts.server.protocol {
     }
 
     export interface SynchronizeProjectListRequestArgs {
-        knownProjects: protocol.ExternalProjectInfo[];
+        knownProjects: protocol.ProjectVersionInfo[];
     }
 
     export interface ApplyChangedToOpenFilesRequest extends Request {

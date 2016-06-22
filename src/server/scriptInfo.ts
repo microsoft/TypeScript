@@ -37,17 +37,13 @@ namespace ts.server {
         }
 
         detachFromProject(project: Project) {
-            const index = this.containingProjects.indexOf(project);
-            if (index < 0) {
-                // TODO: (assert?) attempt to detach file from project that didn't include this file
-                return;
-            }
             removeItemFromSet(this.containingProjects, project);
         }
 
         detachAllProjects() {
             for (const p of this.containingProjects) {
-                p.removeFile(this);
+                // detach is unnecessary since we'll clean the list of containing projects anyways
+                p.removeFile(this, /*detachFromProjects*/ false);
             }
             this.containingProjects.length = 0;
         }

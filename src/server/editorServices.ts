@@ -28,7 +28,7 @@ namespace ts.server {
         hostInfo: string;
     }
 
-    function findVersionedProjectByFileName<T extends VersionedProject>(projectName: string, projects: T[]): T {
+    function findProjectByName<T extends Project>(projectName: string, projects: T[]): T {
         for (const proj of projects) {
             if (proj.getProjectName() === projectName) {
                 return proj;
@@ -42,7 +42,54 @@ namespace ts.server {
         project?: Project;
     }
 
+    class DirectoryWatchers {
+        /**
+         * a path to directory watcher map that detects added tsconfig files
+         **/
+        private directoryWatchersForTsconfig: ts.Map<FileWatcher> = {};
+        /**
+         * count of how many projects are using the directory watcher.
+         * If the number becomes 0 for a watcher, then we should close it.
+         **/
+        private directoryWatchersRefCount: ts.Map<number> = {};
+
+        constructor(private readonly projectService: ProjectService) {
+        }
+
+        stopWatchingDirectory(directory: string) {
+            // if the ref count for this directory watcher drops to 0, it's time to close it
+            this.directoryWatchersRefCount[directory]--;
+            if (this.directoryWatchersRefCount[directory] === 0) {
+                this.projectService.log("Close directory watcher for: " + directory);
+                this.directoryWatchersForTsconfig[directory].close();
+                delete this.directoryWatchersForTsconfig[directory];
+            }
+        }
+
+        startWatchingContainingDirectoriesForFile(fileName: string, project: InferredProject, callback: (fileName: string) => void) {
+            let currentPath = ts.getDirectoryPath(fileName);
+            let parentPath = ts.getDirectoryPath(currentPath);
+            while (currentPath != parentPath) {
+                if (!this.directoryWatchersForTsconfig[currentPath]) {
+                    this.projectService.log("Add watcher for: " + currentPath);
+                    this.directoryWatchersForTsconfig[currentPath] = this.projectService.host.watchDirectory(currentPath, callback);
+                    this.directoryWatchersRefCount[currentPath] = 1;
+                }
+                else {
+                    this.directoryWatchersRefCount[currentPath] += 1;
+                }
+                project.directoriesWatchedForTsconfig.push(currentPath);
+                currentPath = parentPath;
+                parentPath = ts.getDirectoryPath(parentPath);
+            }
+
+        }
+    }
+
     export class ProjectService {
+        /**
+         * Container of all known scripts
+         */
         private filenameToScriptInfo = createNormalizedPathMap<ScriptInfo>();
         /**
          * maps external project file name to list of config files that were the part of this project
@@ -64,10 +111,9 @@ namespace ts.server {
         /** 
          * open, non-configured root files 
          **/
-
         openFileRoots: ScriptInfo[] = [];
         /**
-         * open files referenced by a project
+         * open files referenced by some project
          **/
         openFilesReferenced: ScriptInfo[] = [];
         /**
@@ -75,25 +121,19 @@ namespace ts.server {
          **/
         openFileRootsConfigured: ScriptInfo[] = [];
 
-        /**
-         * a path to directory watcher map that detects added tsconfig files
-         **/
-        private directoryWatchersForTsconfig: ts.Map<FileWatcher> = {};
-        /**
-         * count of how many projects are using the directory watcher.
-         * If the number becomes 0 for a watcher, then we should close it.
-         **/
-        private directoryWatchersRefCount: ts.Map<number> = {};
+        private directoryWatchers: DirectoryWatchers;
 
         private hostConfiguration: HostConfiguration;
         private timerForDetectingProjectFileListChanges: Map<any> = {};
 
         private documentRegistry: ts.DocumentRegistry;
 
-        constructor(public host: ServerHost,
-            public psLogger: Logger,
-            public cancellationToken: HostCancellationToken,
-            public eventHandler?: ProjectServiceEventHandler) {
+        constructor(public readonly host: ServerHost,
+            public readonly psLogger: Logger,
+            public readonly cancellationToken: HostCancellationToken,
+            private readonly eventHandler?: ProjectServiceEventHandler) {
+
+            this.directoryWatchers = new DirectoryWatchers(this);
             // ts.disableIncrementalParsing = true;
             this.setDefaultHostConfiguration();
             this.documentRegistry = ts.createDocumentRegistry(host.useCaseSensitiveFileNames, host.getCurrentDirectory());
@@ -107,13 +147,7 @@ namespace ts.server {
         }
 
         stopWatchingDirectory(directory: string) {
-            // if the ref count for this directory watcher drops to 0, it's time to close it
-            this.directoryWatchersRefCount[directory]--;
-            if (this.directoryWatchersRefCount[directory] === 0) {
-                this.log("Close directory watcher for: " + directory);
-                this.directoryWatchersForTsconfig[directory].close();
-                delete this.directoryWatchersForTsconfig[directory];
-            }
+            this.directoryWatchers.stopWatchingDirectory(directory);
         }
 
         findProject(projectName: string): Project {
@@ -302,10 +336,18 @@ namespace ts.server {
             return undefined;
         }
 
+        private findContainingExternalProject(fileName: NormalizedPath): ExternalProject {
+            for (const proj of this.externalProjects) {
+                if (proj.containsFile(fileName)) {
+                    return proj;
+                }
+            }
+            return undefined;
+        }
+
         private addOpenFile(info: ScriptInfo) {
             const externalProject = this.findContainingExternalProject(info.fileName);
             if (externalProject) {
-                // info.defaultProject = externalProject;
                 return;
             }
             const configuredProject = this.findContainingConfiguredProject(info);
@@ -401,15 +443,6 @@ namespace ts.server {
             this.releaseNonReferencedConfiguredProjects();
 
             info.isOpen = false;
-        }
-
-        private findContainingExternalProject(fileName: NormalizedPath): ExternalProject {
-            for (const proj of this.externalProjects) {
-                if (proj.containsFile(fileName)) {
-                    return proj;
-                }
-            }
-            return undefined;
         }
 
         /**
@@ -511,11 +544,11 @@ namespace ts.server {
         }
 
         private findConfiguredProjectByProjectName(configFileName: NormalizedPath) {
-            return findVersionedProjectByFileName(configFileName, this.configuredProjects);
+            return findProjectByName(configFileName, this.configuredProjects);
         }
 
         private findExternalProjectByProjectName(projectFileName: string) {
-            return findVersionedProjectByFileName(projectFileName, this.externalProjects);
+            return findProjectByName(projectFileName, this.externalProjects);
         }
 
         private configFileToProjectOptions(configFilename: string): { succeeded: boolean, projectOptions?: ProjectOptions, errors?: Diagnostic[] } {
@@ -580,7 +613,7 @@ namespace ts.server {
             return { project, errors };
         }
 
-        private createAndAddConfiguredProject(configFileName: string, projectOptions: ProjectOptions, clientFileName?: string) {
+        private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, clientFileName?: string) {
             const sizeLimitExceeded = this.exceedTotalNonTsFileSizeLimit(projectOptions.compilerOptions, projectOptions.files);
             const project = new ConfiguredProject(
                 configFileName,
@@ -611,7 +644,7 @@ namespace ts.server {
             let errors: Diagnostic[];
             for (const rootFilename of files) {
                 if (this.host.fileExists(rootFilename)) {
-                    const info = this.getOrCreateScriptInfo(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName == rootFilename);
+                    const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName == rootFilename);
                     project.addRoot(info);
                 }
                 else {
@@ -622,7 +655,7 @@ namespace ts.server {
             return errors;
         }
 
-        private openConfigFile(configFileName: string, clientFileName?: string): { success: boolean, project?: ConfiguredProject, errors?: Diagnostic[] } {
+        private openConfigFile(configFileName: NormalizedPath, clientFileName?: string): { success: boolean, project?: ConfiguredProject, errors?: Diagnostic[] } {
             const { succeeded, projectOptions, errors } = this.configFileToProjectOptions(configFileName);
             if (!succeeded) {
                 return { success: false, errors };
@@ -633,7 +666,7 @@ namespace ts.server {
             }
         }
 
-        private updateVersionedProjectWorker(project: VersionedProject, newRootFiles: string[], newOptions: CompilerOptions) {
+        private updateNonInferredProject(project: ExternalProject | ConfiguredProject, newRootFiles: string[], newOptions: CompilerOptions) {
             const oldRootFiles = project.getRootFiles();
             const newFileNames = asNormalizedPathArray(filter(newRootFiles, f => this.host.fileExists(f)));
             const fileNamesToRemove = oldRootFiles.filter(f => !contains(newFileNames, f));
@@ -649,7 +682,7 @@ namespace ts.server {
             for (const fileName of fileNamesToAdd) {
                 let info = this.getScriptInfo(fileName);
                 if (!info) {
-                    info = this.getOrCreateScriptInfo(fileName, /*openedByClient*/ false);
+                    info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ false);
                 }
                 else {
                     // if the root file was opened by client, it would belong to either
@@ -710,7 +743,7 @@ namespace ts.server {
                             project.enableLanguageService();
                         }
                         this.watchConfigDirectoryForProject(project, projectOptions);
-                        this.updateVersionedProjectWorker(project, projectOptions.files, projectOptions.compilerOptions);
+                        this.updateNonInferredProject(project, projectOptions.files, projectOptions.compilerOptions);
                     }
                 }
             }
@@ -720,21 +753,10 @@ namespace ts.server {
             const project = new InferredProject(this, this.documentRegistry, /*languageServiceEnabled*/ true);
             project.addRoot(root);
 
-            let currentPath = ts.getDirectoryPath(root.fileName);
-            let parentPath = ts.getDirectoryPath(currentPath);
-            while (currentPath != parentPath) {
-                if (!this.directoryWatchersForTsconfig[currentPath]) {
-                    this.log("Add watcher for: " + currentPath);
-                    this.directoryWatchersForTsconfig[currentPath] = this.host.watchDirectory(currentPath, fileName => this.onConfigChangeForInferredProject(fileName));
-                    this.directoryWatchersRefCount[currentPath] = 1;
-                }
-                else {
-                    this.directoryWatchersRefCount[currentPath] += 1;
-                }
-                project.directoriesWatchedForTsconfig.push(currentPath);
-                currentPath = parentPath;
-                parentPath = ts.getDirectoryPath(parentPath);
-            }
+            this.directoryWatchers.startWatchingContainingDirectoriesForFile(
+                root.fileName,
+                project,
+                fileName => this.onConfigChangeForInferredProject(fileName));
 
             project.updateGraph();
             this.inferredProjects.push(project);
@@ -745,7 +767,11 @@ namespace ts.server {
          * @param filename is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        getOrCreateScriptInfo(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
+
+        getOrCreateScriptInfo(fileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
+            return this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(fileName), openedByClient, fileContent, scriptKind);
+        }
+        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
             let info = this.filenameToScriptInfo.get(fileName);
             if (!info) {
                 let content: string;
@@ -879,12 +905,37 @@ namespace ts.server {
             // the file to the open, referenced file list.
             const openFileRoots: ScriptInfo[] = [];
             for (const rootFile of this.openFileRoots) {
+                let inConfiguredProject = false;
+                let inExternalProject = false;
+                for (const p of rootFile.containingProjects) {
+                    inConfiguredProject = inConfiguredProject || p.projectKind === ProjectKind.Configured;
+                    inExternalProject = inExternalProject || p.projectKind === ProjectKind.External;
+                }
+                if (inConfiguredProject || inExternalProject) {
+                    const inferredProjects = rootFile.containingProjects.filter(p => p.projectKind === ProjectKind.Inferred);
+                    for (const p of inferredProjects) {
+                        this.removeProject(p);
+                    }
+                    if (inConfiguredProject) {
+                        this.openFileRootsConfigured.push(rootFile);
+                    }
+                }
+                else {
+                    // 
+                    openFileRoots.push(rootFile);
+                }
+                if (rootFile.containingProjects.some(p => p.projectKind !== ProjectKind.Inferred)) {
+                    // file was included in non-inferred project - drop old inferred project
 
-                let inInferredProjectOnly = true;
+                }
+                else {
+                    openFileRoots.push(rootFile);
+                }
+                let inferredProjectsToRemove: Project[];
                 for (const p of rootFile.containingProjects) {
                     if (p.projectKind !== ProjectKind.Inferred) {
                         // file was included in non-inferred project - drop old inferred project
-                        inInferredProjectOnly = false;
+                        infe
                         break; 
                     }
                 }
@@ -892,6 +943,7 @@ namespace ts.server {
                     openFileRoots.push(rootFile);
                 }
                 else {
+
                 }
 
                 // const rootedProject = rootFile.defaultProject;
@@ -941,17 +993,20 @@ namespace ts.server {
          * @param filename is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        openClientFile(uncheckedFileName: string, fileContent?: string, scriptKind?: ScriptKind): { configFileName?: string, configFileErrors?: Diagnostic[] } {
+        openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind): { configFileName?: string, configFileErrors?: Diagnostic[] } {
+            return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind);
+        }
+
+        openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind): { configFileName?: string, configFileErrors?: Diagnostic[] } {
             let configFileName: string;
             let configFileErrors: Diagnostic[];
 
-            const fileName = toNormalizedPath(uncheckedFileName);
             if (!this.findContainingExternalProject(fileName)) {
                 ({ configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName));
             }
 
             // at this point if file is the part of some configured/external project then this project should be created
-            const info = this.getOrCreateScriptInfo(fileName, /*openedByClient*/ true, fileContent, scriptKind);
+            const info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ true, fileContent, scriptKind);
             this.addOpenFile(info);
             this.printProjects();
             return { configFileName, configFileErrors };
@@ -970,27 +1025,23 @@ namespace ts.server {
             this.printProjects();
         }
 
-        // getProjectForFile(filename: string) {
-        //     const scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
-        //     if (scriptInfo) {
-        //         return scriptInfo.defaultProject;
-        //     }
-        // }
+        getDefaultProjectForFile(fileName: NormalizedPath) {
+            const scriptInfo = this.filenameToScriptInfo.get(fileName);
+            return scriptInfo && scriptInfo.getDefaultProject();
+        }
 
-        private addExternalProjectFilesForVersionedProjects(knownProjects: protocol.ExternalProjectInfo[], projects: VersionedProject[], result: protocol.ExternalProjectFiles[]): void {
+        private syncExternalFilesList(knownProjects: protocol.ProjectVersionInfo[], projects: Project[], result: protocol.ProjectFiles[]): void {
             for (const proj of projects) {
                 const knownProject = ts.forEach(knownProjects, p => p.projectName === proj.getProjectName() && p);
                 result.push(proj.getChangesSinceVersion(knownProject && knownProject.version));
             }
         }
 
-        synchronizeProjectList(knownProjects: protocol.ExternalProjectInfo[]): protocol.ExternalProjectFiles[] {
-            const files: protocol.ExternalProjectFiles[] = [];
-            this.addExternalProjectFilesForVersionedProjects(knownProjects, this.externalProjects, files);
-            this.addExternalProjectFilesForVersionedProjects(knownProjects, this.configuredProjects, files);
-            for (const inferredProject of this.inferredProjects) {
-                files.push({ files: inferredProject.getFileNames() });
-            }
+        synchronizeProjectList(knownProjects: protocol.ProjectVersionInfo[]): protocol.ProjectFiles[] {
+            const files: protocol.ProjectFiles[] = [];
+            this.syncExternalFilesList(knownProjects, this.externalProjects, files);
+            this.syncExternalFilesList(knownProjects, this.configuredProjects, files);
+            this.syncExternalFilesList(knownProjects, this.inferredProjects, files);
             return files;
         }
 
@@ -998,7 +1049,7 @@ namespace ts.server {
             for (const file of openFiles) {
                 const scriptInfo = this.getScriptInfo(file.fileName);
                 Debug.assert(!scriptInfo || !scriptInfo.isOpen);
-                this.openClientFile(file.fileName, file.content);
+                this.openClientFileWithNormalizedPath(toNormalizedPath(file.fileName), file.content);
             }
 
             for (const file of changedFiles) {
@@ -1042,7 +1093,7 @@ namespace ts.server {
         openExternalProject(proj: protocol.ExternalProject): void {
             const externalProject = this.findExternalProjectByProjectName(proj.projectFileName);
             if (externalProject) {
-                this.updateVersionedProjectWorker(externalProject, proj.rootFiles, proj.options);
+                this.updateNonInferredProject(externalProject, proj.rootFiles, proj.options);
             }
             else {
                 let tsConfigFiles: NormalizedPath[];
