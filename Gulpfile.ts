@@ -9,7 +9,6 @@ import runSequence = require("run-sequence");
 import concat = require("gulp-concat");
 import clone = require("gulp-clone");
 import newer = require("gulp-newer");
-import gIf = require("gulp-if");
 import tsc = require("gulp-typescript");
 declare module "gulp-typescript" {
     interface Settings {
@@ -32,7 +31,6 @@ import browserify = require("browserify");
 import through2 = require("through2");
 import merge2 = require("merge2");
 import intoStream = require("into-stream");
-import lazypipe = require("lazypipe");
 import * as os from "os";
 import Linter = require("tslint");
 const gulp = helpMaker(originalGulp);
@@ -435,8 +433,10 @@ const nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
 const nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
 const nodeStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescript_standalone.d.ts");
 
-const prependCopyright = lazypipe()
-    .pipe(() => insert.prepend(fs.readFileSync(copyright)));
+let copyrightContent: string;
+function prependCopyright(outputCopyright: boolean = !useDebugMode) {
+    return insert.prepend(outputCopyright ? (copyrightContent || (copyrightContent = fs.readFileSync(copyright).toString())) : "");
+}
 
 gulp.task(builtLocalCompiler, false, [servicesFile], () => {
     const localCompilerProject = tsc.createProject("src/compiler/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/true));
@@ -444,7 +444,7 @@ gulp.task(builtLocalCompiler, false, [servicesFile], () => {
         .pipe(newer(builtLocalCompiler))
         .pipe(sourcemaps.init())
         .pipe(tsc(localCompilerProject))
-        .pipe(gIf(useDebugMode, prependCopyright()))
+        .pipe(prependCopyright())
         .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(builtLocalDirectory));
 });
@@ -455,9 +455,9 @@ gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], () => {
         .pipe(newer(servicesFile))
         .pipe(sourcemaps.init())
         .pipe(tsc(servicesProject));
-    const completedJs = js.pipe(gIf(useDebugMode, prependCopyright()))
+    const completedJs = js.pipe(prependCopyright())
             .pipe(sourcemaps.write("."));
-    const completedDts = dts.pipe(prependCopyright())
+    const completedDts = dts.pipe(prependCopyright(/*outputCopyright*/true))
         .pipe(insert.transform((contents, file) => {
             file.path = standaloneDefinitionsFile;
             return contents.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4");
@@ -489,7 +489,7 @@ gulp.task(serverFile, false, [servicesFile], () => {
         .pipe(newer(serverFile))
         .pipe(sourcemaps.init())
         .pipe(tsc(serverProject))
-        .pipe(gIf(useDebugMode, prependCopyright()))
+        .pipe(prependCopyright())
         .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(builtLocalDirectory));
 });
@@ -508,10 +508,10 @@ gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
         .pipe(tsc(settings));
 
     return merge2([
-        js.pipe(gIf(useDebugMode, prependCopyright()))
+        js.pipe(prependCopyright())
           .pipe(sourcemaps.write("."))
           .pipe(gulp.dest(".")), 
-        dts.pipe(gIf(useDebugMode, prependCopyright()))
+        dts.pipe(prependCopyright())
         .pipe(gulp.dest("."))
     ]);
 });
