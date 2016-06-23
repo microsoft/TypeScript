@@ -25,7 +25,7 @@ namespace ts {
             contains,
             remove,
             forEachValue: forEachValueInMap,
-            clear
+            clear,
         };
 
         function forEachValueInMap(f: (key: Path, value: T) => void) {
@@ -113,6 +113,15 @@ namespace ts {
         return -1;
     }
 
+    export function indexOfAnyCharCode(text: string, charCodes: number[], start?: number): number {
+        for (let i = start || 0, len = text.length; i < len; i++) {
+            if (contains(charCodes, text.charCodeAt(i))) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     export function countWhere<T>(array: T[], predicate: (x: T) => boolean): number {
         let count = 0;
         if (array) {
@@ -136,6 +145,17 @@ namespace ts {
             }
         }
         return result;
+    }
+
+    export function filterMutate<T>(array: T[], f: (x: T) => boolean): void {
+        let outIndex = 0;
+        for (const item of array) {
+            if (f(item)) {
+                array[outIndex] = item;
+                outIndex++;
+            }
+        }
+        array.length = outIndex;
     }
 
     export function map<T, U>(array: T[], f: (x: T) => U): U[] {
@@ -523,6 +543,28 @@ namespace ts {
         return a < b ? Comparison.LessThan : Comparison.GreaterThan;
     }
 
+    export function compareStrings(a: string, b: string, ignoreCase?: boolean): Comparison {
+        if (a === b) return Comparison.EqualTo;
+        if (a === undefined) return Comparison.LessThan;
+        if (b === undefined) return Comparison.GreaterThan;
+        if (ignoreCase) {
+            if (String.prototype.localeCompare) {
+                const result = a.localeCompare(b, /*locales*/ undefined, { usage: "sort", sensitivity: "accent" });
+                return result < 0 ? Comparison.LessThan : result > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
+            }
+
+            a = a.toUpperCase();
+            b = b.toUpperCase();
+            if (a === b) return Comparison.EqualTo;
+        }
+
+        return a < b ? Comparison.LessThan : Comparison.GreaterThan;
+    }
+
+    export function compareStringsCaseInsensitive(a: string, b: string) {
+        return compareStrings(a, b, /*ignoreCase*/ true);
+    }
+
     function getDiagnosticFileName(diagnostic: Diagnostic): string {
         return diagnostic.file ? diagnostic.file.fileName : undefined;
     }
@@ -792,10 +834,273 @@ namespace ts {
         return path1 + directorySeparator + path2;
     }
 
+    /**
+     * Removes a trailing directory separator from a path.
+     * @param path The path.
+     */
+    export function removeTrailingDirectorySeparator(path: string) {
+        if (path.charAt(path.length - 1) === directorySeparator) {
+            return path.substr(0, path.length - 1);
+        }
+
+        return path;
+    }
+
+    /**
+     * Adds a trailing directory separator to a path, if it does not already have one.
+     * @param path The path.
+     */
+    export function ensureTrailingDirectorySeparator(path: string) {
+        if (path.charAt(path.length - 1) !== directorySeparator) {
+            return path + directorySeparator;
+        }
+
+        return path;
+    }
+
+    export function comparePaths(a: string, b: string, currentDirectory: string, ignoreCase?: boolean) {
+        if (a === b) return Comparison.EqualTo;
+        if (a === undefined) return Comparison.LessThan;
+        if (b === undefined) return Comparison.GreaterThan;
+        a = removeTrailingDirectorySeparator(a);
+        b = removeTrailingDirectorySeparator(b);
+        const aComponents = getNormalizedPathComponents(a, currentDirectory);
+        const bComponents = getNormalizedPathComponents(b, currentDirectory);
+        const sharedLength = Math.min(aComponents.length, bComponents.length);
+        for (let i = 0; i < sharedLength; i++) {
+            const result = compareStrings(aComponents[i], bComponents[i], ignoreCase);
+            if (result !== Comparison.EqualTo) {
+                return result;
+            }
+        }
+
+        return compareValues(aComponents.length, bComponents.length);
+    }
+
+    export function containsPath(parent: string, child: string, currentDirectory: string, ignoreCase?: boolean) {
+        if (parent === undefined || child === undefined) return false;
+        if (parent === child) return true;
+        parent = removeTrailingDirectorySeparator(parent);
+        child = removeTrailingDirectorySeparator(child);
+        if (parent === child) return true;
+        const parentComponents = getNormalizedPathComponents(parent, currentDirectory);
+        const childComponents = getNormalizedPathComponents(child, currentDirectory);
+        if (childComponents.length < parentComponents.length) {
+            return false;
+        }
+
+        for (let i = 0; i < parentComponents.length; i++) {
+            const result = compareStrings(parentComponents[i], childComponents[i], ignoreCase);
+            if (result !== Comparison.EqualTo) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     export function fileExtensionIs(path: string, extension: string): boolean {
         const pathLen = path.length;
         const extLen = extension.length;
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
+    }
+
+    export function fileExtensionIsAny(path: string, extensions: string[]): boolean {
+        for (const extension of extensions) {
+            if (fileExtensionIs(path, extension)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
+    // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
+    // proof.
+    const reservedCharacterPattern = /[^\w\s\/]/g;
+    const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
+
+    export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude") {
+        if (specs === undefined || specs.length === 0) {
+            return undefined;
+        }
+
+        let pattern = "";
+        let hasWrittenSubpattern = false;
+        spec: for (const spec of specs) {
+            if (!spec) {
+                continue;
+            }
+
+            let subpattern = "";
+            let hasRecursiveDirectoryWildcard = false;
+            let hasWrittenComponent = false;
+            const components = getNormalizedPathComponents(spec, basePath);
+            if (usage !== "exclude" && components[components.length - 1] === "**") {
+                continue spec;
+            }
+
+            // getNormalizedPathComponents includes the separator for the root component.
+            // We need to remove to create our regex correctly.
+            components[0] = removeTrailingDirectorySeparator(components[0]);
+
+            let optionalCount = 0;
+            for (const component of components) {
+                if (component === "**") {
+                    if (hasRecursiveDirectoryWildcard) {
+                        continue spec;
+                    }
+
+                    subpattern += "(/.+?)?";
+                    hasRecursiveDirectoryWildcard = true;
+                    hasWrittenComponent = true;
+                }
+                else {
+                    if (usage === "directories") {
+                        subpattern += "(";
+                        optionalCount++;
+                    }
+
+                    if (hasWrittenComponent) {
+                        subpattern += directorySeparator;
+                    }
+
+                    subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+                    hasWrittenComponent = true;
+                }
+            }
+
+            while (optionalCount > 0) {
+                subpattern += ")?";
+                optionalCount--;
+            }
+
+            if (hasWrittenSubpattern) {
+                pattern += "|";
+            }
+
+            pattern += "(" + subpattern + ")";
+            hasWrittenSubpattern = true;
+        }
+
+        if (!pattern) {
+            return undefined;
+        }
+
+        return "^(" + pattern + (usage === "exclude" ? ")($|/)" : ")$");
+    }
+
+    function replaceWildcardCharacter(match: string) {
+        return match === "*" ? "[^/]*" : match === "?" ? "[^/]" : "\\" + match;
+    }
+
+    export interface FileSystemEntries {
+        files: string[];
+        directories: string[];
+    }
+
+    export interface FileMatcherPatterns {
+        includeFilePattern: string;
+        includeDirectoryPattern: string;
+        excludePattern: string;
+        basePaths: string[];
+    }
+
+    export function getFileMatcherPatterns(path: string, extensions: string[], excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
+        path = normalizePath(path);
+        currentDirectory = normalizePath(currentDirectory);
+        const absolutePath = combinePaths(currentDirectory, path);
+
+        return {
+            includeFilePattern: getRegularExpressionForWildcard(includes, absolutePath, "files"),
+            includeDirectoryPattern: getRegularExpressionForWildcard(includes, absolutePath, "directories"),
+            excludePattern: getRegularExpressionForWildcard(excludes, absolutePath, "exclude"),
+            basePaths: getBasePaths(path, includes, useCaseSensitiveFileNames)
+        };
+    }
+
+    export function matchFiles(path: string, extensions: string[], excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string, getFileSystemEntries: (path: string) => FileSystemEntries): string[] {
+        path = normalizePath(path);
+        currentDirectory = normalizePath(currentDirectory);
+
+        const patterns = getFileMatcherPatterns(path, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
+
+        const regexFlag = useCaseSensitiveFileNames ? "" : "i";
+        const includeFileRegex = patterns.includeFilePattern && new RegExp(patterns.includeFilePattern, regexFlag);
+        const includeDirectoryRegex = patterns.includeDirectoryPattern && new RegExp(patterns.includeDirectoryPattern, regexFlag);
+        const excludeRegex = patterns.excludePattern && new RegExp(patterns.excludePattern, regexFlag);
+
+        const result: string[] = [];
+        for (const basePath of patterns.basePaths) {
+            visitDirectory(basePath, combinePaths(currentDirectory, basePath));
+        }
+        return result;
+
+        function visitDirectory(path: string, absolutePath: string) {
+            const { files, directories } = getFileSystemEntries(path);
+
+            for (const current of files) {
+                const name = combinePaths(path, current);
+                const absoluteName = combinePaths(absolutePath, current);
+                if ((!extensions || fileExtensionIsAny(name, extensions)) &&
+                    (!includeFileRegex || includeFileRegex.test(absoluteName)) &&
+                    (!excludeRegex || !excludeRegex.test(absoluteName))) {
+                    result.push(name);
+                }
+            }
+
+            for (const current of directories) {
+                const name = combinePaths(path, current);
+                const absoluteName = combinePaths(absolutePath, current);
+                if ((!includeDirectoryRegex || includeDirectoryRegex.test(absoluteName)) &&
+                    (!excludeRegex || !excludeRegex.test(absoluteName))) {
+                    visitDirectory(name, absoluteName);
+                }
+            }
+        }
+    }
+
+    /**
+     * Computes the unique non-wildcard base paths amongst the provided include patterns.
+     */
+    function getBasePaths(path: string, includes: string[], useCaseSensitiveFileNames: boolean) {
+        // Storage for our results in the form of literal paths (e.g. the paths as written by the user).
+        const basePaths: string[] = [path];
+        if (includes) {
+            // Storage for literal base paths amongst the include patterns.
+            const includeBasePaths: string[] = [];
+            for (const include of includes) {
+                if (isRootedDiskPath(include)) {
+                    const wildcardOffset = indexOfAnyCharCode(include, wildcardCharCodes);
+                    const includeBasePath = wildcardOffset < 0
+                        ? removeTrailingDirectorySeparator(getDirectoryPath(include))
+                        : include.substring(0, include.lastIndexOf(directorySeparator, wildcardOffset));
+
+                    // Append the literal and canonical candidate base paths.
+                    includeBasePaths.push(includeBasePath);
+                }
+            }
+
+            // Sort the offsets array using either the literal or canonical path representations.
+            includeBasePaths.sort(useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive);
+
+            // Iterate over each include base path and include unique base paths that are not a
+            // subpath of an existing base path
+            include: for (let i = 0; i < includeBasePaths.length; i++) {
+                const includeBasePath = includeBasePaths[i];
+                for (let j = 0; j < basePaths.length; j++) {
+                    if (containsPath(basePaths[j], includeBasePath, path, !useCaseSensitiveFileNames)) {
+                        continue include;
+                    }
+                }
+
+                basePaths.push(includeBasePath);
+            }
+        }
+
+        return basePaths;
     }
 
     export function ensureScriptKind(fileName: string, scriptKind?: ScriptKind): ScriptKind {
@@ -846,6 +1151,59 @@ namespace ts {
         return false;
     }
 
+    /**
+     * Extension boundaries by priority. Lower numbers indicate higher priorities, and are
+     * aligned to the offset of the highest priority extension in the
+     * allSupportedExtensions array.
+     */
+    export const enum ExtensionPriority {
+        TypeScriptFiles = 0,
+        DeclarationAndJavaScriptFiles = 2,
+        Limit = 5,
+
+        Highest = TypeScriptFiles,
+        Lowest = DeclarationAndJavaScriptFiles,
+    }
+
+    export function getExtensionPriority(path: string, supportedExtensions: string[]): ExtensionPriority {
+        for (let i = supportedExtensions.length - 1; i >= 0; i--) {
+            if (fileExtensionIs(path, supportedExtensions[i])) {
+                return adjustExtensionPriority(<ExtensionPriority>i);
+            }
+        }
+
+        // If its not in the list of supported extensions, this is likely a
+        // TypeScript file with a non-ts extension
+        return ExtensionPriority.Highest;
+    }
+
+    /**
+     * Adjusts an extension priority to be the highest priority within the same range.
+     */
+    export function adjustExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
+        if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
+            return ExtensionPriority.TypeScriptFiles;
+        }
+        else if (extensionPriority < ExtensionPriority.Limit) {
+            return ExtensionPriority.DeclarationAndJavaScriptFiles;
+        }
+        else {
+            return ExtensionPriority.Limit;
+        }
+    }
+
+    /**
+     * Gets the next lowest extension priority for a given priority.
+     */
+    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
+        if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
+            return ExtensionPriority.DeclarationAndJavaScriptFiles;
+        }
+        else {
+            return ExtensionPriority.Limit;
+        }
+    }
+
     const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
         for (const ext of extensionsToRemove) {
@@ -863,6 +1221,10 @@ namespace ts {
 
     export function isJsxOrTsxExtension(ext: string): boolean {
         return ext === ".jsx" || ext === ".tsx";
+    }
+
+    export function changeExtension<T extends string | Path>(path: T, newExtension: string): T {
+        return <T>(removeFileExtension(path) + newExtension);
     }
 
     export interface ObjectAllocator {

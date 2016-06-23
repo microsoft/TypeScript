@@ -245,6 +245,13 @@ function runTests(taskConfigsFolder, run, options, cb) {
     }
 }
 
+var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
+if (process.env.path !== undefined) {
+   process.env.path = nodeModulesPathPrefix + process.env.path;
+} else if (process.env.PATH !== undefined) {
+   process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
+}
+
 function spawnProcess(cmd, options) {
     var shell = process.platform === "win32" ? "cmd" : "/bin/sh";
     var prefix = process.platform === "win32" ? "/c" : "-c";

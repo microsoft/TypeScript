@@ -571,7 +571,7 @@
         "category": "Error",
         "code": 1186
     },
-    "A parameter property may not be a binding pattern.": {
+    "A parameter property may not be declared using a binding pattern.": {
         "category": "Error",
         "code": 1187
     },
@@ -850,6 +850,10 @@
     "Global module exports may only appear at top level.": {
         "category": "Error",
         "code": 1316
+    },
+    "A parameter property cannot be declared using a rest parameter.": {
+        "category": "Error",
+        "code": 1317
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2231,6 +2235,14 @@
     "Cannot find the common subdirectory path for the input files.": {
         "category": "Error",
         "code": 5009
+    },
+    "File specification cannot end in a recursive directory wildcard ('**'): '{0}'.": {
+        "category": "Error",
+        "code": 5010
+    },
+    "File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.": {
+        "category": "Error",
+        "code": 5011
     },
     "Cannot read file '{0}': {1}": {
         "category": "Error",
