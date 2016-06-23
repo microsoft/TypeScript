@@ -1,4 +1,5 @@
 /// <reference path="scripts/types/ambient.d.ts" />
+/// <reference types="q" />
 
 import * as cp from "child_process";
 import * as path from "path";
@@ -25,7 +26,7 @@ declare global {
     type Promise<T> = Q.Promise<T>;
 }
 import del = require("del");
-import mkdirP = require("mkdirP");
+import mkdirP = require("mkdirp");
 import minimist = require("minimist");
 import browserify = require("browserify");
 import through2 = require("through2");
@@ -67,7 +68,9 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
 function exec(cmd: string, args: string[], complete: () => void = (() => {}), error: (e: any, status: number) => void = (() => {})) {
     console.log(`${cmd} ${args.join(" ")}`);
     // TODO (weswig): Update child_process types to add windowsVerbatimArguments to the type definition
-    const ex = cp.spawn(isWin ? "cmd" : "/bin/sh", [isWin ? "/c" : "-c", cmd, ...args], { stdio: "inherit", windowsVerbatimArguments: true } as any);
+    const subshellFlag = isWin ? "/c" : "-c";
+    const command = isWin ? [cmd, ...args] : [`${cmd} ${args.join(" ")}`];
+    const ex = cp.spawn(isWin ? "cmd" : "/bin/sh", [subshellFlag, ...command], { stdio: "inherit", windowsVerbatimArguments: true } as any);
     ex.on("exit", (code) => code === 0 ? complete() : error(/*e*/ undefined, code));
     ex.on("error", error);
 }
