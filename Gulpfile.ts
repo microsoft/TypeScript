@@ -226,7 +226,7 @@ for (const i in libraryTargets) {
     gulp.task(target, false, [], function() {
         return gulp.src(sources)
             .pipe(newer(target))
-            .pipe(concat(target, {newLine: ""}))
+            .pipe(concat(target, { newLine: "" }))
             .pipe(gulp.dest("."));
     });
 }
@@ -577,7 +577,7 @@ gulp.task(run, false, [servicesFile], () => {
         .pipe(newer(run))
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
-        .pipe(sourcemaps.write(".", {includeContent: false, sourceRoot: "../../"}))
+        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "../../" }))
         .pipe(gulp.dest("."));
 });
 
@@ -743,7 +743,7 @@ gulp.task("runtests",
 const nodeServerOutFile = "tests/webTestServer.js";
 const nodeServerInFile = "tests/webTestServer.ts";
 gulp.task(nodeServerOutFile, false, [servicesFile], () => {
-    const settings: tsc.Settings = getCompilerSettings({module: "commonjs"}, /*useBuiltCompiler*/ true);
+    const settings: tsc.Settings = getCompilerSettings({ module: "commonjs" }, /*useBuiltCompiler*/ true);
     return gulp.src(nodeServerInFile)
         .pipe(newer(nodeServerOutFile))
         .pipe(sourcemaps.init())
@@ -768,7 +768,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
                     next(undefined, file);
                 });
         }))
-        .pipe(sourcemaps.write(".", {includeContent: false, sourceRoot: "../../"}))
+        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "../../" }))
         .pipe(gulp.dest("."));
 });
 
@@ -966,7 +966,7 @@ const tslintRulesFiles = tslintRules.map(function(p) {
 const tslintRulesOutFiles = tslintRules.map(function(p, i) {
     const pathname = path.join(builtLocalDirectory, "tslint", p + ".js");
     gulp.task(pathname, false, [], () => {
-        const settings: tsc.Settings = getCompilerSettings({module: "commonjs"}, /*useBuiltCompiler*/ false);
+        const settings: tsc.Settings = getCompilerSettings({ module: "commonjs" }, /*useBuiltCompiler*/ false);
         return gulp.src(tslintRulesFiles[i])
             .pipe(newer(pathname))
             .pipe(sourcemaps.init())
