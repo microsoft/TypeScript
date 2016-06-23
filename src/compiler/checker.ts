@@ -14493,7 +14493,7 @@ namespace ts {
         }
 
         function checkUnusedTypeParameters(node: ClassDeclaration | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration) {
-            if (compilerOptions.noUnusedLocals) {
+            if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 if (node.typeParameters) {
                     for (const typeParameter of node.typeParameters) {
                         if (!typeParameter.symbol.hasReference) {
@@ -14509,7 +14509,7 @@ namespace ts {
         }
 
         function checkUnusedImports(node: SourceFile) {
-            if (compilerOptions.noUnusedLocals) {
+            if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 for (const local in node.locals) {
                     if (hasProperty(node.locals, local)) {
                         const localValue = node.locals[local];
