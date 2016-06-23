@@ -2953,7 +2953,7 @@ namespace FourSlashInterface {
             this.state.verifyDefinitionsName(this.negative, name, containerName);
         }
 
-        public isValidBraceCompletionAtPostion(openingBrace: string) {
+        public isValidBraceCompletionAtPosition(openingBrace: string) {
             this.state.verifyBraceCompletionAtPostion(this.negative, openingBrace);
         }
     }
