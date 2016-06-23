@@ -1046,7 +1046,7 @@ namespace ts {
     // @kind(SyntaxKind.JsxOpeningElement)
     export interface JsxOpeningElement extends Expression {
         _openingElementBrand?: any;
-        tagName: EntityName;
+        tagName: LeftHandSideExpression;
         attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>;
     }
 
@@ -1073,7 +1073,7 @@ namespace ts {
 
     // @kind(SyntaxKind.JsxClosingElement)
     export interface JsxClosingElement extends Node {
-        tagName: EntityName;
+        tagName: LeftHandSideExpression;
     }
 
     // @kind(SyntaxKind.JsxExpression)

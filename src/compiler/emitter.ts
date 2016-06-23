@@ -1217,7 +1217,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             function jsxEmitReact(node: JsxElement | JsxSelfClosingElement) {
                 /// Emit a tag name, which is either '"div"' for lower-cased names, or
                 /// 'Div' for upper-cased or dotted names
-                function emitTagName(name: Identifier | QualifiedName) {
+                function emitTagName(name: LeftHandSideExpression) {
                     if (name.kind === SyntaxKind.Identifier && isIntrinsicJsxName((<Identifier>name).text)) {
                         write('"');
                         emit(name);

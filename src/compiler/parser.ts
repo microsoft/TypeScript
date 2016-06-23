@@ -3575,7 +3575,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function tagNamesAreEquivalent(lhs: EntityName, rhs: EntityName): boolean {
+        function tagNamesAreEquivalent(lhs: LeftHandSideExpression, rhs: LeftHandSideExpression): boolean {
             if (lhs.kind !== rhs.kind) {
                 return false;
             }
@@ -3584,8 +3584,12 @@ namespace ts {
                 return (<Identifier>lhs).text === (<Identifier>rhs).text;
             }
 
-            return (<QualifiedName>lhs).right.text === (<QualifiedName>rhs).right.text &&
-                tagNamesAreEquivalent((<QualifiedName>lhs).left, (<QualifiedName>rhs).left);
+            if (lhs.kind === SyntaxKind.ThisKeyword) {
+                return true;
+            }
+
+            return (<PropertyAccessExpression>lhs).name.text === (<PropertyAccessExpression>rhs).name.text &&
+                tagNamesAreEquivalent((<PropertyAccessExpression>lhs).expression, (<PropertyAccessExpression>rhs).expression);
         }
 
 
@@ -3653,7 +3657,7 @@ namespace ts {
             Debug.fail("Unknown JSX child kind " + token);
         }
 
-        function parseJsxChildren(openingTagName: EntityName): NodeArray<JsxChild> {
+        function parseJsxChildren(openingTagName: LeftHandSideExpression): NodeArray<JsxChild> {
             const result = <NodeArray<JsxChild>>[];
             result.pos = scanner.getStartPos();
             const saveParsingContext = parsingContext;
@@ -3716,17 +3720,21 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseJsxElementName(): EntityName {
+        function parseJsxElementName(): LeftHandSideExpression {
             scanJsxIdentifier();
-            let elementName: EntityName = parseIdentifierName();
+            // JsxElement can have name in the form of property-access expression or an identifier or string literal
+            // We can't just simply use parseLeftHandSideExpressionOrHigher because then we will start consider class,function etc as a keyword
+            // We only want to consider "this" as a primaryExpression
+            // TODO (yuisu): document what form JSX Element can take
+            let expression: LeftHandSideExpression = token === SyntaxKind.ThisKeyword ?
+                parseTokenNode<PrimaryExpression>() : parseIdentifierName();
             while (parseOptional(SyntaxKind.DotToken)) {
-                scanJsxIdentifier();
-                const node: QualifiedName = <QualifiedName>createNode(SyntaxKind.QualifiedName, elementName.pos);  // !!!
-                node.left = elementName;
-                node.right = parseIdentifierName();
-                elementName = finishNode(node);
+                const propertyAccess: PropertyAccessExpression = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos); 
+                propertyAccess.expression = expression;
+                propertyAccess.name = parseRightSideOfDot(/*allowIdntifierNames*/ true);
+                expression = finishNode(propertyAccess);
             }
-            return elementName;
+            return expression;
         }
 
         function parseJsxExpression(inExpressionContext: boolean): JsxExpression {

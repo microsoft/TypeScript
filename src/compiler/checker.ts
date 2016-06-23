@@ -9628,8 +9628,8 @@ namespace ts {
         /**
          * Returns true iff React would emit this tag name as a string rather than an identifier or qualified name
          */
-        function isJsxIntrinsicIdentifier(tagName: Identifier | QualifiedName) {
-            if (tagName.kind === SyntaxKind.QualifiedName) {
+        function isJsxIntrinsicIdentifier(tagName: LeftHandSideExpression) {
+            if (tagName.kind === SyntaxKind.PropertyAccessExpression) {
                 return false;
             }
             else {
