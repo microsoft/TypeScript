@@ -1,4 +1,5 @@
 /// <reference path="scripts/types/ambient.d.ts" />
+/// <reference types="q" />
 
 import * as cp from "child_process";
 import * as path from "path";
@@ -25,7 +26,7 @@ declare global {
     type Promise<T> = Q.Promise<T>;
 }
 import del = require("del");
-import mkdirP = require("mkdirP");
+import mkdirP = require("mkdirp");
 import minimist = require("minimist");
 import browserify = require("browserify");
 import through2 = require("through2");
