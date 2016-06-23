@@ -1949,7 +1949,7 @@ namespace FourSlash {
 
             const position = this.currentCaretPosition;
 
-            const validBraceCompletion = this.languageService.isValidBraceCompletionAtPostion(this.activeFile.fileName, position, charCode);
+            const validBraceCompletion = this.languageService.isValidBraceCompletionAtPosition(this.activeFile.fileName, position, charCode);
 
             if (!negative && !validBraceCompletion) {
                 this.raiseError(`${position} is not a valid brace completion position for ${openingBrace}`);

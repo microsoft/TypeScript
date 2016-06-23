@@ -1148,7 +1148,7 @@ namespace ts {
 
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
 
-        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean;
+        isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeFix[];
 
@@ -7805,7 +7805,7 @@ namespace ts {
             return { newText: result, caretOffset: preamble.length };
         }
 
-        function isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
+        function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
 
             // '<' is currently not supported, figuring out if we're in a Generic Type vs. a comparison is too
             // expensive to do during typing scenarios
@@ -8173,7 +8173,7 @@ namespace ts {
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
-            isValidBraceCompletionAtPostion,
+            isValidBraceCompletionAtPosition,
             getCodeFixesAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,

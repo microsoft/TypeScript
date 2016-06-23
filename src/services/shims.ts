@@ -779,7 +779,7 @@ namespace ts {
         public isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): string {
             return this.forwardJSONCall(
                 `isValidBraceCompletionAtPostion('${fileName}', ${position}, ${openingBrace})`,
-                () => this.languageService.isValidBraceCompletionAtPostion(fileName, position, openingBrace)
+                () => this.languageService.isValidBraceCompletionAtPosition(fileName, position, openingBrace)
             );
         }
 
