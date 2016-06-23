@@ -122,7 +122,7 @@ namespace ts.codeFix {
                 return [{ newText: "{}", span: { start: token.parent.pos, length: token.parent.end - token.parent.pos } }];
             }
 
-            throw new Error("No Quick Fix found");
+            Debug.fail("No Quick fix found.");
         }
     });
 }
