@@ -992,7 +992,8 @@ var tslintRules = [
     "booleanTriviaRule",
     "typeOperatorSpacingRule",
     "noInOperatorRule",
-    "noIncrementDecrementRule"
+    "noIncrementDecrementRule",
+    "objectLiteralSurroundingSpaceRule",
 ];
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
