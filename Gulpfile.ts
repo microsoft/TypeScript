@@ -443,7 +443,7 @@ gulp.task(builtLocalCompiler, false, [servicesFile], () => {
 });
 
 gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], () => {
-    const servicesProject = tsc.createProject("src/services/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/false));
+    const servicesProject = tsc.createProject("src/services/tsconfig.json", getCompilerSettings({removeComments: false}, /*useBuiltCompiler*/false));
     const {js, dts} = servicesProject.src()
         .pipe(newer(servicesFile))
         .pipe(sourcemaps.init())
@@ -566,7 +566,7 @@ gulp.task("VerifyLKG", false, [], () => {
 
 gulp.task("LKGInternal", false, ["lib", "local", "lssl"]);
 
-gulp.task("LKG", "Makes a new LKG out of the built js files", ["dontUseDebugMode"], () => {
+gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUseDebugMode"], () => {
     return runSequence("LKGInternal", "VerifyLKG");
 });
 
