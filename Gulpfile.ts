@@ -443,7 +443,7 @@ gulp.task(builtLocalCompiler, false, [servicesFile], () => {
 });
 
 gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], () => {
-    const servicesProject = tsc.createProject("src/services/tsconfig.json", getCompilerSettings({removeComments: false}, /*useBuiltCompiler*/false));
+    const servicesProject = tsc.createProject("src/services/tsconfig.json", getCompilerSettings({ removeComments: false }, /*useBuiltCompiler*/false));
     const {js, dts} = servicesProject.src()
         .pipe(newer(servicesFile))
         .pipe(sourcemaps.init())
