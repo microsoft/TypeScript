@@ -935,16 +935,14 @@ namespace ts.server {
                 for (const p of rootFile.containingProjects) {
                     if (p.projectKind !== ProjectKind.Inferred) {
                         // file was included in non-inferred project - drop old inferred project
-                        infe
-                        break; 
                     }
                 }
-                if (inInferredProjectOnly) {
-                    openFileRoots.push(rootFile);
-                }
-                else {
+                // if (inInferredProjectOnly) {
+                //     openFileRoots.push(rootFile);
+                // }
+                // else {
 
-                }
+                // }
 
                 // const rootedProject = rootFile.defaultProject;
                 // const referencingProjects = this.findReferencingProjects(rootFile, rootedProject);

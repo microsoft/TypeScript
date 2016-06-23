@@ -94,7 +94,6 @@ namespace ts.server {
             }
             // signal language service to release files acquired from document registry
             this.languageService.dispose();
-
         }
 
         getCompilerOptions() {
@@ -167,21 +166,6 @@ namespace ts.server {
             this.projectStateVersion++;
         }
 
-        // remove a root file from project
-        private removeRoot(info: ScriptInfo): boolean {
-            if (this.isRoot(info)) {
-                this.rootFiles = copyListRemovingItem(info, this.rootFiles);
-                this.rootFilesMap.remove(info.path);
-                this.lsHost.removeRoot(info);
-                return true;
-            }
-            return false;
-        }
-
-        private removeReferencedFile(info: ScriptInfo) {
-            this.lsHost.removeReferencedFile(info)
-        }
-
         updateGraph() {
             if (!this.languageServiceEnabled) {
                 return;
@@ -198,7 +182,7 @@ namespace ts.server {
             }
         }
 
-        getScriptInfoFromNormalizedPath(fileName: NormalizedPath) {
+        getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
             const scriptInfo = this.projectService.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ false);
             if (scriptInfo && scriptInfo.attachToProject(this)) {
                 this.markAsDirty();
@@ -207,7 +191,7 @@ namespace ts.server {
         }
 
         getScriptInfo(uncheckedFileName: string) {
-            return this.getScriptInfoFromNormalizedPath(toNormalizedPath(uncheckedFileName));
+            return this.getScriptInfoForNormalizedPath(toNormalizedPath(uncheckedFileName));
         }
 
         filesToString() {
@@ -240,7 +224,7 @@ namespace ts.server {
         }
 
         reloadScript(filename: NormalizedPath, cb: () => void) {
-            const script = this.getScriptInfoFromNormalizedPath(filename);
+            const script = this.getScriptInfoForNormalizedPath(filename);
             if (script) {
                 script.reloadFromFile(filename, cb);
             }
@@ -287,6 +271,21 @@ namespace ts.server {
                 this.lastReportedVersion = this.projectStructureVersion;
                 return { info, files: projectFileNames };
             }
+        }
+
+        // remove a root file from project
+        private removeRoot(info: ScriptInfo): boolean {
+            if (this.isRoot(info)) {
+                this.rootFiles = copyListRemovingItem(info, this.rootFiles);
+                this.rootFilesMap.remove(info.path);
+                this.lsHost.removeRoot(info);
+                return true;
+            }
+            return false;
+        }
+
+        private removeReferencedFile(info: ScriptInfo) {
+            this.lsHost.removeReferencedFile(info)
         }
     }
 
