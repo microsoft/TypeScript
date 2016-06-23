@@ -1198,9 +1198,16 @@ namespace ts {
         newText: string;
     }
 
-    export interface CodeFix {
-        name: string;
+    export interface FileTextChanges {
+        fileName: string;
         textChanges: TextChange[];
+    }
+
+    export interface CodeFix {
+        /** Description of the code fix to display in the UI of the editor */
+        description: string;
+        /** Text changes to apply to each file as part of the code fix */
+        changes: FileTextChanges[];
     }
 
     export interface TextInsertion {
@@ -7685,16 +7692,16 @@ namespace ts {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
 
-            let fixes: CodeFix[] = [];
+            let allFixes: CodeFix[] = [];
 
-            errorCodes.forEach(error => {
-                const fix = codeFixProvider.getFixes(error, sourceFile, start, end);
-                if (fix) {
-                    fixes = fixes.concat(fix);
+            forEach(errorCodes, error => {
+                const fixes = codeFixProvider.getFixes(error, sourceFile, start, end);
+                if (fixes) {
+                    allFixes = allFixes.concat(fixes);
                 }
             });
 
-            return fixes;
+            return allFixes;
         }
 
         /**

@@ -1887,7 +1887,7 @@ namespace FourSlash {
                 this.raiseError("More than 1 codefix returned.");
             }
 
-            this.applyEdits(fileName, actual[0].textChanges, /*isFormattingEdit*/ false);
+            this.applyEdits(actual[0].changes[0].fileName, actual[0].changes[0].textChanges, /*isFormattingEdit*/ false);
             const actualText = this.getFileContent(fileName);
 
             // We expect the editor to do the final formatting, so we can strip the compare ignoring whitespace

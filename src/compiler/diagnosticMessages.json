@@ -2997,7 +2997,7 @@
         "category": "CodeFix",
         "code": 90001
     },
-    "Make super call the first statement in the constructor.":{
+    "Make 'super()' call the first statement in the constructor.":{
         "category": "CodeFix",
         "code": 90002
     }

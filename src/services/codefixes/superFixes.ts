@@ -10,18 +10,18 @@ namespace ts.codeFix {
         errorCodes: ["TS2377"],
         getTextChanges: (sourceFile: SourceFile, start: number, end: number) => {
             const token = getTokenAtPosition(sourceFile, start);
-            Debug.assert(token.kind === SyntaxKind.ConstructorKeyword,"Failed to find the constructor.");
+            Debug.assert(token.kind === SyntaxKind.ConstructorKeyword, "Failed to find the constructor.");
 
             const newPosition = getOpenBraceEnd(<ConstructorDeclaration>token.parent, sourceFile);
 
-            return [{ newText: "super();", span: { start: newPosition, length: 0 } }];
+            return [{ fileName: sourceFile.fileName, textChanges: [{ newText: "super();", span: { start: newPosition, length: 0 } }] }];
         }
     });
 
     registerCodeFix({
         name: getLocaleSpecificMessage(Diagnostics.Make_super_call_the_first_statement_in_the_constructor),
         errorCodes: ["TS17009"],
-        getTextChanges: (sourceFile: SourceFile, start: number, end: number): TextChange[] => {
+        getTextChanges: (sourceFile: SourceFile, start: number, end: number) => {
             const token = getTokenAtPosition(sourceFile, start);
             const constructor = getContainingFunction(token);
             Debug.assert(constructor.kind === SyntaxKind.Constructor, "Failed to find the constructor.");
@@ -31,13 +31,15 @@ namespace ts.codeFix {
 
             const newPosition = getOpenBraceEnd(<ConstructorDeclaration>constructor, sourceFile);
             return [{
+                fileName: sourceFile.fileName, textChanges: [{
                     newText: superCall.getText(sourceFile),
                     span: { start: newPosition, length: 0 }
                 },
                 {
                     newText: "",
                     span: { start: superCall.getStart(sourceFile), length: superCall.getWidth(sourceFile) }
-                }];
+                }]
+            }];
 
             function findSuperCall(n: Node): Node {
                 if (n.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>n).expression)) {

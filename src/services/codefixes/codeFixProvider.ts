@@ -3,14 +3,14 @@ namespace ts {
     export interface CodeAction {
         name: string;
         errorCodes: string[];
-        getTextChanges(sourceFile: SourceFile, start: number, end: number): TextChange[];
+        getTextChanges(sourceFile: SourceFile, start: number, end: number): FileTextChanges[];
     }
 
     export namespace codeFix {
         var codeActions: Map<CodeAction[]> = {};
 
         export function registerCodeFix(fix: CodeAction) {
-            fix.errorCodes.forEach(error => {
+            forEach( fix.errorCodes, error => {
                 let fixes = codeActions[error];
                 if (!fixes) {
                     fixes = [];
@@ -34,10 +34,10 @@ namespace ts {
                     throw new Error("No fixes found for error: '${errorCode}'.");
                 }
 
-                actions.forEach(a => {
+                forEach(actions, a => {
                     const textChanges = a.getTextChanges(sourceFile, start, end);
                     if (textChanges && textChanges.length > 0) {
-                        fixes.push({ name: a.name, textChanges: textChanges });
+                        fixes.push({ description: a.name, changes: textChanges });
                     }
                 });
 
