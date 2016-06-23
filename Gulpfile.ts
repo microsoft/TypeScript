@@ -69,7 +69,7 @@ function exec(cmd: string, args: string[], complete: () => void = (() => {}), er
     console.log(`${cmd} ${args.join(" ")}`);
     // TODO (weswig): Update child_process types to add windowsVerbatimArguments to the type definition
     const subshellFlag = isWin ? "/c" : "-c";
-    const command = isWin ? [cmd, ...args] : [`${cmd} ${args.join(" ")}`];
+    const command = isWin ? [cmd.indexOf(" ") >= 0 ? `"${cmd}"` : cmd, ...args] : [`${cmd} ${args.join(" ")}`];
     const ex = cp.spawn(isWin ? "cmd" : "/bin/sh", [subshellFlag, ...command], { stdio: "inherit", windowsVerbatimArguments: true } as any);
     ex.on("exit", (code) => code === 0 ? complete() : error(/*e*/ undefined, code));
     ex.on("error", error);
