@@ -14,7 +14,7 @@ import tsc = require("gulp-typescript");
 declare module "gulp-typescript" {
     interface Settings {
         stripInternal?: boolean;
-        newLine?: number;
+        newLine?: string;
     }
     interface CompileStream extends NodeJS.ReadWriteStream {} // Either gulp or gulp-typescript has some odd typings which don't reflect reality, making this required
 }
@@ -310,7 +310,7 @@ function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): ts
     }
     if (!useDebugMode) {
         if (copy.removeComments === undefined) copy.removeComments = true;
-        copy.newLine = 1;
+        copy.newLine = "lf";
     }
     else {
         copy.preserveConstEnums = true;
@@ -548,8 +548,8 @@ gulp.task("clean", "Cleans the compiler output, declare files, and tests", [], (
     return del([builtDirectory]);
 });
 
-gulp.task("useDebugMode", false, [], (done) => { useDebugMode = false; done(); });
-gulp.task("dontUseDebugMode", false, [], (done) => { useDebugMode = true; done(); });
+gulp.task("useDebugMode", false, [], (done) => { useDebugMode = true; done(); });
+gulp.task("dontUseDebugMode", false, [], (done) => { useDebugMode = false; done(); });
 
 gulp.task("VerifyLKG", false, [], () => {
     const expectedFiles = [builtLocalCompiler, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile].concat(libraryTargets);
