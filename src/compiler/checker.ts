@@ -9825,6 +9825,11 @@ namespace ts {
                 }));
             }
 
+            // TODO (yuisu): we should have str
+            if (elemType.flags & TypeFlags.String) {
+                return anyType;
+            }
+
             // Get the element instance type (the result of newing or invoking this tag)
             const elemInstanceType = getJsxElementInstanceType(node, elemType);
 
