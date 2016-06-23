@@ -3575,7 +3575,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function tagNamesAreEquivalent(lhs: LeftHandSideExpression, rhs: LeftHandSideExpression): boolean {
+        function tagNamesAreEquivalent(lhs: JsxTagNameExpression, rhs: JsxTagNameExpression): boolean {
             if (lhs.kind !== rhs.kind) {
                 return false;
             }
@@ -3588,8 +3588,9 @@ namespace ts {
                 return true;
             }
 
+            // If we are at this statement then we must have PropertyAccessExpression
             return (<PropertyAccessExpression>lhs).name.text === (<PropertyAccessExpression>rhs).name.text &&
-                tagNamesAreEquivalent((<PropertyAccessExpression>lhs).expression, (<PropertyAccessExpression>rhs).expression);
+                tagNamesAreEquivalent((<PropertyAccessExpression>lhs).expression as JsxTagNameExpression, (<PropertyAccessExpression>rhs).expression as JsxTagNameExpression);
         }
 
 
@@ -3720,12 +3721,14 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseJsxElementName(): LeftHandSideExpression {
+        function parseJsxElementName(): JsxTagNameExpression {
             scanJsxIdentifier();
-            // JsxElement can have name in the form of property-access expression or an identifier or string literal
+            // JsxElement can have name in the form of
+            //      propertyAccessExpression
+            //      primaryExpression in the form of an identifier and "this" keyword
             // We can't just simply use parseLeftHandSideExpressionOrHigher because then we will start consider class,function etc as a keyword
             // We only want to consider "this" as a primaryExpression
-            let expression: LeftHandSideExpression = token === SyntaxKind.ThisKeyword ?
+            let expression: JsxTagNameExpression = token === SyntaxKind.ThisKeyword ?
                 parseTokenNode<PrimaryExpression>() : parseIdentifierName();
             while (parseOptional(SyntaxKind.DotToken)) {
                 const propertyAccess: PropertyAccessExpression = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos); 
