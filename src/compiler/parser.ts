@@ -3725,7 +3725,6 @@ namespace ts {
             // JsxElement can have name in the form of property-access expression or an identifier or string literal
             // We can't just simply use parseLeftHandSideExpressionOrHigher because then we will start consider class,function etc as a keyword
             // We only want to consider "this" as a primaryExpression
-            // TODO (yuisu): document what form JSX Element can take
             let expression: LeftHandSideExpression = token === SyntaxKind.ThisKeyword ?
                 parseTokenNode<PrimaryExpression>() : parseIdentifierName();
             while (parseOptional(SyntaxKind.DotToken)) {
