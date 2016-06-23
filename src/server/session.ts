@@ -111,8 +111,8 @@ namespace ts.server {
         export const Formatonkey = "formatonkey";
         export const Geterr = "geterr";
         export const GeterrForProject = "geterrForProject";
-        export const SemanticDiagnosticsSync = "semanticDiagnosticsFull";
-        export const SyntacticDiagnosticsSync = "syntacticDiagnosticsFull";
+        export const SemanticDiagnosticsSync = "semanticDiagnosticsSync";
+        export const SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
         export const NavBar = "navbar";
         export const Navto = "navto";
         export const Occurrences = "occurrences";
