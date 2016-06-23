@@ -31,6 +31,11 @@ namespace ts.codeFix {
                         var initializer = <VariableDeclarationList>forOfStatement.initializer;
                         return [{ newText: "{}", span: { start: initializer.declarations[0].pos, length: initializer.declarations[0].end - initializer.declarations[0].pos } }];
                     }
+                    else if (token.parent.parent.kind === SyntaxKind.CatchClause) {
+                        var catchClause = <CatchClause>token.parent.parent;
+                        var parameter = catchClause.variableDeclaration.getChildren()[0];
+                        return [{ newText: "", span: { start: parameter.pos, length: parameter.end - parameter.pos } }];
+                    }
                     else {
                         var variableStatement = <VariableStatement>token.parent.parent.parent;
                         if (variableStatement.declarationList.declarations.length === 1) {
