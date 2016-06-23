@@ -30,9 +30,7 @@ namespace ts {
                 const actions = codeActions[errorCode];
                 const fixes: CodeFix[] = [];
 
-                if (!actions || actions.length == 0) {
-                    throw new Error("No fixes found for error: '${errorCode}'.");
-                }
+                Debug.assert(actions && actions.length > 0, "No fixes found for error: '${errorCode}'.");
 
                 forEach(actions, a => {
                     const textChanges = a.getTextChanges(sourceFile, start, end);
