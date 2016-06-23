@@ -1043,7 +1043,8 @@ var lintTargets = compilerSources
     .concat(["instrumenter.ts"].map(function(f) { return path.join(harnessDirectory, f) }))
     .concat(serverCoreSources)
     .concat(tslintRulesFiles)
-    .concat(servicesSources);
+    .concat(servicesSources)
+    .concat(["Gulpfile.ts"]);
 
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");

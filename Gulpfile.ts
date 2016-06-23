@@ -27,7 +27,7 @@ declare global {
 import del = require("del");
 import mkdirP = require("mkdirP");
 import minimist = require("minimist");
-import browserify = require("browserify")
+import browserify = require("browserify");
 import through2 = require("through2");
 import merge2 = require("merge2");
 import intoStream = require("into-stream");
@@ -105,8 +105,6 @@ const compilerSources = require("./src/compiler/tsconfig.json").files.map((file)
 const servicesSources = require("./src/services/tsconfig.json").files.map((file) => path.join(servicesDirectory, file));
 
 const serverCoreSources = require("./src/server/tsconfig.json").files.map((file) => path.join(serverDirectory, file));
-
-const serverSources = serverCoreSources.concat(servicesSources);
 
 const languageServiceLibrarySources = [
     "editorServices.ts",
@@ -493,7 +491,7 @@ gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
         declaration: true,
         outFile: tsserverLibraryFile
     }, /*useBuiltCompiler*/ true);
-    let {js, dts}: {js: NodeJS.ReadableStream, dts: NodeJS.ReadableStream} = gulp.src(languageServiceLibrarySources)
+    const {js, dts}: {js: NodeJS.ReadableStream, dts: NodeJS.ReadableStream} = gulp.src(languageServiceLibrarySources)
         .pipe(sourcemaps.init())
         .pipe(newer(tsserverLibraryFile))
         .pipe(tsc(settings));
@@ -501,7 +499,7 @@ gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
     return merge2([
         js.pipe(prependCopyright())
           .pipe(sourcemaps.write("."))
-          .pipe(gulp.dest(".")), 
+          .pipe(gulp.dest(".")),
         dts.pipe(prependCopyright())
         .pipe(gulp.dest("."))
     ]);
