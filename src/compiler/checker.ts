@@ -3202,8 +3202,8 @@ namespace ts {
             return parameter && parameter.symbol;
         }
 
-        function getAnnotatedAccessorThisType(accessor: AccessorDeclaration): Type | undefined {
-            return getThisTypeOfSignature(getSignatureFromDeclaration(accessor));
+        function getThisTypeOfDeclaration(declaration: SignatureDeclaration): Type | undefined {
+            return getThisTypeOfSignature(getSignatureFromDeclaration(declaration));
         }
 
         function getTypeOfAccessors(symbol: Symbol): Type {
@@ -8603,7 +8603,7 @@ namespace ts {
                     return type;
                 }
 
-                const thisType = getThisTypeOfSignature(getSignatureFromDeclaration(container));
+                const thisType = getThisTypeOfDeclaration(container);
                 if (thisType) {
                     return thisType;
                 }
@@ -13500,7 +13500,7 @@ namespace ts {
                         // TypeScript 1.0 spec (April 2014): 4.5
                         // If both accessors include type annotations, the specified types must be identical.
                         checkAccessorDeclarationTypesIdentical(node, otherAccessor, getAnnotatedAccessorType, Diagnostics.get_and_set_accessor_must_have_the_same_type);
-                        checkAccessorDeclarationTypesIdentical(node, otherAccessor, getAnnotatedAccessorThisType, Diagnostics.get_and_set_accessor_must_have_the_same_this_type);
+                        checkAccessorDeclarationTypesIdentical(node, otherAccessor, getThisTypeOfDeclaration, Diagnostics.get_and_set_accessor_must_have_the_same_this_type);
                     }
                 }
                 getTypeOfAccessors(getSymbolOfNode(node));
