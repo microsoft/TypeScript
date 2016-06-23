@@ -9825,6 +9825,29 @@ namespace ts {
                 }));
             }
 
+            // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
+            if (elemType.flags & TypeFlags.String) {
+                return anyType;
+            }
+            else if (elemType.flags & TypeFlags.StringLiteral) {
+                // If the elemType is a stringLiteral type, we can then provide a check and give
+                const intrinsicElementsType = getJsxType(JsxNames.IntrinsicElements);
+                if (intrinsicElementsType !== unknownType) {
+                    const stringLiteralTypeName = (<StringLiteralType>elemType).text;
+                    const intrinsicProp = getPropertyOfType(intrinsicElementsType, stringLiteralTypeName);
+                    if (intrinsicProp) {
+                        return getTypeOfSymbol(intrinsicProp);
+                    }
+                    const indexSignatureType = getIndexTypeOfType(intrinsicElementsType, IndexKind.String);
+                    if (indexSignatureType) {
+                        return indexSignatureType;
+                    }
+                    error(node, Diagnostics.Property_0_does_not_exist_on_type_1, stringLiteralTypeName, "JSX." + JsxNames.IntrinsicElements)
+                    // If we need to report an error, we already done so here. So just return any to prevent any more error downstream
+                    return anyType;
+                }
+            }
+
             // Get the element instance type (the result of newing or invoking this tag)
             const elemInstanceType = getJsxElementInstanceType(node, elemType);
 
