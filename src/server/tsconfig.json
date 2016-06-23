@@ -8,6 +8,8 @@
         "stripInternal": true
     },
     "files": [
+        "../services/shims.ts",
+        "../services/utilities.ts",
         "node.d.ts",
         "editorServices.ts",
         "protocol.d.ts",
