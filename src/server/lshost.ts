@@ -72,6 +72,10 @@ namespace ts.server {
             return this.project.getProjectVersion();
         }
 
+        getCompilationSettings() {
+            return this.compilationSettings;
+        }
+
         getCancellationToken() {
             return this.cancellationToken;
         }
@@ -90,22 +94,10 @@ namespace ts.server {
         }
 
         getScriptSnapshot(filename: string): ts.IScriptSnapshot {
-            const scriptInfo = this.project.getScriptInfo(filename);
+            const scriptInfo = this.project.getScriptInfoLSHost(filename);
             if (scriptInfo) {
                 return scriptInfo.snap();
             }
-        }
-
-        setCompilationSettings(opt: ts.CompilerOptions) {
-            this.compilationSettings = opt;
-            // conservatively assume that changing compiler options might affect module resolution strategy
-            this.resolvedModuleNames.clear();
-            this.resolvedTypeReferenceDirectives.clear();
-        }
-
-        getCompilationSettings() {
-            // change this to return active project settings for file
-            return this.compilationSettings;
         }
 
         getScriptFileNames() {
@@ -113,28 +105,17 @@ namespace ts.server {
         }
 
         getScriptKind(fileName: string) {
-            const info = this.project.getScriptInfo(fileName);
+            const info = this.project.getScriptInfoLSHost(fileName);
             return info && info.scriptKind;
         }
 
         getScriptVersion(filename: string) {
-            return this.project.getScriptInfo(filename).getLatestVersion();
+            const info = this.project.getScriptInfoLSHost(filename);
+            return info && info.getLatestVersion();
         }
 
         getCurrentDirectory(): string {
             return "";
-        }
-
-        removeReferencedFile(info: ScriptInfo) {
-            if (!info.isOpen) {
-                this.resolvedModuleNames.remove(info.path);
-                this.resolvedTypeReferenceDirectives.remove(info.path);
-            }
-        }
-
-        removeRoot(info: ScriptInfo) {
-            this.resolvedModuleNames.remove(info.path);
-            this.resolvedTypeReferenceDirectives.remove(info.path);
         }
 
         resolvePath(path: string): string {
@@ -155,6 +136,18 @@ namespace ts.server {
 
         getDirectories(path: string): string[] {
             return this.host.getDirectories(path);
+        }
+
+        notifyFileRemoved(info: ScriptInfo) {
+            this.resolvedModuleNames.remove(info.path);
+            this.resolvedTypeReferenceDirectives.remove(info.path);
+        }
+
+        setCompilationSettings(opt: ts.CompilerOptions) {
+            this.compilationSettings = opt;
+            // conservatively assume that changing compiler options might affect module resolution strategy
+            this.resolvedModuleNames.clear();
+            this.resolvedTypeReferenceDirectives.clear();
         }
     }
 }

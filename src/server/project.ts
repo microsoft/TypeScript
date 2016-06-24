@@ -4,14 +4,22 @@
 /// <reference path="lshost.ts"/>
 
 namespace ts.server {
+
     export enum ProjectKind {
         Inferred,
         Configured,
         External
     }
 
+    function remove<T>(items: T[], item: T) { 
+        const index = items.indexOf(item);
+        if (index >= 0) {
+            items.splice(index, 1);
+        }
+    }
+    
     export abstract class Project {
-        private rootFiles: ScriptInfo[] = [];
+        private readonly rootFiles: ScriptInfo[] = [];
         private readonly rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
         private lsHost: ServerLanguageServiceHost;
         private program: ts.Program;
@@ -130,10 +138,8 @@ namespace ts.server {
 
         containsFile(filename: NormalizedPath, requireOpen?: boolean) {
             const info = this.projectService.getScriptInfoForNormalizedPath(filename);
-            if (info) {
-                if ((!requireOpen) || info.isOpen) {
-                    return this.containsScriptInfo(info);
-                }
+            if (info && (info.isOpen || !requireOpen)) {
+                return this.containsScriptInfo(info);
             }
         }
 
@@ -153,12 +159,13 @@ namespace ts.server {
         }
 
         removeFile(info: ScriptInfo, detachFromProject: boolean = true) {
-            if (!this.removeRoot(info)) {
-                this.removeReferencedFile(info)
-            }
+            this.removeRootFileIfNecessary(info);
+            this.lsHost.notifyFileRemoved(info);
+
             if (detachFromProject) {
                 info.detachFromProject(this);
             }
+
             this.markAsDirty();
         }
 
@@ -179,14 +186,31 @@ namespace ts.server {
             // - newProgram is different from the old program and structure of the old program was not reused.
             if (!oldProgram || (this.program !== oldProgram && !oldProgram.structureIsReused)) {
                 this.projectStructureVersion++;
+                if (oldProgram) {
+                    for (const f of oldProgram.getSourceFiles()) {
+                        if (!this.program.getSourceFileByPath(f.path)) {
+                            // new program does not contain this file - detach it from the project
+                            const scriptInfoToDetach = this.projectService.getScriptInfo(f.fileName);
+                            if (scriptInfoToDetach) {
+                                scriptInfoToDetach.detachFromProject(this);
+                            }
+                        }
+                    }
+                }
             }
+        }
+
+        getScriptInfoLSHost(fileName: string) {
+            const scriptInfo = this.projectService.getOrCreateScriptInfo(fileName, /*openedByClient*/ false);
+            if (scriptInfo) {
+                scriptInfo.attachToProject(this);
+            }
+            return scriptInfo;
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
             const scriptInfo = this.projectService.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ false);
-            if (scriptInfo && scriptInfo.attachToProject(this)) {
-                this.markAsDirty();
-            }
+            Debug.assert(!scriptInfo || scriptInfo.isAttached(this));
             return scriptInfo;
         }
 
@@ -215,19 +239,23 @@ namespace ts.server {
             }
         }
 
-        saveTo(filename: string, tmpfilename: string) {
-            const script = this.getScriptInfo(filename);
+        saveTo(filename: NormalizedPath, tmpfilename: NormalizedPath) {
+            const script = this.projectService.getScriptInfoForNormalizedPath(filename);
             if (script) {
+                Debug.assert(script.isAttached(this));
                 const snap = script.snap();
                 this.projectService.host.writeFile(tmpfilename, snap.getText(0, snap.getLength()));
             }
         }
 
-        reloadScript(filename: NormalizedPath, cb: () => void) {
-            const script = this.getScriptInfoForNormalizedPath(filename);
+        reloadScript(filename: NormalizedPath): boolean {
+            const script = this.projectService.getScriptInfoForNormalizedPath(filename);
             if (script) {
-                script.reloadFromFile(filename, cb);
+                Debug.assert(script.isAttached(this));
+                script.reloadFromFile();
+                return true;
             }
+            return false;
         }
 
         getChangesSinceVersion(lastKnownVersion?: number): protocol.ProjectFiles {
@@ -274,18 +302,11 @@ namespace ts.server {
         }
 
         // remove a root file from project
-        private removeRoot(info: ScriptInfo): boolean {
+        private removeRootFileIfNecessary(info: ScriptInfo): void {
             if (this.isRoot(info)) {
-                this.rootFiles = copyListRemovingItem(info, this.rootFiles);
+                remove(this.rootFiles, info);
                 this.rootFilesMap.remove(info.path);
-                this.lsHost.removeRoot(info);
-                return true;
             }
-            return false;
-        }
-
-        private removeReferencedFile(info: ScriptInfo) {
-            this.lsHost.removeReferencedFile(info)
         }
     }
 

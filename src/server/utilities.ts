@@ -140,17 +140,13 @@ namespace ts.server {
     };
 
     export interface ServerLanguageServiceHost {
-        getCompilationSettings(): CompilerOptions;
         setCompilationSettings(options: CompilerOptions): void;
-        removeRoot(info: ScriptInfo): void;
-        removeReferencedFile(info: ScriptInfo): void;
+        notifyFileRemoved(info: ScriptInfo): void;
     }
 
     export const nullLanguageServiceHost: ServerLanguageServiceHost = {
-        getCompilationSettings: () => undefined,
         setCompilationSettings: () => undefined,
-        removeRoot: () => undefined,
-        removeReferencedFile: () => undefined
+        notifyFileRemoved: () => undefined
     };
 
     export interface ProjectOptions {

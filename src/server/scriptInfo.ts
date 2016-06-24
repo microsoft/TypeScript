@@ -3,15 +3,15 @@
 namespace ts.server {
 
     export class ScriptInfo {
-        private svc: ScriptVersionCache;
         /**
          * All projects that include this file 
          */
         readonly containingProjects: Project[] = [];
+        readonly formatCodeSettings: ts.FormatCodeSettings;
+        readonly path: Path;
 
         private fileWatcher: FileWatcher;
-        formatCodeSettings: ts.FormatCodeSettings;
-        readonly path: Path;
+        private svc: ScriptVersionCache;
 
         constructor(
             private readonly host: ServerHost,
@@ -29,11 +29,15 @@ namespace ts.server {
         }
 
         attachToProject(project: Project): boolean {
-            if (!contains(this.containingProjects, project)) {
+            const isNew = !this.isAttached(project);
+            if (isNew) {
                 this.containingProjects.push(project);
-                return true;
             }
-            return false;
+            return isNew;
+        }
+
+        isAttached(project: Project) {
+            return contains(this.containingProjects, project);
         }
 
         detachFromProject(project: Project) {
@@ -80,8 +84,8 @@ namespace ts.server {
             this.markContainingProjectsAsDirty();
         }
 
-        reloadFromFile(fileName: string, cb?: () => void) {
-            this.svc.reloadFromFile(fileName, cb)
+        reloadFromFile() {
+            this.svc.reloadFromFile(this.fileName);
             this.markContainingProjectsAsDirty();
         }
 

@@ -1018,7 +1018,7 @@ namespace ts.server {
                     scriptInfo.editContent(start, end, args.insertString);
                     this.changeSeq++;
                 }
-                this.updateProjectStructure(this.changeSeq, (n) => n === this.changeSeq);
+                this.updateProjectStructure(this.changeSeq, n => n === this.changeSeq);
             }
         }
 
@@ -1028,15 +1028,15 @@ namespace ts.server {
             if (project) {
                 this.changeSeq++;
                 // make sure no changes happen before this one is finished
-                project.reloadScript(file, () => {
+                if (project.reloadScript(file)) {
                     this.output(undefined, CommandNames.Reload, reqSeq);
-                });
+                }
             }
         }
 
         private saveToTmp(fileName: string, tempFileName: string) {
             const file = toNormalizedPath(fileName);
-            const tmpfile = ts.normalizePath(tempFileName);
+            const tmpfile = toNormalizedPath(tempFileName);
 
             const project = this.projectService.getDefaultProjectForFile(file);
             if (project) {
@@ -1267,6 +1267,7 @@ namespace ts.server {
             },
             [CommandNames.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
                 this.projectService.applyChangesInOpenFiles(request.arguments.openFiles, request.arguments.changedFiles, request.arguments.closedFiles);
+                this.changeSeq++;
                 // TODO: report errors
                 return this.requiredResponse(true);
             },
