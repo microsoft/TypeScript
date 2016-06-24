@@ -2127,6 +2127,7 @@ namespace ts {
         /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
+        /* @internal */ hasReference?: boolean; // True if the symbol is referenced elsewhere
     }
 
     /* @internal */
@@ -2557,6 +2558,8 @@ namespace ts {
         noImplicitAny?: boolean;
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;
+        noUnusedLocals?: boolean;
+        noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
         noLib?: boolean;
         noResolve?: boolean;

@@ -8310,8 +8310,21 @@ namespace ts {
             return container === declarationContainer;
         }
 
+        function updateReferencesForInterfaceHeritiageClauseTargets(node: InterfaceDeclaration): void {
+            const extendedTypeNode = getClassExtendsHeritageClauseElement(node);
+            if (extendedTypeNode) {
+                const t = getTypeFromTypeNode(extendedTypeNode);
+                if (t !== unknownType && t.symbol && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
+                    t.symbol.hasReference = true;
+                }
+            }
+        }
+
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
+            if (symbol && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
+                symbol.hasReference = true;
+            }
 
             // As noted in ECMAScript 6 language spec, arrow functions never have an arguments objects.
             // Although in down-level emit of arrow function, we emit it using function expression which means that
@@ -10224,6 +10237,10 @@ namespace ts {
                     error(right, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(right), typeToString(type.flags & TypeFlags.ThisType ? apparentType : type));
                 }
                 return unknownType;
+            }
+
+            if ((compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
+                prop.hasReference = true;
             }
 
             getNodeLinks(node).resolvedSymbol = prop;
@@ -12168,6 +12185,8 @@ namespace ts {
                         }
                     }
                 }
+                checkUnusedIdentifiers(node);
+                checkUnusedTypeParameters(node);
             }
         }
 
@@ -13238,6 +13257,9 @@ namespace ts {
                         checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
                     }
                 }
+                if (!(<FunctionDeclaration>node).body) {
+                    checkUnusedTypeParameters(node);
+                }
             }
         }
 
@@ -13390,6 +13412,8 @@ namespace ts {
             checkGrammarConstructorTypeParameters(node) || checkGrammarConstructorTypeAnnotation(node);
 
             checkSourceElement(node.body);
+            checkUnusedIdentifiers(node);
+            checkUnusedTypeParameters(node);
 
             const symbol = getSymbolOfNode(node);
             const firstDeclaration = getDeclarationOfKind(symbol, node.kind);
@@ -13582,13 +13606,18 @@ namespace ts {
         function checkTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments) {
             checkGrammarTypeArguments(node, node.typeArguments);
             const type = getTypeFromTypeReference(node);
-            if (type !== unknownType && node.typeArguments) {
-                // Do type argument local checks only if referenced type is successfully resolved
-                forEach(node.typeArguments, checkSourceElement);
-                if (produceDiagnostics) {
-                    const symbol = getNodeLinks(node).resolvedSymbol;
-                    const typeParameters = symbol.flags & SymbolFlags.TypeAlias ? getSymbolLinks(symbol).typeParameters : (<TypeReference>type).target.localTypeParameters;
-                    checkTypeArgumentConstraints(typeParameters, node.typeArguments);
+            if (type !== unknownType) {
+                if (type.symbol && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
+                    type.symbol.hasReference = true;
+                }
+                if (node.typeArguments) {
+                    // Do type argument local checks only if referenced type is successfully resolved
+                    forEach(node.typeArguments, checkSourceElement);
+                    if (produceDiagnostics) {
+                        const symbol = getNodeLinks(node).resolvedSymbol;
+                        const typeParameters = symbol.flags & SymbolFlags.TypeAlias ? getSymbolLinks(symbol).typeParameters : (<TypeReference>type).target.localTypeParameters;
+                        checkTypeArgumentConstraints(typeParameters, node.typeArguments);
+                    }
                 }
             }
         }
@@ -14431,6 +14460,8 @@ namespace ts {
             }
 
             checkSourceElement(node.body);
+            checkUnusedIdentifiers(node);
+            checkUnusedTypeParameters(node);
             if (!node.asteriskToken) {
                 const returnOrPromisedType = node.type && (isAsync ? checkAsyncFunctionReturnType(node) : getTypeFromTypeNode(node.type));
                 checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
@@ -14452,12 +14483,83 @@ namespace ts {
             }
         }
 
+        function checkUnusedIdentifiers(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction | ForInStatement | Block | CatchClause): void {
+            if (node.parent.kind !== SyntaxKind.InterfaceDeclaration && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
+                for (const key in node.locals) {
+                    if (hasProperty(node.locals, key)) {
+                        const local = node.locals[key];
+                        if (!local.hasReference && local.valueDeclaration) {
+                            if (local.valueDeclaration.kind !== SyntaxKind.Parameter && compilerOptions.noUnusedLocals) {
+                                error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
+                            }
+                            else if (local.valueDeclaration.kind === SyntaxKind.Parameter && compilerOptions.noUnusedParameters) {
+                                if (local.valueDeclaration.flags === 0) {
+                                    error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function checkUnusedClassLocals(node: ClassDeclaration): void {
+            if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
+                if (node.members) {
+                    for (const member of node.members) {
+                        if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.PropertyDeclaration) {
+                            if (isPrivateNode(member) && !member.symbol.hasReference) {
+                                error(member.name, Diagnostics._0_is_declared_but_never_used, member.symbol.name);
+                            }
+                        }
+                        else if (member.kind === SyntaxKind.Constructor) {
+                            for (const parameter of (<ConstructorDeclaration>member).parameters) {
+                                if (isPrivateNode(parameter) && !parameter.symbol.hasReference) {
+                                    error(parameter.name, Diagnostics._0_is_declared_but_never_used, parameter.symbol.name);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function checkUnusedTypeParameters(node: ClassDeclaration | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration | InterfaceDeclaration) {
+            if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
+                if (node.typeParameters) {
+                    for (const typeParameter of node.typeParameters) {
+                        if (!typeParameter.symbol.hasReference) {
+                            error(typeParameter.name, Diagnostics._0_is_declared_but_never_used, typeParameter.symbol.name);
+                        }
+                    }
+                }
+            }
+        }
+
+        function isPrivateNode(node: Node): boolean {
+            return (node.flags & NodeFlags.Private) !== 0;
+        }
+
+        function checkUnusedModuleLocals(node: ModuleDeclaration | SourceFile): void {
+            if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
+                for (const key in node.locals) {
+                    if (hasProperty(node.locals, key)) {
+                        const local = node.locals[key];
+                        if (!local.hasReference && !local.exportSymbol) {
+                            forEach(local.declarations, d => error(d.name, Diagnostics._0_is_declared_but_never_used, local.name));
+                        }
+                    }
+                }
+            }
+        }
+
         function checkBlock(node: Block) {
             // Grammar checking for SyntaxKind.Block
             if (node.kind === SyntaxKind.Block) {
                 checkGrammarStatementInAmbientContext(node);
             }
             forEach(node.statements, checkSourceElement);
+            checkUnusedIdentifiers(node);
         }
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
@@ -14962,6 +15064,7 @@ namespace ts {
             }
 
             checkSourceElement(node.statement);
+            checkUnusedIdentifiers(node);
         }
 
         function checkForInStatement(node: ForInStatement) {
@@ -15009,6 +15112,7 @@ namespace ts {
             }
 
             checkSourceElement(node.statement);
+            checkUnusedIdentifiers(node);
         }
 
         function checkForInOrForOfVariableDeclaration(iterationStatement: ForInStatement | ForOfStatement): void {
@@ -15448,6 +15552,7 @@ namespace ts {
                 }
 
                 checkBlock(catchClause.block);
+                checkUnusedIdentifiers(catchClause);
             }
 
             if (node.finallyBlock) {
@@ -15609,6 +15714,8 @@ namespace ts {
             }
             checkClassLikeDeclaration(node);
             forEach(node.members, checkSourceElement);
+            checkUnusedClassLocals(node);
+            checkUnusedTypeParameters(node);
         }
 
         function checkClassLikeDeclaration(node: ClassLikeDeclaration) {
@@ -15918,6 +16025,8 @@ namespace ts {
 
             if (produceDiagnostics) {
                 checkTypeForDuplicateIndexSignatures(node);
+                updateReferencesForInterfaceHeritiageClauseTargets(node);
+                checkUnusedTypeParameters(node);
             }
         }
 
@@ -16314,6 +16423,7 @@ namespace ts {
 
             if (node.body) {
                 checkSourceElement(node.body);
+                checkUnusedModuleLocals(node);
             }
         }
 
@@ -16493,6 +16603,9 @@ namespace ts {
                         }
                         if (target.flags & SymbolFlags.Type) {
                             checkTypeNameIsReserved(node.name, Diagnostics.Import_name_cannot_be_0);
+                        }
+                        if ((compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
+                            target.hasReference = true;
                         }
                     }
                 }
@@ -16836,6 +16949,9 @@ namespace ts {
 
                 deferredNodes = [];
                 forEach(node.statements, checkSourceElement);
+                if (isExternalModule(node)) {
+                    checkUnusedModuleLocals(node);
+                }
                 checkDeferredNodes();
                 deferredNodes = undefined;
 
