@@ -117,6 +117,10 @@ namespace ts.server {
             };
         }
 
+        public getProjectVersion(): string {
+            return this.project.getProjectVersion();
+        }
+
         private resolveNamesWithLocalCache<T extends Timestamped & { failedLookupLocations: string[] }, R>(
             names: string[],
             containingFile: string,
@@ -371,7 +375,7 @@ namespace ts.server {
     export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
-        autoDiagnostics?: boolean;
+        autoBuild?: boolean;
         compilerOptions?: ts.CompilerOptions;
     }
 
@@ -389,6 +393,8 @@ namespace ts.server {
         openRefCount = 0;
         builder: Builder;
 
+        private sequenceNumber: number;
+
         constructor(
             public projectService: ProjectService,
             host: ServerHost,
@@ -398,6 +404,7 @@ namespace ts.server {
             public projectOptions?: ProjectOptions,
             public languageServiceDiabled = false) {
 
+            this.sequenceNumber = 0;
             this.projectFilename = projectFileName;
 
             if (projectOptions && projectOptions.files) {
@@ -413,6 +420,10 @@ namespace ts.server {
                     logError: (err: Error, cmd: string) => {}
                 });
             }
+        }
+
+        getProjectVersion(): string {
+            return this.sequenceNumber.toString();
         }
 
         enableLanguageService() {
@@ -435,6 +446,7 @@ namespace ts.server {
         }
 
         fileChanged(file: string): void {
+            this.sequenceNumber++;
             if (this.languageServiceDiabled) {
                 return;
             }
@@ -446,6 +458,22 @@ namespace ts.server {
                 return;
             }
             this.builder.fileClosed(file);
+        }
+
+        fileCreated(file: string): void {
+            this.sequenceNumber++;
+            if (this.languageServiceDiabled) {
+                return;
+            }
+            this.builder.fileCreated(file);
+        }
+
+        fileDeleted(file: string): void {
+            this.sequenceNumber++;
+            if (this.languageServiceDiabled) {
+                return;
+            }
+            this.builder.fileDeleted(file);
         }
 
         addOpenRef() {
@@ -1385,7 +1413,7 @@ namespace ts.server {
                 else {
                     const projectOptions: ProjectOptions = {
                         files: parsedCommandLine.fileNames,
-                        autoDiagnostics: rawConfig.config.autoDiagnostics,
+                        autoBuild: rawConfig.config.autoBuild,
                         compilerOptions: parsedCommandLine.options
                     };
                     return { succeeded: true, projectOptions };

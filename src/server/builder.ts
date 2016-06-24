@@ -202,7 +202,7 @@ namespace ts.server {
 
     interface FileInfo {
         fileName(): string;
-        needsCheck(): boolean;
+        needsCheck(builder: BuilderAccessor<FileInfo>): boolean;
         syntacticCheck(builder: BuilderAccessor<FileInfo>): Diagnostic[];
         semanticCheck(builder: BuilderAccessor<FileInfo>): Diagnostic[];
         update(builder: BuilderAccessor<FileInfo>): boolean;
@@ -293,7 +293,7 @@ namespace ts.server {
         public abstract getFileInfo(key: string): T;
 
         public queueFileInfo(fileInfo: T, touch?: boolean): void {
-            if (!fileInfo.needsCheck()) {
+            if (!fileInfo.needsCheck(this)) {
                 return;
             }
             this._compileQueue.add(fileInfo.fileName(), fileInfo, touch);
@@ -422,8 +422,8 @@ namespace ts.server {
             return this.info.fileName();
         }
 
-        public needsCheck(): boolean {
-            return this.info.needsCheck();
+        public needsCheck(builder: BuilderAccessor<FileInfo>): boolean {
+            return this.info.needsCheck(builder);
         }
 
         public syntacticCheck(builder: BuilderAccessor<FileInfo>): Diagnostic[] {
@@ -499,20 +499,20 @@ namespace ts.server {
     class ModuleFileInfo extends AbstractFileInfo implements FileInfo {
 
         private finalized: boolean;
+        private sourceFileVersion: string;
         private references: ModuleFileInfo[];
         private referencedBy: ModuleFileInfo[];
 
-        private version: string;
         private contentSignature: string;
         private lastCheckedFingerPrint: string;
 
-        constructor(filename: string, sourceFile: SourceFile) {
+        constructor(filename: string, content: string) {
             super(filename);
             this.finalized = false;
+            this.sourceFileVersion = undefined;
             this.references = undefined;
             this.referencedBy = undefined;
-            this.version = sourceFile.version;
-            this.contentSignature = this.computeHash(sourceFile.text);
+            this.contentSignature = this.computeHash(content);
             this.lastCheckedFingerPrint = undefined;
         }
 
@@ -615,8 +615,8 @@ namespace ts.server {
             return true;
         }
 
-        public needsCheck(): boolean {
-            if (!this.lastCheckedFingerPrint) {
+        public needsCheck(builder: BuilderAccessor<ModuleFileInfo>): boolean {
+            if (!this.lastCheckedFingerPrint || this.sourceFileVersion !== this.getSourceFile(builder).version) {
                 return true;
             }
             return this.lastCheckedFingerPrint != this.computeCheckFingerPrint();
@@ -624,13 +624,13 @@ namespace ts.server {
 
         private computeCheckFingerPrint(): string {
             const hash = crypto.createHash("md5");
-            hash.update(this.version);
+            hash.update(this.sourceFileVersion);
             if (this.references) {
                 for (const reference of this.references) {
                     // If we have a shape signature prefer it over a version id
                     // since it triggers less compiles.
                     // ToDo@dirk: we need to switch between shape and version 
-                    const value = reference.version;
+                    const value = reference.sourceFileVersion;
                     hash.update(value);
                 }
             }
@@ -670,13 +670,14 @@ namespace ts.server {
             return result;
         }
 
-        public finalize(): void {
+        public finalize(builder: BuilderAccessor<ModuleFileInfo>): void {
             if (this.references) {
                 this.references.sort(ModuleFileInfo.compareFileInfos);
             }
             if (this.referencedBy) {
                 this.referencedBy.sort(ModuleFileInfo.compareFileInfos);
             }
+            this.sourceFileVersion = this.getSourceFile(builder).version;
             this.finalized = true;
         }
 
@@ -685,7 +686,7 @@ namespace ts.server {
             const sourceFile = program.getSourceFile(this.fileName());
 
             const newVersion = sourceFile.version;
-            if (this.version !== newVersion) {
+            if (this.sourceFileVersion !== newVersion) {
                 const newReferences: ModuleFileInfo[] = this.getReferencedFileInfos(builder, sourceFile);
                 newReferences.sort(ModuleFileInfo.compareFileInfos);
 
@@ -725,7 +726,7 @@ namespace ts.server {
                 }
                 this.references = newReferences.length > 0 ? newReferences : undefined;
                 this.contentSignature = this.computeHash(sourceFile.text);
-                this.version = newVersion;
+                this.sourceFileVersion = newVersion;
             }
             this.lastCheckedFingerPrint = this.computeCheckFingerPrint();
 
@@ -847,7 +848,7 @@ namespace ts.server {
                 }
                 const sourceFile = program.getSourceFile(file);
                 if (sourceFile) {
-                    const fileInfo = new ModuleFileInfo(file, sourceFile);
+                    const fileInfo = new ModuleFileInfo(file, sourceFile.text);
                     this.fileInfos[fileInfo.fileName()] = fileInfo;
                     memo.push(fileInfo);
                 }
@@ -868,13 +869,14 @@ namespace ts.server {
                     if (state) {
                         fileInfo.initializeFromState(state);
                     }
-                    fileInfo.finalize();
+                    fileInfo.finalize(this);
                     if (fileInfo.needsInitialCompile()) {
                         this.queueFileInfo(fileInfo);
                     }
                 });
             }
             else {
+                fileInfos.forEach((fileInfo) => fileInfo.finalize(this));
                 roots.forEach(fileInfo => this.queueFileInfo(fileInfo));
             }
         }
@@ -1102,7 +1104,7 @@ namespace ts.server {
             return new OpenFilesBuilder(project, builderHost);
         }
         const options = project.projectOptions;
-        if (!options || !options.autoDiagnostics) {
+        if (!options || !options.autoBuild) {
             return new OpenFilesBuilder(project, builderHost);
         }
 
