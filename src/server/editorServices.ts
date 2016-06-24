@@ -547,9 +547,9 @@ namespace ts.server {
             this.logger.startGroup();
 
             let counter = 0;
-            counter = printProjects(this.externalProjects, counter);
-            counter = printProjects(this.configuredProjects, counter);
-            counter = printProjects(this.inferredProjects, counter);
+            counter = printProjects(this.logger, this.externalProjects, counter);
+            counter = printProjects(this.logger, this.configuredProjects, counter);
+            counter = printProjects(this.logger, this.inferredProjects, counter);
 
             this.logger.info("Open file roots of inferred projects: ");
             for (const rootFile of this.openFileRoots) {
@@ -567,12 +567,12 @@ namespace ts.server {
 
             this.logger.endGroup();
 
-            function printProjects(projects: Project[], counter: number) {
+            function printProjects(logger: Logger, projects: Project[], counter: number) {
                 for (const project of projects) {
                     project.updateGraph();
-                    this.psLogger.info(`Project '${project.getProjectName()}' (${ProjectKind[project.projectKind]}) ${counter}`);
-                    this.psLogger.info(project.filesToString());
-                    this.psLogger.info("-----------------------------------------------");
+                    logger.info(`Project '${project.getProjectName()}' (${ProjectKind[project.projectKind]}) ${counter}`);
+                    logger.info(project.filesToString());
+                    logger.info("-----------------------------------------------");
                     counter++;
                 }
                 return counter;
