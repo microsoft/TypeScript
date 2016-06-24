@@ -20,7 +20,7 @@ verify.quickInfoIs('any');
 goTo.marker('2');
 verify.quickInfoIs('(parameter) this: void');
 goTo.marker('3');
-verify.quickInfoIs('void');
+verify.quickInfoIs('this: void');
 goTo.marker('4');
 verify.quickInfoIs('(parameter) this: Restricted');
 goTo.marker('5');

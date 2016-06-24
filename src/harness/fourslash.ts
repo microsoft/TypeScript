@@ -879,13 +879,13 @@ namespace FourSlash {
             assert.equal(getDisplayPartsJson(actualQuickInfo.documentation), getDisplayPartsJson(documentation), this.messageAtLastKnownMarker("QuickInfo documentation"));
         }
 
-        public verifyRenameLocations(findInStrings: boolean, findInComments: boolean) {
+        public verifyRenameLocations(findInStrings: boolean, findInComments: boolean, ranges?: Range[]) {
             const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
             if (renameInfo.canRename) {
                 let references = this.languageService.findRenameLocations(
                     this.activeFile.fileName, this.currentCaretPosition, findInStrings, findInComments);
 
-                let ranges = this.getRanges();
+                ranges = ranges || this.getRanges();
 
                 if (!references) {
                     if (ranges.length !== 0) {
@@ -3129,8 +3129,8 @@ namespace FourSlashInterface {
             this.state.verifyRenameInfoFailed(message);
         }
 
-        public renameLocations(findInStrings: boolean, findInComments: boolean) {
-            this.state.verifyRenameLocations(findInStrings, findInComments);
+        public renameLocations(findInStrings: boolean, findInComments: boolean, ranges?: FourSlash.Range[]) {
+            this.state.verifyRenameLocations(findInStrings, findInComments, ranges);
         }
 
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
