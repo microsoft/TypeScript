@@ -770,7 +770,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyRangesWithSameTextReferenceEachOther(ranges?: Range[]) {
+        public verifyRangesWithSameTextReferenceEachOther() {
             ts.forEachValue(this.rangesByText(), ranges => this.verifyRangesReferenceEachOther(ranges));
         }
 
@@ -2983,8 +2983,8 @@ namespace FourSlashInterface {
             this.state.verifyRangesReferenceEachOther(ranges);
         }
 
-        public rangesWithSameTextReferenceEachOther(ranges?: FourSlash.Range[]) {
-            this.state.verifyRangesWithSameTextReferenceEachOther(ranges);
+        public rangesWithSameTextReferenceEachOther() {
+            this.state.verifyRangesWithSameTextReferenceEachOther();
         }
 
         public currentParameterHelpArgumentNameIs(name: string) {
