@@ -571,7 +571,7 @@
         "category": "Error",
         "code": 1186
     },
-    "A parameter property may not be a binding pattern.": {
+    "A parameter property may not be declared using a binding pattern.": {
         "category": "Error",
         "code": 1187
     },
@@ -627,17 +627,13 @@
         "category": "Error",
         "code": 1200
     },
-    "Import assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
+    "Import assignment cannot be used when targeting ECMAScript 2015 modules. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
         "category": "Error",
         "code": 1202
     },
-    "Export assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'export default' or another module format instead.": {
+    "Export assignment cannot be used when targeting ECMAScript 2015 modules. Consider using 'export default' or another module format instead.": {
         "category": "Error",
         "code": 1203
-    },
-    "Cannot compile modules into 'es2015' when targeting 'ES5' or lower.": {
-        "category": "Error",
-        "code": 1204
     },
     "Decorators are not valid here.": {
         "category": "Error",
@@ -687,7 +683,7 @@
         "category": "Error",
         "code": 1219
     },
-    "Generators are only available when targeting ECMAScript 6 or higher.": {
+    "Generators are only available when targeting ECMAScript 2015 or higher.": {
         "category": "Error",
         "code": 1220
     },
@@ -831,7 +827,7 @@
         "category": "Error",
         "code": 1308
     },
-    "Async functions are only available when targeting ECMAScript 6 and higher.": {
+    "Async functions are only available when targeting ECMAScript 2015 or higher.": {
         "category": "Error",
         "code": 1311
     },
@@ -854,6 +850,10 @@
     "Global module exports may only appear at top level.": {
         "category": "Error",
         "code": 1316
+    },
+    "A parameter property cannot be declared using a rest parameter.": {
+        "category": "Error",
+        "code": 1317
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1935,6 +1935,14 @@
         "category": "Error",
         "code": 2687
     },
+    "Cannot find type definition file for '{0}'.": {
+        "category": "Error",
+        "code": 2688
+    },
+    "Cannot extend an interface '{0}'. Did you mean 'implements'?": {
+        "category": "Error",
+        "code": 2689
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2228,6 +2236,14 @@
         "category": "Error",
         "code": 5009
     },
+    "File specification cannot end in a recursive directory wildcard ('**'): '{0}'.": {
+        "category": "Error",
+        "code": 5010
+    },
+    "File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.": {
+        "category": "Error",
+        "code": 5011
+    },
     "Cannot read file '{0}': {1}": {
         "category": "Error",
         "code": 5012
@@ -2260,7 +2276,7 @@
         "category": "Error",
         "code": 5047
     },
-    "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
+    "Option '{0} can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
         "code": 5051
     },
@@ -2772,6 +2788,22 @@
         "category": "Error",
         "code": 6131
     },
+    "File name '{0}' has a '{1}' extension - stripping it": {
+        "category": "Message",
+        "code": 6132
+    },
+    "'{0}' is declared but never used.": {
+        "category": "Error",
+        "code": 6133
+    },
+    "Report Errors on Unused Locals.": {
+        "category": "Message",
+        "code": 6134
+    },
+    "Report Errors on Unused Parameters.": {
+        "category": "Message",
+        "code": 6135
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -2916,10 +2948,6 @@
     "'parameter modifiers' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8012
-    },
-    "'property declarations' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8014
     },
     "'enum declarations' can only be used in a .ts file.": {
         "category": "Error",

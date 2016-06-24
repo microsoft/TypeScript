@@ -2,13 +2,13 @@
 
 ////interface Foo { }
 ////module Foo {
-////    export interface Bar { }
-////    export module Bar { export interface Baz { } }
-////    export function Bar() { }
+////    export interface [|Bar|] { }
+////    export module [|Bar|] { export interface Baz { } }
+////    export function [|Bar|]() { }
 ////}
 ////
 ////// module, value and type
-////import a2 = Foo./*1*/Bar;
+////import a2 = Foo.[|Bar|];
 
-goTo.marker("1");
-verify.referencesCountIs(4);
+const [r0, r1, r2, r3] = test.ranges();
+verify.referencesOf(r3, [r0, r1, r2, r3]);

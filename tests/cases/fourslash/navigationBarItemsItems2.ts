@@ -13,13 +13,18 @@ verify.navigationBar([
         "kind": "module",
         "childItems": [
             {
+                "text": "<class>",
+                "kind": "class",
+                "kindModifiers": "export"
+            },
+            {
                 "text": "A",
                 "kind": "module"
             }
         ]
     },
     {
-        "text": "default",
+        "text": "<class>",
         "kind": "class",
         "kindModifiers": "export",
         "indent": 1

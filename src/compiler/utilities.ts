@@ -372,6 +372,11 @@ namespace ts {
             ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
     }
 
+    export function isShorthandAmbientModule(node: Node): boolean {
+        // The only kind of module that can be missing a body is a shorthand ambient module.
+        return node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
+    }
+
     export function isBlockScopedContainerTopLevel(node: Node): boolean {
         return node.kind === SyntaxKind.SourceFile ||
             node.kind === SyntaxKind.ModuleDeclaration ||
@@ -825,6 +830,8 @@ namespace ts {
             case SyntaxKind.ConstructorType:
                 return true;
         }
+
+        return false;
     }
 
     export function introducesArgumentsExoticObject(node: Node) {
@@ -1257,6 +1264,18 @@ namespace ts {
         return charCode === CharacterCodes.singleQuote || charCode === CharacterCodes.doubleQuote;
     }
 
+    /**
+     * Returns true if the node is a variable declaration whose initializer is a function expression.
+     * This function does not test if the node is in a JavaScript file or not.
+     */
+    export function isDeclarationOfFunctionExpression(s: Symbol) {
+        if (s.valueDeclaration && s.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
+            const declaration = s.valueDeclaration as VariableDeclaration;
+            return declaration.initializer && declaration.initializer.kind === SyntaxKind.FunctionExpression;
+        }
+        return false;
+    }
+
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
     export function getSpecialPropertyAssignmentKind(expression: Node): SpecialPropertyAssignmentKind {
@@ -1683,7 +1702,7 @@ namespace ts {
             node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier;
     }
 
-    export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration) {
+    export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration | InterfaceDeclaration) {
         const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
@@ -2311,7 +2330,9 @@ namespace ts {
 
     export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
         let sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
-        sourceFilePath = sourceFilePath.replace(host.getCommonSourceDirectory(), "");
+        const commonSourceDirectory = host.getCommonSourceDirectory();
+        const isSourceFileInCommonSourceDirectory = host.getCanonicalFileName(sourceFilePath).indexOf(host.getCanonicalFileName(commonSourceDirectory)) === 0;
+        sourceFilePath = isSourceFileInCommonSourceDirectory ? sourceFilePath.substring(commonSourceDirectory.length) : sourceFilePath;
         return combinePaths(newDirPath, sourceFilePath);
     }
 
@@ -2693,6 +2714,10 @@ namespace ts {
 
     export function hasJavaScriptFileExtension(fileName: string) {
         return forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
+    }
+
+    export function hasTypeScriptFileExtension(fileName: string) {
+        return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
     /**

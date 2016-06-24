@@ -1,4 +1,5 @@
 /// <reference path="..\compiler\program.ts"/>
+/// <reference path="..\compiler\commandLineParser.ts"/>
 
 /// <reference path='breakpoints.ts' />
 /// <reference path='outliningElementsCollector.ts' />
@@ -414,7 +415,7 @@ namespace ts {
                     }
 
                     // If this is left side of dotted module declaration, there is no doc comments associated with this node
-                    if (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).body.kind === SyntaxKind.ModuleDeclaration) {
+                    if (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).body && (<ModuleDeclaration>declaration).body.kind === SyntaxKind.ModuleDeclaration) {
                         return;
                     }
 
@@ -778,7 +779,7 @@ namespace ts {
         declaration: SignatureDeclaration;
         typeParameters: TypeParameter[];
         parameters: Symbol[];
-        thisType: Type;
+        thisParameter: Symbol;
         resolvedReturnType: Type;
         minArgumentCount: number;
         hasRestParameter: boolean;
@@ -1077,6 +1078,7 @@ namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
+        getDirectories?(directoryName: string): string[];
     }
 
     //
@@ -1145,7 +1147,7 @@ namespace ts {
 
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
 
-        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean;
+        isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
         getEmitOutput(fileName: string): EmitOutput;
 
@@ -1208,6 +1210,7 @@ namespace ts {
         textSpan: TextSpan;
         fileName: string;
         isWriteAccess: boolean;
+        isDefinition: boolean;
     }
 
     export interface DocumentHighlights {
@@ -1241,6 +1244,7 @@ namespace ts {
     }
 
     export interface EditorOptions {
+        BaseIndentSize?: number;
         IndentSize: number;
         TabSize: number;
         NewLineCharacter: string;
@@ -1265,7 +1269,7 @@ namespace ts {
         InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-        [s: string]: boolean | number | string;
+        [s: string]: boolean | number | string | undefined;
     }
 
     export interface DefinitionInfo {
@@ -1939,6 +1943,40 @@ namespace ts {
         sourceMapText?: string;
     }
 
+
+
+    let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
+
+    /** JS users may pass in string values for enum compiler options (such as ModuleKind), so convert. */
+    function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
+        // Lazily create this value to fix module loading errors.
+        commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
+            typeof o.type === "object" && !forEachValue(<Map<any>> o.type, v => typeof v !== "number"));
+
+        options = clone(options);
+
+        for (const opt of commandLineOptionsStringToEnum) {
+            if (!hasProperty(options, opt.name)) {
+                continue;
+            }
+
+            const value = options[opt.name];
+            // Value should be a key of opt.type
+            if (typeof value === "string") {
+                // If value is not a string, this will fail
+                options[opt.name] = parseCustomTypeOption(opt, value, diagnostics);
+            }
+            else {
+                if (!forEachValue(opt.type, v => v === value)) {
+                    // Supplied value isn't a valid enum value.
+                    diagnostics.push(createCompilerDiagnosticForInvalidCustomType(opt));
+                }
+            }
+        }
+
+        return options;
+    }
+
     /*
      * This function will compile source text from 'input' argument using specified compiler options.
      * If not options are provided - it will use a set of default compiler options.
@@ -1949,7 +1987,9 @@ namespace ts {
      * - noResolve = true
      */
     export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
-        const options = transpileOptions.compilerOptions ? clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
+        const diagnostics: Diagnostic[] = [];
+
+        const options: CompilerOptions = transpileOptions.compilerOptions ? fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics) : getDefaultCompilerOptions();
 
         options.isolatedModules = true;
 
@@ -1962,6 +2002,18 @@ namespace ts {
         // We are not returning a sourceFile for lib file when asked by the program,
         // so pass --noLib to avoid reporting a file not found error.
         options.noLib = true;
+
+        // Clear out other settings that would not be used in transpiling this module
+        options.lib = undefined;
+        options.types = undefined;
+        options.noEmit = undefined;
+        options.noEmitOnError = undefined;
+        options.paths = undefined;
+        options.rootDirs = undefined;
+        options.declaration = undefined;
+        options.declarationDir = undefined;
+        options.out = undefined;
+        options.outFile = undefined;
 
         // We are not doing a full typecheck, we are not resolving the whole context,
         // so pass --noResolve to avoid reporting missing file errors.
@@ -2002,14 +2054,13 @@ namespace ts {
             getNewLine: () => newLine,
             fileExists: (fileName): boolean => fileName === inputFileName,
             readFile: (fileName): string => "",
-            directoryExists: directoryExists => true
+            directoryExists: directoryExists => true,
+            getDirectories: (path: string) => []
         };
 
         const program = createProgram([inputFileName], options, compilerHost);
 
-        let diagnostics: Diagnostic[];
         if (transpileOptions.reportDiagnostics) {
-            diagnostics = [];
             addRange(/*to*/ diagnostics, /*from*/ program.getSyntacticDiagnostics(sourceFile));
             addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
         }
@@ -2105,7 +2156,7 @@ namespace ts {
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
-            return <DocumentRegistryBucketKey>`_${settings.target}|${settings.module}|${settings.noResolve}|${settings.jsx}|${settings.allowJs}|${settings.baseUrl}|${settings.typesRoot}|${settings.typesSearchPaths}|${JSON.stringify(settings.rootDirs)}|${JSON.stringify(settings.paths)}`;
+            return <DocumentRegistryBucketKey>`_${settings.target}|${settings.module}|${settings.noResolve}|${settings.jsx}|${settings.allowJs}|${settings.baseUrl}|${JSON.stringify(settings.typeRoots)}|${JSON.stringify(settings.rootDirs)}|${JSON.stringify(settings.paths)}`;
         }
 
         function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
@@ -2941,7 +2992,8 @@ namespace ts {
                  oldSettings.moduleResolution !== newSettings.moduleResolution ||
                  oldSettings.noResolve !== newSettings.noResolve ||
                  oldSettings.jsx !== newSettings.jsx ||
-                 oldSettings.allowJs !== newSettings.allowJs);
+                 oldSettings.allowJs !== newSettings.allowJs ||
+                 oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit);
 
             // Now create a new compiler
             const compilerHost: CompilerHost = {
@@ -2965,8 +3017,10 @@ namespace ts {
                     return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
                 },
                 directoryExists: directoryName => {
-                    Debug.assert(!host.resolveModuleNames || !host.resolveTypeReferenceDirectives);
                     return directoryProbablyExists(directoryName, host);
+                },
+                getDirectories: path => {
+                    return host.getDirectories ? host.getDirectories(path) : [];
                 }
             };
             if (host.trace) {
@@ -4103,7 +4157,7 @@ namespace ts {
 
                     if (!uniqueNames[name]) {
                         uniqueNames[name] = name;
-                        const displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks*/ true);
+                        const displayName = getCompletionEntryDisplayName(unescapeIdentifier(name), target, /*performCharacterChecks*/ true);
                         if (displayName) {
                             const entry = {
                                 name: displayName,
@@ -5715,7 +5769,8 @@ namespace ts {
                         result.push({
                             fileName: entry.fileName,
                             textSpan: highlightSpan.textSpan,
-                            isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference
+                            isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
+                            isDefinition: false
                         });
                     }
                 }
@@ -5765,17 +5820,32 @@ namespace ts {
                 return undefined;
             }
 
-            if (node.kind !== SyntaxKind.Identifier &&
-                // TODO (drosen): This should be enabled in a later release - currently breaks rename.
-                // node.kind !== SyntaxKind.ThisKeyword &&
-                // node.kind !== SyntaxKind.SuperKeyword &&
-                node.kind !== SyntaxKind.StringLiteral &&
-                !isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
-                return undefined;
+            switch (node.kind) {
+                case SyntaxKind.NumericLiteral:
+                    if (!isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
+                        break;
+                    }
+                    // Fallthrough
+                case SyntaxKind.Identifier:
+                case SyntaxKind.ThisKeyword:
+                // case SyntaxKind.SuperKeyword: TODO:GH#9268
+                case SyntaxKind.StringLiteral:
+                    return getReferencedSymbolsForNode(node, program.getSourceFiles(), findInStrings, findInComments);
             }
+            return undefined;
+        }
 
-            Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.StringLiteral);
-            return getReferencedSymbolsForNode(node, program.getSourceFiles(), findInStrings, findInComments);
+        function isThis(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.ThisKeyword:
+                // case SyntaxKind.ThisType: TODO: GH#9267
+                    return true;
+                case SyntaxKind.Identifier:
+                    // 'this' as a parameter
+                    return (node as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword && node.parent.kind === SyntaxKind.Parameter;
+                default:
+                    return false;
+            }
         }
 
         function getReferencedSymbolsForNode(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
@@ -5795,7 +5865,7 @@ namespace ts {
                 }
             }
 
-            if (node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.ThisType) {
+            if (isThis(node)) {
                 return getReferencesForThisKeyword(node, sourceFiles);
             }
 
@@ -6149,7 +6219,8 @@ namespace ts {
                                     references: [{
                                         fileName: sourceFile.fileName,
                                         textSpan: createTextSpan(position, searchText.length),
-                                        isWriteAccess: false
+                                        isWriteAccess: false,
+                                        isDefinition: false
                                     }]
                                 });
                             }
@@ -6329,7 +6400,7 @@ namespace ts {
                         cancellationToken.throwIfCancellationRequested();
 
                         const node = getTouchingWord(sourceFile, position);
-                        if (!node || (node.kind !== SyntaxKind.ThisKeyword && node.kind !== SyntaxKind.ThisType)) {
+                        if (!node || !isThis(node)) {
                             return;
                         }
 
@@ -6703,7 +6774,8 @@ namespace ts {
             return {
                 fileName: node.getSourceFile().fileName,
                 textSpan: createTextSpanFromBounds(start, end),
-                isWriteAccess: isWriteAccess(node)
+                isWriteAccess: isWriteAccess(node),
+                isDefinition: isDeclarationName(node) || isLiteralComputedPropertyDeclarationName(node)
             };
         }
 
@@ -6991,7 +7063,7 @@ namespace ts {
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-            return NavigationBar.getNavigationBarItems(sourceFile, host.getCompilationSettings());
+            return NavigationBar.getNavigationBarItems(sourceFile);
         }
 
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
@@ -7485,7 +7557,8 @@ namespace ts {
                                 return;
                             case SyntaxKind.Parameter:
                                 if ((<ParameterDeclaration>token.parent).name === token) {
-                                    return ClassificationType.parameterName;
+                                    const isThis = token.kind === SyntaxKind.Identifier && (<Identifier>token).originalKeywordKind === SyntaxKind.ThisKeyword;
+                                    return isThis ? ClassificationType.keyword : ClassificationType.parameterName;
                                 }
                                 return;
                         }
@@ -7712,7 +7785,7 @@ namespace ts {
             return { newText: result, caretOffset: preamble.length };
         }
 
-        function isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
+        function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
 
             // '<' is currently not supported, figuring out if we're in a Generic Type vs. a comparison is too
             // expensive to do during typing scenarios
@@ -7955,11 +8028,11 @@ namespace ts {
 
             const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
 
-            // Can only rename an identifier.
             if (node) {
                 if (node.kind === SyntaxKind.Identifier ||
                     node.kind === SyntaxKind.StringLiteral ||
-                    isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
+                    isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
+                    isThis(node)) {
                     const symbol = typeChecker.getSymbolAtLocation(node);
 
                     // Only allow a symbol to be renamed if it actually has at least one declaration.
@@ -8080,7 +8153,7 @@ namespace ts {
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
-            isValidBraceCompletionAtPostion,
+            isValidBraceCompletionAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
             getProgram

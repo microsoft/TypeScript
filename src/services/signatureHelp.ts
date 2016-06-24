@@ -165,7 +165,7 @@ namespace ts.SignatureHelp {
 
     const emptyArray: any[] = [];
 
-    const enum ArgumentListKind {
+    export const enum ArgumentListKind {
         TypeArguments,
         CallArguments,
         TaggedTemplateArguments
@@ -357,8 +357,8 @@ namespace ts.SignatureHelp {
     }
 
     function getArgumentIndex(argumentsList: Node, node: Node) {
-        // The list we got back can include commas.  In the presence of errors it may 
-        // also just have nodes without commas.  For example "Foo(a b c)" will have 3 
+        // The list we got back can include commas.  In the presence of errors it may
+        // also just have nodes without commas.  For example "Foo(a b c)" will have 3
         // args without commas.   We want to find what index we're at.  So we count
         // forward until we hit ourselves, only incrementing the index if it isn't a
         // comma.
@@ -390,8 +390,8 @@ namespace ts.SignatureHelp {
         // 'a' '<comma>'.  So, in the case where the last child is a comma, we increase the
         // arg count by one to compensate.
         //
-        // Note: this subtlety only applies to the last comma.  If you had "Foo(a,,"  then 
-        // we'll have:  'a' '<comma>' '<missing>' 
+        // Note: this subtlety only applies to the last comma.  If you had "Foo(a,,"  then
+        // we'll have:  'a' '<comma>' '<missing>'
         // That will give us 2 non-commas.  We then add one for the last comma, givin us an
         // arg count of 3.
         const listChildren = argumentsList.getChildren();
@@ -563,7 +563,7 @@ namespace ts.SignatureHelp {
                 signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
                 suffixDisplayParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
                 const parameterParts = mapToDisplayParts(writer =>
-                    typeChecker.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.thisType, candidateSignature.parameters, writer, invocation));
+                    typeChecker.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.thisParameter, candidateSignature.parameters, writer, invocation));
                 addRange(suffixDisplayParts, parameterParts);
             }
             else {

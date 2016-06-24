@@ -44,6 +44,7 @@
         "type-operator-spacing": true,
         "prefer-const": true,
         "no-in-operator": true,
-        "no-increment-decrement": true
+        "no-increment-decrement": true,
+        "object-literal-surrounding-space": true
   }
 }

@@ -246,16 +246,21 @@ namespace Harness.LanguageService {
                 };
                 this.getTypeReferenceDirectiveResolutionsForFile = (fileName) => {
                     const scriptInfo = this.getScriptInfo(fileName);
-                    const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ false);
-                    const resolutions: ts.Map<ts.ResolvedTypeReferenceDirective> = {};
-                    const settings = this.nativeHost.getCompilationSettings();
-                    for (const typeReferenceDirective of preprocessInfo.typeReferenceDirectives) {
-                        const resolutionInfo = ts.resolveTypeReferenceDirective(typeReferenceDirective.fileName, fileName, settings, moduleResolutionHost);
-                        if (resolutionInfo.resolvedTypeReferenceDirective.resolvedFileName) {
-                            resolutions[typeReferenceDirective.fileName] = resolutionInfo.resolvedTypeReferenceDirective;
+                    if (scriptInfo) {
+                        const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ false);
+                        const resolutions: ts.Map<ts.ResolvedTypeReferenceDirective> = {};
+                        const settings = this.nativeHost.getCompilationSettings();
+                        for (const typeReferenceDirective of preprocessInfo.typeReferenceDirectives) {
+                            const resolutionInfo = ts.resolveTypeReferenceDirective(typeReferenceDirective.fileName, fileName, settings, moduleResolutionHost);
+                            if (resolutionInfo.resolvedTypeReferenceDirective.resolvedFileName) {
+                                resolutions[typeReferenceDirective.fileName] = resolutionInfo.resolvedTypeReferenceDirective;
+                            }
                         }
+                        return JSON.stringify(resolutions);
                     }
-                    return JSON.stringify(resolutions);
+                    else {
+                        return "[]";
+                    }
                 };
             }
         }
@@ -282,6 +287,12 @@ namespace Harness.LanguageService {
 
         readDirectory(rootDir: string, extension: string): string {
             throw new Error("NYI");
+        }
+        readDirectoryNames(path: string): string {
+            throw new Error("Not implemented.");
+        }
+        readFileNames(path: string): string {
+            throw new Error("Not implemented.");
         }
         fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
         readFile(fileName: string) {
@@ -439,8 +450,8 @@ namespace Harness.LanguageService {
         getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion {
             return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position));
         }
-        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
-            return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPostion(fileName, position, openingBrace));
+        isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
+            return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
@@ -606,7 +617,7 @@ namespace Harness.LanguageService {
             return [];
         }
 
-        readDirectory(path: string, extension?: string): string[] {
+        readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]): string[] {
             throw new Error("Not implemented Yet.");
         }
 
@@ -690,4 +701,3 @@ namespace Harness.LanguageService {
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { throw new Error("getPreProcessedFileInfo is not available using the server interface."); }
     }
 }
- 

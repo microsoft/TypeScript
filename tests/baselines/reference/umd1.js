@@ -16,6 +16,6 @@ let y: number = x.n;
 
 //// [a.js]
 /// <reference path="foo.d.ts" />
-exports.Foo.fn();
+Foo.fn();
 var x;
 var y = x.n;
