@@ -100,6 +100,7 @@ declare namespace FourSlashInterface {
         markers(): Marker[];
         marker(name?: string): Marker;
         ranges(): Range[];
+        rangesByText(): { [text: string]: Range[] };
         markerByName(s: string): Marker;
     }
     class goTo {
@@ -152,7 +153,6 @@ declare namespace FourSlashInterface {
         currentFileContentIs(text: string): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
-        referencesCountIs(count: number): void;
         /**
          * Asserts that the given ranges are the references from the current position.
          * If ranges have markers, those markers may have "isDefinition" and "isWriteAccess" data
@@ -170,6 +170,7 @@ declare namespace FourSlashInterface {
          * If `ranges` is omitted, this is `test.ranges()`.
          */
         rangesReferenceEachOther(ranges?: Range[]): void;
+        rangesWithSameTextReferenceEachOther(): void;
         currentParameterHelpArgumentNameIs(name: string): void;
         currentParameterSpanIs(parameter: string): void;
         currentParameterHelpArgumentDocCommentIs(docComment: string): void;
@@ -217,7 +218,7 @@ declare namespace FourSlashInterface {
         }[]): void;
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string): void;
         renameInfoFailed(message?: string): void;
-        renameLocations(findInStrings: boolean, findInComments: boolean): void;
+        renameLocations(findInStrings: boolean, findInComments: boolean, ranges?: Range[]): void;
         verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: {
             start: number;
             length: number;

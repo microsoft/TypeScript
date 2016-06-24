@@ -713,7 +713,6 @@ declare namespace ts {
     }
     interface PropertyAccessExpression extends MemberExpression, Declaration {
         expression: LeftHandSideExpression;
-        dotToken: Node;
         name: Identifier;
     }
     type IdentifierOrPropertyAccess = Identifier | PropertyAccessExpression;
@@ -844,6 +843,7 @@ declare namespace ts {
     interface SwitchStatement extends Statement {
         expression: Expression;
         caseBlock: CaseBlock;
+        possiblyExhaustive?: boolean;
     }
     interface CaseBlock extends Node {
         clauses: NodeArray<CaseOrDefaultClause>;
@@ -1075,8 +1075,9 @@ declare namespace ts {
         Assignment = 16,
         TrueCondition = 32,
         FalseCondition = 64,
-        Referenced = 128,
-        Shared = 256,
+        SwitchClause = 128,
+        Referenced = 256,
+        Shared = 512,
         Label = 12,
         Condition = 96,
     }
@@ -1096,6 +1097,12 @@ declare namespace ts {
     }
     interface FlowCondition extends FlowNode {
         expression: Expression;
+        antecedent: FlowNode;
+    }
+    interface FlowSwitchClause extends FlowNode {
+        switchStatement: SwitchStatement;
+        clauseStart: number;
+        clauseEnd: number;
         antecedent: FlowNode;
     }
     interface AmdDependency {
@@ -1132,7 +1139,13 @@ declare namespace ts {
         getCurrentDirectory(): string;
     }
     interface ParseConfigHost {
-        readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
+        useCaseSensitiveFileNames: boolean;
+        readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[]): string[];
+        /**
+          * Gets a value indicating whether the specified path exists and is a file.
+          * @param path The path to test.
+          */
+        fileExists(path: string): boolean;
     }
     interface WriteFileCallback {
         (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: SourceFile[]): void;
@@ -1412,7 +1425,6 @@ declare namespace ts {
         ThisType = 33554432,
         ObjectLiteralPatternWithComputedProperties = 67108864,
         Never = 134217728,
-        Falsy = 126,
         StringLike = 258,
         NumberLike = 132,
         ObjectType = 80896,
@@ -1574,6 +1586,7 @@ declare namespace ts {
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
+        disableSizeLimit?: boolean;
         types?: string[];
         /** Paths used to used to compute primary types search locations */
         typeRoots?: string[];
@@ -1640,6 +1653,15 @@ declare namespace ts {
         fileNames: string[];
         raw?: any;
         errors: Diagnostic[];
+        wildcardDirectories?: Map<WatchDirectoryFlags>;
+    }
+    enum WatchDirectoryFlags {
+        None = 0,
+        Recursive = 1,
+    }
+    interface ExpandResult {
+        fileNames: string[];
+        wildcardDirectories: Map<WatchDirectoryFlags>;
     }
     interface ModuleResolutionHost {
         fileExists(fileName: string): boolean;
@@ -1710,6 +1732,7 @@ declare namespace ts {
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
         readFile(path: string, encoding?: string): string;
+        getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
@@ -1720,7 +1743,7 @@ declare namespace ts {
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
-        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
         getModifiedTime?(path: string): Date;
         createHash?(data: string): string;
         getMemoryUsage?(): number;

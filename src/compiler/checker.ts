@@ -1125,7 +1125,7 @@ namespace ts {
             return getExternalModuleMember(<ImportDeclaration>node.parent.parent.parent, node);
         }
 
-        function getTargetOfGlobalModuleExportDeclaration(node: NamespaceExportDeclaration): Symbol {
+        function getTargetOfNamespaceExportDeclaration(node: NamespaceExportDeclaration): Symbol {
             return resolveExternalModuleSymbol(node.parent.symbol);
         }
 
@@ -1154,7 +1154,7 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                     return getTargetOfExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.NamespaceExportDeclaration:
-                    return getTargetOfGlobalModuleExportDeclaration(<NamespaceExportDeclaration>node);
+                    return getTargetOfNamespaceExportDeclaration(<NamespaceExportDeclaration>node);
             }
         }
 
@@ -2473,16 +2473,13 @@ namespace ts {
                 }
             }
 
-            function buildDisplayForParametersAndDelimiters(thisType: Type, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
+            function buildDisplayForParametersAndDelimiters(thisParameter: Symbol | undefined, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 writePunctuation(writer, SyntaxKind.OpenParenToken);
-                if (thisType) {
-                    writeKeyword(writer, SyntaxKind.ThisKeyword);
-                    writePunctuation(writer, SyntaxKind.ColonToken);
-                    writeSpace(writer);
-                    buildTypeDisplay(thisType, writer, enclosingDeclaration, flags, symbolStack);
+                if (thisParameter) {
+                    buildParameterDisplay(thisParameter, writer, enclosingDeclaration, flags, symbolStack);
                 }
                 for (let i = 0; i < parameters.length; i++) {
-                    if (i > 0 || thisType) {
+                    if (i > 0 || thisParameter) {
                         writePunctuation(writer, SyntaxKind.CommaToken);
                         writeSpace(writer);
                     }
@@ -2538,7 +2535,7 @@ namespace ts {
                     buildDisplayForTypeParametersAndDelimiters(signature.typeParameters, writer, enclosingDeclaration, flags, symbolStack);
                 }
 
-                buildDisplayForParametersAndDelimiters(signature.thisType, signature.parameters, writer, enclosingDeclaration, flags, symbolStack);
+                buildDisplayForParametersAndDelimiters(signature.thisParameter, signature.parameters, writer, enclosingDeclaration, flags, symbolStack);
 
                 buildReturnTypeDisplay(signature, writer, enclosingDeclaration, flags, symbolStack);
             }
@@ -2981,12 +2978,14 @@ namespace ts {
                 if (func.kind === SyntaxKind.SetAccessor && !hasDynamicName(func)) {
                     const getter = <AccessorDeclaration>getDeclarationOfKind(declaration.parent.symbol, SyntaxKind.GetAccessor);
                     if (getter) {
-                        const signature = getSignatureFromDeclaration(getter);
+                        const getterSignature = getSignatureFromDeclaration(getter);
                         const thisParameter = getAccessorThisParameter(func as AccessorDeclaration);
                         if (thisParameter && declaration === thisParameter) {
-                            return signature.thisType;
+                            // Use the type from the *getter*
+                            Debug.assert(!thisParameter.type);
+                            return getTypeOfSymbol(getterSignature.thisParameter);
                         }
-                        return getReturnTypeOfSignature(signature);
+                        return getReturnTypeOfSignature(getterSignature);
                     }
                 }
                 // Use contextual parameter type if one is available
@@ -3208,14 +3207,13 @@ namespace ts {
             return undefined;
         }
 
-        function getAnnotatedAccessorThisType(accessor: AccessorDeclaration): Type {
-            if (accessor) {
-                const parameter = getAccessorThisParameter(accessor);
-                if (parameter && parameter.type) {
-                    return getTypeFromTypeNode(accessor.parameters[0].type);
-                }
-            }
-            return undefined;
+        function getAnnotatedAccessorThisParameter(accessor: AccessorDeclaration): Symbol | undefined {
+            const parameter = getAccessorThisParameter(accessor);
+            return parameter && parameter.symbol;
+        }
+
+        function getThisTypeOfDeclaration(declaration: SignatureDeclaration): Type | undefined {
+            return getThisTypeOfSignature(getSignatureFromDeclaration(declaration));
         }
 
         function getTypeOfAccessors(symbol: Symbol): Type {
@@ -3898,13 +3896,13 @@ namespace ts {
             resolveObjectTypeMembers(type, source, typeParameters, typeArguments);
         }
 
-        function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisType: Type, parameters: Symbol[],
+        function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[],
             resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasStringLiterals: boolean): Signature {
             const sig = new Signature(checker);
             sig.declaration = declaration;
             sig.typeParameters = typeParameters;
             sig.parameters = parameters;
-            sig.thisType = thisType;
+            sig.thisParameter = thisParameter;
             sig.resolvedReturnType = resolvedReturnType;
             sig.typePredicate = typePredicate;
             sig.minArgumentCount = minArgumentCount;
@@ -3914,7 +3912,7 @@ namespace ts {
         }
 
         function cloneSignature(sig: Signature): Signature {
-            return createSignature(sig.declaration, sig.typeParameters, sig.thisType, sig.parameters, sig.resolvedReturnType,
+            return createSignature(sig.declaration, sig.typeParameters, sig.thisParameter, sig.parameters, sig.resolvedReturnType,
                 sig.typePredicate, sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
         }
 
@@ -4012,8 +4010,9 @@ namespace ts {
                             // Union the result types when more than one signature matches
                             if (unionSignatures.length > 1) {
                                 s = cloneSignature(signature);
-                                if (forEach(unionSignatures, sig => sig.thisType)) {
-                                    s.thisType = getUnionType(map(unionSignatures, sig => sig.thisType || anyType));
+                                if (forEach(unionSignatures, sig => sig.thisParameter)) {
+                                    const thisType = getUnionType(map(unionSignatures, sig => getTypeOfSymbol(sig.thisParameter) || anyType));
+                                    s.thisParameter = createTransientSymbol(signature.thisParameter, thisType);
                                 }
                                 // Clear resolved return type we possibly got from cloneSignature
                                 s.resolvedReturnType = undefined;
@@ -4466,7 +4465,7 @@ namespace ts {
                 const parameters: Symbol[] = [];
                 let hasStringLiterals = false;
                 let minArgumentCount = -1;
-                let thisType: Type = undefined;
+                let thisParameter: Symbol = undefined;
                 let hasThisParameter: boolean;
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
 
@@ -4484,7 +4483,7 @@ namespace ts {
                     }
                     if (i === 0 && paramSymbol.name === "this") {
                         hasThisParameter = true;
-                        thisType = param.type ? getTypeFromTypeNode(param.type) : unknownType;
+                        thisParameter = param.symbol;
                     }
                     else {
                         parameters.push(paramSymbol);
@@ -4508,10 +4507,12 @@ namespace ts {
                 // If only one accessor includes a this-type annotation, the other behaves as if it had the same type annotation
                 if ((declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) &&
                     !hasDynamicName(declaration) &&
-                    (!hasThisParameter || thisType === unknownType)) {
+                    (!hasThisParameter || !thisParameter)) {
                     const otherKind = declaration.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
-                    const setter = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, otherKind);
-                    thisType = getAnnotatedAccessorThisType(setter);
+                    const other = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, otherKind);
+                    if (other) {
+                        thisParameter = getAnnotatedAccessorThisParameter(other);
+                    }
                 }
 
                 if (minArgumentCount < 0) {
@@ -4532,7 +4533,7 @@ namespace ts {
                     createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode) :
                     undefined;
 
-                links.resolvedSignature = createSignature(declaration, typeParameters, thisType, parameters, returnType, typePredicate, minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
+                links.resolvedSignature = createSignature(declaration, typeParameters, thisParameter, parameters, returnType, typePredicate, minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
             }
             return links.resolvedSignature;
         }
@@ -4612,6 +4613,12 @@ namespace ts {
             }
 
             return anyType;
+        }
+
+        function getThisTypeOfSignature(signature: Signature): Type | undefined {
+            if (signature.thisParameter) {
+                return getTypeOfSymbol(signature.thisParameter);
+            }
         }
 
         function getReturnTypeOfSignature(signature: Signature): Type {
@@ -5465,7 +5472,7 @@ namespace ts {
                 freshTypePredicate = cloneTypePredicate(signature.typePredicate, mapper);
             }
             const result = createSignature(signature.declaration, freshTypeParameters,
-                signature.thisType && instantiateType(signature.thisType, mapper),
+                signature.thisParameter && instantiateSymbol(signature.thisParameter, mapper),
                 instantiateList(signature.parameters, mapper, instantiateSymbol),
                 instantiateType(signature.resolvedReturnType, mapper),
                 freshTypePredicate,
@@ -5737,17 +5744,22 @@ namespace ts {
             target = getErasedSignature(target);
 
             let result = Ternary.True;
-            if (source.thisType && target.thisType && source.thisType !== voidType) {
-                // void sources are assignable to anything.
-                const related = compareTypes(source.thisType, target.thisType, /*reportErrors*/ false)
-                    || compareTypes(target.thisType, source.thisType, reportErrors);
-                if (!related) {
-                    if (reportErrors) {
-                        errorReporter(Diagnostics.The_this_types_of_each_signature_are_incompatible);
+
+            const sourceThisType = getThisTypeOfSignature(source);
+            if (sourceThisType && sourceThisType !== voidType) {
+                const targetThisType = getThisTypeOfSignature(target);
+                if (targetThisType) {
+                    // void sources are assignable to anything.
+                    const related = compareTypes(sourceThisType, targetThisType, /*reportErrors*/ false)
+                        || compareTypes(targetThisType, sourceThisType, reportErrors);
+                    if (!related) {
+                        if (reportErrors) {
+                            errorReporter(Diagnostics.The_this_types_of_each_signature_are_incompatible);
+                        }
+                        return Ternary.False;
                     }
-                    return Ternary.False;
+                    result &= related;
                 }
-                result &= related;
             }
 
             const sourceMax = getNumNonRestParameters(source);
@@ -6762,13 +6774,21 @@ namespace ts {
             source = getErasedSignature(source);
             target = getErasedSignature(target);
             let result = Ternary.True;
-            if (!ignoreThisTypes && source.thisType && target.thisType) {
-                const related = compareTypes(source.thisType, target.thisType);
-                if (!related) {
-                    return Ternary.False;
+
+            if (!ignoreThisTypes) {
+                const sourceThisType = getThisTypeOfSignature(source);
+                if (sourceThisType) {
+                    const targetThisType = getThisTypeOfSignature(target);
+                    if (targetThisType) {
+                        const related = compareTypes(sourceThisType, targetThisType);
+                        if (!related) {
+                            return Ternary.False;
+                        }
+                        result &= related;
+                    }
                 }
-                result &= related;
             }
+
             const targetLen = target.parameters.length;
             for (let i = 0; i < targetLen; i++) {
                 const s = isRestParameterIndex(source, i) ? getRestTypeOfSignature(source) : getTypeOfParameter(source.parameters[i]);
@@ -8607,9 +8627,10 @@ namespace ts {
                 if (type) {
                     return type;
                 }
-                const signature = getSignatureFromDeclaration(container);
-                if (signature.thisType) {
-                    return signature.thisType;
+
+                const thisType = getThisTypeOfDeclaration(container);
+                if (thisType) {
+                    return thisType;
                 }
             }
             if (isClassLike(container.parent)) {
@@ -8850,7 +8871,7 @@ namespace ts {
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func) && func.kind !== SyntaxKind.ArrowFunction) {
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
-                    return contextualSignature.thisType;
+                    return getThisTypeOfSignature(contextualSignature);
                 }
             }
 
@@ -10654,10 +10675,11 @@ namespace ts {
                 context.failedTypeParameterIndex = undefined;
             }
 
-            if (signature.thisType) {
+            const thisType = getThisTypeOfSignature(signature);
+            if (thisType) {
                 const thisArgumentNode = getThisArgumentOfCall(node);
                 const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
-                inferTypes(context, thisArgumentType, signature.thisType);
+                inferTypes(context, thisArgumentType, thisType);
             }
 
             // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
@@ -10733,8 +10755,8 @@ namespace ts {
         }
 
         function checkApplicableSignature(node: CallLikeExpression, args: Expression[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean) {
-
-            if (signature.thisType && signature.thisType !== voidType && node.kind !== SyntaxKind.NewExpression) {
+            const thisType = getThisTypeOfSignature(signature);
+            if (thisType && thisType !== voidType && node.kind !== SyntaxKind.NewExpression) {
                 // If the called expression is not of the form `x.f` or `x["f"]`, then sourceType = voidType
                 // If the signature's 'this' type is voidType, then the check is skipped -- anything is compatible.
                 // If the expression is a new expression, then the check is skipped.
@@ -10742,7 +10764,7 @@ namespace ts {
                 const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
                 const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
                 const headMessage = Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
-                if (!checkTypeRelatedTo(thisArgumentType, signature.thisType, relation, errorNode, headMessage)) {
+                if (!checkTypeRelatedTo(thisArgumentType, getThisTypeOfSignature(signature), relation, errorNode, headMessage)) {
                     return false;
                 }
             }
@@ -11461,7 +11483,7 @@ namespace ts {
                 if (getReturnTypeOfSignature(signature) !== voidType) {
                     error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
                 }
-                if (signature.thisType === voidType) {
+                if (getThisTypeOfSignature(signature) === voidType) {
                     error(node, Diagnostics.A_function_that_is_called_with_the_new_keyword_cannot_have_a_this_type_that_is_void);
                 }
                 return signature;
@@ -13211,7 +13233,7 @@ namespace ts {
                         checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
                     }
                 }
-                if (node.kind === SyntaxKind.ConstructSignature || node.kind === SyntaxKind.ConstructorType) {
+                if (!(<FunctionDeclaration>node).body) {
                     checkUnusedTypeParameters(node);
                 }
             }
@@ -13506,7 +13528,7 @@ namespace ts {
                         // TypeScript 1.0 spec (April 2014): 4.5
                         // If both accessors include type annotations, the specified types must be identical.
                         checkAccessorDeclarationTypesIdentical(node, otherAccessor, getAnnotatedAccessorType, Diagnostics.get_and_set_accessor_must_have_the_same_type);
-                        checkAccessorDeclarationTypesIdentical(node, otherAccessor, getAnnotatedAccessorThisType, Diagnostics.get_and_set_accessor_must_have_the_same_this_type);
+                        checkAccessorDeclarationTypesIdentical(node, otherAccessor, getThisTypeOfDeclaration, Diagnostics.get_and_set_accessor_must_have_the_same_this_type);
                     }
                 }
                 getTypeOfAccessors(getSymbolOfNode(node));
@@ -14444,36 +14466,12 @@ namespace ts {
                         const local = node.locals[key];
                         if (!local.hasReference && local.valueDeclaration) {
                             if (local.valueDeclaration.kind !== SyntaxKind.Parameter && compilerOptions.noUnusedLocals) {
-                                error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
+                                error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
                             }
                             else if (local.valueDeclaration.kind === SyntaxKind.Parameter && compilerOptions.noUnusedParameters) {
-                                if (getCombinedNodeFlags(local.valueDeclaration) & NodeFlags.Private) {
-                                    error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
+                                if (local.valueDeclaration.flags === 0) {
+                                    error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
                                 }
-                                else {
-                                    error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        function checkUnusedModuleLocals(node: ModuleDeclaration | SourceFile): void {
-            if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
-                for (const key in node.locals) {
-                    if (hasProperty(node.locals, key)) {
-                        const local = node.locals[key];
-                        if (!local.hasReference && !local.exportSymbol) {
-                            if ((local.valueDeclaration && local.valueDeclaration.kind)) {
-                                error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
-                            }
-                            else if (local.declarations && local.declarations[0].kind === SyntaxKind.ImportEqualsDeclaration) {
-                                error(local.declarations[0].name, Diagnostics._0_is_declared_but_never_used, key);
-                            }
-                            else if (local.declarations) {
-                                error(local.declarations[0], Diagnostics._0_is_declared_but_never_used, key);
                             }
                         }
                     }
@@ -14486,8 +14484,15 @@ namespace ts {
                 if (node.members) {
                     for (const member of node.members) {
                         if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.PropertyDeclaration) {
-                            if (isPrivateClassElement(member) && !member.symbol.hasReference) {
-                                error(member, Diagnostics._0_is_declared_but_never_used, member.symbol.name);
+                            if (isPrivateNode(member) && !member.symbol.hasReference) {
+                                error(member.name, Diagnostics._0_is_declared_but_never_used, member.symbol.name);
+                            }
+                        }
+                        else if (member.kind === SyntaxKind.Constructor) {
+                            for (const parameter of (<ConstructorDeclaration>member).parameters) {
+                                if (isPrivateNode(parameter) && !parameter.symbol.hasReference) {
+                                    error(parameter.name, Diagnostics._0_is_declared_but_never_used, parameter.symbol.name);
+                                }
                             }
                         }
                     }
@@ -14500,32 +14505,24 @@ namespace ts {
                 if (node.typeParameters) {
                     for (const typeParameter of node.typeParameters) {
                         if (!typeParameter.symbol.hasReference) {
-                            error(typeParameter, Diagnostics._0_is_declared_but_never_used, typeParameter.symbol.name);
+                            error(typeParameter.name, Diagnostics._0_is_declared_but_never_used, typeParameter.symbol.name);
                         }
                     }
                 }
             }
         }
 
-        function isPrivateClassElement(node: ClassElement): boolean {
+        function isPrivateNode(node: Node): boolean {
             return (node.flags & NodeFlags.Private) !== 0;
         }
 
-        function checkUnusedImports(node: SourceFile) {
+        function checkUnusedModuleLocals(node: ModuleDeclaration | SourceFile): void {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
-                for (const local in node.locals) {
-                    if (hasProperty(node.locals, local)) {
-                        const localValue = node.locals[local];
-                        if (localValue.declarations && !localValue.exportSymbol) {
-                            const declaration = localValue.declarations[0];
-                            if (!localValue.hasReference) {
-                                if (declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ImportClause || declaration.kind === SyntaxKind.NamespaceImport) {
-                                    error(declaration, Diagnostics._0_is_declared_but_never_used, localValue.name);
-                                }
-                                else if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
-                                    error(declaration.name, Diagnostics._0_is_declared_but_never_used, localValue.name);
-                                }
-                            }
+                for (const key in node.locals) {
+                    if (hasProperty(node.locals, key)) {
+                        const local = node.locals[key];
+                        if (!local.hasReference && !local.exportSymbol) {
+                            forEach(local.declarations, d => error(d.name, Diagnostics._0_is_declared_but_never_used, local.name));
                         }
                     }
                 }
@@ -15977,7 +15974,6 @@ namespace ts {
                 checkExportsOnMergedDeclarations(node);
                 const symbol = getSymbolOfNode(node);
                 checkTypeParameterListsIdentical(node, symbol);
-                updateReferencesForInterfaceHeritiageClauseTargets(node);
 
                 // Only check this symbol once
                 const firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
@@ -16005,6 +16001,7 @@ namespace ts {
 
             if (produceDiagnostics) {
                 checkTypeForDuplicateIndexSignatures(node);
+                updateReferencesForInterfaceHeritiageClauseTargets(node);
                 checkUnusedTypeParameters(node);
             }
         }
@@ -16929,7 +16926,6 @@ namespace ts {
                 deferredNodes = [];
                 forEach(node.statements, checkSourceElement);
                 if (isExternalModule(node)) {
-                    checkUnusedImports(node);
                     checkUnusedModuleLocals(node);
                 }
                 checkDeferredNodes();
@@ -17304,6 +17300,15 @@ namespace ts {
                     return getSymbolOfEntityNameOrPropertyAccessExpression(<EntityName | PropertyAccessExpression>node);
 
                 case SyntaxKind.ThisKeyword:
+                    const container = getThisContainer(node, /*includeArrowFunctions*/ false);
+                    if (isFunctionLike(container)) {
+                        const sig = getSignatureFromDeclaration(container);
+                        if (sig.thisParameter) {
+                            return sig.thisParameter;
+                        }
+                    }
+                    // fallthrough
+
                 case SyntaxKind.SuperKeyword:
                     const type = isExpression(node) ? checkExpression(<Expression>node) : getTypeFromTypeNode(<TypeNode>node);
                     return type.symbol;
@@ -17574,7 +17579,10 @@ namespace ts {
                 const parentSymbol = getParentOfSymbol(symbol);
                 if (parentSymbol) {
                     if (parentSymbol.flags & SymbolFlags.ValueModule && parentSymbol.valueDeclaration.kind === SyntaxKind.SourceFile) {
-                        return <SourceFile>parentSymbol.valueDeclaration;
+                        // If `node` accesses an export and that export isn't in the same file, then symbol is a namespace export, so return undefined.
+                        if (parentSymbol.valueDeclaration === getSourceFileOfNode(node)) {
+                            return <SourceFile>parentSymbol.valueDeclaration;
+                        }
                     }
                     for (let n = node.parent; n; n = n.parent) {
                         if ((n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(n) === parentSymbol) {
@@ -18836,7 +18844,7 @@ namespace ts {
             return getAccessorThisParameter(accessor) || accessor.parameters.length === (accessor.kind === SyntaxKind.GetAccessor ? 0 : 1);
         }
 
-        function getAccessorThisParameter(accessor: AccessorDeclaration) {
+        function getAccessorThisParameter(accessor: AccessorDeclaration): ParameterDeclaration {
             if (accessor.parameters.length === (accessor.kind === SyntaxKind.GetAccessor ? 1 : 2) &&
                 accessor.parameters[0].name.kind === SyntaxKind.Identifier &&
                 (<Identifier>accessor.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword) {

@@ -4699,7 +4699,7 @@ namespace ts {
                         case SyntaxKind.EqualsToken:
                             return parseExportAssignment(fullStart, decorators, modifiers);
                         case SyntaxKind.AsKeyword:
-                            return parseGlobalModuleExportDeclaration(fullStart, decorators, modifiers);
+                            return parseNamespaceExportDeclaration(fullStart, decorators, modifiers);
                         default:
                             return parseExportDeclaration(fullStart, decorators, modifiers);
                     }
@@ -5378,7 +5378,7 @@ namespace ts {
             return nextToken() === SyntaxKind.SlashToken;
         }
 
-        function parseGlobalModuleExportDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): NamespaceExportDeclaration {
+        function parseNamespaceExportDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): NamespaceExportDeclaration {
             const exportDeclaration = <NamespaceExportDeclaration>createNode(SyntaxKind.NamespaceExportDeclaration, fullStart);
             exportDeclaration.decorators = decorators;
             exportDeclaration.modifiers = modifiers;

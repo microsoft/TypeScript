@@ -5,7 +5,7 @@ tests/cases/compiler/unusedParametersinConstructor2.ts(3,17): error TS6133: 'par
     
     class greeter {
         constructor(param1: string, param2: string) {
-                    ~~~~~~~~~~~~~~
+                    ~~~~~~
 !!! error TS6133: 'param1' is declared but never used.
             param2 = param2 + "dummy value";
         }
