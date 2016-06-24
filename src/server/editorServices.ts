@@ -376,30 +376,35 @@ namespace ts.server {
                 }
                 return;
             }
+            if (info.containingProjects.length === 0) {
+                // create new inferred project p with the newly opened file as root
+                const inferredProject = this.createAndAddInferredProject(info);
+                const openFileRoots: ScriptInfo[] = [];
+                // for each inferred project root r
+                for (const rootFile of this.openFileRoots) {
+                    // if r referenced by the new project
+                    if (inferredProject.containsScriptInfo(rootFile)) {
+                        // remove inferred project that was initially created for rootFile
+                        const defaultProject = rootFile.getDefaultProject();
+                        if (defaultProject === inferredProject) {
+                            continue;
+                        }
+                        Debug.assert(defaultProject.projectKind === ProjectKind.Inferred);
 
-            // create new inferred project p with the newly opened file as root
-            const inferredProject = this.createAndAddInferredProject(info);
-            const openFileRoots: ScriptInfo[] = [];
-            // for each inferred project root r
-            for (const rootFile of this.openFileRoots) {
-                // if r referenced by the new project
-                if (inferredProject.containsScriptInfo(rootFile)) {
-                    // remove inferred project that was initially created for rootFile
-                    const defaultProject = rootFile.getDefaultProject();
-                    Debug.assert(defaultProject.projectKind === ProjectKind.Inferred);
-
-                    this.removeProject(defaultProject);
-                    // put r in referenced open file list
-                    this.openFilesReferenced.push(rootFile);
-                    // set default project of r to the new project
-                    rootFile.attachToProject(inferredProject);
+                        this.removeProject(defaultProject);
+                        // put r in referenced open file list
+                        this.openFilesReferenced.push(rootFile);
+                        // set default project of r to the new project
+                        rootFile.attachToProject(inferredProject);
+                    }
+                    else {
+                        // otherwise, keep r as root of inferred project
+                        openFileRoots.push(rootFile);
+                    }
                 }
-                else {
-                    // otherwise, keep r as root of inferred project
-                    openFileRoots.push(rootFile);
-                }
+                this.openFileRoots = openFileRoots;
             }
-            this.openFileRoots = openFileRoots;
+
             this.openFileRoots.push(info);
         }
 
