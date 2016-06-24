@@ -14466,11 +14466,11 @@ namespace ts {
                         const local = node.locals[key];
                         if (!local.hasReference && local.valueDeclaration) {
                             if (local.valueDeclaration.kind !== SyntaxKind.Parameter && compilerOptions.noUnusedLocals) {
-                                error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, key);
+                                error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
                             }
                             else if (local.valueDeclaration.kind === SyntaxKind.Parameter && compilerOptions.noUnusedParameters) {
                                 if (local.valueDeclaration.flags === 0) {
-                                    error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, key);
+                                    error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
                                 }
                             }
                         }
@@ -14505,7 +14505,7 @@ namespace ts {
                 if (node.typeParameters) {
                     for (const typeParameter of node.typeParameters) {
                         if (!typeParameter.symbol.hasReference) {
-                            error(typeParameter, Diagnostics._0_is_declared_but_never_used, typeParameter.symbol.name);
+                            error(typeParameter.name, Diagnostics._0_is_declared_but_never_used, typeParameter.symbol.name);
                         }
                     }
                 }
@@ -14522,7 +14522,7 @@ namespace ts {
                     if (hasProperty(node.locals, key)) {
                         const local = node.locals[key];
                         if (!local.hasReference && !local.exportSymbol) {
-                            forEach(local.declarations, d => error(d.name, Diagnostics._0_is_declared_but_never_used, key));
+                            forEach(local.declarations, d => error(d.name, Diagnostics._0_is_declared_but_never_used, local.name));
                         }
                     }
                 }
