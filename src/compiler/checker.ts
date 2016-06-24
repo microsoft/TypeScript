@@ -13211,7 +13211,7 @@ namespace ts {
                         checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
                     }
                 }
-                if (node.kind === SyntaxKind.ConstructSignature || node.kind === SyntaxKind.ConstructorType) {
+                if (!(<FunctionDeclaration>node).body) {
                     checkUnusedTypeParameters(node);
                 }
             }
@@ -14444,36 +14444,12 @@ namespace ts {
                         const local = node.locals[key];
                         if (!local.hasReference && local.valueDeclaration) {
                             if (local.valueDeclaration.kind !== SyntaxKind.Parameter && compilerOptions.noUnusedLocals) {
-                                error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
+                                error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, key);
                             }
                             else if (local.valueDeclaration.kind === SyntaxKind.Parameter && compilerOptions.noUnusedParameters) {
-                                if (getCombinedNodeFlags(local.valueDeclaration) & NodeFlags.Private) {
-                                    error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
+                                if (local.valueDeclaration.flags === 0) {
+                                    error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, key);
                                 }
-                                else {
-                                    error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        function checkUnusedModuleLocals(node: ModuleDeclaration | SourceFile): void {
-            if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
-                for (const key in node.locals) {
-                    if (hasProperty(node.locals, key)) {
-                        const local = node.locals[key];
-                        if (!local.hasReference && !local.exportSymbol) {
-                            if ((local.valueDeclaration && local.valueDeclaration.kind)) {
-                                error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
-                            }
-                            else if (local.declarations && local.declarations[0].kind === SyntaxKind.ImportEqualsDeclaration) {
-                                error(local.declarations[0].name, Diagnostics._0_is_declared_but_never_used, key);
-                            }
-                            else if (local.declarations) {
-                                error(local.declarations[0], Diagnostics._0_is_declared_but_never_used, key);
                             }
                         }
                     }
@@ -14511,21 +14487,13 @@ namespace ts {
             return (node.flags & NodeFlags.Private) !== 0;
         }
 
-        function checkUnusedImports(node: SourceFile) {
+        function checkUnusedModuleLocals(node: ModuleDeclaration | SourceFile): void {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
-                for (const local in node.locals) {
-                    if (hasProperty(node.locals, local)) {
-                        const localValue = node.locals[local];
-                        if (localValue.declarations && !localValue.exportSymbol) {
-                            const declaration = localValue.declarations[0];
-                            if (!localValue.hasReference) {
-                                if (declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ImportClause || declaration.kind === SyntaxKind.NamespaceImport) {
-                                    error(declaration, Diagnostics._0_is_declared_but_never_used, localValue.name);
-                                }
-                                else if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
-                                    error(declaration.name, Diagnostics._0_is_declared_but_never_used, localValue.name);
-                                }
-                            }
+                for (const key in node.locals) {
+                    if (hasProperty(node.locals, key)) {
+                        const local = node.locals[key];
+                        if (!local.hasReference && !local.exportSymbol) {
+                            forEach(local.declarations, d => error(d.name, Diagnostics._0_is_declared_but_never_used, key));
                         }
                     }
                 }
@@ -16929,7 +16897,6 @@ namespace ts {
                 deferredNodes = [];
                 forEach(node.statements, checkSourceElement);
                 if (isExternalModule(node)) {
-                    checkUnusedImports(node);
                     checkUnusedModuleLocals(node);
                 }
                 checkDeferredNodes();

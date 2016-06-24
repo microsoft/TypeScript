@@ -10,7 +10,7 @@ tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionExpression2.t
 ==== tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionExpression2.ts (7 errors) ====
     
     var greeter = function (person: string, person2: string) {
-                            ~~~~~~~~~~~~~~
+                            ~~~~~~
 !!! error TS6133: 'person' is declared but never used.
         var unused = 20;
             ~~~~~~
@@ -18,14 +18,14 @@ tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionExpression2.t
         var maker = function (child: string): void {
             ~~~~~
 !!! error TS6133: 'maker' is declared but never used.
-                              ~~~~~~~~~~~~~
+                              ~~~~~
 !!! error TS6133: 'child' is declared but never used.
             var unused2 = 22;
                 ~~~~~~~
 !!! error TS6133: 'unused2' is declared but never used.
         }
         var maker2 = function (child2: string): void {
-                               ~~~~~~~~~~~~~~
+                               ~~~~~~
 !!! error TS6133: 'child2' is declared but never used.
             var unused3 = 23;
                 ~~~~~~~
