@@ -1894,7 +1894,7 @@ namespace FourSlash {
             });
         }
 
-        public verifyBraceCompletionAtPostion(negative: boolean, openingBrace: string) {
+        public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
 
             const openBraceMap: ts.Map<ts.CharacterCodes> = {
                 "(": ts.CharacterCodes.openParen,
@@ -1914,7 +1914,7 @@ namespace FourSlash {
 
             const position = this.currentCaretPosition;
 
-            const validBraceCompletion = this.languageService.isValidBraceCompletionAtPostion(this.activeFile.fileName, position, charCode);
+            const validBraceCompletion = this.languageService.isValidBraceCompletionAtPosition(this.activeFile.fileName, position, charCode);
 
             if (!negative && !validBraceCompletion) {
                 this.raiseError(`${position} is not a valid brace completion position for ${openingBrace}`);
@@ -2922,8 +2922,8 @@ namespace FourSlashInterface {
             this.state.verifyDefinitionsName(this.negative, name, containerName);
         }
 
-        public isValidBraceCompletionAtPostion(openingBrace: string) {
-            this.state.verifyBraceCompletionAtPostion(this.negative, openingBrace);
+        public isValidBraceCompletionAtPosition(openingBrace: string) {
+            this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
         }
     }
 
