@@ -14484,8 +14484,15 @@ namespace ts {
                 if (node.members) {
                     for (const member of node.members) {
                         if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.PropertyDeclaration) {
-                            if (isPrivateClassElement(member) && !member.symbol.hasReference) {
-                                error(member, Diagnostics._0_is_declared_but_never_used, member.symbol.name);
+                            if (isPrivateNode(member) && !member.symbol.hasReference) {
+                                error(member.name, Diagnostics._0_is_declared_but_never_used, member.symbol.name);
+                            }
+                        }
+                        else if (member.kind === SyntaxKind.Constructor) {
+                            for (const parameter of (<ConstructorDeclaration>member).parameters) {
+                                if (isPrivateNode(parameter) && !parameter.symbol.hasReference) {
+                                    error(parameter.name, Diagnostics._0_is_declared_but_never_used, parameter.symbol.name);
+                                }
                             }
                         }
                     }
@@ -14505,7 +14512,7 @@ namespace ts {
             }
         }
 
-        function isPrivateClassElement(node: ClassElement): boolean {
+        function isPrivateNode(node: Node): boolean {
             return (node.flags & NodeFlags.Private) !== 0;
         }
 
@@ -15967,7 +15974,6 @@ namespace ts {
                 checkExportsOnMergedDeclarations(node);
                 const symbol = getSymbolOfNode(node);
                 checkTypeParameterListsIdentical(node, symbol);
-                updateReferencesForInterfaceHeritiageClauseTargets(node);
 
                 // Only check this symbol once
                 const firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
@@ -15995,6 +16001,7 @@ namespace ts {
 
             if (produceDiagnostics) {
                 checkTypeForDuplicateIndexSignatures(node);
+                updateReferencesForInterfaceHeritiageClauseTargets(node);
                 checkUnusedTypeParameters(node);
             }
         }
