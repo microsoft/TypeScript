@@ -436,7 +436,7 @@ namespace ts.server {
         }
 
         private getTypeDefinition(args: protocol.FileLocationRequestArgs): protocol.FileSpan[] {
-            const { file, project } = this.getFileAndProject(args)
+            const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
 
@@ -1443,7 +1443,7 @@ namespace ts.server {
                 return this.requiredResponse(this.getNavigationBarItems(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.Occurrences]: (request: protocol.FileLocationRequest) => {
-                return this.requiredResponse(this.getOccurrences(request.arguments));;
+                return this.requiredResponse(this.getOccurrences(request.arguments));
             },
             [CommandNames.DocumentHighlights]: (request: protocol.DocumentHighlightsRequest) => {
                 return this.requiredResponse(this.getDocumentHighlights(request.arguments, /*simplifiedResult*/ true));

@@ -35,10 +35,10 @@ namespace ts.server {
     }
 
     interface OpenConfigFileResult {
-        success: boolean,
-        errors?: Diagnostic[]
+        success: boolean;
+        errors?: Diagnostic[];
 
-        project?: ConfiguredProject,
+        project?: ConfiguredProject;
     }
 
     interface OpenConfiguredProjectResult {
@@ -304,23 +304,23 @@ namespace ts.server {
         }
 
         // TODO: delete if unused
-        private releaseNonReferencedConfiguredProjects() {
-            if (this.configuredProjects.every(p => p.openRefCount > 0)) {
-                return;
-            }
+        // private releaseNonReferencedConfiguredProjects() {
+        //     if (this.configuredProjects.every(p => p.openRefCount > 0)) {
+        //         return;
+        //     }
 
-            const configuredProjects: ConfiguredProject[] = [];
-            for (const proj of this.configuredProjects) {
-                if (proj.openRefCount > 0) {
-                    configuredProjects.push(proj);
-                }
-                else {
-                    proj.close();
-                }
-            }
+        //     const configuredProjects: ConfiguredProject[] = [];
+        //     for (const proj of this.configuredProjects) {
+        //         if (proj.openRefCount > 0) {
+        //             configuredProjects.push(proj);
+        //         }
+        //         else {
+        //             proj.close();
+        //         }
+        //     }
 
-            this.configuredProjects = configuredProjects;
-        }
+        //     this.configuredProjects = configuredProjects;
+        // }
 
        private removeProject(project: Project) {
             this.log(`remove project: ${project.getRootFiles().toString()}`);
@@ -540,7 +540,7 @@ namespace ts.server {
                 return;
             }
             this.logger.startGroup();
-            
+
             let counter = 0;
             counter = printProjects(this.externalProjects, counter);
             counter = printProjects(this.configuredProjects, counter);
@@ -636,10 +636,10 @@ namespace ts.server {
 
         private createAndAddExternalProject(projectFileName: string, files: string[], compilerOptions: CompilerOptions) {
             const project = new ExternalProject(
-                projectFileName, 
-                this, 
-                this.documentRegistry, 
-                compilerOptions, 
+                projectFileName,
+                this,
+                this.documentRegistry,
+                compilerOptions,
                 /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(compilerOptions, files));
 
             const errors = this.addFilesToProjectAndUpdateGraph(project, files, /*clientFileName*/ undefined);
@@ -648,7 +648,7 @@ namespace ts.server {
         }
 
         private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, clientFileName?: string) {
-            const sizeLimitExceeded = !this.exceededTotalSizeLimitForNonTsFiles(projectOptions.compilerOptions, projectOptions.files);
+            const sizeLimitExceeded = this.exceededTotalSizeLimitForNonTsFiles(projectOptions.compilerOptions, projectOptions.files);
             const project = new ConfiguredProject(
                 configFileName,
                 this,
@@ -665,7 +665,7 @@ namespace ts.server {
                 this.watchConfigDirectoryForProject(project, projectOptions);
             }
             project.watchWildcards((project, path) => this.onSourceFileInDirectoryChangedForConfiguredProject(project, path));
-            
+
             this.configuredProjects.push(project);
             return { project, errors };
         }
@@ -902,7 +902,7 @@ namespace ts.server {
             const openFileRootsConfigured: ScriptInfo[] = [];
             // collect all orphanted script infos that used to be roots of configured projects
             for (const info of this.openFileRootsConfigured) {
-                if(info.containingProjects.length === 0) {
+                if (info.containingProjects.length === 0) {
                     unattachedOpenFiles.push(info);
                 }
                 else {
@@ -999,7 +999,6 @@ namespace ts.server {
                 // const rootedProject = rootFile.defaultProject;
                 // const referencingProjects = this.findReferencingProjects(rootFile, rootedProject);
 
-                
                 // if (rootFile.defaultProject && rootFile.defaultProject.projectKind !== ProjectKind.Inferred) {
                 //     // If the root file has already been added into a configured project,
                 //     // meaning the original inferred project is gone already.

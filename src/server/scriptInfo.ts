@@ -15,9 +15,9 @@ namespace ts.server {
 
         constructor(
             private readonly host: ServerHost,
-            readonly fileName: NormalizedPath, 
+            readonly fileName: NormalizedPath,
             content: string,
-            readonly scriptKind: ScriptKind, 
+            readonly scriptKind: ScriptKind,
             public isOpen = false) {
 
             this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));

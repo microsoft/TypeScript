@@ -1,5 +1,7 @@
 /// <reference path="..\services\services.ts" />
 
+/* tslint:disable:no-null-keyword */
+
 namespace ts.server {
     export interface Logger {
         close(): void;
@@ -55,7 +57,6 @@ namespace ts.server {
             items[index] = items.pop();
         }
     }
-    
 
     export type NormalizedPath = string & { __normalizedPathTag: any };
 
@@ -91,9 +92,9 @@ namespace ts.server {
                 return hasProperty(map, path);
             },
             remove(path) {
-                delete map[path]
+                delete map[path];
             }
-        }
+        };
     }
     function throwLanguageServiceIsDisabledError() {;
         throw new Error("LanguageService is disabled");
@@ -169,5 +170,5 @@ namespace ts.server {
 
     export function makeInferredProjectName(counter: number) {
         return `/dev/null/inferredProject${counter}*`;
-    }    
+    }
 }

@@ -11,13 +11,13 @@ namespace ts.server {
         External
     }
 
-    function remove<T>(items: T[], item: T) { 
+    function remove<T>(items: T[], item: T) {
         const index = items.indexOf(item);
         if (index >= 0) {
             items.splice(index, 1);
         }
     }
-    
+
     export abstract class Project {
         private readonly rootFiles: ScriptInfo[] = [];
         private readonly rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
@@ -153,12 +153,12 @@ namespace ts.server {
                 this.rootFiles.push(info);
                 this.rootFilesMap.set(info.path, info);
                 info.attachToProject(this);
-                
+
                 this.markAsDirty();
             }
         }
 
-        removeFile(info: ScriptInfo, detachFromProject: boolean = true) {
+        removeFile(info: ScriptInfo, detachFromProject = true) {
             this.removeRootFileIfNecessary(info);
             this.lsHost.notifyFileRemoved(info);
 
@@ -330,7 +330,8 @@ namespace ts.server {
                 languageServiceEnabled,
                 /*compilerOptions*/ undefined);
 
-            this.inferredProjectName = makeInferredProjectName(InferredProject.NextId++);
+            this.inferredProjectName = makeInferredProjectName(InferredProject.NextId);
+            InferredProject.NextId++;
         }
 
         getProjectName() {
