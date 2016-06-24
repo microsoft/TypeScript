@@ -1948,7 +1948,6 @@ namespace ts {
     }
 
 
-    const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
     const tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</;
     const tripleSlashDirectiveFragmentRegex = /^\/\/\/\s*<reference\s+path\s*=\s*(?:'|")([^'"]+)$/;
 
@@ -4409,10 +4408,9 @@ namespace ts {
 
             /**
              * Check all of the declared modules and those in node modules. Possible sources of modules:
-             *      Modules declared in the program
+             *      Modules that are found by the type checker
              *      Modules from node_modules (i.e. those listed in package.json)
-             *          This includes all files that are found in node_modules/moduleName/ and node_modules/@types/moduleName/
-             *          with acceptable file extensions
+             *          This includes all files that are found in node_modules/moduleName/ with acceptable file extensions
              */
             function getCompletionEntriesForNonRelativeModules(fragment: string, scriptPath: string): CompletionEntry[] {
                 return ts.map(enumeratePotentialNonRelativeModules(fragment, scriptPath), (moduleName) => {
@@ -4479,15 +4477,11 @@ namespace ts {
                         if (isNestedModule && moduleName === moduleNameFragment) {
                             const moduleDir = combinePaths(nodeModulesDir, moduleName);
                             if (directoryProbablyExists(moduleDir, host)) {
-                                // Get all possible nested module names from files with all extensions
-                                const nestedFiles = host.readDirectory(moduleDir, allSupportedExtensions, /*exclude*/undefined, /*include*/["./*"]);
+                                const nestedFiles = host.readDirectory(moduleDir, supportedTypeScriptExtensions, /*exclude*/undefined, /*include*/["./*"]);
 
-                                // Add those with typings to the completion list
                                 nestedFiles.forEach((f) => {
                                     const nestedModule = removeFileExtension(getBaseFileName(f));
-                                    if (hasTypeScriptFileExtension(f)) {
-                                        nonRelativeModules.push(nestedModule);
-                                    }
+                                    nonRelativeModules.push(nestedModule);
                                 });
                             }
                         }
