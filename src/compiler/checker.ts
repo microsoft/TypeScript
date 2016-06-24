@@ -14447,10 +14447,8 @@ namespace ts {
                                 error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
                             }
                             else if (local.valueDeclaration.kind === SyntaxKind.Parameter && compilerOptions.noUnusedParameters) {
-                                if (local.valueDeclaration.modifiers) {
-                                    if (getCombinedNodeFlags(local.valueDeclaration) & NodeFlags.Private) {
-                                        error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
-                                    }
+                                if (getCombinedNodeFlags(local.valueDeclaration) & NodeFlags.Private) {
+                                    error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
                                 }
                                 else {
                                     error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
@@ -14462,7 +14460,7 @@ namespace ts {
             }
         }
 
-        function checkUnusedModuleLocals(node: ModuleDeclaration): void {
+        function checkUnusedModuleLocals(node: ModuleDeclaration | SourceFile): void {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 for (const key in node.locals) {
                     if (hasProperty(node.locals, key)) {
@@ -14471,12 +14469,11 @@ namespace ts {
                             if ((local.valueDeclaration && local.valueDeclaration.kind)) {
                                 error(local.valueDeclaration, Diagnostics._0_is_declared_but_never_used, key);
                             }
-                            else if (local.declarations &&
-                                (local.declarations[0].kind === SyntaxKind.InterfaceDeclaration || local.declarations[0].kind === SyntaxKind.ModuleDeclaration)) {
-                                error(local.declarations[0], Diagnostics._0_is_declared_but_never_used, key);
-                            }
                             else if (local.declarations && local.declarations[0].kind === SyntaxKind.ImportEqualsDeclaration) {
                                 error(local.declarations[0].name, Diagnostics._0_is_declared_but_never_used, key);
+                            }
+                            else if (local.declarations) {
+                                error(local.declarations[0], Diagnostics._0_is_declared_but_never_used, key);
                             }
                         }
                     }
@@ -14498,7 +14495,7 @@ namespace ts {
             }
         }
 
-        function checkUnusedTypeParameters(node: ClassDeclaration | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration) {
+        function checkUnusedTypeParameters(node: ClassDeclaration | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration | InterfaceDeclaration) {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 if (node.typeParameters) {
                     for (const typeParameter of node.typeParameters) {
@@ -14520,15 +14517,13 @@ namespace ts {
                     if (hasProperty(node.locals, local)) {
                         const localValue = node.locals[local];
                         if (localValue.declarations && !localValue.exportSymbol) {
-                            for (const declaration of localValue.declarations) {
-                                const symbol = declaration.symbol;
-                                if (!symbol.hasReference) {
-                                    if (declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ImportClause || declaration.kind === SyntaxKind.NamespaceImport) {
-                                        error(declaration, Diagnostics._0_is_declared_but_never_used, symbol.name);
-                                    }
-                                    else if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
-                                        error(declaration.name, Diagnostics._0_is_declared_but_never_used, symbol.name);
-                                    }
+                            const declaration = localValue.declarations[0];
+                            if (!localValue.hasReference) {
+                                if (declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ImportClause || declaration.kind === SyntaxKind.NamespaceImport) {
+                                    error(declaration, Diagnostics._0_is_declared_but_never_used, localValue.name);
+                                }
+                                else if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
+                                    error(declaration.name, Diagnostics._0_is_declared_but_never_used, localValue.name);
                                 }
                             }
                         }
@@ -16010,6 +16005,7 @@ namespace ts {
 
             if (produceDiagnostics) {
                 checkTypeForDuplicateIndexSignatures(node);
+                checkUnusedTypeParameters(node);
             }
         }
 
@@ -16934,6 +16930,7 @@ namespace ts {
                 forEach(node.statements, checkSourceElement);
                 if (isExternalModule(node)) {
                     checkUnusedImports(node);
+                    checkUnusedModuleLocals(node);
                 }
                 checkDeferredNodes();
                 deferredNodes = undefined;
