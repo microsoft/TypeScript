@@ -753,6 +753,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         return generateNameForExportDefault();
                     case SyntaxKind.ClassExpression:
                         return generateNameForClassExpression();
+                    default:
+                        Debug.fail();
                 }
             }
 

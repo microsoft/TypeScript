@@ -1125,7 +1125,7 @@ namespace ts {
             return getExternalModuleMember(<ImportDeclaration>node.parent.parent.parent, node);
         }
 
-        function getTargetOfGlobalModuleExportDeclaration(node: NamespaceExportDeclaration): Symbol {
+        function getTargetOfNamespaceExportDeclaration(node: NamespaceExportDeclaration): Symbol {
             return resolveExternalModuleSymbol(node.parent.symbol);
         }
 
@@ -1154,7 +1154,7 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                     return getTargetOfExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.NamespaceExportDeclaration:
-                    return getTargetOfGlobalModuleExportDeclaration(<NamespaceExportDeclaration>node);
+                    return getTargetOfNamespaceExportDeclaration(<NamespaceExportDeclaration>node);
             }
         }
 
@@ -17463,7 +17463,10 @@ namespace ts {
                 const parentSymbol = getParentOfSymbol(symbol);
                 if (parentSymbol) {
                     if (parentSymbol.flags & SymbolFlags.ValueModule && parentSymbol.valueDeclaration.kind === SyntaxKind.SourceFile) {
-                        return <SourceFile>parentSymbol.valueDeclaration;
+                        // If `node` accesses an export and that export isn't in the same file, then symbol is a namespace export, so return undefined.
+                        if (parentSymbol.valueDeclaration === getSourceFileOfNode(node)) {
+                            return <SourceFile>parentSymbol.valueDeclaration;
+                        }
                     }
                     for (let n = node.parent; n; n = n.parent) {
                         if ((n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(n) === parentSymbol) {
