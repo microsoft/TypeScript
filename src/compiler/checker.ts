@@ -13211,7 +13211,7 @@ namespace ts {
                         checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
                     }
                 }
-                if (node.kind === SyntaxKind.ConstructSignature) {
+                if (node.kind === SyntaxKind.ConstructSignature || node.kind === SyntaxKind.ConstructorType) {
                     checkUnusedTypeParameters(node);
                 }
             }
