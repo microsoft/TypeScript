@@ -1,14 +1,12 @@
 /// <reference path='fourslash.ts'/>
 
-// References to lable wiht close names
+// References to labels with close names
 
-/////*1*/labela: while (true) {
-/////*2*/labelb:     while (false) { break labelb; }
+////[|labela|]: while (true) {
+////[|labelb|]:     while (false) { break [|labelb|]; }
 ////            break labelc;
 ////}
 
-goTo.marker("1");
-verify.referencesCountIs(1);
-
-goTo.marker("2");
-verify.referencesCountIs(2);
+const [a, b, useB] = test.ranges();
+verify.referencesOf(a, [a]);
+verify.rangesReferenceEachOther([b, useB]);
