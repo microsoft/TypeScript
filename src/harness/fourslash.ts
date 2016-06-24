@@ -1663,24 +1663,25 @@ namespace FourSlash {
             }
         }
 
-        private getIndentation(fileName: string, position: number, indentStyle: ts.IndentStyle): number {
+        private getIndentation(fileName: string, position: number, indentStyle: ts.IndentStyle, baseIndentSize: number): number {
 
             const formatOptions = ts.clone(this.formatCodeOptions);
             formatOptions.IndentStyle = indentStyle;
+            formatOptions.BaseIndentSize = baseIndentSize;
 
             return this.languageService.getIndentationAtPosition(fileName, position, formatOptions);
         }
 
-        public verifyIndentationAtCurrentPosition(numberOfSpaces: number, indentStyle: ts.IndentStyle = ts.IndentStyle.Smart) {
-            const actual = this.getIndentation(this.activeFile.fileName, this.currentCaretPosition, indentStyle);
+        public verifyIndentationAtCurrentPosition(numberOfSpaces: number, indentStyle: ts.IndentStyle = ts.IndentStyle.Smart, baseIndentSize = 0) {
+            const actual = this.getIndentation(this.activeFile.fileName, this.currentCaretPosition, indentStyle, baseIndentSize);
             const lineCol = this.getLineColStringAtPosition(this.currentCaretPosition);
             if (actual !== numberOfSpaces) {
                 this.raiseError(`verifyIndentationAtCurrentPosition failed at ${lineCol} - expected: ${numberOfSpaces}, actual: ${actual}`);
             }
         }
 
-        public verifyIndentationAtPosition(fileName: string, position: number, numberOfSpaces: number, indentStyle: ts.IndentStyle = ts.IndentStyle.Smart) {
-            const actual = this.getIndentation(fileName, position, indentStyle);
+        public verifyIndentationAtPosition(fileName: string, position: number, numberOfSpaces: number, indentStyle: ts.IndentStyle = ts.IndentStyle.Smart, baseIndentSize = 0) {
+            const actual = this.getIndentation(fileName, position, indentStyle, baseIndentSize);
             const lineCol = this.getLineColStringAtPosition(position);
             if (actual !== numberOfSpaces) {
                 this.raiseError(`verifyIndentationAtPosition failed at ${lineCol} - expected: ${numberOfSpaces}, actual: ${actual}`);
@@ -2938,8 +2939,8 @@ namespace FourSlashInterface {
             this.state.verifyIndentationAtCurrentPosition(numberOfSpaces);
         }
 
-        public indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle = ts.IndentStyle.Smart) {
-            this.state.verifyIndentationAtPosition(fileName, position, numberOfSpaces, indentStyle);
+        public indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle = ts.IndentStyle.Smart, baseIndentSize = 0) {
+            this.state.verifyIndentationAtPosition(fileName, position, numberOfSpaces, indentStyle, baseIndentSize);
         }
 
         public textAtCaretIs(text: string) {

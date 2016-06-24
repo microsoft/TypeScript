@@ -16,7 +16,7 @@ namespace ts.formatting {
             // no indentation when the indent style is set to none,
             // so we can return fast
             if (options.IndentStyle === IndentStyle.None) {
-                return getBaseIndentation(options);
+                return 0;
             }
 
             const precedingToken = findPrecedingToken(position, sourceFile);
@@ -27,7 +27,7 @@ namespace ts.formatting {
             // no indentation in string \regex\template literals
             const precedingTokenIsLiteral = isStringOrRegularExpressionOrTemplateLiteral(precedingToken.kind);
             if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position && precedingToken.end > position) {
-                return getBaseIndentation(options);
+                return 0;
             }
 
             const lineAtPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
@@ -103,7 +103,7 @@ namespace ts.formatting {
             return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
         }
 
-        function getBaseIndentation(options: EditorOptions) {
+        export function getBaseIndentation(options: EditorOptions) {
             return options.BaseIndentSize || 0;
         }
 

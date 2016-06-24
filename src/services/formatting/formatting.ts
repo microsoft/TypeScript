@@ -396,10 +396,8 @@ namespace ts.formatting {
                 if (startLine !== parentStartLine || startPos === column) {
                     // Use the base indent size if it is greater than
                     // the indentation of the inherited predecessor.
-                    if (options.BaseIndentSize > column) {
-                        return options.BaseIndentSize;
-                    }
-                    return column;
+                    const baseIndentSize = SmartIndenter.getBaseIndentation(options);
+                    return baseIndentSize > column ? baseIndentSize : column;
                 }
             }
 
