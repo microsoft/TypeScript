@@ -15,9 +15,9 @@ namespace ts {
 
     const defaultTypeRoots = ["node_modules/@types"];
 
-    export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
+    export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName="tsconfig.json"): string {
         while (true) {
-            const fileName = combinePaths(searchPath, "tsconfig.json");
+            const fileName = combinePaths(searchPath, configName);
             if (fileExists(fileName)) {
                 return fileName;
             }

@@ -321,6 +321,14 @@ namespace ts.server {
             return this.host.getDirectories(path);
         }
 
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
+            return this.host.readDirectory(path, extensions, exclude, include);
+        }
+
+        readFile(path: string, encoding?: string): string {
+            return this.host.readFile(path, encoding);
+        }
+
         /**
          *  @param line 1 based index
          */

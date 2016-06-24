@@ -2,6 +2,8 @@
 
 /* @internal */
 namespace ts {
+    const ambientModuleSymbolRegex = /^".+"$/;
+
     let nextSymbolId = 1;
     let nextNodeId = 1;
     let nextMergeId = 1;
@@ -101,6 +103,7 @@ namespace ts {
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
+            getAmbientModules,
 
             getJsxElementAttributesType,
             getJsxIntrinsicTagNames,
@@ -19103,6 +19106,16 @@ namespace ts {
                 diagnostics.add(createFileDiagnostic(sourceFile, textSpanEnd(span), /*length*/ 0, message, arg0, arg1, arg2));
                 return true;
             }
+        }
+
+        function getAmbientModules(): Symbol[] {
+            const result: Symbol[] = [];
+            for (const sym in globals) {
+                if (globals.hasOwnProperty(sym) && ambientModuleSymbolRegex.test(sym)) {
+                    result.push(globals[sym]);
+                }
+            }
+            return result;
         }
     }
 }

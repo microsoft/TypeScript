@@ -67,6 +67,11 @@ namespace ts {
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
 
+        readDirectory(path: string, extensions?: string, exclude?: string, include?: string): string;
+        readFile(path: string, encoding?: string): string;
+        resolvePath(path: string): string;
+        fileExists(path: string): boolean;
+
         getModuleResolutionsForFile?(fileName: string): string;
         getTypeReferenceDirectiveResolutionsForFile?(fileName: string): string;
         directoryExists(directoryName: string): boolean;
@@ -408,6 +413,27 @@ namespace ts {
 
         public getDefaultLibFileName(options: CompilerOptions): string {
             return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
+        }
+
+        public readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
+            return JSON.parse(this.shimHost.readDirectory(
+                path,
+                extensions ? JSON.stringify(extensions) : undefined,
+                exclude ? JSON.stringify(exclude) : undefined,
+                include ? JSON.stringify(include) : undefined
+            ));
+        }
+
+        public readFile(path: string, encoding?: string): string {
+            return this.shimHost.readFile(path, encoding);
+        }
+
+        public resolvePath(path: string): string {
+            return this.shimHost.resolvePath(path);
+        }
+
+        public fileExists(path: string): boolean {
+            return this.shimHost.fileExists(path);
         }
     }
 
