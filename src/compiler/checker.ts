@@ -199,6 +199,8 @@ namespace ts {
         const intersectionTypes: Map<IntersectionType> = {};
         const stringLiteralTypes: Map<LiteralType> = {};
         const numericLiteralTypes: Map<LiteralType> = {};
+        const emptyStringType = getLiteralTypeForText(TypeFlags.StringLiteral, "");
+        const zeroType = getLiteralTypeForText(TypeFlags.NumberLiteral, "0");
 
         const resolutionTargets: TypeSystemEntity[] = [];
         const resolutionResults: boolean[] = [];
@@ -246,12 +248,30 @@ namespace ts {
             // The following members encode facts about particular kinds of types for use in the getTypeFacts function.
             // The presence of a particular fact means that the given test is true for some (and possibly all) values
             // of that kind of type.
-            StringStrictFacts = TypeofEQString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull | Truthy | Falsy,
-            StringFacts = StringStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull,
-            NumberStrictFacts = TypeofEQNumber | TypeofNEString | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull | Truthy | Falsy,
-            NumberFacts = NumberStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull,
-            BooleanStrictFacts = TypeofEQBoolean | TypeofNEString | TypeofNENumber | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull | Truthy | Falsy,
-            BooleanFacts = BooleanStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull,
+            BaseStringStrictFacts = TypeofEQString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull,
+            BaseStringFacts = BaseStringStrictFacts  | EQUndefined | EQNull | EQUndefinedOrNull,
+            StringStrictFacts = BaseStringStrictFacts | Truthy | Falsy,
+            StringFacts = BaseStringFacts | Truthy | Falsy,
+            EmptyStringStrictFacts = BaseStringStrictFacts | Falsy,
+            EmptyStringFacts = BaseStringFacts | Falsy,
+            NonEmptyStringStrictFacts = BaseStringStrictFacts | Truthy,
+            NonEmptyStringFacts = BaseStringFacts | Truthy,
+            BaseNumberStrictFacts = TypeofEQNumber | TypeofNEString | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull,
+            BaseNumberFacts = BaseNumberStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull,
+            NumberStrictFacts = BaseNumberStrictFacts | Truthy | Falsy,
+            NumberFacts = BaseNumberFacts | Truthy | Falsy,
+            ZeroStrictFacts = BaseNumberStrictFacts | Falsy,
+            ZeroFacts = BaseNumberFacts | Falsy,
+            NonZeroStrictFacts = BaseNumberStrictFacts | Truthy,
+            NonZeroFacts = BaseNumberFacts | Truthy,
+            BaseBooleanStrictFacts = TypeofEQBoolean | TypeofNEString | TypeofNENumber | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull,
+            BaseBooleanFacts = BaseBooleanStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull,
+            BooleanStrictFacts = BaseBooleanStrictFacts | Truthy | Falsy,
+            BooleanFacts = BaseBooleanFacts | Truthy | Falsy,
+            FalseStrictFacts = BaseBooleanStrictFacts | Falsy,
+            FalseFacts = BaseBooleanFacts | Falsy,
+            TrueStrictFacts = BaseBooleanStrictFacts | Truthy,
+            TrueFacts = BaseBooleanFacts | Truthy,
             SymbolStrictFacts = TypeofEQSymbol | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull | Truthy,
             SymbolFacts = SymbolStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
             ObjectStrictFacts = TypeofEQObject | TypeofEQHostObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | NEUndefined | NENull | NEUndefinedOrNull | Truthy,
@@ -2871,7 +2891,7 @@ namespace ts {
             }
             // In strict null checking mode, if a default value of a non-undefined type is specified, remove
             // undefined from the final type.
-            if (strictNullChecks && declaration.initializer && !(getCombinedTypeFlags(checkExpressionCached(declaration.initializer)) & TypeFlags.Undefined)) {
+            if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkExpressionCached(declaration.initializer)) & TypeFlags.Undefined)) {
                 type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
             return type;
@@ -2914,7 +2934,7 @@ namespace ts {
         }
 
         function addOptionality(type: Type, optional: boolean): Type {
-            return strictNullChecks && optional ? addTypeKind(type, TypeFlags.Undefined) : type;
+            return strictNullChecks && optional ? includeFalsyTypes(type, TypeFlags.Undefined) : type;
         }
 
         // Return the inferred type for a variable, parameter, or property declaration
@@ -3253,7 +3273,7 @@ namespace ts {
                 else {
                     const type = createObjectType(TypeFlags.Anonymous, symbol);
                     links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ?
-                        addTypeKind(type, TypeFlags.Undefined) : type;
+                        includeFalsyTypes(type, TypeFlags.Undefined) : type;
                 }
             }
             return links.type;
@@ -6769,14 +6789,6 @@ namespace ts {
             return true;
         }
 
-        function getCombinedFlagsOfTypes(types: Type[]) {
-            let flags: TypeFlags = 0;
-            for (const t of types) {
-                flags |= t.flags;
-            }
-            return flags;
-        }
-
         function getCommonSupertype(types: Type[]): Type {
             if (!strictNullChecks) {
                 return forEach(types, t => isSupertypeOfEach(t, types) ? t : undefined);
@@ -6786,7 +6798,7 @@ namespace ts {
                 return getUnionType(types);
             }
             const supertype = forEach(primaryTypes, t => isSupertypeOfEach(t, primaryTypes) ? t : undefined);
-            return supertype && addTypeKind(supertype, getCombinedFlagsOfTypes(types) & TypeFlags.Nullable);
+            return supertype && includeFalsyTypes(supertype, getFalsyFlagsOfTypes(types) & TypeFlags.Nullable);
         }
 
         function reportNoCommonSupertypeError(types: Type[], errorLocation: Node, errorMessageChainHead: DiagnosticMessageChain): void {
@@ -6869,22 +6881,40 @@ namespace ts {
             return !!(type.flags & TypeFlags.Tuple);
         }
 
-        function getCombinedTypeFlags(type: Type): TypeFlags {
-            return type.flags & TypeFlags.Union ? getCombinedFlagsOfTypes((<UnionType>type).types) : type.flags;
+        function getFalsyFlagsOfTypes(types: Type[]): TypeFlags {
+            let result: TypeFlags = 0;
+            for (const t of types) {
+                result |= getFalsyFlags(t);
+            }
+            return result;
         }
 
-        function addTypeKind(type: Type, kind: TypeFlags) {
-            if ((getCombinedTypeFlags(type) & kind) === kind) {
+        function getFalsyFlags(type: Type): TypeFlags {
+            return type === emptyStringType ? TypeFlags.StringLiteral :
+                type === zeroType ? TypeFlags.NumberLiteral :
+                type === falseType ? TypeFlags.BooleanLiteral :
+                type.flags & TypeFlags.Union ? getFalsyFlagsOfTypes((<UnionType>type).types) :
+                type.flags & TypeFlags.AlwaysPossiblyFalsy;
+        }
+
+        function includeFalsyTypes(type: Type, flags: TypeFlags) {
+            if ((getFalsyFlags(type) & flags) === flags) {
                 return type;
             }
             const types = [type];
-            if (kind & TypeFlags.String) types.push(stringType);
-            if (kind & TypeFlags.Number) types.push(numberType);
-            if (kind & TypeFlags.Boolean) types.push(booleanType);
-            if (kind & TypeFlags.Void) types.push(voidType);
-            if (kind & TypeFlags.Undefined) types.push(undefinedType);
-            if (kind & TypeFlags.Null) types.push(nullType);
+            if (flags & TypeFlags.StringLike) types.push(emptyStringType);
+            if (flags & TypeFlags.NumberLike) types.push(zeroType);
+            if (flags & TypeFlags.BooleanLike) types.push(falseType);
+            if (flags & TypeFlags.Void) types.push(voidType);
+            if (flags & TypeFlags.Undefined) types.push(undefinedType);
+            if (flags & TypeFlags.Null) types.push(nullType);
             return getUnionType(types);
+        }
+
+        function removeDefinitelyFalsyTypes(type: Type): Type {
+            return getFalsyFlags(type) & TypeFlags.DefinitelyFalsy ?
+                filterType(type, t => !(getFalsyFlags(t) & TypeFlags.DefinitelyFalsy)) :
+                type;
         }
 
         function getNonNullableType(type: Type): Type {
@@ -7543,14 +7573,29 @@ namespace ts {
 
         function getTypeFacts(type: Type): TypeFacts {
             const flags = type.flags;
-            if (flags & TypeFlags.StringLike) {
+            if (flags & TypeFlags.String) {
                 return strictNullChecks ? TypeFacts.StringStrictFacts : TypeFacts.StringFacts;
             }
-            if (flags & TypeFlags.NumberLike) {
+            if (flags & TypeFlags.StringLiteral) {
+                return strictNullChecks ?
+                    type === emptyStringType ? TypeFacts.EmptyStringStrictFacts : TypeFacts.NonEmptyStringStrictFacts :
+                    type === emptyStringType ? TypeFacts.EmptyStringFacts : TypeFacts.NonEmptyStringFacts;
+            }
+            if (flags & TypeFlags.Number) {
                 return strictNullChecks ? TypeFacts.NumberStrictFacts : TypeFacts.NumberFacts;
             }
-            if (flags & TypeFlags.BooleanLike) {
+            if (flags & TypeFlags.NumberLike) {
+                return strictNullChecks ?
+                    type === zeroType ? TypeFacts.ZeroStrictFacts : TypeFacts.NonZeroStrictFacts :
+                    type === zeroType ? TypeFacts.ZeroFacts : TypeFacts.NonZeroFacts;
+            }
+            if (flags & TypeFlags.Boolean) {
                 return strictNullChecks ? TypeFacts.BooleanStrictFacts : TypeFacts.BooleanFacts;
+            }
+            if (flags & TypeFlags.BooleanLike) {
+                return strictNullChecks ?
+                    type === falseType ? TypeFacts.FalseStrictFacts : TypeFacts.TrueStrictFacts :
+                    type === falseType ? TypeFacts.FalseFacts : TypeFacts.TrueFacts;
             }
             if (flags & TypeFlags.ObjectType) {
                 const resolved = resolveStructuredTypeMembers(type);
@@ -7753,7 +7798,7 @@ namespace ts {
             if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
-            const initialType = assumeInitialized ? declaredType : addTypeKind(declaredType, TypeFlags.Undefined);
+            const initialType = assumeInitialized ? declaredType : includeFalsyTypes(declaredType, TypeFlags.Undefined);
             const visitedFlowStart = visitedFlowCount;
             const result = getTypeAtFlowNode(reference.flowNode);
             visitedFlowCount = visitedFlowStart;
@@ -8330,7 +8375,7 @@ namespace ts {
                 getRootDeclaration(declaration).kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
                 !isDeclarationIncludedInFlow(node, declaration, includeOuterFunctions);
             const flowType = getFlowTypeOfReference(node, type, assumeInitialized, includeOuterFunctions);
-            if (!assumeInitialized && !(getCombinedTypeFlags(type) & TypeFlags.Undefined) && getCombinedTypeFlags(flowType) & TypeFlags.Undefined) {
+            if (!assumeInitialized && !(getFalsyFlags(type) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
                 error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
                 // Return the declared type to reduce follow-on errors
                 return type;
@@ -10146,7 +10191,7 @@ namespace ts {
         function checkNonNullExpression(node: Expression | QualifiedName) {
             const type = checkExpression(node);
             if (strictNullChecks) {
-                const kind = getCombinedTypeFlags(type) & TypeFlags.Nullable;
+                const kind = getFalsyFlags(type) & TypeFlags.Nullable;
                 if (kind) {
                     error(node, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
                         Diagnostics.Object_is_possibly_null_or_undefined :
@@ -11686,7 +11731,7 @@ namespace ts {
             if (strictNullChecks) {
                 const declaration = symbol.valueDeclaration;
                 if (declaration && (<VariableLikeDeclaration>declaration).initializer) {
-                    return addTypeKind(type, TypeFlags.Undefined);
+                    return includeFalsyTypes(type, TypeFlags.Undefined);
                 }
             }
             return type;
@@ -12653,9 +12698,9 @@ namespace ts {
                 case SyntaxKind.InKeyword:
                     return checkInExpression(left, right, leftType, rightType);
                 case SyntaxKind.AmpersandAmpersandToken:
-                    return strictNullChecks ? addTypeKind(rightType, getCombinedTypeFlags(leftType) & TypeFlags.Falsy) : rightType;
+                    return strictNullChecks ? includeFalsyTypes(rightType, getFalsyFlags(leftType)) : rightType;
                 case SyntaxKind.BarBarToken:
-                    return getUnionType([getNonNullableType(leftType), rightType]);
+                    return getUnionType([strictNullChecks ? removeDefinitelyFalsyTypes(leftType) : leftType, rightType]);
                 case SyntaxKind.EqualsToken:
                     checkAssignmentOperator(rightType);
                     return getRegularTypeOfObjectLiteral(rightType);

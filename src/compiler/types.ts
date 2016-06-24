@@ -2237,7 +2237,9 @@ namespace ts {
         Nullable = Undefined | Null,
         Literal = StringLiteral | NumberLiteral | BooleanLiteral,
         /* @internal */
-        Falsy = Void | Undefined | Null,       // TODO: Add false, 0, and ""
+        DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
+        PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
+        AlwaysPossiblyFalsy = String | Number | Boolean | Void | Undefined | Null,
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
