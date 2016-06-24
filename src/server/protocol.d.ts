@@ -904,7 +904,6 @@ declare namespace ts.server.protocol {
      * Arguments of a signature help request.
      */
     export interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
-
     }
 
     /**
@@ -921,6 +920,32 @@ declare namespace ts.server.protocol {
      */
     export interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
+    }
+
+    /**
+      * Synchronous request for semantic diagnostics of one file.
+      */
+    export interface SemanticDiagnosticsSyncRequest extends FileRequest {
+    }
+
+    /**
+      * Response object for synchronous sematic diagnostics request.
+      */
+    export interface SemanticDiagnosticsSyncResponse extends Response {
+        body?: Diagnostic[];
+    }
+
+    /**
+      * Synchronous request for syntactic diagnostics of one file.
+      */
+    export interface SyntacticDiagnosticsSyncRequest extends FileRequest {
+    }
+
+    /**
+      * Response object for synchronous syntactic diagnostics request.
+      */
+    export interface SyntacticDiagnosticsSyncResponse extends Response {
+        body?: Diagnostic[];
     }
 
     /**

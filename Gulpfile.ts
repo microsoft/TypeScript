@@ -14,7 +14,7 @@ import tsc = require("gulp-typescript");
 declare module "gulp-typescript" {
     interface Settings {
         stripInternal?: boolean;
-        newLine?: number;
+        newLine?: string;
     }
     interface CompileStream extends NodeJS.ReadWriteStream {} // Either gulp or gulp-typescript has some odd typings which don't reflect reality, making this required
 }
@@ -310,7 +310,7 @@ function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): ts
     }
     if (!useDebugMode) {
         if (copy.removeComments === undefined) copy.removeComments = true;
-        copy.newLine = 1;
+        copy.newLine = "lf";
     }
     else {
         copy.preserveConstEnums = true;
@@ -443,7 +443,7 @@ gulp.task(builtLocalCompiler, false, [servicesFile], () => {
 });
 
 gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], () => {
-    const servicesProject = tsc.createProject("src/services/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/false));
+    const servicesProject = tsc.createProject("src/services/tsconfig.json", getCompilerSettings({ removeComments: false }, /*useBuiltCompiler*/false));
     const {js, dts} = servicesProject.src()
         .pipe(newer(servicesFile))
         .pipe(sourcemaps.init())
@@ -548,8 +548,8 @@ gulp.task("clean", "Cleans the compiler output, declare files, and tests", [], (
     return del([builtDirectory]);
 });
 
-gulp.task("useDebugMode", false, [], (done) => { useDebugMode = false; done(); });
-gulp.task("dontUseDebugMode", false, [], (done) => { useDebugMode = true; done(); });
+gulp.task("useDebugMode", false, [], (done) => { useDebugMode = true; done(); });
+gulp.task("dontUseDebugMode", false, [], (done) => { useDebugMode = false; done(); });
 
 gulp.task("VerifyLKG", false, [], () => {
     const expectedFiles = [builtLocalCompiler, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile].concat(libraryTargets);
@@ -566,7 +566,7 @@ gulp.task("VerifyLKG", false, [], () => {
 
 gulp.task("LKGInternal", false, ["lib", "local", "lssl"]);
 
-gulp.task("LKG", "Makes a new LKG out of the built js files", ["dontUseDebugMode"], () => {
+gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUseDebugMode"], () => {
     return runSequence("LKGInternal", "VerifyLKG");
 });
 
