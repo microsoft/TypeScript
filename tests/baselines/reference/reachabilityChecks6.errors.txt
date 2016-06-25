@@ -5,11 +5,12 @@ tests/cases/compiler/reachabilityChecks6.ts(52,10): error TS7030: Not all code p
 tests/cases/compiler/reachabilityChecks6.ts(80,10): error TS7030: Not all code paths return a value.
 tests/cases/compiler/reachabilityChecks6.ts(86,13): error TS7027: Unreachable code detected.
 tests/cases/compiler/reachabilityChecks6.ts(94,10): error TS7030: Not all code paths return a value.
+tests/cases/compiler/reachabilityChecks6.ts(97,13): error TS7027: Unreachable code detected.
 tests/cases/compiler/reachabilityChecks6.ts(116,10): error TS7030: Not all code paths return a value.
 tests/cases/compiler/reachabilityChecks6.ts(123,13): error TS7027: Unreachable code detected.
 
 
-==== tests/cases/compiler/reachabilityChecks6.ts (9 errors) ====
+==== tests/cases/compiler/reachabilityChecks6.ts (10 errors) ====
     
     function f0(x) {
         while (true);
@@ -121,6 +122,8 @@ tests/cases/compiler/reachabilityChecks6.ts(123,13): error TS7027: Unreachable c
         try {
             while (false) {
                 return 1;
+                ~~~~~~
+!!! error TS7027: Unreachable code detected.
             }
         }
         catch (e) {

@@ -2,7 +2,8 @@
 /// <reference path="runnerbase.ts" />
 /// <reference path="loggedIO.ts" />
 /// <reference path="..\compiler\commandLineParser.ts"/>
-/* tslint:disable:no-null */
+// In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
+/* tslint:disable:no-null-keyword */
 
 namespace RWC {
     function runWithIOLog(ioLog: IOLog, fn: (oldIO: Harness.IO) => void) {
@@ -74,7 +75,12 @@ namespace RWC {
                     if (tsconfigFile) {
                         const tsconfigFileContents = getHarnessCompilerInputUnit(tsconfigFile.path);
                         const parsedTsconfigFileContents = ts.parseConfigFileTextToJson(tsconfigFile.path, tsconfigFileContents.content);
-                        const configParseResult = ts.parseJsonConfigFileContent(parsedTsconfigFileContents.config, Harness.IO, ts.getDirectoryPath(tsconfigFile.path));
+                        const configParseHost: ts.ParseConfigHost = {
+                            useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
+                            fileExists: Harness.IO.fileExists,
+                            readDirectory: Harness.IO.readDirectory,
+                        };
+                        const configParseResult = ts.parseJsonConfigFileContent(parsedTsconfigFileContents.config, configParseHost, ts.getDirectoryPath(tsconfigFile.path));
                         fileNames = configParseResult.fileNames;
                         opts.options = ts.extend(opts.options, configParseResult.options);
                     }
@@ -123,7 +129,7 @@ namespace RWC {
                     opts.options.noLib = true;
 
                     // Emit the results
-                    compilerOptions = null;
+                    compilerOptions = undefined;
                     const output = Harness.Compiler.compileFiles(
                         inputFiles,
                         otherFiles,
@@ -139,7 +145,7 @@ namespace RWC {
 
                 function getHarnessCompilerInputUnit(fileName: string): Harness.Compiler.TestFile {
                     const unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileName));
-                    let content: string = null;
+                    let content: string;
                     try {
                         content = Harness.IO.readFile(unitName);
                     }
@@ -190,8 +196,9 @@ namespace RWC {
                     if (compilerResult.errors.length === 0) {
                         return null;
                     }
-
-                    return Harness.Compiler.getErrorBaseline(inputFiles.concat(otherFiles), compilerResult.errors);
+                    // Do not include the library in the baselines to avoid noise
+                    const baselineFiles = inputFiles.concat(otherFiles).filter(f => !Harness.isDefaultLibraryFile(f.unitName));
+                    return Harness.Compiler.getErrorBaseline(baselineFiles, compilerResult.errors);
                 }, false, baselineOpts);
             });
 
@@ -222,12 +229,20 @@ namespace RWC {
 class RWCRunner extends RunnerBase {
     private static sourcePath = "internal/cases/rwc/";
 
+    public enumerateTestFiles() {
+        return Harness.IO.listFiles(RWCRunner.sourcePath, /.+\.json$/);
+    }
+
+    public kind(): TestRunnerKind {
+        return "rwc";
+    }
+
     /** Setup the runner's tests so that they are ready to be executed by the harness
      *  The first test should be a describe/it block that sets up the harness's compiler instance appropriately
      */
     public initializeTests(): void {
         // Read in and evaluate the test list
-        const testList = Harness.IO.listFiles(RWCRunner.sourcePath, /.+\.json$/);
+        const testList = this.enumerateTestFiles();
         for (let i = 0; i < testList.length; i++) {
             this.runTest(testList[i]);
         }

@@ -19,7 +19,7 @@
 let debugObjectHost = (<any>this);
 
 // We need to use 'null' to interface with the managed side.
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 /* tslint:disable:no-in-operator */
 
 /* @internal */
@@ -61,6 +61,7 @@ namespace ts {
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
+        getDirectories(path: string): string[];
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
         getProjectVersion?(): string;
@@ -79,8 +80,9 @@ namespace ts {
          * @param exclude A JSON encoded string[] containing the paths to exclude
          *  when enumerating the directory.
          */
-        readDirectory(rootDir: string, extension: string, exclude?: string, depth?: number): string;
-
+        readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
+        useCaseSensitiveFileNames?(): boolean;
+        getCurrentDirectory(): string;
         trace(s: string): void;
     }
 
@@ -163,7 +165,7 @@ namespace ts {
 
         /**
          * Returns a JSON-encoded value of the type:
-         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
+         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean, isDefinition?: boolean }[]
          */
         getReferencesAtPosition(fileName: string, position: number): string;
 
@@ -220,6 +222,13 @@ namespace ts {
          * Returns JSON-encoded value of the type TextInsertion.
          */
         getDocCommentTemplateAtPosition(fileName: string, position: number): string;
+
+        /**
+         * Returns JSON-encoded boolean to indicate whether we should support brace location
+         * at the current position.
+         * E.g. we don't want brace completion inside string-literals, comments, etc.
+         */
+        isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string;
 
         getEmitOutput(fileName: string): string;
     }
@@ -287,7 +296,7 @@ namespace ts {
 
         constructor(private shimHost: LanguageServiceShimHost) {
             // if shimHost is a COM object then property check will become method call with no arguments.
-            // 'in' does not have this effect. 
+            // 'in' does not have this effect.
             if ("getModuleResolutionsForFile" in this.shimHost) {
                 this.resolveModuleNames = (moduleNames: string[], containingFile: string) => {
                     const resolutionsInFile = <Map<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
@@ -393,6 +402,10 @@ namespace ts {
             return this.shimHost.getCurrentDirectory();
         }
 
+        public getDirectories(path: string): string[] {
+            return this.shimHost.getDirectories(path);
+        }
+
         public getDefaultLibFileName(options: CompilerOptions): string {
             return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
         }
@@ -424,24 +437,47 @@ namespace ts {
     export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost {
 
         public directoryExists: (directoryName: string) => boolean;
+        public realpath: (path: string) => string;
+        public useCaseSensitiveFileNames: boolean;
 
         constructor(private shimHost: CoreServicesShimHost) {
+        this.useCaseSensitiveFileNames = this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
             if ("directoryExists" in this.shimHost) {
                 this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
             }
+            if ("realpath" in this.shimHost) {
+                this.realpath = path => this.shimHost.realpath(path);
+            }
         }
 
-        public readDirectory(rootDir: string, extension: string, exclude: string[], depth?: number): string[] {
+        public readDirectory(rootDir: string, extensions: string[], exclude: string[], include: string[], depth?: number): string[] {
             // Wrap the API changes for 2.0 release. This try/catch
             // should be removed once TypeScript 2.0 has shipped.
-            let encoded: string;
             try {
-                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude), depth);
+                const pattern = getFileMatcherPatterns(rootDir, extensions, exclude, include,
+                    this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
+                return JSON.parse(this.shimHost.readDirectory(
+                    rootDir,
+                    JSON.stringify(extensions),
+                    JSON.stringify(pattern.basePaths),
+                    pattern.excludePattern,
+                    pattern.includeFilePattern,
+                    pattern.includeDirectoryPattern,
+                    depth
+                ));
             }
             catch (e) {
-                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+                const results: string[] = [];
+                for (const extension of extensions) {
+                    for (const file of this.readDirectoryFallback(rootDir, extension, exclude))
+                    {
+                        if (!contains(results, file)) {
+                            results.push(file);
+                        }
+                    }
+                }
+                return results;
             }
-            return JSON.parse(encoded);
         }
 
         public fileExists(fileName: string): boolean {
@@ -450,6 +486,10 @@ namespace ts {
 
         public readFile(fileName: string): string {
             return this.shimHost.readFile(fileName);
+        }
+
+        private readDirectoryFallback(rootDir: string, extension: string, exclude: string[]) {
+            return JSON.parse(this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude)));
         }
     }
 
@@ -733,6 +773,13 @@ namespace ts {
             );
         }
 
+        public isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string {
+            return this.forwardJSONCall(
+                `isValidBraceCompletionAtPosition('${fileName}', ${position}, ${openingBrace})`,
+                () => this.languageService.isValidBraceCompletionAtPosition(fileName, position, openingBrace)
+            );
+        }
+
         /// GET SMART INDENT
         public getIndentationAtPosition(fileName: string, position: number, options: string /*Services.EditorOptions*/): string {
             return this.forwardJSONCall(
@@ -943,7 +990,7 @@ namespace ts {
             return this.forwardJSONCall(
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
-                    // for now treat files as JavaScript 
+                    // for now treat files as JavaScript
                     const result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
                     return {
                         referencedFiles: this.convertFileReferences(result.referencedFiles),
@@ -983,6 +1030,7 @@ namespace ts {
                             options: {},
                             typingOptions: {},
                             files: [],
+                            raw: {},
                             errors: [realizeDiagnostic(result.error, "\r\n")]
                         };
                     }
@@ -994,6 +1042,7 @@ namespace ts {
                         options: configFile.options,
                         typingOptions: configFile.typingOptions,
                         files: configFile.fileNames,
+                        raw: configFile.raw,
                         errors: realizeDiagnostics(configFile.errors, "\r\n")
                     };
                 });
