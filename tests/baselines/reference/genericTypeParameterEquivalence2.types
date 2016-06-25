@@ -26,10 +26,10 @@ function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
         return f(g.apply(null, a));
 >f(g.apply(null, a)) : C
 >f : (b: B) => C
->g.apply(null, a) : any
->g.apply : (thisArg: any, argArray?: any) => any
+>g.apply(null, a) : B
+>g.apply : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, argArray?: any): U; (this: Function, thisArg: any, argArray?: any): any; }
 >g : (a: A) => B
->apply : (thisArg: any, argArray?: any) => any
+>apply : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, argArray?: any): U; (this: Function, thisArg: any, argArray?: any): any; }
 >null : null
 >a : A
 

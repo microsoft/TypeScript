@@ -3,18 +3,18 @@
 
 interface Base { foo: string; }
 >Base : Symbol(Base, Decl(subtypingWithObjectMembersOptionality3.ts, 0, 0))
->foo : Symbol(foo, Decl(subtypingWithObjectMembersOptionality3.ts, 2, 16))
+>foo : Symbol(Base.foo, Decl(subtypingWithObjectMembersOptionality3.ts, 2, 16))
 
 interface Derived extends Base { bar: string; }
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality3.ts, 2, 31))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembersOptionality3.ts, 0, 0))
->bar : Symbol(bar, Decl(subtypingWithObjectMembersOptionality3.ts, 3, 32))
+>bar : Symbol(Derived.bar, Decl(subtypingWithObjectMembersOptionality3.ts, 3, 32))
 
 interface T {
 >T : Symbol(T, Decl(subtypingWithObjectMembersOptionality3.ts, 3, 47))
 
     Foo?: Base;
->Foo : Symbol(Foo, Decl(subtypingWithObjectMembersOptionality3.ts, 5, 13))
+>Foo : Symbol(T.Foo, Decl(subtypingWithObjectMembersOptionality3.ts, 5, 13))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembersOptionality3.ts, 0, 0))
 }
 
@@ -23,7 +23,7 @@ interface S extends T {
 >T : Symbol(T, Decl(subtypingWithObjectMembersOptionality3.ts, 3, 47))
 
     Foo2: Derived // ok
->Foo2 : Symbol(Foo2, Decl(subtypingWithObjectMembersOptionality3.ts, 9, 23))
+>Foo2 : Symbol(S.Foo2, Decl(subtypingWithObjectMembersOptionality3.ts, 9, 23))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembersOptionality3.ts, 2, 31))
 }
 

@@ -24,9 +24,9 @@ function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
 
         return f(g.apply(null, a));
 >f : Symbol(f, Decl(genericTypeParameterEquivalence2.ts, 1, 26))
->g.apply : Symbol(Function.apply, Decl(lib.d.ts, --, --))
+>g.apply : Symbol(Function.apply, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >g : Symbol(g, Decl(genericTypeParameterEquivalence2.ts, 1, 41))
->apply : Symbol(Function.apply, Decl(lib.d.ts, --, --))
+>apply : Symbol(Function.apply, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >a : Symbol(a, Decl(genericTypeParameterEquivalence2.ts, 2, 21))
 
     };

@@ -29,7 +29,7 @@ type T2 = ({ a });
 >a : any
 
 type F2 = ({ a }) => void;
->F2 : ({ a }: { a: any; }) => void
+>F2 : ({a}: { a: any; }) => void
 >a : any
 
 type T3 = ([{ a: b }, { b: a }]);
@@ -40,7 +40,7 @@ type T3 = ([{ a: b }, { b: a }]);
 >a : a
 
 type F3 = ([{ a: b }, { b: a }]) => void;
->F3 : ([{ a: b }, { b: a }]: [{ a: any; }, { b: any; }]) => void
+>F3 : ([{a: b}, {b: a}]: [{ a: any; }, { b: any; }]) => void
 >a : any
 >b : any
 >b : any
@@ -53,13 +53,13 @@ type T4 = ([{ a: [b, c] }]);
 >c : c
 
 type F4 = ([{ a: [b, c] }]) => void;
->F4 : ([{ a: [b, c] }]: [{ a: [any, any]; }]) => void
+>F4 : ([{a: [b, c]}]: [{ a: [any, any]; }]) => void
 >a : any
 >b : any
 >c : any
 
 type C1 = new ([{ a: [b, c] }]) => void;
->C1 : new ([{ a: [b, c] }]: [{ a: [any, any]; }]) => void
+>C1 : new ([{a: [b, c]}]: [{ a: [any, any]; }]) => void
 >a : any
 >b : any
 >c : any

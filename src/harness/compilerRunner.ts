@@ -88,7 +88,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 toBeCompiled = [];
                 otherFiles = [];
 
-                if (/require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
+                if (testCaseContent.settings["noImplicitReferences"] || /require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
                     toBeCompiled.push({ unitName: this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content });
                     units.forEach(unit => {
                         if (unit.name !== lastUnit.name) {
@@ -100,6 +100,10 @@ class CompilerBaselineRunner extends RunnerBase {
                     toBeCompiled = units.map(unit => {
                         return { unitName: this.makeUnitName(unit.name, rootDir), content: unit.content };
                     });
+                }
+
+                if (tsConfigOptions && tsConfigOptions.configFilePath !== undefined) {
+                    tsConfigOptions.configFilePath = ts.combinePaths(rootDir, tsConfigOptions.configFilePath);
                 }
 
                 const output = Harness.Compiler.compileFiles(
@@ -140,7 +144,7 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it (`Correct module resolution tracing for ${fileName}`, () => {
-                if (options.traceModuleResolution) {
+                if (options.traceResolution) {
                     Harness.Baseline.runBaseline("Correct sourcemap content for " + fileName, justName.replace(/\.tsx?$/, ".trace.json"), () => {
                         return JSON.stringify(result.traceResults || [], undefined, 4);
                     });

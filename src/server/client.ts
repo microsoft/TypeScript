@@ -613,7 +613,7 @@ namespace ts.server {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
 
-        getSourceFile(fileName: string): SourceFile {
+        getNonBoundSourceFile(fileName: string): SourceFile {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
 

@@ -4,7 +4,7 @@ interface A<T> {
 >T : Symbol(T, Decl(reorderProperties.ts, 0, 12))
 
     x: T
->x : Symbol(x, Decl(reorderProperties.ts, 0, 16))
+>x : Symbol(A.x, Decl(reorderProperties.ts, 0, 16))
 >T : Symbol(T, Decl(reorderProperties.ts, 0, 12))
 }
 
@@ -13,7 +13,7 @@ interface B<T> {
 >T : Symbol(T, Decl(reorderProperties.ts, 4, 12))
 
     x: T
->x : Symbol(x, Decl(reorderProperties.ts, 4, 16))
+>x : Symbol(B.x, Decl(reorderProperties.ts, 4, 16))
 >T : Symbol(T, Decl(reorderProperties.ts, 4, 12))
 }
 
@@ -25,7 +25,7 @@ interface C<S> extends A<D<S>> {
 >S : Symbol(S, Decl(reorderProperties.ts, 8, 12))
 
     y: S
->y : Symbol(y, Decl(reorderProperties.ts, 8, 32))
+>y : Symbol(C.y, Decl(reorderProperties.ts, 8, 32))
 >S : Symbol(S, Decl(reorderProperties.ts, 8, 12))
 }
 
@@ -37,7 +37,7 @@ interface D<S> extends B<C<S>> {
 >S : Symbol(S, Decl(reorderProperties.ts, 12, 12))
 
     y: S
->y : Symbol(y, Decl(reorderProperties.ts, 12, 32))
+>y : Symbol(D.y, Decl(reorderProperties.ts, 12, 32))
 >S : Symbol(S, Decl(reorderProperties.ts, 12, 12))
 }
 

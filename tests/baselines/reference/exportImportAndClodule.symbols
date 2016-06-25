@@ -6,7 +6,7 @@ module K {
 >L : Symbol(L, Decl(exportImportAndClodule.ts, 0, 10), Decl(exportImportAndClodule.ts, 3, 5))
 
         constructor(public name: string) { }
->name : Symbol(name, Decl(exportImportAndClodule.ts, 2, 20))
+>name : Symbol(L.name, Decl(exportImportAndClodule.ts, 2, 20))
     }
     export module L {
 >L : Symbol(L, Decl(exportImportAndClodule.ts, 0, 10), Decl(exportImportAndClodule.ts, 3, 5))
@@ -18,10 +18,10 @@ module K {
 >Point : Symbol(Point, Decl(exportImportAndClodule.ts, 5, 26))
 
             x: number;
->x : Symbol(x, Decl(exportImportAndClodule.ts, 6, 32))
+>x : Symbol(Point.x, Decl(exportImportAndClodule.ts, 6, 32))
 
             y: number;
->y : Symbol(y, Decl(exportImportAndClodule.ts, 7, 22))
+>y : Symbol(Point.y, Decl(exportImportAndClodule.ts, 7, 22))
         }
     }
 }

@@ -29,10 +29,10 @@ declare module A {
 >y : Symbol(y, Decl(class.d.ts, 2, 30))
 
         x: number;
->x : Symbol(x, Decl(class.d.ts, 2, 42))
+>x : Symbol(Point.x, Decl(class.d.ts, 2, 42))
 
         y: number;
->y : Symbol(y, Decl(class.d.ts, 3, 18))
+>y : Symbol(Point.y, Decl(class.d.ts, 3, 18))
     }
 }
 

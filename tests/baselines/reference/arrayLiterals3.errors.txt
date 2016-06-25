@@ -16,8 +16,8 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
   Types of property 'push' are incompatible.
     Type '(...items: (number | string)[]) => number' is not assignable to type '(...items: Number[]) => number'.
       Types of parameters 'items' and 'items' are incompatible.
-        Type 'number | string' is not assignable to type 'Number'.
-          Type 'string' is not assignable to type 'Number'.
+        Type 'Number' is not assignable to type 'number | string'.
+          Type 'Number' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts (6 errors) ====
@@ -79,6 +79,6 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
 !!! error TS2322:   Types of property 'push' are incompatible.
 !!! error TS2322:     Type '(...items: (number | string)[]) => number' is not assignable to type '(...items: Number[]) => number'.
 !!! error TS2322:       Types of parameters 'items' and 'items' are incompatible.
-!!! error TS2322:         Type 'number | string' is not assignable to type 'Number'.
-!!! error TS2322:           Type 'string' is not assignable to type 'Number'.
+!!! error TS2322:         Type 'Number' is not assignable to type 'number | string'.
+!!! error TS2322:           Type 'Number' is not assignable to type 'string'.
     

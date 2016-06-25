@@ -3,7 +3,7 @@ class Comment {
 >Comment : Symbol(Comment, Decl(staticInstanceResolution.ts, 0, 0))
 
     public getDocCommentText()
->getDocCommentText : Symbol(getDocCommentText, Decl(staticInstanceResolution.ts, 0, 15))
+>getDocCommentText : Symbol(Comment.getDocCommentText, Decl(staticInstanceResolution.ts, 0, 15))
     {
 
     }

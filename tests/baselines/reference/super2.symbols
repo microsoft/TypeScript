@@ -4,13 +4,13 @@ class Base5 {
 >Base5 : Symbol(Base5, Decl(super2.ts, 0, 0))
 
     public x() {
->x : Symbol(x, Decl(super2.ts, 1, 13))
+>x : Symbol(Base5.x, Decl(super2.ts, 1, 13))
 
         return "BaseX";
     }
     
     public y() {
->y : Symbol(y, Decl(super2.ts, 4, 5))
+>y : Symbol(Base5.y, Decl(super2.ts, 4, 5))
 
         return "BaseY";
     }
@@ -21,7 +21,7 @@ class Sub5 extends Base5 {
 >Base5 : Symbol(Base5, Decl(super2.ts, 0, 0))
 
     public x() {
->x : Symbol(x, Decl(super2.ts, 11, 26))
+>x : Symbol(Sub5.x, Decl(super2.ts, 11, 26))
 
         return "SubX";
     }
@@ -32,7 +32,7 @@ class SubSub5 extends Sub5 {
 >Sub5 : Symbol(Sub5, Decl(super2.ts, 9, 1))
 
     public x() {
->x : Symbol(x, Decl(super2.ts, 17, 28))
+>x : Symbol(SubSub5.x, Decl(super2.ts, 17, 28))
 
         return super.x();
 >super.x : Symbol(Sub5.x, Decl(super2.ts, 11, 26))
@@ -40,7 +40,7 @@ class SubSub5 extends Sub5 {
 >x : Symbol(Sub5.x, Decl(super2.ts, 11, 26))
     }
     public y() {
->y : Symbol(y, Decl(super2.ts, 20, 5))
+>y : Symbol(SubSub5.y, Decl(super2.ts, 20, 5))
 
         return super.y();
 >super.y : Symbol(Base5.y, Decl(super2.ts, 4, 5))
@@ -54,7 +54,7 @@ class Base6 {
 >Base6 : Symbol(Base6, Decl(super2.ts, 24, 1))
 
     public x() {
->x : Symbol(x, Decl(super2.ts, 27, 13))
+>x : Symbol(Base6.x, Decl(super2.ts, 27, 13))
 
         return "BaseX";
     }
@@ -65,7 +65,7 @@ class Sub6 extends Base6 {
 >Base6 : Symbol(Base6, Decl(super2.ts, 24, 1))
 
     public y() {
->y : Symbol(y, Decl(super2.ts, 33, 26))
+>y : Symbol(Sub6.y, Decl(super2.ts, 33, 26))
 
         return "SubY";
     }
@@ -76,7 +76,7 @@ class SubSub6 extends Sub6 {
 >Sub6 : Symbol(Sub6, Decl(super2.ts, 31, 1))
 
     public y() {
->y : Symbol(y, Decl(super2.ts, 39, 28))
+>y : Symbol(SubSub6.y, Decl(super2.ts, 39, 28))
 
         return super.y();
 >super.y : Symbol(Sub6.y, Decl(super2.ts, 33, 26))

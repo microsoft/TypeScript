@@ -3,7 +3,7 @@ class Base {
 >Base : Symbol(Base, Decl(derivedClassOverridesWithoutSubtype.ts, 0, 0))
 
     x: {
->x : Symbol(x, Decl(derivedClassOverridesWithoutSubtype.ts, 0, 12))
+>x : Symbol(Base.x, Decl(derivedClassOverridesWithoutSubtype.ts, 0, 12))
 
         foo: string;
 >foo : Symbol(foo, Decl(derivedClassOverridesWithoutSubtype.ts, 1, 8))
@@ -15,7 +15,7 @@ class Derived extends Base {
 >Base : Symbol(Base, Decl(derivedClassOverridesWithoutSubtype.ts, 0, 0))
 
     x: {
->x : Symbol(x, Decl(derivedClassOverridesWithoutSubtype.ts, 6, 28))
+>x : Symbol(Derived.x, Decl(derivedClassOverridesWithoutSubtype.ts, 6, 28))
 
         foo: any;
 >foo : Symbol(foo, Decl(derivedClassOverridesWithoutSubtype.ts, 7, 8))

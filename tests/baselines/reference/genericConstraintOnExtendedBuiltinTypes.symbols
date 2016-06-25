@@ -6,12 +6,12 @@ declare module EndGate {
 >ICloneable : Symbol(ICloneable, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 0, 24))
 
         Clone(): any;
->Clone : Symbol(Clone, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 1, 33))
+>Clone : Symbol(ICloneable.Clone, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 1, 33))
     }
 }
 
 interface Number extends EndGate.ICloneable { }
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(genericConstraintOnExtendedBuiltinTypes.ts, 4, 1))
+>Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(genericConstraintOnExtendedBuiltinTypes.ts, 4, 1))
 >EndGate.ICloneable : Symbol(EndGate.ICloneable, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 0, 24))
 >EndGate : Symbol(EndGate, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 0, 0), Decl(genericConstraintOnExtendedBuiltinTypes.ts, 6, 47), Decl(genericConstraintOnExtendedBuiltinTypes.ts, 17, 1))
 >ICloneable : Symbol(EndGate.ICloneable, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 0, 24))
@@ -26,7 +26,7 @@ module EndGate.Tweening {
 >ICloneable : Symbol(ICloneable, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 0, 24))
 
         private _from: T;
->_from : Symbol(_from, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 9, 45))
+>_from : Symbol(Tween._from, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 9, 45))
 >T : Symbol(T, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 9, 23))
 
 
@@ -35,9 +35,9 @@ module EndGate.Tweening {
 >T : Symbol(T, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 9, 23))
 
             this._from = from.Clone();
->this._from : Symbol(_from, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 9, 45))
+>this._from : Symbol(Tween._from, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 9, 45))
 >this : Symbol(Tween, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 8, 25))
->_from : Symbol(_from, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 9, 45))
+>_from : Symbol(Tween._from, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 9, 45))
 >from.Clone : Symbol(ICloneable.Clone, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 1, 33))
 >from : Symbol(from, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 13, 20))
 >Clone : Symbol(ICloneable.Clone, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 1, 33))

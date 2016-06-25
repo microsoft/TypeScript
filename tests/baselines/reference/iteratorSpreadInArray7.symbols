@@ -3,21 +3,21 @@ var array: symbol[];
 >array : Symbol(array, Decl(iteratorSpreadInArray7.ts, 0, 3))
 
 array.concat([...new SymbolIterator]);
->array.concat : Symbol(Array.concat, Decl(lib.d.ts, --, --))
+>array.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --))
 >array : Symbol(array, Decl(iteratorSpreadInArray7.ts, 0, 3))
->concat : Symbol(Array.concat, Decl(lib.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --))
 >SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInArray7.ts, 1, 38))
 
 class SymbolIterator {
 >SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInArray7.ts, 1, 38))
 
     next() {
->next : Symbol(next, Decl(iteratorSpreadInArray7.ts, 3, 22))
+>next : Symbol(SymbolIterator.next, Decl(iteratorSpreadInArray7.ts, 3, 22))
 
         return {
             value: Symbol(),
 >value : Symbol(value, Decl(iteratorSpreadInArray7.ts, 5, 16))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
             done: false
 >done : Symbol(done, Decl(iteratorSpreadInArray7.ts, 6, 28))
@@ -26,9 +26,9 @@ class SymbolIterator {
     }
 
     [Symbol.iterator]() {
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         return this;
 >this : Symbol(SymbolIterator, Decl(iteratorSpreadInArray7.ts, 1, 38))

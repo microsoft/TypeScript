@@ -9,7 +9,7 @@ namespace Harness.LanguageService {
         public editRanges: { length: number; textChangeRange: ts.TextChangeRange; }[] = [];
         private lineMap: number[] = undefined;
 
-        constructor(public fileName: string, public content: string) {
+        constructor(public fileName: string, public content: string, public isRootFile: boolean) {
             this.setContent(content);
         }
 
@@ -135,7 +135,13 @@ namespace Harness.LanguageService {
 
         public getFilenames(): string[] {
             const fileNames: string[] = [];
-            ts.forEachKey(this.fileNameToScript, (fileName) => { fileNames.push(fileName); });
+            ts.forEachValue(this.fileNameToScript, (scriptInfo) => {
+                if (scriptInfo.isRootFile) {
+                    // only include root files here
+                    // usually it means that we won't include lib.d.ts in the list of root files so it won't mess the computation of compilation root dir.
+                    fileNames.push(scriptInfo.fileName);
+                }
+            });
             return fileNames;
         }
 
@@ -143,8 +149,8 @@ namespace Harness.LanguageService {
             return ts.lookUp(this.fileNameToScript, fileName);
         }
 
-        public addScript(fileName: string, content: string): void {
-            this.fileNameToScript[fileName] = new ScriptInfo(fileName, content);
+        public addScript(fileName: string, content: string, isRootFile: boolean): void {
+            this.fileNameToScript[fileName] = new ScriptInfo(fileName, content, isRootFile);
         }
 
         public editScript(fileName: string, start: number, end: number, newText: string) {
@@ -177,7 +183,7 @@ namespace Harness.LanguageService {
         getCompilationSettings() { return this.settings; }
         getCancellationToken() { return this.cancellationToken; }
         getCurrentDirectory(): string { return ""; }
-        getDefaultLibFileName(): string { return ""; }
+        getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
         getScriptFileNames(): string[] { return this.getFilenames(); }
         getScriptSnapshot(fileName: string): ts.IScriptSnapshot {
             const script = this.getScriptInfo(fileName);
@@ -210,6 +216,7 @@ namespace Harness.LanguageService {
         private nativeHost: NativeLanguageServiceHost;
 
         public getModuleResolutionsForFile: (fileName: string) => string;
+        public getTypeReferenceDirectiveResolutionsForFile: (fileName: string) => string;
 
         constructor(preprocessToResolve: boolean, cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             super(cancellationToken, options);
@@ -236,12 +243,25 @@ namespace Harness.LanguageService {
                     }
                     return JSON.stringify(imports);
                 };
+                this.getTypeReferenceDirectiveResolutionsForFile = (fileName) => {
+                    const scriptInfo = this.getScriptInfo(fileName);
+                    const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ false);
+                    const resolutions: ts.Map<ts.ResolvedTypeReferenceDirective> = {};
+                    const settings = this.nativeHost.getCompilationSettings();
+                    for (const typeReferenceDirective of preprocessInfo.typeReferenceDirectives) {
+                        const resolutionInfo = ts.resolveTypeReferenceDirective(typeReferenceDirective.fileName, fileName, settings, moduleResolutionHost);
+                        if (resolutionInfo.resolvedTypeReferenceDirective.resolvedFileName) {
+                            resolutions[typeReferenceDirective.fileName] = resolutionInfo.resolvedTypeReferenceDirective;
+                        }
+                    }
+                    return JSON.stringify(resolutions);
+                };
             }
         }
 
         getFilenames(): string[] { return this.nativeHost.getFilenames(); }
         getScriptInfo(fileName: string): ScriptInfo { return this.nativeHost.getScriptInfo(fileName); }
-        addScript(fileName: string, content: string): void { this.nativeHost.addScript(fileName, content); }
+        addScript(fileName: string, content: string, isRootFile: boolean): void { this.nativeHost.addScript(fileName, content, isRootFile); }
         editScript(fileName: string, start: number, end: number, newText: string): void { this.nativeHost.editScript(fileName, start, end, newText); }
         positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToLineAndCharacter(fileName, position); }
 
@@ -423,7 +443,7 @@ namespace Harness.LanguageService {
         getProgram(): ts.Program {
             throw new Error("Program can not be marshaled across the shim layer.");
         }
-        getSourceFile(fileName: string): ts.SourceFile {
+        getNonBoundSourceFile(fileName: string): ts.SourceFile {
             throw new Error("SourceFile can not be marshaled across the shim layer.");
         }
         dispose(): void { this.shim.dispose({}); }
@@ -442,6 +462,7 @@ namespace Harness.LanguageService {
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo {
             let shimResult: {
                 referencedFiles: ts.IFileReference[];
+                typeReferenceDirectives: ts.IFileReference[];
                 importedFiles: ts.IFileReference[];
                 isLibFile: boolean;
             };
@@ -453,7 +474,8 @@ namespace Harness.LanguageService {
                 referencedFiles: [],
                 importedFiles: [],
                 ambientExternalModules: [],
-                isLibFile: shimResult.isLibFile
+                isLibFile: shimResult.isLibFile,
+                typeReferenceDirectives: []
             };
 
             ts.forEach(shimResult.referencedFiles, refFile => {
@@ -472,6 +494,13 @@ namespace Harness.LanguageService {
                 });
             });
 
+            ts.forEach(shimResult.typeReferenceDirectives, typeRefDirective => {
+                convertResult.importedFiles.push({
+                    fileName: typeRefDirective.path,
+                    pos: typeRefDirective.position,
+                    end: typeRefDirective.position + typeRefDirective.length
+                });
+            });
             return convertResult;
         }
     }

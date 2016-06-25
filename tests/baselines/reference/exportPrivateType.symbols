@@ -6,10 +6,10 @@ module foo {
 >C1 : Symbol(C1, Decl(exportPrivateType.ts, 0, 12))
 
         x: string;
->x : Symbol(x, Decl(exportPrivateType.ts, 1, 14))
+>x : Symbol(C1.x, Decl(exportPrivateType.ts, 1, 14))
 
         y: C1;
->y : Symbol(y, Decl(exportPrivateType.ts, 2, 18))
+>y : Symbol(C1.y, Decl(exportPrivateType.ts, 2, 18))
 >C1 : Symbol(C1, Decl(exportPrivateType.ts, 0, 12))
     }
  
@@ -17,7 +17,7 @@ module foo {
 >C2 : Symbol(C2, Decl(exportPrivateType.ts, 4, 5))
 
         test() { return true; }
->test : Symbol(test, Decl(exportPrivateType.ts, 6, 14))
+>test : Symbol(C2.test, Decl(exportPrivateType.ts, 6, 14))
     }
  
     interface I1 {
@@ -37,10 +37,10 @@ module foo {
 >I2 : Symbol(I2, Decl(exportPrivateType.ts, 13, 5))
 
         x: string;
->x : Symbol(x, Decl(exportPrivateType.ts, 15, 18))
+>x : Symbol(I2.x, Decl(exportPrivateType.ts, 15, 18))
 
         y: number;
->y : Symbol(y, Decl(exportPrivateType.ts, 16, 18))
+>y : Symbol(I2.y, Decl(exportPrivateType.ts, 16, 18))
     }
  
     // None of the types are exported, so per section 10.3, should all be errors

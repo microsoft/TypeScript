@@ -4,7 +4,7 @@ class C<T> {
 >T : Symbol(T, Decl(superWithGenericSpecialization.ts, 0, 8))
 
     x: T;
->x : Symbol(x, Decl(superWithGenericSpecialization.ts, 0, 12))
+>x : Symbol(C.x, Decl(superWithGenericSpecialization.ts, 0, 12))
 >T : Symbol(T, Decl(superWithGenericSpecialization.ts, 0, 8))
 }
 
@@ -14,7 +14,7 @@ class D<T> extends C<string> {
 >C : Symbol(C, Decl(superWithGenericSpecialization.ts, 0, 0))
 
     y: T;
->y : Symbol(y, Decl(superWithGenericSpecialization.ts, 4, 30))
+>y : Symbol(D.y, Decl(superWithGenericSpecialization.ts, 4, 30))
 >T : Symbol(T, Decl(superWithGenericSpecialization.ts, 4, 8))
 
     constructor() {

@@ -6,7 +6,7 @@ tests/cases/compiler/incompatibleTypes.ts(15,7): error TS2420: Class 'C2' incorr
   Types of property 'p1' are incompatible.
     Type '(n: number) => number' is not assignable to type '(s: string) => number'.
       Types of parameters 'n' and 's' are incompatible.
-        Type 'number' is not assignable to type 'string'.
+        Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/incompatibleTypes.ts(25,7): error TS2420: Class 'C3' incorrectly implements interface 'IFoo3'.
   Types of property 'p1' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -52,7 +52,7 @@ tests/cases/compiler/incompatibleTypes.ts(74,5): error TS2322: Type '(a: any) =>
 !!! error TS2420:   Types of property 'p1' are incompatible.
 !!! error TS2420:     Type '(n: number) => number' is not assignable to type '(s: string) => number'.
 !!! error TS2420:       Types of parameters 'n' and 's' are incompatible.
-!!! error TS2420:         Type 'number' is not assignable to type 'string'.
+!!! error TS2420:         Type 'string' is not assignable to type 'number'.
         public p1(n:number) {
             return 0;
         }

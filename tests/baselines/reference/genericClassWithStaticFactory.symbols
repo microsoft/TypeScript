@@ -7,36 +7,36 @@ module Editor {
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
 
         public next: List<T>;
->next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
 
         public prev: List<T>;
->prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
 
         private listFactory: ListFactory<T>;
->listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
+>listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 >ListFactory : Symbol(ListFactory, Decl(genericClassWithStaticFactory.ts, 106, 5))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
 
         constructor(public isHead: boolean, public data: T) {
->isHead : Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
->data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 7, 43))
+>isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
+>data : Symbol(List.data, Decl(genericClassWithStaticFactory.ts, 7, 43))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
 
             this.listFactory = new ListFactory<T>();
->this.listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
+>this.listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
+>listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 >ListFactory : Symbol(ListFactory, Decl(genericClassWithStaticFactory.ts, 106, 5))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
            
         }
 
         public add(data: T): List<T> {
->add : Symbol(add, Decl(genericClassWithStaticFactory.ts, 10, 9))
+>add : Symbol(List.add, Decl(genericClassWithStaticFactory.ts, 10, 9))
 >data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 12, 19))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
 >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
@@ -45,17 +45,17 @@ module Editor {
             var entry = this.listFactory.MakeEntry(data);
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 13, 15))
 >this.listFactory.MakeEntry : Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
->this.listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
+>this.listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
+>listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 >MakeEntry : Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
 >data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 12, 19))
             
             this.prev.next = entry;
 >this.prev.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>this.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 13, 15))
 
@@ -69,14 +69,14 @@ module Editor {
 >entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 13, 15))
 >prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>this.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 
             this.prev = entry;
->this.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>this.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 13, 15))
 
             return entry;
@@ -84,7 +84,7 @@ module Editor {
         }
 
         public count(): number {
->count : Symbol(count, Decl(genericClassWithStaticFactory.ts, 20, 9))
+>count : Symbol(List.count, Decl(genericClassWithStaticFactory.ts, 20, 9))
 
             var entry: List<T>;
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 23, 15))
@@ -96,9 +96,9 @@ module Editor {
 
             entry = this.next;
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 23, 15))
->this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 
             for (i = 0; !(entry.isHead); i++) {
 >i : Symbol(i, Decl(genericClassWithStaticFactory.ts, 24, 15))
@@ -119,29 +119,29 @@ module Editor {
         }
 
         public isEmpty(): boolean {
->isEmpty : Symbol(isEmpty, Decl(genericClassWithStaticFactory.ts, 32, 9))
+>isEmpty : Symbol(List.isEmpty, Decl(genericClassWithStaticFactory.ts, 32, 9))
 
             return (this.next == this);
->this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
         }
 
         public first(): T {
->first : Symbol(first, Decl(genericClassWithStaticFactory.ts, 36, 9))
+>first : Symbol(List.first, Decl(genericClassWithStaticFactory.ts, 36, 9))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
 
             if (this.isEmpty())
->this.isEmpty : Symbol(isEmpty, Decl(genericClassWithStaticFactory.ts, 32, 9))
+>this.isEmpty : Symbol(List.isEmpty, Decl(genericClassWithStaticFactory.ts, 32, 9))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->isEmpty : Symbol(isEmpty, Decl(genericClassWithStaticFactory.ts, 32, 9))
+>isEmpty : Symbol(List.isEmpty, Decl(genericClassWithStaticFactory.ts, 32, 9))
             {
                 return this.next.data;
 >this.next.data : Symbol(List.data, Decl(genericClassWithStaticFactory.ts, 7, 43))
->this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >data : Symbol(List.data, Decl(genericClassWithStaticFactory.ts, 7, 43))
             }
             else {
@@ -150,7 +150,7 @@ module Editor {
         }
 
         public pushEntry(entry: List<T>): void {
->pushEntry : Symbol(pushEntry, Decl(genericClassWithStaticFactory.ts, 46, 9))
+>pushEntry : Symbol(List.pushEntry, Decl(genericClassWithStaticFactory.ts, 46, 9))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
 >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
@@ -164,9 +164,9 @@ module Editor {
 >entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
 >next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 
             entry.prev = this;
 >entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -175,9 +175,9 @@ module Editor {
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 
             this.next = entry;
->this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
 
             entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
@@ -190,16 +190,16 @@ module Editor {
         }
 
         public push(data: T): void {
->push : Symbol(push, Decl(genericClassWithStaticFactory.ts, 54, 9))
+>push : Symbol(List.push, Decl(genericClassWithStaticFactory.ts, 54, 9))
 >data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 56, 20))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
 
             var entry = this.listFactory.MakeEntry(data);
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
 >this.listFactory.MakeEntry : Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
->this.listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
+>this.listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
+>listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 >MakeEntry : Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
 >data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 56, 20))
 
@@ -218,9 +218,9 @@ module Editor {
 >entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
 >next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 
             entry.prev = this;
 >entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -229,9 +229,9 @@ module Editor {
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 
             this.next = entry;
->this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
 
             entry.next.prev = entry;  // entry.next.prev does not show intellisense, but entry.prev.prev does
@@ -244,7 +244,7 @@ module Editor {
         }
 
         public popEntry(head: List<T>): List<T> {
->popEntry : Symbol(popEntry, Decl(genericClassWithStaticFactory.ts, 64, 9))
+>popEntry : Symbol(List.popEntry, Decl(genericClassWithStaticFactory.ts, 64, 9))
 >head : Symbol(head, Decl(genericClassWithStaticFactory.ts, 66, 24))
 >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
@@ -253,9 +253,9 @@ module Editor {
 
             if (this.next.isHead) {
 >this.next.isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
->this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
 
                 return null;
@@ -263,18 +263,18 @@ module Editor {
             else {
                 return this.listFactory.RemoveEntry(this.next);
 >this.listFactory.RemoveEntry : Symbol(ListFactory.RemoveEntry, Decl(genericClassWithStaticFactory.ts, 122, 9))
->this.listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
+>this.listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
+>listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 >RemoveEntry : Symbol(ListFactory.RemoveEntry, Decl(genericClassWithStaticFactory.ts, 122, 9))
->this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
             }
         }
 
         public insertEntry(entry: List<T>): List<T> {
->insertEntry : Symbol(insertEntry, Decl(genericClassWithStaticFactory.ts, 73, 9))
+>insertEntry : Symbol(List.insertEntry, Decl(genericClassWithStaticFactory.ts, 73, 9))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 75, 27))
 >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
@@ -288,9 +288,9 @@ module Editor {
 
             this.prev.next = entry;
 >this.prev.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>this.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 75, 27))
 
@@ -304,14 +304,14 @@ module Editor {
 >entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 75, 27))
 >prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>this.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 
             this.prev = entry;
->this.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>this.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 75, 27))
 
             return entry;
@@ -319,7 +319,7 @@ module Editor {
         }
 
         public insertAfter(data: T): List<T> {
->insertAfter : Symbol(insertAfter, Decl(genericClassWithStaticFactory.ts, 82, 9))
+>insertAfter : Symbol(List.insertAfter, Decl(genericClassWithStaticFactory.ts, 82, 9))
 >data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 84, 27))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
 >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
@@ -330,9 +330,9 @@ module Editor {
 >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
 >this.listFactory.MakeEntry : Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
->this.listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
+>this.listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
+>listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 >MakeEntry : Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
 >data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 84, 27))
 
@@ -340,9 +340,9 @@ module Editor {
 >entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 85, 15))
 >next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 
             entry.prev = this;
 >entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -351,9 +351,9 @@ module Editor {
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 
             this.next = entry;
->this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 85, 15))
 
             entry.next.prev = entry;// entry.next.prev does not show intellisense, but entry.prev.prev does
@@ -369,7 +369,7 @@ module Editor {
         }
 
         public insertEntryBefore(entry: List<T>): List<T> {
->insertEntryBefore : Symbol(insertEntryBefore, Decl(genericClassWithStaticFactory.ts, 91, 9))
+>insertEntryBefore : Symbol(List.insertEntryBefore, Decl(genericClassWithStaticFactory.ts, 91, 9))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 93, 33))
 >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
@@ -378,9 +378,9 @@ module Editor {
 
             this.prev.next = entry;
 >this.prev.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>this.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 93, 33))
 
@@ -394,14 +394,14 @@ module Editor {
 >entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 93, 33))
 >prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>this.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 
             this.prev = entry;
->this.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>this.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 93, 33))
 
             return entry;
@@ -409,7 +409,7 @@ module Editor {
         }
 
         public insertBefore(data: T): List<T> {
->insertBefore : Symbol(insertBefore, Decl(genericClassWithStaticFactory.ts, 100, 9))
+>insertBefore : Symbol(List.insertBefore, Decl(genericClassWithStaticFactory.ts, 100, 9))
 >data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 102, 28))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
 >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
@@ -418,16 +418,16 @@ module Editor {
             var entry = this.listFactory.MakeEntry(data);
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 103, 15))
 >this.listFactory.MakeEntry : Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
->this.listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
+>this.listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
+>listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 >MakeEntry : Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
 >data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 102, 28))
 
             return this.insertEntryBefore(entry);
->this.insertEntryBefore : Symbol(insertEntryBefore, Decl(genericClassWithStaticFactory.ts, 91, 9))
+>this.insertEntryBefore : Symbol(List.insertEntryBefore, Decl(genericClassWithStaticFactory.ts, 91, 9))
 >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->insertEntryBefore : Symbol(insertEntryBefore, Decl(genericClassWithStaticFactory.ts, 91, 9))
+>insertEntryBefore : Symbol(List.insertEntryBefore, Decl(genericClassWithStaticFactory.ts, 91, 9))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 103, 15))
         }
     }
@@ -437,7 +437,7 @@ module Editor {
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 108, 29))
 
         public MakeHead<T>(): List<T> {
->MakeHead : Symbol(MakeHead, Decl(genericClassWithStaticFactory.ts, 108, 33))
+>MakeHead : Symbol(ListFactory.MakeHead, Decl(genericClassWithStaticFactory.ts, 108, 33))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 110, 24))
 >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 110, 24))
@@ -466,7 +466,7 @@ module Editor {
         }
 
         public MakeEntry<T>(data: T): List<T> {
->MakeEntry : Symbol(MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
+>MakeEntry : Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 117, 25))
 >data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 117, 28))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 117, 25))
@@ -498,7 +498,7 @@ module Editor {
         }
 
         public RemoveEntry<T>(entry: List<T>): List<T> {
->RemoveEntry : Symbol(RemoveEntry, Decl(genericClassWithStaticFactory.ts, 122, 9))
+>RemoveEntry : Symbol(ListFactory.RemoveEntry, Decl(genericClassWithStaticFactory.ts, 122, 9))
 >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 124, 27))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
 >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))

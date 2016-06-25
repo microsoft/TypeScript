@@ -12,6 +12,6 @@ declare class Something
 >someStaticVar : Symbol(Something.someStaticVar, Decl(test.d.ts, 1, 1))
 
     private someVar;
->someVar : Symbol(someVar, Decl(test.d.ts, 2, 33))
+>someVar : Symbol(Something.someVar, Decl(test.d.ts, 2, 33))
 }
 

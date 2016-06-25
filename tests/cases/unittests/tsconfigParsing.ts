@@ -13,6 +13,12 @@ namespace ts {
              assert.isTrue(undefined === parsed.config);
              assert.isTrue(undefined !== parsed.error);
         }
+        
+        function assertParseErrorWithExcludesKeyword(jsonText: string) {
+             let parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
+             let parsedCommand = ts.parseJsonConfigFileContent(parsed, ts.sys, "tests/cases/unittests");
+             assert.isTrue(undefined !== parsedCommand.errors);
+        }
 
         it("returns empty config for file with only whitespaces", () => {
             assertParseResult("", { config : {} });
@@ -81,6 +87,38 @@ namespace ts {
 
         it("returns object with error when json is invalid", () => {
              assertParseError("invalid");
+        });
+
+        it("returns object when users correctly specify library", () => {
+            assertParseResult(
+                `{
+                    "compilerOptions": {
+                        "lib": "es5"
+                    }
+                }`, {
+                    config: { compilerOptions: { lib: "es5" } }
+                });
+
+            assertParseResult(
+                `{
+                    "compilerOptions": {
+                        "lib": "es5,es6"
+                    }
+                }`, {
+                    config: { compilerOptions: { lib: "es5,es6" } }
+                });
+        });
+        
+        it("returns error when tsconfig have excludes", () => {
+            assertParseErrorWithExcludesKeyword(
+                `{
+                    "compilerOptions": {
+                        "lib": "es5"
+                    },
+                    "excludes": [
+                        "foge.ts"
+                    ]
+                }`);
         });
     });
 }

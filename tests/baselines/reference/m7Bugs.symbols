@@ -4,7 +4,7 @@ interface ISomething {
 >ISomething : Symbol(ISomething, Decl(m7Bugs.ts, 0, 0))
 
    something: number;
->something : Symbol(something, Decl(m7Bugs.ts, 1, 22))
+>something : Symbol(ISomething.something, Decl(m7Bugs.ts, 1, 22))
 }
 
 var s: ISomething = <ISomething>({ });
@@ -16,7 +16,7 @@ var s: ISomething = <ISomething>({ });
 // scenario 2
 interface A { x: string; }
 >A : Symbol(A, Decl(m7Bugs.ts, 5, 38))
->x : Symbol(x, Decl(m7Bugs.ts, 9, 13))
+>x : Symbol(A.x, Decl(m7Bugs.ts, 9, 13))
 
 interface B extends A { }
 >B : Symbol(B, Decl(m7Bugs.ts, 9, 26))
@@ -31,7 +31,7 @@ class C1 {
 >C1 : Symbol(C1, Decl(m7Bugs.ts, 13, 18))
 
 	public x: string;
->x : Symbol(x, Decl(m7Bugs.ts, 15, 10))
+>x : Symbol(C1.x, Decl(m7Bugs.ts, 15, 10))
 }
 
 class C2 extends C1 {}

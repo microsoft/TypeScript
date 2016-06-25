@@ -13,7 +13,7 @@ class A {
 >A : Symbol(A, Decl(bitwiseNotOperatorWithStringType.ts, 4, 40))
 
     public a: string;
->a : Symbol(a, Decl(bitwiseNotOperatorWithStringType.ts, 6, 9))
+>a : Symbol(A.a, Decl(bitwiseNotOperatorWithStringType.ts, 6, 9))
 
     static foo() { return ""; }
 >foo : Symbol(A.foo, Decl(bitwiseNotOperatorWithStringType.ts, 7, 21))
