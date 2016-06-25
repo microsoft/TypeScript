@@ -1673,6 +1673,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 return false;
             }
 
+            function getClassExpressionInPropertyAccessInStaticPropertyDeclaration(node: Identifier) {
+                if (languageVersion >= ScriptTarget.ES6) {
+                    let parent = node.parent;
+                    if (parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>parent).expression === node) {
+                        parent = parent.parent;
+                        while (parent && parent.kind !== SyntaxKind.PropertyDeclaration) {
+                            parent = parent.parent;
+                        }
+                        return parent && parent.kind === SyntaxKind.PropertyDeclaration && (parent.flags & NodeFlags.Static) !== 0 &&
+                            parent.parent.kind === SyntaxKind.ClassExpression ? parent.parent : undefined;
+                    }
+                }
+                return undefined;
+            }
+
             function emitIdentifier(node: Identifier) {
                 if (convertedLoopState) {
                     if (node.text == "arguments" && resolver.isArgumentsLocalBinding(node)) {
@@ -1687,6 +1702,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write(node.text);
                 }
                 else if (isExpressionIdentifier(node)) {
+                    const classExpression = getClassExpressionInPropertyAccessInStaticPropertyDeclaration(node);
+                    if (classExpression) {
+                        const declaration = resolver.getReferencedValueDeclaration(node);
+                        if (declaration === classExpression) {
+                            write(getGeneratedNameForNode(declaration.name));
+                            return;
+                        }
+                    }
                     emitExpressionIdentifier(node);
                 }
                 else if (isNameOfNestedBlockScopedRedeclarationOrCapturedBinding(node)) {
@@ -5086,13 +5109,13 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function emitPropertyDeclaration(node: ClassLikeDeclaration, property: PropertyDeclaration, receiver?: Identifier, isExpression?: boolean) {
+            function emitPropertyDeclaration(node: ClassLikeDeclaration, property: PropertyDeclaration, receiver?: string, isExpression?: boolean) {
                 writeLine();
                 emitLeadingComments(property);
                 emitStart(property);
                 emitStart(property.name);
                 if (receiver) {
-                    emit(receiver);
+                    write(receiver);
                 }
                 else {
                     if (property.flags & NodeFlags.Static) {
@@ -5511,13 +5534,16 @@ const _super = (function (geti, seti) {
                 // of it have been initialized by the time it is used.
                 const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
                 const isClassExpressionWithStaticProperties = staticProperties.length > 0 && node.kind === SyntaxKind.ClassExpression;
-                let tempVariable: Identifier;
+                let generatedName: string;
 
                 if (isClassExpressionWithStaticProperties) {
-                    tempVariable = createAndRecordTempVariable(TempFlags.Auto);
+                    generatedName = getGeneratedNameForNode(node.name);
+                    const synthesizedNode = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+                    synthesizedNode.text = generatedName;
+                    recordTempDeclaration(synthesizedNode);
                     write("(");
                     increaseIndent();
-                    emit(tempVariable);
+                    emit(synthesizedNode);
                     write(" = ");
                 }
 
@@ -5571,11 +5597,11 @@ const _super = (function (geti, seti) {
                     for (const property of staticProperties) {
                         write(",");
                         writeLine();
-                        emitPropertyDeclaration(node, property, /*receiver*/ tempVariable, /*isExpression*/ true);
+                        emitPropertyDeclaration(node, property, /*receiver*/ generatedName, /*isExpression*/ true);
                     }
                     write(",");
                     writeLine();
-                    emit(tempVariable);
+                    write(generatedName);
                     decreaseIndent();
                     write(")");
                 }
