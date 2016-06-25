@@ -6026,6 +6026,9 @@ namespace ts {
                         if (result = typeRelatedToSomeType(source, <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive))) {
                             return result;
                         }
+                        if (source === booleanType && contains((<UnionType>target).types, trueType) && contains((<UnionType>target).types, falseType)) {
+                            return Ternary.True;
+                        }
                     }
                 }
 
