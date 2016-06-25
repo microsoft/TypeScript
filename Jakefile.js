@@ -123,9 +123,16 @@ var cancellationTokenSources = [
 var serverSources = serverCoreSources.concat(servicesSources);
 
 var languageServiceLibrarySources = [
+    "protocol.d.ts",
+    "utilities.ts",
+    "scriptVersionCache.ts",
+    "scriptInfo.ts",
+    "lsHost.ts",
+    "project.ts",
     "editorServices.ts",
     "protocol.d.ts",
-    "session.ts"
+    "session.ts",
+
 ].map(function (f) {
     return path.join(serverDirectory, f);
 }).concat(servicesSources);
@@ -173,10 +180,14 @@ var harnessSources = harnessCoreSources.concat([
     return path.join(unittestsDirectory, f);
 })).concat([
     "protocol.d.ts",
-    "session.ts",
-    "client.ts",
+    "utilities.ts",
     "scriptVersionCache.ts",
-    "editorServices.ts"
+    "scriptInfo.ts",
+    "lsHost.ts",
+    "project.ts",
+    "editorServices.ts",
+    "protocol.d.ts",
+    "session.ts",
 ].map(function (f) {
     return path.join(serverDirectory, f);
 }));
