@@ -4,7 +4,7 @@
 /// <reference path="utilities.ts" />
 /// <reference path="session.ts" />
 /// <reference path="scriptVersionCache.ts"/>
-/// <reference path="lshost.ts"/>
+/// <reference path="lsHost.ts"/>
 /// <reference path="project.ts"/>
 
 namespace ts.server {

@@ -1,7 +1,7 @@
 /// <reference path="..\services\services.ts" />
 /// <reference path="utilities.ts"/>
 /// <reference path="scriptInfo.ts"/>
-/// <reference path="lshost.ts"/>
+/// <reference path="lsHost.ts"/>
 
 namespace ts.server {
 
