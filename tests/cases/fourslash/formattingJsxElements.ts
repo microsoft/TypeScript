@@ -64,7 +64,12 @@
 /////*childJsxElementIndent*/
 ////<span></span>/*grandchildJsxElementAutoformat*/
 ////</span>/*containedClosingTagAutoformat*/
-////</h5>
+////</h5>;
+////
+////<div>,{integer}</div>;/*commaInJsxElement*/
+////<div>,   {integer}</div>;/*commaInJsxElement2*/
+////<span>)</span>;/*closingParenInJsxElement*/
+////<span>)   </span>;/*closingParenInJsxElement2*/
 
 format.document();
 goTo.marker("autoformat");
@@ -126,3 +131,12 @@ goTo.marker("grandchildJsxElementAutoformat");
 verify.currentLineContentIs("        <span></span>");
 goTo.marker("containedClosingTagAutoformat");
 verify.currentLineContentIs("    </span>");
+
+goTo.marker("commaInJsxElement");
+verify.currentLineContentIs("<div>,{integer}</div>;");
+goTo.marker("commaInJsxElement2");
+verify.currentLineContentIs("<div>,   {integer}</div>;");
+goTo.marker("closingParenInJsxElement");
+verify.currentLineContentIs("<span>)</span>;");
+goTo.marker("closingParenInJsxElement2");
+verify.currentLineContentIs("<span>)   </span>;");
