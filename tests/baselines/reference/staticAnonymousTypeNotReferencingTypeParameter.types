@@ -662,9 +662,9 @@ class ListWrapper {
 >l : T[]
 >T : T
 >JSON.stringify(l) : string
->JSON.stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: string | number): string; (value: any, replacer: any[], space: string | number): string; }
+>JSON.stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[], space?: string | number): string; }
 >JSON : JSON
->stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: string | number): string; (value: any, replacer: any[], space: string | number): string; }
+>stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[], space?: string | number): string; }
 >l : T[]
 
   static maximum<T>(dit: typeof ListWrapper, list: T[], predicate: (t: T) => number): T {

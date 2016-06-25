@@ -1,0 +1,74 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsInDoStatement.ts ===
+let cond: boolean;
+>cond : Symbol(cond, Decl(typeGuardsInDoStatement.ts, 0, 3))
+
+function a(x: string | number | boolean) {
+>a : Symbol(a, Decl(typeGuardsInDoStatement.ts, 0, 18))
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 1, 11))
+
+    x = true;
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 1, 11))
+
+    do {
+        x; // boolean | string
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 1, 11))
+
+        x = undefined;
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 1, 11))
+>undefined : Symbol(undefined)
+
+    } while (typeof x === "string")
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 1, 11))
+
+    x; // number | boolean
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 1, 11))
+}
+function b(x: string | number | boolean) {
+>b : Symbol(b, Decl(typeGuardsInDoStatement.ts, 8, 1))
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 9, 11))
+
+    x = true;
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 9, 11))
+
+    do {
+        x; // boolean | string
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 9, 11))
+
+        if (cond) continue;
+>cond : Symbol(cond, Decl(typeGuardsInDoStatement.ts, 0, 3))
+
+        x = undefined;
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 9, 11))
+>undefined : Symbol(undefined)
+
+    } while (typeof x === "string")
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 9, 11))
+
+    x; // number | boolean
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 9, 11))
+}
+function c(x: string | number) {
+>c : Symbol(c, Decl(typeGuardsInDoStatement.ts, 17, 1))
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 18, 11))
+
+    x = "";
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 18, 11))
+
+    do {
+        x; // string
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 18, 11))
+
+        if (cond) break;
+>cond : Symbol(cond, Decl(typeGuardsInDoStatement.ts, 0, 3))
+
+        x = undefined;
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 18, 11))
+>undefined : Symbol(undefined)
+
+    } while (typeof x === "string")
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 18, 11))
+
+    x; // string | number
+>x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 18, 11))
+}
+
