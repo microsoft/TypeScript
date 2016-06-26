@@ -52,6 +52,10 @@ namespace ts.formatting {
         public SpaceBeforeCloseBrace: Rule;
         public NoSpaceBetweenEmptyBraceBrackets: Rule;
 
+        // No space after { and before } in JSX expression
+        public NoSpaceAfterOpenBraceInJsxExpression: Rule;
+        public NoSpaceBeforeCloseBraceInJsxExpression: Rule;
+
         // Insert new line after { and before } in multi-line contexts.
         public NewLineAfterOpenBraceInBlockContext: Rule;
 
@@ -276,6 +280,10 @@ namespace ts.formatting {
             this.SpaceBeforeCloseBrace = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSingleLineBlockContext), RuleAction.Space));
             this.NoSpaceBetweenEmptyBraceBrackets = new Rule(RuleDescriptor.create1(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsObjectContext), RuleAction.Delete));
 
+            // No space after { and before } in JSX expression
+            this.NoSpaceAfterOpenBraceInJsxExpression = new Rule(RuleDescriptor.create3(SyntaxKind.OpenBraceToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.isJsxExpressionContext), RuleAction.Delete));
+            this.NoSpaceBeforeCloseBraceInJsxExpression = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.isJsxExpressionContext), RuleAction.Delete));
+
             // Insert new line after { and before } in multi-line contexts.
             this.NewLineAfterOpenBraceInBlockContext = new Rule(RuleDescriptor.create3(SyntaxKind.OpenBraceToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsMultilineBlockContext), RuleAction.NewLine));
 
@@ -395,6 +403,7 @@ namespace ts.formatting {
                 this.SpaceAfterSubtractWhenFollowedByUnaryMinus, this.SpaceAfterSubtractWhenFollowedByPredecrement,
                 this.NoSpaceAfterCloseBrace,
                 this.SpaceAfterOpenBrace, this.SpaceBeforeCloseBrace, this.NewLineBeforeCloseBraceInBlockContext,
+                this.NoSpaceAfterOpenBraceInJsxExpression, this.NoSpaceBeforeCloseBraceInJsxExpression,
                 this.SpaceAfterCloseBrace, this.SpaceBetweenCloseBraceAndElse, this.SpaceBetweenCloseBraceAndWhile, this.NoSpaceBetweenEmptyBraceBrackets,
                 this.NoSpaceBetweenFunctionKeywordAndStar, this.SpaceAfterStarInGeneratorDeclaration,
                 this.SpaceAfterFunctionInFuncDecl, this.NewLineAfterOpenBraceInBlockContext, this.SpaceAfterGetSetInMember,
@@ -725,6 +734,10 @@ namespace ts.formatting {
 
         static isNonJsxElementContext(context: FormattingContext): boolean {
             return context.contextNode.kind !== SyntaxKind.JsxElement;
+        }
+
+        static isJsxExpressionContext(context: FormattingContext): boolean {
+            return context.contextNode.kind === SyntaxKind.JsxExpression;
         }
 
         static IsNotBeforeBlockInFunctionDeclarationContext(context: FormattingContext): boolean {

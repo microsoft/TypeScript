@@ -70,6 +70,8 @@
 ////<div>,   {integer}</div>;/*commaInJsxElement2*/
 ////<span>)</span>;/*closingParenInJsxElement*/
 ////<span>)   </span>;/*closingParenInJsxElement2*/
+////<Router routes={                3    } />;/*jsxExpressionSpaces*/
+////<Router routes={                (3)    } />;/*jsxExpressionSpaces2*/
 
 format.document();
 goTo.marker("autoformat");
@@ -140,3 +142,7 @@ goTo.marker("closingParenInJsxElement");
 verify.currentLineContentIs("<span>)</span>;");
 goTo.marker("closingParenInJsxElement2");
 verify.currentLineContentIs("<span>)   </span>;");
+goTo.marker("jsxExpressionSpaces");
+verify.currentLineContentIs("<Router routes={3} />;");
+goTo.marker("jsxExpressionSpaces2");
+verify.currentLineContentIs("<Router routes={(3)} />;");
