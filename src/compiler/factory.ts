@@ -1649,28 +1649,36 @@ namespace ts {
      * @param target: result statements array
      * @param source: origin statements array
      * @param ensureUseStrict: boolean determining whether the function need to add prologue-directives
+     * @param visitor: Optional callback used to visit any custom prologue directives.
      */
-    export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean): number {
+    export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
         Debug.assert(target.length === 0, "PrologueDirectives should be at the first statement in the target statements array");
         let foundUseStrict = false;
-        for (let i = 0; i < source.length; i++) {
-            if (isPrologueDirective(source[i])) {
-                if (isUseStrictPrologue(source[i] as ExpressionStatement)) {
+        let statementOffset = 0;
+        const numStatements = source.length;
+        while (statementOffset < numStatements) {
+            const statement = source[statementOffset];
+            if (isPrologueDirective(statement)) {
+                if (isUseStrictPrologue(statement as ExpressionStatement)) {
                     foundUseStrict = true;
                 }
-
-                target.push(source[i]);
+                target.push(statement);
             }
             else {
                 if (ensureUseStrict && !foundUseStrict) {
                     target.push(startOnNewLine(createStatement(createLiteral("use strict"))));
+                    foundUseStrict = true;
                 }
-
-                return i;
+                if (statement.emitFlags & NodeEmitFlags.CustomPrologue) {
+                    target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
+                }
+                else {
+                    break;
+                }
             }
+            statementOffset++;
         }
-
-        return source.length;
+        return statementOffset;
     }
 
     /**

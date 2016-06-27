@@ -3064,6 +3064,7 @@ namespace ts {
         Indented = 1 << 19,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
         AsyncFunctionBody = 1 << 20,
         ReuseTempVariableScope = 1 << 21,        // Reuse the existing temp variable scope during emit.
+        CustomPrologue = 1 << 22,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
 
         // SourceMap Specialization.
         // TODO(rbuckton): These should be removed once source maps are aligned with the old

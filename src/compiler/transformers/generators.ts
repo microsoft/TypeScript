@@ -309,10 +309,7 @@ namespace ts {
          */
         function visitor(node: Node): VisitResult<Node> {
             const transformFlags = node.transformFlags;
-            if (transformFlags & TransformFlags.ContainsYield) {
-                return visitJavaScriptContainingYield(node);
-            }
-            else if (inStatementContainingYield) {
+            if (inStatementContainingYield) {
                 return visitJavaScriptInStatementContainingYield(node);
             }
             else if (inGeneratorFunctionBody) {
@@ -326,34 +323,6 @@ namespace ts {
             }
             else {
                 return node;
-            }
-        }
-
-        /**
-         * Visits a node that contains a YieldExpression.
-         *
-         * @param node The node to visit.
-         */
-        function visitJavaScriptContainingYield(node: Node): VisitResult<Node> {
-            switch (node.kind) {
-                case SyntaxKind.BinaryExpression:
-                    return visitBinaryExpression(<BinaryExpression>node);
-                case SyntaxKind.ConditionalExpression:
-                    return visitConditionalExpression(<ConditionalExpression>node);
-                case SyntaxKind.YieldExpression:
-                    return visitYieldExpression(<YieldExpression>node);
-                case SyntaxKind.ArrayLiteralExpression:
-                    return visitArrayLiteralExpression(<ArrayLiteralExpression>node);
-                case SyntaxKind.ObjectLiteralExpression:
-                    return visitObjectLiteralExpression(<ObjectLiteralExpression>node);
-                case SyntaxKind.ElementAccessExpression:
-                    return visitElementAccessExpression(<ElementAccessExpression>node);
-                case SyntaxKind.CallExpression:
-                    return visitCallExpression(<CallExpression>node);
-                case SyntaxKind.NewExpression:
-                    return visitNewExpression(<NewExpression>node);
-                default:
-                    return visitJavaScriptInStatementContainingYield(node);
             }
         }
 
@@ -404,12 +373,43 @@ namespace ts {
                 case SyntaxKind.ReturnStatement:
                     return visitReturnStatement(<ReturnStatement>node);
                 default:
-                    if (node.transformFlags & (TransformFlags.ContainsGenerator | TransformFlags.ContainsYield | TransformFlags.ContainsHoistedDeclarationOrCompletion)) {
+                    if (node.transformFlags & TransformFlags.ContainsYield) {
+                        return visitJavaScriptContainingYield(node);
+                    }
+                    else if (node.transformFlags & (TransformFlags.ContainsGenerator | TransformFlags.ContainsHoistedDeclarationOrCompletion)) {
                         return visitEachChild(node, visitor, context);
                     }
                     else {
                         return node;
                     }
+            }
+        }
+
+        /**
+         * Visits a node that contains a YieldExpression.
+         *
+         * @param node The node to visit.
+         */
+        function visitJavaScriptContainingYield(node: Node): VisitResult<Node> {
+            switch (node.kind) {
+                case SyntaxKind.BinaryExpression:
+                    return visitBinaryExpression(<BinaryExpression>node);
+                case SyntaxKind.ConditionalExpression:
+                    return visitConditionalExpression(<ConditionalExpression>node);
+                case SyntaxKind.YieldExpression:
+                    return visitYieldExpression(<YieldExpression>node);
+                case SyntaxKind.ArrayLiteralExpression:
+                    return visitArrayLiteralExpression(<ArrayLiteralExpression>node);
+                case SyntaxKind.ObjectLiteralExpression:
+                    return visitObjectLiteralExpression(<ObjectLiteralExpression>node);
+                case SyntaxKind.ElementAccessExpression:
+                    return visitElementAccessExpression(<ElementAccessExpression>node);
+                case SyntaxKind.CallExpression:
+                    return visitCallExpression(<CallExpression>node);
+                case SyntaxKind.NewExpression:
+                    return visitNewExpression(<NewExpression>node);
+                default:
+                    return visitEachChild(node, visitor, context);
             }
         }
 
@@ -572,7 +572,7 @@ namespace ts {
             operationLocations = undefined;
             state = createTempVariable(/*recordTempVariable*/ undefined);
 
-            const statementOffset = addPrologueDirectives(statements, body.statements);
+            const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
 
             // Build the generator
             startLexicalEnvironment();

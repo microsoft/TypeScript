@@ -930,21 +930,27 @@ namespace ts {
             // of an initializer, we must emit that expression to preserve side effects.
             if (name.elements.length > 0) {
                 statements.push(
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createVariableDeclarationList(
-                            flattenParameterDestructuring(context, parameter, temp, visitor)
-                        )
+                    setNodeEmitFlags(
+                        createVariableStatement(
+                            /*modifiers*/ undefined,
+                            createVariableDeclarationList(
+                                flattenParameterDestructuring(context, parameter, temp, visitor)
+                            )
+                        ),
+                        NodeEmitFlags.CustomPrologue
                     )
                 );
             }
             else if (initializer) {
                 statements.push(
-                    createStatement(
-                        createAssignment(
-                            temp,
-                            visitNode(initializer, visitor, isExpression)
-                        )
+                    setNodeEmitFlags(
+                        createStatement(
+                            createAssignment(
+                                temp,
+                                visitNode(initializer, visitor, isExpression)
+                            )
+                        ),
+                        NodeEmitFlags.CustomPrologue
                     )
                 );
             }
@@ -981,7 +987,7 @@ namespace ts {
                 /*location*/ parameter
             );
             statement.startsOnNewLine = true;
-            setNodeEmitFlags(statement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoTrailingSourceMap);
+            setNodeEmitFlags(statement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoTrailingSourceMap | NodeEmitFlags.CustomPrologue);
             statements.push(statement);
         }
 
@@ -1023,16 +1029,19 @@ namespace ts {
 
             // var param = [];
             statements.push(
-                createVariableStatement(
-                    /*modifiers*/ undefined,
-                    createVariableDeclarationList([
-                        createVariableDeclaration(
-                            declarationName,
-                            /*type*/ undefined,
-                            createArrayLiteral([])
-                        )
-                    ]),
-                    /*location*/ parameter
+                setNodeEmitFlags(
+                    createVariableStatement(
+                        /*modifiers*/ undefined,
+                        createVariableDeclarationList([
+                            createVariableDeclaration(
+                                declarationName,
+                                /*type*/ undefined,
+                                createArrayLiteral([])
+                            )
+                        ]),
+                        /*location*/ parameter
+                    ),
+                    NodeEmitFlags.CustomPrologue
                 )
             );
 
@@ -1065,7 +1074,7 @@ namespace ts {
                 ])
             );
 
-            setNodeEmitFlags(forStatement, NodeEmitFlags.SourceMapAdjustRestParameterLoop);
+            setNodeEmitFlags(forStatement, NodeEmitFlags.SourceMapAdjustRestParameterLoop | NodeEmitFlags.CustomPrologue);
             startOnNewLine(forStatement);
             statements.push(forStatement);
         }
@@ -1090,7 +1099,7 @@ namespace ts {
                     ])
                 );
 
-                setNodeEmitFlags(captureThisStatement, NodeEmitFlags.NoComments);
+                setNodeEmitFlags(captureThisStatement, NodeEmitFlags.NoComments | NodeEmitFlags.CustomPrologue);
                 setSourceMapRange(captureThisStatement, node);
                 statements.push(captureThisStatement);
             }
@@ -1347,7 +1356,7 @@ namespace ts {
             if (isBlock(body)) {
                 // ensureUseStrict is false because no new prologue-directive should be added.
                 // addPrologueDirectives will simply put already-existing directives at the beginning of the target statement-array
-                statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false);
+                statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
             }
 
             addCaptureThisForNodeIfNeeded(statements, node);

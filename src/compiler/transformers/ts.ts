@@ -431,7 +431,7 @@ namespace ts {
                 && (isExternalModule(node) || compilerOptions.isolatedModules)) {
                 startLexicalEnvironment();
                 const statements: Statement[] = [];
-                const statementOffset = addPrologueDirectives(statements, node.statements);
+                const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ false, visitor);
                 const externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText);
                 const externalHelpersModuleImport = createImportDeclaration(
                     createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
@@ -933,7 +933,7 @@ namespace ts {
             if (ctor.body) {
                 const statements = ctor.body.statements;
                 // add prologue directives to the list (if any)
-                const index = addPrologueDirectives(result, statements);
+                const index = addPrologueDirectives(result, statements, /*ensureUseStrict*/ false, visitor);
                 if (index === statements.length) {
                     // list contains nothing but prologue directives (or empty) - exit
                     return index;
@@ -2235,7 +2235,7 @@ namespace ts {
 
             if (!isArrowFunction) {
                 const statements: Statement[] = [];
-                const statementOffset = addPrologueDirectives(statements, (<Block>node.body).statements);
+                const statementOffset = addPrologueDirectives(statements, (<Block>node.body).statements, /*ensureUseStrict*/ false, visitor);
                 statements.push(
                     createReturn(
                         createAwaiterHelper(
