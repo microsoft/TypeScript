@@ -557,7 +557,7 @@ define(["require", "exports"], function (require, exports) {
             };
             C3_public.prototype.f3_private = function (m1_c3_f3_arg) {
             };
-            C3_public.prototype.f4_public = function (m1_c3_f4_arg) {
+            C3_public.prototype.f4_public = function (m1_c3_f4_arg) { // error
             };
             C3_public.prototype.f5_private = function () {
                 return new C1_public();
@@ -580,7 +580,7 @@ define(["require", "exports"], function (require, exports) {
             C3_public.prototype.f11_private = function () {
                 return new C2_private();
             };
-            C3_public.prototype.f12_public = function () {
+            C3_public.prototype.f12_public = function () { // error
                 return new C2_private(); //error
             };
             return C3_public;
@@ -652,7 +652,7 @@ define(["require", "exports"], function (require, exports) {
         m1.f2_public = f2_public;
         function f3_public(m1_f3_arg) {
         }
-        function f4_public(m1_f4_arg) {
+        function f4_public(m1_f4_arg) { // error
         }
         m1.f4_public = f4_public;
         function f5_public() {
@@ -679,7 +679,7 @@ define(["require", "exports"], function (require, exports) {
         function f11_private() {
             return new C2_private();
         }
-        function f12_public() {
+        function f12_public() { // error
             return new C2_private(); //error
         }
         m1.f12_public = f12_public;
@@ -857,7 +857,7 @@ define(["require", "exports"], function (require, exports) {
         };
         C7_public.prototype.f3_private = function (c7_f3_arg) {
         };
-        C7_public.prototype.f4_public = function (c7_f4_arg) {
+        C7_public.prototype.f4_public = function (c7_f4_arg) { //error
         };
         C7_public.prototype.f5_private = function () {
             return new C6_public();
@@ -880,7 +880,7 @@ define(["require", "exports"], function (require, exports) {
         C7_public.prototype.f11_private = function () {
             return new C5_private();
         };
-        C7_public.prototype.f12_public = function () {
+        C7_public.prototype.f12_public = function () { //error
             return new C5_private(); //error
         };
         return C7_public;
@@ -947,7 +947,7 @@ define(["require", "exports"], function (require, exports) {
     }());
     function f1_private(f1_arg) {
     }
-    function f2_public(f2_arg) {
+    function f2_public(f2_arg) { // error
     }
     exports.f2_public = f2_public;
     function f3_private(f3_arg) {
@@ -979,7 +979,7 @@ define(["require", "exports"], function (require, exports) {
     function f11_private() {
         return new C5_private();
     }
-    function f12_public() {
+    function f12_public() { //error 
         return new C5_private(); //error
     }
     exports.f12_public = f12_public;

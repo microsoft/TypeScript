@@ -36,21 +36,21 @@ function foo() {
 
 //// [collisionArgumentsFunctionExpressions.js]
 function foo() {
-    function f1(arguments) {
+    function f1(arguments) { //arguments is error
         var restParameters = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             restParameters[_i - 1] = arguments[_i];
         }
         var arguments = 10; // no error
     }
-    function f12(i) {
+    function f12(i) { //arguments is error
         var arguments = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             arguments[_i - 1] = arguments[_i];
         }
         var arguments; // no error
     }
-    function f1NoError(arguments) {
+    function f1NoError(arguments) { // no error
         var arguments = 10; // no error
     }
     function f3() {
@@ -63,21 +63,21 @@ function foo() {
     function f3NoError() {
         var arguments = 10; // no error
     }
-    function f4(arguments) {
+    function f4(arguments) { // error
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
         }
         var arguments; // No error
     }
-    function f42(i) {
+    function f42(i) { // error
         var arguments = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             arguments[_i - 1] = arguments[_i];
         }
         var arguments; // No error
     }
-    function f4NoError(arguments) {
+    function f4NoError(arguments) { // no error
         var arguments; // No error
     }
 }

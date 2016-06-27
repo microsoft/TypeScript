@@ -30,11 +30,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-function _super() {
+function _super() { // No error
 }
 var Foo = (function () {
     function Foo() {
-        function _super() {
+        function _super() { // No error
         }
     }
     return Foo;
@@ -43,7 +43,7 @@ var b = (function (_super) {
     __extends(b, _super);
     function b() {
         _super.call(this);
-        function _super() {
+        function _super() { // Should be error
         }
     }
     return b;
@@ -53,7 +53,7 @@ var c = (function (_super) {
     function c() {
         _super.call(this);
         var x = function () {
-            function _super() {
+            function _super() { // Should be error
             }
         };
     }

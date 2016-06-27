@@ -299,30 +299,30 @@ var AnotherClass = (function () {
 // if f is a contextually typed function expression, the inferred return type is the union type
 // of the types of the return statement expressions in the function body, 
 // ignoring return statements with no expressions.
-var f7 = function (x) {
+var f7 = function (x) { // should be (x: number) => number | string
     if (x < 0) {
         return x;
     }
     return x.toString();
 };
-var f8 = function (x) {
+var f8 = function (x) { // should be (x: number) => Base
     return new Base();
     return new Derived2();
 };
-var f9 = function (x) {
+var f9 = function (x) { // should be (x: number) => Base
     return new Base();
     return new Derived();
     return new Derived2();
 };
-var f10 = function (x) {
+var f10 = function (x) { // should be (x: number) => Derived | Derived1
     return new Derived();
     return new Derived2();
 };
-var f11 = function (x) {
+var f11 = function (x) { // should be (x: number) => Base | AnotherClass
     return new Base();
     return new AnotherClass();
 };
-var f12 = function (x) {
+var f12 = function (x) { // should be (x: number) => Base | AnotherClass
     return new Base();
     return; // should be ignored
     return new AnotherClass();

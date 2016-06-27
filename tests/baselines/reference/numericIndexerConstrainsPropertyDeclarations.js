@@ -103,7 +103,7 @@ var C = (function () {
     function C() {
     } // ok
     Object.defineProperty(C.prototype, "X", {
-        get: function () {
+        get: function () { // ok
             return '';
         },
         set: function (v) { } // ok
@@ -116,7 +116,7 @@ var C = (function () {
     };
     C.foo = function () { }; // ok
     Object.defineProperty(C, "X", {
-        get: function () {
+        get: function () { // ok
             return 1;
         },
         enumerable: true,

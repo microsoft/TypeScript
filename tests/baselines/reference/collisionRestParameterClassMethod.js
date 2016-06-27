@@ -42,24 +42,24 @@ class c3 {
 var c1 = (function () {
     function c1() {
     }
-    c1.prototype.foo = function (_i) {
+    c1.prototype.foo = function (_i) { //_i is error
         var restParameters = [];
         for (var _a = 1; _a < arguments.length; _a++) {
             restParameters[_a - 1] = arguments[_a];
         }
         var _i = 10; // no error
     };
-    c1.prototype.fooNoError = function (_i) {
+    c1.prototype.fooNoError = function (_i) { // no error
         var _i = 10; // no error
     };
-    c1.prototype.f4 = function (_i) {
+    c1.prototype.f4 = function (_i) { // error
         var rest = [];
         for (var _a = 1; _a < arguments.length; _a++) {
             rest[_a - 1] = arguments[_a];
         }
         var _i; // no error
     };
-    c1.prototype.f4NoError = function (_i) {
+    c1.prototype.f4NoError = function (_i) { // no error
         var _i; // no error
     };
     return c1;

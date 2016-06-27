@@ -24,7 +24,7 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "x", {
-        get: function () {
+        get: function () { // error
             return 1;
         },
         enumerable: true,
@@ -47,7 +47,7 @@ var E = (function () {
     function E() {
     }
     Object.defineProperty(E.prototype, "x", {
-        get: function () {
+        get: function () { // error
             return 1;
         },
         set: function (v) { },

@@ -41,19 +41,19 @@ var Editor;
             this.isHead = isHead;
             this.data = data;
         }
-        List.MakeHead = function () {
+        List.MakeHead = function () { // should error
             var entry = new List(true, null);
             entry.prev = entry;
             entry.next = entry;
             return entry;
         };
-        List.MakeHead2 = function () {
+        List.MakeHead2 = function () { // should not error
             var entry = new List(true, null);
             entry.prev = entry;
             entry.next = entry;
             return entry;
         };
-        List.MakeHead3 = function () {
+        List.MakeHead3 = function () { // should not error
             var entry = new List(true, null);
             entry.prev = entry;
             entry.next = entry;

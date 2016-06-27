@@ -63,7 +63,7 @@ function test4(isError = true) {
 }
 // should not be error, Promise<any> currently working correctly 
 function test5(isError = true) {
-    return __awaiter(this, void 0, void 0, function* () {
+    return __awaiter(this, void 0, void 0, function* () { //should not be error
         if (isError === true) {
             return undefined;
         }

@@ -23,7 +23,7 @@ class StringFoo3 implements IFoo<string> {
 var IFoo = (function () {
     function IFoo() {
     }
-    IFoo.prototype.foo = function (x) {
+    IFoo.prototype.foo = function (x) { // no error on implementors because IFoo's T is different from foo's T
         return null;
     };
     return IFoo;

@@ -253,7 +253,7 @@ var m1;
         };
         C3_public.prototype.f3_private = function (m1_c3_f3_arg) {
         };
-        C3_public.prototype.f4_public = function (m1_c3_f4_arg) {
+        C3_public.prototype.f4_public = function (m1_c3_f4_arg) { // error
         };
         C3_public.prototype.f5_private = function () {
             return new C1_public();
@@ -276,7 +276,7 @@ var m1;
         C3_public.prototype.f11_private = function () {
             return new C2_private();
         };
-        C3_public.prototype.f12_public = function () {
+        C3_public.prototype.f12_public = function () { // error
             return new C2_private(); //error
         };
         return C3_public;
@@ -348,7 +348,7 @@ var m1;
     m1.f2_public = f2_public;
     function f3_public(m1_f3_arg) {
     }
-    function f4_public(m1_f4_arg) {
+    function f4_public(m1_f4_arg) { // error
     }
     m1.f4_public = f4_public;
     function f5_public() {
@@ -375,7 +375,7 @@ var m1;
     function f11_private() {
         return new C2_private();
     }
-    function f12_public() {
+    function f12_public() { // error
         return new C2_private(); //error
     }
     m1.f12_public = f12_public;

@@ -17,7 +17,7 @@ y.myMethod(); // error
 var MyClass = (function () {
     function MyClass() {
     }
-    MyClass.prototype.myMethod = function (myList) {
+    MyClass.prototype.myMethod = function (myList) { // valid
     };
     return MyClass;
 }());

@@ -26,7 +26,7 @@ define(["require", "exports"], function (require, exports) {
 //// [consumer.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    function w() {
+    function w() { // Should be OK
         return { name: 'value' };
     }
     exports.w = w;

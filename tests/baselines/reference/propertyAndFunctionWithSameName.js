@@ -15,7 +15,7 @@ class D {
 var C = (function () {
     function C() {
     }
-    C.prototype.x = function () {
+    C.prototype.x = function () { // error
         return 1;
     };
     return C;

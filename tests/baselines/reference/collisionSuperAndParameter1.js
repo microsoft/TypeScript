@@ -26,7 +26,7 @@ var Foo2 = (function (_super) {
         _super.apply(this, arguments);
     }
     Foo2.prototype.x = function () {
-        var lambda = function (_super) {
+        var lambda = function (_super) { // Error 
         };
     };
     return Foo2;

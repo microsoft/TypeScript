@@ -45,7 +45,7 @@ var c;
 c.foo();
 c.foo(1);
 var b = {
-    foo: function (x) {
+    foo: function (x) { // error
         if (x === void 0) { x = 1; }
     },
     foo: function (x) {

@@ -30,11 +30,11 @@ var GetAndSet = (function () {
         this.getAndSet = null; // error at "getAndSet"
     }
     Object.defineProperty(GetAndSet.prototype, "haveGetAndSet", {
-        get: function () {
+        get: function () { // this should not be an error
             return this.getAndSet;
         },
         // this shouldn't be an error
-        set: function (value) {
+        set: function (value) { // error at "value"
             this.getAndSet = value;
         },
         enumerable: true,
@@ -46,7 +46,7 @@ var SetterOnly = (function () {
     function SetterOnly() {
     }
     Object.defineProperty(SetterOnly.prototype, "haveOnlySet", {
-        set: function (newXValue) {
+        set: function (newXValue) { // error at "haveOnlySet, newXValue"
         },
         enumerable: true,
         configurable: true
@@ -57,7 +57,7 @@ var GetterOnly = (function () {
     function GetterOnly() {
     }
     Object.defineProperty(GetterOnly.prototype, "haveOnlyGet", {
-        get: function () {
+        get: function () { // error at "haveOnlyGet"
             return null;
         },
         enumerable: true,

@@ -97,7 +97,7 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    C.prototype.returnBarWithCase = function () {
+    C.prototype.returnBarWithCase = function () { // this should not be an error
         return this.bar;
     };
     C.prototype.returnFooWithCase = function () {
@@ -137,7 +137,7 @@ function returnTypeBar() {
 function undefinedBar() {
     return undefined; // this should not be an error
 }
-function multipleRets1(x) {
+function multipleRets1(x) { // this should not be an error
     if (x) {
         return 0;
     }
@@ -145,7 +145,7 @@ function multipleRets1(x) {
         return null;
     }
 }
-function multipleRets2(x) {
+function multipleRets2(x) { // this should not be an error
     if (x) {
         return null;
     }

@@ -65,16 +65,16 @@ var C = (function () {
     };
     return C;
 }());
-function foo(x, y) {
-    function bar() {
+function foo(x, y) { // error
+    function bar() { // error
         function baz(a, b) {
             x = y;
             return y;
         }
     }
 }
-function foo2(x, y) {
-    function bar() {
+function foo2(x, y) { // error
+    function bar() { // error
         function baz(a, b) {
             x = y;
             return y;
@@ -82,14 +82,14 @@ function foo2(x, y) {
     }
 }
 var f3 = function (x, y) {
-    function bar(r, s) {
+    function bar(r, s) { // error
         var g = function (a, b) {
             x = y;
             return y;
         };
     }
 };
-var f4 = function (x, y) {
+var f4 = function (x, y) { // error
     function bar() {
         var g = function (a, b) {
             x = y;
