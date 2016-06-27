@@ -34,6 +34,8 @@ namespace ts {
 
     export interface EmitHost extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
+
+        /* @internal */
         getFilesFromNodeModules(): Map<boolean>;
 
         getCommonSourceDirectory(): string;
