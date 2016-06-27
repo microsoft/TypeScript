@@ -1042,11 +1042,13 @@ namespace ts {
         closingElement: JsxClosingElement;
     }
 
+    export type JsxTagNameExpression = PrimaryExpression | PropertyAccessExpression;
+
     /// The opening element of a <Tag>...</Tag> JsxElement
     // @kind(SyntaxKind.JsxOpeningElement)
     export interface JsxOpeningElement extends Expression {
         _openingElementBrand?: any;
-        tagName: EntityName;
+        tagName: JsxTagNameExpression;
         attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>;
     }
 
@@ -1073,7 +1075,7 @@ namespace ts {
 
     // @kind(SyntaxKind.JsxClosingElement)
     export interface JsxClosingElement extends Node {
-        tagName: EntityName;
+        tagName: JsxTagNameExpression;
     }
 
     // @kind(SyntaxKind.JsxExpression)
@@ -2120,6 +2122,7 @@ namespace ts {
         members?: SymbolTable;                  // Class, interface or literal instance members
         exports?: SymbolTable;                  // Module exports
         globalExports?: SymbolTable;            // Conditional global UMD exports
+        /* @internal */ isReadonly?: boolean;   // readonly? (set only for intersections and unions)
         /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
         /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         /* @internal */ parent?: Symbol;        // Parent symbol

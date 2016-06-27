@@ -1265,9 +1265,13 @@ namespace ts {
                 const right = name.kind === SyntaxKind.QualifiedName ? (<QualifiedName>name).right : (<PropertyAccessExpression>name).name;
 
                 const namespace = resolveEntityName(left, SymbolFlags.Namespace, ignoreErrors);
-                if (!namespace || namespace === unknownSymbol || nodeIsMissing(right)) {
+                if (!namespace || nodeIsMissing(right)) {
                     return undefined;
                 }
+                else if (namespace === unknownSymbol) {
+                    return namespace;
+                }
+
                 symbol = getSymbol(getExportsOfSymbol(namespace), right.text, meaning);
                 if (!symbol) {
                     if (!ignoreErrors) {
@@ -4233,6 +4237,7 @@ namespace ts {
             let props: Symbol[];
             // Flags we want to propagate to the result if they exist in all source symbols
             let commonFlags = (containingType.flags & TypeFlags.Intersection) ? SymbolFlags.Optional : SymbolFlags.None;
+            let isReadonly = false;
             for (const current of types) {
                 const type = getApparentType(current);
                 if (type !== unknownType) {
@@ -4244,6 +4249,9 @@ namespace ts {
                         }
                         else if (!contains(props, prop)) {
                             props.push(prop);
+                        }
+                        if (isReadonlySymbol(prop)) {
+                            isReadonly = true;
                         }
                     }
                     else if (containingType.flags & TypeFlags.Union) {
@@ -4274,6 +4282,7 @@ namespace ts {
                 name);
             result.containingType = containingType;
             result.declarations = declarations;
+            result.isReadonly = isReadonly;
             result.type = containingType.flags & TypeFlags.Union ? getUnionType(propTypes) : getIntersectionType(propTypes);
             return result;
         }
@@ -9670,8 +9679,9 @@ namespace ts {
         /**
          * Returns true iff React would emit this tag name as a string rather than an identifier or qualified name
          */
-        function isJsxIntrinsicIdentifier(tagName: Identifier | QualifiedName) {
-            if (tagName.kind === SyntaxKind.QualifiedName) {
+        function isJsxIntrinsicIdentifier(tagName: JsxTagNameExpression) {
+            // TODO (yuisu): comment
+            if (tagName.kind === SyntaxKind.PropertyAccessExpression || tagName.kind === SyntaxKind.ThisKeyword) {
                 return false;
             }
             else {
@@ -9865,6 +9875,29 @@ namespace ts {
                 return getUnionType(types.map(type => {
                     return getResolvedJsxType(node, type, elemClassType);
                 }));
+            }
+
+            // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
+            if (elemType.flags & TypeFlags.String) {
+                return anyType;
+            }
+            else if (elemType.flags & TypeFlags.StringLiteral) {
+                // If the elemType is a stringLiteral type, we can then provide a check to make sure that the string literal type is one of the Jsx intrinsic element type
+                const intrinsicElementsType = getJsxType(JsxNames.IntrinsicElements);
+                if (intrinsicElementsType !== unknownType) {
+                    const stringLiteralTypeName = (<StringLiteralType>elemType).text;
+                    const intrinsicProp = getPropertyOfType(intrinsicElementsType, stringLiteralTypeName);
+                    if (intrinsicProp) {
+                        return getTypeOfSymbol(intrinsicProp);
+                    }
+                    const indexSignatureType = getIndexTypeOfType(intrinsicElementsType, IndexKind.String);
+                    if (indexSignatureType) {
+                        return indexSignatureType;
+                    }
+                    error(node, Diagnostics.Property_0_does_not_exist_on_type_1, stringLiteralTypeName, "JSX." + JsxNames.IntrinsicElements);
+                }
+                // If we need to report an error, we already done so here. So just return any to prevent any more error downstream
+                return anyType;
             }
 
             // Get the element instance type (the result of newing or invoking this tag)
@@ -12180,7 +12213,9 @@ namespace ts {
             // Variables declared with 'const'
             // Get accessors without matching set accessors
             // Enum members
-            return symbol.flags & SymbolFlags.Property && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Readonly) !== 0 ||
+            // Unions and intersections of the above (unions and intersections eagerly set isReadonly on creation)
+            return symbol.isReadonly ||
+                symbol.flags & SymbolFlags.Property && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Readonly) !== 0 ||
                 symbol.flags & SymbolFlags.Variable && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0 ||
                 symbol.flags & SymbolFlags.Accessor && !(symbol.flags & SymbolFlags.SetAccessor) ||
                 (symbol.flags & SymbolFlags.EnumMember) !== 0;

@@ -450,8 +450,8 @@ namespace Harness.LanguageService {
         getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion {
             return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position));
         }
-        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
-            return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPostion(fileName, position, openingBrace));
+        isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
+            return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
         }
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): ts.CodeFix[] {
             return unwrapJSONCallResult(this.shim.getCodeFixesAtPosition(fileName, start, end, JSON.stringify(errorCodes)));
