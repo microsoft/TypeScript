@@ -337,16 +337,6 @@ namespace ts {
             }
         },
         {
-            name: "typesSearchPaths",
-            type: "list",
-            isTSConfigOnly: true,
-            element: {
-                name: "typesSearchPaths",
-                type: "string",
-                isFilePath: true
-            }
-        },
-        {
             name: "typeRoots",
             type: "list",
             element: {

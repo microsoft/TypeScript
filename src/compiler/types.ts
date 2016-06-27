@@ -2590,7 +2590,6 @@ namespace ts {
         types?: string[];
         /** Paths used to used to compute primary types search locations */
         typeRoots?: string[];
-        typesSearchPaths?: string[];
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
 
