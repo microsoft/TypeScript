@@ -171,7 +171,7 @@ namespace ts.server {
 
         describe("send", () => {
             it("is an overrideable handle which sends protocol messages over the wire", () => {
-                const msg = {seq: 0, type: "none"};
+                const msg = { seq: 0, type: "none" };
                 const strmsg = JSON.stringify(msg);
                 const len = 1 + Utils.byteLength(strmsg, "utf8");
                 const resultMsg = `Content-Length: ${len}\r\n\r\n${strmsg}\n`;
@@ -267,7 +267,7 @@ namespace ts.server {
             constructor() {
                 super(mockHost, nullCancellationToken, Utils.byteLength, process.hrtime, mockLogger);
                 this.addProtocolHandler(this.customHandler, () => {
-                    return {response: undefined, responseRequired: true};
+                    return { response: undefined, responseRequired: true };
                 });
             }
             send(msg: protocol.Message) {
@@ -341,7 +341,7 @@ namespace ts.server {
             handleRequest(msg: protocol.Request) {
                 let response: protocol.Response;
                 try {
-                    ({response} = this.executeCommand(msg));
+                    ({ response } = this.executeCommand(msg));
                 }
                 catch (e) {
                     this.output(undefined, msg.command, msg.seq, e.toString());

@@ -7,7 +7,7 @@
 // ${cwd}: the current working directory of the spawned process
 {
     "version": "0.1.0",
-    "command": "jake",
+    "command": "gulp",
     "isShellCommand": true,
     "showOutput": "silent",
     "tasks": [
@@ -18,25 +18,6 @@
             "problemMatcher": [
                 "$tsc"
             ]
-        },
-        {
-            "taskName": "lint-server",
-            "args": [],
-            "problemMatcher": {
-                "owner": "typescript",
-                "fileLocation": ["relative", "${workspaceRoot}"],
-                "pattern": {
-                    "regexp": "^(warning|error)\\s+([^(]+)\\s+\\((\\d+|\\d+,\\d+|\\d+,\\d+,\\d+,\\d+)\\):\\s+(.*)$",
-                    "severity": 1,
-                    "file": 2,
-                    "location": 3,
-                    "message": 4
-                },
-                "watchedTaskBeginsRegExp": "^\\*\\*\\*Lint failure\\*\\*\\*$",
-                "watchedTaskEndsRegExp": "^\\*\\*\\* Total \\d+ failures\\.$"
-            },
-            "showOutput": "always",
-            "isWatching": true
         }
     ]
 }

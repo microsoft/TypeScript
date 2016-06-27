@@ -21,16 +21,16 @@ namespace ts.server {
         return spaceCache[n];
     }
 
-    export function generateIndentString(n: number, editorOptions: EditorOptions): string {
-        if (editorOptions.ConvertTabsToSpaces) {
+    export function generateIndentString(n: number, editorOptions: EditorSettings): string {
+        if (editorOptions.convertTabsToSpaces) {
             return generateSpaces(n);
         }
         else {
             let result = "";
-            for (let i = 0; i < Math.floor(n / editorOptions.TabSize); i++) {
+            for (let i = 0; i < Math.floor(n / editorOptions.tabSize); i++) {
                 result += "\t";
             }
-            for (let i = 0; i < n % editorOptions.TabSize; i++) {
+            for (let i = 0; i < n % editorOptions.tabSize; i++) {
                 result += " ";
             }
             return result;
@@ -119,7 +119,8 @@ namespace ts.server {
         export const FormatRangeFull = "formatRange-full";
         export const Geterr = "geterr";
         export const GeterrForProject = "geterrForProject";
-        export const SemanticDiagnosticsFull = "semanticDiagnostics-full";
+        export const SemanticDiagnosticsSync = "semanticDiagnosticsSync";
+        export const SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
         export const NavBar = "navbar";
         export const NavBarFull = "navbar-full";
         export const Navto = "navto";
@@ -154,7 +155,6 @@ namespace ts.server {
         export const TodoComments = "todoComments";
         export const Indentation = "indentation";
         export const DocCommentTemplate = "docCommentTemplate";
-        export const SyntacticDiagnosticsFull = "syntacticDiagnostics-full";
         export const CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
         export const NameOrDottedNameSpan = "nameOrDottedNameSpan";
         export const BreakpointStatement = "breakpointStatement";
@@ -162,6 +162,7 @@ namespace ts.server {
 
     namespace Errors {
         export const NoProject = new Error("No Project.");
+        export const ProjectLanguageServiceDisabled = new Error("The project's language service is disabled.");
     }
 
     export interface ServerHost extends ts.System {
@@ -380,10 +381,10 @@ namespace ts.server {
 
         private getCompilerOptionsDiagnostics(args: protocol.ProjectRequestArgs) {
             const project = this.getProject(args.projectFileName);
-            return this.convertDiagnostics(project.languageService.getCompilerOptionsDiagnostics(), /*scriptInfo*/ undefined);
+            return this.convertToDiagnosticsWithLinePosition(project.languageService.getCompilerOptionsDiagnostics(), /*scriptInfo*/ undefined);
         }
 
-        private convertDiagnostics(diagnostics: Diagnostic[], scriptInfo: ScriptInfo) {
+        private convertToDiagnosticsWithLinePosition(diagnostics: Diagnostic[], scriptInfo: ScriptInfo) {
             return diagnostics.map(d => <protocol.DiagnosticWithLinePosition>{
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
                 start: d.start,
@@ -395,19 +396,13 @@ namespace ts.server {
             });
         }
 
-        private getDiagnosticsWorker(args: protocol.FileRequestArgs, selector: (project: Project, file: string) => Diagnostic[]) {
+        private getDiagnosticsWorker(args: protocol.FileRequestArgs, selector: (project: Project, file: string) => Diagnostic[], includeLinePosition: boolean) {
             const { project, file } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const diagnostics = selector(project, file);
-            return this.convertDiagnostics(diagnostics, scriptInfo);
-        }
-
-        private getSyntacticDiagnostics(args: protocol.FileRequestArgs): protocol.DiagnosticWithLinePosition[] {
-            return this.getDiagnosticsWorker(args, (project, file) => project.languageService.getSyntacticDiagnostics(file));
-        }
-
-        private getSemanticDiagnostics(args: protocol.FileRequestArgs): protocol.DiagnosticWithLinePosition[] {
-            return this.getDiagnosticsWorker(args, (project, file) => project.languageService.getSemanticDiagnostics(file));
+            return includeLinePosition
+                ? this.convertToDiagnosticsWithLinePosition(diagnostics, scriptInfo)
+                : diagnostics.map(d => formatDiag(file, project, d));
         }
 
         private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.FileSpan[] | DefinitionInfo[] {
@@ -480,11 +475,18 @@ namespace ts.server {
             });
         }
 
+        private getSyntacticDiagnosticsSync(args: protocol.SyntacticDiagnosticsSyncRequestArgs): protocol.Diagnostic[] | protocol.DiagnosticWithLinePosition[] {
+            return this.getDiagnosticsWorker(args, (project, file) => project.languageService.getSyntacticDiagnostics(file), args.includeLinePosition);
+        }
+
+        private getSemanticDiagnosticsSync(args: protocol.SemanticDiagnosticsSyncRequestArgs): protocol.Diagnostic[] | protocol.DiagnosticWithLinePosition[] {
+            return this.getDiagnosticsWorker(args, (project, file) => project.languageService.getSemanticDiagnostics(file), args.includeLinePosition);
+        }
+
         private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): protocol.DocumentHighlightsItem[] | DocumentHighlights[] {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
-
             const documentHighlights = project.languageService.getDocumentHighlights(file, position, args.filesToSearch);
 
             if (!documentHighlights) {
@@ -797,7 +799,7 @@ namespace ts.server {
         private isValidBraceCompletion(args: protocol.BraceCompletionRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPosition(args, project.getScriptInfoForNormalizedPath(file));
-            return project.languageService.isValidBraceCompletionAtPostion(file, position, args.openingBrace.charCodeAt(0));
+            return project.languageService.isValidBraceCompletionAtPosition(file, position, args.openingBrace.charCodeAt(0));
         }
 
         private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.QuickInfoResponseBody | QuickInfo {
@@ -881,15 +883,7 @@ namespace ts.server {
                 if (lineInfo && (lineInfo.leaf) && (lineInfo.leaf.text)) {
                     const lineText = lineInfo.leaf.text;
                     if (lineText.search("\\S") < 0) {
-                        // TODO: get these options from host
-                        const editorOptions: ts.EditorOptions = {
-                            IndentSize: formatOptions.indentSize,
-                            TabSize: formatOptions.tabSize,
-                            NewLineCharacter: formatOptions.newLineCharacter,
-                            ConvertTabsToSpaces: formatOptions.convertTabsToSpaces,
-                            IndentStyle: ts.IndentStyle.Smart,
-                        };
-                        const preferredIndent = project.languageService.getIndentationAtPosition(file, position, editorOptions);
+                        const preferredIndent = project.languageService.getIndentationAtPosition(file, position, formatOptions);
                         let hasIndent = 0;
                         let i: number, len: number;
                         for (i = 0, len = lineText.length; i < len; i++) {
@@ -897,7 +891,7 @@ namespace ts.server {
                                 hasIndent++;
                             }
                             else if (lineText.charAt(i) == "\t") {
-                                hasIndent += editorOptions.TabSize;
+                                hasIndent += formatOptions.tabSize;
                             }
                             else {
                                 break;
@@ -908,7 +902,7 @@ namespace ts.server {
                             const firstNoWhiteSpacePosition = lineInfo.offset + i;
                             edits.push({
                                 span: ts.createTextSpanFromBounds(lineInfo.offset, firstNoWhiteSpacePosition),
-                                newText: generateIndentString(preferredIndent, editorOptions)
+                                newText: generateIndentString(preferredIndent, formatOptions)
                             });
                         }
                     }
@@ -1376,12 +1370,6 @@ namespace ts.server {
             [CommandNames.SignatureHelpFull]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.SemanticDiagnosticsFull]: (request: protocol.FileRequest) => {
-                return this.requiredResponse(this.getSemanticDiagnostics(request.arguments));
-            },
-            [CommandNames.SyntacticDiagnosticsFull]: (request: protocol.FileRequest) => {
-                return this.requiredResponse(this.getSyntacticDiagnostics(request.arguments));
-            },
             [CommandNames.CompilerOptionsDiagnosticsFull]: (request: protocol.ProjectRequest) => {
                 return this.requiredResponse(this.getCompilerOptionsDiagnostics(request.arguments));
             },
@@ -1391,6 +1379,12 @@ namespace ts.server {
             [CommandNames.Cleanup]: (request: protocol.Request) => {
                 this.cleanup();
                 return this.requiredResponse(true);
+            },
+            [CommandNames.SemanticDiagnosticsSync]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getSemanticDiagnosticsSync(request.arguments));
+            },
+            [CommandNames.SyntacticDiagnosticsSync]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getSyntacticDiagnosticsSync(request.arguments));
             },
             [CommandNames.Geterr]: (request: protocol.Request) => {
                 const geterrArgs = <protocol.GeterrRequestArgs>request.arguments;

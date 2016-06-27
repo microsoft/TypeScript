@@ -1,17 +1,14 @@
 /// <reference path="fourslash.ts" />
 
 //@Filename: a.ts
-////var /*1*/x: number;
+////var [|x|]: number;
 
 //@Filename: b.ts
 /////// <reference path="a.ts" />
-////x++;
+////[|x|]++;
 
 //@Filename: c.ts
 /////// <reference path="a.ts" />
-////x++;
+////[|x|]++;
 
-goTo.file("a.ts");
-goTo.marker("1");
-
-verify.referencesCountIs(3);
+verify.rangesReferenceEachOther();

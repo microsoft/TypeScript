@@ -133,7 +133,7 @@ namespace ts.server {
         getFormattingEditsForDocument:  (): any => throwLanguageServiceIsDisabledError(),
         getFormattingEditsAfterKeystroke:   (): any => throwLanguageServiceIsDisabledError(),
         getDocCommentTemplateAtPosition:    (): any => throwLanguageServiceIsDisabledError(),
-        isValidBraceCompletionAtPostion:    (): any => throwLanguageServiceIsDisabledError(),
+        isValidBraceCompletionAtPosition:   (): any => throwLanguageServiceIsDisabledError(),
         getEmitOutput:                  (): any => throwLanguageServiceIsDisabledError(),
         getProgram:                     (): any => throwLanguageServiceIsDisabledError(),
         getNonBoundSourceFile:          (): any => throwLanguageServiceIsDisabledError(),

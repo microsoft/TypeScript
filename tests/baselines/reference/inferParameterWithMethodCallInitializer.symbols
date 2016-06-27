@@ -30,7 +30,7 @@ function weird(this: Example, a = this.getNumber()) {
 >Example : Symbol(Example, Decl(inferParameterWithMethodCallInitializer.ts, 2, 1))
 >a : Symbol(a, Decl(inferParameterWithMethodCallInitializer.ts, 11, 29))
 >this.getNumber : Symbol(Example.getNumber, Decl(inferParameterWithMethodCallInitializer.ts, 3, 15))
->this : Symbol(Example, Decl(inferParameterWithMethodCallInitializer.ts, 2, 1))
+>this : Symbol(this, Decl(inferParameterWithMethodCallInitializer.ts, 11, 15))
 >getNumber : Symbol(Example.getNumber, Decl(inferParameterWithMethodCallInitializer.ts, 3, 15))
 
     return a;
@@ -45,7 +45,7 @@ class Weird {
 >Example : Symbol(Example, Decl(inferParameterWithMethodCallInitializer.ts, 2, 1))
 >a : Symbol(a, Decl(inferParameterWithMethodCallInitializer.ts, 15, 30))
 >this.getNumber : Symbol(Example.getNumber, Decl(inferParameterWithMethodCallInitializer.ts, 3, 15))
->this : Symbol(Example, Decl(inferParameterWithMethodCallInitializer.ts, 2, 1))
+>this : Symbol(this, Decl(inferParameterWithMethodCallInitializer.ts, 15, 16))
 >getNumber : Symbol(Example.getNumber, Decl(inferParameterWithMethodCallInitializer.ts, 3, 15))
 
         return a;
