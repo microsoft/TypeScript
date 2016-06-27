@@ -220,7 +220,7 @@ namespace ts.server {
                 for (const openFile of this.openFilesReferenced) {
                     this.eventHandler("context", openFile.getDefaultProject(), openFile.fileName);
                 }
-                
+
                 // TODO: project system view is inconsistent
             }
 

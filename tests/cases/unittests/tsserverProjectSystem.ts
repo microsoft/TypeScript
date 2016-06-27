@@ -720,6 +720,6 @@ namespace ts {
 
             projectService.closeClientFile(file1.path);
             checkNumberOfConfiguredProjects(projectService, 0);
-        }) 
+        });
     });
 }
