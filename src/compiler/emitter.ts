@@ -5003,6 +5003,8 @@ const _super = (function (geti, seti) {
 
             function emitBlockFunctionBody(node: FunctionLikeDeclaration, body: Block) {
                 write(" {");
+                emitBraceTrailingComments(body);
+
                 const initialTextPos = writer.getTextPos();
 
                 increaseIndent();
