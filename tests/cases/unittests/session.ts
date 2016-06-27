@@ -40,7 +40,7 @@ namespace ts.server {
         let lastSent: protocol.Message;
 
         beforeEach(() => {
-            session = new Session(mockHost, nullCancellationToken, Utils.byteLength, process.hrtime, mockLogger);
+            session = new Session(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, Utils.byteLength, process.hrtime, mockLogger);
             session.send = (msg: protocol.Message) => {
                 lastSent = msg;
             };
@@ -265,7 +265,7 @@ namespace ts.server {
             lastSent: protocol.Message;
             customHandler = "testhandler";
             constructor() {
-                super(mockHost, nullCancellationToken, Utils.byteLength, process.hrtime, mockLogger);
+                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, Utils.byteLength, process.hrtime, mockLogger);
                 this.addProtocolHandler(this.customHandler, () => {
                     return { response: undefined, responseRequired: true };
                 });
@@ -323,7 +323,7 @@ namespace ts.server {
         class InProcSession extends Session {
             private queue: protocol.Request[] = [];
             constructor(private client: InProcClient) {
-                super(mockHost, nullCancellationToken, Utils.byteLength, process.hrtime, mockLogger);
+                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, Utils.byteLength, process.hrtime, mockLogger);
                 this.addProtocolHandler("echo", (req: protocol.Request) => ({
                     response: req.arguments,
                     responseRequired: true

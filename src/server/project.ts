@@ -108,6 +108,10 @@ namespace ts.server {
             return this.compilerOptions;
         }
 
+        hasRoots() {
+            return this.rootFiles.length > 0;
+        }
+
         getRootFiles() {
             return this.rootFiles.map(info => info.fileName);
         }

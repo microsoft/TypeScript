@@ -26,6 +26,22 @@ namespace ts {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
 
+    interface TestServerHostCreationParameters {
+        fileOrFolderList: FileOrFolder[];
+        useCaseSensitiveFileNames?: boolean;
+        executingFilePath?: string;
+        libFile?: FileOrFolder;
+        currentDirectory?: string;
+    }
+
+    function createServerHost(params: TestServerHostCreationParameters): TestServerHost {
+        return new TestServerHost(
+            params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
+            params.executingFilePath || getExecutingFilePathFromLibFile(params.libFile),
+            params.currentDirectory || "/",
+            params.fileOrFolderList);
+    }
+
     interface FileOrFolder {
         path: string;
         content?: string;
@@ -112,12 +128,12 @@ namespace ts {
         checkMapKeys("watchedDirectories", host.watchedDirectories, expectedDirectories);
     }
 
-    function checkConfiguredProjectActualFiles(project: server.Project, expectedFiles: string[]) {
-        checkFileNames("configuredProjects project, actualFileNames", project.getFileNames(), expectedFiles);
+    function checkProjectActualFiles(project: server.Project, expectedFiles: string[]) {
+        checkFileNames(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
     }
 
-    function checkConfiguredProjectRootFiles(project: server.Project, expectedFiles: string[]) {
-        checkFileNames("configuredProjects project, rootFileNames", project.getRootFiles(), expectedFiles);
+    function checkProjectRootFiles(project: server.Project, expectedFiles: string[]) {
+        checkFileNames(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
     type TimeOutCallback = () => any;
@@ -193,7 +209,7 @@ namespace ts {
             return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), (dir) => {
                 const result: FileSystemEntries = {
                     directories: [],
-                    files : []
+                    files: []
                 };
                 const dirEntry = that.fs.get(that.toPath(dir));
                 if (isFolder(dirEntry)) {
@@ -325,8 +341,8 @@ namespace ts {
                 path: "/a/b/c/module.d.ts",
                 content: `export let x: number`
             };
-            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [appFile, moduleFile, libFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken);
+            const host = createServerHost({ fileOrFolderList: [appFile, moduleFile, libFile], libFile });
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
             const { configFileName } = projectService.openClientFile(appFile.path);
 
             assert(!configFileName, `should not find config, got: '${configFileName}`);
@@ -363,8 +379,9 @@ namespace ts {
                 content: "let z = 1"
             };
 
-            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [ configFile, libFile, file1, file2, file3 ]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken);
+
+            const host = createServerHost({ fileOrFolderList: [configFile, libFile, file1, file2, file3], libFile });
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
             const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
 
             assert(configFileName, "should find config file");
@@ -373,8 +390,8 @@ namespace ts {
             checkNumberOfConfiguredProjects(projectService, 1);
 
             const project = projectService.configuredProjects[0];
-            checkConfiguredProjectActualFiles(project, [file1.path, libFile.path, file2.path]);
-            checkConfiguredProjectRootFiles(project, [file1.path, file2.path]);
+            checkProjectActualFiles(project, [file1.path, libFile.path, file2.path]);
+            checkProjectRootFiles(project, [file1.path, file2.path]);
             // watching all files except one that was open
             checkWatchedFiles(host, [configFile.path, file2.path, libFile.path]);
             checkWatchedDirectories(host, [getDirectoryPath(configFile.path)]);
@@ -387,10 +404,11 @@ namespace ts {
                     "files": ["commonFile1.ts"]
                 }`
             };
-            const filesWithoutConfig = [ libFile, commonFile1, commonFile2 ];
-            const filesWithConfig = [ libFile, commonFile1, commonFile2, configFile ];
-            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", filesWithoutConfig);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken);
+            const filesWithoutConfig = [libFile, commonFile1, commonFile2];
+            const host = createServerHost({ fileOrFolderList: filesWithoutConfig, libFile });
+
+            const filesWithConfig = [libFile, commonFile1, commonFile2, configFile];
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
             projectService.openClientFile(commonFile1.path);
             projectService.openClientFile(commonFile2.path);
 
@@ -420,21 +438,21 @@ namespace ts {
                 path: "/a/b/tsconfig.json",
                 content: `{}`
             };
-            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [commonFile1, libFile, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken);
+            const host = createServerHost({ fileOrFolderList: [commonFile1, libFile, configFile], libFile });
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
             projectService.openClientFile(commonFile1.path);
             checkWatchedDirectories(host, ["/a/b"]);
             checkNumberOfConfiguredProjects(projectService, 1);
 
             const project = projectService.configuredProjects[0];
-            checkConfiguredProjectRootFiles(project, [commonFile1.path]);
+            checkProjectRootFiles(project, [commonFile1.path]);
 
             // add a new ts file
             host.reloadFS([commonFile1, commonFile2, libFile, configFile]);
             host.triggerDirectoryWatcherCallback("/a/b", commonFile2.path);
             host.runQueuedTimeoutCallbacks();
             // project service waits for 250ms to update the project structure, therefore the assertion needs to wait longer.
-            checkConfiguredProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
+            checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
         });
 
         it("should ignore non-existing files specified in the config file", () => {
@@ -448,14 +466,14 @@ namespace ts {
                     ]
                 }`
             };
-            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [commonFile1, commonFile2, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken);
+            const host = createServerHost({ fileOrFolderList: [commonFile1, commonFile2, configFile], libFile });
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
             projectService.openClientFile(commonFile1.path);
             projectService.openClientFile(commonFile2.path);
 
             checkNumberOfConfiguredProjects(projectService, 1);
             const project = projectService.configuredProjects[0];
-            checkConfiguredProjectRootFiles(project, [commonFile1.path]);
+            checkProjectRootFiles(project, [commonFile1.path]);
             checkNumberOfInferredProjects(projectService, 1);
         });
 
@@ -464,25 +482,25 @@ namespace ts {
                 path: "/a/b/tsconfig.json",
                 content: `{}`
             };
-            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [commonFile1, commonFile2, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken);
+            const host = createServerHost({ fileOrFolderList: [commonFile1, commonFile2, configFile], libFile });
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
             projectService.openClientFile(commonFile1.path);
 
             checkNumberOfConfiguredProjects(projectService, 1);
             const project = projectService.configuredProjects[0];
-            checkConfiguredProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
+            checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
 
             // delete commonFile2
             host.reloadFS([commonFile1, configFile]);
             host.triggerDirectoryWatcherCallback("/a/b", commonFile2.path);
             host.runQueuedTimeoutCallbacks();
-            checkConfiguredProjectRootFiles(project, [commonFile1.path]);
+            checkProjectRootFiles(project, [commonFile1.path]);
 
             // re-add commonFile2
             host.reloadFS([commonFile1, commonFile2, configFile]);
             host.triggerDirectoryWatcherCallback("/a/b", commonFile2.path);
             host.runQueuedTimeoutCallbacks();
-            checkConfiguredProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
+            checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
         });
 
         it("should create new inferred projects for files excluded from a configured project", () => {
@@ -494,12 +512,12 @@ namespace ts {
                 }`
             };
             const files = [commonFile1, commonFile2, configFile];
-            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", files);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken);
+            const host = createServerHost({ fileOrFolderList: files, libFile });
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
             projectService.openClientFile(commonFile1.path);
 
             const project = projectService.configuredProjects[0];
-            checkConfiguredProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
+            checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
             configFile.content = `{
                 "compilerOptions": {},
                 "files": ["${commonFile1.path}"]
@@ -508,7 +526,7 @@ namespace ts {
             host.triggerFileWatcherCallback(configFile.path);
 
             checkNumberOfConfiguredProjects(projectService, 1);
-            checkConfiguredProjectRootFiles(project, [commonFile1.path]);
+            checkProjectRootFiles(project, [commonFile1.path]);
 
             projectService.openClientFile(commonFile2.path);
             checkNumberOfInferredProjects(projectService, 1);
@@ -527,13 +545,13 @@ namespace ts {
                 content: `let t = 1;`
             };
 
-            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [commonFile1, commonFile2, excludedFile1, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken);
+            const host = createServerHost({ fileOrFolderList: [commonFile1, commonFile2, excludedFile1, configFile], libFile });
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
 
             projectService.openClientFile(commonFile1.path);
             checkNumberOfConfiguredProjects(projectService, 1);
             const project = projectService.configuredProjects[0];
-            checkConfiguredProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
+            checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
             projectService.openClientFile(excludedFile1.path);
             checkNumberOfInferredProjects(projectService, 1);
         });
@@ -561,15 +579,15 @@ namespace ts {
                 }`
             };
             const files = [file1, nodeModuleFile, classicModuleFile, configFile];
-            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", files);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken);
+            const host = createServerHost({ fileOrFolderList: files, libFile });
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
             projectService.openClientFile(file1.path);
             projectService.openClientFile(nodeModuleFile.path);
             projectService.openClientFile(classicModuleFile.path);
 
             checkNumberOfConfiguredProjects(projectService, 1);
             const project = projectService.configuredProjects[0];
-            checkConfiguredProjectActualFiles(project, [file1.path, nodeModuleFile.path]);
+            checkProjectActualFiles(project, [file1.path, nodeModuleFile.path]);
             checkNumberOfInferredProjects(projectService, 1);
 
             configFile.content = `{
@@ -580,7 +598,7 @@ namespace ts {
             }`;
             host.reloadFS(files);
             host.triggerFileWatcherCallback(configFile.path);
-            checkConfiguredProjectActualFiles(project, [file1.path, classicModuleFile.path]);
+            checkProjectActualFiles(project, [file1.path, classicModuleFile.path]);
             checkNumberOfInferredProjects(projectService, 1);
         });
 
@@ -602,8 +620,8 @@ namespace ts {
                     "files": [ "main.ts" ]
                 }`
             };
-            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [file1, file2, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken);
+            const host = createServerHost({ fileOrFolderList: [file1, file2, configFile], libFile });
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
             projectService.openClientFile(file1.path);
             projectService.closeClientFile(file1.path);
             projectService.openClientFile(file2.path);
@@ -629,13 +647,56 @@ namespace ts {
                     "files": [ "main.ts" ]
                 }`
             };
-            const host = new TestServerHost(/*useCaseSensitiveFileNames*/ false, getExecutingFilePathFromLibFile(libFile), "/", [file1, file2, configFile]);
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken);
+            const host = createServerHost({ fileOrFolderList: [file1, file2, configFile], libFile });
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
             projectService.openClientFile(file1.path);
             projectService.closeClientFile(file1.path);
             projectService.openClientFile(file2.path);
             checkNumberOfConfiguredProjects(projectService, 1);
             checkNumberOfInferredProjects(projectService, 0);
+        });
+
+        it("should use only one inferred project if 'useOneInferredProject' is set", () => {
+            const file1 = {
+                path: "/a/b/main.ts",
+                content: "let x =1;"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "target": "es6"
+                    }, 
+                    "files": [ "main.ts" ]
+                }`
+            };
+            const file2 = {
+                path: "/a/c/main.ts",
+                content: "let x =1;"
+            };
+
+            const file3 = {
+                path: "/a/d/main.ts",
+                content: "let x =1;"
+            };
+
+            const host = createServerHost({ fileOrFolderList: [file1, file2, file3, libFile], libFile });
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ true);
+            projectService.openClientFile(file1.path);
+            projectService.openClientFile(file2.path);
+            projectService.openClientFile(file3.path);
+
+            checkNumberOfConfiguredProjects(projectService, 0);
+            checkNumberOfInferredProjects(projectService, 1);
+            checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, file2.path, file3.path, libFile.path]);
+
+
+            host.reloadFS([file1, configFile, file2, file3, libFile]);
+            host.triggerDirectoryWatcherCallback(getDirectoryPath(configFile.path), configFile.path);
+
+            checkNumberOfConfiguredProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 1);
+            checkProjectActualFiles(projectService.inferredProjects[0], [file2.path, file3.path, libFile.path]);
         });
     });
 }

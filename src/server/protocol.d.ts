@@ -606,6 +606,11 @@ declare namespace ts.server.protocol {
          * The format options to use during formatting and other code editing features.
          */
         formatOptions?: FormatOptions;
+
+        /**
+         * If set to true - then all loose files will land into one inferred project
+         */
+        useOneInferredProject?: boolean;
     }
 
     /**

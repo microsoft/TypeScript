@@ -178,12 +178,13 @@ namespace ts.server {
 
         constructor(
             private host: ServerHost,
-            private cancellationToken: HostCancellationToken,
+            cancellationToken: HostCancellationToken,
+            useOneInferredProject: boolean,
             private byteLength: (buf: string, encoding?: string) => number,
             private hrtime: (start?: number[]) => number[],
             private logger: Logger) {
             this.projectService =
-                new ProjectService(host, logger, cancellationToken, (eventName, project, fileName) => {
+                new ProjectService(host, logger, cancellationToken, useOneInferredProject, (eventName, project, fileName) => {
                     this.handleEvent(eventName, project, fileName);
                 });
         }
@@ -1380,10 +1381,10 @@ namespace ts.server {
                 this.cleanup();
                 return this.requiredResponse(true);
             },
-            [CommandNames.SemanticDiagnosticsSync]: (request: protocol.FileRequest) => {
+            [CommandNames.SemanticDiagnosticsSync]: (request: protocol.SemanticDiagnosticsSyncRequest) => {
                 return this.requiredResponse(this.getSemanticDiagnosticsSync(request.arguments));
             },
-            [CommandNames.SyntacticDiagnosticsSync]: (request: protocol.FileRequest) => {
+            [CommandNames.SyntacticDiagnosticsSync]: (request: protocol.SyntacticDiagnosticsSyncRequest) => {
                 return this.requiredResponse(this.getSyntacticDiagnosticsSync(request.arguments));
             },
             [CommandNames.Geterr]: (request: protocol.Request) => {
@@ -1398,9 +1399,8 @@ namespace ts.server {
                 this.change(request.arguments);
                 return this.notRequired();
             },
-            [CommandNames.Configure]: (request: protocol.Request) => {
-                const configureArgs = <protocol.ConfigureRequestArguments>request.arguments;
-                this.projectService.setHostConfiguration(configureArgs);
+            [CommandNames.Configure]: (request: protocol.ConfigureRequest) => {
+                this.projectService.setHostConfiguration(request.arguments);
                 this.output(undefined, CommandNames.Configure, request.seq);
                 return this.notRequired();
             },
