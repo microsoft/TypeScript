@@ -292,8 +292,8 @@ namespace ts.server {
 
         public abstract getFileInfo(key: string): T;
 
-        public queueFileInfo(fileInfo: T, touch?: boolean): void {
-            if (!fileInfo.needsCheck(this)) {
+        public queueFileInfo(fileInfo: T, touch?: boolean, force = false): void {
+            if (!force && !fileInfo.needsCheck(this)) {
                 return;
             }
             this._compileQueue.add(fileInfo.fileName(), fileInfo, touch);
@@ -505,15 +505,17 @@ namespace ts.server {
 
         private contentSignature: string;
         private lastCheckedFingerPrint: string;
+        private _isExternalModule: boolean;
 
-        constructor(filename: string, content: string) {
+        constructor(filename: string, sourceFile: SourceFile) {
             super(filename);
             this.finalized = false;
             this.sourceFileVersion = undefined;
             this.references = undefined;
             this.referencedBy = undefined;
-            this.contentSignature = this.computeHash(content);
+            this.contentSignature = this.computeHash(sourceFile.text);
             this.lastCheckedFingerPrint = undefined;
+            this._isExternalModule = ModuleFileInfo.isExternalModule(sourceFile);
         }
 
         private static binarySearch(array: ModuleFileInfo[], value: string): number {
@@ -576,6 +578,25 @@ namespace ts.server {
                     }
                 }
             }
+        }
+
+        private static isExternalModule(sourceFile: SourceFile): boolean {
+            if (!!sourceFile.externalModuleIndicator) {
+                return true;
+            }
+            if (sourceFile.isDeclarationFile) {
+                for (const statement of sourceFile.statements) {
+                    if (statement.kind !== SyntaxKind.ModuleDeclaration || (<ModuleDeclaration>statement).name.kind !== SyntaxKind.StringLiteral) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public isExternalModule(): boolean  {
+            return this._isExternalModule;
         }
 
         public getState(): ModuleFileInfoState {
@@ -725,6 +746,7 @@ namespace ts.server {
                     newReferences[i].addReferencedBy(this);
                 }
                 this.references = newReferences.length > 0 ? newReferences : undefined;
+                this._isExternalModule = ModuleFileInfo.isExternalModule(sourceFile);
                 this.contentSignature = this.computeHash(sourceFile.text);
                 this.sourceFileVersion = newVersion;
             }
@@ -805,7 +827,28 @@ namespace ts.server {
 
         protected updateCompileQueue(fileInfo: ModuleFileInfo): void {
             if (fileInfo.update(this)) {
-                fileInfo.queueReferencedBy(this);
+                if (fileInfo.isExternalModule()) {
+                    fileInfo.queueReferencedBy(this);
+                }
+                else {
+                    const high: ModuleFileInfo[] = [];
+                    const low: ModuleFileInfo[] = [];
+                    Object.keys(this.fileInfos).forEach((key) => {
+                        const element = this.fileInfos[key];
+                        if (fileInfo.fileName() === element.fileName()) {
+                            return;
+                        }
+                        const scriptInfo = this.getProject().projectService.getScriptInfo(element.fileName());
+                        if (scriptInfo && scriptInfo.isOpen) {
+                            high.push(element);
+                        }
+                        else {
+                            low.push(element);
+                        }
+                    });
+                    high.forEach(info => this.queueFileInfo(info, /*touch*/ true, /*force*/ true));
+                    low.forEach(info => this.queueFileInfo(info, /*touch*/ false, /*force*/ true));
+                }
             }
             const state = fileInfo.getState();
             if (state) {
@@ -848,7 +891,7 @@ namespace ts.server {
                 }
                 const sourceFile = program.getSourceFile(file);
                 if (sourceFile) {
-                    const fileInfo = new ModuleFileInfo(file, sourceFile.text);
+                    const fileInfo = new ModuleFileInfo(file, sourceFile);
                     this.fileInfos[fileInfo.fileName()] = fileInfo;
                     memo.push(fileInfo);
                 }
