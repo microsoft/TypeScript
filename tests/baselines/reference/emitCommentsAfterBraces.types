@@ -1,0 +1,14 @@
+=== tests/cases/compiler/emitCommentsAfterBraces.ts ===
+if (true) {//validation and tokenization
+>true : boolean
+
+	let a = 42;
+>a : number
+>42 : number
+}
+
+if (true) {/*comment*/ let a = 42;}
+>true : boolean
+>a : number
+>42 : number
+
