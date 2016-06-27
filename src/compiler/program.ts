@@ -1361,10 +1361,8 @@ namespace ts {
                 getNewLine: () => host.getNewLine(),
                 getSourceFile: program.getSourceFile,
                 getSourceFileByPath: program.getSourceFileByPath,
-                getSourceFiles: () => filter(program.getSourceFiles(),
-                    // Remove JavaScript files found by searching node_modules from the source files to emit
-                    sourceFile => !lookUp(jsFilesFoundSearchingNodeModules, sourceFile.path)
-                ),
+                getSourceFiles: program.getSourceFiles,
+                getFilesFromNodeModules: () => jsFilesFoundSearchingNodeModules,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
