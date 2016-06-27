@@ -56,6 +56,7 @@ namespace ts.codeFix {
                     token.parent.kind === SyntaxKind.InterfaceDeclaration ||
                     token.parent.kind === SyntaxKind.MethodDeclaration    ||
                     token.parent.kind === SyntaxKind.ModuleDeclaration    ||
+                    token.parent.kind === SyntaxKind.PropertyDeclaration  ||
                     token.parent.kind === SyntaxKind.ArrowFunction) {
                     return [{ newText: "", span: { start: token.parent.pos, length: token.parent.end - token.parent.pos}}];
                 }
@@ -66,7 +67,7 @@ namespace ts.codeFix {
                         return [{ newText: "", span: { start: token.parent.pos - 1, length: token.parent.end - token.parent.pos + 2 } }];
                     } else {
                         if(typeParameters[0] === token.parent) {
-
+                            return [{ newText: "", span: { start: token.parent.pos , length: token.parent.end - token.parent.pos + 1 } }];
                         } else {
                             return [{ newText: "", span: { start: token.parent.pos - 1, length: token.parent.end - token.parent.pos + 1 } }];
                         }
@@ -101,7 +102,7 @@ namespace ts.codeFix {
                     }
                 }
 
-                if(token.parent.kind === SyntaxKind.ImportClause) {
+                if(token.parent.parent.kind === SyntaxKind.ImportClause || token.parent.parent.kind === SyntaxKind.ImportDeclaration) {
                     return [{ newText: "{}", span: { start: token.parent.pos, length: token.parent.end - token.parent.pos } }];
                 }
 
