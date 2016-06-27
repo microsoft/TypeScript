@@ -58,6 +58,29 @@ namespace ts.quickFix {
         }
     });
 
+    registerQuickFix({
+        name: "Implements Inherited Abstract Class",
+        errorCode: "TS2515",
+        getFix: (sourceFile: SourceFile, start: number, end: number, program: Program): { newText: string; span: { start: number, length: number } }[] => {
+            const token = getTokenAtPosition(sourceFile, start);
+            let changesArray: { newText: string; span: { start: number, length: number } }[] = [];
+
+            if (token.kind === SyntaxKind.Identifier && token.parent.kind === SyntaxKind.ClassDeclaration) {
+                let classDeclaration = <ClassDeclaration>token.parent;
+                let startPos: number = classDeclaration.members.pos;
+                let classMembers: Array<string> = getClassMembers(classDeclaration);
+                let trackingAddedMembers: Array<string> = [];
+                let extendsClause = ts.getClassExtendsHeritageClauseElement(classDeclaration);
+                changesArray = changesArray.concat(getChanges(extendsClause, classMembers, startPos, program, false, trackingAddedMembers));
+            }
+
+            if (changesArray.length !== 0)
+                return changesArray;
+
+            throw new Error("No Quick Fix found");
+        }
+    });
+
     function getChanges(interfaceClause: Node, existingMembers: Array<string>, startPos: number, program: Program, reference: boolean, trackingAddedMembers: Array<string>): { newText: string; span: { start: number, length: number } }[] {
         let type = program.getTypeChecker().getTypeAtLocation(interfaceClause);
         let changesArray: { newText: string; span: { start: number, length: number } }[] = [];
