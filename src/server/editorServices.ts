@@ -544,6 +544,7 @@ namespace ts.server {
             if (!this.logger.isVerbose()) {
                 return;
             }
+
             this.logger.startGroup();
 
             let counter = 0;

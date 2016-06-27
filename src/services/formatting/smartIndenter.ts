@@ -10,7 +10,7 @@ namespace ts.formatting {
 
         export function getIndentation(position: number, sourceFile: SourceFile, options: EditorSettings): number {
             if (position > sourceFile.text.length) {
-                return 0; // past EOF
+                return getBaseIndentation(options); // past EOF
             }
 
             // no indentation when the indent style is set to none,
@@ -21,7 +21,7 @@ namespace ts.formatting {
 
             const precedingToken = findPrecedingToken(position, sourceFile);
             if (!precedingToken) {
-                return 0;
+                return getBaseIndentation(options);
             }
 
             // no indentation in string \regex\template literals
@@ -96,8 +96,8 @@ namespace ts.formatting {
             }
 
             if (!current) {
-                // no parent was found - return 0 to be indented on the level of SourceFile
-                return 0;
+                // no parent was found - return the base indentation of the SourceFile
+                return getBaseIndentation(options);
             }
 
             return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
@@ -106,6 +106,10 @@ namespace ts.formatting {
         export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: EditorSettings): number {
             const start = sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
             return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, options);
+        }
+
+        export function getBaseIndentation(options: EditorSettings) {
+            return options.baseIndentSize || 0;
         }
 
         function getIndentationForNodeWorker(
@@ -162,7 +166,7 @@ namespace ts.formatting {
                 parent = current.parent;
             }
 
-            return indentationDelta;
+            return indentationDelta + getBaseIndentation(options);
         }
 
 

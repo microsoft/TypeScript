@@ -7,13 +7,9 @@
 ////    export var x;
 ////}
 ////
-////import /*2*/globalAlias = globalModule;
+////import [|globalAlias|] = globalModule;
 
 // @Filename: referencesForGlobals_2.ts
-////var m = /*1*/globalAlias;
+////var m = [|globalAlias|];
 
-goTo.marker("1");
-verify.referencesCountIs(2);
-
-goTo.marker("2");
-verify.referencesCountIs(2);
+verify.rangesReferenceEachOther();
