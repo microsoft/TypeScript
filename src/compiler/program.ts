@@ -1901,7 +1901,7 @@ namespace ts {
 
                 // See if we need to reprocess the imports due to prior skipped imports
                 if (file && lookUp(modulesWithElidedImports, file.path)) {
-                    if (currentNodeModulesJsDepth < maxNodeModulesJsDepth) { // TODO: Check for off-by-ones
+                    if (currentNodeModulesJsDepth < maxNodeModulesJsDepth) {
                         modulesWithElidedImports[file.path] = false;
                         processImportedModules(file, getDirectoryPath(fileName));
                     }
