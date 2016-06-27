@@ -167,7 +167,7 @@ namespace ts.server {
                 return undefined;
             }
             if (isInferredProjectName(projectName)) {
-                return forEach(this.inferredProjects, p => p.getProjectName() === projectName && p);
+                return findProjectByName(projectName, this.inferredProjects);
             }
             return this.findExternalProjectByProjectName(projectName) || this.findConfiguredProjectByProjectName(toNormalizedPath(projectName));
         }
@@ -209,17 +209,19 @@ namespace ts.server {
 
                 info.detachAllProjects();
 
+                if (!this.eventHandler) {
+                    return;
+                }
+
                 for (const openFile of this.openFileRoots) {
-                    if (this.eventHandler) {
-                        this.eventHandler("context", openFile.getDefaultProject(), openFile.fileName);
-                    }
+                    this.eventHandler("context", openFile.getDefaultProject(), openFile.fileName);
                 }
 
                 for (const openFile of this.openFilesReferenced) {
-                    if (this.eventHandler) {
-                        this.eventHandler("context", openFile.getDefaultProject(), openFile.fileName);
-                    }
+                    this.eventHandler("context", openFile.getDefaultProject(), openFile.fileName);
                 }
+                
+                // TODO: project system view is inconsistent
             }
 
             this.printProjects();

@@ -19,8 +19,8 @@ namespace ts.server {
     }
 
     export abstract class Project {
-        private readonly rootFiles: ScriptInfo[] = [];
-        private readonly rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
+        private rootFiles: ScriptInfo[] = [];
+        private rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
         private lsHost: ServerLanguageServiceHost;
         private program: ts.Program;
 
@@ -96,11 +96,24 @@ namespace ts.server {
         abstract getProjectName(): string;
 
         close() {
-            for (const fileName of this.getFileNames()) {
-                const info = this.projectService.getScriptInfoForNormalizedPath(fileName);
-                info.detachFromProject(this);
+            if (this.program) {
+                // if we have a program - release all files that are enlisted in program
+                for (const f of this.program.getSourceFiles()) {
+                    const info = this.projectService.getScriptInfo(f.fileName);
+                    info.detachFromProject(this);
+                }
             }
-            // signal language service to release files acquired from document registry
+            else {
+                // release all root files
+                for (const root of this.rootFiles) {
+                    root.detachFromProject(this);
+                }
+            }
+            this.rootFiles = undefined;
+            this.rootFilesMap = undefined;
+            this.program = undefined;
+
+            // signal language service to release source files acquired from document registry
             this.languageService.dispose();
         }
 
@@ -137,7 +150,7 @@ namespace ts.server {
         }
 
         containsScriptInfo(info: ScriptInfo): boolean {
-            return this.program && this.program.getSourceFileByPath(info.path) !== undefined;
+            return this.isRoot(info) || (this.program && this.program.getSourceFileByPath(info.path) !== undefined);
         }
 
         containsFile(filename: NormalizedPath, requireOpen?: boolean) {

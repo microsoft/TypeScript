@@ -698,5 +698,28 @@ namespace ts {
             checkNumberOfInferredProjects(projectService, 1);
             checkProjectActualFiles(projectService.inferredProjects[0], [file2.path, file3.path, libFile.path]);
         });
+
+        it ("should close configured project after closing last open file", () => {
+            const file1 = {
+                path: "/a/b/main.ts",
+                content: "let x =1;"
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "target": "es6"
+                    }, 
+                    "files": [ "main.ts" ]
+                }`
+            };
+            const host = createServerHost({ fileOrFolderList: [file1, configFile, libFile], libFile });
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ true);
+            projectService.openClientFile(file1.path);
+            checkNumberOfConfiguredProjects(projectService, 1);
+
+            projectService.closeClientFile(file1.path);
+            checkNumberOfConfiguredProjects(projectService, 0);
+        }) 
     });
 }

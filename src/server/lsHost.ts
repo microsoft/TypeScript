@@ -89,8 +89,8 @@ namespace ts.server {
         }
 
         getDefaultLibFileName() {
-            const nodeModuleBinDir = ts.getDirectoryPath(ts.normalizePath(this.host.getExecutingFilePath()));
-            return ts.combinePaths(nodeModuleBinDir, ts.getDefaultLibFileName(this.compilationSettings));
+            const nodeModuleBinDir = getDirectoryPath(normalizePath(this.host.getExecutingFilePath()));
+            return combinePaths(nodeModuleBinDir, getDefaultLibFileName(this.compilationSettings));
         }
 
         getScriptSnapshot(filename: string): ts.IScriptSnapshot {
