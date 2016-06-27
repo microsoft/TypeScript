@@ -1,13 +1,13 @@
 maxDepthIncreased/root.ts(4,1): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== C:/src/TypeScript/tests/cases/projects/NodeModulesSearch/maxDepthIncreased/node_modules/m2/node_modules/m3/index.js (0 errors) ====
+==== index.js (0 errors) ====
     exports.person = {
         "name": "John Doe",
         "age": 42
     }
     
-==== C:/src/TypeScript/tests/cases/projects/NodeModulesSearch/maxDepthIncreased/node_modules/m2/entry.js (0 errors) ====
+==== entry.js (0 errors) ====
     var m3 = require("m3");
     
     module.exports = {
@@ -16,7 +16,7 @@ maxDepthIncreased/root.ts(4,1): error TS2322: Type 'string' is not assignable to
     	"person": m3.person
     };
     
-==== C:/src/TypeScript/tests/cases/projects/NodeModulesSearch/maxDepthIncreased/node_modules/m1/index.js (0 errors) ====
+==== index.js (0 errors) ====
     var m2 = require('m2');
     
     /**

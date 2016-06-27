@@ -1,7 +1,7 @@
 importHigher/root.ts(6,1): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== C:/src/TypeScript/tests/cases/projects/NodeModulesSearch/importHigher/node_modules/m2/entry.js (0 errors) ====
+==== entry.js (0 errors) ====
     var m3 = require("m3");
     
     module.exports = {
@@ -10,7 +10,7 @@ importHigher/root.ts(6,1): error TS2322: Type 'string' is not assignable to type
     	"person": m3.person
     };
     
-==== C:/src/TypeScript/tests/cases/projects/NodeModulesSearch/importHigher/node_modules/m1/index.js (0 errors) ====
+==== index.js (0 errors) ====
     var m2 = require('m2');
     
     /**
@@ -22,7 +22,7 @@ importHigher/root.ts(6,1): error TS2322: Type 'string' is not assignable to type
     
     exports.f2 = m2;
     
-==== C:/src/TypeScript/tests/cases/projects/NodeModulesSearch/importHigher/node_modules/m2/node_modules/m3/index.js (0 errors) ====
+==== index.js (0 errors) ====
     exports.person = {
         "name": "John Doe",
         "age": 42
