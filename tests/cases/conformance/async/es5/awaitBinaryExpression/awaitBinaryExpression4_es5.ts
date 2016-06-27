@@ -1,4 +1,5 @@
-// @target: ES6
+// @target: ES5
+// @lib: es5,es2015.promise
 // @noEmitHelpers: true
 declare var a: boolean;
 declare var p: Promise<boolean>;

@@ -1,9 +1,9 @@
-=== tests/cases/conformance/async/es6/awaitBinaryExpression/awaitBinaryExpression4_es6.ts ===
-declare var a: boolean;
->a : boolean
+=== tests/cases/conformance/async/es5/awaitBinaryExpression/awaitBinaryExpression3_es5.ts ===
+declare var a: number;
+>a : number
 
-declare var p: Promise<boolean>;
->p : Promise<boolean>
+declare var p: Promise<number>;
+>p : Promise<number>
 >Promise : Promise<T>
 
 declare function before(): void;
@@ -20,13 +20,12 @@ async function func(): Promise<void> {
 >before() : void
 >before : () => void
 
-    var b = (await p, a);
->b : boolean
->(await p, a) : boolean
->await p, a : boolean
->await p : boolean
->p : Promise<boolean>
->a : boolean
+    var b = await p + a;
+>b : number
+>await p + a : number
+>await p : number
+>p : Promise<number>
+>a : number
 
     after();
 >after() : void
