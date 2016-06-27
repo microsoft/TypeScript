@@ -2943,11 +2943,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 if (isSingleLineEmptyBlock(node)) {
                     emitToken(SyntaxKind.OpenBraceToken, node.pos);
                     write(" ");
+                    emitBraceTrailingComments(node);
                     emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
                     return;
                 }
 
                 emitToken(SyntaxKind.OpenBraceToken, node.pos);
+                emitBraceTrailingComments(node);
                 increaseIndent();
                 if (node.kind === SyntaxKind.ModuleBlock) {
                     Debug.assert(node.parent.kind === SyntaxKind.ModuleDeclaration);
@@ -8346,6 +8348,20 @@ const _super = (function (geti, seti) {
                     write(shebang);
                     writeLine();
                 }
+            }
+
+            function emitBraceTrailingComments(block: Block) {
+                // trailing comment after block's open brace is not statements' leading comment
+                const bracePosition = skipTrivia(currentText, block.pos) + 1;
+                if (compilerOptions.removeComments) {
+                    return;
+                }
+                const trailingComments = getTrailingCommentRanges(currentText, bracePosition);
+                if (trailingComments) {
+                    write(" ");
+                }
+                // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
+                emitComments(currentText, currentLineMap, writer, trailingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
         }
 
