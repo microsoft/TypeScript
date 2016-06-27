@@ -88,14 +88,14 @@ namespace ts {
             },
             loadExtension(path) {
                 const fullPath = this.getCanonicalFileName(path);
-                const m = {exports: {}};
+                const m = { exports: {} };
                 ((module, exports, require) => { eval(virtualFs[fullPath]); })(
                     m,
                     m.exports,
                     (name: string) => {
                         return this.loadExtension(
                             this.getCanonicalFileName(
-                                ts.resolveModuleName(name, fullPath, {module: ts.ModuleKind.CommonJS}, this, true).resolvedModule.resolvedFileName
+                                ts.resolveModuleName(name, fullPath, { module: ts.ModuleKind.CommonJS }, this, true).resolvedModule.resolvedFileName
                             )
                         );
                     }
@@ -165,7 +165,7 @@ export abstract class SemanticLintWalker implements tsi.LintWalker {
         }
 
         function buildMap(map: Map<string>, out: Map<string>, compilerOptions?: CompilerOptions, shouldError?: boolean): Diagnostic[] {
-            const diagnostics = compile(map, compilerOptions ? compilerOptions : {module: ModuleKind.CommonJS, declaration: true});
+            const diagnostics = compile(map, compilerOptions ? compilerOptions : { module: ModuleKind.CommonJS, declaration: true });
             if (shouldError && diagnostics && diagnostics.length) {
                 for (let i = 0; i < diagnostics.length; i++) {
                     console.log(prettyPrintDiagnostic(diagnostics[i]));
@@ -176,7 +176,7 @@ export abstract class SemanticLintWalker implements tsi.LintWalker {
             virtualFs = {};
             return diagnostics;
         }
-        buildMap(extensionAPI, extensionAPI, {module: ModuleKind.CommonJS, declaration: true, baseUrl: ".", paths: {"typescript": ["/lib/typescript.d.ts"]}}, /*shouldError*/true);
+        buildMap(extensionAPI, extensionAPI, { module: ModuleKind.CommonJS, declaration: true, baseUrl: ".", paths: { "typescript": ["/lib/typescript.d.ts"] } }, /*shouldError*/true);
 
         const extensions: Map<Map<string>> = {
             "test-syntactic-lint": {
@@ -314,7 +314,7 @@ export class IsValueBar extends SemanticLintWalker {
         // Compile each extension once with the extension API in its node_modules folder (also generating .d.ts and .js)
         forEachKey(extensions, extName => {
             loadSetIntoFsAt(extensionAPI, "/node_modules/typescript-plugin-api");
-            buildMap(extensions[extName], extensions[extName], {module: ModuleKind.CommonJS, declaration: true, experimentalDecorators: true, baseUrl: "/", paths: {"typescript": ["lib/typescript.d.ts"]}}, /*shouldError*/true);
+            buildMap(extensions[extName], extensions[extName], { module: ModuleKind.CommonJS, declaration: true, experimentalDecorators: true, baseUrl: "/", paths: { "typescript": ["lib/typescript.d.ts"] } }, /*shouldError*/true);
         });
 
         /**

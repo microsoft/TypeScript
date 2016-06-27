@@ -1208,7 +1208,7 @@ namespace ts {
                     Stack trace:
                     ${error.stack}` : error));
                 }
-                return {name, result, error};
+                return { name, result, error };
             });
             const successfulExtensionLoadResults = filter(extensionLoadResults, res => !res.error);
             const preparedExtensionObjects = map(successfulExtensionLoadResults, res => {
@@ -1561,10 +1561,10 @@ namespace ts {
             let parent: Node | undefined = undefined;
             for (let i = 0; i < lints.length; i++) {
                 if (kind === ExtensionKind.SemanticLint) {
-                    initializedLints[i] = {name: lints[i].name, walker: new (lints[i].ctor as SemanticLintProviderStatic)({ts, checker: getTypeChecker(), args: lints[i].args, host, program}), accepted: true};
+                    initializedLints[i] = { name: lints[i].name, walker: new (lints[i].ctor as SemanticLintProviderStatic)({ ts, checker: getTypeChecker(), args: lints[i].args, host, program }), accepted: true };
                 }
                 else if (kind === ExtensionKind.SyntacticLint) {
-                    initializedLints[i] = {name: lints[i].name, walker: new (lints[i].ctor as SyntacticLintProviderStatic)({ts, args: lints[i].args, host, program}), accepted: true};
+                    initializedLints[i] = { name: lints[i].name, walker: new (lints[i].ctor as SyntacticLintProviderStatic)({ ts, args: lints[i].args, host, program }), accepted: true };
                 }
             }
 
