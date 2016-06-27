@@ -17249,17 +17249,13 @@ namespace ts {
                 return getTypeOfSymbol(symbol);
             }
 
-            if (isDeclarationName(node)) {
+            if (isDeclarationName(node) || node.kind === SyntaxKind.SourceFile) {
                 const symbol = getSymbolAtLocation(node);
-                return symbol && getTypeOfSymbol(symbol);
+                return symbol && getTypeOfSymbol(symbol) || unknownType;
             }
 
             if (isBindingPattern(node)) {
                 return getTypeForVariableLikeDeclaration(<VariableLikeDeclaration>node.parent, /*includeOptionality*/ true);
-            }
-
-            if (node.kind === SyntaxKind.SourceFile) {
-                return unknownType;
             }
 
             if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {

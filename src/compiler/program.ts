@@ -129,58 +129,25 @@ namespace ts {
         skipTsx: boolean;
     }
 
-    function tryReadTypesSection(packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
-        let jsonContent: { typings?: string, types?: string };
-        try {
-            const jsonText = state.host.readFile(packageJsonPath);
-            jsonContent = jsonText ? <{ typings?: string, types?: string }>JSON.parse(jsonText) : {};
-        }
-        catch (e) {
-            // gracefully handle if readFile fails or returns not JSON
-            jsonContent = {};
-        }
-
-        let typesFile: string;
-        let fieldName: string;
-        // first try to read content of 'typings' section (backward compatibility)
-        if (jsonContent.typings) {
-            if (typeof jsonContent.typings === "string") {
-                fieldName = "typings";
-                typesFile = jsonContent.typings;
+    function tryFetchField(content: any, section: string, state: ModuleResolutionState): string {
+        const field = content[section];
+        if (field) {
+            if (typeof field === "string") {
+                return field;
             }
             else {
                 if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, "typings", typeof jsonContent.typings);
+                    trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, section, typeof field);
                 }
             }
         }
-        // then read 'types'
-        if (!typesFile && jsonContent.types) {
-            if (typeof jsonContent.types === "string") {
-                fieldName = "types";
-                typesFile = jsonContent.types;
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, "types", typeof jsonContent.types);
-                }
-            }
-        }
-        if (typesFile) {
-            const typesFilePath = normalizePath(combinePaths(baseDirectory, typesFile));
-            if (state.traceEnabled) {
-                trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, fieldName, typesFile, typesFilePath);
-            }
-            return typesFilePath;
-        }
-        return undefined;
     }
 
-   function tryReadMainSection(packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
-        let jsonContent: { main?: string };
+    function tryReadPathFromConfigSection(packageJsonPath: string, sections: string | string[], baseDirectory: string, state: ModuleResolutionState): string {
+        let jsonContent: any;
         try {
             const jsonText = state.host.readFile(packageJsonPath);
-            jsonContent = jsonText ? <{ main?: string }>JSON.parse(jsonText) : {};
+            jsonContent = jsonText ? JSON.parse(jsonText) : {};
         }
         catch (e) {
             // gracefully handle if readFile fails or returns not JSON
@@ -188,25 +155,37 @@ namespace ts {
         }
 
         let mainFile: string;
+        let utilizedSection: string;
 
-        if (jsonContent.main) {
-            if (typeof jsonContent.main === "string") {
-                mainFile = jsonContent.main;
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, "main", typeof jsonContent.main);
+        if (typeof sections === "string") {
+            mainFile = tryFetchField(jsonContent, sections, state);
+            utilizedSection = sections;
+        }
+        else {
+            for (const section of sections) {
+                mainFile = tryFetchField(jsonContent, section, state);
+                if (typeof mainFile === "string") {
+                    utilizedSection = section;
+                    break;
                 }
             }
         }
         if (mainFile) {
             const mainFilePath = normalizePath(combinePaths(baseDirectory, mainFile));
             if (state.traceEnabled) {
-                trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, "main", mainFile, mainFilePath);
+                trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, utilizedSection, mainFile, mainFilePath);
             }
             return mainFilePath;
         }
         return undefined;
+    }
+
+    function tryReadTypesSection(packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
+        return tryReadPathFromConfigSection(packageJsonPath, ["typings", "types"], baseDirectory, state);
+    }
+
+    function tryReadMainSection(packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
+        return tryReadPathFromConfigSection(packageJsonPath, "main", baseDirectory, state);
     }
 
     const typeReferenceExtensions = [".d.ts"];
@@ -794,7 +773,7 @@ namespace ts {
                     // first: try to load module as-is
                     loadModuleFromNodeModulesFolder(moduleName, directory, failedLookupLocations, state, loadJS) ||
                     // second: try to load module from the scope '@types'
-                    loadModuleFromNodeModulesFolder(combinePaths("@types", moduleName), directory, failedLookupLocations, state);
+                    !loadJS && loadModuleFromNodeModulesFolder(combinePaths("@types", moduleName), directory, failedLookupLocations, state);
                 if (result) {
                     return result;
                 }
@@ -969,14 +948,9 @@ namespace ts {
             return getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
         }
 
-        function loadExtension(name: string): any {
-            if (sys.loadExtension) {
-                return sys.loadExtension(name);
-            }
-        }
-
         const newLine = getNewLineCharacter(options);
         const realpath = sys.realpath && ((path: string) => sys.realpath(path));
+        const loadExtension = sys.loadExtension && ((name: string) => sys.loadExtension(name));
 
         return {
             getSourceFile,
@@ -1209,7 +1183,7 @@ namespace ts {
         function collectCompilerExtensions(): ExtensionCollectionMap {
             const extOptions = options.extensions;
             const extensionNames = (extOptions instanceof Array) ? extOptions : getKeys(extOptions);
-            return groupBy(flatten(map(filter(map(extensionNames, name => {
+            const extensionLoadResults = map(extensionNames, name => {
                 let result: any;
                 let error: any;
                 if (host.loadExtension) {
@@ -1235,7 +1209,9 @@ namespace ts {
                     ${error.stack}` : error));
                 }
                 return {name, result, error};
-            }), res => !res.error), res => {
+            });
+            const successfulExtensionLoadResults = filter(extensionLoadResults, res => !res.error);
+            const preparedExtensionObjects = map(successfulExtensionLoadResults, res => {
                 if (res.result) {
                     return reduceProperties(res.result, (aggregate: Extension[], potentialExtension: any, key: string) => {
                         if (!potentialExtension) {
@@ -1272,7 +1248,8 @@ namespace ts {
                 else {
                     return [];
                 }
-            })), elem => elem.kind) || {};
+            });
+            return groupBy(flatten(preparedExtensionObjects), elem => elem.kind) || {};
         }
 
         function getCommonSourceDirectory() {
