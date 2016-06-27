@@ -316,7 +316,7 @@ namespace ts.formatting {
 
             // Add a space between statements. All keywords except (do,else,case) has open/close parens after them.
             // So, we have a rule to add a space for [),Any], [do,Any], [else,Any], and [case,Any]
-            this.SpaceBetweenStatements = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.CloseParenToken, SyntaxKind.DoKeyword, SyntaxKind.ElseKeyword, SyntaxKind.CaseKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsNotForContext), RuleAction.Space));
+            this.SpaceBetweenStatements = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.CloseParenToken, SyntaxKind.DoKeyword, SyntaxKind.ElseKeyword, SyntaxKind.CaseKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsNotForContext, Rules.IsCurrentParentNotJsxText, Rules.IsNextParentNotJsxExpression), RuleAction.Space));
 
             // This low-pri rule takes care of "try {" and "finally {" in case the rule SpaceBeforeOpenBraceInControl didn't execute on FormatOnEnter.
             this.SpaceAfterTryFinally = new Rule(RuleDescriptor.create2(Shared.TokenRange.FromTokens([SyntaxKind.TryKeyword, SyntaxKind.FinallyKeyword]), SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
@@ -727,6 +727,14 @@ namespace ts.formatting {
 
         static IsNonJsxSameLineTokenContext(context: FormattingContext): boolean {
             return context.TokensAreOnSameLine() && context.contextNode.kind !== SyntaxKind.JsxText;
+        }
+
+        static IsCurrentParentNotJsxText(context: FormattingContext): boolean {
+            return context.currentTokenParent.kind !== SyntaxKind.JsxText;
+        }
+
+        static IsNextParentNotJsxExpression(context: FormattingContext): boolean {
+            return context.nextTokenParent.kind !== SyntaxKind.JsxExpression;
         }
 
         static IsNotBeforeBlockInFunctionDeclarationContext(context: FormattingContext): boolean {
