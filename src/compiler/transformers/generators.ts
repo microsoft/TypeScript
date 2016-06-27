@@ -572,10 +572,12 @@ namespace ts {
             operationLocations = undefined;
             state = createTempVariable(/*recordTempVariable*/ undefined);
 
+            const statementOffset = addPrologueDirectives(statements, body.statements);
+
             // Build the generator
             startLexicalEnvironment();
 
-            transformAndEmitStatements(body.statements);
+            transformAndEmitStatements(body.statements, statementOffset);
 
             const buildResult = build();
             addNodes(statements, endLexicalEnvironment());
@@ -1117,9 +1119,10 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function transformAndEmitStatements(statements: Statement[]) {
-            for (const statement of statements) {
-                transformAndEmitStatement(statement);
+        function transformAndEmitStatements(statements: Statement[], start = 0) {
+            const numStatements = statements.length;
+            for (let i = start; i < numStatements; i++) {
+                transformAndEmitStatement(statements[i]);
             }
         }
 

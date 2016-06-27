@@ -2181,11 +2181,13 @@ namespace ts {
             return transformFunctionBodyWorker(node.body);
         }
 
-        function transformFunctionBodyWorker(body: Block) {
+        function transformFunctionBodyWorker(body: Block, start = 0) {
             const savedCurrentScope = currentScope;
             currentScope = body;
             startLexicalEnvironment();
-            const visited = visitEachChild(body, visitor, context);
+
+            const statements = visitNodes(body.statements, visitor, isStatement, start);
+            const visited = updateBlock(body, statements);
             const declarations = endLexicalEnvironment();
             currentScope = savedCurrentScope;
             return mergeFunctionBodyLexicalEnvironment(visited, declarations);
@@ -2233,14 +2235,14 @@ namespace ts {
 
             if (!isArrowFunction) {
                 const statements: Statement[] = [];
-
+                const statementOffset = addPrologueDirectives(statements, (<Block>node.body).statements);
                 statements.push(
                     createReturn(
                         createAwaiterHelper(
                             currentSourceFileExternalHelpersModuleName,
                             hasLexicalArguments,
                             promiseConstructor,
-                            transformFunctionBodyWorker(<Block>node.body)
+                            transformFunctionBodyWorker(<Block>node.body, statementOffset)
                         )
                     )
                 );
