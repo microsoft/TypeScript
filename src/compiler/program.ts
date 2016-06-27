@@ -1213,16 +1213,16 @@ namespace ts {
             const successfulExtensionLoadResults = filter(extensionLoadResults, res => !res.error);
             const preparedExtensionObjects = map(successfulExtensionLoadResults, res => {
                 if (res.result) {
-                    return reduceProperties(res.result, (aggregate: Extension[], potentialExtension: any, key: string) => {
+                    return reduceProperties(res.result, (aggregate: Extension[], potentialExtension: BaseProviderStatic, key: string) => {
                         if (!potentialExtension) {
                             return; // Avoid errors on explicitly exported null/undefined (why would someone do that, though?)
                         }
-                        const annotatedKind = potentialExtension.__tsCompilerExtensionKind;
+                        const annotatedKind = potentialExtension["extension-kind"];
                         if (typeof annotatedKind === "string") {
                             const ext: ExtensionBase = {
                                 name: key !== "default" ? `${res.name}[${key}]` : res.name,
                                 args: extensionNames === extOptions ? undefined : (extOptions as Map<any>)[res.name],
-                                kind: annotatedKind as ExtensionKind
+                                kind: annotatedKind
                             };
                             switch (ext.kind) {
                                 case ExtensionKind.SemanticLint:
@@ -1238,7 +1238,7 @@ namespace ts {
                                         ));
                                         return;
                                     }
-                                    (ext as (SemanticLintExtension | SyntacticLintExtension)).ctor = potentialExtension;
+                                    (ext as (SemanticLintExtension | SyntacticLintExtension)).ctor = potentialExtension as (SemanticLintProviderStatic | SyntacticLintProviderStatic);
                             }
                             aggregate.push(ext as Extension);
                         }
@@ -1561,10 +1561,10 @@ namespace ts {
             let parent: Node | undefined = undefined;
             for (let i = 0; i < lints.length; i++) {
                 if (kind === ExtensionKind.SemanticLint) {
-                    initializedLints[i] = {name: lints[i].name, walker: new (lints[i].ctor as SemanticLintProviderStatic)(ts, getTypeChecker(), lints[i].args), accepted: true};
+                    initializedLints[i] = {name: lints[i].name, walker: new (lints[i].ctor as SemanticLintProviderStatic)({ts, checker: getTypeChecker(), args: lints[i].args, host, program}), accepted: true};
                 }
                 else if (kind === ExtensionKind.SyntacticLint) {
-                    initializedLints[i] = {name: lints[i].name, walker: new (lints[i].ctor as SyntacticLintProviderStatic)(ts, lints[i].args), accepted: true};
+                    initializedLints[i] = {name: lints[i].name, walker: new (lints[i].ctor as SyntacticLintProviderStatic)({ts, args: lints[i].args, host, program}), accepted: true};
                 }
             }
 
@@ -1623,7 +1623,7 @@ namespace ts {
         }
 
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
-            if (!(sourceFile.isDeclarationFile || sourceFile.externalModuleIndicator)) {
+            if (!sourceFile.isDeclarationFile) {
                 const lintDiagnostics = performLintPassOnFile(sourceFile, ExtensionKind.SyntacticLint);
                 if (lintDiagnostics && lintDiagnostics.length) {
                     return sourceFile.parseDiagnostics.concat(lintDiagnostics);
@@ -1669,7 +1669,7 @@ namespace ts {
                     typeChecker.getDiagnostics(sourceFile, cancellationToken);
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
-                const lintDiagnostics = (!(sourceFile.isDeclarationFile || sourceFile.externalModuleIndicator)) ? (performLintPassOnFile(sourceFile, ExtensionKind.SemanticLint) || []) : [];
+                const lintDiagnostics = (!sourceFile.isDeclarationFile) ? (performLintPassOnFile(sourceFile, ExtensionKind.SemanticLint) || []) : [];
 
                 return bindDiagnostics.concat(checkDiagnostics).concat(fileProcessingDiagnosticsInFile).concat(programDiagnosticsInFile).concat(lintDiagnostics);
             });

@@ -2916,12 +2916,19 @@ namespace ts {
         visit(node: Node, stop: LintStopMethod, error: LintErrorMethod): void;
     }
 
-    export interface SyntacticLintProviderStatic {
-        new (typescript: typeof ts, args: any): LintWalker;
+    export interface BaseProviderStatic {
+        ["extension-kind"]: ExtensionKind;
+        new (state: {ts: typeof ts, args: any}): any;
     }
 
-    export interface SemanticLintProviderStatic {
-        new (typescript: typeof ts, checker: TypeChecker, args: any): LintWalker;
+    export interface SyntacticLintProviderStatic extends BaseProviderStatic {
+        ["extension-kind"]: ExtensionKind.SyntacticLint;
+        new (state: {ts: typeof ts, args: any, host: CompilerHost, program: Program}): LintWalker;
+    }
+
+    export interface SemanticLintProviderStatic extends BaseProviderStatic {
+        ["extension-kind"]: ExtensionKind.SemanticLint;
+        new (state: {ts: typeof ts, args: any, host: CompilerHost, program: Program, checker: TypeChecker}): LintWalker;
     }
 
     export namespace ExtensionKind {

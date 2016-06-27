@@ -120,14 +120,34 @@ namespace ts {
 import * as tsi from "typescript";
 
 export abstract class SyntacticLintWalker implements tsi.LintWalker {
-    private static __tsCompilerExtensionKind: tsi.ExtensionKind.SyntacticLint = "syntactic-lint";
-    constructor(protected ts: typeof tsi, protected args: any) {}
+    static "extension-kind": tsi.ExtensionKind.SyntacticLint = "syntactic-lint";
+    protected ts: typeof tsi;
+    protected args: any;
+    protected host: tsi.CompilerHost;
+    protected program: tsi.Program;
+    constructor(state: {ts: typeof tsi, args: any, host: tsi.CompilerHost, program: tsi.Program}) {
+        this.ts = state.ts;
+        this.args = state.args;
+        this.host = state.host;
+        this.program = state.program;
+    }
     abstract visit(node: tsi.Node, stop: tsi.LintStopMethod, error: tsi.LintErrorMethod): void;
 }
 
 export abstract class SemanticLintWalker implements tsi.LintWalker {
-    private static __tsCompilerExtensionKind: tsi.ExtensionKind.SemanticLint = "semantic-lint";
-    constructor(protected ts: typeof tsi, protected checker: tsi.TypeChecker, protected args: any) {}
+    static "extension-kind": tsi.ExtensionKind.SemanticLint = "semantic-lint";
+    protected ts: typeof tsi;
+    protected args: any;
+    protected host: tsi.CompilerHost;
+    protected program: tsi.Program;
+    protected checker: tsi.TypeChecker;
+    constructor(state: {ts: typeof tsi, args: any, host: tsi.CompilerHost, program: tsi.Program, checker: tsi.TypeChecker}) {
+        this.ts = state.ts;
+        this.args = state.args;
+        this.host = state.host;
+        this.program = state.program;
+        this.checker = state.checker;
+    }
     abstract visit(node: tsi.Node, stop: tsi.LintStopMethod, error: tsi.LintErrorMethod): void;
 }
 `
@@ -171,7 +191,7 @@ export abstract class SemanticLintWalker implements tsi.LintWalker {
 import {SyntacticLintWalker} from "typescript-plugin-api";
 
 export default class IsNamedFoo extends SyntacticLintWalker {
-    constructor(ts, args) { super(ts, args); }
+    constructor(state) { super(state); }
     visit(node, stop, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             if (node.text.toLowerCase() === "foo") {
@@ -194,7 +214,7 @@ export default class IsNamedFoo extends SyntacticLintWalker {
 import {SemanticLintWalker} from "typescript-plugin-api";
 
 export default class IsValueFoo extends SemanticLintWalker {
-    constructor(ts, checker, args) { super(ts, checker, args); }
+    constructor(state) { super(state); }
     visit(node, stop, error) {
         const type = this.checker.getTypeAtLocation(node);
         if (type.flags & this.ts.TypeFlags.StringLiteral) {
@@ -218,7 +238,7 @@ export default class IsValueFoo extends SemanticLintWalker {
 import {SyntacticLintWalker} from "typescript-plugin-api";
 
 export default class IsNamedX extends SyntacticLintWalker {
-    constructor(ts, args) { super(ts, args); }
+    constructor(state) { super(state); }
     visit(node, stop, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             for (let i = 0; i<this.args.length; i++) {
@@ -243,7 +263,7 @@ export default class IsNamedX extends SyntacticLintWalker {
 import {SyntacticLintWalker, SemanticLintWalker} from "typescript-plugin-api";
 
 export class IsNamedFoo extends SyntacticLintWalker {
-    constructor(ts, args) { super(ts, args); }
+    constructor(state) { super(state); }
     visit(node, stop, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             if (node.text.toLowerCase() === "foo") {
@@ -254,7 +274,7 @@ export class IsNamedFoo extends SyntacticLintWalker {
 }
 
 export class IsNamedBar extends SyntacticLintWalker {
-    constructor(ts, args) { super(ts, args); }
+    constructor(state) { super(state); }
     visit(node, stop, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             if (node.text.toLowerCase() === "bar") {
@@ -265,7 +285,7 @@ export class IsNamedBar extends SyntacticLintWalker {
 }
 
 export class IsValueFoo extends SemanticLintWalker {
-    constructor(ts, checker, args) { super(ts, checker, args); }
+    constructor(state) { super(state); }
     visit(node, stop, error) {
         const type = this.checker.getTypeAtLocation(node);
         if (type.flags & this.ts.TypeFlags.StringLiteral) {
@@ -277,7 +297,7 @@ export class IsValueFoo extends SemanticLintWalker {
 }
 
 export class IsValueBar extends SemanticLintWalker {
-    constructor(ts, checker, args) { super(ts, checker, args); }
+    constructor(state) { super(state); }
     visit(node, stop, error) {
         const type = this.checker.getTypeAtLocation(node);
         if (type.flags & this.ts.TypeFlags.StringLiteral) {
