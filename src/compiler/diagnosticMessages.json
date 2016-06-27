@@ -571,7 +571,7 @@
         "category": "Error",
         "code": 1186
     },
-    "A parameter property may not be a binding pattern.": {
+    "A parameter property may not be declared using a binding pattern.": {
         "category": "Error",
         "code": 1187
     },
@@ -850,6 +850,10 @@
     "Global module exports may only appear at top level.": {
         "category": "Error",
         "code": 1316
+    },
+    "A parameter property cannot be declared using a rest parameter.": {
+        "category": "Error",
+        "code": 1317
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2788,13 +2792,25 @@
         "category": "Message",
         "code": 6132
     },
+    "'{0}' is declared but never used.": {
+        "category": "Error",
+        "code": 6133
+    },
+    "Report Errors on Unused Locals.": {
+        "category": "Message",
+        "code": 6134
+    },
+    "Report Errors on Unused Parameters.": {
+        "category": "Message",
+        "code": 6135
+    },
     "The maximum dependency depth to search under node_modules and load JavaScript files": {
         "category": "Message",
-        "code": 6133
+        "code": 6136
     },
     "No types specified in 'package.json' but 'allowJs' is set, so returning 'main' value of '{0}'": {
         "category": "Message",
-        "code": 6134
+        "code": 6137
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

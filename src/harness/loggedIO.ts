@@ -224,12 +224,7 @@ namespace Playback {
                 recordLog.directoriesRead.push(logEntry);
                 return result;
             },
-            (path, extension, exclude) => findResultByPath(wrapper,
-                    replayLog.directoriesRead.filter(
-                        d => {
-                            return d.extension === extension;
-                        }
-                    ), path));
+            (path, extension, exclude) => findResultByPath(wrapper, replayLog.directoriesRead, path));
 
         wrapper.writeFile = recordReplay(wrapper.writeFile, underlying)(
             (path: string, contents: string) => callAndRecord(underlying.writeFile(path, contents), recordLog.filesWritten, { path, contents, bom: false }),

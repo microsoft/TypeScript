@@ -10,4 +10,4 @@
 ////}
 
 goTo.marker();
-verify.referencesCountIs(0);
+verify.referencesAre([]);

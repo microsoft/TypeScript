@@ -779,7 +779,7 @@ namespace ts {
         declaration: SignatureDeclaration;
         typeParameters: TypeParameter[];
         parameters: Symbol[];
-        thisType: Type;
+        thisParameter: Symbol;
         resolvedReturnType: Type;
         minArgumentCount: number;
         hasRestParameter: boolean;
@@ -1147,7 +1147,7 @@ namespace ts {
 
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
 
-        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean;
+        isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
         getEmitOutput(fileName: string): EmitOutput;
 
@@ -1244,6 +1244,7 @@ namespace ts {
     }
 
     export interface EditorOptions {
+        BaseIndentSize?: number;
         IndentSize: number;
         TabSize: number;
         NewLineCharacter: string;
@@ -1268,7 +1269,7 @@ namespace ts {
         InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-        [s: string]: boolean | number | string;
+        [s: string]: boolean | number | string | undefined;
     }
 
     export interface DefinitionInfo {
@@ -5819,17 +5820,32 @@ namespace ts {
                 return undefined;
             }
 
-            if (node.kind !== SyntaxKind.Identifier &&
-                // TODO (drosen): This should be enabled in a later release - currently breaks rename.
-                // node.kind !== SyntaxKind.ThisKeyword &&
-                // node.kind !== SyntaxKind.SuperKeyword &&
-                node.kind !== SyntaxKind.StringLiteral &&
-                !isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
-                return undefined;
+            switch (node.kind) {
+                case SyntaxKind.NumericLiteral:
+                    if (!isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
+                        break;
+                    }
+                    // Fallthrough
+                case SyntaxKind.Identifier:
+                case SyntaxKind.ThisKeyword:
+                // case SyntaxKind.SuperKeyword: TODO:GH#9268
+                case SyntaxKind.StringLiteral:
+                    return getReferencedSymbolsForNode(node, program.getSourceFiles(), findInStrings, findInComments);
             }
+            return undefined;
+        }
 
-            Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.StringLiteral);
-            return getReferencedSymbolsForNode(node, program.getSourceFiles(), findInStrings, findInComments);
+        function isThis(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.ThisKeyword:
+                // case SyntaxKind.ThisType: TODO: GH#9267
+                    return true;
+                case SyntaxKind.Identifier:
+                    // 'this' as a parameter
+                    return (node as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword && node.parent.kind === SyntaxKind.Parameter;
+                default:
+                    return false;
+            }
         }
 
         function getReferencedSymbolsForNode(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
@@ -5849,7 +5865,7 @@ namespace ts {
                 }
             }
 
-            if (node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.ThisType) {
+            if (isThis(node)) {
                 return getReferencesForThisKeyword(node, sourceFiles);
             }
 
@@ -6384,7 +6400,7 @@ namespace ts {
                         cancellationToken.throwIfCancellationRequested();
 
                         const node = getTouchingWord(sourceFile, position);
-                        if (!node || (node.kind !== SyntaxKind.ThisKeyword && node.kind !== SyntaxKind.ThisType)) {
+                        if (!node || !isThis(node)) {
                             return;
                         }
 
@@ -7769,7 +7785,7 @@ namespace ts {
             return { newText: result, caretOffset: preamble.length };
         }
 
-        function isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
+        function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
 
             // '<' is currently not supported, figuring out if we're in a Generic Type vs. a comparison is too
             // expensive to do during typing scenarios
@@ -8012,11 +8028,11 @@ namespace ts {
 
             const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
 
-            // Can only rename an identifier.
             if (node) {
                 if (node.kind === SyntaxKind.Identifier ||
                     node.kind === SyntaxKind.StringLiteral ||
-                    isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
+                    isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
+                    isThis(node)) {
                     const symbol = typeChecker.getSymbolAtLocation(node);
 
                     // Only allow a symbol to be renamed if it actually has at least one declaration.
@@ -8137,7 +8153,7 @@ namespace ts {
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
-            isValidBraceCompletionAtPostion,
+            isValidBraceCompletionAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
             getProgram
