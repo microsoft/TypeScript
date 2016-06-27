@@ -10,5 +10,5 @@ async function f() {
 	let await_b = await b;
 	let await_c = await c;
 	let await_d = await d;
-	let await_e = await e; 
+	let await_e = await e;
 }

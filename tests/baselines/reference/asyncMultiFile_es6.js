@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/async/es6/asyncMultiFile.ts] ////
+//// [tests/cases/conformance/async/es6/asyncMultiFile_es6.ts] ////
 
 //// [a.ts]
 async function f() {}
