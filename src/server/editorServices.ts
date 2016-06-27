@@ -304,26 +304,7 @@ namespace ts.server {
             return normalizePath(name);
         }
 
-        // TODO: delete if unused
-        // private releaseNonReferencedConfiguredProjects() {
-        //     if (this.configuredProjects.every(p => p.openRefCount > 0)) {
-        //         return;
-        //     }
-
-        //     const configuredProjects: ConfiguredProject[] = [];
-        //     for (const proj of this.configuredProjects) {
-        //         if (proj.openRefCount > 0) {
-        //             configuredProjects.push(proj);
-        //         }
-        //         else {
-        //             proj.close();
-        //         }
-        //     }
-
-        //     this.configuredProjects = configuredProjects;
-        // }
-
-       private removeProject(project: Project) {
+        private removeProject(project: Project) {
             this.log(`remove project: ${project.getRootFiles().toString()}`);
 
             project.close();
@@ -430,7 +411,7 @@ namespace ts.server {
             // collect all projects that should be removed
             let projectsToRemove: Project[];
             for (const p of info.containingProjects) {
-                if ( p.projectKind === ProjectKind.Configured) {
+                if (p.projectKind === ProjectKind.Configured) {
                     // last open file in configured project - close it
                     if ((<ConfiguredProject>p).deleteOpenRef() === 0) {
                         (projectsToRemove || (projectsToRemove = [])).push(p);
@@ -761,7 +742,7 @@ namespace ts.server {
                         if (contains(this.openFilesReferenced, info)) {
                             removeItemFromSet(this.openFilesReferenced, info);
                         }
-                        if (project.projectKind === ProjectKind.Configured)  {
+                        if (project.projectKind === ProjectKind.Configured) {
                             this.openFileRootsConfigured.push(info);
                         }
                     }
@@ -1115,27 +1096,35 @@ namespace ts.server {
         }
 
         applyChangesInOpenFiles(openFiles: protocol.NewOpenFile[], changedFiles: protocol.ChangedOpenFile[], closedFiles: string[]): void {
-            for (const file of openFiles) {
-                const scriptInfo = this.getScriptInfo(file.fileName);
-                Debug.assert(!scriptInfo || !scriptInfo.isOpen);
-                this.openClientFileWithNormalizedPath(toNormalizedPath(file.fileName), file.content);
-            }
-
-            for (const file of changedFiles) {
-                const scriptInfo = this.getScriptInfo(file.fileName);
-                Debug.assert(!!scriptInfo);
-                // apply changes in reverse order 
-                for (let i = file.changes.length - 1; i >= 0; i--) {
-                    const change = file.changes[i];
-                    scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
+            if (openFiles) {
+                for (const file of openFiles) {
+                    const scriptInfo = this.getScriptInfo(file.fileName);
+                    Debug.assert(!scriptInfo || !scriptInfo.isOpen);
+                    this.openClientFileWithNormalizedPath(toNormalizedPath(file.fileName), file.content);
                 }
             }
 
-            for (const file of closedFiles) {
-                this.closeClientFile(file);
+            if (changedFiles) {
+                for (const file of changedFiles) {
+                    const scriptInfo = this.getScriptInfo(file.fileName);
+                    Debug.assert(!!scriptInfo);
+                    // apply changes in reverse order 
+                    for (let i = file.changes.length - 1; i >= 0; i--) {
+                        const change = file.changes[i];
+                        scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
+                    }
+                }
             }
 
-            this.updateProjectStructure();
+            if (closedFiles) {
+                for (const file of closedFiles) {
+                    this.closeClientFile(file);
+                }
+            }
+
+            if (openFiles || changedFiles || closedFiles) {
+                this.updateProjectStructure();
+            }
         }
 
         closeExternalProject(uncheckedFileName: string): void {

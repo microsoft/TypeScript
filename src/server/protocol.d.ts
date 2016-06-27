@@ -691,9 +691,9 @@ declare namespace ts.server.protocol {
     }
 
     export interface ApplyChangedToOpenFilesRequestArgs {
-        openFiles: NewOpenFile[];
-        changedFiles: ChangedOpenFile[];
-        closedFiles: string[];
+        openFiles?: NewOpenFile[];
+        changedFiles?: ChangedOpenFile[];
+        closedFiles?: string[];
     }
 
     /**
