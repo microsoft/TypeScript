@@ -133,6 +133,16 @@ namespace ts {
             description: Diagnostics.Raise_error_on_this_expressions_with_an_implied_any_type,
         },
         {
+            name: "noUnusedLocals",
+            type: "boolean",
+            description: Diagnostics.Report_Errors_on_Unused_Locals,
+        },
+        {
+            name: "noUnusedParameters",
+            type: "boolean",
+            description: Diagnostics.Report_Errors_on_Unused_Parameters
+        },
+        {
             name: "noLib",
             type: "boolean",
         },
@@ -333,16 +343,6 @@ namespace ts {
             }
         },
         {
-            name: "typesSearchPaths",
-            type: "list",
-            isTSConfigOnly: true,
-            element: {
-                name: "typesSearchPaths",
-                type: "string",
-                isFilePath: true
-            }
-        },
-        {
             name: "typeRoots",
             type: "list",
             element: {
@@ -419,7 +419,7 @@ namespace ts {
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
         },
         {
-            name: "disableProjectSizeLimit",
+            name: "disableSizeLimit",
             type: "boolean"
         },
         {

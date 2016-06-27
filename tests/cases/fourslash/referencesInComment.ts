@@ -6,5 +6,5 @@
 ////var bar = 0;
 
 for (const marker of test.markers()) {
-    verify.referencesCountIs(0);
+    verify.referencesAre([]);
 }

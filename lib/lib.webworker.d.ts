@@ -19,6 +19,10 @@ and limitations under the License.
 /// IE Worker APIs
 /////////////////////////////
 
+interface Algorithm {
+    name: string;
+}
+
 interface EventInit {
     bubbles?: boolean;
     cancelable?: boolean;
@@ -32,6 +36,10 @@ interface IDBIndexParameters {
 interface IDBObjectStoreParameters {
     autoIncrement?: boolean;
     keyPath?: IDBKeyPath;
+}
+
+interface KeyAlgorithm {
+    name?: string;
 }
 
 interface EventListener {
@@ -121,6 +129,18 @@ interface Coordinates {
 declare var Coordinates: {
     prototype: Coordinates;
     new(): Coordinates;
+}
+
+interface CryptoKey {
+    readonly algorithm: KeyAlgorithm;
+    readonly extractable: boolean;
+    readonly type: string;
+    readonly usages: string[];
+}
+
+declare var CryptoKey: {
+    prototype: CryptoKey;
+    new(): CryptoKey;
 }
 
 interface DOMError {
@@ -339,7 +359,7 @@ interface IDBDatabase extends EventTarget {
     readonly name: string;
     readonly objectStoreNames: DOMStringList;
     onabort: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     version: number;
     onversionchange: (ev: IDBVersionChangeEvent) => any;
     close(): void;
@@ -442,7 +462,7 @@ declare var IDBOpenDBRequest: {
 
 interface IDBRequest extends EventTarget {
     readonly error: DOMError;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     onsuccess: (ev: Event) => any;
     readonly readyState: string;
     readonly result: any;
@@ -464,7 +484,7 @@ interface IDBTransaction extends EventTarget {
     readonly mode: string;
     onabort: (ev: Event) => any;
     oncomplete: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     abort(): void;
     objectStore(name: string): IDBObjectStore;
     readonly READ_ONLY: string;
@@ -532,7 +552,7 @@ declare var MSApp: MSApp;
 interface MSAppAsyncOperation extends EventTarget {
     readonly error: DOMError;
     oncomplete: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     readonly readyState: number;
     readonly result: any;
     start(): void;
@@ -681,7 +701,7 @@ interface WebSocket extends EventTarget {
     readonly bufferedAmount: number;
     readonly extensions: string;
     onclose: (ev: CloseEvent) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     onmessage: (ev: MessageEvent) => any;
     onopen: (ev: Event) => any;
     readonly protocol: string;
@@ -724,7 +744,6 @@ declare var Worker: {
 }
 
 interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
-    msCaching: string;
     onreadystatechange: (ev: ProgressEvent) => any;
     readonly readyState: number;
     readonly response: any;
@@ -736,6 +755,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     timeout: number;
     readonly upload: XMLHttpRequestUpload;
     withCredentials: boolean;
+    msCaching?: string;
     abort(): void;
     getAllResponseHeaders(): string;
     getResponseHeader(header: string): string | null;
@@ -782,14 +802,14 @@ declare var XMLHttpRequestUpload: {
 }
 
 interface AbstractWorker {
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 interface MSBaseReader {
     onabort: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     onload: (ev: Event) => any;
     onloadend: (ev: ProgressEvent) => any;
     onloadstart: (ev: Event) => any;
@@ -835,7 +855,7 @@ interface WindowConsole {
 
 interface XMLHttpRequestEventTarget {
     onabort: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     onload: (ev: Event) => any;
     onloadend: (ev: ProgressEvent) => any;
     onloadstart: (ev: Event) => any;
@@ -865,7 +885,7 @@ declare var FileReaderSync: {
 
 interface WorkerGlobalScope extends EventTarget, WorkerUtils, DedicatedWorkerGlobalScope, WindowConsole {
     readonly location: WorkerLocation;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     readonly self: WorkerGlobalScope;
     close(): void;
     msWriteProfilerMark(profilerMarkName: string): void;
@@ -921,8 +941,11 @@ interface WorkerUtils extends Object, WindowBase64 {
     clearInterval(handle: number): void;
     clearTimeout(handle: number): void;
     importScripts(...urls: string[]): void;
+    setImmediate(handler: (...args: any[]) => void): number;
     setImmediate(handler: any, ...args: any[]): number;
+    setInterval(handler: (...args: any[]) => void, timeout: number): number;
     setInterval(handler: any, timeout?: any, ...args: any[]): number;
+    setTimeout(handler: (...args: any[]) => void, timeout: number): number;
     setTimeout(handler: any, timeout?: any, ...args: any[]): number;
 }
 
@@ -958,6 +981,177 @@ interface ProgressEventInit extends EventInit {
 interface IDBArrayKey extends Array<IDBValidKey> {
 }
 
+interface RsaKeyGenParams extends Algorithm {
+    modulusLength: number;
+    publicExponent: Uint8Array;
+}
+
+interface RsaHashedKeyGenParams extends RsaKeyGenParams {
+    hash: AlgorithmIdentifier;
+}
+
+interface RsaKeyAlgorithm extends KeyAlgorithm {
+    modulusLength: number;
+    publicExponent: Uint8Array;
+}
+
+interface RsaHashedKeyAlgorithm extends RsaKeyAlgorithm {
+    hash: AlgorithmIdentifier;
+}
+
+interface RsaHashedImportParams {
+    hash: AlgorithmIdentifier;
+}
+
+interface RsaPssParams {
+    saltLength: number;
+}
+
+interface RsaOaepParams extends Algorithm {
+    label?: BufferSource;
+}
+
+interface EcdsaParams extends Algorithm {
+    hash: AlgorithmIdentifier;
+}
+
+interface EcKeyGenParams extends Algorithm {
+    typedCurve: string;
+}
+
+interface EcKeyAlgorithm extends KeyAlgorithm {
+    typedCurve: string;
+}
+
+interface EcKeyImportParams {
+    namedCurve: string;
+}
+
+interface EcdhKeyDeriveParams extends Algorithm {
+    public: CryptoKey;
+}
+
+interface AesCtrParams extends Algorithm {
+    counter: BufferSource;
+    length: number;
+}
+
+interface AesKeyAlgorithm extends KeyAlgorithm {
+    length: number;
+}
+
+interface AesKeyGenParams extends Algorithm {
+    length: number;
+}
+
+interface AesDerivedKeyParams extends Algorithm {
+    length: number;
+}
+
+interface AesCbcParams extends Algorithm {
+    iv: BufferSource;
+}
+
+interface AesCmacParams extends Algorithm {
+    length: number;
+}
+
+interface AesGcmParams extends Algorithm {
+    iv: BufferSource;
+    additionalData?: BufferSource;
+    tagLength?: number;
+}
+
+interface AesCfbParams extends Algorithm {
+    iv: BufferSource;
+}
+
+interface HmacImportParams extends Algorithm {
+    hash?: AlgorithmIdentifier;
+    length?: number;
+}
+
+interface HmacKeyAlgorithm extends KeyAlgorithm {
+    hash: AlgorithmIdentifier;
+    length: number;
+}
+
+interface HmacKeyGenParams extends Algorithm {
+    hash: AlgorithmIdentifier;
+    length?: number;
+}
+
+interface DhKeyGenParams extends Algorithm {
+    prime: Uint8Array;
+    generator: Uint8Array;
+}
+
+interface DhKeyAlgorithm extends KeyAlgorithm {
+    prime: Uint8Array;
+    generator: Uint8Array;
+}
+
+interface DhKeyDeriveParams extends Algorithm {
+    public: CryptoKey;
+}
+
+interface DhImportKeyParams extends Algorithm {
+    prime: Uint8Array;
+    generator: Uint8Array;
+}
+
+interface ConcatParams extends Algorithm {
+    hash?: AlgorithmIdentifier;
+    algorithmId: Uint8Array;
+    partyUInfo: Uint8Array;
+    partyVInfo: Uint8Array;
+    publicInfo?: Uint8Array;
+    privateInfo?: Uint8Array;
+}
+
+interface HkdfCtrParams extends Algorithm {
+    hash: AlgorithmIdentifier;
+    label: BufferSource;
+    context: BufferSource;
+}
+
+interface Pbkdf2Params extends Algorithm {
+    salt: BufferSource;
+    iterations: number;
+    hash: AlgorithmIdentifier;
+}
+
+interface RsaOtherPrimesInfo {
+    r: string;
+    d: string;
+    t: string;
+}
+
+interface JsonWebKey {
+    kty: string;
+    use?: string;
+    key_ops?: string[];
+    alg?: string;
+    kid?: string;
+    x5u?: string;
+    x5c?: string;
+    x5t?: string;
+    ext?: boolean;
+    crv?: string;
+    x?: string;
+    y?: string;
+    d?: string;
+    n?: string;
+    e?: string;
+    p?: string;
+    q?: string;
+    dp?: string;
+    dq?: string;
+    qi?: string;
+    oth?: RsaOtherPrimesInfo[];
+    k?: string;
+}
+
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface ErrorEventHandler {
@@ -991,7 +1185,7 @@ interface FunctionStringCallback {
     (data: string): void;
 }
 declare var location: WorkerLocation;
-declare var onerror: (ev: Event) => any;
+declare var onerror: (ev: ErrorEvent) => any;
 declare var self: WorkerGlobalScope;
 declare function close(): void;
 declare function msWriteProfilerMark(profilerMarkName: string): void;
@@ -1006,8 +1200,11 @@ declare function clearImmediate(handle: number): void;
 declare function clearInterval(handle: number): void;
 declare function clearTimeout(handle: number): void;
 declare function importScripts(...urls: string[]): void;
+declare function setImmediate(handler: (...args: any[]) => void): number;
 declare function setImmediate(handler: any, ...args: any[]): number;
+declare function setInterval(handler: (...args: any[]) => void, timeout: number): number;
 declare function setInterval(handler: any, timeout?: any, ...args: any[]): number;
+declare function setTimeout(handler: (...args: any[]) => void, timeout: number): number;
 declare function setTimeout(handler: any, timeout?: any, ...args: any[]): number;
 declare function atob(encodedString: string): string;
 declare function btoa(rawString: string): string;
@@ -1017,5 +1214,7 @@ declare var console: Console;
 declare function addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
 declare function addEventListener(type: "message", listener: (ev: MessageEvent) => any, useCapture?: boolean): void;
 declare function addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+type AlgorithmIdentifier = string | Algorithm;
 type IDBKeyPath = string;
 type IDBValidKey = number | string | Date | IDBArrayKey;
+type BufferSource = ArrayBuffer | ArrayBufferView;

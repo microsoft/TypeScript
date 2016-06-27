@@ -4,13 +4,16 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "out": "../../built/local/tsserver.js",
-        "sourceMap": true
+        "sourceMap": true,
+        "stripInternal": true
     },
     "files": [
+        "../services/shims.ts",
+        "../services/utilities.ts",
         "node.d.ts",
         "editorServices.ts",
         "protocol.d.ts",
-        "server.ts",
-        "session.ts"
+        "session.ts",
+        "server.ts"
     ]
 }

@@ -394,7 +394,10 @@ namespace ts.formatting {
                 const startLinePosition = getLineStartPositionForPosition(startPos, sourceFile);
                 const column = SmartIndenter.findFirstNonWhitespaceColumn(startLinePosition, startPos, sourceFile, options);
                 if (startLine !== parentStartLine || startPos === column) {
-                    return column;
+                    // Use the base indent size if it is greater than
+                    // the indentation of the inherited predecessor.
+                    const baseIndentSize = SmartIndenter.getBaseIndentation(options);
+                    return baseIndentSize > column ? baseIndentSize : column;
                 }
             }
 

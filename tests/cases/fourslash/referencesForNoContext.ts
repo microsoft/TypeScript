@@ -22,13 +22,13 @@
 ////}
 
 goTo.marker("1");
-verify.referencesCountIs(0);
+verify.referencesAre([]);
 
 goTo.marker("2");
-verify.referencesCountIs(0);
+verify.referencesAre([]);
 
 goTo.marker("3");
-verify.referencesCountIs(0);
+verify.referencesAre([]);
 
 goTo.marker("4");
-verify.referencesCountIs(0);
+verify.referencesAre([]);
