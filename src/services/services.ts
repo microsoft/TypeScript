@@ -2775,11 +2775,15 @@ namespace ts {
 
     function isNameOfExternalModuleImportOrDeclaration(node: Node): boolean {
         if (node.kind === SyntaxKind.StringLiteral) {
-            return isNameOfModuleDeclaration(node) ||
-                (isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node);
+            return isNameOfModuleDeclaration(node) || isExpressionOfExternalModuleImportEqualsDeclaration(node);
         }
 
         return false;
+    }
+
+    function isExpressionOfExternalModuleImportEqualsDeclaration(node: Node) {
+        return isExternalModuleImportEqualsDeclaration(node.parent.parent) &&
+            getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node;
     }
 
     /** Returns true if the position is within a comment */
@@ -4256,15 +4260,25 @@ namespace ts {
 
                 const argumentInfo = SignatureHelp.getContainingArgumentInfo(node, position, sourceFile);
                 if (argumentInfo) {
-                    // Get string literal completions from specialized signatures of the target
-                    return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo);
+                    // Try to get string literal completions from specialized signatures of the target
+                    const callExpressionCompletionEntries = getStringLiteralCompletionEntriesFromCallExpression(argumentInfo);
+                    if (callExpressionCompletionEntries) {
+                        return callExpressionCompletionEntries;
+                    }
+                    else if (isRequireCall(node.parent, false)) {
+                        // If that failed but this call mataches the signature of a require call, treat the literal as an external module name
+                        return getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node);
+                    }
+                    else {
+                        return undefined;
+                    }
                 }
                 else if (isElementAccessExpression(node.parent) && node.parent.argumentExpression === node) {
                     // Get all names of properties on the expression
                     return getStringLiteralCompletionEntriesFromElementAccess(node.parent);
                 }
-                else if (node.parent.kind === SyntaxKind.ImportDeclaration) {
-                    // Get all known module names
+                else if (node.parent.kind === SyntaxKind.ImportDeclaration || isExpressionOfExternalModuleImportEqualsDeclaration(node)) {
+                    // Get all known external module names or complete a path to a module
                     return getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node);
                 }
                 else {

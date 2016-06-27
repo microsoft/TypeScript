@@ -1,22 +1,30 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: test0.ts
-//// import * as foo from "./*0*/
+//// import * as foo1 from "./*import_as0*/
+//// import * as foo2 from ".//*import_as1*/
+//// import * as foo3 from "./f/*import_as2*/
+//// import * as foo4 from "./folder//*import_as3*/
+//// import * as foo5 from "./folder/h/*import_as4*/
 
-// @Filename: test1.ts
-//// import * as foo from ".//*1*/
+//// import foo6 = require("./*import_equals0*/
+//// import foo7 = require(".//*import_equals1*/
+//// import foo8 = require("./f/*import_equals2*/
+//// import foo9 = require("./folder//*import_equals3*/
+//// import foo10 = require("./folder/h/*import_equals4*/
 
-// @Filename: test2.ts
-//// import * as foo from "./f/*2*/
-
-// @Filename: test3.ts
-//// import * as foo from "./folder//*3*/
-
-// @Filename: test4.ts
-//// import * as foo from "./folder/h/*4*/
+//// var foo11 = require("./*require0*/
+//// var foo12 = require(".//*require1*/
+//// var foo13 = require("./f/*require2*/
+//// var foo14 = require("./folder//*require3*/
+//// var foo15 = require("./folder/h/*require4*/
 
 // @Filename: parentTest/sub/test5.ts
-//// import * as foo from "../g/*5*/
+//// import * as foo16 from "../g/*import_as5*/
+
+//// import foo17 = require("../g/*import_equals5*/
+
+//// var foo18 = require("../g/*require5*/
 
 // @Filename: f1.ts
 //// /*f1*/
@@ -40,38 +48,37 @@
 //// /*parentf1*/
 // @Filename: parentTest/g1.ts
 //// /*parentg1*/
+const kinds = ["import_as", "import_equals", "require"];
 
-goTo.marker("0");
-verify.completionListIsEmpty();
+for (const kind of kinds) {
+    goTo.marker(kind + "0");
+    verify.completionListIsEmpty();
 
-goTo.marker("1");
-verify.completionListContains("f1");
-verify.completionListContains("f2");
-verify.completionListContains("e1");
-verify.completionListContains("test0");
-verify.completionListContains("test1");
-verify.completionListContains("test2");
-verify.completionListContains("test3");
-verify.completionListContains("test4");
-verify.completionListContains("folder/");
-verify.completionListContains("parentTest/");
-verify.not.completionListItemsCountIsGreaterThan(10);
+    goTo.marker(kind + "1");
+    verify.completionListContains("f1");
+    verify.completionListContains("f2");
+    verify.completionListContains("e1");
+    verify.completionListContains("test0");
+    verify.completionListContains("folder/");
+    verify.completionListContains("parentTest/");
+    verify.not.completionListItemsCountIsGreaterThan(6);
 
-goTo.marker("2");
-verify.completionListContains("f1");
-verify.completionListContains("f2");
-verify.completionListContains("folder/");
-verify.not.completionListItemsCountIsGreaterThan(3);
+    goTo.marker(kind + "2");
+    verify.completionListContains("f1");
+    verify.completionListContains("f2");
+    verify.completionListContains("folder/");
+    verify.not.completionListItemsCountIsGreaterThan(3);
 
-goTo.marker("3");
-verify.completionListContains("f1");
-verify.completionListContains("h1");
-verify.not.completionListItemsCountIsGreaterThan(2);
+    goTo.marker(kind + "3");
+    verify.completionListContains("f1");
+    verify.completionListContains("h1");
+    verify.not.completionListItemsCountIsGreaterThan(2);
 
-goTo.marker("4");
-verify.completionListContains("h1");
-verify.not.completionListItemsCountIsGreaterThan(1);
+    goTo.marker(kind + "4");
+    verify.completionListContains("h1");
+    verify.not.completionListItemsCountIsGreaterThan(1);
 
-goTo.marker("5");
-verify.completionListContains("g1");
-verify.not.completionListItemsCountIsGreaterThan(1);
+    goTo.marker(kind + "5");
+    verify.completionListContains("g1");
+    verify.not.completionListItemsCountIsGreaterThan(1);
+}

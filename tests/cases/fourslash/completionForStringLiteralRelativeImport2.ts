@@ -2,10 +2,14 @@
 // @allowJs: true
 
 // @Filename: test0.ts
-//// import * as foo from ".//*0*/
+//// import * as foo1 from ".//*import_as0*/
+//// import * as foo2 from "./f/*import_as1*/
 
-// @Filename: test1.ts
-//// import * as foo from "./f/*1*/
+//// import foo3 = require(".//*import_equals0*/
+//// import foo4 = require("./f/*import_equals1*/
+
+//// var foo5 = require(".//*require0*/
+//// var foo6 = require("./f/*require1*/
 
 // @Filename: f1.ts
 //// /f1*/
@@ -23,21 +27,23 @@
 //// /*e1*/
 // @Filename: e2.js
 //// /*e2*/
+const kinds = ["import_as", "import_equals", "require"];
 
-goTo.marker("0");
-verify.completionListContains("f1");
-verify.completionListContains("f2");
-verify.completionListContains("f3");
-verify.completionListContains("f4");
-verify.completionListContains("e1");
-verify.completionListContains("e2");
-verify.completionListContains("test0");
-verify.completionListContains("test1");
-verify.not.completionListItemsCountIsGreaterThan(8);
+for (const kind of kinds) {
+    goTo.marker(kind + "0");
+    verify.completionListContains("f1");
+    verify.completionListContains("f2");
+    verify.completionListContains("f3");
+    verify.completionListContains("f4");
+    verify.completionListContains("e1");
+    verify.completionListContains("e2");
+    verify.completionListContains("test0");
+    verify.not.completionListItemsCountIsGreaterThan(7);
 
-goTo.marker("1");
-verify.completionListContains("f1");
-verify.completionListContains("f2");
-verify.completionListContains("f3");
-verify.completionListContains("f4");
-verify.not.completionListItemsCountIsGreaterThan(4);
+    goTo.marker(kind + "1");
+    verify.completionListContains("f1");
+    verify.completionListContains("f2");
+    verify.completionListContains("f3");
+    verify.completionListContains("f4");
+    verify.not.completionListItemsCountIsGreaterThan(4);
+}

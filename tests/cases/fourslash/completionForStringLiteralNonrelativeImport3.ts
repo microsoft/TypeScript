@@ -2,7 +2,9 @@
 // @allowJs: true
 
 // @Filename: tests/test0.ts
-//// import * as foo from "fake-module//*0*/
+//// import * as foo1 from "fake-module//*import_as0*/
+//// import foo2 = require("fake-module//*import_equals0*/
+//// var foo3 = require("fake-module//*require0*/
 
 // @Filename: package.json
 //// { "dependencies": { "fake-module": "latest" } }
@@ -22,9 +24,12 @@
 // @Filename: node_modules/fake-module/repeated.jsx
 //// /*repeatedjsx*/
 
-goTo.marker("0");
+const kinds = ["import_as", "import_equals", "require"];
 
-verify.completionListContains("ts");
-verify.completionListContains("tsx");
-verify.completionListContains("dts");
-verify.not.completionListItemsCountIsGreaterThan(3);
+for (const kind of kinds) {
+    goTo.marker(kind + "0");
+    verify.completionListContains("ts");
+    verify.completionListContains("tsx");
+    verify.completionListContains("dts");
+    verify.not.completionListItemsCountIsGreaterThan(3);
+}

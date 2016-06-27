@@ -1,7 +1,9 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: tests/test0.ts
-//// import * as foo from "module-/*0*/
+//// import * as foo1 from "module-/*import_as0*/
+//// import foo2 = require("module-/*import_equals0*/
+//// var foo3 = require("module-/*require0*/
 
 // @Filename: package.json
 //// { "dependencies": {
@@ -45,13 +47,16 @@
 // @Filename: node_modules/module-typings/types.d.ts
 //// /*module-typings*/
 
+const kinds = ["import_as", "import_equals", "require"];
 
-goTo.marker("0");
+for (const kind of kinds) {
+    goTo.marker(kind + "0");
 
-verify.completionListContains("module-no-main/");
-verify.completionListContains("module-no-main-index-d-ts/");
-verify.completionListContains("module-index-ts");
-verify.completionListContains("module-index-d-ts-explicit-main");
-verify.completionListContains("module-index-d-ts-default-main");
-verify.completionListContains("module-typings");
-verify.not.completionListItemsCountIsGreaterThan(6);
+    verify.completionListContains("module-no-main/");
+    verify.completionListContains("module-no-main-index-d-ts/");
+    verify.completionListContains("module-index-ts");
+    verify.completionListContains("module-index-d-ts-explicit-main");
+    verify.completionListContains("module-index-d-ts-default-main");
+    verify.completionListContains("module-typings");
+    verify.not.completionListItemsCountIsGreaterThan(6);
+}

@@ -1,13 +1,17 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: tests/test0.ts
-//// import * as foo from "c:/tests/cases/f/*0*/
+//// import * as foo1 from "c:/tests/cases/f/*import_as0*/
+//// import * as foo2 from "c:/tests/cases/fourslash/*import_as1*/
+//// import * as foo3 from "c:/tests/cases/fourslash//*import_as2*/
 
-// @Filename: tests/test1.ts
-//// import * as foo from "c:/tests/cases/fourslash/*1*/
+//// import foo4 = require("c:/tests/cases/f/*import_equals0*/
+//// import foo5 = require("c:/tests/cases/fourslash/*import_equals1*/
+//// import foo6 = require("c:/tests/cases/fourslash//*import_equals2*/
 
-// @Filename: tests/test2.ts
-//// import * as foo from "c:/tests/cases/fourslash//*2*/
+//// var foo7 = require("c:/tests/cases/f/*require0*/
+//// var foo8 = require("c:/tests/cases/fourslash/*require1*/
+//// var foo9 = require("c:/tests/cases/fourslash//*require2*/
 
 // @Filename: f1.ts
 //// /*f1*/
@@ -24,18 +28,22 @@
 // @Filename: e2.js
 //// /*e2*/
 
-goTo.marker("0");
-verify.completionListContains("fourslash/");
-verify.not.completionListItemsCountIsGreaterThan(1);
+const kinds = ["import_as", "import_equals", "require"];
 
-goTo.marker("1");
-verify.completionListContains("fourslash/");
-verify.not.completionListItemsCountIsGreaterThan(1);
+for (const kind of kinds) {
+    goTo.marker(kind + "0");
+    verify.completionListContains("fourslash/");
+    verify.not.completionListItemsCountIsGreaterThan(1);
 
-goTo.marker("2");
-verify.completionListContains("f1");
-verify.completionListContains("f2");
-verify.completionListContains("e1");
-verify.completionListContains("folder/");
-verify.completionListContains("tests/");
-verify.not.completionListItemsCountIsGreaterThan(5);
+    goTo.marker(kind + "1");
+    verify.completionListContains("fourslash/");
+    verify.not.completionListItemsCountIsGreaterThan(1);
+
+    goTo.marker(kind + "2");
+    verify.completionListContains("f1");
+    verify.completionListContains("f2");
+    verify.completionListContains("e1");
+    verify.completionListContains("folder/");
+    verify.completionListContains("tests/");
+    verify.not.completionListItemsCountIsGreaterThan(5);
+}

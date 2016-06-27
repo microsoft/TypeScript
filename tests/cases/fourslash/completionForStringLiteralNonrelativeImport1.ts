@@ -1,13 +1,17 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: tests/test0.ts
-//// import * as foo from "f/*0*/
+//// import * as foo1 from "f/*import_as0*/
+//// import * as foo2 from "fake-module//*import_as1*/
+//// import * as foo3 from "fake-module/*import_as2*/
 
-// @Filename: tests/test1.ts
-//// import * as foo from "fake-module//*1*/
+//// import foo4 = require("f/*import_equals0*/
+//// import foo5 = require("fake-module//*import_equals1*/
+//// import foo6 = require("fake-module/*import_equals2*/
 
-// @Filename: tests/test2.ts
-//// import * as foo from "fake-module/*2*/
+//// var foo7 = require("f/*require0*/
+//// var foo8 = require("fake-module//*require1*/
+//// var foo9 = require("fake-module/*require2*/
 
 // @Filename: package.json
 //// { "dependencies": { "fake-module": "latest" }, "devDependencies": { "fake-module-dev": "latest" } }
@@ -35,19 +39,23 @@
 // @Filename: node_modules/unlisted-module/index.ts
 //// /*unlisted-module*/
 
-goTo.marker("0");
-verify.completionListContains("fake-module");
-verify.completionListContains("fake-module-dev");
-verify.not.completionListItemsCountIsGreaterThan(2);
+const kinds = ["import_as", "import_equals", "require"];
 
-goTo.marker("1");
-verify.completionListContains("index");
-verify.completionListContains("ts");
-verify.completionListContains("dts");
-verify.completionListContains("tsx");
-verify.not.completionListItemsCountIsGreaterThan(4);
+for (const kind of kinds) {
+    goTo.marker(kind + "0");
+    verify.completionListContains("fake-module");
+    verify.completionListContains("fake-module-dev");
+    verify.not.completionListItemsCountIsGreaterThan(2);
 
-goTo.marker("2");
-verify.completionListContains("fake-module");
-verify.completionListContains("fake-module-dev");
-verify.not.completionListItemsCountIsGreaterThan(2);
+    goTo.marker(kind + "1");
+    verify.completionListContains("index");
+    verify.completionListContains("ts");
+    verify.completionListContains("dts");
+    verify.completionListContains("tsx");
+    verify.not.completionListItemsCountIsGreaterThan(4);
+
+    goTo.marker(kind + "2");
+    verify.completionListContains("fake-module");
+    verify.completionListContains("fake-module-dev");
+    verify.not.completionListItemsCountIsGreaterThan(2);
+}
