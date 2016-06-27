@@ -1088,7 +1088,6 @@ declare namespace ts.server.protocol {
         includeLinePosition?: boolean;
     }
 
-
     /**
       * Response object for synchronous sematic diagnostics request.
       */
