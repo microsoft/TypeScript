@@ -923,7 +923,7 @@ namespace ts {
         return <Expression>createBinary(left, SyntaxKind.LessThanToken, right, location);
     }
 
-    export function createAssignment(left: Expression, right: Expression, location?: TextRange, original?: Node) {
+    export function createAssignment(left: Expression, right: Expression, location?: TextRange) {
         return createBinary(left, SyntaxKind.EqualsToken, right, location);
     }
 
@@ -1586,10 +1586,12 @@ namespace ts {
 
     function createExpressionForPropertyAssignment(property: PropertyAssignment, receiver: Expression) {
         return aggregateTransformFlags(
-            createAssignment(
-                createMemberAccessForPropertyName(receiver, property.name, /*location*/ property.name),
-                property.initializer,
-                /*location*/ property,
+            setOriginalNode(
+                createAssignment(
+                    createMemberAccessForPropertyName(receiver, property.name, /*location*/ property.name),
+                    property.initializer,
+                    /*location*/ property
+                ),
                 /*original*/ property
             )
         );
@@ -1597,10 +1599,12 @@ namespace ts {
 
     function createExpressionForShorthandPropertyAssignment(property: ShorthandPropertyAssignment, receiver: Expression) {
         return aggregateTransformFlags(
-            createAssignment(
-                createMemberAccessForPropertyName(receiver, property.name, /*location*/ property.name),
-                getSynthesizedClone(property.name),
-                /*location*/ property,
+            setOriginalNode(
+                createAssignment(
+                    createMemberAccessForPropertyName(receiver, property.name, /*location*/ property.name),
+                    getSynthesizedClone(property.name),
+                    /*location*/ property
+                ),
                 /*original*/ property
             )
         );
@@ -1608,21 +1612,23 @@ namespace ts {
 
     function createExpressionForMethodDeclaration(method: MethodDeclaration, receiver: Expression) {
         return aggregateTransformFlags(
-            createAssignment(
-                createMemberAccessForPropertyName(receiver, method.name, /*location*/ method.name),
-                setOriginalNode(
-                    createFunctionExpression(
-                        method.asteriskToken,
-                        /*name*/ undefined,
-                        /*typeParameters*/ undefined,
-                        method.parameters,
-                        /*type*/ undefined,
-                        method.body,
-                        /*location*/ method
+            setOriginalNode(
+                createAssignment(
+                    createMemberAccessForPropertyName(receiver, method.name, /*location*/ method.name),
+                    setOriginalNode(
+                        createFunctionExpression(
+                            method.asteriskToken,
+                            /*name*/ undefined,
+                            /*typeParameters*/ undefined,
+                            method.parameters,
+                            /*type*/ undefined,
+                            method.body,
+                            /*location*/ method
+                        ),
+                        /*original*/ method
                     ),
-                    /*original*/ method
+                    /*location*/ method
                 ),
-                /*location*/ method,
                 /*original*/ method
             )
         );
