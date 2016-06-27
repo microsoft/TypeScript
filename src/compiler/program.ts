@@ -1073,8 +1073,15 @@ namespace ts {
         // - This calls resolveModuleNames, and then calls findSourceFile for each resolved module.
         // As all these operations happen - and are nested - within the createProgram call, they close over the below variables.
         // The current resolution depth is tracked by incrementing/decrementing as the depth first search progresses.
-        const maxNodeModulesJsDepth = options.maxNodeModuleJsDepth || 2;
+        const maxNodeModulesJsDepth = typeof options.maxNodeModuleJsDepth === "number" ? options.maxNodeModuleJsDepth : 2;
         let currentNodeModulesJsDepth = 0;
+
+        // If a module has some of its imports skipped due to being at the depth limit under node_modules, then track
+        // this, as it may be imported at a shallower depth later, and then it will need its skipped imports processed.
+        const modulesWithElidedImports: Map<boolean> = {};
+
+        // Track source files that are JavaScript files found by searching under node_modules, as these shouldn't be compiled.
+        const jsFilesFoundSearchingNodeModules: Map<boolean> = {};
 
         const start = new Date().getTime();
 
@@ -1230,6 +1237,7 @@ namespace ts {
                 (oldOptions.rootDir !== options.rootDir) ||
                 (oldOptions.configFilePath !== options.configFilePath) ||
                 (oldOptions.baseUrl !== options.baseUrl) ||
+                (oldOptions.maxNodeModuleJsDepth !== options.maxNodeModuleJsDepth) ||
                 !arrayIsEqualTo(oldOptions.typeRoots, oldOptions.typeRoots) ||
                 !arrayIsEqualTo(oldOptions.rootDirs, options.rootDirs) ||
                 !mapIsEqualTo(oldOptions.paths, options.paths)) {
@@ -1353,7 +1361,10 @@ namespace ts {
                 getNewLine: () => host.getNewLine(),
                 getSourceFile: program.getSourceFile,
                 getSourceFileByPath: program.getSourceFileByPath,
-                getSourceFiles: program.getSourceFiles,
+                getSourceFiles: () => filter(program.getSourceFiles(),
+                    // Remove JavaScript files found by searching node_modules from the source files to emit
+                    sourceFile => !lookUp(jsFilesFoundSearchingNodeModules, sourceFile.path)
+                ),
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
@@ -1888,6 +1899,14 @@ namespace ts {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
                 }
 
+                // See if we need to reprocess the imports due to prior skipped imports
+                if (file && lookUp(modulesWithElidedImports, file.path)) {
+                    if (currentNodeModulesJsDepth < maxNodeModulesJsDepth) { // TODO: Check for off-by-ones
+                        modulesWithElidedImports[file.path] = false;
+                        processImportedModules(file, getDirectoryPath(fileName));
+                    }
+                }
+
                 return file;
             }
 
@@ -2026,6 +2045,8 @@ namespace ts {
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
+                    const resolvedPath = resolution ? toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName) : undefined;
+
                     // add file to program only if:
                     // - resolution was successful
                     // - noResolve is falsy
@@ -2033,20 +2054,27 @@ namespace ts {
                     // - it's not a top level JavaScript module that exceeded the search max
                     const isJsFileUnderNodeModules = resolution && resolution.isExternalLibraryImport &&
                                                  hasJavaScriptFileExtension(resolution.resolvedFileName);
+
                     if (isJsFileUnderNodeModules) {
+                        jsFilesFoundSearchingNodeModules[resolvedPath] = true;
                         currentNodeModulesJsDepth++;
                     }
-                    const shouldAddFile = resolution && !options.noResolve && i < file.imports.length &&
-                            !(isJsFileUnderNodeModules && currentNodeModulesJsDepth > maxNodeModulesJsDepth);
 
-                    if (shouldAddFile) {
+                    const elideImport = isJsFileUnderNodeModules && currentNodeModulesJsDepth > maxNodeModulesJsDepth;
+                    const shouldAddFile = resolution && !options.noResolve && i < file.imports.length && !elideImport;
+
+                    if (elideImport) {
+                        modulesWithElidedImports[file.path] = true;
+                    }
+                    else if (shouldAddFile) {
                         findSourceFile(resolution.resolvedFileName,
-                                toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName),
+                                resolvedPath,
                                 /*isDefaultLib*/ false, /*isReference*/ false,
                                 file,
                                 skipTrivia(file.text, file.imports[i].pos),
                                 file.imports[i].end);
                     }
+
                     if (isJsFileUnderNodeModules) {
                         currentNodeModulesJsDepth--;
                     }
