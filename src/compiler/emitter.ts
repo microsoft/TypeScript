@@ -1084,16 +1084,9 @@ const _super = (function (geti, seti) {
                 return;
             }
 
-            const indentBeforeDot = needsIndentation(node, node.expression, node.dotToken);
-            const indentAfterDot = needsIndentation(node, node.dotToken, node.name);
-            const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
-
             emitExpression(node.expression);
-            increaseIndentIf(indentBeforeDot);
-            write(shouldEmitDotDot ? ".." : ".");
-            increaseIndentIf(indentAfterDot);
+            write(needsDotDotForPropertyAccess(node.expression) ? ".." : ".");
             emit(node.name);
-            decreaseIndentIf(indentBeforeDot, indentAfterDot);
         }
 
         // 1..toString is a valid property access, emit a dot after the literal

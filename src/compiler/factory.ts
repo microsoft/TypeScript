@@ -339,20 +339,19 @@ namespace ts {
     }
 
     export function createPropertyAccess(expression: Expression, name: string | Identifier, location?: TextRange) {
-        return createPropertyAccessWithDotToken(expression, createSynthesizedNode(SyntaxKind.DotToken), name, location, /*flags*/ undefined);
+        return createPropertyAccessWithDotToken(expression, name, location, /*flags*/ undefined);
     }
 
-    export function createPropertyAccessWithDotToken(expression: Expression, dotToken: Node, name: string | Identifier, location?: TextRange, flags?: NodeFlags) {
+    export function createPropertyAccessWithDotToken(expression: Expression, name: string | Identifier, location?: TextRange, flags?: NodeFlags) {
         const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, location, flags);
         node.expression = parenthesizeForAccess(expression);
-        node.dotToken = dotToken;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         return node;
     }
 
     export function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier) {
         if (node.expression !== expression || node.name !== name) {
-            return updateNode(createPropertyAccessWithDotToken(expression, node.dotToken, name, /*location*/ node, node.flags), node);
+            return updateNode(createPropertyAccessWithDotToken(expression, name, /*location*/ node, node.flags), node);
         }
         return node;
     }
