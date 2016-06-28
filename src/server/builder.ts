@@ -453,10 +453,6 @@ namespace ts.server {
         }
 
         public fileOpened(file: string): void {
-            this.fileChanged(file);
-        }
-
-        public fileChanged(file: string): void {
             if (path.basename(file) === "lib.d.ts") {
                 return;
             }
@@ -465,12 +461,28 @@ namespace ts.server {
                 const sourceFile = this.project.compilerService.languageService.getProgram().getSourceFile(file);
                 if (sourceFile) {
                     fileInfo = new SimpleFileInfo(file);
+                    this.openFiles[file] = fileInfo;
+                    this.queueFileInfo(fileInfo, /*touch*/ true);
+                    this.processCompileQueue();
                 }
             }
-            if (!fileInfo) {
+        }
+
+        public fileChanged(file: string): void {
+            if (path.basename(file) === "lib.d.ts") {
                 return;
             }
-            this.openFiles[file] = fileInfo;
+            let fileInfo = this.openFiles[file];
+            if (fileInfo) {
+                this.queueFileInfo(fileInfo, /*touch*/ true);
+                this.processCompileQueue();
+            }
+            else {
+                Object.keys(this.openFiles).forEach((key) => {
+                    this.queueFileInfo(new SingleRunFileInfo(this.openFiles[key]));
+                });
+                this.processCompileQueue();
+            }
         }
 
         public fileClosed(file: string): void {
@@ -1147,7 +1159,8 @@ namespace ts.server {
             return new OpenFilesBuilder(project, builderHost);
         }
         const options = project.projectOptions;
-        if (!options || !options.autoBuild) {
+        const autoBuild = !options || options.autoBuild === undefined ? true : options.autoBuild;
+        if (!autoBuild) {
             return new OpenFilesBuilder(project, builderHost);
         }
 
