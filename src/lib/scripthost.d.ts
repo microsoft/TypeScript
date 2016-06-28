@@ -276,3 +276,13 @@ interface VBArrayConstructor {
 }
 
 declare var VBArray: VBArrayConstructor;
+
+/**
+ * Automation date (VT_DATE)
+ */
+interface VarDate { }
+
+interface DateConstructor {
+    new (vd: VarDate): Date;
+    getVarDate: () => VarDate;
+}
