@@ -7712,7 +7712,12 @@ namespace ts {
             let allFixes: CodeFix[] = [];
 
             forEach(errorCodes, error => {
-                const context = new CodeActionContext(error, sourceFile, { start, length: end - start }, checker);
+                const context = {
+                    errorCode: error,
+                    sourceFile: sourceFile,
+                    span: { start, length: end - start },
+                    checker: checker
+                };
 
                 const fixes = codeFixProvider.getFixes(context);
                 if (fixes) {

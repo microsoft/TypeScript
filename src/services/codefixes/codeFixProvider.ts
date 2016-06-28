@@ -6,9 +6,11 @@ namespace ts {
         getTextChanges(context: CodeActionContext): FileTextChanges[];
     }
 
-    export class CodeActionContext {
-        constructor(public errorCode: string, public sourceFile: SourceFile, public span: TextSpan, public checker: TypeChecker) {
-        }
+    export interface CodeActionContext {
+        errorCode: string;
+        sourceFile: SourceFile;
+        span: TextSpan;
+        checker: TypeChecker;
     }
 
     export namespace codeFix {
