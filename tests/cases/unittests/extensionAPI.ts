@@ -56,46 +56,46 @@ namespace ts {
         const mockHost: CompilerHost = {
             useCaseSensitiveFileNames() { return true; },
             getNewLine() { return "\n"; },
-            readFile(path) { return virtualFs[this.getCanonicalFileName(path)]; },
+            readFile(path) { return virtualFs[mockHost.getCanonicalFileName(path)]; },
             writeFile(path, content, foo, bar, baz) {
-                virtualFs[this.getCanonicalFileName(path)] = content;
+                virtualFs[mockHost.getCanonicalFileName(path)] = content;
             },
             fileExists(path) {
-                return !!virtualFs[this.getCanonicalFileName(path)];
+                return !!virtualFs[mockHost.getCanonicalFileName(path)];
             },
             directoryExists(path) {
-                const fullPath = this.getCanonicalFileName(path);
+                const fullPath = mockHost.getCanonicalFileName(path);
                 return forEach(getKeys(virtualFs), key => startsWith(key, fullPath));
             },
             getCurrentDirectory(): string { return "/"; },
             getSourceFile(path, languageVersion, onError): SourceFile {
-                const fullPath = this.getCanonicalFileName(path);
+                const fullPath = mockHost.getCanonicalFileName(path);
                 return createSourceFile(fullPath, virtualFs[fullPath], languageVersion);
             },
             getDefaultLibLocation() {
                 return "/lib/";
             },
             getDefaultLibFileName(options) {
-                return combinePaths(this.getDefaultLibLocation(), getDefaultLibFileName(options));
+                return combinePaths(mockHost.getDefaultLibLocation(), getDefaultLibFileName(options));
             },
             getCanonicalFileName,
             getDirectories(path) {
-                path = this.getCanonicalFileName(path);
+                path = mockHost.getCanonicalFileName(path);
                 return filter(map(filter(getKeys(virtualFs),
                     fullpath => startsWith(fullpath, path) && fullpath.substr(path.length, 1) === "/"),
                         fullpath => fullpath.substr(path.length + 1).indexOf("/") >= 0 ? fullpath.substr(0, 1 + path.length + fullpath.substr(path.length + 1).indexOf("/")) : fullpath),
                             fullpath => fullpath.lastIndexOf(".") === -1);
             },
             loadExtension(path) {
-                const fullPath = this.getCanonicalFileName(path);
+                const fullPath = mockHost.getCanonicalFileName(path);
                 const m = { exports: {} };
                 ((module, exports, require) => { eval(virtualFs[fullPath]); })(
                     m,
                     m.exports,
                     (name: string) => {
-                        return this.loadExtension(
-                            this.getCanonicalFileName(
-                                ts.resolveModuleName(name, fullPath, { module: ts.ModuleKind.CommonJS }, this, true).resolvedModule.resolvedFileName
+                        return mockHost.loadExtension(
+                            mockHost.getCanonicalFileName(
+                                ts.resolveModuleName(name, fullPath, { module: ts.ModuleKind.CommonJS }, mockHost, true).resolvedModule.resolvedFileName
                             )
                         );
                     }

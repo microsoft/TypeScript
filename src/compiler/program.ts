@@ -155,6 +155,11 @@ namespace ts {
             return getPackageEntryAsPath(config, packageJsonPath, "typings", state)
                 || getPackageEntryAsPath(config, packageJsonPath, "types", state);
         }
+        else {
+            if (state.traceEnabled) {
+                trace(state.host, Diagnostics.package_json_does_not_have_0_field, "types");
+            }
+        }
         return undefined;
     }
 
@@ -162,6 +167,11 @@ namespace ts {
         const { config } = readConfigFile(packageJsonPath, state.host.readFile);
         if (config) {
             return getPackageEntryAsPath(config, packageJsonPath, "main", state);
+        }
+        else {
+            if (state.traceEnabled) {
+                trace(state.host, Diagnostics.package_json_does_not_have_0_field, "main");
+            }
         }
         return undefined;
     }
@@ -707,11 +717,6 @@ namespace ts {
                 const result = loadModuleFromFile(typesFile, extensions, failedLookupLocation, !directoryProbablyExists(getDirectoryPath(typesFile), state.host), state);
                 if (result) {
                     return result;
-                }
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.package_json_does_not_have_0_field, loadJS ? "main" : "types");
                 }
             }
         }
