@@ -30,6 +30,7 @@ module M {
 
         export var hello = 1;
 >hello : number
+>1 : number
     }
     f();
 >f() : void

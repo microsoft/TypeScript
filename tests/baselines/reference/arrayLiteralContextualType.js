@@ -36,14 +36,14 @@ var Giraffe = (function () {
         this.neckLength = "3m";
     }
     return Giraffe;
-})();
+}());
 var Elephant = (function () {
     function Elephant() {
         this.name = "Elephant";
         this.trunkDiameter = "20cm";
     }
     return Elephant;
-})();
+}());
 function foo(animals) { }
 function bar(animals) { }
 foo([

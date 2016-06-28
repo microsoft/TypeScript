@@ -1,0 +1,35 @@
+=== tests/cases/compiler/genericPrototypeProperty.ts ===
+class C<T> {
+>C : Symbol(C, Decl(genericPrototypeProperty.ts, 0, 0))
+>T : Symbol(T, Decl(genericPrototypeProperty.ts, 0, 8))
+
+    x: T;
+>x : Symbol(C.x, Decl(genericPrototypeProperty.ts, 0, 12))
+>T : Symbol(T, Decl(genericPrototypeProperty.ts, 0, 8))
+
+    foo(x: T): T { return null; }
+>foo : Symbol(C.foo, Decl(genericPrototypeProperty.ts, 1, 9))
+>x : Symbol(x, Decl(genericPrototypeProperty.ts, 2, 8))
+>T : Symbol(T, Decl(genericPrototypeProperty.ts, 0, 8))
+>T : Symbol(T, Decl(genericPrototypeProperty.ts, 0, 8))
+}
+
+var r = C.prototype;
+>r : Symbol(r, Decl(genericPrototypeProperty.ts, 5, 3))
+>C.prototype : Symbol(C.prototype)
+>C : Symbol(C, Decl(genericPrototypeProperty.ts, 0, 0))
+>prototype : Symbol(C.prototype)
+
+// should be any
+var r2 = r.x
+>r2 : Symbol(r2, Decl(genericPrototypeProperty.ts, 7, 3))
+>r.x : Symbol(C.x, Decl(genericPrototypeProperty.ts, 0, 12))
+>r : Symbol(r, Decl(genericPrototypeProperty.ts, 5, 3))
+>x : Symbol(C.x, Decl(genericPrototypeProperty.ts, 0, 12))
+
+var r3 = r.foo(null);
+>r3 : Symbol(r3, Decl(genericPrototypeProperty.ts, 8, 3))
+>r.foo : Symbol(C.foo, Decl(genericPrototypeProperty.ts, 1, 9))
+>r : Symbol(r, Decl(genericPrototypeProperty.ts, 5, 3))
+>foo : Symbol(C.foo, Decl(genericPrototypeProperty.ts, 1, 9))
+

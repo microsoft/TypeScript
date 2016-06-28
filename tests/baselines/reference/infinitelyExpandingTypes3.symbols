@@ -1,0 +1,54 @@
+=== tests/cases/compiler/infinitelyExpandingTypes3.ts ===
+interface List<T> {
+>List : Symbol(List, Decl(infinitelyExpandingTypes3.ts, 0, 0))
+>T : Symbol(T, Decl(infinitelyExpandingTypes3.ts, 0, 15))
+
+    data: T;
+>data : Symbol(List.data, Decl(infinitelyExpandingTypes3.ts, 0, 19))
+>T : Symbol(T, Decl(infinitelyExpandingTypes3.ts, 0, 15))
+
+    next: List<T>; // will be recursive reference when OwnerList is expanded
+>next : Symbol(List.next, Decl(infinitelyExpandingTypes3.ts, 1, 12))
+>List : Symbol(List, Decl(infinitelyExpandingTypes3.ts, 0, 0))
+>T : Symbol(T, Decl(infinitelyExpandingTypes3.ts, 0, 15))
+
+    owner: OwnerList<T>;
+>owner : Symbol(List.owner, Decl(infinitelyExpandingTypes3.ts, 2, 18))
+>OwnerList : Symbol(OwnerList, Decl(infinitelyExpandingTypes3.ts, 4, 1))
+>T : Symbol(T, Decl(infinitelyExpandingTypes3.ts, 0, 15))
+}
+
+interface OwnerList<U> extends List<List<U>> {
+>OwnerList : Symbol(OwnerList, Decl(infinitelyExpandingTypes3.ts, 4, 1))
+>U : Symbol(U, Decl(infinitelyExpandingTypes3.ts, 6, 20))
+>List : Symbol(List, Decl(infinitelyExpandingTypes3.ts, 0, 0))
+>List : Symbol(List, Decl(infinitelyExpandingTypes3.ts, 0, 0))
+>U : Symbol(U, Decl(infinitelyExpandingTypes3.ts, 6, 20))
+
+    name: string;
+>name : Symbol(OwnerList.name, Decl(infinitelyExpandingTypes3.ts, 6, 46))
+}
+
+interface OwnerList2<U> extends List<List<U>> {
+>OwnerList2 : Symbol(OwnerList2, Decl(infinitelyExpandingTypes3.ts, 8, 1))
+>U : Symbol(U, Decl(infinitelyExpandingTypes3.ts, 10, 21))
+>List : Symbol(List, Decl(infinitelyExpandingTypes3.ts, 0, 0))
+>List : Symbol(List, Decl(infinitelyExpandingTypes3.ts, 0, 0))
+>U : Symbol(U, Decl(infinitelyExpandingTypes3.ts, 10, 21))
+
+    name: string;
+>name : Symbol(OwnerList2.name, Decl(infinitelyExpandingTypes3.ts, 10, 47))
+}
+
+var o1: OwnerList<number>;
+>o1 : Symbol(o1, Decl(infinitelyExpandingTypes3.ts, 14, 3))
+>OwnerList : Symbol(OwnerList, Decl(infinitelyExpandingTypes3.ts, 4, 1))
+
+var o2: OwnerList2<number>;
+>o2 : Symbol(o2, Decl(infinitelyExpandingTypes3.ts, 15, 3))
+>OwnerList2 : Symbol(OwnerList2, Decl(infinitelyExpandingTypes3.ts, 8, 1))
+
+o1 = o2; // should not error
+>o1 : Symbol(o1, Decl(infinitelyExpandingTypes3.ts, 14, 3))
+>o2 : Symbol(o2, Decl(infinitelyExpandingTypes3.ts, 15, 3))
+

@@ -12,6 +12,7 @@ export module c {
 }
 
 //// [internalAliasInitializedModuleInsideLocalModuleWithoutExport.js]
+"use strict";
 var a;
 (function (a) {
     var b;
@@ -20,7 +21,7 @@ var a;
             function c() {
             }
             return c;
-        })();
+        }());
         b.c = c;
     })(b = a.b || (a.b = {}));
 })(a = exports.a || (exports.a = {}));

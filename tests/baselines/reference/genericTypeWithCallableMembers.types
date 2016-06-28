@@ -24,14 +24,14 @@ class C<T extends Constructable> {
 >x : Constructable
 >new this.data() : Constructable
 >this.data : T
->this : C<T>
+>this : this
 >data : T
 
         var x2 = new this.data2(); // was error, shouldn't be
 >x2 : Constructable
 >new this.data2() : Constructable
 >this.data2 : Constructable
->this : C<T>
+>this : this
 >data2 : Constructable
     }
 }

@@ -1,0 +1,7 @@
+{
+	"compilerOptions": {
+		"noImplicitAny": true,
+		"module": "commonjs",
+		"outDir": "../../built/local/tslint"
+	}
+}

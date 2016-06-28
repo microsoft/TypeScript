@@ -2,9 +2,11 @@
 // all the following should be valid
 function fn1(): number { return 1; }
 >fn1 : () => number
+>1 : number
 
 function fn2(): string { return ''; }
 >fn2 : () => string
+>'' : string
 
 function fn3(): void { return undefined; }
 >fn3 : () => void
@@ -15,15 +17,18 @@ function fn4(): void { return; }
 
 function fn5(): boolean { return true; }
 >fn5 : () => boolean
+>true : boolean
 
 function fn6(): Date { return new Date(12); }
 >fn6 : () => Date
 >Date : Date
 >new Date(12) : Date
 >Date : DateConstructor
+>12 : number
 
 function fn7(): any { return null; }
 >fn7 : () => any
+>null : null
 
 function fn8(): any { return; } // OK, eq. to 'return undefined'
 >fn8 : () => any
@@ -54,6 +59,7 @@ function fn10(): I { return { id: 12 }; }
 >I : I
 >{ id: 12 } : { id: number; }
 >id : number
+>12 : number
 
 function fn11(): I { return new C(); }
 >fn11 : () => I
@@ -70,4 +76,5 @@ function fn12(): C { return new D(); }
 function fn13(): C { return null; }
 >fn13 : () => C
 >C : C
+>null : null
 

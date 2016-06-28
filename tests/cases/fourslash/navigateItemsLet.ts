@@ -4,7 +4,7 @@
 ////function foo() {
 ////    {| "itemName": "d", "kind": "let", "parentName": "foo" |}let d = 10;
 ////}
-debugger;
+
 test.markers().forEach(marker => {
     verify.navigationItemsListContains(
         marker.data.itemName,

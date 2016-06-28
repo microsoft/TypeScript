@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @allowNonTsExtensions: true
+// @allowJs: true
 // @Filename: a.js
 //// function F(p?) { }
 
@@ -10,6 +10,6 @@ verify.getSemanticDiagnostics(`[
     "start": 12,
     "length": 1,
     "category": "error",
-    "code": 8013
+    "code": 8009
   }
 ]`);

@@ -25,11 +25,10 @@ class Q extends P {
 }
 
 //// [superAccess2.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var P = (function () {
     function P() {
@@ -37,7 +36,7 @@ var P = (function () {
     P.prototype.x = function () { };
     P.y = function () { };
     return P;
-})();
+}());
 var Q = (function (_super) {
     __extends(Q, _super);
     // Super is not allowed in constructor args
@@ -62,4 +61,4 @@ var Q = (function (_super) {
     };
     Q.yy = _super.; // error for static initializer accessing super
     return Q;
-})(P);
+}(P));

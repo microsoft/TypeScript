@@ -15,7 +15,7 @@ var C = (function () {
     }
     C.prototype.foo = function (x) { return null; };
     return C;
-})();
+}());
 var r = C.prototype;
 // should be any
 var r2 = r.x;

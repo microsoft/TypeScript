@@ -1,0 +1,25 @@
+=== tests/cases/compiler/es5ExportDefaultClassDeclaration4.ts ===
+
+declare module "foo" {
+    export var before: C;
+>before : Symbol(before, Decl(es5ExportDefaultClassDeclaration4.ts, 2, 14))
+>C : Symbol(C, Decl(es5ExportDefaultClassDeclaration4.ts, 2, 25))
+
+    export default class C {
+>C : Symbol(C, Decl(es5ExportDefaultClassDeclaration4.ts, 2, 25))
+
+        method(): C;
+>method : Symbol(C.method, Decl(es5ExportDefaultClassDeclaration4.ts, 4, 28))
+>C : Symbol(C, Decl(es5ExportDefaultClassDeclaration4.ts, 2, 25))
+    }
+
+    export var after: C;
+>after : Symbol(after, Decl(es5ExportDefaultClassDeclaration4.ts, 8, 14))
+>C : Symbol(C, Decl(es5ExportDefaultClassDeclaration4.ts, 2, 25))
+
+    export var t: typeof C;
+>t : Symbol(t, Decl(es5ExportDefaultClassDeclaration4.ts, 10, 14))
+>C : Symbol(C, Decl(es5ExportDefaultClassDeclaration4.ts, 2, 25))
+}
+
+

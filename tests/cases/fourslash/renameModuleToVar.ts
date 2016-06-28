@@ -10,7 +10,7 @@
 ////    var z = y + 5;
 ////}
 
-fs.goTo.marker();
-fs.edit.backspace(6);
-fs.edit.insert("var");
-fs.verify.numberOfErrorsInCurrentFile(0);
+goTo.marker();
+edit.backspace(6);
+edit.insert("var");
+verify.numberOfErrorsInCurrentFile(0);

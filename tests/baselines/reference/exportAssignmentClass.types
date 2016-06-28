@@ -17,6 +17,7 @@ var x = d.p;
 class C { public p = 0; }
 >C : C
 >p : number
+>0 : number
 
 export = C;
 >C : C

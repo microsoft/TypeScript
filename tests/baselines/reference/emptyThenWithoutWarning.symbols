@@ -1,0 +1,13 @@
+=== tests/cases/compiler/emptyThenWithoutWarning.ts ===
+let a = 4;
+>a : Symbol(a, Decl(emptyThenWithoutWarning.ts, 0, 3))
+
+if(a === 1 || a === 2 || a === 3) {
+>a : Symbol(a, Decl(emptyThenWithoutWarning.ts, 0, 3))
+>a : Symbol(a, Decl(emptyThenWithoutWarning.ts, 0, 3))
+>a : Symbol(a, Decl(emptyThenWithoutWarning.ts, 0, 3))
+}
+else {
+    let message = "Ooops";
+>message : Symbol(message, Decl(emptyThenWithoutWarning.ts, 5, 7))
+}

@@ -4,6 +4,7 @@
 ////    (         )           =>    1  ;/*1*/
 ////    (        arg )           =>    2  ;/*2*/
 ////        arg       =>    2  ;/*3*/
+////        arg=>2  ;/*3a*/
 ////      (        arg     = 1 )           =>    3  ;/*4*/
 ////    (        arg    ?        )           =>    4  ;/*5*/
 ////    (        arg    :    number )           =>    5  ;/*6*/
@@ -118,7 +119,9 @@ verify.currentLineContentIs("() => 1;");
 goTo.marker("2");
 verify.currentLineContentIs("(arg) => 2;");
 goTo.marker("3");
-verify.currentLineContentIs("arg       => 2;");
+verify.currentLineContentIs("arg => 2;");
+goTo.marker("3a");
+verify.currentLineContentIs("arg => 2;");
 goTo.marker("4");
 verify.currentLineContentIs("(arg = 1) => 3;");
 goTo.marker("5");

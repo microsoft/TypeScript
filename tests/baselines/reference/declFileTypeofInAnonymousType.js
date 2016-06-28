@@ -29,7 +29,7 @@ var m1;
         function c() {
         }
         return c;
-    })();
+    }());
     m1.c = c;
     (function (e) {
         e[e["weekday"] = 0] = "weekday";

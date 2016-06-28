@@ -13,4 +13,4 @@ var Greeter = (function () {
     Greeter.foo = function () {
     };
     return Greeter;
-})();
+}());

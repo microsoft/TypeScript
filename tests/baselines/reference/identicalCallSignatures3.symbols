@@ -1,0 +1,33 @@
+=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/identicalCallSignatures3.ts ===
+// Normally it is an error to have multiple overloads with identical signatures in a single type declaration.
+// Here the multiple overloads come from multiple merged declarations, so we do not report errors.
+
+interface I {
+>I : Symbol(I, Decl(identicalCallSignatures3.ts, 0, 0), Decl(identicalCallSignatures3.ts, 5, 1))
+
+    (x: number): string;
+>x : Symbol(x, Decl(identicalCallSignatures3.ts, 4, 5))
+}
+
+interface I {
+>I : Symbol(I, Decl(identicalCallSignatures3.ts, 0, 0), Decl(identicalCallSignatures3.ts, 5, 1))
+
+    (x: number): string;
+>x : Symbol(x, Decl(identicalCallSignatures3.ts, 8, 5))
+}
+
+interface I2<T> {
+>I2 : Symbol(I2, Decl(identicalCallSignatures3.ts, 9, 1), Decl(identicalCallSignatures3.ts, 13, 1))
+>T : Symbol(T, Decl(identicalCallSignatures3.ts, 11, 13), Decl(identicalCallSignatures3.ts, 15, 13))
+
+    (x: number): string;
+>x : Symbol(x, Decl(identicalCallSignatures3.ts, 12, 5))
+}
+
+interface I2<T> {
+>I2 : Symbol(I2, Decl(identicalCallSignatures3.ts, 9, 1), Decl(identicalCallSignatures3.ts, 13, 1))
+>T : Symbol(T, Decl(identicalCallSignatures3.ts, 11, 13), Decl(identicalCallSignatures3.ts, 15, 13))
+
+    (x: number): string;
+>x : Symbol(x, Decl(identicalCallSignatures3.ts, 16, 5))
+}

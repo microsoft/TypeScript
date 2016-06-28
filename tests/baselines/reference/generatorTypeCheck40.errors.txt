@@ -1,0 +1,12 @@
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck40.ts(2,21): error TS2507: Type 'any' is not a constructor function type.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck40.ts(2,22): error TS1163: A 'yield' expression is only allowed in a generator body.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck40.ts (2 errors) ====
+    function* g() {
+        class C extends (yield 0) { }
+                        ~~~~~~~~~
+!!! error TS2507: Type 'any' is not a constructor function type.
+                         ~~~~~
+!!! error TS1163: A 'yield' expression is only allowed in a generator body.
+    }

@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts' />
 
-/////** this is multi declare module*/
-////module mult/*3*/iM {
+/////** this is multi declare namespace*/
+////namespace mult/*3*/iM {
 ////    /** class b*/
 ////    export class b {
 ////    }
 ////}
-/////** thi is multi module 2*/
-////module mu/*2*/ltiM {
+/////** thi is multi namespace 2*/
+////namespace mu/*2*/ltiM {
 ////    /** class c comment*/
 ////    export class c {
 ////    }
@@ -20,16 +20,16 @@
 edit.insert('');
 
 goTo.marker('1');
-verify.completionListContains("multiM", "module multiM", "this is multi declare module\nthi is multi module 2");
+verify.completionListContains("multiM", "namespace multiM", "this is multi declare namespace\nthi is multi namespace 2");
 
 goTo.marker('2');
-verify.quickInfoIs("module multiM", "this is multi declare module\nthi is multi module 2");
+verify.quickInfoIs("namespace multiM", "this is multi declare namespace\nthi is multi namespace 2");
 
 goTo.marker('3');
-verify.quickInfoIs("module multiM", "this is multi declare module\nthi is multi module 2");
+verify.quickInfoIs("namespace multiM", "this is multi declare namespace\nthi is multi namespace 2");
 
 goTo.marker('4');
-verify.quickInfoIs("module multiM", "this is multi declare module\nthi is multi module 2");
+verify.quickInfoIs("namespace multiM", "this is multi declare namespace\nthi is multi namespace 2");
 
 goTo.marker('5');
-verify.quickInfoIs("module multiM", "this is multi declare module\nthi is multi module 2");
+verify.quickInfoIs("namespace multiM", "this is multi declare namespace\nthi is multi namespace 2");

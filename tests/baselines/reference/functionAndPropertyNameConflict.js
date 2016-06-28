@@ -19,4 +19,4 @@ var C65 = (function () {
         configurable: true
     });
     return C65;
-})();
+}());

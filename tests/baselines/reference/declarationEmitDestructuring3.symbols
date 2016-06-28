@@ -1,0 +1,13 @@
+=== tests/cases/compiler/declarationEmitDestructuring3.ts ===
+function bar([x, z, ...w]) { }
+>bar : Symbol(bar, Decl(declarationEmitDestructuring3.ts, 0, 0))
+>x : Symbol(x, Decl(declarationEmitDestructuring3.ts, 0, 14))
+>z : Symbol(z, Decl(declarationEmitDestructuring3.ts, 0, 16))
+>w : Symbol(w, Decl(declarationEmitDestructuring3.ts, 0, 19))
+
+function foo([x, ...y] = [1, "string", true]) { }
+>foo : Symbol(foo, Decl(declarationEmitDestructuring3.ts, 0, 30))
+>x : Symbol(x, Decl(declarationEmitDestructuring3.ts, 1, 14))
+>y : Symbol(y, Decl(declarationEmitDestructuring3.ts, 1, 16))
+
+

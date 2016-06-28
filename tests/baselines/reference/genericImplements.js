@@ -25,13 +25,13 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 ;
 var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 ;
 // OK
 var X = (function () {
@@ -39,18 +39,18 @@ var X = (function () {
     }
     X.prototype.f = function () { return undefined; };
     return X;
-})(); // { f: () => { b; } }
+}()); // { f: () => { b; } }
 // OK
 var Y = (function () {
     function Y() {
     }
     Y.prototype.f = function () { return undefined; };
     return Y;
-})(); // { f: () => { a; } }
+}()); // { f: () => { a; } }
 // OK
 var Z = (function () {
     function Z() {
     }
     Z.prototype.f = function () { return undefined; };
     return Z;
-})(); // { f: <T>() => T } 
+}()); // { f: <T>() => T } 

@@ -3,5 +3,5 @@
 (...arg) => 103;
 (...arg:number [] = []) => 104;
 
-// Non optional parameter following an optional one
+// Uninitialized parameter makes the initialized one required
 (arg1 = 1, arg2) => 1; 

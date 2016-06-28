@@ -20,11 +20,11 @@ var A = (function () {
         this.a = x;
     }
     return A;
-})();
+}());
 var B = (function () {
     function B() {
         this.a = x;
         var x = "";
     }
     return B;
-})();
+}());

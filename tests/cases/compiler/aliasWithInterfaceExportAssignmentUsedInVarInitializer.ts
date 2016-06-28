@@ -1,4 +1,4 @@
-//@module: commonjs
+// @module: commonjs
 // @Filename: aliasWithInterfaceExportAssignmentUsedInVarInitializer_0.ts
 interface c {
     q3: number;
@@ -6,5 +6,5 @@ interface c {
 export = c;
 
 // @Filename: aliasWithInterfaceExportAssignmentUsedInVarInitializer_1.ts
-import moduleA = require("aliasWithInterfaceExportAssignmentUsedInVarInitializer_0");
+import moduleA = require("./aliasWithInterfaceExportAssignmentUsedInVarInitializer_0");
 var d = b.q3;

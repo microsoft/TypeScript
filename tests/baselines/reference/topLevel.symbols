@@ -1,0 +1,78 @@
+=== tests/cases/compiler/topLevel.ts ===
+interface IPoint {
+>IPoint : Symbol(IPoint, Decl(topLevel.ts, 0, 0))
+
+    x:number;
+>x : Symbol(IPoint.x, Decl(topLevel.ts, 0, 18))
+
+    y:number;
+>y : Symbol(IPoint.y, Decl(topLevel.ts, 1, 13))
+}
+
+class Point implements IPoint {
+>Point : Symbol(Point, Decl(topLevel.ts, 3, 1))
+>IPoint : Symbol(IPoint, Decl(topLevel.ts, 0, 0))
+
+    constructor(public x,public y){}
+>x : Symbol(Point.x, Decl(topLevel.ts, 6, 16))
+>y : Symbol(Point.y, Decl(topLevel.ts, 6, 25))
+
+    public move(xo:number,yo:number) {
+>move : Symbol(Point.move, Decl(topLevel.ts, 6, 36))
+>xo : Symbol(xo, Decl(topLevel.ts, 7, 16))
+>yo : Symbol(yo, Decl(topLevel.ts, 7, 26))
+
+	this.x+=xo;
+>this.x : Symbol(Point.x, Decl(topLevel.ts, 6, 16))
+>this : Symbol(Point, Decl(topLevel.ts, 3, 1))
+>x : Symbol(Point.x, Decl(topLevel.ts, 6, 16))
+>xo : Symbol(xo, Decl(topLevel.ts, 7, 16))
+
+	this.y+=yo;
+>this.y : Symbol(Point.y, Decl(topLevel.ts, 6, 25))
+>this : Symbol(Point, Decl(topLevel.ts, 3, 1))
+>y : Symbol(Point.y, Decl(topLevel.ts, 6, 25))
+>yo : Symbol(yo, Decl(topLevel.ts, 7, 26))
+
+	return this;
+>this : Symbol(Point, Decl(topLevel.ts, 3, 1))
+    }
+    public toString() {
+>toString : Symbol(Point.toString, Decl(topLevel.ts, 11, 5))
+
+	return ("("+this.x+","+this.y+")");
+>this.x : Symbol(Point.x, Decl(topLevel.ts, 6, 16))
+>this : Symbol(Point, Decl(topLevel.ts, 3, 1))
+>x : Symbol(Point.x, Decl(topLevel.ts, 6, 16))
+>this.y : Symbol(Point.y, Decl(topLevel.ts, 6, 25))
+>this : Symbol(Point, Decl(topLevel.ts, 3, 1))
+>y : Symbol(Point.y, Decl(topLevel.ts, 6, 25))
+    }
+}
+
+var result="";
+>result : Symbol(result, Decl(topLevel.ts, 17, 3))
+
+result+=(new Point(3,4).move(2,2));
+>result : Symbol(result, Decl(topLevel.ts, 17, 3))
+>new Point(3,4).move : Symbol(Point.move, Decl(topLevel.ts, 6, 36))
+>Point : Symbol(Point, Decl(topLevel.ts, 3, 1))
+>move : Symbol(Point.move, Decl(topLevel.ts, 6, 36))
+
+module M {
+>M : Symbol(M, Decl(topLevel.ts, 18, 35))
+
+    export var origin=new Point(0,0);
+>origin : Symbol(origin, Decl(topLevel.ts, 21, 14))
+>Point : Symbol(Point, Decl(topLevel.ts, 3, 1))
+}
+
+result+=(M.origin.move(1,1));
+>result : Symbol(result, Decl(topLevel.ts, 17, 3))
+>M.origin.move : Symbol(Point.move, Decl(topLevel.ts, 6, 36))
+>M.origin : Symbol(M.origin, Decl(topLevel.ts, 21, 14))
+>M : Symbol(M, Decl(topLevel.ts, 18, 35))
+>origin : Symbol(M.origin, Decl(topLevel.ts, 21, 14))
+>move : Symbol(Point.move, Decl(topLevel.ts, 6, 36))
+
+

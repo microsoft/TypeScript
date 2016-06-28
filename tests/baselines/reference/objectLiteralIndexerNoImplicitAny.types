@@ -9,8 +9,9 @@ interface I {
 var x: I = {
 >x : I
 >I : I
->{    p: null} : { [x: string]: null; p: null; }
+>{    p: null} : { p: null; }
 
     p: null
 >p : null
+>null : null
 }

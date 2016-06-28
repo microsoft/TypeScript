@@ -30,4 +30,4 @@ var Foo = (function () {
     Foo.d = false || (function (x) { return x || undefined; })(null);
     Foo.e = function (x) { return null; };
     return Foo;
-})();
+}());

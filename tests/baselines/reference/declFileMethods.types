@@ -32,6 +32,7 @@ export class c1 {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
+>"" : string
     }
 
     public fooWithOverloads(a: string): string;
@@ -80,6 +81,7 @@ export class c1 {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
+>"" : string
     }
     private privateFooWithOverloads(a: string): string;
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
@@ -127,6 +129,7 @@ export class c1 {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
+>"" : string
     }
     static staticFooWithOverloads(a: string): string;
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
@@ -174,6 +177,7 @@ export class c1 {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
+>"" : string
     }
     private static privateStaticFooWithOverloads(a: string): string;
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
@@ -255,6 +259,7 @@ class c2 {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
+>"" : string
     }
 
     public fooWithOverloads(a: string): string;
@@ -303,6 +308,7 @@ class c2 {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
+>"" : string
     }
     private privateFooWithOverloads(a: string): string;
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
@@ -350,6 +356,7 @@ class c2 {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
+>"" : string
     }
     static staticFooWithOverloads(a: string): string;
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
@@ -397,6 +404,7 @@ class c2 {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
+>"" : string
     }
     private static privateStaticFooWithOverloads(a: string): string;
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }

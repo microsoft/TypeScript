@@ -1,4 +1,4 @@
-tests/cases/compiler/multipleExports.ts(10,5): error TS1194: Export declarations are not permitted in an internal module.
+tests/cases/compiler/multipleExports.ts(10,5): error TS1194: Export declarations are not permitted in a namespace.
 tests/cases/compiler/multipleExports.ts(10,13): error TS2484: Export declaration conflicts with exported declaration of 'x'
 
 
@@ -14,7 +14,7 @@ tests/cases/compiler/multipleExports.ts(10,13): error TS2484: Export declaration
         v;
         export {x};
         ~~~~~~~~~~~
-!!! error TS1194: Export declarations are not permitted in an internal module.
+!!! error TS1194: Export declarations are not permitted in a namespace.
                 ~
 !!! error TS2484: Export declaration conflicts with exported declaration of 'x'
     }

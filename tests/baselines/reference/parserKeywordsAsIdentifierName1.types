@@ -5,11 +5,14 @@ var big = {
 
    break : 0,
 >break : number
+>0 : number
 
    super : 0,
 >super : number
+>0 : number
 
    const : 0
 >const : number
+>0 : number
 }
 

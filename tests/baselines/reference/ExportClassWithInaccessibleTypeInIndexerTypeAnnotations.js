@@ -22,11 +22,11 @@ var A;
         function Point() {
         }
         return Point;
-    })();
+    }());
     var points = (function () {
         function points() {
         }
         return points;
-    })();
+    }());
     A.points = points;
 })(A || (A = {}));

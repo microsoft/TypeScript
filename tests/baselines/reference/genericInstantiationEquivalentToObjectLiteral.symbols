@@ -1,0 +1,62 @@
+=== tests/cases/conformance/types/namedTypes/genericInstantiationEquivalentToObjectLiteral.ts ===
+interface Pair<T1, T2> { first: T1; second: T2; }
+>Pair : Symbol(Pair, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 0))
+>T1 : Symbol(T1, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 15))
+>T2 : Symbol(T2, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 18))
+>first : Symbol(Pair.first, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 24))
+>T1 : Symbol(T1, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 15))
+>second : Symbol(Pair.second, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 35))
+>T2 : Symbol(T2, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 18))
+
+var x: Pair<string, number>
+>x : Symbol(x, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 1, 3))
+>Pair : Symbol(Pair, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 0))
+
+var y: { first: string; second: number; }
+>y : Symbol(y, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 2, 3))
+>first : Symbol(first, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 2, 8))
+>second : Symbol(second, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 2, 23))
+
+x = y;
+>x : Symbol(x, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 1, 3))
+>y : Symbol(y, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 2, 3))
+
+y = x;
+>y : Symbol(y, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 2, 3))
+>x : Symbol(x, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 1, 3))
+
+declare function f<T, U>(x: Pair<T, U>);
+>f : Symbol(f, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 5, 6))
+>T : Symbol(T, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 7, 19))
+>U : Symbol(U, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 7, 21))
+>x : Symbol(x, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 7, 25))
+>Pair : Symbol(Pair, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 0))
+>T : Symbol(T, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 7, 19))
+>U : Symbol(U, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 7, 21))
+
+declare function f2<T, U>(x: { first: T; second: U; });
+>f2 : Symbol(f2, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 7, 40))
+>T : Symbol(T, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 8, 20))
+>U : Symbol(U, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 8, 22))
+>x : Symbol(x, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 8, 26))
+>first : Symbol(first, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 8, 30))
+>T : Symbol(T, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 8, 20))
+>second : Symbol(second, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 8, 40))
+>U : Symbol(U, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 8, 22))
+
+f(x);
+>f : Symbol(f, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 5, 6))
+>x : Symbol(x, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 1, 3))
+
+f(y);
+>f : Symbol(f, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 5, 6))
+>y : Symbol(y, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 2, 3))
+
+f2(x);
+>f2 : Symbol(f2, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 7, 40))
+>x : Symbol(x, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 1, 3))
+
+f2(y);
+>f2 : Symbol(f2, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 7, 40))
+>y : Symbol(y, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 2, 3))
+

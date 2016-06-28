@@ -66,7 +66,7 @@ var B;
         function B() {
         }
         return B;
-    })();
+    }());
 })(B || (B = {}));
 var X;
 (function (X_1) {

@@ -1,4 +1,6 @@
-EmitSkipped: false
+EmitSkipped: true
+Diagnostics:
+  Exported variable 'foo' has or is using private name 'C'.
 FileName : tests/cases/fourslash/inputFile.js
 var M;
 (function (M) {
@@ -6,7 +8,7 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     M.foo = new C();
 })(M || (M = {}));
 

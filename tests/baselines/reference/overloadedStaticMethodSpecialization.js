@@ -16,4 +16,4 @@ var A = (function () {
         return null;
     };
     return A;
-})();
+}());

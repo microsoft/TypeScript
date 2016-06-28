@@ -35,7 +35,7 @@ var C = (function () {
         }();
     }
     return C;
-})();
+}());
 var messenger = {
     message: "Hello World",
     start: function () {

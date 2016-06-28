@@ -1,0 +1,7 @@
+=== tests/cases/compiler/functionAssignmentError.ts ===
+var func = function (){return "ONE";};
+>func : Symbol(func, Decl(functionAssignmentError.ts, 0, 3))
+
+func = function (){return "ONE";};
+>func : Symbol(func, Decl(functionAssignmentError.ts, 0, 3))
+

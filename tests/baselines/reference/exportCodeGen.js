@@ -100,7 +100,7 @@ var E;
         function C() {
         }
         return C;
-    })();
+    }());
     E.C = C;
     var M;
     (function (M) {
@@ -120,7 +120,7 @@ var F;
         function C() {
         }
         return C;
-    })();
+    }());
     var M;
     (function (M) {
         var x = 42;

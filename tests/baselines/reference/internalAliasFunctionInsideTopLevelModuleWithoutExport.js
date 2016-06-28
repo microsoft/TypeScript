@@ -11,6 +11,7 @@ export var bVal2 = b;
 
 
 //// [internalAliasFunctionInsideTopLevelModuleWithoutExport.js]
+"use strict";
 var a;
 (function (a) {
     function foo(x) {

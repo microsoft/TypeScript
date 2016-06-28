@@ -8,7 +8,13 @@
 
 declare var process: any;
 declare var console: any;
-declare var fs: any;
+declare var fs: {
+    existsSync(path: string): boolean;
+    readdirSync(path: string): string[];
+    readFileSync(filename: string, encoding?: string): string;
+    writeFileSync(filename: string, data: any, options?: { encoding?: string; mode?: number; flag?: string; }): void;
+    watchFile(filename: string, options: { persistent?: boolean; interval?: number; }, listener: (curr: { mtime: Date }, prev: { mtime: Date }) => void): void;
+};
 declare var path: any;
 
 import * as ts from "typescript";
@@ -109,6 +115,7 @@ watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });
          at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
+"use strict";
 var ts = require("typescript");
 function watch(rootFileNames, options) {
     var files = {};
@@ -181,4 +188,4 @@ function watch(rootFileNames, options) {
 var currentDirectoryFiles = fs.readdirSync(process.cwd()).
     filter(function (fileName) { return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts"; });
 // Start the watcher
-watch(currentDirectoryFiles, { module: 1 /* CommonJS */ });
+watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });

@@ -1,0 +1,19 @@
+=== tests/cases/compiler/moduleUnassignedVariable.ts ===
+module Bar {
+>Bar : Symbol(Bar, Decl(moduleUnassignedVariable.ts, 0, 0))
+
+    export var a = 1;
+>a : Symbol(a, Decl(moduleUnassignedVariable.ts, 1, 14))
+
+    function fooA() { return a; } // Correct: return Bar.a
+>fooA : Symbol(fooA, Decl(moduleUnassignedVariable.ts, 1, 21))
+>a : Symbol(a, Decl(moduleUnassignedVariable.ts, 1, 14))
+
+    export var b;
+>b : Symbol(b, Decl(moduleUnassignedVariable.ts, 4, 14))
+
+    function fooB() { return b; } // Incorrect: return b
+>fooB : Symbol(fooB, Decl(moduleUnassignedVariable.ts, 4, 17))
+>b : Symbol(b, Decl(moduleUnassignedVariable.ts, 4, 14))
+}
+

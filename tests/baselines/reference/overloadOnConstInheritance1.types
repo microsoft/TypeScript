@@ -3,23 +3,23 @@ interface Base {
 >Base : Base
 
     addEventListener(x: string): any;
->addEventListener : { (x: string): any; (x: 'foo'): string; }
+>addEventListener : { (x: string): any; (x: "foo"): string; }
 >x : string
 
     addEventListener(x: 'foo'): string;
->addEventListener : { (x: string): any; (x: 'foo'): string; }
->x : 'foo'
+>addEventListener : { (x: string): any; (x: "foo"): string; }
+>x : "foo"
 }
 interface Deriver extends Base {
 >Deriver : Deriver
 >Base : Base
 
     addEventListener(x: string): any;
->addEventListener : { (x: string): any; (x: 'bar'): string; }
+>addEventListener : { (x: string): any; (x: "bar"): string; }
 >x : string
 
     addEventListener(x: 'bar'): string;
->addEventListener : { (x: string): any; (x: 'bar'): string; }
->x : 'bar'
+>addEventListener : { (x: string): any; (x: "bar"): string; }
+>x : "bar"
 }
 

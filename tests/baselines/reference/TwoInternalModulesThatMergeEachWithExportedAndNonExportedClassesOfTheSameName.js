@@ -47,7 +47,7 @@ var A;
         function Point() {
         }
         return Point;
-    })();
+    }());
     A.Point = Point;
 })(A || (A = {}));
 var A;
@@ -59,7 +59,7 @@ var A;
             return { x: p.x, y: p.y };
         };
         return Point;
-    })();
+    }());
 })(A || (A = {}));
 // ensure merges as expected
 var p;
@@ -74,7 +74,7 @@ var X;
                 function Line() {
                 }
                 return Line;
-            })();
+            }());
             Z.Line = Line;
         })(Z = Y.Z || (Y.Z = {}));
     })(Y = X.Y || (X.Y = {}));
@@ -89,7 +89,7 @@ var X;
                 function Line() {
                 }
                 return Line;
-            })();
+            }());
         })(Z = Y.Z || (Y.Z = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));

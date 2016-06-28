@@ -23,4 +23,4 @@ var A = (function () {
         var d = x();
     };
     return A;
-})();
+}());

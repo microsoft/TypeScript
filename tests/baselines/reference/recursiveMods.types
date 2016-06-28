@@ -1,4 +1,5 @@
 === tests/cases/compiler/recursiveMods.ts ===
+
 export module Foo {
 >Foo : typeof Foo
 
@@ -14,6 +15,7 @@ export module Foo {
 >C : C
 
 		if (true) { return Bar();}
+>true : boolean
 >Bar() : C
 >Bar : () => C
 

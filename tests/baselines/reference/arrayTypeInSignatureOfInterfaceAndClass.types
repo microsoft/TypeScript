@@ -65,7 +65,7 @@ declare module Data {
 >removeIndices : (indices: number[], options?: any) => WinJS.Promise<IListItem<T>[]>
 >indices : number[]
 >options : any
->WinJS : unknown
+>WinJS : any
 >Promise : WinJS.Promise<T>
 >IListItem : IListItem<T>
 >T : T
@@ -81,7 +81,7 @@ declare module Data {
 >removeIndices : (indices: number[], options?: any) => WinJS.Promise<IListItem<T>[]>
 >indices : number[]
 >options : any
->WinJS : unknown
+>WinJS : any
 >Promise : WinJS.Promise<T>
 >IListItem : IListItem<T>
 >T : T

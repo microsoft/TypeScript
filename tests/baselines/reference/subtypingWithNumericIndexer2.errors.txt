@@ -2,7 +2,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
   Index signatures are incompatible.
     Type 'Base' is not assignable to type 'Derived'.
       Property 'bar' is missing in type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer2.ts(24,25): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer2.ts(24,27): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer2.ts(32,15): error TS2430: Interface 'B3<T>' incorrectly extends interface 'A<T>'.
   Index signatures are incompatible.
     Type 'Base' is not assignable to type 'T'.
@@ -44,7 +44,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         }
     
         interface B extends A<Base> {
-                            ~~~~~~~
+                              ~~~~
 !!! error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
             [x: number]: Derived; // error
         }

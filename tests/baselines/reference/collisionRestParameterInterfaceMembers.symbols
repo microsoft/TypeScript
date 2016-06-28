@@ -1,0 +1,44 @@
+=== tests/cases/compiler/collisionRestParameterInterfaceMembers.ts ===
+// call
+interface i1 {
+>i1 : Symbol(i1, Decl(collisionRestParameterInterfaceMembers.ts, 0, 0))
+
+    (_i: number, ...restParameters); // no error - no code gen
+>_i : Symbol(_i, Decl(collisionRestParameterInterfaceMembers.ts, 2, 5))
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterInterfaceMembers.ts, 2, 16))
+}
+interface i1NoError {
+>i1NoError : Symbol(i1NoError, Decl(collisionRestParameterInterfaceMembers.ts, 3, 1))
+
+    (_i: number);  // no error
+>_i : Symbol(_i, Decl(collisionRestParameterInterfaceMembers.ts, 5, 5))
+}
+
+// new
+interface i2 {
+>i2 : Symbol(i2, Decl(collisionRestParameterInterfaceMembers.ts, 6, 1))
+
+    new (_i: number, ...restParameters); // no error - no code gen
+>_i : Symbol(_i, Decl(collisionRestParameterInterfaceMembers.ts, 10, 9))
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterInterfaceMembers.ts, 10, 20))
+}
+interface i2NoError {
+>i2NoError : Symbol(i2NoError, Decl(collisionRestParameterInterfaceMembers.ts, 11, 1))
+
+    new (_i: number);  // no error
+>_i : Symbol(_i, Decl(collisionRestParameterInterfaceMembers.ts, 13, 9))
+}
+
+// method
+interface i3 {
+>i3 : Symbol(i3, Decl(collisionRestParameterInterfaceMembers.ts, 14, 1))
+
+    foo (_i: number, ...restParameters); // no error - no code gen
+>foo : Symbol(i3.foo, Decl(collisionRestParameterInterfaceMembers.ts, 17, 14))
+>_i : Symbol(_i, Decl(collisionRestParameterInterfaceMembers.ts, 18, 9))
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterInterfaceMembers.ts, 18, 20))
+
+    fooNoError (_i: number);  // no error
+>fooNoError : Symbol(i3.fooNoError, Decl(collisionRestParameterInterfaceMembers.ts, 18, 40))
+>_i : Symbol(_i, Decl(collisionRestParameterInterfaceMembers.ts, 19, 16))
+}

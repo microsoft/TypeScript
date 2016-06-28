@@ -42,7 +42,7 @@ var C = (function () {
     });
     C.foo = function () { };
     return C;
-})();
+}());
 var c;
 // all errors
 c.x;

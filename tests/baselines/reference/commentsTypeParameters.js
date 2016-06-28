@@ -28,7 +28,7 @@ var C = (function () {
     C.privatestaticmethod = function (a) {
     };
     return C;
-})();
+}());
 function compare(a, b) {
     return a === b;
 }

@@ -41,7 +41,7 @@ var M;
             var inner = outer; // Ok
         }
         return C;
-    })();
+    }());
     var X;
     (function (X) {
         var inner = outer; // Error: outer not visible

@@ -281,7 +281,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var c;
 var r1 = c.abstract;
 var r2 = c.as;

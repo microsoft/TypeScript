@@ -37,11 +37,10 @@ class MyDerived extends MyBase {
 }
 
 //// [superPropertyAccess.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var MyBase = (function () {
     function MyBase() {
@@ -58,7 +57,7 @@ var MyBase = (function () {
         configurable: true
     });
     return MyBase;
-})();
+}());
 var MyDerived = (function (_super) {
     __extends(MyDerived, _super);
     function MyDerived() {
@@ -77,4 +76,4 @@ var MyDerived = (function (_super) {
         var z = _super.prototype.value; // Should error, instance data property not a public instance member function
     };
     return MyDerived;
-})(MyBase);
+}(MyBase));

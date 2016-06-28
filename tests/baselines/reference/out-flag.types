@@ -10,6 +10,7 @@ class MyClass
 >Count : () => number
     {
         return 42;
+>42 : number
     }
 
     public SetCount(value: number)

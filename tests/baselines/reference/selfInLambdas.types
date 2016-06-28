@@ -28,6 +28,7 @@ var o = {
 
     counter: 0,
 >counter : number
+>0 : number
 
     start: function() {
 >start : () => void
@@ -66,6 +67,7 @@ class X {
 
 	private value = "value";
 >value : string
+>"value" : string
 
 	public foo() {
 >foo : () => void
@@ -77,7 +79,7 @@ class X {
             var x = this.value;
 >x : string
 >this.value : string
->this : X
+>this : this
 >value : string
 
             var inner = () => {
@@ -87,7 +89,7 @@ class X {
                 var y = this.value;
 >y : string
 >this.value : string
->this : X
+>this : this
 >value : string
 			}
 

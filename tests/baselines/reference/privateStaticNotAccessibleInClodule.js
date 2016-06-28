@@ -16,7 +16,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var C;
 (function (C) {
     C.y = C.bar; // error

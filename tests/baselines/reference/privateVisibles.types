@@ -4,12 +4,13 @@ class Foo {
 
 	private pvar = 0;
 >pvar : number
+>0 : number
 
 	constructor() {
 	    var n = this.pvar;
 >n : number
 >this.pvar : number
->this : Foo
+>this : this
 >pvar : number
 	}
 
@@ -17,7 +18,7 @@ class Foo {
 >meth : () => void
 >q : number
 >this.pvar : number
->this : Foo
+>this : this
 >pvar : number
 }
 

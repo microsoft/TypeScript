@@ -2,13 +2,16 @@
 export module Baz { export var x = "hello"; }
 >Baz : typeof Baz
 >x : string
+>"hello" : string
 
 Baz.x = "goodbye";
 >Baz.x = "goodbye" : string
 >Baz.x : string
 >Baz : typeof Baz
 >x : string
+>"goodbye" : string
 
 void 0;
 >void 0 : undefined
+>0 : number
 

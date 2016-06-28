@@ -3,7 +3,7 @@ tests/cases/compiler/voidAsNonAmbiguousReturnType_0.ts(1,17): error TS2394: Over
 
 ==== tests/cases/compiler/voidAsNonAmbiguousReturnType_1.ts (0 errors) ====
     ///<reference path='voidAsNonAmbiguousReturnType_0.ts'/>
-    import fs = require("voidAsNonAmbiguousReturnType_0");
+    import fs = require("./voidAsNonAmbiguousReturnType_0");
     
     function main() {
      fs.mkdirSync('test'); // should not error - return types are the same

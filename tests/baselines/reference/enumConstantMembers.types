@@ -1,0 +1,50 @@
+=== tests/cases/conformance/enums/enumConstantMembers.ts ===
+// Constant members allow negatives, but not decimals. Also hex literals are allowed
+enum E1 {
+>E1 : E1
+
+    a = 1,
+>a : E1
+>1 : number
+
+    b
+>b : E1
+}
+enum E2 {
+>E2 : E2
+
+    a = - 1,
+>a : E2
+>- 1 : number
+>1 : number
+
+    b
+>b : E2
+}
+enum E3 {
+>E3 : E3
+
+    a = 0.1,
+>a : E3
+>0.1 : number
+
+    b // Error because 0.1 is not a constant
+>b : E3
+}
+
+declare enum E4 {
+>E4 : E4
+
+    a = 1,
+>a : E4
+>1 : number
+
+    b = -1,
+>b : E4
+>-1 : number
+>1 : number
+
+    c = 0.1 // Not a constant
+>c : E4
+>0.1 : number
+}

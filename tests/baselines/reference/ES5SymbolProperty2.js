@@ -19,7 +19,7 @@ var M;
         }
         C.prototype[Symbol.iterator] = function () { };
         return C;
-    })();
+    }());
     M.C = C;
     (new C)[Symbol.iterator];
 })(M || (M = {}));

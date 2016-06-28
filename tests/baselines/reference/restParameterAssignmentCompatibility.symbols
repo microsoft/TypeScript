@@ -1,0 +1,55 @@
+=== tests/cases/compiler/restParameterAssignmentCompatibility.ts ===
+class T {
+>T : Symbol(T, Decl(restParameterAssignmentCompatibility.ts, 0, 0))
+
+    m(...p3) {
+>m : Symbol(T.m, Decl(restParameterAssignmentCompatibility.ts, 0, 9))
+>p3 : Symbol(p3, Decl(restParameterAssignmentCompatibility.ts, 1, 6))
+
+    }
+}
+
+class S {
+>S : Symbol(S, Decl(restParameterAssignmentCompatibility.ts, 4, 1))
+
+    m(p1, p2) {
+>m : Symbol(S.m, Decl(restParameterAssignmentCompatibility.ts, 6, 9))
+>p1 : Symbol(p1, Decl(restParameterAssignmentCompatibility.ts, 7, 6))
+>p2 : Symbol(p2, Decl(restParameterAssignmentCompatibility.ts, 7, 9))
+
+    }
+}
+
+var t: T;
+>t : Symbol(t, Decl(restParameterAssignmentCompatibility.ts, 12, 3))
+>T : Symbol(T, Decl(restParameterAssignmentCompatibility.ts, 0, 0))
+
+var s: S;
+>s : Symbol(s, Decl(restParameterAssignmentCompatibility.ts, 13, 3))
+>S : Symbol(S, Decl(restParameterAssignmentCompatibility.ts, 4, 1))
+
+// M is a non - specialized call or construct signature and S' contains a call or construct signature N where,
+//  the number of non-optional parameters in N is less than or equal to the total number of parameters in M,
+t = s; // Should be valid (rest params correspond to an infinite expansion of parameters)
+>t : Symbol(t, Decl(restParameterAssignmentCompatibility.ts, 12, 3))
+>s : Symbol(s, Decl(restParameterAssignmentCompatibility.ts, 13, 3))
+
+class T1 {
+>T1 : Symbol(T1, Decl(restParameterAssignmentCompatibility.ts, 16, 6))
+
+    m(p1?, p2?) {
+>m : Symbol(T1.m, Decl(restParameterAssignmentCompatibility.ts, 18, 10))
+>p1 : Symbol(p1, Decl(restParameterAssignmentCompatibility.ts, 19, 6))
+>p2 : Symbol(p2, Decl(restParameterAssignmentCompatibility.ts, 19, 10))
+
+    }
+}
+var t1: T1;
+>t1 : Symbol(t1, Decl(restParameterAssignmentCompatibility.ts, 23, 3))
+>T1 : Symbol(T1, Decl(restParameterAssignmentCompatibility.ts, 16, 6))
+
+// When comparing call or construct signatures, parameter names are ignored and rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
+t1 = s; // Similar to above, but optionality does not matter here.
+>t1 : Symbol(t1, Decl(restParameterAssignmentCompatibility.ts, 23, 3))
+>s : Symbol(s, Decl(restParameterAssignmentCompatibility.ts, 13, 3))
+

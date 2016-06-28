@@ -189,12 +189,12 @@ var C1 = (function () {
     function C1() {
     }
     return C1;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
     return C2;
-})();
+}());
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -208,7 +208,7 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 var c;
 (function (c) {
     c.bar = 1;

@@ -1,0 +1,67 @@
+=== tests/cases/conformance/es6/spread/iteratorSpreadInCall12.ts ===
+new Foo(...[...new SymbolIterator, ...[...new StringIterator]]);
+>Foo : Symbol(Foo, Decl(iteratorSpreadInCall12.ts, 0, 64))
+>SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInCall12.ts, 4, 1))
+>StringIterator : Symbol(StringIterator, Decl(iteratorSpreadInCall12.ts, 17, 1))
+
+class Foo<T> {
+>Foo : Symbol(Foo, Decl(iteratorSpreadInCall12.ts, 0, 64))
+>T : Symbol(T, Decl(iteratorSpreadInCall12.ts, 2, 10))
+
+    constructor(...s: T[]) { }
+>s : Symbol(s, Decl(iteratorSpreadInCall12.ts, 3, 16))
+>T : Symbol(T, Decl(iteratorSpreadInCall12.ts, 2, 10))
+}
+
+class SymbolIterator {
+>SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInCall12.ts, 4, 1))
+
+    next() {
+>next : Symbol(SymbolIterator.next, Decl(iteratorSpreadInCall12.ts, 6, 22))
+
+        return {
+            value: Symbol(),
+>value : Symbol(value, Decl(iteratorSpreadInCall12.ts, 8, 16))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+
+            done: false
+>done : Symbol(done, Decl(iteratorSpreadInCall12.ts, 9, 28))
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        return this;
+>this : Symbol(SymbolIterator, Decl(iteratorSpreadInCall12.ts, 4, 1))
+    }
+}
+
+class StringIterator {
+>StringIterator : Symbol(StringIterator, Decl(iteratorSpreadInCall12.ts, 17, 1))
+
+    next() {
+>next : Symbol(StringIterator.next, Decl(iteratorSpreadInCall12.ts, 19, 22))
+
+        return {
+            value: "",
+>value : Symbol(value, Decl(iteratorSpreadInCall12.ts, 21, 16))
+
+            done: false
+>done : Symbol(done, Decl(iteratorSpreadInCall12.ts, 22, 22))
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        return this;
+>this : Symbol(StringIterator, Decl(iteratorSpreadInCall12.ts, 17, 1))
+    }
+}

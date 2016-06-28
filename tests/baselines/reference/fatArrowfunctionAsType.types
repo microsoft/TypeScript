@@ -14,6 +14,7 @@ var c: <T>(x: T) => void = function <T>(x: T) { return 42; }
 >T : T
 >x : T
 >T : T
+>42 : number
 
 b = c;
 >b = c : <T>(x: T) => void

@@ -1,8 +1,11 @@
 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(4,5): error TS2322: Type 'U' is not assignable to type 'T'.
+  Type 'Date' is not assignable to type 'T'.
 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(5,5): error TS2322: Type 'V' is not assignable to type 'T'.
 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(6,5): error TS2322: Type 'T' is not assignable to type 'V'.
+  Type 'Date' is not assignable to type 'V'.
 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(7,5): error TS2322: Type 'V' is not assignable to type 'U'.
 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(8,5): error TS2322: Type 'U' is not assignable to type 'V'.
+  Type 'Date' is not assignable to type 'V'.
 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(9,5): error TS2322: Type 'Object' is not assignable to type 'T'.
 
 
@@ -13,18 +16,21 @@ tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(9,5): error TS2322: Type
         x = y;  // Ok
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
+!!! error TS2322:   Type 'Date' is not assignable to type 'T'.
         x = z;  // Error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'T'.
         z = x;  // Error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'V'.
+!!! error TS2322:   Type 'Date' is not assignable to type 'V'.
         y = z;  // Error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'U'.
         z = y;  // Error
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'V'.
+!!! error TS2322:   Type 'Date' is not assignable to type 'V'.
         x = zz;  // Error
         ~
 !!! error TS2322: Type 'Object' is not assignable to type 'T'.

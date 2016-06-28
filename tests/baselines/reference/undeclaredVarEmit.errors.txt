@@ -1,7 +1,10 @@
+tests/cases/compiler/undeclaredVarEmit.ts(1,1): error TS7028: Unused label.
 tests/cases/compiler/undeclaredVarEmit.ts(1,4): error TS2304: Cannot find name 'number'.
 
 
-==== tests/cases/compiler/undeclaredVarEmit.ts (1 errors) ====
+==== tests/cases/compiler/undeclaredVarEmit.ts (2 errors) ====
     f: number;
+    ~
+!!! error TS7028: Unused label.
        ~~~~~~
 !!! error TS2304: Cannot find name 'number'.

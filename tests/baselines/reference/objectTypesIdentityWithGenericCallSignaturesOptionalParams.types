@@ -14,6 +14,7 @@ class A {
 >y : T
 >T : T
 >T : T
+>null : null
 }
 
 class B<T> {
@@ -27,6 +28,7 @@ class B<T> {
 >y : T
 >T : T
 >T : T
+>null : null
 }
 
 class C<T> {
@@ -40,6 +42,7 @@ class C<T> {
 >y : T
 >T : T
 >T : T
+>null : null
 }
 
 interface I<T> {

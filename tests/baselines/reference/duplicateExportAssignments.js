@@ -42,19 +42,22 @@ export = z;
 
 
 //// [foo1.js]
+"use strict";
 var x = 10;
 var y = 20;
 module.exports = x;
 //// [foo2.js]
+"use strict";
 var x = 10;
 var y = (function () {
     function y() {
     }
     return y;
-})();
+}());
 ;
 module.exports = x;
 //// [foo3.js]
+"use strict";
 var x;
 (function (x_1) {
     x_1.x = 10;
@@ -63,9 +66,10 @@ var y = (function () {
     function y() {
     }
     return y;
-})();
+}());
 module.exports = x;
 //// [foo4.js]
+"use strict";
 function x() {
     return 42;
 }
@@ -74,6 +78,7 @@ function y() {
 }
 module.exports = x;
 //// [foo5.js]
+"use strict";
 var x = 5;
 var y = "test";
 var z = {};

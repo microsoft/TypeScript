@@ -58,12 +58,12 @@ var List = (function () {
     function List() {
     }
     return List;
-})();
+}());
 var MyList = (function () {
     function MyList() {
     }
     return MyList;
-})();
+}());
 var list1 = new List();
 var list2 = new List();
 var myList1 = new MyList();

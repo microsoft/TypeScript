@@ -14,7 +14,7 @@ var c1 = (function () {
     }
     c1.prototype.foo = function () { };
     return c1;
-})();
+}());
 var c1 = 1; // error
 //// class then enum
 var c4 = (function () {
@@ -22,7 +22,7 @@ var c4 = (function () {
     }
     c4.prototype.foo = function () { };
     return c4;
-})();
+}());
 var c4;
 (function (c4) {
     c4[c4["One"] = 0] = "One";

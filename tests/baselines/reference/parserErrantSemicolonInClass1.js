@@ -70,4 +70,4 @@ var a = (function () {
         return ns.toString();
     };
     return a;
-})();
+}());

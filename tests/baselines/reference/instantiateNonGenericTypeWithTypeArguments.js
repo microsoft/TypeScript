@@ -25,7 +25,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var c = new C();
 function Foo() { }
 var r = new Foo();

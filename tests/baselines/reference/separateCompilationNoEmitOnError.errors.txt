@@ -1,7 +1,0 @@
-error TS5045: Option 'noEmitOnError' cannot be specified with option 'separateCompilation'.
-
-
-!!! error TS5045: Option 'noEmitOnError' cannot be specified with option 'separateCompilation'.
-==== tests/cases/compiler/separateCompilationNoEmitOnError.ts (0 errors) ====
-    
-    export var x;

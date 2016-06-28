@@ -1,4 +1,5 @@
 //// [forContinueStatements.ts]
+
 for (; ;) {
     continue;
 }

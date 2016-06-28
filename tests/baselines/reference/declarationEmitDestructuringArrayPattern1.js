@@ -11,7 +11,7 @@ var [x3, y3, z3] = a;  // emit x3, y3, z3
 
 //// [declarationEmitDestructuringArrayPattern1.js]
 var _a = [1, "hello"]; // Dont emit anything
-var x = ([1, "hello"])[0]; // emit x: number
+var x = [1, "hello"][0]; // emit x: number
 var _b = [1, "hello"], x1 = _b[0], y1 = _b[1]; // emit x1: number, y1: string
 var _c = [0, 1, 2], z1 = _c[2]; // emit z1: number
 var a = [1, "hello"];
@@ -23,6 +23,6 @@ var x3 = a[0], y3 = a[1], z3 = a[2]; // emit x3, y3, z3
 declare var x: number;
 declare var x1: number, y1: string;
 declare var z1: number;
-declare var a: (string | number)[];
-declare var x2: string | number;
-declare var x3: string | number, y3: string | number, z3: string | number;
+declare var a: (number | string)[];
+declare var x2: number | string;
+declare var x3: number | string, y3: number | string, z3: number | string;

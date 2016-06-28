@@ -22,7 +22,7 @@ module m1 {
 var a: { c: m1.c; };
 >a : { c: m1.c; }
 >c : m1.c
->m1 : unknown
+>m1 : any
 >c : m1.c
 
 var b = {

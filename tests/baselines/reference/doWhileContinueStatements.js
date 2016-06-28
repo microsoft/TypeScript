@@ -1,4 +1,5 @@
 //// [doWhileContinueStatements.ts]
+
 do {
     continue;
 } while(true)

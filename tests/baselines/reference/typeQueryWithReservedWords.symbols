@@ -1,0 +1,43 @@
+=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryWithReservedWords.ts ===
+class Controller {
+>Controller : Symbol(Controller, Decl(typeQueryWithReservedWords.ts, 0, 0))
+
+    create() {
+>create : Symbol(Controller.create, Decl(typeQueryWithReservedWords.ts, 0, 18))
+    }
+    delete() {
+>delete : Symbol(Controller.delete, Decl(typeQueryWithReservedWords.ts, 2, 5))
+    }
+    var() {
+>var : Symbol(Controller.var, Decl(typeQueryWithReservedWords.ts, 4, 5))
+    }
+}
+
+interface IScope {
+>IScope : Symbol(IScope, Decl(typeQueryWithReservedWords.ts, 7, 1))
+
+    create: typeof Controller.prototype.create;  
+>create : Symbol(IScope.create, Decl(typeQueryWithReservedWords.ts, 9, 18))
+>Controller.prototype.create : Symbol(Controller.create, Decl(typeQueryWithReservedWords.ts, 0, 18))
+>Controller.prototype : Symbol(Controller.prototype)
+>Controller : Symbol(Controller, Decl(typeQueryWithReservedWords.ts, 0, 0))
+>prototype : Symbol(Controller.prototype)
+>create : Symbol(Controller.create, Decl(typeQueryWithReservedWords.ts, 0, 18))
+
+    delete: typeof Controller.prototype.delete;  // Should not error
+>delete : Symbol(IScope.delete, Decl(typeQueryWithReservedWords.ts, 10, 47))
+>Controller.prototype.delete : Symbol(Controller.delete, Decl(typeQueryWithReservedWords.ts, 2, 5))
+>Controller.prototype : Symbol(Controller.prototype)
+>Controller : Symbol(Controller, Decl(typeQueryWithReservedWords.ts, 0, 0))
+>prototype : Symbol(Controller.prototype)
+>delete : Symbol(Controller.delete, Decl(typeQueryWithReservedWords.ts, 2, 5))
+
+    var: typeof Controller.prototype.var;        // Should not error
+>var : Symbol(IScope.var, Decl(typeQueryWithReservedWords.ts, 11, 47))
+>Controller.prototype.var : Symbol(Controller.var, Decl(typeQueryWithReservedWords.ts, 4, 5))
+>Controller.prototype : Symbol(Controller.prototype)
+>Controller : Symbol(Controller, Decl(typeQueryWithReservedWords.ts, 0, 0))
+>prototype : Symbol(Controller.prototype)
+>var : Symbol(Controller.var, Decl(typeQueryWithReservedWords.ts, 4, 5))
+}
+

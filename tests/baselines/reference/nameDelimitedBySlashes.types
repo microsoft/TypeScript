@@ -8,8 +8,10 @@ var x = foo.foo + 42;
 >foo.foo : number
 >foo : typeof foo
 >foo : number
+>42 : number
 
 === tests/cases/conformance/externalModules/test/foo_0.ts ===
 export var foo = 42;
 >foo : number
+>42 : number
 

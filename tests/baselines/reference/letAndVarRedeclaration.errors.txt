@@ -1,27 +1,28 @@
-tests/cases/compiler/letAndVarRedeclaration.ts(2,5): error TS2451: Cannot redeclare block-scoped variable 'e0'.
 tests/cases/compiler/letAndVarRedeclaration.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'e0'.
-tests/cases/compiler/letAndVarRedeclaration.ts(4,10): error TS2451: Cannot redeclare block-scoped variable 'e0'.
-tests/cases/compiler/letAndVarRedeclaration.ts(7,9): error TS2451: Cannot redeclare block-scoped variable 'x1'.
+tests/cases/compiler/letAndVarRedeclaration.ts(4,5): error TS2451: Cannot redeclare block-scoped variable 'e0'.
+tests/cases/compiler/letAndVarRedeclaration.ts(5,10): error TS2451: Cannot redeclare block-scoped variable 'e0'.
 tests/cases/compiler/letAndVarRedeclaration.ts(8,9): error TS2451: Cannot redeclare block-scoped variable 'x1'.
-tests/cases/compiler/letAndVarRedeclaration.ts(9,14): error TS2451: Cannot redeclare block-scoped variable 'x1'.
-tests/cases/compiler/letAndVarRedeclaration.ts(13,9): error TS2451: Cannot redeclare block-scoped variable 'x'.
-tests/cases/compiler/letAndVarRedeclaration.ts(15,13): error TS2451: Cannot redeclare block-scoped variable 'x'.
-tests/cases/compiler/letAndVarRedeclaration.ts(18,18): error TS2451: Cannot redeclare block-scoped variable 'x'.
-tests/cases/compiler/letAndVarRedeclaration.ts(23,9): error TS2451: Cannot redeclare block-scoped variable 'x2'.
+tests/cases/compiler/letAndVarRedeclaration.ts(9,9): error TS2451: Cannot redeclare block-scoped variable 'x1'.
+tests/cases/compiler/letAndVarRedeclaration.ts(10,14): error TS2451: Cannot redeclare block-scoped variable 'x1'.
+tests/cases/compiler/letAndVarRedeclaration.ts(14,9): error TS2451: Cannot redeclare block-scoped variable 'x'.
+tests/cases/compiler/letAndVarRedeclaration.ts(16,13): error TS2451: Cannot redeclare block-scoped variable 'x'.
+tests/cases/compiler/letAndVarRedeclaration.ts(19,18): error TS2451: Cannot redeclare block-scoped variable 'x'.
 tests/cases/compiler/letAndVarRedeclaration.ts(24,9): error TS2451: Cannot redeclare block-scoped variable 'x2'.
-tests/cases/compiler/letAndVarRedeclaration.ts(25,14): error TS2451: Cannot redeclare block-scoped variable 'x2'.
-tests/cases/compiler/letAndVarRedeclaration.ts(29,9): error TS2451: Cannot redeclare block-scoped variable 'x2'.
-tests/cases/compiler/letAndVarRedeclaration.ts(31,13): error TS2451: Cannot redeclare block-scoped variable 'x2'.
-tests/cases/compiler/letAndVarRedeclaration.ts(34,18): error TS2451: Cannot redeclare block-scoped variable 'x2'.
-tests/cases/compiler/letAndVarRedeclaration.ts(38,5): error TS2451: Cannot redeclare block-scoped variable 'x11'.
-tests/cases/compiler/letAndVarRedeclaration.ts(39,10): error TS2451: Cannot redeclare block-scoped variable 'x11'.
-tests/cases/compiler/letAndVarRedeclaration.ts(43,9): error TS2451: Cannot redeclare block-scoped variable 'x11'.
-tests/cases/compiler/letAndVarRedeclaration.ts(44,14): error TS2451: Cannot redeclare block-scoped variable 'x11'.
-tests/cases/compiler/letAndVarRedeclaration.ts(49,9): error TS2451: Cannot redeclare block-scoped variable 'x11'.
-tests/cases/compiler/letAndVarRedeclaration.ts(50,14): error TS2451: Cannot redeclare block-scoped variable 'x11'.
+tests/cases/compiler/letAndVarRedeclaration.ts(25,9): error TS2451: Cannot redeclare block-scoped variable 'x2'.
+tests/cases/compiler/letAndVarRedeclaration.ts(26,14): error TS2451: Cannot redeclare block-scoped variable 'x2'.
+tests/cases/compiler/letAndVarRedeclaration.ts(30,9): error TS2451: Cannot redeclare block-scoped variable 'x2'.
+tests/cases/compiler/letAndVarRedeclaration.ts(32,13): error TS2451: Cannot redeclare block-scoped variable 'x2'.
+tests/cases/compiler/letAndVarRedeclaration.ts(35,18): error TS2451: Cannot redeclare block-scoped variable 'x2'.
+tests/cases/compiler/letAndVarRedeclaration.ts(39,5): error TS2451: Cannot redeclare block-scoped variable 'x11'.
+tests/cases/compiler/letAndVarRedeclaration.ts(40,10): error TS2451: Cannot redeclare block-scoped variable 'x11'.
+tests/cases/compiler/letAndVarRedeclaration.ts(44,9): error TS2451: Cannot redeclare block-scoped variable 'x11'.
+tests/cases/compiler/letAndVarRedeclaration.ts(45,14): error TS2451: Cannot redeclare block-scoped variable 'x11'.
+tests/cases/compiler/letAndVarRedeclaration.ts(50,9): error TS2451: Cannot redeclare block-scoped variable 'x11'.
+tests/cases/compiler/letAndVarRedeclaration.ts(51,14): error TS2451: Cannot redeclare block-scoped variable 'x11'.
 
 
 ==== tests/cases/compiler/letAndVarRedeclaration.ts (21 errors) ====
+    
     
     let e0
         ~~

@@ -28,6 +28,7 @@ module m4 {
 
 //// [collisionExportsRequireAndAmbientVar_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var m2;
     (function (m2) {
         var a = 10;

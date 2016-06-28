@@ -1,0 +1,59 @@
+=== tests/cases/compiler/overloadOnGenericClassAndNonGenericClass.ts ===
+class A { a; }
+>A : Symbol(A, Decl(overloadOnGenericClassAndNonGenericClass.ts, 0, 0))
+>a : Symbol(A.a, Decl(overloadOnGenericClassAndNonGenericClass.ts, 0, 9))
+
+class B { b; }
+>B : Symbol(B, Decl(overloadOnGenericClassAndNonGenericClass.ts, 0, 14))
+>b : Symbol(B.b, Decl(overloadOnGenericClassAndNonGenericClass.ts, 1, 9))
+
+class C { c; }
+>C : Symbol(C, Decl(overloadOnGenericClassAndNonGenericClass.ts, 1, 14))
+>c : Symbol(C.c, Decl(overloadOnGenericClassAndNonGenericClass.ts, 2, 9))
+
+class X<T> { x: T; }
+>X : Symbol(X, Decl(overloadOnGenericClassAndNonGenericClass.ts, 2, 14))
+>T : Symbol(T, Decl(overloadOnGenericClassAndNonGenericClass.ts, 3, 8))
+>x : Symbol(X.x, Decl(overloadOnGenericClassAndNonGenericClass.ts, 3, 12))
+>T : Symbol(T, Decl(overloadOnGenericClassAndNonGenericClass.ts, 3, 8))
+
+class X1 { x: string; }
+>X1 : Symbol(X1, Decl(overloadOnGenericClassAndNonGenericClass.ts, 3, 20))
+>x : Symbol(X1.x, Decl(overloadOnGenericClassAndNonGenericClass.ts, 4, 10))
+
+class X2 { x: string; }
+>X2 : Symbol(X2, Decl(overloadOnGenericClassAndNonGenericClass.ts, 4, 23))
+>x : Symbol(X2.x, Decl(overloadOnGenericClassAndNonGenericClass.ts, 5, 10))
+
+function f(a: X1): A;
+>f : Symbol(f, Decl(overloadOnGenericClassAndNonGenericClass.ts, 5, 23), Decl(overloadOnGenericClassAndNonGenericClass.ts, 6, 21), Decl(overloadOnGenericClassAndNonGenericClass.ts, 7, 26))
+>a : Symbol(a, Decl(overloadOnGenericClassAndNonGenericClass.ts, 6, 11))
+>X1 : Symbol(X1, Decl(overloadOnGenericClassAndNonGenericClass.ts, 3, 20))
+>A : Symbol(A, Decl(overloadOnGenericClassAndNonGenericClass.ts, 0, 0))
+
+function f<T>(a: X<T>): B;
+>f : Symbol(f, Decl(overloadOnGenericClassAndNonGenericClass.ts, 5, 23), Decl(overloadOnGenericClassAndNonGenericClass.ts, 6, 21), Decl(overloadOnGenericClassAndNonGenericClass.ts, 7, 26))
+>T : Symbol(T, Decl(overloadOnGenericClassAndNonGenericClass.ts, 7, 11))
+>a : Symbol(a, Decl(overloadOnGenericClassAndNonGenericClass.ts, 7, 14))
+>X : Symbol(X, Decl(overloadOnGenericClassAndNonGenericClass.ts, 2, 14))
+>T : Symbol(T, Decl(overloadOnGenericClassAndNonGenericClass.ts, 7, 11))
+>B : Symbol(B, Decl(overloadOnGenericClassAndNonGenericClass.ts, 0, 14))
+
+function f(a): any {
+>f : Symbol(f, Decl(overloadOnGenericClassAndNonGenericClass.ts, 5, 23), Decl(overloadOnGenericClassAndNonGenericClass.ts, 6, 21), Decl(overloadOnGenericClassAndNonGenericClass.ts, 7, 26))
+>a : Symbol(a, Decl(overloadOnGenericClassAndNonGenericClass.ts, 8, 11))
+}
+
+var xs: X<string>;
+>xs : Symbol(xs, Decl(overloadOnGenericClassAndNonGenericClass.ts, 11, 3))
+>X : Symbol(X, Decl(overloadOnGenericClassAndNonGenericClass.ts, 2, 14))
+
+var t3 = f(xs);
+>t3 : Symbol(t3, Decl(overloadOnGenericClassAndNonGenericClass.ts, 13, 3), Decl(overloadOnGenericClassAndNonGenericClass.ts, 14, 3))
+>f : Symbol(f, Decl(overloadOnGenericClassAndNonGenericClass.ts, 5, 23), Decl(overloadOnGenericClassAndNonGenericClass.ts, 6, 21), Decl(overloadOnGenericClassAndNonGenericClass.ts, 7, 26))
+>xs : Symbol(xs, Decl(overloadOnGenericClassAndNonGenericClass.ts, 11, 3))
+
+var t3: A; // should not error
+>t3 : Symbol(t3, Decl(overloadOnGenericClassAndNonGenericClass.ts, 13, 3), Decl(overloadOnGenericClassAndNonGenericClass.ts, 14, 3))
+>A : Symbol(A, Decl(overloadOnGenericClassAndNonGenericClass.ts, 0, 0))
+

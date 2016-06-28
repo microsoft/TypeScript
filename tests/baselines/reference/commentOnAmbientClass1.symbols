@@ -1,0 +1,22 @@
+=== tests/cases/compiler/b.ts ===
+///<reference path="a.ts"/>
+declare class E extends C {
+>E : Symbol(E, Decl(b.ts, 0, 0))
+>C : Symbol(C, Decl(a.ts, 0, 0))
+}
+=== tests/cases/compiler/a.ts ===
+/*!=========
+    Keep this pinned comment
+   =========
+*/
+
+/*! Don't keep this pinned comment */
+declare class C {
+>C : Symbol(C, Decl(a.ts, 0, 0))
+}
+
+// Don't keep this comment.
+declare class D {
+>D : Symbol(D, Decl(a.ts, 7, 1))
+}
+

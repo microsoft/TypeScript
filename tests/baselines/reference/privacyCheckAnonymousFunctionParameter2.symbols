@@ -1,0 +1,36 @@
+=== tests/cases/compiler/privacyCheckAnonymousFunctionParameter2.ts ===
+export var x = 1;  // Makes this an external module 
+>x : Symbol(x, Decl(privacyCheckAnonymousFunctionParameter2.ts, 0, 10))
+
+interface Iterator<T> { x: T }
+>Iterator : Symbol(Iterator, Decl(privacyCheckAnonymousFunctionParameter2.ts, 0, 17))
+>T : Symbol(T, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 19))
+>x : Symbol(Iterator.x, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 23))
+>T : Symbol(T, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 19))
+
+module Q {
+>Q : Symbol(Q, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 30), Decl(privacyCheckAnonymousFunctionParameter2.ts, 7, 1))
+
+    export function foo<T>(x: (a: Iterator<T>) => number) {
+>foo : Symbol(foo, Decl(privacyCheckAnonymousFunctionParameter2.ts, 3, 10))
+>T : Symbol(T, Decl(privacyCheckAnonymousFunctionParameter2.ts, 4, 24))
+>x : Symbol(x, Decl(privacyCheckAnonymousFunctionParameter2.ts, 4, 27))
+>a : Symbol(a, Decl(privacyCheckAnonymousFunctionParameter2.ts, 4, 31))
+>Iterator : Symbol(Iterator, Decl(privacyCheckAnonymousFunctionParameter2.ts, 0, 17))
+>T : Symbol(T, Decl(privacyCheckAnonymousFunctionParameter2.ts, 4, 24))
+
+        return x;
+>x : Symbol(x, Decl(privacyCheckAnonymousFunctionParameter2.ts, 4, 27))
+    }
+}
+
+module Q {
+>Q : Symbol(Q, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 30), Decl(privacyCheckAnonymousFunctionParameter2.ts, 7, 1))
+
+    function bar() {
+>bar : Symbol(bar, Decl(privacyCheckAnonymousFunctionParameter2.ts, 9, 10))
+
+        foo(null);
+>foo : Symbol(foo, Decl(privacyCheckAnonymousFunctionParameter2.ts, 3, 10))
+    }
+}

@@ -2,10 +2,12 @@
 true.toString()
 >true.toString() : string
 >true.toString : () => string
+>true : boolean
 >toString : () => string
 
 var aBool = false;
 >aBool : boolean
+>false : boolean
 
 aBool.toString();
 >aBool.toString() : string
@@ -16,5 +18,6 @@ aBool.toString();
 1..toString();
 >1..toString() : string
 >1..toString : (radix?: number) => string
+>1. : number
 >toString : (radix?: number) => string
 

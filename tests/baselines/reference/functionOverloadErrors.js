@@ -141,7 +141,7 @@ var cls = (function () {
     cls.prototype.f = function () { };
     cls.prototype.g = function () { };
     return cls;
-})();
+}());
 //Function overloads with differing export
 var M;
 (function (M) {

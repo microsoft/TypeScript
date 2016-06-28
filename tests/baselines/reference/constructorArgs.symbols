@@ -1,0 +1,32 @@
+=== tests/cases/compiler/constructorArgs.ts ===
+interface Options {
+>Options : Symbol(Options, Decl(constructorArgs.ts, 0, 0))
+
+ value: number;
+>value : Symbol(Options.value, Decl(constructorArgs.ts, 0, 19))
+}
+
+class Super {
+>Super : Symbol(Super, Decl(constructorArgs.ts, 2, 1))
+
+ constructor(value:number) {
+>value : Symbol(value, Decl(constructorArgs.ts, 5, 13))
+ }
+}
+
+class Sub extends Super {
+>Sub : Symbol(Sub, Decl(constructorArgs.ts, 7, 1))
+>Super : Symbol(Super, Decl(constructorArgs.ts, 2, 1))
+
+ constructor(public options:Options) {
+>options : Symbol(Sub.options, Decl(constructorArgs.ts, 10, 13))
+>Options : Symbol(Options, Decl(constructorArgs.ts, 0, 0))
+
+  super(options.value);
+>super : Symbol(Super, Decl(constructorArgs.ts, 2, 1))
+>options.value : Symbol(Options.value, Decl(constructorArgs.ts, 0, 19))
+>options : Symbol(options, Decl(constructorArgs.ts, 10, 13))
+>value : Symbol(Options.value, Decl(constructorArgs.ts, 0, 19))
+ } 
+}
+

@@ -1,5 +1,5 @@
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts(4,5): error TS2322: Type '{ name: string; id: number; }' is not assignable to type '{ b: string; id: number; }'.
-  Property 'b' is missing in type '{ name: string; id: number; }'.
+tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts(4,43): error TS2322: Type '{ name: string; id: number; }' is not assignable to type '{ b: string; id: number; }'.
+  Object literal may only specify known properties, and 'name' does not exist in type '{ b: string; id: number; }'.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts(5,16): error TS1131: Property or signature expected.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts(5,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'id' must be of type 'number', but here has type 'any'.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts(5,25): error TS1128: Declaration or statement expected.
@@ -16,9 +16,9 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
     var name: string = "my name";
     
     var person: { b: string; id: number } = { name, id };  // error
-        ~~~~~~
+                                              ~~~~
 !!! error TS2322: Type '{ name: string; id: number; }' is not assignable to type '{ b: string; id: number; }'.
-!!! error TS2322:   Property 'b' is missing in type '{ name: string; id: number; }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'name' does not exist in type '{ b: string; id: number; }'.
     var person1: { name, id };  // error: can't use short-hand property assignment in type position
                    ~~~~
 !!! error TS1131: Property or signature expected.

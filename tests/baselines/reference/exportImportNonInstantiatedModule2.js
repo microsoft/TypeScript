@@ -17,12 +17,15 @@ export function w(): e.w { // Should be OK
 
 //// [w1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 //// [exporter.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 //// [consumer.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     function w() {
         return { name: 'value' };
     }

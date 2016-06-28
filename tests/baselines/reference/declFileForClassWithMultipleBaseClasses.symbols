@@ -1,0 +1,54 @@
+=== tests/cases/compiler/declFileForClassWithMultipleBaseClasses.ts ===
+
+class A {
+>A : Symbol(A, Decl(declFileForClassWithMultipleBaseClasses.ts, 0, 0))
+
+    foo() { }
+>foo : Symbol(A.foo, Decl(declFileForClassWithMultipleBaseClasses.ts, 1, 9))
+}
+
+class B {
+>B : Symbol(B, Decl(declFileForClassWithMultipleBaseClasses.ts, 3, 1))
+
+    bar() { }
+>bar : Symbol(B.bar, Decl(declFileForClassWithMultipleBaseClasses.ts, 5, 9))
+}
+
+interface I {
+>I : Symbol(I, Decl(declFileForClassWithMultipleBaseClasses.ts, 7, 1), Decl(declFileForClassWithMultipleBaseClasses.ts, 23, 1))
+
+    baz();
+>baz : Symbol(I.baz, Decl(declFileForClassWithMultipleBaseClasses.ts, 9, 13))
+}
+
+interface J {
+>J : Symbol(J, Decl(declFileForClassWithMultipleBaseClasses.ts, 11, 1))
+
+    bat();
+>bat : Symbol(J.bat, Decl(declFileForClassWithMultipleBaseClasses.ts, 13, 13))
+}
+
+
+class D implements I, J {
+>D : Symbol(D, Decl(declFileForClassWithMultipleBaseClasses.ts, 15, 1))
+>I : Symbol(I, Decl(declFileForClassWithMultipleBaseClasses.ts, 7, 1), Decl(declFileForClassWithMultipleBaseClasses.ts, 23, 1))
+>J : Symbol(J, Decl(declFileForClassWithMultipleBaseClasses.ts, 11, 1))
+
+    baz() { }
+>baz : Symbol(D.baz, Decl(declFileForClassWithMultipleBaseClasses.ts, 18, 25))
+
+    bat() { }
+>bat : Symbol(D.bat, Decl(declFileForClassWithMultipleBaseClasses.ts, 19, 13))
+
+    foo() { }
+>foo : Symbol(D.foo, Decl(declFileForClassWithMultipleBaseClasses.ts, 20, 13))
+
+    bar() { }
+>bar : Symbol(D.bar, Decl(declFileForClassWithMultipleBaseClasses.ts, 21, 13))
+}
+
+interface I extends A, B {
+>I : Symbol(I, Decl(declFileForClassWithMultipleBaseClasses.ts, 7, 1), Decl(declFileForClassWithMultipleBaseClasses.ts, 23, 1))
+>A : Symbol(A, Decl(declFileForClassWithMultipleBaseClasses.ts, 0, 0))
+>B : Symbol(B, Decl(declFileForClassWithMultipleBaseClasses.ts, 3, 1))
+}

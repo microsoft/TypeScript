@@ -7,7 +7,7 @@
 ////
 ////    }
 ////
-////    public /*1*/start(){
+////    public [|start|](){
 ////        return this;
 ////    }
 ////
@@ -17,13 +17,10 @@
 ////}
 
 //@Filename: findAllRefsOnDefinition.ts
-////import Second = require("findAllRefsOnDefinition-import");
+////import Second = require("./findAllRefsOnDefinition-import");
 ////
 ////var second = new Second.Test()
-////second.start();
+////second.[|start|]();
 ////second.stop();
 
-goTo.file("findAllRefsOnDefinition-import.ts");
-goTo.marker("1");
-
-verify.referencesCountIs(2);
+verify.rangesReferenceEachOther();

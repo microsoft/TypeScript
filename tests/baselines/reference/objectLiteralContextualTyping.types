@@ -1,5 +1,8 @@
 === tests/cases/conformance/expressions/contextualTyping/objectLiteralContextualTyping.ts ===
-// Tests related to #1774
+// In a contextually typed object literal, each property value expression is contextually typed by
+//      the type of the property with a matching name in the contextual type, if any, or otherwise
+//      for a numerically named property, the numeric index type of the contextual type, if any, or otherwise
+//      the string index type of the contextual type, if any.
 
 interface Item {
 >Item : Item
@@ -26,6 +29,7 @@ var x = foo({ name: "Sprocket" });
 >foo : { (item: Item): string; (item: any): number; }
 >{ name: "Sprocket" } : { name: string; }
 >name : string
+>"Sprocket" : string
 
 var x: string;
 >x : string
@@ -36,7 +40,9 @@ var y = foo({ name: "Sprocket", description: "Bumpy wheel" });
 >foo : { (item: Item): string; (item: any): number; }
 >{ name: "Sprocket", description: "Bumpy wheel" } : { name: string; description: string; }
 >name : string
+>"Sprocket" : string
 >description : string
+>"Bumpy wheel" : string
 
 var y: string;
 >y : string
@@ -47,7 +53,9 @@ var z = foo({ name: "Sprocket", description: false });
 >foo : { (item: Item): string; (item: any): number; }
 >{ name: "Sprocket", description: false } : { name: string; description: boolean; }
 >name : string
+>"Sprocket" : string
 >description : boolean
+>false : boolean
 
 var z: number;
 >z : number
@@ -58,6 +66,7 @@ var w = foo({ a: 10 });
 >foo : { (item: Item): string; (item: any): number; }
 >{ a: 10 } : { a: number; }
 >a : number
+>10 : number
 
 var w: number;
 >w : number

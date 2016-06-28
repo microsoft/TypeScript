@@ -61,7 +61,7 @@ var BugExhibition = (function () {
         x = localFunction;
     };
     return BugExhibition;
-})();
+}());
 var BugExhibition2 = (function () {
     function BugExhibition2() {
     }
@@ -76,7 +76,7 @@ var BugExhibition2 = (function () {
         configurable: true
     });
     return BugExhibition2;
-})();
+}());
 var BugExhibition3 = (function () {
     function BugExhibition3() {
     }
@@ -86,7 +86,7 @@ var BugExhibition3 = (function () {
         x = localGenericFunction;
     };
     return BugExhibition3;
-})();
+}());
 var C = (function () {
     function C() {
     }
@@ -96,7 +96,7 @@ var C = (function () {
         x = funcExpr;
     };
     return C;
-})();
+}());
 var M;
 (function (M) {
     function exhibitBug() {

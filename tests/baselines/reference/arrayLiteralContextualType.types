@@ -11,9 +11,11 @@ class Giraffe {
 
     name = "Giraffe";
 >name : string
+>"Giraffe" : string
 
     neckLength = "3m";
 >neckLength : string
+>"3m" : string
 }
 
 class Elephant {
@@ -21,9 +23,11 @@ class Elephant {
 
     name = "Elephant";
 >name : string
+>"Elephant" : string
 
     trunkDiameter = "20cm";
 >trunkDiameter : string
+>"20cm" : string
 }
 
 function foo(animals: IAnimal[]) { }

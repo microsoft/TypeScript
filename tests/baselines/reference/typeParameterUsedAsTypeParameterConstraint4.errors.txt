@@ -1,59 +1,30 @@
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(4,12): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(4,25): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(5,8): error TS2304: Cannot find name 'W'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(8,16): error TS2322: Type 'W' is not assignable to type 'T'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(12,16): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(12,29): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(15,8): error TS2304: Cannot find name 'W'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(19,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(19,43): error TS2304: Cannot find name 'V'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(19,43): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(20,47): error TS2304: Cannot find name 'X'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(20,47): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(22,13): error TS2322: Type 'U' is not assignable to type 'T'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(23,20): error TS2322: Type 'U' is not assignable to type 'T'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(28,15): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(28,44): error TS2304: Cannot find name 'W'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(28,44): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(29,47): error TS2304: Cannot find name 'Y'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(29,47): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(31,13): error TS2322: Type 'U' is not assignable to type 'T'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(32,20): error TS2322: Type 'U' is not assignable to type 'T'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(37,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(38,47): error TS2304: Cannot find name 'X'.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(38,53): error TS2304: Cannot find name 'Y'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(40,13): error TS2322: Type 'U' is not assignable to type 'T'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(41,20): error TS2322: Type 'U' is not assignable to type 'T'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(46,11): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(46,30): error TS2304: Cannot find name 'V'.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts(46,36): error TS2304: Cannot find name 'X'.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts (29 errors) ====
+==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts (10 errors) ====
     // Type parameters are in scope in their own and other type parameter lists
     // Some negative cases
     
     class C<T, U extends T, V extends U> {
-               ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                            ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         z: W; // error
            ~
 !!! error TS2304: Cannot find name 'W'.
         foo<W extends V>(x: W): T {
             var r: T;
             return x;
-                   ~
-!!! error TS2322: Type 'W' is not assignable to type 'T'.
         }
     }
     
     interface I<T, U extends T, V extends U> {
-                   ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         x: T;
         y: U;
         z: W; // error
@@ -63,54 +34,32 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsed
     }
     
     function foo<T, U extends T>(x: T, y: U): V { // error
-                    ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                               ~
 !!! error TS2304: Cannot find name 'V'.
-                                              ~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
         function bar<V extends T, W extends U>(): X { // error
                                                   ~
 !!! error TS2304: Cannot find name 'X'.
-                                                  ~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
             function baz<X extends W, Y extends V>(a: X, b: Y): T {
                 x = y;
-                ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
                 return y;
-                       ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
             }
         }
     }
     
     function foo2<U extends T, T>(x: T, y: U): W { // error
-                  ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                ~
 !!! error TS2304: Cannot find name 'W'.
-                                               ~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
         function bar<V extends T, W extends U>(): Y { // error
                                                   ~
 !!! error TS2304: Cannot find name 'Y'.
-                                                  ~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
             function baz<X extends W, Y extends V>(a: X, b: Y): T {
                 x = y;
-                ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
                 return y;
-                       ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
             }
         }
     }
     
     var f3 = <T, U extends T>(x: T, y: U) => {
-                 ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         function bar<V extends T, W extends U>(r: X, s: Y) { // error
                                                   ~
 !!! error TS2304: Cannot find name 'X'.
@@ -118,18 +67,12 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsed
 !!! error TS2304: Cannot find name 'Y'.
             var g = <X extends W, Y extends V>(a: X, b: Y): T => {
                 x = y;
-                ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
                 return y;
-                       ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
             }
         }
     }
     
     var f4 = <U extends T, T>(x: V, y: X) => { // error
-              ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                  ~
 !!! error TS2304: Cannot find name 'V'.
                                        ~

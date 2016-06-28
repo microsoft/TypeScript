@@ -4,6 +4,7 @@ module Bar {
 
     export var a = 1;
 >a : number
+>1 : number
 
     var t = undefined[a][a]; // CG: var t = undefined[Bar.a][a];
 >t : any

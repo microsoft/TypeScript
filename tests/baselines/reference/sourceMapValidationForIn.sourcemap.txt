@@ -13,38 +13,35 @@ sourceFile:sourceMapValidationForIn.ts
 2 >^^^
 3 >   ^
 4 >    ^
-5 >     ^^^
-6 >        ^
-7 >         ^
-8 >          ^^^^
-9 >              ^^^^^^
-10>                    ^
-11>                     ^
-12>                      ^
+5 >     ^^^^
+6 >         ^
+7 >          ^^^^
+8 >              ^^^^^^
+9 >                    ^
+10>                     ^
+11>                      ^
 1 >
 2 >for
 3 >    
 4 >    (
-5 >     var
-6 >         
-7 >         x
-8 >           in 
-9 >              String
-10>                    )
-11>                      
-12>                      {
+5 >     var 
+6 >         x
+7 >           in 
+8 >              String
+9 >                    )
+10>                      
+11>                      {
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 4) Source(1, 4) + SourceIndex(0)
 3 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
 4 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
-5 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
-6 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
-7 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
-8 >Emitted(1, 15) Source(1, 15) + SourceIndex(0)
-9 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
-10>Emitted(1, 22) Source(1, 22) + SourceIndex(0)
-11>Emitted(1, 23) Source(1, 23) + SourceIndex(0)
-12>Emitted(1, 24) Source(1, 24) + SourceIndex(0)
+5 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+6 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+7 >Emitted(1, 15) Source(1, 15) + SourceIndex(0)
+8 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+9 >Emitted(1, 22) Source(1, 22) + SourceIndex(0)
+10>Emitted(1, 23) Source(1, 23) + SourceIndex(0)
+11>Emitted(1, 24) Source(1, 24) + SourceIndex(0)
 ---
 >>>    WScript.Echo(x);
 1 >^^^^
@@ -159,40 +156,37 @@ sourceFile:sourceMapValidationForIn.ts
 2 >^^^
 3 >   ^
 4 >    ^
-5 >     ^^^
-6 >        ^
-7 >         ^^
-8 >           ^^^^
-9 >               ^^^^^^
-10>                     ^
-11>                      ^
-12>                       ^
+5 >     ^^^^
+6 >         ^^
+7 >           ^^^^
+8 >               ^^^^^^
+9 >                     ^
+10>                      ^
+11>                       ^
 1->
   >
 2 >for
 3 >    
 4 >    (
-5 >     var
-6 >         
-7 >         x2
-8 >            in 
-9 >               String
-10>                     )
-11>                      
+5 >     var 
+6 >         x2
+7 >            in 
+8 >               String
+9 >                     )
+10>                      
   >                      
-12>                       {
+11>                       {
 1->Emitted(7, 1) Source(7, 1) + SourceIndex(0)
 2 >Emitted(7, 4) Source(7, 4) + SourceIndex(0)
 3 >Emitted(7, 5) Source(7, 5) + SourceIndex(0)
 4 >Emitted(7, 6) Source(7, 6) + SourceIndex(0)
-5 >Emitted(7, 9) Source(7, 9) + SourceIndex(0)
-6 >Emitted(7, 10) Source(7, 10) + SourceIndex(0)
-7 >Emitted(7, 12) Source(7, 12) + SourceIndex(0)
-8 >Emitted(7, 16) Source(7, 16) + SourceIndex(0)
-9 >Emitted(7, 22) Source(7, 22) + SourceIndex(0)
-10>Emitted(7, 23) Source(7, 23) + SourceIndex(0)
-11>Emitted(7, 24) Source(8, 1) + SourceIndex(0)
-12>Emitted(7, 25) Source(8, 2) + SourceIndex(0)
+5 >Emitted(7, 10) Source(7, 10) + SourceIndex(0)
+6 >Emitted(7, 12) Source(7, 12) + SourceIndex(0)
+7 >Emitted(7, 16) Source(7, 16) + SourceIndex(0)
+8 >Emitted(7, 22) Source(7, 22) + SourceIndex(0)
+9 >Emitted(7, 23) Source(7, 23) + SourceIndex(0)
+10>Emitted(7, 24) Source(8, 1) + SourceIndex(0)
+11>Emitted(7, 25) Source(8, 2) + SourceIndex(0)
 ---
 >>>    WScript.Echo(x2);
 1 >^^^^

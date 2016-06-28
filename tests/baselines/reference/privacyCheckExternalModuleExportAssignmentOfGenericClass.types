@@ -1,5 +1,5 @@
 === tests/cases/compiler/privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts ===
-import Foo = require("privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
+import Foo = require("./privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
 >Foo : typeof Foo
 
 export = Bar;

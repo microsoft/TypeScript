@@ -2,10 +2,10 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(16,1): er
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(20,38): error TS2304: Cannot find name 'ILineIndenationResolver'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(22,33): error TS2304: Cannot find name 'IndentationBag'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(24,42): error TS2304: Cannot find name 'Dictionary_int_int'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(27,28): error TS2304: Cannot find name 'TypeScript'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(27,28): error TS2503: Cannot find namespace 'TypeScript'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(28,26): error TS2304: Cannot find name 'ParseTree'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(29,30): error TS2304: Cannot find name 'ITextSnapshot'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(31,35): error TS2304: Cannot find name 'Services'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(31,35): error TS2503: Cannot find namespace 'Services'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(32,32): error TS2304: Cannot find name 'TokenSpan'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(35,39): error TS2304: Cannot find name 'IndentationBag'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(37,48): error TS2304: Cannot find name 'Dictionary_int_int'.
@@ -27,9 +27,9 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(152,51): 
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(152,63): error TS2304: Cannot find name 'List_TextEditInfo'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(153,30): error TS2304: Cannot find name 'List_TextEditInfo'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(155,32): error TS2304: Cannot find name 'AuthorTokenKind'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(182,79): error TS2304: Cannot find name 'Services'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(183,20): error TS2304: Cannot find name 'GetIndentSizeFromText'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(186,67): error TS2304: Cannot find name 'Services'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(182,79): error TS2503: Cannot find namespace 'Services'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(183,20): error TS2662: Cannot find name 'GetIndentSizeFromText'. Did you mean the static member 'Indenter.GetIndentSizeFromText'?
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(186,67): error TS2503: Cannot find namespace 'Services'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(207,50): error TS2304: Cannot find name 'TokenSpan'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(207,67): error TS2304: Cannot find name 'ParseNode'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(207,79): error TS2304: Cannot find name 'IndentationInfo'.
@@ -146,7 +146,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
     
     ///<reference path='formatting.ts' />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6053: File 'formatting.ts' not found.
+!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/formatting.ts' not found.
     
     
     module Formatting {
@@ -165,7 +165,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
             constructor(
                 public logger: TypeScript.ILogger,
                                ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeScript'.
+!!! error TS2503: Cannot find namespace 'TypeScript'.
                 public tree: ParseTree,
                              ~~~~~~~~~
 !!! error TS2304: Cannot find name 'ParseTree'.
@@ -175,7 +175,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
                 public languageHostIndentation: string,
                 public editorOptions: Services.EditorOptions,
                                       ~~~~~~~~
-!!! error TS2304: Cannot find name 'Services'.
+!!! error TS2503: Cannot find namespace 'Services'.
                 public firstToken: TokenSpan,
                                    ~~~~~~~~~
 !!! error TS2304: Cannot find name 'TokenSpan'.
@@ -370,15 +370,15 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
     
             static GetIndentSizeFromIndentText(indentText: string, editorOptions: Services.EditorOptions): number {
                                                                                   ~~~~~~~~
-!!! error TS2304: Cannot find name 'Services'.
+!!! error TS2503: Cannot find namespace 'Services'.
                 return GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false);
                        ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'GetIndentSizeFromText'.
+!!! error TS2662: Cannot find name 'GetIndentSizeFromText'. Did you mean the static member 'Indenter.GetIndentSizeFromText'?
             }
     
             static GetIndentSizeFromText(text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean): number {
                                                                       ~~~~~~~~
-!!! error TS2304: Cannot find name 'Services'.
+!!! error TS2503: Cannot find namespace 'Services'.
                 var indentSize = 0;
     
                 for (var i = 0; i < text.length; i++) {

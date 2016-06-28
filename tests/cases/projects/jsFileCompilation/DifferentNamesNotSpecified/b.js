@@ -1,0 +1,1 @@
+var test2 = 10; // Shouldnt get compiled

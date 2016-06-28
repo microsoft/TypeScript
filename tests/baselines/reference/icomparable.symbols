@@ -1,0 +1,33 @@
+=== tests/cases/compiler/icomparable.ts ===
+    interface IComparable<T> {
+>IComparable : Symbol(IComparable, Decl(icomparable.ts, 0, 0))
+>T : Symbol(T, Decl(icomparable.ts, 0, 26))
+
+       compareTo(other: T);
+>compareTo : Symbol(IComparable.compareTo, Decl(icomparable.ts, 0, 30))
+>other : Symbol(other, Decl(icomparable.ts, 1, 17))
+>T : Symbol(T, Decl(icomparable.ts, 0, 26))
+    }
+
+    declare function sort<U extends IComparable<any>>(items: U[]): U[];
+>sort : Symbol(sort, Decl(icomparable.ts, 2, 5))
+>U : Symbol(U, Decl(icomparable.ts, 4, 26))
+>IComparable : Symbol(IComparable, Decl(icomparable.ts, 0, 0))
+>items : Symbol(items, Decl(icomparable.ts, 4, 54))
+>U : Symbol(U, Decl(icomparable.ts, 4, 26))
+>U : Symbol(U, Decl(icomparable.ts, 4, 26))
+
+    interface StringComparable extends IComparable<string> {
+>StringComparable : Symbol(StringComparable, Decl(icomparable.ts, 4, 71))
+>IComparable : Symbol(IComparable, Decl(icomparable.ts, 0, 0))
+    }
+
+    var sc: StringComparable[];
+>sc : Symbol(sc, Decl(icomparable.ts, 9, 7))
+>StringComparable : Symbol(StringComparable, Decl(icomparable.ts, 4, 71))
+
+    var x = sort(sc);
+>x : Symbol(x, Decl(icomparable.ts, 11, 7))
+>sort : Symbol(sort, Decl(icomparable.ts, 2, 5))
+>sc : Symbol(sc, Decl(icomparable.ts, 9, 7))
+

@@ -38,4 +38,4 @@ var Foo = (function () {
     };
     Foo.y = this;
     return Foo;
-})();
+}());

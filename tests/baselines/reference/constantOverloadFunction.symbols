@@ -1,0 +1,48 @@
+=== tests/cases/compiler/constantOverloadFunction.ts ===
+class Base { foo() { } }
+>Base : Symbol(Base, Decl(constantOverloadFunction.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(constantOverloadFunction.ts, 0, 12))
+
+class Derived1 extends Base { bar() { } }
+>Derived1 : Symbol(Derived1, Decl(constantOverloadFunction.ts, 0, 24))
+>Base : Symbol(Base, Decl(constantOverloadFunction.ts, 0, 0))
+>bar : Symbol(Derived1.bar, Decl(constantOverloadFunction.ts, 1, 29))
+
+class Derived2 extends Base { baz() { } }
+>Derived2 : Symbol(Derived2, Decl(constantOverloadFunction.ts, 1, 41))
+>Base : Symbol(Base, Decl(constantOverloadFunction.ts, 0, 0))
+>baz : Symbol(Derived2.baz, Decl(constantOverloadFunction.ts, 2, 29))
+
+class Derived3 extends Base { biz() { } }
+>Derived3 : Symbol(Derived3, Decl(constantOverloadFunction.ts, 2, 41))
+>Base : Symbol(Base, Decl(constantOverloadFunction.ts, 0, 0))
+>biz : Symbol(Derived3.biz, Decl(constantOverloadFunction.ts, 3, 29))
+
+function foo(tagName: 'canvas'): Derived1;
+>foo : Symbol(foo, Decl(constantOverloadFunction.ts, 3, 41), Decl(constantOverloadFunction.ts, 5, 42), Decl(constantOverloadFunction.ts, 6, 40), Decl(constantOverloadFunction.ts, 7, 40), Decl(constantOverloadFunction.ts, 8, 36))
+>tagName : Symbol(tagName, Decl(constantOverloadFunction.ts, 5, 13))
+>Derived1 : Symbol(Derived1, Decl(constantOverloadFunction.ts, 0, 24))
+
+function foo(tagName:  'div'): Derived2;
+>foo : Symbol(foo, Decl(constantOverloadFunction.ts, 3, 41), Decl(constantOverloadFunction.ts, 5, 42), Decl(constantOverloadFunction.ts, 6, 40), Decl(constantOverloadFunction.ts, 7, 40), Decl(constantOverloadFunction.ts, 8, 36))
+>tagName : Symbol(tagName, Decl(constantOverloadFunction.ts, 6, 13))
+>Derived2 : Symbol(Derived2, Decl(constantOverloadFunction.ts, 1, 41))
+
+function foo(tagName: 'span'): Derived3;
+>foo : Symbol(foo, Decl(constantOverloadFunction.ts, 3, 41), Decl(constantOverloadFunction.ts, 5, 42), Decl(constantOverloadFunction.ts, 6, 40), Decl(constantOverloadFunction.ts, 7, 40), Decl(constantOverloadFunction.ts, 8, 36))
+>tagName : Symbol(tagName, Decl(constantOverloadFunction.ts, 7, 13))
+>Derived3 : Symbol(Derived3, Decl(constantOverloadFunction.ts, 2, 41))
+
+function foo(tagName: string): Base;
+>foo : Symbol(foo, Decl(constantOverloadFunction.ts, 3, 41), Decl(constantOverloadFunction.ts, 5, 42), Decl(constantOverloadFunction.ts, 6, 40), Decl(constantOverloadFunction.ts, 7, 40), Decl(constantOverloadFunction.ts, 8, 36))
+>tagName : Symbol(tagName, Decl(constantOverloadFunction.ts, 8, 13))
+>Base : Symbol(Base, Decl(constantOverloadFunction.ts, 0, 0))
+
+function foo(tagName: any): Base {
+>foo : Symbol(foo, Decl(constantOverloadFunction.ts, 3, 41), Decl(constantOverloadFunction.ts, 5, 42), Decl(constantOverloadFunction.ts, 6, 40), Decl(constantOverloadFunction.ts, 7, 40), Decl(constantOverloadFunction.ts, 8, 36))
+>tagName : Symbol(tagName, Decl(constantOverloadFunction.ts, 9, 13))
+>Base : Symbol(Base, Decl(constantOverloadFunction.ts, 0, 0))
+
+    return null;
+}
+

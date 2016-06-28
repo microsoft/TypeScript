@@ -75,7 +75,6 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
     return typedArrays;
 }
 
-/*
 function CreateTypedArraysOf(obj) {
     var typedArrays = [];
     typedArrays[0] = Int8Array.of(...obj);
@@ -90,7 +89,6 @@ function CreateTypedArraysOf(obj) {
 
     return typedArrays;
 }
-*/
 
 function CreateTypedArraysOf2() {
     var typedArrays = [];
@@ -203,7 +201,6 @@ function CreateIntegerTypedArraysFromArrayLike(obj) {
     typedArrays[8] = Uint8ClampedArray.from(obj);
     return typedArrays;
 }
-/*
 function CreateTypedArraysOf(obj) {
     var typedArrays = [];
     typedArrays[0] = Int8Array.of(...obj);
@@ -215,10 +212,8 @@ function CreateTypedArraysOf(obj) {
     typedArrays[6] = Float32Array.of(...obj);
     typedArrays[7] = Float64Array.of(...obj);
     typedArrays[8] = Uint8ClampedArray.of(...obj);
-
     return typedArrays;
 }
-*/
 function CreateTypedArraysOf2() {
     var typedArrays = [];
     typedArrays[0] = Int8Array.of(1, 2, 3, 4);

@@ -43,11 +43,10 @@ module templa.dom.mvc.composite {
 
 
 //// [declFileGenericType2.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 // Module
 var templa;
@@ -62,7 +61,7 @@ var templa;
                     _super.call(this);
                 }
                 return AbstractElementController;
-            })(templa.mvc.AbstractController);
+            }(templa.mvc.AbstractController));
             mvc.AbstractElementController = AbstractElementController;
         })(mvc = dom.mvc || (dom.mvc = {}));
     })(dom = templa.dom || (templa.dom = {}));
@@ -83,7 +82,7 @@ var templa;
                         this._controllers = [];
                     }
                     return AbstractCompositeElementController;
-                })(templa.dom.mvc.AbstractElementController);
+                }(templa.dom.mvc.AbstractElementController));
                 composite.AbstractCompositeElementController = AbstractCompositeElementController;
             })(composite = mvc.composite || (mvc.composite = {}));
         })(mvc = dom.mvc || (dom.mvc = {}));

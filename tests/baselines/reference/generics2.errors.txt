@@ -1,4 +1,4 @@
-tests/cases/compiler/generics2.ts(17,9): error TS2344: Type 'A' does not satisfy the constraint 'B'.
+tests/cases/compiler/generics2.ts(17,14): error TS2344: Type 'A' does not satisfy the constraint 'B'.
   Property 'b' is missing in type 'A'.
 tests/cases/compiler/generics2.ts(20,9): error TS2314: Generic type 'G<T, U>' requires 2 type argument(s).
 tests/cases/compiler/generics2.ts(21,9): error TS2314: Generic type 'G<T, U>' requires 2 type argument(s).
@@ -22,7 +22,7 @@ tests/cases/compiler/generics2.ts(21,9): error TS2314: Generic type 'G<T, U>' re
     
     var v2: G<{ a: string }, C>;   // Ok, equivalent to G<A, C>
     var v3: G<A, A>;               // Error, A not valid argument for U
-            ~~~~~~~
+                 ~
 !!! error TS2344: Type 'A' does not satisfy the constraint 'B'.
 !!! error TS2344:   Property 'b' is missing in type 'A'.
     var v4: G<G<A, B>, C>;         // Ok

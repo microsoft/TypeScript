@@ -1,0 +1,60 @@
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentES6.ts ===
+var id: number = 10000;
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 0, 3))
+
+var name: string = "my name";
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 1, 3))
+
+var person: { name: string; id: number } = { name, id };
+>person : Symbol(person, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 3, 3))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 3, 13))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 3, 27))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 3, 44))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 3, 50))
+
+function foo(obj: { name: string }): void { };
+>foo : Symbol(foo, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 3, 56))
+>obj : Symbol(obj, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 4, 13))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 4, 19))
+
+function bar(name: string, id: number) { return { name, id }; }
+>bar : Symbol(bar, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 4, 46))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 5, 13))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 5, 26))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 5, 49))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 5, 55))
+
+function bar1(name: string, id: number) { return { name }; }
+>bar1 : Symbol(bar1, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 5, 63))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 6, 14))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 6, 27))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 6, 50))
+
+function baz(name: string, id: number): { name: string; id: number } { return { name, id }; }
+>baz : Symbol(baz, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 6, 60))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 7, 13))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 7, 26))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 7, 41))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 7, 55))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 7, 79))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 7, 85))
+
+foo(person);
+>foo : Symbol(foo, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 3, 56))
+>person : Symbol(person, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 3, 3))
+
+var person1 = bar("Hello", 5);
+>person1 : Symbol(person1, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 10, 3))
+>bar : Symbol(bar, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 4, 46))
+
+var person2: { name: string } = bar("Hello", 5);
+>person2 : Symbol(person2, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 11, 3))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 11, 14))
+>bar : Symbol(bar, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 4, 46))
+
+var person3: { name: string; id: number } = bar("Hello", 5);
+>person3 : Symbol(person3, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 12, 3))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 12, 14))
+>id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 12, 28))
+>bar : Symbol(bar, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 4, 46))
+

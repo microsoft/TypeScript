@@ -68,12 +68,12 @@ sourceFile:sourceMap-StringLiteralWithNewLine.ts
 4 >          = 
 5 >            "test1"
 6 >                   ;
-1->Emitted(3, 5) Source(10, 5) + SourceIndex(0) name (Foo)
-2 >Emitted(3, 9) Source(10, 9) + SourceIndex(0) name (Foo)
-3 >Emitted(3, 10) Source(10, 10) + SourceIndex(0) name (Foo)
-4 >Emitted(3, 13) Source(10, 13) + SourceIndex(0) name (Foo)
-5 >Emitted(3, 20) Source(10, 20) + SourceIndex(0) name (Foo)
-6 >Emitted(3, 21) Source(10, 21) + SourceIndex(0) name (Foo)
+1->Emitted(3, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(3, 9) Source(10, 9) + SourceIndex(0)
+3 >Emitted(3, 10) Source(10, 10) + SourceIndex(0)
+4 >Emitted(3, 13) Source(10, 13) + SourceIndex(0)
+5 >Emitted(3, 20) Source(10, 20) + SourceIndex(0)
+6 >Emitted(3, 21) Source(10, 21) + SourceIndex(0)
 ---
 >>>    var y = "test 2\
 1 >^^^^
@@ -86,10 +86,10 @@ sourceFile:sourceMap-StringLiteralWithNewLine.ts
 2 >    var 
 3 >        y
 4 >          = 
-1 >Emitted(4, 5) Source(11, 5) + SourceIndex(0) name (Foo)
-2 >Emitted(4, 9) Source(11, 9) + SourceIndex(0) name (Foo)
-3 >Emitted(4, 10) Source(11, 10) + SourceIndex(0) name (Foo)
-4 >Emitted(4, 13) Source(11, 13) + SourceIndex(0) name (Foo)
+1 >Emitted(4, 5) Source(11, 5) + SourceIndex(0)
+2 >Emitted(4, 9) Source(11, 9) + SourceIndex(0)
+3 >Emitted(4, 10) Source(11, 10) + SourceIndex(0)
+4 >Emitted(4, 13) Source(11, 13) + SourceIndex(0)
 ---
 >>>isn't this a lot of fun";
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -98,8 +98,8 @@ sourceFile:sourceMap-StringLiteralWithNewLine.ts
 1->"test 2\
   >isn't this a lot of fun"
 2 >                        ;
-1->Emitted(5, 25) Source(12, 25) + SourceIndex(0) name (Foo)
-2 >Emitted(5, 26) Source(12, 26) + SourceIndex(0) name (Foo)
+1->Emitted(5, 25) Source(12, 25) + SourceIndex(0)
+2 >Emitted(5, 26) Source(12, 26) + SourceIndex(0)
 ---
 >>>    var z = window.document;
 1->^^^^
@@ -119,14 +119,14 @@ sourceFile:sourceMap-StringLiteralWithNewLine.ts
 6 >                  .
 7 >                   document
 8 >                           ;
-1->Emitted(6, 5) Source(13, 5) + SourceIndex(0) name (Foo)
-2 >Emitted(6, 9) Source(13, 9) + SourceIndex(0) name (Foo)
-3 >Emitted(6, 10) Source(13, 10) + SourceIndex(0) name (Foo)
-4 >Emitted(6, 13) Source(13, 13) + SourceIndex(0) name (Foo)
-5 >Emitted(6, 19) Source(13, 19) + SourceIndex(0) name (Foo)
-6 >Emitted(6, 20) Source(13, 20) + SourceIndex(0) name (Foo)
-7 >Emitted(6, 28) Source(13, 28) + SourceIndex(0) name (Foo)
-8 >Emitted(6, 29) Source(13, 29) + SourceIndex(0) name (Foo)
+1->Emitted(6, 5) Source(13, 5) + SourceIndex(0)
+2 >Emitted(6, 9) Source(13, 9) + SourceIndex(0)
+3 >Emitted(6, 10) Source(13, 10) + SourceIndex(0)
+4 >Emitted(6, 13) Source(13, 13) + SourceIndex(0)
+5 >Emitted(6, 19) Source(13, 19) + SourceIndex(0)
+6 >Emitted(6, 20) Source(13, 20) + SourceIndex(0)
+7 >Emitted(6, 28) Source(13, 28) + SourceIndex(0)
+8 >Emitted(6, 29) Source(13, 29) + SourceIndex(0)
 ---
 >>>})(Foo || (Foo = {}));
 1 >
@@ -150,8 +150,8 @@ sourceFile:sourceMap-StringLiteralWithNewLine.ts
   >              isn't this a lot of fun";
   >                  var z = window.document;
   >              }
-1 >Emitted(7, 1) Source(14, 1) + SourceIndex(0) name (Foo)
-2 >Emitted(7, 2) Source(14, 2) + SourceIndex(0) name (Foo)
+1 >Emitted(7, 1) Source(14, 1) + SourceIndex(0)
+2 >Emitted(7, 2) Source(14, 2) + SourceIndex(0)
 3 >Emitted(7, 4) Source(9, 8) + SourceIndex(0)
 4 >Emitted(7, 7) Source(9, 11) + SourceIndex(0)
 5 >Emitted(7, 12) Source(9, 8) + SourceIndex(0)

@@ -80,6 +80,7 @@ var resultIsNumber5 = (OBJECT, NUMBER);
 //Literal and expression
 null, NUMBER;
 >null, NUMBER : number
+>null : null
 >NUMBER : number
 
 ANY = undefined, NUMBER;
@@ -91,16 +92,22 @@ ANY = undefined, NUMBER;
 
 true, 1;
 >true, 1 : number
+>true : boolean
+>1 : number
 
 BOOLEAN = false, 1;
 >BOOLEAN = false, 1 : number
 >BOOLEAN = false : boolean
 >BOOLEAN : boolean
+>false : boolean
+>1 : number
 
 "", NUMBER = 1;
 >"", NUMBER = 1 : number
+>"" : string
 >NUMBER = 1 : number
 >NUMBER : number
+>1 : number
 
 STRING.trim(), NUMBER = 1;
 >STRING.trim(), NUMBER = 1 : number
@@ -110,11 +117,13 @@ STRING.trim(), NUMBER = 1;
 >trim : () => string
 >NUMBER = 1 : number
 >NUMBER : number
+>1 : number
 
 var resultIsNumber6 = (null, NUMBER);
 >resultIsNumber6 : number
 >(null, NUMBER) : number
 >null, NUMBER : number
+>null : null
 >NUMBER : number
 
 var resultIsNumber7 = (ANY = undefined, NUMBER);
@@ -130,6 +139,8 @@ var resultIsNumber8 = (true, 1);
 >resultIsNumber8 : number
 >(true, 1) : number
 >true, 1 : number
+>true : boolean
+>1 : number
 
 var resultIsNumber9 = (BOOLEAN = false, 1);
 >resultIsNumber9 : number
@@ -137,13 +148,17 @@ var resultIsNumber9 = (BOOLEAN = false, 1);
 >BOOLEAN = false, 1 : number
 >BOOLEAN = false : boolean
 >BOOLEAN : boolean
+>false : boolean
+>1 : number
 
 var resultIsNumber10 = ("", NUMBER = 1);
 >resultIsNumber10 : number
 >("", NUMBER = 1) : number
 >"", NUMBER = 1 : number
+>"" : string
 >NUMBER = 1 : number
 >NUMBER : number
+>1 : number
 
 var resultIsNumber11 = (STRING.trim(), NUMBER = 1);
 >resultIsNumber11 : number
@@ -155,4 +170,5 @@ var resultIsNumber11 = (STRING.trim(), NUMBER = 1);
 >trim : () => string
 >NUMBER = 1 : number
 >NUMBER : number
+>1 : number
 

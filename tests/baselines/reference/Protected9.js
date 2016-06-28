@@ -9,4 +9,4 @@ var C = (function () {
         this.p = p;
     }
     return C;
-})();
+}());

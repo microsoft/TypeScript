@@ -1,13 +1,10 @@
 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive2.ts(3,19): error TS1109: Expression expected.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive2.ts(4,19): error TS9002: Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive2.ts (2 errors) ====
+==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive2.ts (1 errors) ====
     // classes cannot extend primitives
     
     class C4a extends void {}
                       ~~~~
 !!! error TS1109: Expression expected.
     class C5a extends null { }
-                      ~~~~
-!!! error TS9002: Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.

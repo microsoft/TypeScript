@@ -42,4 +42,4 @@ var LanguageSpec_section_4_5_error_cases = (function () {
         configurable: true
     });
     return LanguageSpec_section_4_5_error_cases;
-})();
+}());

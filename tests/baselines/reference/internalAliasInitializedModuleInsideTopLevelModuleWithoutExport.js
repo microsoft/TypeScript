@@ -11,6 +11,7 @@ export var x: b.c = new b.c();
 
 //// [internalAliasInitializedModuleInsideTopLevelModuleWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var a;
     (function (a) {
         var b;
@@ -19,7 +20,7 @@ define(["require", "exports"], function (require, exports) {
                 function c() {
                 }
                 return c;
-            })();
+            }());
             b.c = c;
         })(b = a.b || (a.b = {}));
     })(a = exports.a || (exports.a = {}));

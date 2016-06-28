@@ -1,8 +1,15 @@
 === tests/cases/compiler/nestedIfStatement.ts ===
 if (0) {
-No type information for this code.} else if (1) {
-No type information for this code.} else if (2) {
-No type information for this code.} else if (3) {
-No type information for this code.} else {
-No type information for this code.}
-No type information for this code.
+>0 : number
+
+} else if (1) {
+>1 : number
+
+} else if (2) {
+>2 : number
+
+} else if (3) {
+>3 : number
+
+} else {
+}

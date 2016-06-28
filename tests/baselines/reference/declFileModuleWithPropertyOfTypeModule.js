@@ -14,7 +14,7 @@ var m;
         function c() {
         }
         return c;
-    })();
+    }());
     m.c = c;
     m.a = m;
 })(m || (m = {}));

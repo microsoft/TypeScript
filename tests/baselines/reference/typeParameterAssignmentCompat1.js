@@ -36,4 +36,4 @@ var C = (function () {
         return x;
     };
     return C;
-})();
+}());

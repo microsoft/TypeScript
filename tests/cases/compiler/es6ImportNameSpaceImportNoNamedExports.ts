@@ -6,4 +6,4 @@ var a = 10;
 export = a;
 
 // @filename: es6ImportNameSpaceImportNoNamedExports_1.ts
-import * as nameSpaceBinding from "es6ImportNameSpaceImportNoNamedExports_0"; // error
+import * as nameSpaceBinding from "./es6ImportNameSpaceImportNoNamedExports_0"; // error

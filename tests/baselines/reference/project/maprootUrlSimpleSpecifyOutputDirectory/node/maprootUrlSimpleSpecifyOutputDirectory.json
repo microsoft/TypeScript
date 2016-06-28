@@ -6,9 +6,9 @@
     ],
     "outDir": "outdir/simple",
     "sourceMap": true,
-    "mapRoot": "http://www.typescriptlang.org/",
     "declaration": true,
     "baselineCheck": true,
+    "mapRoot": "http://www.typescriptlang.org/",
     "resolvedInputFiles": [
         "lib.d.ts",
         "m1.ts",

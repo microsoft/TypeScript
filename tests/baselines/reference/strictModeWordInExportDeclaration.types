@@ -1,7 +1,10 @@
 === tests/cases/compiler/strictModeWordInExportDeclaration.ts ===
 "use strict"
+>"use strict" : string
+
 var x = 1;
 >x : number
+>1 : number
 
 export { x as foo }
 >x : number

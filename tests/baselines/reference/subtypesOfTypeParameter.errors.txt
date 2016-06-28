@@ -1,10 +1,9 @@
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(7,7): error TS2415: Class 'D1<T, U>' incorrectly extends base class 'C3<T>'.
   Types of property 'foo' are incompatible.
     Type 'U' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(95,21): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts (2 errors) ====
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts (1 errors) ====
     // checking whether other types are subtypes of type parameters
     
     class C3<T> {
@@ -104,8 +103,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         }
     
         function f18<T, U extends T>(a: U) {
-                        ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             var r18 = true ? x : a;
             var r18 = true ? a : x;
         }

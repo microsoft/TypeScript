@@ -1,0 +1,166 @@
+=== tests/cases/compiler/moduleVisibilityTest1.ts ===
+
+
+module OuterMod {
+>OuterMod : Symbol(OuterMod, Decl(moduleVisibilityTest1.ts, 0, 0))
+
+	export function someExportedOuterFunc() { return -1; }
+>someExportedOuterFunc : Symbol(someExportedOuterFunc, Decl(moduleVisibilityTest1.ts, 2, 17))
+
+	export module OuterInnerMod {
+>OuterInnerMod : Symbol(OuterInnerMod, Decl(moduleVisibilityTest1.ts, 3, 55))
+
+		export function someExportedOuterInnerFunc() { return "foo"; }
+>someExportedOuterInnerFunc : Symbol(someExportedOuterInnerFunc, Decl(moduleVisibilityTest1.ts, 5, 30))
+	}
+}
+
+import OuterInnerAlias = OuterMod.OuterInnerMod;
+>OuterInnerAlias : Symbol(OuterInnerAlias, Decl(moduleVisibilityTest1.ts, 8, 1))
+>OuterMod : Symbol(OuterMod, Decl(moduleVisibilityTest1.ts, 0, 0))
+>OuterInnerMod : Symbol(OuterInnerAlias, Decl(moduleVisibilityTest1.ts, 3, 55))
+
+module M {
+>M : Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+
+	export module InnerMod {
+>InnerMod : Symbol(InnerMod, Decl(moduleVisibilityTest1.ts, 12, 10))
+
+		export function someExportedInnerFunc() { return -2; }
+>someExportedInnerFunc : Symbol(someExportedInnerFunc, Decl(moduleVisibilityTest1.ts, 14, 25))
+	}
+
+	export enum E {
+>E : Symbol(E, Decl(moduleVisibilityTest1.ts, 16, 2))
+
+		A,
+>A : Symbol(E.A, Decl(moduleVisibilityTest1.ts, 18, 16))
+
+		B,
+>B : Symbol(E.B, Decl(moduleVisibilityTest1.ts, 19, 4))
+
+		C,
+>C : Symbol(E.C, Decl(moduleVisibilityTest1.ts, 20, 4))
+	}
+
+	export var x = 5;
+>x : Symbol(x, Decl(moduleVisibilityTest1.ts, 24, 11))
+
+	export declare var exported_var;
+>exported_var : Symbol(exported_var, Decl(moduleVisibilityTest1.ts, 25, 19))
+
+	var y = x + x;
+>y : Symbol(y, Decl(moduleVisibilityTest1.ts, 27, 4))
+>x : Symbol(x, Decl(moduleVisibilityTest1.ts, 24, 11))
+>x : Symbol(x, Decl(moduleVisibilityTest1.ts, 24, 11))
+
+
+	export interface I {
+>I : Symbol(I, Decl(moduleVisibilityTest1.ts, 27, 15))
+
+		someMethod():number;
+>someMethod : Symbol(I.someMethod, Decl(moduleVisibilityTest1.ts, 30, 21))
+	}
+
+	 class B {public b = 0;}
+>B : Symbol(B, Decl(moduleVisibilityTest1.ts, 32, 2))
+>b : Symbol(B.b, Decl(moduleVisibilityTest1.ts, 34, 11))
+
+	 export class C implements I {
+>C : Symbol(C, Decl(moduleVisibilityTest1.ts, 34, 25))
+>I : Symbol(I, Decl(moduleVisibilityTest1.ts, 27, 15))
+
+		public someMethodThatCallsAnOuterMethod() {return OuterInnerAlias.someExportedOuterInnerFunc();}
+>someMethodThatCallsAnOuterMethod : Symbol(C.someMethodThatCallsAnOuterMethod, Decl(moduleVisibilityTest1.ts, 36, 31))
+>OuterInnerAlias.someExportedOuterInnerFunc : Symbol(OuterInnerAlias.someExportedOuterInnerFunc, Decl(moduleVisibilityTest1.ts, 5, 30))
+>OuterInnerAlias : Symbol(OuterInnerAlias, Decl(moduleVisibilityTest1.ts, 8, 1))
+>someExportedOuterInnerFunc : Symbol(OuterInnerAlias.someExportedOuterInnerFunc, Decl(moduleVisibilityTest1.ts, 5, 30))
+
+		public someMethodThatCallsAnInnerMethod() {return InnerMod.someExportedInnerFunc();}
+>someMethodThatCallsAnInnerMethod : Symbol(C.someMethodThatCallsAnInnerMethod, Decl(moduleVisibilityTest1.ts, 37, 98))
+>InnerMod.someExportedInnerFunc : Symbol(InnerMod.someExportedInnerFunc, Decl(moduleVisibilityTest1.ts, 14, 25))
+>InnerMod : Symbol(InnerMod, Decl(moduleVisibilityTest1.ts, 12, 10))
+>someExportedInnerFunc : Symbol(InnerMod.someExportedInnerFunc, Decl(moduleVisibilityTest1.ts, 14, 25))
+
+		public someMethodThatCallsAnOuterInnerMethod() {return OuterMod.someExportedOuterFunc();}
+>someMethodThatCallsAnOuterInnerMethod : Symbol(C.someMethodThatCallsAnOuterInnerMethod, Decl(moduleVisibilityTest1.ts, 38, 86))
+>OuterMod.someExportedOuterFunc : Symbol(OuterMod.someExportedOuterFunc, Decl(moduleVisibilityTest1.ts, 2, 17))
+>OuterMod : Symbol(OuterMod, Decl(moduleVisibilityTest1.ts, 0, 0))
+>someExportedOuterFunc : Symbol(OuterMod.someExportedOuterFunc, Decl(moduleVisibilityTest1.ts, 2, 17))
+
+		public someMethod() { return 0; }
+>someMethod : Symbol(C.someMethod, Decl(moduleVisibilityTest1.ts, 39, 91))
+
+		public someProp = 1;
+>someProp : Symbol(C.someProp, Decl(moduleVisibilityTest1.ts, 40, 35))
+
+		constructor() {
+		    function someInnerFunc() { return 2; }
+>someInnerFunc : Symbol(someInnerFunc, Decl(moduleVisibilityTest1.ts, 43, 17))
+
+            var someInnerVar = 3;
+>someInnerVar : Symbol(someInnerVar, Decl(moduleVisibilityTest1.ts, 45, 15))
+		}
+	}
+
+	var someModuleVar = 4;
+>someModuleVar : Symbol(someModuleVar, Decl(moduleVisibilityTest1.ts, 49, 4))
+
+	function someModuleFunction() { return 5;}
+>someModuleFunction : Symbol(someModuleFunction, Decl(moduleVisibilityTest1.ts, 49, 23))
+}
+
+module M {
+>M : Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+
+	export var c = x;
+>c : Symbol(c, Decl(moduleVisibilityTest1.ts, 55, 11))
+>x : Symbol(x, Decl(moduleVisibilityTest1.ts, 24, 11))
+
+	export var meb = M.E.B;
+>meb : Symbol(meb, Decl(moduleVisibilityTest1.ts, 56, 11))
+>M.E.B : Symbol(E.B, Decl(moduleVisibilityTest1.ts, 19, 4))
+>M.E : Symbol(E, Decl(moduleVisibilityTest1.ts, 16, 2))
+>M : Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+>E : Symbol(E, Decl(moduleVisibilityTest1.ts, 16, 2))
+>B : Symbol(E.B, Decl(moduleVisibilityTest1.ts, 19, 4))
+}
+
+var cprime : M.I = <M.I>null;
+>cprime : Symbol(cprime, Decl(moduleVisibilityTest1.ts, 59, 3))
+>M : Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+>I : Symbol(M.I, Decl(moduleVisibilityTest1.ts, 27, 15))
+>M : Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+>I : Symbol(M.I, Decl(moduleVisibilityTest1.ts, 27, 15))
+
+var c = new M.C();
+>c : Symbol(c, Decl(moduleVisibilityTest1.ts, 61, 3))
+>M.C : Symbol(M.C, Decl(moduleVisibilityTest1.ts, 34, 25))
+>M : Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+>C : Symbol(M.C, Decl(moduleVisibilityTest1.ts, 34, 25))
+
+var z = M.x;
+>z : Symbol(z, Decl(moduleVisibilityTest1.ts, 62, 3))
+>M.x : Symbol(M.x, Decl(moduleVisibilityTest1.ts, 24, 11))
+>M : Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+>x : Symbol(M.x, Decl(moduleVisibilityTest1.ts, 24, 11))
+
+var alpha = M.E.A;
+>alpha : Symbol(alpha, Decl(moduleVisibilityTest1.ts, 63, 3))
+>M.E.A : Symbol(M.E.A, Decl(moduleVisibilityTest1.ts, 18, 16))
+>M.E : Symbol(M.E, Decl(moduleVisibilityTest1.ts, 16, 2))
+>M : Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+>E : Symbol(M.E, Decl(moduleVisibilityTest1.ts, 16, 2))
+>A : Symbol(M.E.A, Decl(moduleVisibilityTest1.ts, 18, 16))
+
+var omega = M.exported_var;
+>omega : Symbol(omega, Decl(moduleVisibilityTest1.ts, 64, 3))
+>M.exported_var : Symbol(M.exported_var, Decl(moduleVisibilityTest1.ts, 25, 19))
+>M : Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+>exported_var : Symbol(M.exported_var, Decl(moduleVisibilityTest1.ts, 25, 19))
+
+c.someMethodThatCallsAnOuterMethod();
+>c.someMethodThatCallsAnOuterMethod : Symbol(M.C.someMethodThatCallsAnOuterMethod, Decl(moduleVisibilityTest1.ts, 36, 31))
+>c : Symbol(c, Decl(moduleVisibilityTest1.ts, 61, 3))
+>someMethodThatCallsAnOuterMethod : Symbol(M.C.someMethodThatCallsAnOuterMethod, Decl(moduleVisibilityTest1.ts, 36, 31))
+

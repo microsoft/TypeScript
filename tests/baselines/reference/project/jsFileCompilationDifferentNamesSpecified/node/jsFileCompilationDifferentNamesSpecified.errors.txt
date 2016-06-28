@@ -1,0 +1,8 @@
+error TS6054: File 'DifferentNamesSpecified/b.js' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts'.
+error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+
+
+!!! error TS6054: File 'DifferentNamesSpecified/b.js' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts'.
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+==== DifferentNamesSpecified/a.ts (0 errors) ====
+    var test = 10;

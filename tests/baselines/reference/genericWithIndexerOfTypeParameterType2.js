@@ -15,18 +15,18 @@ export class ListItem extends CollectionItem {
 
 
 //// [genericWithIndexerOfTypeParameterType2.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Collection = (function () {
         function Collection() {
         }
         return Collection;
-    })();
+    }());
     exports.Collection = Collection;
     var List = (function (_super) {
         __extends(List, _super);
@@ -35,13 +35,13 @@ define(["require", "exports"], function (require, exports) {
         }
         List.prototype.Bar = function () { };
         return List;
-    })(Collection);
+    }(Collection));
     exports.List = List;
     var CollectionItem = (function () {
         function CollectionItem() {
         }
         return CollectionItem;
-    })();
+    }());
     exports.CollectionItem = CollectionItem;
     var ListItem = (function (_super) {
         __extends(ListItem, _super);
@@ -49,6 +49,6 @@ define(["require", "exports"], function (require, exports) {
             _super.apply(this, arguments);
         }
         return ListItem;
-    })(CollectionItem);
+    }(CollectionItem));
     exports.ListItem = ListItem;
 });

@@ -9,4 +9,4 @@ var X = (function () {
     }
     X.prototype.f = function (a) { };
     return X;
-})();
+}());

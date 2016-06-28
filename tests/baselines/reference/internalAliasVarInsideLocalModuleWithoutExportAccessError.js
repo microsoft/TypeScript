@@ -11,6 +11,7 @@ export module c {
 export var z = c.b;
 
 //// [internalAliasVarInsideLocalModuleWithoutExportAccessError.js]
+"use strict";
 var a;
 (function (a) {
     a.x = 10;

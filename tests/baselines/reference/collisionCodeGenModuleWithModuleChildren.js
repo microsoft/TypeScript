@@ -60,7 +60,7 @@ var M;
             function M() {
             }
             return M;
-        })();
+        }());
         var p = M_2.x;
         var p2 = new M();
     })(m2 || (m2 = {}));

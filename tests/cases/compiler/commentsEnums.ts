@@ -1,6 +1,6 @@
 // @target: ES5
 // @declaration: true
-// @comments: true
+// @removeComments: false
 
 /** Enum of colors*/
 enum Colors {

@@ -44,7 +44,7 @@ tests/cases/compiler/giant.ts(125,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(126,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(127,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(140,9): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/giant.ts(154,39): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(154,39): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(166,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(167,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(167,20): error TS2300: Duplicate identifier 'pgF'.
@@ -68,39 +68,39 @@ tests/cases/compiler/giant.ts(204,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(205,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(206,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(219,9): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/giant.ts(233,39): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(238,35): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(240,24): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(243,21): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(244,22): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(233,39): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(238,35): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(240,24): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(243,21): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(244,22): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(245,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(245,22): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(245,22): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(246,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(246,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(247,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(247,31): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(247,31): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(248,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(248,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(249,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(249,23): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(249,23): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(250,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(250,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(251,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(251,32): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(251,32): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(252,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(252,21): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(254,21): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(254,21): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(255,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(255,31): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(255,31): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(256,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(256,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(257,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(257,22): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(257,22): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(258,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(258,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(262,22): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(262,22): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(262,25): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/giant.ts(267,30): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(267,30): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(281,12): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(282,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(282,16): error TS2300: Duplicate identifier 'pgF'.
@@ -147,7 +147,7 @@ tests/cases/compiler/giant.ts(383,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(384,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(385,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(398,9): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/giant.ts(412,39): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(412,39): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(424,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(425,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(425,20): error TS2300: Duplicate identifier 'pgF'.
@@ -171,98 +171,98 @@ tests/cases/compiler/giant.ts(462,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(463,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(464,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(477,9): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/giant.ts(491,39): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(496,35): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(498,24): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(501,21): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(502,22): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(491,39): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(496,35): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(498,24): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(501,21): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(502,22): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(503,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(503,22): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(503,22): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(504,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(504,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(505,16): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(505,31): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(505,31): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(506,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(506,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(507,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(507,23): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(507,23): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(508,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(508,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(509,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(509,32): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(509,32): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(510,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(510,21): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(512,21): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(512,21): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(513,16): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(513,31): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(513,31): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(514,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(514,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(515,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(515,22): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(515,22): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(516,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(516,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(520,22): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(520,22): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(520,25): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/giant.ts(525,30): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(532,31): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(534,20): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(537,17): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(538,18): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(525,30): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(532,31): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(534,20): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(537,17): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(538,18): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(539,12): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(539,18): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(539,18): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(540,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(540,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(541,12): error TS2300: Duplicate identifier 'psF'.
-tests/cases/compiler/giant.ts(541,27): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(541,27): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(542,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(542,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(543,13): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(543,19): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(543,19): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(544,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(544,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(545,13): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(545,28): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(545,28): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(546,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(546,17): error TS2300: Duplicate identifier 'rsF'.
-tests/cases/compiler/giant.ts(548,17): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(548,17): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(549,12): error TS2300: Duplicate identifier 'tsF'.
-tests/cases/compiler/giant.ts(549,27): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(549,27): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(550,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(550,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(551,12): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(551,18): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(551,18): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(552,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(552,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(556,18): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(556,18): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(556,21): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/giant.ts(558,24): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(561,21): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(563,21): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(558,24): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(561,21): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(563,21): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(587,9): error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
 tests/cases/compiler/giant.ts(587,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(588,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(589,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(602,9): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/giant.ts(606,22): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(606,22): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(606,25): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/giant.ts(611,30): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(611,30): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(615,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 tests/cases/compiler/giant.ts(616,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/giant.ts(616,39): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(616,39): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(617,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 tests/cases/compiler/giant.ts(618,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/giant.ts(621,26): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(623,24): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(626,21): error TS1184: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/giant.ts(628,21): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(621,26): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(623,24): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(626,21): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(628,21): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(653,9): error TS1169: A computed property name in an interface must directly refer to a built-in symbol.
 tests/cases/compiler/giant.ts(653,10): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/giant.ts(654,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(655,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/giant.ts(672,22): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(672,22): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(672,25): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
 ==== tests/cases/compiler/giant.ts (265 errors) ====
@@ -513,7 +513,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             export declare var eaV;
             export declare function eaF() { };
                                           ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             export declare class eaC { };
             export declare module eaM { };
         }
@@ -640,31 +640,31 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             export declare var eaV;
             export declare function eaF() { };
                                           ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             export declare class eaC { };
             export declare module eaM { };
         }
         export declare var eaV;
         export declare function eaF() { };
                                       ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
         export declare class eaC {
             constructor () { }
                            ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             public pV;
             private rV;
             public pF() { }
                         ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             private rF() { }
                          ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             public pgF() { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                          ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             public get pgF()
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -674,7 +674,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
                                   ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             public set psF(param:any)
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -684,7 +684,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
                           ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             private get rgF()
                         ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -694,7 +694,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
                                    ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             private set rsF(param:any)
                         ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -703,12 +703,12 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             static tV;
             static tF() { }
                         ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             static tsF(param:any) { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
                                   ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             static set tsF(param:any)
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -718,7 +718,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                          ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             static get tgF()
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -729,7 +729,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             var V;
             function F() { };
                          ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
                             ~
 !!! error TS1036: Statements are not allowed in ambient contexts.
             class C { }
@@ -738,7 +738,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             export var eV;
             export function eF() { };
                                  ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             export class eC { }
             export interface eI { }
             export module eM { }
@@ -977,7 +977,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             export declare var eaV;
             export declare function eaF() { };
                                           ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             export declare class eaC { };
             export declare module eaM { };
         }
@@ -1104,31 +1104,31 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             export declare var eaV;
             export declare function eaF() { };
                                           ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             export declare class eaC { };
             export declare module eaM { };
         }
         export declare var eaV;
         export declare function eaF() { };
                                       ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
         export declare class eaC {
             constructor () { }
                            ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             public pV;
             private rV;
             public pF() { }
                         ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             private rF() { }
                          ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             public pgF() { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                          ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             public get pgF()
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -1138,7 +1138,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
                                   ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             public set psF(param:any)
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -1148,7 +1148,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
                           ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             private get rgF()
                         ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -1158,7 +1158,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
                                    ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             private set rsF(param:any)
                         ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -1167,12 +1167,12 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             static tV;
             static tF() { }
                         ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             static tsF(param:any) { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
                                   ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             static set tsF(param:any)
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -1182,7 +1182,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                          ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             static get tgF()
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -1193,7 +1193,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             var V;
             function F() { };
                          ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
                             ~
 !!! error TS1036: Statements are not allowed in ambient contexts.
             class C { }
@@ -1202,7 +1202,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             export var eV;
             export function eF() { };
                                  ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             export class eC { }
             export interface eI { }
             export module eM { }
@@ -1211,24 +1211,24 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
     export declare var eaV;
     export declare function eaF() { };
                                   ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
     export declare class eaC {
         constructor () { }
                        ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
         public pV;
         private rV;
         public pF() { }
                     ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
         private rF() { }
                      ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
         public pgF() { }
                ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                      ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
         public get pgF()
                    ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -1238,7 +1238,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
                ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
                               ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
         public set psF(param:any)
                    ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -1248,7 +1248,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
                 ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
                       ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
         private get rgF()
                     ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -1258,7 +1258,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
                 ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
                                ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
         private set rsF(param:any)
                     ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -1267,12 +1267,12 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
         static tV;
         static tF() { }
                     ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
         static tsF(param:any) { }
                ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
                               ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
         static set tsF(param:any)
                    ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -1282,7 +1282,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
                ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                      ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
         static get tgF()
                    ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -1293,22 +1293,22 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
         var V;
         function F() { };
                      ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
                         ~
 !!! error TS1036: Statements are not allowed in ambient contexts.
         class C {
             constructor () { }
                            ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             public pV;
             private rV;
             public pF() { }
                         ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             static tV;
             static tF() { }
                         ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
         }
         interface I {
             //Call Signature
@@ -1363,7 +1363,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             var V;
             function F() { };
                          ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
                             ~
 !!! error TS1036: Statements are not allowed in ambient contexts.
             class C { }
@@ -1372,7 +1372,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             export var eV;
             export function eF() { };
                                  ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             export class eC { }
             export interface eI { }
             export module eM { }
@@ -1383,7 +1383,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
                    ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
                                           ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             export declare class eaC { }
                    ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
@@ -1394,20 +1394,20 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
         export var eV;
         export function eF() { };
                              ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
         export class eC {
             constructor () { }
                            ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             public pV;
             private rV;
             public pF() { }
                         ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             static tV
             static tF() { }
                         ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
         }
         export interface eI {
             //Call Signature
@@ -1463,7 +1463,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             var V;
             function F() { };
                          ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
                             ~
 !!! error TS1036: Statements are not allowed in ambient contexts.
             class C { }
@@ -1471,7 +1471,7 @@ tests/cases/compiler/giant.ts(676,30): error TS1184: An implementation cannot be
             export var eV;
             export function eF() { };
                                  ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
             export class eC { }
             export interface eI { }
             export module eM { }

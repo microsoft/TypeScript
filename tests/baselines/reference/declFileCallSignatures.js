@@ -66,6 +66,7 @@ interface IGlobalCallSignatureWithOwnTypeParametes {
 }
 
 //// [declFileCallSignatures_0.js]
+"use strict";
 //// [declFileCallSignatures_1.js]
 
 

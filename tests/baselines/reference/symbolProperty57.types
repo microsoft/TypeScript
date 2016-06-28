@@ -7,6 +7,7 @@ var obj = {
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
+>0 : number
 
 };
 
@@ -16,4 +17,5 @@ obj[Symbol["nonsense"]];
 >obj : { [Symbol.iterator]: number; }
 >Symbol["nonsense"] : any
 >Symbol : SymbolConstructor
+>"nonsense" : string
 

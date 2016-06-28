@@ -1,0 +1,59 @@
+=== tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts ===
+
+var globalCounter = 0;
+>globalCounter : Symbol(globalCounter, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 1, 3))
+
+function foo() {
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 1, 22))
+
+    globalCounter += 1;
+>globalCounter : Symbol(globalCounter, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 1, 3))
+
+    return { prop: 2 };
+>prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+}
+foo().prop **= 2;
+>foo().prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 1, 22))
+>prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+
+var result0 = foo().prop **= 2;
+>result0 : Symbol(result0, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 7, 3))
+>foo().prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 1, 22))
+>prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+
+foo().prop **= foo().prop **= 2;
+>foo().prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 1, 22))
+>prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+>foo().prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 1, 22))
+>prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+
+var result1 = foo().prop **= foo().prop **= 2;
+>result1 : Symbol(result1, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 9, 3))
+>foo().prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 1, 22))
+>prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+>foo().prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 1, 22))
+>prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+
+foo().prop **= foo().prop ** 2;
+>foo().prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 1, 22))
+>prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+>foo().prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 1, 22))
+>prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+
+var result2 = foo().prop **= foo().prop ** 2;
+>result2 : Symbol(result2, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 11, 3))
+>foo().prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 1, 22))
+>prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+>foo().prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+>foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 1, 22))
+>prop : Symbol(prop, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 4, 12))
+

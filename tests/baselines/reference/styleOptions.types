@@ -3,9 +3,11 @@
 
 var x = 1;
 >x : number
+>1 : number
 
 var y = 1;
 >y : number
+>1 : number
 
 var t = x == y;
 >t : boolean

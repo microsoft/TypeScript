@@ -34,7 +34,7 @@ var C = (function () {
     }
     C.prototype.valueOf = function () { };
     return C;
-})();
+}());
 var c;
 var r1 = c.valueOf();
 var i;

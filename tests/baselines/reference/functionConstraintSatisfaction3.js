@@ -49,7 +49,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var a;
 var b;
 var c;
@@ -64,7 +64,7 @@ var C2 = (function () {
     function C2() {
     }
     return C2;
-})();
+}());
 var a2;
 var b2;
 var c2;

@@ -22,8 +22,8 @@ class Greeter {
 >() => {                var x = this;			} : () => void
 
                 var x = this;
->x : Greeter
->this : Greeter
+>x : this
+>this : this
 
 			});
 		});

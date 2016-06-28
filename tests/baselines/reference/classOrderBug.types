@@ -11,7 +11,7 @@ class bar {
         this.baz = new foo();
 >this.baz = new foo() : foo
 >this.baz : foo
->this : bar
+>this : this
 >baz : foo
 >new foo() : foo
 >foo : typeof foo

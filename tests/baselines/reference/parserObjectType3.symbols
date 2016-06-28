@@ -1,0 +1,11 @@
+=== tests/cases/conformance/parser/ecmascript5/ObjectTypes/parserObjectType3.ts ===
+var v: {
+>v : Symbol(v, Decl(parserObjectType3.ts, 0, 3))
+
+  x; 
+>x : Symbol(x, Decl(parserObjectType3.ts, 0, 8))
+
+  y
+>y : Symbol(y, Decl(parserObjectType3.ts, 1, 4))
+
+};

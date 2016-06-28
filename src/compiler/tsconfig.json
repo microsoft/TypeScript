@@ -1,11 +1,12 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "out": "../../built/local/tsc.js",
-        "sourceMap": true
+        "outFile": "../../built/local/tsc.js",
+        "sourceMap": true,
+        "declaration": true,
+        "stripInternal": true
     },
     "files": [
         "core.ts",
@@ -16,6 +17,8 @@
         "utilities.ts",
         "binder.ts",
         "checker.ts",
+        "sourcemap.ts",
+        "declarationEmitter.ts",
         "emitter.ts",
         "program.ts",
         "commandLineParser.ts",

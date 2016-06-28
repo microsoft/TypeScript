@@ -1,4 +1,5 @@
 //// [invalidThrowStatement.ts]
+
 throw; 
 
 export throw null;

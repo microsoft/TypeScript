@@ -18,4 +18,4 @@ var S0 = (function () {
         configurable: true
     });
     return S0;
-})();
+}());

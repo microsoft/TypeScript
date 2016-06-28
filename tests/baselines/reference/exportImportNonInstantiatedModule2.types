@@ -4,12 +4,13 @@ import e = require('./exporter');
 
 export function w(): e.w { // Should be OK
 >w : () => e.w
->e : unknown
+>e : any
 >w : e.w
 
     return {name: 'value' };
 >{name: 'value' } : { name: string; }
 >name : string
+>'value' : string
 }
 === tests/cases/compiler/w1.ts ===
 
@@ -22,5 +23,5 @@ interface Widget1 { name: string; }
 
 === tests/cases/compiler/exporter.ts ===
 export import w = require('./w1');
->w : unknown
+>w : any
 

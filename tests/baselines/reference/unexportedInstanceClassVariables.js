@@ -19,7 +19,7 @@ var M;
         function A(val) {
         }
         return A;
-    })();
+    }());
 })(M || (M = {}));
 var M;
 (function (M) {
@@ -27,6 +27,6 @@ var M;
         function A() {
         }
         return A;
-    })();
+    }());
     var a = new A();
 })(M || (M = {}));

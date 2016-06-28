@@ -52,7 +52,7 @@ var C1 = (function () {
         return this.c;
     };
     return C1;
-})();
+}());
 var x = new C1(undefined, [0, true, ""]);
 var _a = [x.getA(), x.getB(), x.getC()], x_a = _a[0], x_b = _a[1], x_c = _a[2];
 var y = new C1(10, [0, true, true]);

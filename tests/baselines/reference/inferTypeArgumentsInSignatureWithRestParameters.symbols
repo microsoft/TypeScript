@@ -1,0 +1,46 @@
+=== tests/cases/compiler/inferTypeArgumentsInSignatureWithRestParameters.ts ===
+function f<T>(array: T[], ...args) { }
+>f : Symbol(f, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 0, 0))
+>T : Symbol(T, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 0, 11))
+>array : Symbol(array, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 0, 14))
+>T : Symbol(T, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 0, 11))
+>args : Symbol(args, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 0, 25))
+
+function g(array: number[], ...args) { }
+>g : Symbol(g, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 0, 38))
+>array : Symbol(array, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 1, 11))
+>args : Symbol(args, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 1, 27))
+
+function h<T>(nonarray: T, ...args) { }
+>h : Symbol(h, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 1, 40))
+>T : Symbol(T, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 2, 11))
+>nonarray : Symbol(nonarray, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 2, 14))
+>T : Symbol(T, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 2, 11))
+>args : Symbol(args, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 2, 26))
+
+function i<T>(array: T[], opt?: any[]) { }
+>i : Symbol(i, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 2, 39))
+>T : Symbol(T, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 3, 11))
+>array : Symbol(array, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 3, 14))
+>T : Symbol(T, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 3, 11))
+>opt : Symbol(opt, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 3, 25))
+
+var a = [1, 2, 3, 4, 5];
+>a : Symbol(a, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 4, 3))
+
+f(a); // OK
+>f : Symbol(f, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 0, 0))
+>a : Symbol(a, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 4, 3))
+
+g(a); // OK
+>g : Symbol(g, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 0, 38))
+>a : Symbol(a, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 4, 3))
+
+h(a); // OK
+>h : Symbol(h, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 1, 40))
+>a : Symbol(a, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 4, 3))
+
+i(a); // OK
+>i : Symbol(i, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 2, 39))
+>a : Symbol(a, Decl(inferTypeArgumentsInSignatureWithRestParameters.ts, 4, 3))
+

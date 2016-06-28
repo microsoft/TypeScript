@@ -1,0 +1,62 @@
+=== tests/cases/compiler/recursiveGenericUnionType1.ts ===
+declare module Test1 {
+>Test1 : Symbol(Test1, Decl(recursiveGenericUnionType1.ts, 0, 0))
+
+    export type Container<T> = T | {
+>Container : Symbol(Container, Decl(recursiveGenericUnionType1.ts, 0, 22))
+>T : Symbol(T, Decl(recursiveGenericUnionType1.ts, 1, 26))
+>T : Symbol(T, Decl(recursiveGenericUnionType1.ts, 1, 26))
+
+        [i: string]: Container<T>;
+>i : Symbol(i, Decl(recursiveGenericUnionType1.ts, 2, 9))
+>Container : Symbol(Container, Decl(recursiveGenericUnionType1.ts, 0, 22))
+>T : Symbol(T, Decl(recursiveGenericUnionType1.ts, 1, 26))
+
+    };
+    export type IStringContainer = Container<string>;
+>IStringContainer : Symbol(IStringContainer, Decl(recursiveGenericUnionType1.ts, 3, 6))
+>Container : Symbol(Container, Decl(recursiveGenericUnionType1.ts, 0, 22))
+}
+
+declare module Test2 {
+>Test2 : Symbol(Test2, Decl(recursiveGenericUnionType1.ts, 5, 1))
+
+    export type Container<T> = T | {
+>Container : Symbol(Container, Decl(recursiveGenericUnionType1.ts, 7, 22))
+>T : Symbol(T, Decl(recursiveGenericUnionType1.ts, 8, 26))
+>T : Symbol(T, Decl(recursiveGenericUnionType1.ts, 8, 26))
+
+        [i: string]: Container<T>;
+>i : Symbol(i, Decl(recursiveGenericUnionType1.ts, 9, 9))
+>Container : Symbol(Container, Decl(recursiveGenericUnionType1.ts, 7, 22))
+>T : Symbol(T, Decl(recursiveGenericUnionType1.ts, 8, 26))
+
+    };
+    export type IStringContainer = Container<string>;
+>IStringContainer : Symbol(IStringContainer, Decl(recursiveGenericUnionType1.ts, 10, 6))
+>Container : Symbol(Container, Decl(recursiveGenericUnionType1.ts, 7, 22))
+}
+
+var x: Test1.Container<number>;
+>x : Symbol(x, Decl(recursiveGenericUnionType1.ts, 14, 3))
+>Test1 : Symbol(Test1, Decl(recursiveGenericUnionType1.ts, 0, 0))
+>Container : Symbol(Test1.Container, Decl(recursiveGenericUnionType1.ts, 0, 22))
+
+var s1: Test1.IStringContainer;
+>s1 : Symbol(s1, Decl(recursiveGenericUnionType1.ts, 16, 3))
+>Test1 : Symbol(Test1, Decl(recursiveGenericUnionType1.ts, 0, 0))
+>IStringContainer : Symbol(Test1.IStringContainer, Decl(recursiveGenericUnionType1.ts, 3, 6))
+
+var s2: Test2.IStringContainer;
+>s2 : Symbol(s2, Decl(recursiveGenericUnionType1.ts, 17, 3))
+>Test2 : Symbol(Test2, Decl(recursiveGenericUnionType1.ts, 5, 1))
+>IStringContainer : Symbol(Test2.IStringContainer, Decl(recursiveGenericUnionType1.ts, 10, 6))
+
+s1 = s2;
+>s1 : Symbol(s1, Decl(recursiveGenericUnionType1.ts, 16, 3))
+>s2 : Symbol(s2, Decl(recursiveGenericUnionType1.ts, 17, 3))
+
+s2 = s1;
+>s2 : Symbol(s2, Decl(recursiveGenericUnionType1.ts, 17, 3))
+>s1 : Symbol(s1, Decl(recursiveGenericUnionType1.ts, 16, 3))
+

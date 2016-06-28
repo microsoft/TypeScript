@@ -1,17 +1,21 @@
 === tests/cases/compiler/sourceMapValidationSwitch.ts ===
 var x = 10;
 >x : number
+>10 : number
 
 switch (x) {
 >x : number
 
     case 5:
+>5 : number
+
         x++;
 >x++ : number
 >x : number
 
         break;
     case 10:
+>10 : number
         {
             x--;
 >x-- : number
@@ -25,17 +29,21 @@ switch (x) {
 >x : number
 >x *10 : number
 >x : number
+>10 : number
 }
 switch (x)
 >x : number
 {
     case 5:
+>5 : number
+
         x++;
 >x++ : number
 >x : number
 
         break;
     case 10:
+>10 : number
         {
             x--;
 >x-- : number
@@ -50,5 +58,6 @@ switch (x)
 >x : number
 >x * 10 : number
 >x : number
+>10 : number
         }
 }

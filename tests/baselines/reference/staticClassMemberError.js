@@ -20,9 +20,9 @@ var C = (function () {
         s = 1;
     };
     return C;
-})();
+}());
 var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());

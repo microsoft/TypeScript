@@ -39,6 +39,7 @@ d.x = '';
 >d.x : string
 >d : D
 >x : string
+>'' : string
 
 b = d;
 >b = d : D
@@ -50,4 +51,5 @@ b.x = 1; // assigned number to string
 >b.x : Object
 >b : B
 >x : Object
+>1 : number
 

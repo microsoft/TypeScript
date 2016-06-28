@@ -30,7 +30,7 @@ var Point = (function () {
     }
     Point.Origin = { x: 0, y: 0 };
     return Point;
-})();
+}());
 var Point;
 (function (Point) {
     var Origin = ""; // not an error, since not exported
@@ -44,7 +44,7 @@ var A;
         }
         Point.Origin = { x: 0, y: 0 };
         return Point;
-    })();
+    }());
     A.Point = Point;
     var Point;
     (function (Point) {

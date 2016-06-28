@@ -1,7 +1,8 @@
-tests/cases/compiler/letDeclarations-validContexts.ts(20,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+tests/cases/compiler/letDeclarations-validContexts.ts(21,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
 
 
 ==== tests/cases/compiler/letDeclarations-validContexts.ts (1 errors) ====
+    
     
     
     // Control flow statements with blocks

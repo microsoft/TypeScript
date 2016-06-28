@@ -14,7 +14,7 @@ var C = (function () {
     // @internal
     C.prototype.bar = function () { };
     return C;
-})();
+}());
 
 
 //// [stripInternal1.d.ts]

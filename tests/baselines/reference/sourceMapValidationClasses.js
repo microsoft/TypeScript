@@ -50,7 +50,7 @@ var Foo;
                 return "<h1>" + this.greeting + "</h1>";
             };
             return Greeter;
-        })();
+        }());
         function foo(greeting) {
             return new Greeter(greeting);
         }

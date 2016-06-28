@@ -6,4 +6,4 @@ var v = (function () {
     function C() {
     }
     return C;
-})();
+}());

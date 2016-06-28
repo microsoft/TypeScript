@@ -1,0 +1,19 @@
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMethodInNonAbstractClass.ts(2,5): error TS1244: Abstract methods can only appear within an abstract class.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMethodInNonAbstractClass.ts(6,5): error TS1244: Abstract methods can only appear within an abstract class.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMethodInNonAbstractClass.ts(6,14): error TS1245: Method 'foo' cannot have an implementation because it is marked abstract.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMethodInNonAbstractClass.ts (3 errors) ====
+    class A {
+        abstract foo();
+        ~~~~~~~~
+!!! error TS1244: Abstract methods can only appear within an abstract class.
+    }
+    
+    class B {
+        abstract foo() {}
+        ~~~~~~~~
+!!! error TS1244: Abstract methods can only appear within an abstract class.
+                 ~~~
+!!! error TS1245: Method 'foo' cannot have an implementation because it is marked abstract.
+    }

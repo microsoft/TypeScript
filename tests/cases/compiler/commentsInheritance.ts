@@ -1,6 +1,6 @@
 // @target: ES5
 // @declaration: true
-// @comments: true
+// @removeComments: false
 
 /** i1 is interface with properties*/
 interface i1 {

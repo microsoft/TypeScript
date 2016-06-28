@@ -1,4 +1,5 @@
 === tests/cases/compiler/returnStatement1.ts ===
+
 function f() {
 >f : () => (s: any) => void
 
@@ -13,4 +14,5 @@ function f() {
     };
     ("harmless extra line");
 >("harmless extra line") : string
+>"harmless extra line" : string
 }

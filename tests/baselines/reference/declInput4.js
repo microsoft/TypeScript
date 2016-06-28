@@ -22,12 +22,12 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     var E = (function () {
         function E() {
         }
         return E;
-    })();
+    }());
     M.E = E;
     var D = (function () {
         function D() {
@@ -36,7 +36,7 @@ var M;
         D.prototype.m242 = function () { return null; };
         D.prototype.m26 = function (i) { };
         return D;
-    })();
+    }());
     M.D = D;
 })(M || (M = {}));
 

@@ -1,3 +1,6 @@
+// @allowUnusedLabels: true
+// @allowUnreachableCode: true
+
 /*
     0 .. \u0030
     9 .. \u0039

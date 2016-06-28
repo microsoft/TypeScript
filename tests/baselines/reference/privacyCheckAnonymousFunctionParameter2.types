@@ -1,6 +1,7 @@
 === tests/cases/compiler/privacyCheckAnonymousFunctionParameter2.ts ===
 export var x = 1;  // Makes this an external module 
 >x : number
+>1 : number
 
 interface Iterator<T> { x: T }
 >Iterator : Iterator<T>
@@ -33,5 +34,6 @@ module Q {
         foo(null);
 >foo(null) : (a: Iterator<{}>) => number
 >foo : <T>(x: (a: Iterator<T>) => number) => (a: Iterator<T>) => number
+>null : null
     }
 }

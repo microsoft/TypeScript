@@ -191,6 +191,7 @@ interface I2 {
 
 
 //// [declFileMethods_0.js]
+"use strict";
 var c1 = (function () {
     function c1() {
     }
@@ -271,7 +272,7 @@ var c1 = (function () {
         return a;
     };
     return c1;
-})();
+}());
 exports.c1 = c1;
 //// [declFileMethods_1.js]
 var c2 = (function () {
@@ -354,7 +355,7 @@ var c2 = (function () {
         return a;
     };
     return c2;
-})();
+}());
 
 
 //// [declFileMethods_0.d.ts]

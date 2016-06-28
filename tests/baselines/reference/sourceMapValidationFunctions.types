@@ -1,6 +1,7 @@
 === tests/cases/compiler/sourceMapValidationFunctions.ts ===
 var greetings = 0;
 >greetings : number
+>0 : number
 
 function greet(greeting: string): number {
 >greet : (greeting: string) => number
@@ -17,6 +18,7 @@ function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): 
 >greet2 : (greeting: string, n?: number, x?: string, ...restParams: string[]) => number
 >greeting : string
 >n : number
+>10 : number
 >x : string
 >restParams : string[]
 
@@ -31,6 +33,7 @@ function foo(greeting: string, n = 10, x?: string, ...restParams: string[])
 >foo : (greeting: string, n?: number, x?: string, ...restParams: string[]) => void
 >greeting : string
 >n : number
+>10 : number
 >x : string
 >restParams : string[]
 {

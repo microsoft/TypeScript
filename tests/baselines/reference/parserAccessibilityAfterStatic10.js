@@ -11,4 +11,4 @@ var Outer = (function () {
     }
     Outer.intI = function () { };
     return Outer;
-})();
+}());

@@ -25,4 +25,4 @@ var foo = (function () {
         goo = bar("test");
     }
     return foo;
-})();
+}());

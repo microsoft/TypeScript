@@ -1,0 +1,22 @@
+=== tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation2.ts ===
+// instantiating a derived type can cause an infinitely expanding type reference to be generated
+// which could be used in an assignment check for constraint satisfaction
+
+interface AA<T extends AA<T>> // now an error due to referencing type parameter in constraint
+>AA : Symbol(AA, Decl(infiniteExpansionThroughInstantiation2.ts, 0, 0))
+>T : Symbol(T, Decl(infiniteExpansionThroughInstantiation2.ts, 3, 13))
+>AA : Symbol(AA, Decl(infiniteExpansionThroughInstantiation2.ts, 0, 0))
+>T : Symbol(T, Decl(infiniteExpansionThroughInstantiation2.ts, 3, 13))
+{
+    x: T
+>x : Symbol(AA.x, Decl(infiniteExpansionThroughInstantiation2.ts, 4, 1))
+>T : Symbol(T, Decl(infiniteExpansionThroughInstantiation2.ts, 3, 13))
+}
+
+interface BB extends AA<AA<BB>>
+>BB : Symbol(BB, Decl(infiniteExpansionThroughInstantiation2.ts, 6, 1))
+>AA : Symbol(AA, Decl(infiniteExpansionThroughInstantiation2.ts, 0, 0))
+>AA : Symbol(AA, Decl(infiniteExpansionThroughInstantiation2.ts, 0, 0))
+>BB : Symbol(BB, Decl(infiniteExpansionThroughInstantiation2.ts, 6, 1))
+{
+}

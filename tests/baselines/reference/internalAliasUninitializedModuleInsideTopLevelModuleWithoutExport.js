@@ -13,7 +13,7 @@ x.foo();
 
 
 //// [internalAliasUninitializedModuleInsideTopLevelModuleWithoutExport.js]
-exports.x;
+"use strict";
 exports.x.foo();
 
 

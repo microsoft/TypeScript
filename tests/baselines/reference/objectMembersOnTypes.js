@@ -14,7 +14,7 @@ var AAA = (function () {
     function AAA() {
     }
     return AAA;
-})();
+}());
 var x;
 x.toString();
 var i;

@@ -3,6 +3,7 @@ var x: (a: number) => void = true ? (a) => a.toExponential() : (b) => b.toFixed(
 >x : (a: number) => void
 >a : number
 >true ? (a) => a.toExponential() : (b) => b.toFixed() : (a: number) => string
+>true : boolean
 >(a) => a.toExponential() : (a: number) => string
 >a : number
 >a.toExponential() : string
@@ -42,6 +43,7 @@ var x2: (a: A) => void = true ? (a) => a.foo : (b) => b.foo;
 >a : A
 >A : A
 >true ? (a) => a.foo : (b) => b.foo : (a: A) => number
+>true : boolean
 >(a) => a.foo : (a: A) => number
 >a : A
 >a.foo : number

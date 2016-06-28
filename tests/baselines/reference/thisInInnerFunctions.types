@@ -4,6 +4,7 @@ class Foo {
 
     x = "hello";
 >x : string
+>"hello" : string
 
     bar() {
 >bar : () => void
@@ -16,6 +17,7 @@ class Foo {
 >this.y : any
 >this : any
 >y : any
+>"hi" : string
 
             var f = () => this.y;  // 'this' should be not type to 'Foo' either
 >f : () => any

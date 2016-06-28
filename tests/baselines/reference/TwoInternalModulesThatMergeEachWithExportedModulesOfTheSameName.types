@@ -69,8 +69,8 @@ var l: { length: number };
 
 var l: X.Y.Z.Line;
 >l : { length: number; }
->X : unknown
->Y : unknown
->Z : unknown
+>X : any
+>Y : any
+>Z : any
 >Line : X.Y.Z.Line
 

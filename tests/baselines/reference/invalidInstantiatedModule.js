@@ -22,7 +22,7 @@ var M;
         function Point() {
         }
         return Point;
-    })();
+    }());
     M.Point = Point;
     M.Point = 1; // Error
 })(M || (M = {}));

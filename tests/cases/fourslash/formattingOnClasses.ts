@@ -77,7 +77,9 @@
 /////*60*/                                                                         private                foo       (       ns   :                 any    )                            {
 /////*61*/                                                                                                                return              ns.toString       (           )             ;
 /////*62*/                                                        }
-/////*63*/}
+/////*63*/                                                                         protected              bar        (            )  {                 }
+/////*64*/                                                                         protected     static   bar2       (            )  {                 }
+/////*65*/}
 format.document();
 goTo.marker("1");
 verify.currentLineContentIs("class a {");
@@ -204,4 +206,8 @@ verify.currentLineContentIs("        return ns.toString();");
 goTo.marker("62");
 verify.currentLineContentIs("    }");
 goTo.marker("63");
+verify.currentLineContentIs("    protected bar() { }");
+goTo.marker("64");
+verify.currentLineContentIs("    protected static bar2() { }");
+goTo.marker("65");
 verify.currentLineContentIs("}");

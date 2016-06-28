@@ -7,7 +7,12 @@ declare function foobar(a: typeof foo): typeof bar;
 >bar : () => any
 
 === tests/cases/compiler/a.ts ===
-/*! Keep this pinned comment */
+/*!=========
+    Keep this pinned comment
+   =========
+*/
+
+/*! Don't keep this pinned comment */
 declare function foo();
 >foo : () => any
 

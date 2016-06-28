@@ -85,7 +85,7 @@ var M2;
             return { x: 0, y: 0 };
         };
         return Point;
-    })();
+    }());
     M2.Point = Point;
 })(M2 || (M2 = {}));
 var m2;

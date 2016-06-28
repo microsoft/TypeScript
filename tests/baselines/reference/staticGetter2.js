@@ -17,4 +17,4 @@ var C = (function () {
         return this;
     };
     return C;
-})();
+}());

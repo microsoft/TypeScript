@@ -1,0 +1,587 @@
+=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts ===
+class Base {
+>Base : Symbol(Base, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 0, 0))
+
+    public a: string;
+>a : Symbol(Base.a, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 0, 12))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 2, 1))
+>Base : Symbol(Base, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 0, 0))
+
+    public b: string;
+>b : Symbol(Derived.b, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 4, 28))
+}
+
+class C {
+>C : Symbol(C, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 6, 1))
+
+    public c: string;
+>c : Symbol(C.c, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 8, 9))
+}
+
+var a1: { new <T>(x: T): T };
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 15))
+>x : Symbol(x, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 18))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 15))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 15))
+
+var b1: { new (): string };
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+
+var a2: { new <T>(x: T): T };
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 15))
+>x : Symbol(x, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 18))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 15))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 15))
+
+var b2: { new (x: string): number };
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 15))
+
+var a3: { new <T>(x?: T): T };
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 15))
+>x : Symbol(x, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 18))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 15))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 15))
+
+var b3: { new (x?: string): number };
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 15))
+
+var a4: { new <T>(...x: T[]): T };
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 15))
+>x : Symbol(x, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 18))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 15))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 15))
+
+var b4: { new (...x: string[]): number };
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 15))
+
+var a5: { new <T>(x: T, y: T): T };
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 15))
+>x : Symbol(x, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 18))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 15))
+>y : Symbol(y, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 23))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 15))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 15))
+
+var b5: { new (x: string, y: number): string };
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 15))
+>y : Symbol(y, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 25))
+
+var a6: { new <T, U extends T>(x: T, y: U): T };
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 15))
+>U : Symbol(U, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 17))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 15))
+>x : Symbol(x, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 31))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 15))
+>y : Symbol(y, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 36))
+>U : Symbol(U, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 17))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 15))
+
+var b6: { new (x: Base, y: C): Base };
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 15))
+>Base : Symbol(Base, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 0, 0))
+>y : Symbol(y, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 23))
+>C : Symbol(C, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 6, 1))
+>Base : Symbol(Base, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 0, 0))
+
+// operator <
+var r1a1 = a1 < b1;
+>r1a1 : Symbol(r1a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 31, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+
+var r1a2 = a2 < b2;
+>r1a2 : Symbol(r1a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 32, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+
+var r1a3 = a3 < b3;
+>r1a3 : Symbol(r1a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 33, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+
+var r1a4 = a4 < b4;
+>r1a4 : Symbol(r1a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 34, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+
+var r1a5 = a5 < b5;
+>r1a5 : Symbol(r1a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 35, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+
+var r1a6 = a6 < b6;
+>r1a6 : Symbol(r1a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 36, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+
+var r1b1 = b1 < a1;
+>r1b1 : Symbol(r1b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 38, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+
+var r1b2 = b2 < a2;
+>r1b2 : Symbol(r1b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 39, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+
+var r1b3 = b3 < a3;
+>r1b3 : Symbol(r1b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 40, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+
+var r1b4 = b4 < a4;
+>r1b4 : Symbol(r1b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 41, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+
+var r1b5 = b5 < a5;
+>r1b5 : Symbol(r1b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 42, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+
+var r1b6 = b6 < a6;
+>r1b6 : Symbol(r1b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 43, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+
+// operator >
+var r2a1 = a1 > b1;
+>r2a1 : Symbol(r2a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 46, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+
+var r2a2 = a2 > b2;
+>r2a2 : Symbol(r2a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 47, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+
+var r2a3 = a3 > b3;
+>r2a3 : Symbol(r2a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 48, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+
+var r2a4 = a4 > b4;
+>r2a4 : Symbol(r2a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 49, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+
+var r2a5 = a5 > b5;
+>r2a5 : Symbol(r2a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 50, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+
+var r2a6 = a6 > b6;
+>r2a6 : Symbol(r2a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 51, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+
+var r2b1 = b1 > a1;
+>r2b1 : Symbol(r2b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 53, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+
+var r2b2 = b2 > a2;
+>r2b2 : Symbol(r2b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 54, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+
+var r2b3 = b3 > a3;
+>r2b3 : Symbol(r2b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 55, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+
+var r2b4 = b4 > a4;
+>r2b4 : Symbol(r2b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 56, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+
+var r2b5 = b5 > a5;
+>r2b5 : Symbol(r2b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 57, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+
+var r2b6 = b6 > a6;
+>r2b6 : Symbol(r2b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 58, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+
+// operator <=
+var r3a1 = a1 <= b1;
+>r3a1 : Symbol(r3a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 61, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+
+var r3a2 = a2 <= b2;
+>r3a2 : Symbol(r3a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 62, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+
+var r3a3 = a3 <= b3;
+>r3a3 : Symbol(r3a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 63, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+
+var r3a4 = a4 <= b4;
+>r3a4 : Symbol(r3a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 64, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+
+var r3a5 = a5 <= b5;
+>r3a5 : Symbol(r3a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 65, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+
+var r3a6 = a6 <= b6;
+>r3a6 : Symbol(r3a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 66, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+
+var r3b1 = b1 <= a1;
+>r3b1 : Symbol(r3b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 68, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+
+var r3b2 = b2 <= a2;
+>r3b2 : Symbol(r3b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 69, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+
+var r3b3 = b3 <= a3;
+>r3b3 : Symbol(r3b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 70, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+
+var r3b4 = b4 <= a4;
+>r3b4 : Symbol(r3b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 71, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+
+var r3b5 = b5 <= a5;
+>r3b5 : Symbol(r3b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 72, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+
+var r3b6 = b6 <= a6;
+>r3b6 : Symbol(r3b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 73, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+
+// operator >=
+var r4a1 = a1 >= b1;
+>r4a1 : Symbol(r4a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 76, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+
+var r4a2 = a2 >= b2;
+>r4a2 : Symbol(r4a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 77, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+
+var r4a3 = a3 >= b3;
+>r4a3 : Symbol(r4a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 78, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+
+var r4a4 = a4 >= b4;
+>r4a4 : Symbol(r4a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 79, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+
+var r4a5 = a5 >= b5;
+>r4a5 : Symbol(r4a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 80, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+
+var r4a6 = a6 >= b6;
+>r4a6 : Symbol(r4a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 81, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+
+var r4b1 = b1 >= a1;
+>r4b1 : Symbol(r4b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 83, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+
+var r4b2 = b2 >= a2;
+>r4b2 : Symbol(r4b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 84, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+
+var r4b3 = b3 >= a3;
+>r4b3 : Symbol(r4b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 85, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+
+var r4b4 = b4 >= a4;
+>r4b4 : Symbol(r4b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 86, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+
+var r4b5 = b5 >= a5;
+>r4b5 : Symbol(r4b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 87, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+
+var r4b6 = b6 >= a6;
+>r4b6 : Symbol(r4b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 88, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+
+// operator ==
+var r5a1 = a1 == b1;
+>r5a1 : Symbol(r5a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 91, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+
+var r5a2 = a2 == b2;
+>r5a2 : Symbol(r5a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 92, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+
+var r5a3 = a3 == b3;
+>r5a3 : Symbol(r5a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 93, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+
+var r5a4 = a4 == b4;
+>r5a4 : Symbol(r5a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 94, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+
+var r5a5 = a5 == b5;
+>r5a5 : Symbol(r5a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 95, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+
+var r5a6 = a6 == b6;
+>r5a6 : Symbol(r5a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 96, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+
+var r5b1 = b1 == a1;
+>r5b1 : Symbol(r5b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 98, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+
+var r5b2 = b2 == a2;
+>r5b2 : Symbol(r5b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 99, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+
+var r5b3 = b3 == a3;
+>r5b3 : Symbol(r5b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 100, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+
+var r5b4 = b4 == a4;
+>r5b4 : Symbol(r5b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 101, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+
+var r5b5 = b5 == a5;
+>r5b5 : Symbol(r5b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 102, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+
+var r5b6 = b6 == a6;
+>r5b6 : Symbol(r5b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 103, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+
+// operator !=
+var r6a1 = a1 != b1;
+>r6a1 : Symbol(r6a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 106, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+
+var r6a2 = a2 != b2;
+>r6a2 : Symbol(r6a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 107, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+
+var r6a3 = a3 != b3;
+>r6a3 : Symbol(r6a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 108, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+
+var r6a4 = a4 != b4;
+>r6a4 : Symbol(r6a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 109, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+
+var r6a5 = a5 != b5;
+>r6a5 : Symbol(r6a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 110, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+
+var r6a6 = a6 != b6;
+>r6a6 : Symbol(r6a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 111, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+
+var r6b1 = b1 != a1;
+>r6b1 : Symbol(r6b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 113, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+
+var r6b2 = b2 != a2;
+>r6b2 : Symbol(r6b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 114, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+
+var r6b3 = b3 != a3;
+>r6b3 : Symbol(r6b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 115, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+
+var r6b4 = b4 != a4;
+>r6b4 : Symbol(r6b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 116, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+
+var r6b5 = b5 != a5;
+>r6b5 : Symbol(r6b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 117, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+
+var r6b6 = b6 != a6;
+>r6b6 : Symbol(r6b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 118, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+
+// operator ===
+var r7a1 = a1 === b1;
+>r7a1 : Symbol(r7a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 121, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+
+var r7a2 = a2 === b2;
+>r7a2 : Symbol(r7a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 122, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+
+var r7a3 = a3 === b3;
+>r7a3 : Symbol(r7a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 123, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+
+var r7a4 = a4 === b4;
+>r7a4 : Symbol(r7a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 124, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+
+var r7a5 = a5 === b5;
+>r7a5 : Symbol(r7a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 125, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+
+var r7a6 = a6 === b6;
+>r7a6 : Symbol(r7a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 126, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+
+var r7b1 = b1 === a1;
+>r7b1 : Symbol(r7b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 128, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+
+var r7b2 = b2 === a2;
+>r7b2 : Symbol(r7b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 129, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+
+var r7b3 = b3 === a3;
+>r7b3 : Symbol(r7b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 130, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+
+var r7b4 = b4 === a4;
+>r7b4 : Symbol(r7b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 131, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+
+var r7b5 = b5 === a5;
+>r7b5 : Symbol(r7b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 132, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+
+var r7b6 = b6 === a6;
+>r7b6 : Symbol(r7b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 133, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+
+// operator !==
+var r8a1 = a1 !== b1;
+>r8a1 : Symbol(r8a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 136, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+
+var r8a2 = a2 !== b2;
+>r8a2 : Symbol(r8a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 137, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+
+var r8a3 = a3 !== b3;
+>r8a3 : Symbol(r8a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 138, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+
+var r8a4 = a4 !== b4;
+>r8a4 : Symbol(r8a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 139, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+
+var r8a5 = a5 !== b5;
+>r8a5 : Symbol(r8a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 140, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+
+var r8a6 = a6 !== b6;
+>r8a6 : Symbol(r8a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 141, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+
+var r8b1 = b1 !== a1;
+>r8b1 : Symbol(r8b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 143, 3))
+>b1 : Symbol(b1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 13, 3))
+>a1 : Symbol(a1, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 12, 3))
+
+var r8b2 = b2 !== a2;
+>r8b2 : Symbol(r8b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 144, 3))
+>b2 : Symbol(b2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 16, 3))
+>a2 : Symbol(a2, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 15, 3))
+
+var r8b3 = b3 !== a3;
+>r8b3 : Symbol(r8b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 145, 3))
+>b3 : Symbol(b3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 19, 3))
+>a3 : Symbol(a3, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 18, 3))
+
+var r8b4 = b4 !== a4;
+>r8b4 : Symbol(r8b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 146, 3))
+>b4 : Symbol(b4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 22, 3))
+>a4 : Symbol(a4, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 21, 3))
+
+var r8b5 = b5 !== a5;
+>r8b5 : Symbol(r8b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 147, 3))
+>b5 : Symbol(b5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 25, 3))
+>a5 : Symbol(a5, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 24, 3))
+
+var r8b6 = b6 !== a6;
+>r8b6 : Symbol(r8b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 148, 3))
+>b6 : Symbol(b6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 28, 3))
+>a6 : Symbol(a6, Decl(comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.ts, 27, 3))
+

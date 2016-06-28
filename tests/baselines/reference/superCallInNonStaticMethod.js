@@ -51,11 +51,10 @@ class Other extends Doing {
 
 
 //// [superCallInNonStaticMethod.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Doing = (function () {
     function Doing() {
@@ -63,7 +62,7 @@ var Doing = (function () {
     Doing.prototype.instanceMethod = function () {
     };
     return Doing;
-})();
+}());
 var Other = (function (_super) {
     __extends(Other, _super);
     function Other() {
@@ -108,4 +107,4 @@ var Other = (function (_super) {
         configurable: true
     });
     return Other;
-})(Doing);
+}(Doing));

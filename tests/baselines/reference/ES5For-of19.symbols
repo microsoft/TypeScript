@@ -1,0 +1,19 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-of19.ts ===
+for (let v of []) {
+>v : Symbol(v, Decl(ES5For-of19.ts, 0, 8))
+
+    v;
+>v : Symbol(v, Decl(ES5For-of19.ts, 0, 8))
+
+    function foo() {
+>foo : Symbol(foo, Decl(ES5For-of19.ts, 1, 6))
+
+        for (const v of []) {
+>v : Symbol(v, Decl(ES5For-of19.ts, 3, 18))
+
+            v;
+>v : Symbol(v, Decl(ES5For-of19.ts, 3, 18))
+        }
+    }
+}
+

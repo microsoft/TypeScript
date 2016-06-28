@@ -1,0 +1,430 @@
+=== tests/cases/compiler/privacyFunc.ts ===
+module m1 {
+>m1 : Symbol(m1, Decl(privacyFunc.ts, 0, 0))
+
+    export class C1_public {
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+
+        private f1() {
+>f1 : Symbol(C1_public.f1, Decl(privacyFunc.ts, 1, 28))
+        }
+    }
+
+    class C2_private {
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+    }
+
+    export class C3_public {
+>C3_public : Symbol(C3_public, Decl(privacyFunc.ts, 7, 5))
+
+        constructor (m1_c3_c1: C1_public);
+>m1_c3_c1 : Symbol(m1_c3_c1, Decl(privacyFunc.ts, 10, 21))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+
+        constructor (m1_c3_c2: C2_private); //error
+>m1_c3_c2 : Symbol(m1_c3_c2, Decl(privacyFunc.ts, 11, 21))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+
+        constructor (m1_c3_c1_2: any) {
+>m1_c3_c1_2 : Symbol(m1_c3_c1_2, Decl(privacyFunc.ts, 12, 21))
+        }
+
+        private f1_private(m1_c3_f1_arg: C1_public) {
+>f1_private : Symbol(C3_public.f1_private, Decl(privacyFunc.ts, 13, 9))
+>m1_c3_f1_arg : Symbol(m1_c3_f1_arg, Decl(privacyFunc.ts, 15, 27))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+        }
+
+        public f2_public(m1_c3_f2_arg: C1_public) {
+>f2_public : Symbol(C3_public.f2_public, Decl(privacyFunc.ts, 16, 9))
+>m1_c3_f2_arg : Symbol(m1_c3_f2_arg, Decl(privacyFunc.ts, 18, 25))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+        }
+
+        private f3_private(m1_c3_f3_arg: C2_private) {
+>f3_private : Symbol(C3_public.f3_private, Decl(privacyFunc.ts, 19, 9))
+>m1_c3_f3_arg : Symbol(m1_c3_f3_arg, Decl(privacyFunc.ts, 21, 27))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+        }
+
+        public f4_public(m1_c3_f4_arg: C2_private) { // error
+>f4_public : Symbol(C3_public.f4_public, Decl(privacyFunc.ts, 22, 9))
+>m1_c3_f4_arg : Symbol(m1_c3_f4_arg, Decl(privacyFunc.ts, 24, 25))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+        }
+
+        private f5_private() {
+>f5_private : Symbol(C3_public.f5_private, Decl(privacyFunc.ts, 25, 9))
+
+            return new C1_public();
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+        }
+
+        public f6_public() {
+>f6_public : Symbol(C3_public.f6_public, Decl(privacyFunc.ts, 29, 9))
+
+            return new C1_public();
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+        }
+
+        private f7_private() {
+>f7_private : Symbol(C3_public.f7_private, Decl(privacyFunc.ts, 33, 9))
+
+            return new C2_private();
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+        }
+
+        public f8_public() {
+>f8_public : Symbol(C3_public.f8_public, Decl(privacyFunc.ts, 37, 9))
+
+            return new C2_private();  // error
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+        }
+
+        private f9_private(): C1_public {
+>f9_private : Symbol(C3_public.f9_private, Decl(privacyFunc.ts, 41, 9))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+
+            return new C1_public();
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+        }
+
+        public f10_public(): C1_public {
+>f10_public : Symbol(C3_public.f10_public, Decl(privacyFunc.ts, 45, 9))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+
+            return new C1_public();
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+        }
+
+        private f11_private(): C2_private {
+>f11_private : Symbol(C3_public.f11_private, Decl(privacyFunc.ts, 49, 9))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+
+            return new C2_private();
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+        }
+
+        public f12_public(): C2_private { // error
+>f12_public : Symbol(C3_public.f12_public, Decl(privacyFunc.ts, 53, 9))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+
+            return new C2_private(); //error
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+        }
+    }
+
+    class C4_private {
+>C4_private : Symbol(C4_private, Decl(privacyFunc.ts, 58, 5))
+
+        constructor (m1_c4_c1: C1_public);
+>m1_c4_c1 : Symbol(m1_c4_c1, Decl(privacyFunc.ts, 61, 21))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+
+        constructor (m1_c4_c2: C2_private);
+>m1_c4_c2 : Symbol(m1_c4_c2, Decl(privacyFunc.ts, 62, 21))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+
+        constructor (m1_c4_c1_2: any) {
+>m1_c4_c1_2 : Symbol(m1_c4_c1_2, Decl(privacyFunc.ts, 63, 21))
+        }
+        private f1_private(m1_c4_f1_arg: C1_public) {
+>f1_private : Symbol(C4_private.f1_private, Decl(privacyFunc.ts, 64, 9))
+>m1_c4_f1_arg : Symbol(m1_c4_f1_arg, Decl(privacyFunc.ts, 65, 27))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+        }
+
+        public f2_public(m1_c4_f2_arg: C1_public) {
+>f2_public : Symbol(C4_private.f2_public, Decl(privacyFunc.ts, 66, 9))
+>m1_c4_f2_arg : Symbol(m1_c4_f2_arg, Decl(privacyFunc.ts, 68, 25))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+        }
+
+        private f3_private(m1_c4_f3_arg: C2_private) {
+>f3_private : Symbol(C4_private.f3_private, Decl(privacyFunc.ts, 69, 9))
+>m1_c4_f3_arg : Symbol(m1_c4_f3_arg, Decl(privacyFunc.ts, 71, 27))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+        }
+
+        public f4_public(m1_c4_f4_arg: C2_private) {
+>f4_public : Symbol(C4_private.f4_public, Decl(privacyFunc.ts, 72, 9))
+>m1_c4_f4_arg : Symbol(m1_c4_f4_arg, Decl(privacyFunc.ts, 74, 25))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+        }
+
+
+        private f5_private() {
+>f5_private : Symbol(C4_private.f5_private, Decl(privacyFunc.ts, 75, 9))
+
+            return new C1_public();
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+        }
+
+        public f6_public() {
+>f6_public : Symbol(C4_private.f6_public, Decl(privacyFunc.ts, 80, 9))
+
+            return new C1_public();
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+        }
+
+        private f7_private() {
+>f7_private : Symbol(C4_private.f7_private, Decl(privacyFunc.ts, 84, 9))
+
+            return new C2_private();
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+        }
+
+        public f8_public() {
+>f8_public : Symbol(C4_private.f8_public, Decl(privacyFunc.ts, 88, 9))
+
+            return new C2_private();
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+        }
+
+
+        private f9_private(): C1_public {
+>f9_private : Symbol(C4_private.f9_private, Decl(privacyFunc.ts, 92, 9))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+
+            return new C1_public();
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+        }
+
+        public f10_public(): C1_public {
+>f10_public : Symbol(C4_private.f10_public, Decl(privacyFunc.ts, 97, 9))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+
+            return new C1_public();
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+        }
+
+        private f11_private(): C2_private {
+>f11_private : Symbol(C4_private.f11_private, Decl(privacyFunc.ts, 101, 9))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+
+            return new C2_private();
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+        }
+
+        public f12_public(): C2_private {
+>f12_public : Symbol(C4_private.f12_public, Decl(privacyFunc.ts, 105, 9))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+
+            return new C2_private();
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+        }
+    }
+
+    export class C5_public {
+>C5_public : Symbol(C5_public, Decl(privacyFunc.ts, 110, 5))
+
+        constructor (m1_c5_c: C1_public) {
+>m1_c5_c : Symbol(m1_c5_c, Decl(privacyFunc.ts, 113, 21))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+        }
+    }
+    
+    class C6_private {
+>C6_private : Symbol(C6_private, Decl(privacyFunc.ts, 115, 5))
+
+        constructor (m1_c6_c: C1_public) {
+>m1_c6_c : Symbol(m1_c6_c, Decl(privacyFunc.ts, 118, 21))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+        }
+    }
+    export class C7_public {
+>C7_public : Symbol(C7_public, Decl(privacyFunc.ts, 120, 5))
+
+        constructor (m1_c7_c: C2_private) { // error
+>m1_c7_c : Symbol(m1_c7_c, Decl(privacyFunc.ts, 122, 21))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+        }
+    }
+    
+    class C8_private {
+>C8_private : Symbol(C8_private, Decl(privacyFunc.ts, 124, 5))
+
+        constructor (m1_c8_c: C2_private) {
+>m1_c8_c : Symbol(m1_c8_c, Decl(privacyFunc.ts, 127, 21))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+        }
+    }
+
+    function f1_public(m1_f1_arg: C1_public) {
+>f1_public : Symbol(f1_public, Decl(privacyFunc.ts, 129, 5))
+>m1_f1_arg : Symbol(m1_f1_arg, Decl(privacyFunc.ts, 131, 23))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+    }
+
+    export function f2_public(m1_f2_arg: C1_public) {
+>f2_public : Symbol(f2_public, Decl(privacyFunc.ts, 132, 5))
+>m1_f2_arg : Symbol(m1_f2_arg, Decl(privacyFunc.ts, 134, 30))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+    }
+
+    function f3_public(m1_f3_arg: C2_private) {
+>f3_public : Symbol(f3_public, Decl(privacyFunc.ts, 135, 5))
+>m1_f3_arg : Symbol(m1_f3_arg, Decl(privacyFunc.ts, 137, 23))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+    }
+
+    export function f4_public(m1_f4_arg: C2_private) { // error
+>f4_public : Symbol(f4_public, Decl(privacyFunc.ts, 138, 5))
+>m1_f4_arg : Symbol(m1_f4_arg, Decl(privacyFunc.ts, 140, 30))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+    }
+
+
+    function f5_public() {
+>f5_public : Symbol(f5_public, Decl(privacyFunc.ts, 141, 5))
+
+        return new C1_public();
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+    }
+
+    export function f6_public() {
+>f6_public : Symbol(f6_public, Decl(privacyFunc.ts, 146, 5))
+
+        return new C1_public();
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+    }
+
+    function f7_public() {
+>f7_public : Symbol(f7_public, Decl(privacyFunc.ts, 150, 5))
+
+        return new C2_private();
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+    }
+
+    export function f8_public() {
+>f8_public : Symbol(f8_public, Decl(privacyFunc.ts, 154, 5))
+
+        return new C2_private();  // error
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+    }
+
+
+    function f9_private(): C1_public {
+>f9_private : Symbol(f9_private, Decl(privacyFunc.ts, 158, 5))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+
+        return new C1_public();
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+    }
+
+    export function f10_public(): C1_public {
+>f10_public : Symbol(f10_public, Decl(privacyFunc.ts, 163, 5))
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+
+        return new C1_public();
+>C1_public : Symbol(C1_public, Decl(privacyFunc.ts, 0, 11))
+    }
+
+    function f11_private(): C2_private {
+>f11_private : Symbol(f11_private, Decl(privacyFunc.ts, 167, 5))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+
+        return new C2_private();
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+    }
+
+    export function f12_public(): C2_private { // error
+>f12_public : Symbol(f12_public, Decl(privacyFunc.ts, 171, 5))
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+
+        return new C2_private(); //error
+>C2_private : Symbol(C2_private, Decl(privacyFunc.ts, 4, 5))
+    }
+}
+
+class C6_public {
+>C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+}
+
+class C7_public {
+>C7_public : Symbol(C7_public, Decl(privacyFunc.ts, 179, 1))
+
+    constructor (c7_c2: C6_public);
+>c7_c2 : Symbol(c7_c2, Decl(privacyFunc.ts, 182, 17))
+>C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+
+    constructor (c7_c1_2: any) {
+>c7_c1_2 : Symbol(c7_c1_2, Decl(privacyFunc.ts, 183, 17))
+    }
+    private f1_private(c7_f1_arg: C6_public) {
+>f1_private : Symbol(C7_public.f1_private, Decl(privacyFunc.ts, 184, 5))
+>c7_f1_arg : Symbol(c7_f1_arg, Decl(privacyFunc.ts, 185, 23))
+>C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+    }
+
+    public f2_public(c7_f2_arg: C6_public) {
+>f2_public : Symbol(C7_public.f2_public, Decl(privacyFunc.ts, 186, 5))
+>c7_f2_arg : Symbol(c7_f2_arg, Decl(privacyFunc.ts, 188, 21))
+>C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+    }
+
+    private f5_private() {
+>f5_private : Symbol(C7_public.f5_private, Decl(privacyFunc.ts, 189, 5))
+
+        return new C6_public();
+>C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+    }
+
+    public f6_public() {
+>f6_public : Symbol(C7_public.f6_public, Decl(privacyFunc.ts, 193, 5))
+
+        return new C6_public();
+>C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+    }
+
+    private f9_private(): C6_public {
+>f9_private : Symbol(C7_public.f9_private, Decl(privacyFunc.ts, 197, 5))
+>C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+
+        return new C6_public();
+>C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+    }
+
+    public f10_public(): C6_public {
+>f10_public : Symbol(C7_public.f10_public, Decl(privacyFunc.ts, 201, 5))
+>C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+
+        return new C6_public();
+>C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+    }
+}
+
+class C9_public {
+>C9_public : Symbol(C9_public, Decl(privacyFunc.ts, 206, 1))
+
+    constructor (c9_c: C6_public) {
+>c9_c : Symbol(c9_c, Decl(privacyFunc.ts, 209, 17))
+>C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+    }
+}
+  
+
+function f4_public(f4_arg: C6_public) {
+>f4_public : Symbol(f4_public, Decl(privacyFunc.ts, 211, 1))
+>f4_arg : Symbol(f4_arg, Decl(privacyFunc.ts, 214, 19))
+>C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+}
+
+
+
+function f6_public() {
+>f6_public : Symbol(f6_public, Decl(privacyFunc.ts, 215, 1))
+
+    return new C6_public();
+>C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+}
+
+
+function f10_public(): C6_public {
+>f10_public : Symbol(f10_public, Decl(privacyFunc.ts, 221, 1))
+>C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+
+    return new C6_public();
+>C6_public : Symbol(C6_public, Decl(privacyFunc.ts, 176, 1))
+}
+

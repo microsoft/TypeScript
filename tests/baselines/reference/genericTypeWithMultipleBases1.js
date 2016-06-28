@@ -20,6 +20,7 @@ x.m2();
 
 
 //// [genericTypeWithMultipleBases1.js]
+"use strict";
 var x;
 x.p1;
 x.m1();

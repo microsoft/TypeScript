@@ -1,0 +1,27 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck45.ts ===
+declare function foo<T, U>(x: T, fun: () => Iterator<(x: T) => U>, fun2: (y: U) => T): T;
+>foo : Symbol(foo, Decl(generatorTypeCheck45.ts, 0, 0))
+>T : Symbol(T, Decl(generatorTypeCheck45.ts, 0, 21))
+>U : Symbol(U, Decl(generatorTypeCheck45.ts, 0, 23))
+>x : Symbol(x, Decl(generatorTypeCheck45.ts, 0, 27))
+>T : Symbol(T, Decl(generatorTypeCheck45.ts, 0, 21))
+>fun : Symbol(fun, Decl(generatorTypeCheck45.ts, 0, 32))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>x : Symbol(x, Decl(generatorTypeCheck45.ts, 0, 54))
+>T : Symbol(T, Decl(generatorTypeCheck45.ts, 0, 21))
+>U : Symbol(U, Decl(generatorTypeCheck45.ts, 0, 23))
+>fun2 : Symbol(fun2, Decl(generatorTypeCheck45.ts, 0, 66))
+>y : Symbol(y, Decl(generatorTypeCheck45.ts, 0, 74))
+>U : Symbol(U, Decl(generatorTypeCheck45.ts, 0, 23))
+>T : Symbol(T, Decl(generatorTypeCheck45.ts, 0, 21))
+>T : Symbol(T, Decl(generatorTypeCheck45.ts, 0, 21))
+
+foo("", function* () { yield x => x.length }, p => undefined); // T is fixed, should be string
+>foo : Symbol(foo, Decl(generatorTypeCheck45.ts, 0, 0))
+>x : Symbol(x, Decl(generatorTypeCheck45.ts, 2, 28))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(generatorTypeCheck45.ts, 2, 28))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>p : Symbol(p, Decl(generatorTypeCheck45.ts, 2, 45))
+>undefined : Symbol(undefined)
+

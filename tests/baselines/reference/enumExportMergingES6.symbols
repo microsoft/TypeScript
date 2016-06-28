@@ -1,0 +1,22 @@
+=== tests/cases/conformance/enums/enumExportMergingES6.ts ===
+export enum Animals {
+>Animals : Symbol(Animals, Decl(enumExportMergingES6.ts, 0, 0), Decl(enumExportMergingES6.ts, 2, 1), Decl(enumExportMergingES6.ts, 5, 1))
+
+	Cat = 1
+>Cat : Symbol(Animals.Cat, Decl(enumExportMergingES6.ts, 0, 21))
+}
+export enum Animals {
+>Animals : Symbol(Animals, Decl(enumExportMergingES6.ts, 0, 0), Decl(enumExportMergingES6.ts, 2, 1), Decl(enumExportMergingES6.ts, 5, 1))
+
+	Dog = 2
+>Dog : Symbol(Animals.Dog, Decl(enumExportMergingES6.ts, 3, 21))
+}
+export enum Animals {
+>Animals : Symbol(Animals, Decl(enumExportMergingES6.ts, 0, 0), Decl(enumExportMergingES6.ts, 2, 1), Decl(enumExportMergingES6.ts, 5, 1))
+
+	CatDog = Cat | Dog
+>CatDog : Symbol(Animals.CatDog, Decl(enumExportMergingES6.ts, 6, 21))
+>Cat : Symbol(Animals.Cat, Decl(enumExportMergingES6.ts, 0, 21))
+>Dog : Symbol(Animals.Dog, Decl(enumExportMergingES6.ts, 3, 21))
+}
+

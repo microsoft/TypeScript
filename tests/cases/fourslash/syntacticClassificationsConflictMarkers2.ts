@@ -11,5 +11,5 @@ verify.syntacticClassificationsAre(
     c.comment("<<<<<<< HEAD"),
     c.keyword("class"), c.className("C"), c.punctuation("{"), c.punctuation("}"),
     c.comment("======="),
-    c.keyword("class"), c.text("D"), c.punctuation("{"), c.punctuation("}"),
+    c.keyword("class"), c.identifier("D"), c.punctuation("{"), c.punctuation("}"),
     c.comment(">>>>>>> Branch - a"));

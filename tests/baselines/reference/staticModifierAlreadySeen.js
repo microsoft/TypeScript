@@ -11,4 +11,4 @@ var C = (function () {
     C.bar = function () { };
     C.foo = 1;
     return C;
-})();
+}());

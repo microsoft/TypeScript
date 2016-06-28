@@ -1,0 +1,10 @@
+=== tests/cases/compiler/anonymousClassExpression1.ts ===
+function f() {
+>f : () => boolean
+
+    return typeof class {} === "function";
+>typeof class {} === "function" : boolean
+>typeof class {} : string
+>class {} : typeof (Anonymous class)
+>"function" : string
+}

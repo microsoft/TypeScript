@@ -91,7 +91,7 @@ var C = (function () {
         if (b === void 0) { b = 1; }
     };
     return C;
-})();
+}());
 // Function expressions
 var x = function (a, b, c) {
     if (a === void 0) { a = b; }

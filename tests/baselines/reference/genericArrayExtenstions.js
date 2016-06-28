@@ -6,3 +6,4 @@ concat(...items: T[]): T[];
 
 
 //// [genericArrayExtenstions.js]
+"use strict";

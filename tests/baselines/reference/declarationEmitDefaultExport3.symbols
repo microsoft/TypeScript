@@ -1,0 +1,6 @@
+=== tests/cases/compiler/declarationEmitDefaultExport3.ts ===
+export default function foo() {
+>foo : Symbol(foo, Decl(declarationEmitDefaultExport3.ts, 0, 0))
+
+    return ""
+}

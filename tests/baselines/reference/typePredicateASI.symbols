@@ -1,0 +1,14 @@
+=== tests/cases/conformance/expressions/typeGuards/typePredicateASI.ts ===
+interface I {
+>I : Symbol(I, Decl(typePredicateASI.ts, 0, 0))
+
+    foo(callback: (a: any, b: any) => void): I
+>foo : Symbol(I.foo, Decl(typePredicateASI.ts, 0, 13))
+>callback : Symbol(callback, Decl(typePredicateASI.ts, 1, 8))
+>a : Symbol(a, Decl(typePredicateASI.ts, 1, 19))
+>b : Symbol(b, Decl(typePredicateASI.ts, 1, 26))
+>I : Symbol(I, Decl(typePredicateASI.ts, 0, 0))
+
+    is(): boolean;
+>is : Symbol(I.is, Decl(typePredicateASI.ts, 1, 46))
+}

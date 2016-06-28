@@ -5,6 +5,7 @@
         "foo.ts",
         "../../../bar/bar.ts"
     ],
+    "noResolve": true,
     "declaration": true,
     "baselineCheck": true,
     "resolvedInputFiles": [

@@ -58,7 +58,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var c;
 var r = c["   "];
 var r2 = c["    "];

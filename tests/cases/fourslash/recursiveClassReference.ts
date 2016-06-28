@@ -11,4 +11,4 @@
 //// }
 
 goTo.marker();
-fs.verify.quickInfoExists();
+verify.quickInfoExists();

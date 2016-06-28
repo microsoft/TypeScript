@@ -24,6 +24,7 @@ module m2 {
 
 //// [collisionExportsRequireAndFunction.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     function exports() {
         return 1;
     }

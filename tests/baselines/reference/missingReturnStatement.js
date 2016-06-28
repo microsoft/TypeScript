@@ -16,6 +16,6 @@ var Test;
         Bug.prototype.foo = function () {
         };
         return Bug;
-    })();
+    }());
     Test.Bug = Bug;
 })(Test || (Test = {}));

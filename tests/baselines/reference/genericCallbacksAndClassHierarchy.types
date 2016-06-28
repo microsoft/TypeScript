@@ -31,7 +31,7 @@ module M {
     export class B<T> extends C1<A<T>> { }
 >B : B<T>
 >T : T
->C1 : C1<T>
+>C1 : C1<A<T>>
 >A : A<T>
 >T : T
 

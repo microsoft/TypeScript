@@ -1,0 +1,22 @@
+=== tests/cases/compiler/recursiveClassInstantiationsWithDefaultConstructors.ts ===
+var a = new TypeScript2.MemberNameArray()
+>a : Symbol(a, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 0, 3))
+>TypeScript2.MemberNameArray : Symbol(TypeScript2.MemberNameArray, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 4, 1))
+>TypeScript2 : Symbol(TypeScript2, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 0, 41))
+>MemberNameArray : Symbol(TypeScript2.MemberNameArray, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 4, 1))
+
+module TypeScript2 {
+>TypeScript2 : Symbol(TypeScript2, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 0, 41))
+
+export class MemberName {
+>MemberName : Symbol(MemberName, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 1, 20))
+
+public prefix: string = "";
+>prefix : Symbol(MemberName.prefix, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 2, 25))
+}
+export class MemberNameArray extends MemberName {
+>MemberNameArray : Symbol(MemberNameArray, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 4, 1))
+>MemberName : Symbol(MemberName, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 1, 20))
+}
+}
+

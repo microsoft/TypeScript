@@ -1,11 +1,13 @@
 tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(68,11): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(82,11): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(82,69): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate '{ x: number; z: Date; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; y: string; }'.
-    Property 'z' is missing in type '{ x: number; y: string; }'.
+    Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; z: Date; }'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(84,74): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
+  Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
 
 
-==== tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts (2 errors) ====
+==== tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts (3 errors) ====
     // Generic call with no parameters
     function noParams<T>() { }
     noParams();
@@ -91,12 +93,15 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts(82,11
         z?: Date;
     }
     var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
-              ~~~~~~~~~~~~~
+                                                                        ~~~~~
 !!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
 !!! error TS2453:   Type argument candidate '{ x: number; z: Date; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; y: string; }'.
-!!! error TS2453:     Property 'z' is missing in type '{ x: number; y: string; }'.
+!!! error TS2453:     Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; z: Date; }'.
     var a9e: {};
     var a9f = someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
+                                                                             ~~~~~
+!!! error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
+!!! error TS2345:   Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
     var a9f: A92;
     
     // Generic call with multiple parameters of generic type passed arguments with a single best common type

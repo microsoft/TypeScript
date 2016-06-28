@@ -1,0 +1,21 @@
+=== tests/cases/compiler/continueInLoopsWithCapturedBlockScopedBindings1.ts ===
+function foo() {
+>foo : Symbol(foo, Decl(continueInLoopsWithCapturedBlockScopedBindings1.ts, 0, 0))
+
+    for (const i of [0, 1]) {
+>i : Symbol(i, Decl(continueInLoopsWithCapturedBlockScopedBindings1.ts, 1, 14))
+
+        if (i === 0) {
+>i : Symbol(i, Decl(continueInLoopsWithCapturedBlockScopedBindings1.ts, 1, 14))
+
+            continue;
+        }
+
+        // Trigger non-simple-loop emit
+        (() => {
+            return i;
+>i : Symbol(i, Decl(continueInLoopsWithCapturedBlockScopedBindings1.ts, 1, 14))
+
+        })();
+    }
+}

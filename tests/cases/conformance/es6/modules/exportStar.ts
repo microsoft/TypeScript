@@ -1,4 +1,5 @@
 // @module: commonjs
+// @target: ES5
 
 // @filename: t1.ts
 export var x = 1;

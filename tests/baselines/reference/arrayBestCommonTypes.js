@@ -108,11 +108,10 @@ module NonEmptyTypes {
 
 
 //// [arrayBestCommonTypes.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var EmptyTypes;
 (function (EmptyTypes) {
@@ -120,19 +119,19 @@ var EmptyTypes;
         function base() {
         }
         return base;
-    })();
+    }());
     var base2 = (function () {
         function base2() {
         }
         return base2;
-    })();
+    }());
     var derived = (function (_super) {
         __extends(derived, _super);
         function derived() {
             _super.apply(this, arguments);
         }
         return derived;
-    })(base);
+    }(base));
     var f = (function () {
         function f() {
         }
@@ -171,7 +170,7 @@ var EmptyTypes;
             var b4 = [ifaceObj, baseObj, base2Obj];
         };
         return f;
-    })();
+    }());
 })(EmptyTypes || (EmptyTypes = {}));
 var NonEmptyTypes;
 (function (NonEmptyTypes) {
@@ -179,19 +178,19 @@ var NonEmptyTypes;
         function base() {
         }
         return base;
-    })();
+    }());
     var base2 = (function () {
         function base2() {
         }
         return base2;
-    })();
+    }());
     var derived = (function (_super) {
         __extends(derived, _super);
         function derived() {
             _super.apply(this, arguments);
         }
         return derived;
-    })(base);
+    }(base));
     var f = (function () {
         function f() {
         }
@@ -230,5 +229,5 @@ var NonEmptyTypes;
             var b4 = [ifaceObj, baseObj, base2Obj];
         };
         return f;
-    })();
+    }());
 })(NonEmptyTypes || (NonEmptyTypes = {}));

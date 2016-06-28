@@ -1,7 +1,7 @@
 === tests/cases/compiler/ipromise4.ts ===
 declare module Windows.Foundation {
->Windows : unknown
->Foundation : unknown
+>Windows : any
+>Foundation : any
 
     export interface IPromise<T> {
 >IPromise : IPromise<T>
@@ -21,8 +21,8 @@ declare module Windows.Foundation {
 >U : U
 >progress : (progress: any) => void
 >progress : any
->Windows : unknown
->Foundation : unknown
+>Windows : any
+>Foundation : any
 >IPromise : IPromise<T>
 >U : U
 
@@ -39,8 +39,8 @@ declare module Windows.Foundation {
 >U : U
 >progress : (progress: any) => void
 >progress : any
->Windows : unknown
->Foundation : unknown
+>Windows : any
+>Foundation : any
 >IPromise : IPromise<T>
 >U : U
 
@@ -57,8 +57,8 @@ declare module Windows.Foundation {
 >U : U
 >progress : (progress: any) => void
 >progress : any
->Windows : unknown
->Foundation : unknown
+>Windows : any
+>Foundation : any
 >IPromise : IPromise<T>
 >U : U
 
@@ -74,8 +74,8 @@ declare module Windows.Foundation {
 >U : U
 >progress : (progress: any) => void
 >progress : any
->Windows : unknown
->Foundation : unknown
+>Windows : any
+>Foundation : any
 >IPromise : IPromise<T>
 >U : U
 
@@ -94,9 +94,10 @@ declare module Windows.Foundation {
  
 var p: Windows.Foundation.IPromise<number> = null;
 >p : Windows.Foundation.IPromise<number>
->Windows : unknown
->Foundation : unknown
+>Windows : any
+>Foundation : any
 >IPromise : Windows.Foundation.IPromise<T>
+>null : null
  
 p.then(function (x) { } ); // should not error
 >p.then(function (x) { } ) : Windows.Foundation.IPromise<void>
@@ -115,6 +116,7 @@ p.then(function (x) { return "hello"; } ).then(function (x) { return x } ); // s
 >then : { <U>(success?: (value: number) => Windows.Foundation.IPromise<U>, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: number) => Windows.Foundation.IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: number) => U, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }
 >function (x) { return "hello"; } : (x: number) => string
 >x : number
+>"hello" : string
 >then : { <U>(success?: (value: string) => Windows.Foundation.IPromise<U>, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => Windows.Foundation.IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }
 >function (x) { return x } : (x: string) => string
 >x : string

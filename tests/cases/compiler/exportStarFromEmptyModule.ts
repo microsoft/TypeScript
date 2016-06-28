@@ -11,15 +11,15 @@ export class A {
 // empty
 
 // @filename: exportStarFromEmptyModule_module3.ts
-export * from "exportStarFromEmptyModule_module2";
-export * from "exportStarFromEmptyModule_module1";
+export * from "./exportStarFromEmptyModule_module2";
+export * from "./exportStarFromEmptyModule_module1";
 
 export class A {
     static q;
 }
 
 // @filename: exportStarFromEmptyModule_module4.ts
-import * as X from "exportStarFromEmptyModule_module3";
+import * as X from "./exportStarFromEmptyModule_module3";
 var s: X.A;
 X.A.q;
 X.A.r; // Error

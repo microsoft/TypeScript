@@ -53,14 +53,14 @@ var y3 = (function () {
     function y3() {
     }
     return y3;
-})(); // error
+}()); // error
 function y3a() { } // error
 var y3a = (function () {
     function y3a() {
     }
     y3a.prototype.foo = function () { };
     return y3a;
-})(); // error
+}()); // error
 // function then enum
 function y4() { } // error
 var y4;

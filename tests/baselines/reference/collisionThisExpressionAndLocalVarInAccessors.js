@@ -71,7 +71,7 @@ var class1 = (function () {
         configurable: true
     });
     return class1;
-})();
+}());
 var class2 = (function () {
     function class2() {
     }
@@ -99,4 +99,4 @@ var class2 = (function () {
         configurable: true
     });
     return class2;
-})();
+}());

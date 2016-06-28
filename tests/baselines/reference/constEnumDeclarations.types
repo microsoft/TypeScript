@@ -5,9 +5,11 @@ const enum E {
 
     A = 1,
 >A : E
+>1 : number
 
     B = 2,
 >B : E
+>2 : number
 
     C = A | B
 >C : E
@@ -21,6 +23,7 @@ const enum E2 {
 
     A = 1,
 >A : E2
+>1 : number
 
     B,
 >B : E2

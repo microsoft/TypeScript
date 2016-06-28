@@ -9,7 +9,7 @@ class C {
         this.x = (() => {
 >this.x = (() => {   var x = 1;   return this.x;  })() : number
 >this.x : number
->this : C
+>this : this
 >x : number
 >(() => {   var x = 1;   return this.x;  })() : number
 >(() => {   var x = 1;   return this.x;  }) : () => number
@@ -17,23 +17,25 @@ class C {
 
    var x = 1;
 >x : number
+>1 : number
 
    return this.x;
 >this.x : number
->this : C
+>this : this
 >x : number
 
   })();
   this.x = function() {
 >this.x = function() {   var x = 1;   return this.x;  }() : any
 >this.x : number
->this : C
+>this : this
 >x : number
 >function() {   var x = 1;   return this.x;  }() : any
 >function() {   var x = 1;   return this.x;  } : () => any
 
    var x = 1;
 >x : number
+>1 : number
 
    return this.x;
 >this.x : any
@@ -55,6 +57,7 @@ var messenger = {
 
     message: "Hello World",
 >message : string
+>"Hello World" : string
 
     start: function () {
 >start : () => number
@@ -68,6 +71,7 @@ var messenger = {
 >this.message : any
 >this : any
 >message : any
+>3000 : number
     }
 };
 

@@ -1,0 +1,54 @@
+===================================================================
+JsFile: sourceMapValidationLambdaSpanningMultipleLines.js
+mapUrl: sourceMapValidationLambdaSpanningMultipleLines.js.map
+sourceRoot: 
+sources: sourceMapValidationLambdaSpanningMultipleLines.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationLambdaSpanningMultipleLines.js
+sourceFile:sourceMapValidationLambdaSpanningMultipleLines.ts
+-------------------------------------------------------------------
+>>>(function (item) {
+1 >
+2 >^
+3 > ^^^^^^^^^^
+4 >           ^^^^
+5 >               ^^->
+1 >
+2 >(
+3 > (
+4 >           item: string
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 2) Source(1, 2) + SourceIndex(0)
+3 >Emitted(1, 12) Source(1, 3) + SourceIndex(0)
+4 >Emitted(1, 16) Source(1, 15) + SourceIndex(0)
+---
+>>>    return item;
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^
+1->) =>
+  >    
+2 >    
+3 >           item
+1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 12) Source(2, 5) + SourceIndex(0)
+3 >Emitted(2, 16) Source(2, 9) + SourceIndex(0)
+---
+>>>});
+1 >
+2 >^
+3 > ^
+4 >  ^
+5 >   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >item
+3 > 
+  > )
+4 >  
+1 >Emitted(3, 1) Source(2, 5) + SourceIndex(0)
+2 >Emitted(3, 2) Source(2, 9) + SourceIndex(0)
+3 >Emitted(3, 3) Source(3, 2) + SourceIndex(0)
+4 >Emitted(3, 4) Source(3, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationLambdaSpanningMultipleLines.js.map

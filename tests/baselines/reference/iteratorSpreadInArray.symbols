@@ -1,0 +1,31 @@
+=== tests/cases/conformance/es6/spread/iteratorSpreadInArray.ts ===
+var array = [...new SymbolIterator];
+>array : Symbol(array, Decl(iteratorSpreadInArray.ts, 0, 3))
+>SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInArray.ts, 0, 36))
+
+class SymbolIterator {
+>SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInArray.ts, 0, 36))
+
+    next() {
+>next : Symbol(SymbolIterator.next, Decl(iteratorSpreadInArray.ts, 2, 22))
+
+        return {
+            value: Symbol(),
+>value : Symbol(value, Decl(iteratorSpreadInArray.ts, 4, 16))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+
+            done: false
+>done : Symbol(done, Decl(iteratorSpreadInArray.ts, 5, 28))
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        return this;
+>this : Symbol(SymbolIterator, Decl(iteratorSpreadInArray.ts, 0, 36))
+    }
+}

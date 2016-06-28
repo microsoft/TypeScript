@@ -6,7 +6,6 @@ var m = M;
 //// [structuralTypeInDeclareFileForModule.js]
 var M;
 (function (M) {
-    M.x;
 })(M || (M = {}));
 var m = M;
 

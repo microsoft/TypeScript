@@ -1,0 +1,2 @@
+//// [sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.js.map]
+{"version":3,"file":"sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.js","sourceRoot":"","sources":["sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.ts"],"names":[],"mappings":"AAAA,IAAO,CAAC,CAKP;AALD,WAAO,CAAC,EAAC,CAAC;IACN;QACI,YAAY;QACZ,IAAI,CAAC,GAAG,CAAC,CAAC;IACd,CAAC;AACL,CAAC,EALM,CAAC,KAAD,CAAC,QAKP"}

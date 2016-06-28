@@ -5,6 +5,7 @@ function f<T>(x: T): T { return null; }
 >x : T
 >T : T
 >T : T
+>null : null
 
 var r = <T>(x: T) => x;
 >r : <T>(x: T) => T

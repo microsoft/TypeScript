@@ -196,4 +196,4 @@ var C = (function () {
     };
     C.prototype.priv_f8 = function (x3, y3) { };
     return C;
-})();
+}());

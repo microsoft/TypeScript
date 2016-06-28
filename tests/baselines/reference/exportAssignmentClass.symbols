@@ -1,0 +1,22 @@
+=== tests/cases/compiler/exportAssignmentClass_B.ts ===
+import D = require("exportAssignmentClass_A");
+>D : Symbol(D, Decl(exportAssignmentClass_B.ts, 0, 0))
+
+var d = new D();
+>d : Symbol(d, Decl(exportAssignmentClass_B.ts, 2, 3))
+>D : Symbol(D, Decl(exportAssignmentClass_B.ts, 0, 0))
+
+var x = d.p;
+>x : Symbol(x, Decl(exportAssignmentClass_B.ts, 3, 3))
+>d.p : Symbol(D.p, Decl(exportAssignmentClass_A.ts, 0, 9))
+>d : Symbol(d, Decl(exportAssignmentClass_B.ts, 2, 3))
+>p : Symbol(D.p, Decl(exportAssignmentClass_A.ts, 0, 9))
+
+=== tests/cases/compiler/exportAssignmentClass_A.ts ===
+class C { public p = 0; }
+>C : Symbol(C, Decl(exportAssignmentClass_A.ts, 0, 0))
+>p : Symbol(C.p, Decl(exportAssignmentClass_A.ts, 0, 9))
+
+export = C;
+>C : Symbol(C, Decl(exportAssignmentClass_A.ts, 0, 0))
+

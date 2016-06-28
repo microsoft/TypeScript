@@ -40,7 +40,7 @@ var Microsoft;
                     var res = Model.KnockoutExtentions;
                 };
                 return _Person;
-            })();
+            }());
             Model._Person = _Person;
         })(Model = PeopleAtWork.Model || (PeopleAtWork.Model = {}));
     })(PeopleAtWork = Microsoft.PeopleAtWork || (Microsoft.PeopleAtWork = {}));
@@ -61,7 +61,7 @@ var Microsoft;
                 function KnockoutExtentions() {
                 }
                 return KnockoutExtentions;
-            })();
+            }());
             Model.KnockoutExtentions = KnockoutExtentions;
         })(Model = PeopleAtWork.Model || (PeopleAtWork.Model = {}));
     })(PeopleAtWork = Microsoft.PeopleAtWork || (Microsoft.PeopleAtWork = {}));

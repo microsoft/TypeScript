@@ -1,0 +1,16 @@
+=== tests/cases/compiler/voidReturnLambdaValue.ts ===
+function foo(arg1, arg2, callback:(v1,v2,v3) => void):void {
+>foo : Symbol(foo, Decl(voidReturnLambdaValue.ts, 0, 0))
+>arg1 : Symbol(arg1, Decl(voidReturnLambdaValue.ts, 0, 13))
+>arg2 : Symbol(arg2, Decl(voidReturnLambdaValue.ts, 0, 18))
+>callback : Symbol(callback, Decl(voidReturnLambdaValue.ts, 0, 24))
+>v1 : Symbol(v1, Decl(voidReturnLambdaValue.ts, 0, 35))
+>v2 : Symbol(v2, Decl(voidReturnLambdaValue.ts, 0, 38))
+>v3 : Symbol(v3, Decl(voidReturnLambdaValue.ts, 0, 41))
+
+                return callback(arg1, arg2, arg2);
+>callback : Symbol(callback, Decl(voidReturnLambdaValue.ts, 0, 24))
+>arg1 : Symbol(arg1, Decl(voidReturnLambdaValue.ts, 0, 13))
+>arg2 : Symbol(arg2, Decl(voidReturnLambdaValue.ts, 0, 18))
+>arg2 : Symbol(arg2, Decl(voidReturnLambdaValue.ts, 0, 18))
+}

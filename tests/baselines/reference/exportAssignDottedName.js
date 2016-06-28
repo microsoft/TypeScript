@@ -11,10 +11,12 @@ export = foo1.x; // Ok
 
 
 //// [foo1.js]
+"use strict";
 function x() {
     return true;
 }
 exports.x = x;
 //// [foo2.js]
+"use strict";
 var foo1 = require('./foo1');
 module.exports = foo1.x;

@@ -4,6 +4,7 @@ module m2 {
 
     var a = 10;
 >a : number
+>10 : number
 
     a++;
 >a++ : number
@@ -17,6 +18,7 @@ module m3 {
 
         export var x = 30;
 >x : number
+>30 : number
     }
 
     export function foo() {

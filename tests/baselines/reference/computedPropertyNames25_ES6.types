@@ -6,6 +6,7 @@ class Base {
 >bar : () => number
 
         return 0;
+>0 : number
     }
 }
 class C extends Base {
@@ -16,8 +17,8 @@ class C extends Base {
 >foo : () => number
 
         var obj = {
->obj : {}
->{            [super.bar()]() { }        } : {}
+>obj : { [x: number]: () => void; }
+>{            [super.bar()]() { }        } : { [x: number]: () => void; }
 
             [super.bar()]() { }
 >super.bar() : number
@@ -27,5 +28,6 @@ class C extends Base {
 
         };
         return 0;
+>0 : number
     }
 }

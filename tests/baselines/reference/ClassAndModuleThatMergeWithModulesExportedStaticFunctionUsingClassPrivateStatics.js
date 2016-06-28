@@ -21,7 +21,7 @@ var clodule = (function () {
     }
     clodule.sfn = function (id) { return 42; };
     return clodule;
-})();
+}());
 var clodule;
 (function (clodule) {
     // error: duplicate identifier expected

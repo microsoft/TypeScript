@@ -1,10 +1,11 @@
 define(["require", "exports", "ref/m1", "../outputdir_module_multifolder_ref/m2"], function (require, exports, m1, m2) {
+    "use strict";
     exports.a1 = 10;
     var c1 = (function () {
         function c1() {
         }
         return c1;
-    })();
+    }());
     exports.c1 = c1;
     exports.instance1 = new c1();
     function f1() {

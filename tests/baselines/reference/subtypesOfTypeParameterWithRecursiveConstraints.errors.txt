@@ -1,103 +1,82 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(4,12): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(4,30): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(4,48): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(61,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(61,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(61,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(66,11): error TS2415: Class 'D2<T, U, V>' incorrectly extends base class 'Base<T>'.
   Types of property 'foo' are incompatible.
     Type 'U' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(66,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(66,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(66,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+      Type 'Foo<T>' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(68,9): error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(71,11): error TS2415: Class 'D3<T, U, V>' incorrectly extends base class 'Base<T>'.
   Types of property 'foo' are incompatible.
     Type 'V' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(71,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(71,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(71,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+      Type 'Foo<V>' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(73,9): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(76,11): error TS2415: Class 'D4<T, U, V>' incorrectly extends base class 'Base<U>'.
   Types of property 'foo' are incompatible.
     Type 'T' is not assignable to type 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(76,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(76,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(76,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+      Type 'Foo<U>' is not assignable to type 'U'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(78,9): error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(81,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(81,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(81,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(86,11): error TS2415: Class 'D6<T, U, V>' incorrectly extends base class 'Base<U>'.
   Types of property 'foo' are incompatible.
     Type 'V' is not assignable to type 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(86,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(86,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(86,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+      Type 'Foo<V>' is not assignable to type 'U'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(88,9): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(91,11): error TS2415: Class 'D7<T, U, V>' incorrectly extends base class 'Base<V>'.
   Types of property 'foo' are incompatible.
     Type 'T' is not assignable to type 'V'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(91,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(91,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(91,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+      Type 'Foo<U>' is not assignable to type 'V'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(93,9): error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'V'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(96,11): error TS2415: Class 'D8<T, U, V>' incorrectly extends base class 'Base<V>'.
   Types of property 'foo' are incompatible.
     Type 'U' is not assignable to type 'V'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(96,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(96,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(96,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+      Type 'Foo<T>' is not assignable to type 'V'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(98,9): error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'V'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(101,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(101,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(101,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(113,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(113,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(113,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(118,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(118,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(118,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(113,11): error TS2415: Class 'D1<T, U, V>' incorrectly extends base class 'Base2<T>'.
+  Types of property 'foo' are incompatible.
+    Type 'T' is not assignable to type 'Foo<T>'.
+      Type 'Foo<U>' is not assignable to type 'Foo<T>'.
+        Type 'U' is not assignable to type 'T'.
+          Type 'Foo<T>' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(120,9): error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(123,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(123,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(123,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(123,11): error TS2415: Class 'D3<T, U, V>' incorrectly extends base class 'Base2<T>'.
+  Types of property 'foo' are incompatible.
+    Type 'V' is not assignable to type 'Foo<T>'.
+      Type 'Foo<V>' is not assignable to type 'Foo<T>'.
+        Type 'V' is not assignable to type 'T'.
+          Type 'Foo<V>' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(125,9): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(128,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(128,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(128,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(130,9): error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(133,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(133,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(133,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(138,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(138,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(138,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(133,11): error TS2415: Class 'D5<T, U, V>' incorrectly extends base class 'Base2<U>'.
+  Types of property 'foo' are incompatible.
+    Type 'U' is not assignable to type 'Foo<U>'.
+      Type 'Foo<T>' is not assignable to type 'Foo<U>'.
+        Type 'T' is not assignable to type 'U'.
+          Type 'Foo<U>' is not assignable to type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(138,11): error TS2415: Class 'D6<T, U, V>' incorrectly extends base class 'Base2<U>'.
+  Types of property 'foo' are incompatible.
+    Type 'V' is not assignable to type 'Foo<U>'.
+      Type 'Foo<V>' is not assignable to type 'Foo<U>'.
+        Type 'V' is not assignable to type 'U'.
+          Type 'Foo<V>' is not assignable to type 'U'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(140,9): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(143,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(143,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(143,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(143,11): error TS2415: Class 'D7<T, U, V>' incorrectly extends base class 'Base2<V>'.
+  Types of property 'foo' are incompatible.
+    Type 'T' is not assignable to type 'Foo<V>'.
+      Type 'Foo<U>' is not assignable to type 'Foo<V>'.
+        Type 'U' is not assignable to type 'V'.
+          Type 'Foo<T>' is not assignable to type 'V'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(145,9): error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'V'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(148,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(148,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(148,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(148,11): error TS2415: Class 'D8<T, U, V>' incorrectly extends base class 'Base2<V>'.
+  Types of property 'foo' are incompatible.
+    Type 'U' is not assignable to type 'Foo<V>'.
+      Type 'Foo<T>' is not assignable to type 'Foo<V>'.
+        Type 'T' is not assignable to type 'V'.
+          Type 'Foo<U>' is not assignable to type 'V'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(150,9): error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'V'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(153,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(153,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts(153,50): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts (75 errors) ====
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts (24 errors) ====
     // checking whether other types are subtypes of type parameters with constraints
     
     class Foo<T> { foo: T; }
     function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: V) {
-               ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         // ok
         var r1 = true ? t : u;
         var r1 = true ? u : t;
@@ -155,12 +134,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         }
     
         class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: T;
             foo: T
         }
@@ -170,12 +143,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2415: Class 'D2<T, U, V>' incorrectly extends base class 'Base<T>'.
 !!! error TS2415:   Types of property 'foo' are incompatible.
 !!! error TS2415:     Type 'U' is not assignable to type 'T'.
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2415:       Type 'Foo<T>' is not assignable to type 'T'.
             [x: string]: T;
             foo: U
             ~~~~~~
@@ -187,12 +155,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2415: Class 'D3<T, U, V>' incorrectly extends base class 'Base<T>'.
 !!! error TS2415:   Types of property 'foo' are incompatible.
 !!! error TS2415:     Type 'V' is not assignable to type 'T'.
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2415:       Type 'Foo<V>' is not assignable to type 'T'.
             [x: string]: T;
             foo: V
             ~~~~~~
@@ -204,12 +167,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2415: Class 'D4<T, U, V>' incorrectly extends base class 'Base<U>'.
 !!! error TS2415:   Types of property 'foo' are incompatible.
 !!! error TS2415:     Type 'T' is not assignable to type 'U'.
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2415:       Type 'Foo<U>' is not assignable to type 'U'.
             [x: string]: U;
             foo: T
             ~~~~~~
@@ -217,12 +175,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         }
     
         class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: U;
             foo: U
         }
@@ -232,12 +184,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2415: Class 'D6<T, U, V>' incorrectly extends base class 'Base<U>'.
 !!! error TS2415:   Types of property 'foo' are incompatible.
 !!! error TS2415:     Type 'V' is not assignable to type 'U'.
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2415:       Type 'Foo<V>' is not assignable to type 'U'.
             [x: string]: U;
             foo: V
             ~~~~~~
@@ -249,12 +196,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2415: Class 'D7<T, U, V>' incorrectly extends base class 'Base<V>'.
 !!! error TS2415:   Types of property 'foo' are incompatible.
 !!! error TS2415:     Type 'T' is not assignable to type 'V'.
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2415:       Type 'Foo<U>' is not assignable to type 'V'.
             [x: string]: V;
             foo: T
             ~~~~~~
@@ -266,12 +208,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2415: Class 'D8<T, U, V>' incorrectly extends base class 'Base<V>'.
 !!! error TS2415:   Types of property 'foo' are incompatible.
 !!! error TS2415:     Type 'U' is not assignable to type 'V'.
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2415:       Type 'Foo<T>' is not assignable to type 'V'.
             [x: string]: V;
             foo: U
             ~~~~~~
@@ -279,12 +216,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         }
     
         class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: V;
             foo: V
         }
@@ -297,23 +228,18 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         }
     
         class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+              ~~
+!!! error TS2415: Class 'D1<T, U, V>' incorrectly extends base class 'Base2<T>'.
+!!! error TS2415:   Types of property 'foo' are incompatible.
+!!! error TS2415:     Type 'T' is not assignable to type 'Foo<T>'.
+!!! error TS2415:       Type 'Foo<U>' is not assignable to type 'Foo<T>'.
+!!! error TS2415:         Type 'U' is not assignable to type 'T'.
+!!! error TS2415:           Type 'Foo<T>' is not assignable to type 'T'.
             [x: string]: T;
             foo: T
         }
     
         class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: T;
             foo: U
             ~~~~~~
@@ -321,12 +247,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         }
     
         class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+              ~~
+!!! error TS2415: Class 'D3<T, U, V>' incorrectly extends base class 'Base2<T>'.
+!!! error TS2415:   Types of property 'foo' are incompatible.
+!!! error TS2415:     Type 'V' is not assignable to type 'Foo<T>'.
+!!! error TS2415:       Type 'Foo<V>' is not assignable to type 'Foo<T>'.
+!!! error TS2415:         Type 'V' is not assignable to type 'T'.
+!!! error TS2415:           Type 'Foo<V>' is not assignable to type 'T'.
             [x: string]: T;
             foo: V
             ~~~~~~
@@ -334,12 +261,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         }
     
         class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: U;
             foo: T
             ~~~~~~
@@ -347,23 +268,25 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         }
     
         class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+              ~~
+!!! error TS2415: Class 'D5<T, U, V>' incorrectly extends base class 'Base2<U>'.
+!!! error TS2415:   Types of property 'foo' are incompatible.
+!!! error TS2415:     Type 'U' is not assignable to type 'Foo<U>'.
+!!! error TS2415:       Type 'Foo<T>' is not assignable to type 'Foo<U>'.
+!!! error TS2415:         Type 'T' is not assignable to type 'U'.
+!!! error TS2415:           Type 'Foo<U>' is not assignable to type 'U'.
             [x: string]: U;
             foo: U
         }
     
         class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+              ~~
+!!! error TS2415: Class 'D6<T, U, V>' incorrectly extends base class 'Base2<U>'.
+!!! error TS2415:   Types of property 'foo' are incompatible.
+!!! error TS2415:     Type 'V' is not assignable to type 'Foo<U>'.
+!!! error TS2415:       Type 'Foo<V>' is not assignable to type 'Foo<U>'.
+!!! error TS2415:         Type 'V' is not assignable to type 'U'.
+!!! error TS2415:           Type 'Foo<V>' is not assignable to type 'U'.
             [x: string]: U;
             foo: V
             ~~~~~~
@@ -371,12 +294,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         }
     
         class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+              ~~
+!!! error TS2415: Class 'D7<T, U, V>' incorrectly extends base class 'Base2<V>'.
+!!! error TS2415:   Types of property 'foo' are incompatible.
+!!! error TS2415:     Type 'T' is not assignable to type 'Foo<V>'.
+!!! error TS2415:       Type 'Foo<U>' is not assignable to type 'Foo<V>'.
+!!! error TS2415:         Type 'U' is not assignable to type 'V'.
+!!! error TS2415:           Type 'Foo<T>' is not assignable to type 'V'.
             [x: string]: V;
             foo: T
             ~~~~~~
@@ -384,12 +308,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         }
     
         class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+              ~~
+!!! error TS2415: Class 'D8<T, U, V>' incorrectly extends base class 'Base2<V>'.
+!!! error TS2415:   Types of property 'foo' are incompatible.
+!!! error TS2415:     Type 'U' is not assignable to type 'Foo<V>'.
+!!! error TS2415:       Type 'Foo<T>' is not assignable to type 'Foo<V>'.
+!!! error TS2415:         Type 'T' is not assignable to type 'V'.
+!!! error TS2415:           Type 'Foo<U>' is not assignable to type 'V'.
             [x: string]: V;
             foo: U
             ~~~~~~
@@ -397,12 +322,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         }
     
         class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                   ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             [x: string]: V;
             foo: V
         }

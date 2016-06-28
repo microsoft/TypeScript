@@ -14,11 +14,13 @@ module A {
 >Origin : Point
 >new Point(0, 0) : Point
 >Point : typeof Point
+>0 : number
+>0 : number
 }
 
 // no code gen expected
 module B {
->B : unknown
+>B : any
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
 >a : typeof a
@@ -39,14 +41,16 @@ module C {
 
     var p: a.Point;
 >p : a.Point
->a : unknown
+>a : any
 >Point : a.Point
 
     var p = {x:0, y:0 };
 >p : a.Point
 >{x:0, y:0 } : { x: number; y: number; }
 >x : number
+>0 : number
 >y : number
+>0 : number
 }
 
 // code gen expected
@@ -63,6 +67,8 @@ module D {
 >a.Point : typeof a.Point
 >a : typeof a
 >Point : typeof a.Point
+>1 : number
+>1 : number
 }
 
 module E {
@@ -75,7 +81,7 @@ module E {
     export function xDist(x: a.Point) {
 >xDist : (x: a.Point) => number
 >x : a.Point
->a : unknown
+>a : any
 >Point : a.Point
 
         return (a.Origin.x - x.x);

@@ -1,4 +1,3 @@
-tests/cases/conformance/externalModules/foo1.ts(1,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
 tests/cases/conformance/externalModules/foo1.ts(9,12): error TS2339: Property 'x' does not exist on type 'C1'.
 tests/cases/conformance/externalModules/foo2.ts(8,12): error TS2339: Property 'y' does not exist on type 'C1'.
 tests/cases/conformance/externalModules/foo2.ts(13,8): error TS2339: Property 'x' does not exist on type 'C1'.
@@ -26,10 +25,8 @@ tests/cases/conformance/externalModules/foo2.ts(13,8): error TS2339: Property 'x
     	}
     }
     
-==== tests/cases/conformance/externalModules/foo1.ts (2 errors) ====
+==== tests/cases/conformance/externalModules/foo1.ts (1 errors) ====
     import foo2 = require('./foo2');
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
     export module M1 {
     	export class C1 {
     		m1: foo2.M1.C1;

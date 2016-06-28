@@ -7,4 +7,4 @@ var C\u0032 = (function () {
     function C\u0032() {
     }
     return C\u0032;
-})();
+}());

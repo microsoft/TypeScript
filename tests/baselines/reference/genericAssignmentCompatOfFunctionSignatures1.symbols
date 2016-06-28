@@ -1,0 +1,35 @@
+=== tests/cases/compiler/genericAssignmentCompatOfFunctionSignatures1.ts ===
+var x1 = function foo3<T, U extends { a: T; b: string }>(x: T, z: U) { }
+>x1 : Symbol(x1, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 0, 3))
+>foo3 : Symbol(foo3, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 0, 8))
+>T : Symbol(T, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 0, 23))
+>U : Symbol(U, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 0, 25))
+>a : Symbol(a, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 0, 37))
+>T : Symbol(T, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 0, 23))
+>b : Symbol(b, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 0, 43))
+>x : Symbol(x, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 0, 57))
+>T : Symbol(T, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 0, 23))
+>z : Symbol(z, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 0, 62))
+>U : Symbol(U, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 0, 25))
+
+var x2 = function foo3<T, U extends { a: T; b: number }>(x: T, z: U) { }
+>x2 : Symbol(x2, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 1, 3))
+>foo3 : Symbol(foo3, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 1, 8))
+>T : Symbol(T, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 1, 23))
+>U : Symbol(U, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 1, 25))
+>a : Symbol(a, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 1, 37))
+>T : Symbol(T, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 1, 23))
+>b : Symbol(b, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 1, 43))
+>x : Symbol(x, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 1, 57))
+>T : Symbol(T, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 1, 23))
+>z : Symbol(z, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 1, 62))
+>U : Symbol(U, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 1, 25))
+
+x1 = x2;
+>x1 : Symbol(x1, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 0, 3))
+>x2 : Symbol(x2, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 1, 3))
+
+x2 = x1;
+>x2 : Symbol(x2, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 1, 3))
+>x1 : Symbol(x1, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 0, 3))
+

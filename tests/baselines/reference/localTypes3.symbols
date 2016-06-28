@@ -1,0 +1,134 @@
+=== tests/cases/conformance/types/localTypes/localTypes3.ts ===
+function f1() {
+>f1 : Symbol(f1, Decl(localTypes3.ts, 0, 0))
+
+    function f() {
+>f : Symbol(f, Decl(localTypes3.ts, 0, 15))
+
+        class C<X, Y> {
+>C : Symbol(C, Decl(localTypes3.ts, 1, 18))
+>X : Symbol(X, Decl(localTypes3.ts, 2, 16))
+>Y : Symbol(Y, Decl(localTypes3.ts, 2, 18))
+
+            constructor(public x: X, public y: Y) { }
+>x : Symbol(C.x, Decl(localTypes3.ts, 3, 24))
+>X : Symbol(X, Decl(localTypes3.ts, 2, 16))
+>y : Symbol(C.y, Decl(localTypes3.ts, 3, 36))
+>Y : Symbol(Y, Decl(localTypes3.ts, 2, 18))
+        }
+        return C;
+>C : Symbol(C, Decl(localTypes3.ts, 1, 18))
+    }
+    let C = f();
+>C : Symbol(C, Decl(localTypes3.ts, 7, 7))
+>f : Symbol(f, Decl(localTypes3.ts, 0, 15))
+
+    let v = new C(10, "hello");
+>v : Symbol(v, Decl(localTypes3.ts, 8, 7))
+>C : Symbol(C, Decl(localTypes3.ts, 7, 7))
+
+    let x = v.x;
+>x : Symbol(x, Decl(localTypes3.ts, 9, 7))
+>v.x : Symbol(C.x, Decl(localTypes3.ts, 3, 24))
+>v : Symbol(v, Decl(localTypes3.ts, 8, 7))
+>x : Symbol(C.x, Decl(localTypes3.ts, 3, 24))
+
+    let y = v.y;
+>y : Symbol(y, Decl(localTypes3.ts, 10, 7))
+>v.y : Symbol(C.y, Decl(localTypes3.ts, 3, 36))
+>v : Symbol(v, Decl(localTypes3.ts, 8, 7))
+>y : Symbol(C.y, Decl(localTypes3.ts, 3, 36))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(localTypes3.ts, 11, 1))
+
+    function f<X>(x: X) {
+>f : Symbol(f, Decl(localTypes3.ts, 13, 15))
+>X : Symbol(X, Decl(localTypes3.ts, 14, 15))
+>x : Symbol(x, Decl(localTypes3.ts, 14, 18))
+>X : Symbol(X, Decl(localTypes3.ts, 14, 15))
+
+        class C<Y> {
+>C : Symbol(C, Decl(localTypes3.ts, 14, 25))
+>Y : Symbol(Y, Decl(localTypes3.ts, 15, 16))
+
+            public x = x;
+>x : Symbol(C.x, Decl(localTypes3.ts, 15, 20))
+>x : Symbol(x, Decl(localTypes3.ts, 14, 18))
+
+            constructor(public y: Y) { }
+>y : Symbol(C.y, Decl(localTypes3.ts, 17, 24))
+>Y : Symbol(Y, Decl(localTypes3.ts, 15, 16))
+        }
+        return C;
+>C : Symbol(C, Decl(localTypes3.ts, 14, 25))
+    }
+    let C = f(10);
+>C : Symbol(C, Decl(localTypes3.ts, 21, 7))
+>f : Symbol(f, Decl(localTypes3.ts, 13, 15))
+
+    let v = new C("hello");
+>v : Symbol(v, Decl(localTypes3.ts, 22, 7))
+>C : Symbol(C, Decl(localTypes3.ts, 21, 7))
+
+    let x = v.x;
+>x : Symbol(x, Decl(localTypes3.ts, 23, 7))
+>v.x : Symbol(C.x, Decl(localTypes3.ts, 15, 20))
+>v : Symbol(v, Decl(localTypes3.ts, 22, 7))
+>x : Symbol(C.x, Decl(localTypes3.ts, 15, 20))
+
+    let y = v.y;
+>y : Symbol(y, Decl(localTypes3.ts, 24, 7))
+>v.y : Symbol(C.y, Decl(localTypes3.ts, 17, 24))
+>v : Symbol(v, Decl(localTypes3.ts, 22, 7))
+>y : Symbol(C.y, Decl(localTypes3.ts, 17, 24))
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(localTypes3.ts, 25, 1))
+
+    function f<X, Y>(x: X, y: Y) {
+>f : Symbol(f, Decl(localTypes3.ts, 27, 15))
+>X : Symbol(X, Decl(localTypes3.ts, 28, 15))
+>Y : Symbol(Y, Decl(localTypes3.ts, 28, 17))
+>x : Symbol(x, Decl(localTypes3.ts, 28, 21))
+>X : Symbol(X, Decl(localTypes3.ts, 28, 15))
+>y : Symbol(y, Decl(localTypes3.ts, 28, 26))
+>Y : Symbol(Y, Decl(localTypes3.ts, 28, 17))
+
+        class C {
+>C : Symbol(C, Decl(localTypes3.ts, 28, 34))
+
+            public x = x;
+>x : Symbol(C.x, Decl(localTypes3.ts, 29, 17))
+>x : Symbol(x, Decl(localTypes3.ts, 28, 21))
+
+            public y = y;
+>y : Symbol(C.y, Decl(localTypes3.ts, 30, 25))
+>y : Symbol(y, Decl(localTypes3.ts, 28, 26))
+        }
+        return C;
+>C : Symbol(C, Decl(localTypes3.ts, 28, 34))
+    }
+    let C = f(10, "hello");
+>C : Symbol(C, Decl(localTypes3.ts, 35, 7))
+>f : Symbol(f, Decl(localTypes3.ts, 27, 15))
+
+    let v = new C();
+>v : Symbol(v, Decl(localTypes3.ts, 36, 7))
+>C : Symbol(C, Decl(localTypes3.ts, 35, 7))
+
+    let x = v.x;
+>x : Symbol(x, Decl(localTypes3.ts, 37, 7))
+>v.x : Symbol(C.x, Decl(localTypes3.ts, 29, 17))
+>v : Symbol(v, Decl(localTypes3.ts, 36, 7))
+>x : Symbol(C.x, Decl(localTypes3.ts, 29, 17))
+
+    let y = v.y;
+>y : Symbol(y, Decl(localTypes3.ts, 38, 7))
+>v.y : Symbol(C.y, Decl(localTypes3.ts, 30, 25))
+>v : Symbol(v, Decl(localTypes3.ts, 36, 7))
+>y : Symbol(C.y, Decl(localTypes3.ts, 30, 25))
+}
+

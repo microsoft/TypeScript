@@ -1,4 +1,5 @@
 //// [forBreakStatements.ts]
+
 for (; ;) {
     break;
 }

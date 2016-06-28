@@ -52,7 +52,7 @@ var C1 = (function () {
         C1.s = 1; // should be ok
     };
     return C1;
-})();
+}());
 var C2 = (function () {
     function C2() {
         this.barback = "";
@@ -66,4 +66,4 @@ var C2 = (function () {
         configurable: true
     });
     return C2;
-})();
+}());

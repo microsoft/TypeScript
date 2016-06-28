@@ -1,0 +1,16 @@
+=== tests/cases/compiler/typeArgumentInferenceApparentType1.ts ===
+function method<T>(iterable: Iterable<T>): T {
+>method : Symbol(method, Decl(typeArgumentInferenceApparentType1.ts, 0, 0))
+>T : Symbol(T, Decl(typeArgumentInferenceApparentType1.ts, 0, 16))
+>iterable : Symbol(iterable, Decl(typeArgumentInferenceApparentType1.ts, 0, 19))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(typeArgumentInferenceApparentType1.ts, 0, 16))
+>T : Symbol(T, Decl(typeArgumentInferenceApparentType1.ts, 0, 16))
+
+    return;
+}
+
+var res: string = method("test");
+>res : Symbol(res, Decl(typeArgumentInferenceApparentType1.ts, 4, 3))
+>method : Symbol(method, Decl(typeArgumentInferenceApparentType1.ts, 0, 0))
+

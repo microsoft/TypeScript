@@ -15,4 +15,4 @@ function foo(_a) {
 
 //// [declarationEmitDestructuring3.d.ts]
 declare function bar([x, z, ...w]: any[]): void;
-declare function foo([x, ...y]?: (string | number | boolean)[]): void;
+declare function foo([x, ...y]?: (number | string | boolean)[]): void;

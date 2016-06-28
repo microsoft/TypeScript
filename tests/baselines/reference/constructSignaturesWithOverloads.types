@@ -20,6 +20,8 @@ var r1 = new C(1, '');
 >r1 : C
 >new C(1, '') : C
 >C : typeof C
+>1 : number
+>'' : string
 
 class C2<T> {
 >C2 : C2<T>
@@ -44,6 +46,8 @@ var r2 = new C2(1, '');
 >r2 : C2<number>
 >new C2(1, '') : C2<number>
 >C2 : typeof C2
+>1 : number
+>'' : string
 
 interface I {
 >I : I
@@ -67,6 +71,8 @@ var r3 = new i(1, '');
 >r3 : C
 >new i(1, '') : C
 >i : I
+>1 : number
+>'' : string
 
 interface I2<T> {
 >I2 : I2<T>
@@ -112,6 +118,8 @@ var r4 = new i2(1, '');
 >r4 : C2<number>
 >new i2(1, '') : C2<number>
 >i2 : I2<number>
+>1 : number
+>'' : string
 
 var a: {
 >a : { new (x: number, y?: string): C; new (x: number, y: string): C; }
@@ -131,6 +139,8 @@ var r5 = new a(1, '');
 >r5 : C
 >new a(1, '') : C
 >a : { new (x: number, y?: string): C; new (x: number, y: string): C; }
+>1 : number
+>'' : string
 
 var b: {
 >b : { new <T>(x: T, y?: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
@@ -156,4 +166,6 @@ var r6 = new b(1, '');
 >r6 : C2<number>
 >new b(1, '') : C2<number>
 >b : { new <T>(x: T, y?: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
+>1 : number
+>'' : string
 

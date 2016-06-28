@@ -38,7 +38,7 @@ var A = (function () {
         return this.one(source, 42);
     };
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
@@ -49,4 +49,4 @@ var B = (function () {
         return this.one(source, 42);
     };
     return B;
-})();
+}());

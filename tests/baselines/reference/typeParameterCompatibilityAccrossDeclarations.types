@@ -10,6 +10,7 @@ var a = {
 >y : T
 >T : T
 >T : T
+>null : null
 }
 var a2 = {
 >a2 : { x: (y: any) => any; }
@@ -19,6 +20,7 @@ var a2 = {
 >x : (y: any) => any
 >function (y: any): any { return null; } : (y: any) => any
 >y : any
+>null : null
 }
 export interface I {
 >I : I

@@ -1,14 +1,18 @@
 === tests/cases/conformance/es6/templates/templateStringWithEmbeddedComments.ts ===
 `head${ // single line comment
-No type information for this code.10
-No type information for this code.}
-No type information for this code.middle${
-No type information for this code./* Multi-
-No type information for this code. * line
-No type information for this code. * comment
-No type information for this code. */
-No type information for this code. 20
-No type information for this code. // closing comment
-No type information for this code.}
-No type information for this code.tail`;
-No type information for this code.
+>`head${ // single line comment10}middle${/* Multi- * line * comment */ 20 // closing comment}tail` : string
+
+10
+>10 : number
+}
+middle${
+/* Multi-
+ * line
+ * comment
+ */
+ 20
+>20 : number
+
+ // closing comment
+}
+tail`;

@@ -1,17 +1,10 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts(5,33): error TS2322: Type 'number' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts(6,18): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts(6,37): error TS2322: Type 'T' is not assignable to type 'U'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts(7,18): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts(7,37): error TS2322: Type 'U' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts(8,18): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts(8,31): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts(8,56): error TS2322: Type 'U' is not assignable to type 'V'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts(9,18): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts(9,31): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts(9,50): error TS2322: Type 'V' is not assignable to type 'U'.
+  Type 'T' is not assignable to type 'V'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts (11 errors) ====
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts (3 errors) ====
     // Generic typed parameters with initializers
     
     function foo<T>(x: T = null) { return x; } // ok
@@ -20,26 +13,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericC
                                     ~~~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'T'.
     function foo4<T, U extends T>(x: T, y: U = x) { } // error
-                     ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                         ~~~~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'U'.
     function foo5<T, U extends T>(x: U, y: T = x) { } // ok
-                     ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                        ~~~~~~~~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
     function foo6<T, U extends T, V extends U>(x: T, y: U, z: V = y) { } // error
-                     ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                  ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                            ~~~~~~~~
 !!! error TS2322: Type 'U' is not assignable to type 'V'.
+!!! error TS2322:   Type 'T' is not assignable to type 'V'.
     function foo7<T, U extends T, V extends U>(x: V, y: U = x) { } // should be ok
-                     ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                  ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-                                                     ~~~~~~~~
-!!! error TS2322: Type 'V' is not assignable to type 'U'.

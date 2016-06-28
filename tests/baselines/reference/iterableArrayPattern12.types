@@ -37,6 +37,7 @@ class FooIterator {
 
             done: false
 >done : boolean
+>false : boolean
 
         };
     }
@@ -47,6 +48,6 @@ class FooIterator {
 >iterator : symbol
 
         return this;
->this : FooIterator
+>this : this
     }
 }

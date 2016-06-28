@@ -1,0 +1,9 @@
+=== tests/cases/compiler/genericCallWithNonGenericArgs1.ts ===
+function f<T>(x: any) { }
+>f : Symbol(f, Decl(genericCallWithNonGenericArgs1.ts, 0, 0))
+>T : Symbol(T, Decl(genericCallWithNonGenericArgs1.ts, 0, 11))
+>x : Symbol(x, Decl(genericCallWithNonGenericArgs1.ts, 0, 14))
+
+f<any>(null)
+>f : Symbol(f, Decl(genericCallWithNonGenericArgs1.ts, 0, 0))
+

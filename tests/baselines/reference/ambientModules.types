@@ -11,4 +11,5 @@ Foo.Bar.foo = 5;
 >Foo : typeof Foo
 >Bar : typeof Foo.Bar
 >foo : any
+>5 : number
 

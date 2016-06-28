@@ -13,5 +13,5 @@ var C1 = (function () {
         this.x = x;
     }
     return C1;
-})();
+}());
 var c1 = new C1(0);

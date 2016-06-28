@@ -1,0 +1,7 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext5.ts ===
+class C {
+>C : C
+
+    *generator(): any { }
+>generator : () => any
+}

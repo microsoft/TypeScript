@@ -1,0 +1,38 @@
+=== tests/cases/compiler/typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts ===
+type TreeNode = {
+>TreeNode : { name: string; parent: TreeNode; }
+
+    name: string;
+>name : string
+
+    parent: TreeNode;
+>parent : { name: string; parent: TreeNode; }
+>TreeNode : { name: string; parent: TreeNode; }
+}
+
+type TreeNodeMiddleman = {
+>TreeNodeMiddleman : { name: string; parent: { name: string; parent: TreeNode; }; }
+
+    name: string;
+>name : string
+
+    parent: TreeNode;
+>parent : { name: string; parent: TreeNode; }
+>TreeNode : { name: string; parent: TreeNode; }
+}
+
+var nodes: TreeNodeMiddleman[];
+>nodes : { name: string; parent: { name: string; parent: TreeNode; }; }[]
+>TreeNodeMiddleman : { name: string; parent: { name: string; parent: TreeNode; }; }
+
+nodes.map(n => n.name);
+>nodes.map(n => n.name) : string[]
+>nodes.map : <U>(callbackfn: (value: { name: string; parent: { name: string; parent: TreeNode; }; }, index: number, array: { name: string; parent: { name: string; parent: TreeNode; }; }[]) => U, thisArg?: any) => U[]
+>nodes : { name: string; parent: { name: string; parent: TreeNode; }; }[]
+>map : <U>(callbackfn: (value: { name: string; parent: { name: string; parent: TreeNode; }; }, index: number, array: { name: string; parent: { name: string; parent: TreeNode; }; }[]) => U, thisArg?: any) => U[]
+>n => n.name : (n: { name: string; parent: { name: string; parent: TreeNode; }; }) => string
+>n : { name: string; parent: { name: string; parent: TreeNode; }; }
+>n.name : string
+>n : { name: string; parent: { name: string; parent: TreeNode; }; }
+>name : string
+

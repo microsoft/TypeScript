@@ -4,7 +4,7 @@
 (...arg) => 103;
 (...arg:number [] = []) => 104;
 
-// Non optional parameter following an optional one
+// Uninitialized parameter makes the initialized one required
 (arg1 = 1, arg2) => 1; 
 
 //// [fatarrowfunctionsOptionalArgsErrors1.js]
@@ -24,14 +24,13 @@
     return 103;
 });
 (function () {
-    if (arg === void 0) { arg = []; }
     var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         arg[_i - 0] = arguments[_i];
     }
     return 104;
 });
-// Non optional parameter following an optional one
+// Uninitialized parameter makes the initialized one required
 (function (arg1, arg2) {
     if (arg1 === void 0) { arg1 = 1; }
     return 1;

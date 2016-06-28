@@ -80,7 +80,7 @@ var Bug = (function () {
         }
     ];
     return Bug;
-})();
+}());
 // Valid use of this in a property bound decl
 var A = (function () {
     function A() {
@@ -109,7 +109,7 @@ var A = (function () {
         };
     }
     return A;
-})();
+}());
 var B = (function () {
     function B() {
         var _this = this;
@@ -131,4 +131,4 @@ var B = (function () {
         };
     }
     return B;
-})();
+}());

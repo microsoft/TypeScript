@@ -45,5 +45,5 @@ var Greeter = (function () {
         configurable: true
     });
     return Greeter;
-})();
+}());
 //# sourceMappingURL=sourceMapValidationClass.js.map

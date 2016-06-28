@@ -32,6 +32,7 @@
     }
 
 //// [parserModule1.js]
+"use strict";
 var CompilerDiagnostics;
 (function (CompilerDiagnostics) {
     CompilerDiagnostics.debug = false;

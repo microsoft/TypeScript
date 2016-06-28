@@ -7,6 +7,7 @@ module A {
 
     export var x = 12;
 >x : number
+>12 : number
 
     function lt12() {
 >lt12 : () => boolean
@@ -14,6 +15,7 @@ module A {
         return x < 12;
 >x < 12 : boolean
 >x : number
+>12 : number
     }
 } 
 
@@ -23,6 +25,7 @@ module B {
 
     var x = 12;
 >x : number
+>12 : number
 
     function lt12() {
 >lt12 : () => boolean
@@ -30,6 +33,7 @@ module B {
         return x < 12;
 >x < 12 : boolean
 >x : number
+>12 : number
     }
 }
 
@@ -41,6 +45,7 @@ module C {
 >no : () => boolean
 
         return false;
+>false : boolean
     }
 }
 
@@ -52,6 +57,7 @@ module D {
 >yes : () => boolean
 
         return true;
+>true : boolean
     }
 }
 
@@ -79,6 +85,7 @@ module E {
 
         export var x = 42;
 >x : number
+>42 : number
     }
 }
 
@@ -107,5 +114,6 @@ module F {
 
         var x = 42;
 >x : number
+>42 : number
     }
 }

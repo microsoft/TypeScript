@@ -6,9 +6,9 @@
     ],
     "outDir": "outdir/simple",
     "sourceMap": true,
-    "sourceRoot": "http://typescript.codeplex.com/",
     "declaration": true,
     "baselineCheck": true,
+    "sourceRoot": "http://typescript.codeplex.com/",
     "resolvedInputFiles": [
         "lib.d.ts",
         "test.ts"

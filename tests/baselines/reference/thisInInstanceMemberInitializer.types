@@ -3,8 +3,8 @@ class C {
 >C : C
 
     x = this;
->x : C
->this : C
+>x : this
+>this : this
 }
 
 class D<T> {
@@ -12,8 +12,8 @@ class D<T> {
 >T : T
 
     x = this;
->x : D<T>
->this : D<T>
+>x : this
+>this : this
 
     y: T;
 >y : T

@@ -1,0 +1,4 @@
+=== tests/cases/compiler/destructuringWithNumberLiteral.ts ===
+var { toExponential } = 0;
+>toExponential : Symbol(toExponential, Decl(destructuringWithNumberLiteral.ts, 0, 5))
+

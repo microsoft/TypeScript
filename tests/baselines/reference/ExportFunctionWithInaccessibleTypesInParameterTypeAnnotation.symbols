@@ -1,0 +1,37 @@
+=== tests/cases/conformance/internalModules/exportDeclarations/ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts ===
+module A {
+>A : Symbol(A, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 0, 0))
+
+    class Point {
+>Point : Symbol(Point, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 0, 10))
+
+        x: number;
+>x : Symbol(Point.x, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 2, 17))
+
+        y: number;
+>y : Symbol(Point.y, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 3, 18))
+    }
+
+    export class Line {
+>Line : Symbol(Line, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 5, 5))
+
+        constructor(public start: Point, public end: Point) { }
+>start : Symbol(Line.start, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 8, 20))
+>Point : Symbol(Point, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 0, 10))
+>end : Symbol(Line.end, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 8, 40))
+>Point : Symbol(Point, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 0, 10))
+    }
+
+    export function fromOrigin(p: Point): Line {
+>fromOrigin : Symbol(fromOrigin, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 9, 5))
+>p : Symbol(p, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 11, 31))
+>Point : Symbol(Point, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 0, 10))
+>Line : Symbol(Line, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 5, 5))
+
+        return new Line({ x: 0, y: 0 }, p);
+>Line : Symbol(Line, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 5, 5))
+>x : Symbol(x, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 12, 25))
+>y : Symbol(y, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 12, 31))
+>p : Symbol(p, Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts, 11, 31))
+    }
+}

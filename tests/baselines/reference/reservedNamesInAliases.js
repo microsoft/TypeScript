@@ -7,4 +7,6 @@ type string = I;
 type void = I;
 
 //// [reservedNamesInAliases.js]
+type;
+void ;
 I;

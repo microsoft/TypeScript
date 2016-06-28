@@ -46,7 +46,7 @@ var C = (function () {
     function C(x) {
     }
     return C;
-})();
+}());
 var C;
 (function (C) {
     C.x = 1;
@@ -56,7 +56,7 @@ var C2 = (function () {
     function C2(x) {
     }
     return C2;
-})();
+}());
 var C2;
 (function (C2) {
     C2.x = 1;

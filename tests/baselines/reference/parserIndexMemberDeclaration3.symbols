@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration3.ts ===
+class C {
+>C : Symbol(C, Decl(parserIndexMemberDeclaration3.ts, 0, 0))
+
+   [a: string]: number;
+>a : Symbol(a, Decl(parserIndexMemberDeclaration3.ts, 1, 4))
+
+   public v: number
+>v : Symbol(C.v, Decl(parserIndexMemberDeclaration3.ts, 1, 23))
+}

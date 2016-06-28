@@ -45,4 +45,4 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());

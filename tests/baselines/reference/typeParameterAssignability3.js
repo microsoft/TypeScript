@@ -31,7 +31,7 @@ var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 function foo(t, u) {
     var a;
     var b;
@@ -51,4 +51,4 @@ var C = (function () {
         };
     }
     return C;
-})();
+}());

@@ -24,16 +24,16 @@ export module M {
 // exported let\const bindings should not be renamed
 exports.foo = 10;
 exports.bar = "123";
-exports.bar1 = ([1])[0];
-exports.bar2 = ([2])[0];
-exports.bar3 = ({ a: 1 }).a;
-exports.bar4 = ({ a: 1 }).a;
+exports.bar1 = [1][0];
+exports.bar2 = [2][0];
+exports.bar3 = { a: 1 }.a;
+exports.bar4 = { a: 1 }.a;
 var M;
 (function (M) {
     M.baz = 100;
     M.baz2 = true;
-    M.bar5 = ([1])[0];
-    M.bar6 = ([2])[0];
-    M.bar7 = ({ a: 1 }).a;
-    M.bar8 = ({ a: 1 }).a;
+    M.bar5 = [1][0];
+    M.bar6 = [2][0];
+    M.bar7 = { a: 1 }.a;
+    M.bar8 = { a: 1 }.a;
 })(M = exports.M || (exports.M = {}));

@@ -40,8 +40,8 @@ module T {
     interface fi { } // ok
 
     class cli { }
-    interface cli { } // error
+    interface cli { }
 
     interface cli2 { }
-    class cli2 { } // error
+    class cli2 { }
 }

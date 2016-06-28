@@ -1,0 +1,20 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of28.ts ===
+for (var v of new StringIterator) { }
+>v : Symbol(v, Decl(for-of28.ts, 0, 8))
+>StringIterator : Symbol(StringIterator, Decl(for-of28.ts, 0, 37))
+
+class StringIterator {
+>StringIterator : Symbol(StringIterator, Decl(for-of28.ts, 0, 37))
+
+    next: any;
+>next : Symbol(StringIterator.next, Decl(for-of28.ts, 2, 22))
+
+    [Symbol.iterator]() {
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        return this;
+>this : Symbol(StringIterator, Decl(for-of28.ts, 0, 37))
+    }
+}

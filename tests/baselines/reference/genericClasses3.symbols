@@ -1,0 +1,48 @@
+=== tests/cases/compiler/genericClasses3.ts ===
+class B<T> {
+>B : Symbol(B, Decl(genericClasses3.ts, 0, 0))
+>T : Symbol(T, Decl(genericClasses3.ts, 0, 8))
+
+    a: T;
+>a : Symbol(B.a, Decl(genericClasses3.ts, 0, 12))
+>T : Symbol(T, Decl(genericClasses3.ts, 0, 8))
+
+    b: T;
+>b : Symbol(B.b, Decl(genericClasses3.ts, 1, 9))
+>T : Symbol(T, Decl(genericClasses3.ts, 0, 8))
+}
+
+class C<T> extends B<T> {
+>C : Symbol(C, Decl(genericClasses3.ts, 3, 1))
+>T : Symbol(T, Decl(genericClasses3.ts, 5, 8))
+>B : Symbol(B, Decl(genericClasses3.ts, 0, 0))
+>T : Symbol(T, Decl(genericClasses3.ts, 5, 8))
+
+    public x: T;
+>x : Symbol(C.x, Decl(genericClasses3.ts, 5, 25))
+>T : Symbol(T, Decl(genericClasses3.ts, 5, 8))
+}
+
+var v2: C <string>;
+>v2 : Symbol(v2, Decl(genericClasses3.ts, 9, 3))
+>C : Symbol(C, Decl(genericClasses3.ts, 3, 1))
+
+var y = v2.x; // should be 'string'
+>y : Symbol(y, Decl(genericClasses3.ts, 11, 3))
+>v2.x : Symbol(C.x, Decl(genericClasses3.ts, 5, 25))
+>v2 : Symbol(v2, Decl(genericClasses3.ts, 9, 3))
+>x : Symbol(C.x, Decl(genericClasses3.ts, 5, 25))
+
+var u = v2.a; // should be 'string'
+>u : Symbol(u, Decl(genericClasses3.ts, 12, 3))
+>v2.a : Symbol(B.a, Decl(genericClasses3.ts, 0, 12))
+>v2 : Symbol(v2, Decl(genericClasses3.ts, 9, 3))
+>a : Symbol(B.a, Decl(genericClasses3.ts, 0, 12))
+
+var z = v2.b;
+>z : Symbol(z, Decl(genericClasses3.ts, 14, 3))
+>v2.b : Symbol(B.b, Decl(genericClasses3.ts, 1, 9))
+>v2 : Symbol(v2, Decl(genericClasses3.ts, 9, 3))
+>b : Symbol(B.b, Decl(genericClasses3.ts, 1, 9))
+
+

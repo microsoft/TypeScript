@@ -5,4 +5,5 @@
 // (FFFF == 65535)
 var x = `\u{FFFF}`;
 >x : string
+>`\u{FFFF}` : string
 

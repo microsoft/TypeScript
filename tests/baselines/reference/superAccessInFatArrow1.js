@@ -16,11 +16,10 @@ module test {
 }
 
 //// [superAccessInFatArrow1.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var test;
 (function (test) {
@@ -30,7 +29,7 @@ var test;
         A.prototype.foo = function () {
         };
         return A;
-    })();
+    }());
     test.A = A;
     var B = (function (_super) {
         __extends(B, _super);
@@ -46,6 +45,6 @@ var test;
             });
         };
         return B;
-    })(A);
+    }(A));
     test.B = B;
 })(test || (test = {}));

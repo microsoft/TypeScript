@@ -121,7 +121,7 @@ var C1 = (function () {
     function C1() {
     }
     return C1;
-})();
+}());
 var c1;
 var r10 = true ? c1 : null;
 var r10 = true ? null : c1;
@@ -129,7 +129,7 @@ var C2 = (function () {
     function C2() {
     }
     return C2;
-})();
+}());
 var c2;
 var r12 = true ? c2 : null;
 var r12 = true ? null : c2;
@@ -153,7 +153,7 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 var c;
 (function (c) {
     c.bar = 1;

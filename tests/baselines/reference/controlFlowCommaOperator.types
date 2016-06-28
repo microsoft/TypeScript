@@ -1,0 +1,71 @@
+=== tests/cases/conformance/controlFlow/controlFlowCommaOperator.ts ===
+function f(x: string | number | boolean) {
+>f : (x: string | number | boolean) => void
+>x : string | number | boolean
+
+    let y: string | number | boolean = false;
+>y : string | number | boolean
+>false : boolean
+
+    let z: string | number | boolean = false;
+>z : string | number | boolean
+>false : boolean
+
+    if (y = "", typeof x === "string") {
+>y = "", typeof x === "string" : boolean
+>y = "" : string
+>y : string | number | boolean
+>"" : string
+>typeof x === "string" : boolean
+>typeof x : string
+>x : string | number | boolean
+>"string" : string
+
+        x; // string
+>x : string
+
+        y; // string
+>y : string
+
+        z; // boolean
+>z : boolean
+    }
+    else if (z = 1, typeof x === "number") {
+>z = 1, typeof x === "number" : boolean
+>z = 1 : number
+>z : string | number | boolean
+>1 : number
+>typeof x === "number" : boolean
+>typeof x : string
+>x : number | boolean
+>"number" : string
+
+        x; // number
+>x : number
+
+        y; // string
+>y : string
+
+        z; // number
+>z : number
+    }
+    else {
+        x; // boolean
+>x : boolean
+
+        y; // string
+>y : string
+
+        z; // number
+>z : number
+    }
+    x; // string | number | boolean
+>x : string | number | boolean
+
+    y; // string
+>y : string
+
+    z; // number | boolean
+>z : boolean | number
+}
+

@@ -12,6 +12,7 @@ export class A
 }
 
 //// [es5ModuleWithoutModuleGenTarget.js]
+"use strict";
 var A = (function () {
     function A() {
     }
@@ -19,5 +20,5 @@ var A = (function () {
         return 42;
     };
     return A;
-})();
+}());
 exports.A = A;

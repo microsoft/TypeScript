@@ -13,7 +13,7 @@ var C = (function () {
     C.prototype.foo = function (a) {
     };
     return C;
-})();
+}());
 
 
 //// [methodSignatureDeclarationEmit1.d.ts]

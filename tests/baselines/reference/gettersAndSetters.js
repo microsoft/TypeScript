@@ -67,7 +67,7 @@ var C = (function () {
     });
     C.barBack = "";
     return C;
-})();
+}());
 var c = new C();
 var foo = c.Foo;
 c.Foo = "foov";

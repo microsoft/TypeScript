@@ -27,11 +27,10 @@ module TypeScript2 {
 
 
 //// [genericRecursiveImplicitConstructorErrors2.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var TypeScript2;
 (function (TypeScript2) {
@@ -53,7 +52,7 @@ var TypeScript2;
             return undefined;
         };
         return PullSymbol;
-    })();
+    }());
     TypeScript2.PullSymbol = PullSymbol;
     var PullTypeSymbol = (function (_super) {
         __extends(PullTypeSymbol, _super);
@@ -61,6 +60,6 @@ var TypeScript2;
             _super.apply(this, arguments);
         }
         return PullTypeSymbol;
-    })(PullSymbol);
+    }(PullSymbol));
     TypeScript2.PullTypeSymbol = PullTypeSymbol;
 })(TypeScript2 || (TypeScript2 = {}));

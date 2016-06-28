@@ -1,0 +1,93 @@
+=== tests/cases/compiler/f1.ts ===
+
+
+export class A {}
+>A : Symbol(A, Decl(f1.ts, 0, 0))
+
+export interface I {}
+>I : Symbol(I, Decl(f1.ts, 2, 17))
+
+=== tests/cases/compiler/f2.ts ===
+
+var x = 1;
+>x : Symbol(x, Decl(f2.ts, 1, 3))
+
+interface I { }
+>I : Symbol(I, Decl(f2.ts, 1, 10))
+
+namespace N {
+>N : Symbol(N, Decl(f2.ts, 2, 15))
+
+	export var x = 1;
+>x : Symbol(x, Decl(f2.ts, 5, 11))
+
+	export interface I { }	
+>I : Symbol(I, Decl(f2.ts, 5, 18))
+}
+
+import IX = N.x;
+>IX : Symbol(IX, Decl(f2.ts, 7, 1))
+>N : Symbol(N, Decl(f2.ts, 2, 15))
+>x : Symbol(IX, Decl(f2.ts, 5, 11))
+
+import II = N.I;
+>II : Symbol(II, Decl(f2.ts, 9, 16))
+>N : Symbol(N, Decl(f2.ts, 2, 15))
+>I : Symbol(II, Decl(f2.ts, 5, 18))
+
+import { A, A as EA, I as EI } from "f1";
+>A : Symbol(A, Decl(f2.ts, 11, 8))
+>A : Symbol(EA, Decl(f2.ts, 11, 11))
+>EA : Symbol(EA, Decl(f2.ts, 11, 11))
+>I : Symbol(EI, Decl(f2.ts, 11, 20))
+>EI : Symbol(EI, Decl(f2.ts, 11, 20))
+
+export {x};
+>x : Symbol(x, Decl(f2.ts, 13, 8))
+
+export {x as x1};
+>x : Symbol(x1, Decl(f2.ts, 14, 8))
+>x1 : Symbol(x1, Decl(f2.ts, 14, 8))
+
+export {I};
+>I : Symbol(I, Decl(f2.ts, 16, 8))
+
+export {I as I1};
+>I : Symbol(I1, Decl(f2.ts, 17, 8))
+>I1 : Symbol(I1, Decl(f2.ts, 17, 8))
+
+export {A};
+>A : Symbol(A, Decl(f2.ts, 19, 8))
+
+export {A as A1};
+>A : Symbol(A1, Decl(f2.ts, 20, 8))
+>A1 : Symbol(A1, Decl(f2.ts, 20, 8))
+
+export {EA};
+>EA : Symbol(EA, Decl(f2.ts, 22, 8))
+
+export {EA as EA1};
+>EA : Symbol(EA1, Decl(f2.ts, 23, 8))
+>EA1 : Symbol(EA1, Decl(f2.ts, 23, 8))
+
+export {EI };
+>EI : Symbol(EI, Decl(f2.ts, 25, 8))
+
+export {EI as EI1};
+>EI : Symbol(EI1, Decl(f2.ts, 26, 8))
+>EI1 : Symbol(EI1, Decl(f2.ts, 26, 8))
+
+export {IX};
+>IX : Symbol(IX, Decl(f2.ts, 28, 8))
+
+export {IX as IX1};
+>IX : Symbol(IX1, Decl(f2.ts, 29, 8))
+>IX1 : Symbol(IX1, Decl(f2.ts, 29, 8))
+
+export {II};
+>II : Symbol(II, Decl(f2.ts, 31, 8))
+
+export {II as II1};
+>II : Symbol(II1, Decl(f2.ts, 32, 8))
+>II1 : Symbol(II1, Decl(f2.ts, 32, 8))
+

@@ -38,12 +38,12 @@ class parser {
 		this.options = this.options.sort(function(a, b) {
 >this.options = this.options.sort(function(a, b) {            var aName = a.name.toLowerCase();            var bName = b.name.toLowerCase();            if (aName > bName) {                return 1;            } else if (aName < bName) {                return -1;            } else {                return 0;            }        }) : IOptions[]
 >this.options : IOptions[]
->this : parser
+>this : this
 >options : IOptions[]
 >this.options.sort(function(a, b) {            var aName = a.name.toLowerCase();            var bName = b.name.toLowerCase();            if (aName > bName) {                return 1;            } else if (aName < bName) {                return -1;            } else {                return 0;            }        }) : IOptions[]
 >this.options.sort : (compareFn?: (a: IOptions, b: IOptions) => number) => IOptions[]
 >this.options : IOptions[]
->this : parser
+>this : this
 >options : IOptions[]
 >sort : (compareFn?: (a: IOptions, b: IOptions) => number) => IOptions[]
 >function(a, b) {            var aName = a.name.toLowerCase();            var bName = b.name.toLowerCase();            if (aName > bName) {                return 1;            } else if (aName < bName) {                return -1;            } else {                return 0;            }        } : (a: IOptions, b: IOptions) => number
@@ -74,6 +74,8 @@ class parser {
 >bName : string
 
                 return 1;
+>1 : number
+
             } else if (aName < bName) {
 >aName < bName : boolean
 >aName : string
@@ -81,9 +83,11 @@ class parser {
 
                 return -1;
 >-1 : number
+>1 : number
 
             } else {
                 return 0;
+>0 : number
             }
         });
 	}

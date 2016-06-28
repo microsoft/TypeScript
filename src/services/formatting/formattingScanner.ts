@@ -2,56 +2,72 @@
 /// <reference path="..\..\compiler\scanner.ts"/>
 
 /* @internal */
-module ts.formatting {
-    let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
+namespace ts.formatting {
+    const standardScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.Standard);
+    const jsxScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.JSX);
+
+    /**
+     * Scanner that is currently used for formatting
+     */
+    let scanner: Scanner;
 
     export interface FormattingScanner {
         advance(): void;
         isOnToken(): boolean;
         readTokenInfo(n: Node): TokenInfo;
+        getCurrentLeadingTrivia(): TextRangeWithKind[];
         lastTrailingTriviaWasNewLine(): boolean;
         close(): void;
     }
 
-    const enum ScanAction{
+    const enum ScanAction {
         Scan,
         RescanGreaterThanToken,
         RescanSlashToken,
-        RescanTemplateToken
+        RescanTemplateToken,
+        RescanJsxIdentifier
     }
 
     export function getFormattingScanner(sourceFile: SourceFile, startPos: number, endPos: number): FormattingScanner {
+        Debug.assert(scanner === undefined);
+        scanner = sourceFile.languageVariant === LanguageVariant.JSX ? jsxScanner : standardScanner;
 
         scanner.setText(sourceFile.text);
         scanner.setTextPos(startPos);
 
-        let wasNewLine: boolean = true;
+        let wasNewLine = true;
         let leadingTrivia: TextRangeWithKind[];
         let trailingTrivia: TextRangeWithKind[];
-        
+
         let savedPos: number;
         let lastScanAction: ScanAction;
         let lastTokenInfo: TokenInfo;
 
         return {
-            advance: advance,
-            readTokenInfo: readTokenInfo,
-            isOnToken: isOnToken,
+            advance,
+            readTokenInfo,
+            isOnToken,
+            getCurrentLeadingTrivia: () => leadingTrivia,
             lastTrailingTriviaWasNewLine: () => wasNewLine,
             close: () => {
+                Debug.assert(scanner !== undefined);
+
                 lastTokenInfo = undefined;
                 scanner.setText(undefined);
+                scanner = undefined;
             }
-        }
+        };
 
         function advance(): void {
+            Debug.assert(scanner !== undefined);
+
             lastTokenInfo = undefined;
-            let isStarted = scanner.getStartPos() !== startPos;
+            const isStarted = scanner.getStartPos() !== startPos;
 
             if (isStarted) {
                 if (trailingTrivia) {
                     Debug.assert(trailingTrivia.length !== 0);
-                    wasNewLine = trailingTrivia[trailingTrivia.length - 1].kind === SyntaxKind.NewLineTrivia;
+                    wasNewLine = lastOrUndefined(trailingTrivia).kind === SyntaxKind.NewLineTrivia;
                 }
                 else {
                     wasNewLine = false;
@@ -65,23 +81,22 @@ module ts.formatting {
                 scanner.scan();
             }
 
-            let t: SyntaxKind;
             let pos = scanner.getStartPos();
-            
+
             // Read leading trivia and token
             while (pos < endPos) {
-                let t = scanner.getToken();
+                const t = scanner.getToken();
                 if (!isTrivia(t)) {
                     break;
                 }
 
                 // consume leading trivia
                 scanner.scan();
-                let item = {
+                const item = {
                     pos: pos,
                     end: scanner.getStartPos(),
                     kind: t
-                }
+                };
 
                 pos = scanner.getStartPos();
 
@@ -109,12 +124,26 @@ module ts.formatting {
             return false;
         }
 
+        function shouldRescanJsxIdentifier(node: Node): boolean {
+            if (node.parent) {
+                switch (node.parent.kind) {
+                    case SyntaxKind.JsxAttribute:
+                    case SyntaxKind.JsxOpeningElement:
+                    case SyntaxKind.JsxClosingElement:
+                    case SyntaxKind.JsxSelfClosingElement:
+                        return node.kind === SyntaxKind.Identifier;
+                }
+            }
+
+            return false;
+        }
+
         function shouldRescanSlashToken(container: Node): boolean {
             return container.kind === SyntaxKind.RegularExpressionLiteral;
         }
 
         function shouldRescanTemplateToken(container: Node): boolean {
-            return container.kind === SyntaxKind.TemplateMiddle || 
+            return container.kind === SyntaxKind.TemplateMiddle ||
                 container.kind === SyntaxKind.TemplateTail;
         }
 
@@ -123,10 +152,12 @@ module ts.formatting {
         }
 
         function readTokenInfo(n: Node): TokenInfo {
+            Debug.assert(scanner !== undefined);
+
             if (!isOnToken()) {
                 // scanner is not on the token (either advance was not called yet or scanner is already past the end position)
                 return {
-                    leadingTrivia: leadingTrivia,
+                    leadingTrivia,
                     trailingTrivia: undefined,
                     token: undefined
                 };
@@ -134,20 +165,22 @@ module ts.formatting {
 
             // normally scanner returns the smallest available token
             // check the kind of context node to determine if scanner should have more greedy behavior and consume more text.
-            let expectedScanAction = 
+            const expectedScanAction =
                 shouldRescanGreaterThanToken(n)
                 ? ScanAction.RescanGreaterThanToken
-                : shouldRescanSlashToken(n) 
-                    ? ScanAction.RescanSlashToken 
+                : shouldRescanSlashToken(n)
+                    ? ScanAction.RescanSlashToken
                     : shouldRescanTemplateToken(n)
                         ? ScanAction.RescanTemplateToken
-                        : ScanAction.Scan
+                        : shouldRescanJsxIdentifier(n)
+                            ? ScanAction.RescanJsxIdentifier
+                            : ScanAction.Scan;
 
             if (lastTokenInfo && expectedScanAction === lastScanAction) {
                 // readTokenInfo was called before with the same expected scan action.
                 // No need to re-scan text, return existing 'lastTokenInfo'
                 // it is ok to call fixTokenKind here since it does not affect
-                // what portion of text is consumed. In opposize rescanning can change it,
+                // what portion of text is consumed. In contrast rescanning can change it,
                 // i.e. for '>=' when originally scanner eats just one character
                 // and rescanning forces it to consume more.
                 return fixTokenKind(lastTokenInfo, n);
@@ -176,26 +209,30 @@ module ts.formatting {
                 currentToken = scanner.reScanTemplateToken();
                 lastScanAction = ScanAction.RescanTemplateToken;
             }
+            else if (expectedScanAction === ScanAction.RescanJsxIdentifier && currentToken === SyntaxKind.Identifier) {
+                currentToken = scanner.scanJsxIdentifier();
+                lastScanAction = ScanAction.RescanJsxIdentifier;
+            }
             else {
                 lastScanAction = ScanAction.Scan;
             }
 
-            let token: TextRangeWithKind = {
+            const token: TextRangeWithKind = {
                 pos: scanner.getStartPos(),
                 end: scanner.getTextPos(),
                 kind: currentToken
-            }
+            };
 
             // consume trailing trivia
             if (trailingTrivia) {
                 trailingTrivia = undefined;
             }
-            while(scanner.getStartPos() < endPos) {
+            while (scanner.getStartPos() < endPos) {
                 currentToken = scanner.scan();
                 if (!isTrivia(currentToken)) {
                     break;
                 }
-                let trivia = {
+                const trivia = {
                     pos: scanner.getStartPos(),
                     end: scanner.getTextPos(),
                     kind: currentToken
@@ -218,20 +255,22 @@ module ts.formatting {
                 leadingTrivia: leadingTrivia,
                 trailingTrivia: trailingTrivia,
                 token: token
-            }
+            };
 
             return fixTokenKind(lastTokenInfo, n);
         }
 
         function isOnToken(): boolean {
-            let current = (lastTokenInfo && lastTokenInfo.token.kind) ||  scanner.getToken();
-            let startPos = (lastTokenInfo && lastTokenInfo.token.pos) || scanner.getStartPos();
+            Debug.assert(scanner !== undefined);
+
+            const current = (lastTokenInfo && lastTokenInfo.token.kind) || scanner.getToken();
+            const startPos = (lastTokenInfo && lastTokenInfo.token.pos) || scanner.getStartPos();
             return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
         }
 
-        // when containing node in the tree is token 
+        // when containing node in the tree is token
         // but its kind differs from the kind that was returned by the scanner,
-        // then kind needs to be fixed. This might happen in cases 
+        // then kind needs to be fixed. This might happen in cases
         // when parser interprets token differently, i.e keyword treated as identifier
         function fixTokenKind(tokenInfo: TokenInfo, container: Node): TokenInfo {
             if (isToken(container) && tokenInfo.token.kind !== container.kind) {

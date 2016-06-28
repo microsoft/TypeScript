@@ -15,4 +15,4 @@ export module uninstantiated {
 }
 
 // @filename: client.ts
-export * from "server";
+export * from "./server";

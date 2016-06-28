@@ -47,6 +47,6 @@ var M;
             return ({ oneI: this });
         };
         return C;
-    })();
+    }());
     M.C = C;
 })(M || (M = {}));

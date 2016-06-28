@@ -7,6 +7,7 @@ if(foo.answer === 42){
 >foo.answer : number
 >foo : typeof foo
 >answer : number
+>42 : number
 
 	var x = foo();
 >x : string
@@ -19,12 +20,14 @@ function foo() {
 >foo : typeof foo
 
 	return "test";
+>"test" : string
 }
 module foo {
 >foo : typeof foo
 
 	export var answer = 42;
 >answer : number
+>42 : number
 }
 export = foo;
 >foo : typeof foo

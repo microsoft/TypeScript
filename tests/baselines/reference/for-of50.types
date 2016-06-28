@@ -5,6 +5,8 @@ var map = new Map([["", true]]);
 >Map : MapConstructor
 >[["", true]] : [string, boolean][]
 >["", true] : [string, boolean]
+>"" : string
+>true : boolean
 
 for (const [k, v] of map) {
 >k : string

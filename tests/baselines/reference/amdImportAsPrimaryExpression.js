@@ -14,6 +14,7 @@ if(foo.E1.A === 0){
 
 //// [foo_0.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     (function (E1) {
         E1[E1["A"] = 0] = "A";
         E1[E1["B"] = 1] = "B";
@@ -23,6 +24,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [foo_1.js]
 define(["require", "exports", "./foo_0"], function (require, exports, foo) {
+    "use strict";
     if (foo.E1.A === 0) {
     }
 });

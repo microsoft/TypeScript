@@ -15,6 +15,7 @@ interface String {
 
 var x = '';
 >x : string
+>'' : string
 
 var a: string = x.doStuff();
 >a : string
@@ -29,16 +30,20 @@ var b: string = x.doOtherStuff('hm');
 >x.doOtherStuff : <T>(x: T) => T
 >x : string
 >doOtherStuff : <T>(x: T) => T
+>'hm' : string
 
 var c: string = x['doStuff']();
 >c : string
 >x['doStuff']() : string
 >x['doStuff'] : () => string
 >x : string
+>'doStuff' : string
 
 var d: string = x['doOtherStuff']('hm');
 >d : string
 >x['doOtherStuff']('hm') : string
 >x['doOtherStuff'] : <T>(x: T) => T
 >x : string
+>'doOtherStuff' : string
+>'hm' : string
 

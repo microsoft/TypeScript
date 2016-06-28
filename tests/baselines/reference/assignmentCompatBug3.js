@@ -48,7 +48,7 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 function foo(test) { }
 var x;
 var y;

@@ -1,0 +1,216 @@
+=== tests/cases/conformance/statements/throwStatements/throwStatements.ts ===
+
+// all legal
+
+interface I {
+>I : Symbol(I, Decl(throwStatements.ts, 0, 0))
+
+    id: number;
+>id : Symbol(I.id, Decl(throwStatements.ts, 3, 13))
+}
+
+class C implements I {
+>C : Symbol(C, Decl(throwStatements.ts, 5, 1))
+>I : Symbol(I, Decl(throwStatements.ts, 0, 0))
+
+    id: number;
+>id : Symbol(C.id, Decl(throwStatements.ts, 7, 22))
+}
+
+class D<T>{
+>D : Symbol(D, Decl(throwStatements.ts, 9, 1))
+>T : Symbol(T, Decl(throwStatements.ts, 11, 8))
+
+    source: T;
+>source : Symbol(D.source, Decl(throwStatements.ts, 11, 11))
+>T : Symbol(T, Decl(throwStatements.ts, 11, 8))
+
+    recurse: D<T>;
+>recurse : Symbol(D.recurse, Decl(throwStatements.ts, 12, 14))
+>D : Symbol(D, Decl(throwStatements.ts, 9, 1))
+>T : Symbol(T, Decl(throwStatements.ts, 11, 8))
+
+    wrapped: D<D<T>>
+>wrapped : Symbol(D.wrapped, Decl(throwStatements.ts, 13, 18))
+>D : Symbol(D, Decl(throwStatements.ts, 9, 1))
+>D : Symbol(D, Decl(throwStatements.ts, 9, 1))
+>T : Symbol(T, Decl(throwStatements.ts, 11, 8))
+}
+
+function F(x: string): number { return 42; }
+>F : Symbol(F, Decl(throwStatements.ts, 15, 1))
+>x : Symbol(x, Decl(throwStatements.ts, 17, 11))
+
+module M {
+>M : Symbol(M, Decl(throwStatements.ts, 17, 44))
+
+    export class A {
+>A : Symbol(A, Decl(throwStatements.ts, 19, 10))
+
+        name: string;
+>name : Symbol(A.name, Decl(throwStatements.ts, 20, 20))
+    }
+
+    export function F2(x: number): string { return x.toString(); }
+>F2 : Symbol(F2, Decl(throwStatements.ts, 22, 5))
+>x : Symbol(x, Decl(throwStatements.ts, 24, 23))
+>x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(throwStatements.ts, 24, 23))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+}
+
+var aNumber = 9.9;
+>aNumber : Symbol(aNumber, Decl(throwStatements.ts, 27, 3))
+
+throw aNumber;
+>aNumber : Symbol(aNumber, Decl(throwStatements.ts, 27, 3))
+
+var aString = 'this is a string';
+>aString : Symbol(aString, Decl(throwStatements.ts, 29, 3))
+
+throw aString;
+>aString : Symbol(aString, Decl(throwStatements.ts, 29, 3))
+
+var aDate = new Date(12);
+>aDate : Symbol(aDate, Decl(throwStatements.ts, 31, 3))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+throw aDate;
+>aDate : Symbol(aDate, Decl(throwStatements.ts, 31, 3))
+
+var anObject = new Object();
+>anObject : Symbol(anObject, Decl(throwStatements.ts, 33, 3))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+throw anObject;
+>anObject : Symbol(anObject, Decl(throwStatements.ts, 33, 3))
+
+var anAny = null;
+>anAny : Symbol(anAny, Decl(throwStatements.ts, 36, 3))
+
+throw anAny;
+>anAny : Symbol(anAny, Decl(throwStatements.ts, 36, 3))
+
+var anOtherAny = <any> new C();
+>anOtherAny : Symbol(anOtherAny, Decl(throwStatements.ts, 38, 3))
+>C : Symbol(C, Decl(throwStatements.ts, 5, 1))
+
+throw anOtherAny;
+>anOtherAny : Symbol(anOtherAny, Decl(throwStatements.ts, 38, 3))
+
+var anUndefined = undefined;
+>anUndefined : Symbol(anUndefined, Decl(throwStatements.ts, 40, 3))
+>undefined : Symbol(undefined)
+
+throw anUndefined;
+>anUndefined : Symbol(anUndefined, Decl(throwStatements.ts, 40, 3))
+
+var aClass = new C();
+>aClass : Symbol(aClass, Decl(throwStatements.ts, 43, 3))
+>C : Symbol(C, Decl(throwStatements.ts, 5, 1))
+
+throw aClass;
+>aClass : Symbol(aClass, Decl(throwStatements.ts, 43, 3))
+
+var aGenericClass = new D<string>();
+>aGenericClass : Symbol(aGenericClass, Decl(throwStatements.ts, 45, 3))
+>D : Symbol(D, Decl(throwStatements.ts, 9, 1))
+
+throw aGenericClass;
+>aGenericClass : Symbol(aGenericClass, Decl(throwStatements.ts, 45, 3))
+
+var anObjectLiteral = { id: 12 };
+>anObjectLiteral : Symbol(anObjectLiteral, Decl(throwStatements.ts, 47, 3))
+>id : Symbol(id, Decl(throwStatements.ts, 47, 23))
+
+throw anObjectLiteral;
+>anObjectLiteral : Symbol(anObjectLiteral, Decl(throwStatements.ts, 47, 3))
+
+var aFunction = F;
+>aFunction : Symbol(aFunction, Decl(throwStatements.ts, 50, 3))
+>F : Symbol(F, Decl(throwStatements.ts, 15, 1))
+
+throw aFunction;
+>aFunction : Symbol(aFunction, Decl(throwStatements.ts, 50, 3))
+
+throw aFunction('');
+>aFunction : Symbol(aFunction, Decl(throwStatements.ts, 50, 3))
+
+var aLambda = (x) => 2;
+>aLambda : Symbol(aLambda, Decl(throwStatements.ts, 53, 3))
+>x : Symbol(x, Decl(throwStatements.ts, 53, 15))
+
+throw aLambda;
+>aLambda : Symbol(aLambda, Decl(throwStatements.ts, 53, 3))
+
+throw aLambda(1);
+>aLambda : Symbol(aLambda, Decl(throwStatements.ts, 53, 3))
+
+var aModule = M;
+>aModule : Symbol(aModule, Decl(throwStatements.ts, 57, 3))
+>M : Symbol(M, Decl(throwStatements.ts, 17, 44))
+
+throw aModule;
+>aModule : Symbol(aModule, Decl(throwStatements.ts, 57, 3))
+
+throw typeof M;
+>M : Symbol(M, Decl(throwStatements.ts, 17, 44))
+
+var aClassInModule = new M.A();
+>aClassInModule : Symbol(aClassInModule, Decl(throwStatements.ts, 60, 3))
+>M.A : Symbol(M.A, Decl(throwStatements.ts, 19, 10))
+>M : Symbol(M, Decl(throwStatements.ts, 17, 44))
+>A : Symbol(M.A, Decl(throwStatements.ts, 19, 10))
+
+throw aClassInModule;
+>aClassInModule : Symbol(aClassInModule, Decl(throwStatements.ts, 60, 3))
+
+var aFunctionInModule = M.F2;
+>aFunctionInModule : Symbol(aFunctionInModule, Decl(throwStatements.ts, 62, 3))
+>M.F2 : Symbol(M.F2, Decl(throwStatements.ts, 22, 5))
+>M : Symbol(M, Decl(throwStatements.ts, 17, 44))
+>F2 : Symbol(M.F2, Decl(throwStatements.ts, 22, 5))
+
+throw aFunctionInModule;
+>aFunctionInModule : Symbol(aFunctionInModule, Decl(throwStatements.ts, 62, 3))
+
+// no initializer or annotation, so this is an 'any'
+var x;
+>x : Symbol(x, Decl(throwStatements.ts, 66, 3))
+
+throw x;
+>x : Symbol(x, Decl(throwStatements.ts, 66, 3))
+
+// literals
+throw 0.0;
+throw false;
+throw null;
+throw undefined;
+>undefined : Symbol(undefined)
+
+throw 'a string';
+throw function () { return 'a string' };
+throw <T>(x:T) => 42;
+>T : Symbol(T, Decl(throwStatements.ts, 76, 7))
+>x : Symbol(x, Decl(throwStatements.ts, 76, 10))
+>T : Symbol(T, Decl(throwStatements.ts, 76, 7))
+
+throw { x: 12, y: 13 };
+>x : Symbol(x, Decl(throwStatements.ts, 77, 7))
+>y : Symbol(y, Decl(throwStatements.ts, 77, 14))
+
+throw [];
+throw ['a', ['b']];
+throw /[a-z]/;
+throw new Date();
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+throw new C();
+>C : Symbol(C, Decl(throwStatements.ts, 5, 1))
+
+throw new Object();
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+throw new D<number>();
+>D : Symbol(D, Decl(throwStatements.ts, 9, 1))
+

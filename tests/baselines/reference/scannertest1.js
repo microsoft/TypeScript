@@ -46,4 +46,4 @@ var CharacterInfo = (function () {
                 : c - CharacterCodes.a + 10;
     };
     return CharacterInfo;
-})();
+}());

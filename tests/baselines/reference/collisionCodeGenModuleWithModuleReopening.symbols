@@ -1,0 +1,83 @@
+=== tests/cases/compiler/collisionCodeGenModuleWithModuleReopening.ts ===
+module m1 {
+>m1 : Symbol(m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleReopening.ts, 4, 22))
+
+    export class m1 {
+>m1 : Symbol(m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 11))
+    }
+}
+var foo = new m1.m1();
+>foo : Symbol(foo, Decl(collisionCodeGenModuleWithModuleReopening.ts, 4, 3))
+>m1.m1 : Symbol(m1.m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 11))
+>m1 : Symbol(m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleReopening.ts, 4, 22))
+>m1 : Symbol(m1.m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 11))
+
+module m1 {
+>m1 : Symbol(m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleReopening.ts, 4, 22))
+
+    export class c1 {
+>c1 : Symbol(c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 5, 11))
+    }
+    var b = new c1();
+>b : Symbol(b, Decl(collisionCodeGenModuleWithModuleReopening.ts, 8, 7))
+>c1 : Symbol(c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 5, 11))
+
+    var c = new m1();
+>c : Symbol(c, Decl(collisionCodeGenModuleWithModuleReopening.ts, 9, 7))
+>m1 : Symbol(m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 11))
+}
+var foo2 = new m1.c1();
+>foo2 : Symbol(foo2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 11, 3), Decl(collisionCodeGenModuleWithModuleReopening.ts, 28, 3))
+>m1.c1 : Symbol(m1.c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 5, 11))
+>m1 : Symbol(m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleReopening.ts, 4, 22))
+>c1 : Symbol(m1.c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 5, 11))
+
+module m2 {
+>m2 : Symbol(m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 11, 23), Decl(collisionCodeGenModuleWithModuleReopening.ts, 19, 23))
+
+    export class c1 {
+>c1 : Symbol(c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 13, 11))
+    }
+    export var b10 = 10;
+>b10 : Symbol(b10, Decl(collisionCodeGenModuleWithModuleReopening.ts, 16, 14))
+
+    var x = new c1();
+>x : Symbol(x, Decl(collisionCodeGenModuleWithModuleReopening.ts, 17, 7))
+>c1 : Symbol(c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 13, 11))
+}
+var foo3 = new m2.c1();
+>foo3 : Symbol(foo3, Decl(collisionCodeGenModuleWithModuleReopening.ts, 19, 3), Decl(collisionCodeGenModuleWithModuleReopening.ts, 27, 3))
+>m2.c1 : Symbol(m2.c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 13, 11))
+>m2 : Symbol(m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 11, 23), Decl(collisionCodeGenModuleWithModuleReopening.ts, 19, 23))
+>c1 : Symbol(m2.c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 13, 11))
+
+module m2 {
+>m2 : Symbol(m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 11, 23), Decl(collisionCodeGenModuleWithModuleReopening.ts, 19, 23))
+
+    export class m2 {
+>m2 : Symbol(m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 20, 11))
+    }
+    var b = new m2();
+>b : Symbol(b, Decl(collisionCodeGenModuleWithModuleReopening.ts, 23, 7))
+>m2 : Symbol(m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 20, 11))
+
+    var d = b10;
+>d : Symbol(d, Decl(collisionCodeGenModuleWithModuleReopening.ts, 24, 7))
+>b10 : Symbol(b10, Decl(collisionCodeGenModuleWithModuleReopening.ts, 16, 14))
+
+    var c = new c1();
+>c : Symbol(c, Decl(collisionCodeGenModuleWithModuleReopening.ts, 25, 7))
+>c1 : Symbol(c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 13, 11))
+}
+var foo3 = new m2.c1();
+>foo3 : Symbol(foo3, Decl(collisionCodeGenModuleWithModuleReopening.ts, 19, 3), Decl(collisionCodeGenModuleWithModuleReopening.ts, 27, 3))
+>m2.c1 : Symbol(m2.c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 13, 11))
+>m2 : Symbol(m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 11, 23), Decl(collisionCodeGenModuleWithModuleReopening.ts, 19, 23))
+>c1 : Symbol(m2.c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 13, 11))
+
+var foo2 = new m2.m2();
+>foo2 : Symbol(foo2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 11, 3), Decl(collisionCodeGenModuleWithModuleReopening.ts, 28, 3))
+>m2.m2 : Symbol(m2.m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 20, 11))
+>m2 : Symbol(m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 11, 23), Decl(collisionCodeGenModuleWithModuleReopening.ts, 19, 23))
+>m2 : Symbol(m2.m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 20, 11))
+

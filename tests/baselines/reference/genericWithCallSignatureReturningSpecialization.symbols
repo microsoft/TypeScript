@@ -1,0 +1,20 @@
+=== tests/cases/compiler/genericWithCallSignatureReturningSpecialization.ts ===
+interface B<T> {
+>B : Symbol(B, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 0))
+>T : Symbol(T, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 12))
+
+    f(): B<number>;
+>f : Symbol(B.f, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 16))
+>B : Symbol(B, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 0))
+
+    (value: T): void;
+>value : Symbol(value, Decl(genericWithCallSignatureReturningSpecialization.ts, 2, 5))
+>T : Symbol(T, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 12))
+}
+var x: B<boolean>;
+>x : Symbol(x, Decl(genericWithCallSignatureReturningSpecialization.ts, 4, 3))
+>B : Symbol(B, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 0))
+
+x(true); // was error
+>x : Symbol(x, Decl(genericWithCallSignatureReturningSpecialization.ts, 4, 3))
+

@@ -1,0 +1,384 @@
+
+1  >declare function ClassDecorator1(target: Function): void;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (0 to 57)  SpanInfo: undefined
+--------------------------------
+2  >declare function ClassDecorator2(x: number): (target: Function) => void;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (58 to 130)  SpanInfo: undefined
+--------------------------------
+3  >declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (131 to 244)  SpanInfo: undefined
+--------------------------------
+4  >declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (245 to 373)  SpanInfo: undefined
+--------------------------------
+5  >declare function ParameterDecorator1(target: Object, key: string | symbol, paramIndex: number): void;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (374 to 475)  SpanInfo: undefined
+--------------------------------
+6  >declare function ParameterDecorator2(x: number): (target: Object, key: string | symbol, paramIndex: number) => void;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (476 to 592)  SpanInfo: undefined
+--------------------------------
+7  >
+
+    ~                                             => Pos: (593 to 593)  SpanInfo: undefined
+--------------------------------
+8  >@ClassDecorator1
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (594 to 610)  SpanInfo: {"start":594,"length":37}
+    >@ClassDecorator1
+    >@ClassDecorator2(10)
+    >:=> (line 8, col 0) to (line 9, col 20)
+--------------------------------
+9  >@ClassDecorator2(10)
+
+    ~~~~~~~~~~~~~~~~~~~~~                         => Pos: (611 to 631)  SpanInfo: {"start":594,"length":37}
+    >@ClassDecorator1
+    >@ClassDecorator2(10)
+    >:=> (line 8, col 0) to (line 9, col 20)
+--------------------------------
+10 >class Greeter {
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (632 to 647)  SpanInfo: {"start":632,"length":914}
+    >class Greeter {
+    >    constructor(
+    >        @ParameterDecorator1
+    >        @ParameterDecorator2(20)
+    >        public greeting: string,
+    >
+    >        @ParameterDecorator1
+    >        @ParameterDecorator2(30)
+    >            ...b: string[]) {
+    >    }
+    >
+    >    @PropertyDecorator1
+    >    @PropertyDecorator2(40)
+    >    greet() {
+    >        return "<h1>" + this.greeting + "</h1>";
+    >    }
+    >
+    >    @PropertyDecorator1
+    >    @PropertyDecorator2(50)
+    >    private x: string;
+    >
+    >    @PropertyDecorator1
+    >    @PropertyDecorator2(60)
+    >    private static x1: number = 10;
+    >
+    >    private fn(
+    >        @ParameterDecorator1
+    >        @ParameterDecorator2(70)
+    >        x: number) {
+    >        return this.greeting;
+    >    }
+    >
+    >    @PropertyDecorator1
+    >    @PropertyDecorator2(80)
+    >    get greetings() {
+    >        return this.greeting;
+    >    }
+    >
+    >    set greetings(
+    >        @ParameterDecorator1
+    >        @ParameterDecorator2(90)
+    >        greetings: string) {
+    >        this.greeting = greetings;
+    >    }
+    >}
+    >:=> (line 10, col 0) to (line 54, col 1)
+--------------------------------
+11 >    constructor(
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (648 to 664)  SpanInfo: {"start":857,"length":1}
+    >}
+    >:=> (line 19, col 4) to (line 19, col 5)
+--------------------------------
+12 >        @ParameterDecorator1
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 => Pos: (665 to 693)  SpanInfo: {"start":673,"length":53}
+    >@ParameterDecorator1
+    >        @ParameterDecorator2(20)
+    >:=> (line 12, col 8) to (line 13, col 32)
+--------------------------------
+13 >        @ParameterDecorator2(20)
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             => Pos: (694 to 726)  SpanInfo: {"start":673,"length":53}
+    >@ParameterDecorator1
+    >        @ParameterDecorator2(20)
+    >:=> (line 12, col 8) to (line 13, col 32)
+--------------------------------
+14 >        public greeting: string,
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             => Pos: (727 to 759)  SpanInfo: {"start":735,"length":23}
+    >public greeting: string
+    >:=> (line 14, col 8) to (line 14, col 31)
+--------------------------------
+15 >
+
+    ~                                             => Pos: (760 to 760)  SpanInfo: undefined
+--------------------------------
+16 >        @ParameterDecorator1
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 => Pos: (761 to 789)  SpanInfo: {"start":769,"length":53}
+    >@ParameterDecorator1
+    >        @ParameterDecorator2(30)
+    >:=> (line 16, col 8) to (line 17, col 32)
+--------------------------------
+17 >        @ParameterDecorator2(30)
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             => Pos: (790 to 822)  SpanInfo: {"start":769,"length":53}
+    >@ParameterDecorator1
+    >        @ParameterDecorator2(30)
+    >:=> (line 16, col 8) to (line 17, col 32)
+--------------------------------
+18 >            ...b: string[]) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (823 to 849)  SpanInfo: {"start":835,"length":14}
+    >...b: string[]
+    >:=> (line 18, col 12) to (line 18, col 26)
+18 >            ...b: string[]) {
+
+                               ~~~                => Pos: (850 to 852)  SpanInfo: {"start":857,"length":1}
+    >}
+    >:=> (line 19, col 4) to (line 19, col 5)
+--------------------------------
+19 >    }
+
+    ~~~~~~                                        => Pos: (853 to 858)  SpanInfo: {"start":857,"length":1}
+    >}
+    >:=> (line 19, col 4) to (line 19, col 5)
+--------------------------------
+20 >
+
+    ~                                             => Pos: (859 to 859)  SpanInfo: undefined
+--------------------------------
+21 >    @PropertyDecorator1
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (860 to 883)  SpanInfo: {"start":864,"length":47}
+    >@PropertyDecorator1
+    >    @PropertyDecorator2(40)
+    >:=> (line 21, col 4) to (line 22, col 27)
+--------------------------------
+22 >    @PropertyDecorator2(40)
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (884 to 911)  SpanInfo: {"start":864,"length":47}
+    >@PropertyDecorator1
+    >    @PropertyDecorator2(40)
+    >:=> (line 21, col 4) to (line 22, col 27)
+--------------------------------
+23 >    greet() {
+
+    ~~~~~~~~~~~                                   => Pos: (912 to 922)  SpanInfo: {"start":916,"length":64}
+    >greet() {
+    >        return "<h1>" + this.greeting + "</h1>";
+    >    }
+    >:=> (line 23, col 4) to (line 25, col 5)
+23 >    greet() {
+
+               ~~~                                => Pos: (923 to 925)  SpanInfo: {"start":934,"length":39}
+    >return "<h1>" + this.greeting + "</h1>"
+    >:=> (line 24, col 8) to (line 24, col 47)
+--------------------------------
+24 >        return "<h1>" + this.greeting + "</h1>";
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (926 to 974)  SpanInfo: {"start":934,"length":39}
+    >return "<h1>" + this.greeting + "</h1>"
+    >:=> (line 24, col 8) to (line 24, col 47)
+--------------------------------
+25 >    }
+
+    ~~~~~~                                        => Pos: (975 to 980)  SpanInfo: {"start":979,"length":1}
+    >}
+    >:=> (line 25, col 4) to (line 25, col 5)
+--------------------------------
+26 >
+
+    ~                                             => Pos: (981 to 981)  SpanInfo: undefined
+--------------------------------
+27 >    @PropertyDecorator1
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (982 to 1005)  SpanInfo: {"start":986,"length":47}
+    >@PropertyDecorator1
+    >    @PropertyDecorator2(50)
+    >:=> (line 27, col 4) to (line 28, col 27)
+--------------------------------
+28 >    @PropertyDecorator2(50)
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (1006 to 1033)  SpanInfo: {"start":986,"length":47}
+    >@PropertyDecorator1
+    >    @PropertyDecorator2(50)
+    >:=> (line 27, col 4) to (line 28, col 27)
+--------------------------------
+29 >    private x: string;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (1034 to 1056)  SpanInfo: undefined
+--------------------------------
+30 >
+
+    ~                                             => Pos: (1057 to 1057)  SpanInfo: undefined
+--------------------------------
+31 >    @PropertyDecorator1
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (1058 to 1081)  SpanInfo: {"start":1062,"length":47}
+    >@PropertyDecorator1
+    >    @PropertyDecorator2(60)
+    >:=> (line 31, col 4) to (line 32, col 27)
+--------------------------------
+32 >    @PropertyDecorator2(60)
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (1082 to 1109)  SpanInfo: {"start":1062,"length":47}
+    >@PropertyDecorator1
+    >    @PropertyDecorator2(60)
+    >:=> (line 31, col 4) to (line 32, col 27)
+--------------------------------
+33 >    private static x1: number = 10;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~          => Pos: (1110 to 1145)  SpanInfo: {"start":1114,"length":31}
+    >private static x1: number = 10;
+    >:=> (line 33, col 4) to (line 33, col 35)
+--------------------------------
+34 >
+
+    ~                                             => Pos: (1146 to 1146)  SpanInfo: undefined
+--------------------------------
+35 >    private fn(
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (1147 to 1162)  SpanInfo: {"start":1151,"length":130}
+    >private fn(
+    >        @ParameterDecorator1
+    >        @ParameterDecorator2(70)
+    >        x: number) {
+    >        return this.greeting;
+    >    }
+    >:=> (line 35, col 4) to (line 40, col 5)
+--------------------------------
+36 >        @ParameterDecorator1
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 => Pos: (1163 to 1191)  SpanInfo: {"start":1171,"length":53}
+    >@ParameterDecorator1
+    >        @ParameterDecorator2(70)
+    >:=> (line 36, col 8) to (line 37, col 32)
+--------------------------------
+37 >        @ParameterDecorator2(70)
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             => Pos: (1192 to 1224)  SpanInfo: {"start":1171,"length":53}
+    >@ParameterDecorator1
+    >        @ParameterDecorator2(70)
+    >:=> (line 36, col 8) to (line 37, col 32)
+--------------------------------
+38 >        x: number) {
+
+    ~~~~~~~~~~~~~~~~~~~~~                         => Pos: (1225 to 1245)  SpanInfo: {"start":1254,"length":20}
+    >return this.greeting
+    >:=> (line 39, col 8) to (line 39, col 28)
+--------------------------------
+39 >        return this.greeting;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                => Pos: (1246 to 1275)  SpanInfo: {"start":1254,"length":20}
+    >return this.greeting
+    >:=> (line 39, col 8) to (line 39, col 28)
+--------------------------------
+40 >    }
+
+    ~~~~~~                                        => Pos: (1276 to 1281)  SpanInfo: {"start":1280,"length":1}
+    >}
+    >:=> (line 40, col 4) to (line 40, col 5)
+--------------------------------
+41 >
+
+    ~                                             => Pos: (1282 to 1282)  SpanInfo: undefined
+--------------------------------
+42 >    @PropertyDecorator1
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (1283 to 1306)  SpanInfo: {"start":1287,"length":47}
+    >@PropertyDecorator1
+    >    @PropertyDecorator2(80)
+    >:=> (line 42, col 4) to (line 43, col 27)
+--------------------------------
+43 >    @PropertyDecorator2(80)
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (1307 to 1334)  SpanInfo: {"start":1287,"length":47}
+    >@PropertyDecorator1
+    >    @PropertyDecorator2(80)
+    >:=> (line 42, col 4) to (line 43, col 27)
+--------------------------------
+44 >    get greetings() {
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (1335 to 1353)  SpanInfo: {"start":1339,"length":53}
+    >get greetings() {
+    >        return this.greeting;
+    >    }
+    >:=> (line 44, col 4) to (line 46, col 5)
+44 >    get greetings() {
+
+                       ~~~                        => Pos: (1354 to 1356)  SpanInfo: {"start":1365,"length":20}
+    >return this.greeting
+    >:=> (line 45, col 8) to (line 45, col 28)
+--------------------------------
+45 >        return this.greeting;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                => Pos: (1357 to 1386)  SpanInfo: {"start":1365,"length":20}
+    >return this.greeting
+    >:=> (line 45, col 8) to (line 45, col 28)
+--------------------------------
+46 >    }
+
+    ~~~~~~                                        => Pos: (1387 to 1392)  SpanInfo: {"start":1391,"length":1}
+    >}
+    >:=> (line 46, col 4) to (line 46, col 5)
+--------------------------------
+47 >
+
+    ~                                             => Pos: (1393 to 1393)  SpanInfo: undefined
+--------------------------------
+48 >    set greetings(
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (1394 to 1412)  SpanInfo: {"start":1398,"length":146}
+    >set greetings(
+    >        @ParameterDecorator1
+    >        @ParameterDecorator2(90)
+    >        greetings: string) {
+    >        this.greeting = greetings;
+    >    }
+    >:=> (line 48, col 4) to (line 53, col 5)
+--------------------------------
+49 >        @ParameterDecorator1
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 => Pos: (1413 to 1441)  SpanInfo: {"start":1421,"length":53}
+    >@ParameterDecorator1
+    >        @ParameterDecorator2(90)
+    >:=> (line 49, col 8) to (line 50, col 32)
+--------------------------------
+50 >        @ParameterDecorator2(90)
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             => Pos: (1442 to 1474)  SpanInfo: {"start":1421,"length":53}
+    >@ParameterDecorator1
+    >        @ParameterDecorator2(90)
+    >:=> (line 49, col 8) to (line 50, col 32)
+--------------------------------
+51 >        greetings: string) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 => Pos: (1475 to 1503)  SpanInfo: {"start":1512,"length":25}
+    >this.greeting = greetings
+    >:=> (line 52, col 8) to (line 52, col 33)
+--------------------------------
+52 >        this.greeting = greetings;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~           => Pos: (1504 to 1538)  SpanInfo: {"start":1512,"length":25}
+    >this.greeting = greetings
+    >:=> (line 52, col 8) to (line 52, col 33)
+--------------------------------
+53 >    }
+
+    ~~~~~~                                        => Pos: (1539 to 1544)  SpanInfo: {"start":1543,"length":1}
+    >}
+    >:=> (line 53, col 4) to (line 53, col 5)
+--------------------------------
+54 >}
+    ~                                             => Pos: (1545 to 1545)  SpanInfo: {"start":1545,"length":1}
+    >}
+    >:=> (line 54, col 0) to (line 54, col 1)

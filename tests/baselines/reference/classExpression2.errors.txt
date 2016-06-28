@@ -1,8 +1,0 @@
-tests/cases/conformance/classes/classExpressions/classExpression2.ts(2,15): error TS9003: 'class' expressions are not currently supported.
-
-
-==== tests/cases/conformance/classes/classExpressions/classExpression2.ts (1 errors) ====
-    class D { }
-    var v = class C extends D {};
-                  ~
-!!! error TS9003: 'class' expressions are not currently supported.

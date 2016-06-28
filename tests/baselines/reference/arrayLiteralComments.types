@@ -1,0 +1,36 @@
+=== tests/cases/compiler/arrayLiteralComments.ts ===
+var testArrayWithFunc = [
+>testArrayWithFunc : ((() => void) | string | number | { a: number; } | number[])[]
+>[    // Function comment    function() {        let x = 1;    },    // String comment    '1',    // Numeric comment    2,    // Object comment    { a: 1 },    // Array comment    [1, 2, 3]] : ((() => void) | string | number | { a: number; } | number[])[]
+
+    // Function comment
+    function() {
+>function() {        let x = 1;    } : () => void
+
+        let x = 1;
+>x : number
+>1 : number
+
+    },
+    // String comment
+    '1',
+>'1' : string
+
+    // Numeric comment
+    2,
+>2 : number
+
+    // Object comment
+    { a: 1 },
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : number
+
+    // Array comment
+    [1, 2, 3]
+>[1, 2, 3] : number[]
+>1 : number
+>2 : number
+>3 : number
+
+]

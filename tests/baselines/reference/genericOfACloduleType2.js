@@ -21,7 +21,7 @@ var G = (function () {
     }
     G.prototype.bar = function (x) { return x; };
     return G;
-})();
+}());
 var M;
 (function (M) {
     var C = (function () {
@@ -29,7 +29,7 @@ var M;
         }
         C.prototype.foo = function () { };
         return C;
-    })();
+    }());
     M.C = C;
     var C;
     (function (C) {
@@ -37,7 +37,7 @@ var M;
             function X() {
             }
             return X;
-        })();
+        }());
         C.X = X;
     })(C = M.C || (M.C = {}));
     var g1 = new G();

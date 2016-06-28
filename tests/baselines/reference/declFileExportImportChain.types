@@ -4,10 +4,10 @@ import c = require("declFileExportImportChain_c");
 
 export var x: c.b1.a.m2.c1;
 >x : c.b1.a.m2.c1
->c : unknown
->b1 : unknown
->a : unknown
->m2 : unknown
+>c : any
+>b1 : any
+>a : any
+>m2 : any
 >c1 : c.b1.a.m2.c1
 
 === tests/cases/compiler/declFileExportImportChain_a.ts ===

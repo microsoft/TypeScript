@@ -40,4 +40,6 @@ var y = new enumdule.Point(0, 0);
 >enumdule.Point : typeof enumdule.Point
 >enumdule : typeof enumdule
 >Point : typeof enumdule.Point
+>0 : number
+>0 : number
 

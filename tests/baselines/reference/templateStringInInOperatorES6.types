@@ -2,7 +2,11 @@
 var x = `${ "hi" }` in { hi: 10, hello: 20};
 >x : boolean
 >`${ "hi" }` in { hi: 10, hello: 20} : boolean
+>`${ "hi" }` : string
+>"hi" : string
 >{ hi: 10, hello: 20} : { hi: number; hello: number; }
 >hi : number
+>10 : number
 >hello : number
+>20 : number
 

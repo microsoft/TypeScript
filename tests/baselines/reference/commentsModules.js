@@ -101,8 +101,6 @@ new m7.m8.m9.c();
 /** Module comment*/
 var m1;
 (function (m1) {
-    /** b's comment*/
-    m1.b;
     /** foo's comment*/
     function foo() {
         return m1.b;
@@ -115,7 +113,7 @@ var m1;
             function c() {
             }
             return c;
-        })();
+        }());
         m2.c = c;
         ;
         /** i*/
@@ -154,7 +152,7 @@ var m2;
             function c() {
             }
             return c;
-        })();
+        }());
         m3.c = c;
     })(m3 = m2.m3 || (m2.m3 = {}));
 })(m2 || (m2 = {})); /* trailing dotted module comment*/
@@ -171,7 +169,7 @@ var m3;
                 function c() {
                 }
                 return c;
-            })();
+            }());
             m5.c = c;
         })(m5 = m4.m5 || (m4.m5 = {}));
     })(m4 = m3.m4 || (m3.m4 = {}));
@@ -191,7 +189,7 @@ var m4;
                     function c() {
                     }
                     return c;
-                })();
+                }());
                 m7.c = c;
             })(m7 = m6.m7 || (m6.m7 = {})); /* trailing inner module */ /* multiple comments*/
         })(m6 = m5.m6 || (m5.m6 = {}));
@@ -213,7 +211,7 @@ var m5;
                     function c() {
                     }
                     return c;
-                })();
+                }());
                 m8.c = c;
             })(m8 = m7.m8 || (m7.m8 = {}));
         })(m7 = m6.m7 || (m6.m7 = {}));
@@ -231,7 +229,7 @@ var m6;
                 function c() {
                 }
                 return c;
-            })();
+            }());
             m8.c = c;
         })(m8 = m7.m8 || (m7.m8 = {}));
     })(m7 = m6.m7 || (m6.m7 = {}));
@@ -249,20 +247,20 @@ var m7;
                 function c() {
                 }
                 return c;
-            })();
+            }());
             m9.c = c;
             /** class d */
             var d = (function () {
                 function d() {
                 }
                 return d;
-            })();
+            }());
             // class e
             var e = (function () {
                 function e() {
                 }
                 return e;
-            })();
+            }());
             m9.e = e;
         })(m9 = m8.m9 || (m8.m9 = {}));
     })(m8 = m7.m8 || (m7.m8 = {}));

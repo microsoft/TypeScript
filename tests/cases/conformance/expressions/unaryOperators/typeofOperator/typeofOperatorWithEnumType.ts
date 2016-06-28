@@ -1,3 +1,5 @@
+// @allowUnusedLabels: true
+
 // typeof  operator on enum type
 
 enum ENUM { };

@@ -25,7 +25,7 @@ var Foo = (function () {
     }
     Foo.prototype.bar1 = function () { };
     return Foo;
-})();
+}());
 //class Foo(s: String);
 var f1 = new Foo("hey");
 f1.bar1();

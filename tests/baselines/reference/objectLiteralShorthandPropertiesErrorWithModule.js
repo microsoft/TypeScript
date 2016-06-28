@@ -20,7 +20,6 @@ m.y.x;
 var x = "Foo";
 var m;
 (function (m) {
-    m.x;
 })(m || (m = {}));
 var n;
 (function (n) {

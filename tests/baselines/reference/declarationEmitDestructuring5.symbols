@@ -1,0 +1,21 @@
+=== tests/cases/compiler/declarationEmitDestructuring5.ts ===
+function baz([, z, , ]) { }
+>baz : Symbol(baz, Decl(declarationEmitDestructuring5.ts, 0, 0))
+>z : Symbol(z, Decl(declarationEmitDestructuring5.ts, 0, 15))
+
+function foo([, b, ]: [any, any]): void { }
+>foo : Symbol(foo, Decl(declarationEmitDestructuring5.ts, 0, 27))
+>b : Symbol(b, Decl(declarationEmitDestructuring5.ts, 1, 15))
+
+function bar([z, , , ]) { }
+>bar : Symbol(bar, Decl(declarationEmitDestructuring5.ts, 1, 43))
+>z : Symbol(z, Decl(declarationEmitDestructuring5.ts, 2, 14))
+
+function bar1([z, , , ] = [1, 3, 4, 6, 7]) { }
+>bar1 : Symbol(bar1, Decl(declarationEmitDestructuring5.ts, 2, 27))
+>z : Symbol(z, Decl(declarationEmitDestructuring5.ts, 3, 15))
+
+function bar2([,,z, , , ]) { }
+>bar2 : Symbol(bar2, Decl(declarationEmitDestructuring5.ts, 3, 46))
+>z : Symbol(z, Decl(declarationEmitDestructuring5.ts, 4, 17))
+

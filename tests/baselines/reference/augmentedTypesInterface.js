@@ -10,11 +10,11 @@ interface i {
 }
 
 // interface then class
-interface i2 { // error
+interface i2 {
     foo(): void;
 }
 
-class i2 {  // error
+class i2 {
     bar() {
         return 1;
     }
@@ -42,7 +42,7 @@ var i2 = (function () {
         return 1;
     };
     return i2;
-})();
+}());
 var i3;
 (function (i3) {
     i3[i3["One"] = 0] = "One";

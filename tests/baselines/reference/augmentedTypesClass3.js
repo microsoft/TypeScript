@@ -20,13 +20,13 @@ var c5 = (function () {
     }
     c5.prototype.foo = function () { };
     return c5;
-})();
+}());
 var c5a = (function () {
     function c5a() {
     }
     c5a.prototype.foo = function () { };
     return c5a;
-})();
+}());
 var c5a;
 (function (c5a) {
     var y = 2;
@@ -36,7 +36,7 @@ var c5b = (function () {
     }
     c5b.prototype.foo = function () { };
     return c5b;
-})();
+}());
 var c5b;
 (function (c5b) {
     c5b.y = 2;
@@ -47,5 +47,5 @@ var c5c = (function () {
     }
     c5c.prototype.foo = function () { };
     return c5c;
-})();
+}());
 //import c5c = require(''); 

@@ -1,0 +1,18 @@
+=== tests/cases/conformance/es6/restParameters/emitRestParametersFunctionExpression.ts ===
+var funcExp = (...rest) => { }
+>funcExp : Symbol(funcExp, Decl(emitRestParametersFunctionExpression.ts, 0, 3))
+>rest : Symbol(rest, Decl(emitRestParametersFunctionExpression.ts, 0, 15))
+
+var funcExp1 = (X: number, ...rest) => { }
+>funcExp1 : Symbol(funcExp1, Decl(emitRestParametersFunctionExpression.ts, 1, 3))
+>X : Symbol(X, Decl(emitRestParametersFunctionExpression.ts, 1, 16))
+>rest : Symbol(rest, Decl(emitRestParametersFunctionExpression.ts, 1, 26))
+
+var funcExp2 = function (...rest) { }
+>funcExp2 : Symbol(funcExp2, Decl(emitRestParametersFunctionExpression.ts, 2, 3))
+>rest : Symbol(rest, Decl(emitRestParametersFunctionExpression.ts, 2, 25))
+
+var funcExp3 = (function (...rest) { })()
+>funcExp3 : Symbol(funcExp3, Decl(emitRestParametersFunctionExpression.ts, 3, 3))
+>rest : Symbol(rest, Decl(emitRestParametersFunctionExpression.ts, 3, 26))
+

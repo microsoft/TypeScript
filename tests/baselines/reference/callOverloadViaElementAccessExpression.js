@@ -19,7 +19,7 @@ var C = (function () {
         return null;
     };
     return C;
-})();
+}());
 var c = new C();
 var r = c['foo'](1);
 var r2 = c['foo']('');

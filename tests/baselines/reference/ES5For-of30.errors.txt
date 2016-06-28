@@ -1,4 +1,4 @@
-tests/cases/conformance/statements/for-ofStatements/ES5For-of30.ts(3,6): error TS2461: Type 'string | number' is not an array type.
+tests/cases/conformance/statements/for-ofStatements/ES5For-of30.ts(3,6): error TS2461: Type 'number | string' is not an array type.
 tests/cases/conformance/statements/for-ofStatements/ES5For-of30.ts(3,7): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/statements/for-ofStatements/ES5For-of30.ts(3,14): error TS2322: Type 'string' is not assignable to type 'number'.
 
@@ -8,7 +8,7 @@ tests/cases/conformance/statements/for-ofStatements/ES5For-of30.ts(3,14): error 
     var tuple: [number, string] = [2, "3"];
     for ([a = 1, b = ""] of tuple) {
          ~~~~~~~~~~~~~~~
-!!! error TS2461: Type 'string | number' is not an array type.
+!!! error TS2461: Type 'number | string' is not an array type.
           ~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
                  ~

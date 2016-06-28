@@ -22,4 +22,4 @@ var C = (function () {
     };
     C.prototype.bar = function () { };
     return C;
-})();
+}());

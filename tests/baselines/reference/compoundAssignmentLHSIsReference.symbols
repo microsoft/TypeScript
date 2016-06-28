@@ -1,0 +1,100 @@
+=== tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsReference.ts ===
+var value;
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+
+// identifiers: variable and parameter
+var x1: number;
+>x1 : Symbol(x1, Decl(compoundAssignmentLHSIsReference.ts, 3, 3))
+
+x1 *= value;
+>x1 : Symbol(x1, Decl(compoundAssignmentLHSIsReference.ts, 3, 3))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+
+x1 += value;
+>x1 : Symbol(x1, Decl(compoundAssignmentLHSIsReference.ts, 3, 3))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+
+function fn1(x2: number) {
+>fn1 : Symbol(fn1, Decl(compoundAssignmentLHSIsReference.ts, 5, 12))
+>x2 : Symbol(x2, Decl(compoundAssignmentLHSIsReference.ts, 7, 13))
+
+    x2 *= value;
+>x2 : Symbol(x2, Decl(compoundAssignmentLHSIsReference.ts, 7, 13))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+
+    x2 += value;
+>x2 : Symbol(x2, Decl(compoundAssignmentLHSIsReference.ts, 7, 13))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+}
+
+// property accesses
+var x3: { a: number };
+>x3 : Symbol(x3, Decl(compoundAssignmentLHSIsReference.ts, 13, 3))
+>a : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
+
+x3.a *= value;
+>x3.a : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
+>x3 : Symbol(x3, Decl(compoundAssignmentLHSIsReference.ts, 13, 3))
+>a : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+
+x3.a += value;
+>x3.a : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
+>x3 : Symbol(x3, Decl(compoundAssignmentLHSIsReference.ts, 13, 3))
+>a : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+
+x3['a'] *= value;
+>x3 : Symbol(x3, Decl(compoundAssignmentLHSIsReference.ts, 13, 3))
+>'a' : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+
+x3['a'] += value;
+>x3 : Symbol(x3, Decl(compoundAssignmentLHSIsReference.ts, 13, 3))
+>'a' : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+
+// parentheses, the contained expression is reference
+(x1) *= value;
+>x1 : Symbol(x1, Decl(compoundAssignmentLHSIsReference.ts, 3, 3))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+
+(x1) += value;
+>x1 : Symbol(x1, Decl(compoundAssignmentLHSIsReference.ts, 3, 3))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+
+function fn2(x4: number) {
+>fn2 : Symbol(fn2, Decl(compoundAssignmentLHSIsReference.ts, 22, 14))
+>x4 : Symbol(x4, Decl(compoundAssignmentLHSIsReference.ts, 24, 13))
+
+    (x4) *= value;
+>x4 : Symbol(x4, Decl(compoundAssignmentLHSIsReference.ts, 24, 13))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+
+    (x4) += value;
+>x4 : Symbol(x4, Decl(compoundAssignmentLHSIsReference.ts, 24, 13))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+}
+
+(x3.a) *= value;
+>x3.a : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
+>x3 : Symbol(x3, Decl(compoundAssignmentLHSIsReference.ts, 13, 3))
+>a : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+
+(x3.a) += value;
+>x3.a : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
+>x3 : Symbol(x3, Decl(compoundAssignmentLHSIsReference.ts, 13, 3))
+>a : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+
+(x3['a']) *= value;
+>x3 : Symbol(x3, Decl(compoundAssignmentLHSIsReference.ts, 13, 3))
+>'a' : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+
+(x3['a']) += value;
+>x3 : Symbol(x3, Decl(compoundAssignmentLHSIsReference.ts, 13, 3))
+>'a' : Symbol(a, Decl(compoundAssignmentLHSIsReference.ts, 13, 9))
+>value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
+

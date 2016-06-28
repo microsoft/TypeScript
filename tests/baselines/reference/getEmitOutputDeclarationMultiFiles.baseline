@@ -5,7 +5,7 @@ var Bar = (function () {
     function Bar() {
     }
     return Bar;
-})();
+}());
 FileName : tests/cases/fourslash/inputFile1.d.ts
 declare var x: number;
 declare class Bar {
@@ -20,7 +20,7 @@ var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 FileName : tests/cases/fourslash/inputFile2.d.ts
 declare var x1: string;
 declare class Foo {

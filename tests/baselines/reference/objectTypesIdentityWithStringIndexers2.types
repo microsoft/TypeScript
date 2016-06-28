@@ -64,10 +64,11 @@ var b: { [x: string]: Derived; } = { foo: <Derived>null };
 >b : { [x: string]: Derived; }
 >x : string
 >Derived : Derived
->{ foo: <Derived>null } : { [x: string]: Derived; foo: Derived; }
+>{ foo: <Derived>null } : { foo: Derived; }
 >foo : Derived
 ><Derived>null : Derived
 >Derived : Derived
+>null : null
 
 function foo1(x: A);
 >foo1 : { (x: A): any; (x: A): any; }

@@ -1,0 +1,38 @@
+=== tests/cases/conformance/es6/defaultParameters/emitDefaultParametersFunctionExpression.ts ===
+var lambda1 = (y = "hello") => { }
+>lambda1 : Symbol(lambda1, Decl(emitDefaultParametersFunctionExpression.ts, 0, 3))
+>y : Symbol(y, Decl(emitDefaultParametersFunctionExpression.ts, 0, 15))
+
+var lambda2 = (x: number, y = "hello") => { }
+>lambda2 : Symbol(lambda2, Decl(emitDefaultParametersFunctionExpression.ts, 1, 3))
+>x : Symbol(x, Decl(emitDefaultParametersFunctionExpression.ts, 1, 15))
+>y : Symbol(y, Decl(emitDefaultParametersFunctionExpression.ts, 1, 25))
+
+var lambda3 = (x: number, y = "hello", ...rest) => { }
+>lambda3 : Symbol(lambda3, Decl(emitDefaultParametersFunctionExpression.ts, 2, 3))
+>x : Symbol(x, Decl(emitDefaultParametersFunctionExpression.ts, 2, 15))
+>y : Symbol(y, Decl(emitDefaultParametersFunctionExpression.ts, 2, 25))
+>rest : Symbol(rest, Decl(emitDefaultParametersFunctionExpression.ts, 2, 38))
+
+var lambda4 = (y = "hello", ...rest) => { }
+>lambda4 : Symbol(lambda4, Decl(emitDefaultParametersFunctionExpression.ts, 3, 3))
+>y : Symbol(y, Decl(emitDefaultParametersFunctionExpression.ts, 3, 15))
+>rest : Symbol(rest, Decl(emitDefaultParametersFunctionExpression.ts, 3, 27))
+
+var x = function (str = "hello", ...rest) { }
+>x : Symbol(x, Decl(emitDefaultParametersFunctionExpression.ts, 5, 3))
+>str : Symbol(str, Decl(emitDefaultParametersFunctionExpression.ts, 5, 18))
+>rest : Symbol(rest, Decl(emitDefaultParametersFunctionExpression.ts, 5, 32))
+
+var y = (function (num = 10, boo = false, ...rest) { })()
+>y : Symbol(y, Decl(emitDefaultParametersFunctionExpression.ts, 6, 3))
+>num : Symbol(num, Decl(emitDefaultParametersFunctionExpression.ts, 6, 19))
+>boo : Symbol(boo, Decl(emitDefaultParametersFunctionExpression.ts, 6, 28))
+>rest : Symbol(rest, Decl(emitDefaultParametersFunctionExpression.ts, 6, 41))
+
+var z = (function (num: number, boo = false, ...rest) { })(10)
+>z : Symbol(z, Decl(emitDefaultParametersFunctionExpression.ts, 7, 3))
+>num : Symbol(num, Decl(emitDefaultParametersFunctionExpression.ts, 7, 19))
+>boo : Symbol(boo, Decl(emitDefaultParametersFunctionExpression.ts, 7, 31))
+>rest : Symbol(rest, Decl(emitDefaultParametersFunctionExpression.ts, 7, 44))
+

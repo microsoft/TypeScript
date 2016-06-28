@@ -1,5 +1,6 @@
 // @module: amd
 // @declaration: true
+// @target: ES5
 
 // @filename: server.ts
 var a = 10;

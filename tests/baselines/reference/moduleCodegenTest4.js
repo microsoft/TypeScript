@@ -5,6 +5,7 @@ Baz.x = "goodbye";
 void 0;
 
 //// [moduleCodegenTest4.js]
+"use strict";
 var Baz;
 (function (Baz) {
     Baz.x = "hello";

@@ -21,6 +21,7 @@ class SymbolIterator {
 
             done: false
 >done : boolean
+>false : boolean
 
         };
     }
@@ -31,6 +32,6 @@ class SymbolIterator {
 >iterator : symbol
 
         return this;
->this : SymbolIterator
+>this : this
     }
 }

@@ -15,7 +15,7 @@ var C = (function () {
             function D() {
             }
             return D;
-        })();
+        }());
     }
     return C;
-})();
+}());

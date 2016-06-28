@@ -5,3 +5,4 @@ export interface Album {
 }
 
 //// [duplicateStringNamedProperty1.js]
+"use strict";

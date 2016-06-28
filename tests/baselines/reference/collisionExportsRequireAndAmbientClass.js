@@ -39,6 +39,7 @@ module m4 {
 
 //// [collisionExportsRequireAndAmbientClass_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var m2;
     (function (m2) {
     })(m2 || (m2 = {}));

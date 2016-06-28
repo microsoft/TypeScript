@@ -1,4 +1,5 @@
 //// [commentEmitAtEndOfFile1.ts]
+
 // test
 var f = ''
 // test #2

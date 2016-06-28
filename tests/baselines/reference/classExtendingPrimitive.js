@@ -16,11 +16,10 @@ class C8 extends E { }
 
 //// [classExtendingPrimitive.js]
 // classes cannot extend primitives
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var C = (function (_super) {
     __extends(C, _super);
@@ -28,33 +27,33 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(number);
+}(number));
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
         _super.apply(this, arguments);
     }
     return C2;
-})(string);
+}(string));
 var C3 = (function (_super) {
     __extends(C3, _super);
     function C3() {
         _super.apply(this, arguments);
     }
     return C3;
-})(boolean);
+}(boolean));
 var C4 = (function (_super) {
     __extends(C4, _super);
     function C4() {
         _super.apply(this, arguments);
     }
     return C4;
-})(Void);
+}(Void));
 var C4a = (function () {
     function C4a() {
     }
     return C4a;
-})();
+}());
 void {};
 var C5 = (function (_super) {
     __extends(C5, _super);
@@ -62,28 +61,28 @@ var C5 = (function (_super) {
         _super.apply(this, arguments);
     }
     return C5;
-})(Null);
+}(Null));
 var C5a = (function (_super) {
     __extends(C5a, _super);
     function C5a() {
         _super.apply(this, arguments);
     }
     return C5a;
-})(null);
+}(null));
 var C6 = (function (_super) {
     __extends(C6, _super);
     function C6() {
         _super.apply(this, arguments);
     }
     return C6;
-})(undefined);
+}(undefined));
 var C7 = (function (_super) {
     __extends(C7, _super);
     function C7() {
         _super.apply(this, arguments);
     }
     return C7;
-})(Undefined);
+}(Undefined));
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -94,4 +93,4 @@ var C8 = (function (_super) {
         _super.apply(this, arguments);
     }
     return C8;
-})(E);
+}(E));

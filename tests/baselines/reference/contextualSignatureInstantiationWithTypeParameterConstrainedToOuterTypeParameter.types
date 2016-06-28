@@ -10,6 +10,7 @@ function f<T>() {
 >u : U
 >U : U
 >U : U
+>null : null
 
     return g;
 >g : <U extends T>(u: U) => U
@@ -30,6 +31,7 @@ var x = h("", f<string>()); // Call should succeed and x should be string. All t
 >x : string
 >h("", f<string>()) : string
 >h : <V, W>(v: V, func: (v: V) => W) => W
+>"" : string
 >f<string>() : <U extends string>(u: U) => U
 >f : <T>() => <U extends T>(u: U) => U
 

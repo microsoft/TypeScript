@@ -1,6 +1,6 @@
 // @target: ES5
 // @declaration: true
-// @comments: true
+// @removeComments: false
 
 /** This is class c2 without constuctor*/
 class c2 {

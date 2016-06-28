@@ -7,6 +7,7 @@ x.name = "hello";
 >x.name : any
 >x : any
 >name : any
+>"hello" : string
 
 var z = x + x;
 >z : any

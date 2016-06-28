@@ -1,0 +1,58 @@
+=== tests/cases/conformance/es6/spread/iteratorSpreadInArray2.ts ===
+var array = [...new NumberIterator, ...new SymbolIterator];
+>array : Symbol(array, Decl(iteratorSpreadInArray2.ts, 0, 3))
+>NumberIterator : Symbol(NumberIterator, Decl(iteratorSpreadInArray2.ts, 13, 1))
+>SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInArray2.ts, 0, 59))
+
+class SymbolIterator {
+>SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInArray2.ts, 0, 59))
+
+    next() {
+>next : Symbol(SymbolIterator.next, Decl(iteratorSpreadInArray2.ts, 2, 22))
+
+        return {
+            value: Symbol(),
+>value : Symbol(value, Decl(iteratorSpreadInArray2.ts, 4, 16))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+
+            done: false
+>done : Symbol(done, Decl(iteratorSpreadInArray2.ts, 5, 28))
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        return this;
+>this : Symbol(SymbolIterator, Decl(iteratorSpreadInArray2.ts, 0, 59))
+    }
+}
+
+class NumberIterator {
+>NumberIterator : Symbol(NumberIterator, Decl(iteratorSpreadInArray2.ts, 13, 1))
+
+    next() {
+>next : Symbol(NumberIterator.next, Decl(iteratorSpreadInArray2.ts, 15, 22))
+
+        return {
+            value: 0,
+>value : Symbol(value, Decl(iteratorSpreadInArray2.ts, 17, 16))
+
+            done: false
+>done : Symbol(done, Decl(iteratorSpreadInArray2.ts, 18, 21))
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        return this;
+>this : Symbol(NumberIterator, Decl(iteratorSpreadInArray2.ts, 13, 1))
+    }
+}

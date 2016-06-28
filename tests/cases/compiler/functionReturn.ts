@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 function f0(): void { }
 function f1() {
     var n: any = f0();

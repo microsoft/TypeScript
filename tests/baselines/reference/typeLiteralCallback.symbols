@@ -1,0 +1,54 @@
+=== tests/cases/compiler/typeLiteralCallback.ts ===
+interface Foo<T> {
+>Foo : Symbol(Foo, Decl(typeLiteralCallback.ts, 0, 0))
+>T : Symbol(T, Decl(typeLiteralCallback.ts, 0, 14))
+
+    reject(arg: T): void ;
+>reject : Symbol(Foo.reject, Decl(typeLiteralCallback.ts, 0, 18))
+>arg : Symbol(arg, Decl(typeLiteralCallback.ts, 1, 11))
+>T : Symbol(T, Decl(typeLiteralCallback.ts, 0, 14))
+}
+var foo: Foo<string>
+>foo : Symbol(foo, Decl(typeLiteralCallback.ts, 3, 3))
+>Foo : Symbol(Foo, Decl(typeLiteralCallback.ts, 0, 0))
+
+interface bar<T> {
+>bar : Symbol(bar, Decl(typeLiteralCallback.ts, 3, 20))
+>T : Symbol(T, Decl(typeLiteralCallback.ts, 5, 14))
+
+    fail(func: (arg: T) => void ): void ;
+>fail : Symbol(bar.fail, Decl(typeLiteralCallback.ts, 5, 18))
+>func : Symbol(func, Decl(typeLiteralCallback.ts, 6, 9))
+>arg : Symbol(arg, Decl(typeLiteralCallback.ts, 6, 16))
+>T : Symbol(T, Decl(typeLiteralCallback.ts, 5, 14))
+
+    fail2(func: { (arg: T): void ; }): void ;
+>fail2 : Symbol(bar.fail2, Decl(typeLiteralCallback.ts, 6, 41))
+>func : Symbol(func, Decl(typeLiteralCallback.ts, 7, 10))
+>arg : Symbol(arg, Decl(typeLiteralCallback.ts, 7, 19))
+>T : Symbol(T, Decl(typeLiteralCallback.ts, 5, 14))
+}
+var test: bar<string>;
+>test : Symbol(test, Decl(typeLiteralCallback.ts, 9, 3))
+>bar : Symbol(bar, Decl(typeLiteralCallback.ts, 3, 20))
+
+test.fail(arg => foo.reject(arg));
+>test.fail : Symbol(bar.fail, Decl(typeLiteralCallback.ts, 5, 18))
+>test : Symbol(test, Decl(typeLiteralCallback.ts, 9, 3))
+>fail : Symbol(bar.fail, Decl(typeLiteralCallback.ts, 5, 18))
+>arg : Symbol(arg, Decl(typeLiteralCallback.ts, 11, 10))
+>foo.reject : Symbol(Foo.reject, Decl(typeLiteralCallback.ts, 0, 18))
+>foo : Symbol(foo, Decl(typeLiteralCallback.ts, 3, 3))
+>reject : Symbol(Foo.reject, Decl(typeLiteralCallback.ts, 0, 18))
+>arg : Symbol(arg, Decl(typeLiteralCallback.ts, 11, 10))
+
+test.fail2(arg => foo.reject(arg));  // Should be OK.  Was: Error: Supplied parameters do not match any signature of call target
+>test.fail2 : Symbol(bar.fail2, Decl(typeLiteralCallback.ts, 6, 41))
+>test : Symbol(test, Decl(typeLiteralCallback.ts, 9, 3))
+>fail2 : Symbol(bar.fail2, Decl(typeLiteralCallback.ts, 6, 41))
+>arg : Symbol(arg, Decl(typeLiteralCallback.ts, 12, 11))
+>foo.reject : Symbol(Foo.reject, Decl(typeLiteralCallback.ts, 0, 18))
+>foo : Symbol(foo, Decl(typeLiteralCallback.ts, 3, 3))
+>reject : Symbol(Foo.reject, Decl(typeLiteralCallback.ts, 0, 18))
+>arg : Symbol(arg, Decl(typeLiteralCallback.ts, 12, 11))
+

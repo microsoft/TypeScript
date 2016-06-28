@@ -19,4 +19,4 @@ var C5 = (function () {
     }
     C5.prototype.iFn = function () { };
     return C5;
-})();
+}());

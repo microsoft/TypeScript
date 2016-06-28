@@ -121,7 +121,7 @@ var c = (function () {
         return aOrb.toString();
     };
     return c;
-})();
+}());
 var i = new c();
 var i1_i;
 var m1;
@@ -131,7 +131,7 @@ var m1;
             this.x = x;
         }
         return b;
-    })();
+    }());
     m1.b = b;
 })(m1 || (m1 = {}));
 var shade = 1;

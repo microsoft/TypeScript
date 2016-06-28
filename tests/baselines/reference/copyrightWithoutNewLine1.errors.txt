@@ -1,4 +1,4 @@
-tests/cases/compiler/copyrightWithoutNewLine1.ts(4,24): error TS2307: Cannot find external module './greeter'.
+tests/cases/compiler/copyrightWithoutNewLine1.ts(4,24): error TS2307: Cannot find module './greeter'.
 tests/cases/compiler/copyrightWithoutNewLine1.ts(5,10): error TS2304: Cannot find name 'document'.
 
 
@@ -8,7 +8,7 @@ tests/cases/compiler/copyrightWithoutNewLine1.ts(5,10): error TS2304: Cannot fin
     ****************************/
     import model = require("./greeter")
                            ~~~~~~~~~~~
-!!! error TS2307: Cannot find external module './greeter'.
+!!! error TS2307: Cannot find module './greeter'.
     var el = document.getElementById('content');
              ~~~~~~~~
 !!! error TS2304: Cannot find name 'document'.

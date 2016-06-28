@@ -1,9 +1,9 @@
-tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(8,4): error TS2345: Argument of type '{ hello: number; }' is not assignable to parameter of type 'I2'.
-  Property 'value' is missing in type '{ hello: number; }'.
+tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(8,6): error TS2345: Argument of type '{ hello: number; }' is not assignable to parameter of type 'I2'.
+  Object literal may only specify known properties, and 'hello' does not exist in type 'I2'.
 tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(9,4): error TS2345: Argument of type '{ value: string; }' is not assignable to parameter of type 'I2'.
   Property 'doStuff' is missing in type '{ value: string; }'.
-tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(10,4): error TS2345: Argument of type '{ value: string; what: number; }' is not assignable to parameter of type 'I2'.
-  Property 'doStuff' is missing in type '{ value: string; what: number; }'.
+tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(10,17): error TS2345: Argument of type '{ value: string; what: number; }' is not assignable to parameter of type 'I2'.
+  Object literal may only specify known properties, and 'what' does not exist in type 'I2'.
 tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(11,4): error TS2345: Argument of type '{ toString: (s: any) => any; }' is not assignable to parameter of type 'I2'.
   Property 'value' is missing in type '{ toString: (s: any) => any; }'.
 tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(12,4): error TS2345: Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I2'.
@@ -21,17 +21,17 @@ tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(13,4): error T
     function f2(args: I2) { }
     
     f2({ hello: 1 }) 
-       ~~~~~~~~~~~~
+         ~~~~~~~~
 !!! error TS2345: Argument of type '{ hello: number; }' is not assignable to parameter of type 'I2'.
-!!! error TS2345:   Property 'value' is missing in type '{ hello: number; }'.
+!!! error TS2345:   Object literal may only specify known properties, and 'hello' does not exist in type 'I2'.
     f2({ value: '' })
        ~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ value: string; }' is not assignable to parameter of type 'I2'.
 !!! error TS2345:   Property 'doStuff' is missing in type '{ value: string; }'.
     f2({ value: '', what: 1 }) 
-       ~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~~~~~
 !!! error TS2345: Argument of type '{ value: string; what: number; }' is not assignable to parameter of type 'I2'.
-!!! error TS2345:   Property 'doStuff' is missing in type '{ value: string; what: number; }'.
+!!! error TS2345:   Object literal may only specify known properties, and 'what' does not exist in type 'I2'.
     f2({ toString: (s) => s }) 
        ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ toString: (s: any) => any; }' is not assignable to parameter of type 'I2'.

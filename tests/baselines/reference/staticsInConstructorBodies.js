@@ -13,4 +13,4 @@ var C = (function () {
     C.m1 = function () { }; // ERROR
     C.p1 = 0; // ERROR
     return C;
-})();
+}());

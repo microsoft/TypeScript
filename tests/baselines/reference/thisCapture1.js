@@ -22,4 +22,4 @@ var X = (function () {
         }).promise();
     };
     return X;
-})();
+}());

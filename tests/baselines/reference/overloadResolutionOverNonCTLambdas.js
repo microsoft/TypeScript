@@ -30,7 +30,7 @@ var Bugs;
         function A() {
         }
         return A;
-    })();
+    }());
     // replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
     function bug2(message) {
         var args = [];

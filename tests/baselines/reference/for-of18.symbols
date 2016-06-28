@@ -1,0 +1,32 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of18.ts ===
+var v: string;
+>v : Symbol(v, Decl(for-of18.ts, 0, 3))
+
+for (v of new StringIterator) { } // Should succeed
+>v : Symbol(v, Decl(for-of18.ts, 0, 3))
+>StringIterator : Symbol(StringIterator, Decl(for-of18.ts, 1, 33))
+
+class StringIterator {
+>StringIterator : Symbol(StringIterator, Decl(for-of18.ts, 1, 33))
+
+    next() {
+>next : Symbol(StringIterator.next, Decl(for-of18.ts, 3, 22))
+
+        return {
+            value: "",
+>value : Symbol(value, Decl(for-of18.ts, 5, 16))
+
+            done: false
+>done : Symbol(done, Decl(for-of18.ts, 6, 22))
+
+        };
+    }
+    [Symbol.iterator]() {
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        return this;
+>this : Symbol(StringIterator, Decl(for-of18.ts, 1, 33))
+    }
+}

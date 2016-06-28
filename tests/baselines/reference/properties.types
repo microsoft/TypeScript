@@ -7,6 +7,7 @@ class MyClass
 >Count : number
     {
         return 42;
+>42 : number
     }
 
     public set Count(value: number)

@@ -6,8 +6,10 @@ declare var x: number;
 x = 2;
 >x = 2 : number
 >x : number
+>2 : number
 
 === tests/cases/compiler/commentOnAmbientVariable2_1.ts ===
 var y = 1;
 >y : number
+>1 : number
 

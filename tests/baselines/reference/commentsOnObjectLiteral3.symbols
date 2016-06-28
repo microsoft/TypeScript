@@ -1,0 +1,35 @@
+=== tests/cases/compiler/commentsOnObjectLiteral3.ts ===
+
+var v = {
+>v : Symbol(v, Decl(commentsOnObjectLiteral3.ts, 1, 3))
+
+ //property
+ prop: 1 /* multiple trailing comments */ /*trailing comments*/,
+>prop : Symbol(prop, Decl(commentsOnObjectLiteral3.ts, 1, 9))
+
+ //property
+ func: function () {
+>func : Symbol(func, Decl(commentsOnObjectLiteral3.ts, 3, 64))
+
+ },
+ //PropertyName + CallSignature
+ func1() { },
+>func1 : Symbol(func1, Decl(commentsOnObjectLiteral3.ts, 6, 3))
+
+ //getter
+ get a() {
+>a : Symbol(a, Decl(commentsOnObjectLiteral3.ts, 8, 13), Decl(commentsOnObjectLiteral3.ts, 12, 18))
+
+  return this.prop;
+ } /*trailing 1*/,
+ //setter
+ set a(value) {
+>a : Symbol(a, Decl(commentsOnObjectLiteral3.ts, 8, 13), Decl(commentsOnObjectLiteral3.ts, 12, 18))
+>value : Symbol(value, Decl(commentsOnObjectLiteral3.ts, 14, 7))
+
+  this.prop = value;
+>value : Symbol(value, Decl(commentsOnObjectLiteral3.ts, 14, 7))
+
+ } // trailing 2
+};
+

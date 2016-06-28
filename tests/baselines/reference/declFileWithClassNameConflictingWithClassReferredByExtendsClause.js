@@ -21,11 +21,10 @@ module X.Y.base.Z {
 
 
 //// [declFileWithClassNameConflictingWithClassReferredByExtendsClause.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var X;
 (function (X) {
@@ -39,7 +38,7 @@ var X;
                     _super.apply(this, arguments);
                 }
                 return W;
-            })(A.B.Base.W);
+            }(A.B.Base.W));
             base.W = W;
         })(base = Y.base || (Y.base = {}));
     })(Y = X.Y || (X.Y = {}));
@@ -58,7 +57,7 @@ var X;
                         _super.apply(this, arguments);
                     }
                     return W;
-                })(X.Y.base.W);
+                }(X.Y.base.W));
                 Z.W = W;
             })(Z = base.Z || (base.Z = {}));
         })(base = Y.base || (Y.base = {}));

@@ -30,7 +30,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 // should be ok
 function foo1(x) {
 }

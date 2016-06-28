@@ -12,6 +12,6 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     M.C = C; // this should be an unresolved symbol I error
 })(M || (M = {}));

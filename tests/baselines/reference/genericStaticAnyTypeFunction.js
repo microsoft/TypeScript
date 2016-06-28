@@ -30,4 +30,4 @@ var A = (function () {
         return this.one(source, 42); // should not error
     };
     return A;
-})();
+}());

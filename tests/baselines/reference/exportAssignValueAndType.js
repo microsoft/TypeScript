@@ -15,6 +15,7 @@ export = server;
 
 
 //// [exportAssignValueAndType.js]
+"use strict";
 var x = 5;
 var server = new Date();
 module.exports = server;

@@ -1,6 +1,7 @@
 //// [letDeclarations-validContexts.ts]
 
 
+
 // Control flow statements with blocks
 if (true) { 
     let l1 = 0;

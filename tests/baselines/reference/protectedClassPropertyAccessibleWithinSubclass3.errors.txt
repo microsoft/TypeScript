@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinSubclass3.ts(11,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinSubclass3.ts(11,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 
 
 ==== tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinSubclass3.ts (1 errors) ====
@@ -14,6 +14,6 @@ tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAcce
             this.x;            // OK, accessed within a subclass of the declaring class
             super.x;           // Error, x is not public
                   ~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
         }
     }

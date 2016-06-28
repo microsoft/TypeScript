@@ -20,4 +20,4 @@ var C = (function () {
         callback(hm);
     };
     return C;
-})();
+}());

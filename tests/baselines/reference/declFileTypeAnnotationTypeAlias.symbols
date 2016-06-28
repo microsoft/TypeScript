@@ -1,0 +1,63 @@
+=== tests/cases/compiler/declFileTypeAnnotationTypeAlias.ts ===
+
+module M {
+>M : Symbol(M, Decl(declFileTypeAnnotationTypeAlias.ts, 0, 0), Decl(declFileTypeAnnotationTypeAlias.ts, 22, 1))
+
+    export type Value = string | number | boolean;
+>Value : Symbol(Value, Decl(declFileTypeAnnotationTypeAlias.ts, 1, 10))
+
+    export var x: Value;
+>x : Symbol(x, Decl(declFileTypeAnnotationTypeAlias.ts, 3, 14))
+>Value : Symbol(Value, Decl(declFileTypeAnnotationTypeAlias.ts, 1, 10))
+
+    export class c {
+>c : Symbol(c, Decl(declFileTypeAnnotationTypeAlias.ts, 3, 24))
+    }
+
+    export type C = c;
+>C : Symbol(C, Decl(declFileTypeAnnotationTypeAlias.ts, 6, 5))
+>c : Symbol(c, Decl(declFileTypeAnnotationTypeAlias.ts, 3, 24))
+
+    export module m {
+>m : Symbol(m, Decl(declFileTypeAnnotationTypeAlias.ts, 8, 22))
+
+        export class c {
+>c : Symbol(c, Decl(declFileTypeAnnotationTypeAlias.ts, 10, 21))
+        }
+    }
+
+    export type MC = m.c;
+>MC : Symbol(MC, Decl(declFileTypeAnnotationTypeAlias.ts, 13, 5))
+>m : Symbol(m, Decl(declFileTypeAnnotationTypeAlias.ts, 8, 22))
+>c : Symbol(m.c, Decl(declFileTypeAnnotationTypeAlias.ts, 10, 21))
+
+    export type fc = () => c;
+>fc : Symbol(fc, Decl(declFileTypeAnnotationTypeAlias.ts, 15, 25))
+>c : Symbol(c, Decl(declFileTypeAnnotationTypeAlias.ts, 3, 24))
+}
+
+interface Window {
+>Window : Symbol(Window, Decl(declFileTypeAnnotationTypeAlias.ts, 18, 1))
+
+    someMethod();
+>someMethod : Symbol(Window.someMethod, Decl(declFileTypeAnnotationTypeAlias.ts, 20, 18))
+}
+
+module M {
+>M : Symbol(M, Decl(declFileTypeAnnotationTypeAlias.ts, 0, 0), Decl(declFileTypeAnnotationTypeAlias.ts, 22, 1))
+
+    export type W = Window | string;
+>W : Symbol(W, Decl(declFileTypeAnnotationTypeAlias.ts, 24, 10))
+>Window : Symbol(Window, Decl(declFileTypeAnnotationTypeAlias.ts, 18, 1))
+
+    export module N {
+>N : Symbol(N, Decl(declFileTypeAnnotationTypeAlias.ts, 25, 36))
+
+        export class Window { }
+>Window : Symbol(Window, Decl(declFileTypeAnnotationTypeAlias.ts, 26, 21))
+
+        export var p: W;
+>p : Symbol(p, Decl(declFileTypeAnnotationTypeAlias.ts, 28, 18))
+>W : Symbol(W, Decl(declFileTypeAnnotationTypeAlias.ts, 24, 10))
+    }
+}

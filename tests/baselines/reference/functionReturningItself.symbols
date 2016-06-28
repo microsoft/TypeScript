@@ -1,0 +1,7 @@
+=== tests/cases/compiler/functionReturningItself.ts ===
+function somefn() {
+>somefn : Symbol(somefn, Decl(functionReturningItself.ts, 0, 0))
+
+    return somefn;
+>somefn : Symbol(somefn, Decl(functionReturningItself.ts, 0, 0))
+}

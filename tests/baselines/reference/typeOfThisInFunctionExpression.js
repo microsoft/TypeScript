@@ -71,7 +71,7 @@ var C = (function () {
         };
     }
     return C;
-})();
+}());
 var M;
 (function (M) {
     function fn() {

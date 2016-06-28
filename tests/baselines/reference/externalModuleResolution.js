@@ -17,11 +17,13 @@ import x = require('./foo');
 x.Y // .ts should be picked
 
 //// [foo.js]
+"use strict";
 var M2;
 (function (M2) {
     M2.Y = 1;
 })(M2 || (M2 = {}));
 module.exports = M2;
 //// [consumer.js]
+"use strict";
 var x = require('./foo');
 x.Y; // .ts should be picked

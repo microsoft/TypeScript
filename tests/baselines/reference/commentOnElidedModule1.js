@@ -1,7 +1,12 @@
 //// [tests/cases/compiler/commentOnElidedModule1.ts] ////
 
 //// [a.ts]
-/*! Keep this pinned comment */
+/*!=================
+    Keep this pinned
+   =================
+*/
+
+/*! Don't keep this pinned comment */
 module ElidedModule {
 }
 
@@ -15,6 +20,9 @@ module ElidedModule3 {
 }
 
 //// [a.js]
-/*! Keep this pinned comment */
+/*!=================
+    Keep this pinned
+   =================
+*/
 //// [b.js]
 ///<reference path="a.ts"/>

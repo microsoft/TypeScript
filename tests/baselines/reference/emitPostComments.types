@@ -2,6 +2,7 @@
 
 var y = 10;
 >y : number
+>10 : number
 
 /**
 * @name Foo

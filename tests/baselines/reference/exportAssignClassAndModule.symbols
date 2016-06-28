@@ -1,0 +1,38 @@
+=== tests/cases/compiler/exportAssignClassAndModule_1.ts ===
+///<reference path='exportAssignClassAndModule_0.ts'/>
+import Foo = require('./exportAssignClassAndModule_0');
+>Foo : Symbol(Foo, Decl(exportAssignClassAndModule_1.ts, 0, 0))
+
+var z: Foo.Bar;
+>z : Symbol(z, Decl(exportAssignClassAndModule_1.ts, 3, 3))
+>Foo : Symbol(Foo, Decl(exportAssignClassAndModule_1.ts, 0, 0))
+>Bar : Symbol(Foo.Bar, Decl(exportAssignClassAndModule_0.ts, 3, 12))
+
+var zz: Foo;
+>zz : Symbol(zz, Decl(exportAssignClassAndModule_1.ts, 4, 3))
+>Foo : Symbol(Foo, Decl(exportAssignClassAndModule_1.ts, 0, 0))
+
+zz.x;
+>zz.x : Symbol(Foo.x, Decl(exportAssignClassAndModule_0.ts, 0, 11))
+>zz : Symbol(zz, Decl(exportAssignClassAndModule_1.ts, 4, 3))
+>x : Symbol(Foo.x, Decl(exportAssignClassAndModule_0.ts, 0, 11))
+
+=== tests/cases/compiler/exportAssignClassAndModule_0.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(exportAssignClassAndModule_0.ts, 0, 0), Decl(exportAssignClassAndModule_0.ts, 2, 1))
+
+    x: Foo.Bar;
+>x : Symbol(Foo.x, Decl(exportAssignClassAndModule_0.ts, 0, 11))
+>Foo : Symbol(Foo, Decl(exportAssignClassAndModule_0.ts, 0, 0), Decl(exportAssignClassAndModule_0.ts, 2, 1))
+>Bar : Symbol(Foo.Bar, Decl(exportAssignClassAndModule_0.ts, 3, 12))
+}
+module Foo {
+>Foo : Symbol(Foo, Decl(exportAssignClassAndModule_0.ts, 0, 0), Decl(exportAssignClassAndModule_0.ts, 2, 1))
+
+    export interface Bar {
+>Bar : Symbol(Bar, Decl(exportAssignClassAndModule_0.ts, 3, 12))
+    }
+}
+export = Foo;
+>Foo : Symbol(Foo, Decl(exportAssignClassAndModule_0.ts, 0, 0), Decl(exportAssignClassAndModule_0.ts, 2, 1))
+

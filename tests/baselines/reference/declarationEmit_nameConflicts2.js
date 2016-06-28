@@ -28,11 +28,10 @@ var X;
                 function C() {
                 }
                 return C;
-            })();
+            }());
             base.C = C;
             var M;
             (function (M) {
-                M.v;
             })(M = base.M || (base.M = {}));
             (function (E) {
             })(base.E || (base.E = {}));

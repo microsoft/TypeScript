@@ -1,0 +1,34 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGenericClassWithZeroTypeArguments.ts ===
+// no errors expected when instantiating a generic type with no type arguments provided
+
+class C<T> {
+>C : Symbol(C, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 0, 0))
+>T : Symbol(T, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 2, 8))
+
+    x: T;
+>x : Symbol(C.x, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 2, 12))
+>T : Symbol(T, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 2, 8))
+}
+
+var c = new C();
+>c : Symbol(c, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 6, 3))
+>C : Symbol(C, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 0, 0))
+
+class D<T, U> {
+>D : Symbol(D, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 6, 16))
+>T : Symbol(T, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 8))
+>U : Symbol(U, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 10))
+
+    x: T
+>x : Symbol(D.x, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 15))
+>T : Symbol(T, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 8))
+
+    y: U
+>y : Symbol(D.y, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 9, 8))
+>U : Symbol(U, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 10))
+}
+
+var d = new D();
+>d : Symbol(d, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 13, 3))
+>D : Symbol(D, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 6, 16))
+

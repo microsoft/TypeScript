@@ -95,46 +95,47 @@ class publicClassImplementingPublicInterfaceInGlobal implements publicInterfaceI
 
 
 //// [privacyClassImplementsClauseDeclFile_externalModule.js]
+"use strict";
 var publicModule;
 (function (publicModule) {
     var privateClassImplementingPublicInterfaceInModule = (function () {
         function privateClassImplementingPublicInterfaceInModule() {
         }
         return privateClassImplementingPublicInterfaceInModule;
-    })();
+    }());
     var privateClassImplementingPrivateInterfaceInModule = (function () {
         function privateClassImplementingPrivateInterfaceInModule() {
         }
         return privateClassImplementingPrivateInterfaceInModule;
-    })();
+    }());
     var publicClassImplementingPublicInterfaceInModule = (function () {
         function publicClassImplementingPublicInterfaceInModule() {
         }
         return publicClassImplementingPublicInterfaceInModule;
-    })();
+    }());
     publicModule.publicClassImplementingPublicInterfaceInModule = publicClassImplementingPublicInterfaceInModule;
     var publicClassImplementingPrivateInterfaceInModule = (function () {
         function publicClassImplementingPrivateInterfaceInModule() {
         }
         return publicClassImplementingPrivateInterfaceInModule;
-    })();
+    }());
     publicModule.publicClassImplementingPrivateInterfaceInModule = publicClassImplementingPrivateInterfaceInModule;
     var privateClassImplementingFromPrivateModuleInterface = (function () {
         function privateClassImplementingFromPrivateModuleInterface() {
         }
         return privateClassImplementingFromPrivateModuleInterface;
-    })();
+    }());
     var publicClassImplementingFromPrivateModuleInterface = (function () {
         function publicClassImplementingFromPrivateModuleInterface() {
         }
         return publicClassImplementingFromPrivateModuleInterface;
-    })();
+    }());
     publicModule.publicClassImplementingFromPrivateModuleInterface = publicClassImplementingFromPrivateModuleInterface;
     var publicClassImplementingPrivateAndPublicInterface = (function () {
         function publicClassImplementingPrivateAndPublicInterface() {
         }
         return publicClassImplementingPrivateAndPublicInterface;
-    })();
+    }());
     publicModule.publicClassImplementingPrivateAndPublicInterface = publicClassImplementingPrivateAndPublicInterface;
 })(publicModule = exports.publicModule || (exports.publicModule = {}));
 var privateModule;
@@ -143,68 +144,68 @@ var privateModule;
         function privateClassImplementingPublicInterfaceInModule() {
         }
         return privateClassImplementingPublicInterfaceInModule;
-    })();
+    }());
     var privateClassImplementingPrivateInterfaceInModule = (function () {
         function privateClassImplementingPrivateInterfaceInModule() {
         }
         return privateClassImplementingPrivateInterfaceInModule;
-    })();
+    }());
     var publicClassImplementingPublicInterfaceInModule = (function () {
         function publicClassImplementingPublicInterfaceInModule() {
         }
         return publicClassImplementingPublicInterfaceInModule;
-    })();
+    }());
     privateModule.publicClassImplementingPublicInterfaceInModule = publicClassImplementingPublicInterfaceInModule;
     var publicClassImplementingPrivateInterfaceInModule = (function () {
         function publicClassImplementingPrivateInterfaceInModule() {
         }
         return publicClassImplementingPrivateInterfaceInModule;
-    })();
+    }());
     privateModule.publicClassImplementingPrivateInterfaceInModule = publicClassImplementingPrivateInterfaceInModule;
     var privateClassImplementingFromPrivateModuleInterface = (function () {
         function privateClassImplementingFromPrivateModuleInterface() {
         }
         return privateClassImplementingFromPrivateModuleInterface;
-    })();
+    }());
     var publicClassImplementingFromPrivateModuleInterface = (function () {
         function publicClassImplementingFromPrivateModuleInterface() {
         }
         return publicClassImplementingFromPrivateModuleInterface;
-    })();
+    }());
     privateModule.publicClassImplementingFromPrivateModuleInterface = publicClassImplementingFromPrivateModuleInterface;
 })(privateModule || (privateModule = {}));
 var privateClassImplementingPublicInterface = (function () {
     function privateClassImplementingPublicInterface() {
     }
     return privateClassImplementingPublicInterface;
-})();
+}());
 var privateClassImplementingPrivateInterfaceInModule = (function () {
     function privateClassImplementingPrivateInterfaceInModule() {
     }
     return privateClassImplementingPrivateInterfaceInModule;
-})();
+}());
 var publicClassImplementingPublicInterface = (function () {
     function publicClassImplementingPublicInterface() {
     }
     return publicClassImplementingPublicInterface;
-})();
+}());
 exports.publicClassImplementingPublicInterface = publicClassImplementingPublicInterface;
 var publicClassImplementingPrivateInterface = (function () {
     function publicClassImplementingPrivateInterface() {
     }
     return publicClassImplementingPrivateInterface;
-})();
+}());
 exports.publicClassImplementingPrivateInterface = publicClassImplementingPrivateInterface;
 var privateClassImplementingFromPrivateModuleInterface = (function () {
     function privateClassImplementingFromPrivateModuleInterface() {
     }
     return privateClassImplementingFromPrivateModuleInterface;
-})();
+}());
 var publicClassImplementingFromPrivateModuleInterface = (function () {
     function publicClassImplementingFromPrivateModuleInterface() {
     }
     return publicClassImplementingFromPrivateModuleInterface;
-})();
+}());
 exports.publicClassImplementingFromPrivateModuleInterface = publicClassImplementingFromPrivateModuleInterface;
 //// [privacyClassImplementsClauseDeclFile_GlobalFile.js]
 var publicModuleInGlobal;
@@ -213,27 +214,27 @@ var publicModuleInGlobal;
         function privateClassImplementingPublicInterfaceInModule() {
         }
         return privateClassImplementingPublicInterfaceInModule;
-    })();
+    }());
     var privateClassImplementingPrivateInterfaceInModule = (function () {
         function privateClassImplementingPrivateInterfaceInModule() {
         }
         return privateClassImplementingPrivateInterfaceInModule;
-    })();
+    }());
     var publicClassImplementingPublicInterfaceInModule = (function () {
         function publicClassImplementingPublicInterfaceInModule() {
         }
         return publicClassImplementingPublicInterfaceInModule;
-    })();
+    }());
     publicModuleInGlobal.publicClassImplementingPublicInterfaceInModule = publicClassImplementingPublicInterfaceInModule;
     var publicClassImplementingPrivateInterfaceInModule = (function () {
         function publicClassImplementingPrivateInterfaceInModule() {
         }
         return publicClassImplementingPrivateInterfaceInModule;
-    })();
+    }());
     publicModuleInGlobal.publicClassImplementingPrivateInterfaceInModule = publicClassImplementingPrivateInterfaceInModule;
 })(publicModuleInGlobal || (publicModuleInGlobal = {}));
 var publicClassImplementingPublicInterfaceInGlobal = (function () {
     function publicClassImplementingPublicInterfaceInGlobal() {
     }
     return publicClassImplementingPublicInterfaceInGlobal;
-})();
+}());

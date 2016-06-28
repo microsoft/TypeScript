@@ -16,8 +16,22 @@ var y = function (w2: WinJS) { }
 function z(w3: WinJS) { }
 
 
+//// [staticInstanceResolution5_0.js]
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    var Promise = (function () {
+        function Promise() {
+        }
+        Promise.timeout = function (delay) {
+            return null;
+        };
+        return Promise;
+    }());
+    exports.Promise = Promise;
+});
 //// [staticInstanceResolution5_1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     // these 3 should be errors
     var x = function (w1) { };
     var y = function (w2) { };

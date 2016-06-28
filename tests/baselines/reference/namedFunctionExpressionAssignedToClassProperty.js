@@ -21,4 +21,4 @@ var Foo = (function () {
         }; // this shouldn't crash the compiler...
     }
     return Foo;
-})();
+}());

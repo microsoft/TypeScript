@@ -7,18 +7,20 @@ var classes = undefined;
 }
 
 //// [file2.ts]
-import f = require('file1');
+import f = require('./file1');
 f.foo();
 
 
 //// [file1.js]
+"use strict";
 function foo() {
     var classes = undefined;
     return new classes(null);
 }
 exports.foo = foo;
 //// [file2.js]
-var f = require('file1');
+"use strict";
+var f = require('./file1');
 f.foo();
 
 

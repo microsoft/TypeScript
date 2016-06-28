@@ -7,4 +7,5 @@ foo.bar = 4;
 >foo.bar : any
 >foo : any
 >bar : any
+>4 : number
 

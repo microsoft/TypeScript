@@ -16,4 +16,4 @@ var C1 = (function () {
     }
     C1.prototype.name = function () { return ""; };
     return C1;
-})();
+}());

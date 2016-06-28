@@ -1,0 +1,20 @@
+=== tests/cases/compiler/fatArrowfunctionAsType.ts ===
+declare var b: <T>(x: T) => void ;
+>b : Symbol(b, Decl(fatArrowfunctionAsType.ts, 0, 11))
+>T : Symbol(T, Decl(fatArrowfunctionAsType.ts, 0, 16))
+>x : Symbol(x, Decl(fatArrowfunctionAsType.ts, 0, 19))
+>T : Symbol(T, Decl(fatArrowfunctionAsType.ts, 0, 16))
+
+var c: <T>(x: T) => void = function <T>(x: T) { return 42; }
+>c : Symbol(c, Decl(fatArrowfunctionAsType.ts, 2, 3))
+>T : Symbol(T, Decl(fatArrowfunctionAsType.ts, 2, 8))
+>x : Symbol(x, Decl(fatArrowfunctionAsType.ts, 2, 11))
+>T : Symbol(T, Decl(fatArrowfunctionAsType.ts, 2, 8))
+>T : Symbol(T, Decl(fatArrowfunctionAsType.ts, 2, 37))
+>x : Symbol(x, Decl(fatArrowfunctionAsType.ts, 2, 40))
+>T : Symbol(T, Decl(fatArrowfunctionAsType.ts, 2, 37))
+
+b = c;
+>b : Symbol(b, Decl(fatArrowfunctionAsType.ts, 0, 11))
+>c : Symbol(c, Decl(fatArrowfunctionAsType.ts, 2, 3))
+

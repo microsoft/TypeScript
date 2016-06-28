@@ -27,7 +27,7 @@ var K;
             this.name = name;
         }
         return L;
-    })();
+    }());
     K.L = L;
     var L;
     (function (L) {

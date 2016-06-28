@@ -1,9 +1,0 @@
-tests/cases/conformance/classes/classDeclarations/classInsideBlock.ts(2,11): error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
-
-
-==== tests/cases/conformance/classes/classDeclarations/classInsideBlock.ts (1 errors) ====
-    function foo() {
-        class C { }
-              ~
-!!! error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
-    }

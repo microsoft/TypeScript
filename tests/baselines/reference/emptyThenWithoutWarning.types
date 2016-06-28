@@ -1,0 +1,23 @@
+=== tests/cases/compiler/emptyThenWithoutWarning.ts ===
+let a = 4;
+>a : number
+>4 : number
+
+if(a === 1 || a === 2 || a === 3) {
+>a === 1 || a === 2 || a === 3 : boolean
+>a === 1 || a === 2 : boolean
+>a === 1 : boolean
+>a : number
+>1 : number
+>a === 2 : boolean
+>a : number
+>2 : number
+>a === 3 : boolean
+>a : number
+>3 : number
+}
+else {
+    let message = "Ooops";
+>message : string
+>"Ooops" : string
+}

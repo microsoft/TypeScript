@@ -1,0 +1,107 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypeAssertion01.ts ===
+
+type S = "a" | "b";
+>S : "a" | "b"
+
+type T = S[] | S;
+>T : ("a" | "b")[] | "a" | "b"
+>S : "a" | "b"
+>S : "a" | "b"
+
+var s: S;
+>s : "a" | "b"
+>S : "a" | "b"
+
+var t: T;
+>t : ("a" | "b")[] | "a" | "b"
+>T : ("a" | "b")[] | "a" | "b"
+
+var str: string;
+>str : string
+
+////////////////
+
+s = <S>t;
+>s = <S>t : "a" | "b"
+>s : "a" | "b"
+><S>t : "a" | "b"
+>S : "a" | "b"
+>t : ("a" | "b")[] | "a" | "b"
+
+s = t as S;
+>s = t as S : "a" | "b"
+>s : "a" | "b"
+>t as S : "a" | "b"
+>t : ("a" | "b")[] | "a" | "b"
+>S : "a" | "b"
+
+s = <S>str;
+>s = <S>str : "a" | "b"
+>s : "a" | "b"
+><S>str : "a" | "b"
+>S : "a" | "b"
+>str : string
+
+s = str as S;
+>s = str as S : "a" | "b"
+>s : "a" | "b"
+>str as S : "a" | "b"
+>str : string
+>S : "a" | "b"
+
+////////////////
+
+t = <T>s;
+>t = <T>s : ("a" | "b")[] | "a" | "b"
+>t : ("a" | "b")[] | "a" | "b"
+><T>s : ("a" | "b")[] | "a" | "b"
+>T : ("a" | "b")[] | "a" | "b"
+>s : "a" | "b"
+
+t = s as T;
+>t = s as T : ("a" | "b")[] | "a" | "b"
+>t : ("a" | "b")[] | "a" | "b"
+>s as T : ("a" | "b")[] | "a" | "b"
+>s : "a" | "b"
+>T : ("a" | "b")[] | "a" | "b"
+
+t = <T>str;
+>t = <T>str : ("a" | "b")[] | "a" | "b"
+>t : ("a" | "b")[] | "a" | "b"
+><T>str : ("a" | "b")[] | "a" | "b"
+>T : ("a" | "b")[] | "a" | "b"
+>str : string
+
+t = str as T;
+>t = str as T : ("a" | "b")[] | "a" | "b"
+>t : ("a" | "b")[] | "a" | "b"
+>str as T : ("a" | "b")[] | "a" | "b"
+>str : string
+>T : ("a" | "b")[] | "a" | "b"
+
+////////////////
+
+str = <string>s;
+>str = <string>s : string
+>str : string
+><string>s : string
+>s : "a" | "b"
+
+str = s as string;
+>str = s as string : string
+>str : string
+>s as string : string
+>s : "a" | "b"
+
+str = <string>t;
+>str = <string>t : string
+>str : string
+><string>t : string
+>t : ("a" | "b")[] | "a" | "b"
+
+str = t as string;
+>str = t as string : string
+>str : string
+>t as string : string
+>t : ("a" | "b")[] | "a" | "b"
+

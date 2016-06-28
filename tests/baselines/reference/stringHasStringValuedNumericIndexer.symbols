@@ -1,0 +1,4 @@
+=== tests/cases/compiler/stringHasStringValuedNumericIndexer.ts ===
+var str: string = ""[0];
+>str : Symbol(str, Decl(stringHasStringValuedNumericIndexer.ts, 0, 3))
+

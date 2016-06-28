@@ -1,4 +1,5 @@
 //// [parser_duplicateLabel4.ts]
+
 target:
 while (true) {
 }

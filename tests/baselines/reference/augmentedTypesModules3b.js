@@ -24,7 +24,7 @@ var m3b = (function () {
     }
     m3b.prototype.foo = function () { };
     return m3b;
-})();
+}());
 var m3b;
 (function (m3b) {
     var y = 2;
@@ -34,7 +34,7 @@ var m3c = (function () {
     }
     m3c.prototype.foo = function () { };
     return m3c;
-})();
+}());
 var m3c;
 (function (m3c) {
     m3c.y = 2;
@@ -54,6 +54,6 @@ var m3g;
         }
         C.prototype.foo = function () { };
         return C;
-    })();
+    }());
     m3g.C = C;
 })(m3g || (m3g = {}));

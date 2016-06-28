@@ -14,11 +14,12 @@ if (typeof x === "object") {
 >typeof x === "object" : boolean
 >typeof x : string
 >x : symbol | Foo
+>"object" : string
 
     x;
 >x : Foo
 }
 else {
     x;
->x : symbol | Foo
+>x : symbol
 }

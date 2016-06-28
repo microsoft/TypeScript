@@ -1,0 +1,33 @@
+=== tests/cases/compiler/reversedRecusiveTypeInstantiation.ts ===
+interface A<StringArgPos1, NumberArgPos2> {
+>A : Symbol(A, Decl(reversedRecusiveTypeInstantiation.ts, 0, 0))
+>StringArgPos1 : Symbol(StringArgPos1, Decl(reversedRecusiveTypeInstantiation.ts, 0, 12))
+>NumberArgPos2 : Symbol(NumberArgPos2, Decl(reversedRecusiveTypeInstantiation.ts, 0, 26))
+
+   xPos1 : StringArgPos1
+>xPos1 : Symbol(A.xPos1, Decl(reversedRecusiveTypeInstantiation.ts, 0, 43))
+>StringArgPos1 : Symbol(StringArgPos1, Decl(reversedRecusiveTypeInstantiation.ts, 0, 12))
+
+   yPos2 : NumberArgPos2
+>yPos2 : Symbol(A.yPos2, Decl(reversedRecusiveTypeInstantiation.ts, 1, 24))
+>NumberArgPos2 : Symbol(NumberArgPos2, Decl(reversedRecusiveTypeInstantiation.ts, 0, 26))
+
+   zPos2Pos1 : A<NumberArgPos2, StringArgPos1>
+>zPos2Pos1 : Symbol(A.zPos2Pos1, Decl(reversedRecusiveTypeInstantiation.ts, 2, 24))
+>A : Symbol(A, Decl(reversedRecusiveTypeInstantiation.ts, 0, 0))
+>NumberArgPos2 : Symbol(NumberArgPos2, Decl(reversedRecusiveTypeInstantiation.ts, 0, 26))
+>StringArgPos1 : Symbol(StringArgPos1, Decl(reversedRecusiveTypeInstantiation.ts, 0, 12))
+}
+
+var a : A<string, number>
+>a : Symbol(a, Decl(reversedRecusiveTypeInstantiation.ts, 6, 3))
+>A : Symbol(A, Decl(reversedRecusiveTypeInstantiation.ts, 0, 0))
+
+a.zPos2Pos1.xPos1 = 1
+>a.zPos2Pos1.xPos1 : Symbol(A.xPos1, Decl(reversedRecusiveTypeInstantiation.ts, 0, 43))
+>a.zPos2Pos1 : Symbol(A.zPos2Pos1, Decl(reversedRecusiveTypeInstantiation.ts, 2, 24))
+>a : Symbol(a, Decl(reversedRecusiveTypeInstantiation.ts, 6, 3))
+>zPos2Pos1 : Symbol(A.zPos2Pos1, Decl(reversedRecusiveTypeInstantiation.ts, 2, 24))
+>xPos1 : Symbol(A.xPos1, Decl(reversedRecusiveTypeInstantiation.ts, 0, 43))
+
+

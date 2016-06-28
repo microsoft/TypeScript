@@ -1194,16 +1194,17 @@ module publicModuleInGlobal {
 }
 
 //// [privacyFunctionReturnTypeDeclFile_externalModule.js]
+"use strict";
 var privateClass = (function () {
     function privateClass() {
     }
     return privateClass;
-})();
+}());
 var publicClass = (function () {
     function publicClass() {
     }
     return publicClass;
-})();
+}());
 exports.publicClass = publicClass;
 var publicClassWithWithPrivateParmeterTypes = (function () {
     function publicClassWithWithPrivateParmeterTypes() {
@@ -1233,7 +1234,7 @@ var publicClassWithWithPrivateParmeterTypes = (function () {
         return new privateClass();
     };
     return publicClassWithWithPrivateParmeterTypes;
-})();
+}());
 exports.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
 var publicClassWithWithPublicParmeterTypes = (function () {
     function publicClassWithWithPublicParmeterTypes() {
@@ -1263,7 +1264,7 @@ var publicClassWithWithPublicParmeterTypes = (function () {
         return new publicClass();
     };
     return publicClassWithWithPublicParmeterTypes;
-})();
+}());
 exports.publicClassWithWithPublicParmeterTypes = publicClassWithWithPublicParmeterTypes;
 var privateClassWithWithPrivateParmeterTypes = (function () {
     function privateClassWithWithPrivateParmeterTypes() {
@@ -1293,7 +1294,7 @@ var privateClassWithWithPrivateParmeterTypes = (function () {
         return new privateClass();
     };
     return privateClassWithWithPrivateParmeterTypes;
-})();
+}());
 var privateClassWithWithPublicParmeterTypes = (function () {
     function privateClassWithWithPublicParmeterTypes() {
     }
@@ -1322,7 +1323,7 @@ var privateClassWithWithPublicParmeterTypes = (function () {
         return new publicClass();
     };
     return privateClassWithWithPublicParmeterTypes;
-})();
+}());
 function publicFunctionWithPrivateParmeterTypes() {
     return null;
 }
@@ -1367,7 +1368,7 @@ var publicClassWithPrivateModuleParameterTypes = (function () {
         return new privateModule.publicClass();
     };
     return publicClassWithPrivateModuleParameterTypes;
-})();
+}());
 exports.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
 function publicFunctionWithPrivateModuleParameterTypes() {
     return null;
@@ -1393,7 +1394,7 @@ var privateClassWithPrivateModuleParameterTypes = (function () {
         return new privateModule.publicClass();
     };
     return privateClassWithPrivateModuleParameterTypes;
-})();
+}());
 function privateFunctionWithPrivateModuleParameterTypes() {
     return null;
 }
@@ -1406,12 +1407,12 @@ var publicModule;
         function privateClass() {
         }
         return privateClass;
-    })();
+    }());
     var publicClass = (function () {
         function publicClass() {
         }
         return publicClass;
-    })();
+    }());
     publicModule.publicClass = publicClass;
     var publicClassWithWithPrivateParmeterTypes = (function () {
         function publicClassWithWithPrivateParmeterTypes() {
@@ -1441,7 +1442,7 @@ var publicModule;
             return new privateClass();
         };
         return publicClassWithWithPrivateParmeterTypes;
-    })();
+    }());
     publicModule.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
     var publicClassWithWithPublicParmeterTypes = (function () {
         function publicClassWithWithPublicParmeterTypes() {
@@ -1471,7 +1472,7 @@ var publicModule;
             return new publicClass();
         };
         return publicClassWithWithPublicParmeterTypes;
-    })();
+    }());
     publicModule.publicClassWithWithPublicParmeterTypes = publicClassWithWithPublicParmeterTypes;
     var privateClassWithWithPrivateParmeterTypes = (function () {
         function privateClassWithWithPrivateParmeterTypes() {
@@ -1501,7 +1502,7 @@ var publicModule;
             return new privateClass();
         };
         return privateClassWithWithPrivateParmeterTypes;
-    })();
+    }());
     var privateClassWithWithPublicParmeterTypes = (function () {
         function privateClassWithWithPublicParmeterTypes() {
         }
@@ -1530,7 +1531,7 @@ var publicModule;
             return new publicClass();
         };
         return privateClassWithWithPublicParmeterTypes;
-    })();
+    }());
     function publicFunctionWithPrivateParmeterTypes() {
         return null;
     }
@@ -1575,7 +1576,7 @@ var publicModule;
             return new privateModule.publicClass();
         };
         return publicClassWithPrivateModuleParameterTypes;
-    })();
+    }());
     publicModule.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
     function publicFunctionWithPrivateModuleParameterTypes() {
         return null;
@@ -1601,7 +1602,7 @@ var publicModule;
             return new privateModule.publicClass();
         };
         return privateClassWithPrivateModuleParameterTypes;
-    })();
+    }());
     function privateFunctionWithPrivateModuleParameterTypes() {
         return null;
     }
@@ -1615,12 +1616,12 @@ var privateModule;
         function privateClass() {
         }
         return privateClass;
-    })();
+    }());
     var publicClass = (function () {
         function publicClass() {
         }
         return publicClass;
-    })();
+    }());
     privateModule.publicClass = publicClass;
     var publicClassWithWithPrivateParmeterTypes = (function () {
         function publicClassWithWithPrivateParmeterTypes() {
@@ -1650,7 +1651,7 @@ var privateModule;
             return new privateClass();
         };
         return publicClassWithWithPrivateParmeterTypes;
-    })();
+    }());
     privateModule.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
     var publicClassWithWithPublicParmeterTypes = (function () {
         function publicClassWithWithPublicParmeterTypes() {
@@ -1680,7 +1681,7 @@ var privateModule;
             return new publicClass();
         };
         return publicClassWithWithPublicParmeterTypes;
-    })();
+    }());
     privateModule.publicClassWithWithPublicParmeterTypes = publicClassWithWithPublicParmeterTypes;
     var privateClassWithWithPrivateParmeterTypes = (function () {
         function privateClassWithWithPrivateParmeterTypes() {
@@ -1710,7 +1711,7 @@ var privateModule;
             return new privateClass();
         };
         return privateClassWithWithPrivateParmeterTypes;
-    })();
+    }());
     var privateClassWithWithPublicParmeterTypes = (function () {
         function privateClassWithWithPublicParmeterTypes() {
         }
@@ -1739,7 +1740,7 @@ var privateModule;
             return new publicClass();
         };
         return privateClassWithWithPublicParmeterTypes;
-    })();
+    }());
     function publicFunctionWithPrivateParmeterTypes() {
         return null;
     }
@@ -1784,7 +1785,7 @@ var privateModule;
             return new privateModule.publicClass();
         };
         return publicClassWithPrivateModuleParameterTypes;
-    })();
+    }());
     privateModule.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
     function publicFunctionWithPrivateModuleParameterTypes() {
         return null;
@@ -1810,7 +1811,7 @@ var privateModule;
             return new privateModule.publicClass();
         };
         return privateClassWithPrivateModuleParameterTypes;
-    })();
+    }());
     function privateFunctionWithPrivateModuleParameterTypes() {
         return null;
     }
@@ -1823,7 +1824,7 @@ var publicClassInGlobal = (function () {
     function publicClassInGlobal() {
     }
     return publicClassInGlobal;
-})();
+}());
 var publicClassWithWithPublicParmeterTypesInGlobal = (function () {
     function publicClassWithWithPublicParmeterTypesInGlobal() {
     }
@@ -1852,7 +1853,7 @@ var publicClassWithWithPublicParmeterTypesInGlobal = (function () {
         return new publicClassInGlobal();
     };
     return publicClassWithWithPublicParmeterTypesInGlobal;
-})();
+}());
 function publicFunctionWithPublicParmeterTypesInGlobal() {
     return null;
 }
@@ -1865,12 +1866,12 @@ var publicModuleInGlobal;
         function privateClass() {
         }
         return privateClass;
-    })();
+    }());
     var publicClass = (function () {
         function publicClass() {
         }
         return publicClass;
-    })();
+    }());
     publicModuleInGlobal.publicClass = publicClass;
     var privateModule;
     (function (privateModule) {
@@ -1878,12 +1879,12 @@ var publicModuleInGlobal;
             function privateClass() {
             }
             return privateClass;
-        })();
+        }());
         var publicClass = (function () {
             function publicClass() {
             }
             return publicClass;
-        })();
+        }());
         privateModule.publicClass = publicClass;
         var publicClassWithWithPrivateParmeterTypes = (function () {
             function publicClassWithWithPrivateParmeterTypes() {
@@ -1913,7 +1914,7 @@ var publicModuleInGlobal;
                 return new privateClass();
             };
             return publicClassWithWithPrivateParmeterTypes;
-        })();
+        }());
         privateModule.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
         var publicClassWithWithPublicParmeterTypes = (function () {
             function publicClassWithWithPublicParmeterTypes() {
@@ -1943,7 +1944,7 @@ var publicModuleInGlobal;
                 return new publicClass();
             };
             return publicClassWithWithPublicParmeterTypes;
-        })();
+        }());
         privateModule.publicClassWithWithPublicParmeterTypes = publicClassWithWithPublicParmeterTypes;
         var privateClassWithWithPrivateParmeterTypes = (function () {
             function privateClassWithWithPrivateParmeterTypes() {
@@ -1973,7 +1974,7 @@ var publicModuleInGlobal;
                 return new privateClass();
             };
             return privateClassWithWithPrivateParmeterTypes;
-        })();
+        }());
         var privateClassWithWithPublicParmeterTypes = (function () {
             function privateClassWithWithPublicParmeterTypes() {
             }
@@ -2002,7 +2003,7 @@ var publicModuleInGlobal;
                 return new publicClass();
             };
             return privateClassWithWithPublicParmeterTypes;
-        })();
+        }());
         function publicFunctionWithPrivateParmeterTypes() {
             return null;
         }
@@ -2047,7 +2048,7 @@ var publicModuleInGlobal;
                 return new privateModule.publicClass();
             };
             return publicClassWithPrivateModuleParameterTypes;
-        })();
+        }());
         privateModule.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
         function publicFunctionWithPrivateModuleParameterTypes() {
             return null;
@@ -2073,7 +2074,7 @@ var publicModuleInGlobal;
                 return new privateModule.publicClass();
             };
             return privateClassWithPrivateModuleParameterTypes;
-        })();
+        }());
         function privateFunctionWithPrivateModuleParameterTypes() {
             return null;
         }
@@ -2109,7 +2110,7 @@ var publicModuleInGlobal;
             return new privateClass();
         };
         return publicClassWithWithPrivateParmeterTypes;
-    })();
+    }());
     publicModuleInGlobal.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
     var publicClassWithWithPublicParmeterTypes = (function () {
         function publicClassWithWithPublicParmeterTypes() {
@@ -2139,7 +2140,7 @@ var publicModuleInGlobal;
             return new publicClass();
         };
         return publicClassWithWithPublicParmeterTypes;
-    })();
+    }());
     publicModuleInGlobal.publicClassWithWithPublicParmeterTypes = publicClassWithWithPublicParmeterTypes;
     var privateClassWithWithPrivateParmeterTypes = (function () {
         function privateClassWithWithPrivateParmeterTypes() {
@@ -2169,7 +2170,7 @@ var publicModuleInGlobal;
             return new privateClass();
         };
         return privateClassWithWithPrivateParmeterTypes;
-    })();
+    }());
     var privateClassWithWithPublicParmeterTypes = (function () {
         function privateClassWithWithPublicParmeterTypes() {
         }
@@ -2198,7 +2199,7 @@ var publicModuleInGlobal;
             return new publicClass();
         };
         return privateClassWithWithPublicParmeterTypes;
-    })();
+    }());
     function publicFunctionWithPrivateParmeterTypes() {
         return null;
     }
@@ -2243,7 +2244,7 @@ var publicModuleInGlobal;
             return new privateModule.publicClass();
         };
         return publicClassWithPrivateModuleParameterTypes;
-    })();
+    }());
     publicModuleInGlobal.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
     function publicFunctionWithPrivateModuleParameterTypes() {
         return null;
@@ -2269,7 +2270,7 @@ var publicModuleInGlobal;
             return new privateModule.publicClass();
         };
         return privateClassWithPrivateModuleParameterTypes;
-    })();
+    }());
     function privateFunctionWithPrivateModuleParameterTypes() {
         return null;
     }

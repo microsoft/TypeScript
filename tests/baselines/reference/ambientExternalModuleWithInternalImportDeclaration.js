@@ -21,5 +21,6 @@ var c = new A();
 //// [ambientExternalModuleWithInternalImportDeclaration_0.js]
 //// [ambientExternalModuleWithInternalImportDeclaration_1.js]
 define(["require", "exports", 'M'], function (require, exports, A) {
+    "use strict";
     var c = new A();
 });

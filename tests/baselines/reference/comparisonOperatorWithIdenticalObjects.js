@@ -195,11 +195,10 @@ var r8b6 = b5 !== a5;
 var r8b7 = b6 !== a6;
 
 //// [comparisonOperatorWithIdenticalObjects.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var A1 = (function () {
     function A1() {
@@ -208,7 +207,7 @@ var A1 = (function () {
         return null;
     };
     return A1;
-})();
+}());
 var B1 = (function () {
     function B1() {
     }
@@ -216,7 +215,7 @@ var B1 = (function () {
         return null;
     };
     return B1;
-})();
+}());
 var Base = (function () {
     function Base() {
     }
@@ -224,21 +223,21 @@ var Base = (function () {
         return null;
     };
     return Base;
-})();
+}());
 var A2 = (function (_super) {
     __extends(A2, _super);
     function A2() {
         _super.apply(this, arguments);
     }
     return A2;
-})(Base);
+}(Base));
 var B2 = (function (_super) {
     __extends(B2, _super);
     function B2() {
         _super.apply(this, arguments);
     }
     return B2;
-})(Base);
+}(Base));
 var a1;
 var a2;
 var a3;

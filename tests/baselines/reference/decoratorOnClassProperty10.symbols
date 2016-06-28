@@ -1,0 +1,14 @@
+=== tests/cases/conformance/decorators/class/property/decoratorOnClassProperty10.ts ===
+declare function dec(): <T>(target: any, propertyKey: string) => void;
+>dec : Symbol(dec, Decl(decoratorOnClassProperty10.ts, 0, 0))
+>T : Symbol(T, Decl(decoratorOnClassProperty10.ts, 0, 25))
+>target : Symbol(target, Decl(decoratorOnClassProperty10.ts, 0, 28))
+>propertyKey : Symbol(propertyKey, Decl(decoratorOnClassProperty10.ts, 0, 40))
+
+class C {
+>C : Symbol(C, Decl(decoratorOnClassProperty10.ts, 0, 70))
+
+    @dec() prop;
+>dec : Symbol(dec, Decl(decoratorOnClassProperty10.ts, 0, 0))
+>prop : Symbol(C.prop, Decl(decoratorOnClassProperty10.ts, 2, 9))
+}

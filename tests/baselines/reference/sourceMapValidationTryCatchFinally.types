@@ -1,6 +1,7 @@
 === tests/cases/compiler/sourceMapValidationTryCatchFinally.ts ===
 var x = 10;
 >x : number
+>10 : number
 
 try {
     x = x + 1;
@@ -8,6 +9,7 @@ try {
 >x : number
 >x + 1 : number
 >x : number
+>1 : number
 
 } catch (e) {
 >e : any
@@ -17,6 +19,7 @@ try {
 >x : number
 >x - 1 : number
 >x : number
+>1 : number
 
 } finally {
     x = x * 10;
@@ -24,6 +27,7 @@ try {
 >x : number
 >x * 10 : number
 >x : number
+>10 : number
 }
 try
 {
@@ -32,6 +36,7 @@ try
 >x : number
 >x + 1 : number
 >x : number
+>1 : number
 
     throw new Error();
 >new Error() : Error
@@ -45,6 +50,7 @@ catch (e)
 >x : number
 >x - 1 : number
 >x : number
+>1 : number
 }
 finally
 {
@@ -53,4 +59,5 @@ finally
 >x : number
 >x * 10 : number
 >x : number
+>10 : number
 }

@@ -13,6 +13,7 @@ module K {
 
         export var y = 12;
 >y : number
+>12 : number
 
         export interface Point {
 >Point : Point
@@ -43,6 +44,7 @@ var o = new M.D('Hello');
 >M.D : typeof K.L
 >M : typeof M
 >D : typeof K.L
+>'Hello' : string
 
 var p: { x: number; y: number; }
 >p : { x: number; y: number; }
@@ -51,7 +53,7 @@ var p: { x: number; y: number; }
 
 var p: M.D.Point;
 >p : { x: number; y: number; }
->M : unknown
->D : unknown
+>M : any
+>D : any
 >Point : K.L.Point
 

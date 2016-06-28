@@ -63,7 +63,7 @@ var e4 = (function () {
     }
     e4.prototype.foo = function () { };
     return e4;
-})(); // error
+}()); // error
 // enum then enum
 var e5;
 (function (e5) {

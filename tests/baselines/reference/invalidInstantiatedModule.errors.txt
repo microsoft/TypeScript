@@ -1,6 +1,6 @@
 tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts(2,18): error TS2300: Duplicate identifier 'Point'.
 tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts(3,16): error TS2300: Duplicate identifier 'Point'.
-tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts(12,8): error TS2304: Cannot find name 'm'.
+tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts(12,8): error TS2503: Cannot find namespace 'm'.
 
 
 ==== tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts (3 errors) ====
@@ -21,7 +21,7 @@ tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedMo
     var m = M2;
     var p: m.Point; // Error
            ~
-!!! error TS2304: Cannot find name 'm'.
+!!! error TS2503: Cannot find namespace 'm'.
     
     
      

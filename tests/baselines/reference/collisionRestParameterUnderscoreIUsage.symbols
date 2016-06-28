@@ -1,0 +1,25 @@
+=== tests/cases/compiler/collisionRestParameterUnderscoreIUsage.ts ===
+declare var console: { log(msg?: string): void; };
+>console : Symbol(console, Decl(collisionRestParameterUnderscoreIUsage.ts, 0, 11))
+>log : Symbol(log, Decl(collisionRestParameterUnderscoreIUsage.ts, 0, 22))
+>msg : Symbol(msg, Decl(collisionRestParameterUnderscoreIUsage.ts, 0, 27))
+
+var _i = "This is what I'd expect to see";
+>_i : Symbol(_i, Decl(collisionRestParameterUnderscoreIUsage.ts, 1, 3))
+
+class Foo {
+>Foo : Symbol(Foo, Decl(collisionRestParameterUnderscoreIUsage.ts, 1, 42))
+
+    constructor(...args: any[]) {
+>args : Symbol(args, Decl(collisionRestParameterUnderscoreIUsage.ts, 3, 16))
+
+        console.log(_i); // This should result in error
+>console.log : Symbol(log, Decl(collisionRestParameterUnderscoreIUsage.ts, 0, 22))
+>console : Symbol(console, Decl(collisionRestParameterUnderscoreIUsage.ts, 0, 11))
+>log : Symbol(log, Decl(collisionRestParameterUnderscoreIUsage.ts, 0, 22))
+>_i : Symbol(_i, Decl(collisionRestParameterUnderscoreIUsage.ts, 1, 3))
+    }
+}
+new Foo();
+>Foo : Symbol(Foo, Decl(collisionRestParameterUnderscoreIUsage.ts, 1, 42))
+

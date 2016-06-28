@@ -1,8 +1,7 @@
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var m2;
 (function (m2) {
@@ -18,7 +17,7 @@ var m2;
             _super.apply(this, arguments);
         }
         return class1;
-    })(mExported.me.class1);
+    }(m2.mExported.me.class1));
     m2.class1 = class1;
     var c2 = new m2.mExported.me.class1;
     function f2() {
@@ -31,7 +30,7 @@ var m2;
             _super.apply(this, arguments);
         }
         return class2;
-    })(mExported.me.class1);
+    }(m2.mExported.me.class1));
     m2.c3 = new mNonExported.mne.class1;
     function f3() {
         return new mNonExported.mne.class1();
@@ -44,7 +43,7 @@ var m2;
             _super.apply(this, arguments);
         }
         return class3;
-    })(mNonExported.mne.class1);
+    }(mNonExported.mne.class1));
     m2.class3 = class3;
     var c4 = new mNonExported.mne.class1;
     function f4() {
@@ -57,5 +56,5 @@ var m2;
             _super.apply(this, arguments);
         }
         return class4;
-    })(mNonExported.mne.class1);
+    }(mNonExported.mne.class1));
 })(m2 || (m2 = {}));

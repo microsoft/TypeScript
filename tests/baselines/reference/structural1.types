@@ -23,6 +23,8 @@ module M {
 >f : (i: I) => void
 >{salt:2,pepper:0} : { salt: number; pepper: number; }
 >salt : number
+>2 : number
 >pepper : number
+>0 : number
 }
 

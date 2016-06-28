@@ -1,3 +1,6 @@
+// @allowUnusedLabels: true
+// @allowUnreachableCode: true
+
 target:
 while (true) {
 }

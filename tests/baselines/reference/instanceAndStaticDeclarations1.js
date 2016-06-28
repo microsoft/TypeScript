@@ -27,4 +27,4 @@ var Point = (function () {
     Point.distance = function (p1, p2) { return p1.distance(p2); };
     Point.origin = new Point(0, 0);
     return Point;
-})();
+}());

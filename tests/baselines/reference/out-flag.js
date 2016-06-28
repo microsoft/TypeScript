@@ -30,7 +30,7 @@ var MyClass = (function () {
         //
     };
     return MyClass;
-})();
+}());
 //# sourceMappingURL=out-flag.js.map
 
 //// [out-flag.d.ts]

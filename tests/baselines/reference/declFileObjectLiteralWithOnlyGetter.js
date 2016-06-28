@@ -12,19 +12,19 @@ var /*2*/x = point./*3*/x;
 //// [declFileObjectLiteralWithOnlyGetter.js]
 function makePoint(x) {
     return {
-        get x() { return x; }
+        get x() { return x; },
     };
 }
 ;
-var point = makePoint(2);
-var x = point.x;
+var /*4*/ point = makePoint(2);
+var /*2*/ x = point.x;
 
 
 //// [declFileObjectLiteralWithOnlyGetter.d.ts]
 declare function makePoint(x: number): {
-    x: number;
+    readonly x: number;
 };
 declare var point: {
-    x: number;
+    readonly x: number;
 };
 declare var x: number;

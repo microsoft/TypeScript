@@ -9,4 +9,4 @@
 ////}
 
 goTo.marker();
-verify.quickInfoIs('class Greeter');
+verify.quickInfoIs('this: this');

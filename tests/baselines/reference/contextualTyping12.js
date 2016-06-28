@@ -7,4 +7,4 @@ var foo = (function () {
         this.bar = [{ id: 1 }, { id: 2, name: "foo" }];
     }
     return foo;
-})();
+}());

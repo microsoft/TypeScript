@@ -2,4 +2,5 @@
 
 var x = /\u{0}/g;
 >x : RegExp
+>/\u{0}/g : RegExp
 

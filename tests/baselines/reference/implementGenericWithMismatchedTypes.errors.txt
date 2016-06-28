@@ -2,7 +2,7 @@ tests/cases/compiler/implementGenericWithMismatchedTypes.ts(7,7): error TS2420: 
   Types of property 'foo' are incompatible.
     Type '(x: string) => number' is not assignable to type '(x: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
-        Type 'string' is not assignable to type 'T'.
+        Type 'T' is not assignable to type 'string'.
 tests/cases/compiler/implementGenericWithMismatchedTypes.ts(16,7): error TS2420: Class 'C2<T>' incorrectly implements interface 'IFoo2<T>'.
   Types of property 'foo' are incompatible.
     Type '<Tstring>(x: Tstring) => number' is not assignable to type '(x: T) => T'.
@@ -22,7 +22,7 @@ tests/cases/compiler/implementGenericWithMismatchedTypes.ts(16,7): error TS2420:
 !!! error TS2420:   Types of property 'foo' are incompatible.
 !!! error TS2420:     Type '(x: string) => number' is not assignable to type '(x: T) => T'.
 !!! error TS2420:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2420:         Type 'string' is not assignable to type 'T'.
+!!! error TS2420:         Type 'T' is not assignable to type 'string'.
         foo(x: string): number {
             return null;
         }

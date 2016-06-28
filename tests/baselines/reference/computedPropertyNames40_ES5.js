@@ -15,12 +15,12 @@ var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 var Foo2 = (function () {
     function Foo2() {
     }
     return Foo2;
-})();
+}());
 var C = (function () {
     function C() {
     }
@@ -28,4 +28,4 @@ var C = (function () {
     C.prototype[""] = function () { return new Foo; };
     C.prototype[""] = function () { return new Foo2; };
     return C;
-})();
+}());

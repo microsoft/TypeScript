@@ -156,7 +156,7 @@ var MyClass = (function () {
         var p = function (n) { return n && _this; };
     };
     return MyClass;
-})();
+}());
 // Arrow function used in arrow function
 var arrrr = function () { return function (m) { return function () { return function (n) { return m + n; }; }; }; };
 var e = arrrr()(3)()(4);

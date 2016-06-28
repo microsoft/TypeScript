@@ -12,6 +12,6 @@ function verifyIndentationAfterNewLine(marker: string, indentation: number): voi
 verifyIndentationAfterNewLine("1", 4);
 verifyIndentationAfterNewLine("2", 4);
 verifyIndentationAfterNewLine("3", 4);
-verifyIndentationAfterNewLine("4", 4);
+verifyIndentationAfterNewLine("4", 8);
 verifyIndentationAfterNewLine("5", 4);
 verifyIndentationAfterNewLine("6", 4);

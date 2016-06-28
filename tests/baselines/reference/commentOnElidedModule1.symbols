@@ -1,0 +1,21 @@
+=== tests/cases/compiler/b.ts ===
+///<reference path="a.ts"/>
+module ElidedModule3 {
+>ElidedModule3 : Symbol(ElidedModule3, Decl(b.ts, 0, 0))
+}
+=== tests/cases/compiler/a.ts ===
+/*!=================
+    Keep this pinned
+   =================
+*/
+
+/*! Don't keep this pinned comment */
+module ElidedModule {
+>ElidedModule : Symbol(ElidedModule, Decl(a.ts, 0, 0))
+}
+
+// Don't keep this comment.
+module ElidedModule2 {
+>ElidedModule2 : Symbol(ElidedModule2, Decl(a.ts, 7, 1))
+}
+

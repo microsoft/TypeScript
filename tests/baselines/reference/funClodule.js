@@ -30,4 +30,4 @@ var foo3 = (function () {
     function foo3() {
     }
     return foo3;
-})(); // Should error
+}()); // Should error

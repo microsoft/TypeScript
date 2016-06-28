@@ -6,7 +6,7 @@ export function mkdirSync(path: string, mode?: string): void {}
 
 //// [voidAsNonAmbiguousReturnType_1.ts]
 ///<reference path='voidAsNonAmbiguousReturnType_0.ts'/>
-import fs = require("voidAsNonAmbiguousReturnType_0");
+import fs = require("./voidAsNonAmbiguousReturnType_0");
 
 function main() {
  fs.mkdirSync('test'); // should not error - return types are the same
@@ -14,11 +14,13 @@ function main() {
 
 
 //// [voidAsNonAmbiguousReturnType_0.js]
+"use strict";
 function mkdirSync(path, mode) { }
 exports.mkdirSync = mkdirSync;
 //// [voidAsNonAmbiguousReturnType_1.js]
+"use strict";
 ///<reference path='voidAsNonAmbiguousReturnType_0.ts'/>
-var fs = require("voidAsNonAmbiguousReturnType_0");
+var fs = require("./voidAsNonAmbiguousReturnType_0");
 function main() {
     fs.mkdirSync('test'); // should not error - return types are the same
 }

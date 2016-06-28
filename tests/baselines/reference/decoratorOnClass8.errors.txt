@@ -1,4 +1,5 @@
-tests/cases/conformance/decorators/class/decoratorOnClass8.ts(3,1): error TS2322: Type '(target: Function, paramIndex: number) => void' is not assignable to type '(target: typeof C) => void | typeof C'.
+tests/cases/conformance/decorators/class/decoratorOnClass8.ts(3,1): error TS1238: Unable to resolve signature of class decorator when called as an expression.
+  Supplied parameters do not match any signature of call target.
 
 
 ==== tests/cases/conformance/decorators/class/decoratorOnClass8.ts (1 errors) ====
@@ -6,6 +7,7 @@ tests/cases/conformance/decorators/class/decoratorOnClass8.ts(3,1): error TS2322
     
     @dec()
     ~~~~~~
-!!! error TS2322: Type '(target: Function, paramIndex: number) => void' is not assignable to type '(target: typeof C) => void | typeof C'.
+!!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
+!!! error TS1238:   Supplied parameters do not match any signature of call target.
     class C {
     }

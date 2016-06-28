@@ -1,0 +1,21 @@
+=== tests/cases/compiler/inheritanceStaticFunctionOverridingInstanceProperty.ts ===
+class a {
+>a : Symbol(a, Decl(inheritanceStaticFunctionOverridingInstanceProperty.ts, 0, 0))
+
+    x: string;
+>x : Symbol(a.x, Decl(inheritanceStaticFunctionOverridingInstanceProperty.ts, 0, 9))
+}
+
+class b extends a {
+>b : Symbol(b, Decl(inheritanceStaticFunctionOverridingInstanceProperty.ts, 2, 1))
+>a : Symbol(a, Decl(inheritanceStaticFunctionOverridingInstanceProperty.ts, 0, 0))
+
+    static x() {
+>x : Symbol(b.x, Decl(inheritanceStaticFunctionOverridingInstanceProperty.ts, 4, 19))
+
+        return new b().x;
+>new b().x : Symbol(a.x, Decl(inheritanceStaticFunctionOverridingInstanceProperty.ts, 0, 9))
+>b : Symbol(b, Decl(inheritanceStaticFunctionOverridingInstanceProperty.ts, 2, 1))
+>x : Symbol(a.x, Decl(inheritanceStaticFunctionOverridingInstanceProperty.ts, 0, 9))
+    }
+}

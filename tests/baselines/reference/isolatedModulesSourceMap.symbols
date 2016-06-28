@@ -1,0 +1,5 @@
+=== tests/cases/compiler/file1.ts ===
+
+export var x = 1;
+>x : Symbol(x, Decl(file1.ts, 1, 10))
+

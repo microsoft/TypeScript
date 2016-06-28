@@ -26,7 +26,7 @@ var Moclodule = (function () {
     function Moclodule() {
     }
     return Moclodule;
-})();
+}());
 // Instantiated module.
 var Moclodule;
 (function (Moclodule) {
@@ -34,6 +34,6 @@ var Moclodule;
         function Manager() {
         }
         return Manager;
-    })();
+    }());
     Moclodule.Manager = Manager;
 })(Moclodule || (Moclodule = {}));

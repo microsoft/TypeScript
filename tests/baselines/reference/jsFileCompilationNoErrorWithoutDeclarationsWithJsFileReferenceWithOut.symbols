@@ -1,0 +1,16 @@
+=== tests/cases/compiler/a.ts ===
+class c {
+>c : Symbol(c, Decl(a.ts, 0, 0))
+}
+
+=== tests/cases/compiler/b.ts ===
+/// <reference path="c.js"/>
+//no  error on above reference since not emitting declarations
+function foo() {
+>foo : Symbol(foo, Decl(b.ts, 0, 0))
+}
+
+=== tests/cases/compiler/c.js ===
+function bar() {
+>bar : Symbol(bar, Decl(c.js, 0, 0))
+}

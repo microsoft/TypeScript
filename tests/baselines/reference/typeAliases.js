@@ -98,7 +98,7 @@ var C7 = (function () {
     function C7() {
     }
     return C7;
-})();
+}());
 var x7;
 var x7;
 var x8;

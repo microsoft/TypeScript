@@ -39,7 +39,7 @@ var C = (function () {
     }
     C.prototype.foo = function () { return null; };
     return C;
-})();
+}());
 var c1;
 var i1;
 var c2;
@@ -52,12 +52,12 @@ var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 function f(x) {
     return null;
 }

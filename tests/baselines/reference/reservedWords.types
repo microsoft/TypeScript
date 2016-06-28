@@ -5,15 +5,19 @@ var obj = {
 
     if: 0,
 >if : number
+>0 : number
 
     debugger: 2,
 >debugger : number
+>2 : number
 
     break: 3,
 >break : number
+>3 : number
 
     function: 4
 >function : number
+>4 : number
 }
 
 //This compiles.
@@ -24,17 +28,22 @@ var obj2 = {
 
     if: 0,
 >if : number
+>0 : number
 
     while: 1,
 >while : number
+>1 : number
 
     debugger: 2,
 >debugger : number
+>2 : number
 
     break: 3,
 >break : number
+>3 : number
 
     function: 4
 >function : number
+>4 : number
 }
 

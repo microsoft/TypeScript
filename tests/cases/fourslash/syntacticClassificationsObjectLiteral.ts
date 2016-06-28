@@ -13,13 +13,13 @@
 
 var c = classification;
 verify.syntacticClassificationsAre(
-    c.keyword("var"), c.text("v"), c.operator("="), c.numericLiteral("10e0"), c.punctuation(";"),
-    c.keyword("var"), c.text("x"), c.operator("="), c.punctuation("{"),
-    c.text("p1"), c.punctuation(":"), c.numericLiteral("1"), c.punctuation(","),
-    c.text("p2"), c.punctuation(":"), c.numericLiteral("2"), c.punctuation(","),
-    c.text("any"), c.punctuation(":"), c.numericLiteral("3"), c.punctuation(","),
-    c.text("function"), c.punctuation(":"), c.numericLiteral("4"), c.punctuation(","),
-    c.text("var"), c.punctuation(":"), c.numericLiteral("5"), c.punctuation(","),
-    c.text("void"), c.punctuation(":"), c.keyword("void"), c.numericLiteral("0"), c.punctuation(","),
-    c.text("v"), c.punctuation(":"), c.text("v"), c.operator("+="), c.text("v"), c.punctuation(","),
+    c.keyword("var"), c.identifier("v"), c.operator("="), c.numericLiteral("10e0"), c.punctuation(";"),
+    c.keyword("var"), c.identifier("x"), c.operator("="), c.punctuation("{"),
+    c.identifier("p1"), c.punctuation(":"), c.numericLiteral("1"), c.punctuation(","),
+    c.identifier("p2"), c.punctuation(":"), c.numericLiteral("2"), c.punctuation(","),
+    c.identifier("any"), c.punctuation(":"), c.numericLiteral("3"), c.punctuation(","),
+    c.identifier("function"), c.punctuation(":"), c.numericLiteral("4"), c.punctuation(","),
+    c.identifier("var"), c.punctuation(":"), c.numericLiteral("5"), c.punctuation(","),
+    c.identifier("void"), c.punctuation(":"), c.keyword("void"), c.numericLiteral("0"), c.punctuation(","),
+    c.identifier("v"), c.punctuation(":"), c.identifier("v"), c.operator("+="), c.identifier("v"), c.punctuation(","),
     c.punctuation("}"), c.punctuation(";"));

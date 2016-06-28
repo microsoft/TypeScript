@@ -44,19 +44,19 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 var g = (function () {
     function g() {
     }
     return g;
-})();
+}());
 var m;
 (function (m) {
     var c = (function () {
         function c() {
         }
         return c;
-    })();
+    }());
     m.c = c;
 })(m || (m = {}));
 // Object literal with everything

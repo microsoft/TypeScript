@@ -1,4 +1,5 @@
 define(["require", "exports", "m4", "m5"], function (require, exports, m4, m5) {
+    "use strict";
     exports.x4 = m4.x;
     exports.d4 = m4.d;
     exports.f4 = m4.foo();

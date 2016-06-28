@@ -1,0 +1,11 @@
+=== tests/cases/compiler/functionWithAnyReturnTypeAndNoReturnExpression.ts ===
+// All should be allowed
+function f(): any { }
+>f : Symbol(f, Decl(functionWithAnyReturnTypeAndNoReturnExpression.ts, 0, 0))
+
+var f2: () => any = () => { };
+>f2 : Symbol(f2, Decl(functionWithAnyReturnTypeAndNoReturnExpression.ts, 2, 3))
+
+var f3 = (): any => { };
+>f3 : Symbol(f3, Decl(functionWithAnyReturnTypeAndNoReturnExpression.ts, 3, 3))
+

@@ -18,10 +18,10 @@ var C = (function () {
     }
     C.prototype.f = function () { };
     return C;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
     C2.prototype.f = function (x) { };
     return C2;
-})();
+}());

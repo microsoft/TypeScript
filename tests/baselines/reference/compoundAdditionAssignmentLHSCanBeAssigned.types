@@ -26,14 +26,17 @@ x1 += b;
 x1 += true;
 >x1 += true : any
 >x1 : any
+>true : boolean
 
 x1 += 0;
 >x1 += 0 : any
 >x1 : any
+>0 : number
 
 x1 += '';
 >x1 += '' : string
 >x1 : any
+>'' : string
 
 x1 += E.a;
 >x1 += E.a : any
@@ -50,6 +53,7 @@ x1 += {};
 x1 += null;
 >x1 += null : any
 >x1 : any
+>null : null
 
 x1 += undefined;
 >x1 += undefined : any
@@ -72,14 +76,17 @@ x2 += b;
 x2 += true;
 >x2 += true : string
 >x2 : string
+>true : boolean
 
 x2 += 0;
 >x2 += 0 : string
 >x2 : string
+>0 : number
 
 x2 += '';
 >x2 += '' : string
 >x2 : string
+>'' : string
 
 x2 += E.a;
 >x2 += E.a : string
@@ -96,6 +103,7 @@ x2 += {};
 x2 += null;
 >x2 += null : string
 >x2 : string
+>null : null
 
 x2 += undefined;
 >x2 += undefined : string
@@ -113,6 +121,7 @@ x3 += a;
 x3 += 0;
 >x3 += 0 : number
 >x3 : number
+>0 : number
 
 x3 += E.a;
 >x3 += E.a : number
@@ -124,6 +133,7 @@ x3 += E.a;
 x3 += null;
 >x3 += null : number
 >x3 : number
+>null : null
 
 x3 += undefined;
 >x3 += undefined : number
@@ -142,6 +152,7 @@ x4 += a;
 x4 += 0;
 >x4 += 0 : number
 >x4 : E
+>0 : number
 
 x4 += E.a;
 >x4 += E.a : number
@@ -153,6 +164,7 @@ x4 += E.a;
 x4 += null;
 >x4 += null : number
 >x4 : E
+>null : null
 
 x4 += undefined;
 >x4 += undefined : number
@@ -178,6 +190,7 @@ x6 += a;
 x6 += '';
 >x6 += '' : string
 >x6 : {}
+>'' : string
 
 var x7: void;
 >x7 : void

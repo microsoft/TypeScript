@@ -1,0 +1,44 @@
+=== tests/cases/compiler/constructorArgWithGenericCallSignature.ts ===
+module Test {
+>Test : Symbol(Test, Decl(constructorArgWithGenericCallSignature.ts, 0, 0))
+
+    export interface MyFunc {
+>MyFunc : Symbol(MyFunc, Decl(constructorArgWithGenericCallSignature.ts, 0, 13))
+
+        <T>(value1: T): T;
+>T : Symbol(T, Decl(constructorArgWithGenericCallSignature.ts, 2, 9))
+>value1 : Symbol(value1, Decl(constructorArgWithGenericCallSignature.ts, 2, 12))
+>T : Symbol(T, Decl(constructorArgWithGenericCallSignature.ts, 2, 9))
+>T : Symbol(T, Decl(constructorArgWithGenericCallSignature.ts, 2, 9))
+    }
+    export class MyClass {
+>MyClass : Symbol(MyClass, Decl(constructorArgWithGenericCallSignature.ts, 3, 5))
+
+        constructor(func: MyFunc) { }
+>func : Symbol(func, Decl(constructorArgWithGenericCallSignature.ts, 5, 20))
+>MyFunc : Symbol(MyFunc, Decl(constructorArgWithGenericCallSignature.ts, 0, 13))
+    }
+ 
+ export function F(func: MyFunc) { }
+>F : Symbol(F, Decl(constructorArgWithGenericCallSignature.ts, 6, 5))
+>func : Symbol(func, Decl(constructorArgWithGenericCallSignature.ts, 8, 19))
+>MyFunc : Symbol(MyFunc, Decl(constructorArgWithGenericCallSignature.ts, 0, 13))
+}
+var func: Test.MyFunc;
+>func : Symbol(func, Decl(constructorArgWithGenericCallSignature.ts, 10, 3))
+>Test : Symbol(Test, Decl(constructorArgWithGenericCallSignature.ts, 0, 0))
+>MyFunc : Symbol(Test.MyFunc, Decl(constructorArgWithGenericCallSignature.ts, 0, 13))
+
+Test.F(func); // OK
+>Test.F : Symbol(Test.F, Decl(constructorArgWithGenericCallSignature.ts, 6, 5))
+>Test : Symbol(Test, Decl(constructorArgWithGenericCallSignature.ts, 0, 0))
+>F : Symbol(Test.F, Decl(constructorArgWithGenericCallSignature.ts, 6, 5))
+>func : Symbol(func, Decl(constructorArgWithGenericCallSignature.ts, 10, 3))
+
+var test = new Test.MyClass(func); // Should be OK
+>test : Symbol(test, Decl(constructorArgWithGenericCallSignature.ts, 12, 3))
+>Test.MyClass : Symbol(Test.MyClass, Decl(constructorArgWithGenericCallSignature.ts, 3, 5))
+>Test : Symbol(Test, Decl(constructorArgWithGenericCallSignature.ts, 0, 0))
+>MyClass : Symbol(Test.MyClass, Decl(constructorArgWithGenericCallSignature.ts, 3, 5))
+>func : Symbol(func, Decl(constructorArgWithGenericCallSignature.ts, 10, 3))
+

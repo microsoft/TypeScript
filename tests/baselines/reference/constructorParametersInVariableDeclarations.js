@@ -24,7 +24,7 @@ var A = (function () {
         this.c = function () { return x; };
     }
     return A;
-})();
+}());
 var B = (function () {
     function B() {
         this.a = x;
@@ -33,4 +33,4 @@ var B = (function () {
         var x = 1;
     }
     return B;
-})();
+}());

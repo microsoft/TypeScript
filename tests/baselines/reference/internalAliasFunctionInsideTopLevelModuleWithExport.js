@@ -12,6 +12,7 @@ export var bVal2 = b;
 
 //// [internalAliasFunctionInsideTopLevelModuleWithExport.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var a;
     (function (a) {
         function foo(x) {

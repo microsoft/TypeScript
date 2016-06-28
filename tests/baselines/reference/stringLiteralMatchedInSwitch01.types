@@ -1,0 +1,37 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralMatchedInSwitch01.ts ===
+
+type S = "a" | "b";
+>S : "a" | "b"
+
+type T = S[] | S;
+>T : ("a" | "b")[] | "a" | "b"
+>S : "a" | "b"
+>S : "a" | "b"
+
+var foo: T;
+>foo : ("a" | "b")[] | "a" | "b"
+>T : ("a" | "b")[] | "a" | "b"
+
+switch (foo) {
+>foo : ("a" | "b")[] | "a" | "b"
+
+    case "a":
+>"a" : string
+
+    case "b":
+>"b" : string
+
+        break;
+    default:
+        foo = (foo as S[])[0];
+>foo = (foo as S[])[0] : "a" | "b"
+>foo : ("a" | "b")[] | "a" | "b"
+>(foo as S[])[0] : "a" | "b"
+>(foo as S[]) : ("a" | "b")[]
+>foo as S[] : ("a" | "b")[]
+>foo : ("a" | "b")[] | "a" | "b"
+>S : "a" | "b"
+>0 : number
+
+        break;
+}

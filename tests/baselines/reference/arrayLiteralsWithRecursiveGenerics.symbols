@@ -1,0 +1,79 @@
+=== tests/cases/conformance/types/typeRelationships/recursiveTypes/arrayLiteralsWithRecursiveGenerics.ts ===
+class List<T> {
+>List : Symbol(List, Decl(arrayLiteralsWithRecursiveGenerics.ts, 0, 0))
+>T : Symbol(T, Decl(arrayLiteralsWithRecursiveGenerics.ts, 0, 11))
+
+    data: T;
+>data : Symbol(List.data, Decl(arrayLiteralsWithRecursiveGenerics.ts, 0, 15))
+>T : Symbol(T, Decl(arrayLiteralsWithRecursiveGenerics.ts, 0, 11))
+
+    next: List<List<T>>;
+>next : Symbol(List.next, Decl(arrayLiteralsWithRecursiveGenerics.ts, 1, 12))
+>List : Symbol(List, Decl(arrayLiteralsWithRecursiveGenerics.ts, 0, 0))
+>List : Symbol(List, Decl(arrayLiteralsWithRecursiveGenerics.ts, 0, 0))
+>T : Symbol(T, Decl(arrayLiteralsWithRecursiveGenerics.ts, 0, 11))
+}
+
+class DerivedList<U> extends List<U> {
+>DerivedList : Symbol(DerivedList, Decl(arrayLiteralsWithRecursiveGenerics.ts, 3, 1))
+>U : Symbol(U, Decl(arrayLiteralsWithRecursiveGenerics.ts, 5, 18))
+>List : Symbol(List, Decl(arrayLiteralsWithRecursiveGenerics.ts, 0, 0))
+>U : Symbol(U, Decl(arrayLiteralsWithRecursiveGenerics.ts, 5, 18))
+
+    foo: U;
+>foo : Symbol(DerivedList.foo, Decl(arrayLiteralsWithRecursiveGenerics.ts, 5, 38))
+>U : Symbol(U, Decl(arrayLiteralsWithRecursiveGenerics.ts, 5, 18))
+
+    // next: List<List<U>>
+}
+
+class MyList<T> {
+>MyList : Symbol(MyList, Decl(arrayLiteralsWithRecursiveGenerics.ts, 8, 1))
+>T : Symbol(T, Decl(arrayLiteralsWithRecursiveGenerics.ts, 10, 13))
+
+    data: T;
+>data : Symbol(MyList.data, Decl(arrayLiteralsWithRecursiveGenerics.ts, 10, 17))
+>T : Symbol(T, Decl(arrayLiteralsWithRecursiveGenerics.ts, 10, 13))
+
+    next: MyList<MyList<T>>;
+>next : Symbol(MyList.next, Decl(arrayLiteralsWithRecursiveGenerics.ts, 11, 12))
+>MyList : Symbol(MyList, Decl(arrayLiteralsWithRecursiveGenerics.ts, 8, 1))
+>MyList : Symbol(MyList, Decl(arrayLiteralsWithRecursiveGenerics.ts, 8, 1))
+>T : Symbol(T, Decl(arrayLiteralsWithRecursiveGenerics.ts, 10, 13))
+}
+
+var list: List<number>;
+>list : Symbol(list, Decl(arrayLiteralsWithRecursiveGenerics.ts, 15, 3))
+>List : Symbol(List, Decl(arrayLiteralsWithRecursiveGenerics.ts, 0, 0))
+
+var list2: List<string>;
+>list2 : Symbol(list2, Decl(arrayLiteralsWithRecursiveGenerics.ts, 16, 3))
+>List : Symbol(List, Decl(arrayLiteralsWithRecursiveGenerics.ts, 0, 0))
+
+var myList: MyList<number>;
+>myList : Symbol(myList, Decl(arrayLiteralsWithRecursiveGenerics.ts, 17, 3))
+>MyList : Symbol(MyList, Decl(arrayLiteralsWithRecursiveGenerics.ts, 8, 1))
+
+var xs = [list, myList]; // {}[]
+>xs : Symbol(xs, Decl(arrayLiteralsWithRecursiveGenerics.ts, 19, 3))
+>list : Symbol(list, Decl(arrayLiteralsWithRecursiveGenerics.ts, 15, 3))
+>myList : Symbol(myList, Decl(arrayLiteralsWithRecursiveGenerics.ts, 17, 3))
+
+var ys = [list, list2]; // {}[]
+>ys : Symbol(ys, Decl(arrayLiteralsWithRecursiveGenerics.ts, 20, 3))
+>list : Symbol(list, Decl(arrayLiteralsWithRecursiveGenerics.ts, 15, 3))
+>list2 : Symbol(list2, Decl(arrayLiteralsWithRecursiveGenerics.ts, 16, 3))
+
+var zs = [list, null]; // List<number>[]
+>zs : Symbol(zs, Decl(arrayLiteralsWithRecursiveGenerics.ts, 21, 3))
+>list : Symbol(list, Decl(arrayLiteralsWithRecursiveGenerics.ts, 15, 3))
+
+var myDerivedList: DerivedList<number>;
+>myDerivedList : Symbol(myDerivedList, Decl(arrayLiteralsWithRecursiveGenerics.ts, 23, 3))
+>DerivedList : Symbol(DerivedList, Decl(arrayLiteralsWithRecursiveGenerics.ts, 3, 1))
+
+var as = [list, myDerivedList]; // List<number>[]
+>as : Symbol(as, Decl(arrayLiteralsWithRecursiveGenerics.ts, 24, 3))
+>list : Symbol(list, Decl(arrayLiteralsWithRecursiveGenerics.ts, 15, 3))
+>myDerivedList : Symbol(myDerivedList, Decl(arrayLiteralsWithRecursiveGenerics.ts, 23, 3))
+

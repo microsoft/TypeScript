@@ -1,6 +1,6 @@
 === tests/cases/compiler/internalAliasInterfaceInsideTopLevelModuleWithoutExport.ts ===
 export module a {
->a : unknown
+>a : any
 
     export interface I {
 >I : I
@@ -8,8 +8,8 @@ export module a {
 }
 
 import b = a.I;
->b : unknown
->a : unknown
+>b : any
+>a : any
 >I : b
 
 export var x: b;

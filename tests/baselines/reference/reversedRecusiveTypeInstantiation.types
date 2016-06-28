@@ -30,5 +30,6 @@ a.zPos2Pos1.xPos1 = 1
 >a : A<string, number>
 >zPos2Pos1 : A<number, string>
 >xPos1 : number
+>1 : number
 
 

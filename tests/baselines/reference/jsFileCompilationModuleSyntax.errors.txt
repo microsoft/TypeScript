@@ -1,0 +1,9 @@
+error TS5055: Cannot write file 'tests/cases/compiler/a.js' because it would overwrite input file.
+tests/cases/compiler/a.js(1,8): error TS8007: 'module declarations' can only be used in a .ts file.
+
+
+!!! error TS5055: Cannot write file 'tests/cases/compiler/a.js' because it would overwrite input file.
+==== tests/cases/compiler/a.js (1 errors) ====
+    module M { }
+           ~
+!!! error TS8007: 'module declarations' can only be used in a .ts file.

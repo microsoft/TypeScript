@@ -1,0 +1,16 @@
+=== tests/cases/compiler/functionOverloads24.ts ===
+function foo(bar:number):(b:string)=>void;
+>foo : Symbol(foo, Decl(functionOverloads24.ts, 0, 0), Decl(functionOverloads24.ts, 0, 42), Decl(functionOverloads24.ts, 1, 42))
+>bar : Symbol(bar, Decl(functionOverloads24.ts, 0, 13))
+>b : Symbol(b, Decl(functionOverloads24.ts, 0, 26))
+
+function foo(bar:string):(a:number)=>void;
+>foo : Symbol(foo, Decl(functionOverloads24.ts, 0, 0), Decl(functionOverloads24.ts, 0, 42), Decl(functionOverloads24.ts, 1, 42))
+>bar : Symbol(bar, Decl(functionOverloads24.ts, 1, 13))
+>a : Symbol(a, Decl(functionOverloads24.ts, 1, 26))
+
+function foo(bar:any):(a)=>void { return function(){} }
+>foo : Symbol(foo, Decl(functionOverloads24.ts, 0, 0), Decl(functionOverloads24.ts, 0, 42), Decl(functionOverloads24.ts, 1, 42))
+>bar : Symbol(bar, Decl(functionOverloads24.ts, 2, 13))
+>a : Symbol(a, Decl(functionOverloads24.ts, 2, 23))
+

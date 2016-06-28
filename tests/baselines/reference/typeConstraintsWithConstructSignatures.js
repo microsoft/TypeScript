@@ -23,4 +23,4 @@ var C = (function () {
         var x2 = new this.data2(); // should not error
     };
     return C;
-})();
+}());

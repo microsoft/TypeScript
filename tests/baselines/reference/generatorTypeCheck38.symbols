@@ -1,0 +1,12 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck38.ts ===
+var yield;
+>yield : Symbol(yield, Decl(generatorTypeCheck38.ts, 0, 3))
+
+function* g() {
+>g : Symbol(g, Decl(generatorTypeCheck38.ts, 0, 10))
+
+    yield 0;
+    var v: typeof yield;
+>v : Symbol(v, Decl(generatorTypeCheck38.ts, 3, 7))
+>yield : Symbol(yield, Decl(generatorTypeCheck38.ts, 0, 3))
+}

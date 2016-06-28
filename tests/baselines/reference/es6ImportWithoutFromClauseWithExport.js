@@ -8,8 +8,10 @@ export var a = 10;
 export import "server";
 
 //// [server.js]
+"use strict";
 exports.a = 10;
 //// [client.js]
+"use strict";
 require("server");
 
 

@@ -22,6 +22,6 @@ var Foo = (function () {
     }
     Foo.prototype.Boz = function () { };
     return Foo;
-})();
+}());
 function Biz(map) { }
 Biz(new Foo());

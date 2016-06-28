@@ -1,0 +1,20 @@
+=== tests/cases/compiler/functionOverloads32.ts ===
+function foo(bar:string):string;
+>foo : Symbol(foo, Decl(functionOverloads32.ts, 0, 0), Decl(functionOverloads32.ts, 0, 32), Decl(functionOverloads32.ts, 1, 32))
+>bar : Symbol(bar, Decl(functionOverloads32.ts, 0, 13))
+
+function foo(bar:number):number;
+>foo : Symbol(foo, Decl(functionOverloads32.ts, 0, 0), Decl(functionOverloads32.ts, 0, 32), Decl(functionOverloads32.ts, 1, 32))
+>bar : Symbol(bar, Decl(functionOverloads32.ts, 1, 13))
+
+function foo(bar:any):any{ return bar }
+>foo : Symbol(foo, Decl(functionOverloads32.ts, 0, 0), Decl(functionOverloads32.ts, 0, 32), Decl(functionOverloads32.ts, 1, 32))
+>bar : Symbol(bar, Decl(functionOverloads32.ts, 2, 13))
+>bar : Symbol(bar, Decl(functionOverloads32.ts, 2, 13))
+
+var baz:number; var x = foo(baz);
+>baz : Symbol(baz, Decl(functionOverloads32.ts, 3, 3))
+>x : Symbol(x, Decl(functionOverloads32.ts, 3, 19))
+>foo : Symbol(foo, Decl(functionOverloads32.ts, 0, 0), Decl(functionOverloads32.ts, 0, 32), Decl(functionOverloads32.ts, 1, 32))
+>baz : Symbol(baz, Decl(functionOverloads32.ts, 3, 3))
+

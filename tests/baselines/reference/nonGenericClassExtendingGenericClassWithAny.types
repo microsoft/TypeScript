@@ -10,5 +10,5 @@ class Foo<T> {
 
 class Bar extends Foo<any> { } // Valid
 >Bar : Bar
->Foo : Foo<T>
+>Foo : Foo<any>
 

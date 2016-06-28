@@ -28,7 +28,7 @@ var MyClass = (function () {
         configurable: true
     });
     return MyClass;
-})();
+}());
 //# sourceMappingURL=properties.js.map
 
 //// [properties.d.ts]

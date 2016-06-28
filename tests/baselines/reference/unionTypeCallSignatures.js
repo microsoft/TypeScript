@@ -26,12 +26,12 @@ unionOfDifferentNumberOfSignatures(); // error - no call signatures
 unionOfDifferentNumberOfSignatures(10); // error - no call signatures
 unionOfDifferentNumberOfSignatures("hello"); // error - no call signatures
 
-    var unionWithDifferentParameterCount: { (a: string): string; } | { (a: string, b: number): number; } ;
+var unionWithDifferentParameterCount: { (a: string): string; } | { (a: string, b: number): number; } ;
 unionWithDifferentParameterCount();// no  call signature
 unionWithDifferentParameterCount("hello");// no  call signature
 unionWithDifferentParameterCount("hello", 10);// no  call signature
 
-    var unionWithOptionalParameter1: { (a: string, b?: number): string; } | { (a: string, b?: number): number; };
+var unionWithOptionalParameter1: { (a: string, b?: number): string; } | { (a: string, b?: number): number; };
 strOrNum = unionWithOptionalParameter1('hello');
 strOrNum = unionWithOptionalParameter1('hello', 10);
 strOrNum = unionWithOptionalParameter1('hello', "hello"); // error in parameter type
@@ -44,7 +44,7 @@ strOrNum = unionWithOptionalParameter2('hello', "hello"); // error no call signa
 strOrNum = unionWithOptionalParameter2(); // error no call signature
 
 var unionWithOptionalParameter3: { (a: string, b?: number): string; } | { (a: string): number; };
-strOrNum = unionWithOptionalParameter3('hello'); // error no call signature
+strOrNum = unionWithOptionalParameter3('hello');
 strOrNum = unionWithOptionalParameter3('hello', 10); // error no call signature
 strOrNum = unionWithOptionalParameter3('hello', "hello"); // error no call signature
 strOrNum = unionWithOptionalParameter3(); // error no call signature
@@ -64,11 +64,16 @@ strOrNum = unionWithRestParameter2('hello', "hello"); // error no call signature
 strOrNum = unionWithRestParameter2(); // error no call signature
 
 var unionWithRestParameter3: { (a: string, ...b: number[]): string; } | { (a: string): number };
-strOrNum = unionWithRestParameter3('hello'); // error no call signature
+strOrNum = unionWithRestParameter3('hello');
 strOrNum = unionWithRestParameter3('hello', 10); // error no call signature
 strOrNum = unionWithRestParameter3('hello', 10, 11); // error no call signature
 strOrNum = unionWithRestParameter3('hello', "hello"); // error no call signature
 strOrNum = unionWithRestParameter3(); // error no call signature
+
+var unionWithRestParameter4: { (...a: string[]): string; } | { (a: string, b: string): number; };
+strOrNum = unionWithRestParameter4("hello"); // error supplied parameters do not match any call signature
+strOrNum = unionWithRestParameter4("hello", "world");
+
 
 //// [unionTypeCallSignatures.js]
 var numOrDate;
@@ -108,7 +113,7 @@ strOrNum = unionWithOptionalParameter2('hello', 10); // error no call signature
 strOrNum = unionWithOptionalParameter2('hello', "hello"); // error no call signature
 strOrNum = unionWithOptionalParameter2(); // error no call signature
 var unionWithOptionalParameter3;
-strOrNum = unionWithOptionalParameter3('hello'); // error no call signature
+strOrNum = unionWithOptionalParameter3('hello');
 strOrNum = unionWithOptionalParameter3('hello', 10); // error no call signature
 strOrNum = unionWithOptionalParameter3('hello', "hello"); // error no call signature
 strOrNum = unionWithOptionalParameter3(); // error no call signature
@@ -125,8 +130,11 @@ strOrNum = unionWithRestParameter2('hello', 10, 11); // error no call signature
 strOrNum = unionWithRestParameter2('hello', "hello"); // error no call signature
 strOrNum = unionWithRestParameter2(); // error no call signature
 var unionWithRestParameter3;
-strOrNum = unionWithRestParameter3('hello'); // error no call signature
+strOrNum = unionWithRestParameter3('hello');
 strOrNum = unionWithRestParameter3('hello', 10); // error no call signature
 strOrNum = unionWithRestParameter3('hello', 10, 11); // error no call signature
 strOrNum = unionWithRestParameter3('hello', "hello"); // error no call signature
 strOrNum = unionWithRestParameter3(); // error no call signature
+var unionWithRestParameter4;
+strOrNum = unionWithRestParameter4("hello"); // error supplied parameters do not match any call signature
+strOrNum = unionWithRestParameter4("hello", "world");

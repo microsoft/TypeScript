@@ -1,4 +1,4 @@
-//@module: commonjs
+// @module: commonjs
 // @declaration: true
 // @Filename: file1.ts
 export function foo() {
@@ -7,5 +7,5 @@ var classes = undefined;
 }
 
 // @Filename: file2.ts
-import f = require('file1');
+import f = require('./file1');
 f.foo();

@@ -1,6 +1,6 @@
-tests/cases/compiler/typeArgInference2.ts(12,10): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+tests/cases/compiler/typeArgInference2.ts(12,52): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate '{ name: string; a: number; }' is not a valid type argument because it is not a supertype of candidate '{ name: string; b: number; }'.
-    Property 'a' is missing in type '{ name: string; b: number; }'.
+    Object literal may only specify known properties, and 'b' does not exist in type '{ name: string; a: number; }'.
 
 
 ==== tests/cases/compiler/typeArgInference2.ts (1 errors) ====
@@ -16,7 +16,7 @@ tests/cases/compiler/typeArgInference2.ts(12,10): error TS2453: The type argumen
     var z4 = foo({ name: "abc" });        // { name: string }
     var z5 = foo({ name: "abc", a: 5 });  // { name: string; a: number }
     var z6 = foo({ name: "abc", a: 5 }, { name: "def", b: 5 });  // error
-             ~~~
+                                                       ~~~~
 !!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
 !!! error TS2453:   Type argument candidate '{ name: string; a: number; }' is not a valid type argument because it is not a supertype of candidate '{ name: string; b: number; }'.
-!!! error TS2453:     Property 'a' is missing in type '{ name: string; b: number; }'.
+!!! error TS2453:     Object literal may only specify known properties, and 'b' does not exist in type '{ name: string; a: number; }'.

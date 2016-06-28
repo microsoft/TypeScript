@@ -12,7 +12,7 @@ declare class B<T> {
 
 class D extends B<any> {
 >D : D
->B : B<T>
+>B : B<any>
 
     constructor() {
         super();

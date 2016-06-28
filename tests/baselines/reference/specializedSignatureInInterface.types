@@ -11,8 +11,8 @@ interface B extends A {
 >A : A
 
   (key:'foo'):string;
->key : 'foo'
+>key : "foo"
 
   (key:'bar'):string;
->key : 'bar'
+>key : "bar"
 }

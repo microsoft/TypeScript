@@ -133,16 +133,17 @@ function privateFunctionWithPublicTypeParametersWithoutExtends<T>() {
 }
 
 //// [privacyTypeParameterOfFunction.js]
+"use strict";
 var privateClass = (function () {
     function privateClass() {
     }
     return privateClass;
-})();
+}());
 var publicClass = (function () {
     function publicClass() {
     }
     return publicClass;
-})();
+}());
 exports.publicClass = publicClass;
 var publicClassWithWithPrivateTypeParameters = (function () {
     function publicClassWithWithPrivateTypeParameters() {
@@ -158,7 +159,7 @@ var publicClassWithWithPrivateTypeParameters = (function () {
     publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod = function () {
     };
     return publicClassWithWithPrivateTypeParameters;
-})();
+}());
 exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTypeParameters;
 var publicClassWithWithPublicTypeParameters = (function () {
     function publicClassWithWithPublicTypeParameters() {
@@ -172,7 +173,7 @@ var publicClassWithWithPublicTypeParameters = (function () {
     publicClassWithWithPublicTypeParameters.prototype.myPrivateMethod = function () {
     };
     return publicClassWithWithPublicTypeParameters;
-})();
+}());
 exports.publicClassWithWithPublicTypeParameters = publicClassWithWithPublicTypeParameters;
 var privateClassWithWithPrivateTypeParameters = (function () {
     function privateClassWithWithPrivateTypeParameters() {
@@ -186,7 +187,7 @@ var privateClassWithWithPrivateTypeParameters = (function () {
     privateClassWithWithPrivateTypeParameters.prototype.myPrivateMethod = function () {
     };
     return privateClassWithWithPrivateTypeParameters;
-})();
+}());
 var privateClassWithWithPublicTypeParameters = (function () {
     function privateClassWithWithPublicTypeParameters() {
     }
@@ -199,7 +200,7 @@ var privateClassWithWithPublicTypeParameters = (function () {
     privateClassWithWithPublicTypeParameters.prototype.myPrivateMethod = function () {
     };
     return privateClassWithWithPublicTypeParameters;
-})();
+}());
 // TypeParameter_0_of_exported_function_has_or_is_using_private_type_1
 function publicFunctionWithPrivateTypeParameters() {
 }
@@ -223,7 +224,7 @@ var publicClassWithWithPublicTypeParametersWithoutExtends = (function () {
     publicClassWithWithPublicTypeParametersWithoutExtends.prototype.myPrivateMethod = function () {
     };
     return publicClassWithWithPublicTypeParametersWithoutExtends;
-})();
+}());
 exports.publicClassWithWithPublicTypeParametersWithoutExtends = publicClassWithWithPublicTypeParametersWithoutExtends;
 var privateClassWithWithPublicTypeParametersWithoutExtends = (function () {
     function privateClassWithWithPublicTypeParametersWithoutExtends() {
@@ -237,7 +238,7 @@ var privateClassWithWithPublicTypeParametersWithoutExtends = (function () {
     privateClassWithWithPublicTypeParametersWithoutExtends.prototype.myPrivateMethod = function () {
     };
     return privateClassWithWithPublicTypeParametersWithoutExtends;
-})();
+}());
 function publicFunctionWithPublicTypeParametersWithoutExtends() {
 }
 exports.publicFunctionWithPublicTypeParametersWithoutExtends = publicFunctionWithPublicTypeParametersWithoutExtends;

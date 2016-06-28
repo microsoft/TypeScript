@@ -1,5 +1,5 @@
 === tests/cases/compiler/chainedImportAlias_file1.ts ===
-import x = require('chainedImportAlias_file0');
+import x = require('./chainedImportAlias_file0');
 >x : typeof x
 
 import y = x;

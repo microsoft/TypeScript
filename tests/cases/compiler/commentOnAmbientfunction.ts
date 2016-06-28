@@ -1,5 +1,10 @@
 //@filename: a.ts
-/*! Keep this pinned comment */
+/*!=========
+    Keep this pinned comment
+   =========
+*/
+
+/*! Don't keep this pinned comment */
 declare function foo();
 
 // Don't keep this comment.

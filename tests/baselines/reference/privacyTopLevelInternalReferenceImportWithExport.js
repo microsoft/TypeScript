@@ -101,6 +101,7 @@ export var publicUse_im_public_mu_public: im_public_mu_public.i;
 
 //// [privacyTopLevelInternalReferenceImportWithExport.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     // private elements
     var m_private;
     (function (m_private) {
@@ -108,7 +109,7 @@ define(["require", "exports"], function (require, exports) {
             function c_private() {
             }
             return c_private;
-        })();
+        }());
         m_private.c_private = c_private;
         (function (e_private) {
             e_private[e_private["Happy"] = 0] = "Happy";
@@ -126,7 +127,7 @@ define(["require", "exports"], function (require, exports) {
                 function c() {
                 }
                 return c;
-            })();
+            }());
             mi_private.c = c;
         })(mi_private = m_private.mi_private || (m_private.mi_private = {}));
     })(m_private || (m_private = {}));
@@ -137,7 +138,7 @@ define(["require", "exports"], function (require, exports) {
             function c_public() {
             }
             return c_public;
-        })();
+        }());
         m_public.c_public = c_public;
         (function (e_public) {
             e_public[e_public["Happy"] = 0] = "Happy";
@@ -155,7 +156,7 @@ define(["require", "exports"], function (require, exports) {
                 function c() {
                 }
                 return c;
-            })();
+            }());
             mi_public.c = c;
         })(mi_public = m_public.mi_public || (m_public.mi_public = {}));
     })(m_public = exports.m_public || (exports.m_public = {}));
@@ -175,11 +176,9 @@ define(["require", "exports"], function (require, exports) {
     var privateUse_im_public_v_private = exports.im_public_v_private;
     exports.publicUse_im_public_v_private = exports.im_public_v_private;
     var privateUse_im_public_i_private;
-    exports.publicUse_im_public_i_private;
     var privateUse_im_public_mi_private = new exports.im_public_mi_private.c();
     exports.publicUse_im_public_mi_private = new exports.im_public_mi_private.c();
     var privateUse_im_public_mu_private;
-    exports.publicUse_im_public_mu_private;
     // No Privacy errors - importing public elements
     exports.im_public_c_public = m_public.c_public;
     exports.im_public_e_public = m_public.e_public;
@@ -196,9 +195,7 @@ define(["require", "exports"], function (require, exports) {
     var privateUse_im_public_v_public = exports.im_public_v_public;
     exports.publicUse_im_public_v_public = exports.im_public_v_public;
     var privateUse_im_public_i_public;
-    exports.publicUse_im_public_i_public;
     var privateUse_im_public_mi_public = new exports.im_public_mi_public.c();
     exports.publicUse_im_public_mi_public = new exports.im_public_mi_public.c();
     var privateUse_im_public_mu_public;
-    exports.publicUse_im_public_mu_public;
 });

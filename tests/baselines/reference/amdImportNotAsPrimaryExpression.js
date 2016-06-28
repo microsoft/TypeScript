@@ -33,13 +33,14 @@ var e: number = <foo.E1>0;
 
 //// [foo_0.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var C1 = (function () {
         function C1() {
             this.m1 = 42;
         }
         C1.s1 = true;
         return C1;
-    })();
+    }());
     exports.C1 = C1;
     (function (E1) {
         E1[E1["A"] = 0] = "A";
@@ -50,6 +51,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [foo_1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var i;
     var x = {};
     var y = false;

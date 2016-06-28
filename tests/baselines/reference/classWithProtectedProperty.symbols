@@ -1,0 +1,92 @@
+=== tests/cases/conformance/types/members/classWithProtectedProperty.ts ===
+// accessing any protected outside the class is an error
+
+class C {
+>C : Symbol(C, Decl(classWithProtectedProperty.ts, 0, 0))
+
+    protected x;
+>x : Symbol(C.x, Decl(classWithProtectedProperty.ts, 2, 9))
+
+    protected a = '';
+>a : Symbol(C.a, Decl(classWithProtectedProperty.ts, 3, 16))
+
+    protected b: string = '';
+>b : Symbol(C.b, Decl(classWithProtectedProperty.ts, 4, 21))
+
+    protected c() { return '' }
+>c : Symbol(C.c, Decl(classWithProtectedProperty.ts, 5, 29))
+
+    protected d = () => '';
+>d : Symbol(C.d, Decl(classWithProtectedProperty.ts, 6, 31))
+
+    protected static e;
+>e : Symbol(C.e, Decl(classWithProtectedProperty.ts, 7, 27))
+
+    protected static f() { return '' }
+>f : Symbol(C.f, Decl(classWithProtectedProperty.ts, 8, 23))
+
+    protected static g = () => '';
+>g : Symbol(C.g, Decl(classWithProtectedProperty.ts, 9, 38))
+}
+
+class D extends C {
+>D : Symbol(D, Decl(classWithProtectedProperty.ts, 11, 1))
+>C : Symbol(C, Decl(classWithProtectedProperty.ts, 0, 0))
+
+    method() {
+>method : Symbol(D.method, Decl(classWithProtectedProperty.ts, 13, 19))
+
+        // No errors
+        var d = new D();
+>d : Symbol(d, Decl(classWithProtectedProperty.ts, 16, 11))
+>D : Symbol(D, Decl(classWithProtectedProperty.ts, 11, 1))
+
+        var r1: string = d.x;
+>r1 : Symbol(r1, Decl(classWithProtectedProperty.ts, 17, 11))
+>d.x : Symbol(C.x, Decl(classWithProtectedProperty.ts, 2, 9))
+>d : Symbol(d, Decl(classWithProtectedProperty.ts, 16, 11))
+>x : Symbol(C.x, Decl(classWithProtectedProperty.ts, 2, 9))
+
+        var r2: string = d.a;
+>r2 : Symbol(r2, Decl(classWithProtectedProperty.ts, 18, 11))
+>d.a : Symbol(C.a, Decl(classWithProtectedProperty.ts, 3, 16))
+>d : Symbol(d, Decl(classWithProtectedProperty.ts, 16, 11))
+>a : Symbol(C.a, Decl(classWithProtectedProperty.ts, 3, 16))
+
+        var r3: string = d.b;
+>r3 : Symbol(r3, Decl(classWithProtectedProperty.ts, 19, 11))
+>d.b : Symbol(C.b, Decl(classWithProtectedProperty.ts, 4, 21))
+>d : Symbol(d, Decl(classWithProtectedProperty.ts, 16, 11))
+>b : Symbol(C.b, Decl(classWithProtectedProperty.ts, 4, 21))
+
+        var r4: string = d.c();
+>r4 : Symbol(r4, Decl(classWithProtectedProperty.ts, 20, 11))
+>d.c : Symbol(C.c, Decl(classWithProtectedProperty.ts, 5, 29))
+>d : Symbol(d, Decl(classWithProtectedProperty.ts, 16, 11))
+>c : Symbol(C.c, Decl(classWithProtectedProperty.ts, 5, 29))
+
+        var r5: string = d.d();
+>r5 : Symbol(r5, Decl(classWithProtectedProperty.ts, 21, 11))
+>d.d : Symbol(C.d, Decl(classWithProtectedProperty.ts, 6, 31))
+>d : Symbol(d, Decl(classWithProtectedProperty.ts, 16, 11))
+>d : Symbol(C.d, Decl(classWithProtectedProperty.ts, 6, 31))
+
+        var r6: string = C.e;
+>r6 : Symbol(r6, Decl(classWithProtectedProperty.ts, 22, 11))
+>C.e : Symbol(C.e, Decl(classWithProtectedProperty.ts, 7, 27))
+>C : Symbol(C, Decl(classWithProtectedProperty.ts, 0, 0))
+>e : Symbol(C.e, Decl(classWithProtectedProperty.ts, 7, 27))
+
+        var r7: string = C.f();
+>r7 : Symbol(r7, Decl(classWithProtectedProperty.ts, 23, 11))
+>C.f : Symbol(C.f, Decl(classWithProtectedProperty.ts, 8, 23))
+>C : Symbol(C, Decl(classWithProtectedProperty.ts, 0, 0))
+>f : Symbol(C.f, Decl(classWithProtectedProperty.ts, 8, 23))
+
+        var r8: string = C.g();
+>r8 : Symbol(r8, Decl(classWithProtectedProperty.ts, 24, 11))
+>C.g : Symbol(C.g, Decl(classWithProtectedProperty.ts, 9, 38))
+>C : Symbol(C, Decl(classWithProtectedProperty.ts, 0, 0))
+>g : Symbol(C.g, Decl(classWithProtectedProperty.ts, 9, 38))
+    }
+}

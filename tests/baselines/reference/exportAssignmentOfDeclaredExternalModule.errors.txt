@@ -4,7 +4,7 @@ tests/cases/compiler/exportAssignmentOfDeclaredExternalModule_1.ts(4,9): error T
 
 ==== tests/cases/compiler/exportAssignmentOfDeclaredExternalModule_1.ts (2 errors) ====
     ///<reference path='exportAssignmentOfDeclaredExternalModule_0.ts'/>
-    import Sammy = require('exportAssignmentOfDeclaredExternalModule_0');
+    import Sammy = require('./exportAssignmentOfDeclaredExternalModule_0');
     var x = new Sammy(); // error to use as constructor as there is not constructor symbol
                 ~~~~~
 !!! error TS2304: Cannot find name 'Sammy'.

@@ -4,6 +4,7 @@ module M {
 
     export var v = 10;
 >v : number
+>10 : number
 
     v;
 >v : number

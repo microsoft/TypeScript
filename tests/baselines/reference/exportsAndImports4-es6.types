@@ -1,0 +1,68 @@
+=== tests/cases/conformance/es6/modules/t3.ts ===
+import a = require("./t1");
+>a : typeof a
+
+a.default;
+>a.default : string
+>a : typeof a
+>default : string
+
+import b from "./t1";
+>b : string
+
+b;
+>b : string
+
+import * as c from "./t1";
+>c : typeof a
+
+c.default;
+>c.default : string
+>c : typeof a
+>default : string
+
+import { default as d } from "./t1";
+>default : string
+>d : string
+
+d;
+>d : string
+
+import e1, * as e2 from "./t1";
+>e1 : string
+>e2 : typeof a
+
+e1;
+>e1 : string
+
+e2.default;
+>e2.default : string
+>e2 : typeof a
+>default : string
+
+import f1, { default as f2 } from "./t1";
+>f1 : string
+>default : string
+>f2 : string
+
+f1;
+>f1 : string
+
+f2;
+>f2 : string
+
+export { a, b, c, d, e1, e2, f1, f2 };
+>a : typeof a
+>b : string
+>c : typeof a
+>d : string
+>e1 : string
+>e2 : typeof a
+>f1 : string
+>f2 : string
+
+=== tests/cases/conformance/es6/modules/t1.ts ===
+
+No type information for this code.export default "hello";
+No type information for this code.
+No type information for this code.

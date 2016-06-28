@@ -7,21 +7,23 @@ class Foo<A> {
 }
 
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts]
-import Foo = require("privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
+import Foo = require("./privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
 export = Bar;
 interface Bar {
     foo: Foo<number>;
 }
 
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_0.js]
+"use strict";
 var Foo = (function () {
     function Foo(a) {
         this.a = a;
     }
     return Foo;
-})();
+}());
 module.exports = Foo;
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_1.js]
+"use strict";
 
 
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_0.d.ts]
@@ -31,7 +33,7 @@ declare class Foo<A> {
     constructor(a: A);
 }
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_1.d.ts]
-import Foo = require("privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
+import Foo = require("./privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
 export = Bar;
 interface Bar {
     foo: Foo<number>;

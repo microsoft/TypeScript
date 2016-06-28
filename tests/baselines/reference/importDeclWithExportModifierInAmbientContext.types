@@ -1,15 +1,15 @@
 === tests/cases/compiler/importDeclWithExportModifierInAmbientContext.ts ===
 declare module "m" {
     module x {
->x : unknown
+>x : any
 
         interface c {
 >c : c
         }
     }
     export import a = x.c;
->a : unknown
->x : unknown
+>a : any
+>x : any
 >c : a
 
     var b: a;

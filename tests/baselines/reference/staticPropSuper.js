@@ -36,17 +36,16 @@ class E extends A {
 }
 
 //// [staticPropSuper.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -55,7 +54,7 @@ var B = (function (_super) {
     }
     B.s = 9;
     return B;
-})(A);
+}(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
@@ -63,7 +62,7 @@ var C = (function (_super) {
         var x = 1; // should error
     }
     return C;
-})(A);
+}(A));
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -71,7 +70,7 @@ var D = (function (_super) {
         var x = 1; // should error
     }
     return D;
-})(A);
+}(A));
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
@@ -79,4 +78,4 @@ var E = (function (_super) {
         var x = 1; // should error
     }
     return E;
-})(A);
+}(A));

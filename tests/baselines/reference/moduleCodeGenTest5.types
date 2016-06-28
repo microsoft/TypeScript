@@ -1,9 +1,11 @@
 === tests/cases/compiler/moduleCodeGenTest5.ts ===
 export var x = 0;
 >x : number
+>0 : number
 
 var y = 0;
 >y : number
+>0 : number
 
 export function f1() {}
 >f1 : () => void
@@ -16,6 +18,7 @@ export class C1 {
 
 	public p1 = 0;
 >p1 : number
+>0 : number
 
 	public p2() {}
 >p2 : () => void
@@ -25,6 +28,7 @@ class C2{
 
 	public p1 = 0;
 >p1 : number
+>0 : number
 
 	public p2() {}	
 >p2 : () => void
@@ -33,6 +37,7 @@ class C2{
 export enum E1 {A=0}
 >E1 : E1
 >A : E1
+>0 : number
 
 var u = E1.A;
 >u : E1
@@ -43,6 +48,7 @@ var u = E1.A;
 enum E2 {B=0}
 >E2 : E2
 >B : E2
+>0 : number
 
 var v = E2.B;
 >v : E2

@@ -1,0 +1,38 @@
+=== tests/cases/compiler/mixedExports.ts ===
+declare module M {
+>M : Symbol(M, Decl(mixedExports.ts, 0, 0))
+
+     function foo();
+>foo : Symbol(foo, Decl(mixedExports.ts, 0, 18), Decl(mixedExports.ts, 1, 20), Decl(mixedExports.ts, 2, 27))
+
+     export function foo();
+>foo : Symbol(foo, Decl(mixedExports.ts, 0, 18), Decl(mixedExports.ts, 1, 20), Decl(mixedExports.ts, 2, 27))
+
+     function foo();
+>foo : Symbol(foo, Decl(mixedExports.ts, 0, 18), Decl(mixedExports.ts, 1, 20), Decl(mixedExports.ts, 2, 27))
+}
+
+declare module M1 {
+>M1 : Symbol(M1, Decl(mixedExports.ts, 4, 1))
+
+     export interface Foo {}
+>Foo : Symbol(Foo, Decl(mixedExports.ts, 6, 19), Decl(mixedExports.ts, 7, 28))
+
+     interface Foo {}
+>Foo : Symbol(Foo, Decl(mixedExports.ts, 6, 19), Decl(mixedExports.ts, 7, 28))
+}
+
+module A {
+>A : Symbol(A, Decl(mixedExports.ts, 9, 1))
+
+     interface X {x}
+>X : Symbol(X, Decl(mixedExports.ts, 11, 10), Decl(mixedExports.ts, 12, 20), Decl(mixedExports.ts, 13, 23))
+>x : Symbol(X.x, Decl(mixedExports.ts, 12, 18))
+
+     export module X {}
+>X : Symbol(X, Decl(mixedExports.ts, 12, 20))
+
+     interface X {y}
+>X : Symbol(X, Decl(mixedExports.ts, 11, 10), Decl(mixedExports.ts, 12, 20), Decl(mixedExports.ts, 13, 23))
+>y : Symbol(X.y, Decl(mixedExports.ts, 14, 18))
+}

@@ -14,11 +14,10 @@ class MyDerived extends MyBase {
 }
 
 //// [superAccess.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var MyBase = (function () {
     function MyBase() {
@@ -27,7 +26,7 @@ var MyBase = (function () {
     }
     MyBase.S1 = 5;
     return MyBase;
-})();
+}());
 var MyDerived = (function (_super) {
     __extends(MyDerived, _super);
     function MyDerived() {
@@ -39,4 +38,4 @@ var MyDerived = (function (_super) {
         var l5 = _super.prototype.f.call(this); // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword
     };
     return MyDerived;
-})(MyBase);
+}(MyBase));

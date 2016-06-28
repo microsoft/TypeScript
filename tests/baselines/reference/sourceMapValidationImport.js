@@ -9,13 +9,14 @@ var x = new a();
 var y = new b();
 
 //// [sourceMapValidationImport.js]
+"use strict";
 var m;
 (function (m) {
     var c = (function () {
         function c() {
         }
         return c;
-    })();
+    }());
     m.c = c;
 })(m = exports.m || (exports.m = {}));
 var a = m.c;

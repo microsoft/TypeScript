@@ -6,6 +6,7 @@ export class C {
 
 //// [fieldAndGetterWithSameName.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var C = (function () {
         function C() {
         }
@@ -15,6 +16,6 @@ define(["require", "exports"], function (require, exports) {
             configurable: true
         });
         return C;
-    })();
+    }());
     exports.C = C;
 });

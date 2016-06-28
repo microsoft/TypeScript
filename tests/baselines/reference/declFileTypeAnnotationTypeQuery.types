@@ -37,6 +37,7 @@ function foo2() {
 // Qualified name
 function foo3(): typeof m.c {
 >foo3 : () => typeof m.c
+>m.c : typeof m.c
 >m : typeof m
 >c : typeof m.c
 
@@ -72,6 +73,7 @@ function foo6() {
 // Qualified name with type arguments
 function foo7(): typeof m.g {
 >foo7 : () => typeof m.g
+>m.g : typeof m.g
 >m : typeof m
 >g : typeof m.g
 

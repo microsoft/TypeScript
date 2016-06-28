@@ -1,5 +1,6 @@
 //// [letAndVarRedeclaration.ts]
 
+
 let e0
 var e0;
 function e0() { }

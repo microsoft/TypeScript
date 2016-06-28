@@ -1,4 +1,5 @@
 //// [invalidForBreakStatements.ts]
+
 // All errors
 
 // naked break not allowed

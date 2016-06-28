@@ -45,18 +45,17 @@ var b = {
 var r4 = b.foo(new B()); // error after constraints above made illegal, doesn't matter
 
 //// [propertyAccessOnTypeParameterWithConstraints5.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var A = (function () {
     function A() {
     }
     A.prototype.foo = function () { return ''; };
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -66,7 +65,7 @@ var B = (function (_super) {
         return '';
     };
     return B;
-})(A);
+}(A));
 var C = (function () {
     function C() {
     }
@@ -76,7 +75,7 @@ var C = (function () {
         return a + x.foo() + x.notHere();
     };
     return C;
-})();
+}());
 var r = (new C()).f();
 var i;
 var r2 = i.foo.notHere();

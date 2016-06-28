@@ -34,7 +34,7 @@ var M;
             x.z; // ok 
         };
         return C;
-    })();
+    }());
     M.C = C;
 })(M || (M = {}));
 var C = (function () {
@@ -43,4 +43,4 @@ var C = (function () {
     C.prototype.f = function (x) {
     };
     return C;
-})();
+}());

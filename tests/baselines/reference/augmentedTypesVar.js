@@ -51,14 +51,14 @@ var x4 = (function () {
     function x4() {
     }
     return x4;
-})(); // error
+}()); // error
 var x4a = 1; // error
 var x4a = (function () {
     function x4a() {
     }
     x4a.prototype.foo = function () { };
     return x4a;
-})(); // error
+}()); // error
 // var then enum
 var x5 = 1;
 var x5;

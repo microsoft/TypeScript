@@ -16,4 +16,4 @@ var Bug = (function () {
     Bug.prototype.foo = function (value) {
     };
     return Bug;
-})();
+}());

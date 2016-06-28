@@ -30,4 +30,4 @@ var Foo = (function () {
         });
     };
     return Foo;
-})();
+}());

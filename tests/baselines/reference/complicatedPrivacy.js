@@ -131,7 +131,7 @@ var m1;
                 return "Hello world";
             };
             return C2;
-        })();
+        }());
         m2.C2 = C2;
     })(m2 = m1.m2 || (m1.m2 = {}));
     function f2(arg1) {
@@ -156,20 +156,19 @@ var m1;
         function C1() {
         }
         return C1;
-    })();
+    }());
     var C5 = (function () {
         function C5() {
         }
         return C5;
-    })();
+    }());
     m1.C5 = C5;
-    m1.v2;
 })(m1 || (m1 = {}));
 var C2 = (function () {
     function C2() {
     }
     return C2;
-})();
+}());
 var m2;
 (function (m2) {
     var m3;
@@ -181,7 +180,7 @@ var m2;
                 return "Hello";
             };
             return c_pr;
-        })();
+        }());
         m3.c_pr = c_pr;
         var m4;
         (function (m4) {
@@ -189,7 +188,7 @@ var m2;
                 function C() {
                 }
                 return C;
-            })();
+            }());
             var m5;
             (function (m5) {
                 var m6;

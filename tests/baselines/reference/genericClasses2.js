@@ -20,7 +20,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var v1;
 var y = v1.x; // should be 'string'
 var w = v1.y.a; // should be 'string'

@@ -1,0 +1,37 @@
+tests/cases/conformance/jsx/file.tsx(12,9): error TS2324: Property 'name' is missing in type 'IntrinsicAttributes & { name: string; }'.
+tests/cases/conformance/jsx/file.tsx(12,16): error TS2339: Property 'naaame' does not exist on type 'IntrinsicAttributes & { name: string; }'.
+tests/cases/conformance/jsx/file.tsx(19,15): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(21,15): error TS2339: Property 'naaaaaaame' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
+    
+    function Greet(x: {name: string}) {
+    	return <div>Hello, {x}</div>;
+    }
+    function Meet({name = 'world'}) {
+    	return <div>Hello, {name}</div>;
+    }
+    
+    // OK
+    let a = <Greet name='world' />;
+    // Error
+    let b = <Greet naaame='world' />;
+            ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2324: Property 'name' is missing in type 'IntrinsicAttributes & { name: string; }'.
+                   ~~~~~~
+!!! error TS2339: Property 'naaame' does not exist on type 'IntrinsicAttributes & { name: string; }'.
+    
+    // OK
+    let c = <Meet />;
+    // OK
+    let d = <Meet name='me' />;
+    // Error
+    let e = <Meet name={42} />;
+                  ~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    // Error
+    let f = <Meet naaaaaaame='no' />;
+                  ~~~~~~~~~~
+!!! error TS2339: Property 'naaaaaaame' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+    

@@ -6,21 +6,15 @@
     ],
     "out": "bin/test.js",
     "sourceMap": true,
-    "sourceRoot": "http://typescript.codeplex.com/",
     "declaration": true,
     "baselineCheck": true,
+    "sourceRoot": "http://typescript.codeplex.com/",
     "resolvedInputFiles": [
         "lib.d.ts",
         "ref/m1.ts",
         "test.ts"
     ],
     "emittedFiles": [
-        "ref/m1.js.map",
-        "ref/m1.js",
-        "ref/m1.d.ts",
-        "test.js.map",
-        "test.js",
-        "test.d.ts",
         "bin/test.js.map",
         "bin/test.js",
         "bin/test.d.ts"

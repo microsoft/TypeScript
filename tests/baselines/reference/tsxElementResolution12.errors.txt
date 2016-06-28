@@ -1,0 +1,43 @@
+tests/cases/conformance/jsx/file.tsx(17,2): error TS2304: Cannot find name 'Obj2'.
+tests/cases/conformance/jsx/file.tsx(23,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property
+tests/cases/conformance/jsx/file.tsx(30,7): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface ElementAttributesProperty { pr: any; }
+    	interface IntrinsicElements { }
+    }
+    
+    interface Obj1type {
+    	new(n: string): any;
+    }
+    var Obj1: Obj1type;
+    <Obj1 x={10} />; // OK
+    
+    interface Obj2type {
+    	new(n: string): { q?: number; pr: any };
+    }
+    var obj2: Obj2type;
+    <Obj2 x={10} />; // OK
+     ~~~~
+!!! error TS2304: Cannot find name 'Obj2'.
+    
+    interface Obj3type {
+    	new(n: string): { x: number; };
+    }
+    var Obj3: Obj3type;
+    <Obj3 x={10} />; // Error
+    ~~~~~~~~~~~~~~~
+!!! error TS2607: JSX element class does not support attributes because it does not have a 'pr' property
+    
+    interface Obj4type {
+    	new(n: string): { x: number; pr: { x: number; } };
+    }
+    var Obj4: Obj4type;
+    <Obj4 x={10} />; // OK
+    <Obj4 x={'10'} />; // Error
+          ~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    

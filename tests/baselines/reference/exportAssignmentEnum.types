@@ -1,5 +1,5 @@
 === tests/cases/compiler/exportAssignmentEnum_B.ts ===
-import EnumE = require("exportAssignmentEnum_A");
+import EnumE = require("./exportAssignmentEnum_A");
 >EnumE : typeof EnumE
 
 var a = EnumE.A;

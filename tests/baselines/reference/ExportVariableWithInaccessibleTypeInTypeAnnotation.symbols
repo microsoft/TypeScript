@@ -1,0 +1,38 @@
+=== tests/cases/conformance/internalModules/exportDeclarations/ExportVariableWithInaccessibleTypeInTypeAnnotation.ts ===
+module A {
+>A : Symbol(A, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 0, 0))
+
+    export interface Point {
+>Point : Symbol(Point, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 0, 10))
+
+        x: number;
+>x : Symbol(Point.x, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 2, 28))
+
+        y: number;
+>y : Symbol(Point.y, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 3, 18))
+    }
+
+    // valid since Point is exported
+    export var Origin: Point = { x: 0, y: 0 };
+>Origin : Symbol(Origin, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 8, 14))
+>Point : Symbol(Point, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 0, 10))
+>x : Symbol(x, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 8, 32))
+>y : Symbol(y, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 8, 38))
+
+    interface Point3d extends Point {
+>Point3d : Symbol(Point3d, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 8, 46))
+>Point : Symbol(Point, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 0, 10))
+
+        z: number;
+>z : Symbol(Point3d.z, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 10, 37))
+    }
+
+    // invalid Point3d is not exported
+    export var Origin3d: Point3d = { x: 0, y: 0, z: 0 };
+>Origin3d : Symbol(Origin3d, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 15, 14))
+>Point3d : Symbol(Point3d, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 8, 46))
+>x : Symbol(x, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 15, 36))
+>y : Symbol(y, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 15, 42))
+>z : Symbol(z, Decl(ExportVariableWithInaccessibleTypeInTypeAnnotation.ts, 15, 48))
+}
+

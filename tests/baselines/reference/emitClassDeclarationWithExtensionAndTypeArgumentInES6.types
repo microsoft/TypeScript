@@ -9,11 +9,11 @@ class B<T> {
 }
 class C extends B<string> { }
 >C : C
->B : B<T>
+>B : B<string>
 
 class D extends B<number> {
 >D : D
->B : B<T>
+>B : B<number>
 
     constructor(a: any)
 >a : any

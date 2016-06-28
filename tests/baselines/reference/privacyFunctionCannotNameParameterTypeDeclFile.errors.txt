@@ -25,7 +25,7 @@ tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts(
 
 
 ==== tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts (24 errors) ====
-    import exporter = require("privacyFunctionCannotNameParameterTypeDeclFile_exporter");
+    import exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
     export class publicClassWithWithPrivateParmeterTypes {
         static myPublicStaticMethod(param = exporter.createExportedWidget1()) { // Error
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -212,7 +212,7 @@ tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts(
     
 ==== tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts (0 errors) ====
     ///<reference path='privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts'/>
-    import Widgets = require("privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
+    import Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
     import Widgets1 = require("GlobalWidgets");
     export function createExportedWidget1() {
         return Widgets.createWidget1();

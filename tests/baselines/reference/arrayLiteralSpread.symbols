@@ -1,0 +1,67 @@
+=== tests/cases/conformance/es6/spread/arrayLiteralSpread.ts ===
+function f0() {
+>f0 : Symbol(f0, Decl(arrayLiteralSpread.ts, 0, 0))
+
+    var a = [1, 2, 3];
+>a : Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+
+    var a1 = [...a];
+>a1 : Symbol(a1, Decl(arrayLiteralSpread.ts, 2, 7))
+>a : Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+
+    var a2 = [1, ...a];
+>a2 : Symbol(a2, Decl(arrayLiteralSpread.ts, 3, 7))
+>a : Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+
+    var a3 = [1, 2, ...a];
+>a3 : Symbol(a3, Decl(arrayLiteralSpread.ts, 4, 7))
+>a : Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+
+    var a4 = [...a, 1];
+>a4 : Symbol(a4, Decl(arrayLiteralSpread.ts, 5, 7))
+>a : Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+
+    var a5 = [...a, 1, 2];
+>a5 : Symbol(a5, Decl(arrayLiteralSpread.ts, 6, 7))
+>a : Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+
+    var a6 = [1, 2, ...a, 1, 2];
+>a6 : Symbol(a6, Decl(arrayLiteralSpread.ts, 7, 7))
+>a : Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+
+    var a7 = [1, ...a, 2, ...a];
+>a7 : Symbol(a7, Decl(arrayLiteralSpread.ts, 8, 7))
+>a : Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+>a : Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+
+    var a8 = [...a, ...a, ...a];
+>a8 : Symbol(a8, Decl(arrayLiteralSpread.ts, 9, 7))
+>a : Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+>a : Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+>a : Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+}
+
+function f1() {
+>f1 : Symbol(f1, Decl(arrayLiteralSpread.ts, 10, 1))
+
+    var a = [1, 2, 3];
+>a : Symbol(a, Decl(arrayLiteralSpread.ts, 13, 7))
+
+    var b = ["hello", ...a, true];
+>b : Symbol(b, Decl(arrayLiteralSpread.ts, 14, 7), Decl(arrayLiteralSpread.ts, 15, 7))
+>a : Symbol(a, Decl(arrayLiteralSpread.ts, 13, 7))
+
+    var b: (string | number | boolean)[];
+>b : Symbol(b, Decl(arrayLiteralSpread.ts, 14, 7), Decl(arrayLiteralSpread.ts, 15, 7))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(arrayLiteralSpread.ts, 16, 1))
+
+    var a = [...[...[...[...[...[]]]]]];
+>a : Symbol(a, Decl(arrayLiteralSpread.ts, 19, 7))
+
+    var b = [...[...[...[...[...[5]]]]]];
+>b : Symbol(b, Decl(arrayLiteralSpread.ts, 20, 7))
+}
+

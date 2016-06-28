@@ -59,11 +59,10 @@ module Y {
 
 
 //// [moduleWithStatementsOfEveryKind.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var A;
 (function (A_1) {
@@ -71,33 +70,33 @@ var A;
         function A() {
         }
         return A;
-    })();
+    }());
     var AA = (function () {
         function AA() {
         }
         return AA;
-    })();
+    }());
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
             _super.apply(this, arguments);
         }
         return B;
-    })(AA);
+    }(AA));
     var BB = (function (_super) {
         __extends(BB, _super);
         function BB() {
             _super.apply(this, arguments);
         }
         return BB;
-    })(A);
+    }(A));
     var Module;
     (function (Module) {
         var A = (function () {
             function A() {
             }
             return A;
-        })();
+        }());
     })(Module || (Module = {}));
     var Color;
     (function (Color) {
@@ -120,13 +119,13 @@ var Y;
         function A() {
         }
         return A;
-    })();
+    }());
     Y.A = A;
     var AA = (function () {
         function AA() {
         }
         return AA;
-    })();
+    }());
     Y.AA = AA;
     var B = (function (_super) {
         __extends(B, _super);
@@ -134,7 +133,7 @@ var Y;
             _super.apply(this, arguments);
         }
         return B;
-    })(AA);
+    }(AA));
     Y.B = B;
     var BB = (function (_super) {
         __extends(BB, _super);
@@ -142,7 +141,7 @@ var Y;
             _super.apply(this, arguments);
         }
         return BB;
-    })(A);
+    }(A));
     Y.BB = BB;
     var Module;
     (function (Module) {
@@ -150,7 +149,7 @@ var Y;
             function A() {
             }
             return A;
-        })();
+        }());
     })(Module = Y.Module || (Y.Module = {}));
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";

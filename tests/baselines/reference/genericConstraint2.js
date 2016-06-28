@@ -37,7 +37,7 @@ var ComparableString = (function () {
         return 0;
     };
     return ComparableString;
-})();
+}());
 var a = new ComparableString("a");
 var b = new ComparableString("b");
 var c = compare(a, b);

@@ -23,7 +23,7 @@ var B;
         function B() {
         }
         return B;
-    })();
+    }());
     B_1.B = B;
 })(B || (B = {}));
 var C;

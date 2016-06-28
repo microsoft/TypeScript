@@ -87,7 +87,7 @@ var C = (function () {
         }
     };
     return C;
-})();
+}());
 var a;
 var b = {
     foo: function () {
@@ -137,7 +137,7 @@ var C2 = (function () {
         }
     };
     return C2;
-})();
+}());
 var a2;
 var b2 = {
     foo: function () {

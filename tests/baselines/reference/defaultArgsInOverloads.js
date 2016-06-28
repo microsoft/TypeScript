@@ -33,5 +33,5 @@ var C = (function () {
         if (a === void 0) { a = null; }
     };
     return C;
-})();
+}());
 var f;

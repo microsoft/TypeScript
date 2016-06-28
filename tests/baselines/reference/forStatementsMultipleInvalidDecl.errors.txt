@@ -1,18 +1,19 @@
-tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(32,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'number'.
-tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(33,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'string'.
-tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(34,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'C'.
-tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(35,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'D<string>'.
-tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(36,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'typeof M'.
-tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(39,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C'.
-tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(40,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C2'.
-tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(43,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'f' must be of type '(x: string) => number', but here has type '(x: number) => string'.
-tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(46,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type 'number[]'.
-tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(47,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type '(C | D<string>)[]'.
-tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(50,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr2' must be of type 'D<string>[]', but here has type 'D<number>[]'.
-tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(53,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'm' must be of type 'typeof M', but here has type 'typeof A'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(33,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'number'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(34,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'string'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(35,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'C'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(36,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'D<string>'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(37,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'typeof M'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(40,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(41,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C2'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(44,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'f' must be of type '(x: string) => number', but here has type '(x: number) => string'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(47,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type 'number[]'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(48,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type '(C | D<string>)[]'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(51,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr2' must be of type 'D<string>[]', but here has type 'D<number>[]'.
+tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts(54,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'm' must be of type 'typeof M', but here has type 'typeof A'.
 
 
 ==== tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts (12 errors) ====
+    
     interface I {
         id: number;
     }

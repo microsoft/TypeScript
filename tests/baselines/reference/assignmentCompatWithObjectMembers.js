@@ -94,12 +94,12 @@ var SimpleTypes;
         function S() {
         }
         return S;
-    })();
+    }());
     var T = (function () {
         function T() {
         }
         return T;
-    })();
+    }());
     var s;
     var t;
     var s2;
@@ -134,12 +134,12 @@ var ObjectTypes;
         function S() {
         }
         return S;
-    })();
+    }());
     var T = (function () {
         function T() {
         }
         return T;
-    })();
+    }());
     var s;
     var t;
     var s2;

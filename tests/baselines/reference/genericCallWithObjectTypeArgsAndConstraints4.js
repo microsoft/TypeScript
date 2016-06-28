@@ -39,12 +39,12 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 function foo(t, t2) {
     return function (x) { return t2; };
 }

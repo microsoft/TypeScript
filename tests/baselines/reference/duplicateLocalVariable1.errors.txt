@@ -1,7 +1,20 @@
-tests/cases/compiler/duplicateLocalVariable1.ts(185,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'any', but here has type 'number'.
+tests/cases/compiler/duplicateLocalVariable1.ts(2,4): error TS1005: ';' expected.
+tests/cases/compiler/duplicateLocalVariable1.ts(2,11): error TS1146: Declaration expected.
+tests/cases/compiler/duplicateLocalVariable1.ts(2,13): error TS2304: Cannot find name 'commonjs'.
+tests/cases/compiler/duplicateLocalVariable1.ts(187,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
+tests/cases/compiler/duplicateLocalVariable1.ts(187,29): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
+tests/cases/compiler/duplicateLocalVariable1.ts(187,37): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
 
 
-==== tests/cases/compiler/duplicateLocalVariable1.ts (1 errors) ====
+==== tests/cases/compiler/duplicateLocalVariable1.ts (6 errors) ====
+    
+    / /@module: commonjs
+       ~
+!!! error TS1005: ';' expected.
+              
+!!! error TS1146: Declaration expected.
+                ~~~~~~~~
+!!! error TS2304: Cannot find name 'commonjs'.
     
     //import FileManager = require('filemanager');
     //import App = require('app');
@@ -188,7 +201,11 @@ tests/cases/compiler/duplicateLocalVariable1.ts(185,22): error TS2403: Subsequen
                 var bytes = [];
                 for (var i = 0; i < 14; i++) {
                          ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'any', but here has type 'number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
+                                ~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
+                                        ~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
                     bytes.push(fb.readByte());
                 }
                 var expected = [0xEF, 0xBB, 0xBF, 0x54, 0xC3, 0xA8, 0xE1, 0xB4, 0xA3, 0xE2, 0x80, 0xA0, 0x0D, 0x0A];

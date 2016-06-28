@@ -1,0 +1,16 @@
+=== tests/cases/compiler/thisInModuleFunction1.ts ===
+module bar {
+>bar : Symbol(bar, Decl(thisInModuleFunction1.ts, 0, 0))
+
+ export function bar() {
+>bar : Symbol(bar, Decl(thisInModuleFunction1.ts, 0, 12))
+
+  return this;
+ } 
+} 
+var z = bar.bar();
+>z : Symbol(z, Decl(thisInModuleFunction1.ts, 5, 3))
+>bar.bar : Symbol(bar.bar, Decl(thisInModuleFunction1.ts, 0, 12))
+>bar : Symbol(bar, Decl(thisInModuleFunction1.ts, 0, 0))
+>bar : Symbol(bar.bar, Decl(thisInModuleFunction1.ts, 0, 12))
+

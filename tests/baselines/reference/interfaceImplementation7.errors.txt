@@ -4,7 +4,6 @@ tests/cases/compiler/interfaceImplementation7.ts(7,7): error TS2420: Class 'C1' 
   Types of property 'name' are incompatible.
     Type '() => string' is not assignable to type '() => { s: string; n: number; }'.
       Type 'string' is not assignable to type '{ s: string; n: number; }'.
-        Property 's' is missing in type 'String'.
 
 
 ==== tests/cases/compiler/interfaceImplementation7.ts (2 errors) ====
@@ -23,7 +22,6 @@ tests/cases/compiler/interfaceImplementation7.ts(7,7): error TS2420: Class 'C1' 
 !!! error TS2420:   Types of property 'name' are incompatible.
 !!! error TS2420:     Type '() => string' is not assignable to type '() => { s: string; n: number; }'.
 !!! error TS2420:       Type 'string' is not assignable to type '{ s: string; n: number; }'.
-!!! error TS2420:         Property 's' is missing in type 'String'.
         public name(): string { return ""; }
     }
     

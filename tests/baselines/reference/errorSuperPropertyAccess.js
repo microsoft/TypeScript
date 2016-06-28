@@ -129,25 +129,24 @@ var obj = { n: super.wat, p: super.foo() };
 
 
 //// [errorSuperPropertyAccess.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 //super property access in constructor of class with no base type
 //super property access in instance member function of class with no base type
 //super property access in instance member accessor(get and set) of class with no base type
 var NoBase = (function () {
     function NoBase() {
-        this.m = _super.prototype;
-        this.n = _super.hasOwnProperty.call(this, '');
-        var a = _super.prototype;
-        var b = _super.hasOwnProperty.call(this, '');
+        this.m = _super.prototype.prototype;
+        this.n = _super.prototype.hasOwnProperty.call(this, '');
+        var a = _super.prototype.prototype;
+        var b = _super.prototype.hasOwnProperty.call(this, '');
     }
     NoBase.prototype.fn = function () {
-        var a = _super.prototype;
-        var b = _super.hasOwnProperty.call(this, '');
+        var a = _super.prototype.prototype;
+        var b = _super.prototype.hasOwnProperty.call(this, '');
     };
     //super static property access in static member function of class with no base type
     //super static property access in static member accessor(get and set) of class with no base type
@@ -166,7 +165,7 @@ var NoBase = (function () {
         configurable: true
     });
     return NoBase;
-})();
+}());
 var SomeBase = (function () {
     function SomeBase() {
         this.privateMember = 0;
@@ -179,7 +178,7 @@ var SomeBase = (function () {
     SomeBase.privateStaticMember = 0;
     SomeBase.publicStaticMember = 0;
     return SomeBase;
-})();
+}());
 //super.publicInstanceMemberNotFunction in constructor of derived class
 //super.publicInstanceMemberNotFunction in instance member function of derived class
 //super.publicInstanceMemberNotFunction in instance member accessor(get and set) of derived class
@@ -213,7 +212,7 @@ var SomeDerived1 = (function (_super) {
         };
     };
     return SomeDerived1;
-})(SomeBase);
+}(SomeBase));
 //super.privateProperty in constructor of derived class
 //super.privateProperty in instance member function of derived class
 //super.privateProperty in instance member accessor(get and set) of derived class
@@ -238,7 +237,7 @@ var SomeDerived2 = (function (_super) {
         configurable: true
     });
     return SomeDerived2;
-})(SomeBase);
+}(SomeBase));
 //super.publicStaticMemberNotFunction in static member function of derived class
 //super.publicStaticMemberNotFunction in static member accessor(get and set) of derived class
 //super.privateStaticProperty in static member function of derived class
@@ -269,6 +268,6 @@ var SomeDerived3 = (function (_super) {
         configurable: true
     });
     return SomeDerived3;
-})(SomeBase);
+}(SomeBase));
 // In object literal
 var obj = { n: _super.wat, p: _super.foo.call(this) };

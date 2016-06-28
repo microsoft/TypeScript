@@ -169,29 +169,28 @@ var r8b6 = b6 !== a6;
 var r8b7 = b7 !== a7;
 
 //// [comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         _super.apply(this, arguments);
     }
     return Derived;
-})(Base);
+}(Base));
 var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var a1;
 var b1;
 var a2;

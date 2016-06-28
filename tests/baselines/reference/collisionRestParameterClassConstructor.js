@@ -77,13 +77,13 @@ var c1 = (function () {
         var _i = 10; // no error
     }
     return c1;
-})();
+}());
 var c1NoError = (function () {
     function c1NoError(_i) {
         var _i = 10; // no error
     }
     return c1NoError;
-})();
+}());
 var c2 = (function () {
     function c2() {
         var restParameters = [];
@@ -93,13 +93,13 @@ var c2 = (function () {
         var _i = 10; // no error
     }
     return c2;
-})();
+}());
 var c2NoError = (function () {
     function c2NoError() {
         var _i = 10; // no error
     }
     return c2NoError;
-})();
+}());
 var c3 = (function () {
     function c3(_i) {
         var restParameters = [];
@@ -110,14 +110,14 @@ var c3 = (function () {
         var _i = 10; // no error
     }
     return c3;
-})();
+}());
 var c3NoError = (function () {
     function c3NoError(_i) {
         this._i = _i;
         var _i = 10; // no error
     }
     return c3NoError;
-})();
+}());
 var c5 = (function () {
     function c5(_i) {
         var rest = [];
@@ -127,10 +127,10 @@ var c5 = (function () {
         var _i; // no error
     }
     return c5;
-})();
+}());
 var c5NoError = (function () {
     function c5NoError(_i) {
         var _i; // no error
     }
     return c5NoError;
-})();
+}());

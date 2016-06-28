@@ -13,25 +13,24 @@ function foo(name: any): A {
 
 
 //// [overloadOnConstConstraintChecks3.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var A = (function () {
     function A() {
         this.x = 1;
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
         _super.apply(this, arguments);
     }
     return B;
-})(A);
+}(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
@@ -39,7 +38,7 @@ var C = (function (_super) {
     }
     C.prototype.foo = function () { };
     return C;
-})(A);
+}(A));
 function foo(name) {
     return null;
 }

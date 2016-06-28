@@ -10,7 +10,6 @@ module M {
 //// [symbolProperty49.js]
 var M;
 (function (M) {
-    M.Symbol;
     class C {
         [M.Symbol.iterator]() { }
     }

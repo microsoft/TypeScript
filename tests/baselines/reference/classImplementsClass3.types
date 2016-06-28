@@ -2,6 +2,7 @@
 class A { foo(): number { return 1; } }
 >A : A
 >foo : () => number
+>1 : number
 
 class C implements A {
 >C : C
@@ -11,6 +12,7 @@ class C implements A {
 >foo : () => number
 
         return 1;
+>1 : number
     }
 }
 

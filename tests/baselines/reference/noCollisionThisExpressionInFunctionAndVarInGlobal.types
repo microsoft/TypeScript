@@ -8,6 +8,7 @@ var console: {
 }
 var _this = 5;
 >_this : number
+>5 : number
 
 function x() {
 >x : () => void

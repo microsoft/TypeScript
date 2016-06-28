@@ -11,4 +11,4 @@ var C = (function () {
         if (x === void 0) { x = ''; }
     }
     return C;
-})();
+}());

@@ -15,6 +15,7 @@ interface Boolean {
 
 var x = true;
 >x : boolean
+>true : boolean
 
 var a: string = x.doStuff();
 >a : string
@@ -29,16 +30,20 @@ var b: string = x.doOtherStuff('hm');
 >x.doOtherStuff : <T>(x: T) => T
 >x : boolean
 >doOtherStuff : <T>(x: T) => T
+>'hm' : string
 
 var c: string = x['doStuff']();
 >c : string
 >x['doStuff']() : string
 >x['doStuff'] : () => string
 >x : boolean
+>'doStuff' : string
 
 var d: string = x['doOtherStuff']('hm');
 >d : string
 >x['doOtherStuff']('hm') : string
 >x['doOtherStuff'] : <T>(x: T) => T
 >x : boolean
+>'doOtherStuff' : string
+>'hm' : string
 

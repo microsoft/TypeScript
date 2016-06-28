@@ -5,6 +5,7 @@
         "test.ts",
         "../ReferenceResolution/test.ts"
     ],
+    "noResolve": true,
     "declaration": true,
     "baselineCheck": true,
     "resolvedInputFiles": [

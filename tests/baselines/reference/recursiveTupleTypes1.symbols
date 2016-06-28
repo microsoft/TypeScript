@@ -1,0 +1,35 @@
+=== tests/cases/compiler/recursiveTupleTypes1.ts ===
+interface Tree1 {
+>Tree1 : Symbol(Tree1, Decl(recursiveTupleTypes1.ts, 0, 0))
+
+    children: [Tree1, Tree2];
+>children : Symbol(Tree1.children, Decl(recursiveTupleTypes1.ts, 0, 17))
+>Tree1 : Symbol(Tree1, Decl(recursiveTupleTypes1.ts, 0, 0))
+>Tree2 : Symbol(Tree2, Decl(recursiveTupleTypes1.ts, 2, 1))
+}
+
+interface Tree2 {
+>Tree2 : Symbol(Tree2, Decl(recursiveTupleTypes1.ts, 2, 1))
+
+    children: [Tree2, Tree1];
+>children : Symbol(Tree2.children, Decl(recursiveTupleTypes1.ts, 4, 17))
+>Tree2 : Symbol(Tree2, Decl(recursiveTupleTypes1.ts, 2, 1))
+>Tree1 : Symbol(Tree1, Decl(recursiveTupleTypes1.ts, 0, 0))
+}
+
+let tree1: Tree1;
+>tree1 : Symbol(tree1, Decl(recursiveTupleTypes1.ts, 8, 3))
+>Tree1 : Symbol(Tree1, Decl(recursiveTupleTypes1.ts, 0, 0))
+
+let tree2: Tree2;
+>tree2 : Symbol(tree2, Decl(recursiveTupleTypes1.ts, 9, 3))
+>Tree2 : Symbol(Tree2, Decl(recursiveTupleTypes1.ts, 2, 1))
+
+tree1 = tree2;
+>tree1 : Symbol(tree1, Decl(recursiveTupleTypes1.ts, 8, 3))
+>tree2 : Symbol(tree2, Decl(recursiveTupleTypes1.ts, 9, 3))
+
+tree2 = tree1;
+>tree2 : Symbol(tree2, Decl(recursiveTupleTypes1.ts, 9, 3))
+>tree1 : Symbol(tree1, Decl(recursiveTupleTypes1.ts, 8, 3))
+

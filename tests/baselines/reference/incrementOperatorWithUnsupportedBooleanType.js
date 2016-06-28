@@ -63,10 +63,9 @@ var A = (function () {
     }
     A.foo = function () { return true; };
     return A;
-})();
+}());
 var M;
 (function (M) {
-    M.n;
 })(M || (M = {}));
 var objA = new A();
 // boolean type var

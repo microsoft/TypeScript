@@ -53,7 +53,7 @@ var m4d;
         }
         C.prototype.foo = function () { };
         return C;
-    })();
+    }());
 })(m4d || (m4d = {}));
 var m4d;
 (function (m4d) {

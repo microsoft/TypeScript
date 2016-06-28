@@ -1,4 +1,5 @@
 // @declaration: true
+// @target: es5
 
 function /*1*/makePoint(x: number) { 
     return {

@@ -1,5 +1,10 @@
 === tests/cases/compiler/commentOnAmbientVariable1.ts ===
-/*! Keep this pinned comment */
+/*!=========
+    Keep this pinned comment
+   =========
+*/
+
+/*! Don't keep this pinned comment */
 declare var v: number;
 >v : number
 

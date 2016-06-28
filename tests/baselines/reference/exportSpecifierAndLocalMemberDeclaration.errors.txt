@@ -1,0 +1,18 @@
+tests/cases/compiler/exportSpecifierAndLocalMemberDeclaration.ts(11,20): error TS2503: Cannot find namespace 'X'.
+
+
+==== tests/cases/compiler/exportSpecifierAndLocalMemberDeclaration.ts (1 errors) ====
+    declare module "m2" {
+        module X {
+            interface I { }
+        }
+        function Y();
+        export { Y as X };
+        function Z(): X.I;
+    }
+    
+    declare module "m2" {
+        function Z2(): X.I;
+                       ~
+!!! error TS2503: Cannot find namespace 'X'.
+    }

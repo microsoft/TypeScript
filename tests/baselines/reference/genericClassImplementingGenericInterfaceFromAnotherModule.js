@@ -14,7 +14,7 @@ var bar;
         function Foo() {
         }
         return Foo;
-    })();
+    }());
     bar.Foo = Foo;
 })(bar || (bar = {}));
 

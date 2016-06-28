@@ -36,35 +36,36 @@ export { v, f, C, I, E, D, M, N, T, a };
 
 //// [t1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     exports.v = 1;
     exports.v1 = exports.v;
     function f() { }
     exports.f = f;
-    exports.f1 = exports.f;
+    exports.f1 = f;
     var C = (function () {
         function C() {
         }
         return C;
-    })();
+    }());
     exports.C = C;
-    exports.C1 = exports.C;
+    exports.C1 = C;
     (function (E) {
         E[E["A"] = 0] = "A";
         E[E["B"] = 1] = "B";
         E[E["C"] = 2] = "C";
     })(exports.E || (exports.E = {}));
     var E = exports.E;
-    exports.E1 = exports.E;
+    exports.E1 = E;
     var M;
     (function (M) {
-        M.x;
     })(M = exports.M || (exports.M = {}));
-    exports.M1 = exports.M;
+    exports.M1 = M;
     exports.a = M.x;
     exports.a1 = exports.a;
 });
 //// [t2.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
+    "use strict";
     exports.v = t1_1.v1;
     exports.f = t1_1.f1;
     exports.C = t1_1.C1;
@@ -74,6 +75,7 @@ define(["require", "exports", "./t1"], function (require, exports, t1_1) {
 });
 //// [t3.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
+    "use strict";
     exports.v = t1_1.v1;
     exports.f = t1_1.f1;
     exports.C = t1_1.C1;

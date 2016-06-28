@@ -11,6 +11,7 @@ class A {
 >T : T
 >x : T
 >T : T
+>null : null
 }
 
 class B<T> {
@@ -21,6 +22,7 @@ class B<T> {
 >foo : (x: T) => number
 >x : T
 >T : T
+>null : null
 }
 
 class C<T> {
@@ -31,6 +33,7 @@ class C<T> {
 >foo : (x: T) => boolean
 >x : T
 >T : T
+>null : null
 }
 
 interface I<T> {
@@ -70,6 +73,7 @@ var b = { foo<T>(x: T) { return null; } };
 >T : T
 >x : T
 >T : T
+>null : null
 
 function foo1(x: A);
 >foo1 : { (x: A): any; (x: A): any; }

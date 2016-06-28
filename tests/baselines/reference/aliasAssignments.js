@@ -6,7 +6,7 @@ export class someClass {
 }
 
 //// [aliasAssignments_1.ts]
-import moduleA = require("aliasAssignments_moduleA");
+import moduleA = require("./aliasAssignments_moduleA");
 var x = moduleA;
 x = 1; // Should be error
 var y = 1;
@@ -14,14 +14,16 @@ y = moduleA; // should be error
 
 
 //// [aliasAssignments_moduleA.js]
+"use strict";
 var someClass = (function () {
     function someClass() {
     }
     return someClass;
-})();
+}());
 exports.someClass = someClass;
 //// [aliasAssignments_1.js]
-var moduleA = require("aliasAssignments_moduleA");
+"use strict";
+var moduleA = require("./aliasAssignments_moduleA");
 var x = moduleA;
 x = 1; // Should be error
 var y = 1;

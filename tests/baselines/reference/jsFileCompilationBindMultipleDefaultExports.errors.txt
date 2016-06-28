@@ -1,0 +1,9 @@
+tests/cases/compiler/a.js(3,16): error TS1109: Expression expected.
+
+
+==== tests/cases/compiler/a.js (1 errors) ====
+    export default class a {
+    }
+    export default var a = 10;
+                   ~~~
+!!! error TS1109: Expression expected.

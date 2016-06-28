@@ -11,8 +11,10 @@ var _arr = [{ key: 'foo' }, { key: 'bar' }]
 >[{ key: 'foo' }, { key: 'bar' }] : { key: string; }[]
 >{ key: 'foo' } : { key: string; }
 >key : string
+>'foo' : string
 >{ key: 'bar' } : { key: string; }
 >key : string
+>'bar' : string
 
 var enumValue = MyEnumType.foo;
 >enumValue : MyEnumType

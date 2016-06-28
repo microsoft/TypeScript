@@ -1,19 +1,31 @@
-tests/cases/compiler/recursiveBaseCheck.ts(2,11): error TS2310: Type 'C' recursively references itself as a base type.
+tests/cases/compiler/recursiveBaseCheck.ts(2,11): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
+tests/cases/compiler/recursiveBaseCheck.ts(4,18): error TS2506: 'B' is referenced directly or indirectly in its own base expression.
+tests/cases/compiler/recursiveBaseCheck.ts(6,18): error TS2506: 'A' is referenced directly or indirectly in its own base expression.
+tests/cases/compiler/recursiveBaseCheck.ts(8,18): error TS2506: 'AmChart' is referenced directly or indirectly in its own base expression.
+tests/cases/compiler/recursiveBaseCheck.ts(10,18): error TS2506: 'D' is referenced directly or indirectly in its own base expression.
 
 
-==== tests/cases/compiler/recursiveBaseCheck.ts (1 errors) ====
+==== tests/cases/compiler/recursiveBaseCheck.ts (5 errors) ====
     declare module Module {
         class C extends D {
               ~
-!!! error TS2310: Type 'C' recursively references itself as a base type.
+!!! error TS2506: 'C' is referenced directly or indirectly in its own base expression.
         }
         export class B extends Module.C {
+                     ~
+!!! error TS2506: 'B' is referenced directly or indirectly in its own base expression.
         }
         export class A extends Module.B {
+                     ~
+!!! error TS2506: 'A' is referenced directly or indirectly in its own base expression.
         }
         export class AmChart extends Module.A {
+                     ~~~~~~~
+!!! error TS2506: 'AmChart' is referenced directly or indirectly in its own base expression.
         }
         export class D extends AmChart {
+                     ~
+!!! error TS2506: 'D' is referenced directly or indirectly in its own base expression.
         }
         export class E extends Module.D {
         }

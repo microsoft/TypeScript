@@ -1,4 +1,5 @@
 //// [ifElseWithStatements1.ts]
+
 if (true)
     f();
 else

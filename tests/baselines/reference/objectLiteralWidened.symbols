@@ -1,0 +1,72 @@
+=== tests/cases/conformance/types/typeRelationships/widenedTypes/objectLiteralWidened.ts ===
+// object literal properties are widened to any
+
+var x1 = {
+>x1 : Symbol(x1, Decl(objectLiteralWidened.ts, 2, 3))
+
+    foo: null,
+>foo : Symbol(foo, Decl(objectLiteralWidened.ts, 2, 10))
+
+    bar: undefined
+>bar : Symbol(bar, Decl(objectLiteralWidened.ts, 3, 14))
+>undefined : Symbol(undefined)
+}
+
+var y1 = {
+>y1 : Symbol(y1, Decl(objectLiteralWidened.ts, 7, 3))
+
+    foo: null,
+>foo : Symbol(foo, Decl(objectLiteralWidened.ts, 7, 10))
+
+    bar: {
+>bar : Symbol(bar, Decl(objectLiteralWidened.ts, 8, 14))
+
+        baz: null,
+>baz : Symbol(baz, Decl(objectLiteralWidened.ts, 9, 10))
+
+        boo: undefined
+>boo : Symbol(boo, Decl(objectLiteralWidened.ts, 10, 18))
+>undefined : Symbol(undefined)
+    }
+}
+
+// these are not widened
+
+var u: undefined = undefined;
+>u : Symbol(u, Decl(objectLiteralWidened.ts, 17, 3))
+>undefined : Symbol(undefined)
+
+var n: null = null;
+>n : Symbol(n, Decl(objectLiteralWidened.ts, 18, 3))
+
+var x2 = {
+>x2 : Symbol(x2, Decl(objectLiteralWidened.ts, 20, 3))
+
+    foo: n,
+>foo : Symbol(foo, Decl(objectLiteralWidened.ts, 20, 10))
+>n : Symbol(n, Decl(objectLiteralWidened.ts, 18, 3))
+
+    bar: u
+>bar : Symbol(bar, Decl(objectLiteralWidened.ts, 21, 11))
+>u : Symbol(u, Decl(objectLiteralWidened.ts, 17, 3))
+}
+
+var y2 = {
+>y2 : Symbol(y2, Decl(objectLiteralWidened.ts, 25, 3))
+
+    foo: n,
+>foo : Symbol(foo, Decl(objectLiteralWidened.ts, 25, 10))
+>n : Symbol(n, Decl(objectLiteralWidened.ts, 18, 3))
+
+    bar: {
+>bar : Symbol(bar, Decl(objectLiteralWidened.ts, 26, 11))
+
+        baz: n,
+>baz : Symbol(baz, Decl(objectLiteralWidened.ts, 27, 10))
+>n : Symbol(n, Decl(objectLiteralWidened.ts, 18, 3))
+
+        boo: u
+>boo : Symbol(boo, Decl(objectLiteralWidened.ts, 28, 15))
+>u : Symbol(u, Decl(objectLiteralWidened.ts, 17, 3))
+    }
+}

@@ -1,0 +1,9 @@
+=== tests/cases/compiler/letInNonStrictMode.ts ===
+let [x] = [1];
+>x : Symbol(x, Decl(letInNonStrictMode.ts, 0, 5))
+
+let {a: y} = {a: 1};
+>a : Symbol(a, Decl(letInNonStrictMode.ts, 1, 14))
+>y : Symbol(y, Decl(letInNonStrictMode.ts, 1, 5))
+>a : Symbol(a, Decl(letInNonStrictMode.ts, 1, 14))
+

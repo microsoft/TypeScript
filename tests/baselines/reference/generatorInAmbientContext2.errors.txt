@@ -1,0 +1,9 @@
+tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext2.ts(2,14): error TS1221: Generators are not allowed in an ambient context.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext2.ts (1 errors) ====
+    declare module M {
+        function *generator(): any;
+                 ~
+!!! error TS1221: Generators are not allowed in an ambient context.
+    }

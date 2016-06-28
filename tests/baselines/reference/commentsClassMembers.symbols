@@ -1,0 +1,706 @@
+=== tests/cases/compiler/commentsClassMembers.ts ===
+
+/** This is comment for c1*/
+class c1 {
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+
+    /** p1 is property of c1*/
+    public p1: number;
+>p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
+
+    /** sum with property*/
+    public p2(/** number to add*/b: number) {
+>p2 : Symbol(c1.p2, Decl(commentsClassMembers.ts, 4, 22))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 6, 14))
+
+        return this.p1 + b;
+>this.p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 6, 14))
+
+    } /* trailing comment of method*/
+    /** getter property*/
+    public get p3() {
+>p3 : Symbol(c1.p3, Decl(commentsClassMembers.ts, 8, 5), Decl(commentsClassMembers.ts, 12, 5))
+
+        return this.p2(this.p1);
+>this.p2 : Symbol(c1.p2, Decl(commentsClassMembers.ts, 4, 22))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>p2 : Symbol(c1.p2, Decl(commentsClassMembers.ts, 4, 22))
+>this.p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
+
+    }// trailing comment Getter
+    /** setter property*/
+    public set p3(/** this is value*/value: number) {
+>p3 : Symbol(c1.p3, Decl(commentsClassMembers.ts, 8, 5), Decl(commentsClassMembers.ts, 12, 5))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 14, 18))
+
+        this.p1 = this.p2(value);
+>this.p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
+>this.p2 : Symbol(c1.p2, Decl(commentsClassMembers.ts, 4, 22))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>p2 : Symbol(c1.p2, Decl(commentsClassMembers.ts, 4, 22))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 14, 18))
+
+    }// trailing comment Setter
+    /** pp1 is property of c1*/
+    private pp1: number;
+>pp1 : Symbol(c1.pp1, Decl(commentsClassMembers.ts, 16, 5))
+
+    /** sum with property*/
+    private pp2(/** number to add*/b: number) {
+>pp2 : Symbol(c1.pp2, Decl(commentsClassMembers.ts, 18, 24))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 20, 16))
+
+        return this.p1 + b;
+>this.p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 20, 16))
+
+    } // trailing comment of method
+    /** getter property*/
+    private get pp3() {
+>pp3 : Symbol(c1.pp3, Decl(commentsClassMembers.ts, 22, 5), Decl(commentsClassMembers.ts, 26, 5))
+
+        return this.pp2(this.pp1);
+>this.pp2 : Symbol(c1.pp2, Decl(commentsClassMembers.ts, 18, 24))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>pp2 : Symbol(c1.pp2, Decl(commentsClassMembers.ts, 18, 24))
+>this.pp1 : Symbol(c1.pp1, Decl(commentsClassMembers.ts, 16, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>pp1 : Symbol(c1.pp1, Decl(commentsClassMembers.ts, 16, 5))
+    }
+    /** setter property*/
+    private set pp3( /** this is value*/value: number) {
+>pp3 : Symbol(c1.pp3, Decl(commentsClassMembers.ts, 22, 5), Decl(commentsClassMembers.ts, 26, 5))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 28, 20))
+
+        this.pp1 = this.pp2(value);
+>this.pp1 : Symbol(c1.pp1, Decl(commentsClassMembers.ts, 16, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>pp1 : Symbol(c1.pp1, Decl(commentsClassMembers.ts, 16, 5))
+>this.pp2 : Symbol(c1.pp2, Decl(commentsClassMembers.ts, 18, 24))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>pp2 : Symbol(c1.pp2, Decl(commentsClassMembers.ts, 18, 24))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 28, 20))
+    }
+    /** Constructor method*/
+    constructor() {
+    }
+    /** s1 is static property of c1*/
+    static s1: number;
+>s1 : Symbol(c1.s1, Decl(commentsClassMembers.ts, 33, 5))
+
+    /** static sum with property*/
+    static s2(/** number to add*/b: number) {
+>s2 : Symbol(c1.s2, Decl(commentsClassMembers.ts, 35, 22))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 37, 14))
+
+        return c1.s1 + b;
+>c1.s1 : Symbol(c1.s1, Decl(commentsClassMembers.ts, 33, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>s1 : Symbol(c1.s1, Decl(commentsClassMembers.ts, 33, 5))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 37, 14))
+    }
+    /** static getter property*/
+    static get s3() {
+>s3 : Symbol(c1.s3, Decl(commentsClassMembers.ts, 39, 5), Decl(commentsClassMembers.ts, 43, 5))
+
+        return c1.s2(c1.s1);
+>c1.s2 : Symbol(c1.s2, Decl(commentsClassMembers.ts, 35, 22))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>s2 : Symbol(c1.s2, Decl(commentsClassMembers.ts, 35, 22))
+>c1.s1 : Symbol(c1.s1, Decl(commentsClassMembers.ts, 33, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>s1 : Symbol(c1.s1, Decl(commentsClassMembers.ts, 33, 5))
+
+    } /*trailing comment 1 getter*/
+    /** setter property*/
+    static set s3( /** this is value*/value: number) {
+>s3 : Symbol(c1.s3, Decl(commentsClassMembers.ts, 39, 5), Decl(commentsClassMembers.ts, 43, 5))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 45, 18))
+
+        c1.s1 = c1.s2(value);
+>c1.s1 : Symbol(c1.s1, Decl(commentsClassMembers.ts, 33, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>s1 : Symbol(c1.s1, Decl(commentsClassMembers.ts, 33, 5))
+>c1.s2 : Symbol(c1.s2, Decl(commentsClassMembers.ts, 35, 22))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>s2 : Symbol(c1.s2, Decl(commentsClassMembers.ts, 35, 22))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 45, 18))
+
+    }/*trailing comment 2 */ /*setter*/
+    public nc_p1: number;
+>nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+
+    public nc_p2(b: number) {
+>nc_p2 : Symbol(c1.nc_p2, Decl(commentsClassMembers.ts, 48, 25))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 49, 17))
+
+        return this.nc_p1 + b;
+>this.nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 49, 17))
+    }
+    public get nc_p3() {
+>nc_p3 : Symbol(c1.nc_p3, Decl(commentsClassMembers.ts, 51, 5), Decl(commentsClassMembers.ts, 54, 5))
+
+        return this.nc_p2(this.nc_p1);
+>this.nc_p2 : Symbol(c1.nc_p2, Decl(commentsClassMembers.ts, 48, 25))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_p2 : Symbol(c1.nc_p2, Decl(commentsClassMembers.ts, 48, 25))
+>this.nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+    }
+    public set nc_p3(value: number) {
+>nc_p3 : Symbol(c1.nc_p3, Decl(commentsClassMembers.ts, 51, 5), Decl(commentsClassMembers.ts, 54, 5))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 55, 21))
+
+        this.nc_p1 = this.nc_p2(value);
+>this.nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+>this.nc_p2 : Symbol(c1.nc_p2, Decl(commentsClassMembers.ts, 48, 25))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_p2 : Symbol(c1.nc_p2, Decl(commentsClassMembers.ts, 48, 25))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 55, 21))
+    }
+    private nc_pp1: number;
+>nc_pp1 : Symbol(c1.nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
+
+    private nc_pp2(b: number) {
+>nc_pp2 : Symbol(c1.nc_pp2, Decl(commentsClassMembers.ts, 58, 27))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 59, 19))
+
+        return this.nc_pp1 + b;
+>this.nc_pp1 : Symbol(c1.nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_pp1 : Symbol(c1.nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 59, 19))
+    }
+    private get nc_pp3() {
+>nc_pp3 : Symbol(c1.nc_pp3, Decl(commentsClassMembers.ts, 61, 5), Decl(commentsClassMembers.ts, 64, 5))
+
+        return this.nc_pp2(this.nc_pp1);
+>this.nc_pp2 : Symbol(c1.nc_pp2, Decl(commentsClassMembers.ts, 58, 27))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_pp2 : Symbol(c1.nc_pp2, Decl(commentsClassMembers.ts, 58, 27))
+>this.nc_pp1 : Symbol(c1.nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_pp1 : Symbol(c1.nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
+    }
+    private set nc_pp3(value: number) {
+>nc_pp3 : Symbol(c1.nc_pp3, Decl(commentsClassMembers.ts, 61, 5), Decl(commentsClassMembers.ts, 64, 5))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 65, 23))
+
+        this.nc_pp1 = this.nc_pp2(value);
+>this.nc_pp1 : Symbol(c1.nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_pp1 : Symbol(c1.nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
+>this.nc_pp2 : Symbol(c1.nc_pp2, Decl(commentsClassMembers.ts, 58, 27))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_pp2 : Symbol(c1.nc_pp2, Decl(commentsClassMembers.ts, 58, 27))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 65, 23))
+    }
+    static nc_s1: number;
+>nc_s1 : Symbol(c1.nc_s1, Decl(commentsClassMembers.ts, 67, 5))
+
+    static nc_s2(b: number) {
+>nc_s2 : Symbol(c1.nc_s2, Decl(commentsClassMembers.ts, 68, 25))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 69, 17))
+
+        return c1.nc_s1 + b;
+>c1.nc_s1 : Symbol(c1.nc_s1, Decl(commentsClassMembers.ts, 67, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_s1 : Symbol(c1.nc_s1, Decl(commentsClassMembers.ts, 67, 5))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 69, 17))
+    }
+    static get nc_s3() {
+>nc_s3 : Symbol(c1.nc_s3, Decl(commentsClassMembers.ts, 71, 5), Decl(commentsClassMembers.ts, 74, 5))
+
+        return c1.nc_s2(c1.nc_s1);
+>c1.nc_s2 : Symbol(c1.nc_s2, Decl(commentsClassMembers.ts, 68, 25))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_s2 : Symbol(c1.nc_s2, Decl(commentsClassMembers.ts, 68, 25))
+>c1.nc_s1 : Symbol(c1.nc_s1, Decl(commentsClassMembers.ts, 67, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_s1 : Symbol(c1.nc_s1, Decl(commentsClassMembers.ts, 67, 5))
+    }
+    static set nc_s3(value: number) {
+>nc_s3 : Symbol(c1.nc_s3, Decl(commentsClassMembers.ts, 71, 5), Decl(commentsClassMembers.ts, 74, 5))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 75, 21))
+
+        c1.nc_s1 = c1.nc_s2(value);
+>c1.nc_s1 : Symbol(c1.nc_s1, Decl(commentsClassMembers.ts, 67, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_s1 : Symbol(c1.nc_s1, Decl(commentsClassMembers.ts, 67, 5))
+>c1.nc_s2 : Symbol(c1.nc_s2, Decl(commentsClassMembers.ts, 68, 25))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_s2 : Symbol(c1.nc_s2, Decl(commentsClassMembers.ts, 68, 25))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 75, 21))
+    }
+
+    // p1 is property of c1
+    public a_p1: number;
+>a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
+
+    // sum with property
+    public a_p2(b: number) {
+>a_p2 : Symbol(c1.a_p2, Decl(commentsClassMembers.ts, 80, 24))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 82, 16))
+
+        return this.a_p1 + b;
+>this.a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 82, 16))
+    }
+    // getter property
+    public get a_p3() {
+>a_p3 : Symbol(c1.a_p3, Decl(commentsClassMembers.ts, 84, 5), Decl(commentsClassMembers.ts, 88, 5))
+
+        return this.a_p2(this.a_p1);
+>this.a_p2 : Symbol(c1.a_p2, Decl(commentsClassMembers.ts, 80, 24))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>a_p2 : Symbol(c1.a_p2, Decl(commentsClassMembers.ts, 80, 24))
+>this.a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
+    }
+    // setter property
+    public set a_p3(value: number) {
+>a_p3 : Symbol(c1.a_p3, Decl(commentsClassMembers.ts, 84, 5), Decl(commentsClassMembers.ts, 88, 5))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 90, 20))
+
+        this.a_p1 = this.a_p2(value);
+>this.a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>this.a_p2 : Symbol(c1.a_p2, Decl(commentsClassMembers.ts, 80, 24))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>a_p2 : Symbol(c1.a_p2, Decl(commentsClassMembers.ts, 80, 24))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 90, 20))
+    }
+    // pp1 is property of c1
+    private a_pp1: number;
+>a_pp1 : Symbol(c1.a_pp1, Decl(commentsClassMembers.ts, 92, 5))
+
+    // sum with property
+    private a_pp2(b: number) {
+>a_pp2 : Symbol(c1.a_pp2, Decl(commentsClassMembers.ts, 94, 26))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 96, 18))
+
+        return this.a_p1 + b;
+>this.a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 96, 18))
+    }
+    // getter property
+    private get a_pp3() {
+>a_pp3 : Symbol(c1.a_pp3, Decl(commentsClassMembers.ts, 98, 5), Decl(commentsClassMembers.ts, 102, 5))
+
+        return this.a_pp2(this.a_pp1);
+>this.a_pp2 : Symbol(c1.a_pp2, Decl(commentsClassMembers.ts, 94, 26))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>a_pp2 : Symbol(c1.a_pp2, Decl(commentsClassMembers.ts, 94, 26))
+>this.a_pp1 : Symbol(c1.a_pp1, Decl(commentsClassMembers.ts, 92, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>a_pp1 : Symbol(c1.a_pp1, Decl(commentsClassMembers.ts, 92, 5))
+    }
+    // setter property
+    private set a_pp3(value: number) {
+>a_pp3 : Symbol(c1.a_pp3, Decl(commentsClassMembers.ts, 98, 5), Decl(commentsClassMembers.ts, 102, 5))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 104, 22))
+
+        this.a_pp1 = this.a_pp2(value);
+>this.a_pp1 : Symbol(c1.a_pp1, Decl(commentsClassMembers.ts, 92, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>a_pp1 : Symbol(c1.a_pp1, Decl(commentsClassMembers.ts, 92, 5))
+>this.a_pp2 : Symbol(c1.a_pp2, Decl(commentsClassMembers.ts, 94, 26))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>a_pp2 : Symbol(c1.a_pp2, Decl(commentsClassMembers.ts, 94, 26))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 104, 22))
+    }
+    
+    // s1 is static property of c1
+    static a_s1: number;
+>a_s1 : Symbol(c1.a_s1, Decl(commentsClassMembers.ts, 106, 5))
+
+    // static sum with property
+    static a_s2(b: number) {
+>a_s2 : Symbol(c1.a_s2, Decl(commentsClassMembers.ts, 109, 24))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 111, 16))
+
+        return c1.a_s1 + b;
+>c1.a_s1 : Symbol(c1.a_s1, Decl(commentsClassMembers.ts, 106, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>a_s1 : Symbol(c1.a_s1, Decl(commentsClassMembers.ts, 106, 5))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 111, 16))
+    }
+    // static getter property
+    static get a_s3() {
+>a_s3 : Symbol(c1.a_s3, Decl(commentsClassMembers.ts, 113, 5), Decl(commentsClassMembers.ts, 117, 5))
+
+        return c1.s2(c1.s1);
+>c1.s2 : Symbol(c1.s2, Decl(commentsClassMembers.ts, 35, 22))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>s2 : Symbol(c1.s2, Decl(commentsClassMembers.ts, 35, 22))
+>c1.s1 : Symbol(c1.s1, Decl(commentsClassMembers.ts, 33, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>s1 : Symbol(c1.s1, Decl(commentsClassMembers.ts, 33, 5))
+    }
+    
+    // setter property
+    static set a_s3(value: number) {
+>a_s3 : Symbol(c1.a_s3, Decl(commentsClassMembers.ts, 113, 5), Decl(commentsClassMembers.ts, 117, 5))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 120, 20))
+
+        c1.a_s1 = c1.a_s2(value);
+>c1.a_s1 : Symbol(c1.a_s1, Decl(commentsClassMembers.ts, 106, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>a_s1 : Symbol(c1.a_s1, Decl(commentsClassMembers.ts, 106, 5))
+>c1.a_s2 : Symbol(c1.a_s2, Decl(commentsClassMembers.ts, 109, 24))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>a_s2 : Symbol(c1.a_s2, Decl(commentsClassMembers.ts, 109, 24))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 120, 20))
+    }
+
+    /** p1 is property of c1 */
+    public b_p1: number;
+>b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
+
+    /** sum with property */
+    public b_p2(b: number) {
+>b_p2 : Symbol(c1.b_p2, Decl(commentsClassMembers.ts, 125, 24))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 127, 16))
+
+        return this.b_p1 + b;
+>this.b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 127, 16))
+    }
+    /** getter property */
+    public get b_p3() {
+>b_p3 : Symbol(c1.b_p3, Decl(commentsClassMembers.ts, 129, 5), Decl(commentsClassMembers.ts, 133, 5))
+
+        return this.b_p2(this.b_p1);
+>this.b_p2 : Symbol(c1.b_p2, Decl(commentsClassMembers.ts, 125, 24))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>b_p2 : Symbol(c1.b_p2, Decl(commentsClassMembers.ts, 125, 24))
+>this.b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
+    }
+    /** setter property */
+    public set b_p3(value: number) {
+>b_p3 : Symbol(c1.b_p3, Decl(commentsClassMembers.ts, 129, 5), Decl(commentsClassMembers.ts, 133, 5))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 135, 20))
+
+        this.b_p1 = this.b_p2(value);
+>this.b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>this.b_p2 : Symbol(c1.b_p2, Decl(commentsClassMembers.ts, 125, 24))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>b_p2 : Symbol(c1.b_p2, Decl(commentsClassMembers.ts, 125, 24))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 135, 20))
+    }
+    /** pp1 is property of c1 */
+    private b_pp1: number;
+>b_pp1 : Symbol(c1.b_pp1, Decl(commentsClassMembers.ts, 137, 5))
+
+    /** sum with property */
+    private b_pp2(b: number) {
+>b_pp2 : Symbol(c1.b_pp2, Decl(commentsClassMembers.ts, 139, 26))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 141, 18))
+
+        return this.b_p1 + b;
+>this.b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 141, 18))
+    }
+    /** getter property */
+    private get b_pp3() {
+>b_pp3 : Symbol(c1.b_pp3, Decl(commentsClassMembers.ts, 143, 5), Decl(commentsClassMembers.ts, 147, 5))
+
+        return this.b_pp2(this.b_pp1);
+>this.b_pp2 : Symbol(c1.b_pp2, Decl(commentsClassMembers.ts, 139, 26))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>b_pp2 : Symbol(c1.b_pp2, Decl(commentsClassMembers.ts, 139, 26))
+>this.b_pp1 : Symbol(c1.b_pp1, Decl(commentsClassMembers.ts, 137, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>b_pp1 : Symbol(c1.b_pp1, Decl(commentsClassMembers.ts, 137, 5))
+    }
+    /** setter property */
+    private set b_pp3(value: number) {
+>b_pp3 : Symbol(c1.b_pp3, Decl(commentsClassMembers.ts, 143, 5), Decl(commentsClassMembers.ts, 147, 5))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 149, 22))
+
+        this.b_pp1 = this.b_pp2(value);
+>this.b_pp1 : Symbol(c1.b_pp1, Decl(commentsClassMembers.ts, 137, 5))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>b_pp1 : Symbol(c1.b_pp1, Decl(commentsClassMembers.ts, 137, 5))
+>this.b_pp2 : Symbol(c1.b_pp2, Decl(commentsClassMembers.ts, 139, 26))
+>this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>b_pp2 : Symbol(c1.b_pp2, Decl(commentsClassMembers.ts, 139, 26))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 149, 22))
+    }
+    
+    /** s1 is static property of c1 */
+    static b_s1: number;
+>b_s1 : Symbol(c1.b_s1, Decl(commentsClassMembers.ts, 151, 5))
+
+    /** static sum with property */
+    static b_s2(b: number) {
+>b_s2 : Symbol(c1.b_s2, Decl(commentsClassMembers.ts, 154, 24))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 156, 16))
+
+        return c1.b_s1 + b;
+>c1.b_s1 : Symbol(c1.b_s1, Decl(commentsClassMembers.ts, 151, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>b_s1 : Symbol(c1.b_s1, Decl(commentsClassMembers.ts, 151, 5))
+>b : Symbol(b, Decl(commentsClassMembers.ts, 156, 16))
+    }
+    /** static getter property 
+    */
+    static get b_s3() {
+>b_s3 : Symbol(c1.b_s3, Decl(commentsClassMembers.ts, 158, 5), Decl(commentsClassMembers.ts, 163, 5))
+
+        return c1.s2(c1.s1);
+>c1.s2 : Symbol(c1.s2, Decl(commentsClassMembers.ts, 35, 22))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>s2 : Symbol(c1.s2, Decl(commentsClassMembers.ts, 35, 22))
+>c1.s1 : Symbol(c1.s1, Decl(commentsClassMembers.ts, 33, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>s1 : Symbol(c1.s1, Decl(commentsClassMembers.ts, 33, 5))
+    }
+    
+    /** setter property 
+    */
+    static set b_s3(value: number) {
+>b_s3 : Symbol(c1.b_s3, Decl(commentsClassMembers.ts, 158, 5), Decl(commentsClassMembers.ts, 163, 5))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 167, 20))
+
+        /** setter */
+        c1.b_s1 = c1.b_s2(value);
+>c1.b_s1 : Symbol(c1.b_s1, Decl(commentsClassMembers.ts, 151, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>b_s1 : Symbol(c1.b_s1, Decl(commentsClassMembers.ts, 151, 5))
+>c1.b_s2 : Symbol(c1.b_s2, Decl(commentsClassMembers.ts, 154, 24))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>b_s2 : Symbol(c1.b_s2, Decl(commentsClassMembers.ts, 154, 24))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 167, 20))
+    }
+}
+var i1 = new c1();
+>i1 : Symbol(i1, Decl(commentsClassMembers.ts, 172, 3))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+
+var i1_p = i1.p1;
+>i1_p : Symbol(i1_p, Decl(commentsClassMembers.ts, 173, 3))
+>i1.p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
+>i1 : Symbol(i1, Decl(commentsClassMembers.ts, 172, 3))
+>p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
+
+var i1_f = i1.p2;
+>i1_f : Symbol(i1_f, Decl(commentsClassMembers.ts, 174, 3))
+>i1.p2 : Symbol(c1.p2, Decl(commentsClassMembers.ts, 4, 22))
+>i1 : Symbol(i1, Decl(commentsClassMembers.ts, 172, 3))
+>p2 : Symbol(c1.p2, Decl(commentsClassMembers.ts, 4, 22))
+
+var i1_r = i1.p2(20);
+>i1_r : Symbol(i1_r, Decl(commentsClassMembers.ts, 175, 3))
+>i1.p2 : Symbol(c1.p2, Decl(commentsClassMembers.ts, 4, 22))
+>i1 : Symbol(i1, Decl(commentsClassMembers.ts, 172, 3))
+>p2 : Symbol(c1.p2, Decl(commentsClassMembers.ts, 4, 22))
+
+var i1_prop = i1.p3;
+>i1_prop : Symbol(i1_prop, Decl(commentsClassMembers.ts, 176, 3))
+>i1.p3 : Symbol(c1.p3, Decl(commentsClassMembers.ts, 8, 5), Decl(commentsClassMembers.ts, 12, 5))
+>i1 : Symbol(i1, Decl(commentsClassMembers.ts, 172, 3))
+>p3 : Symbol(c1.p3, Decl(commentsClassMembers.ts, 8, 5), Decl(commentsClassMembers.ts, 12, 5))
+
+i1.p3 = i1_prop;
+>i1.p3 : Symbol(c1.p3, Decl(commentsClassMembers.ts, 8, 5), Decl(commentsClassMembers.ts, 12, 5))
+>i1 : Symbol(i1, Decl(commentsClassMembers.ts, 172, 3))
+>p3 : Symbol(c1.p3, Decl(commentsClassMembers.ts, 8, 5), Decl(commentsClassMembers.ts, 12, 5))
+>i1_prop : Symbol(i1_prop, Decl(commentsClassMembers.ts, 176, 3))
+
+var i1_nc_p = i1.nc_p1;
+>i1_nc_p : Symbol(i1_nc_p, Decl(commentsClassMembers.ts, 178, 3))
+>i1.nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+>i1 : Symbol(i1, Decl(commentsClassMembers.ts, 172, 3))
+>nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+
+var i1_ncf = i1.nc_p2;
+>i1_ncf : Symbol(i1_ncf, Decl(commentsClassMembers.ts, 179, 3))
+>i1.nc_p2 : Symbol(c1.nc_p2, Decl(commentsClassMembers.ts, 48, 25))
+>i1 : Symbol(i1, Decl(commentsClassMembers.ts, 172, 3))
+>nc_p2 : Symbol(c1.nc_p2, Decl(commentsClassMembers.ts, 48, 25))
+
+var i1_ncr = i1.nc_p2(20);
+>i1_ncr : Symbol(i1_ncr, Decl(commentsClassMembers.ts, 180, 3))
+>i1.nc_p2 : Symbol(c1.nc_p2, Decl(commentsClassMembers.ts, 48, 25))
+>i1 : Symbol(i1, Decl(commentsClassMembers.ts, 172, 3))
+>nc_p2 : Symbol(c1.nc_p2, Decl(commentsClassMembers.ts, 48, 25))
+
+var i1_ncprop = i1.nc_p3;
+>i1_ncprop : Symbol(i1_ncprop, Decl(commentsClassMembers.ts, 181, 3))
+>i1.nc_p3 : Symbol(c1.nc_p3, Decl(commentsClassMembers.ts, 51, 5), Decl(commentsClassMembers.ts, 54, 5))
+>i1 : Symbol(i1, Decl(commentsClassMembers.ts, 172, 3))
+>nc_p3 : Symbol(c1.nc_p3, Decl(commentsClassMembers.ts, 51, 5), Decl(commentsClassMembers.ts, 54, 5))
+
+i1.nc_p3 = i1_ncprop;
+>i1.nc_p3 : Symbol(c1.nc_p3, Decl(commentsClassMembers.ts, 51, 5), Decl(commentsClassMembers.ts, 54, 5))
+>i1 : Symbol(i1, Decl(commentsClassMembers.ts, 172, 3))
+>nc_p3 : Symbol(c1.nc_p3, Decl(commentsClassMembers.ts, 51, 5), Decl(commentsClassMembers.ts, 54, 5))
+>i1_ncprop : Symbol(i1_ncprop, Decl(commentsClassMembers.ts, 181, 3))
+
+var i1_s_p = c1.s1;
+>i1_s_p : Symbol(i1_s_p, Decl(commentsClassMembers.ts, 183, 3))
+>c1.s1 : Symbol(c1.s1, Decl(commentsClassMembers.ts, 33, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>s1 : Symbol(c1.s1, Decl(commentsClassMembers.ts, 33, 5))
+
+var i1_s_f = c1.s2;
+>i1_s_f : Symbol(i1_s_f, Decl(commentsClassMembers.ts, 184, 3))
+>c1.s2 : Symbol(c1.s2, Decl(commentsClassMembers.ts, 35, 22))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>s2 : Symbol(c1.s2, Decl(commentsClassMembers.ts, 35, 22))
+
+var i1_s_r = c1.s2(20);
+>i1_s_r : Symbol(i1_s_r, Decl(commentsClassMembers.ts, 185, 3))
+>c1.s2 : Symbol(c1.s2, Decl(commentsClassMembers.ts, 35, 22))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>s2 : Symbol(c1.s2, Decl(commentsClassMembers.ts, 35, 22))
+
+var i1_s_prop = c1.s3;
+>i1_s_prop : Symbol(i1_s_prop, Decl(commentsClassMembers.ts, 186, 3))
+>c1.s3 : Symbol(c1.s3, Decl(commentsClassMembers.ts, 39, 5), Decl(commentsClassMembers.ts, 43, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>s3 : Symbol(c1.s3, Decl(commentsClassMembers.ts, 39, 5), Decl(commentsClassMembers.ts, 43, 5))
+
+c1.s3 = i1_s_prop;
+>c1.s3 : Symbol(c1.s3, Decl(commentsClassMembers.ts, 39, 5), Decl(commentsClassMembers.ts, 43, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>s3 : Symbol(c1.s3, Decl(commentsClassMembers.ts, 39, 5), Decl(commentsClassMembers.ts, 43, 5))
+>i1_s_prop : Symbol(i1_s_prop, Decl(commentsClassMembers.ts, 186, 3))
+
+var i1_s_nc_p = c1.nc_s1;
+>i1_s_nc_p : Symbol(i1_s_nc_p, Decl(commentsClassMembers.ts, 188, 3))
+>c1.nc_s1 : Symbol(c1.nc_s1, Decl(commentsClassMembers.ts, 67, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_s1 : Symbol(c1.nc_s1, Decl(commentsClassMembers.ts, 67, 5))
+
+var i1_s_ncf = c1.nc_s2;
+>i1_s_ncf : Symbol(i1_s_ncf, Decl(commentsClassMembers.ts, 189, 3))
+>c1.nc_s2 : Symbol(c1.nc_s2, Decl(commentsClassMembers.ts, 68, 25))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_s2 : Symbol(c1.nc_s2, Decl(commentsClassMembers.ts, 68, 25))
+
+var i1_s_ncr = c1.nc_s2(20);
+>i1_s_ncr : Symbol(i1_s_ncr, Decl(commentsClassMembers.ts, 190, 3))
+>c1.nc_s2 : Symbol(c1.nc_s2, Decl(commentsClassMembers.ts, 68, 25))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_s2 : Symbol(c1.nc_s2, Decl(commentsClassMembers.ts, 68, 25))
+
+var i1_s_ncprop = c1.nc_s3;
+>i1_s_ncprop : Symbol(i1_s_ncprop, Decl(commentsClassMembers.ts, 191, 3))
+>c1.nc_s3 : Symbol(c1.nc_s3, Decl(commentsClassMembers.ts, 71, 5), Decl(commentsClassMembers.ts, 74, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_s3 : Symbol(c1.nc_s3, Decl(commentsClassMembers.ts, 71, 5), Decl(commentsClassMembers.ts, 74, 5))
+
+c1.nc_s3 = i1_s_ncprop;
+>c1.nc_s3 : Symbol(c1.nc_s3, Decl(commentsClassMembers.ts, 71, 5), Decl(commentsClassMembers.ts, 74, 5))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+>nc_s3 : Symbol(c1.nc_s3, Decl(commentsClassMembers.ts, 71, 5), Decl(commentsClassMembers.ts, 74, 5))
+>i1_s_ncprop : Symbol(i1_s_ncprop, Decl(commentsClassMembers.ts, 191, 3))
+
+var i1_c = c1;
+>i1_c : Symbol(i1_c, Decl(commentsClassMembers.ts, 193, 3))
+>c1 : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
+
+class cProperties {
+>cProperties : Symbol(cProperties, Decl(commentsClassMembers.ts, 193, 14))
+
+    private val: number;
+>val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
+
+    /** getter only property*/
+    public get p1() {
+>p1 : Symbol(cProperties.p1, Decl(commentsClassMembers.ts, 195, 24))
+
+        return this.val;
+>this.val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
+>this : Symbol(cProperties, Decl(commentsClassMembers.ts, 193, 14))
+>val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
+
+    } // trailing comment of only getter
+    public get nc_p1() {
+>nc_p1 : Symbol(cProperties.nc_p1, Decl(commentsClassMembers.ts, 199, 5))
+
+        return this.val;
+>this.val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
+>this : Symbol(cProperties, Decl(commentsClassMembers.ts, 193, 14))
+>val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
+    }
+    /**setter only property*/
+    public set p2(value: number) {
+>p2 : Symbol(cProperties.p2, Decl(commentsClassMembers.ts, 202, 5))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 204, 18))
+
+        this.val = value;
+>this.val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
+>this : Symbol(cProperties, Decl(commentsClassMembers.ts, 193, 14))
+>val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 204, 18))
+    }
+    public set nc_p2(value: number) {
+>nc_p2 : Symbol(cProperties.nc_p2, Decl(commentsClassMembers.ts, 206, 5))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 207, 21))
+
+        this.val = value;
+>this.val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
+>this : Symbol(cProperties, Decl(commentsClassMembers.ts, 193, 14))
+>val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
+>value : Symbol(value, Decl(commentsClassMembers.ts, 207, 21))
+
+    } /* trailing comment of setter only*/
+
+    public x = 10; /*trailing comment for property*/
+>x : Symbol(cProperties.x, Decl(commentsClassMembers.ts, 209, 5))
+
+    private y = 10; // trailing comment of // style
+>y : Symbol(cProperties.y, Decl(commentsClassMembers.ts, 211, 18))
+}
+var cProperties_i = new cProperties();
+>cProperties_i : Symbol(cProperties_i, Decl(commentsClassMembers.ts, 214, 3))
+>cProperties : Symbol(cProperties, Decl(commentsClassMembers.ts, 193, 14))
+
+cProperties_i.p2 = cProperties_i.p1;
+>cProperties_i.p2 : Symbol(cProperties.p2, Decl(commentsClassMembers.ts, 202, 5))
+>cProperties_i : Symbol(cProperties_i, Decl(commentsClassMembers.ts, 214, 3))
+>p2 : Symbol(cProperties.p2, Decl(commentsClassMembers.ts, 202, 5))
+>cProperties_i.p1 : Symbol(cProperties.p1, Decl(commentsClassMembers.ts, 195, 24))
+>cProperties_i : Symbol(cProperties_i, Decl(commentsClassMembers.ts, 214, 3))
+>p1 : Symbol(cProperties.p1, Decl(commentsClassMembers.ts, 195, 24))
+
+cProperties_i.nc_p2 = cProperties_i.nc_p1;
+>cProperties_i.nc_p2 : Symbol(cProperties.nc_p2, Decl(commentsClassMembers.ts, 206, 5))
+>cProperties_i : Symbol(cProperties_i, Decl(commentsClassMembers.ts, 214, 3))
+>nc_p2 : Symbol(cProperties.nc_p2, Decl(commentsClassMembers.ts, 206, 5))
+>cProperties_i.nc_p1 : Symbol(cProperties.nc_p1, Decl(commentsClassMembers.ts, 199, 5))
+>cProperties_i : Symbol(cProperties_i, Decl(commentsClassMembers.ts, 214, 3))
+>nc_p1 : Symbol(cProperties.nc_p1, Decl(commentsClassMembers.ts, 199, 5))
+

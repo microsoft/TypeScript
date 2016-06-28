@@ -30,24 +30,23 @@ function f() {
 
 
 //// [baseCheck.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var C = (function () {
     function C(x, y) {
     }
     return C;
-})();
+}());
 var ELoc = (function (_super) {
     __extends(ELoc, _super);
     function ELoc(x) {
         _super.call(this, 0, x);
     }
     return ELoc;
-})(C);
+}(C));
 var ELocVar = (function (_super) {
     __extends(ELocVar, _super);
     function ELocVar(x) {
@@ -57,7 +56,7 @@ var ELocVar = (function (_super) {
         var loc = 10;
     };
     return ELocVar;
-})(C);
+}(C));
 var D = (function (_super) {
     __extends(D, _super);
     function D(z) {
@@ -65,7 +64,7 @@ var D = (function (_super) {
         this.z = z;
     }
     return D;
-})(C); // too few params
+}(C)); // too few params
 var E = (function (_super) {
     __extends(E, _super);
     function E(z) {
@@ -73,7 +72,7 @@ var E = (function (_super) {
         this.z = z;
     }
     return E;
-})(C);
+}(C));
 var F = (function (_super) {
     __extends(F, _super);
     function F(z) {
@@ -81,7 +80,7 @@ var F = (function (_super) {
         this.z = z;
     }
     return F;
-})(C); // first param type
+}(C)); // first param type
 function f() {
     if (x < 10) {
         x = 11;

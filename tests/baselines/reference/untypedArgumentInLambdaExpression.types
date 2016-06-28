@@ -12,6 +12,7 @@ f((input): string => {
 
     return "." + input;
 >"." + input : string
+>"." : string
 >input : string
 
 });

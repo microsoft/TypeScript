@@ -1,10 +1,8 @@
-tests/cases/compiler/augmentedTypesInterface.ts(12,11): error TS2300: Duplicate identifier 'i2'.
-tests/cases/compiler/augmentedTypesInterface.ts(16,7): error TS2300: Duplicate identifier 'i2'.
 tests/cases/compiler/augmentedTypesInterface.ts(23,11): error TS2300: Duplicate identifier 'i3'.
 tests/cases/compiler/augmentedTypesInterface.ts(26,6): error TS2300: Duplicate identifier 'i3'.
 
 
-==== tests/cases/compiler/augmentedTypesInterface.ts (4 errors) ====
+==== tests/cases/compiler/augmentedTypesInterface.ts (2 errors) ====
     // interface then interface
     
     interface i {
@@ -16,15 +14,11 @@ tests/cases/compiler/augmentedTypesInterface.ts(26,6): error TS2300: Duplicate i
     }
     
     // interface then class
-    interface i2 { // error
-              ~~
-!!! error TS2300: Duplicate identifier 'i2'.
+    interface i2 {
         foo(): void;
     }
     
-    class i2 {  // error
-          ~~
-!!! error TS2300: Duplicate identifier 'i2'.
+    class i2 {
         bar() {
             return 1;
         }

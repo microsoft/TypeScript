@@ -22,6 +22,6 @@ class StringIterator {
 >iterator : symbol
 
         return this;
->this : StringIterator
+>this : this
     }
 }

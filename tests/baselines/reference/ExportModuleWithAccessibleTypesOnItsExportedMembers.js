@@ -29,7 +29,7 @@ var A;
             this.y = y;
         }
         return Point;
-    })();
+    }());
     A.Point = Point;
     var B;
     (function (B) {
@@ -41,7 +41,7 @@ var A;
                 return new Line({ x: 0, y: 0 }, p);
             };
             return Line;
-        })();
+        }());
         B.Line = Line;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));

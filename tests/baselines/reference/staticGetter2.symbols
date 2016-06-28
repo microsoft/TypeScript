@@ -1,0 +1,16 @@
+=== tests/cases/compiler/staticGetter2.ts ===
+// once caused stack overflow
+class C {
+>C : Symbol(C, Decl(staticGetter2.ts, 0, 0))
+
+    static x() {
+>x : Symbol(C.x, Decl(staticGetter2.ts, 1, 9))
+
+        var r = this;
+>r : Symbol(r, Decl(staticGetter2.ts, 3, 11))
+>this : Symbol(C, Decl(staticGetter2.ts, 0, 0))
+
+        return this;
+>this : Symbol(C, Decl(staticGetter2.ts, 0, 0))
+    }
+}

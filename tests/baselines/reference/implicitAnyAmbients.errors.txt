@@ -39,10 +39,10 @@ tests/cases/compiler/implicitAnyAmbients.ts(23,13): error TS7005: Variable 'y' i
     
         class C {
             foo(); // error
-            ~~~~~~
+            ~~~
 !!! error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
             foo2(x: any); // error
-            ~~~~~~~~~~~~~
+            ~~~~
 !!! error TS7010: 'foo2', which lacks return-type annotation, implicitly has an 'any' return type.
             foo3(x: any): any;
         }

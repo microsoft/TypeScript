@@ -1,0 +1,4 @@
+=== tests/cases/compiler/commentInEmptyParameterList1.ts ===
+function foo(/** nothing */) {
+>foo : Symbol(foo, Decl(commentInEmptyParameterList1.ts, 0, 0))
+}

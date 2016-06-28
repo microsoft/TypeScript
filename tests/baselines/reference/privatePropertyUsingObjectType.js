@@ -11,10 +11,11 @@ export interface IFilterProvider {
 
 //// [privatePropertyUsingObjectType.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var FilterManager = (function () {
         function FilterManager() {
         }
         return FilterManager;
-    })();
+    }());
     exports.FilterManager = FilterManager;
 });

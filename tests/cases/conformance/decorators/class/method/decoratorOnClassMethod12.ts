@@ -1,4 +1,5 @@
 // @target: ES5
+// @experimentaldecorators: true
 module M {
     class S {
         decorator(target: Object, key: string): void { }

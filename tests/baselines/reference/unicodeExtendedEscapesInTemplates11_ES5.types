@@ -6,4 +6,5 @@
 // this is a useful edge-case test.
 var x = `\u{DC00}`;
 >x : string
+>`\u{DC00}` : string
 

@@ -1,0 +1,46 @@
+=== tests/cases/conformance/es6/defaultParameters/emitDefaultParametersMethod.ts ===
+class C {
+>C : Symbol(C, Decl(emitDefaultParametersMethod.ts, 0, 0))
+
+    constructor(t: boolean, z: string, x: number, y = "hello") { }
+>t : Symbol(t, Decl(emitDefaultParametersMethod.ts, 1, 16))
+>z : Symbol(z, Decl(emitDefaultParametersMethod.ts, 1, 27))
+>x : Symbol(x, Decl(emitDefaultParametersMethod.ts, 1, 38))
+>y : Symbol(y, Decl(emitDefaultParametersMethod.ts, 1, 49))
+
+    public foo(x: string, t = false) { }
+>foo : Symbol(C.foo, Decl(emitDefaultParametersMethod.ts, 1, 66))
+>x : Symbol(x, Decl(emitDefaultParametersMethod.ts, 3, 15))
+>t : Symbol(t, Decl(emitDefaultParametersMethod.ts, 3, 25))
+
+    public foo1(x: string, t = false, ...rest) { }
+>foo1 : Symbol(C.foo1, Decl(emitDefaultParametersMethod.ts, 3, 40))
+>x : Symbol(x, Decl(emitDefaultParametersMethod.ts, 4, 16))
+>t : Symbol(t, Decl(emitDefaultParametersMethod.ts, 4, 26))
+>rest : Symbol(rest, Decl(emitDefaultParametersMethod.ts, 4, 37))
+
+    public bar(t = false) { }
+>bar : Symbol(C.bar, Decl(emitDefaultParametersMethod.ts, 4, 50))
+>t : Symbol(t, Decl(emitDefaultParametersMethod.ts, 5, 15))
+
+    public boo(t = false, ...rest) { }
+>boo : Symbol(C.boo, Decl(emitDefaultParametersMethod.ts, 5, 29))
+>t : Symbol(t, Decl(emitDefaultParametersMethod.ts, 6, 15))
+>rest : Symbol(rest, Decl(emitDefaultParametersMethod.ts, 6, 25))
+}
+
+class D {
+>D : Symbol(D, Decl(emitDefaultParametersMethod.ts, 7, 1))
+
+    constructor(y = "hello") { }
+>y : Symbol(y, Decl(emitDefaultParametersMethod.ts, 10, 16))
+}
+
+class E {
+>E : Symbol(E, Decl(emitDefaultParametersMethod.ts, 11, 1))
+
+    constructor(y = "hello", ...rest) { }
+>y : Symbol(y, Decl(emitDefaultParametersMethod.ts, 14, 16))
+>rest : Symbol(rest, Decl(emitDefaultParametersMethod.ts, 14, 28))
+}
+

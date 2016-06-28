@@ -1,3 +1,5 @@
+// @allowUnusedLabels: true
+
 for(var x in {}) {
     break;
 }

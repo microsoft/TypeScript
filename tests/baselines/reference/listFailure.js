@@ -54,7 +54,7 @@ var Editor;
             return lineEntry;
         };
         return Buffer;
-    })();
+    }());
     Editor.Buffer = Buffer;
     function ListRemoveEntry(entry) {
         return entry;
@@ -79,11 +79,11 @@ var Editor;
             return (ListRemoveEntry(this.next));
         };
         return List;
-    })();
+    }());
     var Line = (function () {
         function Line() {
         }
         return Line;
-    })();
+    }());
     Editor.Line = Line;
 })(Editor || (Editor = {}));

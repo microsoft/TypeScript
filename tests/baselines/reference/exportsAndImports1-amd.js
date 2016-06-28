@@ -36,6 +36,7 @@ export { v, f, C, I, E, D, M, N, T, a };
 
 //// [t1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var v = 1;
     exports.v = v;
     function f() { }
@@ -44,7 +45,7 @@ define(["require", "exports"], function (require, exports) {
         function C() {
         }
         return C;
-    })();
+    }());
     exports.C = C;
     var E;
     (function (E) {
@@ -55,7 +56,6 @@ define(["require", "exports"], function (require, exports) {
     exports.E = E;
     var M;
     (function (M) {
-        M.x;
     })(M || (M = {}));
     exports.M = M;
     var a = M.x;
@@ -63,6 +63,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [t2.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
+    "use strict";
     exports.v = t1_1.v;
     exports.f = t1_1.f;
     exports.C = t1_1.C;
@@ -72,6 +73,7 @@ define(["require", "exports", "./t1"], function (require, exports, t1_1) {
 });
 //// [t3.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
+    "use strict";
     exports.v = t1_1.v;
     exports.f = t1_1.f;
     exports.C = t1_1.C;

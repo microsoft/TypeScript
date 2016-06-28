@@ -1,0 +1,27 @@
+=== tests/cases/compiler/inferentialTypingWithFunctionTypeNested.ts ===
+declare function map<T, U>(x: T, f: () => { x: (s: T) => U }): U;
+>map : Symbol(map, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 0))
+>T : Symbol(T, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 21))
+>U : Symbol(U, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 23))
+>x : Symbol(x, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 27))
+>T : Symbol(T, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 21))
+>f : Symbol(f, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 32))
+>x : Symbol(x, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 43))
+>s : Symbol(s, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 48))
+>T : Symbol(T, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 21))
+>U : Symbol(U, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 23))
+>U : Symbol(U, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 23))
+
+declare function identity<V>(y: V): V;
+>identity : Symbol(identity, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 65))
+>V : Symbol(V, Decl(inferentialTypingWithFunctionTypeNested.ts, 1, 26))
+>y : Symbol(y, Decl(inferentialTypingWithFunctionTypeNested.ts, 1, 29))
+>V : Symbol(V, Decl(inferentialTypingWithFunctionTypeNested.ts, 1, 26))
+>V : Symbol(V, Decl(inferentialTypingWithFunctionTypeNested.ts, 1, 26))
+
+var s = map("", () => { return { x: identity }; });
+>s : Symbol(s, Decl(inferentialTypingWithFunctionTypeNested.ts, 3, 3))
+>map : Symbol(map, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 0))
+>x : Symbol(x, Decl(inferentialTypingWithFunctionTypeNested.ts, 3, 32))
+>identity : Symbol(identity, Decl(inferentialTypingWithFunctionTypeNested.ts, 0, 65))
+

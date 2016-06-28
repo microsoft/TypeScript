@@ -18,6 +18,7 @@ class IntFooBad implements IFoo<number> {
     foo(x: string): string { return null; }
 >foo : (x: string) => string
 >x : string
+>null : null
 }
 
 class StringFoo2 implements IFoo<string> {
@@ -27,6 +28,7 @@ class StringFoo2 implements IFoo<string> {
     foo(x: string): string { return null; }
 >foo : (x: string) => string
 >x : string
+>null : null
 }
 
 class StringFoo3 implements IFoo<string> {
@@ -39,4 +41,5 @@ class StringFoo3 implements IFoo<string> {
 >x : T
 >T : T
 >T : T
+>null : null
 }

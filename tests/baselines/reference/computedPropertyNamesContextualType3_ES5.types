@@ -10,10 +10,11 @@ interface I {
 var o: I = {
 >o : I
 >I : I
->{    [+"foo"](y) { return y.length; },    [+"bar"]: y => y.length} : { [x: string]: (y: string) => number; }
+>{    [+"foo"](y) { return y.length; },    [+"bar"]: y => y.length} : { [x: number]: (y: string) => number; }
 
     [+"foo"](y) { return y.length; },
 >+"foo" : number
+>"foo" : string
 >y : string
 >y.length : number
 >y : string
@@ -21,6 +22,7 @@ var o: I = {
 
     [+"bar"]: y => y.length
 >+"bar" : number
+>"bar" : string
 >y => y.length : (y: string) => number
 >y : string
 >y.length : number

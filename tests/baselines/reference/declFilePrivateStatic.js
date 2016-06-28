@@ -43,7 +43,7 @@ var C = (function () {
     C.x = 1;
     C.y = 1;
     return C;
-})();
+}());
 
 
 //// [declFilePrivateStatic.d.ts]
@@ -52,8 +52,8 @@ declare class C {
     static y: number;
     private static a();
     static b(): void;
-    private static c;
-    static d: number;
+    private static readonly c;
+    static readonly d: number;
     private static e;
     static f: any;
 }

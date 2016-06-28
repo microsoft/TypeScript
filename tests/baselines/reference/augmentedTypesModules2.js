@@ -66,6 +66,6 @@ var m2g;
         }
         C.prototype.foo = function () { };
         return C;
-    })();
+    }());
     m2g.C = C;
 })(m2g || (m2g = {}));

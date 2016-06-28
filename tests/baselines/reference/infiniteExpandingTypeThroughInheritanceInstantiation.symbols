@@ -1,0 +1,25 @@
+=== tests/cases/compiler/infiniteExpandingTypeThroughInheritanceInstantiation.ts ===
+interface A<T>
+>A : Symbol(A, Decl(infiniteExpandingTypeThroughInheritanceInstantiation.ts, 0, 0))
+>T : Symbol(T, Decl(infiniteExpandingTypeThroughInheritanceInstantiation.ts, 0, 12))
+{
+   x: A<B<T>>
+>x : Symbol(A.x, Decl(infiniteExpandingTypeThroughInheritanceInstantiation.ts, 1, 1))
+>A : Symbol(A, Decl(infiniteExpandingTypeThroughInheritanceInstantiation.ts, 0, 0))
+>B : Symbol(B, Decl(infiniteExpandingTypeThroughInheritanceInstantiation.ts, 3, 1))
+>T : Symbol(T, Decl(infiniteExpandingTypeThroughInheritanceInstantiation.ts, 0, 12))
+}
+
+interface B<T> extends A<T> // error
+>B : Symbol(B, Decl(infiniteExpandingTypeThroughInheritanceInstantiation.ts, 3, 1))
+>T : Symbol(T, Decl(infiniteExpandingTypeThroughInheritanceInstantiation.ts, 5, 12))
+>A : Symbol(A, Decl(infiniteExpandingTypeThroughInheritanceInstantiation.ts, 0, 0))
+>T : Symbol(T, Decl(infiniteExpandingTypeThroughInheritanceInstantiation.ts, 5, 12))
+{
+   x: B<A<T>>
+>x : Symbol(B.x, Decl(infiniteExpandingTypeThroughInheritanceInstantiation.ts, 6, 1))
+>B : Symbol(B, Decl(infiniteExpandingTypeThroughInheritanceInstantiation.ts, 3, 1))
+>A : Symbol(A, Decl(infiniteExpandingTypeThroughInheritanceInstantiation.ts, 0, 0))
+>T : Symbol(T, Decl(infiniteExpandingTypeThroughInheritanceInstantiation.ts, 5, 12))
+}
+

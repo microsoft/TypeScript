@@ -7,4 +7,4 @@ var v = (function () {
     }
     C.a = 1;
     return C;
-})();
+}());

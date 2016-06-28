@@ -26,4 +26,4 @@ var C = (function () {
     C.public = function () { };
     C.static = function () { };
     return C;
-})();
+}());

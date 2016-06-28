@@ -1,9 +1,0 @@
-tests/cases/compiler/ambientEnumElementInitializer3.ts(2,2): error TS1066: Ambient enum elements can only have integer literal initializers.
-
-
-==== tests/cases/compiler/ambientEnumElementInitializer3.ts (1 errors) ====
-    declare enum E {
-     e = 3.3 // Decimal
-     ~
-!!! error TS1066: Ambient enum elements can only have integer literal initializers.
-    }

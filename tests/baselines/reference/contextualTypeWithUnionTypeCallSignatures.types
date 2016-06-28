@@ -90,10 +90,10 @@ var x4: IWithCallSignatures | IWithCallSignatures4 = a => /*here a should be any
 >x4 : IWithCallSignatures | IWithCallSignatures4
 >IWithCallSignatures : IWithCallSignatures
 >IWithCallSignatures4 : IWithCallSignatures4
->a => /*here a should be any*/ a.toString() : (a: any) => any
->a : any
->a.toString() : any
->a.toString : any
->a : any
->toString : any
+>a => /*here a should be any*/ a.toString() : (a: number) => string
+>a : number
+>a.toString() : string
+>a.toString : (radix?: number) => string
+>a : number
+>toString : (radix?: number) => string
 

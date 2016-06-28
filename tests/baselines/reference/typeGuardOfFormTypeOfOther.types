@@ -52,6 +52,7 @@ if (typeof strOrC === "Object") {
 >typeof strOrC === "Object" : boolean
 >typeof strOrC : string
 >strOrC : string | C
+>"Object" : string
 
     c = strOrC; // C
 >c = strOrC : C
@@ -59,15 +60,15 @@ if (typeof strOrC === "Object") {
 >strOrC : C
 }
 else {
-    var r2: string | C = strOrC; // string | C
->r2 : string | C
->C : C
->strOrC : string | C
+    var r2: string = strOrC; // string
+>r2 : string
+>strOrC : string
 }
 if (typeof numOrC === "Object") {
 >typeof numOrC === "Object" : boolean
 >typeof numOrC : string
 >numOrC : number | C
+>"Object" : string
 
     c = numOrC; // C
 >c = numOrC : C
@@ -75,15 +76,15 @@ if (typeof numOrC === "Object") {
 >numOrC : C
 }
 else {
-    var r3: number | C = numOrC; // number | C
->r3 : number | C
->C : C
->numOrC : number | C
+    var r3: number  = numOrC; // number
+>r3 : number
+>numOrC : number
 }
 if (typeof boolOrC === "Object") {
 >typeof boolOrC === "Object" : boolean
 >typeof boolOrC : string
 >boolOrC : boolean | C
+>"Object" : string
 
     c = boolOrC; // C
 >c = boolOrC : C
@@ -91,24 +92,23 @@ if (typeof boolOrC === "Object") {
 >boolOrC : C
 }
 else {
-    var r4: boolean | C = boolOrC; // boolean | C
->r4 : boolean | C
->C : C
->boolOrC : boolean | C
+    var r4: boolean = boolOrC; // boolean
+>r4 : boolean
+>boolOrC : boolean
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrNumOrBool === "Object") {
 >typeof strOrNumOrBool === "Object" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
+>"Object" : string
 
-    var q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
->q1 : string | number | boolean
->strOrNumOrBool : string | number | boolean
+    let q1: {} = strOrNumOrBool; // {}
+>q1 : {}
+>strOrNumOrBool : never
 }
 else {
-    var q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
+    let q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
 >q2 : string | number | boolean
 >strOrNumOrBool : string | number | boolean
 }
@@ -119,12 +119,12 @@ else {
 if (typeof strOrC !== "Object") {
 >typeof strOrC !== "Object" : boolean
 >typeof strOrC : string
->strOrC : string | C
+>strOrC : C | string
+>"Object" : string
 
-    var r2: string | C = strOrC; // string | C
->r2 : string | C
->C : C
->strOrC : string | C
+    var r2: string = strOrC; // string
+>r2 : string
+>strOrC : string
 }
 else {
     c = strOrC; // C
@@ -135,12 +135,12 @@ else {
 if (typeof numOrC !== "Object") {
 >typeof numOrC !== "Object" : boolean
 >typeof numOrC : string
->numOrC : number | C
+>numOrC : C | number
+>"Object" : string
 
-    var r3: number | C = numOrC; // number | C
->r3 : number | C
->C : C
->numOrC : number | C
+    var r3: number = numOrC; // number
+>r3 : number
+>numOrC : number
 }
 else {
     c = numOrC; // C
@@ -151,12 +151,12 @@ else {
 if (typeof boolOrC !== "Object") {
 >typeof boolOrC !== "Object" : boolean
 >typeof boolOrC : string
->boolOrC : boolean | C
+>boolOrC : C | boolean
+>"Object" : string
 
-    var r4: boolean | C = boolOrC; // boolean | C
->r4 : boolean | C
->C : C
->boolOrC : boolean | C
+    var r4: boolean = boolOrC; // boolean
+>r4 : boolean
+>boolOrC : boolean
 }
 else {
     c = boolOrC; // C
@@ -165,19 +165,19 @@ else {
 >boolOrC : C
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrNumOrBool !== "Object") {
 >typeof strOrNumOrBool !== "Object" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
+>"Object" : string
 
-    var q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
+    let q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
 >q1 : string | number | boolean
 >strOrNumOrBool : string | number | boolean
 }
 else {
-    var q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
->q2 : string | number | boolean
->strOrNumOrBool : string | number | boolean
+    let q2: {} = strOrNumOrBool; // {}
+>q2 : {}
+>strOrNumOrBool : never
 }
 

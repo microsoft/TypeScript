@@ -23,4 +23,4 @@ var Chain = (function () {
         return new Chain(result);
     };
     return Chain;
-})();
+}());

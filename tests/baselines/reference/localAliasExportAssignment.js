@@ -9,7 +9,7 @@ export = server;
 
 //// [localAliasExportAssignment_1.ts]
 ///<reference path='localAliasExportAssignment_0.ts'/>
-import connect = require('localAliasExportAssignment_0');
+import connect = require('./localAliasExportAssignment_0');
 
 connect();
 
@@ -17,9 +17,11 @@ connect();
 
 
 //// [localAliasExportAssignment_0.js]
+"use strict";
 var server;
 module.exports = server;
 //// [localAliasExportAssignment_1.js]
+"use strict";
 ///<reference path='localAliasExportAssignment_0.ts'/>
-var connect = require('localAliasExportAssignment_0');
+var connect = require('./localAliasExportAssignment_0');
 connect();

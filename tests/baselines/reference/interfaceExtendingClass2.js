@@ -1,4 +1,5 @@
 //// [interfaceExtendingClass2.ts]
+
 class Foo {
     x: string;
     y() { }
@@ -28,6 +29,6 @@ var Foo = (function () {
         configurable: true
     });
     return Foo;
-})();
+}());
 return 1;
 ;

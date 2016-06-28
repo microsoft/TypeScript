@@ -6,6 +6,7 @@ m1.f();
 
 //// [amdDependencyCommentName2.js]
 ///<amd-dependency path='bar' name='b'/>
-define(["require", "exports", "m2", "bar"], function (require, exports, m1, b) {
+define(["require", "exports", "bar", "m2"], function (require, exports, b, m1) {
+    "use strict";
     m1.f();
 });

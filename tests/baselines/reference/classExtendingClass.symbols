@@ -1,0 +1,108 @@
+=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingClass.ts ===
+class C {
+>C : Symbol(C, Decl(classExtendingClass.ts, 0, 0))
+
+    foo: string;
+>foo : Symbol(C.foo, Decl(classExtendingClass.ts, 0, 9))
+
+    thing() { }
+>thing : Symbol(C.thing, Decl(classExtendingClass.ts, 1, 16))
+
+    static other() { }
+>other : Symbol(C.other, Decl(classExtendingClass.ts, 2, 15))
+}
+
+class D extends C {
+>D : Symbol(D, Decl(classExtendingClass.ts, 4, 1))
+>C : Symbol(C, Decl(classExtendingClass.ts, 0, 0))
+
+    bar: string;
+>bar : Symbol(D.bar, Decl(classExtendingClass.ts, 6, 19))
+}
+
+var d: D;
+>d : Symbol(d, Decl(classExtendingClass.ts, 10, 3))
+>D : Symbol(D, Decl(classExtendingClass.ts, 4, 1))
+
+var r = d.foo;
+>r : Symbol(r, Decl(classExtendingClass.ts, 11, 3))
+>d.foo : Symbol(C.foo, Decl(classExtendingClass.ts, 0, 9))
+>d : Symbol(d, Decl(classExtendingClass.ts, 10, 3))
+>foo : Symbol(C.foo, Decl(classExtendingClass.ts, 0, 9))
+
+var r2 = d.bar;
+>r2 : Symbol(r2, Decl(classExtendingClass.ts, 12, 3))
+>d.bar : Symbol(D.bar, Decl(classExtendingClass.ts, 6, 19))
+>d : Symbol(d, Decl(classExtendingClass.ts, 10, 3))
+>bar : Symbol(D.bar, Decl(classExtendingClass.ts, 6, 19))
+
+var r3 = d.thing();
+>r3 : Symbol(r3, Decl(classExtendingClass.ts, 13, 3))
+>d.thing : Symbol(C.thing, Decl(classExtendingClass.ts, 1, 16))
+>d : Symbol(d, Decl(classExtendingClass.ts, 10, 3))
+>thing : Symbol(C.thing, Decl(classExtendingClass.ts, 1, 16))
+
+var r4 = D.other();
+>r4 : Symbol(r4, Decl(classExtendingClass.ts, 14, 3))
+>D.other : Symbol(C.other, Decl(classExtendingClass.ts, 2, 15))
+>D : Symbol(D, Decl(classExtendingClass.ts, 4, 1))
+>other : Symbol(C.other, Decl(classExtendingClass.ts, 2, 15))
+
+class C2<T> {
+>C2 : Symbol(C2, Decl(classExtendingClass.ts, 14, 19))
+>T : Symbol(T, Decl(classExtendingClass.ts, 16, 9))
+
+    foo: T;
+>foo : Symbol(C2.foo, Decl(classExtendingClass.ts, 16, 13))
+>T : Symbol(T, Decl(classExtendingClass.ts, 16, 9))
+
+    thing(x: T) { }
+>thing : Symbol(C2.thing, Decl(classExtendingClass.ts, 17, 11))
+>x : Symbol(x, Decl(classExtendingClass.ts, 18, 10))
+>T : Symbol(T, Decl(classExtendingClass.ts, 16, 9))
+
+    static other<T>(x: T) { }
+>other : Symbol(C2.other, Decl(classExtendingClass.ts, 18, 19))
+>T : Symbol(T, Decl(classExtendingClass.ts, 19, 17))
+>x : Symbol(x, Decl(classExtendingClass.ts, 19, 20))
+>T : Symbol(T, Decl(classExtendingClass.ts, 19, 17))
+}
+
+class D2<T> extends C2<T> {
+>D2 : Symbol(D2, Decl(classExtendingClass.ts, 20, 1))
+>T : Symbol(T, Decl(classExtendingClass.ts, 22, 9))
+>C2 : Symbol(C2, Decl(classExtendingClass.ts, 14, 19))
+>T : Symbol(T, Decl(classExtendingClass.ts, 22, 9))
+
+    bar: string;
+>bar : Symbol(D2.bar, Decl(classExtendingClass.ts, 22, 27))
+}
+
+var d2: D2<string>;
+>d2 : Symbol(d2, Decl(classExtendingClass.ts, 26, 3))
+>D2 : Symbol(D2, Decl(classExtendingClass.ts, 20, 1))
+
+var r5 = d2.foo;
+>r5 : Symbol(r5, Decl(classExtendingClass.ts, 27, 3))
+>d2.foo : Symbol(C2.foo, Decl(classExtendingClass.ts, 16, 13))
+>d2 : Symbol(d2, Decl(classExtendingClass.ts, 26, 3))
+>foo : Symbol(C2.foo, Decl(classExtendingClass.ts, 16, 13))
+
+var r6 = d2.bar;
+>r6 : Symbol(r6, Decl(classExtendingClass.ts, 28, 3))
+>d2.bar : Symbol(D2.bar, Decl(classExtendingClass.ts, 22, 27))
+>d2 : Symbol(d2, Decl(classExtendingClass.ts, 26, 3))
+>bar : Symbol(D2.bar, Decl(classExtendingClass.ts, 22, 27))
+
+var r7 = d2.thing('');
+>r7 : Symbol(r7, Decl(classExtendingClass.ts, 29, 3))
+>d2.thing : Symbol(C2.thing, Decl(classExtendingClass.ts, 17, 11))
+>d2 : Symbol(d2, Decl(classExtendingClass.ts, 26, 3))
+>thing : Symbol(C2.thing, Decl(classExtendingClass.ts, 17, 11))
+
+var r8 = D2.other(1);
+>r8 : Symbol(r8, Decl(classExtendingClass.ts, 30, 3))
+>D2.other : Symbol(C2.other, Decl(classExtendingClass.ts, 18, 19))
+>D2 : Symbol(D2, Decl(classExtendingClass.ts, 20, 1))
+>other : Symbol(C2.other, Decl(classExtendingClass.ts, 18, 19))
+

@@ -1,0 +1,48 @@
+=== tests/cases/compiler/aliasUsageInFunctionExpression_main.ts ===
+import Backbone = require("./aliasUsageInFunctionExpression_backbone");
+>Backbone : Symbol(Backbone, Decl(aliasUsageInFunctionExpression_main.ts, 0, 0))
+
+import moduleA = require("./aliasUsageInFunctionExpression_moduleA");
+>moduleA : Symbol(moduleA, Decl(aliasUsageInFunctionExpression_main.ts, 0, 71))
+
+interface IHasVisualizationModel {
+>IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInFunctionExpression_main.ts, 1, 69))
+
+    VisualizationModel: typeof Backbone.Model;
+>VisualizationModel : Symbol(IHasVisualizationModel.VisualizationModel, Decl(aliasUsageInFunctionExpression_main.ts, 2, 34))
+>Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
+>Backbone : Symbol(Backbone, Decl(aliasUsageInFunctionExpression_main.ts, 0, 0))
+>Model : Symbol(Backbone.Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
+}
+var f = (x: IHasVisualizationModel) => x;
+>f : Symbol(f, Decl(aliasUsageInFunctionExpression_main.ts, 5, 3))
+>x : Symbol(x, Decl(aliasUsageInFunctionExpression_main.ts, 5, 9))
+>IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInFunctionExpression_main.ts, 1, 69))
+>x : Symbol(x, Decl(aliasUsageInFunctionExpression_main.ts, 5, 9))
+
+f = (x) => moduleA;
+>f : Symbol(f, Decl(aliasUsageInFunctionExpression_main.ts, 5, 3))
+>x : Symbol(x, Decl(aliasUsageInFunctionExpression_main.ts, 6, 5))
+>moduleA : Symbol(moduleA, Decl(aliasUsageInFunctionExpression_main.ts, 0, 71))
+
+=== tests/cases/compiler/aliasUsageInFunctionExpression_backbone.ts ===
+export class Model {
+>Model : Symbol(Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
+
+    public someData: string;
+>someData : Symbol(Model.someData, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 20))
+}
+
+=== tests/cases/compiler/aliasUsageInFunctionExpression_moduleA.ts ===
+import Backbone = require("./aliasUsageInFunctionExpression_backbone");
+>Backbone : Symbol(Backbone, Decl(aliasUsageInFunctionExpression_moduleA.ts, 0, 0))
+
+export class VisualizationModel extends Backbone.Model {
+>VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInFunctionExpression_moduleA.ts, 0, 71))
+>Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
+>Backbone : Symbol(Backbone, Decl(aliasUsageInFunctionExpression_moduleA.ts, 0, 0))
+>Model : Symbol(Backbone.Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
+
+    // interesting stuff here
+}
+

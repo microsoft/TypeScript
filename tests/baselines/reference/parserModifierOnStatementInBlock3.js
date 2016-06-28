@@ -6,6 +6,7 @@ export function foo() {
 
 
 //// [parserModifierOnStatementInBlock3.js]
+"use strict";
 function foo() {
     function bar() {
     }

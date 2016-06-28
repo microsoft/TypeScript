@@ -38,14 +38,13 @@ var Shapes;
         function Point(x, y) {
             this.x = x;
             this.y = y;
-            this.con = "hello";
         }
         // Instance member
         Point.prototype.getDist = function () { return Math.sqrt(this.x * this.x + this.y * this.y); };
         // Static member
         Point.origin = new Point(0, 0);
         return Point;
-    })();
+    }());
     Shapes.Point = Point;
 })(Shapes || (Shapes = {}));
 // Local variables

@@ -1,0 +1,60 @@
+=== tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts ===
+// used to be valid, now an error to do this
+
+interface IComparable<T> {
+>IComparable : Symbol(IComparable, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 0, 0))
+>T : Symbol(T, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 2, 22))
+}
+function f<T, I extends IComparable<T>>() {
+>f : Symbol(f, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 3, 1))
+>T : Symbol(T, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 4, 11))
+>I : Symbol(I, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 4, 13))
+>IComparable : Symbol(IComparable, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 0, 0))
+>T : Symbol(T, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 4, 11))
+}
+
+interface I1<T, U extends I1<T, any>> { // Error, any does not satisfy the constraint I1<T, any>
+>I1 : Symbol(I1, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 5, 1))
+>T : Symbol(T, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 7, 13))
+>U : Symbol(U, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 7, 15))
+>I1 : Symbol(I1, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 5, 1))
+>T : Symbol(T, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 7, 13))
+}
+interface I2<T, U extends T> {
+>I2 : Symbol(I2, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 8, 1))
+>T : Symbol(T, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 9, 13))
+>U : Symbol(U, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 9, 15))
+>T : Symbol(T, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 9, 13))
+}
+
+interface I4<T, U extends () => T> {
+>I4 : Symbol(I4, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 10, 1))
+>T : Symbol(T, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 12, 13))
+>U : Symbol(U, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 12, 15))
+>T : Symbol(T, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 12, 13))
+}
+
+// No error
+interface I3<T, U extends string> {
+>I3 : Symbol(I3, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 13, 1))
+>T : Symbol(T, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 16, 13))
+>U : Symbol(U, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 16, 15))
+
+    method1<X, Y extends T>();
+>method1 : Symbol(I3.method1, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 16, 35))
+>X : Symbol(X, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 17, 12))
+>Y : Symbol(Y, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 17, 14))
+>T : Symbol(T, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 16, 13))
+}
+
+function foo<T, U extends <V extends T>(v: V) => void>() {
+>foo : Symbol(foo, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 18, 1))
+>T : Symbol(T, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 20, 13))
+>U : Symbol(U, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 20, 15))
+>V : Symbol(V, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 20, 27))
+>T : Symbol(T, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 20, 13))
+>v : Symbol(v, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 20, 40))
+>V : Symbol(V, Decl(constraintReferencingTypeParameterFromSameTypeParameterList.ts, 20, 27))
+}
+
+

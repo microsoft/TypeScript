@@ -13,4 +13,4 @@ var Markup = (function () {
     function Markup() {
     }
     return Markup;
-})();
+}());

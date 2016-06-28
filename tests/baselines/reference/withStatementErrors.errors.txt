@@ -1,9 +1,7 @@
 tests/cases/compiler/withStatementErrors.ts(3,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
-tests/cases/compiler/withStatementErrors.ts(13,5): error TS1129: Statement expected.
-tests/cases/compiler/withStatementErrors.ts(17,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/withStatementErrors.ts (3 errors) ====
+==== tests/cases/compiler/withStatementErrors.ts (1 errors) ====
     declare var ooo:any;
     
     with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
@@ -19,12 +17,8 @@ tests/cases/compiler/withStatementErrors.ts(17,1): error TS1128: Declaration or 
         class C {} // error   
         
         interface I {} // error
-        ~~~~~~~~~
-!!! error TS1129: Statement expected.
         
         module M {} // error
             
     }
-    ~
-!!! error TS1128: Declaration or statement expected.
     

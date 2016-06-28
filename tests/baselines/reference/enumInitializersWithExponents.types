@@ -1,0 +1,29 @@
+=== tests/cases/compiler/enumInitializersWithExponents.ts ===
+// Must be integer literals.
+declare enum E {
+>E : E
+
+    a = 1e3, // ok
+>a : E
+>1e3 : number
+
+    b = 1e25, // ok
+>b : E
+>1e25 : number
+
+    c = 1e-3, // error
+>c : E
+>1e-3 : number
+
+    d = 1e-9, // error
+>d : E
+>1e-9 : number
+
+    e = 1e0, // ok
+>e : E
+>1e0 : number
+
+    f = 1e+25 // ok
+>f : E
+>1e+25 : number
+}

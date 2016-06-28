@@ -1,0 +1,16 @@
+=== tests/cases/compiler/a.ts ===
+
+export const x = 1;
+>x : number
+>1 : number
+
+=== tests/cases/compiler/b.ts ===
+import {x} from "./a"
+>x : number
+
+(function() { return 1; }())
+>(function() { return 1; }()) : number
+>function() { return 1; }() : number
+>function() { return 1; } : () => number
+>1 : number
+

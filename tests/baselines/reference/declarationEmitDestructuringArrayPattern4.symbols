@@ -1,0 +1,37 @@
+=== tests/cases/compiler/declarationEmitDestructuringArrayPattern4.ts ===
+var [...a5] = [1, 2, 3];
+>a5 : Symbol(a5, Decl(declarationEmitDestructuringArrayPattern4.ts, 0, 5))
+
+var [x14, ...a6] = [1, 2, 3];
+>x14 : Symbol(x14, Decl(declarationEmitDestructuringArrayPattern4.ts, 1, 5))
+>a6 : Symbol(a6, Decl(declarationEmitDestructuringArrayPattern4.ts, 1, 9))
+
+var [x15, y15, ...a7] = [1, 2, 3];
+>x15 : Symbol(x15, Decl(declarationEmitDestructuringArrayPattern4.ts, 2, 5))
+>y15 : Symbol(y15, Decl(declarationEmitDestructuringArrayPattern4.ts, 2, 9))
+>a7 : Symbol(a7, Decl(declarationEmitDestructuringArrayPattern4.ts, 2, 14))
+
+var [x16, y16, z16, ...a8] = [1, 2, 3];
+>x16 : Symbol(x16, Decl(declarationEmitDestructuringArrayPattern4.ts, 3, 5))
+>y16 : Symbol(y16, Decl(declarationEmitDestructuringArrayPattern4.ts, 3, 9))
+>z16 : Symbol(z16, Decl(declarationEmitDestructuringArrayPattern4.ts, 3, 14))
+>a8 : Symbol(a8, Decl(declarationEmitDestructuringArrayPattern4.ts, 3, 19))
+
+var [...a9] = [1, "hello", true];
+>a9 : Symbol(a9, Decl(declarationEmitDestructuringArrayPattern4.ts, 5, 5))
+
+var [x17, ...a10] = [1, "hello", true];
+>x17 : Symbol(x17, Decl(declarationEmitDestructuringArrayPattern4.ts, 6, 5))
+>a10 : Symbol(a10, Decl(declarationEmitDestructuringArrayPattern4.ts, 6, 9))
+
+var [x18, y18, ...a12] = [1, "hello", true];
+>x18 : Symbol(x18, Decl(declarationEmitDestructuringArrayPattern4.ts, 7, 5))
+>y18 : Symbol(y18, Decl(declarationEmitDestructuringArrayPattern4.ts, 7, 9))
+>a12 : Symbol(a12, Decl(declarationEmitDestructuringArrayPattern4.ts, 7, 14))
+
+var [x19, y19, z19, ...a13] = [1, "hello", true];
+>x19 : Symbol(x19, Decl(declarationEmitDestructuringArrayPattern4.ts, 8, 5))
+>y19 : Symbol(y19, Decl(declarationEmitDestructuringArrayPattern4.ts, 8, 9))
+>z19 : Symbol(z19, Decl(declarationEmitDestructuringArrayPattern4.ts, 8, 14))
+>a13 : Symbol(a13, Decl(declarationEmitDestructuringArrayPattern4.ts, 8, 19))
+

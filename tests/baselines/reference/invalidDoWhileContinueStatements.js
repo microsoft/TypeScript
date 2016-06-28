@@ -1,4 +1,5 @@
 //// [invalidDoWhileContinueStatements.ts]
+
 // All errors
 
 // naked continue not allowed

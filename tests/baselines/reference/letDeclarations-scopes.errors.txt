@@ -1,7 +1,8 @@
-tests/cases/compiler/letDeclarations-scopes.ts(28,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+tests/cases/compiler/letDeclarations-scopes.ts(29,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
 
 
 ==== tests/cases/compiler/letDeclarations-scopes.ts (1 errors) ====
+    
     
     // global
     let l = "string";

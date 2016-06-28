@@ -1,3 +1,5 @@
+// @allowUnusedLabels: true
+
 target:
 while (true) {
   function f() {

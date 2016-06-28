@@ -34,7 +34,7 @@ var c1 = (function () {
         // Function here
     };
     return c1;
-})();
+}());
 
 
 //// [declFilePrivateMethodOverloads.d.ts]

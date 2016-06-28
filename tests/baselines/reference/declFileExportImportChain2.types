@@ -4,9 +4,9 @@ import c = require("declFileExportImportChain2_c");
 
 export var x: c.b.m2.c1;
 >x : c.b.m2.c1
->c : unknown
->b : unknown
->m2 : unknown
+>c : any
+>b : any
+>m2 : any
 >c1 : c.b.m2.c1
 
 === tests/cases/compiler/declFileExportImportChain2_a.ts ===

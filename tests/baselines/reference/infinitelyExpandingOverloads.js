@@ -31,13 +31,13 @@ var Validator2 = (function () {
     function Validator2() {
     }
     return Validator2;
-})();
+}());
 var ViewModel = (function () {
     function ViewModel() {
         this.validationPlacements = new Array();
     }
     return ViewModel;
-})();
+}());
 var Widget = (function () {
     function Widget(viewModelType) {
     }
@@ -49,4 +49,4 @@ var Widget = (function () {
         configurable: true
     });
     return Widget;
-})();
+}());

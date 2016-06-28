@@ -1,14 +1,25 @@
-tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(1,12): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(2,27): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(12,26): error TS2344: Type '{ b: string; }' does not satisfy the constraint '{ a: string; }'.
+  Property 'a' is missing in type '{ b: string; }'.
+tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(13,26): error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: string; }'.
+  Types of property 'a' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(14,26): error TS2344: Type '{ b: string; }' does not satisfy the constraint '{ a: string; }'.
+  Property 'a' is missing in type '{ b: string; }'.
+tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(15,26): error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: string; }'.
+  Types of property 'a' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(16,37): error TS2344: Type '{ a: string; }' does not satisfy the constraint '{ a: string; b: number; }'.
+  Property 'b' is missing in type '{ a: string; }'.
+tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(17,37): error TS2344: Type '{ a: string; }' does not satisfy the constraint '{ a: string; b: number; }'.
+  Property 'b' is missing in type '{ a: string; }'.
+tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(28,15): error TS2344: Type 'I1' does not satisfy the constraint 'I2'.
+  Property 'b' is missing in type 'I1'.
+tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(29,15): error TS2344: Type 'I1' does not satisfy the constraint 'I2'.
 
 
-==== tests/cases/compiler/typeParamExtendsOtherTypeParam.ts (2 errors) ====
+==== tests/cases/compiler/typeParamExtendsOtherTypeParam.ts (8 errors) ====
     class A<T, U extends T> { }
-               ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     class B<T extends Object, U extends T> {
-                              ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         data: A<Object, Object>;
     }
     
@@ -19,11 +30,31 @@ tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(2,27): error TS2313: Cons
     
     // Below should be in error
     var x1: A<{ a: string;}, { b: string }>;
+                             ~~~~~~~~~~~~~
+!!! error TS2344: Type '{ b: string; }' does not satisfy the constraint '{ a: string; }'.
+!!! error TS2344:   Property 'a' is missing in type '{ b: string; }'.
     var x2: A<{ a: string;}, { a: number }>;
+                             ~~~~~~~~~~~~~
+!!! error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: string; }'.
+!!! error TS2344:   Types of property 'a' are incompatible.
+!!! error TS2344:     Type 'number' is not assignable to type 'string'.
     var x3: B<{ a: string;}, { b: string }>;
+                             ~~~~~~~~~~~~~
+!!! error TS2344: Type '{ b: string; }' does not satisfy the constraint '{ a: string; }'.
+!!! error TS2344:   Property 'a' is missing in type '{ b: string; }'.
     var x4: B<{ a: string;}, { a: number }>;
+                             ~~~~~~~~~~~~~
+!!! error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: string; }'.
+!!! error TS2344:   Types of property 'a' are incompatible.
+!!! error TS2344:     Type 'number' is not assignable to type 'string'.
     var x5: A<{ a: string; b: number }, { a: string }>;
+                                        ~~~~~~~~~~~~~
+!!! error TS2344: Type '{ a: string; }' does not satisfy the constraint '{ a: string; b: number; }'.
+!!! error TS2344:   Property 'b' is missing in type '{ a: string; }'.
     var x6: B<{ a: string; b: number }, { a: string }>;
+                                        ~~~~~~~~~~~~~
+!!! error TS2344: Type '{ a: string; }' does not satisfy the constraint '{ a: string; b: number; }'.
+!!! error TS2344:   Property 'b' is missing in type '{ a: string; }'.
     
     interface I1 {
         a: string;
@@ -35,5 +66,10 @@ tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(2,27): error TS2313: Cons
     }
     
     var x7: A<I2, I1>;
+                  ~~
+!!! error TS2344: Type 'I1' does not satisfy the constraint 'I2'.
+!!! error TS2344:   Property 'b' is missing in type 'I1'.
     var x8: B<I2, I1>;
+                  ~~
+!!! error TS2344: Type 'I1' does not satisfy the constraint 'I2'.
     

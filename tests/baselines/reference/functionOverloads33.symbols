@@ -1,0 +1,18 @@
+=== tests/cases/compiler/functionOverloads33.ts ===
+function foo(bar:string):string;
+>foo : Symbol(foo, Decl(functionOverloads33.ts, 0, 0), Decl(functionOverloads33.ts, 0, 32), Decl(functionOverloads33.ts, 1, 29))
+>bar : Symbol(bar, Decl(functionOverloads33.ts, 0, 13))
+
+function foo(bar:any):number;
+>foo : Symbol(foo, Decl(functionOverloads33.ts, 0, 0), Decl(functionOverloads33.ts, 0, 32), Decl(functionOverloads33.ts, 1, 29))
+>bar : Symbol(bar, Decl(functionOverloads33.ts, 1, 13))
+
+function foo(bar:any):any{ return bar }
+>foo : Symbol(foo, Decl(functionOverloads33.ts, 0, 0), Decl(functionOverloads33.ts, 0, 32), Decl(functionOverloads33.ts, 1, 29))
+>bar : Symbol(bar, Decl(functionOverloads33.ts, 2, 13))
+>bar : Symbol(bar, Decl(functionOverloads33.ts, 2, 13))
+
+var x = foo(5);
+>x : Symbol(x, Decl(functionOverloads33.ts, 3, 3))
+>foo : Symbol(foo, Decl(functionOverloads33.ts, 0, 0), Decl(functionOverloads33.ts, 0, 32), Decl(functionOverloads33.ts, 1, 29))
+

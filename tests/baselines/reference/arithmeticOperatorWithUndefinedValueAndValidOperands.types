@@ -35,6 +35,7 @@ var ra3 = undefined * 1;
 >ra3 : number
 >undefined * 1 : number
 >undefined : undefined
+>1 : number
 
 var ra4 = undefined * E.a;
 >ra4 : number
@@ -59,6 +60,7 @@ var ra6 = b * undefined;
 var ra7 = 0 * undefined;
 >ra7 : number
 >0 * undefined : number
+>0 : number
 >undefined : undefined
 
 var ra8 = E.b * undefined;
@@ -86,6 +88,7 @@ var rb3 = undefined / 1;
 >rb3 : number
 >undefined / 1 : number
 >undefined : undefined
+>1 : number
 
 var rb4 = undefined / E.a;
 >rb4 : number
@@ -110,6 +113,7 @@ var rb6 = b / undefined;
 var rb7 = 0 / undefined;
 >rb7 : number
 >0 / undefined : number
+>0 : number
 >undefined : undefined
 
 var rb8 = E.b / undefined;
@@ -137,6 +141,7 @@ var rc3 = undefined % 1;
 >rc3 : number
 >undefined % 1 : number
 >undefined : undefined
+>1 : number
 
 var rc4 = undefined % E.a;
 >rc4 : number
@@ -161,6 +166,7 @@ var rc6 = b % undefined;
 var rc7 = 0 % undefined;
 >rc7 : number
 >0 % undefined : number
+>0 : number
 >undefined : undefined
 
 var rc8 = E.b % undefined;
@@ -188,6 +194,7 @@ var rd3 = undefined - 1;
 >rd3 : number
 >undefined - 1 : number
 >undefined : undefined
+>1 : number
 
 var rd4 = undefined - E.a;
 >rd4 : number
@@ -212,6 +219,7 @@ var rd6 = b - undefined;
 var rd7 = 0 - undefined;
 >rd7 : number
 >0 - undefined : number
+>0 : number
 >undefined : undefined
 
 var rd8 = E.b - undefined;
@@ -239,6 +247,7 @@ var re3 = undefined << 1;
 >re3 : number
 >undefined << 1 : number
 >undefined : undefined
+>1 : number
 
 var re4 = undefined << E.a;
 >re4 : number
@@ -263,6 +272,7 @@ var re6 = b << undefined;
 var re7 = 0 << undefined;
 >re7 : number
 >0 << undefined : number
+>0 : number
 >undefined : undefined
 
 var re8 = E.b << undefined;
@@ -290,6 +300,7 @@ var rf3 = undefined >> 1;
 >rf3 : number
 >undefined >> 1 : number
 >undefined : undefined
+>1 : number
 
 var rf4 = undefined >> E.a;
 >rf4 : number
@@ -314,6 +325,7 @@ var rf6 = b >> undefined;
 var rf7 = 0 >> undefined;
 >rf7 : number
 >0 >> undefined : number
+>0 : number
 >undefined : undefined
 
 var rf8 = E.b >> undefined;
@@ -341,6 +353,7 @@ var rg3 = undefined >>> 1;
 >rg3 : number
 >undefined >>> 1 : number
 >undefined : undefined
+>1 : number
 
 var rg4 = undefined >>> E.a;
 >rg4 : number
@@ -365,6 +378,7 @@ var rg6 = b >>> undefined;
 var rg7 = 0 >>> undefined;
 >rg7 : number
 >0 >>> undefined : number
+>0 : number
 >undefined : undefined
 
 var rg8 = E.b >>> undefined;
@@ -392,6 +406,7 @@ var rh3 = undefined & 1;
 >rh3 : number
 >undefined & 1 : number
 >undefined : undefined
+>1 : number
 
 var rh4 = undefined & E.a;
 >rh4 : number
@@ -416,6 +431,7 @@ var rh6 = b & undefined;
 var rh7 = 0 & undefined;
 >rh7 : number
 >0 & undefined : number
+>0 : number
 >undefined : undefined
 
 var rh8 = E.b & undefined;
@@ -443,6 +459,7 @@ var ri3 = undefined ^ 1;
 >ri3 : number
 >undefined ^ 1 : number
 >undefined : undefined
+>1 : number
 
 var ri4 = undefined ^ E.a;
 >ri4 : number
@@ -467,6 +484,7 @@ var ri6 = b ^ undefined;
 var ri7 = 0 ^ undefined;
 >ri7 : number
 >0 ^ undefined : number
+>0 : number
 >undefined : undefined
 
 var ri8 = E.b ^ undefined;
@@ -494,6 +512,7 @@ var rj3 = undefined | 1;
 >rj3 : number
 >undefined | 1 : number
 >undefined : undefined
+>1 : number
 
 var rj4 = undefined | E.a;
 >rj4 : number
@@ -518,6 +537,7 @@ var rj6 = b | undefined;
 var rj7 = 0 | undefined;
 >rj7 : number
 >0 | undefined : number
+>0 : number
 >undefined : undefined
 
 var rj8 = E.b | undefined;

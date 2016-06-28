@@ -1,5 +1,5 @@
 === tests/cases/compiler/file2.ts ===
-import f = require('file1');
+import f = require('./file1');
 >f : typeof f
 
 f.foo();
@@ -19,5 +19,6 @@ var classes = undefined;
     return new classes(null);
 >new classes(null) : any
 >classes : any
+>null : null
 }
 

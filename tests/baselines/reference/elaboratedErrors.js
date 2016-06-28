@@ -33,7 +33,7 @@ var WorkerFS = (function () {
     function WorkerFS() {
     }
     return WorkerFS;
-})();
+}());
 var x;
 var y;
 // Only one of these errors should be large

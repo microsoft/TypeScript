@@ -17,4 +17,4 @@ var Foo = (function () {
     }
     Foo.prototype.meth = function () { var q = this.pvar; };
     return Foo;
-})();
+}());

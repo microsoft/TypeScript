@@ -1,0 +1,9 @@
+=== tests/cases/compiler/parameterPropertyInitializerInInitializers.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(parameterPropertyInitializerInInitializers.ts, 0, 0))
+
+    constructor(public x: number, public y: number = x) { }
+>x : Symbol(Foo.x, Decl(parameterPropertyInitializerInInitializers.ts, 1, 16))
+>y : Symbol(Foo.y, Decl(parameterPropertyInitializerInInitializers.ts, 1, 33))
+>x : Symbol(x, Decl(parameterPropertyInitializerInInitializers.ts, 1, 16))
+}

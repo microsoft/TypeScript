@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module mod1 {
+////namespace mod1 {
 ////    var mod1var = 1;
 ////    function mod1fn() {
 ////        var bar = 1;
@@ -19,7 +19,7 @@
 ////        bar: any;
 ////        foob(bar: any): any;
 ////    }
-////    module mod1mod {
+////    namespace mod1mod {
 ////        var m1X = 1;
 ////        function m1Func() {
 ////            var bar = 1;
@@ -56,8 +56,8 @@
 ////            bar: any;
 ////            foob(bar: any): any;
 ////        }
-////        module m1Mod { }
-////        export module m1eMod { }
+////        namespace m1Mod { }
+////        export namespace m1eMod { }
 ////    }
 ////    export var mod1evar = 1;
 ////    export function mod1efn() {
@@ -78,7 +78,7 @@
 ////        bar: any;
 ////        foob(bar: any): any;
 ////    }
-////    export module mod1emod {
+////    export namespace mod1emod {
 ////        var mX = 1;
 ////        function mFunc() {
 ////            var bar = 1;
@@ -114,18 +114,18 @@
 ////            bar: any;
 ////            foob(bar: any): any;
 ////        }
-////        module mMod { }
-////    	export module meMod { }
+////        namespace mMod { }
+////    	export namespace meMod { }
 ////    }
 ////}
 ////
-////// EXTENDING MODULE 1
-////module mod1 {
+////// EXTENDING NAMESPACE 1
+////namespace mod1 {
 ////    export var mod1eexvar = 1;
 ////    var mod1exvar = 2;
 ////}
 ////
-////module mod2 {
+////namespace mod2 {
 ////    var mod2var = "shadow";
 ////    function mod2fn() {
 ////        var bar = 1;
@@ -139,7 +139,7 @@
 ////        static csVar = 1;
 ////        static csFunc() { }
 ////    }
-////    module mod2mod { }
+////    namespace mod2mod { }
 ////    interface mod2int {
 ////        (bar: any): any;
 ////        new (bar: any): any;
@@ -162,14 +162,14 @@
 ////        bar: any;
 ////        foob(bar: any): any;
 ////    }
-////    export module mod2emod { }
+////    export namespace mod2emod { }
 ////}
 ////
-////module mod2 {
+////namespace mod2 {
 ////    export var mod2eexvar = 1;
 ////}
 ////
-////module mod3 {
+////namespace mod3 {
 ////    var shwvar = "shadow";
 ////    function shwfn() {
 ////        var bar = 1;
@@ -260,9 +260,9 @@ function goToMarkAndGeneralVerify(marker: string)
 
 // from global scope
 goToMarkAndGeneralVerify('global');
-verify.completionListContains('mod1', 'module mod1');
-verify.completionListContains('mod2', 'module mod2');
-verify.completionListContains('mod3', 'module mod3');
+verify.completionListContains('mod1', 'namespace mod1');
+verify.completionListContains('mod2', 'namespace mod2');
+verify.completionListContains('mod3', 'namespace mod3');
 verify.completionListContains('shwvar', 'var shwvar: number');
 verify.completionListContains('shwfn', 'function shwfn(): void');
 verify.completionListContains('shwcls', 'class shwcls');

@@ -1,10 +1,9 @@
-tests/cases/compiler/overloadingOnConstants2.ts(8,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/compiler/overloadingOnConstants2.ts(9,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/compiler/overloadingOnConstants2.ts(15,13): error TS2345: Argument of type 'string' is not assignable to parameter of type '"bye"'.
-tests/cases/compiler/overloadingOnConstants2.ts(19,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadingOnConstants2.ts(9,10): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/compiler/overloadingOnConstants2.ts(15,13): error TS2345: Argument of type '"um"' is not assignable to parameter of type '"bye"'.
+tests/cases/compiler/overloadingOnConstants2.ts(19,10): error TS2394: Overload signature is not compatible with function implementation.
 
 
-==== tests/cases/compiler/overloadingOnConstants2.ts (4 errors) ====
+==== tests/cases/compiler/overloadingOnConstants2.ts (3 errors) ====
     class C {
        private x = 1;
     }
@@ -13,11 +12,9 @@ tests/cases/compiler/overloadingOnConstants2.ts(19,10): error TS2382: Specialize
        private y = 1;
     }
     function foo(x: "hi", items: string[]): D;
-             ~~~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function foo(x: "bye", items: string[]): E;
              ~~~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2394: Overload signature is not compatible with function implementation.
     function foo(x: string, items: string[]): C {
        return null;
     }
@@ -25,13 +22,13 @@ tests/cases/compiler/overloadingOnConstants2.ts(19,10): error TS2382: Specialize
     var b: E = foo("bye", []); // E 
     var c = foo("um", []); // error
                 ~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"bye"'.
+!!! error TS2345: Argument of type '"um"' is not assignable to parameter of type '"bye"'.
     
     
     //function bar(x: "hi", items: string[]): D;
     function bar(x: "bye", items: string[]): E;
              ~~~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2394: Overload signature is not compatible with function implementation.
     function bar(x: string, items: string[]): C;
     function bar(x: string, items: string[]): C {
        return null;

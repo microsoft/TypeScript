@@ -15,4 +15,4 @@ var Vector = (function () {
         foo();
     };
     return Vector;
-})();
+}());

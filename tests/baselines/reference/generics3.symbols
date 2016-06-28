@@ -1,0 +1,29 @@
+=== tests/cases/compiler/generics3.ts ===
+class C<T> { private x: T; }
+>C : Symbol(C, Decl(generics3.ts, 0, 0))
+>T : Symbol(T, Decl(generics3.ts, 0, 8))
+>x : Symbol(C.x, Decl(generics3.ts, 0, 12))
+>T : Symbol(T, Decl(generics3.ts, 0, 8))
+
+interface X { f(): string; }
+>X : Symbol(X, Decl(generics3.ts, 0, 28))
+>f : Symbol(X.f, Decl(generics3.ts, 1, 13))
+
+interface Y { f(): string; }
+>Y : Symbol(Y, Decl(generics3.ts, 1, 28))
+>f : Symbol(Y.f, Decl(generics3.ts, 2, 13))
+
+var a: C<X>;
+>a : Symbol(a, Decl(generics3.ts, 3, 3))
+>C : Symbol(C, Decl(generics3.ts, 0, 0))
+>X : Symbol(X, Decl(generics3.ts, 0, 28))
+
+var b: C<Y>;
+>b : Symbol(b, Decl(generics3.ts, 4, 3))
+>C : Symbol(C, Decl(generics3.ts, 0, 0))
+>Y : Symbol(Y, Decl(generics3.ts, 1, 28))
+
+a = b; // Ok - should be identical
+>a : Symbol(a, Decl(generics3.ts, 3, 3))
+>b : Symbol(b, Decl(generics3.ts, 4, 3))
+

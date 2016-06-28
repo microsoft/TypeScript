@@ -38,7 +38,7 @@ var C = (function () {
         return undefined;
     };
     return C;
-})();
+}());
 // this should not be an error
 function foo1() { return null; }
 function bar1() { return undefined; }

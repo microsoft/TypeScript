@@ -4,5 +4,6 @@ class Outer
 {
 static public = 1;
 >public : number
+>1 : number
 }
 

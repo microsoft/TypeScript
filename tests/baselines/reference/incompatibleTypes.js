@@ -83,7 +83,7 @@ var C1 = (function () {
         return "s";
     };
     return C1;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
@@ -91,17 +91,17 @@ var C2 = (function () {
         return 0;
     };
     return C2;
-})();
+}());
 var C3 = (function () {
     function C3() {
     }
     return C3;
-})();
+}());
 var C4 = (function () {
     function C4() {
     }
     return C4;
-})();
+}());
 function if1(a) { }
 var c1;
 var c2;

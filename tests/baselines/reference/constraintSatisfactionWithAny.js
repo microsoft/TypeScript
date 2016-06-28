@@ -76,7 +76,7 @@ var C = (function () {
         this.x = x;
     }
     return C;
-})();
+}());
 var c1 = new C(a);
 var c2 = new C(b);
 var C2 = (function () {
@@ -84,7 +84,7 @@ var C2 = (function () {
         this.x = x;
     }
     return C2;
-})();
+}());
 var c3 = new C2(a);
 var c4 = new C2(b);
 //class C3<T extends T[]> {
@@ -97,6 +97,6 @@ var C4 = (function () {
         this.x = x;
     }
     return C4;
-})();
+}());
 var c7 = new C4(a);
 var c8 = new C4(b);

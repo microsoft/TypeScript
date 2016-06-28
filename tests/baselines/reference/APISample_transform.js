@@ -22,7 +22,8 @@ console.log(JSON.stringify(result));
          at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-simple-transform-function
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
+"use strict";
 var ts = require("typescript");
 var source = "let x: string  = 'string'";
-var result = ts.transpile(source, { module: 1 /* CommonJS */ });
+var result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });
 console.log(JSON.stringify(result));

@@ -4,6 +4,7 @@ module A {
 
 export var x = 'hello world'
 >x : string
+>'hello world' : string
 
 export class Point {
 >Point : Point
@@ -13,7 +14,7 @@ export class Point {
 >y : number
     }
     export module B {
->B : unknown
+>B : any
 
         export interface Id {
 >Id : Id
@@ -49,6 +50,8 @@ var b: { x: number; y: number; } = new C.a.Point(0, 0);
 >C : typeof C
 >a : typeof A
 >Point : typeof A.Point
+>0 : number
+>0 : number
 
 var c: { name: string };
 >c : { name: string; }
@@ -56,8 +59,8 @@ var c: { name: string };
 
 var c: C.a.B.Id;
 >c : { name: string; }
->C : unknown
->a : unknown
->B : unknown
+>C : any
+>a : any
+>B : any
 >Id : A.B.Id
 

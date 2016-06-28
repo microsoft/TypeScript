@@ -14,5 +14,6 @@ class b extends a {
 >x : () => string
 
         return "20";
+>"20" : string
     }
 }

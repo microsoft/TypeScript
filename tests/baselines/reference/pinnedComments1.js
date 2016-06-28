@@ -1,14 +1,21 @@
 //// [pinnedComments1.ts]
+/*!=========
+    Keep this pinned comment
+   =========
+*/
 
 /* unpinned comment */
-/*! pinned comment */
+/*! pinned comment that need to be removed */
 class C {
 }
 
 //// [pinnedComments1.js]
-/*! pinned comment */
+/*!=========
+    Keep this pinned comment
+   =========
+*/
 var C = (function () {
     function C() {
     }
     return C;
-})();
+}());

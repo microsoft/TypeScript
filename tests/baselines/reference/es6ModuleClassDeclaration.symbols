@@ -1,0 +1,222 @@
+=== tests/cases/compiler/es6ModuleClassDeclaration.ts ===
+export class c {
+>c : Symbol(c, Decl(es6ModuleClassDeclaration.ts, 0, 0))
+
+    constructor() {
+    }
+    private x = 10;
+>x : Symbol(c.x, Decl(es6ModuleClassDeclaration.ts, 2, 5))
+
+    public y = 30;
+>y : Symbol(c.y, Decl(es6ModuleClassDeclaration.ts, 3, 19))
+
+    static k = 20;
+>k : Symbol(c.k, Decl(es6ModuleClassDeclaration.ts, 4, 18))
+
+    private static l = 30;
+>l : Symbol(c.l, Decl(es6ModuleClassDeclaration.ts, 5, 18))
+
+    private method1() {
+>method1 : Symbol(c.method1, Decl(es6ModuleClassDeclaration.ts, 6, 26))
+    }
+    public method2() {
+>method2 : Symbol(c.method2, Decl(es6ModuleClassDeclaration.ts, 8, 5))
+    }
+    static method3() {
+>method3 : Symbol(c.method3, Decl(es6ModuleClassDeclaration.ts, 10, 5))
+    }
+    private static method4() {
+>method4 : Symbol(c.method4, Decl(es6ModuleClassDeclaration.ts, 12, 5))
+    }
+}
+class c2 {
+>c2 : Symbol(c2, Decl(es6ModuleClassDeclaration.ts, 15, 1))
+
+    constructor() {
+    }
+    private x = 10;
+>x : Symbol(c2.x, Decl(es6ModuleClassDeclaration.ts, 18, 5))
+
+    public y = 30;
+>y : Symbol(c2.y, Decl(es6ModuleClassDeclaration.ts, 19, 19))
+
+    static k = 20;
+>k : Symbol(c2.k, Decl(es6ModuleClassDeclaration.ts, 20, 18))
+
+    private static l = 30;
+>l : Symbol(c2.l, Decl(es6ModuleClassDeclaration.ts, 21, 18))
+
+    private method1() {
+>method1 : Symbol(c2.method1, Decl(es6ModuleClassDeclaration.ts, 22, 26))
+    }
+    public method2() {
+>method2 : Symbol(c2.method2, Decl(es6ModuleClassDeclaration.ts, 24, 5))
+    }
+    static method3() {
+>method3 : Symbol(c2.method3, Decl(es6ModuleClassDeclaration.ts, 26, 5))
+    }
+    private static method4() {
+>method4 : Symbol(c2.method4, Decl(es6ModuleClassDeclaration.ts, 28, 5))
+    }
+}
+new c();
+>c : Symbol(c, Decl(es6ModuleClassDeclaration.ts, 0, 0))
+
+new c2();
+>c2 : Symbol(c2, Decl(es6ModuleClassDeclaration.ts, 15, 1))
+
+export module m1 {
+>m1 : Symbol(m1, Decl(es6ModuleClassDeclaration.ts, 33, 9))
+
+    export class c3 {
+>c3 : Symbol(c3, Decl(es6ModuleClassDeclaration.ts, 35, 18))
+
+        constructor() {
+        }
+        private x = 10;
+>x : Symbol(c3.x, Decl(es6ModuleClassDeclaration.ts, 38, 9))
+
+        public y = 30;
+>y : Symbol(c3.y, Decl(es6ModuleClassDeclaration.ts, 39, 23))
+
+        static k = 20;
+>k : Symbol(c3.k, Decl(es6ModuleClassDeclaration.ts, 40, 22))
+
+        private static l = 30;
+>l : Symbol(c3.l, Decl(es6ModuleClassDeclaration.ts, 41, 22))
+
+        private method1() {
+>method1 : Symbol(c3.method1, Decl(es6ModuleClassDeclaration.ts, 42, 30))
+        }
+        public method2() {
+>method2 : Symbol(c3.method2, Decl(es6ModuleClassDeclaration.ts, 44, 9))
+        }
+        static method3() {
+>method3 : Symbol(c3.method3, Decl(es6ModuleClassDeclaration.ts, 46, 9))
+        }
+        private static method4() {
+>method4 : Symbol(c3.method4, Decl(es6ModuleClassDeclaration.ts, 48, 9))
+        }
+    }
+    class c4 {
+>c4 : Symbol(c4, Decl(es6ModuleClassDeclaration.ts, 51, 5))
+
+        constructor() {
+        }
+        private x = 10;
+>x : Symbol(c4.x, Decl(es6ModuleClassDeclaration.ts, 54, 9))
+
+        public y = 30;
+>y : Symbol(c4.y, Decl(es6ModuleClassDeclaration.ts, 55, 23))
+
+        static k = 20;
+>k : Symbol(c4.k, Decl(es6ModuleClassDeclaration.ts, 56, 22))
+
+        private static l = 30;
+>l : Symbol(c4.l, Decl(es6ModuleClassDeclaration.ts, 57, 22))
+
+        private method1() {
+>method1 : Symbol(c4.method1, Decl(es6ModuleClassDeclaration.ts, 58, 30))
+        }
+        public method2() {
+>method2 : Symbol(c4.method2, Decl(es6ModuleClassDeclaration.ts, 60, 9))
+        }
+        static method3() {
+>method3 : Symbol(c4.method3, Decl(es6ModuleClassDeclaration.ts, 62, 9))
+        }
+        private static method4() {
+>method4 : Symbol(c4.method4, Decl(es6ModuleClassDeclaration.ts, 64, 9))
+        }
+    }
+    new c();
+>c : Symbol(c, Decl(es6ModuleClassDeclaration.ts, 0, 0))
+
+    new c2();
+>c2 : Symbol(c2, Decl(es6ModuleClassDeclaration.ts, 15, 1))
+
+    new c3();
+>c3 : Symbol(c3, Decl(es6ModuleClassDeclaration.ts, 35, 18))
+
+    new c4();
+>c4 : Symbol(c4, Decl(es6ModuleClassDeclaration.ts, 51, 5))
+}
+module m2 {
+>m2 : Symbol(m2, Decl(es6ModuleClassDeclaration.ts, 72, 1))
+
+    export class c3 {
+>c3 : Symbol(c3, Decl(es6ModuleClassDeclaration.ts, 73, 11))
+
+        constructor() {
+        }
+        private x = 10;
+>x : Symbol(c3.x, Decl(es6ModuleClassDeclaration.ts, 76, 9))
+
+        public y = 30;
+>y : Symbol(c3.y, Decl(es6ModuleClassDeclaration.ts, 77, 23))
+
+        static k = 20;
+>k : Symbol(c3.k, Decl(es6ModuleClassDeclaration.ts, 78, 22))
+
+        private static l = 30;
+>l : Symbol(c3.l, Decl(es6ModuleClassDeclaration.ts, 79, 22))
+
+        private method1() {
+>method1 : Symbol(c3.method1, Decl(es6ModuleClassDeclaration.ts, 80, 30))
+        }
+        public method2() {
+>method2 : Symbol(c3.method2, Decl(es6ModuleClassDeclaration.ts, 82, 9))
+        }
+        static method3() {
+>method3 : Symbol(c3.method3, Decl(es6ModuleClassDeclaration.ts, 84, 9))
+        }
+        private static method4() {
+>method4 : Symbol(c3.method4, Decl(es6ModuleClassDeclaration.ts, 86, 9))
+        }
+    }
+    class c4 {
+>c4 : Symbol(c4, Decl(es6ModuleClassDeclaration.ts, 89, 5))
+
+        constructor() {
+        }
+        private x = 10;
+>x : Symbol(c4.x, Decl(es6ModuleClassDeclaration.ts, 92, 9))
+
+        public y = 30;
+>y : Symbol(c4.y, Decl(es6ModuleClassDeclaration.ts, 93, 23))
+
+        static k = 20;
+>k : Symbol(c4.k, Decl(es6ModuleClassDeclaration.ts, 94, 22))
+
+        private static l = 30;
+>l : Symbol(c4.l, Decl(es6ModuleClassDeclaration.ts, 95, 22))
+
+        private method1() {
+>method1 : Symbol(c4.method1, Decl(es6ModuleClassDeclaration.ts, 96, 30))
+        }
+        public method2() {
+>method2 : Symbol(c4.method2, Decl(es6ModuleClassDeclaration.ts, 98, 9))
+        }
+        static method3() {
+>method3 : Symbol(c4.method3, Decl(es6ModuleClassDeclaration.ts, 100, 9))
+        }
+        private static method4() {
+>method4 : Symbol(c4.method4, Decl(es6ModuleClassDeclaration.ts, 102, 9))
+        }
+    }
+    new c();
+>c : Symbol(c, Decl(es6ModuleClassDeclaration.ts, 0, 0))
+
+    new c2();
+>c2 : Symbol(c2, Decl(es6ModuleClassDeclaration.ts, 15, 1))
+
+    new c3();
+>c3 : Symbol(c3, Decl(es6ModuleClassDeclaration.ts, 73, 11))
+
+    new c4();
+>c4 : Symbol(c4, Decl(es6ModuleClassDeclaration.ts, 89, 5))
+
+    new m1.c3();
+>m1.c3 : Symbol(m1.c3, Decl(es6ModuleClassDeclaration.ts, 35, 18))
+>m1 : Symbol(m1, Decl(es6ModuleClassDeclaration.ts, 33, 9))
+>c3 : Symbol(m1.c3, Decl(es6ModuleClassDeclaration.ts, 35, 18))
+}

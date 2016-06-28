@@ -1,0 +1,35 @@
+=== tests/cases/compiler/staticInheritance.ts ===
+function doThing(x: { n: string }) { }
+>doThing : Symbol(doThing, Decl(staticInheritance.ts, 0, 0))
+>x : Symbol(x, Decl(staticInheritance.ts, 0, 17))
+>n : Symbol(n, Decl(staticInheritance.ts, 0, 21))
+
+class A {
+>A : Symbol(A, Decl(staticInheritance.ts, 0, 38))
+
+    static n: string;
+>n : Symbol(A.n, Decl(staticInheritance.ts, 1, 9))
+
+    p = doThing(A); // OK
+>p : Symbol(A.p, Decl(staticInheritance.ts, 2, 21))
+>doThing : Symbol(doThing, Decl(staticInheritance.ts, 0, 0))
+>A : Symbol(A, Decl(staticInheritance.ts, 0, 38))
+}
+class B extends A {
+>B : Symbol(B, Decl(staticInheritance.ts, 4, 1))
+>A : Symbol(A, Decl(staticInheritance.ts, 0, 38))
+
+    p1 = doThing(A); // OK
+>p1 : Symbol(B.p1, Decl(staticInheritance.ts, 5, 19))
+>doThing : Symbol(doThing, Decl(staticInheritance.ts, 0, 0))
+>A : Symbol(A, Decl(staticInheritance.ts, 0, 38))
+
+    p2 = doThing(B); // OK
+>p2 : Symbol(B.p2, Decl(staticInheritance.ts, 6, 20))
+>doThing : Symbol(doThing, Decl(staticInheritance.ts, 0, 0))
+>B : Symbol(B, Decl(staticInheritance.ts, 4, 1))
+}
+doThing(B); //OK
+>doThing : Symbol(doThing, Decl(staticInheritance.ts, 0, 0))
+>B : Symbol(B, Decl(staticInheritance.ts, 4, 1))
+

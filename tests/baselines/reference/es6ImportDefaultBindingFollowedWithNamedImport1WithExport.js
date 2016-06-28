@@ -6,35 +6,38 @@ var a = 10;
 export default a;
 
 //// [client.ts]
-export import defaultBinding1, { } from "server";
+export import defaultBinding1, { } from "./server";
 export var x1: number = defaultBinding1;
-export import defaultBinding2, { a } from "server";
+export import defaultBinding2, { a } from "./server";
 export var x1: number = defaultBinding2;
-export import defaultBinding3, { a as b } from "server";
+export import defaultBinding3, { a as b } from "./server";
 export var x1: number = defaultBinding3;
-export import defaultBinding4, { x, a as y } from "server";
+export import defaultBinding4, { x, a as y } from "./server";
 export var x1: number = defaultBinding4;
-export import defaultBinding5, { x as z,  } from "server";
+export import defaultBinding5, { x as z,  } from "./server";
 export var x1: number = defaultBinding5;
-export import defaultBinding6, { m,  } from "server";
+export import defaultBinding6, { m,  } from "./server";
 export var x1: number = defaultBinding6;
 
 
 //// [server.js]
+"use strict";
 var a = 10;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = a;
 //// [client.js]
-var server_1 = require("server");
+"use strict";
+var server_1 = require("./server");
 exports.x1 = server_1.default;
-var server_2 = require("server");
+var server_2 = require("./server");
 exports.x1 = server_2.default;
-var server_3 = require("server");
+var server_3 = require("./server");
 exports.x1 = server_3.default;
-var server_4 = require("server");
+var server_4 = require("./server");
 exports.x1 = server_4.default;
-var server_5 = require("server");
+var server_5 = require("./server");
 exports.x1 = server_5.default;
-var server_6 = require("server");
+var server_6 = require("./server");
 exports.x1 = server_6.default;
 
 

@@ -28,9 +28,11 @@ var v1 = "sausages"; // Global scope
 var v2 = 42; // Global scope
 var v4 = function () { return 5; };
 //// [file3.js]
+"use strict";
 exports.v3 = true;
 var v2 = [1, 2, 3]; // Module scope. Should not appear in global scope
 //// [file4.js]
+"use strict";
 var file3 = require('./file3');
 var t1 = v1;
 var t2 = v2;

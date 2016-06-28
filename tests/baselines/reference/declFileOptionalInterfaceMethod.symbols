@@ -1,0 +1,9 @@
+=== tests/cases/compiler/declFileOptionalInterfaceMethod.ts ===
+interface X {
+>X : Symbol(X, Decl(declFileOptionalInterfaceMethod.ts, 0, 0))
+
+    f? <T>();
+>f : Symbol(X.f, Decl(declFileOptionalInterfaceMethod.ts, 0, 13))
+>T : Symbol(T, Decl(declFileOptionalInterfaceMethod.ts, 1, 8))
+}
+

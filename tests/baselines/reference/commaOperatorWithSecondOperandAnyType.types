@@ -83,6 +83,7 @@ var x: any;
 
 1, ANY;
 >1, ANY : any
+>1 : number
 >ANY : any
 
 ++NUMBER, ANY;
@@ -93,19 +94,28 @@ var x: any;
 
 "string", [null, 1];
 >"string", [null, 1] : number[]
+>"string" : string
 >[null, 1] : number[]
+>null : null
+>1 : number
 
 "string".charAt(0), [null, 1];
 >"string".charAt(0), [null, 1] : number[]
 >"string".charAt(0) : string
 >"string".charAt : (pos: number) => string
+>"string" : string
 >charAt : (pos: number) => string
+>0 : number
 >[null, 1] : number[]
+>null : null
+>1 : number
 
 true, x("any");
 >true, x("any") : any
+>true : boolean
 >x("any") : any
 >x : any
+>"any" : string
 
 !BOOLEAN, x.doSomeThing();
 >!BOOLEAN, x.doSomeThing() : any
@@ -120,6 +130,7 @@ var resultIsAny6 = (1, ANY);
 >resultIsAny6 : any
 >(1, ANY) : any
 >1, ANY : any
+>1 : number
 >ANY : any
 
 var resultIsAny7 = (++NUMBER, ANY);
@@ -134,6 +145,8 @@ var resultIsAny8 = ("string", null);
 >resultIsAny8 : any
 >("string", null) : null
 >"string", null : null
+>"string" : string
+>null : null
 
 var resultIsAny9 = ("string".charAt(0), undefined);
 >resultIsAny9 : any
@@ -141,15 +154,19 @@ var resultIsAny9 = ("string".charAt(0), undefined);
 >"string".charAt(0), undefined : undefined
 >"string".charAt(0) : string
 >"string".charAt : (pos: number) => string
+>"string" : string
 >charAt : (pos: number) => string
+>0 : number
 >undefined : undefined
 
 var resultIsAny10 = (true, x("any"));
 >resultIsAny10 : any
 >(true, x("any")) : any
 >true, x("any") : any
+>true : boolean
 >x("any") : any
 >x : any
+>"any" : string
 
 var resultIsAny11 = (!BOOLEAN, x.doSomeThing());
 >resultIsAny11 : any

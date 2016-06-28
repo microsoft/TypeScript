@@ -1,4 +1,5 @@
 //// [interfaceWithPrivateMember.ts]
+
 // interfaces do not permit private members, these are errors
 
 interface I {
@@ -16,4 +17,3 @@ var x: {
 //// [interfaceWithPrivateMember.js]
 // interfaces do not permit private members, these are errors
 var x;
-y: string;

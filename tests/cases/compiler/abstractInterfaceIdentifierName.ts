@@ -1,0 +1,4 @@
+
+interface abstract {
+    abstract(): void;
+}

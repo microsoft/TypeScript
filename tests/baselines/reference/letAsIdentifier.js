@@ -10,10 +10,10 @@ a;
 var let = 10;
 var a = 10;
 let = 30;
-let;
-a;
+var a;
 
 
 //// [letAsIdentifier.d.ts]
 declare var let: number;
 declare var a: number;
+declare let a: any;

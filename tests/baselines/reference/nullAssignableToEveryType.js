@@ -48,7 +48,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var ac;
 var ai;
 var E;

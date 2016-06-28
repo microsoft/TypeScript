@@ -13,4 +13,6 @@ f[0] = 4; // Shouldn't be allowed
 >f[0] = 4 : number
 >f[0] : any
 >f : foo
+>0 : number
+>4 : number
 

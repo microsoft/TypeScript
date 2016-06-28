@@ -1,7 +1,8 @@
-tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts(1,10): error TS2354: No best common type exists among return expressions.
+tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts(2,10): error TS2354: No best common type exists among return expressions.
 
 
 ==== tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts (1 errors) ====
+    
     function foo() {
              ~~~
 !!! error TS2354: No best common type exists among return expressions.

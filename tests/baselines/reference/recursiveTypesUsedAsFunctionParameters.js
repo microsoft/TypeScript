@@ -48,12 +48,12 @@ var List = (function () {
     function List() {
     }
     return List;
-})();
+}());
 var MyList = (function () {
     function MyList() {
     }
     return MyList;
-})();
+}());
 function foo(x) {
 }
 function foo2(x) {

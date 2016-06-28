@@ -13,5 +13,5 @@ var Foo = (function () {
     }
     Foo.bar = '';
     return Foo;
-})();
+}());
 Foo.prototype.bar = undefined; // Should be OK

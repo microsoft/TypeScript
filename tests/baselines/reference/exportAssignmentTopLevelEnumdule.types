@@ -35,6 +35,7 @@ module foo {
 
 	export var answer = 42;
 >answer : number
+>42 : number
 }
 export = foo;
 >foo : foo

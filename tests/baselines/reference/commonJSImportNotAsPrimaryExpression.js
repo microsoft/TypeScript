@@ -32,13 +32,14 @@ var z: foo.M1.I2;
 var e: number = <foo.E1>0;
 
 //// [foo_0.js]
+"use strict";
 var C1 = (function () {
     function C1() {
         this.m1 = 42;
     }
     C1.s1 = true;
     return C1;
-})();
+}());
 exports.C1 = C1;
 (function (E1) {
     E1[E1["A"] = 0] = "A";
@@ -47,6 +48,7 @@ exports.C1 = C1;
 })(exports.E1 || (exports.E1 = {}));
 var E1 = exports.E1;
 //// [foo_1.js]
+"use strict";
 var i;
 var x = {};
 var y = false;

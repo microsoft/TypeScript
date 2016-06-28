@@ -34,7 +34,7 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
@@ -45,7 +45,7 @@ var D = (function () {
         configurable: true
     });
     return D;
-})();
+}());
 var x = {
     get a() { return 1; }
 };

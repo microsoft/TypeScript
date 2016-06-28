@@ -7,6 +7,7 @@ var obj = {
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
+>0 : number
 
 };
 
@@ -23,4 +24,5 @@ module M {
 >obj : { [Symbol.iterator]: number; }
 >Symbol["iterator"] : any
 >Symbol : {}
+>"iterator" : string
 }

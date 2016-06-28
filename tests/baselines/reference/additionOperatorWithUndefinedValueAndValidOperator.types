@@ -44,6 +44,7 @@ var r4 = undefined + 1;
 >r4 : number
 >undefined + 1 : number
 >undefined : undefined
+>1 : number
 
 var r5 = undefined + c;
 >r5 : number
@@ -65,6 +66,7 @@ var r7 = undefined + E['a'];
 >undefined : undefined
 >E['a'] : E
 >E : typeof E
+>'a' : string
 
 var r8 = b + undefined;
 >r8 : number
@@ -75,6 +77,7 @@ var r8 = b + undefined;
 var r9 = 1 + undefined;
 >r9 : number
 >1 + undefined : number
+>1 : number
 >undefined : undefined
 
 var r10 = c + undefined
@@ -96,6 +99,7 @@ var r12 = E['a'] + undefined;
 >E['a'] + undefined : number
 >E['a'] : E
 >E : typeof E
+>'a' : string
 >undefined : undefined
 
 // undefined + string
@@ -109,6 +113,7 @@ var r14 = undefined + '';
 >r14 : string
 >undefined + '' : string
 >undefined : undefined
+>'' : string
 
 var r15 = d + undefined;
 >r15 : string
@@ -119,5 +124,6 @@ var r15 = d + undefined;
 var r16 = '' + undefined;
 >r16 : string
 >'' + undefined : string
+>'' : string
 >undefined : undefined
 

@@ -7,6 +7,7 @@ A.hasOwnProperty('foo');
 >A.hasOwnProperty : (v: string) => boolean
 >A : typeof A
 >hasOwnProperty : (v: string) => boolean
+>'foo' : string
 
 class B {
 >B : B
@@ -18,6 +19,7 @@ B.hasOwnProperty('foo');
 >B.hasOwnProperty : (v: string) => boolean
 >B : typeof B
 >hasOwnProperty : (v: string) => boolean
+>'foo' : string
 
 
 

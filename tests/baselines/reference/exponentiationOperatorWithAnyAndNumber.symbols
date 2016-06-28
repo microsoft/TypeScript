@@ -1,0 +1,42 @@
+=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithAnyAndNumber.ts ===
+var a: any;
+>a : Symbol(a, Decl(exponentiationOperatorWithAnyAndNumber.ts, 0, 3))
+
+var b: number;
+>b : Symbol(b, Decl(exponentiationOperatorWithAnyAndNumber.ts, 1, 3))
+
+// operator **
+var r1 = a ** a;
+>r1 : Symbol(r1, Decl(exponentiationOperatorWithAnyAndNumber.ts, 4, 3))
+>a : Symbol(a, Decl(exponentiationOperatorWithAnyAndNumber.ts, 0, 3))
+>a : Symbol(a, Decl(exponentiationOperatorWithAnyAndNumber.ts, 0, 3))
+
+var r2 = a ** b;
+>r2 : Symbol(r2, Decl(exponentiationOperatorWithAnyAndNumber.ts, 5, 3))
+>a : Symbol(a, Decl(exponentiationOperatorWithAnyAndNumber.ts, 0, 3))
+>b : Symbol(b, Decl(exponentiationOperatorWithAnyAndNumber.ts, 1, 3))
+
+var r3 = a ** 0;
+>r3 : Symbol(r3, Decl(exponentiationOperatorWithAnyAndNumber.ts, 6, 3))
+>a : Symbol(a, Decl(exponentiationOperatorWithAnyAndNumber.ts, 0, 3))
+
+var r4 = 0 ** a;
+>r4 : Symbol(r4, Decl(exponentiationOperatorWithAnyAndNumber.ts, 7, 3))
+>a : Symbol(a, Decl(exponentiationOperatorWithAnyAndNumber.ts, 0, 3))
+
+var r5 = 0 ** 0;
+>r5 : Symbol(r5, Decl(exponentiationOperatorWithAnyAndNumber.ts, 8, 3))
+
+var r6 = b ** 0;
+>r6 : Symbol(r6, Decl(exponentiationOperatorWithAnyAndNumber.ts, 9, 3))
+>b : Symbol(b, Decl(exponentiationOperatorWithAnyAndNumber.ts, 1, 3))
+
+var r7 = 0 ** b;
+>r7 : Symbol(r7, Decl(exponentiationOperatorWithAnyAndNumber.ts, 10, 3))
+>b : Symbol(b, Decl(exponentiationOperatorWithAnyAndNumber.ts, 1, 3))
+
+var r8 = b ** b;
+>r8 : Symbol(r8, Decl(exponentiationOperatorWithAnyAndNumber.ts, 11, 3))
+>b : Symbol(b, Decl(exponentiationOperatorWithAnyAndNumber.ts, 1, 3))
+>b : Symbol(b, Decl(exponentiationOperatorWithAnyAndNumber.ts, 1, 3))
+

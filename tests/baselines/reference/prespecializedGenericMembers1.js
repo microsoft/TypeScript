@@ -21,17 +21,18 @@ var catThing = {
 var catBag = new CatBag(catThing);
 
 //// [prespecializedGenericMembers1.js]
+"use strict";
 var Cat = (function () {
     function Cat() {
     }
     return Cat;
-})();
+}());
 exports.Cat = Cat;
 var CatBag = (function () {
     function CatBag(cats) {
     }
     return CatBag;
-})();
+}());
 exports.CatBag = CatBag;
 var cat = new Cat();
 var catThing = {

@@ -36,8 +36,8 @@ sourceFile:sourceMapValidationFunctionPropertyAssignment.ts
 4 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
 5 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
 6 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
-7 >Emitted(1, 28) Source(1, 17) + SourceIndex(0) name (n)
-8 >Emitted(1, 29) Source(1, 18) + SourceIndex(0) name (n)
+7 >Emitted(1, 28) Source(1, 17) + SourceIndex(0)
+8 >Emitted(1, 29) Source(1, 18) + SourceIndex(0)
 9 >Emitted(1, 31) Source(1, 20) + SourceIndex(0)
 10>Emitted(1, 32) Source(1, 21) + SourceIndex(0)
 ---

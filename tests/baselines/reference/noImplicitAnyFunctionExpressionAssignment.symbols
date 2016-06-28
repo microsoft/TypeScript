@@ -1,0 +1,22 @@
+=== tests/cases/compiler/noImplicitAnyFunctionExpressionAssignment.ts ===
+
+var x: (a: any) => void = function <T>(x: T) {
+>x : Symbol(x, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 1, 3))
+>a : Symbol(a, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 1, 8))
+>T : Symbol(T, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 1, 36))
+>x : Symbol(x, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 1, 39))
+>T : Symbol(T, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 1, 36))
+
+    return null;
+};
+
+var x2: (a: any) => void = function f<T>(x: T) {
+>x2 : Symbol(x2, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 5, 3))
+>a : Symbol(a, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 5, 9))
+>f : Symbol(f, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 5, 26))
+>T : Symbol(T, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 5, 38))
+>x : Symbol(x, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 5, 41))
+>T : Symbol(T, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 5, 38))
+
+    return null;
+};

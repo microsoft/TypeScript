@@ -1,0 +1,48 @@
+=== tests/cases/conformance/internalModules/exportDeclarations/ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts ===
+module A {
+>A : Symbol(A, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 0, 0))
+
+    export class Point {
+>Point : Symbol(Point, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 0, 10))
+
+        x: number;
+>x : Symbol(Point.x, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 2, 24))
+
+        y: number;
+>y : Symbol(Point.y, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 3, 18))
+    }
+
+    export var Origin: Point = { x: 0, y: 0 };
+>Origin : Symbol(Origin, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 7, 14))
+>Point : Symbol(Point, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 0, 10))
+>x : Symbol(x, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 7, 32))
+>y : Symbol(y, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 7, 38))
+
+    export class Point3d extends Point {
+>Point3d : Symbol(Point3d, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 7, 46))
+>Point : Symbol(Point, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 0, 10))
+
+        z: number;
+>z : Symbol(Point3d.z, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 9, 40))
+    }
+
+    export var Origin3d: Point3d = { x: 0, y: 0, z: 0 };
+>Origin3d : Symbol(Origin3d, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 13, 14))
+>Point3d : Symbol(Point3d, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 7, 46))
+>x : Symbol(x, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 13, 36))
+>y : Symbol(y, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 13, 42))
+>z : Symbol(z, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 13, 48))
+
+    export class Line<TPoint extends Point>{
+>Line : Symbol(Line, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 13, 56))
+>TPoint : Symbol(TPoint, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 15, 22))
+>Point : Symbol(Point, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 0, 10))
+
+        constructor(public start: TPoint, public end: TPoint) { }
+>start : Symbol(Line.start, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 16, 20))
+>TPoint : Symbol(TPoint, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 15, 22))
+>end : Symbol(Line.end, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 16, 41))
+>TPoint : Symbol(TPoint, Decl(ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts, 15, 22))
+    }
+}
+

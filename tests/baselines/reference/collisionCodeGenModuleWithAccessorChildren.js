@@ -60,7 +60,7 @@ var M;
             configurable: true
         });
         return c;
-    })();
+    }());
 })(M || (M = {}));
 var M;
 (function (M_2) {
@@ -76,7 +76,7 @@ var M;
             configurable: true
         });
         return d;
-    })();
+    }());
 })(M || (M = {}));
 var M;
 (function (M) {
@@ -91,7 +91,7 @@ var M;
             configurable: true
         });
         return e;
-    })();
+    }());
 })(M || (M = {}));
 var M;
 (function (M_3) {
@@ -107,7 +107,7 @@ var M;
             configurable: true
         });
         return f;
-    })();
+    }());
 })(M || (M = {}));
 var M;
 (function (M) {
@@ -122,5 +122,5 @@ var M;
             configurable: true
         });
         return e;
-    })();
+    }());
 })(M || (M = {}));

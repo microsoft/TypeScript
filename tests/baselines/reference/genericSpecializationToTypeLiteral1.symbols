@@ -1,0 +1,178 @@
+=== tests/cases/compiler/genericSpecializationToTypeLiteral1.ts ===
+interface IEnumerable<T> {
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+
+    zip<TResult>(second: IEnumerable<T>, resultSelector: (first: T, second: T, index: number) => TResult): IEnumerable<TResult>;
+>zip : Symbol(IEnumerable.zip, Decl(genericSpecializationToTypeLiteral1.ts, 0, 26), Decl(genericSpecializationToTypeLiteral1.ts, 2, 128), Decl(genericSpecializationToTypeLiteral1.ts, 3, 117))
+>TResult : Symbol(TResult, Decl(genericSpecializationToTypeLiteral1.ts, 2, 8))
+>second : Symbol(second, Decl(genericSpecializationToTypeLiteral1.ts, 2, 17))
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>resultSelector : Symbol(resultSelector, Decl(genericSpecializationToTypeLiteral1.ts, 2, 40))
+>first : Symbol(first, Decl(genericSpecializationToTypeLiteral1.ts, 2, 58))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>second : Symbol(second, Decl(genericSpecializationToTypeLiteral1.ts, 2, 67))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>index : Symbol(index, Decl(genericSpecializationToTypeLiteral1.ts, 2, 78))
+>TResult : Symbol(TResult, Decl(genericSpecializationToTypeLiteral1.ts, 2, 8))
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>TResult : Symbol(TResult, Decl(genericSpecializationToTypeLiteral1.ts, 2, 8))
+
+    zip<TResult>(second: T[], resultSelector: (first: T, second: T, index: number) => TResult): IEnumerable<TResult>;
+>zip : Symbol(IEnumerable.zip, Decl(genericSpecializationToTypeLiteral1.ts, 0, 26), Decl(genericSpecializationToTypeLiteral1.ts, 2, 128), Decl(genericSpecializationToTypeLiteral1.ts, 3, 117))
+>TResult : Symbol(TResult, Decl(genericSpecializationToTypeLiteral1.ts, 3, 8))
+>second : Symbol(second, Decl(genericSpecializationToTypeLiteral1.ts, 3, 17))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>resultSelector : Symbol(resultSelector, Decl(genericSpecializationToTypeLiteral1.ts, 3, 29))
+>first : Symbol(first, Decl(genericSpecializationToTypeLiteral1.ts, 3, 47))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>second : Symbol(second, Decl(genericSpecializationToTypeLiteral1.ts, 3, 56))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>index : Symbol(index, Decl(genericSpecializationToTypeLiteral1.ts, 3, 67))
+>TResult : Symbol(TResult, Decl(genericSpecializationToTypeLiteral1.ts, 3, 8))
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>TResult : Symbol(TResult, Decl(genericSpecializationToTypeLiteral1.ts, 3, 8))
+
+    zip<TResult>(...params: any[]): IEnumerable<TResult>; // last one is selector
+>zip : Symbol(IEnumerable.zip, Decl(genericSpecializationToTypeLiteral1.ts, 0, 26), Decl(genericSpecializationToTypeLiteral1.ts, 2, 128), Decl(genericSpecializationToTypeLiteral1.ts, 3, 117))
+>TResult : Symbol(TResult, Decl(genericSpecializationToTypeLiteral1.ts, 4, 8))
+>params : Symbol(params, Decl(genericSpecializationToTypeLiteral1.ts, 4, 17))
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>TResult : Symbol(TResult, Decl(genericSpecializationToTypeLiteral1.ts, 4, 8))
+
+    merge<TResult>(...params: IEnumerable<T>[]): IEnumerable<T>;
+>merge : Symbol(IEnumerable.merge, Decl(genericSpecializationToTypeLiteral1.ts, 4, 57), Decl(genericSpecializationToTypeLiteral1.ts, 6, 64))
+>TResult : Symbol(TResult, Decl(genericSpecializationToTypeLiteral1.ts, 6, 10))
+>params : Symbol(params, Decl(genericSpecializationToTypeLiteral1.ts, 6, 19))
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+
+    merge<TResult>(...params: T[][]): IEnumerable<T>;
+>merge : Symbol(IEnumerable.merge, Decl(genericSpecializationToTypeLiteral1.ts, 4, 57), Decl(genericSpecializationToTypeLiteral1.ts, 6, 64))
+>TResult : Symbol(TResult, Decl(genericSpecializationToTypeLiteral1.ts, 7, 10))
+>params : Symbol(params, Decl(genericSpecializationToTypeLiteral1.ts, 7, 19))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+
+
+    concat(...sequences: IEnumerable<T>[]): IEnumerable<T>;
+>concat : Symbol(IEnumerable.concat, Decl(genericSpecializationToTypeLiteral1.ts, 7, 53), Decl(genericSpecializationToTypeLiteral1.ts, 10, 59))
+>sequences : Symbol(sequences, Decl(genericSpecializationToTypeLiteral1.ts, 10, 11))
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+
+    concat(...sequences: T[]): IEnumerable<T>;
+>concat : Symbol(IEnumerable.concat, Decl(genericSpecializationToTypeLiteral1.ts, 7, 53), Decl(genericSpecializationToTypeLiteral1.ts, 10, 59))
+>sequences : Symbol(sequences, Decl(genericSpecializationToTypeLiteral1.ts, 11, 11))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+
+    insert(index: number, second: IEnumerable<T>): IEnumerable<T>;
+>insert : Symbol(IEnumerable.insert, Decl(genericSpecializationToTypeLiteral1.ts, 11, 46))
+>index : Symbol(index, Decl(genericSpecializationToTypeLiteral1.ts, 13, 11))
+>second : Symbol(second, Decl(genericSpecializationToTypeLiteral1.ts, 13, 25))
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+
+    sequenceEqual(second: IEnumerable<T>): boolean;
+>sequenceEqual : Symbol(IEnumerable.sequenceEqual, Decl(genericSpecializationToTypeLiteral1.ts, 13, 66), Decl(genericSpecializationToTypeLiteral1.ts, 15, 51), Decl(genericSpecializationToTypeLiteral1.ts, 16, 104), Decl(genericSpecializationToTypeLiteral1.ts, 17, 40))
+>second : Symbol(second, Decl(genericSpecializationToTypeLiteral1.ts, 15, 18))
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+
+    sequenceEqual<TCompare>(second: IEnumerable<T>, compareSelector: (element: T) => TCompare): boolean;
+>sequenceEqual : Symbol(IEnumerable.sequenceEqual, Decl(genericSpecializationToTypeLiteral1.ts, 13, 66), Decl(genericSpecializationToTypeLiteral1.ts, 15, 51), Decl(genericSpecializationToTypeLiteral1.ts, 16, 104), Decl(genericSpecializationToTypeLiteral1.ts, 17, 40))
+>TCompare : Symbol(TCompare, Decl(genericSpecializationToTypeLiteral1.ts, 16, 18))
+>second : Symbol(second, Decl(genericSpecializationToTypeLiteral1.ts, 16, 28))
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>compareSelector : Symbol(compareSelector, Decl(genericSpecializationToTypeLiteral1.ts, 16, 51))
+>element : Symbol(element, Decl(genericSpecializationToTypeLiteral1.ts, 16, 70))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>TCompare : Symbol(TCompare, Decl(genericSpecializationToTypeLiteral1.ts, 16, 18))
+
+    sequenceEqual(second: T[]): boolean;
+>sequenceEqual : Symbol(IEnumerable.sequenceEqual, Decl(genericSpecializationToTypeLiteral1.ts, 13, 66), Decl(genericSpecializationToTypeLiteral1.ts, 15, 51), Decl(genericSpecializationToTypeLiteral1.ts, 16, 104), Decl(genericSpecializationToTypeLiteral1.ts, 17, 40))
+>second : Symbol(second, Decl(genericSpecializationToTypeLiteral1.ts, 17, 18))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+
+    sequenceEqual<TCompare>(second: T[], compareSelector: (element: T) => TCompare): boolean;   
+>sequenceEqual : Symbol(IEnumerable.sequenceEqual, Decl(genericSpecializationToTypeLiteral1.ts, 13, 66), Decl(genericSpecializationToTypeLiteral1.ts, 15, 51), Decl(genericSpecializationToTypeLiteral1.ts, 16, 104), Decl(genericSpecializationToTypeLiteral1.ts, 17, 40))
+>TCompare : Symbol(TCompare, Decl(genericSpecializationToTypeLiteral1.ts, 18, 18))
+>second : Symbol(second, Decl(genericSpecializationToTypeLiteral1.ts, 18, 28))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>compareSelector : Symbol(compareSelector, Decl(genericSpecializationToTypeLiteral1.ts, 18, 40))
+>element : Symbol(element, Decl(genericSpecializationToTypeLiteral1.ts, 18, 59))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>TCompare : Symbol(TCompare, Decl(genericSpecializationToTypeLiteral1.ts, 18, 18))
+    
+    toDictionary<TKey>(keySelector: (element: T) => TKey): IDictionary<TKey, any>;
+>toDictionary : Symbol(IEnumerable.toDictionary, Decl(genericSpecializationToTypeLiteral1.ts, 18, 93), Decl(genericSpecializationToTypeLiteral1.ts, 20, 82), Decl(genericSpecializationToTypeLiteral1.ts, 21, 134))
+>TKey : Symbol(TKey, Decl(genericSpecializationToTypeLiteral1.ts, 20, 17))
+>keySelector : Symbol(keySelector, Decl(genericSpecializationToTypeLiteral1.ts, 20, 23))
+>element : Symbol(element, Decl(genericSpecializationToTypeLiteral1.ts, 20, 37))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>TKey : Symbol(TKey, Decl(genericSpecializationToTypeLiteral1.ts, 20, 17))
+>IDictionary : Symbol(IDictionary, Decl(genericSpecializationToTypeLiteral1.ts, 23, 1))
+>TKey : Symbol(TKey, Decl(genericSpecializationToTypeLiteral1.ts, 20, 17))
+
+    toDictionary<TKey, TValue>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TValue): IDictionary<TKey, TValue>;
+>toDictionary : Symbol(IEnumerable.toDictionary, Decl(genericSpecializationToTypeLiteral1.ts, 18, 93), Decl(genericSpecializationToTypeLiteral1.ts, 20, 82), Decl(genericSpecializationToTypeLiteral1.ts, 21, 134))
+>TKey : Symbol(TKey, Decl(genericSpecializationToTypeLiteral1.ts, 21, 17))
+>TValue : Symbol(TValue, Decl(genericSpecializationToTypeLiteral1.ts, 21, 22))
+>keySelector : Symbol(keySelector, Decl(genericSpecializationToTypeLiteral1.ts, 21, 31))
+>element : Symbol(element, Decl(genericSpecializationToTypeLiteral1.ts, 21, 45))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>TKey : Symbol(TKey, Decl(genericSpecializationToTypeLiteral1.ts, 21, 17))
+>elementSelector : Symbol(elementSelector, Decl(genericSpecializationToTypeLiteral1.ts, 21, 65))
+>element : Symbol(element, Decl(genericSpecializationToTypeLiteral1.ts, 21, 84))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>TValue : Symbol(TValue, Decl(genericSpecializationToTypeLiteral1.ts, 21, 22))
+>IDictionary : Symbol(IDictionary, Decl(genericSpecializationToTypeLiteral1.ts, 23, 1))
+>TKey : Symbol(TKey, Decl(genericSpecializationToTypeLiteral1.ts, 21, 17))
+>TValue : Symbol(TValue, Decl(genericSpecializationToTypeLiteral1.ts, 21, 22))
+
+    toDictionary<TKey, TValue, TCompare>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TValue, compareSelector: (key: TKey) => TCompare): IDictionary<TKey, TValue>;
+>toDictionary : Symbol(IEnumerable.toDictionary, Decl(genericSpecializationToTypeLiteral1.ts, 18, 93), Decl(genericSpecializationToTypeLiteral1.ts, 20, 82), Decl(genericSpecializationToTypeLiteral1.ts, 21, 134))
+>TKey : Symbol(TKey, Decl(genericSpecializationToTypeLiteral1.ts, 22, 17))
+>TValue : Symbol(TValue, Decl(genericSpecializationToTypeLiteral1.ts, 22, 22))
+>TCompare : Symbol(TCompare, Decl(genericSpecializationToTypeLiteral1.ts, 22, 30))
+>keySelector : Symbol(keySelector, Decl(genericSpecializationToTypeLiteral1.ts, 22, 41))
+>element : Symbol(element, Decl(genericSpecializationToTypeLiteral1.ts, 22, 55))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>TKey : Symbol(TKey, Decl(genericSpecializationToTypeLiteral1.ts, 22, 17))
+>elementSelector : Symbol(elementSelector, Decl(genericSpecializationToTypeLiteral1.ts, 22, 75))
+>element : Symbol(element, Decl(genericSpecializationToTypeLiteral1.ts, 22, 94))
+>T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))
+>TValue : Symbol(TValue, Decl(genericSpecializationToTypeLiteral1.ts, 22, 22))
+>compareSelector : Symbol(compareSelector, Decl(genericSpecializationToTypeLiteral1.ts, 22, 116))
+>key : Symbol(key, Decl(genericSpecializationToTypeLiteral1.ts, 22, 135))
+>TKey : Symbol(TKey, Decl(genericSpecializationToTypeLiteral1.ts, 22, 17))
+>TCompare : Symbol(TCompare, Decl(genericSpecializationToTypeLiteral1.ts, 22, 30))
+>IDictionary : Symbol(IDictionary, Decl(genericSpecializationToTypeLiteral1.ts, 23, 1))
+>TKey : Symbol(TKey, Decl(genericSpecializationToTypeLiteral1.ts, 22, 17))
+>TValue : Symbol(TValue, Decl(genericSpecializationToTypeLiteral1.ts, 22, 22))
+}
+
+interface IDictionary<TKey, TValue> {
+>IDictionary : Symbol(IDictionary, Decl(genericSpecializationToTypeLiteral1.ts, 23, 1))
+>TKey : Symbol(TKey, Decl(genericSpecializationToTypeLiteral1.ts, 25, 22))
+>TValue : Symbol(TValue, Decl(genericSpecializationToTypeLiteral1.ts, 25, 27))
+
+    toEnumerable(): IEnumerable<{ key: TKey; value: TValue }>;
+>toEnumerable : Symbol(IDictionary.toEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 25, 37))
+>IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
+>key : Symbol(key, Decl(genericSpecializationToTypeLiteral1.ts, 26, 33))
+>TKey : Symbol(TKey, Decl(genericSpecializationToTypeLiteral1.ts, 25, 22))
+>value : Symbol(value, Decl(genericSpecializationToTypeLiteral1.ts, 26, 44))
+>TValue : Symbol(TValue, Decl(genericSpecializationToTypeLiteral1.ts, 25, 27))
+}

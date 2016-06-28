@@ -23,9 +23,9 @@ export = M;
 
 //// [exportAssignmentWithImportStatementPrivacyError.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var M;
     (function (M) {
-        M.server;
     })(M || (M = {}));
     return M;
 });

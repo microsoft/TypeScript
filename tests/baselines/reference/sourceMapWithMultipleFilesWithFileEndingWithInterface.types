@@ -4,6 +4,7 @@ module M {
 
     export var X = 1;
 >X : number
+>1 : number
 }
 interface Navigator {
 >Navigator : Navigator

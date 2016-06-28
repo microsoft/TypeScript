@@ -6,14 +6,17 @@ var x: typeof undefined;
 x = 1;
 >x = 1 : number
 >x : any
+>1 : number
 
 x = '';
 >x = '' : string
 >x : any
+>'' : string
 
 x = true;
 >x = true : boolean
 >x : any
+>true : boolean
 
 var a: void;
 >a : void
@@ -26,6 +29,7 @@ x = a;
 x = null;
 >x = null : null
 >x : any
+>null : null
 
 class C { foo: string }
 >C : C
@@ -61,6 +65,7 @@ x = c;
 module M { export var x = 1; }
 >M : typeof M
 >x : number
+>1 : number
 
 x = M;
 >x = M : typeof M

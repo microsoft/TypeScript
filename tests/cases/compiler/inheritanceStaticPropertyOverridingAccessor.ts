@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 class a {
     static get x(): () => string {
         return null;;

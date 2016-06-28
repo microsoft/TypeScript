@@ -1,0 +1,828 @@
+=== tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNamesOfReservedWords.ts ===
+class C {
+>C : Symbol(C, Decl(propertyNamesOfReservedWords.ts, 0, 0))
+
+    abstract;
+>abstract : Symbol(C.abstract, Decl(propertyNamesOfReservedWords.ts, 0, 9))
+
+    as;
+>as : Symbol(C.as, Decl(propertyNamesOfReservedWords.ts, 1, 13))
+
+    boolean;
+>boolean : Symbol(C.boolean, Decl(propertyNamesOfReservedWords.ts, 2, 7))
+
+    break;
+>break : Symbol(C.break, Decl(propertyNamesOfReservedWords.ts, 3, 12))
+
+    byte;
+>byte : Symbol(C.byte, Decl(propertyNamesOfReservedWords.ts, 4, 10))
+
+    case;
+>case : Symbol(C.case, Decl(propertyNamesOfReservedWords.ts, 5, 9))
+
+    catch;
+>catch : Symbol(C.catch, Decl(propertyNamesOfReservedWords.ts, 6, 9))
+
+    char;
+>char : Symbol(C.char, Decl(propertyNamesOfReservedWords.ts, 7, 10))
+
+    class;
+>class : Symbol(C.class, Decl(propertyNamesOfReservedWords.ts, 8, 9))
+
+    continue;
+>continue : Symbol(C.continue, Decl(propertyNamesOfReservedWords.ts, 9, 10))
+
+    const;
+>const : Symbol(C.const, Decl(propertyNamesOfReservedWords.ts, 10, 13))
+
+    debugger;
+>debugger : Symbol(C.debugger, Decl(propertyNamesOfReservedWords.ts, 11, 10))
+
+    default;
+>default : Symbol(C.default, Decl(propertyNamesOfReservedWords.ts, 12, 13))
+
+    delete;
+>delete : Symbol(C.delete, Decl(propertyNamesOfReservedWords.ts, 13, 12))
+
+    do;
+>do : Symbol(C.do, Decl(propertyNamesOfReservedWords.ts, 14, 11))
+
+    double;
+>double : Symbol(C.double, Decl(propertyNamesOfReservedWords.ts, 15, 7))
+
+    else;
+>else : Symbol(C.else, Decl(propertyNamesOfReservedWords.ts, 16, 11))
+
+    enum;
+>enum : Symbol(C.enum, Decl(propertyNamesOfReservedWords.ts, 17, 9))
+
+    export;
+>export : Symbol(C.export, Decl(propertyNamesOfReservedWords.ts, 18, 9))
+
+    extends;
+>extends : Symbol(C.extends, Decl(propertyNamesOfReservedWords.ts, 19, 11))
+
+    false;
+>false : Symbol(C.false, Decl(propertyNamesOfReservedWords.ts, 20, 12))
+
+    final;
+>final : Symbol(C.final, Decl(propertyNamesOfReservedWords.ts, 21, 10))
+
+    finally;
+>finally : Symbol(C.finally, Decl(propertyNamesOfReservedWords.ts, 22, 10))
+
+    float;
+>float : Symbol(C.float, Decl(propertyNamesOfReservedWords.ts, 23, 12))
+
+    for;
+>for : Symbol(C.for, Decl(propertyNamesOfReservedWords.ts, 24, 10))
+
+    function;
+>function : Symbol(C.function, Decl(propertyNamesOfReservedWords.ts, 25, 8))
+
+    goto;
+>goto : Symbol(C.goto, Decl(propertyNamesOfReservedWords.ts, 26, 13))
+
+    if;
+>if : Symbol(C.if, Decl(propertyNamesOfReservedWords.ts, 27, 9))
+
+    implements;
+>implements : Symbol(C.implements, Decl(propertyNamesOfReservedWords.ts, 28, 7))
+
+    import;
+>import : Symbol(C.import, Decl(propertyNamesOfReservedWords.ts, 29, 15))
+
+    in;
+>in : Symbol(C.in, Decl(propertyNamesOfReservedWords.ts, 30, 11))
+
+    instanceof;
+>instanceof : Symbol(C.instanceof, Decl(propertyNamesOfReservedWords.ts, 31, 7))
+
+    int;
+>int : Symbol(C.int, Decl(propertyNamesOfReservedWords.ts, 32, 15))
+
+    interface;
+>interface : Symbol(C.interface, Decl(propertyNamesOfReservedWords.ts, 33, 8))
+
+    is;
+>is : Symbol(C.is, Decl(propertyNamesOfReservedWords.ts, 34, 14))
+
+    long;
+>long : Symbol(C.long, Decl(propertyNamesOfReservedWords.ts, 35, 7))
+
+    namespace;
+>namespace : Symbol(C.namespace, Decl(propertyNamesOfReservedWords.ts, 36, 9))
+
+    native;
+>native : Symbol(C.native, Decl(propertyNamesOfReservedWords.ts, 37, 14))
+
+    new;
+>new : Symbol(C.new, Decl(propertyNamesOfReservedWords.ts, 38, 11))
+
+    null;
+>null : Symbol(C.null, Decl(propertyNamesOfReservedWords.ts, 39, 8))
+
+    package;
+>package : Symbol(C.package, Decl(propertyNamesOfReservedWords.ts, 40, 9))
+
+    private;
+>private : Symbol(C.private, Decl(propertyNamesOfReservedWords.ts, 41, 12))
+
+    protected;
+>protected : Symbol(C.protected, Decl(propertyNamesOfReservedWords.ts, 42, 12))
+
+    public;
+>public : Symbol(C.public, Decl(propertyNamesOfReservedWords.ts, 43, 14))
+
+    return;
+>return : Symbol(C.return, Decl(propertyNamesOfReservedWords.ts, 44, 11))
+
+    short;
+>short : Symbol(C.short, Decl(propertyNamesOfReservedWords.ts, 45, 11))
+
+    static;
+>static : Symbol(C.static, Decl(propertyNamesOfReservedWords.ts, 46, 10))
+
+    super;
+>super : Symbol(C.super, Decl(propertyNamesOfReservedWords.ts, 47, 11))
+
+    switch;
+>switch : Symbol(C.switch, Decl(propertyNamesOfReservedWords.ts, 48, 10))
+
+    synchronized;
+>synchronized : Symbol(C.synchronized, Decl(propertyNamesOfReservedWords.ts, 49, 11))
+
+    this;
+>this : Symbol(C.this, Decl(propertyNamesOfReservedWords.ts, 50, 17))
+
+    throw;
+>throw : Symbol(C.throw, Decl(propertyNamesOfReservedWords.ts, 51, 9))
+
+    throws;
+>throws : Symbol(C.throws, Decl(propertyNamesOfReservedWords.ts, 52, 10))
+
+    transient;
+>transient : Symbol(C.transient, Decl(propertyNamesOfReservedWords.ts, 53, 11))
+
+    true;
+>true : Symbol(C.true, Decl(propertyNamesOfReservedWords.ts, 54, 14))
+
+    try;
+>try : Symbol(C.try, Decl(propertyNamesOfReservedWords.ts, 55, 9))
+
+    typeof;
+>typeof : Symbol(C.typeof, Decl(propertyNamesOfReservedWords.ts, 56, 8))
+
+    use;
+>use : Symbol(C.use, Decl(propertyNamesOfReservedWords.ts, 57, 11))
+
+    var;
+>var : Symbol(C.var, Decl(propertyNamesOfReservedWords.ts, 58, 8))
+
+    void;
+>void : Symbol(C.void, Decl(propertyNamesOfReservedWords.ts, 59, 8))
+
+    volatile;
+>volatile : Symbol(C.volatile, Decl(propertyNamesOfReservedWords.ts, 60, 9))
+
+    while;
+>while : Symbol(C.while, Decl(propertyNamesOfReservedWords.ts, 61, 13))
+
+    with;
+>with : Symbol(C.with, Decl(propertyNamesOfReservedWords.ts, 62, 10))
+}
+var c: C;
+>c : Symbol(c, Decl(propertyNamesOfReservedWords.ts, 65, 3))
+>C : Symbol(C, Decl(propertyNamesOfReservedWords.ts, 0, 0))
+
+var r1 = c.abstract;
+>r1 : Symbol(r1, Decl(propertyNamesOfReservedWords.ts, 66, 3))
+>c.abstract : Symbol(C.abstract, Decl(propertyNamesOfReservedWords.ts, 0, 9))
+>c : Symbol(c, Decl(propertyNamesOfReservedWords.ts, 65, 3))
+>abstract : Symbol(C.abstract, Decl(propertyNamesOfReservedWords.ts, 0, 9))
+
+var r2 = c.as;
+>r2 : Symbol(r2, Decl(propertyNamesOfReservedWords.ts, 67, 3))
+>c.as : Symbol(C.as, Decl(propertyNamesOfReservedWords.ts, 1, 13))
+>c : Symbol(c, Decl(propertyNamesOfReservedWords.ts, 65, 3))
+>as : Symbol(C.as, Decl(propertyNamesOfReservedWords.ts, 1, 13))
+
+interface I {
+>I : Symbol(I, Decl(propertyNamesOfReservedWords.ts, 67, 14))
+
+    abstract;
+>abstract : Symbol(I.abstract, Decl(propertyNamesOfReservedWords.ts, 69, 13))
+
+    as;
+>as : Symbol(I.as, Decl(propertyNamesOfReservedWords.ts, 70, 13))
+
+    boolean;
+>boolean : Symbol(I.boolean, Decl(propertyNamesOfReservedWords.ts, 71, 7))
+
+    break;
+>break : Symbol(I.break, Decl(propertyNamesOfReservedWords.ts, 72, 12))
+
+    byte;
+>byte : Symbol(I.byte, Decl(propertyNamesOfReservedWords.ts, 73, 10))
+
+    case;
+>case : Symbol(I.case, Decl(propertyNamesOfReservedWords.ts, 74, 9))
+
+    catch;
+>catch : Symbol(I.catch, Decl(propertyNamesOfReservedWords.ts, 75, 9))
+
+    char;
+>char : Symbol(I.char, Decl(propertyNamesOfReservedWords.ts, 76, 10))
+
+    class;
+>class : Symbol(I.class, Decl(propertyNamesOfReservedWords.ts, 77, 9))
+
+    continue;
+>continue : Symbol(I.continue, Decl(propertyNamesOfReservedWords.ts, 78, 10))
+
+    const;
+>const : Symbol(I.const, Decl(propertyNamesOfReservedWords.ts, 79, 13))
+
+    debugger;
+>debugger : Symbol(I.debugger, Decl(propertyNamesOfReservedWords.ts, 80, 10))
+
+    default;
+>default : Symbol(I.default, Decl(propertyNamesOfReservedWords.ts, 81, 13))
+
+    delete;
+>delete : Symbol(I.delete, Decl(propertyNamesOfReservedWords.ts, 82, 12))
+
+    do;
+>do : Symbol(I.do, Decl(propertyNamesOfReservedWords.ts, 83, 11))
+
+    double;
+>double : Symbol(I.double, Decl(propertyNamesOfReservedWords.ts, 84, 7))
+
+    else;
+>else : Symbol(I.else, Decl(propertyNamesOfReservedWords.ts, 85, 11))
+
+    enum;
+>enum : Symbol(I.enum, Decl(propertyNamesOfReservedWords.ts, 86, 9))
+
+    export;
+>export : Symbol(I.export, Decl(propertyNamesOfReservedWords.ts, 87, 9))
+
+    extends;
+>extends : Symbol(I.extends, Decl(propertyNamesOfReservedWords.ts, 88, 11))
+
+    false;
+>false : Symbol(I.false, Decl(propertyNamesOfReservedWords.ts, 89, 12))
+
+    final;
+>final : Symbol(I.final, Decl(propertyNamesOfReservedWords.ts, 90, 10))
+
+    finally;
+>finally : Symbol(I.finally, Decl(propertyNamesOfReservedWords.ts, 91, 10))
+
+    float;
+>float : Symbol(I.float, Decl(propertyNamesOfReservedWords.ts, 92, 12))
+
+    for;
+>for : Symbol(I.for, Decl(propertyNamesOfReservedWords.ts, 93, 10))
+
+    function;
+>function : Symbol(I.function, Decl(propertyNamesOfReservedWords.ts, 94, 8))
+
+    goto;
+>goto : Symbol(I.goto, Decl(propertyNamesOfReservedWords.ts, 95, 13))
+
+    if;
+>if : Symbol(I.if, Decl(propertyNamesOfReservedWords.ts, 96, 9))
+
+    implements;
+>implements : Symbol(I.implements, Decl(propertyNamesOfReservedWords.ts, 97, 7))
+
+    import;
+>import : Symbol(I.import, Decl(propertyNamesOfReservedWords.ts, 98, 15))
+
+    in;
+>in : Symbol(I.in, Decl(propertyNamesOfReservedWords.ts, 99, 11))
+
+    instanceof;
+>instanceof : Symbol(I.instanceof, Decl(propertyNamesOfReservedWords.ts, 100, 7))
+
+    int;
+>int : Symbol(I.int, Decl(propertyNamesOfReservedWords.ts, 101, 15))
+
+    interface;
+>interface : Symbol(I.interface, Decl(propertyNamesOfReservedWords.ts, 102, 8))
+
+    is;
+>is : Symbol(I.is, Decl(propertyNamesOfReservedWords.ts, 103, 14))
+
+    long;
+>long : Symbol(I.long, Decl(propertyNamesOfReservedWords.ts, 104, 7))
+
+    namespace;
+>namespace : Symbol(I.namespace, Decl(propertyNamesOfReservedWords.ts, 105, 9))
+
+    native;
+>native : Symbol(I.native, Decl(propertyNamesOfReservedWords.ts, 106, 14))
+
+    new;
+>new : Symbol(I.new, Decl(propertyNamesOfReservedWords.ts, 107, 11))
+
+    null;
+>null : Symbol(I.null, Decl(propertyNamesOfReservedWords.ts, 108, 8))
+
+    package;
+>package : Symbol(I.package, Decl(propertyNamesOfReservedWords.ts, 109, 9))
+
+    private;
+>private : Symbol(I.private, Decl(propertyNamesOfReservedWords.ts, 110, 12))
+
+    protected;
+>protected : Symbol(I.protected, Decl(propertyNamesOfReservedWords.ts, 111, 12))
+
+    public;
+>public : Symbol(I.public, Decl(propertyNamesOfReservedWords.ts, 112, 14))
+
+    return;
+>return : Symbol(I.return, Decl(propertyNamesOfReservedWords.ts, 113, 11))
+
+    short;
+>short : Symbol(I.short, Decl(propertyNamesOfReservedWords.ts, 114, 11))
+
+    static;
+>static : Symbol(I.static, Decl(propertyNamesOfReservedWords.ts, 115, 10))
+
+    super;
+>super : Symbol(I.super, Decl(propertyNamesOfReservedWords.ts, 116, 11))
+
+    switch;
+>switch : Symbol(I.switch, Decl(propertyNamesOfReservedWords.ts, 117, 10))
+
+    synchronized;
+>synchronized : Symbol(I.synchronized, Decl(propertyNamesOfReservedWords.ts, 118, 11))
+
+    this;
+>this : Symbol(I.this, Decl(propertyNamesOfReservedWords.ts, 119, 17))
+
+    throw;
+>throw : Symbol(I.throw, Decl(propertyNamesOfReservedWords.ts, 120, 9))
+
+    throws;
+>throws : Symbol(I.throws, Decl(propertyNamesOfReservedWords.ts, 121, 10))
+
+    transient;
+>transient : Symbol(I.transient, Decl(propertyNamesOfReservedWords.ts, 122, 11))
+
+    true;
+>true : Symbol(I.true, Decl(propertyNamesOfReservedWords.ts, 123, 14))
+
+    try;
+>try : Symbol(I.try, Decl(propertyNamesOfReservedWords.ts, 124, 9))
+
+    typeof;
+>typeof : Symbol(I.typeof, Decl(propertyNamesOfReservedWords.ts, 125, 8))
+
+    use;
+>use : Symbol(I.use, Decl(propertyNamesOfReservedWords.ts, 126, 11))
+
+    var;
+>var : Symbol(I.var, Decl(propertyNamesOfReservedWords.ts, 127, 8))
+
+    void;
+>void : Symbol(I.void, Decl(propertyNamesOfReservedWords.ts, 128, 8))
+
+    volatile;
+>volatile : Symbol(I.volatile, Decl(propertyNamesOfReservedWords.ts, 129, 9))
+
+    while;
+>while : Symbol(I.while, Decl(propertyNamesOfReservedWords.ts, 130, 13))
+
+    with;
+>with : Symbol(I.with, Decl(propertyNamesOfReservedWords.ts, 131, 10))
+}
+
+var i: I;
+>i : Symbol(i, Decl(propertyNamesOfReservedWords.ts, 135, 3))
+>I : Symbol(I, Decl(propertyNamesOfReservedWords.ts, 67, 14))
+
+var r3 = i.abstract;
+>r3 : Symbol(r3, Decl(propertyNamesOfReservedWords.ts, 136, 3))
+>i.abstract : Symbol(I.abstract, Decl(propertyNamesOfReservedWords.ts, 69, 13))
+>i : Symbol(i, Decl(propertyNamesOfReservedWords.ts, 135, 3))
+>abstract : Symbol(I.abstract, Decl(propertyNamesOfReservedWords.ts, 69, 13))
+
+var r4 = i.as;
+>r4 : Symbol(r4, Decl(propertyNamesOfReservedWords.ts, 137, 3))
+>i.as : Symbol(I.as, Decl(propertyNamesOfReservedWords.ts, 70, 13))
+>i : Symbol(i, Decl(propertyNamesOfReservedWords.ts, 135, 3))
+>as : Symbol(I.as, Decl(propertyNamesOfReservedWords.ts, 70, 13))
+
+var a: {
+>a : Symbol(a, Decl(propertyNamesOfReservedWords.ts, 139, 3))
+
+    abstract;
+>abstract : Symbol(abstract, Decl(propertyNamesOfReservedWords.ts, 139, 8))
+
+    as;
+>as : Symbol(as, Decl(propertyNamesOfReservedWords.ts, 140, 13))
+
+    boolean;
+>boolean : Symbol(boolean, Decl(propertyNamesOfReservedWords.ts, 141, 7))
+
+    break;
+>break : Symbol(break, Decl(propertyNamesOfReservedWords.ts, 142, 12))
+
+    byte;
+>byte : Symbol(byte, Decl(propertyNamesOfReservedWords.ts, 143, 10))
+
+    case;
+>case : Symbol(case, Decl(propertyNamesOfReservedWords.ts, 144, 9))
+
+    catch;
+>catch : Symbol(catch, Decl(propertyNamesOfReservedWords.ts, 145, 9))
+
+    char;
+>char : Symbol(char, Decl(propertyNamesOfReservedWords.ts, 146, 10))
+
+    class;
+>class : Symbol(class, Decl(propertyNamesOfReservedWords.ts, 147, 9))
+
+    continue;
+>continue : Symbol(continue, Decl(propertyNamesOfReservedWords.ts, 148, 10))
+
+    const;
+>const : Symbol(const, Decl(propertyNamesOfReservedWords.ts, 149, 13))
+
+    debugger;
+>debugger : Symbol(debugger, Decl(propertyNamesOfReservedWords.ts, 150, 10))
+
+    default;
+>default : Symbol(default, Decl(propertyNamesOfReservedWords.ts, 151, 13))
+
+    delete;
+>delete : Symbol(delete, Decl(propertyNamesOfReservedWords.ts, 152, 12))
+
+    do;
+>do : Symbol(do, Decl(propertyNamesOfReservedWords.ts, 153, 11))
+
+    double;
+>double : Symbol(double, Decl(propertyNamesOfReservedWords.ts, 154, 7))
+
+    else;
+>else : Symbol(else, Decl(propertyNamesOfReservedWords.ts, 155, 11))
+
+    enum;
+>enum : Symbol(enum, Decl(propertyNamesOfReservedWords.ts, 156, 9))
+
+    export;
+>export : Symbol(export, Decl(propertyNamesOfReservedWords.ts, 157, 9))
+
+    extends;
+>extends : Symbol(extends, Decl(propertyNamesOfReservedWords.ts, 158, 11))
+
+    false;
+>false : Symbol(false, Decl(propertyNamesOfReservedWords.ts, 159, 12))
+
+    final;
+>final : Symbol(final, Decl(propertyNamesOfReservedWords.ts, 160, 10))
+
+    finally;
+>finally : Symbol(finally, Decl(propertyNamesOfReservedWords.ts, 161, 10))
+
+    float;
+>float : Symbol(float, Decl(propertyNamesOfReservedWords.ts, 162, 12))
+
+    for;
+>for : Symbol(for, Decl(propertyNamesOfReservedWords.ts, 163, 10))
+
+    function;
+>function : Symbol(function, Decl(propertyNamesOfReservedWords.ts, 164, 8))
+
+    goto;
+>goto : Symbol(goto, Decl(propertyNamesOfReservedWords.ts, 165, 13))
+
+    if;
+>if : Symbol(if, Decl(propertyNamesOfReservedWords.ts, 166, 9))
+
+    implements;
+>implements : Symbol(implements, Decl(propertyNamesOfReservedWords.ts, 167, 7))
+
+    import;
+>import : Symbol(import, Decl(propertyNamesOfReservedWords.ts, 168, 15))
+
+    in;
+>in : Symbol(in, Decl(propertyNamesOfReservedWords.ts, 169, 11))
+
+    instanceof;
+>instanceof : Symbol(instanceof, Decl(propertyNamesOfReservedWords.ts, 170, 7))
+
+    int;
+>int : Symbol(int, Decl(propertyNamesOfReservedWords.ts, 171, 15))
+
+    interface;
+>interface : Symbol(interface, Decl(propertyNamesOfReservedWords.ts, 172, 8))
+
+    is;
+>is : Symbol(is, Decl(propertyNamesOfReservedWords.ts, 173, 14))
+
+    long;
+>long : Symbol(long, Decl(propertyNamesOfReservedWords.ts, 174, 7))
+
+    namespace;
+>namespace : Symbol(namespace, Decl(propertyNamesOfReservedWords.ts, 175, 9))
+
+    native;
+>native : Symbol(native, Decl(propertyNamesOfReservedWords.ts, 176, 14))
+
+    new;
+>new : Symbol(new, Decl(propertyNamesOfReservedWords.ts, 177, 11))
+
+    null;
+>null : Symbol(null, Decl(propertyNamesOfReservedWords.ts, 178, 8))
+
+    package;
+>package : Symbol(package, Decl(propertyNamesOfReservedWords.ts, 179, 9))
+
+    private;
+>private : Symbol(private, Decl(propertyNamesOfReservedWords.ts, 180, 12))
+
+    protected;
+>protected : Symbol(protected, Decl(propertyNamesOfReservedWords.ts, 181, 12))
+
+    public;
+>public : Symbol(public, Decl(propertyNamesOfReservedWords.ts, 182, 14))
+
+    return;
+>return : Symbol(return, Decl(propertyNamesOfReservedWords.ts, 183, 11))
+
+    short;
+>short : Symbol(short, Decl(propertyNamesOfReservedWords.ts, 184, 11))
+
+    static;
+>static : Symbol(static, Decl(propertyNamesOfReservedWords.ts, 185, 10))
+
+    super;
+>super : Symbol(super, Decl(propertyNamesOfReservedWords.ts, 186, 11))
+
+    switch;
+>switch : Symbol(switch, Decl(propertyNamesOfReservedWords.ts, 187, 10))
+
+    synchronized;
+>synchronized : Symbol(synchronized, Decl(propertyNamesOfReservedWords.ts, 188, 11))
+
+    this;
+>this : Symbol(this, Decl(propertyNamesOfReservedWords.ts, 189, 17))
+
+    throw;
+>throw : Symbol(throw, Decl(propertyNamesOfReservedWords.ts, 190, 9))
+
+    throws;
+>throws : Symbol(throws, Decl(propertyNamesOfReservedWords.ts, 191, 10))
+
+    transient;
+>transient : Symbol(transient, Decl(propertyNamesOfReservedWords.ts, 192, 11))
+
+    true;
+>true : Symbol(true, Decl(propertyNamesOfReservedWords.ts, 193, 14))
+
+    try;
+>try : Symbol(try, Decl(propertyNamesOfReservedWords.ts, 194, 9))
+
+    typeof;
+>typeof : Symbol(typeof, Decl(propertyNamesOfReservedWords.ts, 195, 8))
+
+    use;
+>use : Symbol(use, Decl(propertyNamesOfReservedWords.ts, 196, 11))
+
+    var;
+>var : Symbol(var, Decl(propertyNamesOfReservedWords.ts, 197, 8))
+
+    void;
+>void : Symbol(void, Decl(propertyNamesOfReservedWords.ts, 198, 8))
+
+    volatile;
+>volatile : Symbol(volatile, Decl(propertyNamesOfReservedWords.ts, 199, 9))
+
+    while;
+>while : Symbol(while, Decl(propertyNamesOfReservedWords.ts, 200, 13))
+
+    with;
+>with : Symbol(with, Decl(propertyNamesOfReservedWords.ts, 201, 10))
+}
+
+var r5 = a.abstract;
+>r5 : Symbol(r5, Decl(propertyNamesOfReservedWords.ts, 205, 3))
+>a.abstract : Symbol(abstract, Decl(propertyNamesOfReservedWords.ts, 139, 8))
+>a : Symbol(a, Decl(propertyNamesOfReservedWords.ts, 139, 3))
+>abstract : Symbol(abstract, Decl(propertyNamesOfReservedWords.ts, 139, 8))
+
+var r6 = a.as;
+>r6 : Symbol(r6, Decl(propertyNamesOfReservedWords.ts, 206, 3))
+>a.as : Symbol(as, Decl(propertyNamesOfReservedWords.ts, 140, 13))
+>a : Symbol(a, Decl(propertyNamesOfReservedWords.ts, 139, 3))
+>as : Symbol(as, Decl(propertyNamesOfReservedWords.ts, 140, 13))
+
+enum E {
+>E : Symbol(E, Decl(propertyNamesOfReservedWords.ts, 206, 14))
+
+    abstract,
+>abstract : Symbol(E.abstract, Decl(propertyNamesOfReservedWords.ts, 208, 8))
+
+    as,
+>as : Symbol(E.as, Decl(propertyNamesOfReservedWords.ts, 209, 13))
+
+    boolean,
+>boolean : Symbol(E.boolean, Decl(propertyNamesOfReservedWords.ts, 210, 7))
+
+    break,
+>break : Symbol(E.break, Decl(propertyNamesOfReservedWords.ts, 211, 12))
+
+    byte,
+>byte : Symbol(E.byte, Decl(propertyNamesOfReservedWords.ts, 212, 10))
+
+    case,
+>case : Symbol(E.case, Decl(propertyNamesOfReservedWords.ts, 213, 9))
+
+    catch,
+>catch : Symbol(E.catch, Decl(propertyNamesOfReservedWords.ts, 214, 9))
+
+    char,
+>char : Symbol(E.char, Decl(propertyNamesOfReservedWords.ts, 215, 10))
+
+    class,
+>class : Symbol(E.class, Decl(propertyNamesOfReservedWords.ts, 216, 9))
+
+    continue,
+>continue : Symbol(E.continue, Decl(propertyNamesOfReservedWords.ts, 217, 10))
+
+    const,
+>const : Symbol(E.const, Decl(propertyNamesOfReservedWords.ts, 218, 13))
+
+    debugger,
+>debugger : Symbol(E.debugger, Decl(propertyNamesOfReservedWords.ts, 219, 10))
+
+    default,
+>default : Symbol(E.default, Decl(propertyNamesOfReservedWords.ts, 220, 13))
+
+    delete,
+>delete : Symbol(E.delete, Decl(propertyNamesOfReservedWords.ts, 221, 12))
+
+    do,
+>do : Symbol(E.do, Decl(propertyNamesOfReservedWords.ts, 222, 11))
+
+    double,
+>double : Symbol(E.double, Decl(propertyNamesOfReservedWords.ts, 223, 7))
+
+    else,
+>else : Symbol(E.else, Decl(propertyNamesOfReservedWords.ts, 224, 11))
+
+    enum,
+>enum : Symbol(E.enum, Decl(propertyNamesOfReservedWords.ts, 225, 9))
+
+    export,
+>export : Symbol(E.export, Decl(propertyNamesOfReservedWords.ts, 226, 9))
+
+    extends,
+>extends : Symbol(E.extends, Decl(propertyNamesOfReservedWords.ts, 227, 11))
+
+    false,
+>false : Symbol(E.false, Decl(propertyNamesOfReservedWords.ts, 228, 12))
+
+    final,
+>final : Symbol(E.final, Decl(propertyNamesOfReservedWords.ts, 229, 10))
+
+    finally,
+>finally : Symbol(E.finally, Decl(propertyNamesOfReservedWords.ts, 230, 10))
+
+    float,
+>float : Symbol(E.float, Decl(propertyNamesOfReservedWords.ts, 231, 12))
+
+    for,
+>for : Symbol(E.for, Decl(propertyNamesOfReservedWords.ts, 232, 10))
+
+    function,
+>function : Symbol(E.function, Decl(propertyNamesOfReservedWords.ts, 233, 8))
+
+    goto,
+>goto : Symbol(E.goto, Decl(propertyNamesOfReservedWords.ts, 234, 13))
+
+    if,
+>if : Symbol(E.if, Decl(propertyNamesOfReservedWords.ts, 235, 9))
+
+    implements,
+>implements : Symbol(E.implements, Decl(propertyNamesOfReservedWords.ts, 236, 7))
+
+    import,
+>import : Symbol(E.import, Decl(propertyNamesOfReservedWords.ts, 237, 15))
+
+    in,
+>in : Symbol(E.in, Decl(propertyNamesOfReservedWords.ts, 238, 11))
+
+    instanceof,
+>instanceof : Symbol(E.instanceof, Decl(propertyNamesOfReservedWords.ts, 239, 7))
+
+    int,
+>int : Symbol(E.int, Decl(propertyNamesOfReservedWords.ts, 240, 15))
+
+    interface,
+>interface : Symbol(E.interface, Decl(propertyNamesOfReservedWords.ts, 241, 8))
+
+    is,
+>is : Symbol(E.is, Decl(propertyNamesOfReservedWords.ts, 242, 14))
+
+    long,
+>long : Symbol(E.long, Decl(propertyNamesOfReservedWords.ts, 243, 7))
+
+    namespace,
+>namespace : Symbol(E.namespace, Decl(propertyNamesOfReservedWords.ts, 244, 9))
+
+    native,
+>native : Symbol(E.native, Decl(propertyNamesOfReservedWords.ts, 245, 14))
+
+    new,
+>new : Symbol(E.new, Decl(propertyNamesOfReservedWords.ts, 246, 11))
+
+    null,
+>null : Symbol(E.null, Decl(propertyNamesOfReservedWords.ts, 247, 8))
+
+    package,
+>package : Symbol(E.package, Decl(propertyNamesOfReservedWords.ts, 248, 9))
+
+    private,
+>private : Symbol(E.private, Decl(propertyNamesOfReservedWords.ts, 249, 12))
+
+    protected,
+>protected : Symbol(E.protected, Decl(propertyNamesOfReservedWords.ts, 250, 12))
+
+    public,
+>public : Symbol(E.public, Decl(propertyNamesOfReservedWords.ts, 251, 14))
+
+    return,
+>return : Symbol(E.return, Decl(propertyNamesOfReservedWords.ts, 252, 11))
+
+    short,
+>short : Symbol(E.short, Decl(propertyNamesOfReservedWords.ts, 253, 11))
+
+    static,
+>static : Symbol(E.static, Decl(propertyNamesOfReservedWords.ts, 254, 10))
+
+    super,
+>super : Symbol(E.super, Decl(propertyNamesOfReservedWords.ts, 255, 11))
+
+    switch,
+>switch : Symbol(E.switch, Decl(propertyNamesOfReservedWords.ts, 256, 10))
+
+    synchronized,
+>synchronized : Symbol(E.synchronized, Decl(propertyNamesOfReservedWords.ts, 257, 11))
+
+    this,
+>this : Symbol(E.this, Decl(propertyNamesOfReservedWords.ts, 258, 17))
+
+    throw,
+>throw : Symbol(E.throw, Decl(propertyNamesOfReservedWords.ts, 259, 9))
+
+    throws,
+>throws : Symbol(E.throws, Decl(propertyNamesOfReservedWords.ts, 260, 10))
+
+    transient,
+>transient : Symbol(E.transient, Decl(propertyNamesOfReservedWords.ts, 261, 11))
+
+    true,
+>true : Symbol(E.true, Decl(propertyNamesOfReservedWords.ts, 262, 14))
+
+    try,
+>try : Symbol(E.try, Decl(propertyNamesOfReservedWords.ts, 263, 9))
+
+    typeof,
+>typeof : Symbol(E.typeof, Decl(propertyNamesOfReservedWords.ts, 264, 8))
+
+    use,
+>use : Symbol(E.use, Decl(propertyNamesOfReservedWords.ts, 265, 11))
+
+    var,
+>var : Symbol(E.var, Decl(propertyNamesOfReservedWords.ts, 266, 8))
+
+    void,
+>void : Symbol(E.void, Decl(propertyNamesOfReservedWords.ts, 267, 8))
+
+    volatile,
+>volatile : Symbol(E.volatile, Decl(propertyNamesOfReservedWords.ts, 268, 9))
+
+    while,
+>while : Symbol(E.while, Decl(propertyNamesOfReservedWords.ts, 269, 13))
+
+    with,
+>with : Symbol(E.with, Decl(propertyNamesOfReservedWords.ts, 270, 10))
+}
+
+var r7 = E.abstract;
+>r7 : Symbol(r7, Decl(propertyNamesOfReservedWords.ts, 274, 3))
+>E.abstract : Symbol(E.abstract, Decl(propertyNamesOfReservedWords.ts, 208, 8))
+>E : Symbol(E, Decl(propertyNamesOfReservedWords.ts, 206, 14))
+>abstract : Symbol(E.abstract, Decl(propertyNamesOfReservedWords.ts, 208, 8))
+
+var r8 = E.as;
+>r8 : Symbol(r8, Decl(propertyNamesOfReservedWords.ts, 275, 3))
+>E.as : Symbol(E.as, Decl(propertyNamesOfReservedWords.ts, 209, 13))
+>E : Symbol(E, Decl(propertyNamesOfReservedWords.ts, 206, 14))
+>as : Symbol(E.as, Decl(propertyNamesOfReservedWords.ts, 209, 13))
+

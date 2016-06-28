@@ -4,6 +4,7 @@ module M {
 
     var x = 1;
 >x : number
+>1 : number
 
     class C {
 >C : C

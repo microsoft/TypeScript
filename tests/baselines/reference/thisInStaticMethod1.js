@@ -16,5 +16,5 @@ var foo = (function () {
     };
     foo.x = 3;
     return foo;
-})();
+}());
 var x = foo.bar();

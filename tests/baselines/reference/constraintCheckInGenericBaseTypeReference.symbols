@@ -1,0 +1,44 @@
+=== tests/cases/compiler/constraintCheckInGenericBaseTypeReference.ts ===
+// No errors
+class Constraint {
+>Constraint : Symbol(Constraint, Decl(constraintCheckInGenericBaseTypeReference.ts, 0, 0))
+
+    public method() { }
+>method : Symbol(Constraint.method, Decl(constraintCheckInGenericBaseTypeReference.ts, 1, 18))
+}
+class GenericBase<T extends Constraint> {
+>GenericBase : Symbol(GenericBase, Decl(constraintCheckInGenericBaseTypeReference.ts, 3, 1))
+>T : Symbol(T, Decl(constraintCheckInGenericBaseTypeReference.ts, 4, 18))
+>Constraint : Symbol(Constraint, Decl(constraintCheckInGenericBaseTypeReference.ts, 0, 0))
+
+    public items: any;
+>items : Symbol(GenericBase.items, Decl(constraintCheckInGenericBaseTypeReference.ts, 4, 41))
+}
+class Derived extends GenericBase<TypeArg> {
+>Derived : Symbol(Derived, Decl(constraintCheckInGenericBaseTypeReference.ts, 6, 1))
+>GenericBase : Symbol(GenericBase, Decl(constraintCheckInGenericBaseTypeReference.ts, 3, 1))
+>TypeArg : Symbol(TypeArg, Decl(constraintCheckInGenericBaseTypeReference.ts, 9, 1))
+
+}
+class TypeArg {
+>TypeArg : Symbol(TypeArg, Decl(constraintCheckInGenericBaseTypeReference.ts, 9, 1))
+
+    public method() {
+>method : Symbol(TypeArg.method, Decl(constraintCheckInGenericBaseTypeReference.ts, 10, 15))
+
+        Container.People.items;
+>Container.People.items : Symbol(GenericBase.items, Decl(constraintCheckInGenericBaseTypeReference.ts, 4, 41))
+>Container.People : Symbol(Container.People, Decl(constraintCheckInGenericBaseTypeReference.ts, 16, 17))
+>Container : Symbol(Container, Decl(constraintCheckInGenericBaseTypeReference.ts, 14, 1))
+>People : Symbol(Container.People, Decl(constraintCheckInGenericBaseTypeReference.ts, 16, 17))
+>items : Symbol(GenericBase.items, Decl(constraintCheckInGenericBaseTypeReference.ts, 4, 41))
+    }
+}
+
+class Container {
+>Container : Symbol(Container, Decl(constraintCheckInGenericBaseTypeReference.ts, 14, 1))
+
+    public static People: Derived
+>People : Symbol(Container.People, Decl(constraintCheckInGenericBaseTypeReference.ts, 16, 17))
+>Derived : Symbol(Derived, Decl(constraintCheckInGenericBaseTypeReference.ts, 6, 1))
+}

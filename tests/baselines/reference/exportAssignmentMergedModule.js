@@ -25,6 +25,7 @@ if(!!foo.b){
 }
 
 //// [foo_0.js]
+"use strict";
 var Foo;
 (function (Foo) {
     function a() {
@@ -46,6 +47,7 @@ var Foo;
 })(Foo || (Foo = {}));
 module.exports = Foo;
 //// [foo_1.js]
+"use strict";
 var foo = require("./foo_0");
 var a = foo.a();
 if (!!foo.b) {

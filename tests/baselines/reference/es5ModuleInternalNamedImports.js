@@ -34,6 +34,7 @@ export module M {
 
 //// [es5ModuleInternalNamedImports.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var M;
     (function (M) {
         // variable
@@ -43,7 +44,7 @@ define(["require", "exports"], function (require, exports) {
             function M_C() {
             }
             return M_C;
-        })();
+        }());
         M.M_C = M_C;
         // instantiated module
         var M_M;

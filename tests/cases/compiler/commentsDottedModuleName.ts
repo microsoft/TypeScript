@@ -1,7 +1,7 @@
-//@module: amd
+// @module: amd
 // @target: ES5
 // @declaration: true
-// @comments: true
+// @removeComments: false
 
 /** this is multi declare module*/
 export module outerModule.InnerModule {

@@ -17,7 +17,7 @@ class List<T> {
 class DerivedList<U> extends List<U> {
 >DerivedList : DerivedList<U>
 >U : U
->List : List<T>
+>List : List<U>
 >U : U
 
     foo: U;
@@ -70,6 +70,7 @@ var zs = [list, null]; // List<number>[]
 >zs : List<number>[]
 >[list, null] : List<number>[]
 >list : List<number>
+>null : null
 
 var myDerivedList: DerivedList<number>;
 >myDerivedList : DerivedList<number>

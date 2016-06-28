@@ -1,0 +1,15 @@
+=== tests/cases/compiler/typeInferenceWithTypeAnnotation.ts ===
+declare function f<T>(p: (t: T) => T): T;
+>f : Symbol(f, Decl(typeInferenceWithTypeAnnotation.ts, 0, 0))
+>T : Symbol(T, Decl(typeInferenceWithTypeAnnotation.ts, 0, 19))
+>p : Symbol(p, Decl(typeInferenceWithTypeAnnotation.ts, 0, 22))
+>t : Symbol(t, Decl(typeInferenceWithTypeAnnotation.ts, 0, 26))
+>T : Symbol(T, Decl(typeInferenceWithTypeAnnotation.ts, 0, 19))
+>T : Symbol(T, Decl(typeInferenceWithTypeAnnotation.ts, 0, 19))
+>T : Symbol(T, Decl(typeInferenceWithTypeAnnotation.ts, 0, 19))
+
+f((n: number) => n); 
+>f : Symbol(f, Decl(typeInferenceWithTypeAnnotation.ts, 0, 0))
+>n : Symbol(n, Decl(typeInferenceWithTypeAnnotation.ts, 2, 3))
+>n : Symbol(n, Decl(typeInferenceWithTypeAnnotation.ts, 2, 3))
+

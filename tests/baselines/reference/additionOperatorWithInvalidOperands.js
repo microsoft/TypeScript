@@ -47,7 +47,7 @@ var C = (function () {
     }
     C.foo = function () { };
     return C;
-})();
+}());
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";
@@ -56,7 +56,6 @@ var E;
 })(E || (E = {}));
 var M;
 (function (M) {
-    M.a;
 })(M || (M = {}));
 var a;
 var b;

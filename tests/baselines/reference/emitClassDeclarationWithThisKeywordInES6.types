@@ -4,13 +4,15 @@ class B {
 
     x = 10;
 >x : number
+>10 : number
 
     constructor() {
         this.x = 10;
 >this.x = 10 : number
 >this.x : number
->this : B
+>this : this
 >x : number
+>10 : number
     }
     static log(a: number) { }
 >log : (a: number) => void
@@ -25,7 +27,7 @@ class B {
 >B : typeof B
 >log : (a: number) => void
 >this.x : number
->this : B
+>this : this
 >x : number
     }
 
@@ -34,7 +36,7 @@ class B {
 
         return this.x;
 >this.x : number
->this : B
+>this : this
 >x : number
     }
 
@@ -45,7 +47,7 @@ class B {
         this.x = y;
 >this.x = y : number
 >this.x : number
->this : B
+>this : this
 >x : number
 >y : number
     }

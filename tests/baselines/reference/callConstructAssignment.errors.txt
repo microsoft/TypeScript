@@ -1,5 +1,7 @@
 tests/cases/compiler/callConstructAssignment.ts(7,1): error TS2322: Type 'new () => any' is not assignable to type '() => void'.
+  Type 'new () => any' provides no match for the signature '(): void'
 tests/cases/compiler/callConstructAssignment.ts(8,1): error TS2322: Type '() => void' is not assignable to type 'new () => any'.
+  Type '() => void' provides no match for the signature 'new (): any'
 
 
 ==== tests/cases/compiler/callConstructAssignment.ts (2 errors) ====
@@ -12,6 +14,8 @@ tests/cases/compiler/callConstructAssignment.ts(8,1): error TS2322: Type '() => 
     foo = bar; // error
     ~~~
 !!! error TS2322: Type 'new () => any' is not assignable to type '() => void'.
+!!! error TS2322:   Type 'new () => any' provides no match for the signature '(): void'
     bar = foo; // error
     ~~~
 !!! error TS2322: Type '() => void' is not assignable to type 'new () => any'.
+!!! error TS2322:   Type '() => void' provides no match for the signature 'new (): any'

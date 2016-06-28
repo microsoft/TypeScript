@@ -28,6 +28,7 @@ static B<S>(v: any): A1<S> {
 >S : S
 
 return null;
+>null : null
 }
 }
 

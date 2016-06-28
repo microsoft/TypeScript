@@ -47,7 +47,7 @@ module M.P {
     }
     export var v: M.D; // ok
 >v : M.D
->M : unknown
+>M : any
 >D : M.D
 
     export var w = M.D.f; // error, should be typeof M.D.f

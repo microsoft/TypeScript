@@ -31,11 +31,10 @@ module TypeScript {
 
 
 //// [genericRecursiveImplicitConstructorErrors3.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var TypeScript;
 (function (TypeScript) {
@@ -45,7 +44,7 @@ var TypeScript;
         MemberName.create = function (arg1, arg2, arg3) {
         };
         return MemberName;
-    })();
+    }());
     TypeScript.MemberName = MemberName;
 })(TypeScript || (TypeScript = {}));
 var TypeScript;
@@ -55,7 +54,7 @@ var TypeScript;
             this.type = null;
         }
         return PullSymbol;
-    })();
+    }());
     TypeScript.PullSymbol = PullSymbol;
     var PullTypeSymbol = (function (_super) {
         __extends(PullTypeSymbol, _super);
@@ -77,6 +76,6 @@ var TypeScript;
             }
         };
         return PullTypeSymbol;
-    })(PullSymbol);
+    }(PullSymbol));
     TypeScript.PullTypeSymbol = PullTypeSymbol;
 })(TypeScript || (TypeScript = {}));

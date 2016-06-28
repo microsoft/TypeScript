@@ -49,7 +49,7 @@ var M;
         C.pub = 3;
         C.y = C.priv;
         return C;
-    })();
+    }());
     M.C = C;
     var c = C.y;
     function f() {

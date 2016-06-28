@@ -22,7 +22,6 @@
 /////*15*/h(10);
 /////*16*/h("hello");
 
-debugger;
 var marker = 0;
 function verifyConst(name: string, typeDisplay: ts.SymbolDisplayPart[], optionalNameDisplay?: ts.SymbolDisplayPart[], optionalKindModifiers?: string) {
     marker++;

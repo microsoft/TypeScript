@@ -16,6 +16,6 @@ var Foo = (function () {
         return null;
     };
     return Foo;
-})();
+}());
 var f = new Foo();
 var r = f.clone();

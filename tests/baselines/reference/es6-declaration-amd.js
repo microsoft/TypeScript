@@ -21,7 +21,7 @@ class A {
         return 42;
     }
 }
-//# sourceMappingURL=es6-declaration-amd.js.map
+
 
 //// [es6-declaration-amd.d.ts]
 declare class A {

@@ -1,0 +1,7 @@
+=== tests/cases/compiler/objectLiteral2.ts ===
+var v30 = {a:1, b:2}, v31;
+>v30 : Symbol(v30, Decl(objectLiteral2.ts, 0, 3))
+>a : Symbol(a, Decl(objectLiteral2.ts, 0, 11))
+>b : Symbol(b, Decl(objectLiteral2.ts, 0, 15))
+>v31 : Symbol(v31, Decl(objectLiteral2.ts, 0, 21))
+

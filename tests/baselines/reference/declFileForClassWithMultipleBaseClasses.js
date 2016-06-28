@@ -33,13 +33,13 @@ var A = (function () {
     }
     A.prototype.foo = function () { };
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
     B.prototype.bar = function () { };
     return B;
-})();
+}());
 var D = (function () {
     function D() {
     }
@@ -48,7 +48,7 @@ var D = (function () {
     D.prototype.foo = function () { };
     D.prototype.bar = function () { };
     return D;
-})();
+}());
 
 
 //// [declFileForClassWithMultipleBaseClasses.d.ts]

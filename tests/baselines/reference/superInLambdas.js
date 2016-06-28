@@ -68,11 +68,10 @@ class RegisteredUser4 extends User {
 }
 
 //// [superInLambdas.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var User = (function () {
     function User() {
@@ -82,7 +81,7 @@ var User = (function () {
         //console.log("Hello, " + this.name);
     };
     return User;
-})();
+}());
 var RegisteredUser = (function (_super) {
     __extends(RegisteredUser, _super);
     function RegisteredUser() {
@@ -102,7 +101,7 @@ var RegisteredUser = (function (_super) {
         var x = function () { return _super.prototype.sayHello.call(_this); };
     };
     return RegisteredUser;
-})(User);
+}(User));
 var RegisteredUser2 = (function (_super) {
     __extends(RegisteredUser2, _super);
     function RegisteredUser2() {
@@ -118,7 +117,7 @@ var RegisteredUser2 = (function (_super) {
         var x = function () { return function () { return function () { return _super.prototype.sayHello.call(_this); }; }; };
     };
     return RegisteredUser2;
-})(User);
+}(User));
 var RegisteredUser3 = (function (_super) {
     __extends(RegisteredUser3, _super);
     function RegisteredUser3() {
@@ -134,7 +133,7 @@ var RegisteredUser3 = (function (_super) {
         var superName = function () { return function () { return function () { return _super.prototype.name; }; }; };
     };
     return RegisteredUser3;
-})(User);
+}(User));
 var RegisteredUser4 = (function (_super) {
     __extends(RegisteredUser4, _super);
     function RegisteredUser4() {
@@ -150,4 +149,4 @@ var RegisteredUser4 = (function (_super) {
         var x = function () { return function () { return _super.prototype.; }; };
     };
     return RegisteredUser4;
-})(User);
+}(User));

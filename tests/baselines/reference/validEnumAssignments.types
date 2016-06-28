@@ -75,6 +75,7 @@ e = n;
 e = null;
 >e = null : null
 >e : E
+>null : null
 
 e = undefined;
 >e = undefined : undefined
@@ -84,17 +85,21 @@ e = undefined;
 e = 1;
 >e = 1 : number
 >e : E
+>1 : number
 
 e = 1.;
 >e = 1. : number
 >e : E
+>1. : number
 
 e = 1.0;
 >e = 1.0 : number
 >e : E
+>1.0 : number
 
 e = -1;
 >e = -1 : number
 >e : E
 >-1 : number
+>1 : number
 

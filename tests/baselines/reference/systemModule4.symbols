@@ -1,0 +1,8 @@
+=== tests/cases/compiler/systemModule4.ts ===
+
+export var x = 1;
+>x : Symbol(x, Decl(systemModule4.ts, 1, 10))
+
+export var y;
+>y : Symbol(y, Decl(systemModule4.ts, 2, 10))
+

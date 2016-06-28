@@ -29,7 +29,7 @@ var mOfGloalFile;
         function c() {
         }
         return c;
-    })();
+    }());
     mOfGloalFile.c = c;
 })(mOfGloalFile || (mOfGloalFile = {}));
 var exports = mOfGloalFile.c;

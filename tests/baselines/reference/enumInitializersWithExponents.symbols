@@ -1,0 +1,23 @@
+=== tests/cases/compiler/enumInitializersWithExponents.ts ===
+// Must be integer literals.
+declare enum E {
+>E : Symbol(E, Decl(enumInitializersWithExponents.ts, 0, 0))
+
+    a = 1e3, // ok
+>a : Symbol(E.a, Decl(enumInitializersWithExponents.ts, 1, 16))
+
+    b = 1e25, // ok
+>b : Symbol(E.b, Decl(enumInitializersWithExponents.ts, 2, 12))
+
+    c = 1e-3, // error
+>c : Symbol(E.c, Decl(enumInitializersWithExponents.ts, 3, 13))
+
+    d = 1e-9, // error
+>d : Symbol(E.d, Decl(enumInitializersWithExponents.ts, 4, 13))
+
+    e = 1e0, // ok
+>e : Symbol(E.e, Decl(enumInitializersWithExponents.ts, 5, 13))
+
+    f = 1e+25 // ok
+>f : Symbol(E.f, Decl(enumInitializersWithExponents.ts, 6, 12))
+}

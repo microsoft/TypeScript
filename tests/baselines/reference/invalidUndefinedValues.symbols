@@ -1,0 +1,92 @@
+=== tests/cases/conformance/types/primitives/undefined/invalidUndefinedValues.ts ===
+var x: typeof undefined;
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>undefined : Symbol(undefined)
+
+x = 1;
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+
+x = '';
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+
+x = true;
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+
+var a: void;
+>a : Symbol(a, Decl(invalidUndefinedValues.ts, 5, 3))
+
+x = a;
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>a : Symbol(a, Decl(invalidUndefinedValues.ts, 5, 3))
+
+x = null;
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+
+class C { foo: string }
+>C : Symbol(C, Decl(invalidUndefinedValues.ts, 7, 9))
+>foo : Symbol(C.foo, Decl(invalidUndefinedValues.ts, 9, 9))
+
+var b: C;
+>b : Symbol(b, Decl(invalidUndefinedValues.ts, 10, 3))
+>C : Symbol(C, Decl(invalidUndefinedValues.ts, 7, 9))
+
+x = C;
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>C : Symbol(C, Decl(invalidUndefinedValues.ts, 7, 9))
+
+x = b;
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>b : Symbol(b, Decl(invalidUndefinedValues.ts, 10, 3))
+
+interface I { foo: string }
+>I : Symbol(I, Decl(invalidUndefinedValues.ts, 12, 6))
+>foo : Symbol(I.foo, Decl(invalidUndefinedValues.ts, 14, 13))
+
+var c: I;
+>c : Symbol(c, Decl(invalidUndefinedValues.ts, 15, 3))
+>I : Symbol(I, Decl(invalidUndefinedValues.ts, 12, 6))
+
+x = c;
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>c : Symbol(c, Decl(invalidUndefinedValues.ts, 15, 3))
+
+module M { export var x = 1; }
+>M : Symbol(M, Decl(invalidUndefinedValues.ts, 16, 6))
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 18, 21))
+
+x = M;
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>M : Symbol(M, Decl(invalidUndefinedValues.ts, 16, 6))
+
+x = { f() { } }
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>f : Symbol(f, Decl(invalidUndefinedValues.ts, 21, 5))
+
+function f<T>(a: T) {
+>f : Symbol(f, Decl(invalidUndefinedValues.ts, 21, 15))
+>T : Symbol(T, Decl(invalidUndefinedValues.ts, 23, 11))
+>a : Symbol(a, Decl(invalidUndefinedValues.ts, 23, 14))
+>T : Symbol(T, Decl(invalidUndefinedValues.ts, 23, 11))
+
+    x = a;
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>a : Symbol(a, Decl(invalidUndefinedValues.ts, 23, 14))
+}
+x = f;
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>f : Symbol(f, Decl(invalidUndefinedValues.ts, 21, 15))
+
+enum E { A }
+>E : Symbol(E, Decl(invalidUndefinedValues.ts, 26, 6))
+>A : Symbol(E.A, Decl(invalidUndefinedValues.ts, 28, 8))
+
+x = E;
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>E : Symbol(E, Decl(invalidUndefinedValues.ts, 26, 6))
+
+x = E.A;
+>x : Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>E.A : Symbol(E.A, Decl(invalidUndefinedValues.ts, 28, 8))
+>E : Symbol(E, Decl(invalidUndefinedValues.ts, 26, 6))
+>A : Symbol(E.A, Decl(invalidUndefinedValues.ts, 28, 8))
+

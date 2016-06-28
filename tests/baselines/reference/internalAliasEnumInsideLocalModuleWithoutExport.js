@@ -14,6 +14,7 @@ export module c {
 
 
 //// [internalAliasEnumInsideLocalModuleWithoutExport.js]
+"use strict";
 var a;
 (function (a) {
     (function (weekend) {

@@ -1,10 +1,10 @@
-tests/cases/compiler/typeParameterWithInvalidConstraintType.ts(1,9): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/typeParameterWithInvalidConstraintType.ts(1,19): error TS2313: Type parameter 'T' has a circular constraint.
 
 
 ==== tests/cases/compiler/typeParameterWithInvalidConstraintType.ts (1 errors) ====
     class A<T extends T> {
-            ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+                      ~
+!!! error TS2313: Type parameter 'T' has a circular constraint.
         foo() {
             var x: T;
             // no error expected below this line

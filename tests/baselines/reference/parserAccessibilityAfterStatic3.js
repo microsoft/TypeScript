@@ -11,4 +11,4 @@ var Outer = (function () {
     }
     Outer.public = 1;
     return Outer;
-})();
+}());

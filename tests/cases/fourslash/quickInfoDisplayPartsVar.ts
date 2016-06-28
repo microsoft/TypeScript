@@ -15,7 +15,6 @@
 ////var /*11*/i = /*12*/h;
 /////*13*/h(10);
 /////*14*/h("hello");
-debugger;
 var marker = 0;
 function verifyVar(name: string, typeDisplay: ts.SymbolDisplayPart[], optionalNameDisplay?: ts.SymbolDisplayPart[], optionalKindModifiers?: string) {
     marker++;

@@ -6,6 +6,7 @@ class SomeBase {
 >GetNumber : () => number
 
         return 2;
+>2 : number
     }
 }
 class P extends SomeBase {

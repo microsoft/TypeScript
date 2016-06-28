@@ -1,0 +1,76 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/part1.ts ===
+module Root {
+>Root : Symbol(Root, Decl(part1.ts, 0, 0))
+
+    export module A {
+>A : Symbol(A, Decl(part1.ts, 0, 13))
+
+        export interface Point {
+>Point : Symbol(Point, Decl(part1.ts, 1, 21))
+
+            x: number;
+>x : Symbol(Point.x, Decl(part1.ts, 2, 32))
+
+            y: number;
+>y : Symbol(Point.y, Decl(part1.ts, 3, 22))
+        }
+
+        export module Utils {
+>Utils : Symbol(Utils, Decl(part1.ts, 5, 9))
+
+            export function mirror<T extends Point>(p: T) {
+>mirror : Symbol(mirror, Decl(part1.ts, 7, 29))
+>T : Symbol(T, Decl(part1.ts, 8, 35))
+>Point : Symbol(Point, Decl(part1.ts, 1, 21))
+>p : Symbol(p, Decl(part1.ts, 8, 52))
+>T : Symbol(T, Decl(part1.ts, 8, 35))
+
+                return { x: p.y, y: p.x };
+>x : Symbol(x, Decl(part1.ts, 9, 24))
+>p.y : Symbol(Point.y, Decl(part1.ts, 3, 22))
+>p : Symbol(p, Decl(part1.ts, 8, 52))
+>y : Symbol(Point.y, Decl(part1.ts, 3, 22))
+>y : Symbol(y, Decl(part1.ts, 9, 32))
+>p.x : Symbol(Point.x, Decl(part1.ts, 2, 32))
+>p : Symbol(p, Decl(part1.ts, 8, 52))
+>x : Symbol(Point.x, Decl(part1.ts, 2, 32))
+            }
+        }
+    }
+}
+
+=== tests/cases/conformance/internalModules/DeclarationMerging/part2.ts ===
+module otherRoot {
+>otherRoot : Symbol(otherRoot, Decl(part2.ts, 0, 0))
+
+    export module A {
+>A : Symbol(A, Decl(part2.ts, 0, 18))
+
+        // have to be fully qualified since in different root
+        export var Origin: Root.A.Point = { x: 0, y: 0 };
+>Origin : Symbol(Origin, Decl(part2.ts, 3, 18))
+>Root : Symbol(Root, Decl(part1.ts, 0, 0))
+>A : Symbol(Root.A, Decl(part1.ts, 0, 13))
+>Point : Symbol(Root.A.Point, Decl(part1.ts, 1, 21))
+>x : Symbol(x, Decl(part2.ts, 3, 43))
+>y : Symbol(y, Decl(part2.ts, 3, 49))
+
+        export module Utils {
+>Utils : Symbol(Utils, Decl(part2.ts, 3, 57))
+
+            export class Plane {
+>Plane : Symbol(Plane, Decl(part2.ts, 5, 29))
+
+                constructor(public tl: Root.A.Point, public br: Root.A.Point) { }
+>tl : Symbol(Plane.tl, Decl(part2.ts, 7, 28))
+>Root : Symbol(Root, Decl(part1.ts, 0, 0))
+>A : Symbol(Root.A, Decl(part1.ts, 0, 13))
+>Point : Symbol(Root.A.Point, Decl(part1.ts, 1, 21))
+>br : Symbol(Plane.br, Decl(part2.ts, 7, 52))
+>Root : Symbol(Root, Decl(part1.ts, 0, 0))
+>A : Symbol(Root.A, Decl(part1.ts, 0, 13))
+>Point : Symbol(Root.A.Point, Decl(part1.ts, 1, 21))
+            }
+        }
+    }
+}

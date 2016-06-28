@@ -1,0 +1,9 @@
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractConstructor.ts(2,5): error TS1242: 'abstract' modifier can only appear on a class, method, or property declaration.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractConstructor.ts (1 errors) ====
+    abstract class A {
+        abstract constructor() {}
+        ~~~~~~~~
+!!! error TS1242: 'abstract' modifier can only appear on a class, method, or property declaration.
+    }

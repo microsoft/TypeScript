@@ -3,4 +3,5 @@
 
 var x = `\x19\u0019 19`;
 >x : string
+>`\x19\u0019 19` : string
 

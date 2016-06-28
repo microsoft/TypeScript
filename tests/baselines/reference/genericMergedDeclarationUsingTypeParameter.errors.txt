@@ -1,12 +1,9 @@
-tests/cases/compiler/genericMergedDeclarationUsingTypeParameter.ts(1,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/compiler/genericMergedDeclarationUsingTypeParameter.ts(3,19): error TS2304: Cannot find name 'T'.
 tests/cases/compiler/genericMergedDeclarationUsingTypeParameter.ts(4,14): error TS2304: Cannot find name 'T'.
 
 
-==== tests/cases/compiler/genericMergedDeclarationUsingTypeParameter.ts (3 errors) ====
+==== tests/cases/compiler/genericMergedDeclarationUsingTypeParameter.ts (2 errors) ====
     function foo<T extends U, U>(y: T, z: U) { return y; }
-                 ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     module foo {
         export var x: T;
                       ~

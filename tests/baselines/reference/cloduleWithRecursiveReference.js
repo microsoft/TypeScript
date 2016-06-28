@@ -14,7 +14,7 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     M.C = C;
     var C;
     (function (C_1) {

@@ -56,10 +56,9 @@ var A = (function () {
     }
     A.foo = function () { return 1; };
     return A;
-})();
+}());
 var M;
 (function (M) {
-    M.n;
 })(M || (M = {}));
 var objA = new A();
 //number type var

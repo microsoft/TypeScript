@@ -1,0 +1,27 @@
+=== tests/cases/compiler/circularTypeofWithFunctionModule.ts ===
+// Repro from #6072
+
+class Foo {}
+>Foo : Symbol(Foo, Decl(circularTypeofWithFunctionModule.ts, 0, 0))
+
+function maker (value: string): typeof maker.Bar {
+>maker : Symbol(maker, Decl(circularTypeofWithFunctionModule.ts, 2, 12), Decl(circularTypeofWithFunctionModule.ts, 6, 1))
+>value : Symbol(value, Decl(circularTypeofWithFunctionModule.ts, 4, 16))
+>maker.Bar : Symbol(maker.Bar, Decl(circularTypeofWithFunctionModule.ts, 8, 17))
+>maker : Symbol(maker, Decl(circularTypeofWithFunctionModule.ts, 2, 12), Decl(circularTypeofWithFunctionModule.ts, 6, 1))
+>Bar : Symbol(maker.Bar, Decl(circularTypeofWithFunctionModule.ts, 8, 17))
+
+    return maker.Bar;
+>maker.Bar : Symbol(maker.Bar, Decl(circularTypeofWithFunctionModule.ts, 8, 17))
+>maker : Symbol(maker, Decl(circularTypeofWithFunctionModule.ts, 2, 12), Decl(circularTypeofWithFunctionModule.ts, 6, 1))
+>Bar : Symbol(maker.Bar, Decl(circularTypeofWithFunctionModule.ts, 8, 17))
+}
+
+namespace maker {
+>maker : Symbol(maker, Decl(circularTypeofWithFunctionModule.ts, 2, 12), Decl(circularTypeofWithFunctionModule.ts, 6, 1))
+
+    export class Bar extends Foo {}
+>Bar : Symbol(Bar, Decl(circularTypeofWithFunctionModule.ts, 8, 17))
+>Foo : Symbol(Foo, Decl(circularTypeofWithFunctionModule.ts, 0, 0))
+}
+

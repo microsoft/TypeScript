@@ -21,7 +21,7 @@ var Collection = (function () {
     }
     Collection.prototype.add = function (x) { };
     return Collection;
-})();
+}());
 var utils;
 var c = new Collection();
 var r3 = utils.mapReduce(c, function (x) { return 1; }, function (y) { return new Date(); });

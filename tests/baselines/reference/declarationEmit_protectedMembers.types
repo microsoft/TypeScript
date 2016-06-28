@@ -12,7 +12,7 @@ class C1 {
 
         return this.x;
 >this.x : number
->this : C1
+>this : this
 >x : number
     }
 
@@ -22,6 +22,7 @@ class C1 {
 
     protected get accessor() { return 0; }
 >accessor : number
+>0 : number
 
     protected static sx: number;
 >sx : number
@@ -41,6 +42,7 @@ class C1 {
 
     protected static get staticGetter() { return 0; }
 >staticGetter : number
+>0 : number
 }
 
 // Derived class overriding protected members
@@ -58,7 +60,7 @@ class C2 extends C1 {
 >super : C1
 >f : () => number
 >this.x : number
->this : C2
+>this : this
 >x : number
     }
     protected static sf() {
@@ -108,6 +110,7 @@ class C3 extends C2 {
 
     static get staticGetter() { return 1; }
 >staticGetter : number
+>1 : number
 }
 
 // Protected properties in constructors

@@ -38,11 +38,10 @@ var context4: Base[] = [new Derived1(), new Derived1()];
 
 //// [arrayLiterals.js]
 // Empty array literal with no contextual type has type Undefined[]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var arr1 = [[], [1], ['']];
 var arr2 = [[null], [1], ['']];
@@ -55,7 +54,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var classArr = [new C(), new C()];
 var classTypeArray = [C, C, C];
 var classTypeArray; // Should OK, not be a parse error
@@ -67,14 +66,14 @@ var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var Derived1 = (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
         _super.apply(this, arguments);
     }
     return Derived1;
-})(Base);
+}(Base));
 ;
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
@@ -82,7 +81,7 @@ var Derived2 = (function (_super) {
         _super.apply(this, arguments);
     }
     return Derived2;
-})(Base);
+}(Base));
 ;
 var context3 = [new Derived1(), new Derived2()];
 // Contextual type C with numeric index signature of type Base makes array literal of Derived1 and Derived2 have type Base[]

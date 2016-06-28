@@ -11,10 +11,10 @@ var x: number = E1.A;
 // Enum object type is anonymous with properties of the enum type and numeric indexer
 var e = E1;
 var e: {
-    A: E1;
-    B: E1;
-    C: E1;
-    [n: number]: string;
+    readonly A: E1;
+    readonly B: E1;
+    readonly C: E1;
+    readonly [n: number]: string;
 };
 var e: typeof E1;
 

@@ -56,7 +56,7 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 var c;
 // all ok
 var r = c.x;

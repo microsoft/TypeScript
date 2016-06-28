@@ -1,0 +1,23 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardTautologicalConsistiency.ts ===
+let stringOrNumber: string | number;
+>stringOrNumber : Symbol(stringOrNumber, Decl(typeGuardTautologicalConsistiency.ts, 0, 3))
+
+if (typeof stringOrNumber === "number") {
+>stringOrNumber : Symbol(stringOrNumber, Decl(typeGuardTautologicalConsistiency.ts, 0, 3))
+
+    if (typeof stringOrNumber !== "number") {
+>stringOrNumber : Symbol(stringOrNumber, Decl(typeGuardTautologicalConsistiency.ts, 0, 3))
+
+        stringOrNumber;
+>stringOrNumber : Symbol(stringOrNumber, Decl(typeGuardTautologicalConsistiency.ts, 0, 3))
+    }
+}
+
+if (typeof stringOrNumber === "number" && typeof stringOrNumber !== "number") {
+>stringOrNumber : Symbol(stringOrNumber, Decl(typeGuardTautologicalConsistiency.ts, 0, 3))
+>stringOrNumber : Symbol(stringOrNumber, Decl(typeGuardTautologicalConsistiency.ts, 0, 3))
+
+    stringOrNumber;
+>stringOrNumber : Symbol(stringOrNumber, Decl(typeGuardTautologicalConsistiency.ts, 0, 3))
+}
+

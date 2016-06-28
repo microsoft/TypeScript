@@ -49,12 +49,12 @@ var S = (function () {
     function S() {
     }
     return S;
-})();
+}());
 var T = (function () {
     function T() {
     }
     return T;
-})();
+}());
 var s;
 var t;
 var s2;

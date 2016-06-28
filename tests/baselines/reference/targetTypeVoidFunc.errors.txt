@@ -1,4 +1,5 @@
 tests/cases/compiler/targetTypeVoidFunc.ts(2,12): error TS2322: Type '() => void' is not assignable to type 'new () => number'.
+  Type '() => void' provides no match for the signature 'new (): number'
 
 
 ==== tests/cases/compiler/targetTypeVoidFunc.ts (1 errors) ====
@@ -6,6 +7,7 @@ tests/cases/compiler/targetTypeVoidFunc.ts(2,12): error TS2322: Type '() => void
         return function () { return; }
                ~~~~~~~~
 !!! error TS2322: Type '() => void' is not assignable to type 'new () => number'.
+!!! error TS2322:   Type '() => void' provides no match for the signature 'new (): number'
     }; 
     
     var x = f1();

@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 if (true)
     f();
 else

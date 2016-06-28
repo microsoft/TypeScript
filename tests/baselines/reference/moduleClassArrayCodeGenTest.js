@@ -18,13 +18,13 @@ var M;
         function A() {
         }
         return A;
-    })();
+    }());
     M.A = A;
     var B = (function () {
         function B() {
         }
         return B;
-    })();
+    }());
 })(M || (M = {}));
 var t = [];
 var t2 = [];

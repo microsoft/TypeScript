@@ -1,0 +1,6 @@
+=== tests/cases/compiler/contextualTyping7.ts ===
+var foo:{id:number;}[] = [<{id:number;}>({})];
+>foo : Symbol(foo, Decl(contextualTyping7.ts, 0, 3))
+>id : Symbol(id, Decl(contextualTyping7.ts, 0, 9))
+>id : Symbol(id, Decl(contextualTyping7.ts, 0, 28))
+

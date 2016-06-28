@@ -1,0 +1,17 @@
+=== tests/cases/compiler/redeclarationOfVarWithGenericType.ts ===
+var a1: { fn<T>(x: T): T };
+>a1 : Symbol(a1, Decl(redeclarationOfVarWithGenericType.ts, 0, 3), Decl(redeclarationOfVarWithGenericType.ts, 1, 3))
+>fn : Symbol(fn, Decl(redeclarationOfVarWithGenericType.ts, 0, 9))
+>T : Symbol(T, Decl(redeclarationOfVarWithGenericType.ts, 0, 13))
+>x : Symbol(x, Decl(redeclarationOfVarWithGenericType.ts, 0, 16))
+>T : Symbol(T, Decl(redeclarationOfVarWithGenericType.ts, 0, 13))
+>T : Symbol(T, Decl(redeclarationOfVarWithGenericType.ts, 0, 13))
+
+var a1: { fn<T>(x: T): T };
+>a1 : Symbol(a1, Decl(redeclarationOfVarWithGenericType.ts, 0, 3), Decl(redeclarationOfVarWithGenericType.ts, 1, 3))
+>fn : Symbol(fn, Decl(redeclarationOfVarWithGenericType.ts, 1, 9))
+>T : Symbol(T, Decl(redeclarationOfVarWithGenericType.ts, 1, 13))
+>x : Symbol(x, Decl(redeclarationOfVarWithGenericType.ts, 1, 16))
+>T : Symbol(T, Decl(redeclarationOfVarWithGenericType.ts, 1, 13))
+>T : Symbol(T, Decl(redeclarationOfVarWithGenericType.ts, 1, 13))
+

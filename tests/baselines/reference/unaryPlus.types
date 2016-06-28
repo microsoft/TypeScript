@@ -3,12 +3,14 @@
 var a = +1;
 >a : number
 >+1 : number
+>1 : number
 
 var b = +(<any>"");
 >b : number
 >+(<any>"") : number
 >(<any>"") : any
 ><any>"" : any
+>"" : string
 
 enum E { some, thing };
 >E : E
@@ -26,12 +28,15 @@ var c = +E.some;
 var x = +"3"; //should be valid
 >x : number
 >+"3" : number
+>"3" : string
 
 var y = -"3"; // should be valid
 >y : number
 >-"3" : number
+>"3" : string
 
 var z = ~"3"; // should be valid
 >z : number
 >~"3" : number
+>"3" : string
 

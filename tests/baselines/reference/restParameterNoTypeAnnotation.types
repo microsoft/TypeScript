@@ -7,6 +7,7 @@ function foo(...rest) {
 >x : number
 >rest[0] : any
 >rest : any[]
+>0 : number
 
      return x;   
 >x : number

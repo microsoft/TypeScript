@@ -12,5 +12,6 @@ module fn {
 
     export var n = 1;
 >n : number
+>1 : number
 }
 

@@ -21,17 +21,19 @@ export = m2;
 
 //// [declFileImportModuleWithExportAssignment_1.ts]
 /**This is on import declaration*/
-import a1 = require("declFileImportModuleWithExportAssignment_0");
+import a1 = require("./declFileImportModuleWithExportAssignment_0");
 export var a = a1;
 a.test1(null, null, null);
 
 
 //// [declFileImportModuleWithExportAssignment_0.js]
+"use strict";
 var m2;
 module.exports = m2;
 //// [declFileImportModuleWithExportAssignment_1.js]
+"use strict";
 /**This is on import declaration*/
-var a1 = require("declFileImportModuleWithExportAssignment_0");
+var a1 = require("./declFileImportModuleWithExportAssignment_0");
 exports.a = a1;
 exports.a.test1(null, null, null);
 
@@ -54,7 +56,7 @@ declare var m2: {
 export = m2;
 //// [declFileImportModuleWithExportAssignment_1.d.ts]
 /**This is on import declaration*/
-import a1 = require("declFileImportModuleWithExportAssignment_0");
+import a1 = require("./declFileImportModuleWithExportAssignment_0");
 export declare var a: {
     (): a1.connectExport;
     test1: a1.connectModule;

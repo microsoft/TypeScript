@@ -1,0 +1,17 @@
+=== tests/cases/compiler/collisionCodeGenModuleWithMemberVariable.ts ===
+module m1 {
+>m1 : Symbol(m1, Decl(collisionCodeGenModuleWithMemberVariable.ts, 0, 0))
+
+    export var m1 = 10;
+>m1 : Symbol(m1, Decl(collisionCodeGenModuleWithMemberVariable.ts, 1, 14))
+
+    var b = m1;
+>b : Symbol(b, Decl(collisionCodeGenModuleWithMemberVariable.ts, 2, 7))
+>m1 : Symbol(m1, Decl(collisionCodeGenModuleWithMemberVariable.ts, 1, 14))
+}
+var foo = m1.m1;
+>foo : Symbol(foo, Decl(collisionCodeGenModuleWithMemberVariable.ts, 4, 3))
+>m1.m1 : Symbol(m1.m1, Decl(collisionCodeGenModuleWithMemberVariable.ts, 1, 14))
+>m1 : Symbol(m1, Decl(collisionCodeGenModuleWithMemberVariable.ts, 0, 0))
+>m1 : Symbol(m1.m1, Decl(collisionCodeGenModuleWithMemberVariable.ts, 1, 14))
+

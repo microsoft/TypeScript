@@ -81,7 +81,7 @@ var C = (function () {
         this.s = foo(this);
     }
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
@@ -94,4 +94,4 @@ var D = (function () {
         configurable: true
     });
     return D;
-})();
+}());

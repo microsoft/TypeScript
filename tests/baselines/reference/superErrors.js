@@ -52,11 +52,10 @@ class RegisteredUser extends User {
 }
 
 //// [superErrors.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 function foo() {
     // super in a non class context
@@ -72,7 +71,7 @@ var User = (function () {
         //console.log("Hello, " + this.name);
     };
     return User;
-})();
+}());
 var RegisteredUser = (function (_super) {
     __extends(RegisteredUser, _super);
     function RegisteredUser() {
@@ -107,4 +106,4 @@ var RegisteredUser = (function (_super) {
         var y = function () { return function () { return function () { return _super.; }; }; };
     };
     return RegisteredUser;
-})(User);
+}(User));

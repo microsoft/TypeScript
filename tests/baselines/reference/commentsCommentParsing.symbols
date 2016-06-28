@@ -1,0 +1,235 @@
+=== tests/cases/compiler/commentsCommentParsing.ts ===
+
+/// This is simple /// comments
+function simple() {
+>simple : Symbol(simple, Decl(commentsCommentParsing.ts, 0, 0))
+}
+
+simple();
+>simple : Symbol(simple, Decl(commentsCommentParsing.ts, 0, 0))
+
+/// multiLine /// Comments
+/// This is example of multiline /// comments
+/// Another multiLine
+function multiLine() {
+>multiLine : Symbol(multiLine, Decl(commentsCommentParsing.ts, 5, 9))
+}
+multiLine();
+>multiLine : Symbol(multiLine, Decl(commentsCommentParsing.ts, 5, 9))
+
+/** this is eg of single line jsdoc style comment */
+function jsDocSingleLine() {
+>jsDocSingleLine : Symbol(jsDocSingleLine, Decl(commentsCommentParsing.ts, 12, 12))
+}
+jsDocSingleLine();
+>jsDocSingleLine : Symbol(jsDocSingleLine, Decl(commentsCommentParsing.ts, 12, 12))
+
+
+/** this is multiple line jsdoc stule comment
+*New line1
+*New Line2*/
+function jsDocMultiLine() {
+>jsDocMultiLine : Symbol(jsDocMultiLine, Decl(commentsCommentParsing.ts, 17, 18))
+}
+jsDocMultiLine();
+>jsDocMultiLine : Symbol(jsDocMultiLine, Decl(commentsCommentParsing.ts, 17, 18))
+
+/** this is multiple line jsdoc stule comment
+*New line1
+*New Line2*/
+/** Shoul mege this line as well
+* and this too*/ /** Another this one too*/
+function jsDocMultiLineMerge() {
+>jsDocMultiLineMerge : Symbol(jsDocMultiLineMerge, Decl(commentsCommentParsing.ts, 25, 17))
+}
+jsDocMultiLineMerge();
+>jsDocMultiLineMerge : Symbol(jsDocMultiLineMerge, Decl(commentsCommentParsing.ts, 25, 17))
+
+
+/// Triple slash comment
+/** jsdoc comment */
+function jsDocMixedComments1() {
+>jsDocMixedComments1 : Symbol(jsDocMixedComments1, Decl(commentsCommentParsing.ts, 34, 22))
+}
+jsDocMixedComments1();
+>jsDocMixedComments1 : Symbol(jsDocMixedComments1, Decl(commentsCommentParsing.ts, 34, 22))
+
+/// Triple slash comment
+/** jsdoc comment */ /*** another jsDocComment*/
+function jsDocMixedComments2() {
+>jsDocMixedComments2 : Symbol(jsDocMixedComments2, Decl(commentsCommentParsing.ts, 41, 22))
+}
+jsDocMixedComments2();
+>jsDocMixedComments2 : Symbol(jsDocMixedComments2, Decl(commentsCommentParsing.ts, 41, 22))
+
+/** jsdoc comment */ /*** another jsDocComment*/
+/// Triple slash comment
+function jsDocMixedComments3() {
+>jsDocMixedComments3 : Symbol(jsDocMixedComments3, Decl(commentsCommentParsing.ts, 47, 22))
+}
+jsDocMixedComments3();
+>jsDocMixedComments3 : Symbol(jsDocMixedComments3, Decl(commentsCommentParsing.ts, 47, 22))
+
+/** jsdoc comment */ /*** another jsDocComment*/
+/// Triple slash comment
+/// Triple slash comment 2
+function jsDocMixedComments4() {
+>jsDocMixedComments4 : Symbol(jsDocMixedComments4, Decl(commentsCommentParsing.ts, 53, 22))
+}
+jsDocMixedComments4();
+>jsDocMixedComments4 : Symbol(jsDocMixedComments4, Decl(commentsCommentParsing.ts, 53, 22))
+
+/// Triple slash comment 1
+/** jsdoc comment */ /*** another jsDocComment*/
+/// Triple slash comment
+/// Triple slash comment 2
+function jsDocMixedComments5() {
+>jsDocMixedComments5 : Symbol(jsDocMixedComments5, Decl(commentsCommentParsing.ts, 60, 22))
+}
+jsDocMixedComments5();
+>jsDocMixedComments5 : Symbol(jsDocMixedComments5, Decl(commentsCommentParsing.ts, 60, 22))
+
+/*** another jsDocComment*/
+/// Triple slash comment 1
+/// Triple slash comment
+/// Triple slash comment 2
+/** jsdoc comment */
+function jsDocMixedComments6() {
+>jsDocMixedComments6 : Symbol(jsDocMixedComments6, Decl(commentsCommentParsing.ts, 68, 22))
+}
+jsDocMixedComments6();
+>jsDocMixedComments6 : Symbol(jsDocMixedComments6, Decl(commentsCommentParsing.ts, 68, 22))
+
+// This shoulnot be help comment
+function noHelpComment1() {
+>noHelpComment1 : Symbol(noHelpComment1, Decl(commentsCommentParsing.ts, 77, 22))
+}
+noHelpComment1();
+>noHelpComment1 : Symbol(noHelpComment1, Decl(commentsCommentParsing.ts, 77, 22))
+
+/* This shoulnot be help comment */
+function noHelpComment2() {
+>noHelpComment2 : Symbol(noHelpComment2, Decl(commentsCommentParsing.ts, 82, 17))
+}
+noHelpComment2();
+>noHelpComment2 : Symbol(noHelpComment2, Decl(commentsCommentParsing.ts, 82, 17))
+
+function noHelpComment3() {
+>noHelpComment3 : Symbol(noHelpComment3, Decl(commentsCommentParsing.ts, 87, 17))
+}
+noHelpComment3();
+>noHelpComment3 : Symbol(noHelpComment3, Decl(commentsCommentParsing.ts, 87, 17))
+
+/** Adds two integers and returns the result
+  * @param {number} a first number
+  * @param b second number
+  */
+function sum(a: number, b: number) {
+>sum : Symbol(sum, Decl(commentsCommentParsing.ts, 91, 17))
+>a : Symbol(a, Decl(commentsCommentParsing.ts, 96, 13))
+>b : Symbol(b, Decl(commentsCommentParsing.ts, 96, 23))
+
+    return a + b;
+>a : Symbol(a, Decl(commentsCommentParsing.ts, 96, 13))
+>b : Symbol(b, Decl(commentsCommentParsing.ts, 96, 23))
+}
+sum(10, 20);
+>sum : Symbol(sum, Decl(commentsCommentParsing.ts, 91, 17))
+
+/** This is multiplication function*/
+/** @param */
+/** @param a first number*/
+/** @param b */
+/** @param c {
+ @param d @anotherTag*/
+/** @param e LastParam @anotherTag*/
+function multiply(a: number, b: number, c?: number, d?, e?) {
+>multiply : Symbol(multiply, Decl(commentsCommentParsing.ts, 99, 12))
+>a : Symbol(a, Decl(commentsCommentParsing.ts, 107, 18))
+>b : Symbol(b, Decl(commentsCommentParsing.ts, 107, 28))
+>c : Symbol(c, Decl(commentsCommentParsing.ts, 107, 39))
+>d : Symbol(d, Decl(commentsCommentParsing.ts, 107, 51))
+>e : Symbol(e, Decl(commentsCommentParsing.ts, 107, 55))
+}
+/** fn f1 with number
+* @param { string} b about b
+*/
+function f1(a: number);
+>f1 : Symbol(f1, Decl(commentsCommentParsing.ts, 108, 1), Decl(commentsCommentParsing.ts, 112, 23), Decl(commentsCommentParsing.ts, 113, 23))
+>a : Symbol(a, Decl(commentsCommentParsing.ts, 112, 12))
+
+function f1(b: string);
+>f1 : Symbol(f1, Decl(commentsCommentParsing.ts, 108, 1), Decl(commentsCommentParsing.ts, 112, 23), Decl(commentsCommentParsing.ts, 113, 23))
+>b : Symbol(b, Decl(commentsCommentParsing.ts, 113, 12))
+
+/**@param opt optional parameter*/
+function f1(aOrb, opt?) {
+>f1 : Symbol(f1, Decl(commentsCommentParsing.ts, 108, 1), Decl(commentsCommentParsing.ts, 112, 23), Decl(commentsCommentParsing.ts, 113, 23))
+>aOrb : Symbol(aOrb, Decl(commentsCommentParsing.ts, 115, 12))
+>opt : Symbol(opt, Decl(commentsCommentParsing.ts, 115, 17))
+
+    return aOrb;
+>aOrb : Symbol(aOrb, Decl(commentsCommentParsing.ts, 115, 12))
+}
+/** This is subtract function
+@param { a
+*@param { number | } b this is about b
+@param { { () => string; } } c this is optional param c
+@param { { () => string; } d this is optional param d
+@param { { () => string; } } e this is optional param e
+@param { { { () => string; } } f this is optional param f
+*/
+function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string) {
+>subtract : Symbol(subtract, Decl(commentsCommentParsing.ts, 117, 1))
+>a : Symbol(a, Decl(commentsCommentParsing.ts, 126, 18))
+>b : Symbol(b, Decl(commentsCommentParsing.ts, 126, 28))
+>c : Symbol(c, Decl(commentsCommentParsing.ts, 126, 39))
+>d : Symbol(d, Decl(commentsCommentParsing.ts, 126, 57))
+>e : Symbol(e, Decl(commentsCommentParsing.ts, 126, 75))
+>f : Symbol(f, Decl(commentsCommentParsing.ts, 126, 93))
+}
+/** this is square function
+@paramTag { number } a this is input number of paramTag
+@param { number } a this is input number
+@returnType { number } it is return type
+*/
+function square(a: number) {
+>square : Symbol(square, Decl(commentsCommentParsing.ts, 127, 1))
+>a : Symbol(a, Decl(commentsCommentParsing.ts, 133, 16))
+
+    return a * a;
+>a : Symbol(a, Decl(commentsCommentParsing.ts, 133, 16))
+>a : Symbol(a, Decl(commentsCommentParsing.ts, 133, 16))
+}
+/** this is divide function
+@param { number} a this is a
+@paramTag { number } g this is optional param g
+@param { number} b this is b
+*/
+function divide(a: number, b: number) {
+>divide : Symbol(divide, Decl(commentsCommentParsing.ts, 135, 1))
+>a : Symbol(a, Decl(commentsCommentParsing.ts, 141, 16))
+>b : Symbol(b, Decl(commentsCommentParsing.ts, 141, 26))
+}
+/** this is jsdoc style function with param tag as well as inline parameter help
+*@param a it is first parameter
+*@param c it is third parameter
+*/
+function jsDocParamTest(/** this is inline comment for a */a: number, /** this is inline comment for b*/ b: number, c: number, d: number) {
+>jsDocParamTest : Symbol(jsDocParamTest, Decl(commentsCommentParsing.ts, 142, 1))
+>a : Symbol(a, Decl(commentsCommentParsing.ts, 147, 24))
+>b : Symbol(b, Decl(commentsCommentParsing.ts, 147, 69))
+>c : Symbol(c, Decl(commentsCommentParsing.ts, 147, 115))
+>d : Symbol(d, Decl(commentsCommentParsing.ts, 147, 126))
+
+    return a + b + c + d;
+>a : Symbol(a, Decl(commentsCommentParsing.ts, 147, 24))
+>b : Symbol(b, Decl(commentsCommentParsing.ts, 147, 69))
+>c : Symbol(c, Decl(commentsCommentParsing.ts, 147, 115))
+>d : Symbol(d, Decl(commentsCommentParsing.ts, 147, 126))
+}
+
+/**/
+class NoQuickInfoClass {
+>NoQuickInfoClass : Symbol(NoQuickInfoClass, Decl(commentsCommentParsing.ts, 149, 1))
+}

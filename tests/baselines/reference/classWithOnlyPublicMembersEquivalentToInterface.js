@@ -38,7 +38,7 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 var c;
 var i;
 c = i;

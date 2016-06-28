@@ -18,6 +18,7 @@ module CallSignature {
 >foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }
 >(x: number) => 1 : (x: number) => number
 >x : number
+>1 : number
 
     var r2 = foo1(<T>(x: T) => ''); // ok because base returns void
 >r2 : (x: number) => void
@@ -27,6 +28,7 @@ module CallSignature {
 >T : T
 >x : T
 >T : T
+>'' : string
 
     declare function foo2(cb: (x: number, y: number) => void): typeof cb;
 >foo2 : { (cb: (x: number, y: number) => void): (x: number, y: number) => void; (cb: any): any; }
@@ -46,6 +48,7 @@ module CallSignature {
 >(x: number, y: number) => 1 : (x: number, y: number) => number
 >x : number
 >y : number
+>1 : number
 
     var r4 = foo2(<T>(x: T) => ''); // ok because base returns void
 >r4 : (x: number, y: number) => void
@@ -55,4 +58,5 @@ module CallSignature {
 >T : T
 >x : T
 >T : T
+>'' : string
 }

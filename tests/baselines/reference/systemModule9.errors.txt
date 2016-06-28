@@ -1,0 +1,42 @@
+tests/cases/compiler/systemModule9.ts(2,21): error TS2307: Cannot find module 'file1'.
+tests/cases/compiler/systemModule9.ts(3,25): error TS2307: Cannot find module 'file2'.
+tests/cases/compiler/systemModule9.ts(4,15): error TS2307: Cannot find module 'file3'.
+tests/cases/compiler/systemModule9.ts(6,25): error TS2307: Cannot find module 'file5'.
+tests/cases/compiler/systemModule9.ts(7,22): error TS2307: Cannot find module 'file6'.
+tests/cases/compiler/systemModule9.ts(17,15): error TS2307: Cannot find module 'file7'.
+
+
+==== tests/cases/compiler/systemModule9.ts (6 errors) ====
+    
+    import * as ns from 'file1';
+                        ~~~~~~~
+!!! error TS2307: Cannot find module 'file1'.
+    import {a, b as c} from 'file2';
+                            ~~~~~~~
+!!! error TS2307: Cannot find module 'file2'.
+    import d from 'file3'
+                  ~~~~~~~
+!!! error TS2307: Cannot find module 'file3'.
+    import 'file4'
+    import e, * as ns2 from 'file5';
+                            ~~~~~~~
+!!! error TS2307: Cannot find module 'file5'.
+    import ns3 = require('file6');
+                         ~~~~~~~
+!!! error TS2307: Cannot find module 'file6'.
+    
+    ns.f();
+    a();
+    c();
+    d();
+    e();
+    ns2.f();
+    ns3.f();
+    
+    export * from 'file7';
+                  ~~~~~~~
+!!! error TS2307: Cannot find module 'file7'.
+    
+    var x, y = true;
+    export {x};
+    export {y as z};

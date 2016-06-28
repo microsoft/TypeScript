@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 for (; ;) {
     continue;
 }

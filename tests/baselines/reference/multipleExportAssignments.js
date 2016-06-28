@@ -17,5 +17,6 @@ export = connectExport;
 
 
 //// [multipleExportAssignments.js]
+"use strict";
 var server;
 module.exports = server;

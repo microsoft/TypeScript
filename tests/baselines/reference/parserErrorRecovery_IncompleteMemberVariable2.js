@@ -45,7 +45,7 @@ var Shapes;
         // Static member
         Point.origin = new Point(0, 0);
         return Point;
-    })();
+    }());
     Shapes.Point = Point;
 })(Shapes || (Shapes = {}));
 // Local variables

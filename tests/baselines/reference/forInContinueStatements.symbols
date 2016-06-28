@@ -1,0 +1,59 @@
+=== tests/cases/conformance/statements/continueStatements/forInContinueStatements.ts ===
+
+for(var x in {}) {
+>x : Symbol(x, Decl(forInContinueStatements.ts, 1, 7), Decl(forInContinueStatements.ts, 6, 7), Decl(forInContinueStatements.ts, 12, 7), Decl(forInContinueStatements.ts, 17, 7), Decl(forInContinueStatements.ts, 19, 11), Decl(forInContinueStatements.ts, 24, 7), Decl(forInContinueStatements.ts, 26, 11), Decl(forInContinueStatements.ts, 30, 8), Decl(forInContinueStatements.ts, 30, 26), Decl(forInContinueStatements.ts, 30, 44), Decl(forInContinueStatements.ts, 33, 8))
+
+    continue;
+}
+
+ONE:
+for(var x in {}) {
+>x : Symbol(x, Decl(forInContinueStatements.ts, 1, 7), Decl(forInContinueStatements.ts, 6, 7), Decl(forInContinueStatements.ts, 12, 7), Decl(forInContinueStatements.ts, 17, 7), Decl(forInContinueStatements.ts, 19, 11), Decl(forInContinueStatements.ts, 24, 7), Decl(forInContinueStatements.ts, 26, 11), Decl(forInContinueStatements.ts, 30, 8), Decl(forInContinueStatements.ts, 30, 26), Decl(forInContinueStatements.ts, 30, 44), Decl(forInContinueStatements.ts, 33, 8))
+
+    continue ONE;
+}
+
+TWO:
+THREE:
+for(var x in {}) {
+>x : Symbol(x, Decl(forInContinueStatements.ts, 1, 7), Decl(forInContinueStatements.ts, 6, 7), Decl(forInContinueStatements.ts, 12, 7), Decl(forInContinueStatements.ts, 17, 7), Decl(forInContinueStatements.ts, 19, 11), Decl(forInContinueStatements.ts, 24, 7), Decl(forInContinueStatements.ts, 26, 11), Decl(forInContinueStatements.ts, 30, 8), Decl(forInContinueStatements.ts, 30, 26), Decl(forInContinueStatements.ts, 30, 44), Decl(forInContinueStatements.ts, 33, 8))
+
+    continue THREE;
+}
+
+FOUR:
+for(var x in {}) {
+>x : Symbol(x, Decl(forInContinueStatements.ts, 1, 7), Decl(forInContinueStatements.ts, 6, 7), Decl(forInContinueStatements.ts, 12, 7), Decl(forInContinueStatements.ts, 17, 7), Decl(forInContinueStatements.ts, 19, 11), Decl(forInContinueStatements.ts, 24, 7), Decl(forInContinueStatements.ts, 26, 11), Decl(forInContinueStatements.ts, 30, 8), Decl(forInContinueStatements.ts, 30, 26), Decl(forInContinueStatements.ts, 30, 44), Decl(forInContinueStatements.ts, 33, 8))
+
+    FIVE:
+    for(var x in {}) {
+>x : Symbol(x, Decl(forInContinueStatements.ts, 1, 7), Decl(forInContinueStatements.ts, 6, 7), Decl(forInContinueStatements.ts, 12, 7), Decl(forInContinueStatements.ts, 17, 7), Decl(forInContinueStatements.ts, 19, 11), Decl(forInContinueStatements.ts, 24, 7), Decl(forInContinueStatements.ts, 26, 11), Decl(forInContinueStatements.ts, 30, 8), Decl(forInContinueStatements.ts, 30, 26), Decl(forInContinueStatements.ts, 30, 44), Decl(forInContinueStatements.ts, 33, 8))
+
+        continue FOUR;
+    }
+}
+
+for(var x in {}) {
+>x : Symbol(x, Decl(forInContinueStatements.ts, 1, 7), Decl(forInContinueStatements.ts, 6, 7), Decl(forInContinueStatements.ts, 12, 7), Decl(forInContinueStatements.ts, 17, 7), Decl(forInContinueStatements.ts, 19, 11), Decl(forInContinueStatements.ts, 24, 7), Decl(forInContinueStatements.ts, 26, 11), Decl(forInContinueStatements.ts, 30, 8), Decl(forInContinueStatements.ts, 30, 26), Decl(forInContinueStatements.ts, 30, 44), Decl(forInContinueStatements.ts, 33, 8))
+
+    SIX:
+    for(var x in {}) continue SIX;
+>x : Symbol(x, Decl(forInContinueStatements.ts, 1, 7), Decl(forInContinueStatements.ts, 6, 7), Decl(forInContinueStatements.ts, 12, 7), Decl(forInContinueStatements.ts, 17, 7), Decl(forInContinueStatements.ts, 19, 11), Decl(forInContinueStatements.ts, 24, 7), Decl(forInContinueStatements.ts, 26, 11), Decl(forInContinueStatements.ts, 30, 8), Decl(forInContinueStatements.ts, 30, 26), Decl(forInContinueStatements.ts, 30, 44), Decl(forInContinueStatements.ts, 33, 8))
+}
+
+SEVEN:
+for (var x in {}) for (var x in {}) for (var x in {}) continue SEVEN;
+>x : Symbol(x, Decl(forInContinueStatements.ts, 1, 7), Decl(forInContinueStatements.ts, 6, 7), Decl(forInContinueStatements.ts, 12, 7), Decl(forInContinueStatements.ts, 17, 7), Decl(forInContinueStatements.ts, 19, 11), Decl(forInContinueStatements.ts, 24, 7), Decl(forInContinueStatements.ts, 26, 11), Decl(forInContinueStatements.ts, 30, 8), Decl(forInContinueStatements.ts, 30, 26), Decl(forInContinueStatements.ts, 30, 44), Decl(forInContinueStatements.ts, 33, 8))
+>x : Symbol(x, Decl(forInContinueStatements.ts, 1, 7), Decl(forInContinueStatements.ts, 6, 7), Decl(forInContinueStatements.ts, 12, 7), Decl(forInContinueStatements.ts, 17, 7), Decl(forInContinueStatements.ts, 19, 11), Decl(forInContinueStatements.ts, 24, 7), Decl(forInContinueStatements.ts, 26, 11), Decl(forInContinueStatements.ts, 30, 8), Decl(forInContinueStatements.ts, 30, 26), Decl(forInContinueStatements.ts, 30, 44), Decl(forInContinueStatements.ts, 33, 8))
+>x : Symbol(x, Decl(forInContinueStatements.ts, 1, 7), Decl(forInContinueStatements.ts, 6, 7), Decl(forInContinueStatements.ts, 12, 7), Decl(forInContinueStatements.ts, 17, 7), Decl(forInContinueStatements.ts, 19, 11), Decl(forInContinueStatements.ts, 24, 7), Decl(forInContinueStatements.ts, 26, 11), Decl(forInContinueStatements.ts, 30, 8), Decl(forInContinueStatements.ts, 30, 26), Decl(forInContinueStatements.ts, 30, 44), Decl(forInContinueStatements.ts, 33, 8))
+
+EIGHT:
+for (var x in {}){
+>x : Symbol(x, Decl(forInContinueStatements.ts, 1, 7), Decl(forInContinueStatements.ts, 6, 7), Decl(forInContinueStatements.ts, 12, 7), Decl(forInContinueStatements.ts, 17, 7), Decl(forInContinueStatements.ts, 19, 11), Decl(forInContinueStatements.ts, 24, 7), Decl(forInContinueStatements.ts, 26, 11), Decl(forInContinueStatements.ts, 30, 8), Decl(forInContinueStatements.ts, 30, 26), Decl(forInContinueStatements.ts, 30, 44), Decl(forInContinueStatements.ts, 33, 8))
+
+    var fn = function () { }
+>fn : Symbol(fn, Decl(forInContinueStatements.ts, 34, 7))
+
+    continue EIGHT;
+}
+

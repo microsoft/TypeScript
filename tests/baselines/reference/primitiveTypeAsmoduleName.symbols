@@ -1,0 +1,4 @@
+=== tests/cases/compiler/primitiveTypeAsmoduleName.ts ===
+module string {}
+>string : Symbol(string, Decl(primitiveTypeAsmoduleName.ts, 0, 0))
+

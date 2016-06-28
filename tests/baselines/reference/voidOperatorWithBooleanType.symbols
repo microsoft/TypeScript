@@ -1,0 +1,89 @@
+=== tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithBooleanType.ts ===
+// void  operator on boolean type
+var BOOLEAN: boolean;
+>BOOLEAN : Symbol(BOOLEAN, Decl(voidOperatorWithBooleanType.ts, 1, 3))
+
+function foo(): boolean { return true; }
+>foo : Symbol(foo, Decl(voidOperatorWithBooleanType.ts, 1, 21))
+
+class A {
+>A : Symbol(A, Decl(voidOperatorWithBooleanType.ts, 3, 40))
+
+    public a: boolean;
+>a : Symbol(A.a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
+
+    static foo() { return false; }
+>foo : Symbol(A.foo, Decl(voidOperatorWithBooleanType.ts, 6, 22))
+}
+module M {
+>M : Symbol(M, Decl(voidOperatorWithBooleanType.ts, 8, 1))
+
+    export var n: boolean;
+>n : Symbol(n, Decl(voidOperatorWithBooleanType.ts, 10, 14))
+}
+
+var objA = new A();
+>objA : Symbol(objA, Decl(voidOperatorWithBooleanType.ts, 13, 3))
+>A : Symbol(A, Decl(voidOperatorWithBooleanType.ts, 3, 40))
+
+// boolean type var
+var ResultIsAny1 = void BOOLEAN;
+>ResultIsAny1 : Symbol(ResultIsAny1, Decl(voidOperatorWithBooleanType.ts, 16, 3))
+>BOOLEAN : Symbol(BOOLEAN, Decl(voidOperatorWithBooleanType.ts, 1, 3))
+
+// boolean type literal
+var ResultIsAny2 = void true;
+>ResultIsAny2 : Symbol(ResultIsAny2, Decl(voidOperatorWithBooleanType.ts, 19, 3))
+
+var ResultIsAny3 = void { x: true, y: false };
+>ResultIsAny3 : Symbol(ResultIsAny3, Decl(voidOperatorWithBooleanType.ts, 20, 3))
+>x : Symbol(x, Decl(voidOperatorWithBooleanType.ts, 20, 25))
+>y : Symbol(y, Decl(voidOperatorWithBooleanType.ts, 20, 34))
+
+// boolean type expressions
+var ResultIsAny4 = void objA.a;
+>ResultIsAny4 : Symbol(ResultIsAny4, Decl(voidOperatorWithBooleanType.ts, 23, 3))
+>objA.a : Symbol(A.a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
+>objA : Symbol(objA, Decl(voidOperatorWithBooleanType.ts, 13, 3))
+>a : Symbol(A.a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
+
+var ResultIsAny5 = void M.n;
+>ResultIsAny5 : Symbol(ResultIsAny5, Decl(voidOperatorWithBooleanType.ts, 24, 3))
+>M.n : Symbol(M.n, Decl(voidOperatorWithBooleanType.ts, 10, 14))
+>M : Symbol(M, Decl(voidOperatorWithBooleanType.ts, 8, 1))
+>n : Symbol(M.n, Decl(voidOperatorWithBooleanType.ts, 10, 14))
+
+var ResultIsAny6 = void foo();
+>ResultIsAny6 : Symbol(ResultIsAny6, Decl(voidOperatorWithBooleanType.ts, 25, 3))
+>foo : Symbol(foo, Decl(voidOperatorWithBooleanType.ts, 1, 21))
+
+var ResultIsAny7 = void A.foo();
+>ResultIsAny7 : Symbol(ResultIsAny7, Decl(voidOperatorWithBooleanType.ts, 26, 3))
+>A.foo : Symbol(A.foo, Decl(voidOperatorWithBooleanType.ts, 6, 22))
+>A : Symbol(A, Decl(voidOperatorWithBooleanType.ts, 3, 40))
+>foo : Symbol(A.foo, Decl(voidOperatorWithBooleanType.ts, 6, 22))
+
+// multiple void  operator
+var ResultIsAny8 = void void BOOLEAN;
+>ResultIsAny8 : Symbol(ResultIsAny8, Decl(voidOperatorWithBooleanType.ts, 29, 3))
+>BOOLEAN : Symbol(BOOLEAN, Decl(voidOperatorWithBooleanType.ts, 1, 3))
+
+// miss assignment operators
+void true;
+void BOOLEAN;
+>BOOLEAN : Symbol(BOOLEAN, Decl(voidOperatorWithBooleanType.ts, 1, 3))
+
+void foo();
+>foo : Symbol(foo, Decl(voidOperatorWithBooleanType.ts, 1, 21))
+
+void true, false;
+void objA.a;
+>objA.a : Symbol(A.a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
+>objA : Symbol(objA, Decl(voidOperatorWithBooleanType.ts, 13, 3))
+>a : Symbol(A.a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
+
+void M.n;
+>M.n : Symbol(M.n, Decl(voidOperatorWithBooleanType.ts, 10, 14))
+>M : Symbol(M, Decl(voidOperatorWithBooleanType.ts, 8, 1))
+>n : Symbol(M.n, Decl(voidOperatorWithBooleanType.ts, 10, 14))
+

@@ -1,0 +1,55 @@
+=== tests/cases/conformance/types/typeRelationships/comparable/equalityWithUnionTypes01.ts ===
+interface I1 {
+>I1 : Symbol(I1, Decl(equalityWithUnionTypes01.ts, 0, 0))
+
+    p1: number
+>p1 : Symbol(I1.p1, Decl(equalityWithUnionTypes01.ts, 0, 14))
+}
+
+interface I2 extends I1 {
+>I2 : Symbol(I2, Decl(equalityWithUnionTypes01.ts, 2, 1))
+>I1 : Symbol(I1, Decl(equalityWithUnionTypes01.ts, 0, 0))
+
+    p2: number;
+>p2 : Symbol(I2.p2, Decl(equalityWithUnionTypes01.ts, 4, 25))
+}
+
+var x = { p1: 10, p2: 20 };
+>x : Symbol(x, Decl(equalityWithUnionTypes01.ts, 8, 3))
+>p1 : Symbol(p1, Decl(equalityWithUnionTypes01.ts, 8, 9))
+>p2 : Symbol(p2, Decl(equalityWithUnionTypes01.ts, 8, 17))
+
+var y: number | I2 = x;
+>y : Symbol(y, Decl(equalityWithUnionTypes01.ts, 9, 3))
+>I2 : Symbol(I2, Decl(equalityWithUnionTypes01.ts, 2, 1))
+>x : Symbol(x, Decl(equalityWithUnionTypes01.ts, 8, 3))
+
+var z: I1 = x;
+>z : Symbol(z, Decl(equalityWithUnionTypes01.ts, 10, 3))
+>I1 : Symbol(I1, Decl(equalityWithUnionTypes01.ts, 0, 0))
+>x : Symbol(x, Decl(equalityWithUnionTypes01.ts, 8, 3))
+
+if (y === z || z === y) {
+>y : Symbol(y, Decl(equalityWithUnionTypes01.ts, 9, 3))
+>z : Symbol(z, Decl(equalityWithUnionTypes01.ts, 10, 3))
+>z : Symbol(z, Decl(equalityWithUnionTypes01.ts, 10, 3))
+>y : Symbol(y, Decl(equalityWithUnionTypes01.ts, 9, 3))
+}
+else if (y !== z || z !== y) {
+>y : Symbol(y, Decl(equalityWithUnionTypes01.ts, 9, 3))
+>z : Symbol(z, Decl(equalityWithUnionTypes01.ts, 10, 3))
+>z : Symbol(z, Decl(equalityWithUnionTypes01.ts, 10, 3))
+>y : Symbol(y, Decl(equalityWithUnionTypes01.ts, 9, 3))
+}
+else if (y == z || z == y) {
+>y : Symbol(y, Decl(equalityWithUnionTypes01.ts, 9, 3))
+>z : Symbol(z, Decl(equalityWithUnionTypes01.ts, 10, 3))
+>z : Symbol(z, Decl(equalityWithUnionTypes01.ts, 10, 3))
+>y : Symbol(y, Decl(equalityWithUnionTypes01.ts, 9, 3))
+}
+else if (y != z || z != y) {
+>y : Symbol(y, Decl(equalityWithUnionTypes01.ts, 9, 3))
+>z : Symbol(z, Decl(equalityWithUnionTypes01.ts, 10, 3))
+>z : Symbol(z, Decl(equalityWithUnionTypes01.ts, 10, 3))
+>y : Symbol(y, Decl(equalityWithUnionTypes01.ts, 9, 3))
+}

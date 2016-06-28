@@ -16,7 +16,7 @@ var C = (function () {
     }
     C.foo = function (x) { };
     return C;
-})();
+}());
 var M;
 (function (M) {
     function f(x) {

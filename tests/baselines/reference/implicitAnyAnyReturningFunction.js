@@ -39,7 +39,7 @@ var C = (function () {
         return someLocal;
     };
     return C;
-})();
+}());
 
 
 //// [implicitAnyAnyReturningFunction.d.ts]

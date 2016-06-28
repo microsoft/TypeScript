@@ -1,6 +1,6 @@
 tests/cases/compiler/superAccess.ts(9,24): error TS2339: Property 'S1' does not exist on type 'MyBase'.
-tests/cases/compiler/superAccess.ts(10,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
-tests/cases/compiler/superAccess.ts(11,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/compiler/superAccess.ts(10,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+tests/cases/compiler/superAccess.ts(11,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 
 
 ==== tests/cases/compiler/superAccess.ts (3 errors) ====
@@ -17,9 +17,9 @@ tests/cases/compiler/superAccess.ts(11,24): error TS2340: Only public and protec
 !!! error TS2339: Property 'S1' does not exist on type 'MyBase'.
             var l4 = super.S2;    // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword
                            ~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
             var l5 = super.f();   // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword
                            ~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
         }
     }

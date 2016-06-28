@@ -28,4 +28,4 @@ var C = (function () {
     }
     C["hello " + a + " bye"] = 0;
     return C;
-})();
+}());

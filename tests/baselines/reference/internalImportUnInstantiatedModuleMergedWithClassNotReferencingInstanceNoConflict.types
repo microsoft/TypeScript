@@ -14,7 +14,7 @@ module A {
 }
 
 module B {
->B : unknown
+>B : any
 
     import Y = A;
 >Y : typeof Y

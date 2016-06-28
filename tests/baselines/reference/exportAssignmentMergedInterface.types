@@ -1,6 +1,6 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
 import foo = require("./foo_0");
->foo : unknown
+>foo : any
 
 var x: foo;
 >x : foo
@@ -9,10 +9,12 @@ var x: foo;
 x("test");
 >x("test") : void
 >x : foo
+>"test" : string
 
 x(42);
 >x(42) : number
 >x : foo
+>42 : number
 
 var y: string = x.b;
 >y : string
@@ -31,7 +33,9 @@ var z = {x: 1, y: 2};
 >z : { x: number; y: number; }
 >{x: 1, y: 2} : { x: number; y: number; }
 >x : number
+>1 : number
 >y : number
+>2 : number
 
 z = x.d;
 >z = x.d : { x: number; y: number; }

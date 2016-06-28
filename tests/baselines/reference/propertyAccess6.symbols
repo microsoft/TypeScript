@@ -1,0 +1,7 @@
+=== tests/cases/compiler/propertyAccess6.ts ===
+var foo: any;
+>foo : Symbol(foo, Decl(propertyAccess6.ts, 0, 3))
+
+foo.bar = 4;
+>foo : Symbol(foo, Decl(propertyAccess6.ts, 0, 3))
+

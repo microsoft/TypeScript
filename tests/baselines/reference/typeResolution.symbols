@@ -1,0 +1,365 @@
+=== tests/cases/compiler/typeResolution.ts ===
+export module TopLevelModule1 {
+>TopLevelModule1 : Symbol(TopLevelModule1, Decl(typeResolution.ts, 0, 0))
+
+    export module SubModule1 {
+>SubModule1 : Symbol(SubModule1, Decl(typeResolution.ts, 0, 31))
+
+        export module SubSubModule1 {
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+
+            export class ClassA {
+>ClassA : Symbol(ClassA, Decl(typeResolution.ts, 2, 37))
+
+                public AisIn1_1_1() {
+>AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+
+                    // Try all qualified names of this type
+                    var a1: ClassA; a1.AisIn1_1_1();
+>a1 : Symbol(a1, Decl(typeResolution.ts, 6, 23))
+>ClassA : Symbol(ClassA, Decl(typeResolution.ts, 2, 37))
+>a1.AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a1 : Symbol(a1, Decl(typeResolution.ts, 6, 23))
+>AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+
+                    var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
+>a2 : Symbol(a2, Decl(typeResolution.ts, 7, 23))
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+>ClassA : Symbol(ClassA, Decl(typeResolution.ts, 2, 37))
+>a2.AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a2 : Symbol(a2, Decl(typeResolution.ts, 7, 23))
+>AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+
+                    var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
+>a3 : Symbol(a3, Decl(typeResolution.ts, 8, 23))
+>SubModule1 : Symbol(SubModule1, Decl(typeResolution.ts, 0, 31))
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+>ClassA : Symbol(ClassA, Decl(typeResolution.ts, 2, 37))
+>a3.AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a3 : Symbol(a3, Decl(typeResolution.ts, 8, 23))
+>AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+
+                    var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
+>a4 : Symbol(a4, Decl(typeResolution.ts, 9, 23))
+>TopLevelModule1 : Symbol(TopLevelModule1, Decl(typeResolution.ts, 0, 0))
+>SubModule1 : Symbol(SubModule1, Decl(typeResolution.ts, 0, 31))
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+>ClassA : Symbol(ClassA, Decl(typeResolution.ts, 2, 37))
+>a4.AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a4 : Symbol(a4, Decl(typeResolution.ts, 9, 23))
+>AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+                    
+                    // Two variants of qualifying a peer type
+                    var b1: ClassB; b1.BisIn1_1_1();
+>b1 : Symbol(b1, Decl(typeResolution.ts, 12, 23))
+>ClassB : Symbol(ClassB, Decl(typeResolution.ts, 22, 13))
+>b1.BisIn1_1_1 : Symbol(ClassB.BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
+>b1 : Symbol(b1, Decl(typeResolution.ts, 12, 23))
+>BisIn1_1_1 : Symbol(ClassB.BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
+
+                    var b2: TopLevelModule1.SubModule1.SubSubModule1.ClassB; b2.BisIn1_1_1();
+>b2 : Symbol(b2, Decl(typeResolution.ts, 13, 23))
+>TopLevelModule1 : Symbol(TopLevelModule1, Decl(typeResolution.ts, 0, 0))
+>SubModule1 : Symbol(SubModule1, Decl(typeResolution.ts, 0, 31))
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+>ClassB : Symbol(ClassB, Decl(typeResolution.ts, 22, 13))
+>b2.BisIn1_1_1 : Symbol(ClassB.BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
+>b2 : Symbol(b2, Decl(typeResolution.ts, 13, 23))
+>BisIn1_1_1 : Symbol(ClassB.BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
+                    
+                    // Type only accessible from the root
+                    var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
+>c1 : Symbol(c1, Decl(typeResolution.ts, 16, 23))
+>TopLevelModule1 : Symbol(TopLevelModule1, Decl(typeResolution.ts, 0, 0))
+>SubModule2 : Symbol(SubModule2, Decl(typeResolution.ts, 73, 5))
+>SubSubModule2 : Symbol(SubModule2.SubSubModule2, Decl(typeResolution.ts, 75, 30))
+>ClassA : Symbol(SubModule2.SubSubModule2.ClassA, Decl(typeResolution.ts, 76, 37))
+>c1.AisIn1_2_2 : Symbol(SubModule2.SubSubModule2.ClassA.AisIn1_2_2, Decl(typeResolution.ts, 78, 33))
+>c1 : Symbol(c1, Decl(typeResolution.ts, 16, 23))
+>AisIn1_2_2 : Symbol(SubModule2.SubSubModule2.ClassA.AisIn1_2_2, Decl(typeResolution.ts, 78, 33))
+                    
+                    // Interface reference
+                    var d1: InterfaceX; d1.XisIn1_1_1();
+>d1 : Symbol(d1, Decl(typeResolution.ts, 19, 23))
+>InterfaceX : Symbol(InterfaceX, Decl(typeResolution.ts, 45, 13))
+>d1.XisIn1_1_1 : Symbol(InterfaceX.XisIn1_1_1, Decl(typeResolution.ts, 46, 41))
+>d1 : Symbol(d1, Decl(typeResolution.ts, 19, 23))
+>XisIn1_1_1 : Symbol(InterfaceX.XisIn1_1_1, Decl(typeResolution.ts, 46, 41))
+
+                    var d2: SubSubModule1.InterfaceX; d2.XisIn1_1_1();
+>d2 : Symbol(d2, Decl(typeResolution.ts, 20, 23))
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+>InterfaceX : Symbol(InterfaceX, Decl(typeResolution.ts, 45, 13))
+>d2.XisIn1_1_1 : Symbol(InterfaceX.XisIn1_1_1, Decl(typeResolution.ts, 46, 41))
+>d2 : Symbol(d2, Decl(typeResolution.ts, 20, 23))
+>XisIn1_1_1 : Symbol(InterfaceX.XisIn1_1_1, Decl(typeResolution.ts, 46, 41))
+                }
+            }
+            export class ClassB {
+>ClassB : Symbol(ClassB, Decl(typeResolution.ts, 22, 13))
+
+                public BisIn1_1_1() {
+>BisIn1_1_1 : Symbol(ClassB.BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
+
+                    /** Exactly the same as above in AisIn1_1_1 **/
+                    
+                    // Try all qualified names of this type
+                    var a1: ClassA; a1.AisIn1_1_1();
+>a1 : Symbol(a1, Decl(typeResolution.ts, 28, 23))
+>ClassA : Symbol(ClassA, Decl(typeResolution.ts, 2, 37))
+>a1.AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a1 : Symbol(a1, Decl(typeResolution.ts, 28, 23))
+>AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+
+                    var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
+>a2 : Symbol(a2, Decl(typeResolution.ts, 29, 23))
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+>ClassA : Symbol(ClassA, Decl(typeResolution.ts, 2, 37))
+>a2.AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a2 : Symbol(a2, Decl(typeResolution.ts, 29, 23))
+>AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+
+                    var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
+>a3 : Symbol(a3, Decl(typeResolution.ts, 30, 23))
+>SubModule1 : Symbol(SubModule1, Decl(typeResolution.ts, 0, 31))
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+>ClassA : Symbol(ClassA, Decl(typeResolution.ts, 2, 37))
+>a3.AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a3 : Symbol(a3, Decl(typeResolution.ts, 30, 23))
+>AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+
+                    var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
+>a4 : Symbol(a4, Decl(typeResolution.ts, 31, 23))
+>TopLevelModule1 : Symbol(TopLevelModule1, Decl(typeResolution.ts, 0, 0))
+>SubModule1 : Symbol(SubModule1, Decl(typeResolution.ts, 0, 31))
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+>ClassA : Symbol(ClassA, Decl(typeResolution.ts, 2, 37))
+>a4.AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a4 : Symbol(a4, Decl(typeResolution.ts, 31, 23))
+>AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+                    
+                    // Two variants of qualifying a peer type
+                    var b1: ClassB; b1.BisIn1_1_1();
+>b1 : Symbol(b1, Decl(typeResolution.ts, 34, 23))
+>ClassB : Symbol(ClassB, Decl(typeResolution.ts, 22, 13))
+>b1.BisIn1_1_1 : Symbol(ClassB.BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
+>b1 : Symbol(b1, Decl(typeResolution.ts, 34, 23))
+>BisIn1_1_1 : Symbol(ClassB.BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
+
+                    var b2: TopLevelModule1.SubModule1.SubSubModule1.ClassB; b2.BisIn1_1_1();
+>b2 : Symbol(b2, Decl(typeResolution.ts, 35, 23))
+>TopLevelModule1 : Symbol(TopLevelModule1, Decl(typeResolution.ts, 0, 0))
+>SubModule1 : Symbol(SubModule1, Decl(typeResolution.ts, 0, 31))
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+>ClassB : Symbol(ClassB, Decl(typeResolution.ts, 22, 13))
+>b2.BisIn1_1_1 : Symbol(ClassB.BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
+>b2 : Symbol(b2, Decl(typeResolution.ts, 35, 23))
+>BisIn1_1_1 : Symbol(ClassB.BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
+                    
+                    // Type only accessible from the root
+                    var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
+>c1 : Symbol(c1, Decl(typeResolution.ts, 38, 23))
+>TopLevelModule1 : Symbol(TopLevelModule1, Decl(typeResolution.ts, 0, 0))
+>SubModule2 : Symbol(SubModule2, Decl(typeResolution.ts, 73, 5))
+>SubSubModule2 : Symbol(SubModule2.SubSubModule2, Decl(typeResolution.ts, 75, 30))
+>ClassA : Symbol(SubModule2.SubSubModule2.ClassA, Decl(typeResolution.ts, 76, 37))
+>c1.AisIn1_2_2 : Symbol(SubModule2.SubSubModule2.ClassA.AisIn1_2_2, Decl(typeResolution.ts, 78, 33))
+>c1 : Symbol(c1, Decl(typeResolution.ts, 38, 23))
+>AisIn1_2_2 : Symbol(SubModule2.SubSubModule2.ClassA.AisIn1_2_2, Decl(typeResolution.ts, 78, 33))
+
+                    var c2: TopLevelModule2.SubModule3.ClassA; c2.AisIn2_3();
+>c2 : Symbol(c2, Decl(typeResolution.ts, 39, 23))
+>TopLevelModule2 : Symbol(TopLevelModule2, Decl(typeResolution.ts, 99, 1))
+>SubModule3 : Symbol(TopLevelModule2.SubModule3, Decl(typeResolution.ts, 101, 24))
+>ClassA : Symbol(TopLevelModule2.SubModule3.ClassA, Decl(typeResolution.ts, 102, 30))
+>c2.AisIn2_3 : Symbol(TopLevelModule2.SubModule3.ClassA.AisIn2_3, Decl(typeResolution.ts, 103, 29))
+>c2 : Symbol(c2, Decl(typeResolution.ts, 39, 23))
+>AisIn2_3 : Symbol(TopLevelModule2.SubModule3.ClassA.AisIn2_3, Decl(typeResolution.ts, 103, 29))
+                    
+                    // Interface reference
+                    var d1: InterfaceX; d1.XisIn1_1_1();
+>d1 : Symbol(d1, Decl(typeResolution.ts, 42, 23))
+>InterfaceX : Symbol(InterfaceX, Decl(typeResolution.ts, 45, 13))
+>d1.XisIn1_1_1 : Symbol(InterfaceX.XisIn1_1_1, Decl(typeResolution.ts, 46, 41))
+>d1 : Symbol(d1, Decl(typeResolution.ts, 42, 23))
+>XisIn1_1_1 : Symbol(InterfaceX.XisIn1_1_1, Decl(typeResolution.ts, 46, 41))
+
+                    var d2: SubSubModule1.InterfaceX; d2.XisIn1_1_1();
+>d2 : Symbol(d2, Decl(typeResolution.ts, 43, 23))
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+>InterfaceX : Symbol(InterfaceX, Decl(typeResolution.ts, 45, 13))
+>d2.XisIn1_1_1 : Symbol(InterfaceX.XisIn1_1_1, Decl(typeResolution.ts, 46, 41))
+>d2 : Symbol(d2, Decl(typeResolution.ts, 43, 23))
+>XisIn1_1_1 : Symbol(InterfaceX.XisIn1_1_1, Decl(typeResolution.ts, 46, 41))
+                }
+            }
+            export interface InterfaceX { XisIn1_1_1(); }
+>InterfaceX : Symbol(InterfaceX, Decl(typeResolution.ts, 45, 13))
+>XisIn1_1_1 : Symbol(InterfaceX.XisIn1_1_1, Decl(typeResolution.ts, 46, 41))
+
+            class NonExportedClassQ {
+>NonExportedClassQ : Symbol(NonExportedClassQ, Decl(typeResolution.ts, 46, 57))
+
+                constructor() {
+                    function QQ() {
+>QQ : Symbol(QQ, Decl(typeResolution.ts, 48, 31))
+
+                        /* Sampling of stuff from AisIn1_1_1 */
+                        var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
+>a4 : Symbol(a4, Decl(typeResolution.ts, 51, 27))
+>TopLevelModule1 : Symbol(TopLevelModule1, Decl(typeResolution.ts, 0, 0))
+>SubModule1 : Symbol(SubModule1, Decl(typeResolution.ts, 0, 31))
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+>ClassA : Symbol(ClassA, Decl(typeResolution.ts, 2, 37))
+>a4.AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a4 : Symbol(a4, Decl(typeResolution.ts, 51, 27))
+>AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+
+                        var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
+>c1 : Symbol(c1, Decl(typeResolution.ts, 52, 27))
+>TopLevelModule1 : Symbol(TopLevelModule1, Decl(typeResolution.ts, 0, 0))
+>SubModule2 : Symbol(SubModule2, Decl(typeResolution.ts, 73, 5))
+>SubSubModule2 : Symbol(SubModule2.SubSubModule2, Decl(typeResolution.ts, 75, 30))
+>ClassA : Symbol(SubModule2.SubSubModule2.ClassA, Decl(typeResolution.ts, 76, 37))
+>c1.AisIn1_2_2 : Symbol(SubModule2.SubSubModule2.ClassA.AisIn1_2_2, Decl(typeResolution.ts, 78, 33))
+>c1 : Symbol(c1, Decl(typeResolution.ts, 52, 27))
+>AisIn1_2_2 : Symbol(SubModule2.SubSubModule2.ClassA.AisIn1_2_2, Decl(typeResolution.ts, 78, 33))
+
+                        var d1: InterfaceX; d1.XisIn1_1_1();
+>d1 : Symbol(d1, Decl(typeResolution.ts, 53, 27))
+>InterfaceX : Symbol(InterfaceX, Decl(typeResolution.ts, 45, 13))
+>d1.XisIn1_1_1 : Symbol(InterfaceX.XisIn1_1_1, Decl(typeResolution.ts, 46, 41))
+>d1 : Symbol(d1, Decl(typeResolution.ts, 53, 27))
+>XisIn1_1_1 : Symbol(InterfaceX.XisIn1_1_1, Decl(typeResolution.ts, 46, 41))
+
+                        var c2: TopLevelModule2.SubModule3.ClassA; c2.AisIn2_3();
+>c2 : Symbol(c2, Decl(typeResolution.ts, 54, 27))
+>TopLevelModule2 : Symbol(TopLevelModule2, Decl(typeResolution.ts, 99, 1))
+>SubModule3 : Symbol(TopLevelModule2.SubModule3, Decl(typeResolution.ts, 101, 24))
+>ClassA : Symbol(TopLevelModule2.SubModule3.ClassA, Decl(typeResolution.ts, 102, 30))
+>c2.AisIn2_3 : Symbol(TopLevelModule2.SubModule3.ClassA.AisIn2_3, Decl(typeResolution.ts, 103, 29))
+>c2 : Symbol(c2, Decl(typeResolution.ts, 54, 27))
+>AisIn2_3 : Symbol(TopLevelModule2.SubModule3.ClassA.AisIn2_3, Decl(typeResolution.ts, 103, 29))
+                    }
+                }
+            }
+        }
+        
+        // Should have no effect on S1.SS1.ClassA above because it is not exported
+        class ClassA {
+>ClassA : Symbol(ClassA, Decl(typeResolution.ts, 58, 9))
+
+            constructor() {
+                function AA() {
+>AA : Symbol(AA, Decl(typeResolution.ts, 62, 27))
+
+                    var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
+>a2 : Symbol(a2, Decl(typeResolution.ts, 64, 23))
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+>ClassA : Symbol(SubSubModule1.ClassA, Decl(typeResolution.ts, 2, 37))
+>a2.AisIn1_1_1 : Symbol(SubSubModule1.ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a2 : Symbol(a2, Decl(typeResolution.ts, 64, 23))
+>AisIn1_1_1 : Symbol(SubSubModule1.ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+
+                    var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
+>a3 : Symbol(a3, Decl(typeResolution.ts, 65, 23))
+>SubModule1 : Symbol(SubModule1, Decl(typeResolution.ts, 0, 31))
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+>ClassA : Symbol(SubSubModule1.ClassA, Decl(typeResolution.ts, 2, 37))
+>a3.AisIn1_1_1 : Symbol(SubSubModule1.ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a3 : Symbol(a3, Decl(typeResolution.ts, 65, 23))
+>AisIn1_1_1 : Symbol(SubSubModule1.ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+
+                    var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
+>a4 : Symbol(a4, Decl(typeResolution.ts, 66, 23))
+>TopLevelModule1 : Symbol(TopLevelModule1, Decl(typeResolution.ts, 0, 0))
+>SubModule1 : Symbol(SubModule1, Decl(typeResolution.ts, 0, 31))
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+>ClassA : Symbol(SubSubModule1.ClassA, Decl(typeResolution.ts, 2, 37))
+>a4.AisIn1_1_1 : Symbol(SubSubModule1.ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a4 : Symbol(a4, Decl(typeResolution.ts, 66, 23))
+>AisIn1_1_1 : Symbol(SubSubModule1.ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+                    
+                    // Interface reference
+                    var d2: SubSubModule1.InterfaceX; d2.XisIn1_1_1();
+>d2 : Symbol(d2, Decl(typeResolution.ts, 69, 23))
+>SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
+>InterfaceX : Symbol(SubSubModule1.InterfaceX, Decl(typeResolution.ts, 45, 13))
+>d2.XisIn1_1_1 : Symbol(SubSubModule1.InterfaceX.XisIn1_1_1, Decl(typeResolution.ts, 46, 41))
+>d2 : Symbol(d2, Decl(typeResolution.ts, 69, 23))
+>XisIn1_1_1 : Symbol(SubSubModule1.InterfaceX.XisIn1_1_1, Decl(typeResolution.ts, 46, 41))
+                }
+            }
+        }
+    }
+
+    export module SubModule2 {
+>SubModule2 : Symbol(SubModule2, Decl(typeResolution.ts, 73, 5))
+
+        export module SubSubModule2 {
+>SubSubModule2 : Symbol(SubSubModule2, Decl(typeResolution.ts, 75, 30))
+
+            // No code here since these are the mirror of the above calls
+            export class ClassA { public AisIn1_2_2() { } }
+>ClassA : Symbol(ClassA, Decl(typeResolution.ts, 76, 37))
+>AisIn1_2_2 : Symbol(ClassA.AisIn1_2_2, Decl(typeResolution.ts, 78, 33))
+
+            export class ClassB { public BisIn1_2_2() { } }
+>ClassB : Symbol(ClassB, Decl(typeResolution.ts, 78, 59))
+>BisIn1_2_2 : Symbol(ClassB.BisIn1_2_2, Decl(typeResolution.ts, 79, 33))
+
+            export class ClassC { public CisIn1_2_2() { } }
+>ClassC : Symbol(ClassC, Decl(typeResolution.ts, 79, 59))
+>CisIn1_2_2 : Symbol(ClassC.CisIn1_2_2, Decl(typeResolution.ts, 80, 33))
+
+            export interface InterfaceY { YisIn1_2_2(); }
+>InterfaceY : Symbol(InterfaceY, Decl(typeResolution.ts, 80, 59))
+>YisIn1_2_2 : Symbol(InterfaceY.YisIn1_2_2, Decl(typeResolution.ts, 81, 41))
+
+            interface NonExportedInterfaceQ { }
+>NonExportedInterfaceQ : Symbol(NonExportedInterfaceQ, Decl(typeResolution.ts, 81, 57))
+        }
+        
+        export interface InterfaceY { YisIn1_2(); }
+>InterfaceY : Symbol(InterfaceY, Decl(typeResolution.ts, 83, 9))
+>YisIn1_2 : Symbol(InterfaceY.YisIn1_2, Decl(typeResolution.ts, 85, 37))
+    }
+    
+    class ClassA {
+>ClassA : Symbol(ClassA, Decl(typeResolution.ts, 86, 5))
+
+        public AisIn1() { }
+>AisIn1 : Symbol(ClassA.AisIn1, Decl(typeResolution.ts, 88, 18))
+    }
+
+    interface InterfaceY {
+>InterfaceY : Symbol(InterfaceY, Decl(typeResolution.ts, 90, 5))
+
+        YisIn1();
+>YisIn1 : Symbol(InterfaceY.YisIn1, Decl(typeResolution.ts, 92, 26))
+    }
+    
+    module NotExportedModule {
+>NotExportedModule : Symbol(NotExportedModule, Decl(typeResolution.ts, 94, 5))
+
+        export class ClassA { }
+>ClassA : Symbol(ClassA, Decl(typeResolution.ts, 96, 30))
+    }
+}
+
+module TopLevelModule2 {
+>TopLevelModule2 : Symbol(TopLevelModule2, Decl(typeResolution.ts, 99, 1))
+
+    export module SubModule3 {
+>SubModule3 : Symbol(SubModule3, Decl(typeResolution.ts, 101, 24))
+
+        export class ClassA {
+>ClassA : Symbol(ClassA, Decl(typeResolution.ts, 102, 30))
+
+            public AisIn2_3() { }
+>AisIn2_3 : Symbol(ClassA.AisIn2_3, Decl(typeResolution.ts, 103, 29))
+        }
+    }
+}
+
+

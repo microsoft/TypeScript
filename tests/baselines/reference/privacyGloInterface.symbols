@@ -1,0 +1,278 @@
+=== tests/cases/compiler/privacyGloInterface.ts ===
+module m1 {
+>m1 : Symbol(m1, Decl(privacyGloInterface.ts, 0, 0))
+
+    export class C1_public {
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        private f1() {
+>f1 : Symbol(C1_public.f1, Decl(privacyGloInterface.ts, 1, 28))
+        }
+    }
+
+
+    class C2_private {
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+    }
+
+    export interface C3_public {
+>C3_public : Symbol(C3_public, Decl(privacyGloInterface.ts, 8, 5))
+
+        (c1: C1_public);
+>c1 : Symbol(c1, Decl(privacyGloInterface.ts, 11, 9))
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        (c1: C2_private);
+>c1 : Symbol(c1, Decl(privacyGloInterface.ts, 12, 9))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        (): C1_public;
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        (c2: number): C2_private;
+>c2 : Symbol(c2, Decl(privacyGloInterface.ts, 14, 9))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        new (c1: C1_public);
+>c1 : Symbol(c1, Decl(privacyGloInterface.ts, 16, 13))
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        new (c1: C2_private);
+>c1 : Symbol(c1, Decl(privacyGloInterface.ts, 17, 13))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        new (): C1_public;
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        new (c2: number): C2_private;
+>c2 : Symbol(c2, Decl(privacyGloInterface.ts, 19, 13))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        [c: number]: C1_public;
+>c : Symbol(c, Decl(privacyGloInterface.ts, 21, 9))
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        [c: string]: C2_private;
+>c : Symbol(c, Decl(privacyGloInterface.ts, 22, 9))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        x: C1_public;
+>x : Symbol(C3_public.x, Decl(privacyGloInterface.ts, 22, 32))
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        y: C2_private;
+>y : Symbol(C3_public.y, Decl(privacyGloInterface.ts, 24, 21))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        a?: C1_public;
+>a : Symbol(C3_public.a, Decl(privacyGloInterface.ts, 25, 22))
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        b?: C2_private;
+>b : Symbol(C3_public.b, Decl(privacyGloInterface.ts, 27, 22))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        f1(a1: C1_public);
+>f1 : Symbol(C3_public.f1, Decl(privacyGloInterface.ts, 28, 23))
+>a1 : Symbol(a1, Decl(privacyGloInterface.ts, 30, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        f2(a1: C2_private);
+>f2 : Symbol(C3_public.f2, Decl(privacyGloInterface.ts, 30, 26))
+>a1 : Symbol(a1, Decl(privacyGloInterface.ts, 31, 11))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        f3(): C1_public;
+>f3 : Symbol(C3_public.f3, Decl(privacyGloInterface.ts, 31, 27))
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        f4(): C2_private;
+>f4 : Symbol(C3_public.f4, Decl(privacyGloInterface.ts, 32, 24))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+    }
+
+    interface C4_private {
+>C4_private : Symbol(C4_private, Decl(privacyGloInterface.ts, 35, 5))
+
+        (c1: C1_public);
+>c1 : Symbol(c1, Decl(privacyGloInterface.ts, 38, 9))
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        (c1: C2_private);
+>c1 : Symbol(c1, Decl(privacyGloInterface.ts, 39, 9))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        (): C1_public;
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        (c2: number): C2_private;
+>c2 : Symbol(c2, Decl(privacyGloInterface.ts, 41, 9))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        new (c1: C1_public);
+>c1 : Symbol(c1, Decl(privacyGloInterface.ts, 43, 13))
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        new (c1: C2_private);
+>c1 : Symbol(c1, Decl(privacyGloInterface.ts, 44, 13))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        new (): C1_public;
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        new (c2: number): C2_private;
+>c2 : Symbol(c2, Decl(privacyGloInterface.ts, 46, 13))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        [c: number]: C1_public;
+>c : Symbol(c, Decl(privacyGloInterface.ts, 48, 9))
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        [c: string]: C2_private;
+>c : Symbol(c, Decl(privacyGloInterface.ts, 49, 9))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        x: C1_public;
+>x : Symbol(C4_private.x, Decl(privacyGloInterface.ts, 49, 32))
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        y: C2_private;
+>y : Symbol(C4_private.y, Decl(privacyGloInterface.ts, 51, 21))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        a?: C1_public;
+>a : Symbol(C4_private.a, Decl(privacyGloInterface.ts, 52, 22))
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        b?: C2_private;
+>b : Symbol(C4_private.b, Decl(privacyGloInterface.ts, 54, 22))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        f1(a1: C1_public);
+>f1 : Symbol(C4_private.f1, Decl(privacyGloInterface.ts, 55, 23))
+>a1 : Symbol(a1, Decl(privacyGloInterface.ts, 57, 11))
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        f2(a1: C2_private);
+>f2 : Symbol(C4_private.f2, Decl(privacyGloInterface.ts, 57, 26))
+>a1 : Symbol(a1, Decl(privacyGloInterface.ts, 58, 11))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+        f3(): C1_public;
+>f3 : Symbol(C4_private.f3, Decl(privacyGloInterface.ts, 58, 27))
+>C1_public : Symbol(C1_public, Decl(privacyGloInterface.ts, 0, 11))
+
+        f4(): C2_private;
+>f4 : Symbol(C4_private.f4, Decl(privacyGloInterface.ts, 59, 24))
+>C2_private : Symbol(C2_private, Decl(privacyGloInterface.ts, 4, 5))
+
+    }
+}
+
+class C5_public {
+>C5_public : Symbol(C5_public, Decl(privacyGloInterface.ts, 63, 1))
+
+    private f1() {
+>f1 : Symbol(C5_public.f1, Decl(privacyGloInterface.ts, 65, 17))
+    }
+}
+
+
+interface C7_public {
+>C7_public : Symbol(C7_public, Decl(privacyGloInterface.ts, 68, 1))
+
+    (c1: C5_public);
+>c1 : Symbol(c1, Decl(privacyGloInterface.ts, 72, 5))
+>C5_public : Symbol(C5_public, Decl(privacyGloInterface.ts, 63, 1))
+
+    (): C5_public;
+>C5_public : Symbol(C5_public, Decl(privacyGloInterface.ts, 63, 1))
+
+    new (c1: C5_public);
+>c1 : Symbol(c1, Decl(privacyGloInterface.ts, 75, 9))
+>C5_public : Symbol(C5_public, Decl(privacyGloInterface.ts, 63, 1))
+
+    new (): C5_public;
+>C5_public : Symbol(C5_public, Decl(privacyGloInterface.ts, 63, 1))
+
+    [c: number]: C5_public;
+>c : Symbol(c, Decl(privacyGloInterface.ts, 78, 5))
+>C5_public : Symbol(C5_public, Decl(privacyGloInterface.ts, 63, 1))
+
+    x: C5_public;
+>x : Symbol(C7_public.x, Decl(privacyGloInterface.ts, 78, 27))
+>C5_public : Symbol(C5_public, Decl(privacyGloInterface.ts, 63, 1))
+
+    a?: C5_public;
+>a : Symbol(C7_public.a, Decl(privacyGloInterface.ts, 80, 17))
+>C5_public : Symbol(C5_public, Decl(privacyGloInterface.ts, 63, 1))
+
+    f1(a1: C5_public);
+>f1 : Symbol(C7_public.f1, Decl(privacyGloInterface.ts, 82, 18))
+>a1 : Symbol(a1, Decl(privacyGloInterface.ts, 84, 7))
+>C5_public : Symbol(C5_public, Decl(privacyGloInterface.ts, 63, 1))
+
+    f3(): C5_public;
+>f3 : Symbol(C7_public.f3, Decl(privacyGloInterface.ts, 84, 22))
+>C5_public : Symbol(C5_public, Decl(privacyGloInterface.ts, 63, 1))
+}
+
+module m3 {
+>m3 : Symbol(m3, Decl(privacyGloInterface.ts, 86, 1))
+
+    export interface m3_i_public {
+>m3_i_public : Symbol(m3_i_public, Decl(privacyGloInterface.ts, 88, 11))
+
+        f1(): number;
+>f1 : Symbol(m3_i_public.f1, Decl(privacyGloInterface.ts, 89, 34))
+    }
+
+    interface m3_i_private {
+>m3_i_private : Symbol(m3_i_private, Decl(privacyGloInterface.ts, 91, 5))
+
+        f2(): string;
+>f2 : Symbol(m3_i_private.f2, Decl(privacyGloInterface.ts, 93, 28))
+    }
+
+    interface m3_C1_private extends m3_i_public {
+>m3_C1_private : Symbol(m3_C1_private, Decl(privacyGloInterface.ts, 95, 5))
+>m3_i_public : Symbol(m3_i_public, Decl(privacyGloInterface.ts, 88, 11))
+    }
+    interface m3_C2_private extends m3_i_private {
+>m3_C2_private : Symbol(m3_C2_private, Decl(privacyGloInterface.ts, 98, 5))
+>m3_i_private : Symbol(m3_i_private, Decl(privacyGloInterface.ts, 91, 5))
+    }
+    export interface m3_C3_public extends m3_i_public {
+>m3_C3_public : Symbol(m3_C3_public, Decl(privacyGloInterface.ts, 100, 5))
+>m3_i_public : Symbol(m3_i_public, Decl(privacyGloInterface.ts, 88, 11))
+    }
+    export interface m3_C4_public extends m3_i_private {
+>m3_C4_public : Symbol(m3_C4_public, Decl(privacyGloInterface.ts, 102, 5))
+>m3_i_private : Symbol(m3_i_private, Decl(privacyGloInterface.ts, 91, 5))
+    }
+
+    interface m3_C5_private extends m3_i_private, m3_i_public {
+>m3_C5_private : Symbol(m3_C5_private, Decl(privacyGloInterface.ts, 104, 5))
+>m3_i_private : Symbol(m3_i_private, Decl(privacyGloInterface.ts, 91, 5))
+>m3_i_public : Symbol(m3_i_public, Decl(privacyGloInterface.ts, 88, 11))
+    }
+    export interface m3_C6_public extends  m3_i_private, m3_i_public {
+>m3_C6_public : Symbol(m3_C6_public, Decl(privacyGloInterface.ts, 107, 5))
+>m3_i_private : Symbol(m3_i_private, Decl(privacyGloInterface.ts, 91, 5))
+>m3_i_public : Symbol(m3_i_public, Decl(privacyGloInterface.ts, 88, 11))
+    }
+}
+
+interface glo_i_public {
+>glo_i_public : Symbol(glo_i_public, Decl(privacyGloInterface.ts, 110, 1))
+
+    f1(): number;
+>f1 : Symbol(glo_i_public.f1, Decl(privacyGloInterface.ts, 112, 24))
+}
+
+interface glo_C3_public extends glo_i_public {
+>glo_C3_public : Symbol(glo_C3_public, Decl(privacyGloInterface.ts, 114, 1))
+>glo_i_public : Symbol(glo_i_public, Decl(privacyGloInterface.ts, 110, 1))
+}
+

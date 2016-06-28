@@ -1,0 +1,16 @@
+=== tests/cases/compiler/B.ts ===
+import a = require('A');
+>a : Symbol(a, Decl(B.ts, 0, 0))
+
+import A = a.A;
+>A : Symbol(A, Decl(B.ts, 0, 24))
+>a : Symbol(a, Decl(B.ts, 0, 0))
+>A : Symbol(a.A, Decl(A.ts, 0, 0))
+
+export = A;
+>A : Symbol(A, Decl(B.ts, 0, 24))
+
+=== tests/cases/compiler/A.ts ===
+export class A {
+>A : Symbol(A, Decl(A.ts, 0, 0))
+}

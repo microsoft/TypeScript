@@ -4,6 +4,7 @@ module M {
 
     export var x = 3;
 >x : number
+>3 : number
 
     class c {
 >c : c
@@ -39,6 +40,7 @@ module M {
         constructor() {
             var M = 10;
 >M : number
+>10 : number
 
             var p = x;
 >p : number

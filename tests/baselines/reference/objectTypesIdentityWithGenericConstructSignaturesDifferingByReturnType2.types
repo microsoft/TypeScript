@@ -11,6 +11,7 @@ class B<T extends Date> {
     constructor(x: T) { return null; }
 >x : T
 >T : T
+>null : null
 }
 
 class C<T extends Date> {
@@ -21,6 +22,7 @@ class C<T extends Date> {
     constructor(x: T) { return null; }
 >x : T
 >T : T
+>null : null
 }
 
 interface I<T extends Date> {
@@ -61,6 +63,7 @@ var b = { new<T extends Date>(x: T) { return null; } }; // not a construct signa
 >Date : Date
 >x : T
 >T : T
+>null : null
 
 function foo1b(x: B<Date>);
 >foo1b : { (x: B<Date>): any; (x: B<Date>): any; }

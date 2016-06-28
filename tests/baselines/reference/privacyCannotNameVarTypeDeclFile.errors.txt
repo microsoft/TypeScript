@@ -13,7 +13,7 @@ tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(38,12): error 
 
 
 ==== tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts (12 errors) ====
-    import exporter = require("privacyCannotNameVarTypeDeclFile_exporter");
+    import exporter = require("./privacyCannotNameVarTypeDeclFile_exporter");
     export class publicClassWithWithPrivatePropertyTypes {
         static myPublicStaticProperty = exporter.createExportedWidget1(); // Error
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -120,7 +120,7 @@ tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts(38,12): error 
     
 ==== tests/cases/compiler/privacyCannotNameVarTypeDeclFile_exporter.ts (0 errors) ====
     ///<reference path='privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts'/>
-    import Widgets = require("privacyCannotNameVarTypeDeclFile_Widgets");
+    import Widgets = require("./privacyCannotNameVarTypeDeclFile_Widgets");
     import Widgets1 = require("GlobalWidgets");
     export function createExportedWidget1() {
         return Widgets.createWidget1();

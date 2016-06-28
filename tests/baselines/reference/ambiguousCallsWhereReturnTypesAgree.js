@@ -38,7 +38,7 @@ var TestClass = (function () {
         this.bar(x); // should not error
     };
     return TestClass;
-})();
+}());
 var TestClass2 = (function () {
     function TestClass2() {
     }
@@ -49,4 +49,4 @@ var TestClass2 = (function () {
         return this.bar(x); // should not error
     };
     return TestClass2;
-})();
+}());

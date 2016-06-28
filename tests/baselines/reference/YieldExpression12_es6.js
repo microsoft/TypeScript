@@ -11,4 +11,4 @@ var C = (function () {
         yield foo;
     }
     return C;
-})();
+}());

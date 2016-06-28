@@ -36,7 +36,7 @@ var Test;
             this.moo = 0;
         }
         return Gar;
-    })();
+    }());
     Test.Gar = Gar;
     function bug() {
         var state = null;

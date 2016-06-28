@@ -1,0 +1,24 @@
+=== tests/cases/compiler/nestedBlockScopedBindings11.ts ===
+var x;
+>x : Symbol(x, Decl(nestedBlockScopedBindings11.ts, 0, 3))
+{
+    let x;
+>x : Symbol(x, Decl(nestedBlockScopedBindings11.ts, 2, 7))
+
+    () => x;
+>x : Symbol(x, Decl(nestedBlockScopedBindings11.ts, 2, 7))
+}
+
+var y;
+>y : Symbol(y, Decl(nestedBlockScopedBindings11.ts, 6, 3))
+
+switch (1) {
+    case 1:
+        let y;
+>y : Symbol(y, Decl(nestedBlockScopedBindings11.ts, 9, 11))
+
+        () => y;
+>y : Symbol(y, Decl(nestedBlockScopedBindings11.ts, 9, 11))
+
+        break;
+}

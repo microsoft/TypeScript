@@ -1,4 +1,4 @@
-=== tests/cases/compiler/exportAssignmentError.ts ===
+=== tests/cases/compiler/exportEqualsModule_A.ts ===
 module M {
 >M : typeof M
 

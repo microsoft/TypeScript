@@ -28,6 +28,6 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 var c;
 var r = c.x(''); // string

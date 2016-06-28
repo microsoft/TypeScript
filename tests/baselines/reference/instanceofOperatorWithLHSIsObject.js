@@ -20,7 +20,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var x1;
 var x2;
 var a;

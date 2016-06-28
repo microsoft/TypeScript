@@ -5,7 +5,7 @@ export class someClass {
 }
 
 // @Filename: aliasAssignments_1.ts
-import moduleA = require("aliasAssignments_moduleA");
+import moduleA = require("./aliasAssignments_moduleA");
 var x = moduleA;
 x = 1; // Should be error
 var y = 1;

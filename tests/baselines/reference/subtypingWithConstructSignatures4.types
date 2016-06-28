@@ -307,8 +307,8 @@ var r3a = [r3arg, r3arg2];
 >r3arg2 : new <T>(x: T) => void
 
 var r3b = [r3arg2, r3arg];
->r3b : (new <T>(x: T) => T)[]
->[r3arg2, r3arg] : (new <T>(x: T) => T)[]
+>r3b : (new <T>(x: T) => void)[]
+>[r3arg2, r3arg] : (new <T>(x: T) => void)[]
 >r3arg2 : new <T>(x: T) => void
 >r3arg : new <T>(x: T) => T
 
@@ -421,8 +421,8 @@ var r6a = [r6arg, r6arg2];
 >r6arg2 : new <T extends Base>(x: new (arg: T) => Derived) => T
 
 var r6b = [r6arg2, r6arg];
->r6b : (new <T extends Base, U extends Derived>(x: new (arg: T) => U) => T)[]
->[r6arg2, r6arg] : (new <T extends Base, U extends Derived>(x: new (arg: T) => U) => T)[]
+>r6b : (new <T extends Base>(x: new (arg: T) => Derived) => T)[]
+>[r6arg2, r6arg] : (new <T extends Base>(x: new (arg: T) => Derived) => T)[]
 >r6arg2 : new <T extends Base>(x: new (arg: T) => Derived) => T
 >r6arg : new <T extends Base, U extends Derived>(x: new (arg: T) => U) => T
 
@@ -466,8 +466,8 @@ var r11a = [r11arg, r11arg2];
 >r11arg2 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
 
 var r11b = [r11arg2, r11arg];
->r11b : (new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base)[]
->[r11arg2, r11arg] : (new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base)[]
+>r11b : (new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base)[]
+>[r11arg2, r11arg] : (new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base)[]
 >r11arg2 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
 >r11arg : new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
 
@@ -505,8 +505,8 @@ var r15a = [r15arg, r15arg2];
 >r15arg2 : new <T>(x: { a: T; b: T; }) => T[]
 
 var r15b = [r15arg2, r15arg];
->r15b : (new <U, V>(x: { a: U; b: V; }) => U[])[]
->[r15arg2, r15arg] : (new <U, V>(x: { a: U; b: V; }) => U[])[]
+>r15b : (new <T>(x: { a: T; b: T; }) => T[])[]
+>[r15arg2, r15arg] : (new <T>(x: { a: T; b: T; }) => T[])[]
 >r15arg2 : new <T>(x: { a: T; b: T; }) => T[]
 >r15arg : new <U, V>(x: { a: U; b: V; }) => U[]
 

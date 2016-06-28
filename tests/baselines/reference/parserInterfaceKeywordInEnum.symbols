@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserInterfaceKeywordInEnum.ts ===
+enum Bar {
+>Bar : Symbol(Bar, Decl(parserInterfaceKeywordInEnum.ts, 0, 0))
+
+    interface,
+>interface : Symbol(Bar.interface, Decl(parserInterfaceKeywordInEnum.ts, 0, 10))
+}
+

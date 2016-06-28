@@ -3,11 +3,13 @@ function exports() {
 >exports : () => number
 
     return 1;
+>1 : number
 }
 function require() {
 >require : () => string
 
     return "require";
+>"require" : string
 }
 module m3 {
 >m3 : typeof m3
@@ -16,11 +18,13 @@ module m3 {
 >exports : () => number
 
         return 1;
+>1 : number
     }
     function require() {
 >require : () => string
 
         return "require";
+>"require" : string
     }
 }
 module m4 {
@@ -30,10 +34,12 @@ module m4 {
 >exports : () => number
 
         return 1;
+>1 : number
     }
     export function require() {
 >require : () => string
 
         return "require";
+>"require" : string
     }
 }

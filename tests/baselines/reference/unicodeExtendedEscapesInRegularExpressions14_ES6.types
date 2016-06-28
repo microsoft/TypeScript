@@ -3,4 +3,5 @@
 // Shouldn't work, negatives are not allowed.
 var x = /\u{-DDDD}/g;
 >x : RegExp
+>/\u{-DDDD}/g : RegExp
 

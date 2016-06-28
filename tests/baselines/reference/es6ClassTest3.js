@@ -27,5 +27,5 @@ var M;
         Visibility.prototype.bar = function () { };
         ;
         return Visibility;
-    })();
+    }());
 })(M || (M = {}));

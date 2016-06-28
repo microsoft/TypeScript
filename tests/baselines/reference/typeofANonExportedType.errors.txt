@@ -1,11 +1,11 @@
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType.ts(2,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType.ts(20,12): error TS2323: Cannot redeclare exported variable 'r5'.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType.ts(21,12): error TS2323: Cannot redeclare exported variable 'r5'.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or indirectly in its own type annotation.
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType.ts (1 errors) ====
+==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType.ts (3 errors) ====
     var x = 1;
     export var r1: typeof x;
-    ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
     var y = { foo: '' };
     export var r2: typeof y;
     class C {
@@ -24,7 +24,11 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType
     export var i: I;
     var i2: I;
     export var r5: typeof i;
+               ~~
+!!! error TS2323: Cannot redeclare exported variable 'r5'.
     export var r5: typeof i2;
+               ~~
+!!! error TS2323: Cannot redeclare exported variable 'r5'.
     
     module M {
         export var foo = '';
@@ -46,6 +50,8 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType
     export var r11: typeof E.A;
     
     export var r12: typeof r12;
+               ~~~
+!!! error TS2502: 'r12' is referenced directly or indirectly in its own type annotation.
     
     function foo() { }
     module foo {

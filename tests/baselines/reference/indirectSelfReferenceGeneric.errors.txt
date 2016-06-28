@@ -1,8 +1,11 @@
-tests/cases/compiler/indirectSelfReferenceGeneric.ts(1,7): error TS2310: Type 'a<T>' recursively references itself as a base type.
+tests/cases/compiler/indirectSelfReferenceGeneric.ts(1,7): error TS2506: 'a' is referenced directly or indirectly in its own base expression.
+tests/cases/compiler/indirectSelfReferenceGeneric.ts(2,7): error TS2506: 'b' is referenced directly or indirectly in its own base expression.
 
 
-==== tests/cases/compiler/indirectSelfReferenceGeneric.ts (1 errors) ====
+==== tests/cases/compiler/indirectSelfReferenceGeneric.ts (2 errors) ====
     class a<T> extends b<T> { }
           ~
-!!! error TS2310: Type 'a<T>' recursively references itself as a base type.
+!!! error TS2506: 'a' is referenced directly or indirectly in its own base expression.
     class b<T> extends a<T> { }
+          ~
+!!! error TS2506: 'b' is referenced directly or indirectly in its own base expression.

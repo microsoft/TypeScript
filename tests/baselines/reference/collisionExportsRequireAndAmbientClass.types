@@ -54,4 +54,5 @@ module m4 {
     }
     var a = 10;
 >a : number
+>10 : number
 }

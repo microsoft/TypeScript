@@ -7,4 +7,4 @@ var 剩下 = (function () {
     function 剩下() {
     }
     return 剩下;
-})();
+}());

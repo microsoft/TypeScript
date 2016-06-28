@@ -22,7 +22,7 @@ var Test;
         function Mocked() {
         }
         return Mocked;
-    })();
+    }());
     var Tester = (function () {
         function Tester() {
         }
@@ -32,5 +32,5 @@ var Test;
             };
         };
         return Tester;
-    })();
+    }());
 })(Test || (Test = {}));

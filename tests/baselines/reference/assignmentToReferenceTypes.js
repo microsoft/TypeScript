@@ -30,7 +30,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 C = null;
 var E;
 (function (E) {

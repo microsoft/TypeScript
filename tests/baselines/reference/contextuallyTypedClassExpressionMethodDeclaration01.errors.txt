@@ -1,0 +1,67 @@
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration01.ts(17,24): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration01.ts(20,24): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration01.ts(28,27): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration01.ts(31,27): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration01.ts(39,36): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration01.ts(42,36): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+
+
+==== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration01.ts (6 errors) ====
+    
+    interface A {
+        numProp: number;
+    }
+    
+    interface B  {
+        strProp: string;
+    }
+    
+    interface Foo {
+        method1(arg: A): void;
+        method2(arg: B): void;
+    }
+    
+    function getFoo1(): Foo {
+        return class {
+            static method1(arg) {
+                           ~~~
+!!! error TS7006: Parameter 'arg' implicitly has an 'any' type.
+                arg.numProp = 10;
+            }
+            static method2(arg) {
+                           ~~~
+!!! error TS7006: Parameter 'arg' implicitly has an 'any' type.
+                arg.strProp = "hello";
+            }
+        }
+    }
+    
+    function getFoo2(): Foo {
+        return class {
+            static method1 = (arg) => {
+                              ~~~
+!!! error TS7006: Parameter 'arg' implicitly has an 'any' type.
+                arg.numProp = 10;
+            }
+            static method2 = (arg) => {
+                              ~~~
+!!! error TS7006: Parameter 'arg' implicitly has an 'any' type.
+                arg.strProp = "hello";
+            }
+        }
+    }
+    
+    function getFoo3(): Foo {
+        return class {
+            static method1 = function (arg) {
+                                       ~~~
+!!! error TS7006: Parameter 'arg' implicitly has an 'any' type.
+                arg.numProp = 10;
+            }
+            static method2 = function (arg) {
+                                       ~~~
+!!! error TS7006: Parameter 'arg' implicitly has an 'any' type.
+                arg.strProp = "hello";
+            }
+        }
+    }

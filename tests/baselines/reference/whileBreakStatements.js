@@ -1,4 +1,5 @@
 //// [whileBreakStatements.ts]
+
 while(true) {
     break;
 } 

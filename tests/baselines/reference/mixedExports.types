@@ -13,7 +13,7 @@ declare module M {
 }
 
 declare module M1 {
->M1 : unknown
+>M1 : any
 
      export interface Foo {}
 >Foo : Foo
@@ -23,14 +23,14 @@ declare module M1 {
 }
 
 module A {
->A : unknown
+>A : any
 
      interface X {x}
 >X : X
 >x : any
 
      export module X {}
->X : unknown
+>X : any
 
      interface X {y}
 >X : X

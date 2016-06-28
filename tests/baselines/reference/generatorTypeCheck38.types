@@ -1,0 +1,15 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck38.ts ===
+var yield;
+>yield : any
+
+function* g() {
+>g : () => IterableIterator<number>
+
+    yield 0;
+>yield 0 : any
+>0 : number
+
+    var v: typeof yield;
+>v : any
+>yield : any
+}

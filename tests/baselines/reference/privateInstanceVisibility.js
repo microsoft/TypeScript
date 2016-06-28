@@ -51,7 +51,7 @@ var Test;
             }
         };
         return Example;
-    })();
+    }());
     Test.Example = Example;
 })(Test || (Test = {}));
 var C = (function () {
@@ -62,4 +62,4 @@ var C = (function () {
         this.x = other.x;
     };
     return C;
-})();
+}());

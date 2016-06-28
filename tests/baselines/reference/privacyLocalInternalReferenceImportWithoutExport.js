@@ -154,6 +154,7 @@ module import_private {
 
 //// [privacyLocalInternalReferenceImportWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     // private elements
     var m_private;
     (function (m_private) {
@@ -161,7 +162,7 @@ define(["require", "exports"], function (require, exports) {
             function c_private() {
             }
             return c_private;
-        })();
+        }());
         m_private.c_private = c_private;
         (function (e_private) {
             e_private[e_private["Happy"] = 0] = "Happy";
@@ -179,7 +180,7 @@ define(["require", "exports"], function (require, exports) {
                 function c() {
                 }
                 return c;
-            })();
+            }());
             mi_private.c = c;
         })(mi_private = m_private.mi_private || (m_private.mi_private = {}));
     })(m_private || (m_private = {}));
@@ -190,7 +191,7 @@ define(["require", "exports"], function (require, exports) {
             function c_public() {
             }
             return c_public;
-        })();
+        }());
         m_public.c_public = c_public;
         (function (e_public) {
             e_public[e_public["Happy"] = 0] = "Happy";
@@ -208,7 +209,7 @@ define(["require", "exports"], function (require, exports) {
                 function c() {
                 }
                 return c;
-            })();
+            }());
             mi_public.c = c;
         })(mi_public = m_public.mi_public || (m_public.mi_public = {}));
     })(m_public = exports.m_public || (exports.m_public = {}));
@@ -230,11 +231,9 @@ define(["require", "exports"], function (require, exports) {
         var privateUse_im_private_v_private = im_private_v_private;
         import_public.publicUse_im_private_v_private = im_private_v_private;
         var privateUse_im_private_i_private;
-        import_public.publicUse_im_private_i_private;
         var privateUse_im_private_mi_private = new im_private_mi_private.c();
         import_public.publicUse_im_private_mi_private = new im_private_mi_private.c();
         var privateUse_im_private_mu_private;
-        import_public.publicUse_im_private_mu_private;
         // No Privacy errors - importing public elements
         var im_private_c_public = m_public.c_public;
         var im_private_e_public = m_public.e_public;
@@ -251,11 +250,9 @@ define(["require", "exports"], function (require, exports) {
         var privateUse_im_private_v_public = im_private_v_public;
         import_public.publicUse_im_private_v_public = im_private_v_public;
         var privateUse_im_private_i_public;
-        import_public.publicUse_im_private_i_public;
         var privateUse_im_private_mi_public = new im_private_mi_public.c();
         import_public.publicUse_im_private_mi_public = new im_private_mi_public.c();
         var privateUse_im_private_mu_public;
-        import_public.publicUse_im_private_mu_public;
     })(import_public = exports.import_public || (exports.import_public = {}));
     var import_private;
     (function (import_private) {
@@ -275,11 +272,9 @@ define(["require", "exports"], function (require, exports) {
         var privateUse_im_private_v_private = im_private_v_private;
         import_private.publicUse_im_private_v_private = im_private_v_private;
         var privateUse_im_private_i_private;
-        import_private.publicUse_im_private_i_private;
         var privateUse_im_private_mi_private = new im_private_mi_private.c();
         import_private.publicUse_im_private_mi_private = new im_private_mi_private.c();
         var privateUse_im_private_mu_private;
-        import_private.publicUse_im_private_mu_private;
         // No privacy Error - importing public elements
         var im_private_c_public = m_public.c_public;
         var im_private_e_public = m_public.e_public;
@@ -296,10 +291,8 @@ define(["require", "exports"], function (require, exports) {
         var privateUse_im_private_v_public = im_private_v_public;
         import_private.publicUse_im_private_v_public = im_private_v_public;
         var privateUse_im_private_i_public;
-        import_private.publicUse_im_private_i_public;
         var privateUse_im_private_mi_public = new im_private_mi_public.c();
         import_private.publicUse_im_private_mi_public = new im_private_mi_public.c();
         var privateUse_im_private_mu_public;
-        import_private.publicUse_im_private_mu_public;
     })(import_private || (import_private = {}));
 });

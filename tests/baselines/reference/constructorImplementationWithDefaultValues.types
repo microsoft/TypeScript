@@ -7,6 +7,7 @@ class C {
 
     constructor(x = 1) {
 >x : number
+>1 : number
 
         var y = x;
 >y : number
@@ -24,6 +25,7 @@ class D<T> {
     constructor(x:T = null) {
 >x : T
 >T : T
+>null : null
 
         var y = x;
 >y : T
@@ -42,6 +44,7 @@ class E<T extends Date> {
     constructor(x: T = null) {
 >x : T
 >T : T
+>null : null
 
         var y = x;
 >y : T

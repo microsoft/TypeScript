@@ -82,10 +82,12 @@ var b = { Foo: <Derived>null };
 >Foo : Derived
 ><Derived>null : Derived
 >Derived : Derived
+>null : null
 
 var r = true ? a : b;
 >r : { Foo?: Base; }
 >true ? a : b : { Foo?: Base; }
+>true : boolean
 >a : { Foo?: Base; }
 >b : { Foo: Derived; }
 
@@ -151,10 +153,12 @@ module TwoLevels {
 >Foo : Derived2
 ><Derived2>null : Derived2
 >Derived2 : Derived2
+>null : null
 
     var r = true ? a : b;
 >r : { Foo?: Base; }
 >true ? a : b : { Foo?: Base; }
+>true : boolean
 >a : { Foo?: Base; }
 >b : { Foo: Derived2; }
 }

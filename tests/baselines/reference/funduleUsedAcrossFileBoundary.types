@@ -25,7 +25,7 @@ function promiseWithCancellation<T>(promise: Q.Promise<T>) {
 >promiseWithCancellation : <T>(promise: Q.Promise<T>) => void
 >T : T
 >promise : Q.Promise<T>
->Q : unknown
+>Q : any
 >Promise : Q.Promise<T>
 >T : T
 

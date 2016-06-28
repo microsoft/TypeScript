@@ -234,7 +234,7 @@ var TypeScript;
             this.script = null;
         }
         return TypeCollectionContext;
-    })();
+    }());
     TypeScript.TypeCollectionContext = TypeCollectionContext;
     var MemberScopeContext = (function () {
         function MemberScopeContext(flow, pos, matchFlag) {
@@ -246,7 +246,7 @@ var TypeScript;
             this.options = new AstWalkOptions();
         }
         return MemberScopeContext;
-    })();
+    }());
     TypeScript.MemberScopeContext = MemberScopeContext;
     var EnclosingScopeContext = (function () {
         function EnclosingScopeContext(logger, script, text, pos, isMemberCompletion) {
@@ -293,7 +293,7 @@ var TypeScript;
             return this.scriptFragment;
         };
         return EnclosingScopeContext;
-    })();
+    }());
     TypeScript.EnclosingScopeContext = EnclosingScopeContext;
     function preFindMemberScope(ast, parent, walker) {
         var memScope = walker.state;

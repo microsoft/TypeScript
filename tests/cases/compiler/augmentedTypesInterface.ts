@@ -9,11 +9,11 @@ interface i {
 }
 
 // interface then class
-interface i2 { // error
+interface i2 {
     foo(): void;
 }
 
-class i2 {  // error
+class i2 {
     bar() {
         return 1;
     }

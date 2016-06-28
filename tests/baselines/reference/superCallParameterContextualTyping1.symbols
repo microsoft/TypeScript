@@ -1,0 +1,30 @@
+=== tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping1.ts ===
+
+class A<T1, T2> {
+>A : Symbol(A, Decl(superCallParameterContextualTyping1.ts, 0, 0))
+>T1 : Symbol(T1, Decl(superCallParameterContextualTyping1.ts, 1, 8))
+>T2 : Symbol(T2, Decl(superCallParameterContextualTyping1.ts, 1, 11))
+
+    constructor(private map: (value: T1) => T2) {
+>map : Symbol(A.map, Decl(superCallParameterContextualTyping1.ts, 2, 16))
+>value : Symbol(value, Decl(superCallParameterContextualTyping1.ts, 2, 30))
+>T1 : Symbol(T1, Decl(superCallParameterContextualTyping1.ts, 1, 8))
+>T2 : Symbol(T2, Decl(superCallParameterContextualTyping1.ts, 1, 11))
+
+    }
+}
+
+class B extends A<number, string> {
+>B : Symbol(B, Decl(superCallParameterContextualTyping1.ts, 5, 1))
+>A : Symbol(A, Decl(superCallParameterContextualTyping1.ts, 0, 0))
+
+    // Ensure 'value' is of type 'number (and not '{}') by using its 'toExponential()' method.
+    constructor() { super(value => String(value.toExponential())); }
+>super : Symbol(A, Decl(superCallParameterContextualTyping1.ts, 0, 0))
+>value : Symbol(value, Decl(superCallParameterContextualTyping1.ts, 9, 26))
+>String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>value.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>value : Symbol(value, Decl(superCallParameterContextualTyping1.ts, 9, 26))
+>toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+}
+

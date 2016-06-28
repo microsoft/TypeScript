@@ -8,4 +8,5 @@ var b: a;
 
 
 //// [importDeclWithDeclareModifier.js]
+"use strict";
 var b;

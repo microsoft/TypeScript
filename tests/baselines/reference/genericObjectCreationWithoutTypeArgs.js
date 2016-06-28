@@ -14,7 +14,7 @@ var SS = (function () {
     function SS() {
     }
     return SS;
-})();
+}());
 var x1 = new SS(); // OK
 var x2 = new SS(); // Correctly give error 
 var x3 = new SS(); // OK

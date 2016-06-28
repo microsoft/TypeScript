@@ -7,5 +7,5 @@ var a = 10;
 export default a;
 
 // @filename: es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.ts
-import defaultBinding, * as nameSpaceBinding  from "es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0";
+import defaultBinding, * as nameSpaceBinding  from "./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0";
 var x: number = defaultBinding;

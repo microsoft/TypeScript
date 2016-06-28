@@ -1,0 +1,5 @@
+=== tests/cases/compiler/sourceMapValidationFunctionPropertyAssignment.ts ===
+var x = { n() { } };
+>x : Symbol(x, Decl(sourceMapValidationFunctionPropertyAssignment.ts, 0, 3))
+>n : Symbol(n, Decl(sourceMapValidationFunctionPropertyAssignment.ts, 0, 9))
+

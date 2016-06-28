@@ -15,6 +15,7 @@ String.prototype.slice(0);
 >String : StringConstructor
 >prototype : String
 >slice : (start?: number, end?: number) => string
+>0 : number
 
 String.prototype.slice(0,1);
 >String.prototype.slice(0,1) : string
@@ -23,4 +24,6 @@ String.prototype.slice(0,1);
 >String : StringConstructor
 >prototype : String
 >slice : (start?: number, end?: number) => string
+>0 : number
+>1 : number
 

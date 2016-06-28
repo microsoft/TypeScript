@@ -49,6 +49,6 @@ var B = (function () {
         })();
     }
     return B;
-})();
+}());
 var b = new B();
 b.foo();

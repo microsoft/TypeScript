@@ -1,0 +1,18 @@
+=== tests/cases/compiler/interfaceSubtyping.ts ===
+interface iface {
+>iface : Symbol(iface, Decl(interfaceSubtyping.ts, 0, 0))
+
+    foo(): void;
+>foo : Symbol(iface.foo, Decl(interfaceSubtyping.ts, 0, 17))
+}
+class Camera implements iface{
+>Camera : Symbol(Camera, Decl(interfaceSubtyping.ts, 2, 1))
+>iface : Symbol(iface, Decl(interfaceSubtyping.ts, 0, 0))
+
+    constructor (public str: string) {
+>str : Symbol(Camera.str, Decl(interfaceSubtyping.ts, 4, 17))
+    }
+    foo() {  return "s";   }
+>foo : Symbol(Camera.foo, Decl(interfaceSubtyping.ts, 5, 5))
+}
+

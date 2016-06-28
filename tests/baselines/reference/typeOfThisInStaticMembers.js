@@ -44,7 +44,7 @@ var C = (function () {
         return this;
     };
     return C;
-})();
+}());
 var t = C.bar();
 // all ok
 var r2 = t.foo + 1;
@@ -59,7 +59,7 @@ var C2 = (function () {
         return this;
     };
     return C2;
-})();
+}());
 var t2 = C2.bar();
 // all ok
 var r5 = t2.foo + 1;

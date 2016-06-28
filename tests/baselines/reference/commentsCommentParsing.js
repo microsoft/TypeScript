@@ -288,7 +288,7 @@ var NoQuickInfoClass = (function () {
     function NoQuickInfoClass() {
     }
     return NoQuickInfoClass;
-})();
+}());
 
 
 //// [commentsCommentParsing.d.ts]

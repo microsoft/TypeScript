@@ -11,5 +11,5 @@ var Greeter = (function () {
         this.nameA = "Ten";
     }
     return Greeter;
-})();
+}());
 //# sourceMappingURL=sourceMapValidationClassWithDefaultConstructor.js.map
