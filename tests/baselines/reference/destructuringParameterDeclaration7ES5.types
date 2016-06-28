@@ -16,3 +16,18 @@ function foo({}, {foo, bar}: ISomething) {}
 >bar : string
 >ISomething : ISomething
 
+function baz([], {foo, bar}: ISomething) {}
+>baz : ([]: any[], {foo, bar}: ISomething) => void
+>foo : string
+>bar : string
+>ISomething : ISomething
+
+function one([], {}) {}
+>one : ([]: any[], {}: {}) => void
+
+function two([], [a, b, c]: number[]) {}
+>two : ([]: any[], [a, b, c]: number[]) => void
+>a : number
+>b : number
+>c : number
+
