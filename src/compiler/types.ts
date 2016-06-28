@@ -2540,6 +2540,7 @@ namespace ts {
         declaration?: boolean;
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;
+        disableSizeLimit?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
@@ -2555,6 +2556,7 @@ namespace ts {
         /*@internal*/listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
+        maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
@@ -2593,7 +2595,6 @@ namespace ts {
         /* @internal */ suppressOutputPathCheck?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
-        disableSizeLimit?: boolean;
         types?: string[];
         /** Paths used to used to compute primary types search locations */
         typeRoots?: string[];

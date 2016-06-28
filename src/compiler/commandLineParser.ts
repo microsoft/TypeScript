@@ -381,6 +381,11 @@ namespace ts {
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
         },
         {
+            name: "maxNodeModuleJsDepth",
+            type: "number",
+            description: Diagnostics.The_maximum_dependency_depth_to_search_under_node_modules_and_load_JavaScript_files
+        },
+        {
             name: "listEmittedFiles",
             type: "boolean"
         },

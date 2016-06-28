@@ -2804,6 +2804,10 @@
         "category": "Message",
         "code": 6135
     },
+    "The maximum dependency depth to search under node_modules and load JavaScript files": {
+        "category": "Message",
+        "code": 6136
+    },
 
     "List of compiler extensions to require.": {
         "category": "Message",

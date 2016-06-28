@@ -523,7 +523,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
     ///<reference path='typescript.ts' />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6053: File 'typescript.ts' not found.
+!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
     
     module TypeScript {
         export class ASTSpan {
