@@ -2590,14 +2590,17 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertTypeScript;
             }
 
-            // If a FunctionDeclaration has an asterisk token, is exported, or its
-            // subtree has marked the container as needing to capture the lexical `this`,
-            // then this node is ES6 syntax.
+            // If a FunctionDeclaration is exported or its subtree has marked the container as
+            // needing to capture the lexical `this`, then this node is ES6 syntax.
             if (subtreeFlags & TransformFlags.ES6FunctionSyntaxMask) {
                 transformFlags |= TransformFlags.AssertES6;
             }
 
-            // Currently, we only support generators that were originally async function bodies.
+            // If a FunctionDeclaration is generator function and is the body of a
+            // transformed async function, then this node can be transformed to a
+            // down-level generator.
+            // Currently we do not support transforming any other generator fucntions
+            // down level.
             if (asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
                 transformFlags |= TransformFlags.AssertGenerator;
             }
@@ -2623,7 +2626,11 @@ namespace ts {
             transformFlags |= TransformFlags.AssertES6;
         }
 
-        // Currently, we only support generators that were originally async function bodies.
+        // If a FunctionExpression is generator function and is the body of a
+        // transformed async function, then this node can be transformed to a
+        // down-level generator.
+        // Currently we do not support transforming any other generator fucntions
+        // down level.
         if (asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
             transformFlags |= TransformFlags.AssertGenerator;
         }
