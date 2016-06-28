@@ -1695,7 +1695,7 @@
         "category": "Error",
         "code": 2521
     },
-    "The 'arguments' object cannot be referenced in an async arrow function. Consider using a standard async function expression.": {
+    "The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.": {
         "category": "Error",
         "code": 2522
     },

@@ -8162,9 +8162,12 @@ namespace ts {
             // can explicitly bound arguments objects
             if (symbol === argumentsSymbol) {
                 const container = getContainingFunction(node);
-                if (container.kind === SyntaxKind.ArrowFunction) {
-                    if (languageVersion < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6) {
+                    if (container.kind === SyntaxKind.ArrowFunction) {
                         error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
+                    }
+                    else if (hasModifier(container, ModifierFlags.Async)) {
+                        error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_async_function_or_method_in_ES3_and_ES5_Consider_using_a_standard_function_or_method);
                     }
                 }
 
