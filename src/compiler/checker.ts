@@ -15563,7 +15563,6 @@ namespace ts {
                 }
 
                 checkBlock(catchClause.block);
-                checkUnusedIdentifiers(catchClause);
             }
 
             if (node.finallyBlock) {
