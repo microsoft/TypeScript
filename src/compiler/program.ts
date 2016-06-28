@@ -242,7 +242,7 @@ namespace ts {
         const failedLookupLocations: string[] = [];
 
         // Check primary library paths
-        if (typeRoots.length) {
+        if (typeRoots && typeRoots.length) {
             if (traceEnabled) {
                 trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(", "));
             }
@@ -1060,9 +1060,11 @@ namespace ts {
         let result: string[] = [];
         if (host.directoryExists && host.getDirectories) {
             const typeRoots = getEffectiveTypeRoots(options, host);
-            for (const root of typeRoots) {
-                if (host.directoryExists(root)) {
-                    result = result.concat(host.getDirectories(root));
+            if (typeRoots) {
+                for (const root of typeRoots) {
+                    if (host.directoryExists(root)) {
+                        result = result.concat(host.getDirectories(root));
+                    }
                 }
             }
         }

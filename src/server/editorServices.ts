@@ -113,7 +113,6 @@ namespace ts.server {
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
                 readFile: fileName => this.host.readFile(fileName),
-                getCurrentDirectory: () => this.host.getCurrentDirectory(),
                 directoryExists: directoryName => this.host.directoryExists(directoryName)
             };
         }
