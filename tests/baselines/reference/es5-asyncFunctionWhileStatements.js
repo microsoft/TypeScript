@@ -80,7 +80,7 @@ async function whileStatement18() {
 //// [es5-asyncFunctionWhileStatements.js]
 function whileStatement0() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             while (x) {
                 y;
             }
@@ -90,7 +90,7 @@ function whileStatement0() {
 }
 function whileStatement1() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
@@ -105,7 +105,7 @@ function whileStatement1() {
 }
 function whileStatement2() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!x)
@@ -121,7 +121,7 @@ function whileStatement2() {
 }
 function whileStatement3() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             while (x) {
                 continue;
             }
@@ -131,7 +131,7 @@ function whileStatement3() {
 }
 function whileStatement4() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
@@ -145,7 +145,7 @@ function whileStatement4() {
 }
 function whileStatement5() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!x)
@@ -161,7 +161,7 @@ function whileStatement5() {
 }
 function whileStatement6() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!x)
@@ -179,7 +179,7 @@ function whileStatement6() {
 }
 function whileStatement7() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             A: while (x) {
                 continue A;
             }
@@ -189,7 +189,7 @@ function whileStatement7() {
 }
 function whileStatement8() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
@@ -203,7 +203,7 @@ function whileStatement8() {
 }
 function whileStatement9() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!x)
@@ -219,7 +219,7 @@ function whileStatement9() {
 }
 function whileStatement10() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!x)
@@ -237,7 +237,7 @@ function whileStatement10() {
 }
 function whileStatement11() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             while (x) {
                 break;
             }
@@ -247,7 +247,7 @@ function whileStatement11() {
 }
 function whileStatement12() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
@@ -261,7 +261,7 @@ function whileStatement12() {
 }
 function whileStatement13() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!x)
@@ -277,7 +277,7 @@ function whileStatement13() {
 }
 function whileStatement14() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!x)
@@ -295,7 +295,7 @@ function whileStatement14() {
 }
 function whileStatement15() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             E: while (x) {
                 break E;
             }
@@ -305,7 +305,7 @@ function whileStatement15() {
 }
 function whileStatement16() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
@@ -319,7 +319,7 @@ function whileStatement16() {
 }
 function whileStatement17() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!x)
@@ -335,7 +335,7 @@ function whileStatement17() {
 }
 function whileStatement18() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!x)

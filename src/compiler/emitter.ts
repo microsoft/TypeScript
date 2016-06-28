@@ -72,7 +72,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };`;
 
         const generatorHelper = `
-var __generator = (this && this.__generator) || function (body) {
+var __generator = (this && this.__generator) || function (thisArg, body) {
     var _ = { label: 0, sent: function() { if (sent[0] === 1) throw sent[1]; return sent[1]; }, trys: [], stack: [] }, sent, f;
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -97,7 +97,7 @@ var __generator = (this && this.__generator) || function (body) {
                         _.trys.pop();
                         continue;
                 }
-                op = body(_);
+                op = body.call(thisArg, _);
             }
             catch (e) { op = [6, e]; }
             finally { f = 0, sent = void 0; }

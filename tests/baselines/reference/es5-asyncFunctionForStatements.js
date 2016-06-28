@@ -32,7 +32,7 @@ async function forStatement6() {
 //// [es5-asyncFunctionForStatements.js]
 function forStatement0() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             for (x; y; z) {
                 a;
             }
@@ -42,7 +42,7 @@ function forStatement0() {
 }
 function forStatement1() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
@@ -63,7 +63,7 @@ function forStatement1() {
 }
 function forStatement2() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     x;
@@ -84,7 +84,7 @@ function forStatement2() {
 }
 function forStatement3() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     x;
@@ -105,7 +105,7 @@ function forStatement3() {
 }
 function forStatement4() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     x;
@@ -128,7 +128,7 @@ function forStatement4() {
 function forStatement5() {
     return __awaiter(this, void 0, void 0, function () {
         var b;
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             for (; y; z) {
                 a;
             }
@@ -139,7 +139,7 @@ function forStatement5() {
 function forStatement6() {
     return __awaiter(this, void 0, void 0, function () {
         var c;
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             for (c = x; y; z) {
                 a;
             }

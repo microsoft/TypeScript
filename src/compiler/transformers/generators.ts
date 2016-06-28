@@ -2554,21 +2554,24 @@ namespace ts {
             return createCall(
                 createHelperName(currentSourceFile.externalHelpersModuleName, "__generator"),
                 /*typeArguments*/ undefined,
-                [setNodeEmitFlags(
-                    createFunctionExpression(
-                        /*asteriskToken*/ undefined,
-                        /*name*/ undefined,
-                        /*typeParameters*/ undefined,
-                        [createParameter(state)],
-                        /*type*/ undefined,
-                        createBlock(
-                            buildResult,
-                            /*location*/ undefined,
-                            /*multiLine*/ buildResult.length > 0
-                        )
-                    ),
-                    NodeEmitFlags.ReuseTempVariableScope
-                )]
+                [
+                    createThis(),
+                    setNodeEmitFlags(
+                        createFunctionExpression(
+                            /*asteriskToken*/ undefined,
+                            /*name*/ undefined,
+                            /*typeParameters*/ undefined,
+                            [createParameter(state)],
+                            /*type*/ undefined,
+                            createBlock(
+                                buildResult,
+                                /*location*/ undefined,
+                                /*multiLine*/ buildResult.length > 0
+                            )
+                        ),
+                        NodeEmitFlags.ReuseTempVariableScope
+                    )
+                ]
             );
         }
 

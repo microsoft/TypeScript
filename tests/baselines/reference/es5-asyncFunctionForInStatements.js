@@ -40,7 +40,7 @@ async function forInStatement8() {
 //// [es5-asyncFunctionForInStatements.js]
 function forInStatement0() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             for (x in y) {
                 z;
             }
@@ -51,7 +51,7 @@ function forInStatement0() {
 function forInStatement1() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _i;
-        return __generator(function (_c) {
+        return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _a = [];
@@ -78,7 +78,7 @@ function forInStatement1() {
 function forInStatement2() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _i;
-        return __generator(function (_c) {
+        return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _a = [];
@@ -105,7 +105,7 @@ function forInStatement2() {
 function forInStatement3() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _i;
-        return __generator(function (_c) {
+        return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _a = [];
@@ -132,7 +132,7 @@ function forInStatement3() {
 function forInStatement4() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _i;
-        return __generator(function (_c) {
+        return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _a = [];
@@ -159,7 +159,7 @@ function forInStatement4() {
 function forInStatement5() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _i;
-        return __generator(function (_c) {
+        return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _a = [];
@@ -186,7 +186,7 @@ function forInStatement5() {
 function forInStatement6() {
     return __awaiter(this, void 0, void 0, function () {
         var a;
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             for (a in y) {
                 z;
             }
@@ -197,7 +197,7 @@ function forInStatement6() {
 function forInStatement7() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _i, b;
-        return __generator(function (_c) {
+        return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _a = [];
@@ -224,7 +224,7 @@ function forInStatement7() {
 function forInStatement8() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _i, c;
-        return __generator(function (_c) {
+        return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _a = [];

@@ -2043,12 +2043,13 @@ namespace ts {
                                             // function that can be reached at runtime (e.g. a `class`
                                             // declaration or a `var` declaration for the static side
                                             // of a type, such as the global `Promise` type in lib.d.ts).
-        VoidType,                           // The TypeReferenceNode resolves to a Void-like type.
+        VoidNullableOrNeverType,            // The TypeReferenceNode resolves to a Void-like, Nullable, or Never type.
         NumberLikeType,                     // The TypeReferenceNode resolves to a Number-like type.
         StringLikeType,                     // The TypeReferenceNode resolves to a String-like type.
         BooleanType,                        // The TypeReferenceNode resolves to a Boolean-like type.
         ArrayLikeType,                      // The TypeReferenceNode resolves to an Array-like type.
         ESSymbolType,                       // The TypeReferenceNode resolves to the ESSymbol type.
+        Promise,                            // The TypeReferenceNode resolved to the global Promise constructor symbol.
         TypeWithCallSignature,              // The TypeReferenceNode resolves to a Function type or a type
                                             // with call signatures.
         ObjectType,                         // The TypeReferenceNode resolves to any other type.

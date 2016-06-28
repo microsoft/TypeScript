@@ -81,7 +81,7 @@ async function forOfStatement18() {
 function forOfStatement0() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_1;
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             for (_i = 0, y_1 = y; _i < y_1.length; _i++) {
                 x = y_1[_i];
                 z;
@@ -93,7 +93,7 @@ function forOfStatement0() {
 function forOfStatement1() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _i = 0;
@@ -118,7 +118,7 @@ function forOfStatement1() {
 function forOfStatement2() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_2;
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _i = 0, y_2 = y;
@@ -142,7 +142,7 @@ function forOfStatement2() {
 function forOfStatement3() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_3;
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _i = 0, y_3 = y;
@@ -166,7 +166,7 @@ function forOfStatement3() {
 function forOfStatement4() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _i = 0;
@@ -191,7 +191,7 @@ function forOfStatement4() {
 function forOfStatement5() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_4;
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _i = 0, y_4 = y;
@@ -215,7 +215,7 @@ function forOfStatement5() {
 function forOfStatement6() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_5, b;
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             for (_i = 0, y_5 = y; _i < y_5.length; _i++) {
                 b = y_5[_i];
                 z;
@@ -227,7 +227,7 @@ function forOfStatement6() {
 function forOfStatement7() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, _a, c;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _i = 0;
@@ -252,7 +252,7 @@ function forOfStatement7() {
 function forOfStatement8() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_6, d;
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _i = 0, y_6 = y;
@@ -276,7 +276,7 @@ function forOfStatement8() {
 function forOfStatement9() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _i = 0;
@@ -301,7 +301,7 @@ function forOfStatement9() {
 function forOfStatement10() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_7;
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _i = 0, y_7 = y;
@@ -325,7 +325,7 @@ function forOfStatement10() {
 function forOfStatement11() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_8, _a, _b;
-        return __generator(function (_c) {
+        return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _i = 0, y_8 = y;
@@ -358,7 +358,7 @@ function forOfStatement11() {
 function forOfStatement12() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, _a, _b;
-        return __generator(function (_c) {
+        return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _i = 0;
@@ -383,7 +383,7 @@ function forOfStatement12() {
 function forOfStatement13() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_9, _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _i = 0, y_9 = y;
@@ -407,7 +407,7 @@ function forOfStatement13() {
 function forOfStatement14() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _i = 0;
@@ -432,7 +432,7 @@ function forOfStatement14() {
 function forOfStatement15() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_10;
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _i = 0, y_10 = y;
@@ -456,7 +456,7 @@ function forOfStatement15() {
 function forOfStatement16() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_11, _a, _b;
-        return __generator(function (_c) {
+        return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _i = 0, y_11 = y;
@@ -489,7 +489,7 @@ function forOfStatement16() {
 function forOfStatement17() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, _a, _b;
-        return __generator(function (_c) {
+        return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _i = 0;
@@ -514,7 +514,7 @@ function forOfStatement17() {
 function forOfStatement18() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_12, _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _i = 0, y_12 = y;

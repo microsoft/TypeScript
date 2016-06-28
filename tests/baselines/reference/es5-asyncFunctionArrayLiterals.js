@@ -37,7 +37,7 @@ async function arrayLiteral7() {
 function arrayLiteral0() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0: return [4 /*yield*/, y];
                 case 1:
@@ -50,7 +50,7 @@ function arrayLiteral0() {
 function arrayLiteral1() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = [y];
@@ -64,7 +64,7 @@ function arrayLiteral1() {
 }
 function arrayLiteral2() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, y];
                 case 1:
@@ -77,7 +77,7 @@ function arrayLiteral2() {
 function arrayLiteral3() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c, _d;
-        return __generator(function (_e) {
+        return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
                     _b = (_a = y).concat;
@@ -92,7 +92,7 @@ function arrayLiteral3() {
 function arrayLiteral4() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0: return [4 /*yield*/, y];
                 case 1:
@@ -105,7 +105,7 @@ function arrayLiteral4() {
 function arrayLiteral5() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c;
-        return __generator(function (_d) {
+        return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
                     _b = (_a = [y]).concat;
@@ -120,7 +120,7 @@ function arrayLiteral5() {
 function arrayLiteral6() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = [y];
@@ -135,7 +135,7 @@ function arrayLiteral6() {
 function arrayLiteral7() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0: return [4 /*yield*/, y];
                 case 1:

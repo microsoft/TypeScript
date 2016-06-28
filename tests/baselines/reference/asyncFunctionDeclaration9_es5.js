@@ -5,9 +5,9 @@ async function foo(): Promise<void> {
 
 //// [asyncFunctionDeclaration9_es5.js]
 function foo() {
-    return __awaiter(this, void 0, Promise, function () {
+    return __awaiter(this, void 0, void 0, function () {
         var v, _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = {};

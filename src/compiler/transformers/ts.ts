@@ -1774,7 +1774,7 @@ namespace ts {
                 case TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue:
                     return serializeEntityNameAsExpression(node.typeName, /*useFallback*/ false);
 
-                case TypeReferenceSerializationKind.VoidType:
+                case TypeReferenceSerializationKind.VoidNullableOrNeverType:
                     return createVoidZero();
 
                 case TypeReferenceSerializationKind.BooleanType:
@@ -1796,6 +1796,9 @@ namespace ts {
 
                 case TypeReferenceSerializationKind.TypeWithCallSignature:
                     return createIdentifier("Function");
+
+                case TypeReferenceSerializationKind.Promise:
+                    return createIdentifier("Promise");
 
                 case TypeReferenceSerializationKind.ObjectType:
                 default:
@@ -2221,8 +2224,21 @@ namespace ts {
             }
         }
 
+        function getPromiseConstructor(type: TypeNode) {
+            const typeName = getEntityNameFromTypeNode(type);
+            if (typeName && isEntityName(typeName)) {
+                const serializationKind = resolver.getTypeReferenceSerializationKind(typeName);
+                if (serializationKind === TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue
+                    || serializationKind === TypeReferenceSerializationKind.Unknown) {
+                    return typeName;
+                }
+            }
+
+            return undefined;
+        }
+
         function transformAsyncFunctionBody(node: FunctionLikeDeclaration): ConciseBody | FunctionBody {
-            const promiseConstructor = languageVersion < ScriptTarget.ES6 ? getEntityNameFromTypeNode(node.type) : undefined;
+            const promiseConstructor = languageVersion < ScriptTarget.ES6 ? getPromiseConstructor(node.type) : undefined;
             const isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
             const hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
 

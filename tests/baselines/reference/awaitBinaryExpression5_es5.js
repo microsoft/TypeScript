@@ -12,9 +12,9 @@ async function func(): Promise<void> {
 
 //// [awaitBinaryExpression5_es5.js]
 function func() {
-    return __awaiter(this, void 0, Promise, function () {
+    return __awaiter(this, void 0, void 0, function () {
         var o, _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     before();

@@ -70,7 +70,7 @@ async function switchStatement8() {
 //// [es5-asyncFunctionSwitchStatements.js]
 function switchStatement0() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (x) {
                 case y:
                     a;
@@ -85,7 +85,7 @@ function switchStatement0() {
 }
 function switchStatement1() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
@@ -105,7 +105,7 @@ function switchStatement1() {
 function switchStatement2() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = x;
@@ -129,7 +129,7 @@ function switchStatement2() {
 function switchStatement3() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = x;
@@ -152,7 +152,7 @@ function switchStatement3() {
 function switchStatement4() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = x;
@@ -175,7 +175,7 @@ function switchStatement4() {
 function switchStatement5() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = x;
@@ -202,7 +202,7 @@ function switchStatement5() {
 function switchStatement6() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = x;
@@ -230,7 +230,7 @@ function switchStatement6() {
 function switchStatement7() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = x;
@@ -260,7 +260,7 @@ function switchStatement7() {
 function switchStatement8() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = x;

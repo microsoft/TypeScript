@@ -54,7 +54,7 @@ async function objectLiteral6() {
 function objectLiteral0() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = {};
@@ -71,7 +71,7 @@ function objectLiteral0() {
 function objectLiteral1() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = {
@@ -89,7 +89,7 @@ function objectLiteral1() {
 function objectLiteral2() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = {};
@@ -106,7 +106,7 @@ function objectLiteral2() {
 function objectLiteral3() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b;
-        return __generator(function (_c) {
+        return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _b = {};
@@ -124,7 +124,7 @@ function objectLiteral3() {
 function objectLiteral4() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = {};
@@ -141,7 +141,7 @@ function objectLiteral4() {
 function objectLiteral5() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = {
@@ -159,7 +159,7 @@ function objectLiteral5() {
 function objectLiteral6() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b;
-        return __generator(function (_c) {
+        return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _b = {

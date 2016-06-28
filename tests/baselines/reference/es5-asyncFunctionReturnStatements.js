@@ -28,22 +28,22 @@ async function returnStatement5(): Promise<any>{
 
 //// [es5-asyncFunctionReturnStatements.js]
 function returnStatement0() {
-    return __awaiter(this, void 0, Promise, function () {
-        return __generator(function (_a) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
             return [2 /*return*/];
         });
     });
 }
 function returnStatement1() {
-    return __awaiter(this, void 0, Promise, function () {
-        return __generator(function (_a) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
             return [2 /*return*/, x];
         });
     });
 }
 function returnStatement2() {
-    return __awaiter(this, void 0, Promise, function () {
-        return __generator(function (_a) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1: return [2 /*return*/, _a.sent()];
@@ -52,8 +52,8 @@ function returnStatement2() {
     });
 }
 function returnStatement3() {
-    return __awaiter(this, void 0, Promise, function () {
-        return __generator(function (_a) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
             {
                 return [2 /*return*/];
             }
@@ -62,8 +62,8 @@ function returnStatement3() {
     });
 }
 function returnStatement4() {
-    return __awaiter(this, void 0, Promise, function () {
-        return __generator(function (_a) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
@@ -77,8 +77,8 @@ function returnStatement4() {
     });
 }
 function returnStatement5() {
-    return __awaiter(this, void 0, Promise, function () {
-        return __generator(function (_a) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1: return [2 /*return*/, _a.sent()];

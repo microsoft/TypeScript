@@ -88,7 +88,7 @@ async function newExpression20() {
 //// [es5-asyncFunctionNewExpressions.js]
 function newExpression0() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, new x(y, z)];
                 case 1:
@@ -100,7 +100,7 @@ function newExpression0() {
 }
 function newExpression1() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
@@ -113,7 +113,7 @@ function newExpression1() {
 function newExpression2() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b;
-        return __generator(function (_c) {
+        return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _a = x.bind;
@@ -128,7 +128,7 @@ function newExpression2() {
 function newExpression3() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b;
-        return __generator(function (_c) {
+        return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _a = x.bind;
@@ -143,7 +143,7 @@ function newExpression3() {
 }
 function newExpression4() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, new (x.bind.apply(x, [void 0].concat(y, [z])))()];
                 case 1:
@@ -156,7 +156,7 @@ function newExpression4() {
 function newExpression5() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
@@ -169,7 +169,7 @@ function newExpression5() {
 function newExpression6() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c, _d, _e, _f;
-        return __generator(function (_g) {
+        return __generator(this, function (_g) {
             switch (_g.label) {
                 case 0:
                     _b = (_a = x.bind).apply;
@@ -186,7 +186,7 @@ function newExpression6() {
 function newExpression7() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c, _d, _e, _f, _g;
-        return __generator(function (_h) {
+        return __generator(this, function (_h) {
             switch (_h.label) {
                 case 0:
                     _b = (_a = x.bind).apply;
@@ -204,7 +204,7 @@ function newExpression7() {
 function newExpression8() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c, _d;
-        return __generator(function (_e) {
+        return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
                     _b = (_a = x.bind).apply;
@@ -221,7 +221,7 @@ function newExpression8() {
 function newExpression9() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c, _d, _e, _f;
-        return __generator(function (_g) {
+        return __generator(this, function (_g) {
             switch (_g.label) {
                 case 0:
                     _b = (_a = x.bind).apply;
@@ -237,7 +237,7 @@ function newExpression9() {
 }
 function newExpression10() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, new x.a(y, z)];
                 case 1:
@@ -249,7 +249,7 @@ function newExpression10() {
 }
 function newExpression11() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x.a];
                 case 1:
@@ -261,7 +261,7 @@ function newExpression11() {
 }
 function newExpression12() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
@@ -274,7 +274,7 @@ function newExpression12() {
 function newExpression13() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c;
-        return __generator(function (_d) {
+        return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
                     _b = (_a = x.a).bind;
@@ -289,7 +289,7 @@ function newExpression13() {
 function newExpression14() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c;
-        return __generator(function (_d) {
+        return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
                     _b = (_a = x.a).bind;
@@ -304,7 +304,7 @@ function newExpression14() {
 }
 function newExpression15() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, new x[a](y, z)];
                 case 1:
@@ -316,7 +316,7 @@ function newExpression15() {
 }
 function newExpression16() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x[a]];
                 case 1:
@@ -328,7 +328,7 @@ function newExpression16() {
 }
 function newExpression17() {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(function (_a) {
+        return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
@@ -341,7 +341,7 @@ function newExpression17() {
 function newExpression18() {
     return __awaiter(this, void 0, void 0, function () {
         var _a;
-        return __generator(function (_b) {
+        return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = x;
@@ -356,7 +356,7 @@ function newExpression18() {
 function newExpression19() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c;
-        return __generator(function (_d) {
+        return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
                     _b = (_a = x[a]).bind;
@@ -371,7 +371,7 @@ function newExpression19() {
 function newExpression20() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, _c;
-        return __generator(function (_d) {
+        return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
                     _b = (_a = x[a]).bind;
