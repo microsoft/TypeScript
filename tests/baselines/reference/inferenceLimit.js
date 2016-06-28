@@ -59,15 +59,13 @@ class BrokenClass {
             let result = [];
             let populateItems = (order) => {
                 return new Promise((resolve, reject) => {
-                    this.doStuff(order.id)
-                        .then((items) => {
+                    this.doStuff(order.id).then((items) => {
                         order.items = items;
                         resolve(order);
                     });
                 });
             };
-            return Promise.all(result.map(populateItems))
-                .then((orders) => {
+            return Promise.all(result.map(populateItems)).then((orders) => {
                 resolve(orders);
             });
         });

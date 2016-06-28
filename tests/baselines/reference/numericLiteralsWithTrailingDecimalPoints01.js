@@ -32,7 +32,6 @@ var test3 = 3..toString();
 var test4 = 3..toString();
 var test5 = 3..toString();
 var test6 = 3.['toString']();
-var test7 = 3
-    .toString();
+var test7 = 3..toString();
 var test8 = new Number(4).toString();
 var test9 = 3. + 3.;

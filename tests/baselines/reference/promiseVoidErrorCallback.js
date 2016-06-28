@@ -34,10 +34,8 @@ function f1() {
 function f2(x) {
     return { __t2: x.__t1 + ":foo_21" };
 }
-var x3 = f1()
-    .then(f2, (e) => {
+var x3 = f1().then(f2, (e) => {
     throw e;
-})
-    .then((x) => {
+}).then((x) => {
     return { __t3: x.__t2 + "bar" };
 });

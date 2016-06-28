@@ -254,9 +254,7 @@ var HTMLtoJSX = (function () {
                 // If this text is contained within a <pre>, we need to ensure the JSX
                 // whitespace coalescing rules don't eat the whitespace. This means
                 // wrapping newlines and sequences of two or more spaces in variables.
-                text = text
-                    .replace(/\r/g, '')
-                    .replace(/( {2,}|\n|\t|\{|\})/g, function (whitespace) {
+                text = text.replace(/\r/g, '').replace(/( {2,}|\n|\t|\{|\})/g, function (whitespace) {
                     return '{' + JSON.stringify(whitespace) + '}';
                 });
             }

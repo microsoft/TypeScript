@@ -249,8 +249,7 @@ var C = (function () {
             // Not fine, since we can *only* consist of a single throw statement
             // if no return statements are present but we are a get accessor.
             throw null;
-            throw undefined.
-            ;
+            throw undefined.;
         },
         enumerable: true,
         configurable: true

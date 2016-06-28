@@ -1019,11 +1019,7 @@ _.omit({ name: 'moe', age: 50, userid: 'moe1' }, 'userid');
 var iceCream = { flavor: "chocolate" };
 _.defaults(iceCream, { flavor: "vanilla", sprinkles: "lots" });
 _.clone({ name: 'moe' });
-_.chain([1, 2, 3, 200])
-    .filter(function (num) { return num % 2 == 0; })
-    .tap(alert)
-    .map(function (num) { return num * num; })
-    .value();
+_.chain([1, 2, 3, 200]).filter(function (num) { return num % 2 == 0; }).tap(alert).map(function (num) { return num * num; }).value();
 _.has({ a: 1, b: 2, c: 3 }, "b");
 var moe = { name: 'moe', luckyNumbers: [13, 27, 34] };
 var clone = { name: 'moe', luckyNumbers: [13, 27, 34] };

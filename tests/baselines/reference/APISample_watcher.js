@@ -169,9 +169,7 @@ function watch(rootFileNames, options) {
         });
     }
     function logErrors(fileName) {
-        var allDiagnostics = services.getCompilerOptionsDiagnostics()
-            .concat(services.getSyntacticDiagnostics(fileName))
-            .concat(services.getSemanticDiagnostics(fileName));
+        var allDiagnostics = services.getCompilerOptionsDiagnostics().concat(services.getSyntacticDiagnostics(fileName)).concat(services.getSemanticDiagnostics(fileName));
         allDiagnostics.forEach(function (diagnostic) {
             var message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
             if (diagnostic.file) {
@@ -185,7 +183,6 @@ function watch(rootFileNames, options) {
     }
 }
 // Initialize files constituting the program as all .ts files in the current directory
-var currentDirectoryFiles = fs.readdirSync(process.cwd()).
-    filter(function (fileName) { return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts"; });
+var currentDirectoryFiles = fs.readdirSync(process.cwd()).filter(function (fileName) { return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts"; });
 // Start the watcher
 watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });

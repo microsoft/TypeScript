@@ -5,7 +5,4 @@ var v = this
   .baz();
 
 //// [wrappedIncovations1.js]
-var v = this
-    .foo()
-    .bar()
-    .baz();
+var v = this.foo().bar().baz();
