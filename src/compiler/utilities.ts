@@ -35,6 +35,9 @@ namespace ts {
     export interface EmitHost extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
 
+        /* @internal */
+        getFilesFromNodeModules(): Map<boolean>;
+
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
@@ -2274,8 +2277,10 @@ namespace ts {
         }
         else {
             const sourceFiles = targetSourceFile === undefined ? host.getSourceFiles() : [targetSourceFile];
+            const nodeModulesFiles = host.getFilesFromNodeModules();
             for (const sourceFile of sourceFiles) {
-                if (!isDeclarationFile(sourceFile)) {
+                // Don't emit if source file is a declaration file, or was located under node_modules
+                if (!isDeclarationFile(sourceFile) && !lookUp(nodeModulesFiles, sourceFile.path)) {
                     onSingleFileEmit(host, sourceFile);
                 }
             }
@@ -2307,11 +2312,14 @@ namespace ts {
         }
 
         function onBundledEmit(host: EmitHost) {
-            // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
-            const bundledSources = filter(host.getSourceFiles(), sourceFile =>
-                !isDeclarationFile(sourceFile)                                       // Not a declaration file
-                && (!isExternalModule(sourceFile) || !!getEmitModuleKind(options))); // and not a module, unless module emit enabled
-
+            // Can emit only sources that are not declaration file and are either non module code or module with
+            // --module or --target es6 specified. Files included by searching under node_modules are also not emitted.
+            const nodeModulesFiles = host.getFilesFromNodeModules();
+            const bundledSources = filter(host.getSourceFiles(),
+                sourceFile => !isDeclarationFile(sourceFile) &&
+                              !lookUp(nodeModulesFiles, sourceFile.path) &&
+                              (!isExternalModule(sourceFile) ||
+                               !!getEmitModuleKind(options)));
             if (bundledSources.length) {
                 const jsFilePath = options.outFile || options.out;
                 const emitFileNames: EmitFileNames = {

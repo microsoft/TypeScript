@@ -2804,7 +2804,14 @@
         "category": "Message",
         "code": 6135
     },
-
+    "The maximum dependency depth to search under node_modules and load JavaScript files": {
+        "category": "Message",
+        "code": 6136
+    },
+    "No types specified in 'package.json' but 'allowJs' is set, so returning 'main' value of '{0}'": {
+        "category": "Message",
+        "code": 6137
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
