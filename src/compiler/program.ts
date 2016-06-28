@@ -129,63 +129,41 @@ namespace ts {
         skipTsx: boolean;
     }
 
-    function tryFetchField(content: any, section: string, state: ModuleResolutionState): string {
-        const field = content[section];
-        if (field) {
-            if (typeof field === "string") {
-                return field;
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, section, typeof field);
-                }
-            }
+    function getPackageEntry(packageJson: any, key: string, tag: string, state: ModuleResolutionState) {
+        const value = packageJson[key];
+        if (typeof value === tag) {
+            return value;
         }
-    }
-
-    function tryReadPathFromConfigSection(packageJsonPath: string, sections: string | string[], baseDirectory: string, state: ModuleResolutionState): string {
-        let jsonContent: any;
-        try {
-            const jsonText = state.host.readFile(packageJsonPath);
-            jsonContent = jsonText ? JSON.parse(jsonText) : {};
-        }
-        catch (e) {
-            // gracefully handle if readFile fails or returns not JSON
-            jsonContent = {};
-        }
-
-        let mainFile: string;
-        let utilizedSection: string;
-
-        if (typeof sections === "string") {
-            mainFile = tryFetchField(jsonContent, sections, state);
-            utilizedSection = sections;
-        }
-        else {
-            for (const section of sections) {
-                mainFile = tryFetchField(jsonContent, section, state);
-                if (typeof mainFile === "string") {
-                    utilizedSection = section;
-                    break;
-                }
-            }
-        }
-        if (mainFile) {
-            const mainFilePath = normalizePath(combinePaths(baseDirectory, mainFile));
-            if (state.traceEnabled) {
-                trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, utilizedSection, mainFile, mainFilePath);
-            }
-            return mainFilePath;
+        if (state.traceEnabled) {
+            trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_1_got_2, key, tag, typeof value);
         }
         return undefined;
     }
 
-    function tryReadTypesSection(packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
-        return tryReadPathFromConfigSection(packageJsonPath, ["typings", "types"], baseDirectory, state);
+    function getPackageEntryAsPath(packageJson: any, packageJsonPath: string, key: string, state: ModuleResolutionState) {
+        const value = getPackageEntry(packageJson, key, "string", state);
+        const path = value ? normalizePath(combinePaths(getDirectoryPath(packageJsonPath), value)) : undefined;
+        if (path && state.traceEnabled) {
+            trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, key, value, path);
+        }
+        return path;
     }
 
-    function tryReadMainSection(packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
-        return tryReadPathFromConfigSection(packageJsonPath, "main", baseDirectory, state);
+    function getPackageTypes(packageJsonPath: string, state: ModuleResolutionState) {
+        const { config } = readConfigFile(packageJsonPath, state.host.readFile);
+        if (config) {
+            return getPackageEntryAsPath(config, packageJsonPath, "typings", state)
+                || getPackageEntryAsPath(config, packageJsonPath, "types", state);
+        }
+        return undefined;
+    }
+
+    function getPackageMain(packageJsonPath: string, state: ModuleResolutionState) {
+        const { config } = readConfigFile(packageJsonPath, state.host.readFile);
+        if (config) {
+            return getPackageEntryAsPath(config, packageJsonPath, "main", state);
+        }
+        return undefined;
     }
 
     const typeReferenceExtensions = [".d.ts"];
@@ -724,7 +702,7 @@ namespace ts {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.Found_package_json_at_0, packageJsonPath);
             }
-            const typesFile = loadJS ? tryReadMainSection(packageJsonPath, candidate, state) : tryReadTypesSection(packageJsonPath, candidate, state);
+            const typesFile = loadJS ? getPackageMain(packageJsonPath, state) : getPackageTypes(packageJsonPath, state);
             if (typesFile) {
                 const result = loadModuleFromFile(typesFile, extensions, failedLookupLocation, !directoryProbablyExists(getDirectoryPath(typesFile), state.host), state);
                 if (result) {
