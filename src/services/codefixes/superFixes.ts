@@ -8,8 +8,9 @@ namespace ts.codeFix {
     registerCodeFix({
         name: getLocaleSpecificMessage(Diagnostics.Add_missing_super_call),
         errorCodes: ["TS2377"],
-        getTextChanges: (sourceFile: SourceFile, start: number, end: number) => {
-            const token = getTokenAtPosition(sourceFile, start);
+        getTextChanges: (context: CodeActionContext) => {
+            const sourceFile = context.sourceFile;
+            const token = getTokenAtPosition(sourceFile, context.span.start);
             Debug.assert(token.kind === SyntaxKind.ConstructorKeyword, "Failed to find the constructor.");
 
             const newPosition = getOpenBraceEnd(<ConstructorDeclaration>token.parent, sourceFile);
@@ -21,8 +22,10 @@ namespace ts.codeFix {
     registerCodeFix({
         name: getLocaleSpecificMessage(Diagnostics.Make_super_call_the_first_statement_in_the_constructor),
         errorCodes: ["TS17009"],
-        getTextChanges: (sourceFile: SourceFile, start: number, end: number) => {
-            const token = getTokenAtPosition(sourceFile, start);
+        getTextChanges: (context: CodeActionContext) => {
+            const sourceFile = context.sourceFile;
+
+            const token = getTokenAtPosition(sourceFile, context.span.start);
             const constructor = getContainingFunction(token);
             Debug.assert(constructor.kind === SyntaxKind.Constructor, "Failed to find the constructor.");
 

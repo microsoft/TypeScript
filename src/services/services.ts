@@ -7708,11 +7708,13 @@ namespace ts {
         function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeFix[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
-
+            const checker = program.getTypeChecker();
             let allFixes: CodeFix[] = [];
 
             forEach(errorCodes, error => {
-                const fixes = codeFixProvider.getFixes(error, sourceFile, start, end);
+                const context = new CodeActionContext(error, sourceFile, { start, length: end - start }, checker);
+
+                const fixes = codeFixProvider.getFixes(context);
                 if (fixes) {
                     allFixes = allFixes.concat(fixes);
                 }
