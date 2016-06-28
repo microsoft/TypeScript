@@ -187,8 +187,22 @@ namespace ts {
     const typeReferenceExtensions = [".d.ts"];
 
     function getEffectiveTypeRoots(options: CompilerOptions, host: ModuleResolutionHost) {
-        return options.typeRoots ||
-            map(defaultTypeRoots, d => combinePaths(options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory(), d));
+        if (options.typeRoots) {
+            return options.typeRoots;
+        }
+
+        let currentDirectory: string;
+        if (options.configFilePath) {
+            currentDirectory = getDirectoryPath(options.configFilePath);
+        }
+        else if (host.getCurrentDirectory) {
+            currentDirectory = host.getCurrentDirectory();
+        }
+
+        if (!currentDirectory) {
+            return undefined;
+        }
+        return map(defaultTypeRoots, d => combinePaths(currentDirectory, d));
     }
 
     /**
