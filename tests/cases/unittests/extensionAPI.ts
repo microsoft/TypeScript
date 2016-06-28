@@ -574,7 +574,7 @@ const x = 3 * 4;
                 `,
             }, {
                 availableExtensions: ["test-multierrors"],
-                expectedDiagnostics: ["test-multierrors(FOO)", "test-multierrors[NoShortNames](SHORT)", "test-multierrors(BAR)", "test-multierrors[NoShortNames](SHORT)", "test-multierrors[NoShortNames](SINGLE)",],
+                expectedDiagnostics: ["test-multierrors(FOO)", "test-multierrors[NoShortNames](SHORT)", "test-multierrors(BAR)", "test-multierrors[NoShortNames](SHORT)", "test-multierrors[NoShortNames](SINGLE)"],
                 compilerOptions: {
                     extensions: ["test-multierrors"],
                     module: ModuleKind.CommonJS,
