@@ -1614,15 +1614,69 @@ namespace ts {
             function error(err: string): void;
             function error(err: string, node: Node): void;
             function error(err: string, start: number, length: number): void;
-            function error(err: string, nodeOrStart?: Node | number, length?: number): void {
-                if (typeof nodeOrStart === "undefined") {
-                    diagnostics.push(createExtensionDiagnostic(activeLint.name, err, sourceFile));
-                }
-                else if (typeof nodeOrStart === "number") {
-                    diagnostics.push(createExtensionDiagnostic(activeLint.name, err, sourceFile, nodeOrStart, length));
+            function error(shortname: string, err: string): void;
+            function error(shortname: string, err: string, span: Node): void;
+            function error(shortname: string, err: string, start: number, length: number): void;
+            function error(errOrShortname: string, errOrNodeOrStart?: string | Node | number, lengthOrNodeOrStart?: Node | number,  length?: number): void {
+                if (typeof length === "undefined") {
+                    // 3 or fewer arguments
+                    if (typeof lengthOrNodeOrStart === "undefined") {
+                        // 2 or fewer arguments
+                        if (typeof errOrNodeOrStart === "undefined") {
+                            // 1 argument
+                            // (err: string)
+                            return void diagnostics.push(createExtensionDiagnostic(activeLint.name, errOrShortname));
+                        }
+                        else {
+                            // Exactly 2 arguments
+                            if (typeof errOrNodeOrStart === "number") {
+                                // No corresponding overloads
+                            }
+                            else if (typeof errOrNodeOrStart === "string") {
+                                // (shortname: string, err: string)
+                                return void diagnostics.push(createExtensionDiagnostic(`${activeLint.name}(${errOrShortname})`, errOrNodeOrStart));
+                            }
+                            else {
+                                // (err: string, node: Node)
+                                return void diagnostics.push(createExtensionDiagnosticForNode(errOrNodeOrStart, activeLint.name, errOrShortname));
+                            }
+                        }
+                    }
+                    else {
+                        // Exactly 3 arguments
+                        if (typeof lengthOrNodeOrStart === "number") {
+                            if (typeof errOrNodeOrStart !== "number") {
+                                // No corresponding overloads
+                            }
+                            else {
+                                // (err: string, start: number, length: number)
+                                return void diagnostics.push(createExtensionDiagnostic(activeLint.name, errOrShortname, sourceFile, errOrNodeOrStart, lengthOrNodeOrStart));
+                            }
+                        }
+                        else {
+                            if (typeof errOrNodeOrStart !== "string") {
+                                // No corresponding overloads
+                            }
+                            else {
+                                // (shortname: string, err: string, span: Node)
+                                return void diagnostics.push(createExtensionDiagnosticForNode(lengthOrNodeOrStart, `${activeLint.name}(${errOrShortname})`, errOrNodeOrStart));
+                            }
+                        }
+                    }
                 }
                 else {
-                    diagnostics.push(createExtensionDiagnosticForNode(nodeOrStart, activeLint.name, err));
+                    if (typeof errOrNodeOrStart !== "string") {
+                        // No corresponding overloads
+                    }
+                    else {
+                        if (typeof lengthOrNodeOrStart !== "number") {
+                            // No corresponding overloads
+                        }
+                        else {
+                            // (shortname: string, err: string, start: number, length: number)
+                            return void diagnostics.push(createExtensionDiagnostic(`${activeLint.name}(${errOrShortname})`, errOrNodeOrStart, sourceFile, lengthOrNodeOrStart, length));
+                        }
+                    }
                 }
             }
         }

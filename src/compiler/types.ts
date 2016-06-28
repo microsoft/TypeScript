@@ -2912,6 +2912,9 @@ namespace ts {
         (err: string): void;
         (err: string, span: Node): void;
         (err: string, start: number, length: number): void;
+        (shortname: string, err: string): void;
+        (shortname: string, err: string, span: Node): void;
+        (shortname: string, err: string, start: number, length: number): void;
     };
     export type LintStopMethod = () => void;
 

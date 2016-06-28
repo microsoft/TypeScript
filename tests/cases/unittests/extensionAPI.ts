@@ -308,7 +308,107 @@ export class IsValueBar extends SemanticLintWalker {
     }
 }
 `
+            },
+            "test-multierrors": {
+                "package.json": `{
+  "name": "test-multierrors",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": ""
+}`,
+                "index.ts": `
+import {SyntacticLintWalker} from "typescript-plugin-api";
+
+export default class IsNamedFooOrBar extends SyntacticLintWalker {
+    constructor(state) { super(state); }
+    visit(node, stop, error) {
+        if (node.kind === this.ts.SyntaxKind.Identifier) {
+            if (node.text.toLowerCase() === "foo") {
+                error("FOO", "Identifier 'foo' is forbidden.", node);
             }
+            if (node.text.toLowerCase() === "bar") {
+                error("BAR", "Identifier 'bar' is forbidden.", node);
+            }
+        }
+    }
+}
+
+export class NoShortNames extends SyntacticLintWalker {
+    constructor(state) { super(state); }
+    visit(node, stop, error) {
+        if (node.kind === this.ts.SyntaxKind.Identifier) {
+            if (node.text.length == 1) {
+                error("SINGLE", "Single character identifiers are forbidden", node);
+            }
+            else if (node.text.length <= 3) {
+                error("SHORT", "Short identifiers are forbidden.", node);
+            }
+        }
+    }
+}
+`,
+            },
+            "test-errors": {
+                "package.json": `{
+  "name": "test-errors",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": ""
+}`,
+                "index.ts": `
+import {SyntacticLintWalker} from "typescript-plugin-api";
+
+export default class Throws extends SyntacticLintWalker {
+    constructor(state) { super(state); }
+    visit(node, stop, error) {
+        error("Not allowed.");
+        stop();
+    }
+}
+
+export class Throws2 extends SyntacticLintWalker {
+    constructor(state) { super(state); }
+    visit(node, stop, error) {
+        error("THROWS2", "Not allowed.");
+        stop();
+    }
+}
+
+export class Throws3 extends SyntacticLintWalker {
+    constructor(state) { super(state); }
+    visit(node, stop, error) {
+        error("THROWS3", "Not allowed.", node);
+        stop();
+    }
+}
+
+export class Throws4 extends SyntacticLintWalker {
+    constructor(state) { super(state); }
+    visit(node, stop, error) {
+        error("THROWS4", "Not allowed.", 0, 10);
+        stop();
+    }
+}
+
+export class Throws5 extends SyntacticLintWalker {
+    constructor(state) { super(state); }
+    visit(node, stop, error) {
+        error("Not allowed.", node);
+        stop();
+    }
+}
+
+export class Throws6 extends SyntacticLintWalker {
+    constructor(state) { super(state); }
+    visit(node, stop, error) {
+        error("Not allowed.", 0, 10);
+        stop();
+    }
+}
+`,
+            },
         };
 
         // Compile each extension once with the extension API in its node_modules folder (also generating .d.ts and .js)
@@ -460,6 +560,36 @@ export class IsValueBar extends SemanticLintWalker {
                 expectedDiagnostics: [6151, 6151],
                 compilerOptions: {
                     extensions: ["test-syntactic-lint", "test-semantic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            });
+        });
+
+        it("can handle multiple diagnostics from a single rule", () => {
+            test({
+                "main.ts": `
+const foo = 3;
+const bar = 4;
+const x = 3 * 4;              
+                `,
+            }, {
+                availableExtensions: ["test-multierrors"],
+                expectedDiagnostics: ["test-multierrors(FOO)", "test-multierrors[NoShortNames](SHORT)", "test-multierrors(BAR)", "test-multierrors[NoShortNames](SHORT)", "test-multierrors[NoShortNames](SINGLE)",],
+                compilerOptions: {
+                    extensions: ["test-multierrors"],
+                    module: ModuleKind.CommonJS,
+                }
+            });
+        });
+
+        it("sucessfully handles all six avalable error method overloads", () => {
+            test({
+                "main.ts": `console.log('Hello, world!')`,
+            }, {
+                availableExtensions: ["test-errors"],
+                expectedDiagnostics: ["test-errors", "test-errors[Throws2](THROWS2)", "test-errors[Throws3](THROWS3)", "test-errors[Throws5]", "test-errors[Throws4](THROWS4)", "test-errors[Throws6]"],
+                compilerOptions: {
+                    extensions: ["test-errors"],
                     module: ModuleKind.CommonJS,
                 }
             });
