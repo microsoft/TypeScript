@@ -53,6 +53,8 @@ namespace ts {
             case SyntaxKind.Block:
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.CaseBlock:
+            case SyntaxKind.NamedImports:
+            case SyntaxKind.NamedExports:
                 return nodeEndsWith(n, SyntaxKind.CloseBraceToken, sourceFile);
             case SyntaxKind.CatchClause:
                 return isCompletedNode((<CatchClause>n).block, sourceFile);
@@ -155,6 +157,10 @@ namespace ts {
                 return isCompletedNode(lastSpan, sourceFile);
             case SyntaxKind.TemplateSpan:
                 return nodeIsPresent((<TemplateSpan>n).literal);
+
+            case SyntaxKind.ExportDeclaration:
+            case SyntaxKind.ImportDeclaration:
+                return nodeIsPresent((<ExportDeclaration | ImportDeclaration>n).moduleSpecifier);
 
             case SyntaxKind.PrefixUnaryExpression:
                 return isCompletedNode((<PrefixUnaryExpression>n).operand, sourceFile);

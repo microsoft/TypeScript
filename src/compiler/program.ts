@@ -9,7 +9,7 @@ namespace ts {
     /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
-    export const version = "1.9.0";
+    export const version = "2.0.0";
 
     const emptyArray: any[] = [];
 
@@ -130,10 +130,10 @@ namespace ts {
     }
 
     function tryReadTypesSection(packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
-        let jsonContent: { typings?: string, types?: string };
+        let jsonContent: { typings?: string, types?: string, main?: string };
         try {
             const jsonText = state.host.readFile(packageJsonPath);
-            jsonContent = jsonText ? <{ typings?: string, types?: string }>JSON.parse(jsonText) : {};
+            jsonContent = jsonText ? <{ typings?: string, types?: string, main?: string }>JSON.parse(jsonText) : {};
         }
         catch (e) {
             // gracefully handle if readFile fails or returns not JSON
@@ -172,6 +172,14 @@ namespace ts {
                 trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, fieldName, typesFile, typesFilePath);
             }
             return typesFilePath;
+        }
+        // Use the main module for inferring types if no types package specified and the allowJs is set
+        if (state.compilerOptions.allowJs && jsonContent.main && typeof jsonContent.main === "string") {
+            if (state.traceEnabled) {
+                trace(state.host, Diagnostics.No_types_specified_in_package_json_but_allowJs_is_set_so_returning_main_value_of_0, jsonContent.main);
+            }
+            const mainFilePath = normalizePath(combinePaths(baseDirectory, jsonContent.main));
+            return mainFilePath;
         }
         return undefined;
     }
@@ -610,7 +618,7 @@ namespace ts {
             failedLookupLocations, supportedExtensions, state);
 
         let isExternalLibraryImport = false;
-        if (!resolvedFileName)  {
+        if (!resolvedFileName) {
             if (moduleHasNonRelativeName(moduleName)) {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Loading_module_0_from_node_modules_folder, moduleName);
@@ -740,12 +748,13 @@ namespace ts {
         const nodeModulesFolder = combinePaths(directory, "node_modules");
         const nodeModulesFolderExists = directoryProbablyExists(nodeModulesFolder, state.host);
         const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
-        // Load only typescript files irrespective of allowJs option if loading from node modules
-        let result = loadModuleFromFile(candidate, supportedTypeScriptExtensions, failedLookupLocations, !nodeModulesFolderExists, state);
+        const supportedExtensions = getSupportedExtensions(state.compilerOptions);
+
+        let result = loadModuleFromFile(candidate, supportedExtensions, failedLookupLocations, !nodeModulesFolderExists, state);
         if (result) {
             return result;
         }
-        result = loadNodeModuleFromDirectory(supportedTypeScriptExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state);
+        result = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state);
         if (result) {
             return result;
         }
@@ -1057,6 +1066,23 @@ namespace ts {
         let resolvedTypeReferenceDirectives: Map<ResolvedTypeReferenceDirective> = {};
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
+        // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
+        // This works as imported modules are discovered recursively in a depth first manner, specifically:
+        // - For each root file, findSourceFile is called.
+        // - This calls processImportedModules for each module imported in the source file.
+        // - This calls resolveModuleNames, and then calls findSourceFile for each resolved module.
+        // As all these operations happen - and are nested - within the createProgram call, they close over the below variables.
+        // The current resolution depth is tracked by incrementing/decrementing as the depth first search progresses.
+        const maxNodeModulesJsDepth = typeof options.maxNodeModuleJsDepth === "number" ? options.maxNodeModuleJsDepth : 2;
+        let currentNodeModulesJsDepth = 0;
+
+        // If a module has some of its imports skipped due to being at the depth limit under node_modules, then track
+        // this, as it may be imported at a shallower depth later, and then it will need its skipped imports processed.
+        const modulesWithElidedImports: Map<boolean> = {};
+
+        // Track source files that are JavaScript files found by searching under node_modules, as these shouldn't be compiled.
+        const jsFilesFoundSearchingNodeModules: Map<boolean> = {};
+
         const start = new Date().getTime();
 
         host = host || createCompilerHost(options);
@@ -1211,6 +1237,7 @@ namespace ts {
                 (oldOptions.rootDir !== options.rootDir) ||
                 (oldOptions.configFilePath !== options.configFilePath) ||
                 (oldOptions.baseUrl !== options.baseUrl) ||
+                (oldOptions.maxNodeModuleJsDepth !== options.maxNodeModuleJsDepth) ||
                 !arrayIsEqualTo(oldOptions.typeRoots, oldOptions.typeRoots) ||
                 !arrayIsEqualTo(oldOptions.rootDirs, options.rootDirs) ||
                 !mapIsEqualTo(oldOptions.paths, options.paths)) {
@@ -1335,6 +1362,7 @@ namespace ts {
                 getSourceFile: program.getSourceFile,
                 getSourceFileByPath: program.getSourceFileByPath,
                 getSourceFiles: program.getSourceFiles,
+                getFilesFromNodeModules: () => jsFilesFoundSearchingNodeModules,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
@@ -1869,6 +1897,14 @@ namespace ts {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
                 }
 
+                // See if we need to reprocess the imports due to prior skipped imports
+                if (file && lookUp(modulesWithElidedImports, file.path)) {
+                    if (currentNodeModulesJsDepth < maxNodeModulesJsDepth) {
+                        modulesWithElidedImports[file.path] = false;
+                        processImportedModules(file, getDirectoryPath(fileName));
+                    }
+                }
+
                 return file;
             }
 
@@ -2007,16 +2043,38 @@ namespace ts {
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
+                    const resolvedPath = resolution ? toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName) : undefined;
+
                     // add file to program only if:
                     // - resolution was successful
                     // - noResolve is falsy
                     // - module name comes from the list of imports
-                    const shouldAddFile = resolution &&
-                        !options.noResolve &&
-                        i < file.imports.length;
+                    // - it's not a top level JavaScript module that exceeded the search max
+                    const isJsFileUnderNodeModules = resolution && resolution.isExternalLibraryImport &&
+                                                 hasJavaScriptFileExtension(resolution.resolvedFileName);
 
-                    if (shouldAddFile) {
-                        findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, /*isReference*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
+                    if (isJsFileUnderNodeModules) {
+                        jsFilesFoundSearchingNodeModules[resolvedPath] = true;
+                        currentNodeModulesJsDepth++;
+                    }
+
+                    const elideImport = isJsFileUnderNodeModules && currentNodeModulesJsDepth > maxNodeModulesJsDepth;
+                    const shouldAddFile = resolution && !options.noResolve && i < file.imports.length && !elideImport;
+
+                    if (elideImport) {
+                        modulesWithElidedImports[file.path] = true;
+                    }
+                    else if (shouldAddFile) {
+                        findSourceFile(resolution.resolvedFileName,
+                                resolvedPath,
+                                /*isDefaultLib*/ false, /*isReference*/ false,
+                                file,
+                                skipTrivia(file.text, file.imports[i].pos),
+                                file.imports[i].end);
+                    }
+
+                    if (isJsFileUnderNodeModules) {
+                        currentNodeModulesJsDepth--;
                     }
                 }
             }

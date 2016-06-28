@@ -146,7 +146,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
     
     ///<reference path='formatting.ts' />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6053: File 'formatting.ts' not found.
+!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/formatting.ts' not found.
     
     
     module Formatting {
