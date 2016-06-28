@@ -592,7 +592,7 @@ namespace ts.server {
             throw new Error("Not Implemented Yet.");
         }
 
-        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
+        isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
             throw new Error("Not Implemented Yet.");
         }
 

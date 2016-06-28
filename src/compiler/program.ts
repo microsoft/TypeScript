@@ -9,7 +9,7 @@ namespace ts {
     /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
-    export const version = "1.9.0";
+    export const version = "2.0.0";
 
     const emptyArray: any[] = [];
 
@@ -129,82 +129,51 @@ namespace ts {
         skipTsx: boolean;
     }
 
-    function tryReadTypesSection(packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
-        let jsonContent: { typings?: string, types?: string };
-        try {
-            const jsonText = state.host.readFile(packageJsonPath);
-            jsonContent = jsonText ? <{ typings?: string, types?: string }>JSON.parse(jsonText) : {};
+    function getPackageEntry(packageJson: any, key: string, tag: string, state: ModuleResolutionState) {
+        const value = packageJson[key];
+        if (typeof value === tag) {
+            return value;
         }
-        catch (e) {
-            // gracefully handle if readFile fails or returns not JSON
-            jsonContent = {};
-        }
-
-        let typesFile: string;
-        let fieldName: string;
-        // first try to read content of 'typings' section (backward compatibility)
-        if (jsonContent.typings) {
-            if (typeof jsonContent.typings === "string") {
-                fieldName = "typings";
-                typesFile = jsonContent.typings;
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, "typings", typeof jsonContent.typings);
-                }
-            }
-        }
-        // then read 'types'
-        if (!typesFile && jsonContent.types) {
-            if (typeof jsonContent.types === "string") {
-                fieldName = "types";
-                typesFile = jsonContent.types;
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, "types", typeof jsonContent.types);
-                }
-            }
-        }
-        if (typesFile) {
-            const typesFilePath = normalizePath(combinePaths(baseDirectory, typesFile));
-            if (state.traceEnabled) {
-                trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, fieldName, typesFile, typesFilePath);
-            }
-            return typesFilePath;
+        if (state.traceEnabled) {
+            trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_1_got_2, key, tag, typeof value);
         }
         return undefined;
     }
 
-   function tryReadMainSection(packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
-        let jsonContent: { main?: string };
-        try {
-            const jsonText = state.host.readFile(packageJsonPath);
-            jsonContent = jsonText ? <{ main?: string }>JSON.parse(jsonText) : {};
+    function getPackageEntryAsPath(packageJson: any, packageJsonPath: string, key: string, state: ModuleResolutionState) {
+        const value = getPackageEntry(packageJson, key, "string", state);
+        const path = value ? normalizePath(combinePaths(getDirectoryPath(packageJsonPath), value)) : undefined;
+        if (path && state.traceEnabled) {
+            trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, key, value, path);
         }
-        catch (e) {
-            // gracefully handle if readFile fails or returns not JSON
-            jsonContent = {};
-        }
+        return path;
+    }
 
-        let mainFile: string;
-
-        if (jsonContent.main) {
-            if (typeof jsonContent.main === "string") {
-                mainFile = jsonContent.main;
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, "main", typeof jsonContent.main);
-                }
-            }
+    function getPackageTypes(packageJsonPath: string, state: ModuleResolutionState) {
+        const { config } = readConfigFile(packageJsonPath, state.host.readFile);
+        if (config) {
+            return getPackageEntryAsPath(config, packageJsonPath, "typings", state)
+                || getPackageEntryAsPath(config, packageJsonPath, "types", state)
+                // Use the main module for inferring types if no types package specified and the allowJs is set
+                || (state.compilerOptions.allowJs && getPackageEntryAsPath(config, packageJsonPath, "main", state));
         }
-        if (mainFile) {
-            const mainFilePath = normalizePath(combinePaths(baseDirectory, mainFile));
+        else {
             if (state.traceEnabled) {
-                trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, "main", mainFile, mainFilePath);
+                trace(state.host, Diagnostics.package_json_does_not_have_0_field, "types");
             }
-            return mainFilePath;
+        }
+        return undefined;
+    }
+
+    function getPackageMain(packageJsonPath: string, state: ModuleResolutionState) {
+        const { config } = readConfigFile(packageJsonPath, state.host.readFile);
+        if (config) {
+            return getPackageEntryAsPath(config, packageJsonPath, "main", state);
+        }
+        else {
+            if (state.traceEnabled) {
+                trace(state.host, Diagnostics.package_json_does_not_have_0_field, "main");
+            }
         }
         return undefined;
     }
@@ -643,7 +612,7 @@ namespace ts {
             failedLookupLocations, supportedExtensions, state);
 
         let isExternalLibraryImport = false;
-        if (!resolvedFileName)  {
+        if (!resolvedFileName) {
             if (moduleHasNonRelativeName(moduleName)) {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Loading_module_0_from_node_modules_folder, moduleName);
@@ -745,16 +714,11 @@ namespace ts {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.Found_package_json_at_0, packageJsonPath);
             }
-            const typesFile = loadJS ? tryReadMainSection(packageJsonPath, candidate, state) : tryReadTypesSection(packageJsonPath, candidate, state);
+            const typesFile = loadJS ? getPackageMain(packageJsonPath, state) : getPackageTypes(packageJsonPath, state);
             if (typesFile) {
                 const result = loadModuleFromFile(typesFile, extensions, failedLookupLocation, !directoryProbablyExists(getDirectoryPath(typesFile), state.host), state);
                 if (result) {
                     return result;
-                }
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.package_json_does_not_have_0_field, loadJS ? "main" : "types");
                 }
             }
         }
@@ -773,13 +737,14 @@ namespace ts {
         const nodeModulesFolder = combinePaths(directory, "node_modules");
         const nodeModulesFolderExists = directoryProbablyExists(nodeModulesFolder, state.host);
         const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
-        // Load only typescript files irrespective of allowJs option if loading from node modules
-        const extensionsSearched = loadJS ? supportedJavascriptExtensions : supportedTypeScriptExtensions;
-        let result = loadModuleFromFile(candidate, extensionsSearched, failedLookupLocations, !nodeModulesFolderExists, state);
+
+        const supportedExtensions = getSupportedExtensions(state.compilerOptions, loadJS);
+
+        let result = loadModuleFromFile(candidate, supportedExtensions, failedLookupLocations, !nodeModulesFolderExists, state);
         if (result) {
             return result;
         }
-        result = loadNodeModuleFromDirectory(extensionsSearched, candidate, failedLookupLocations, !nodeModulesFolderExists, state, loadJS);
+        result = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state, loadJS);
         if (result) {
             return result;
         }
@@ -794,7 +759,7 @@ namespace ts {
                     // first: try to load module as-is
                     loadModuleFromNodeModulesFolder(moduleName, directory, failedLookupLocations, state, loadJS) ||
                     // second: try to load module from the scope '@types'
-                    loadModuleFromNodeModulesFolder(combinePaths("@types", moduleName), directory, failedLookupLocations, state);
+                    !loadJS && loadModuleFromNodeModulesFolder(combinePaths("@types", moduleName), directory, failedLookupLocations, state);
                 if (result) {
                     return result;
                 }
@@ -969,14 +934,9 @@ namespace ts {
             return getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
         }
 
-        function loadExtension(name: string): any {
-            if (sys.loadExtension) {
-                return sys.loadExtension(name);
-            }
-        }
-
         const newLine = getNewLineCharacter(options);
         const realpath = sys.realpath && ((path: string) => sys.realpath(path));
+        const loadExtension = sys.loadExtension && ((name: string) => sys.loadExtension(name));
 
         return {
             getSourceFile,
@@ -1098,6 +1058,23 @@ namespace ts {
         let resolvedTypeReferenceDirectives: Map<ResolvedTypeReferenceDirective> = {};
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
+        // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
+        // This works as imported modules are discovered recursively in a depth first manner, specifically:
+        // - For each root file, findSourceFile is called.
+        // - This calls processImportedModules for each module imported in the source file.
+        // - This calls resolveModuleNames, and then calls findSourceFile for each resolved module.
+        // As all these operations happen - and are nested - within the createProgram call, they close over the below variables.
+        // The current resolution depth is tracked by incrementing/decrementing as the depth first search progresses.
+        const maxNodeModulesJsDepth = typeof options.maxNodeModuleJsDepth === "number" ? options.maxNodeModuleJsDepth : 2;
+        let currentNodeModulesJsDepth = 0;
+
+        // If a module has some of its imports skipped due to being at the depth limit under node_modules, then track
+        // this, as it may be imported at a shallower depth later, and then it will need its skipped imports processed.
+        const modulesWithElidedImports: Map<boolean> = {};
+
+        // Track source files that are JavaScript files found by searching under node_modules, as these shouldn't be compiled.
+        const jsFilesFoundSearchingNodeModules: Map<boolean> = {};
+
         const start = new Date().getTime();
 
         host = host || createCompilerHost(options);
@@ -1209,7 +1186,7 @@ namespace ts {
         function collectCompilerExtensions(): ExtensionCollectionMap {
             const extOptions = options.extensions;
             const extensionNames = (extOptions instanceof Array) ? extOptions : getKeys(extOptions);
-            return groupBy(flatten(map(filter(map(extensionNames, name => {
+            const extensionLoadResults = map(extensionNames, name => {
                 let result: any;
                 let error: any;
                 if (host.loadExtension) {
@@ -1234,19 +1211,21 @@ namespace ts {
                     Stack trace:
                     ${error.stack}` : error));
                 }
-                return {name, result, error};
-            }), res => !res.error), res => {
+                return { name, result, error };
+            });
+            const successfulExtensionLoadResults = filter(extensionLoadResults, res => !res.error);
+            const preparedExtensionObjects = map(successfulExtensionLoadResults, res => {
                 if (res.result) {
-                    return reduceProperties(res.result, (aggregate: Extension[], potentialExtension: any, key: string) => {
+                    return reduceProperties(res.result, (aggregate: Extension[], potentialExtension: BaseProviderStatic, key: string) => {
                         if (!potentialExtension) {
                             return; // Avoid errors on explicitly exported null/undefined (why would someone do that, though?)
                         }
-                        const annotatedKind = potentialExtension.__tsCompilerExtensionKind;
+                        const annotatedKind = potentialExtension["extension-kind"];
                         if (typeof annotatedKind === "string") {
                             const ext: ExtensionBase = {
                                 name: key !== "default" ? `${res.name}[${key}]` : res.name,
                                 args: extensionNames === extOptions ? undefined : (extOptions as Map<any>)[res.name],
-                                kind: annotatedKind as ExtensionKind
+                                kind: annotatedKind
                             };
                             switch (ext.kind) {
                                 case ExtensionKind.SemanticLint:
@@ -1263,7 +1242,7 @@ namespace ts {
                                         ));
                                         return;
                                     }
-                                    (ext as (SemanticLintExtension | SyntacticLintExtension | LanguageServiceExtension)).ctor = potentialExtension;
+                                    (ext as (SemanticLintExtension | SyntacticLintExtension | LanguageServiceExtension)).ctor = potentialExtension as (SemanticLintProviderStatic | SyntacticLintProviderStatic | LanguageServiceProviderStatic);
                                     break;
                                 default:
                                     // Include a default case which just puts the extension unchecked onto the base extension
@@ -1279,7 +1258,8 @@ namespace ts {
                 else {
                     return [];
                 }
-            })), elem => elem.kind) || {};
+            });
+            return groupBy(flatten(preparedExtensionObjects), elem => elem.kind) || {};
         }
 
         function getCommonSourceDirectory() {
@@ -1333,6 +1313,7 @@ namespace ts {
                 (oldOptions.rootDir !== options.rootDir) ||
                 (oldOptions.configFilePath !== options.configFilePath) ||
                 (oldOptions.baseUrl !== options.baseUrl) ||
+                (oldOptions.maxNodeModuleJsDepth !== options.maxNodeModuleJsDepth) ||
                 !arrayIsEqualTo(oldOptions.typeRoots, oldOptions.typeRoots) ||
                 !arrayIsEqualTo(oldOptions.rootDirs, options.rootDirs) ||
                 !mapIsEqualTo(oldOptions.paths, options.paths)) {
@@ -1457,6 +1438,7 @@ namespace ts {
                 getSourceFile: program.getSourceFile,
                 getSourceFileByPath: program.getSourceFileByPath,
                 getSourceFiles: program.getSourceFiles,
+                getFilesFromNodeModules: () => jsFilesFoundSearchingNodeModules,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
@@ -1591,10 +1573,10 @@ namespace ts {
             let parent: Node | undefined = undefined;
             for (let i = 0; i < lints.length; i++) {
                 if (kind === ExtensionKind.SemanticLint) {
-                    initializedLints[i] = {name: lints[i].name, walker: new (lints[i].ctor as SemanticLintProviderStatic)(ts, getTypeChecker(), lints[i].args), accepted: true};
+                    initializedLints[i] = { name: lints[i].name, walker: new (lints[i].ctor as SemanticLintProviderStatic)({ ts, checker: getTypeChecker(), args: lints[i].args, host, program }), accepted: true };
                 }
                 else if (kind === ExtensionKind.SyntacticLint) {
-                    initializedLints[i] = {name: lints[i].name, walker: new (lints[i].ctor as SyntacticLintProviderStatic)(ts, lints[i].args), accepted: true};
+                    initializedLints[i] = { name: lints[i].name, walker: new (lints[i].ctor as SyntacticLintProviderStatic)({ ts, args: lints[i].args, host, program }), accepted: true };
                 }
             }
 
@@ -1653,7 +1635,7 @@ namespace ts {
         }
 
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
-            if (!(sourceFile.isDeclarationFile || sourceFile.externalModuleIndicator)) {
+            if (!sourceFile.isDeclarationFile) {
                 const lintDiagnostics = performLintPassOnFile(sourceFile, ExtensionKind.SyntacticLint);
                 if (lintDiagnostics && lintDiagnostics.length) {
                     return sourceFile.parseDiagnostics.concat(lintDiagnostics);
@@ -1699,7 +1681,7 @@ namespace ts {
                     typeChecker.getDiagnostics(sourceFile, cancellationToken);
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
-                const lintDiagnostics = (!(sourceFile.isDeclarationFile || sourceFile.externalModuleIndicator)) ? (performLintPassOnFile(sourceFile, ExtensionKind.SemanticLint) || []) : [];
+                const lintDiagnostics = (!sourceFile.isDeclarationFile) ? (performLintPassOnFile(sourceFile, ExtensionKind.SemanticLint) || []) : [];
 
                 return bindDiagnostics.concat(checkDiagnostics).concat(fileProcessingDiagnosticsInFile).concat(programDiagnosticsInFile).concat(lintDiagnostics);
             });
@@ -2074,6 +2056,14 @@ namespace ts {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
                 }
 
+                // See if we need to reprocess the imports due to prior skipped imports
+                if (file && lookUp(modulesWithElidedImports, file.path)) {
+                    if (currentNodeModulesJsDepth < maxNodeModulesJsDepth) {
+                        modulesWithElidedImports[file.path] = false;
+                        processImportedModules(file, getDirectoryPath(fileName));
+                    }
+                }
+
                 return file;
             }
 
@@ -2212,16 +2202,38 @@ namespace ts {
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
+                    const resolvedPath = resolution ? toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName) : undefined;
+
                     // add file to program only if:
                     // - resolution was successful
                     // - noResolve is falsy
                     // - module name comes from the list of imports
-                    const shouldAddFile = resolution &&
-                        !options.noResolve &&
-                        i < file.imports.length;
+                    // - it's not a top level JavaScript module that exceeded the search max
+                    const isJsFileUnderNodeModules = resolution && resolution.isExternalLibraryImport &&
+                                                 hasJavaScriptFileExtension(resolution.resolvedFileName);
 
-                    if (shouldAddFile) {
-                        findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, /*isReference*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
+                    if (isJsFileUnderNodeModules) {
+                        jsFilesFoundSearchingNodeModules[resolvedPath] = true;
+                        currentNodeModulesJsDepth++;
+                    }
+
+                    const elideImport = isJsFileUnderNodeModules && currentNodeModulesJsDepth > maxNodeModulesJsDepth;
+                    const shouldAddFile = resolution && !options.noResolve && i < file.imports.length && !elideImport;
+
+                    if (elideImport) {
+                        modulesWithElidedImports[file.path] = true;
+                    }
+                    else if (shouldAddFile) {
+                        findSourceFile(resolution.resolvedFileName,
+                                resolvedPath,
+                                /*isDefaultLib*/ false, /*isReference*/ false,
+                                file,
+                                skipTrivia(file.text, file.imports[i].pos),
+                                file.imports[i].end);
+                    }
+
+                    if (isJsFileUnderNodeModules) {
+                        currentNodeModulesJsDepth--;
                     }
                 }
             }

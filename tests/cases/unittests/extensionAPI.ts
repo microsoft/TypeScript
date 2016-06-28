@@ -58,46 +58,46 @@ namespace ts {
         const mockHost: CompilerHost = {
             useCaseSensitiveFileNames() { return true; },
             getNewLine() { return "\n"; },
-            readFile(path) { return virtualFs[this.getCanonicalFileName(path)]; },
+            readFile(path) { return virtualFs[mockHost.getCanonicalFileName(path)]; },
             writeFile(path, content, foo, bar, baz) {
-                virtualFs[this.getCanonicalFileName(path)] = content;
+                virtualFs[mockHost.getCanonicalFileName(path)] = content;
             },
             fileExists(path) {
-                return !!virtualFs[this.getCanonicalFileName(path)];
+                return !!virtualFs[mockHost.getCanonicalFileName(path)];
             },
             directoryExists(path) {
-                const fullPath = this.getCanonicalFileName(path);
+                const fullPath = mockHost.getCanonicalFileName(path);
                 return forEach(getKeys(virtualFs), key => startsWith(key, fullPath));
             },
             getCurrentDirectory(): string { return "/"; },
             getSourceFile(path, languageVersion, onError): SourceFile {
-                const fullPath = this.getCanonicalFileName(path);
+                const fullPath = mockHost.getCanonicalFileName(path);
                 return createSourceFile(fullPath, virtualFs[fullPath], languageVersion);
             },
             getDefaultLibLocation() {
                 return "/lib/";
             },
             getDefaultLibFileName(options) {
-                return combinePaths(this.getDefaultLibLocation(), getDefaultLibFileName(options));
+                return combinePaths(mockHost.getDefaultLibLocation(), getDefaultLibFileName(options));
             },
             getCanonicalFileName,
             getDirectories(path) {
-                path = this.getCanonicalFileName(path);
+                path = mockHost.getCanonicalFileName(path);
                 return filter(map(filter(getKeys(virtualFs),
                     fullpath => startsWith(fullpath, path) && fullpath.substr(path.length, 1) === "/"),
                         fullpath => fullpath.substr(path.length + 1).indexOf("/") >= 0 ? fullpath.substr(0, 1 + path.length + fullpath.substr(path.length + 1).indexOf("/")) : fullpath),
                             fullpath => fullpath.lastIndexOf(".") === -1);
             },
             loadExtension(path) {
-                const fullPath = this.getCanonicalFileName(path);
-                const m = {exports: {}};
+                const fullPath = mockHost.getCanonicalFileName(path);
+                const m = { exports: {} };
                 ((module, exports, require) => { eval(virtualFs[fullPath]); })(
                     m,
                     m.exports,
                     (name: string) => {
-                        return this.loadExtension(
-                            this.getCanonicalFileName(
-                                resolveModuleName(name, fullPath, {module: ModuleKind.CommonJS}, this, true).resolvedModule.resolvedFileName
+                        return mockHost.loadExtension(
+                            mockHost.getCanonicalFileName(
+                                resolveModuleName(name, fullPath, { module: ts.ModuleKind.CommonJS }, mockHost, true).resolvedModule.resolvedFileName
                             )
                         );
                     }
@@ -163,20 +163,51 @@ namespace ts {
 import * as tsi from "typescript";
 
 export abstract class SyntacticLintWalker implements tsi.LintWalker {
-    private static __tsCompilerExtensionKind: tsi.ExtensionKind.SyntacticLint = "syntactic-lint";
-    constructor(protected ts: typeof tsi, protected args: any) {}
+    static "extension-kind": tsi.ExtensionKind.SyntacticLint = "syntactic-lint";
+    protected ts: typeof tsi;
+    protected args: any;
+    protected host: tsi.CompilerHost;
+    protected program: tsi.Program;
+    constructor(state: {ts: typeof tsi, args: any, host: tsi.CompilerHost, program: tsi.Program}) {
+        this.ts = state.ts;
+        this.args = state.args;
+        this.host = state.host;
+        this.program = state.program;
+    }
     abstract visit(node: tsi.Node, stop: tsi.LintStopMethod, error: tsi.LintErrorMethod): void;
 }
 
 export abstract class SemanticLintWalker implements tsi.LintWalker {
-    private static __tsCompilerExtensionKind: tsi.ExtensionKind.SemanticLint = "semantic-lint";
-    constructor(protected ts: typeof tsi, protected checker: tsi.TypeChecker, protected args: any) {}
+    static "extension-kind": tsi.ExtensionKind.SemanticLint = "semantic-lint";
+    protected ts: typeof tsi;
+    protected args: any;
+    protected host: tsi.CompilerHost;
+    protected program: tsi.Program;
+    protected checker: tsi.TypeChecker;
+    constructor(state: {ts: typeof tsi, args: any, host: tsi.CompilerHost, program: tsi.Program, checker: tsi.TypeChecker}) {
+        this.ts = state.ts;
+        this.args = state.args;
+        this.host = state.host;
+        this.program = state.program;
+        this.checker = state.checker;
+    }
     abstract visit(node: tsi.Node, stop: tsi.LintStopMethod, error: tsi.LintErrorMethod): void;
 }
 
 export abstract class LanguageServiceProvider implements tsi.LanguageServiceProvider {
-    private static __tsCompilerExtensionKind: tsi.ExtensionKind.LanguageService = "language-service";
-    constructor(protected ts: typeof tsi, protected host: tsi.LanguageServiceHost, protected service: tsi.LanguageService, protected registry: tsi.DocumentRegistry, args: any) {}
+    static "extension-kind": tsi.ExtensionKind.LanguageService = "language-service";
+    protected ts: typeof tsi;
+    protected args: any;
+    protected host: tsi.LanguageServiceHost;
+    protected service: tsi.LanguageService;
+    protected registry: tsi.DocumentRegistry;
+    constructor(state: {ts: typeof tsi, args: any, host: tsi.LanguageServiceHost, service: tsi.LanguageService, registry: tsi.DocumentRegistry}) {
+        this.ts = state.ts;
+        this.args = state.args;
+        this.host = state.host;
+        this.service = state.service;
+        this.registry = state.registry;
+    }
 }
 `
         };
@@ -217,7 +248,7 @@ export abstract class LanguageServiceProvider implements tsi.LanguageServiceProv
         }
 
         function buildMap(compileFunc: VirtualCompilationFunction, map: Map<string>, out: Map<string>, compilerOptions?: CompilerOptions, shouldError?: boolean, additionalVerifiers?: () => void): Diagnostic[] {
-            const diagnostics = compile(map, compilerOptions ? compilerOptions : {module: ModuleKind.CommonJS, declaration: true}, compileFunc, additionalVerifiers);
+            const diagnostics = compile(map, compilerOptions ? compilerOptions : { module: ModuleKind.CommonJS, declaration: true }, compileFunc, additionalVerifiers);
             if (shouldError && diagnostics && diagnostics.length) {
                 for (let i = 0; i < diagnostics.length; i++) {
                     console.log(prettyPrintDiagnostic(diagnostics[i]));
@@ -228,7 +259,7 @@ export abstract class LanguageServiceProvider implements tsi.LanguageServiceProv
             virtualFs = {};
             return diagnostics;
         }
-        buildMap(programCompile, extensionAPI, extensionAPI, {module: ModuleKind.CommonJS, declaration: true, baseUrl: ".", paths: {"typescript": ["/lib/typescript.d.ts"]}}, /*shouldError*/true);
+        buildMap(programCompile, extensionAPI, extensionAPI, { module: ModuleKind.CommonJS, declaration: true, baseUrl: ".", paths: { "typescript": ["/lib/typescript.d.ts"] } }, /*shouldError*/true);
 
         const extensions: Map<Map<string>> = {
             "test-syntactic-lint": {
@@ -243,7 +274,7 @@ export abstract class LanguageServiceProvider implements tsi.LanguageServiceProv
 import {SyntacticLintWalker} from "typescript-plugin-api";
 
 export default class IsNamedFoo extends SyntacticLintWalker {
-    constructor(ts, args) { super(ts, args); }
+    constructor(state) { super(state); }
     visit(node, stop, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             if (node.text.toLowerCase() === "foo") {
@@ -266,7 +297,7 @@ export default class IsNamedFoo extends SyntacticLintWalker {
 import {SemanticLintWalker} from "typescript-plugin-api";
 
 export default class IsValueFoo extends SemanticLintWalker {
-    constructor(ts, checker, args) { super(ts, checker, args); }
+    constructor(state) { super(state); }
     visit(node, stop, error) {
         const type = this.checker.getTypeAtLocation(node);
         if (type.flags & this.ts.TypeFlags.StringLiteral) {
@@ -290,7 +321,7 @@ export default class IsValueFoo extends SemanticLintWalker {
 import {SyntacticLintWalker} from "typescript-plugin-api";
 
 export default class IsNamedX extends SyntacticLintWalker {
-    constructor(ts, args) { super(ts, args); }
+    constructor(state) { super(state); }
     visit(node, stop, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             for (let i = 0; i<this.args.length; i++) {
@@ -315,7 +346,7 @@ export default class IsNamedX extends SyntacticLintWalker {
 import {SyntacticLintWalker, SemanticLintWalker} from "typescript-plugin-api";
 
 export class IsNamedFoo extends SyntacticLintWalker {
-    constructor(ts, args) { super(ts, args); }
+    constructor(state) { super(state); }
     visit(node, stop, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             if (node.text.toLowerCase() === "foo") {
@@ -326,7 +357,7 @@ export class IsNamedFoo extends SyntacticLintWalker {
 }
 
 export class IsNamedBar extends SyntacticLintWalker {
-    constructor(ts, args) { super(ts, args); }
+    constructor(state) { super(state); }
     visit(node, stop, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             if (node.text.toLowerCase() === "bar") {
@@ -337,7 +368,7 @@ export class IsNamedBar extends SyntacticLintWalker {
 }
 
 export class IsValueFoo extends SemanticLintWalker {
-    constructor(ts, checker, args) { super(ts, checker, args); }
+    constructor(state) { super(state); }
     visit(node, stop, error) {
         const type = this.checker.getTypeAtLocation(node);
         if (type.flags & this.ts.TypeFlags.StringLiteral) {
@@ -349,7 +380,7 @@ export class IsValueFoo extends SemanticLintWalker {
 }
 
 export class IsValueBar extends SemanticLintWalker {
-    constructor(ts, checker, args) { super(ts, checker, args); }
+    constructor(state) { super(state); }
     visit(node, stop, error) {
         const type = this.checker.getTypeAtLocation(node);
         if (type.flags & this.ts.TypeFlags.StringLiteral) {
@@ -373,7 +404,7 @@ export class IsValueBar extends SemanticLintWalker {
 import {LanguageServiceProvider} from "typescript-plugin-api";
 
 export default class extends LanguageServiceProvider {
-    constructor(ts, host, service, registry, args) { super(ts, host, service, registry, args); }
+    constructor(state) { super(state); }
     getProgramDiagnosticsFilter(previous) {
         previous.push({
             file: undefined,
@@ -401,7 +432,7 @@ import {LanguageServiceProvider} from "typescript-plugin-api";
 import * as ts from "typescript";
 
 export default class extends LanguageServiceProvider {
-    constructor(ts, host, service, registry, args) { super(ts, host, service, registry, args); }
+    constructor(state) { super(state); }
     getProgramDiagnostics() {
         return [{
             file: undefined,
@@ -540,7 +571,7 @@ import {LanguageServiceProvider} from "typescript-plugin-api";
 import * as ts from "typescript";
 
 export default class extends LanguageServiceProvider {
-    constructor(ts, host, service, registry, args) { super(ts, host, service, registry, args); }
+    constructor(state) { super(state); }
     getProgramDiagnosticsFilter(previous) {
         return [{
             file: undefined,
@@ -677,7 +708,7 @@ export default class extends LanguageServiceProvider {
 import {LanguageServiceProvider} from "typescript-plugin-api";
 
 export default class extends LanguageServiceProvider {
-    constructor(ts, host, service, registry, args) { super(ts, host, service, registry, args); }
+    constructor(state) { super(state); }
     getProgramDiagnosticsFilter(previous) {
         return previous;
     }
@@ -702,7 +733,7 @@ export default class extends LanguageServiceProvider {
 import {LanguageServiceProvider} from "typescript-plugin-api";
 
 export class AddsDiagnostics extends LanguageServiceProvider {
-    constructor(ts, host, service, registry, args) { super(ts, host, service, registry, args); }
+    constructor(state) { super(state); }
     getProgramDiagnosticsFilter(previous) {
         return previous.concat([{
             file: undefined,
@@ -738,7 +769,7 @@ export class AddsDiagnostics extends LanguageServiceProvider {
 // Since this is exported second, it should be second in the chain. Probably.
 // This is honestly dependent on js host key ordering 
 export class MutatesAddedDiagnostics extends LanguageServiceProvider {
-    constructor(ts, host, service, registry, args) { super(ts, host, service, registry, args); }
+    constructor(state) { super(state); }
     getProgramDiagnosticsFilter(previous) {
         return previous.map(prev => prev.code === "program-diagnostics-amended" ? {
             file: undefined,
@@ -777,7 +808,7 @@ export class MutatesAddedDiagnostics extends LanguageServiceProvider {
         // Compile each extension once with the extension API in its node_modules folder (also generating .d.ts and .js)
         forEachKey(extensions, extName => {
             loadSetIntoFsAt(extensionAPI, "/node_modules/typescript-plugin-api");
-            buildMap(programCompile, extensions[extName], extensions[extName], {module: ModuleKind.CommonJS, declaration: true, experimentalDecorators: true, baseUrl: "/", paths: {"typescript": ["lib/typescript.d.ts"]}}, /*shouldError*/true);
+            buildMap(programCompile, extensions[extName], extensions[extName], { module: ModuleKind.CommonJS, declaration: true, experimentalDecorators: true, baseUrl: "/", paths: { "typescript": ["lib/typescript.d.ts"] } }, /*shouldError*/true);
         });
 
         /**

@@ -133,6 +133,16 @@ namespace ts {
             description: Diagnostics.Raise_error_on_this_expressions_with_an_implied_any_type,
         },
         {
+            name: "noUnusedLocals",
+            type: "boolean",
+            description: Diagnostics.Report_Errors_on_Unused_Locals,
+        },
+        {
+            name: "noUnusedParameters",
+            type: "boolean",
+            description: Diagnostics.Report_Errors_on_Unused_Parameters
+        },
+        {
             name: "noLib",
             type: "boolean",
         },
@@ -333,16 +343,6 @@ namespace ts {
             }
         },
         {
-            name: "typesSearchPaths",
-            type: "list",
-            isTSConfigOnly: true,
-            element: {
-                name: "typesSearchPaths",
-                type: "string",
-                isFilePath: true
-            }
-        },
-        {
             name: "typeRoots",
             type: "list",
             element: {
@@ -379,6 +379,11 @@ namespace ts {
             name: "noImplicitUseStrict",
             type: "boolean",
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
+        },
+        {
+            name: "maxNodeModuleJsDepth",
+            type: "number",
+            description: Diagnostics.The_maximum_dependency_depth_to_search_under_node_modules_and_load_JavaScript_files
         },
         {
             name: "listEmittedFiles",
@@ -419,7 +424,7 @@ namespace ts {
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
         },
         {
-            name: "disableProjectSizeLimit",
+            name: "disableSizeLimit",
             type: "boolean"
         },
         {

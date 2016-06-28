@@ -1021,7 +1021,7 @@ namespace ts {
         directories: string[];
     }
 
-    interface FileMatcherPatterns {
+    export interface FileMatcherPatterns {
         includeFilePattern: string;
         includeDirectoryPattern: string;
         excludePattern: string;
@@ -1156,7 +1156,8 @@ namespace ts {
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
-    export function getSupportedExtensions(options?: CompilerOptions): string[] {
+    export function getSupportedExtensions(options?: CompilerOptions, loadJS?: boolean): string[] {
+        if (loadJS) return supportedJavascriptExtensions;
         return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;
     }
 

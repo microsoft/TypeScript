@@ -1566,6 +1566,7 @@ namespace ts.server {
 
         static getDefaultFormatCodeOptions(host: ServerHost): ts.FormatCodeOptions {
             return ts.clone({
+                BaseIndentSize: 0,
                 IndentSize: 4,
                 TabSize: 4,
                 NewLineCharacter: host.newLine || "\n",

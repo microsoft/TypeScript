@@ -111,6 +111,8 @@ namespace ts.server {
         export const Formatonkey = "formatonkey";
         export const Geterr = "geterr";
         export const GeterrForProject = "geterrForProject";
+        export const SemanticDiagnosticsSync = "semanticDiagnosticsSync";
+        export const SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
         export const NavBar = "navbar";
         export const Navto = "navto";
         export const Occurrences = "occurrences";
@@ -130,6 +132,7 @@ namespace ts.server {
 
     namespace Errors {
         export const NoProject = new Error("No Project.");
+        export const ProjectLanguageServiceDisabled = new Error("The project's language service is disabled.");
     }
 
     export interface ServerHost extends ts.System {
@@ -382,6 +385,27 @@ namespace ts.server {
                     isWriteAccess,
                 };
             });
+        }
+
+        private getDiagnosticsWorker(args: protocol.FileRequestArgs, selector: (project: Project, file: string) => Diagnostic[]) {
+            const file = normalizePath(args.file);
+            const project = this.projectService.getProjectForFile(file);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+            if (project.languageServiceDiabled) {
+                throw Errors.ProjectLanguageServiceDisabled;
+            }
+            const diagnostics = selector(project, file);
+            return ts.map(diagnostics, originalDiagnostic => formatDiag(file, project, originalDiagnostic));
+        }
+
+        private getSyntacticDiagnosticsSync(args: protocol.FileRequestArgs): protocol.Diagnostic[] {
+            return this.getDiagnosticsWorker(args, (project, file) => project.compilerService.languageService.getSyntacticDiagnostics(file));
+        }
+
+        private getSemanticDiagnosticsSync(args: protocol.FileRequestArgs): protocol.Diagnostic[] {
+            return this.getDiagnosticsWorker(args, (project, file) => project.compilerService.languageService.getSemanticDiagnostics(file));
         }
 
         private getDocumentHighlights(line: number, offset: number, fileName: string, filesToSearch: string[]): protocol.DocumentHighlightsItem[] {
@@ -679,6 +703,7 @@ namespace ts.server {
                         if (lineText.search("\\S") < 0) {
                             // TODO: get these options from host
                             const editorOptions: ts.EditorOptions = {
+                                BaseIndentSize: formatOptions.BaseIndentSize,
                                 IndentSize: formatOptions.IndentSize,
                                 TabSize: formatOptions.TabSize,
                                 NewLineCharacter: formatOptions.NewLineCharacter,
@@ -1032,6 +1057,10 @@ namespace ts.server {
         exit() {
         }
 
+        private requiredResponse(response: any) {
+            return { response, responseRequired: true };
+        }
+
         private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
             [CommandNames.Exit]: () => {
                 this.exit();
@@ -1100,6 +1129,12 @@ namespace ts.server {
                 const signatureHelpArgs = <protocol.SignatureHelpRequestArgs>request.arguments;
                 return { response: this.getSignatureHelpItems(signatureHelpArgs.line, signatureHelpArgs.offset, signatureHelpArgs.file), responseRequired: true };
             },
+            [CommandNames.SemanticDiagnosticsSync]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getSemanticDiagnosticsSync(request.arguments));
+            },
+            [CommandNames.SyntacticDiagnosticsSync]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getSyntacticDiagnosticsSync(request.arguments));
+            },
             [CommandNames.Geterr]: (request: protocol.Request) => {
                 const geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
                 return { response: this.getDiagnostics(geterrArgs.delay, geterrArgs.files), responseRequired: false };
@@ -1123,7 +1158,7 @@ namespace ts.server {
             [CommandNames.Reload]: (request: protocol.Request) => {
                 const reloadArgs = <protocol.ReloadRequestArgs>request.arguments;
                 this.reload(reloadArgs.file, reloadArgs.tmpfile, request.seq);
-                return {response: { reloadFinished: true }, responseRequired: true};
+                return { response: { reloadFinished: true }, responseRequired: true };
             },
             [CommandNames.Saveto]: (request: protocol.Request) => {
                 const savetoArgs = <protocol.SavetoRequestArgs>request.arguments;
