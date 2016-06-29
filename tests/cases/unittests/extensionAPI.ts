@@ -480,7 +480,7 @@ export default class extends LanguageServiceProvider {
         return {
             isMemberCompletion: false,
             isNewIdentifierLocation: false,
-            entries: [{name: fileName, kind: '', kindModifiers: '', sortText: fileName}]
+            entries: [{name: fileName, kind: "", kindModifiers: "", sortText: fileName}]
         };
     }
     getCompletionEntryDetails(fileName, position, entryName) {
@@ -619,7 +619,7 @@ export default class extends LanguageServiceProvider {
         return {
             isMemberCompletion: false,
             isNewIdentifierLocation: false,
-            entries: [{name: fileName, kind: '', kindModifiers: '', sortText: fileName}]
+            entries: [{name: fileName, kind: "", kindModifiers: "", sortText: fileName}]
         };
     }
     getCompletionEntryDetailsFilter(fileName, position, entryName, previous) {
@@ -1127,7 +1127,7 @@ of comparison only.
             assert.deepEqual<CompletionInfo>(service.getCompletionsAtPosition(atotcFile, 0), {
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
-                entries: [{ name: atotcFile as Path, kind: '', kindModifiers: '', sortText: atotcFile }]
+                entries: [{ name: atotcFile as Path, kind: "", kindModifiers: "", sortText: atotcFile }]
             }, "Completions did not match!");
             assert.deepEqual(service.getCompletionEntryDetails(atotcFile, 0, "first"), {
                 name: atotcFile,
