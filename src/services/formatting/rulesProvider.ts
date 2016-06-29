@@ -90,6 +90,15 @@ namespace ts.formatting {
                 rules.push(this.globalRules.NoSpaceBeforeTemplateMiddleAndTail);
             }
 
+            if (options.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces) {
+                rules.push(this.globalRules.SpaceAfterOpenBraceInJsxExpression);
+                rules.push(this.globalRules.SpaceBeforeCloseBraceInJsxExpression);
+            }
+            else {
+                rules.push(this.globalRules.NoSpaceAfterOpenBraceInJsxExpression);
+                rules.push(this.globalRules.NoSpaceBeforeCloseBraceInJsxExpression);
+            }
+
             if (options.insertSpaceAfterSemicolonInForStatements) {
                 rules.push(this.globalRules.SpaceAfterSemicolonInFor);
             }

@@ -18,7 +18,7 @@
 ==== /node_modules/bar/index.d.ts (1 errors) ====
     /// <reference types="alpha" />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! message TS4090: Conflicting library definitions for 'alpha' found at 'index.d.ts' and 'index.d.ts'. Copy the correct file to the 'typings' folder to resolve this conflict.
+!!! message TS4090: Conflicting library definitions for 'alpha' found at '/node_modules/bar/node_modules/alpha/index.d.ts' and '/node_modules/foo/node_modules/alpha/index.d.ts'. Copy the correct file to the 'typings' folder to resolve this conflict.
     declare var bar: any;
     
 ==== /node_modules/bar/node_modules/alpha/index.d.ts (0 errors) ====

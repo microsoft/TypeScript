@@ -1294,6 +1294,7 @@ namespace ts {
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
+        InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
     }
@@ -1307,6 +1308,7 @@ namespace ts {
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
         insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: boolean;
         placeOpenBraceOnNewLineForFunctions: boolean;
         placeOpenBraceOnNewLineForControlBlocks: boolean;
     }

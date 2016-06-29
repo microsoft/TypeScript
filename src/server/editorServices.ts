@@ -1169,7 +1169,6 @@ namespace ts.server {
                 this.updateNonInferredProject(externalProject, proj.rootFiles, proj.options);
                 return;
             }
-
             let tsConfigFiles: NormalizedPath[];
             const rootFiles: string[] = [];
             for (const file of proj.rootFiles) {

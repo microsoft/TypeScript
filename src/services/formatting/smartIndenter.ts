@@ -466,7 +466,10 @@ namespace ts.formatting {
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.AwaitExpression:
+                case SyntaxKind.NamedExports:
                 case SyntaxKind.NamedImports:
+                case SyntaxKind.ExportSpecifier:
+                case SyntaxKind.ImportSpecifier:
                     return true;
             }
             return false;
@@ -490,6 +493,11 @@ namespace ts.formatting {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     return childKind !== SyntaxKind.Block;
+                case SyntaxKind.ExportDeclaration:
+                    return childKind !== SyntaxKind.NamedExports;
+                case SyntaxKind.ImportDeclaration:
+                    return childKind !== SyntaxKind.ImportClause ||
+                        (<ImportClause>child).namedBindings.kind !== SyntaxKind.NamedImports;
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
             }
