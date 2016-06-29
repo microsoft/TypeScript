@@ -17,6 +17,7 @@
     "File '/a/node_modules/jquery.ts' does not exist.",
     "File '/a/node_modules/jquery.d.ts' does not exist.",
     "Found 'package.json' at '/a/node_modules/jquery/package.json'.",
+    "Expected type of 'typings' field in 'package.json' to be 'string', got 'undefined'.",
     "'package.json' has 'types' field 'dist/jquery.d.ts' that references '/a/node_modules/jquery/dist/jquery.d.ts'.",
     "File '/a/node_modules/jquery/dist/jquery.d.ts' exist - use it as a name resolution result.",
     "======== Type reference directive 'jquery' was successfully resolved to '/a/node_modules/jquery/dist/jquery.d.ts', primary: false. ========"
