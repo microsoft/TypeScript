@@ -842,7 +842,7 @@ export class NoShortNames extends SyntacticLintWalker {
         }
     }
 }
-`
+`,
             },
             "test-errors": {
                 "package.json": `{

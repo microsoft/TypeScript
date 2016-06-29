@@ -1,5 +1,4 @@
 namespace ts {
-
     export type LintErrorMethod = {
         (err: string): void;
         (err: string, span: Node): void;
