@@ -1,0 +1,12 @@
+=== tests/cases/compiler/destructuringAssignmentWithDefault.ts ===
+const a: { x?: number } = { };
+>a : Symbol(a, Decl(destructuringAssignmentWithDefault.ts, 0, 5))
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault.ts, 0, 10))
+
+let x = 0;
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault.ts, 1, 3))
+
+({x = 1} = a);
+>x : Symbol(x, Decl(destructuringAssignmentWithDefault.ts, 2, 2))
+>a : Symbol(a, Decl(destructuringAssignmentWithDefault.ts, 0, 5))
+
