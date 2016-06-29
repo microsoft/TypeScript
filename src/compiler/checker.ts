@@ -14532,8 +14532,11 @@ namespace ts {
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
-                            checkUnusedIdentifiers(<FunctionLikeDeclaration>node);
-
+                            if ((<FunctionLikeDeclaration>node).body) {
+                                checkUnusedIdentifiers(<FunctionLikeDeclaration>node);
+                            }
+                            checkUnusedTypeParameters(<FunctionLikeDeclaration>node);
+                            break;
                         case SyntaxKind.MethodSignature:
                         case SyntaxKind.CallSignature:
                         case SyntaxKind.ConstructSignature:
@@ -17029,7 +17032,9 @@ namespace ts {
                     checkUnusedIdentifiersDeferred(node);
                 }
 
-                checkUnusedIdentifiersDeferredNodes();
+                if (!node.isDeclarationFile) {
+                    checkUnusedIdentifiersDeferredNodes();
+                }
 
                 deferredNodes = undefined;
                 deferredUnusedIdentifierNodes = undefined;
