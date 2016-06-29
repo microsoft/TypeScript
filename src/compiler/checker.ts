@@ -15090,6 +15090,7 @@ namespace ts {
             if (node.condition) checkExpression(node.condition);
             if (node.incrementor) checkExpression(node.incrementor);
             checkSourceElement(node.statement);
+            checkUnusedIdentifiersDeferred(node);
         }
 
         function checkForOfStatement(node: ForOfStatement): void {
