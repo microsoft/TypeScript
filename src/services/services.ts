@@ -474,8 +474,7 @@ namespace ts {
 
                 for (; pos < end; pos++) {
                     const ch = sourceFile.text.charCodeAt(pos);
-                    if (!isWhiteSpace(ch) || isLineBreak(ch)) {
-                        // Either found lineBreak or non whiteSpace
+                    if (!isWhiteSpace(ch)) {
                         return pos;
                     }
                 }
@@ -494,8 +493,7 @@ namespace ts {
             function isName(pos: number, end: number, sourceFile: SourceFile, name: string) {
                 return pos + name.length < end &&
                     sourceFile.text.substr(pos, name.length) === name &&
-                    (isWhiteSpace(sourceFile.text.charCodeAt(pos + name.length)) ||
-                        isLineBreak(sourceFile.text.charCodeAt(pos + name.length)));
+                    isWhiteSpaceLike(sourceFile.text.charCodeAt(pos + name.length));
             }
 
             function isParamTag(pos: number, end: number, sourceFile: SourceFile) {

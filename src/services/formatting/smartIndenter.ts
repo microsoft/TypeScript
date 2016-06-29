@@ -42,7 +42,7 @@ namespace ts.formatting {
                 let current = position;
                 while (current > 0) {
                     const char = sourceFile.text.charCodeAt(current);
-                    if (!isWhiteSpace(char) && !isLineBreak(char)) {
+                    if (!isWhiteSpaceLike(char)) {
                         break;
                     }
                     current--;

@@ -78,7 +78,7 @@ namespace ts.formatting {
         //  1. the end of the previous line
         //  2. the last non-whitespace character in the current line
         let endOfFormatSpan = getEndLinePosition(line, sourceFile);
-        while (isWhiteSpace(sourceFile.text.charCodeAt(endOfFormatSpan)) && !isLineBreak(sourceFile.text.charCodeAt(endOfFormatSpan))) {
+        while (isWhiteSpace(sourceFile.text.charCodeAt(endOfFormatSpan))) {
             endOfFormatSpan--;
         }
         // if the character at the end of the span is a line break, we shouldn't include it, because it indicates we don't want to
@@ -599,6 +599,9 @@ namespace ts.formatting {
 
                 // child node is outside the target range - do not dive inside
                 if (!rangeOverlapsWithStartEnd(originalRange, child.pos, child.end)) {
+                    if (child.end < originalRange.pos) {
+                        formattingScanner.skipToEndOf(child);
+                    }
                     return inheritedIndentation;
                 }
 

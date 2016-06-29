@@ -17,6 +17,7 @@ namespace ts.formatting {
         readTokenInfo(n: Node): TokenInfo;
         getCurrentLeadingTrivia(): TextRangeWithKind[];
         lastTrailingTriviaWasNewLine(): boolean;
+        skipToEndOf(node: Node): void;
         close(): void;
     }
 
@@ -36,12 +37,12 @@ namespace ts.formatting {
         scanner.setTextPos(startPos);
 
         let wasNewLine = true;
-        let leadingTrivia: TextRangeWithKind[];
-        let trailingTrivia: TextRangeWithKind[];
+        let leadingTrivia: TextRangeWithKind[] | undefined;
+        let trailingTrivia: TextRangeWithKind[] | undefined;
 
         let savedPos: number;
-        let lastScanAction: ScanAction;
-        let lastTokenInfo: TokenInfo;
+        let lastScanAction: ScanAction | undefined;
+        let lastTokenInfo: TokenInfo | undefined;
 
         return {
             advance,
@@ -49,6 +50,7 @@ namespace ts.formatting {
             isOnToken,
             getCurrentLeadingTrivia: () => leadingTrivia,
             lastTrailingTriviaWasNewLine: () => wasNewLine,
+            skipToEndOf,
             close: () => {
                 Debug.assert(scanner !== undefined);
 
@@ -277,6 +279,25 @@ namespace ts.formatting {
                 tokenInfo.token.kind = container.kind;
             }
             return tokenInfo;
+        }
+
+        function skipToEndOf(node: Node): void {
+            scanner.setTextPos(backUpWhitespace());
+            savedPos = scanner.getStartPos();
+            lastScanAction = undefined;
+            lastTokenInfo = undefined;
+            wasNewLine = false;
+            leadingTrivia = undefined;
+            trailingTrivia = undefined;
+
+            function backUpWhitespace(): number {
+                const text = scanner.getText();
+                let end = node.end;
+                while (end > 0 && isWhiteSpaceLike(text.charCodeAt(end - 1))) {
+                    end--;
+                }
+                return end;
+            }
         }
     }
 }
