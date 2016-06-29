@@ -617,16 +617,8 @@ namespace ts {
             return false;
         }
 
-        function isNarrowingNullCheckOperands(expr1: Expression, expr2: Expression) {
-            return (expr1.kind === SyntaxKind.NullKeyword || expr1.kind === SyntaxKind.Identifier && (<Identifier>expr1).text === "undefined") && isNarrowableOperand(expr2);
-        }
-
         function isNarrowingTypeofOperands(expr1: Expression, expr2: Expression) {
             return expr1.kind === SyntaxKind.TypeOfExpression && isNarrowableOperand((<TypeOfExpression>expr1).expression) && expr2.kind === SyntaxKind.StringLiteral;
-        }
-
-        function isNarrowingDiscriminant(expr: Expression) {
-            return expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
         }
 
         function isNarrowingBinaryExpression(expr: BinaryExpression) {
