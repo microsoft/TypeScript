@@ -20,10 +20,10 @@ namespace ts {
             }
 
             for (let i = 0; i < expectedDiagnosticCodes.length; i++) {
-                assert.equal(expectedDiagnosticCodes[i], diagnostics[i] && diagnostics[i].code, `Could not find expeced diagnostic.`);
+                assert.equal(expectedDiagnosticCodes[i], diagnostics[i] && diagnostics[i].code, `Could not find expeced diagnostic: (expected) [${expectedDiagnosticCodes.toString()}] vs (actual) [${map(diagnostics, d => d.code).toString()}]. First diagnostic: ${prettyPrintDiagnostic(diagnostics[0])}`);
             }
             if (expectedDiagnosticCodes.length === 0 && diagnostics.length) {
-                throw new Error(`Unexpected diagnostic (${diagnostics.length - 1} more): ${prettyPrintDiagnostic(diagnostics[0])}`);
+                throw new Error(`Unexpected diagnostic (${map(diagnostics, d => d.code).toString()}): ${prettyPrintDiagnostic(diagnostics[0])}`);
             }
             assert.equal(diagnostics.length, expectedDiagnosticCodes.length, "Resuting diagnostics count does not match expected");
         }
@@ -43,10 +43,12 @@ namespace ts {
 
         let virtualFs: Map<string> = {};
 
-        const getCanonicalFileName = createGetCanonicalFileName(true);
+        const innerCanonicalName = createGetCanonicalFileName(true);
+        const getCanonicalFileName = (fileName: string) => toPath(fileName, "/", innerCanonicalName);
 
         function loadSetIntoFsAt(set: Map<string>, prefix: string) {
-            forEachKey(set, key => void (virtualFs[getCanonicalFileName(combinePaths(prefix, key))] = set[key]));
+            // Load a fileset at the given location, but exclude the /lib/ dir from the added set
+            forEachKey(set, key => startsWith(key, "/lib/") ? void 0 : void (virtualFs[getCanonicalFileName(prefix + key)] = set[key]));
         }
 
         function loadSetIntoFs(set: Map<string>) {
@@ -95,7 +97,7 @@ namespace ts {
                     (name: string) => {
                         return mockHost.loadExtension(
                             mockHost.getCanonicalFileName(
-                                ts.resolveModuleName(name, fullPath, { module: ts.ModuleKind.CommonJS }, mockHost, true).resolvedModule.resolvedFileName
+                                resolveModuleName(name, fullPath, { module: ts.ModuleKind.CommonJS }, mockHost, true).resolvedModule.resolvedFileName
                             )
                         );
                     }
@@ -105,6 +107,48 @@ namespace ts {
             trace(s) {
                 console.log(s);
             }
+        };
+
+        function makeMockLSHost(files: string[], options: CompilerOptions): LanguageServiceHost {
+            files = filter(files, file => !endsWith(file, ".json"));
+            const host: LanguageServiceHost = {
+                getCompilationSettings: () => options,
+                getScriptFileNames: () => files,
+                getScriptVersion(fileName) {
+                    return "1";
+                },
+                getScriptSnapshot(fileName): IScriptSnapshot {
+                    const fileContents = virtualFs[getCanonicalFileName(fileName)];
+                    if (!fileContents) return;
+                    return ScriptSnapshot.fromString(fileContents);
+                },
+                getCurrentDirectory() {
+                    return "";
+                },
+                getDefaultLibFileName() {
+                    return "/lib/lib.d.ts";
+                },
+                loadExtension(path) {
+                    const fullPath = getCanonicalFileName(path);
+                    const m = { exports: {} };
+                    ((module, exports, require) => { eval(virtualFs[fullPath]); })(
+                        m,
+                        m.exports,
+                        (name: string) => {
+                            return host.loadExtension(
+                                getCanonicalFileName(
+                                    resolveModuleName(name, fullPath, { module: ModuleKind.CommonJS }, mockHost, true).resolvedModule.resolvedFileName
+                                )
+                            );
+                        }
+                    );
+                    return m.exports;
+                },
+                trace(s) {
+                    console.log(s);
+                }
+            };
+            return host;
         };
 
         const extensionAPI: Map<string> = {
@@ -154,18 +198,42 @@ export abstract class SemanticLintWalker implements tsi.LintWalker {
         };
         // Compile extension API once (generating .d.ts and .js)
 
-        function compile(fileset: Map<string>, options: ts.CompilerOptions): Diagnostic[] {
-            loadSetIntoFs(virtualLib);
-            loadSetIntoFs(fileset);
+        function languageServiceCompile(typescriptFiles: string[], options: CompilerOptions, additionalVerifiers?: (service: LanguageService) => void): Diagnostic[] {
+            options.allowJs = true;
+            options.noEmit = true;
+            const service = createLanguageService(makeMockLSHost(getKeys(virtualFs), options));
 
-            const program = createProgram(filter(getKeys(fileset), name => name != "package.json"), options, mockHost);
+            if (additionalVerifiers) {
+                additionalVerifiers(service);
+            }
+
+            const diagnostics = concatenate(concatenate(
+                service.getProgramDiagnostics(),
+                flatten(map(typescriptFiles, fileName => service.getSyntacticDiagnostics(getCanonicalFileName(fileName))))),
+                flatten(map(typescriptFiles, fileName => service.getSemanticDiagnostics(getCanonicalFileName(fileName)))));
+
+            return sortAndDeduplicateDiagnostics(diagnostics);
+        }
+
+        type VirtualCompilationFunction = (files: string[], options: CompilerOptions, additionalVerifiers?: () => void) => Diagnostic[];
+
+        function programCompile(typescriptFiles: string[], options: CompilerOptions): Diagnostic[] {
+            const program = createProgram(typescriptFiles, options, mockHost);
             program.emit();
 
             return ts.getPreEmitDiagnostics(program);
         }
 
-        function buildMap(map: Map<string>, out: Map<string>, compilerOptions?: CompilerOptions, shouldError?: boolean): Diagnostic[] {
-            const diagnostics = compile(map, compilerOptions ? compilerOptions : { module: ModuleKind.CommonJS, declaration: true });
+        function compile(fileset: Map<string>, options: ts.CompilerOptions, compileFunc: VirtualCompilationFunction, additionalVerifiers?: () => void): Diagnostic[] {
+            loadSetIntoFs(virtualLib);
+            loadSetIntoFs(fileset);
+
+            const typescriptFiles = filter(getKeys(fileset), name => endsWith(name, ".ts"));
+            return compileFunc(typescriptFiles, options, additionalVerifiers);
+        }
+
+        function buildMap(compileFunc: VirtualCompilationFunction, map: Map<string>, out: Map<string>, compilerOptions?: CompilerOptions, shouldError?: boolean, additionalVerifiers?: () => void): Diagnostic[] {
+            const diagnostics = compile(map, compilerOptions ? compilerOptions : { module: ModuleKind.CommonJS, declaration: true }, compileFunc, additionalVerifiers);
             if (shouldError && diagnostics && diagnostics.length) {
                 for (let i = 0; i < diagnostics.length; i++) {
                     console.log(prettyPrintDiagnostic(diagnostics[i]));
@@ -176,7 +244,7 @@ export abstract class SemanticLintWalker implements tsi.LintWalker {
             virtualFs = {};
             return diagnostics;
         }
-        buildMap(extensionAPI, extensionAPI, { module: ModuleKind.CommonJS, declaration: true, baseUrl: ".", paths: { "typescript": ["/lib/typescript.d.ts"] } }, /*shouldError*/true);
+        buildMap(programCompile, extensionAPI, extensionAPI, { module: ModuleKind.CommonJS, declaration: true, baseUrl: ".", paths: { "typescript": ["/lib/typescript.d.ts"] } }, /*shouldError*/true);
 
         const extensions: Map<Map<string>> = {
             "test-syntactic-lint": {
@@ -414,15 +482,15 @@ export class Throws6 extends SyntacticLintWalker {
         // Compile each extension once with the extension API in its node_modules folder (also generating .d.ts and .js)
         forEachKey(extensions, extName => {
             loadSetIntoFsAt(extensionAPI, "/node_modules/typescript-plugin-api");
-            buildMap(extensions[extName], extensions[extName], { module: ModuleKind.CommonJS, declaration: true, experimentalDecorators: true, baseUrl: "/", paths: { "typescript": ["lib/typescript.d.ts"] } }, /*shouldError*/true);
+            buildMap(programCompile, extensions[extName], extensions[extName], { module: ModuleKind.CommonJS, declaration: true, experimentalDecorators: true, baseUrl: "/", paths: { "typescript": ["lib/typescript.d.ts"] } }, /*shouldError*/true);
         });
 
         /**
          * Setup a new test, where all extensions specified in the options hash are available in a node_modules folder, alongside the extension API
          */
-        function test(sources: Map<string>, options: ExtensionTestOptions) {
+        function test(sources: Map<string>, options: ExtensionTestOptions, compileFunc: VirtualCompilationFunction = programCompile, additionalVerifiers?: (...args: any[]) => void) {
             forEach(options.availableExtensions, ext => loadSetIntoFsAt(extensions[ext], `/node_modules/${ext}`));
-            const diagnostics = buildMap(sources, sources, options.compilerOptions);
+            const diagnostics = buildMap(compileFunc, sources, sources, options.compilerOptions, /*shouldError*/false, additionalVerifiers);
             checkDiagnostics(diagnostics, options.expectedDiagnostics);
         }
 
@@ -593,6 +661,134 @@ const x = 3 * 4;
                     module: ModuleKind.CommonJS,
                 }
             });
+        });
+        it("can run all lint plugins in the language service", () => {
+            test({
+                "main.ts": `console.log("Hello, world!");`,
+            }, {
+                availableExtensions: ["test-syntactic-lint"],
+                expectedDiagnostics: [],
+                compilerOptions: {
+                    extensions: ["test-syntactic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `interface Foo {a; b;}`,
+            }, {
+                availableExtensions: ["test-syntactic-lint"],
+                expectedDiagnostics: ["test-syntactic-lint"],
+                compilerOptions: {
+                    extensions: ["test-syntactic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `console.log("Hello, world!");`,
+            }, {
+                availableExtensions: ["test-semantic-lint"],
+                expectedDiagnostics: [],
+                compilerOptions: {
+                    extensions: ["test-semantic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `const s: "foo" = "foo";`,
+            }, {
+                availableExtensions: ["test-semantic-lint"],
+                expectedDiagnostics: ["test-semantic-lint", "test-semantic-lint"],
+                compilerOptions: {
+                    extensions: ["test-semantic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `console.log("Hello, world!");`,
+            }, {
+                availableExtensions: ["test-syntactic-lint", "test-semantic-lint"],
+                expectedDiagnostics: [],
+                compilerOptions: {
+                    extensions: ["test-syntactic-lint", "test-semantic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `const s: "foo" = "foo";`,
+            }, {
+                availableExtensions: ["test-syntactic-lint", "test-semantic-lint"],
+                expectedDiagnostics: ["test-semantic-lint", "test-semantic-lint"],
+                compilerOptions: {
+                    extensions: ["test-syntactic-lint", "test-semantic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `interface Foo {a; b;}`,
+            }, {
+                availableExtensions: ["test-syntactic-lint", "test-semantic-lint"],
+                expectedDiagnostics: ["test-syntactic-lint"],
+                compilerOptions: {
+                    extensions: ["test-syntactic-lint", "test-semantic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `interface Foo {a; b;}
+                const s: "foo" = "foo";`,
+            }, {
+                availableExtensions: ["test-syntactic-lint", "test-semantic-lint"],
+                expectedDiagnostics: ["test-syntactic-lint", "test-semantic-lint", "test-semantic-lint"],
+                compilerOptions: {
+                    extensions: ["test-syntactic-lint", "test-semantic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `interface Foo {a; b;}`,
+            }, {
+                availableExtensions: ["test-extension-arguments"],
+                expectedDiagnostics: ["test-extension-arguments", "test-extension-arguments"],
+                compilerOptions: {
+                    extensions: {
+                        "test-extension-arguments": ["a", "b"]
+                    },
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `interface Foo {b;}
+                interface Bar {a;}
+                const f: "foo" = "foo";
+                let b: "bar" = "bar";`,
+            }, {
+                availableExtensions: ["test-multi-extension"],
+                expectedDiagnostics: ["test-multi-extension[IsNamedFoo]", "test-multi-extension[IsNamedBar]", "test-multi-extension[IsValueFoo]", "test-multi-extension[IsValueFoo]", "test-multi-extension[IsValueBar]", "test-multi-extension[IsValueBar]"],
+                compilerOptions: {
+                    extensions: ["test-multi-extension"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
+
+            test({
+                "main.ts": `console.log("Hello, world!");`,
+            }, {
+                availableExtensions: [],
+                expectedDiagnostics: [6151, 6151],
+                compilerOptions: {
+                    extensions: ["test-syntactic-lint", "test-semantic-lint"],
+                    module: ModuleKind.CommonJS,
+                }
+            }, languageServiceCompile);
         });
     });
 }

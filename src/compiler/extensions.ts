@@ -153,6 +153,12 @@ namespace ts {
                                         return;
                                     }
                                     (ext as (SemanticLintExtension | SyntacticLintExtension)).ctor = potentialExtension as (SemanticLintProviderStatic | SyntacticLintProviderStatic);
+                                    break;
+                                default:
+                                    // Include a default case which just puts the extension unchecked onto the base extension
+                                    // This can allow language service extensions to query for custom extension kinds
+                                    (ext as any).__extension =  potentialExtension;
+                                    break;
                             }
                             aggregate.push(ext as Extension);
                         }

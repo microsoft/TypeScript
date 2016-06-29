@@ -119,6 +119,7 @@ namespace ts {
         getSyntacticDiagnostics(fileName: string): string;
         getSemanticDiagnostics(fileName: string): string;
         getCompilerOptionsDiagnostics(): string;
+        getProgramDiagnostics(): string;
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
         getSemanticClassifications(fileName: string, start: number, length: number): string;
@@ -674,6 +675,15 @@ namespace ts {
                 "getCompilerOptionsDiagnostics()",
                 () => {
                     const diagnostics = this.languageService.getCompilerOptionsDiagnostics();
+                    return this.realizeDiagnostics(diagnostics);
+                });
+        }
+
+        public getProgramDiagnostics(): string {
+            return this.forwardJSONCall(
+                "getProgramDiagnostics()",
+                () => {
+                    const diagnostics = this.languageService.getProgramDiagnostics();
                     return this.realizeDiagnostics(diagnostics);
                 });
         }

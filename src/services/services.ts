@@ -1079,6 +1079,8 @@ namespace ts {
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
         getDirectories?(directoryName: string): string[];
+
+        loadExtension?(path: string): any;
     }
 
     //
@@ -1091,9 +1093,12 @@ namespace ts {
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
 
-        // TODO: Rename this to getProgramDiagnostics to better indicate that these are any
-        // diagnostics present for the program level, and not just 'options' diagnostics.
+        /**
+         * @deprecated Use getProgramDiagnostics instead.
+         */
         getCompilerOptionsDiagnostics(): Diagnostic[];
+
+        getProgramDiagnostics(): Diagnostic[];
 
         /**
          * @deprecated Use getEncodedSyntacticClassifications instead.
@@ -2971,7 +2976,7 @@ namespace ts {
             }
 
             // Get a fresh cache of the host information
-            let hostCache = new HostCache(host, getCanonicalFileName);
+            const hostCache = new HostCache(host, getCanonicalFileName);
 
             // If the program is already up-to-date, we can reuse it
             if (programUpToDate()) {
@@ -3021,6 +3026,9 @@ namespace ts {
                 },
                 getDirectories: path => {
                     return host.getDirectories ? host.getDirectories(path) : [];
+                },
+                loadExtension: path => {
+                    return host.loadExtension ? host.loadExtension(path) : undefined;
                 }
             };
             if (host.trace) {
@@ -3053,7 +3061,9 @@ namespace ts {
 
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
-            hostCache = undefined;
+            // TODO (weswig): hostCache needs to exist as long as its associated compilerHost exists, since it is used in fileExists.
+            //     As such, we cannot release it here - it must be tied to the lifetime of the compilerHost.
+            // hostCache = undefined;
 
             program = newProgram;
 
@@ -3198,7 +3208,7 @@ namespace ts {
             return concatenate(semanticDiagnostics, declarationDiagnostics);
         }
 
-        function getCompilerOptionsDiagnostics() {
+        function getProgramDiagnostics() {
             synchronizeHostData();
             return program.getOptionsDiagnostics(cancellationToken).concat(
                    program.getGlobalDiagnostics(cancellationToken));
@@ -8124,7 +8134,8 @@ namespace ts {
             cleanupSemanticCache,
             getSyntacticDiagnostics,
             getSemanticDiagnostics,
-            getCompilerOptionsDiagnostics,
+            getCompilerOptionsDiagnostics: getProgramDiagnostics,
+            getProgramDiagnostics,
             getSyntacticClassifications,
             getSemanticClassifications,
             getEncodedSyntacticClassifications,
