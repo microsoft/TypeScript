@@ -1,6 +1,6 @@
 {
-    "scenario": "Realistic npm package types",
-    "projectRoot": "tests/cases/projects/realisticNpmTypes",
+    "scenario": "Realistic npm package types with package.json",
+    "projectRoot": "tests/cases/projects/realisticNpmTypes2",
     "inputFiles": [
         "index.ts"
     ],
@@ -8,7 +8,7 @@
     "moduleResolution": "node",
     "resolvedInputFiles": [
         "lib.d.ts",
-        "node_modules/@types/m1/index.d.ts",
+        "node_modules/@types/m1/m1.d.ts",
         "index.ts"
     ],
     "emittedFiles": [

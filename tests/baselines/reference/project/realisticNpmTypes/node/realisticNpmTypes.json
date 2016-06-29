@@ -4,7 +4,6 @@
     "inputFiles": [
         "index.ts"
     ],
-    "declaration": true,
     "baselineCheck": true,
     "moduleResolution": "node",
     "resolvedInputFiles": [
@@ -13,7 +12,6 @@
         "index.ts"
     ],
     "emittedFiles": [
-        "index.js",
-        "index.d.ts"
+        "index.js"
     ]
 }
