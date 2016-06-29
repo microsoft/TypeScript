@@ -480,7 +480,7 @@ export default class extends LanguageServiceProvider {
         return {
             isMemberCompletion: false,
             isNewIdentifierLocation: false,
-            entries: [{name: fileName, kind: 0, kindModifiers: 0, sortText: fileName}]
+            entries: [{name: fileName, kind: '', kindModifiers: '', sortText: fileName}]
         };
     }
     getCompletionEntryDetails(fileName, position, entryName) {
@@ -619,7 +619,7 @@ export default class extends LanguageServiceProvider {
         return {
             isMemberCompletion: false,
             isNewIdentifierLocation: false,
-            entries: [{name: fileName, kind: 0, kindModifiers: 0, sortText: fileName}]
+            entries: [{name: fileName, kind: '', kindModifiers: '', sortText: fileName}]
         };
     }
     getCompletionEntryDetailsFilter(fileName, position, entryName, previous) {
@@ -1124,10 +1124,10 @@ of comparison only.
             assert.deepEqual(service.getEncodedSemanticClassifications(atotcFile, { start: 24, length: 42 }),
                 { spans: [24, 42, ClassificationType.moduleName], endOfLineState: EndOfLineState.None },
                 "Semantic classifications did not match!");
-            assert.deepEqual(service.getCompletionsAtPosition(atotcFile, 0), {
+            assert.deepEqual<CompletionInfo>(service.getCompletionsAtPosition(atotcFile, 0), {
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
-                entries: [{ name: atotcFile, kind: 0, kindModifiers: 0, sortText: atotcFile }]
+                entries: [{ name: atotcFile as Path, kind: '', kindModifiers: '', sortText: atotcFile }]
             }, "Completions did not match!");
             assert.deepEqual(service.getCompletionEntryDetails(atotcFile, 0, "first"), {
                 name: atotcFile,
