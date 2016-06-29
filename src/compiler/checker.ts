@@ -14557,7 +14557,7 @@ namespace ts {
                                 error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
                             }
                             else if (local.valueDeclaration.kind === SyntaxKind.Parameter && compilerOptions.noUnusedParameters) {
-                                if (local.valueDeclaration.flags === 0) {
+                                if (!isParameterPropertyDeclaration(<ParameterDeclaration>local.valueDeclaration)) {
                                     error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
                                 }
                             }
