@@ -50,6 +50,30 @@ namespace ts {
         name: string;
         args: any;
         kind: ExtensionKind;
+        profiles?: Map<ProfileData>
+    }
+
+    export interface ProfileData {
+        task: string;
+        start: number;
+        length: number;
+    }
+
+    export function startExtensionProfile(ext: ExtensionBase, task: string) {
+        if (!ext.profiles) ext.profiles = {};
+
+        ext.profiles[task] = {
+            task,
+            start: +(new Date()),
+            length: -1
+        };
+    }
+
+    export function completeExtensionProfile(ext: ExtensionBase, task: string) {
+        const endTime = +(new Date());
+        Debug.assert(!!ext.profiles, "Completed profile, but extension has no started profiles.");
+        Debug.assert(!!ext.profiles[task], "Completed profile did not have a corresponding start.");
+        ext.profiles[task].length = endTime - ext.profiles[task].start;
     }
 
     // @kind(ExtensionKind.SyntacticLint)
