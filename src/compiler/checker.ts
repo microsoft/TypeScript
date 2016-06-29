@@ -14546,14 +14546,14 @@ namespace ts {
                 for (const key in node.locals) {
                     if (hasProperty(node.locals, key)) {
                         const local = node.locals[key];
-                        if (!local.hasReference && local.valueDeclaration) {
-                            if (local.valueDeclaration.kind !== SyntaxKind.Parameter && compilerOptions.noUnusedLocals) {
-                                error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
-                            }
-                            else if (local.valueDeclaration.kind === SyntaxKind.Parameter && compilerOptions.noUnusedParameters) {
-                                if (!isParameterPropertyDeclaration(<ParameterDeclaration>local.valueDeclaration)) {
+                        if (!local.hasReference) {
+                            if (local.valueDeclaration && local.valueDeclaration.kind === SyntaxKind.Parameter) {
+                                if (compilerOptions.noUnusedParameters && !isParameterPropertyDeclaration(<ParameterDeclaration>local.valueDeclaration)) {
                                     error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
                                 }
+                            }
+                            else if (compilerOptions.noUnusedLocals) {
+                                forEach(local.declarations, d => error(d.name || d, Diagnostics._0_is_declared_but_never_used, local.name));
                             }
                         }
                     }
