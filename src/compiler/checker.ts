@@ -12196,9 +12196,7 @@ namespace ts {
                         }
                     }
                 }
-                if (produceDiagnostics && noUnusedIdentifiers) {
-                    checkUnusedIdentifiersDeferred(node)
-                }
+                checkUnusedIdentifiersDeferred(node);
             }
         }
 
@@ -13426,10 +13424,7 @@ namespace ts {
             checkGrammarConstructorTypeParameters(node) || checkGrammarConstructorTypeAnnotation(node);
 
             checkSourceElement(node.body);
-
-            if (produceDiagnostics && noUnusedIdentifiers) {
-                checkUnusedIdentifiersDeferred(node);
-            }
+            checkUnusedIdentifiersDeferred(node);
 
             const symbol = getSymbolOfNode(node);
             const firstDeclaration = getDeclarationOfKind(symbol, node.kind);
@@ -13575,9 +13570,7 @@ namespace ts {
             }
             if (node.parent.kind !== SyntaxKind.ObjectLiteralExpression) {
                 checkSourceElement(node.body);
-                if (noUnusedIdentifiers) {
-                    checkUnusedIdentifiersDeferred(node);
-                }
+                checkUnusedIdentifiersDeferred(node);
             }
             else {
                 checkNodeDeferred(node);
@@ -13594,9 +13587,7 @@ namespace ts {
 
         function checkAccessorDeferred(node: AccessorDeclaration) {
             checkSourceElement(node.body);
-            if (produceDiagnostics && noUnusedIdentifiers) {
-                checkUnusedIdentifiersDeferred(node);
-            }
+            checkUnusedIdentifiersDeferred(node);
         }
 
         function checkMissingDeclaration(node: Node) {
@@ -14503,54 +14494,56 @@ namespace ts {
                 }
             }
 
-            if (produceDiagnostics && noUnusedIdentifiers) {
-                checkUnusedIdentifiersDeferred(node)
-            }
+            checkUnusedIdentifiersDeferred(node);
         }
 
         function checkUnusedIdentifiersDeferred(node: Node) {
-            deferredUnusedIdentifierNodes.push(node);
+            if (deferredUnusedIdentifierNodes) {
+                deferredUnusedIdentifierNodes.push(node);
+            }
         }
 
         function checkUnusedIdentifiersDeferredNodes() {
-            for (const node of deferredUnusedIdentifierNodes) {
-                switch (node.kind) {
-                    case SyntaxKind.SourceFile:
-                    case SyntaxKind.ModuleDeclaration:
-                        checkUnusedModuleLocals(<ModuleDeclaration | SourceFile>node);
-                        break;
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.ClassExpression:
-                        checkUnusedClassLocals(<ClassDeclaration | ClassExpression>node);
-                        checkUnusedTypeParameters(<ClassDeclaration | ClassExpression>node);
-                        break;
-                    case SyntaxKind.InterfaceDeclaration:
-                        checkUnusedTypeParameters(<InterfaceDeclaration>node);
-                        break;
-                    case SyntaxKind.Block:
-                    case SyntaxKind.ForStatement:
-                    case SyntaxKind.ForInStatement:
-                    case SyntaxKind.ForOfStatement:
-                        checkUnusedIdentifiers(<Block | ForInStatement | ForStatement | ForOfStatement>node);
-                        break;
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        checkUnusedIdentifiers(<FunctionLikeDeclaration>node);
+            if (deferredUnusedIdentifierNodes) {
+                for (const node of deferredUnusedIdentifierNodes) {
+                    switch (node.kind) {
+                        case SyntaxKind.SourceFile:
+                        case SyntaxKind.ModuleDeclaration:
+                            checkUnusedModuleLocals(<ModuleDeclaration | SourceFile>node);
+                            break;
+                        case SyntaxKind.ClassDeclaration:
+                        case SyntaxKind.ClassExpression:
+                            checkUnusedClassLocals(<ClassDeclaration | ClassExpression>node);
+                            checkUnusedTypeParameters(<ClassDeclaration | ClassExpression>node);
+                            break;
+                        case SyntaxKind.InterfaceDeclaration:
+                            checkUnusedTypeParameters(<InterfaceDeclaration>node);
+                            break;
+                        case SyntaxKind.Block:
+                        case SyntaxKind.ForStatement:
+                        case SyntaxKind.ForInStatement:
+                        case SyntaxKind.ForOfStatement:
+                            checkUnusedIdentifiers(<Block | ForInStatement | ForStatement | ForOfStatement>node);
+                            break;
+                        case SyntaxKind.Constructor:
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.ArrowFunction:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                            checkUnusedIdentifiers(<FunctionLikeDeclaration>node);
 
-                    case SyntaxKind.MethodSignature:
-                    case SyntaxKind.CallSignature:
-                    case SyntaxKind.ConstructSignature:
-                    case SyntaxKind.IndexSignature:
-                    case SyntaxKind.FunctionType:
-                    case SyntaxKind.ConstructorType:
-                        checkUnusedTypeParameters(<FunctionLikeDeclaration>node);
-                        break;
-                };
+                        case SyntaxKind.MethodSignature:
+                        case SyntaxKind.CallSignature:
+                        case SyntaxKind.ConstructSignature:
+                        case SyntaxKind.IndexSignature:
+                        case SyntaxKind.FunctionType:
+                        case SyntaxKind.ConstructorType:
+                            checkUnusedTypeParameters(<FunctionLikeDeclaration>node);
+                            break;
+                    };
+                }
             }
         }
 
@@ -14630,7 +14623,7 @@ namespace ts {
                 checkGrammarStatementInAmbientContext(node);
             }
             forEach(node.statements, checkSourceElement);
-            if (produceDiagnostics && noUnusedIdentifiers && node.locals) {
+            if (node.locals) {
                 checkUnusedIdentifiersDeferred(node);
             }
         }
@@ -15137,7 +15130,7 @@ namespace ts {
             }
 
             checkSourceElement(node.statement);
-            if (produceDiagnostics && noUnusedIdentifiers && node.locals) {
+            if (node.locals) {
                 checkUnusedIdentifiersDeferred(node);
             }
         }
@@ -15187,8 +15180,8 @@ namespace ts {
             }
 
             checkSourceElement(node.statement);
-            if (produceDiagnostics && noUnusedIdentifiers && node.locals) {
-                checkUnusedIdentifiersDeferred(node)
+            if (node.locals) {
+                checkUnusedIdentifiersDeferred(node);
             }
         }
 
@@ -15782,9 +15775,7 @@ namespace ts {
 
         function checkClassExpressionDeferred(node: ClassExpression) {
             forEach(node.members, checkSourceElement);
-            if (produceDiagnostics && noUnusedIdentifiers) {
-                checkUnusedIdentifiersDeferred(node)
-            }
+            checkUnusedIdentifiersDeferred(node);
         }
 
         function checkClassDeclaration(node: ClassDeclaration) {
@@ -15794,9 +15785,7 @@ namespace ts {
             checkClassLikeDeclaration(node);
             forEach(node.members, checkSourceElement);
 
-            if (produceDiagnostics && noUnusedIdentifiers) {
-                checkUnusedIdentifiersDeferred(node);
-            }
+            checkUnusedIdentifiersDeferred(node);
         }
 
         function checkClassLikeDeclaration(node: ClassLikeDeclaration) {
@@ -16504,9 +16493,7 @@ namespace ts {
 
             if (node.body) {
                 checkSourceElement(node.body);
-                if (produceDiagnostics && noUnusedIdentifiers) {
-                    checkUnusedIdentifiersDeferred(node);
-                }
+                checkUnusedIdentifiersDeferred(node);
             }
         }
 
@@ -17031,13 +17018,13 @@ namespace ts {
                 potentialThisCollisions.length = 0;
 
                 deferredNodes = [];
-                deferredUnusedIdentifierNodes = [];
+                deferredUnusedIdentifierNodes = produceDiagnostics && noUnusedIdentifiers ? [] : undefined;
 
                 forEach(node.statements, checkSourceElement);
 
                 checkDeferredNodes();
 
-                if (isExternalModule(node) && produceDiagnostics && noUnusedIdentifiers) {
+                if (isExternalModule(node)) {
                     checkUnusedIdentifiersDeferred(node);
                 }
 
