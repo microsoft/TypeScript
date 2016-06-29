@@ -1,0 +1,9 @@
+{
+    "scenario": "Realistic npm package types with package.json",
+    "projectRoot": "tests/cases/projects/realisticNpmTypes2",
+    "inputFiles": [
+        "index.ts"
+    ],
+    "baselineCheck": true,
+    "moduleResolution": "node"
+}
