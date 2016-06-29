@@ -1743,6 +1743,11 @@ namespace ts {
          */
         getCompilerExtensions(): ExtensionCollectionMap;
 
+        /**
+         * Gets only diagnostics reported while loading extensions
+         */
+        getExtensionLoadingDiagnostics(): Diagnostic[];
+
         /* @internal */ getCommonSourceDirectory(): string;
 
         // For testing purposes only.  Should not be used by any other consumers (including the
@@ -2907,85 +2912,6 @@ namespace ts {
         resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
         failedLookupLocations: string[];
     }
-
-    export type LintErrorMethod = {
-        (err: string): void;
-        (err: string, span: Node): void;
-        (err: string, start: number, length: number): void;
-    };
-    export type LintStopMethod = () => void;
-
-    /*
-    * Walkers call stop to halt recursion into the node's children
-    * Walkers call error to add errors to the output.
-    */
-    export interface LintWalker {
-        visit(node: Node, stop: LintStopMethod, error: LintErrorMethod): void;
-    }
-
-    export interface BaseProviderStatic {
-        readonly ["extension-kind"]: ExtensionKind;
-        new (state: {ts: typeof ts, args: any}): any;
-    }
-
-    export interface SyntacticLintProviderStatic extends BaseProviderStatic {
-        readonly ["extension-kind"]: ExtensionKind.SyntacticLint;
-        new (state: {ts: typeof ts, args: any, host: CompilerHost, program: Program}): LintWalker;
-    }
-
-    export interface SemanticLintProviderStatic extends BaseProviderStatic {
-        readonly ["extension-kind"]: ExtensionKind.SemanticLint;
-        new (state: {ts: typeof ts, args: any, host: CompilerHost, program: Program, checker: TypeChecker}): LintWalker;
-    }
-
-    export interface LanguageServiceHost {} // The members for these interfaces are provided in the services layer
-    export interface LanguageService {}
-    export interface LanguageServiceProvider {}
-    export interface DocumentRegistry {}
-
-    export interface LanguageServiceProviderStatic {
-        new (state: { ts: typeof ts, args: any, host: LanguageServiceHost, service: LanguageService, registry: DocumentRegistry }): LanguageServiceProvider;
-    }
-
-    export namespace ExtensionKind {
-        export const SemanticLint: "semantic-lint" = "semantic-lint";
-        export type SemanticLint = "semantic-lint";
-        export const SyntacticLint: "syntactic-lint" = "syntactic-lint";
-        export type SyntacticLint = "syntactic-lint";
-        export const LanguageService: "language-service" = "language-service";
-        export type LanguageService = "language-service";
-    }
-    export type ExtensionKind = ExtensionKind.SemanticLint | ExtensionKind.SyntacticLint | ExtensionKind.LanguageService;
-
-    export interface ExtensionCollectionMap {
-        "syntactic-lint"?: SyntacticLintExtension[];
-        "semantic-lint"?: SemanticLintExtension[];
-        "language-service"?: LanguageServiceExtension[];
-        [index: string]: Extension[] | undefined;
-    }
-
-    export interface ExtensionBase {
-        name: string;
-        args: any;
-        kind: ExtensionKind;
-    }
-
-    // @kind(ExtensionKind.SyntacticLint)
-    export interface SyntacticLintExtension extends ExtensionBase {
-        ctor: SyntacticLintProviderStatic;
-    }
-
-    // @kind(ExtensionKind.SemanticLint)
-    export interface SemanticLintExtension extends ExtensionBase {
-        ctor: SemanticLintProviderStatic;
-    }
-
-    // @kind(ExtensionKind.LanguageService)
-    export interface LanguageServiceExtension extends ExtensionBase {
-        ctor: LanguageServiceProviderStatic;
-    }
-
-    export type Extension = SyntacticLintExtension | SemanticLintExtension | LanguageServiceExtension;
 
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;

@@ -45,6 +45,7 @@ var compilerSources = [
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
+    "extensions.ts",
     "commandLineParser.ts",
     "tsc.ts",
     "diagnosticInformationMap.generated.ts"

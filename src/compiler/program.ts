@@ -1,6 +1,7 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 /// <reference path="core.ts" />
+/// <reference path="extensions.ts" />
 
 namespace ts {
     /* @internal */ export let programTime = 0;
@@ -1047,7 +1048,7 @@ namespace ts {
         return result;
     }
 
-    export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
+    export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, extensionCache?: ExtensionCache): Program {
         let program: Program;
         let files: SourceFile[] = [];
         let commonSourceDirectory: string;
@@ -1147,7 +1148,7 @@ namespace ts {
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
 
-        const compilerExtensions = collectCompilerExtensions();
+        extensionCache = extensionCache || createExtensionCache(options, host);
 
         program = {
             getRootFileNames: () => rootNames,
@@ -1173,8 +1174,11 @@ namespace ts {
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
             getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
             getCompilerExtensions() {
-                return compilerExtensions;
-            }
+                return extensionCache.getCompilerExtensions();
+            },
+            getExtensionLoadingDiagnostics() {
+                return extensionCache.getExtensionLoadingDiagnostics();
+            },
         };
 
         verifyCompilerOptions();
@@ -1182,85 +1186,6 @@ namespace ts {
         programTime += new Date().getTime() - start;
 
         return program;
-
-        function collectCompilerExtensions(): ExtensionCollectionMap {
-            const extOptions = options.extensions;
-            const extensionNames = (extOptions instanceof Array) ? extOptions : getKeys(extOptions);
-            const extensionLoadResults = map(extensionNames, name => {
-                let result: any;
-                let error: any;
-                if (host.loadExtension) {
-                    const resolved = resolveModuleName(name, combinePaths(currentDirectory, "tsconfig.json"), options, host, /*loadJs*/true).resolvedModule;
-                    if (resolved) {
-                        try {
-                            result = host.loadExtension(resolved.resolvedFileName);
-                        }
-                        catch (e) {
-                            error = e;
-                        }
-                    }
-                    else {
-                        error = new Error(`Host could not locate extension '${name}'.`);
-                    }
-                }
-                else {
-                    error = new Error("Extension loading not implemented in compiler host.");
-                }
-                if (error) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Extension_loading_failed_with_error_0, error.stack ? `${error}
-                    Stack trace:
-                    ${error.stack}` : error));
-                }
-                return { name, result, error };
-            });
-            const successfulExtensionLoadResults = filter(extensionLoadResults, res => !res.error);
-            const preparedExtensionObjects = map(successfulExtensionLoadResults, res => {
-                if (res.result) {
-                    return reduceProperties(res.result, (aggregate: Extension[], potentialExtension: BaseProviderStatic, key: string) => {
-                        if (!potentialExtension) {
-                            return; // Avoid errors on explicitly exported null/undefined (why would someone do that, though?)
-                        }
-                        const annotatedKind = potentialExtension["extension-kind"];
-                        if (typeof annotatedKind === "string") {
-                            const ext: ExtensionBase = {
-                                name: key !== "default" ? `${res.name}[${key}]` : res.name,
-                                args: extensionNames === extOptions ? undefined : (extOptions as Map<any>)[res.name],
-                                kind: annotatedKind
-                            };
-                            switch (ext.kind) {
-                                case ExtensionKind.SemanticLint:
-                                case ExtensionKind.SyntacticLint:
-                                case ExtensionKind.LanguageService:
-                                    if (typeof potentialExtension !== "function") {
-                                        programDiagnostics.add(createCompilerDiagnostic(
-                                            Diagnostics.Extension_0_exported_member_1_has_extension_kind_2_but_was_type_3_when_type_4_was_expected,
-                                            res.name,
-                                            key,
-                                            (ts as any).ExtensionKind[annotatedKind],
-                                            typeof potentialExtension,
-                                            "function"
-                                        ));
-                                        return;
-                                    }
-                                    (ext as (SemanticLintExtension | SyntacticLintExtension | LanguageServiceExtension)).ctor = potentialExtension as (SemanticLintProviderStatic | SyntacticLintProviderStatic | LanguageServiceProviderStatic);
-                                    break;
-                                default:
-                                    // Include a default case which just puts the extension unchecked onto the base extension
-                                    // This can allow language service extensions to query for custom extension kinds
-                                    (ext as any).__extension =  potentialExtension;
-                                    break;
-                            }
-                            aggregate.push(ext as Extension);
-                        }
-                        return aggregate;
-                    }, []);
-                }
-                else {
-                    return [];
-                }
-            });
-            return groupBy(flatten(preparedExtensionObjects), elem => elem.kind) || {};
-        }
 
         function getCommonSourceDirectory() {
             if (typeof commonSourceDirectory === "undefined") {
@@ -1562,7 +1487,7 @@ namespace ts {
          * ExtensionKind.SyntacticLint or ExtensionKind.SemanticLint only
          */
         function performLintPassOnFile(sourceFile: SourceFile, kind: ExtensionKind): Diagnostic[] | undefined {
-            const lints = compilerExtensions[kind];
+            const lints = extensionCache.getCompilerExtensions()[kind];
             if (!lints || !lints.length) {
                 return;
             }
@@ -1621,15 +1546,69 @@ namespace ts {
             function error(err: string): void;
             function error(err: string, node: Node): void;
             function error(err: string, start: number, length: number): void;
-            function error(err: string, nodeOrStart?: Node | number, length?: number): void {
-                if (typeof nodeOrStart === "undefined") {
-                    diagnostics.push(createExtensionDiagnostic(activeLint.name, err, sourceFile));
-                }
-                else if (typeof nodeOrStart === "number") {
-                    diagnostics.push(createExtensionDiagnostic(activeLint.name, err, sourceFile, nodeOrStart, length));
+            function error(shortname: string, err: string): void;
+            function error(shortname: string, err: string, span: Node): void;
+            function error(shortname: string, err: string, start: number, length: number): void;
+            function error(errOrShortname: string, errOrNodeOrStart?: string | Node | number, lengthOrNodeOrStart?: Node | number,  length?: number): void {
+                if (typeof length === "undefined") {
+                    // 3 or fewer arguments
+                    if (typeof lengthOrNodeOrStart === "undefined") {
+                        // 2 or fewer arguments
+                        if (typeof errOrNodeOrStart === "undefined") {
+                            // 1 argument
+                            // (err: string)
+                            return void diagnostics.push(createExtensionDiagnostic(activeLint.name, errOrShortname));
+                        }
+                        else {
+                            // Exactly 2 arguments
+                            if (typeof errOrNodeOrStart === "number") {
+                                // No corresponding overloads
+                            }
+                            else if (typeof errOrNodeOrStart === "string") {
+                                // (shortname: string, err: string)
+                                return void diagnostics.push(createExtensionDiagnostic(`${activeLint.name}(${errOrShortname})`, errOrNodeOrStart));
+                            }
+                            else {
+                                // (err: string, node: Node)
+                                return void diagnostics.push(createExtensionDiagnosticForNode(errOrNodeOrStart, activeLint.name, errOrShortname));
+                            }
+                        }
+                    }
+                    else {
+                        // Exactly 3 arguments
+                        if (typeof lengthOrNodeOrStart === "number") {
+                            if (typeof errOrNodeOrStart !== "number") {
+                                // No corresponding overloads
+                            }
+                            else {
+                                // (err: string, start: number, length: number)
+                                return void diagnostics.push(createExtensionDiagnostic(activeLint.name, errOrShortname, sourceFile, errOrNodeOrStart, lengthOrNodeOrStart));
+                            }
+                        }
+                        else {
+                            if (typeof errOrNodeOrStart !== "string") {
+                                // No corresponding overloads
+                            }
+                            else {
+                                // (shortname: string, err: string, span: Node)
+                                return void diagnostics.push(createExtensionDiagnosticForNode(lengthOrNodeOrStart, `${activeLint.name}(${errOrShortname})`, errOrNodeOrStart));
+                            }
+                        }
+                    }
                 }
                 else {
-                    diagnostics.push(createExtensionDiagnosticForNode(nodeOrStart, activeLint.name, err));
+                    if (typeof errOrNodeOrStart !== "string") {
+                        // No corresponding overloads
+                    }
+                    else {
+                        if (typeof lengthOrNodeOrStart !== "number") {
+                            // No corresponding overloads
+                        }
+                        else {
+                            // (shortname: string, err: string, start: number, length: number)
+                            return void diagnostics.push(createExtensionDiagnostic(`${activeLint.name}(${errOrShortname})`, errOrNodeOrStart, sourceFile, lengthOrNodeOrStart, length));
+                        }
+                    }
                 }
             }
         }
@@ -1880,6 +1859,7 @@ namespace ts {
             const allDiagnostics: Diagnostic[] = [];
             addRange(allDiagnostics, fileProcessingDiagnostics.getGlobalDiagnostics());
             addRange(allDiagnostics, programDiagnostics.getGlobalDiagnostics());
+            allDiagnostics.push(...extensionCache.getExtensionLoadingDiagnostics());
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
