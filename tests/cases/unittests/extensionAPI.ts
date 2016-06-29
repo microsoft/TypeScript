@@ -111,7 +111,7 @@ namespace ts {
 
         function makeMockLSHost(files: string[], options: CompilerOptions): LanguageServiceHost {
             files = filter(files, file => !endsWith(file, ".json"));
-            return {
+            const host: LanguageServiceHost = {
                 getCompilationSettings: () => options,
                 getScriptFileNames: () => files,
                 getScriptVersion(fileName) {
@@ -130,14 +130,14 @@ namespace ts {
                 },
                 loadExtension(path) {
                     const fullPath = getCanonicalFileName(path);
-                    const m = {exports: {}};
+                    const m = { exports: {} };
                     ((module, exports, require) => { eval(virtualFs[fullPath]); })(
                         m,
                         m.exports,
                         (name: string) => {
-                            return this.loadExtension(
+                            return host.loadExtension(
                                 getCanonicalFileName(
-                                    resolveModuleName(name, fullPath, {module: ModuleKind.CommonJS}, mockHost, true).resolvedModule.resolvedFileName
+                                    resolveModuleName(name, fullPath, { module: ModuleKind.CommonJS }, mockHost, true).resolvedModule.resolvedFileName
                                 )
                             );
                         }
@@ -148,6 +148,7 @@ namespace ts {
                     console.log(s);
                 }
             };
+            return host;
         };
 
         const extensionAPI: Map<string> = {
@@ -1117,16 +1118,16 @@ being received, for good or for evil, in the superlative degree
 of comparison only.
 `;
         const testDummyLS = (service: LanguageService) => {
-            assert.deepEqual(service.getEncodedSyntacticClassifications(atotcFile, {start: 0, length: 24}),
-                {spans: [0, 24, ClassificationType.text], endOfLineState: EndOfLineState.None},
+            assert.deepEqual(service.getEncodedSyntacticClassifications(atotcFile, { start: 0, length: 24 }),
+                { spans: [0, 24, ClassificationType.text], endOfLineState: EndOfLineState.None },
                 "Syntactic classifications did not match!");
-            assert.deepEqual(service.getEncodedSemanticClassifications(atotcFile, {start: 24, length: 42}),
-                {spans: [24, 42, ClassificationType.moduleName], endOfLineState: EndOfLineState.None},
+            assert.deepEqual(service.getEncodedSemanticClassifications(atotcFile, { start: 24, length: 42 }),
+                { spans: [24, 42, ClassificationType.moduleName], endOfLineState: EndOfLineState.None },
                 "Semantic classifications did not match!");
             assert.deepEqual(service.getCompletionsAtPosition(atotcFile, 0), {
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
-                entries: [{name: atotcFile, kind: 0, kindModifiers: 0, sortText: atotcFile}]
+                entries: [{ name: atotcFile, kind: 0, kindModifiers: 0, sortText: atotcFile }]
             }, "Completions did not match!");
             assert.deepEqual(service.getCompletionEntryDetails(atotcFile, 0, "first"), {
                 name: atotcFile,

@@ -3126,7 +3126,7 @@ namespace ts {
             }
 
             // Get a fresh cache of the host information
-            let hostCache = new HostCache(host, getCanonicalFileName);
+            const hostCache = new HostCache(host, getCanonicalFileName);
 
             // If the program is already up-to-date, we can reuse it
             if (programUpToDate()) {
@@ -3211,7 +3211,9 @@ namespace ts {
 
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
-            hostCache = undefined;
+            // TODO (weswig): hostCache needs to exist as long as its associated compilerHost exists, since it is used in fileExists.
+            //     As such, we cannot release it here - it must be tied to the lifetime of the compilerHost.
+            // hostCache = undefined;
 
             program = newProgram;
 
