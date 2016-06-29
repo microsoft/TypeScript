@@ -49,10 +49,12 @@ namespace ts.server {
         if (index < 0) {
             return;
         }
-        if (items.length === 1) {
+        if (index ===  items.length - 1) {
+            // last item - pop it
             items.pop();
         }
         else {
+            // non-last item - replace it with the last one
             items[index] = items.pop();
         }
     }

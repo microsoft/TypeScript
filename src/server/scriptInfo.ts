@@ -60,7 +60,7 @@ namespace ts.server {
                     if (this.containingProjects[0] === project) {
                         this.containingProjects[0] = this.containingProjects.pop();
                     }
-                    if (this.containingProjects[1] === project) {
+                    else if (this.containingProjects[1] === project) {
                         this.containingProjects.pop();
                     }
                     break;

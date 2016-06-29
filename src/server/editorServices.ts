@@ -442,6 +442,10 @@ namespace ts.server {
                     }
                 }
             }
+            if (info.containingProjects.length === 0) {
+                // if there are not projects that include this script info - delete it
+                this.filenameToScriptInfo.remove(info.fileName);
+            }
         }
 
         /**
@@ -666,14 +670,16 @@ namespace ts.server {
             return { success: true, project, errors };
         }
 
-        private updateNonInferredProject(project: ExternalProject | ConfiguredProject, newRootFiles: string[], newOptions: CompilerOptions) {
+        private updateNonInferredProject(project: ExternalProject | ConfiguredProject, newUncheckedRootFiles: string[], newOptions: CompilerOptions) {
             const oldRootFiles = project.getRootFiles();
-
-            // TODO: verify that newRootFiles are always normalized
-            // TODO: avoid N^2
-            const newFileNames = asNormalizedPathArray(filter(newRootFiles, f => this.host.fileExists(f)));
-            const fileNamesToRemove = asNormalizedPathArray(oldRootFiles.filter(f => !contains(newFileNames, f)));
-            const fileNamesToAdd = asNormalizedPathArray(newFileNames.filter(f => !contains(oldRootFiles, f)));
+            const newFileNames: NormalizedPath[] = [];
+            for (const f of newUncheckedRootFiles) {
+                if (this.host.fileExists(f)) {
+                    newFileNames.push(toNormalizedPath(f));
+                }
+            }
+            const fileNamesToRemove = oldRootFiles.filter(f => !contains(newFileNames, f));
+            const fileNamesToAdd = newFileNames.filter(f => !contains(oldRootFiles, f));
 
             for (const fileName of fileNamesToRemove) {
                 const info = this.getScriptInfoForNormalizedPath(fileName);
