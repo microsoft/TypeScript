@@ -145,7 +145,10 @@ namespace ts {
         private fs: ts.FileMap<FSEntry>;
         private getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
-        private callbackQueue: TimeOutCallback[] = [];
+
+        private nextTimeoutId = 0;
+        private callbacks: { [n: number]: TimeOutCallback } = {};
+
         readonly watchedDirectories: Map<{ cb: DirectoryWatcherCallback, recursive: boolean }[]> = {};
         readonly watchedFiles: Map<FileWatcherCallback[]> = {};
 
@@ -283,25 +286,28 @@ namespace ts {
         }
 
         // TOOD: record and invoke callbacks to simulate timer events
-        readonly setTimeout = (callback: TimeOutCallback, time: number) => {
-            this.callbackQueue.push(callback);
-            return this.callbackQueue.length - 1;
+        readonly setTimeout = (callback: TimeOutCallback, time: number, ...args: any[]) => {
+            const timeoutId = this.nextTimeoutId;
+            this.nextTimeoutId++;
+            this.callbacks[timeoutId] = callback.bind(undefined, ...args);
+            return timeoutId;
         };
         readonly clearTimeout = (timeoutId: any): void => {
             if (typeof timeoutId === "number") {
-                this.callbackQueue.splice(timeoutId, 1);
+                delete this.callbacks[timeoutId];
             }
         };
 
         checkTimeoutQueueLength(expected: number) {
-            assert.equal(this.callbackQueue.length, expected, `expected ${expected} timeout callbacks queued but found ${this.callbackQueue.length}.`);
+            const callbacksCount = sizeOfMap(this.callbacks);
+            assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
         }
 
         runQueuedTimeoutCallbacks() {
-            for (const callback of this.callbackQueue) {
-                callback();
+            for (const id in this.callbacks) {
+                this.callbacks[id]();
             }
-            this.callbackQueue = [];
+            this.callbacks = [];
         }
 
         readonly readFile = (s: string) => (<File>this.fs.get(this.toPath(s))).content;

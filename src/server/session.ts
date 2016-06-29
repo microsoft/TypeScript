@@ -179,12 +179,12 @@ namespace ts.server {
         constructor(
             private host: ServerHost,
             cancellationToken: HostCancellationToken,
-            useOneInferredProject: boolean,
+            useSingleInferredProject: boolean,
             private byteLength: (buf: string, encoding?: string) => number,
             private hrtime: (start?: number[]) => number[],
             private logger: Logger) {
             this.projectService =
-                new ProjectService(host, logger, cancellationToken, useOneInferredProject, (eventName, project, fileName) => {
+                new ProjectService(host, logger, cancellationToken, useSingleInferredProject, (eventName, project, fileName) => {
                     this.handleEvent(eventName, project, fileName);
                 });
         }

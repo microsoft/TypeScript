@@ -91,8 +91,8 @@ namespace ts.server {
     }
 
     class IOSession extends Session {
-        constructor(host: ServerHost, cancellationToken: HostCancellationToken, useOneInferredProject: boolean, logger: ts.server.Logger) {
-            super(host, cancellationToken, useOneInferredProject, Buffer.byteLength, process.hrtime, logger);
+        constructor(host: ServerHost, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean, logger: ts.server.Logger) {
+            super(host, cancellationToken, useSingleInferredProject, Buffer.byteLength, process.hrtime, logger);
         }
 
         exit() {
@@ -304,8 +304,8 @@ namespace ts.server {
         };
     };
 
-    const useOneInferredProject = sys.args.some(arg => arg === "--useOneInferredProject");
-    const ioSession = new IOSession(sys, cancellationToken, useOneInferredProject, logger);
+    const useSingleInferredProject = sys.args.some(arg => arg === "--useSingleInferredProject");
+    const ioSession = new IOSession(sys, cancellationToken, useSingleInferredProject, logger);
     process.on("uncaughtException", function(err: Error) {
         ioSession.logError(err, "unknown");
     });
