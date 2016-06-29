@@ -37,7 +37,8 @@ namespace ts {
     export interface LanguageServiceProvider {}
     export interface DocumentRegistry {}
 
-    export interface LanguageServiceProviderStatic {
+    export interface LanguageServiceProviderStatic extends BaseProviderStatic {
+        readonly ["extension-kind"]: ExtensionKind.LanguageService;
         new (state: { ts: typeof ts, args: any, host: LanguageServiceHost, service: LanguageService, registry: DocumentRegistry }): LanguageServiceProvider;
     }
 
