@@ -637,9 +637,8 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    return isNarrowingNullCheckOperands(expr.right, expr.left) || isNarrowingNullCheckOperands(expr.left, expr.right) ||
-                        isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right) ||
-                        isNarrowingDiscriminant(expr.left) || isNarrowingDiscriminant(expr.right);
+                    return isNarrowableOperand(expr.left) || isNarrowableOperand(expr.right) ||
+                        isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right);
                 case SyntaxKind.InstanceOfKeyword:
                     return isNarrowableOperand(expr.left);
                 case SyntaxKind.CommaToken:
@@ -661,11 +660,6 @@ namespace ts {
                     }
             }
             return isNarrowableReference(expr);
-        }
-
-        function isNarrowingSwitchStatement(switchStatement: SwitchStatement) {
-            const expr = switchStatement.expression;
-            return expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
         }
 
         function createBranchLabel(): FlowLabel {
@@ -717,7 +711,7 @@ namespace ts {
         }
 
         function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
-            if (!isNarrowingSwitchStatement(switchStatement)) {
+            if (!isNarrowingExpression(switchStatement.expression)) {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
