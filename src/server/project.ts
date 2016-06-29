@@ -122,11 +122,11 @@ namespace ts.server {
         }
 
         hasRoots() {
-            return this.rootFiles.length > 0;
+            return this.rootFiles && this.rootFiles.length > 0;
         }
 
         getRootFiles() {
-            return this.rootFiles.map(info => info.fileName);
+            return this.rootFiles && this.rootFiles.map(info => info.fileName);
         }
 
         getFileNames() {
@@ -161,7 +161,7 @@ namespace ts.server {
         }
 
         isRoot(info: ScriptInfo) {
-            return this.rootFilesMap.contains(info.path);
+            return this.rootFilesMap && this.rootFilesMap.contains(info.path);
         }
 
         // add a root file to project
@@ -190,14 +190,15 @@ namespace ts.server {
             this.projectStateVersion++;
         }
 
-        updateGraph() {
+        updateGraph(): boolean {
             if (!this.languageServiceEnabled) {
-                return;
+                return true;
             }
 
             const oldProgram = this.program;
             this.program = this.languageService.getProgram();
 
+            const oldProjectStructureVersion = this.projectStructureVersion;
             // bump up the version if
             // - oldProgram is not set - this is a first time updateGraph is called
             // - newProgram is different from the old program and structure of the old program was not reused.
@@ -205,16 +206,18 @@ namespace ts.server {
                 this.projectStructureVersion++;
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
-                        if (!this.program.getSourceFileByPath(f.path)) {
-                            // new program does not contain this file - detach it from the project
-                            const scriptInfoToDetach = this.projectService.getScriptInfo(f.fileName);
-                            if (scriptInfoToDetach) {
-                                scriptInfoToDetach.detachFromProject(this);
-                            }
+                        if (this.program.getSourceFileByPath(f.path)) {
+                            continue;
+                        }
+                        // new program does not contain this file - detach it from the project
+                        const scriptInfoToDetach = this.projectService.getScriptInfo(f.fileName);
+                        if (scriptInfoToDetach) {
+                            scriptInfoToDetach.detachFromProject(this);
                         }
                     }
                 }
             }
+            return oldProjectStructureVersion === this.projectStructureVersion;
         }
 
         getScriptInfoLSHost(fileName: string) {

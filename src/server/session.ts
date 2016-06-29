@@ -307,7 +307,7 @@ namespace ts.server {
         private updateProjectStructure(seq: number, matchSeq: (seq: number) => boolean, ms = 1500) {
             this.host.setTimeout(() => {
                 if (matchSeq(seq)) {
-                    this.projectService.updateProjectStructure();
+                    this.projectService.refreshInferredProjects();
                 }
             }, ms);
         }

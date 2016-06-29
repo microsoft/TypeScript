@@ -37,11 +37,37 @@ namespace ts.server {
         }
 
         isAttached(project: Project) {
-            return contains(this.containingProjects, project);
+            // unrolled for common cases
+            switch (this.containingProjects.length) {
+                case 0: return false;
+                case 1: return this.containingProjects[0] === project;
+                case 2: return this.containingProjects[0] === project || this.containingProjects[1] === project;
+                default: return contains(this.containingProjects, project);
+            }
         }
 
         detachFromProject(project: Project) {
-            removeItemFromSet(this.containingProjects, project);
+            // unrolled for common cases
+            switch (this.containingProjects.length) {
+                case 0:
+                    return;
+                case 1:
+                    if (this.containingProjects[0] === project) {
+                        this.containingProjects.pop();
+                    }
+                    break;
+                case 2:
+                    if (this.containingProjects[0] === project) {
+                        this.containingProjects[0] = this.containingProjects.pop();
+                    }
+                    if (this.containingProjects[1] === project) {
+                        this.containingProjects.pop();
+                    }
+                    break;
+                default:
+                    removeItemFromSet(this.containingProjects, project);
+                    break;
+            }
         }
 
         detachAllProjects() {
