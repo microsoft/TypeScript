@@ -1097,7 +1097,7 @@ namespace ts {
         const modulesWithElidedImports: Map<boolean> = {};
 
         // Track source files that are JavaScript files found by searching under node_modules, as these shouldn't be compiled.
-        const jsFilesFoundSearchingNodeModules: Map<boolean> = {};
+        const sourceFilesFoundSearchingNodeModules: Map<boolean> = {};
 
         const start = new Date().getTime();
 
@@ -1378,7 +1378,7 @@ namespace ts {
                 getSourceFile: program.getSourceFile,
                 getSourceFileByPath: program.getSourceFileByPath,
                 getSourceFiles: program.getSourceFiles,
-                getFilesFromNodeModules: () => jsFilesFoundSearchingNodeModules,
+                isSourceFileFromNodeModules: (file: SourceFile) => !!lookUp(sourceFilesFoundSearchingNodeModules, file.path),
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
@@ -2066,15 +2066,17 @@ namespace ts {
                     // - noResolve is falsy
                     // - module name comes from the list of imports
                     // - it's not a top level JavaScript module that exceeded the search max
-                    const isJsFileUnderNodeModules = resolution && resolution.isExternalLibraryImport &&
-                                                 hasJavaScriptFileExtension(resolution.resolvedFileName);
+                    const isFromNodeModulesSearch = resolution && resolution.isExternalLibraryImport;
+                    const isJsFileFromNodeModules = isFromNodeModulesSearch && hasJavaScriptFileExtension(resolution.resolvedFileName);
 
-                    if (isJsFileUnderNodeModules) {
-                        jsFilesFoundSearchingNodeModules[resolvedPath] = true;
+                    if (isFromNodeModulesSearch) {
+                        sourceFilesFoundSearchingNodeModules[resolvedPath] = true;
+                    }
+                    if (isJsFileFromNodeModules) {
                         currentNodeModulesJsDepth++;
                     }
 
-                    const elideImport = isJsFileUnderNodeModules && currentNodeModulesJsDepth > maxNodeModulesJsDepth;
+                    const elideImport = isJsFileFromNodeModules && currentNodeModulesJsDepth > maxNodeModulesJsDepth;
                     const shouldAddFile = resolution && !options.noResolve && i < file.imports.length && !elideImport;
 
                     if (elideImport) {
@@ -2089,7 +2091,7 @@ namespace ts {
                                 file.imports[i].end);
                     }
 
-                    if (isJsFileUnderNodeModules) {
+                    if (isJsFileFromNodeModules) {
                         currentNodeModulesJsDepth--;
                     }
                 }
