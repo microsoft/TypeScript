@@ -1134,10 +1134,33 @@ namespace ts {
      */
     export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
     export const supportedJavascriptExtensions = [".js", ".jsx"];
-    const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
+
+    export function getExtensionsForGoal(goal: ResolutionGoal): string[] {
+        const extensions: string[] = [];
+        if (goal & ResolutionGoal.TS) {
+            extensions.push(".ts");
+        }
+        if (goal & ResolutionGoal.TSX) {
+            extensions.push(".tsx");
+        }
+        if (goal & ResolutionGoal.DTS) {
+            extensions.push(".d.ts");
+        }
+        if (goal & ResolutionGoal.JS) {
+            extensions.push(".js");
+        }
+        if (goal & ResolutionGoal.JSX) {
+            extensions.push(".jsx");
+        }
+        return extensions;
+    }
+
+    export function getResolutionGoalForCompilerOptions(options?: CompilerOptions) {
+        return options && options.allowJs ? ResolutionGoal.Any : ResolutionGoal.TypeScript;
+    }
 
     export function getSupportedExtensions(options?: CompilerOptions): string[] {
-        return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;
+        return getExtensionsForGoal(getResolutionGoalForCompilerOptions(options));
     }
 
     export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions) {
