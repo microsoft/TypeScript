@@ -21,7 +21,7 @@ function isS(t: T): t is S {
 >t : ("a" | "b")[] | "a" | "b"
 >"a" : "a"
 >t === "b" : boolean
->t : ("a" | "b")[] | "a" | "b"
+>t : ("a" | "b")[] | "b"
 >"b" : "b"
 }
 

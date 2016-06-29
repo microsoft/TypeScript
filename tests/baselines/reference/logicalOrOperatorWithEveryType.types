@@ -370,7 +370,7 @@ var rg6 = a6 || a6;         // enum      || enum is E
 >rg6 : E
 >a6 || a6 : E
 >a6 : E
->a6 : never
+>a6 : E
 
 var rg7 = a7 || a6;         // object    || enum is object | enum
 >rg7 : { a: string; } | E

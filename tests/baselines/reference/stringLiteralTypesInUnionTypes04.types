@@ -19,8 +19,8 @@ if (x === "") {
 >"" : ""
 
     let a = x;
->a : "" | "foo"
->x : "" | "foo"
+>a : ""
+>x : ""
 }
 
 if (x !== "") {
@@ -29,18 +29,18 @@ if (x !== "") {
 >"" : ""
 
     let b = x;
->b : "" | "foo"
->x : "" | "foo"
+>b : "foo"
+>x : "foo"
 }
 
 if (x == "") {
 >x == "" : boolean
->x : "" | "foo"
+>x : "foo" | ""
 >"" : ""
 
     let c = x;
->c : "" | "foo"
->x : "" | "foo"
+>c : ""
+>x : ""
 }
 
 if (x != "") {
@@ -49,12 +49,12 @@ if (x != "") {
 >"" : ""
 
     let d = x;
->d : "" | "foo"
->x : "" | "foo"
+>d : "foo"
+>x : "foo"
 }
 
 if (x) {
->x : "" | "foo"
+>x : "foo" | ""
 
     let e = x;
 >e : "foo"

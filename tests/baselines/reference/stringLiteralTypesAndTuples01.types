@@ -45,7 +45,7 @@ function rawr(dino: RexOrRaptor) {
     }
     if (dino === "raptor") {
 >dino === "raptor" : boolean
->dino : "t-rex" | "raptor"
+>dino : "raptor"
 >"raptor" : "raptor"
 
         return "yip yip!";
@@ -55,5 +55,5 @@ function rawr(dino: RexOrRaptor) {
     throw "Unexpected " + dino;
 >"Unexpected " + dino : string
 >"Unexpected " : string
->dino : "t-rex" | "raptor"
+>dino : "t-rex"
 }

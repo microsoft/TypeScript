@@ -102,7 +102,7 @@ function move2(direction: "up" | "down") {
         direction === "down" ? -1 :
 >direction === "down" ? -1 :        error("Should never get here") : number
 >direction === "down" : boolean
->direction : "up" | "down"
+>direction : "down"
 >"down" : "down"
 >-1 : number
 >1 : number

@@ -9,7 +9,7 @@ type T = S[] | S;
 >S : "a" | "b"
 
 function f(foo: T) {
->f : (foo: ("a" | "b")[] | "a" | "b") => ("a" | "b")[] | "a" | "b"
+>f : (foo: ("a" | "b")[] | "a" | "b") => "a" | "b"
 >foo : ("a" | "b")[] | "a" | "b"
 >T : ("a" | "b")[] | "a" | "b"
 
@@ -19,22 +19,22 @@ function f(foo: T) {
 >"a" : "a"
 
         return foo;
->foo : ("a" | "b")[] | "a" | "b"
+>foo : "a"
     }
     else if (foo === "b") {
 >foo === "b" : boolean
->foo : ("a" | "b")[] | "a" | "b"
+>foo : ("a" | "b")[] | "b"
 >"b" : "b"
 
         return foo;
->foo : ("a" | "b")[] | "a" | "b"
+>foo : "b"
     }
     else { 
         return (foo as S[])[0];
 >(foo as S[])[0] : "a" | "b"
 >(foo as S[]) : ("a" | "b")[]
 >foo as S[] : ("a" | "b")[]
->foo : ("a" | "b")[] | "a" | "b"
+>foo : ("a" | "b")[]
 >S : "a" | "b"
 >0 : number
     }
