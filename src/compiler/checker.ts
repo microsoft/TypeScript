@@ -6865,19 +6865,16 @@ namespace ts {
                 type.flags & TypeFlags.Enum && type.symbol.flags & SymbolFlags.EnumMember ? true : false;
         }
 
-        function isLiteralUnionType(type: Type): boolean {
-            return type.flags & TypeFlags.Literal ? true :
-                type.flags & TypeFlags.Enum ? (type.symbol.flags & SymbolFlags.EnumMember) !== 0 :
-                type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isLiteralUnionType) :
-                false;
+        function isUnitUnionType(type: Type): boolean {
+            return type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isUnitType) : isUnitType(type);
         }
 
-        function getBaseTypeOfLiteralType(type: Type): Type {
+        function getBaseTypeOfUnitType(type: Type): Type {
             return type.flags & TypeFlags.StringLiteral ? stringType :
                 type.flags & TypeFlags.NumberLiteral ? numberType :
                 type.flags & TypeFlags.BooleanLiteral ? booleanType :
                 type.flags & TypeFlags.Enum && type.symbol.flags & SymbolFlags.EnumMember ? getDeclaredTypeOfSymbol(getParentOfSymbol(type.symbol)) :
-                type.flags & TypeFlags.Union ? getUnionType(map((<UnionType>type).types, getBaseTypeOfLiteralType)) :
+                type.flags & TypeFlags.Union ? getUnionType(map((<UnionType>type).types, getBaseTypeOfUnitType)) :
                 type;
         }
 
@@ -8123,7 +8120,7 @@ namespace ts {
             }
 
             function narrowTypeBySwitchOnDiscriminant(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
-                if (!isLiteralUnionType(type)) {
+                if (!isUnitUnionType(type)) {
                     return type;
                 }
                 const switchTypes = getSwitchClauseTypes(switchStatement);
@@ -11970,7 +11967,7 @@ namespace ts {
                 return false;
             }
             const type = checkExpression(node.expression);
-            if (!isLiteralUnionType(type)) {
+            if (!isUnitUnionType(type)) {
                 return false;
             }
             const switchTypes = getSwitchClauseTypes(node);
@@ -12690,11 +12687,11 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    const leftIsLiteral = isLiteralUnionType(leftType);
-                    const rightIsLiteral = isLiteralUnionType(rightType);
-                    if (!leftIsLiteral || !rightIsLiteral) {
-                        leftType = leftIsLiteral ? getBaseTypeOfLiteralType(leftType) : leftType;
-                        rightType = rightIsLiteral ? getBaseTypeOfLiteralType(rightType) : rightType;
+                    const leftIsUnit = isUnitUnionType(leftType);
+                    const rightIsUnit = isUnitUnionType(rightType);
+                    if (!leftIsUnit || !rightIsUnit) {
+                        leftType = leftIsUnit ? getBaseTypeOfUnitType(leftType) : leftType;
+                        rightType = rightIsUnit ? getBaseTypeOfUnitType(rightType) : rightType;
                     }
                     if (!isTypeEqualityComparableTo(leftType, rightType) && !isTypeEqualityComparableTo(rightType, leftType)) {
                         reportOperatorError();
@@ -12834,6 +12831,13 @@ namespace ts {
             const type1 = checkExpression(node.whenTrue, contextualMapper);
             const type2 = checkExpression(node.whenFalse, contextualMapper);
             return getUnionType([type1, type2]);
+        }
+
+        function isLiteralUnionType(type: Type): boolean {
+            return type.flags & TypeFlags.Literal ? true :
+                type.flags & TypeFlags.Enum ? (type.symbol.flags & SymbolFlags.EnumMember) !== 0 :
+                type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isLiteralUnionType) :
+                false;
         }
 
         function isLiteralTypeContext(node: Expression) {
