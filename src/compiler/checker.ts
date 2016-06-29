@@ -10817,6 +10817,15 @@ namespace ts {
                         argType = arg.kind === SyntaxKind.StringLiteral && !reportErrors
                             ? getStringLiteralTypeForText((<StringLiteral>arg).text)
                             : checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+
+                    }
+
+                    // If the parameter is a destructuring without initializer and argType is undefined, we should give an error
+                    if (argType.flags & (TypeFlags.Undefined | TypeFlags.Null)) {
+                        const parameterDeclaration = getParameterAtPosition(signature, i);
+                        if (parameterDeclaration && !parameterDeclaration.initializer && isBindingPattern(parameterDeclaration.name)) {
+                            error(arg, Diagnostics.Undefined_or_null_is_not_assignable_to_a_destructuring_parameter);
+                        }
                     }
 
                     // Use argument expression as error location when reporting errors
@@ -11759,6 +11768,12 @@ namespace ts {
                 }
             }
             return type;
+        }
+
+        function getParameterAtPosition(signature: Signature, pos: number): ParameterDeclaration {
+            return signature.hasRestParameter ?
+                pos < signature.parameters.length - 1 ? signature.parameters[pos].valueDeclaration as ParameterDeclaration : undefined :
+                pos < signature.parameters.length ? signature.parameters[pos].valueDeclaration as ParameterDeclaration : undefined;
         }
 
         function getTypeAtPosition(signature: Signature, pos: number): Type {
