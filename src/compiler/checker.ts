@@ -51,6 +51,7 @@ namespace ts {
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = compilerOptions.target || ScriptTarget.ES3;
         const modulekind = getEmitModuleKind(compilerOptions);
+        const noUnusedIdentifiers = compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters;
         const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : modulekind === ModuleKind.System;
         const strictNullChecks = compilerOptions.strictNullChecks;
 
@@ -8323,7 +8324,7 @@ namespace ts {
             const extendedTypeNode = getClassExtendsHeritageClauseElement(node);
             if (extendedTypeNode) {
                 const t = getTypeFromTypeNode(extendedTypeNode);
-                if (t !== unknownType && t.symbol && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
+                if (t !== unknownType && t.symbol && noUnusedIdentifiers && !isInAmbientContext(node)) {
                     t.symbol.hasReference = true;
                 }
             }
@@ -8331,7 +8332,7 @@ namespace ts {
 
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
-            if (symbol && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
+            if (symbol && noUnusedIdentifiers && !isInAmbientContext(node)) {
                 symbol.hasReference = true;
             }
 
@@ -10248,7 +10249,7 @@ namespace ts {
                 return unknownType;
             }
 
-            if ((compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
+            if (noUnusedIdentifiers && !isInAmbientContext(node)) {
                 prop.hasReference = true;
             }
 
@@ -12155,47 +12156,54 @@ namespace ts {
         }
 
         function checkFunctionExpressionOrObjectLiteralMethodDeferred(node: ArrowFunction | FunctionExpression | MethodDeclaration) {
-            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
+            if (node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node)) {
 
-            const isAsync = isAsyncFunctionLike(node);
-            const returnOrPromisedType = node.type && (isAsync ? checkAsyncFunctionReturnType(node) : getTypeFromTypeNode(node.type));
-            if (!node.asteriskToken) {
-                // return is not necessary in the body of generators
-                checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
-            }
-
-            if (node.body) {
-                if (!node.type) {
-                    // There are some checks that are only performed in getReturnTypeFromBody, that may produce errors
-                    // we need. An example is the noImplicitAny errors resulting from widening the return expression
-                    // of a function. Because checking of function expression bodies is deferred, there was never an
-                    // appropriate time to do this during the main walk of the file (see the comment at the top of
-                    // checkFunctionExpressionBodies). So it must be done now.
-                    getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+                const isAsync = isAsyncFunctionLike(node);
+                const returnOrPromisedType = node.type && (isAsync ? checkAsyncFunctionReturnType(node) : getTypeFromTypeNode(node.type));
+                if (!node.asteriskToken) {
+                    // return is not necessary in the body of generators
+                    checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
                 }
 
-                if (node.body.kind === SyntaxKind.Block) {
-                    checkSourceElement(node.body);
-                }
-                else {
-                    // From within an async function you can return either a non-promise value or a promise. Any
-                    // Promise/A+ compatible implementation will always assimilate any foreign promise, so we
-                    // should not be checking assignability of a promise to the return type. Instead, we need to
-                    // check assignability of the awaited type of the expression body against the promised type of
-                    // its return type annotation.
-                    const exprType = checkExpression(<Expression>node.body);
-                    if (returnOrPromisedType) {
-                        if (isAsync) {
-                            const awaitedType = checkAwaitedType(exprType, node.body, Diagnostics.Expression_body_for_async_arrow_function_does_not_have_a_valid_callable_then_member);
-                            checkTypeAssignableTo(awaitedType, returnOrPromisedType, node.body);
+                if (node.body) {
+                    if (!node.type) {
+                        // There are some checks that are only performed in getReturnTypeFromBody, that may produce errors
+                        // we need. An example is the noImplicitAny errors resulting from widening the return expression
+                        // of a function. Because checking of function expression bodies is deferred, there was never an
+                        // appropriate time to do this during the main walk of the file (see the comment at the top of
+                        // checkFunctionExpressionBodies). So it must be done now.
+                        getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+                    }
+
+                    if (node.body.kind === SyntaxKind.Block) {
+                        checkSourceElement(node.body);
+                    }
+                    else {
+                        // From within an async function you can return either a non-promise value or a promise. Any
+                        // Promise/A+ compatible implementation will always assimilate any foreign promise, so we
+                        // should not be checking assignability of a promise to the return type. Instead, we need to
+                        // check assignability of the awaited type of the expression body against the promised type of
+                        // its return type annotation.
+                        const exprType = checkExpression(<Expression>node.body);
+                        if (returnOrPromisedType) {
+                            if (isAsync) {
+                                const awaitedType = checkAwaitedType(exprType, node.body, Diagnostics.Expression_body_for_async_arrow_function_does_not_have_a_valid_callable_then_member);
+                                checkTypeAssignableTo(awaitedType, returnOrPromisedType, node.body);
+                            }
+                            else {
+                                checkTypeAssignableTo(exprType, returnOrPromisedType, node.body);
+                            }
                         }
-                        else {
-                            checkTypeAssignableTo(exprType, returnOrPromisedType, node.body);
+                        if (produceDiagnostics && noUnusedIdentifiers) {
+                            checkNodeDeferred(node);
                         }
                     }
                 }
-                checkUnusedIdentifiers(node);
-                checkUnusedTypeParameters(node);
+            }
+            else {
+                if (produceDiagnostics && noUnusedIdentifiers) {
+                    checkNodeDeferred(node);
+                }
             }
         }
 
@@ -13423,8 +13431,10 @@ namespace ts {
             checkGrammarConstructorTypeParameters(node) || checkGrammarConstructorTypeAnnotation(node);
 
             checkSourceElement(node.body);
-            checkUnusedIdentifiers(node);
-            checkUnusedTypeParameters(node);
+
+            if (produceDiagnostics && noUnusedIdentifiers) {
+                checkNodeDeferred(node);
+            }
 
             const symbol = getSymbolOfNode(node);
             const firstDeclaration = getDeclarationOfKind(symbol, node.kind);
@@ -13586,6 +13596,8 @@ namespace ts {
 
         function checkAccessorDeferred(node: AccessorDeclaration) {
             checkSourceElement(node.body);
+            checkUnusedIdentifiers(node);
+            checkUnusedTypeParameters(node);
         }
 
         function checkMissingDeclaration(node: Node) {
@@ -13618,7 +13630,7 @@ namespace ts {
             checkGrammarTypeArguments(node, node.typeArguments);
             const type = getTypeFromTypeReference(node);
             if (type !== unknownType) {
-                if (type.symbol && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
+                if (type.symbol && noUnusedIdentifiers && !isInAmbientContext(node)) {
                     type.symbol.hasReference = true;
                 }
                 if (node.typeArguments) {
@@ -14471,8 +14483,7 @@ namespace ts {
             }
 
             checkSourceElement(node.body);
-            checkUnusedIdentifiers(node);
-            checkUnusedTypeParameters(node);
+
             if (!node.asteriskToken) {
                 const returnOrPromisedType = node.type && (isAsync ? checkAsyncFunctionReturnType(node) : getTypeFromTypeNode(node.type));
                 checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
@@ -14492,10 +14503,19 @@ namespace ts {
                     getReturnTypeOfSignature(getSignatureFromDeclaration(node));
                 }
             }
+
+            if (produceDiagnostics && noUnusedIdentifiers) {
+                checkNodeDeferred(node);
+            }
+        }
+
+        function checkFunctionOrConstructorDeclarationDeferred(node: FunctionDeclaration | ConstructorDeclaration) {
+            checkUnusedIdentifiers(node);
+            checkUnusedTypeParameters(node);
         }
 
         function checkUnusedIdentifiers(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction | ForInStatement | Block | CatchClause): void {
-            if (node.parent.kind !== SyntaxKind.InterfaceDeclaration && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
+            if (node.parent.kind !== SyntaxKind.InterfaceDeclaration && noUnusedIdentifiers && !isInAmbientContext(node)) {
                 for (const key in node.locals) {
                     if (hasProperty(node.locals, key)) {
                         const local = node.locals[key];
@@ -14514,7 +14534,7 @@ namespace ts {
             }
         }
 
-        function checkUnusedClassLocals(node: ClassDeclaration): void {
+        function checkUnusedClassLocals(node: ClassDeclaration | ClassExpression): void {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 if (node.members) {
                     for (const member of node.members) {
@@ -14535,7 +14555,7 @@ namespace ts {
             }
         }
 
-        function checkUnusedTypeParameters(node: ClassDeclaration | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration | InterfaceDeclaration) {
+        function checkUnusedTypeParameters(node: ClassDeclaration | ClassExpression | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration | InterfaceDeclaration) {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 if (node.typeParameters) {
                     for (const typeParameter of node.typeParameters) {
@@ -14570,6 +14590,12 @@ namespace ts {
                 checkGrammarStatementInAmbientContext(node);
             }
             forEach(node.statements, checkSourceElement);
+            if (produceDiagnostics && noUnusedIdentifiers) {
+                checkNodeDeferred(node);
+            }
+        }
+
+        function checkBlockDeferred(node: Block | ForInStatement | ForOfStatement) {
             checkUnusedIdentifiers(node);
         }
 
@@ -15075,7 +15101,9 @@ namespace ts {
             }
 
             checkSourceElement(node.statement);
-            checkUnusedIdentifiers(node);
+            if (produceDiagnostics && noUnusedIdentifiers) {
+                checkNodeDeferred(node);
+            }
         }
 
         function checkForInStatement(node: ForInStatement) {
@@ -15123,7 +15151,9 @@ namespace ts {
             }
 
             checkSourceElement(node.statement);
-            checkUnusedIdentifiers(node);
+            if (produceDiagnostics && noUnusedIdentifiers) {
+                checkNodeDeferred(node);
+            }
         }
 
         function checkForInOrForOfVariableDeclaration(iterationStatement: ForInStatement | ForOfStatement): void {
@@ -15716,6 +15746,8 @@ namespace ts {
 
         function checkClassExpressionDeferred(node: ClassExpression) {
             forEach(node.members, checkSourceElement);
+            checkUnusedClassLocals(node);
+            checkUnusedTypeParameters(node);
         }
 
         function checkClassDeclaration(node: ClassDeclaration) {
@@ -15724,6 +15756,13 @@ namespace ts {
             }
             checkClassLikeDeclaration(node);
             forEach(node.members, checkSourceElement);
+
+            if (produceDiagnostics && noUnusedIdentifiers) {
+                checkNodeDeferred(node);
+            }
+        }
+
+        function checkClassDeclarationDefered(node: ClassDeclaration) {
             checkUnusedClassLocals(node);
             checkUnusedTypeParameters(node);
         }
@@ -16614,7 +16653,7 @@ namespace ts {
                         if (target.flags & SymbolFlags.Type) {
                             checkTypeNameIsReserved(node.name, Diagnostics.Import_name_cannot_be_0);
                         }
-                        if ((compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
+                        if (noUnusedIdentifiers && !isInAmbientContext(node)) {
                             target.hasReference = true;
                         }
                     }
@@ -16929,6 +16968,18 @@ namespace ts {
                     case SyntaxKind.ClassExpression:
                         checkClassExpressionDeferred(<ClassExpression>node);
                         break;
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.FunctionDeclaration:
+                        checkFunctionOrConstructorDeclarationDeferred(<FunctionDeclaration | ConstructorDeclaration>node);
+                        break;
+                    case SyntaxKind.Block:
+                    case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
+                        checkBlockDeferred(<Block | ForInStatement | ForOfStatement>node);
+                        break;
+                    case SyntaxKind.ClassDeclaration:
+                        checkClassDeclarationDefered(<ClassDeclaration>node);
+                        break;
                 }
             }
         }
@@ -16959,10 +17010,13 @@ namespace ts {
 
                 deferredNodes = [];
                 forEach(node.statements, checkSourceElement);
+
+                checkDeferredNodes();
+
                 if (isExternalModule(node)) {
                     checkUnusedModuleLocals(node);
                 }
-                checkDeferredNodes();
+
                 deferredNodes = undefined;
 
                 if (isExternalOrCommonJsModule(node)) {
