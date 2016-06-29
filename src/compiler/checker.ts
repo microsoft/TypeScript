@@ -4961,6 +4961,10 @@ namespace ts {
                 // type reference in checkTypeReferenceOrExpressionWithTypeArguments.
                 links.resolvedSymbol = symbol;
                 links.resolvedType = type;
+
+                if (noUnusedIdentifiers && symbol !== unknownSymbol && !isInAmbientContext(node)) {
+                    symbol.hasReference = true;
+                }
             }
             return links.resolvedType;
         }
@@ -8319,16 +8323,6 @@ namespace ts {
                 container = getControlFlowContainer(container);
             }
             return container === declarationContainer;
-        }
-
-        function updateReferencesForInterfaceHeritiageClauseTargets(node: InterfaceDeclaration): void {
-            const extendedTypeNode = getClassExtendsHeritageClauseElement(node);
-            if (extendedTypeNode) {
-                const t = getTypeFromTypeNode(extendedTypeNode);
-                if (t !== unknownType && t.symbol && noUnusedIdentifiers && !isInAmbientContext(node)) {
-                    t.symbol.hasReference = true;
-                }
-            }
         }
 
         function checkIdentifier(node: Identifier): Type {
@@ -13620,9 +13614,6 @@ namespace ts {
             checkGrammarTypeArguments(node, node.typeArguments);
             const type = getTypeFromTypeReference(node);
             if (type !== unknownType) {
-                if (type.symbol && noUnusedIdentifiers && !isInAmbientContext(node)) {
-                    type.symbol.hasReference = true;
-                }
                 if (node.typeArguments) {
                     // Do type argument local checks only if referenced type is successfully resolved
                     forEach(node.typeArguments, checkSourceElement);
@@ -16099,7 +16090,6 @@ namespace ts {
 
             if (produceDiagnostics) {
                 checkTypeForDuplicateIndexSignatures(node);
-                updateReferencesForInterfaceHeritiageClauseTargets(node);
                 checkUnusedTypeParameters(node);
             }
         }
