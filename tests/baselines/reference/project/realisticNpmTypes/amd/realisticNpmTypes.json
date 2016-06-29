@@ -1,0 +1,19 @@
+{
+    "scenario": "Realistic npm package types",
+    "projectRoot": "tests/cases/projects/realisticNpmTypes",
+    "inputFiles": [
+        "index.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true,
+    "moduleResolution": "node",
+    "resolvedInputFiles": [
+        "lib.d.ts",
+        "node_modules/@types/m1/index.d.ts",
+        "index.ts"
+    ],
+    "emittedFiles": [
+        "index.js",
+        "index.d.ts"
+    ]
+}
