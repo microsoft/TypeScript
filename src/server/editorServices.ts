@@ -11,7 +11,7 @@ namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 
     /**
-     * This helper funciton processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
+     * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
      */
     export function combineProjectOutput<T>(projects: Project[], action: (project: Project) => T[], comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
         const result = projects.reduce<T[]>((previous, current) => concatenate(previous, action(current)), []).sort(comparer);
@@ -177,6 +177,24 @@ namespace ts.server {
             return this.findExternalProjectByProjectName(projectName) || this.findConfiguredProjectByProjectName(toNormalizedPath(projectName));
         }
 
+        private findContainingConfiguredProject(info: ScriptInfo): ConfiguredProject {
+            for (const proj of this.configuredProjects) {
+                if (proj.containsScriptInfo(info)) {
+                    return proj;
+                }
+            }
+            return undefined;
+        }
+
+        private findContainingExternalProject(fileName: NormalizedPath): ExternalProject {
+            for (const proj of this.externalProjects) {
+                if (proj.containsFile(fileName)) {
+                    return proj;
+                }
+            }
+            return undefined;
+        }
+
         getFormatCodeOptions(file?: NormalizedPath) {
             if (file) {
                 const info = this.getScriptInfoForNormalizedPath(file);
@@ -185,6 +203,18 @@ namespace ts.server {
                 }
             }
             return this.hostConfiguration.formatCodeOptions;
+        }
+
+        private updateProjectGraphs(projects: Project[]) {
+            let shouldRefreshInferredProjects = false;
+            for (const p of projects) {
+                if (p.updateGraph()) {
+                    shouldRefreshInferredProjects = true;
+                }
+            }
+            if (shouldRefreshInferredProjects) {
+                this.refreshInferredProjects();
+            }
         }
 
         private onSourceFileChanged(fileName: NormalizedPath) {
@@ -199,7 +229,11 @@ namespace ts.server {
             }
             else {
                 if (info && (!info.isOpen)) {
+                    // file has been changed which might affect the set of referenced files in projects that include 
+                    // this file and set of inferred projects
+                    // TODO: add tests
                     info.reloadFromFile();
+                    this.updateProjectGraphs(info.containingProjects);
                 }
             }
         }
@@ -209,10 +243,16 @@ namespace ts.server {
 
             info.stopWatcher();
 
+            // TODO: handle isOpen = true case
+
             if (!info.isOpen) {
                 this.filenameToScriptInfo.remove(info.fileName);
 
+                // capture list of projects
+                const containingProjects = info.containingProjects.slice();
                 info.detachAllProjects();
+                // update projects to make sure that set of referenced files is correct
+                this.updateProjectGraphs(containingProjects);
 
                 if (!this.eventHandler) {
                     return;
@@ -221,8 +261,6 @@ namespace ts.server {
                 for (const openFile of this.openFiles) {
                     this.eventHandler("context", openFile.getDefaultProject(), openFile.fileName);
                 }
-
-                // TODO: project system view is inconsistent
             }
 
             this.printProjects();
@@ -244,7 +282,7 @@ namespace ts.server {
             this.log(`Detected source file changes: ${fileName}`);
             this.throttledOperations.schedule(
                 project.configFileName,
-                250,
+                /*delay*/250,
                 () => this.handleChangeInSourceFileForConfiguredProject(project));
         }
 
@@ -311,24 +349,6 @@ namespace ts.server {
             }
         }
 
-        private findContainingConfiguredProject(info: ScriptInfo): ConfiguredProject {
-            for (const proj of this.configuredProjects) {
-                if (proj.containsScriptInfo(info)) {
-                    return proj;
-                }
-            }
-            return undefined;
-        }
-
-        private findContainingExternalProject(fileName: NormalizedPath): ExternalProject {
-            for (const proj of this.externalProjects) {
-                if (proj.containsFile(fileName)) {
-                    return proj;
-                }
-            }
-            return undefined;
-        }
-
         private assignScriptInfoToInferredProjectIfNecessary(info: ScriptInfo, addToListOfOpenFiles: boolean): void {
             const externalProject = this.findContainingExternalProject(info.fileName);
             if (externalProject) {
@@ -353,7 +373,6 @@ namespace ts.server {
                 // or add root to existing inferred project if 'useOneInferredProject' is true
                 const inferredProject = this.createInferredProjectWithRootFileIfNecessary(info);
                 if (!this.useSingleInferredProject) {
-
                     // if useOneInferredProject is not set then try to fixup ownership of open files
                     for (const f of this.openFiles) {
                         const defaultProject = f.getDefaultProject();
@@ -669,8 +688,6 @@ namespace ts.server {
                     info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ false);
                 }
                 else {
-                    // if the root file was opened by client, it would belong to either
-                    // openFileRoots or openFileReferenced.
                     if (info.isOpen) {
                         // delete inferred project
                         let toRemove: Project;
@@ -683,33 +700,6 @@ namespace ts.server {
                                 this.removeProject(toRemove);
                             }
                         }
-                        // if (contains(this.openFileRoots, info)) {
-                        //     removeItemFromSet(this.openFileRoots, info);
-
-                        //     // delete inferred project
-                        //     let toRemove: Project[];
-
-                        //     // TODO: unify logic
-                        //     for (const p of info.containingProjects) {
-                        //         if (p.projectKind === ProjectKind.Inferred && p.isRoot(info)) {
-                        //             (toRemove || (toRemove = [])).push(p);
-                        //         }
-                        //     }
-                        //     if (toRemove) {
-                        //         for (const p of toRemove) {
-                        //             p.removeFile(info);
-                        //             if (!p.hasRoots()) {
-                        //                 this.removeProject(p);
-                        //             }
-                        //         }
-                        //     }
-                        // }
-                        // if (contains(this.openFilesReferenced, info)) {
-                        //     removeItemFromSet(this.openFilesReferenced, info);
-                        // }
-                        // if (project.projectKind === ProjectKind.Configured) {
-                        //     this.openFileRootsConfigured.push(info);
-                        // }
                     }
                 }
                 project.addRoot(info);
@@ -883,167 +873,12 @@ namespace ts.server {
                             this.removeProject(inferredProject);
                         }
                     }
-                    // let inConfiguredProject = false;
-                    // let inExternalProject = false;
-                    // for (const p of info.containingProjects) {
-                    //     inConfiguredProject = inConfiguredProject || p.projectKind === ProjectKind.Configured;
-                    //     inExternalProject = inExternalProject || p.projectKind === ProjectKind.External;
-                    // }
-                    // if (inConfiguredProject || inExternalProject) {
-                    //     const inferredProjects = rootFile.containingProjects.filter(p => p.projectKind === ProjectKind.Inferred);
-                    //     for (const p of inferredProjects) {
-                    //         p.removeFile(rootFile, /*detachFromProject*/ true);
-                    //         if (!p.hasRoots()) {
-                    //             this.removeProject(p);
-                    //         }
-                    //     }
-                    // }
-                    // else {
-                    //     if (rootFile.containingProjects.length > 1) {
-                    //         // TODO: fixme
-                    //         // file is contained in more than one inferred project - keep only ones where it is used as reference
-                    //         const roots = rootFile.containingProjects.filter(p => p.isRoot(rootFile));
-                    //         for (const root of roots) {
-                    //             this.removeProject(root);
-                    //         }
-                    //         Debug.assert(info.containingProjects.length > 0);
-                    //     }
-                    // }
-
                 }
-
-                // if (info.containingProjects.length === 0) {
-                //     unattachedOpenFiles.push(info);
-                // }
-                // else {
-                //     openFileRootsConfigured.push(info);
-                // }
-                // const project = info.defaultProject;
-                // if (!project || !(project.containsScriptInfo(info))) {
-                //     info.defaultProject = undefined;
-                //     unattachedOpenFiles.push(info);
-                // }
-                // else {
-                //     openFileRootsConfigured.push(info);
-                // }
             }
             for (const unattached of unattachedOpenFiles) {
                 this.assignScriptInfoToInferredProjectIfNecessary(unattached, /*addToListOfOpenFiles*/ false);
             }
 
-            // this.openFileRootsConfigured = openFileRootsConfigured;
-
-            // // First loop through all open files that are referenced by projects but are not
-            // // project roots.  For each referenced file, see if the default project still
-            // // references that file.  If so, then just keep the file in the referenced list.
-            // // If not, add the file to an unattached list, to be rechecked later.
-            // const openFilesReferenced: ScriptInfo[] = [];
-            // for (const referencedFile of this.openFilesReferenced) {
-            //     // check if any of projects that used to reference this file are still referencing it
-            //     if (referencedFile.containingProjects.length === 0) {
-            //         unattachedOpenFiles.push(referencedFile);
-            //     }
-            //     else {
-            //         openFilesReferenced.push(referencedFile);
-            //     }
-            //     // referencedFile.defaultProject.updateGraph();
-            //     // if (referencedFile.defaultProject.containsScriptInfo(referencedFile)) {
-            //     //     openFilesReferenced.push(referencedFile);
-            //     // }
-            //     // else {
-            //     //     unattachedOpenFiles.push(referencedFile);
-            //     // }
-            // }
-            // this.openFilesReferenced = openFilesReferenced;
-
-            // Then, loop through all of the open files that are project roots.
-            // For each root file, note the project that it roots.  Then see if
-            // any other projects newly reference the file.  If zero projects
-            // newly reference the file, keep it as a root.  If one or more
-            // projects newly references the file, remove its project from the
-            // inferred projects list (since it is no longer a root) and add
-            // the file to the open, referenced file list.
-            // const openFileRoots: ScriptInfo[] = [];
-            // for (const rootFile of this.openFileRoots) {
-            //     let inConfiguredProject = false;
-            //     let inExternalProject = false;
-            //     for (const p of rootFile.containingProjects) {
-            //         inConfiguredProject = inConfiguredProject || p.projectKind === ProjectKind.Configured;
-            //         inExternalProject = inExternalProject || p.projectKind === ProjectKind.External;
-            //     }
-            //     if (inConfiguredProject || inExternalProject) {
-            //         const inferredProjects = rootFile.containingProjects.filter(p => p.projectKind === ProjectKind.Inferred);
-            //         for (const p of inferredProjects) {
-            //             p.removeFile(rootFile, /*detachFromProject*/ true);
-            //             if (!p.hasRoots()) {
-            //                 this.removeProject(p);
-            //             }
-            //         }
-            //         if (inConfiguredProject) {
-            //             this.openFileRootsConfigured.push(rootFile);
-            //         }
-            //     }
-            //     else {
-            //         if (rootFile.containingProjects.length === 1) {
-            //             // file contained only in one project
-            //             openFileRoots.push(rootFile);
-            //         }
-            //         else {
-            //             // TODO: fixme
-            //             // file is contained in more than one inferred project - keep only ones where it is used as reference
-            //             const roots = rootFile.containingProjects.filter(p => p.isRoot(rootFile));
-            //             for (const root of roots) {
-            //                 this.removeProject(root);
-            //             }
-            //             Debug.assert(rootFile.containingProjects.length > 0);
-            //             this.openFilesReferenced.push(rootFile);
-            //         }
-            //     }
-            // if (rootFile.containingProjects.some(p => p.projectKind !== ProjectKind.Inferred)) {
-            //     // file was included in non-inferred project - drop old inferred project
-
-            // }
-            // else {
-            //     openFileRoots.push(rootFile);
-            // }
-            // let inferredProjectsToRemove: Project[];
-            // for (const p of rootFile.containingProjects) {
-            //     if (p.projectKind !== ProjectKind.Inferred) {
-            //         // file was included in non-inferred project - drop old inferred project
-            //     }
-            // }
-
-            // const rootedProject = rootFile.defaultProject;
-            // const referencingProjects = this.findReferencingProjects(rootFile, rootedProject);
-
-            // if (rootFile.defaultProject && rootFile.defaultProject.projectKind !== ProjectKind.Inferred) {
-            //     // If the root file has already been added into a configured project,
-            //     // meaning the original inferred project is gone already.
-            //     if (rootedProject.projectKind === ProjectKind.Inferred) {
-            //         this.removeProject(rootedProject);
-            //     }
-            //     this.openFileRootsConfigured.push(rootFile);
-            // }
-            // else {
-            //     if (referencingProjects.length === 0) {
-            //         rootFile.defaultProject = rootedProject;
-            //         openFileRoots.push(rootFile);
-            //     }
-            //     else {
-            //         // remove project from inferred projects list because root captured
-            //         this.removeProject(rootedProject);
-            //         this.openFilesReferenced.push(rootFile);
-            //     }
-            // }
-            // }
-            // this.openFileRoots = openFileRoots;
-
-            // Finally, if we found any open, referenced files that are no longer
-            // referenced by their default project, treat them as newly opened
-            // by the editor.
-            // for (const f of unattachedOpenFiles) {
-            //     this.addOpenFile(f);
-            // }
             for (const p of this.inferredProjects) {
                 p.updateGraph();
             }
