@@ -36,7 +36,7 @@ namespace ts {
         getSourceFiles(): SourceFile[];
 
         /* @internal */
-        isSourceFileFromNodeModules(file: SourceFile): boolean;
+        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
 
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
@@ -2279,7 +2279,7 @@ namespace ts {
             const sourceFiles = targetSourceFile === undefined ? host.getSourceFiles() : [targetSourceFile];
             for (const sourceFile of sourceFiles) {
                 // Don't emit if source file is a declaration file, or was located under node_modules
-                if (!isDeclarationFile(sourceFile) && !host.isSourceFileFromNodeModules(sourceFile)) {
+                if (!isDeclarationFile(sourceFile) && !host.isSourceFileFromExternalLibrary(sourceFile)) {
                     onSingleFileEmit(host, sourceFile);
                 }
             }
@@ -2315,7 +2315,7 @@ namespace ts {
             // --module or --target es6 specified. Files included by searching under node_modules are also not emitted.
             const bundledSources = filter(host.getSourceFiles(),
                 sourceFile => !isDeclarationFile(sourceFile) &&
-                              !host.isSourceFileFromNodeModules(sourceFile) &&
+                              !host.isSourceFileFromExternalLibrary(sourceFile) &&
                               (!isExternalModule(sourceFile) ||
                                !!getEmitModuleKind(options)));
             if (bundledSources.length) {

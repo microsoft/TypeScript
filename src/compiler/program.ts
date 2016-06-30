@@ -1383,7 +1383,7 @@ namespace ts {
                 getSourceFile: program.getSourceFile,
                 getSourceFileByPath: program.getSourceFileByPath,
                 getSourceFiles: program.getSourceFiles,
-                isSourceFileFromNodeModules: (file: SourceFile) => !!lookUp(sourceFilesFoundSearchingNodeModules, file.path),
+                isSourceFileFromExternalLibrary: (file: SourceFile) => !!lookUp(sourceFilesFoundSearchingNodeModules, file.path),
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
