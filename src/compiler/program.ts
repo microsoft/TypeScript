@@ -779,13 +779,18 @@ namespace ts {
         while (true) {
             const baseName = getBaseFileName(directory);
             if (baseName !== "node_modules") {
-                const result =
-                    // first: try to load module as-is
-                    loadModuleFromNodeModulesFolder(moduleName, directory, failedLookupLocations, state) ||
-                    // second: try to load module from the scope '@types'
-                    loadModuleFromNodeModulesFolder(combinePaths("@types", moduleName), directory, failedLookupLocations, state);
-                if (result) {
-                    return result;
+                // Try to load source from the package
+                const packageResult = loadModuleFromNodeModulesFolder(moduleName, directory, failedLookupLocations, state);
+                if (packageResult && hasTypeScriptFileExtension(packageResult)) {
+                    // Always prefer a TypeScript (.ts, .tsx, .d.ts) file shipped with the package
+                    return packageResult;
+                }
+                else {
+                    // Else prefer a types package over non-TypeScript results (e.g. JavaScript files)
+                    const typesResult = loadModuleFromNodeModulesFolder(combinePaths("@types", moduleName), directory, failedLookupLocations, state);
+                    if (typesResult || packageResult) {
+                        return typesResult || packageResult;
+                    }
                 }
             }
 
