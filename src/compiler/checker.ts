@@ -15388,7 +15388,7 @@ namespace ts {
 
         function isUnwrappedReturnTypeVoidOrAny(func: FunctionLikeDeclaration, returnType: Type): boolean {
             const unwrappedReturnType = isAsyncFunctionLike(func) ? getPromisedType(returnType) : returnType;
-            return maybeTypeOfKind(unwrappedReturnType, TypeFlags.Void | TypeFlags.Any);
+            return unwrappedReturnType && maybeTypeOfKind(unwrappedReturnType, TypeFlags.Void | TypeFlags.Any);
         }
 
         function checkReturnStatement(node: ReturnStatement) {
