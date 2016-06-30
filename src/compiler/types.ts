@@ -2964,4 +2964,19 @@ namespace ts {
     export interface SyntaxList extends Node {
         _children: Node[];
     }
+
+    /* @internal */
+    export const enum ResolutionGoal {
+        None    =      0,
+        TS      = 1 << 0,
+        TSX     = 1 << 1,
+        DTS     = 1 << 2,
+        JS      = 1 << 3,
+        JSX     = 1 << 4,
+
+        JSXLike = JSX | TSX,
+        TypeScript = TS | TSX | DTS,
+        JavaScript = JS | JSX,
+        Any = TypeScript | JavaScript,
+    }
 }

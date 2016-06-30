@@ -6,5 +6,6 @@
     ],
     "baselineCheck": true,
     "moduleResolution": "node",
-    "allowJs": true
+    "allowJs": true,
+    "traceResolution": true
 }

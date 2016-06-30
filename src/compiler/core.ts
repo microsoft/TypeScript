@@ -1135,28 +1135,48 @@ namespace ts {
     export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
     export const supportedJavascriptExtensions = [".js", ".jsx"];
 
+    export const extensionMap = {
+        [ResolutionGoal.TS]: ".ts",
+        [ResolutionGoal.TSX]: ".tsx",
+        [ResolutionGoal.DTS]: ".d.ts",
+        [ResolutionGoal.JS]: ".js",
+        [ResolutionGoal.JSX]: ".jsx",
+    };
+
+    export const reverseExtensionMap = {
+        ".ts": ResolutionGoal.TS,
+        ".tsx": ResolutionGoal.TSX,
+        ".d.ts": ResolutionGoal.DTS,
+        ".js": ResolutionGoal.JS,
+        ".jsx": ResolutionGoal.JSX,
+    };
+
+    const extensionPowerset: { [index: number]: string[] } = {
+        [ResolutionGoal.None]: []
+    };
+
+    function createPowerset(base: ResolutionGoal, powerset: { [index: number]: string[] }): void {
+        const newBases: number[] = [];
+        for (const key in extensionMap) {
+            const newKey = base | parseInt(key);
+            if (!powerset[newKey]) {
+                newBases.push(newKey);
+                powerset[newKey] = concatenate(powerset[base], [extensionMap[key]]);
+            }
+        }
+        for (const newBase of newBases) {
+            createPowerset(newBase, powerset);
+        }
+    }
+
+    createPowerset(ResolutionGoal.None, extensionPowerset);
+
     export function getExtensionsForGoal(goal: ResolutionGoal): string[] {
-        const extensions: string[] = [];
-        if (goal & ResolutionGoal.TS) {
-            extensions.push(".ts");
-        }
-        if (goal & ResolutionGoal.TSX) {
-            extensions.push(".tsx");
-        }
-        if (goal & ResolutionGoal.DTS) {
-            extensions.push(".d.ts");
-        }
-        if (goal & ResolutionGoal.JS) {
-            extensions.push(".js");
-        }
-        if (goal & ResolutionGoal.JSX) {
-            extensions.push(".jsx");
-        }
-        return extensions;
+        return extensionPowerset[goal];
     }
 
     export function getResolutionGoalForCompilerOptions(options?: CompilerOptions) {
-        return options && options.allowJs ? ResolutionGoal.Any : ResolutionGoal.TypeScript;
+        return (options && options.allowJs) ? ResolutionGoal.Any : ResolutionGoal.TypeScript;
     }
 
     export function getSupportedExtensions(options?: CompilerOptions): string[] {
