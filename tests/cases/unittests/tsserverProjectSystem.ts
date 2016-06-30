@@ -136,6 +136,36 @@ namespace ts {
         checkFileNames(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
+    class Callbacks {
+        private map: { [n: number]: TimeOutCallback } = {};
+        private nextId = 1;
+
+        register(cb: (...args: any[]) => void, args: any[]) {
+            const timeoutId = this.nextId;
+            this.nextId++;
+            this.map[timeoutId] = cb.bind(undefined, ...args);
+            return timeoutId;            
+        }
+        unregister(id: any) {
+            if (typeof id === "number") {
+                delete this.map[id];
+            }
+        }
+
+        count() {
+            return sizeOfMap(this.map);
+        }
+
+        invoke() {
+            for (const id in this.map) {
+                if (hasProperty(this.map, id)) {
+                    this.map[id]();
+                }
+            }
+            this.map = {};
+        }
+    }
+
     type TimeOutCallback = () => any;
 
     class TestServerHost implements server.ServerHost {
@@ -146,8 +176,8 @@ namespace ts {
         private getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
 
-        private nextTimeoutId = 0;
-        private callbacks: { [n: number]: TimeOutCallback } = {};
+        private timeoutCallbacks = new Callbacks();
+        private immediateCallbacks = new Callbacks();
 
         readonly watchedDirectories: Map<{ cb: DirectoryWatcherCallback, recursive: boolean }[]> = {};
         readonly watchedFiles: Map<FileWatcherCallback[]> = {};
@@ -286,29 +316,31 @@ namespace ts {
         }
 
         // TOOD: record and invoke callbacks to simulate timer events
-        readonly setTimeout = (callback: TimeOutCallback, time: number, ...args: any[]) => {
-            const timeoutId = this.nextTimeoutId;
-            this.nextTimeoutId++;
-            this.callbacks[timeoutId] = callback.bind(undefined, ...args);
-            return timeoutId;
+        setTimeout (callback: TimeOutCallback, time: number, ...args: any[]) {
+            return this.timeoutCallbacks.register(callback, args);
         };
-        readonly clearTimeout = (timeoutId: any): void => {
-            if (typeof timeoutId === "number") {
-                delete this.callbacks[timeoutId];
-            }
+
+        clearTimeout(timeoutId: any): void {
+            this.timeoutCallbacks.unregister(timeoutId);
         };
 
         checkTimeoutQueueLength(expected: number) {
-            const callbacksCount = sizeOfMap(this.callbacks);
+            const callbacksCount = this.timeoutCallbacks.count();
             assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
         }
 
         runQueuedTimeoutCallbacks() {
-            for (const id in this.callbacks) {
-                this.callbacks[id]();
-            }
-            this.callbacks = [];
+            this.timeoutCallbacks.invoke();
         }
+
+        setImmediate (callback: TimeOutCallback, time: number, ...args: any[]) {
+            return this.immediateCallbacks.register(callback, args);
+        };
+
+        clearImmediate(timeoutId: any): void {
+            this.immediateCallbacks.unregister(timeoutId);
+        };
+
 
         readonly readFile = (s: string) => (<File>this.fs.get(this.toPath(s))).content;
         readonly resolvePath = (s: string) => s;

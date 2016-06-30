@@ -69,10 +69,6 @@ namespace ts.server {
         return <NormalizedPath>fileName;
     }
 
-    export function asNormalizedPathArray(fileNames: string[]): NormalizedPath[] {
-        return <NormalizedPath[]>fileNames;
-    }
-
     export interface NormalizedPathMap<T> {
         get(path: NormalizedPath): T;
         set(path: NormalizedPath, value: T): void;

@@ -666,6 +666,14 @@ namespace Harness.LanguageService {
         clearTimeout(timeoutId: any): void {
             clearTimeout(timeoutId);
         }
+
+        setImmediate(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
+            return setImmediate(callback, args);
+        }
+
+        clearImmediate(timeoutId: any): void {
+            clearImmediate(timeoutId);
+        }        
     }
 
     export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {

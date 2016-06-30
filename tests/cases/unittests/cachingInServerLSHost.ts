@@ -63,7 +63,9 @@ namespace ts {
                 };
             },
             setTimeout,
-            clearTimeout
+            clearTimeout,
+            setImmediate,
+            clearImmediate
         };
     }
 

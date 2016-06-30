@@ -165,9 +165,11 @@ namespace ts.server {
         export const ProjectLanguageServiceDisabled = new Error("The project's language service is disabled.");
     }
 
-    export interface ServerHost extends ts.System {
+    export interface ServerHost extends System {
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout(timeoutId: any): void;
+        setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;
+        clearImmediate(timeoutId: any): void;
     }
 
     export class Session {
@@ -318,10 +320,10 @@ namespace ts.server {
                 followMs = ms;
             }
             if (this.errorTimer) {
-                clearTimeout(this.errorTimer);
+                this.host.clearTimeout(this.errorTimer);
             }
             if (this.immediateId) {
-                clearImmediate(this.immediateId);
+                this.host.clearImmediate(this.immediateId);
                 this.immediateId = undefined;
             }
             let index = 0;
@@ -331,7 +333,7 @@ namespace ts.server {
                     index++;
                     if (checkSpec.project.containsFile(checkSpec.fileName, requireOpen)) {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
-                        this.immediateId = setImmediate(() => {
+                        this.immediateId = this.host.setImmediate(() => {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);
                             this.immediateId = undefined;
                             if (checkList.length > index) {
