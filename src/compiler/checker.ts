@@ -14604,7 +14604,11 @@ namespace ts {
                     if (hasProperty(node.locals, key)) {
                         const local = node.locals[key];
                         if (!local.hasReference && !local.exportSymbol) {
-                            forEach(local.declarations, d => error(d.name, Diagnostics._0_is_declared_but_never_used, local.name));
+                            for (const declaration of local.declarations) {
+                                if (!isAmbientModule(declaration)) {
+                                    error(declaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
+                                }
+                            }
                         }
                     }
                 }
@@ -16487,7 +16491,9 @@ namespace ts {
 
             if (node.body) {
                 checkSourceElement(node.body);
-                checkUnusedIdentifiersDeferred(node);
+                if (!isGlobalScopeAugmentation(node)) {
+                    checkUnusedIdentifiersDeferred(node);
+                }
             }
         }
 
