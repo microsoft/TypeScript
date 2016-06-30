@@ -124,11 +124,15 @@ namespace ts {
             const extensionLoadResults = map(extensionNames, name => {
                 let result: any;
                 let error: any;
+                let loadTime: number;
+                let startTime: number;
                 if (host.loadExtension) {
                     const resolved = resolveModuleName(name, combinePaths(currentDirectory, "tsconfig.json"), options, host, /*loadJs*/true).resolvedModule;
                     if (resolved) {
                         try {
+                            startTime = +(new Date());
                             result = host.loadExtension(resolved.resolvedFileName);
+                            loadTime = +(new Date()) - startTime;
                         }
                         catch (e) {
                             error = e;
@@ -160,7 +164,7 @@ namespace ts {
                             const ext: ExtensionBase = {
                                 name: key !== "default" ? `${res.name}[${key}]` : res.name,
                                 args: extensionNames === extOptions ? undefined : (extOptions as Map<any>)[res.name],
-                                kind: annotatedKind
+                                kind: annotatedKind,
                             };
                             switch (ext.kind) {
                                 case ExtensionKind.SemanticLint:

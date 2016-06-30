@@ -2607,6 +2607,7 @@ namespace ts {
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
         extensions?: string[] | Map<any>;
+        profileExtensions?: boolean;
 
         [option: string]: CompilerOptionsValue | undefined;
     }

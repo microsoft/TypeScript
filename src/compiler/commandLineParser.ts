@@ -431,6 +431,11 @@ namespace ts {
             name: "strictNullChecks",
             type: "boolean",
             description: Diagnostics.Enable_strict_null_checks
+        },
+        {
+            name: "profileExtensions",
+            type: "boolean",
+            description: Diagnostics.Enable_extension_profiling,
         }
     ];
 
