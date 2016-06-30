@@ -899,6 +899,10 @@ namespace ts {
                         error(errorLocation, Diagnostics.Identifier_0_must_be_imported_from_a_module, name);
                     }
                 }
+
+                if (result && noUnusedIdentifiers && !isInAmbientContext(location)) {
+                    result.hasReference = true;
+                }
             }
             return result;
         }
@@ -4961,10 +4965,6 @@ namespace ts {
                 // type reference in checkTypeReferenceOrExpressionWithTypeArguments.
                 links.resolvedSymbol = symbol;
                 links.resolvedType = type;
-
-                if (noUnusedIdentifiers && symbol !== unknownSymbol && !isInAmbientContext(node)) {
-                    symbol.hasReference = true;
-                }
             }
             return links.resolvedType;
         }
@@ -8327,9 +8327,6 @@ namespace ts {
 
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
-            if (symbol && noUnusedIdentifiers && !isInAmbientContext(node)) {
-                symbol.hasReference = true;
-            }
 
             // As noted in ECMAScript 6 language spec, arrow functions never have an arguments objects.
             // Although in down-level emit of arrow function, we emit it using function expression which means that
@@ -16673,9 +16670,6 @@ namespace ts {
                         }
                         if (target.flags & SymbolFlags.Type) {
                             checkTypeNameIsReserved(node.name, Diagnostics.Import_name_cannot_be_0);
-                        }
-                        if (noUnusedIdentifiers && !isInAmbientContext(node)) {
-                            target.hasReference = true;
                         }
                     }
                 }
