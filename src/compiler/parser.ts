@@ -3567,7 +3567,7 @@ namespace ts {
             // If it wasn't then just try to parse out a '.' and report an error.
             const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
             node.expression = expression;
-            parseExpectedToken(SyntaxKind.DotToken, /*reportAtCurrentPosition*/ false, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
+            parseExpected(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             node.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
             return finishNode(node);
         }

@@ -338,20 +338,20 @@ namespace ts {
         return node;
     }
 
-    export function createPropertyAccess(expression: Expression, name: string | Identifier, location?: TextRange) {
-        return createPropertyAccessWithDotToken(expression, name, location, /*flags*/ undefined);
-    }
-
-    export function createPropertyAccessWithDotToken(expression: Expression, name: string | Identifier, location?: TextRange, flags?: NodeFlags) {
+    export function createPropertyAccess(expression: Expression, name: string | Identifier, location?: TextRange, flags?: NodeFlags) {
         const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, location, flags);
         node.expression = parenthesizeForAccess(expression);
+        node.emitFlags = NodeEmitFlags.NoIndentation;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         return node;
     }
 
     export function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier) {
         if (node.expression !== expression || node.name !== name) {
-            return updateNode(createPropertyAccessWithDotToken(expression, name, /*location*/ node, node.flags), node);
+            const propertyAccess = createPropertyAccess(expression, name, /*location*/ node, node.flags);
+            // Because we are updating existed propertyAccess we want to inherit its emitFlags instead of using default from createPropertyAccess
+            propertyAccess.emitFlags = node.emitFlags;
+            return updateNode(propertyAccess, node);
         }
         return node;
     }

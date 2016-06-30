@@ -16,7 +16,8 @@ var Foo = (function () {
     function Foo() {
     }
     Foo.prototype.f1 = function () {
-        if (this.)
+        if (this.
+        )
             ;
     };
     Foo.prototype.f2 = function () {

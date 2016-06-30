@@ -1084,9 +1084,24 @@ const _super = (function (geti, seti) {
                 return;
             }
 
+            let indentBeforeDot = false;
+            let indentAfterDot = false;
+            let shouldEmitDotDot = false;
+            if (!(node.flags & NodeFlags.Synthesized)) {
+                const dotRangeStart = node.expression.end;
+                const dotRangeEnd = skipTrivia(currentText, node.expression.end) + 1;
+                const dotToken = <Node>{ kind: SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
+                indentBeforeDot = needsIndentation(node, node.expression, dotToken);
+                indentAfterDot = needsIndentation(node, dotToken, node.name);
+                shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
+            }
+
             emitExpression(node.expression);
-            write(needsDotDotForPropertyAccess(node.expression) ? ".." : ".");
+            increaseIndentIf(indentBeforeDot);
+            write(shouldEmitDotDot ? ".." : ".");
+            increaseIndentIf(indentAfterDot);
             emit(node.name);
+            decreaseIndentIf(indentBeforeDot, indentAfterDot);
         }
 
         // 1..toString is a valid property access, emit a dot after the literal

@@ -14,7 +14,8 @@ var A;
 (function (A) {
     function foo() {
         if (true) {
-            B.;
+            B.
+            ;
             var B;
             (function (B) {
                 function baz() { }

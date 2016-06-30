@@ -27,7 +27,8 @@ var bar = (function (_super) {
         _super.apply(this, arguments);
     }
     bar.prototype.test = function () {
-        this.;
+        this.
+        ;
     };
     return bar;
 }(foo));

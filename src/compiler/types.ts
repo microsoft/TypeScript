@@ -3080,13 +3080,14 @@ namespace ts {
         ExportName = 1 << 17,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
         LocalName = 1 << 18,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
         Indented = 1 << 19,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        NoIndentation = 1 << 20,                    // Do not indent the node.
 
         // SourceMap Specialization.
         // TODO(rbuckton): These should be removed once source maps are aligned with the old
         //                 emitter and new baselines are taken. This exists solely to
         //                 align with the old emitter.
-        SourceMapEmitOpenBraceAsToken = 1 << 20,        // Emits the open brace of a block function body as a source mapped token.
-        SourceMapAdjustRestParameterLoop = 1 << 21,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
+        SourceMapEmitOpenBraceAsToken = 1 << 21,        // Emits the open brace of a block function body as a source mapped token.
+        SourceMapAdjustRestParameterLoop = 1 << 22,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
     }
 
     /** Additional context provided to `visitEachChild` */
