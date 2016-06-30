@@ -673,7 +673,7 @@ namespace Harness.LanguageService {
 
         clearImmediate(timeoutId: any): void {
             clearImmediate(timeoutId);
-        }        
+        }
     }
 
     export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {

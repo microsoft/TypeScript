@@ -775,7 +775,7 @@ namespace ts {
             };
             const externalProjectName = "externalproject";
             const host = createServerHost({ fileOrFolderList: [file1, file2], libFile });
-            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ true);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
             projectService.openExternalProject({
                 rootFiles: [ file1.path, file2.path ],
                 options: {},
@@ -799,5 +799,77 @@ namespace ts {
             checkNumberOfExternalProjects(projectService, 0);
             checkNumberOfInferredProjects(projectService, 0);
         });
+
+        it ("external project that included config files", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x =1;"
+            };
+            const config1 = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify(
+                    {
+                        compilerOptions: {},
+                        files: ["f1.ts"]
+                    }
+                )
+            };
+            const file2 = {
+                path: "/a/c/f2.ts",
+                content: "let y =1;"
+            };
+            const config2 = {
+                path: "/a/c/tsconfig.json",
+                content: JSON.stringify(
+                    {
+                        compilerOptions: {},
+                        files: ["f2.ts"]
+                    }
+                )
+            };
+            const file3 = {
+                path: "/a/d/f3.ts",
+                content: "let z =1;"
+            };
+            const externalProjectName = "externalproject";
+            const host = createServerHost({ fileOrFolderList: [file1, file2, file3, config1, config2], libFile });
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
+            projectService.openExternalProject({
+                rootFiles: [ config1.path, config2.path, file3.path ],
+                options: {},
+                projectFileName: externalProjectName
+            });
+
+            checkNumberOfExternalProjects(projectService, 0);
+            checkNumberOfConfiguredProjects(projectService, 2);
+            checkNumberOfInferredProjects(projectService, 0);
+
+            // open client file - should not lead to creation of inferred project
+            projectService.openClientFile(file1.path, file1.content);
+            checkNumberOfExternalProjects(projectService, 0);
+            checkNumberOfConfiguredProjects(projectService, 2);
+            checkNumberOfInferredProjects(projectService, 0);
+
+            projectService.openClientFile(file3.path, file3.content);
+            checkNumberOfExternalProjects(projectService, 0);
+            checkNumberOfConfiguredProjects(projectService, 2);
+            checkNumberOfInferredProjects(projectService, 1);
+
+            projectService.closeExternalProject(externalProjectName);
+            checkNumberOfExternalProjects(projectService, 0);
+            // open file 'file1' from configured project is moved to its own inferred project + inferred project for file3
+            checkNumberOfInferredProjects(projectService, 2);
+
+            projectService.closeClientFile(file3.path);
+            checkNumberOfExternalProjects(projectService, 0);
+            checkNumberOfConfiguredProjects(projectService, 0);
+            checkNumberOfInferredProjects(projectService, 1);
+
+            projectService.closeClientFile(file1.path);
+            checkNumberOfExternalProjects(projectService, 0);
+            checkNumberOfConfiguredProjects(projectService, 0);
+            checkNumberOfInferredProjects(projectService, 0);
+        });
+
     });
 }
