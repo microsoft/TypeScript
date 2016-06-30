@@ -190,6 +190,10 @@ namespace ts.server {
             this.projectStateVersion++;
         }
 
+        /**
+         * Updates set of files that contribute to this project
+         * @returns: true if set of files in the project stays the same and false - otherwise.
+         */
         updateGraph(): boolean {
             if (!this.languageServiceEnabled) {
                 return true;

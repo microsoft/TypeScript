@@ -72,12 +72,12 @@ namespace ts.server {
         /**
          * a path to directory watcher map that detects added tsconfig files
          **/
-        private directoryWatchersForTsconfig: Map<FileWatcher> = {};
+        private readonly directoryWatchersForTsconfig: Map<FileWatcher> = {};
         /**
          * count of how many projects are using the directory watcher.
          * If the number becomes 0 for a watcher, then we should close it.
          **/
-        private directoryWatchersRefCount: Map<number> = {};
+        private readonly directoryWatchersRefCount: Map<number> = {};
 
         constructor(private readonly projectService: ProjectService) {
         }
@@ -208,7 +208,7 @@ namespace ts.server {
         private updateProjectGraphs(projects: Project[]) {
             let shouldRefreshInferredProjects = false;
             for (const p of projects) {
-                if (p.updateGraph()) {
+                if (!p.updateGraph()) {
                     shouldRefreshInferredProjects = true;
                 }
             }
@@ -231,7 +231,6 @@ namespace ts.server {
                 if (info && (!info.isOpen)) {
                     // file has been changed which might affect the set of referenced files in projects that include 
                     // this file and set of inferred projects
-                    // TODO: add tests
                     info.reloadFromFile();
                     this.updateProjectGraphs(info.containingProjects);
                 }
