@@ -1,7 +1,6 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 /// <reference path="core.ts" />
-/// <reference path="extensions.ts" />
 
 namespace ts {
     /* @internal */ export let programTime = 0;

@@ -1,3 +1,4 @@
+/// <reference path="extensions.ts" />
 
 namespace ts {
     export interface Map<T> {
