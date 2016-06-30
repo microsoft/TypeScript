@@ -292,6 +292,8 @@ namespace ts.server {
 
     sys.setTimeout = setTimeout;
     sys.clearTimeout = clearTimeout;
+    sys.setImmediate = setImmediate;
+    sys.clearImmediate = clearImmediate;
 
     let cancellationToken: HostCancellationToken;
     try {
