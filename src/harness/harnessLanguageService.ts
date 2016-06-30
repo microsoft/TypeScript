@@ -135,7 +135,7 @@ namespace Harness.LanguageService {
 
         public getFilenames(): string[] {
             const fileNames: string[] = [];
-            this.virtualFileSystem.getAllFileEntries().forEach((virtualEntry) => {
+            ts.forEach(this.virtualFileSystem.getAllFileEntries(), (virtualEntry) => {
                 const scriptInfo = virtualEntry.content;
                 if (scriptInfo.isRootFile) {
                     // only include root files here

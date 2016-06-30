@@ -1947,8 +1947,15 @@ namespace ts {
         sourceMapText?: string;
     }
 
-
+    // Matches the beginning of a triple slash directive
     const tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</;
+
+    /**
+     * Matches a triple slash reference directive with an incomplete string literal for its path. Used
+     * to determine if the caret is currently within the string literal and capture the literal fragment
+     * for completions.
+     * For example, this matches /// <reference path="fragment
+     */
     const tripleSlashDirectiveFragmentRegex = /^\/\/\/\s*<reference\s+path\s*=\s*(?:'|")([^'"]+)$/;
 
     let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
@@ -4386,7 +4393,7 @@ namespace ts {
                 if (directoryProbablyExists(baseDir, host)) {
                     // Enumerate the available files
                     const files = host.readDirectory(baseDir, extensions, /*exclude*/undefined, /*include*/["./*"]);
-                    files.forEach((f) => {
+                    ts.forEach(files, (f) => {
                         const fName = includeExtensions ? getBaseFileName(f) : removeFileExtension(getBaseFileName(f));
 
                         if (startsWith(fName, toComplete)) {
@@ -4402,7 +4409,7 @@ namespace ts {
                     // If possible, get folder completion as well
                     if (host.getDirectories) {
                         const directories = host.getDirectories(baseDir);
-                        directories.forEach((d) => {
+                        ts.forEach(directories, (d) => {
                             const dName = getBaseFileName(removeTrailingDirectorySeparator(d));
 
                             if (startsWith(dName, toComplete)) {
@@ -4471,7 +4478,7 @@ namespace ts {
                 // Check for node_modules. We only offer completions for modules that are listed in the
                 // package.json for a project for efficiency and to ensure that the completion list is
                 // not polluted with sub-dependencies
-                findPackageJsons(scriptPath).forEach((packageJson) => {
+                ts.forEach(findPackageJsons(scriptPath), (packageJson) => {
                     const package = tryReadingPackageJson(packageJson);
                     if (!package) {
                         return;
@@ -4487,13 +4494,13 @@ namespace ts {
                         addPotentialPackageNames(package.devDependencies, moduleNameFragment, foundModuleNames);
                     }
 
-                    foundModuleNames.forEach((moduleName) => {
+                    ts.forEach(foundModuleNames, (moduleName) => {
                         if (isNestedModule && moduleName === moduleNameFragment) {
                             const moduleDir = combinePaths(nodeModulesDir, moduleName);
                             if (directoryProbablyExists(moduleDir, host)) {
                                 const nestedFiles = host.readDirectory(moduleDir, supportedTypeScriptExtensions, /*exclude*/undefined, /*include*/["./*"]);
 
-                                nestedFiles.forEach((f) => {
+                                ts.forEach(nestedFiles, (f) => {
                                     const nestedModule = removeFileExtension(getBaseFileName(f));
                                     nonRelativeModules.push(nestedModule);
                                 });

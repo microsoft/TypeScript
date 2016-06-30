@@ -158,6 +158,11 @@ namespace Utils {
             return directory;
         }
 
+        /**
+         * Reads the directory at the given path and retrieves a list of file names and a list
+         * of directory names within it. Suitable for use with ts.matchFiles()
+         * @param path  The path to the directory to be read
+         */
         getAccessibleFileSystemEntries(path: string) {
             const entry = this.traversePath(path);
             if (entry && entry.isDirectory()) {
@@ -176,8 +181,8 @@ namespace Utils {
             return fileEntries;
 
             function getFilesRecursive(dir: VirtualDirectory<T>, result: VirtualFile<T>[]) {
-                dir.getFiles().forEach((e) => result.push(e));
-                dir.getDirectories().forEach((subDir) => getFilesRecursive(subDir, result));
+                ts.forEach(dir.getFiles(), (e) => result.push(e));
+                ts.forEach(dir.getDirectories(), (subDir) => getFilesRecursive(subDir, result));
             }
         }
 
