@@ -2825,6 +2825,14 @@
         "category": "Message",
         "code": 6153
     },
+    "PROFILE: Extension '{0}' begin '{1}'": {
+        "category": "Message",
+        "code": 6154
+    },
+    "PROFILE: Extension '{0}' end '{1}' ({2} ms)": {
+        "category": "Message",
+        "code": 6155
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

@@ -1495,13 +1495,16 @@ namespace ts {
             const diagnostics: Diagnostic[] = [];
             let activeLint: UniqueLint;
             let parent: Node | undefined = undefined;
+            const shouldProfile = !!options.profileExtensions;
             for (let i = 0; i < lints.length; i++) {
+                if (shouldProfile) startExtensionProfile(lints[i], "construct", host.trace);
                 if (kind === ExtensionKind.SemanticLint) {
                     initializedLints[i] = { name: lints[i].name, walker: new (lints[i].ctor as SemanticLintProviderStatic)({ ts, checker: getTypeChecker(), args: lints[i].args, host, program }), accepted: true };
                 }
                 else if (kind === ExtensionKind.SyntacticLint) {
                     initializedLints[i] = { name: lints[i].name, walker: new (lints[i].ctor as SyntacticLintProviderStatic)({ ts, args: lints[i].args, host, program }), accepted: true };
                 }
+                if (shouldProfile) completeExtensionProfile(lints[i], "construct", host.trace);
             }
 
             visitNode(sourceFile);
@@ -1516,7 +1519,9 @@ namespace ts {
                     if (initializedLints[i].accepted) {
                         activeLint = initializedLints[i];
                         node.parent = parent;
+                        if (shouldProfile) startExtensionProfile(lints[i], `visitNode|${getNodeId(node)}`, host.trace);
                         activeLint.walker.visit(node, stop, error);
+                        if (shouldProfile) completeExtensionProfile(lints[i], `visitNode|${getNodeId(node)}`, host.trace);
                         if (activeLint.accepted) {
                             oneAccepted = true;
                         }

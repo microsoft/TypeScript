@@ -50,7 +50,7 @@ namespace ts {
         name: string;
         args: any;
         kind: ExtensionKind;
-        profiles?: Map<ProfileData>
+        profiles?: Map<ProfileData>;
     }
 
     export interface ProfileData {
@@ -59,7 +59,13 @@ namespace ts {
         length: number;
     }
 
-    export function startExtensionProfile(ext: ExtensionBase, task: string) {
+    function profileTrace(trace: (s: string) => void | undefined, message: DiagnosticMessage, ...args: any[]) {
+        if (trace) {
+            trace(flattenDiagnosticMessageText(createCompilerDiagnostic(message, ...args).messageText, (sys && sys.newLine || "\n")));
+        }
+    }
+
+    export function startExtensionProfile(ext: ExtensionBase, task: string, trace?: (s: string) => void) {
         if (!ext.profiles) ext.profiles = {};
 
         ext.profiles[task] = {
@@ -67,13 +73,17 @@ namespace ts {
             start: +(new Date()),
             length: -1
         };
+
+        profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_begin_1, ext.name, task);
     }
 
-    export function completeExtensionProfile(ext: ExtensionBase, task: string) {
+    export function completeExtensionProfile(ext: ExtensionBase, task: string, trace?: (s: string) => void) {
         const endTime = +(new Date());
         Debug.assert(!!ext.profiles, "Completed profile, but extension has no started profiles.");
         Debug.assert(!!ext.profiles[task], "Completed profile did not have a corresponding start.");
         ext.profiles[task].length = endTime - ext.profiles[task].start;
+
+        profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, ext.name, task, ext.profiles[task].length.toFixed(4));
     }
 
     // @kind(ExtensionKind.SyntacticLint)
@@ -117,22 +127,32 @@ namespace ts {
         };
         return cache;
 
+        function trace(message: DiagnosticMessage, ...args: any[]) {
+            profileTrace(host.trace, message, ...args);
+        }
+
         function collectCompilerExtensions(): ExtensionCollectionMap {
             const extOptions = options.extensions;
             const extensionNames = (extOptions instanceof Array) ? extOptions : getKeys(extOptions);
             const currentDirectory = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
+            const shouldProfile = !!options.profileExtensions;
             const extensionLoadResults = map(extensionNames, name => {
                 let result: any;
                 let error: any;
-                let loadTime: number;
-                let startTime: number;
                 if (host.loadExtension) {
                     const resolved = resolveModuleName(name, combinePaths(currentDirectory, "tsconfig.json"), options, host, /*loadJs*/true).resolvedModule;
                     if (resolved) {
                         try {
-                            startTime = +(new Date());
+                            let startTime: number;
+                            if (shouldProfile) {
+                                startTime = +(new Date());
+                                trace(Diagnostics.PROFILE_Colon_Extension_0_begin_1, name, "load");
+                            }
                             result = host.loadExtension(resolved.resolvedFileName);
-                            loadTime = +(new Date()) - startTime;
+                            if (shouldProfile) {
+                                const loadTime = +(new Date()) - startTime;
+                                trace(Diagnostics.PROFILE_Colon_Extension_0_begin_1, name, "load", loadTime.toFixed(4));
+                            }
                         }
                         catch (e) {
                             error = e;
