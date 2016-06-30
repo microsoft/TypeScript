@@ -759,23 +759,53 @@ gulp.task(nodeServerOutFile, false, [servicesFile], () => {
         .pipe(gulp.dest(path.dirname(nodeServerOutFile)));
 });
 
+import convertMap = require("convert-source-map");
+import sorcery = require("sorcery");
+declare module "convert-source-map" {
+    export function fromSource(source: string, largeSource?: boolean): SourceMapConverter;
+}
+
 gulp.task("browserify", "Runs browserify on run.js to produce a file suitable for running tests in the browser", [servicesFile], (done) => {
     const settings: tsc.Settings = getCompilerSettings({
-        outFile: "built/local/bundle.js"
+        outFile: "built/local/bundle.js",
     }, /*useBuiltCompiler*/ true);
     return gulp.src(harnessSources)
         .pipe(newer("built/local/bundle.js"))
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
         .pipe(through2.obj((file, enc, next) => {
-            browserify(intoStream(file.contents))
+            const originalMap = file.sourceMap;
+            const prebundledContent = file.contents.toString();
+            originalMap.sources = originalMap.sources.map(s => path.resolve(s)); // Make paths absolute to help sorcery deal with all the terrible paths being thrown around
+            originalMap.file = "built/local/_stream_0.js"; // intoStream (below) makes browserify think the input file is named this, so this is what it puts in the sourcemap
+
+            browserify(intoStream(file.contents), { debug: true })
                 .bundle((err, res) => {
                     // assumes file.contents is a Buffer
-                    file.contents = res;
+                    const maps = JSON.parse(convertMap.fromSource(res.toString(), /*largeSource*/true).toJSON());
+                    delete maps.sourceRoot;
+                    for (let i = 0; i < maps.sources.length; i++) {
+                        if (maps.sources[i] === "_stream_0.js") maps.sources[i] = path.resolve("built/local/_stream_0.js");
+                        else maps.sources[i] = path.resolve(maps.sources[i]);
+                    }
+                    // Strip browserify's inline comments away (could probably just let sorcery do this, but then we couldn't fix the paths)
+                    file.contents = new Buffer(convertMap.removeComments(res.toString()));
+                    const chain = sorcery.loadSync("built/local/bundle.js", {
+                        content: {
+                            "built/local/_stream_0.js": prebundledContent,
+                            "built/local/bundle.js": file.contents.toString()
+                        },
+                        sourcemaps: {
+                            "built/local/_stream_0.js": originalMap,
+                            "built/local/bundle.js": maps,
+                        }
+                    });
+                    const finalMap = chain.apply();
+                    file.sourceMap = finalMap;
                     next(undefined, file);
                 });
         }))
-        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "../../" }))
+        .pipe(sourcemaps.write(".", { includeContent: false }))
         .pipe(gulp.dest("."));
 });
 

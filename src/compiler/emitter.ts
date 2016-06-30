@@ -614,7 +614,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 const sourceMappingURL = sourceMap.getSourceMappingURL();
                 if (sourceMappingURL) {
-                    write(`//# sourceMappingURL=${sourceMappingURL}`);
+                    write(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Sometimes tools can sometimes see this line as a source mapping url comment
                 }
 
                 writeEmittedFiles(writer.getText(), jsFilePath, sourceMapFilePath, /*writeByteOrderMark*/ compilerOptions.emitBOM, sourceFiles);
