@@ -1,5 +1,4 @@
 maxDepthIncreased/root.ts(7,1): error TS2322: Type 'string' is not assignable to type 'number'.
-maxDepthIncreased/root.ts(8,13): error TS2339: Property 'test' does not exist on type 'typeof "C:/src/TypeScript/tests/cases/projects/NodeModulesSearch/maxDepthIncreased/node_modules/@...'.
 
 
 ==== index.js (0 errors) ====
@@ -32,7 +31,7 @@ maxDepthIncreased/root.ts(8,13): error TS2339: Property 'test' does not exist on
 ==== entry.d.ts (0 errors) ====
     export declare var foo: number;
     
-==== maxDepthIncreased/root.ts (2 errors) ====
+==== maxDepthIncreased/root.ts (1 errors) ====
     import * as m1 from "m1";
     import * as m4 from "m4";
     
@@ -42,9 +41,6 @@ maxDepthIncreased/root.ts(8,13): error TS2339: Property 'test' does not exist on
     m1.f2.person.age = "10";    // Should error if loaded the .js files correctly
     ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-    let r1 = m4.test.charAt(2); // Should error if correctly not using the .js file but using @types info
-                ~~~~
-!!! error TS2339: Property 'test' does not exist on type 'typeof "C:/src/TypeScript/tests/cases/projects/NodeModulesSearch/maxDepthIncreased/node_modules/@...'.
     
     let r2 = 3 + m4.foo; // Should be OK if correctly using the @types .d.ts file
     
