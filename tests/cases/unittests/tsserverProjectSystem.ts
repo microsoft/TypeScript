@@ -993,5 +993,45 @@ namespace ts {
             checkNumberOfInferredProjects(projectService, 1);
             checkProjectActualFiles(projectService.inferredProjects[0], [ file1.path, modifiedFile2.path, file3.path ]);
         });
+
+        it("deleted files affect project structure", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: `export * from "./f2"`
+            };
+            const file2 = {
+                path: "/a/b/f2.ts",
+                content: `export * from "../c/f3"`
+            };
+            const file3 = {
+                path: "/a/c/f3.ts",
+                content: `export let y = 1;`
+            };
+            const host = createServerHost([file1, file2, file3]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+
+            projectService.openClientFile(file1.path);
+
+            checkNumberOfInferredProjects(projectService, 1);
+            checkNumberOfExternalProjects(projectService, 0);
+            checkNumberOfConfiguredProjects(projectService, 0);
+
+            checkProjectActualFiles(projectService.inferredProjects[0], [ file1.path, file2.path, file3.path ]);
+
+            projectService.openClientFile(file3.path);
+            checkNumberOfInferredProjects(projectService, 1);
+            checkNumberOfExternalProjects(projectService, 0);
+            checkNumberOfConfiguredProjects(projectService, 0);
+
+            host.reloadFS([file1, file3]);
+            host.triggerFileWatcherCallback(file2.path, /*removed*/ true);
+
+            checkNumberOfInferredProjects(projectService, 2);
+            checkNumberOfExternalProjects(projectService, 0);
+            checkNumberOfConfiguredProjects(projectService, 0);
+
+            checkProjectActualFiles(projectService.inferredProjects[0], [ file1.path ]);
+            checkProjectActualFiles(projectService.inferredProjects[1], [ file3.path ]);
+        });
     });
 }
