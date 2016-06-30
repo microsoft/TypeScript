@@ -51,6 +51,7 @@ namespace ts {
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = compilerOptions.target || ScriptTarget.ES3;
         const modulekind = getEmitModuleKind(compilerOptions);
+        const noUnusedIdentifiers = !!compilerOptions.noUnusedLocals || !!compilerOptions.noUnusedParameters;
         const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : modulekind === ModuleKind.System;
         const strictNullChecks = compilerOptions.strictNullChecks;
 
@@ -187,6 +188,7 @@ namespace ts {
         let jsxElementClassType: Type;
 
         let deferredNodes: Node[];
+        let deferredUnusedIdentifierNodes: Node[];
 
         let flowLoopStart = 0;
         let flowLoopCount = 0;
@@ -394,7 +396,7 @@ namespace ts {
                 target.flags |= source.flags;
                 if (source.valueDeclaration &&
                     (!target.valueDeclaration ||
-                     (target.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && source.valueDeclaration.kind !== SyntaxKind.ModuleDeclaration))) {
+                        (target.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && source.valueDeclaration.kind !== SyntaxKind.ModuleDeclaration))) {
                     // other kinds of value declarations take precedence over modules
                     target.valueDeclaration = source.valueDeclaration;
                 }
@@ -664,8 +666,8 @@ namespace ts {
                                 useResult = result.flags & SymbolFlags.TypeParameter
                                     // type parameters are visible in parameter list, return type and type parameter list
                                     ? lastLocation === (<FunctionLikeDeclaration>location).type ||
-                                      lastLocation.kind === SyntaxKind.Parameter ||
-                                      lastLocation.kind === SyntaxKind.TypeParameter
+                                    lastLocation.kind === SyntaxKind.Parameter ||
+                                    lastLocation.kind === SyntaxKind.TypeParameter
                                     // local types not visible outside the function body
                                     : false;
                             }
@@ -847,6 +849,10 @@ namespace ts {
                 location = location.parent;
             }
 
+            if (result && nameNotFoundMessage && noUnusedIdentifiers) {
+                result.isReferenced = true;
+            }
+
             if (!result) {
                 result = getSymbol(globals, name, meaning);
             }
@@ -854,7 +860,7 @@ namespace ts {
             if (!result) {
                 if (nameNotFoundMessage) {
                     if (!checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg) &&
-                       !checkAndReportErrorForExtendingInterface(errorLocation)) {
+                        !checkAndReportErrorForExtendingInterface(errorLocation)) {
                         error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
                     }
                 }
@@ -961,7 +967,7 @@ namespace ts {
                 return true;
             }
             return false;
-         }
+        }
 
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
             Debug.assert((result.flags & SymbolFlags.BlockScopedVariable) !== 0);
@@ -1022,8 +1028,8 @@ namespace ts {
                 const exportDefaultSymbol = isShorthandAmbientModule(moduleSymbol.valueDeclaration) ?
                     moduleSymbol :
                     moduleSymbol.exports["export="] ?
-                    getPropertyOfType(getTypeOfSymbol(moduleSymbol.exports["export="]), "default") :
-                    resolveSymbol(moduleSymbol.exports["default"]);
+                        getPropertyOfType(getTypeOfSymbol(moduleSymbol.exports["export="]), "default") :
+                        resolveSymbol(moduleSymbol.exports["default"]);
 
                 if (!exportDefaultSymbol && !allowSyntheticDefaultImports) {
                     error(node.name, Diagnostics.Module_0_has_no_default_export, symbolToString(moduleSymbol));
@@ -4536,7 +4542,7 @@ namespace ts {
                     : undefined;
                 const typeParameters = classType ? classType.localTypeParameters :
                     declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) :
-                    getTypeParametersFromJSDocTemplate(declaration);
+                        getTypeParametersFromJSDocTemplate(declaration);
                 const returnType = getSignatureReturnTypeFromDeclaration(declaration, minArgumentCount, isJSConstructSignature, classType);
                 const typePredicate = declaration.type && declaration.type.kind === SyntaxKind.TypePredicate ?
                     createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode) :
@@ -5165,7 +5171,7 @@ namespace ts {
             if (typeSet.length === 0) {
                 return typeSet.containsNull ? typeSet.containsNonWideningType ? nullType : nullWideningType :
                     typeSet.containsUndefined ? typeSet.containsNonWideningType ? undefinedType : undefinedWideningType :
-                    neverType;
+                        neverType;
             }
             else if (typeSet.length === 1) {
                 return typeSet[0];
@@ -5401,8 +5407,8 @@ namespace ts {
             const count = sources.length;
             const mapper: TypeMapper =
                 count == 1 ? createUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) :
-                count == 2 ? createBinaryTypeMapper(sources[0], targets ? targets[0] : anyType, sources[1], targets ? targets[1] : anyType) :
-                createArrayTypeMapper(sources, targets);
+                    count == 2 ? createBinaryTypeMapper(sources[0], targets ? targets[0] : anyType, sources[1], targets ? targets[1] : anyType) :
+                        createArrayTypeMapper(sources, targets);
             mapper.mappedTypes = sources;
             return mapper;
         }
@@ -5725,8 +5731,8 @@ namespace ts {
         }
 
         function isSignatureAssignableTo(source: Signature,
-                                         target: Signature,
-                                         ignoreReturnTypes: boolean): boolean {
+            target: Signature,
+            ignoreReturnTypes: boolean): boolean {
             return compareSignaturesRelated(source, target, ignoreReturnTypes, /*reportErrors*/ false, /*errorReporter*/ undefined, compareTypesAssignable) !== Ternary.False;
         }
 
@@ -5734,11 +5740,11 @@ namespace ts {
          * See signatureRelatedTo, compareSignaturesIdentical
          */
         function compareSignaturesRelated(source: Signature,
-                                          target: Signature,
-                                          ignoreReturnTypes: boolean,
-                                          reportErrors: boolean,
-                                          errorReporter: (d: DiagnosticMessage, arg0?: string, arg1?: string) => void,
-                                          compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {
+            target: Signature,
+            ignoreReturnTypes: boolean,
+            reportErrors: boolean,
+            errorReporter: (d: DiagnosticMessage, arg0?: string, arg1?: string) => void,
+            compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {
             // TODO (drosen): De-duplicate code between related functions.
             if (source === target) {
                 return Ternary.True;
@@ -5820,10 +5826,10 @@ namespace ts {
         }
 
         function compareTypePredicateRelatedTo(source: TypePredicate,
-                                               target: TypePredicate,
-                                               reportErrors: boolean,
-                                               errorReporter: (d: DiagnosticMessage, arg0?: string, arg1?: string) => void,
-                                               compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {
+            target: TypePredicate,
+            reportErrors: boolean,
+            errorReporter: (d: DiagnosticMessage, arg0?: string, arg1?: string) => void,
+            compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {
             if (source.kind !== target.kind) {
                 if (reportErrors) {
                     errorReporter(Diagnostics.A_this_based_type_guard_is_not_compatible_with_a_parameter_based_type_guard);
@@ -6904,7 +6910,7 @@ namespace ts {
         function isStringLiteralUnionType(type: Type): boolean {
             return type.flags & TypeFlags.StringLiteral ? true :
                 type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isStringLiteralUnionType) :
-                false;
+                    false;
         }
 
         /**
@@ -6986,11 +6992,11 @@ namespace ts {
             const resolved = <ResolvedType>type;
             const members = transformTypeOfMembers(type, getRegularTypeOfObjectLiteral);
             const regularNew = createAnonymousType(resolved.symbol,
-                                                   members,
-                                                   resolved.callSignatures,
-                                                   resolved.constructSignatures,
-                                                   resolved.stringIndexInfo,
-                                                   resolved.numberIndexInfo);
+                members,
+                resolved.callSignatures,
+                resolved.constructSignatures,
+                resolved.stringIndexInfo,
+                resolved.numberIndexInfo);
             regularNew.flags = resolved.flags & ~TypeFlags.FreshObjectLiteral;
             (<FreshObjectLiteralType>type).regularType = regularNew;
             return regularNew;
@@ -7818,7 +7824,7 @@ namespace ts {
                         // We cache results of flow type resolution for shared nodes that were previously visited in
                         // the same getFlowTypeOfReference invocation. A node is considered shared when it is the
                         // antecedent of more than one node.
-                        for (let i = visitedFlowStart; i < visitedFlowCount;  i++) {
+                        for (let i = visitedFlowStart; i < visitedFlowCount; i++) {
                             if (visitedFlowNodes[i] === flow) {
                                 return visitedFlowTypes[i];
                             }
@@ -8205,7 +8211,7 @@ namespace ts {
                 const targetType = type.flags & TypeFlags.TypeParameter ? getApparentType(type) : type;
                 return isTypeAssignableTo(candidate, targetType) ? candidate :
                     isTypeAssignableTo(type, candidate) ? type :
-                    getIntersectionType([type, candidate]);
+                        getIntersectionType([type, candidate]);
             }
 
             function narrowTypeByTypePredicate(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
@@ -8319,21 +8325,8 @@ namespace ts {
             return container === declarationContainer;
         }
 
-        function updateReferencesForInterfaceHeritiageClauseTargets(node: InterfaceDeclaration): void {
-            const extendedTypeNode = getClassExtendsHeritageClauseElement(node);
-            if (extendedTypeNode) {
-                const t = getTypeFromTypeNode(extendedTypeNode);
-                if (t !== unknownType && t.symbol && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
-                    t.symbol.hasReference = true;
-                }
-            }
-        }
-
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
-            if (symbol && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
-                symbol.hasReference = true;
-            }
 
             // As noted in ECMAScript 6 language spec, arrow functions never have an arguments objects.
             // Although in down-level emit of arrow function, we emit it using function expression which means that
@@ -8624,9 +8617,9 @@ namespace ts {
                     getSpecialPropertyAssignmentKind(container.parent) === SpecialPropertyAssignmentKind.PrototypeProperty) {
                     // Get the 'x' of 'x.prototype.y = f' (here, 'f' is 'container')
                     const className = (((container.parent as BinaryExpression)   // x.prototype.y = f
-                                        .left as PropertyAccessExpression)       // x.prototype.y
-                                        .expression as PropertyAccessExpression) // x.prototype
-                                        .expression;                             // x
+                        .left as PropertyAccessExpression)       // x.prototype.y
+                        .expression as PropertyAccessExpression) // x.prototype
+                        .expression;                             // x
                     const classSymbol = checkExpression(className).symbol;
                     if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
                         return getInferredClassType(classSymbol);
@@ -9871,7 +9864,7 @@ namespace ts {
                 elemType = checkExpression(node.tagName);
             }
             if (elemType.flags & TypeFlags.Union) {
-                const types = (<UnionOrIntersectionType> elemType).types;
+                const types = (<UnionOrIntersectionType>elemType).types;
                 return getUnionType(types.map(type => {
                     return getResolvedJsxType(node, type, elemClassType);
                 }));
@@ -10248,8 +10241,13 @@ namespace ts {
                 return unknownType;
             }
 
-            if ((compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
-                prop.hasReference = true;
+            if (noUnusedIdentifiers && (prop.flags & SymbolFlags.ClassMember)) {
+                if (prop.flags & SymbolFlags.Instantiated) {
+                    getSymbolLinks(prop).target.isReferenced = true;
+                }
+                else {
+                    prop.isReferenced = true;
+                }
             }
 
             getNodeLinks(node).resolvedSymbol = prop;
@@ -11803,7 +11801,7 @@ namespace ts {
                 // if inference didn't come up with anything but {}, fall back to the binding pattern if present.
                 if (links.type === emptyObjectType &&
                     (parameter.valueDeclaration.name.kind === SyntaxKind.ObjectBindingPattern ||
-                     parameter.valueDeclaration.name.kind === SyntaxKind.ArrayBindingPattern)) {
+                        parameter.valueDeclaration.name.kind === SyntaxKind.ArrayBindingPattern)) {
                     links.type = getTypeFromBindingPattern(<BindingPattern>parameter.valueDeclaration.name);
                 }
                 assignBindingElementTypes(<ParameterDeclaration>parameter.valueDeclaration);
@@ -12194,8 +12192,7 @@ namespace ts {
                         }
                     }
                 }
-                checkUnusedIdentifiers(node);
-                checkUnusedTypeParameters(node);
+                registerForUnusedIdentifiersCheck(node);
             }
         }
 
@@ -13423,8 +13420,7 @@ namespace ts {
             checkGrammarConstructorTypeParameters(node) || checkGrammarConstructorTypeAnnotation(node);
 
             checkSourceElement(node.body);
-            checkUnusedIdentifiers(node);
-            checkUnusedTypeParameters(node);
+            registerForUnusedIdentifiersCheck(node);
 
             const symbol = getSymbolOfNode(node);
             const firstDeclaration = getDeclarationOfKind(symbol, node.kind);
@@ -13570,6 +13566,7 @@ namespace ts {
             }
             if (node.parent.kind !== SyntaxKind.ObjectLiteralExpression) {
                 checkSourceElement(node.body);
+                registerForUnusedIdentifiersCheck(node);
             }
             else {
                 checkNodeDeferred(node);
@@ -13586,6 +13583,7 @@ namespace ts {
 
         function checkAccessorDeferred(node: AccessorDeclaration) {
             checkSourceElement(node.body);
+            registerForUnusedIdentifiersCheck(node);
         }
 
         function checkMissingDeclaration(node: Node) {
@@ -13618,9 +13616,6 @@ namespace ts {
             checkGrammarTypeArguments(node, node.typeArguments);
             const type = getTypeFromTypeReference(node);
             if (type !== unknownType) {
-                if (type.symbol && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
-                    type.symbol.hasReference = true;
-                }
                 if (node.typeArguments) {
                     // Do type argument local checks only if referenced type is successfully resolved
                     forEach(node.typeArguments, checkSourceElement);
@@ -14471,8 +14466,7 @@ namespace ts {
             }
 
             checkSourceElement(node.body);
-            checkUnusedIdentifiers(node);
-            checkUnusedTypeParameters(node);
+
             if (!node.asteriskToken) {
                 const returnOrPromisedType = node.type && (isAsync ? checkAsyncFunctionReturnType(node) : getTypeFromTypeNode(node.type));
                 checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
@@ -14492,21 +14486,76 @@ namespace ts {
                     getReturnTypeOfSignature(getSignatureFromDeclaration(node));
                 }
             }
+
+            registerForUnusedIdentifiersCheck(node);
         }
 
-        function checkUnusedIdentifiers(node: FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction | ForInStatement | Block | CatchClause): void {
-            if (node.parent.kind !== SyntaxKind.InterfaceDeclaration && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
+        function registerForUnusedIdentifiersCheck(node: Node) {
+            if (deferredUnusedIdentifierNodes) {
+                deferredUnusedIdentifierNodes.push(node);
+            }
+        }
+
+        function checkUnusedIdentifiers() {
+            if (deferredUnusedIdentifierNodes) {
+                for (const node of deferredUnusedIdentifierNodes) {
+                    switch (node.kind) {
+                        case SyntaxKind.SourceFile:
+                        case SyntaxKind.ModuleDeclaration:
+                            checkUnusedModuleMembers(<ModuleDeclaration | SourceFile>node);
+                            break;
+                        case SyntaxKind.ClassDeclaration:
+                        case SyntaxKind.ClassExpression:
+                            checkUnusedClassMembers(<ClassDeclaration | ClassExpression>node);
+                            checkUnusedTypeParameters(<ClassDeclaration | ClassExpression>node);
+                            break;
+                        case SyntaxKind.InterfaceDeclaration:
+                            checkUnusedTypeParameters(<InterfaceDeclaration>node);
+                            break;
+                        case SyntaxKind.Block:
+                        case SyntaxKind.ForStatement:
+                        case SyntaxKind.ForInStatement:
+                        case SyntaxKind.ForOfStatement:
+                            checkUnusedLocalsAndParameters(<Block | ForInStatement | ForStatement | ForOfStatement>node);
+                            break;
+                        case SyntaxKind.Constructor:
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.ArrowFunction:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                            if ((<FunctionLikeDeclaration>node).body) {
+                                checkUnusedLocalsAndParameters(<FunctionLikeDeclaration>node);
+                            }
+                            checkUnusedTypeParameters(<FunctionLikeDeclaration>node);
+                            break;
+                        case SyntaxKind.MethodSignature:
+                        case SyntaxKind.CallSignature:
+                        case SyntaxKind.ConstructSignature:
+                        case SyntaxKind.IndexSignature:
+                        case SyntaxKind.FunctionType:
+                        case SyntaxKind.ConstructorType:
+                            checkUnusedTypeParameters(<FunctionLikeDeclaration>node);
+                            break;
+                    };
+                }
+            }
+        }
+
+        function checkUnusedLocalsAndParameters(node: FunctionLikeDeclaration | ForStatement | Block): void {
+            if (node.parent.kind !== SyntaxKind.InterfaceDeclaration && noUnusedIdentifiers && !isInAmbientContext(node)) {
                 for (const key in node.locals) {
                     if (hasProperty(node.locals, key)) {
                         const local = node.locals[key];
-                        if (!local.hasReference && local.valueDeclaration) {
-                            if (local.valueDeclaration.kind !== SyntaxKind.Parameter && compilerOptions.noUnusedLocals) {
-                                error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
-                            }
-                            else if (local.valueDeclaration.kind === SyntaxKind.Parameter && compilerOptions.noUnusedParameters) {
-                                if (local.valueDeclaration.flags === 0) {
+                        if (!local.isReferenced) {
+                            if (local.valueDeclaration && local.valueDeclaration.kind === SyntaxKind.Parameter) {
+                                if (compilerOptions.noUnusedParameters && !isParameterPropertyDeclaration(<ParameterDeclaration>local.valueDeclaration)) {
                                     error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
                                 }
+                            }
+                            else if (compilerOptions.noUnusedLocals) {
+                                forEach(local.declarations, d => error(d.name || d, Diagnostics._0_is_declared_but_never_used, local.name));
                             }
                         }
                     }
@@ -14514,18 +14563,18 @@ namespace ts {
             }
         }
 
-        function checkUnusedClassLocals(node: ClassDeclaration): void {
+        function checkUnusedClassMembers(node: ClassDeclaration | ClassExpression): void {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 if (node.members) {
                     for (const member of node.members) {
                         if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.PropertyDeclaration) {
-                            if (isPrivateNode(member) && !member.symbol.hasReference) {
+                            if (isPrivateNode(member) && !member.symbol.isReferenced) {
                                 error(member.name, Diagnostics._0_is_declared_but_never_used, member.symbol.name);
                             }
                         }
                         else if (member.kind === SyntaxKind.Constructor) {
                             for (const parameter of (<ConstructorDeclaration>member).parameters) {
-                                if (isPrivateNode(parameter) && !parameter.symbol.hasReference) {
+                                if (isPrivateNode(parameter) && !parameter.symbol.isReferenced) {
                                     error(parameter.name, Diagnostics._0_is_declared_but_never_used, parameter.symbol.name);
                                 }
                             }
@@ -14535,11 +14584,11 @@ namespace ts {
             }
         }
 
-        function checkUnusedTypeParameters(node: ClassDeclaration | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration | InterfaceDeclaration) {
+        function checkUnusedTypeParameters(node: ClassDeclaration | ClassExpression | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration | InterfaceDeclaration) {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 if (node.typeParameters) {
                     for (const typeParameter of node.typeParameters) {
-                        if (!typeParameter.symbol.hasReference) {
+                        if (!typeParameter.symbol.isReferenced) {
                             error(typeParameter.name, Diagnostics._0_is_declared_but_never_used, typeParameter.symbol.name);
                         }
                     }
@@ -14551,13 +14600,17 @@ namespace ts {
             return (node.flags & NodeFlags.Private) !== 0;
         }
 
-        function checkUnusedModuleLocals(node: ModuleDeclaration | SourceFile): void {
+        function checkUnusedModuleMembers(node: ModuleDeclaration | SourceFile): void {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 for (const key in node.locals) {
                     if (hasProperty(node.locals, key)) {
                         const local = node.locals[key];
-                        if (!local.hasReference && !local.exportSymbol) {
-                            forEach(local.declarations, d => error(d.name, Diagnostics._0_is_declared_but_never_used, local.name));
+                        if (!local.isReferenced && !local.exportSymbol) {
+                            for (const declaration of local.declarations) {
+                                if (!isAmbientModule(declaration)) {
+                                    error(declaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
+                                }
+                            }
                         }
                     }
                 }
@@ -14570,7 +14623,9 @@ namespace ts {
                 checkGrammarStatementInAmbientContext(node);
             }
             forEach(node.statements, checkSourceElement);
-            checkUnusedIdentifiers(node);
+            if (node.locals) {
+                registerForUnusedIdentifiersCheck(node);
+            }
         }
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
@@ -15035,6 +15090,7 @@ namespace ts {
             if (node.condition) checkExpression(node.condition);
             if (node.incrementor) checkExpression(node.incrementor);
             checkSourceElement(node.statement);
+            registerForUnusedIdentifiersCheck(node);
         }
 
         function checkForOfStatement(node: ForOfStatement): void {
@@ -15075,7 +15131,9 @@ namespace ts {
             }
 
             checkSourceElement(node.statement);
-            checkUnusedIdentifiers(node);
+            if (node.locals) {
+                registerForUnusedIdentifiersCheck(node);
+            }
         }
 
         function checkForInStatement(node: ForInStatement) {
@@ -15123,7 +15181,9 @@ namespace ts {
             }
 
             checkSourceElement(node.statement);
-            checkUnusedIdentifiers(node);
+            if (node.locals) {
+                registerForUnusedIdentifiersCheck(node);
+            }
         }
 
         function checkForInOrForOfVariableDeclaration(iterationStatement: ForInStatement | ForOfStatement): void {
@@ -15563,7 +15623,6 @@ namespace ts {
                 }
 
                 checkBlock(catchClause.block);
-                checkUnusedIdentifiers(catchClause);
             }
 
             if (node.finallyBlock) {
@@ -15717,6 +15776,7 @@ namespace ts {
 
         function checkClassExpressionDeferred(node: ClassExpression) {
             forEach(node.members, checkSourceElement);
+            registerForUnusedIdentifiersCheck(node);
         }
 
         function checkClassDeclaration(node: ClassDeclaration) {
@@ -15725,8 +15785,8 @@ namespace ts {
             }
             checkClassLikeDeclaration(node);
             forEach(node.members, checkSourceElement);
-            checkUnusedClassLocals(node);
-            checkUnusedTypeParameters(node);
+
+            registerForUnusedIdentifiersCheck(node);
         }
 
         function checkClassLikeDeclaration(node: ClassLikeDeclaration) {
@@ -16036,7 +16096,6 @@ namespace ts {
 
             if (produceDiagnostics) {
                 checkTypeForDuplicateIndexSignatures(node);
-                updateReferencesForInterfaceHeritiageClauseTargets(node);
                 checkUnusedTypeParameters(node);
             }
         }
@@ -16434,7 +16493,9 @@ namespace ts {
 
             if (node.body) {
                 checkSourceElement(node.body);
-                checkUnusedModuleLocals(node);
+                if (!isGlobalScopeAugmentation(node)) {
+                    registerForUnusedIdentifiersCheck(node);
+                }
             }
         }
 
@@ -16614,9 +16675,6 @@ namespace ts {
                         }
                         if (target.flags & SymbolFlags.Type) {
                             checkTypeNameIsReserved(node.name, Diagnostics.Import_name_cannot_be_0);
-                        }
-                        if ((compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters) && !isInAmbientContext(node)) {
-                            target.hasReference = true;
                         }
                     }
                 }
@@ -16959,12 +17017,22 @@ namespace ts {
                 potentialThisCollisions.length = 0;
 
                 deferredNodes = [];
+                deferredUnusedIdentifierNodes = produceDiagnostics && noUnusedIdentifiers ? [] : undefined;
+
                 forEach(node.statements, checkSourceElement);
-                if (isExternalModule(node)) {
-                    checkUnusedModuleLocals(node);
-                }
+
                 checkDeferredNodes();
+
+                if (isExternalModule(node)) {
+                    registerForUnusedIdentifiersCheck(node);
+                }
+
+                if (!node.isDeclarationFile) {
+                    checkUnusedIdentifiers();
+                }
+
                 deferredNodes = undefined;
+                deferredUnusedIdentifierNodes = undefined;
 
                 if (isExternalOrCommonJsModule(node)) {
                     checkExternalModuleExports(node);
