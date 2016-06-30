@@ -116,6 +116,10 @@ namespace ts {
         assert.equal(projectService.configuredProjects.length, expected, `expected ${expected} configured project(s)`);
     }
 
+    function checkNumberOfExternalProjects(projectService: server.ProjectService, expected: number) {
+        assert.equal(projectService.externalProjects.length, expected, `expected ${expected} external project(s)`);
+    }
+
     function checkNumberOfInferredProjects(projectService: server.ProjectService, expected: number) {
         assert.equal(projectService.inferredProjects.length, expected, `expected ${expected} inferred project(s)`);
     }
@@ -144,7 +148,7 @@ namespace ts {
             const timeoutId = this.nextId;
             this.nextId++;
             this.map[timeoutId] = cb.bind(undefined, ...args);
-            return timeoutId;            
+            return timeoutId;
         }
         unregister(id: any) {
             if (typeof id === "number") {
@@ -758,6 +762,42 @@ namespace ts {
 
             projectService.closeClientFile(file1.path);
             checkNumberOfConfiguredProjects(projectService, 0);
+        });
+
+        it ("should not close external project with no open files", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x =1;"
+            };
+            const file2 = {
+                path: "/a/b/f2.ts",
+                content: "let y =1;"
+            };
+            const externalProjectName = "externalproject";
+            const host = createServerHost({ fileOrFolderList: [file1, file2], libFile });
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ true);
+            projectService.openExternalProject({
+                rootFiles: [ file1.path, file2.path ],
+                options: {},
+                projectFileName: externalProjectName
+            });
+
+            checkNumberOfExternalProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 0);
+
+            // open client file - should not lead to creation of inferred project
+            projectService.openClientFile(file1.path, file1.content);
+            checkNumberOfExternalProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 0);
+
+            // close client file - external project should still exists
+            projectService.closeClientFile(file1.path);
+            checkNumberOfExternalProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 0);
+
+            projectService.closeExternalProject(externalProjectName);
+            checkNumberOfExternalProjects(projectService, 0);
+            checkNumberOfInferredProjects(projectService, 0);
         });
     });
 }

@@ -121,7 +121,7 @@ namespace ts.server {
         /**
          * maps external project file name to list of config files that were the part of this project
          */
-        private readonly externalProjectToConfiguredProjectMap: Map<NormalizedPath[]>;
+        private readonly externalProjectToConfiguredProjectMap: Map<NormalizedPath[]> = {};
 
         /**
          * external projects (configuration and list of root files is not controlled by tsserver)
