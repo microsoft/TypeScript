@@ -125,7 +125,7 @@ namespace ts {
         host: ModuleResolutionHost;
         compilerOptions: CompilerOptions;
         traceEnabled: boolean;
-        goal: ResolutionGoal;
+        goal: PrioritizedExtensionCollection;
     }
 
     function getPackageEntry(packageJson: any, key: string, tag: string, state: ModuleResolutionState) {
@@ -205,7 +205,7 @@ namespace ts {
             compilerOptions: options,
             host: host,
             traceEnabled,
-            goal: ResolutionGoal.DTS | ResolutionGoal.TS
+            goal: PrioritizedExtensionCollection.DTS | PrioritizedExtensionCollection.TS
         };
 
         const typeRoots = getEffectiveTypeRoots(options, host);
@@ -236,7 +236,7 @@ namespace ts {
                 trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(", "));
             }
             const primarySearchPaths = typeRoots;
-            moduleResolutionState.goal = ResolutionGoal.DTS;
+            moduleResolutionState.goal = PrioritizedExtensionCollection.DTS;
             for (const typeRoot of primarySearchPaths) {
                 const candidate = combinePaths(typeRoot, typeReferenceDirectiveName);
                 const candidateDirectory = getDirectoryPath(candidate);
@@ -271,7 +271,7 @@ namespace ts {
             if (traceEnabled) {
                 trace(host, Diagnostics.Looking_up_in_node_modules_folder_initial_location_0, initialLocationForSecondaryLookup);
             }
-            moduleResolutionState.goal = ResolutionGoal.DTS | ResolutionGoal.TS;
+            moduleResolutionState.goal = PrioritizedExtensionCollection.DTS | PrioritizedExtensionCollection.TS;
             resolvedFile = loadModuleFromNodeModules(typeReferenceDirectiveName, initialLocationForSecondaryLookup, failedLookupLocations, moduleResolutionState);
             if (traceEnabled) {
                 if (resolvedFile) {
@@ -614,7 +614,7 @@ namespace ts {
 
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         const containingDirectory = getDirectoryPath(containingFile);
-        const goal = getResolutionGoalForCompilerOptions(compilerOptions);
+        const goal = getExtensionCollectionForCompilerOptions(compilerOptions);
         const traceEnabled = isTraceEnabled(compilerOptions, host);
 
         const failedLookupLocations: string[] = [];
@@ -671,7 +671,7 @@ namespace ts {
      * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
      */
     function loadModuleFromFile(candidate: string, failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
-        const extensions = getExtensionsForGoal(state.goal);
+        const extensions = getExtensionsForCollection(state.goal);
         // First try to keep/add an extension: importing "./foo.ts" can be matched by a file "./foo.ts", and "./foo" by "./foo.d.ts"
         const resolvedByAddingOrKeepingExtension = loadModuleFromFileWorker(candidate, extensions, failedLookupLocation, onlyRecordFailures, state);
         if (resolvedByAddingOrKeepingExtension) {
@@ -724,10 +724,10 @@ namespace ts {
                 trace(state.host, Diagnostics.Found_package_json_at_0, packageJsonPath);
             }
             let typesFile: string;
-            if (state.goal & ResolutionGoal.TypeScript) {
+            if (state.goal & PrioritizedExtensionCollection.TypeScript) {
                 typesFile = getPackageTypes(packageJsonPath, state);
             }
-            if (!typesFile && (state.goal & ResolutionGoal.JavaScript)) {
+            if (!typesFile && (state.goal & PrioritizedExtensionCollection.JavaScript)) {
                 typesFile = getPackageMain(packageJsonPath, state);
             }
             if (typesFile) {
@@ -769,9 +769,9 @@ namespace ts {
             const baseName = getBaseFileName(directory);
             if (baseName !== "node_modules") {
                 let result: string;
-                if (state.goal & ResolutionGoal.TypeScript) {
+                if (state.goal & PrioritizedExtensionCollection.TypeScript) {
                     const oldGoal = state.goal;
-                    state.goal = state.goal & ResolutionGoal.TypeScript;
+                    state.goal = state.goal & PrioritizedExtensionCollection.TypeScript;
                     result =
                         // first: try to load module ts as-is
                         loadModuleFromNodeModulesFolder(moduleName, directory, failedLookupLocations, state) ||
@@ -779,10 +779,10 @@ namespace ts {
                         loadModuleFromNodeModulesFolder(combinePaths("@types", moduleName), directory, failedLookupLocations, state);
                     state.goal = oldGoal;
                 }
-                if (!result && (state.goal & ResolutionGoal.JavaScript)) {
+                if (!result && (state.goal & PrioritizedExtensionCollection.JavaScript)) {
                     // always look for js after ts
                     const oldGoal = state.goal;
-                    state.goal = state.goal & ResolutionGoal.JavaScript;
+                    state.goal = state.goal & PrioritizedExtensionCollection.JavaScript;
                     result = loadModuleFromNodeModulesFolder(moduleName, directory, failedLookupLocations, state);
                     state.goal = oldGoal;
                 }
@@ -803,8 +803,8 @@ namespace ts {
 
     export function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
-        let goal = getResolutionGoalForCompilerOptions(compilerOptions);
-        if (!compilerOptions.jsx) goal &= ~ResolutionGoal.JSXLike;
+        let goal = getExtensionCollectionForCompilerOptions(compilerOptions);
+        if (!compilerOptions.jsx) goal &= ~PrioritizedExtensionCollection.JSXLike;
         const state = { compilerOptions, host, traceEnabled, goal };
         const failedLookupLocations: string[] = [];
         let containingDirectory = getDirectoryPath(containingFile);
