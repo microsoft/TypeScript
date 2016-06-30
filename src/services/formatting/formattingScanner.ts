@@ -282,22 +282,13 @@ namespace ts.formatting {
         }
 
         function skipToEndOf(node: Node): void {
-            scanner.setTextPos(backUpWhitespace());
+            scanner.setTextPos(node.end);
             savedPos = scanner.getStartPos();
             lastScanAction = undefined;
             lastTokenInfo = undefined;
             wasNewLine = false;
             leadingTrivia = undefined;
             trailingTrivia = undefined;
-
-            function backUpWhitespace(): number {
-                const text = scanner.getText();
-                let end = node.end;
-                while (end > 0 && isWhiteSpaceLike(text.charCodeAt(end - 1))) {
-                    end--;
-                }
-                return end;
-            }
         }
     }
 }
