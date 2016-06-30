@@ -2107,6 +2107,8 @@ namespace ts {
         PropertyOrAccessor = Property | Accessor,
         Export = ExportNamespace | ExportType | ExportValue,
 
+        ClassMember = Method | Accessor | Property,
+
         /* @internal */
         // The set of things we consider semantically classifiable.  Used to speed up the LS during
         // classification.

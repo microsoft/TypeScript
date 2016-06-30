@@ -10241,8 +10241,13 @@ namespace ts {
                 return unknownType;
             }
 
-            if (noUnusedIdentifiers && !isInAmbientContext(node)) {
-                prop.isReferenced = true;
+            if (noUnusedIdentifiers && (prop.flags & SymbolFlags.ClassMember)) {
+                if (prop.flags & SymbolFlags.Instantiated) {
+                    getSymbolLinks(prop).target.isReferenced = true;
+                }
+                else {
+                    prop.isReferenced = true;
+                }
             }
 
             getNodeLinks(node).resolvedSymbol = prop;
