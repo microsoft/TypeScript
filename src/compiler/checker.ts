@@ -10241,9 +10241,12 @@ namespace ts {
                 return unknownType;
             }
 
-            if (noUnusedIdentifiers && (prop.flags & SymbolFlags.ClassMember)) {
+            if (noUnusedIdentifiers &&
+                (prop.flags & SymbolFlags.ClassMember) &&
+                prop.valueDeclaration && (prop.valueDeclaration.flags & NodeFlags.Private)) {
                 if (prop.flags & SymbolFlags.Instantiated) {
                     getSymbolLinks(prop).target.isReferenced = true;
+
                 }
                 else {
                     prop.isReferenced = true;
@@ -14513,10 +14516,11 @@ namespace ts {
                             checkUnusedTypeParameters(<InterfaceDeclaration>node);
                             break;
                         case SyntaxKind.Block:
+                        case SyntaxKind.CaseBlock:
                         case SyntaxKind.ForStatement:
                         case SyntaxKind.ForInStatement:
                         case SyntaxKind.ForOfStatement:
-                            checkUnusedLocalsAndParameters(<Block | ForInStatement | ForStatement | ForOfStatement>node);
+                            checkUnusedLocalsAndParameters(node);
                             break;
                         case SyntaxKind.Constructor:
                         case SyntaxKind.FunctionExpression:
@@ -14543,7 +14547,7 @@ namespace ts {
             }
         }
 
-        function checkUnusedLocalsAndParameters(node: FunctionLikeDeclaration | ForStatement | Block): void {
+        function checkUnusedLocalsAndParameters(node: Node): void {
             if (node.parent.kind !== SyntaxKind.InterfaceDeclaration && noUnusedIdentifiers && !isInAmbientContext(node)) {
                 for (const key in node.locals) {
                     if (hasProperty(node.locals, key)) {
@@ -14568,13 +14572,13 @@ namespace ts {
                 if (node.members) {
                     for (const member of node.members) {
                         if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.PropertyDeclaration) {
-                            if (isPrivateNode(member) && !member.symbol.isReferenced) {
+                            if (!member.symbol.isReferenced && member.flags & NodeFlags.Private) {
                                 error(member.name, Diagnostics._0_is_declared_but_never_used, member.symbol.name);
                             }
                         }
                         else if (member.kind === SyntaxKind.Constructor) {
                             for (const parameter of (<ConstructorDeclaration>member).parameters) {
-                                if (isPrivateNode(parameter) && !parameter.symbol.isReferenced) {
+                                if (!parameter.symbol.isReferenced && parameter.flags & NodeFlags.Private) {
                                     error(parameter.name, Diagnostics._0_is_declared_but_never_used, parameter.symbol.name);
                                 }
                             }
@@ -14594,10 +14598,6 @@ namespace ts {
                     }
                 }
             }
-        }
-
-        function isPrivateNode(node: Node): boolean {
-            return (node.flags & NodeFlags.Private) !== 0;
         }
 
         function checkUnusedModuleMembers(node: ModuleDeclaration | SourceFile): void {
@@ -15090,7 +15090,9 @@ namespace ts {
             if (node.condition) checkExpression(node.condition);
             if (node.incrementor) checkExpression(node.incrementor);
             checkSourceElement(node.statement);
-            registerForUnusedIdentifiersCheck(node);
+            if (node.locals) {
+                registerForUnusedIdentifiersCheck(node);
+            }
         }
 
         function checkForOfStatement(node: ForOfStatement): void {
@@ -15556,6 +15558,9 @@ namespace ts {
                 }
                 forEach(clause.statements, checkSourceElement);
             });
+            if (node.caseBlock.locals) {
+                registerForUnusedIdentifiersCheck(node.caseBlock);
+            }
         }
 
         function checkLabeledStatement(node: LabeledStatement) {
