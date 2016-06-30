@@ -983,10 +983,11 @@ namespace ts.server {
             if (configFiles) {
                 for (const configFile of configFiles) {
                     const configuredProject = this.findConfiguredProjectByProjectName(configFile);
-                    if (configuredProject) {
+                    if (configuredProject && configuredProject.deleteOpenRef() === 0) {
                         this.removeProject(configuredProject);
                     }
                 }
+                // TODO: do this only if ownership of files is changed
                 this.refreshInferredProjects();
             }
             else {
@@ -1019,9 +1020,14 @@ namespace ts.server {
                 // store the list of tsconfig files that belong to the external project
                 this.externalProjectToConfiguredProjectMap[proj.projectFileName] = tsConfigFiles;
                 for (const tsconfigFile of tsConfigFiles) {
-                    const { success, project, errors } = this.openConfigFile(tsconfigFile);
-                    if (success) {
-                        // keep project alive - its lifetime is bound to the lifetime of containing external project
+                    let project = this.findConfiguredProjectByProjectName(tsconfigFile);
+                    if (!project) {
+                        const result = this.openConfigFile(tsconfigFile);
+                        // TODO: save errors
+                        project = result.success && result.project;
+                    }
+                    if (project) {
+                        // keep project alive even if no documents are opened - its lifetime is bound to the lifetime of containing external project
                         project.addOpenRef();
                     }
                 }
