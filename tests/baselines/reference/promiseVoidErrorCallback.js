@@ -37,6 +37,7 @@ function f2(x) {
 var x3 = f1()
     .then(f2, (e) => {
     throw e;
-}).then((x) => {
+})
+    .then((x) => {
     return { __t3: x.__t2 + "bar" };
 });
