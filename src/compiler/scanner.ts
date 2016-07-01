@@ -365,12 +365,12 @@ namespace ts {
 
     const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-    export function isWhiteSpaceLike(ch: number): boolean {
-        return isWhiteSpace(ch) || isLineBreak(ch);
+    export function isWhiteSpace(ch: number): boolean {
+        return isWhiteSpaceSingleLine(ch) || isLineBreak(ch);
     }
 
     /** Does not include line breaks. For that, see isWhiteSpaceLike. */
-    export function isWhiteSpace(ch: number): boolean {
+    export function isWhiteSpaceSingleLine(ch: number): boolean {
         // Note: nextLine is in the Zs space, and should be considered to be a whitespace.
         // It is explicitly not a line-break as it isn't in the exact set specified by EcmaScript.
         return ch === CharacterCodes.space ||
@@ -511,7 +511,7 @@ namespace ts {
                       break;
 
                   default:
-                      if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpaceLike(ch))) {
+                      if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch))) {
                           pos++;
                           continue;
                       }
@@ -664,7 +664,7 @@ namespace ts {
                     }
                     break;
                 default:
-                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpaceLike(ch))) {
+                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch))) {
                         if (result && result.length && isLineBreak(ch)) {
                             lastOrUndefined(result).hasTrailingNewLine = true;
                         }
@@ -1209,7 +1209,7 @@ namespace ts {
                             continue;
                         }
                         else {
-                            while (pos < end && isWhiteSpace(text.charCodeAt(pos))) {
+                            while (pos < end && isWhiteSpaceSingleLine(text.charCodeAt(pos))) {
                                 pos++;
                             }
                             return token = SyntaxKind.WhitespaceTrivia;
@@ -1527,7 +1527,7 @@ namespace ts {
                             }
                             return token = getIdentifierToken();
                         }
-                        else if (isWhiteSpace(ch)) {
+                        else if (isWhiteSpaceSingleLine(ch)) {
                             pos++;
                             continue;
                         }
@@ -1696,7 +1696,7 @@ namespace ts {
             let ch = text.charCodeAt(pos);
             while (pos < end) {
                 ch = text.charCodeAt(pos);
-                if (isWhiteSpace(ch)) {
+                if (isWhiteSpaceSingleLine(ch)) {
                     pos++;
                 }
                 else {

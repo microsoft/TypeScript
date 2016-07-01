@@ -78,7 +78,7 @@ namespace ts.formatting {
         //  1. the end of the previous line
         //  2. the last non-whitespace character in the current line
         let endOfFormatSpan = getEndLinePosition(line, sourceFile);
-        while (isWhiteSpace(sourceFile.text.charCodeAt(endOfFormatSpan))) {
+        while (isWhiteSpaceSingleLine(sourceFile.text.charCodeAt(endOfFormatSpan))) {
             endOfFormatSpan--;
         }
         // if the character at the end of the span is a line break, we shouldn't include it, because it indicates we don't want to
@@ -966,7 +966,7 @@ namespace ts.formatting {
 
                 const whitespaceStart = getTrailingWhitespaceStartPosition(lineStartPosition, lineEndPosition);
                 if (whitespaceStart !== -1) {
-                    Debug.assert(whitespaceStart === lineStartPosition || !isWhiteSpace(sourceFile.text.charCodeAt(whitespaceStart - 1)));
+                    Debug.assert(whitespaceStart === lineStartPosition || !isWhiteSpaceSingleLine(sourceFile.text.charCodeAt(whitespaceStart - 1)));
                     recordDelete(whitespaceStart, lineEndPosition + 1 - whitespaceStart);
                 }
             }
@@ -978,7 +978,7 @@ namespace ts.formatting {
          */
         function getTrailingWhitespaceStartPosition(start: number, end: number) {
             let pos = end;
-            while (pos >= start && isWhiteSpace(sourceFile.text.charCodeAt(pos))) {
+            while (pos >= start && isWhiteSpaceSingleLine(sourceFile.text.charCodeAt(pos))) {
                 pos--;
             }
             if (pos !== end) {
