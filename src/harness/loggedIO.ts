@@ -8,7 +8,6 @@ interface FileInformation {
 }
 
 interface FindFileResult {
-
 }
 
 interface IOLog {
@@ -61,7 +60,7 @@ interface IOLog {
     }[];
     directoriesRead: {
         path: string,
-        extension: string[],
+        extensions: string[],
         exclude: string[],
         include: string[],
         result: string[]
@@ -218,13 +217,29 @@ namespace Playback {
             memoize(path => findResultByPath(wrapper, replayLog.filesRead, path).contents));
 
         wrapper.readDirectory = recordReplay(wrapper.readDirectory, underlying)(
-            (path, extension, exclude, include) => {
-                const result = (<ts.System>underlying).readDirectory(path, extension, exclude, include);
-                const logEntry = { path, extension, exclude, include, result };
+            (path, extensions, exclude, include) => {
+                const result = (<ts.System>underlying).readDirectory(path, extensions, exclude, include);
+                const logEntry = { path, extensions, exclude, include, result };
                 recordLog.directoriesRead.push(logEntry);
                 return result;
             },
-            (path, extension, exclude) => findResultByPath(wrapper, replayLog.directoriesRead, path));
+            (path, extensions, exclude) => {
+                // Because extensions is an array of all allowed extension, we will want to merge each of the replayLog.directoriesRead into one
+                // if each of the directoriesRead support the specific extensions. We can certainly remove these once we recapture the RWC to
+                // sum all replayLog.directoriesRead into one. Currently the same folder with different support extension will be considered
+                // different entry in replayLog.directoriesRead
+                const normalizedPath = ts.normalizePath(path).toLowerCase();
+                const result: string[] = [];
+                 for (const directory of replayLog.directoriesRead) {
+                    for (const extension of extensions) {
+                        if (ts.normalizeSlashes(directory.path).toLowerCase() === normalizedPath) {
+                            result.push(...directory.result);
+                        }
+                    }
+                }
+
+                return result;
+            });
 
         wrapper.writeFile = recordReplay(wrapper.writeFile, underlying)(
             (path: string, contents: string) => callAndRecord(underlying.writeFile(path, contents), recordLog.filesWritten, { path, contents, bom: false }),
