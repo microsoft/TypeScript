@@ -10,17 +10,19 @@ interface FileInformation {
 interface FindFileResult {
 }
 
+interface IOLogFile {
+    path: string;
+    codepage: number;
+    result?: FileInformation;
+}
+
 interface IOLog {
     timestamp: string;
     arguments: string[];
     executingPath: string;
     currentDirectory: string;
     useCustomLibraryFile?: boolean;
-    filesRead: {
-        path: string;
-        codepage: number;
-        result?: FileInformation;
-    }[];
+    filesRead: IOLogFile[];
     filesWritten: {
         path: string;
         contents: string;
@@ -169,8 +171,7 @@ namespace Playback {
             path => callAndRecord(underlying.fileExists(path), recordLog.fileExists, { path }),
             memoize(path => {
                 // If we read from the file, it must exist
-                const noResult = {};
-                if (findResultByPath(wrapper, replayLog.filesRead, path, noResult) !== noResult) {
+                if (findFileByPath(wrapper, replayLog.filesRead, path, /*throwFileNotFoundError*/ false)) {
                     return true;
                 }
                 else {
@@ -214,7 +215,7 @@ namespace Playback {
                 recordLog.filesRead.push(logEntry);
                 return result;
             },
-            memoize(path => findResultByPath(wrapper, replayLog.filesRead, path).contents));
+            memoize(path => findFileByPath(wrapper, replayLog.filesRead, path, /*throwFileNotFoundError*/ true).contents));
 
         wrapper.readDirectory = recordReplay(wrapper.readDirectory, underlying)(
             (path, extensions, exclude, include) => {
@@ -225,16 +226,14 @@ namespace Playback {
             },
             (path, extensions, exclude) => {
                 // Because extensions is an array of all allowed extension, we will want to merge each of the replayLog.directoriesRead into one
-                // if each of the directoriesRead support the specific extensions. We can certainly remove these once we recapture the RWC to
-                // sum all replayLog.directoriesRead into one. Currently the same folder with different support extension will be considered
-                // different entry in replayLog.directoriesRead
+                // if each of the directoriesRead has matched path with the given path (directory with same path but different extension will considered
+                // different entry).
+                // TODO (yuisu): We can certainly remove these once we recapture the RWC using new API
                 const normalizedPath = ts.normalizePath(path).toLowerCase();
                 const result: string[] = [];
                  for (const directory of replayLog.directoriesRead) {
-                    for (const extension of extensions) {
-                        if (ts.normalizeSlashes(directory.path).toLowerCase() === normalizedPath) {
-                            result.push(...directory.result);
-                        }
+                    if (ts.normalizeSlashes(directory.path).toLowerCase() === normalizedPath) {
+                        result.push(...directory.result);
                     }
                 }
 
@@ -294,30 +293,22 @@ namespace Playback {
         return results[0].result;
     }
 
-    function findResultByPath<T>(wrapper: { resolvePath(s: string): string }, logArray: { path: string; result?: T }[], expectedPath: string, defaultValue?: T): T {
+    function findFileByPath(wrapper: { resolvePath(s: string): string }, logArray: IOLogFile[],
+        expectedPath: string, throwFileNotFoundError: boolean): FileInformation {
         const normalizedName = ts.normalizePath(expectedPath).toLowerCase();
         // Try to find the result through normal fileName
-        for (let i = 0; i < logArray.length; i++) {
-            if (ts.normalizeSlashes(logArray[i].path).toLowerCase() === normalizedName) {
-                return logArray[i].result;
-            }
-        }
-        // Fallback, try to resolve the target paths as well
-        if (replayLog.pathsResolved.length > 0) {
-            const normalizedResolvedName = wrapper.resolvePath(expectedPath).toLowerCase();
-            for (let i = 0; i < logArray.length; i++) {
-                if (wrapper.resolvePath(logArray[i].path).toLowerCase() === normalizedResolvedName) {
-                    return logArray[i].result;
-                }
+        for (const log of logArray) {
+            if (ts.normalizeSlashes(log.path).toLowerCase() === normalizedName) {
+                return log.result;
             }
         }
 
         // If we got here, we didn't find a match
-        if (defaultValue === undefined) {
+        if (throwFileNotFoundError) {
             throw new Error("No matching result in log array for path: " + expectedPath);
         }
         else {
-            return defaultValue;
+            return undefined;
         }
     }
 
