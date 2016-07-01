@@ -139,6 +139,32 @@ namespace ts {
             );
         });
 
+        it("ignore dotted files and folders inside of the project", () => {
+            assertParseFileList(
+                `{}`,
+                "tsconfig.json",
+                "/.outer/project",
+                ["/.outer/project/test.ts",
+                    "/.outer/project/.git/a.ts",
+                    "/.outer/project/.b.ts",
+                    "/.outer/project/..c.ts"],
+                ["/.outer/project/test.ts"]
+            );
+        });
+
+        it("allow include relative folder", () => {
+            assertParseFileList(
+                `{
+                    "include": ["../other_project/**/*", "**/*"]
+                }`,
+                "tsconfig.json",
+                "/.outer/project",
+                ["/.outer/project/test.ts", "/.outer/other_project/test.ts"],
+                ["/.outer/project/test.ts", "/.outer/other_project/test.ts"]
+            );
+        });
+
+
         it("allow dotted files and folders when explicitly requested", () => {
             assertParseFileList(
                 `{
