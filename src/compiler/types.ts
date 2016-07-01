@@ -1,5 +1,3 @@
-/// <reference path="extensions.ts" />
-
 namespace ts {
     export interface Map<T> {
         [index: string]: T;
@@ -1740,11 +1738,6 @@ namespace ts {
         getTypeChecker(): TypeChecker;
 
         /**
-         * Gets a map of loaded compiler extensions
-         */
-        getCompilerExtensions(): ExtensionCollectionMap;
-
-        /**
          * Gets only diagnostics reported while loading extensions
          */
         getExtensionLoadingDiagnostics(): Diagnostic[];
@@ -1825,7 +1818,6 @@ namespace ts {
         getSourceFiles(): SourceFile[];
         getSourceFile(fileName: string): SourceFile;
         getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
-        getCompilerExtensions(): ExtensionCollectionMap;
     }
 
     export interface TypeChecker {

@@ -59,6 +59,39 @@ namespace ts {
         length: number;
     }
 
+    // @kind(ExtensionKind.SyntacticLint)
+    export interface SyntacticLintExtension extends ExtensionBase {
+        ctor: SyntacticLintProviderStatic;
+    }
+
+    // @kind(ExtensionKind.SemanticLint)
+    export interface SemanticLintExtension extends ExtensionBase {
+        ctor: SemanticLintProviderStatic;
+    }
+
+    export type Extension = SyntacticLintExtension | SemanticLintExtension;
+
+    export interface ExtensionCache {
+        getCompilerExtensions(): ExtensionCollectionMap;
+        getExtensionLoadingDiagnostics(): Diagnostic[];
+    }
+
+    export interface ExtensionHost extends ModuleResolutionHost {
+        loadExtension?(name: string): any;
+    }
+
+    export interface Program {
+        /**
+         * Gets a map of loaded compiler extensions
+         */
+        getCompilerExtensions(): ExtensionCollectionMap;
+    }
+
+    /* @internal */
+    export interface TypeCheckerHost {
+        getCompilerExtensions(): ExtensionCollectionMap;
+    }
+
     function profileTrace(trace: (s: string) => void | undefined, message: DiagnosticMessage, ...args: any[]) {
         if (trace) {
             trace(flattenDiagnosticMessageText(createCompilerDiagnostic(message, ...args).messageText, (sys && sys.newLine || "\n")));
@@ -84,27 +117,6 @@ namespace ts {
         ext.profiles[task].length = endTime - ext.profiles[task].start;
 
         profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, ext.name, task, ext.profiles[task].length.toFixed(4));
-    }
-
-    // @kind(ExtensionKind.SyntacticLint)
-    export interface SyntacticLintExtension extends ExtensionBase {
-        ctor: SyntacticLintProviderStatic;
-    }
-
-    // @kind(ExtensionKind.SemanticLint)
-    export interface SemanticLintExtension extends ExtensionBase {
-        ctor: SemanticLintProviderStatic;
-    }
-
-    export type Extension = SyntacticLintExtension | SemanticLintExtension;
-
-    export interface ExtensionCache {
-        getCompilerExtensions(): ExtensionCollectionMap;
-        getExtensionLoadingDiagnostics(): Diagnostic[];
-    }
-
-    export interface ExtensionHost extends ModuleResolutionHost {
-        loadExtension?(name: string): any;
     }
 
     export function createExtensionCache(options: CompilerOptions, host: ExtensionHost): ExtensionCache {

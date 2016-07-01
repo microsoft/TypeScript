@@ -66,6 +66,7 @@ var servicesSources = [
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
+    "extensions.ts",
     "commandLineParser.ts",
     "diagnosticInformationMap.generated.ts"
 ].map(function (f) {
