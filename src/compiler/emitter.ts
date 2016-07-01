@@ -1086,15 +1086,14 @@ const _super = (function (geti, seti) {
 
             let indentBeforeDot = false;
             let indentAfterDot = false;
-            let shouldEmitDotDot = false;
-            if (!(node.flags & NodeFlags.Synthesized)) {
+            if (!(node.emitFlags & NodeEmitFlags.NoIndentation)) {
                 const dotRangeStart = node.expression.end;
                 const dotRangeEnd = skipTrivia(currentText, node.expression.end) + 1;
                 const dotToken = <Node>{ kind: SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
                 indentBeforeDot = needsIndentation(node, node.expression, dotToken);
                 indentAfterDot = needsIndentation(node, dotToken, node.name);
-                shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
             }
+            const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
 
             emitExpression(node.expression);
             increaseIndentIf(indentBeforeDot);

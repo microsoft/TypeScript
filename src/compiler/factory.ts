@@ -936,16 +936,13 @@ namespace ts {
     }
 
     export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, setNodeEmitFlags: (node: Node, flags: NodeEmitFlags) => void, location?: TextRange): MemberExpression {
-        if (isIdentifier(memberName)) {
-            const expression = createPropertyAccess(target, memberName, location);
-            setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
-            return expression;
-        }
-        else if (isComputedPropertyName(memberName)) {
-            return createElementAccess(target, memberName.expression, location);
+        if (isComputedPropertyName(memberName)) {
+             return createElementAccess(target, memberName.expression, location);
         }
         else {
-            return createElementAccess(target, memberName, location);
+            const expression = isIdentifier(memberName) ? createPropertyAccess(target, memberName, location) : createElementAccess(target, memberName, location);
+            setNodeEmitFlags(expression, expression.emitFlags ? NodeEmitFlags.NoNestedSourceMaps | expression.emitFlags : NodeEmitFlags.NoNestedSourceMaps);
+            return expression;
         }
     }
 

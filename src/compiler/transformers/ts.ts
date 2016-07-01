@@ -1085,9 +1085,6 @@ namespace ts {
             const propertyName = visitPropertyNameOfClassElement(property);
             const initializer = visitNode(property.initializer, visitor, isExpression);
             const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, setNodeEmitFlags, /*location*/ propertyName);
-            if (!isComputedPropertyName(propertyName)) {
-                setNodeEmitFlags(memberAccess, NodeEmitFlags.NoNestedSourceMaps);
-            }
 
             return createAssignment(memberAccess, initializer);
         }
