@@ -650,7 +650,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         }
 
         if (tests && tests.toLocaleLowerCase() === "rwc") {
-            testTimeout = 100000;
+            testTimeout = 400000;
         }
 
         const colors = cmdLineOptions["colors"];
