@@ -1865,7 +1865,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyCodeFixAtPosition(expectedText: string) {
+        public verifyCodeFixAtPosition(expectedText: string, errorCode?:number) {
             const fileName = this.activeFile.fileName;
             const diagnostics = this.getDiagnostics(fileName);
 
@@ -1873,11 +1873,13 @@ namespace FourSlash {
                 this.raiseError("Errors expected.");
             }
 
-            // we expect a single error per file
-            const errorCode = diagnostics[0].code;
-            const position = diagnostics[0].start;
+            if (diagnostics.length > 1 && !errorCode) {
+                this.raiseError("When there's more than one error, you must specify the errror to fix.");
+            }
 
-            const actual = this.languageService.getCodeFixesAtPosition(this.activeFile.fileName, position, position, [`TS${errorCode}`]);
+            let diagnostic = !errorCode ? diagnostics[0] : ts.firstOrUndefined(diagnostics, d => d.code == errorCode);
+
+            const actual = this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [`TS${diagnostic.code}`]);
 
             if (!actual || actual.length == 0) {
                 this.raiseError("No codefixes returned.");
@@ -1887,8 +1889,12 @@ namespace FourSlash {
                 this.raiseError("More than 1 codefix returned.");
             }
 
+
+//todo: handle multiple files, probably need to set the cursor in the test file, and loop over all the files
+
+
             this.applyEdits(actual[0].changes[0].fileName, actual[0].changes[0].textChanges, /*isFormattingEdit*/ false);
-            const actualText = this.getFileContent(fileName);
+            const actualText = this.getFileContent(actual[0].changes[0].fileName);
 
             // We expect the editor to do the final formatting, so we can strip the compare ignoring whitespace
             if (this.removeWhitespace(expectedText) !== this.removeWhitespace(actualText)) {
