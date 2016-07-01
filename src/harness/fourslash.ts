@@ -1896,9 +1896,6 @@ namespace FourSlash {
             this.applyEdits(actual[0].changes[0].fileName, actual[0].changes[0].textChanges, /*isFormattingEdit*/ false);
             const actualText = this.getFileContent(actual[0].changes[0].fileName);
 
-            // We expect the editor to do the final formatting, so we can strip the compare ignoring whitespace
-            if (this.removeWhitespace(expectedText) !== this.removeWhitespace(actualText)) {
-                this.raiseError(`Expected insertion: '${expectedText}', actual insertion '${actualText}'.`);
             }
         }
 
