@@ -13294,8 +13294,8 @@ namespace ts {
                     }
                 }
                 else {
-                    const static = forEach(member.modifiers, m => m.kind === SyntaxKind.StaticKeyword);
-                    const names = static ? staticNames : instanceNames;
+                    const isStatic = forEach(member.modifiers, m => m.kind === SyntaxKind.StaticKeyword);
+                    const names = isStatic ? staticNames : instanceNames;
 
                     const memberName = member.name && getPropertyNameForPropertyNameNode(member.name);
                     if (memberName) {
