@@ -290,10 +290,6 @@ namespace ts.formatting {
                         return (<TypeReferenceNode>node).typeArguments;
                     }
                     break;
-                case SyntaxKind.ObjectLiteralExpression:
-                    return (<ObjectLiteralExpression>node).properties;
-                case SyntaxKind.ArrayLiteralExpression:
-                    return (<ArrayLiteralExpression>node).elements;
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
