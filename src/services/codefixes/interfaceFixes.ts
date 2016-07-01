@@ -1,13 +1,13 @@
 /* @internal */
 namespace ts.codeFix {
     registerCodeFix({
-        name: "Implement Interface on Reference",
+        name: "ImplementInterfaceOnReferenceFix",
         errorCodes: ["TS2322"],
-        getTextChanges: (context: CodeActionContext) => {
+        getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
             const start = context.span.start;
             const token = getTokenAtPosition(sourceFile, start);
-            let changesArray: TextChange[] = [];
+            let textChanges: TextChange[] = [];
 
             if (token.kind === SyntaxKind.Identifier && token.parent.kind === SyntaxKind.VariableDeclaration) {
                 const variableDeclaration = <VariableDeclaration>token.parent;
@@ -17,18 +17,24 @@ namespace ts.codeFix {
                 const startPos: number = membersAndStartPosObject.startPos;
 
                 if (variableDeclaration.type.kind === SyntaxKind.TypeReference) {
-                    changesArray = changesArray.concat(getChanges(variableDeclaration.type, variableMembers, startPos, context.checker, /*reference*/ true, trackingAddedMembers));
+                    textChanges = textChanges.concat(getChanges(variableDeclaration.type, variableMembers, startPos, context.checker, /*reference*/ true, trackingAddedMembers));
                 }
                 else if (variableDeclaration.type.kind === SyntaxKind.UnionType) {
                     const types = (<UnionTypeNode>variableDeclaration.type).types;
                     for (let i = 0; i < types.length; i++) {
-                        changesArray = changesArray.concat(getChanges(types[i], variableMembers, startPos, context.checker, /*reference*/ true, trackingAddedMembers));
+                        textChanges = textChanges.concat(getChanges(types[i], variableMembers, startPos, context.checker, /*reference*/ true, trackingAddedMembers));
                     }
                 }
             }
 
-            if (changesArray.length !== 0) {
-                return [{ fileName: sourceFile.fileName, textChanges: changesArray }];
+            if (textChanges.length !== 0) {
+                return [{
+                    description: getLocaleSpecificMessage(Diagnostics.Implement_interface_on_reference),
+                    changes: [{
+                        fileName: sourceFile.fileName,
+                        textChanges: textChanges
+                    }]
+                }];
             }
 
             Debug.fail("No Quick Fix found");
@@ -36,13 +42,13 @@ namespace ts.codeFix {
     });
 
     registerCodeFix({
-        name: "Implement Interface On Class",
+        name: "ImplementInterfaceOnClassFix",
         errorCodes: ["TS2420"],
-        getTextChanges: (context: CodeActionContext) => {
+        getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
             const start = context.span.start;
             const token = getTokenAtPosition(sourceFile, start);
-            let changesArray: TextChange[] = [];
+            let textChanges: TextChange[] = [];
 
             if (token.kind === SyntaxKind.Identifier && token.parent.kind === SyntaxKind.ClassDeclaration) {
                 const classDeclaration = <ClassDeclaration>token.parent;
@@ -52,12 +58,18 @@ namespace ts.codeFix {
                 const interfaceClauses = ts.getClassImplementsHeritageClauseElements(classDeclaration);
 
                 for (let i = 0; interfaceClauses && i < interfaceClauses.length; i++) {
-                    changesArray = changesArray.concat(getChanges(interfaceClauses[i], classMembers, startPos, context.checker, /*reference*/ false, trackingAddedMembers));
+                    textChanges = textChanges.concat(getChanges(interfaceClauses[i], classMembers, startPos, context.checker, /*reference*/ false, trackingAddedMembers));
                 }
             }
 
-            if (changesArray.length !== 0) {
-                return [{ fileName: sourceFile.fileName, textChanges: changesArray }];
+            if (textChanges.length !== 0) {
+                return [{
+                    description: getLocaleSpecificMessage(Diagnostics.Implement_interface_on_class),
+                    changes: [{
+                        fileName: sourceFile.fileName,
+                        textChanges: textChanges
+                    }]
+                }];
             }
 
             Debug.fail("No Quick Fix found");
@@ -65,13 +77,13 @@ namespace ts.codeFix {
     });
 
     registerCodeFix({
-        name: "Implements Inherited Abstract Class",
+        name: "ImplementsInheritedAbstractClassFix",
         errorCodes: ["TS2515"],
-        getTextChanges: (context: CodeActionContext) => {
+        getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
             const start = context.span.start;
             const token = getTokenAtPosition(sourceFile, start);
-            let changesArray: { newText: string; span: { start: number, length: number } }[] = [];
+            let textChanges: { newText: string; span: { start: number, length: number } }[] = [];
 
             if (token.kind === SyntaxKind.Identifier && token.parent.kind === SyntaxKind.ClassDeclaration) {
                 const classDeclaration = <ClassDeclaration>token.parent;
@@ -79,11 +91,17 @@ namespace ts.codeFix {
                 const classMembers: Array<string> = getClassMembers(classDeclaration);
                 const trackingAddedMembers: Array<string> = [];
                 const extendsClause = ts.getClassExtendsHeritageClauseElement(classDeclaration);
-                changesArray = changesArray.concat(getChanges(extendsClause, classMembers, startPos, context.checker, /*reference*/ false, trackingAddedMembers));
+                textChanges = textChanges.concat(getChanges(extendsClause, classMembers, startPos, context.checker, /*reference*/ false, trackingAddedMembers));
             }
 
-            if (changesArray.length !== 0) {
-                return [{ fileName: sourceFile.fileName, textChanges: changesArray }];
+            if (textChanges.length !== 0) {
+                return [{
+                    description: getLocaleSpecificMessage(Diagnostics.Implement_inherited_abstract_class),
+                    changes: [{
+                        fileName: sourceFile.fileName,
+                        textChanges: textChanges
+                    }]
+                }];
             }
 
             Debug.fail("No Quick Fix found");

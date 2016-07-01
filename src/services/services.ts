@@ -1150,7 +1150,7 @@ namespace ts {
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeFix[];
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeAction[];
 
         getEmitOutput(fileName: string): EmitOutput;
 
@@ -1203,10 +1203,10 @@ namespace ts {
         textChanges: TextChange[];
     }
 
-    export interface CodeFix {
-        /** Description of the code fix to display in the UI of the editor */
+    export interface CodeAction {
+        /** Description of the code action to display in the UI of the editor */
         description: string;
-        /** Text changes to apply to each file as part of the code fix */
+        /** Text changes to apply to each file as part of the code action */
         changes: FileTextChanges[];
     }
 
@@ -7705,11 +7705,11 @@ namespace ts {
             return [];
         }
 
-        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeFix[] {
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeAction[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const checker = program.getTypeChecker();
-            let allFixes: CodeFix[] = [];
+            let allFixes: CodeAction[] = [];
 
             forEach(errorCodes, error => {
                 const context = {

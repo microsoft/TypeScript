@@ -1,12 +1,12 @@
 /* @internal */
 namespace ts {
-    export interface CodeAction {
+    export interface CodeFix {
         name: string;
         errorCodes: string[];
-        getTextChanges(context: CodeActionContext): FileTextChanges[];
+        getCodeActions(context: CodeFixContext): CodeAction[];
     }
 
-    export interface CodeActionContext {
+    export interface CodeFixContext {
         errorCode: string;
         sourceFile: SourceFile;
         span: TextSpan;
@@ -14,39 +14,38 @@ namespace ts {
     }
 
     export namespace codeFix {
-        const codeActions: Map<CodeAction[]> = {};
+        const codeFixes: Map<CodeFix[]> = {};
 
-        export function registerCodeFix(fix: CodeAction) {
-            forEach(fix.errorCodes, error => {
-                let fixes = codeActions[error];
+        export function registerCodeFix(action: CodeFix) {
+            forEach(action.errorCodes, error => {
+                let fixes = codeFixes[error];
                 if (!fixes) {
                     fixes = [];
-                    codeActions[error] = fixes;
+                    codeFixes[error] = fixes;
                 }
-                fixes.push(fix);
+                fixes.push(action);
             });
         }
 
         export class CodeFixProvider {
-
             public static getSupportedErrorCodes() {
-                return getKeys(codeActions);
+                return getKeys(codeFixes);
             }
 
-            public getFixes(context: CodeActionContext): CodeFix[] {
-                const actions = codeActions[context.errorCode];
-                const fixes: CodeFix[] = [];
+            public getFixes(context: CodeFixContext): CodeAction[] {
+                const fixes = codeFixes[context.errorCode];
+                let allActions: CodeAction[] = [];
 
-                Debug.assert(actions && actions.length > 0, "No fixes found for error: '${errorCode}'.");
+                Debug.assert(fixes && fixes.length > 0, "No fixes found for error: '${errorCode}'.");
 
-                forEach(actions, a => {
-                    const textChanges = a.getTextChanges(context);
-                    if (textChanges && textChanges.length > 0) {
-                        fixes.push({ description: a.name, changes: textChanges });
+                forEach(fixes, f => {
+                    const actions = f.getCodeActions(context);
+                    if (actions && actions.length > 0) {
+                        allActions = allActions.concat(actions);
                     }
                 });
 
-                return fixes;
+                return allActions;
             }
         }
     }

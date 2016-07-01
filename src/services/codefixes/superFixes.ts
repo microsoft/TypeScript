@@ -6,23 +6,26 @@ namespace ts.codeFix {
     }
 
     registerCodeFix({
-        name: getLocaleSpecificMessage(Diagnostics.Add_missing_super_call),
+        name: "AddMissingSuperCallFix",
         errorCodes: ["TS2377"],
-        getTextChanges: (context: CodeActionContext) => {
+        getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
             const token = getTokenAtPosition(sourceFile, context.span.start);
             Debug.assert(token.kind === SyntaxKind.ConstructorKeyword, "Failed to find the constructor.");
 
             const newPosition = getOpenBraceEnd(<ConstructorDeclaration>token.parent, sourceFile);
 
-            return [{ fileName: sourceFile.fileName, textChanges: [{ newText: "super();", span: { start: newPosition, length: 0 } }] }];
+            return [{
+                description: getLocaleSpecificMessage(Diagnostics.Add_missing_super_call),
+                changes: [{ fileName: sourceFile.fileName, textChanges: [{ newText: "super();", span: { start: newPosition, length: 0 } }] }]
+            }];
         }
     });
 
     registerCodeFix({
-        name: getLocaleSpecificMessage(Diagnostics.Make_super_call_the_first_statement_in_the_constructor),
+        name: "MakeSuperCallTheFirstStatementInTheConstructor",
         errorCodes: ["TS17009"],
-        getTextChanges: (context: CodeActionContext) => {
+        getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
 
             const token = getTokenAtPosition(sourceFile, context.span.start);
@@ -33,7 +36,7 @@ namespace ts.codeFix {
             Debug.assert(!!superCall, "Failed to find super call.");
 
             const newPosition = getOpenBraceEnd(<ConstructorDeclaration>constructor, sourceFile);
-            return [{
+            const changes =  [{
                 fileName: sourceFile.fileName, textChanges: [{
                     newText: superCall.getText(sourceFile),
                     span: { start: newPosition, length: 0 }
@@ -42,6 +45,11 @@ namespace ts.codeFix {
                     newText: "",
                     span: { start: superCall.getStart(sourceFile), length: superCall.getWidth(sourceFile) }
                 }]
+            }];
+
+            return [{
+                description: getLocaleSpecificMessage(Diagnostics.Make_super_call_the_first_statement_in_the_constructor),
+                changes
             }];
 
             function findSuperCall(n: Node): Node {
