@@ -414,24 +414,24 @@ function foo(x: Enum1) {
 >C : Enum1.C
 
         case Enum1.D:
->Enum1.D : Enum1.D
+>Enum1.D : Enum1.B
 >Enum1 : typeof Enum1
->D : Enum1.D
+>D : Enum1.B
 
         case Enum1.E:
->Enum1.E : Enum1.E
+>Enum1.E : Enum1.B
 >Enum1 : typeof Enum1
->E : Enum1.E
+>E : Enum1.B
 
         case Enum1.F:
->Enum1.F : Enum1.F
+>Enum1.F : Enum1.B
 >Enum1 : typeof Enum1
->F : Enum1.F
+>F : Enum1.B
 
         case Enum1.G:
->Enum1.G : Enum1.G
+>Enum1.G : Enum1.B
 >Enum1 : typeof Enum1
->G : Enum1.G
+>G : Enum1.B
 
         case Enum1.H:
 >Enum1.H : Enum1.H
@@ -439,14 +439,14 @@ function foo(x: Enum1) {
 >H : Enum1.H
 
         case Enum1.I:
->Enum1.I : Enum1.I
+>Enum1.I : Enum1.A
 >Enum1 : typeof Enum1
->I : Enum1.I
+>I : Enum1.A
 
         case Enum1.J:
->Enum1.J : Enum1.J
+>Enum1.J : Enum1.A
 >Enum1 : typeof Enum1
->J : Enum1.J
+>J : Enum1.A
 
         case Enum1.K:
 >Enum1.K : Enum1.K
@@ -454,9 +454,9 @@ function foo(x: Enum1) {
 >K : Enum1.K
 
         case Enum1.L:
->Enum1.L : Enum1.L
+>Enum1.L : Enum1.H
 >Enum1 : typeof Enum1
->L : Enum1.L
+>L : Enum1.H
 
         case Enum1.M:
 >Enum1.M : Enum1.M
@@ -464,19 +464,19 @@ function foo(x: Enum1) {
 >M : Enum1.M
 
         case Enum1.N:
->Enum1.N : Enum1.N
+>Enum1.N : Enum1.M
 >Enum1 : typeof Enum1
->N : Enum1.N
+>N : Enum1.M
 
         case Enum1.O:
->Enum1.O : Enum1.O
+>Enum1.O : Enum1.A
 >Enum1 : typeof Enum1
->O : Enum1.O
+>O : Enum1.A
 
         case Enum1.P:
->Enum1.P : Enum1.P
+>Enum1.P : Enum1.A
 >Enum1 : typeof Enum1
->P : Enum1.P
+>P : Enum1.A
 
         case Enum1.Q:
 >Enum1.Q : Enum1.Q
@@ -484,14 +484,14 @@ function foo(x: Enum1) {
 >Q : Enum1.Q
 
         case Enum1.R:
->Enum1.R : Enum1.R
+>Enum1.R : Enum1.A
 >Enum1 : typeof Enum1
->R : Enum1.R
+>R : Enum1.A
 
         case Enum1.S:
->Enum1.S : Enum1.S
+>Enum1.S : Enum1.A
 >Enum1 : typeof Enum1
->S : Enum1.S
+>S : Enum1.A
 
         case Enum1["T"]:
 >Enum1["T"] : Enum1
@@ -504,14 +504,14 @@ function foo(x: Enum1) {
 >U : Enum1.U
 
         case Enum1.V:
->Enum1.V : Enum1.V
+>Enum1.V : Enum1.U
 >Enum1 : typeof Enum1
->V : Enum1.V
+>V : Enum1.U
 
         case Enum1.W:
->Enum1.W : Enum1.W
+>Enum1.W : Enum1.U
 >Enum1 : typeof Enum1
->W : Enum1.W
+>W : Enum1.U
 
         case Enum1.W1:
 >Enum1.W1 : Enum1.W1
@@ -519,19 +519,19 @@ function foo(x: Enum1) {
 >W1 : Enum1.W1
 
         case Enum1.W2:
->Enum1.W2 : Enum1.W2
+>Enum1.W2 : Enum1.W1
 >Enum1 : typeof Enum1
->W2 : Enum1.W2
+>W2 : Enum1.W1
 
         case Enum1.W3:
->Enum1.W3 : Enum1.W3
+>Enum1.W3 : Enum1.W1
 >Enum1 : typeof Enum1
->W3 : Enum1.W3
+>W3 : Enum1.W1
 
         case Enum1.W4:
->Enum1.W4 : Enum1.W4
+>Enum1.W4 : Enum1.U
 >Enum1 : typeof Enum1
->W4 : Enum1.W4
+>W4 : Enum1.U
 
             break;
     }
