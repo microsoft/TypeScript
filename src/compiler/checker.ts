@@ -14554,7 +14554,10 @@ namespace ts {
                         const local = node.locals[key];
                         if (!local.isReferenced) {
                             if (local.valueDeclaration && local.valueDeclaration.kind === SyntaxKind.Parameter) {
-                                if (compilerOptions.noUnusedParameters && !isParameterPropertyDeclaration(<ParameterDeclaration>local.valueDeclaration)) {
+                                const parameter = <ParameterDeclaration>local.valueDeclaration;
+                                if (compilerOptions.noUnusedParameters &&
+                                    !isParameterPropertyDeclaration(parameter) &&
+                                    !parameterNameStartsWithUnderscore(parameter)) {
                                     error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
                                 }
                             }
@@ -14565,6 +14568,10 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function parameterNameStartsWithUnderscore(parameter: ParameterDeclaration) {
+            return parameter.name && parameter.name.kind === SyntaxKind.Identifier && (<Identifier>parameter.name).text.charCodeAt(0) === CharacterCodes._;
         }
 
         function checkUnusedClassMembers(node: ClassDeclaration | ClassExpression): void {
