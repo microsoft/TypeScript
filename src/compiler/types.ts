@@ -2136,6 +2136,7 @@ namespace ts {
         isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
+        enumMemberTypes?: Map<Type>;        // Enum member types indexed by enum value
     }
 
     /* @internal */

@@ -3667,12 +3667,23 @@ namespace ts {
             return links.declaredType;
         }
 
+        function createEnumType(symbol: Symbol): Type {
+            const type = createType(TypeFlags.Enum);
+            type.symbol = symbol;
+            return type;
+        }
+
+        function getEnumMemberType(symbol: Symbol): Type {
+            const links = getSymbolLinks(getParentOfSymbol(symbol));
+            const map = links.enumMemberTypes || (links.enumMemberTypes = {});
+            const value = "" + getEnumMemberValue(<EnumMember>symbol.valueDeclaration);
+            return map[value] || (map[value] = createEnumType(symbol));
+        }
+
         function getDeclaredTypeOfEnum(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.declaredType) {
-                const type = createType(TypeFlags.Enum);
-                type.symbol = symbol;
-                links.declaredType = type;
+                links.declaredType = symbol.flags & SymbolFlags.EnumMember ? getEnumMemberType(symbol) : createEnumType(symbol);
             }
             return links.declaredType;
         }
