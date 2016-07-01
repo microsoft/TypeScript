@@ -1865,7 +1865,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyCodeFixAtPosition(expectedText: string, errorCode?:number) {
+        public verifyCodeFixAtPosition(expectedText: string, errorCode?: number) {
             const fileName = this.activeFile.fileName;
             const diagnostics = this.getDiagnostics(fileName);
 
@@ -1877,7 +1877,7 @@ namespace FourSlash {
                 this.raiseError("When there's more than one error, you must specify the errror to fix.");
             }
 
-            let diagnostic = !errorCode ? diagnostics[0] : ts.firstOrUndefined(diagnostics, d => d.code == errorCode);
+            const diagnostic = !errorCode ? diagnostics[0] : ts.firstOrUndefined(diagnostics, d => d.code == errorCode);
 
             const actual = this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [`TS${diagnostic.code}`]);
 
@@ -1890,12 +1890,14 @@ namespace FourSlash {
             }
 
 
-//todo: handle multiple files, probably need to set the cursor in the test file, and loop over all the files
+            // todo: handle multiple files, probably need to set the cursor in the test file, and loop over all the files
 
 
             this.applyEdits(actual[0].changes[0].fileName, actual[0].changes[0].textChanges, /*isFormattingEdit*/ false);
             const actualText = this.getFileContent(actual[0].changes[0].fileName);
 
+            if (this.removeWhitespace(actualText) !== this.removeWhitespace(expectedText)) {
+                this.raiseError(`Actual text doesn't match expected text. Actual: '${actualText}' Expected: '${expectedText}'`);
             }
         }
 

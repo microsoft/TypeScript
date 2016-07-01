@@ -14,7 +14,7 @@ namespace ts {
     }
 
     export namespace codeFix {
-        var codeActions: Map<CodeAction[]> = {};
+        const codeActions: Map<CodeAction[]> = {};
 
         export function registerCodeFix(fix: CodeAction) {
             forEach(fix.errorCodes, error => {
