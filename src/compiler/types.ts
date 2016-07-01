@@ -469,7 +469,7 @@ namespace ts {
     }
 
     export interface ModifiersArray extends NodeArray<Modifier> {
-        flags: number;
+        flags: NodeFlags;
     }
 
     // @kind(SyntaxKind.AbstractKeyword)
