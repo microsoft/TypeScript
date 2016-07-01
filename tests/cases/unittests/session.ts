@@ -14,11 +14,14 @@ namespace ts.server {
         resolvePath(): string { return void 0; },
         fileExists: () => false,
         directoryExists: () => false,
+        getDirectories: () => [],
         createDirectory(): void {},
         getExecutingFilePath(): string { return void 0; },
         getCurrentDirectory(): string { return void 0; },
         readDirectory(): string[] { return []; },
-        exit(): void {}
+        exit(): void { },
+        setTimeout(callback, ms, ...args) { return 0; },
+        clearTimeout(timeoutId) { }
     };
     const mockLogger: Logger = {
         close(): void {},
@@ -36,7 +39,7 @@ namespace ts.server {
         let lastSent: protocol.Message;
 
         beforeEach(() => {
-            session = new Session(mockHost, Buffer.byteLength, process.hrtime, mockLogger);
+            session = new Session(mockHost, Utils.byteLength, process.hrtime, mockLogger);
             session.send = (msg: protocol.Message) => {
                 lastSent = msg;
             };
@@ -109,23 +112,31 @@ namespace ts.server {
                     }
                     const req: protocol.Request = {
                         command: name,
-                        seq: i++,
+                        seq: i,
                         type: "command"
                     };
+                    i++;
                     session.onMessage(JSON.stringify(req));
-                    req.seq = i++;
+                    req.seq = i;
+                    i++;
                     req.arguments = {};
                     session.onMessage(JSON.stringify(req));
-                    req.seq = i++;
+                    req.seq = i;
+                    i++;
+                    /* tslint:disable no-null-keyword */
                     req.arguments = null;
+                    /* tslint:enable no-null-keyword */
                     session.onMessage(JSON.stringify(req));
-                    req.seq = i++;
+                    req.seq = i;
+                    i++;
                     req.arguments = "";
                     session.onMessage(JSON.stringify(req));
-                    req.seq = i++;
+                    req.seq = i;
+                    i++;
                     req.arguments = 0;
                     session.onMessage(JSON.stringify(req));
-                    req.seq = i++;
+                    req.seq = i;
+                    i++;
                     req.arguments = [];
                     session.onMessage(JSON.stringify(req));
                 }
@@ -159,9 +170,9 @@ namespace ts.server {
 
         describe("send", () => {
             it("is an overrideable handle which sends protocol messages over the wire", () => {
-                const msg = {seq: 0, type: "none"};
+                const msg = { seq: 0, type: "none" };
                 const strmsg = JSON.stringify(msg);
-                const len = 1 + Buffer.byteLength(strmsg, "utf8");
+                const len = 1 + Utils.byteLength(strmsg, "utf8");
                 const resultMsg = `Content-Length: ${len}\r\n\r\n${strmsg}\n`;
 
                 session.send = Session.prototype.send;
@@ -253,9 +264,9 @@ namespace ts.server {
             lastSent: protocol.Message;
             customHandler = "testhandler";
             constructor() {
-                super(mockHost, Buffer.byteLength, process.hrtime, mockLogger);
+                super(mockHost, Utils.byteLength, process.hrtime, mockLogger);
                 this.addProtocolHandler(this.customHandler, () => {
-                    return {response: undefined, responseRequired: true};
+                    return { response: undefined, responseRequired: true };
                 });
             }
             send(msg: protocol.Message) {
@@ -311,7 +322,7 @@ namespace ts.server {
         class InProcSession extends Session {
             private queue: protocol.Request[] = [];
             constructor(private client: InProcClient) {
-                super(mockHost, Buffer.byteLength, process.hrtime, mockLogger);
+                super(mockHost, Utils.byteLength, process.hrtime, mockLogger);
                 this.addProtocolHandler("echo", (req: protocol.Request) => ({
                     response: req.arguments,
                     responseRequired: true
@@ -329,7 +340,7 @@ namespace ts.server {
             handleRequest(msg: protocol.Request) {
                 let response: protocol.Response;
                 try {
-                    ({response} = this.executeCommand(msg));
+                    ({ response } = this.executeCommand(msg));
                 }
                 catch (e) {
                     this.output(undefined, msg.command, msg.seq, e.toString());

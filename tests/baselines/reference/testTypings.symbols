@@ -4,7 +4,7 @@ interface IComparable<T> {
 >T : Symbol(T, Decl(testTypings.ts, 0, 22))
 
    compareTo(other: T);
->compareTo : Symbol(compareTo, Decl(testTypings.ts, 0, 26))
+>compareTo : Symbol(IComparable.compareTo, Decl(testTypings.ts, 0, 26))
 >other : Symbol(other, Decl(testTypings.ts, 1, 13))
 >T : Symbol(T, Decl(testTypings.ts, 0, 22))
 }

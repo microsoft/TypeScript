@@ -1,11 +1,11 @@
 === tests/cases/conformance/types/members/augmentedTypeBracketAccessIndexSignature.ts ===
 interface Foo { a }
 >Foo : Symbol(Foo, Decl(augmentedTypeBracketAccessIndexSignature.ts, 0, 0))
->a : Symbol(a, Decl(augmentedTypeBracketAccessIndexSignature.ts, 0, 15))
+>a : Symbol(Foo.a, Decl(augmentedTypeBracketAccessIndexSignature.ts, 0, 15))
 
 interface Bar { b }
 >Bar : Symbol(Bar, Decl(augmentedTypeBracketAccessIndexSignature.ts, 0, 19))
->b : Symbol(b, Decl(augmentedTypeBracketAccessIndexSignature.ts, 1, 15))
+>b : Symbol(Bar.b, Decl(augmentedTypeBracketAccessIndexSignature.ts, 1, 15))
 
 interface Object {
 >Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(augmentedTypeBracketAccessIndexSignature.ts, 1, 19))

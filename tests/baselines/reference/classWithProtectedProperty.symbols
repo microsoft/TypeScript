@@ -5,19 +5,19 @@ class C {
 >C : Symbol(C, Decl(classWithProtectedProperty.ts, 0, 0))
 
     protected x;
->x : Symbol(x, Decl(classWithProtectedProperty.ts, 2, 9))
+>x : Symbol(C.x, Decl(classWithProtectedProperty.ts, 2, 9))
 
     protected a = '';
->a : Symbol(a, Decl(classWithProtectedProperty.ts, 3, 16))
+>a : Symbol(C.a, Decl(classWithProtectedProperty.ts, 3, 16))
 
     protected b: string = '';
->b : Symbol(b, Decl(classWithProtectedProperty.ts, 4, 21))
+>b : Symbol(C.b, Decl(classWithProtectedProperty.ts, 4, 21))
 
     protected c() { return '' }
->c : Symbol(c, Decl(classWithProtectedProperty.ts, 5, 29))
+>c : Symbol(C.c, Decl(classWithProtectedProperty.ts, 5, 29))
 
     protected d = () => '';
->d : Symbol(d, Decl(classWithProtectedProperty.ts, 6, 31))
+>d : Symbol(C.d, Decl(classWithProtectedProperty.ts, 6, 31))
 
     protected static e;
 >e : Symbol(C.e, Decl(classWithProtectedProperty.ts, 7, 27))
@@ -34,7 +34,7 @@ class D extends C {
 >C : Symbol(C, Decl(classWithProtectedProperty.ts, 0, 0))
 
     method() {
->method : Symbol(method, Decl(classWithProtectedProperty.ts, 13, 19))
+>method : Symbol(D.method, Decl(classWithProtectedProperty.ts, 13, 19))
 
         // No errors
         var d = new D();

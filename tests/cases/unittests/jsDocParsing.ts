@@ -3,19 +3,20 @@
 /// <reference path="..\..\..\src\compiler\parser.ts" />
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
-module ts {
+namespace ts {
     describe("JSDocParsing", () => {
         describe("TypeExpressions", () => {
             function parsesCorrectly(content: string, expected: string) {
-                let typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
+                const typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
                 assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0);
 
-                let result = Utils.sourceFileToJSON(typeAndDiagnostics.jsDocTypeExpression.type);
+                const result = Utils.sourceFileToJSON(typeAndDiagnostics.jsDocTypeExpression.type);
+
                 assert.equal(result, expected);
             }
 
             function parsesIncorrectly(content: string) {
-                let type = ts.parseJSDocTypeExpressionForTests(content);
+                const type = ts.parseJSDocTypeExpressionForTests(content);
                 assert.isTrue(!type || type.diagnostics.length > 0);
             }
 
@@ -49,7 +50,7 @@ module ts {
         "pos": 2,
         "end": 8
     }
-}`)
+}`);
                 });
 
                 it("nullableType2", () => {
@@ -63,7 +64,7 @@ module ts {
         "pos": 1,
         "end": 7
     }
-}`)
+}`);
                 });
 
                 it("nonNullableType", () => {
@@ -77,7 +78,7 @@ module ts {
         "pos": 2,
         "end": 8
     }
-}`)
+}`);
                 });
 
                 it("nonNullableType2", () => {
@@ -91,7 +92,7 @@ module ts {
         "pos": 1,
         "end": 7
     }
-}`)
+}`);
                 });
 
                 it("recordType1", () => {
@@ -105,7 +106,7 @@ module ts {
         "pos": 2,
         "end": 2
     }
-}`)
+}`);
                 });
 
                 it("recordType2", () => {
@@ -130,7 +131,7 @@ module ts {
         "pos": 2,
         "end": 5
     }
-}`)
+}`);
                 });
 
                 it("recordType3", () => {
@@ -160,7 +161,7 @@ module ts {
         "pos": 2,
         "end": 13
     }
-}`)
+}`);
                 });
 
                 it("recordType4", () => {
@@ -196,7 +197,7 @@ module ts {
         "pos": 2,
         "end": 10
     }
-}`)
+}`);
                 });
 
                 it("recordType5", () => {
@@ -237,7 +238,7 @@ module ts {
         "pos": 2,
         "end": 18
     }
-}`)
+}`);
                 });
 
                 it("recordType6", () => {
@@ -278,7 +279,7 @@ module ts {
         "pos": 2,
         "end": 18
     }
-}`)
+}`);
                 });
 
                 it("recordType7", () => {
@@ -324,7 +325,7 @@ module ts {
         "pos": 2,
         "end": 26
     }
-}`)
+}`);
                 });
 
                 it("recordType8", () => {
@@ -350,7 +351,7 @@ module ts {
         "pos": 2,
         "end": 10
     }
-}`)
+}`);
                 });
 
                 it("unionType", () => {
@@ -792,6 +793,7 @@ module ts {
         "kind": "Identifier",
         "pos": 1,
         "end": 10,
+        "originalKeywordKind": "UndefinedKeyword",
         "text": "undefined"
     }
 }`);
@@ -985,24 +987,25 @@ module ts {
 
         describe("DocComments", () => {
             function parsesCorrectly(content: string, expected: string) {
-                let comment = parseIsolatedJSDocComment(content);
+                const comment = parseIsolatedJSDocComment(content);
                 if (!comment) {
-                    Debug.fail('Comment failed to parse entirely');
+                    Debug.fail("Comment failed to parse entirely");
                 }
                 if (comment.diagnostics.length > 0) {
-                    Debug.fail('Comment has at least one diagnostic: ' + comment.diagnostics[0].messageText);
+                    Debug.fail("Comment has at least one diagnostic: " + comment.diagnostics[0].messageText);
                 }
 
-                let result = JSON.stringify(comment.jsDocComment, (k, v) => {
+                const result = JSON.stringify(comment.jsDocComment, (k, v) => {
                     return v && v.pos !== undefined
                         ? JSON.parse(Utils.sourceFileToJSON(v))
                         : v;
                 }, 4);
-                
+
                 if (result !== expected) {
                     // Turn on a human-readable diff
-                    if (typeof require !== 'undefined') {
-                        require('chai').config.showDiff = true;
+                    if (typeof require !== "undefined") {
+                        const chai = require("chai");
+                        chai.config.showDiff = true;
                         chai.expect(JSON.parse(result)).equal(JSON.parse(expected));
                     }
                     else {
@@ -1012,7 +1015,7 @@ module ts {
             }
 
             function parsesIncorrectly(content: string) {
-                let type = parseIsolatedJSDocComment(content);
+                const type = parseIsolatedJSDocComment(content);
                 assert.isTrue(!type || type.diagnostics.length > 0);
             }
 
@@ -1032,7 +1035,7 @@ module ts {
                 it("multipleTypes", () => {
                     parsesIncorrectly(
 `/**
-  * @type {number} 
+  * @type {number}
   * @type {string}
   */`);
                 });
@@ -1069,7 +1072,7 @@ module ts {
                 it("paramWithoutTypeOrName", () => {
                     parsesIncorrectly(
 `/**
-  * @param 
+  * @param
   */`);
                 });
             });

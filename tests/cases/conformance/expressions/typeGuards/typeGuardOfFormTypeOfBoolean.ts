@@ -41,12 +41,11 @@ else {
     c = boolOrC; // C
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrNum === "boolean") {
-    var z1: string | number = strOrNum; // string | number
+    let z1: {} = strOrNum; // {}
 }
 else {
-    var z2: string | number = strOrNum; // string | number
+    let z2: string | number = strOrNum; // string | number
 }
 
 
@@ -78,10 +77,9 @@ else {
     bool = boolOrC; // boolean
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrNum !== "boolean") {
-    var z1: string | number = strOrNum; // string | number
+    let z1: string | number = strOrNum; // string | number
 }
 else {
-    var z2: string | number = strOrNum; // string | number
+    let z2: {} = strOrNum; // {}
 }

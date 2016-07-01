@@ -5,17 +5,17 @@ interface Collection<T, U> {
 >U : Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 23))
 
     length: number;
->length : Symbol(length, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 28))
+>length : Symbol(Collection.length, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 28))
 
     add(x: T, y: U): void;
->add : Symbol(add, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 1, 19))
+>add : Symbol(Collection.add, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 1, 19))
 >x : Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 2, 8))
 >T : Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 21))
 >y : Symbol(y, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 2, 13))
 >U : Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 23))
 
     remove(x: T, y: U): boolean;
->remove : Symbol(remove, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 2, 26))
+>remove : Symbol(Collection.remove, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 2, 26))
 >x : Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 3, 11))
 >T : Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 21))
 >y : Symbol(y, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 3, 16))
@@ -25,7 +25,7 @@ interface Combinators {
 >Combinators : Symbol(Combinators, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 4, 1))
 
     map<T, U, V>(c: Collection<T,U>, f: (x: T, y: U) => V): Collection<T, V>;
->map : Symbol(map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
+>map : Symbol(Combinators.map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
 >T : Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 8))
 >U : Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 10))
 >V : Symbol(V, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 13))
@@ -44,7 +44,7 @@ interface Combinators {
 >V : Symbol(V, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 13))
 
     map<T, U>(c: Collection<T,U>, f: (x: T, y: U) => any): Collection<any, any>;
->map : Symbol(map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
+>map : Symbol(Combinators.map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
 >T : Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 8))
 >U : Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 10))
 >c : Symbol(c, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 14))

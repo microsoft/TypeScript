@@ -6,17 +6,17 @@ class C {
 >C : Symbol(C, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 0, 0))
 
     x: string;
->x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 3, 9))
+>x : Symbol(C.x, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 3, 9))
 }
 
 class D {
 >D : Symbol(D, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 5, 1))
 
     x: string;
->x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 7, 9))
+>x : Symbol(D.x, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 7, 9))
 
     y: string;
->y : Symbol(y, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 8, 14))
+>y : Symbol(D.y, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 8, 14))
 }
 
 class X<T> {
@@ -24,7 +24,7 @@ class X<T> {
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 12, 8))
 
     x: T;
->x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 12, 12))
+>x : Symbol(X.x, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 12, 12))
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 12, 8))
 }
 

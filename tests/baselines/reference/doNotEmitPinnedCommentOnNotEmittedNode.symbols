@@ -5,12 +5,12 @@ class C {
 
     /*! remove pinned comment anywhere else */
     public foo(x: string, y: any)
->foo : Symbol(foo, Decl(file1.ts, 1, 9), Decl(file1.ts, 3, 33))
+>foo : Symbol(C.foo, Decl(file1.ts, 1, 9), Decl(file1.ts, 3, 33))
 >x : Symbol(x, Decl(file1.ts, 3, 15))
 >y : Symbol(y, Decl(file1.ts, 3, 25))
 
     public foo(x: string, y: number) { }
->foo : Symbol(foo, Decl(file1.ts, 1, 9), Decl(file1.ts, 3, 33))
+>foo : Symbol(C.foo, Decl(file1.ts, 1, 9), Decl(file1.ts, 3, 33))
 >x : Symbol(x, Decl(file1.ts, 4, 15))
 >y : Symbol(y, Decl(file1.ts, 4, 25))
 }

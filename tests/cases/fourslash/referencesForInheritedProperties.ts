@@ -1,15 +1,15 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface interface1 {
-////    /*1*/doStuff(): void;
+////    [|doStuff|](): void;
 ////}
 ////
 ////interface interface2  extends interface1{
-////    /*2*/doStuff(): void;
+////    [|doStuff|](): void;
 ////}
 ////
 ////class class1 implements interface2 {
-////    /*3*/doStuff() {
+////    [|doStuff|]() {
 ////
 ////    }
 ////}
@@ -19,9 +19,6 @@
 ////}
 ////
 ////var v: class2;
-////v./*4*/doStuff();
+////v.[|doStuff|]();
 
-test.markers().forEach(m=> {
-    goTo.position(m.position, m.fileName);
-    verify.referencesCountIs(4);
-});
+verify.rangesWithSameTextReferenceEachOther();

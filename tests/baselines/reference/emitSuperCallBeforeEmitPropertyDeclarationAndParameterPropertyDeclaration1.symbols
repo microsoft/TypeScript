@@ -3,7 +3,7 @@ class A {
 >A : Symbol(A, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1.ts, 0, 0))
 
     blub = 6;
->blub : Symbol(blub, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1.ts, 0, 9))
+>blub : Symbol(A.blub, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1.ts, 0, 9))
 }
 
 
@@ -12,10 +12,10 @@ class B extends A {
 >A : Symbol(A, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1.ts, 0, 0))
 
     blah = 2;
->blah : Symbol(blah, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1.ts, 5, 19))
+>blah : Symbol(B.blah, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1.ts, 5, 19))
 
     constructor(public x: number) {
->x : Symbol(x, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1.ts, 7, 16))
+>x : Symbol(B.x, Decl(emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1.ts, 7, 16))
 
         "use strict";
         'someStringForEgngInject';

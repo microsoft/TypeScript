@@ -93,7 +93,7 @@ class SomeClass {
 >SomeClass : Symbol(SomeClass, Decl(file.tsx, 20, 43))
 
 	f() {
->f : Symbol(f, Decl(file.tsx, 22, 17))
+>f : Symbol(SomeClass.f, Decl(file.tsx, 22, 17))
 
 		var rewrites1 = <div>{() => this}</div>;
 >rewrites1 : Symbol(rewrites1, Decl(file.tsx, 24, 5))

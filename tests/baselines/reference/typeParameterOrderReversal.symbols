@@ -4,7 +4,7 @@ interface X<T> {
 >T : Symbol(T, Decl(typeParameterOrderReversal.ts, 0, 12))
 
     n: T;
->n : Symbol(n, Decl(typeParameterOrderReversal.ts, 0, 16))
+>n : Symbol(X.n, Decl(typeParameterOrderReversal.ts, 0, 16))
 >T : Symbol(T, Decl(typeParameterOrderReversal.ts, 0, 12))
 }
 

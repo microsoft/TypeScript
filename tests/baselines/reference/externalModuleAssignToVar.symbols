@@ -41,7 +41,7 @@ y3 = ext3; // ok
 === tests/cases/compiler/externalModuleAssignToVar_ext.ts ===
 class D { foo: string; }
 >D : Symbol(D, Decl(externalModuleAssignToVar_ext.ts, 0, 0))
->foo : Symbol(foo, Decl(externalModuleAssignToVar_ext.ts, 0, 9))
+>foo : Symbol(D.foo, Decl(externalModuleAssignToVar_ext.ts, 0, 9))
 
 export = D;
 >D : Symbol(D, Decl(externalModuleAssignToVar_ext.ts, 0, 0))
@@ -49,12 +49,12 @@ export = D;
 === tests/cases/compiler/externalModuleAssignToVar_core_require.ts ===
 export class C { bar: string; }
 >C : Symbol(C, Decl(externalModuleAssignToVar_core_require.ts, 0, 0))
->bar : Symbol(bar, Decl(externalModuleAssignToVar_core_require.ts, 0, 16))
+>bar : Symbol(C.bar, Decl(externalModuleAssignToVar_core_require.ts, 0, 16))
 
 === tests/cases/compiler/externalModuleAssignToVar_core_require2.ts ===
 class C { baz: string; }
 >C : Symbol(C, Decl(externalModuleAssignToVar_core_require2.ts, 0, 0))
->baz : Symbol(baz, Decl(externalModuleAssignToVar_core_require2.ts, 0, 9))
+>baz : Symbol(C.baz, Decl(externalModuleAssignToVar_core_require2.ts, 0, 9))
 
 export = C;
 >C : Symbol(C, Decl(externalModuleAssignToVar_core_require2.ts, 0, 0))

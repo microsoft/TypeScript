@@ -3,7 +3,7 @@ class B {
 >B : Symbol(B, Decl(subtypingTransitivity.ts, 0, 0))
 
     x: Object;
->x : Symbol(x, Decl(subtypingTransitivity.ts, 0, 9))
+>x : Symbol(B.x, Decl(subtypingTransitivity.ts, 0, 9))
 >Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
@@ -12,14 +12,14 @@ class D extends B {
 >B : Symbol(B, Decl(subtypingTransitivity.ts, 0, 0))
 
     public x: string;
->x : Symbol(x, Decl(subtypingTransitivity.ts, 4, 19))
+>x : Symbol(D.x, Decl(subtypingTransitivity.ts, 4, 19))
 }
 class D2 extends B {
 >D2 : Symbol(D2, Decl(subtypingTransitivity.ts, 6, 1))
 >B : Symbol(B, Decl(subtypingTransitivity.ts, 0, 0))
 
     public x: number;
->x : Symbol(x, Decl(subtypingTransitivity.ts, 7, 20))
+>x : Symbol(D2.x, Decl(subtypingTransitivity.ts, 7, 20))
 }
 
 var b: B;

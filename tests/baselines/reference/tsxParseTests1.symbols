@@ -7,8 +7,8 @@ declare module JSX {
 
 	interface IntrinsicElements { div; span; }
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
->div : Symbol(div, Decl(file.tsx, 2, 30))
->span : Symbol(span, Decl(file.tsx, 2, 35))
+>div : Symbol(IntrinsicElements.div, Decl(file.tsx, 2, 30))
+>span : Symbol(IntrinsicElements.span, Decl(file.tsx, 2, 35))
 }
 
 var x = <div><div><span><div></div></span></div></div>;

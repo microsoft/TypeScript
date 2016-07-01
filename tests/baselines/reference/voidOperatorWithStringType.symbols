@@ -13,7 +13,7 @@ class A {
 >A : Symbol(A, Decl(voidOperatorWithStringType.ts, 4, 40))
 
     public a: string;
->a : Symbol(a, Decl(voidOperatorWithStringType.ts, 6, 9))
+>a : Symbol(A.a, Decl(voidOperatorWithStringType.ts, 6, 9))
 
     static foo() { return ""; }
 >foo : Symbol(A.foo, Decl(voidOperatorWithStringType.ts, 7, 21))

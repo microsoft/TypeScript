@@ -1,6 +1,7 @@
 /// <reference path="harness.ts" />
 /// <reference path="runnerbase.ts" />
-/* tslint:disable:no-null */
+// In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
+/* tslint:disable:no-null-keyword */
 
 class Test262BaselineRunner extends RunnerBase {
     private static basePath = "internal/cases/test262";
@@ -97,12 +98,20 @@ class Test262BaselineRunner extends RunnerBase {
         });
     }
 
+    public kind(): TestRunnerKind {
+        return "test262";
+    }
+
+    public enumerateTestFiles() {
+        return ts.map(this.enumerateFiles(Test262BaselineRunner.basePath, Test262BaselineRunner.testFileExtensionRegex, { recursive: true }), ts.normalizePath);
+    }
+
     public initializeTests() {
         // this will set up a series of describe/it blocks to run between the setup and cleanup phases
         if (this.tests.length === 0) {
-            const testFiles = this.enumerateFiles(Test262BaselineRunner.basePath, Test262BaselineRunner.testFileExtensionRegex, { recursive: true });
+            const testFiles = this.enumerateTestFiles();
             testFiles.forEach(fn => {
-                this.runTest(ts.normalizePath(fn));
+                this.runTest(fn);
             });
         }
         else {

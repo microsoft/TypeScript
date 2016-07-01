@@ -1,6 +1,5 @@
 ///<reference path="harness.ts" />
 ///<reference path="runnerbase.ts" />
-/* tslint:disable:no-null */
 
 // Test case is json of below type in tests/cases/project/
 interface ProjectRunnerTestCase {
@@ -37,11 +36,19 @@ interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
 }
 
 class ProjectRunner extends RunnerBase {
+
+    public enumerateTestFiles() {
+        return this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
+    }
+
+    public kind(): TestRunnerKind {
+        return "project";
+    }
+
     public initializeTests() {
         if (this.tests.length === 0) {
-            const testFiles = this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
+            const testFiles = this.enumerateTestFiles();
             testFiles.forEach(fn => {
-                fn = fn.replace(/\\/g, "/");
                 this.runProjectTestCase(fn);
             });
         }
@@ -53,7 +60,7 @@ class ProjectRunner extends RunnerBase {
     private runProjectTestCase(testCaseFileName: string) {
         let testCase: ProjectRunnerTestCase & ts.CompilerOptions;
 
-        let testFileText: string = null;
+        let testFileText: string;
         try {
             testFileText = Harness.IO.readFile(testCaseFileName);
         }
@@ -156,7 +163,7 @@ class ProjectRunner extends RunnerBase {
             function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
                 let sourceFile: ts.SourceFile = undefined;
                 if (fileName === Harness.Compiler.defaultLibFileName) {
-                    sourceFile = languageVersion === ts.ScriptTarget.ES6 ? Harness.Compiler.defaultES6LibSourceFile : Harness.Compiler.defaultLibSourceFile;
+                    sourceFile = Harness.Compiler.getDefaultLibrarySourceFile(Harness.Compiler.getDefaultLibFileName(compilerOptions));
                 }
                 else {
                     const text = getSourceFileText(fileName);
@@ -178,7 +185,8 @@ class ProjectRunner extends RunnerBase {
                     useCaseSensitiveFileNames: () => Harness.IO.useCaseSensitiveFileNames(),
                     getNewLine: () => Harness.IO.newLine(),
                     fileExists: fileName => fileName === Harness.Compiler.defaultLibFileName ||  getSourceFileText(fileName) !== undefined,
-                    readFile: fileName => Harness.IO.readFile(fileName)
+                    readFile: fileName => Harness.IO.readFile(fileName),
+                    getDirectories: path => Harness.IO.getDirectories(path)
                 };
             }
         }
@@ -210,7 +218,12 @@ class ProjectRunner extends RunnerBase {
                 }
 
                 const configObject = result.config;
-                const configParseResult = ts.parseJsonConfigFileContent(configObject, { readDirectory }, ts.getDirectoryPath(configFileName), compilerOptions);
+                const configParseHost: ts.ParseConfigHost = {
+                    useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
+                    fileExists,
+                    readDirectory,
+                };
+                const configParseResult = ts.parseJsonConfigFileContent(configObject, configParseHost, ts.getDirectoryPath(configFileName), compilerOptions);
                 if (configParseResult.errors.length > 0) {
                     return {
                         moduleKind,
@@ -237,7 +250,7 @@ class ProjectRunner extends RunnerBase {
                     mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? Harness.IO.resolvePath(testCase.mapRoot) : testCase.mapRoot,
                     sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? Harness.IO.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
                     module: moduleKind,
-                    moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future 
+                    moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future
                 };
                 // Set the values specified using json
                 const optionNameMap: ts.Map<ts.CommandLineOption> = {};
@@ -268,8 +281,8 @@ class ProjectRunner extends RunnerBase {
                     : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName);
             }
 
-            function readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
-                const harnessReadDirectoryResult = Harness.IO.readDirectory(getFileNameInTheProjectTest(rootDir), extension, exclude);
+            function readDirectory(rootDir: string, extension: string[], exclude: string[], include: string[]): string[] {
+                const harnessReadDirectoryResult = Harness.IO.readDirectory(getFileNameInTheProjectTest(rootDir), extension, exclude, include);
                 const result: string[] = [];
                 for (let i = 0; i < harnessReadDirectoryResult.length; i++) {
                     result[i] = ts.getRelativePathToDirectoryOrUrl(testCase.projectRoot, harnessReadDirectoryResult[i],
@@ -412,7 +425,7 @@ class ProjectRunner extends RunnerBase {
 
         function getErrorsBaseline(compilerResult: CompileProjectFilesResult) {
             const inputFiles = compilerResult.program ? ts.map(ts.filter(compilerResult.program.getSourceFiles(),
-                sourceFile => sourceFile.fileName !== "lib.d.ts"),
+                sourceFile => !Harness.isDefaultLibraryFile(sourceFile.fileName)),
                 sourceFile => {
                     return {
                         unitName: ts.isRootedDiskPath(sourceFile.fileName) ?

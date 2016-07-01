@@ -10,10 +10,10 @@ class c {
 >y : Symbol(c.y, Decl(declFileTypeofClass.ts, 2, 22))
 
     private x3: string;
->x3 : Symbol(x3, Decl(declFileTypeofClass.ts, 3, 29))
+>x3 : Symbol(c.x3, Decl(declFileTypeofClass.ts, 3, 29))
 
     public y3: number;
->y3 : Symbol(y3, Decl(declFileTypeofClass.ts, 4, 23))
+>y3 : Symbol(c.y3, Decl(declFileTypeofClass.ts, 4, 23))
 }
 
 var x: c;

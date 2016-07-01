@@ -1,10 +1,13 @@
 {
     "compilerOptions": {
         "noImplicitAny": true,
-        "removeComments": true,
+        "removeComments": false,
         "preserveConstEnums": true,
-        "out": "../../built/local/typescriptServices.js",
-        "sourceMap": true
+        "outFile": "../../built/local/typescriptServices.js",
+        "sourceMap": true,
+        "stripInternal": true,
+        "noResolve": false,
+        "declaration": true
     },
     "files": [
         "../compiler/core.ts",
@@ -15,11 +18,12 @@
         "../compiler/utilities.ts",
         "../compiler/binder.ts",
         "../compiler/checker.ts",
+        "../compiler/sourcemap.ts",
+        "../compiler/declarationEmitter.ts",
         "../compiler/emitter.ts",
         "../compiler/program.ts",
-        "../compiler/declarationEmitter.ts",
-        "../compiler/diagnosticInformationMap.generated.ts",
         "../compiler/commandLineParser.ts",
+        "../compiler/diagnosticInformationMap.generated.ts",
         "breakpoints.ts",
         "navigateTo.ts",
         "navigationBar.ts",
@@ -29,6 +33,7 @@
         "shims.ts",
         "signatureHelp.ts",
         "utilities.ts",
+        "jsTyping.ts",
         "formatting/formatting.ts",
         "formatting/formattingContext.ts",
         "formatting/formattingRequestKind.ts",

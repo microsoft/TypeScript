@@ -3,23 +3,23 @@ class C {
 >C : Symbol(C, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 0, 0))
 
     x: string = "Hello world";
->x : Symbol(x, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 0, 9))
+>x : Symbol(C.x, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 0, 9))
 }
 
 class D {
 >D : Symbol(D, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 2, 1))
 
     x: string = "Hello world";
->x : Symbol(x, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 4, 9))
+>x : Symbol(D.x, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 4, 9))
 
     y: number;
->y : Symbol(y, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 5, 30))
+>y : Symbol(D.y, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 5, 30))
 
     constructor() {
         this.y = 10;
->this.y : Symbol(y, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 5, 30))
+>this.y : Symbol(D.y, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 5, 30))
 >this : Symbol(D, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 2, 1))
->y : Symbol(y, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 5, 30))
+>y : Symbol(D.y, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 5, 30))
     }
 }
 
@@ -28,7 +28,7 @@ class E extends D{
 >D : Symbol(D, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 2, 1))
 
     z: boolean = true;
->z : Symbol(z, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 12, 18))
+>z : Symbol(E.z, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 12, 18))
 }
 
 class F extends D{
@@ -36,18 +36,18 @@ class F extends D{
 >D : Symbol(D, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 2, 1))
 
     z: boolean = true;
->z : Symbol(z, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 16, 18))
+>z : Symbol(F.z, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 16, 18))
 
     j: string;
->j : Symbol(j, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 17, 22))
+>j : Symbol(F.j, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 17, 22))
 
     constructor() {
         super();
 >super : Symbol(D, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 2, 1))
 
         this.j = "HI";
->this.j : Symbol(j, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 17, 22))
+>this.j : Symbol(F.j, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 17, 22))
 >this : Symbol(F, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 14, 1))
->j : Symbol(j, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 17, 22))
+>j : Symbol(F.j, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 17, 22))
     }
 }

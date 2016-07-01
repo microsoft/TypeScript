@@ -181,7 +181,7 @@ function foo4(x: number | string | boolean) {
         })(x); // x here is narrowed to number | boolean
 >x : number | boolean
 }
-// Type guards affect nested function expressions and nested function declarations
+// Type guards do not affect nested function declarations
 function foo5(x: number | string | boolean) {
 >foo5 : (x: number | string | boolean) => void
 >x : number | string | boolean
@@ -200,8 +200,8 @@ function foo5(x: number | string | boolean) {
 >foo : () => void
 
             var z = x; // string
->z : string
->x : string
+>z : number | string | boolean
+>x : number | string | boolean
         }
     }
 }

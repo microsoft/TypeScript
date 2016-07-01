@@ -10,7 +10,7 @@ class A {
 >A : Symbol(A, Decl(voidOperatorWithBooleanType.ts, 3, 40))
 
     public a: boolean;
->a : Symbol(a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
+>a : Symbol(A.a, Decl(voidOperatorWithBooleanType.ts, 5, 9))
 
     static foo() { return false; }
 >foo : Symbol(A.foo, Decl(voidOperatorWithBooleanType.ts, 6, 22))

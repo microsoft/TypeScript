@@ -166,7 +166,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
     
     ///<reference path='typescript.ts' />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6053: File 'typescript.ts' not found.
+!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
     
     module TypeScript {
         export function lastOf(items: any[]): any {

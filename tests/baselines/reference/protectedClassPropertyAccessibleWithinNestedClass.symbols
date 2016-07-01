@@ -1,0 +1,154 @@
+=== tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedClass.ts ===
+// no errors
+
+class C {
+>C : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+
+    protected x: string;
+>x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 2, 9))
+
+    protected get y() { return this.x; }
+>y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 4, 40))
+>this.x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 2, 9))
+>this : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+>x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 2, 9))
+
+    protected set y(x) { this.y = this.x; }
+>y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 4, 40))
+>x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 5, 20))
+>this.y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 4, 40))
+>this : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+>y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 4, 40))
+>this.x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 2, 9))
+>this : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+>x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 2, 9))
+
+    protected foo() { return this.foo; }
+>foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 5, 43))
+>this.foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 5, 43))
+>this : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 5, 43))
+
+    protected static x: string;
+>x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 6, 40))
+
+    protected static get y() { return this.x; }
+>y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 8, 31), Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 9, 47))
+>this.x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 6, 40))
+>this : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+>x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 6, 40))
+
+    protected static set y(x) { this.y = this.x; }
+>y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 8, 31), Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 9, 47))
+>x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 10, 27))
+>this.y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 8, 31), Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 9, 47))
+>this : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+>y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 8, 31), Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 9, 47))
+>this.x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 6, 40))
+>this : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+>x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 6, 40))
+
+    protected static foo() { return this.foo; }
+>foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 10, 50))
+>this.foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 10, 50))
+>this : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 10, 50))
+
+    protected static bar() { this.foo(); }
+>bar : Symbol(C.bar, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 11, 47))
+>this.foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 10, 50))
+>this : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 10, 50))
+
+    protected bar() {
+>bar : Symbol(C.bar, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 12, 42))
+
+        class C2 {
+>C2 : Symbol(C2, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 14, 21))
+
+            protected foo() {
+>foo : Symbol(C2.foo, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 15, 18))
+
+                let x: C;
+>x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 17, 19))
+>C : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+
+                var x1 = x.foo;
+>x1 : Symbol(x1, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 18, 19))
+>x.foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 5, 43))
+>x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 17, 19))
+>foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 5, 43))
+
+                var x2 = x.bar;
+>x2 : Symbol(x2, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 19, 19))
+>x.bar : Symbol(C.bar, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 12, 42))
+>x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 17, 19))
+>bar : Symbol(C.bar, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 12, 42))
+
+                var x3 = x.x;
+>x3 : Symbol(x3, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 20, 19))
+>x.x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 2, 9))
+>x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 17, 19))
+>x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 2, 9))
+
+                var x4 = x.y;
+>x4 : Symbol(x4, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 21, 19))
+>x.y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 4, 40))
+>x : Symbol(x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 17, 19))
+>y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 4, 40))
+
+                var sx1 = C.x;
+>sx1 : Symbol(sx1, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 23, 19))
+>C.x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 6, 40))
+>C : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+>x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 6, 40))
+
+                var sx2 = C.y;
+>sx2 : Symbol(sx2, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 24, 19))
+>C.y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 8, 31), Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 9, 47))
+>C : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+>y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 8, 31), Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 9, 47))
+
+                var sx3 = C.bar;
+>sx3 : Symbol(sx3, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 25, 19))
+>C.bar : Symbol(C.bar, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 11, 47))
+>C : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+>bar : Symbol(C.bar, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 11, 47))
+
+                var sx4 = C.foo;
+>sx4 : Symbol(sx4, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 26, 19))
+>C.foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 10, 50))
+>C : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 10, 50))
+
+                let y = new C();
+>y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 28, 19))
+>C : Symbol(C, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 0, 0))
+
+                var y1 = y.foo;
+>y1 : Symbol(y1, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 29, 19))
+>y.foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 5, 43))
+>y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 28, 19))
+>foo : Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 5, 43))
+
+                var y2 = y.bar;
+>y2 : Symbol(y2, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 30, 19))
+>y.bar : Symbol(C.bar, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 12, 42))
+>y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 28, 19))
+>bar : Symbol(C.bar, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 12, 42))
+
+                var y3 = y.x;
+>y3 : Symbol(y3, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 31, 19))
+>y.x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 2, 9))
+>y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 28, 19))
+>x : Symbol(C.x, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 2, 9))
+
+                var y4 = y.y;
+>y4 : Symbol(y4, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 32, 19))
+>y.y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 4, 40))
+>y : Symbol(y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 28, 19))
+>y : Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 3, 24), Decl(protectedClassPropertyAccessibleWithinNestedClass.ts, 4, 40))
+            }
+        }
+    }
+}

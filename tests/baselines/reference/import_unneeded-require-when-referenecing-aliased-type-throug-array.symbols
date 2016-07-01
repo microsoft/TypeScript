@@ -19,7 +19,7 @@ declare module "ITest" {
 >Name : Symbol(Name, Decl(b.ts, 0, 24))
 
         name: string;
->name : Symbol(name, Decl(b.ts, 1, 20))
+>name : Symbol(Name.name, Decl(b.ts, 1, 20))
     }
     export = Name;
 >Name : Symbol(Name, Decl(b.ts, 0, 24))

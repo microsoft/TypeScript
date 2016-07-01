@@ -7,7 +7,7 @@ module sas.tools {
 >Test : Symbol(Test, Decl(sourceMap-Comments.ts, 0, 18))
 
         public doX(): void {
->doX : Symbol(doX, Decl(sourceMap-Comments.ts, 1, 23))
+>doX : Symbol(Test.doX, Decl(sourceMap-Comments.ts, 1, 23))
 
             let f: number = 2;
 >f : Symbol(f, Decl(sourceMap-Comments.ts, 3, 15))

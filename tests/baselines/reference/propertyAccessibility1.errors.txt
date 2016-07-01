@@ -1,4 +1,4 @@
-tests/cases/compiler/propertyAccessibility1.ts(5,1): error TS2341: Property 'privProp' is private and only accessible within class 'Foo'.
+tests/cases/compiler/propertyAccessibility1.ts(5,3): error TS2341: Property 'privProp' is private and only accessible within class 'Foo'.
 
 
 ==== tests/cases/compiler/propertyAccessibility1.ts (1 errors) ====
@@ -7,6 +7,6 @@ tests/cases/compiler/propertyAccessibility1.ts(5,1): error TS2341: Property 'pri
     }
     var f = new Foo();
     f.privProp;
-    ~~~~~~~~~~
+      ~~~~~~~~
 !!! error TS2341: Property 'privProp' is private and only accessible within class 'Foo'.
     

@@ -11,7 +11,7 @@ class C<T extends { length: number }> {
 >T : Symbol(T, Decl(wrappedAndRecursiveConstraints3.ts, 2, 8))
 
     foo<U extends T>(x: U) {
->foo : Symbol(foo, Decl(wrappedAndRecursiveConstraints3.ts, 3, 25))
+>foo : Symbol(C.foo, Decl(wrappedAndRecursiveConstraints3.ts, 3, 25))
 >U : Symbol(U, Decl(wrappedAndRecursiveConstraints3.ts, 4, 8))
 >T : Symbol(T, Decl(wrappedAndRecursiveConstraints3.ts, 2, 8))
 >x : Symbol(x, Decl(wrappedAndRecursiveConstraints3.ts, 4, 21))

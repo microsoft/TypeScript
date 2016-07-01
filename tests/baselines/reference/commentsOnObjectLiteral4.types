@@ -2,7 +2,7 @@
 
 var v = {
 >v : { readonly bar: number; }
->{ /**  * @type {number}  */ get bar(): number {  return this._bar; }} : { readonly bar: number; }
+>{ /**  * @type {number}  */ get bar(): number {  return 12; }} : { readonly bar: number; }
 
  /**
   * @type {number}
@@ -10,9 +10,8 @@ var v = {
  get bar(): number {
 >bar : number
 
-  return this._bar;
->this._bar : any
->this : any
->_bar : any
+  return 12;
+>12 : number
  }
 }
+

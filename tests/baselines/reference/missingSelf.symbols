@@ -3,26 +3,26 @@ class CalcButton
 >CalcButton : Symbol(CalcButton, Decl(missingSelf.ts, 0, 0))
 {
     public a() { this.onClick(); }
->a : Symbol(a, Decl(missingSelf.ts, 1, 1))
->this.onClick : Symbol(onClick, Decl(missingSelf.ts, 2, 34))
+>a : Symbol(CalcButton.a, Decl(missingSelf.ts, 1, 1))
+>this.onClick : Symbol(CalcButton.onClick, Decl(missingSelf.ts, 2, 34))
 >this : Symbol(CalcButton, Decl(missingSelf.ts, 0, 0))
->onClick : Symbol(onClick, Decl(missingSelf.ts, 2, 34))
+>onClick : Symbol(CalcButton.onClick, Decl(missingSelf.ts, 2, 34))
 
     public onClick() { }
->onClick : Symbol(onClick, Decl(missingSelf.ts, 2, 34))
+>onClick : Symbol(CalcButton.onClick, Decl(missingSelf.ts, 2, 34))
 }
 
 class CalcButton2
 >CalcButton2 : Symbol(CalcButton2, Decl(missingSelf.ts, 4, 1))
 {
     public b() { () => this.onClick(); }
->b : Symbol(b, Decl(missingSelf.ts, 7, 1))
->this.onClick : Symbol(onClick, Decl(missingSelf.ts, 8, 40))
+>b : Symbol(CalcButton2.b, Decl(missingSelf.ts, 7, 1))
+>this.onClick : Symbol(CalcButton2.onClick, Decl(missingSelf.ts, 8, 40))
 >this : Symbol(CalcButton2, Decl(missingSelf.ts, 4, 1))
->onClick : Symbol(onClick, Decl(missingSelf.ts, 8, 40))
+>onClick : Symbol(CalcButton2.onClick, Decl(missingSelf.ts, 8, 40))
 
     public onClick() { }
->onClick : Symbol(onClick, Decl(missingSelf.ts, 8, 40))
+>onClick : Symbol(CalcButton2.onClick, Decl(missingSelf.ts, 8, 40))
 }
 
 var c = new CalcButton();

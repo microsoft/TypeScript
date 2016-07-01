@@ -3,7 +3,7 @@ interface JQueryElement {
 >JQueryElement : Symbol(JQueryElement, Decl(indexer.ts, 0, 0))
 
     id:string;
->id : Symbol(id, Decl(indexer.ts, 0, 25))
+>id : Symbol(JQueryElement.id, Decl(indexer.ts, 0, 25))
 }
 
 interface JQuery {

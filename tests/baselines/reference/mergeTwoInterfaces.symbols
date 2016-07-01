@@ -6,14 +6,14 @@ interface A {
 >A : Symbol(A, Decl(mergeTwoInterfaces.ts, 0, 0), Decl(mergeTwoInterfaces.ts, 5, 1))
 
     foo: string;
->foo : Symbol(foo, Decl(mergeTwoInterfaces.ts, 3, 13))
+>foo : Symbol(A.foo, Decl(mergeTwoInterfaces.ts, 3, 13))
 }
 
 interface A {
 >A : Symbol(A, Decl(mergeTwoInterfaces.ts, 0, 0), Decl(mergeTwoInterfaces.ts, 5, 1))
 
     bar: number;
->bar : Symbol(bar, Decl(mergeTwoInterfaces.ts, 7, 13))
+>bar : Symbol(A.bar, Decl(mergeTwoInterfaces.ts, 7, 13))
 }
 
 var a: A;
@@ -38,10 +38,10 @@ interface B<T> {
 >T : Symbol(T, Decl(mergeTwoInterfaces.ts, 16, 12), Decl(mergeTwoInterfaces.ts, 21, 12))
 
     baz: string;
->baz : Symbol(baz, Decl(mergeTwoInterfaces.ts, 16, 16))
+>baz : Symbol(B.baz, Decl(mergeTwoInterfaces.ts, 16, 16))
 
     foo: T;
->foo : Symbol(foo, Decl(mergeTwoInterfaces.ts, 17, 16))
+>foo : Symbol(B.foo, Decl(mergeTwoInterfaces.ts, 17, 16))
 >T : Symbol(T, Decl(mergeTwoInterfaces.ts, 16, 12), Decl(mergeTwoInterfaces.ts, 21, 12))
 }
 
@@ -50,7 +50,7 @@ interface B<T> {
 >T : Symbol(T, Decl(mergeTwoInterfaces.ts, 16, 12), Decl(mergeTwoInterfaces.ts, 21, 12))
 
     bar: T;
->bar : Symbol(bar, Decl(mergeTwoInterfaces.ts, 21, 16))
+>bar : Symbol(B.bar, Decl(mergeTwoInterfaces.ts, 21, 16))
 >T : Symbol(T, Decl(mergeTwoInterfaces.ts, 16, 12), Decl(mergeTwoInterfaces.ts, 21, 12))
 }
 
@@ -78,14 +78,14 @@ module M {
 >A : Symbol(A, Decl(mergeTwoInterfaces.ts, 30, 10), Decl(mergeTwoInterfaces.ts, 33, 5))
 
         foo: string;
->foo : Symbol(foo, Decl(mergeTwoInterfaces.ts, 31, 17))
+>foo : Symbol(A.foo, Decl(mergeTwoInterfaces.ts, 31, 17))
     }
 
     interface A {
 >A : Symbol(A, Decl(mergeTwoInterfaces.ts, 30, 10), Decl(mergeTwoInterfaces.ts, 33, 5))
 
         bar: number;
->bar : Symbol(bar, Decl(mergeTwoInterfaces.ts, 35, 17))
+>bar : Symbol(A.bar, Decl(mergeTwoInterfaces.ts, 35, 17))
     }
 
     var a: A;
@@ -110,7 +110,7 @@ module M {
 >T : Symbol(T, Decl(mergeTwoInterfaces.ts, 44, 16), Decl(mergeTwoInterfaces.ts, 48, 16))
 
         foo: T;
->foo : Symbol(foo, Decl(mergeTwoInterfaces.ts, 44, 20))
+>foo : Symbol(B.foo, Decl(mergeTwoInterfaces.ts, 44, 20))
 >T : Symbol(T, Decl(mergeTwoInterfaces.ts, 44, 16), Decl(mergeTwoInterfaces.ts, 48, 16))
     }
 
@@ -119,7 +119,7 @@ module M {
 >T : Symbol(T, Decl(mergeTwoInterfaces.ts, 44, 16), Decl(mergeTwoInterfaces.ts, 48, 16))
 
         bar: T;
->bar : Symbol(bar, Decl(mergeTwoInterfaces.ts, 48, 20))
+>bar : Symbol(B.bar, Decl(mergeTwoInterfaces.ts, 48, 20))
 >T : Symbol(T, Decl(mergeTwoInterfaces.ts, 44, 16), Decl(mergeTwoInterfaces.ts, 48, 16))
     }
 

@@ -50,7 +50,7 @@ declare module "observable" {
 >T : Symbol(T, Decl(observable.d.ts, 1, 21), Decl(map.ts, 6, 25))
 
         map<U>(proj: (e:T) => U): Observable<U>
->map : Symbol(map, Decl(map.ts, 6, 29))
+>map : Symbol(Observable.map, Decl(map.ts, 6, 29))
 >U : Symbol(U, Decl(map.ts, 7, 12))
 >proj : Symbol(proj, Decl(map.ts, 7, 15))
 >e : Symbol(e, Decl(map.ts, 7, 22))
@@ -74,7 +74,7 @@ declare module "observable" {
 >T : Symbol(T, Decl(observable.d.ts, 1, 21), Decl(map.ts, 6, 25))
 
         filter(pred: (e:T) => boolean): Observable<T>;
->filter : Symbol(filter, Decl(observable.d.ts, 1, 25))
+>filter : Symbol(Observable.filter, Decl(observable.d.ts, 1, 25))
 >pred : Symbol(pred, Decl(observable.d.ts, 2, 15))
 >e : Symbol(e, Decl(observable.d.ts, 2, 22))
 >T : Symbol(T, Decl(observable.d.ts, 1, 21), Decl(map.ts, 6, 25))

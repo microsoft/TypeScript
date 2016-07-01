@@ -6,13 +6,13 @@ class A {
     private constructor() { }
 
     method() {
->method : Symbol(method, Decl(classConstructorAccessibility4.ts, 2, 29))
+>method : Symbol(A.method, Decl(classConstructorAccessibility4.ts, 2, 29))
 
         class B {
 >B : Symbol(B, Decl(classConstructorAccessibility4.ts, 4, 14))
 
             method() {
->method : Symbol(method, Decl(classConstructorAccessibility4.ts, 5, 17))
+>method : Symbol(B.method, Decl(classConstructorAccessibility4.ts, 5, 17))
 
                 new A(); // OK
 >A : Symbol(A, Decl(classConstructorAccessibility4.ts, 0, 0))
@@ -32,13 +32,13 @@ class D {
     protected constructor() { }
 
     method() {
->method : Symbol(method, Decl(classConstructorAccessibility4.ts, 17, 31))
+>method : Symbol(D.method, Decl(classConstructorAccessibility4.ts, 17, 31))
 
         class E {
 >E : Symbol(E, Decl(classConstructorAccessibility4.ts, 19, 14))
 
             method() {
->method : Symbol(method, Decl(classConstructorAccessibility4.ts, 20, 17))
+>method : Symbol(E.method, Decl(classConstructorAccessibility4.ts, 20, 17))
 
                 new D(); // OK
 >D : Symbol(D, Decl(classConstructorAccessibility4.ts, 14, 1))

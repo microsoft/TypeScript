@@ -4,7 +4,7 @@ declare class Promise<T> {
 >T : Symbol(T, Decl(promiseTypeInference.ts, 0, 22))
 
     then<U>(success?: (value: T) => Promise<U>): Promise<U>;
->then : Symbol(then, Decl(promiseTypeInference.ts, 0, 26))
+>then : Symbol(Promise.then, Decl(promiseTypeInference.ts, 0, 26))
 >U : Symbol(U, Decl(promiseTypeInference.ts, 1, 9))
 >success : Symbol(success, Decl(promiseTypeInference.ts, 1, 12))
 >value : Symbol(value, Decl(promiseTypeInference.ts, 1, 23))
@@ -19,7 +19,7 @@ interface IPromise<T> {
 >T : Symbol(T, Decl(promiseTypeInference.ts, 3, 19))
 
     then<U>(success?: (value: T) => IPromise<U>): IPromise<U>;
->then : Symbol(then, Decl(promiseTypeInference.ts, 3, 23))
+>then : Symbol(IPromise.then, Decl(promiseTypeInference.ts, 3, 23))
 >U : Symbol(U, Decl(promiseTypeInference.ts, 4, 9))
 >success : Symbol(success, Decl(promiseTypeInference.ts, 4, 12))
 >value : Symbol(value, Decl(promiseTypeInference.ts, 4, 23))

@@ -10,7 +10,7 @@ interface IWithNoCallSignatures {
 >IWithNoCallSignatures : Symbol(IWithNoCallSignatures, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 0, 0))
 
     foo: string;
->foo : Symbol(foo, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 7, 33))
+>foo : Symbol(IWithNoCallSignatures.foo, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 7, 33))
 }
 interface IWithCallSignatures {
 >IWithCallSignatures : Symbol(IWithCallSignatures, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 9, 1))

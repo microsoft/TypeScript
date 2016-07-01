@@ -51,6 +51,7 @@ var d = <Other />;
 var e = <Dotted.Name />;
 >e : any
 ><Dotted.Name /> : any
->Dotted : any
->Name : any
+>Dotted.Name : typeof Dotted.Name
+>Dotted : typeof Dotted
+>Name : typeof Dotted.Name
 

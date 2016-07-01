@@ -6,13 +6,13 @@ module Bugs {
 >IToken : Symbol(IToken, Decl(overloadResolutionOverNonCTObjectLit.ts, 0, 13))
 
                                 startIndex:number;
->startIndex : Symbol(startIndex, Decl(overloadResolutionOverNonCTObjectLit.ts, 1, 41))
+>startIndex : Symbol(IToken.startIndex, Decl(overloadResolutionOverNonCTObjectLit.ts, 1, 41))
 
                                 type:string;
->type : Symbol(type, Decl(overloadResolutionOverNonCTObjectLit.ts, 2, 50))
+>type : Symbol(IToken.type, Decl(overloadResolutionOverNonCTObjectLit.ts, 2, 50))
 
                                 bracket:number;
->bracket : Symbol(bracket, Decl(overloadResolutionOverNonCTObjectLit.ts, 3, 44))
+>bracket : Symbol(IToken.bracket, Decl(overloadResolutionOverNonCTObjectLit.ts, 3, 44))
                 }
                 
                 export interface IState {
@@ -24,11 +24,11 @@ module Bugs {
 >IToken : Symbol(IToken, Decl(overloadResolutionOverNonCTObjectLit.ts, 0, 13))
 
                                 state: IState;
->state : Symbol(state, Decl(overloadResolutionOverNonCTObjectLit.ts, 10, 61))
+>state : Symbol(IStateToken.state, Decl(overloadResolutionOverNonCTObjectLit.ts, 10, 61))
 >IState : Symbol(IState, Decl(overloadResolutionOverNonCTObjectLit.ts, 5, 17))
 
                                 length: number;
->length : Symbol(length, Decl(overloadResolutionOverNonCTObjectLit.ts, 11, 46))
+>length : Symbol(IStateToken.length, Decl(overloadResolutionOverNonCTObjectLit.ts, 11, 46))
                 }
                 
                 function bug3() {
