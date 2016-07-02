@@ -4545,8 +4545,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                                 }
 
                                 write(";");
-                                tempIndex++;
                             }
+                            // Regardless of whether we will emit a var declaration for the binding pattern, we generate the temporary
+                            // variable for the parameter (see: emitParameter)
+                            tempIndex++;
                         }
                         else if (initializer) {
                             writeLine();
