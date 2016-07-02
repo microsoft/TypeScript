@@ -27,7 +27,7 @@ namespace ts.codeFix {
                 }
             }
 
-            if (textChanges.length !== 0) {
+            if (textChanges.length > 0) {
                 return [{
                     description: getLocaleSpecificMessage(Diagnostics.Implement_interface_on_reference),
                     changes: [{
@@ -53,8 +53,8 @@ namespace ts.codeFix {
             if (token.kind === SyntaxKind.Identifier && token.parent.kind === SyntaxKind.ClassDeclaration) {
                 const classDeclaration = <ClassDeclaration>token.parent;
                 const startPos: number = classDeclaration.members.pos;
-                const classMembers: Array<string> = getClassMembers(classDeclaration);
-                const trackingAddedMembers: Array<string> = [];
+                const classMembers = getClassMembers(classDeclaration);
+                const trackingAddedMembers: string[] = [];
                 const interfaceClauses = ts.getClassImplementsHeritageClauseElements(classDeclaration);
 
                 for (let i = 0; interfaceClauses && i < interfaceClauses.length; i++) {
@@ -62,7 +62,7 @@ namespace ts.codeFix {
                 }
             }
 
-            if (textChanges.length !== 0) {
+            if (textChanges.length > 0) {
                 return [{
                     description: getLocaleSpecificMessage(Diagnostics.Implement_interface_on_class),
                     changes: [{
@@ -83,18 +83,18 @@ namespace ts.codeFix {
             const sourceFile = context.sourceFile;
             const start = context.span.start;
             const token = getTokenAtPosition(sourceFile, start);
-            let textChanges: { newText: string; span: { start: number, length: number } }[] = [];
+            let textChanges: TextChange[] = [];
 
             if (token.kind === SyntaxKind.Identifier && token.parent.kind === SyntaxKind.ClassDeclaration) {
                 const classDeclaration = <ClassDeclaration>token.parent;
-                const startPos: number = classDeclaration.members.pos;
-                const classMembers: Array<string> = getClassMembers(classDeclaration);
-                const trackingAddedMembers: Array<string> = [];
+                const startPos = classDeclaration.members.pos;
+                const classMembers = getClassMembers(classDeclaration);
+                const trackingAddedMembers: string[] = [];
                 const extendsClause = ts.getClassExtendsHeritageClauseElement(classDeclaration);
                 textChanges = textChanges.concat(getChanges(extendsClause, classMembers, startPos, context.checker, /*reference*/ false, trackingAddedMembers));
             }
 
-            if (textChanges.length !== 0) {
+            if (textChanges.length > 0) {
                 return [{
                     description: getLocaleSpecificMessage(Diagnostics.Implement_inherited_abstract_class),
                     changes: [{
@@ -121,10 +121,7 @@ namespace ts.codeFix {
                         if (trackingAddedMembers.indexOf(interfaceProperty.name.getText()) === -1) {
                             let propertyText = "";
                             if (reference) {
-                                propertyText = interfaceProperty.name.getText();
-                                propertyText += " : ";
-                                propertyText += getDefaultValue(interfaceProperty.type.kind);
-                                propertyText += ",sys.newLine";
+                                propertyText = `${interfaceProperty.name.getText()} : ${getDefaultValue(interfaceProperty.type.kind)},sys.newLine`;
                             }
                             else {
                                 propertyText = interfaceProperty.getText();
@@ -146,7 +143,7 @@ namespace ts.codeFix {
         if (reference && existingMembers.length === 0 && changesArray.length > 0) {
             let lastValue = changesArray[changesArray.length - 1].newText;
             lastValue = lastValue.substr(0, lastValue.length - 12);
-            lastValue = lastValue + " sys.newLine";
+            lastValue += " sys.newLine";
             changesArray[changesArray.length - 1].newText = lastValue;
         }
 
@@ -212,32 +209,40 @@ namespace ts.codeFix {
         return "null";
     }
 
-    function handleMethods(interfaceMethod: MethodSignature, startPos: number, isReference: boolean, trackingAddedMembers: string[], changesArray: TextChange[]) {
+    function handleMethods(interfaceMethod: MethodSignature, startPos: number, isReference: boolean, trackingAddedMembers: string[], textChanges: TextChange[]) {
+
+        const methodBody = "throw new Error('Method not Implemented');";
+
         if (trackingAddedMembers.indexOf(interfaceMethod.name.getText())) {
             const methodName = interfaceMethod.name.getText();
-            const typeParameterArray: Array<string> = [];
+            const typeParameterArray: string[] = [];
+
             for (let i = 0; interfaceMethod.typeParameters && i < interfaceMethod.typeParameters.length; i++) {
                 typeParameterArray.push(interfaceMethod.typeParameters[i].getText());
             }
-            const parameterArray: Array<string> = [];
+
+            const parameterArray: string[] = [];
             for (let j = 0; interfaceMethod.parameters && j < interfaceMethod.parameters.length; j++) {
                 parameterArray.push(interfaceMethod.parameters[j].getText());
             }
-            const methodBody = "throw new Error('Method not Implemented');";
+
 
             let methodText = methodName;
             if (typeParameterArray.length > 0) {
                 methodText += "<";
             }
+
             for (let k = 0; k < typeParameterArray.length; k++) {
                 methodText += typeParameterArray[k];
                 if (k !== typeParameterArray.length - 1) {
                     methodText += ",";
                 }
             }
+
             if (typeParameterArray.length > 0) {
                 methodText += ">";
             }
+
             methodText += "(";
             for (let k = 0; k < parameterArray.length; k++) {
                 methodText += parameterArray[k];
@@ -245,12 +250,14 @@ namespace ts.codeFix {
                     methodText += ",";
                 }
             }
+
             methodText += ")";
             methodText += "{sys.newLine ";
             methodText += methodBody;
             methodText += "sys.newLine";
             methodText = isReference ? methodText.concat("},sys.newLine") : methodText.concat("}sys.newLine");
-            changesArray.push({ newText: methodText, span: { start: startPos, length: 0 } });
+
+            textChanges.push({ newText: methodText, span: { start: startPos, length: 0 } });
             trackingAddedMembers.push(interfaceMethod.name.getText());
         }
     }
