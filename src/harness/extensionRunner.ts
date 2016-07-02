@@ -290,7 +290,7 @@ class ExtensionRunner extends RunnerBase {
      */
     private runTest(caseName: string) {
         const caseNameNoExtension = caseName.replace(/\.json$/, "");
-        const shortCasePath = caseName.substring(this.scenarioPath.length + 1);
+        const shortCasePath = caseName.substring(this.scenarioPath.length + 1).replace(/\.json$/, "");
         const testConfigText = Harness.IO.readFile(caseName);
         const testConfig: ExtensionTestConfig = JSON.parse(testConfigText);
         const inputSources: ts.Map<string> = {};

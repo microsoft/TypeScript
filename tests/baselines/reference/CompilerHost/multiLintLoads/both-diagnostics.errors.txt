@@ -1,0 +1,14 @@
+/foo-interface-const.ts(1,11): warning TStest-syntactic-lint: Identifier 'foo' is forbidden.
+/foo-interface-const.ts(2,10): warning TStest-semantic-lint: String literal type 'foo' is forbidden.
+/foo-interface-const.ts(2,18): warning TStest-semantic-lint: String literal type 'foo' is forbidden.
+
+
+==== /foo-interface-const.ts (3 errors) ====
+    interface Foo {a; b;}
+              ~~~
+!!! warning TStest-syntactic-lint: Identifier 'foo' is forbidden.
+    const s: "foo" = "foo";
+             ~~~~~
+!!! warning TStest-semantic-lint: String literal type 'foo' is forbidden.
+                     ~~~~~
+!!! warning TStest-semantic-lint: String literal type 'foo' is forbidden.

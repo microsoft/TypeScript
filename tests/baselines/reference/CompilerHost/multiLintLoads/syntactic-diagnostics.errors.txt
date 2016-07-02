@@ -1,0 +1,7 @@
+/foo-interface.ts(1,11): warning TStest-syntactic-lint: Identifier 'foo' is forbidden.
+
+
+==== /foo-interface.ts (1 errors) ====
+    interface Foo {a; b;}
+              ~~~
+!!! warning TStest-syntactic-lint: Identifier 'foo' is forbidden.
