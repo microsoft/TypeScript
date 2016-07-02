@@ -1,21 +1,21 @@
-/foo-bar-math.ts(1,7): warning TStest-multierrors(FOO): Identifier 'foo' is forbidden.
-/foo-bar-math.ts(1,7): warning TStest-multierrors[NoShortNames](SHORT): Short identifiers are forbidden.
-/foo-bar-math.ts(2,7): warning TStest-multierrors(BAR): Identifier 'bar' is forbidden.
-/foo-bar-math.ts(2,7): warning TStest-multierrors[NoShortNames](SHORT): Short identifiers are forbidden.
-/foo-bar-math.ts(3,7): warning TStest-multierrors[NoShortNames](SINGLE): Single character identifiers are forbidden
+/foo-bar-math.ts(1,7): warning test-multierrors(FOO): Identifier 'foo' is forbidden.
+/foo-bar-math.ts(1,7): warning test-multierrors[NoShortNames](SHORT): Short identifiers are forbidden.
+/foo-bar-math.ts(2,7): warning test-multierrors(BAR): Identifier 'bar' is forbidden.
+/foo-bar-math.ts(2,7): warning test-multierrors[NoShortNames](SHORT): Short identifiers are forbidden.
+/foo-bar-math.ts(3,7): warning test-multierrors[NoShortNames](SINGLE): Single character identifiers are forbidden
 
 
 ==== /foo-bar-math.ts (5 errors) ====
     const foo = 3;
           ~~~
-!!! warning TStest-multierrors(FOO): Identifier 'foo' is forbidden.
+!!! warning test-multierrors(FOO): Identifier 'foo' is forbidden.
           ~~~
-!!! warning TStest-multierrors[NoShortNames](SHORT): Short identifiers are forbidden.
+!!! warning test-multierrors[NoShortNames](SHORT): Short identifiers are forbidden.
     const bar = 4;
           ~~~
-!!! warning TStest-multierrors(BAR): Identifier 'bar' is forbidden.
+!!! warning test-multierrors(BAR): Identifier 'bar' is forbidden.
           ~~~
-!!! warning TStest-multierrors[NoShortNames](SHORT): Short identifiers are forbidden.
+!!! warning test-multierrors[NoShortNames](SHORT): Short identifiers are forbidden.
     const x = 3 * 4; 
           ~
-!!! warning TStest-multierrors[NoShortNames](SINGLE): Single character identifiers are forbidden
+!!! warning test-multierrors[NoShortNames](SINGLE): Single character identifiers are forbidden

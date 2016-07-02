@@ -1202,6 +1202,11 @@ namespace Harness {
             return normalized;
         }
 
+        function getDiagnosticCodeString(code: string | number) {
+            if (typeof code === "number") return `TS${code}`;
+            return code;
+        }
+
         export function minimalDiagnosticsToString(diagnostics: ts.Diagnostic[]) {
             // This is basically copied from tsc.ts's reportError to replicate what tsc does
             let errorOutput = "";
@@ -1211,7 +1216,7 @@ namespace Harness {
                     errorOutput += diagnostic.file.fileName + "(" + (lineAndCharacter.line + 1) + "," + (lineAndCharacter.character + 1) + "): ";
                 }
 
-                errorOutput += ts.DiagnosticCategory[diagnostic.category].toLowerCase() + " TS" + diagnostic.code + ": " + ts.flattenDiagnosticMessageText(diagnostic.messageText, Harness.IO.newLine()) + Harness.IO.newLine();
+                errorOutput += ts.DiagnosticCategory[diagnostic.category].toLowerCase() + " " + getDiagnosticCodeString(diagnostic.code) + ": " + ts.flattenDiagnosticMessageText(diagnostic.messageText, Harness.IO.newLine()) + Harness.IO.newLine();
             });
 
             return errorOutput;
@@ -1230,7 +1235,7 @@ namespace Harness {
                     .split("\n")
                     .map(s => s.length > 0 && s.charAt(s.length - 1) === "\r" ? s.substr(0, s.length - 1) : s)
                     .filter(s => s.length > 0)
-                    .map(s => "!!! " + ts.DiagnosticCategory[error.category].toLowerCase() + " TS" + error.code + ": " + s);
+                    .map(s => "!!! " + ts.DiagnosticCategory[error.category].toLowerCase() + " " + getDiagnosticCodeString(error.code) + ": " + s);
                 errLines.forEach(e => outputLines.push(e));
 
                 // do not count errors from lib.d.ts here, they are computed separately as numLibraryDiagnostics

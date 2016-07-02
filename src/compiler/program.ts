@@ -1509,11 +1509,13 @@ namespace ts {
                 if (shouldProfile) completeExtensionProfile(lints[i], "construct", host.trace);
             }
 
+            let nodesVisited = 0;
             visitNode(sourceFile);
 
             return diagnostics;
 
             function visitNode(node: Node) {
+                nodesVisited++;
                 let oneAccepted = false;
                 const oldParent = parent;
                 const needsReset: Map<boolean> = {};
@@ -1521,9 +1523,9 @@ namespace ts {
                     if (initializedLints[i].accepted) {
                         activeLint = initializedLints[i];
                         node.parent = parent;
-                        if (shouldProfile) startExtensionProfile(lints[i], `visitNode|${getNodeId(node)}`, host.trace);
+                        if (shouldProfile) startExtensionProfile(lints[i], `visitNode|${nodesVisited}`, host.trace);
                         activeLint.walker.visit(node, stop, error);
-                        if (shouldProfile) completeExtensionProfile(lints[i], `visitNode|${getNodeId(node)}`, host.trace);
+                        if (shouldProfile) completeExtensionProfile(lints[i], `visitNode|${nodesVisited}`, host.trace);
                         if (activeLint.accepted) {
                             oneAccepted = true;
                         }

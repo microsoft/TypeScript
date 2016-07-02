@@ -1,20 +1,20 @@
-warning TStest-errors: Not allowed.
-warning TStest-errors[Throws2](THROWS2): Not allowed.
-/hello.ts(1,1): warning TStest-errors[Throws3](THROWS3): Not allowed.
-/hello.ts(1,1): warning TStest-errors[Throws5]: Not allowed.
-/hello.ts(1,1): warning TStest-errors[Throws4](THROWS4): Not allowed.
-/hello.ts(1,1): warning TStest-errors[Throws6]: Not allowed.
+warning test-errors: Not allowed.
+warning test-errors[Throws2](THROWS2): Not allowed.
+/hello.ts(1,1): warning test-errors[Throws3](THROWS3): Not allowed.
+/hello.ts(1,1): warning test-errors[Throws5]: Not allowed.
+/hello.ts(1,1): warning test-errors[Throws4](THROWS4): Not allowed.
+/hello.ts(1,1): warning test-errors[Throws6]: Not allowed.
 
 
-!!! warning TStest-errors: Not allowed.
-!!! warning TStest-errors[Throws2](THROWS2): Not allowed.
+!!! warning test-errors: Not allowed.
+!!! warning test-errors[Throws2](THROWS2): Not allowed.
 ==== /hello.ts (4 errors) ====
     console.log("Hello, world!");
     ~~~~~~~
-!!! warning TStest-errors[Throws3](THROWS3): Not allowed.
+!!! warning test-errors[Throws3](THROWS3): Not allowed.
     ~~~~~~~
-!!! warning TStest-errors[Throws5]: Not allowed.
+!!! warning test-errors[Throws5]: Not allowed.
     ~~~~~~~~~~
-!!! warning TStest-errors[Throws4](THROWS4): Not allowed.
+!!! warning test-errors[Throws4](THROWS4): Not allowed.
     ~~~~~~~~~~
-!!! warning TStest-errors[Throws6]: Not allowed.
+!!! warning test-errors[Throws6]: Not allowed.

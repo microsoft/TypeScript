@@ -4,71 +4,71 @@ PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'construct'
 PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'construct' (REDACTED ms)
 PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'construct'
 PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'construct' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|319090'
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|319090' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|319090'
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|319090' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|319091'
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|319091' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|319091'
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|319091' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|319092'
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|319092' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|319092'
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|319092' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|319093'
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|319093' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|319093'
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|319093' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|319094'
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|319094' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|319094'
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|319094' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|319095'
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|319095' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|319095'
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|319095' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|319096'
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|319096' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|319096'
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|319096' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|319097'
-PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|319097' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|319097'
-PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|319097' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|1'
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|1' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|1'
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|1' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|2'
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|2' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|2'
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|2' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|3'
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|3' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|3'
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|3' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|4'
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|4' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|4'
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|4' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|5'
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|5' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|5'
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|5' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|6'
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|6' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|6'
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|6' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|7'
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|7' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|7'
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|7' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' begin 'visitNode|8'
+PROFILE: Extension 'test-multi-extension[IsNamedFoo]' end 'visitNode|8' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' begin 'visitNode|8'
+PROFILE: Extension 'test-multi-extension[IsNamedBar]' end 'visitNode|8' (REDACTED ms)
 PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'construct'
 PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'construct' (REDACTED ms)
 PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'construct'
 PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'construct' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|319090'
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|319090' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|319090'
-PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|319090' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|319091'
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|319091' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|319091'
-PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|319091' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|319092'
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|319092' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|319092'
-PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|319092' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|319093'
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|319093' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|319093'
-PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|319093' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|319094'
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|319094' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|319094'
-PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|319094' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|319095'
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|319095' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|319095'
-PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|319095' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|319096'
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|319096' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|319096'
-PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|319096' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|319097'
-PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|319097' (REDACTED ms)
-PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|319097'
-PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|319097' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|1'
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|1' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|1'
+PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|1' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|2'
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|2' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|2'
+PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|2' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|3'
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|3' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|3'
+PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|3' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|4'
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|4' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|4'
+PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|4' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|5'
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|5' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|5'
+PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|5' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|6'
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|6' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|6'
+PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|6' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|7'
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|7' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|7'
+PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|7' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' begin 'visitNode|8'
+PROFILE: Extension 'test-multi-extension[IsValueFoo]' end 'visitNode|8' (REDACTED ms)
+PROFILE: Extension 'test-multi-extension[IsValueBar]' begin 'visitNode|8'
+PROFILE: Extension 'test-multi-extension[IsValueBar]' end 'visitNode|8' (REDACTED ms)
