@@ -1,0 +1,10 @@
+{
+    "inputFiles": [
+        "foo-const.ts"
+    ],
+    "availableExtensions": ["test-semantic-lint"],
+    "compilerOptions": {
+        "extensions": ["test-semantic-lint"],
+        "traceResolution": true
+    }
+}

@@ -132,6 +132,7 @@ var harnessCoreSources = [
     "typeWriter.ts",
     "fourslashRunner.ts",
     "projectsRunner.ts",
+    "extensionRunner.ts",
     "loggedIO.ts",
     "rwcRunner.ts",
     "test262Runner.ts",
