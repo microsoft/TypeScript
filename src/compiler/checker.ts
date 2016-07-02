@@ -201,6 +201,7 @@ namespace ts {
         const numericLiteralTypes: Map<LiteralType> = {};
         const emptyStringType = getLiteralTypeForText(TypeFlags.StringLiteral, "");
         const zeroType = getLiteralTypeForText(TypeFlags.NumberLiteral, "0");
+        const trueFalseType = getUnionType([trueType, falseType]);
 
         const resolutionTargets: TypeSystemEntity[] = [];
         const resolutionResults: boolean[] = [];
@@ -6889,6 +6890,10 @@ namespace ts {
                 type;
         }
 
+        function isUnionWithTrueOrFalse(type: Type) {
+            return type.flags & TypeFlags.Union && (contains((<UnionType>type).types, trueType) || contains((<UnionType>type).types, falseType));
+        }
+
         /**
          * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
@@ -12330,7 +12335,11 @@ namespace ts {
                     }
                     return numberType;
                 case SyntaxKind.ExclamationToken:
-                    return booleanType;
+                    const facts = getTypeFacts(operandType) & (TypeFacts.Truthy | TypeFacts.Falsy);
+                    return facts === TypeFacts.Truthy ? falseType :
+                        facts === TypeFacts.Falsy ? trueType :
+                        isUnionWithTrueOrFalse(operandType) ? trueFalseType :
+                        booleanType;
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
                     const ok = checkArithmeticOperandType(node.operand, getNonNullableType(operandType),
@@ -12713,9 +12722,11 @@ namespace ts {
                 case SyntaxKind.InKeyword:
                     return checkInExpression(left, right, leftType, rightType);
                 case SyntaxKind.AmpersandAmpersandToken:
-                    return strictNullChecks ? includeFalsyTypes(rightType, getFalsyFlags(leftType)) : rightType;
+                    return !strictNullChecks ? rightType :
+                        getTypeFacts(leftType) & TypeFacts.Truthy ? includeFalsyTypes(rightType, getFalsyFlags(leftType)) : leftType;
                 case SyntaxKind.BarBarToken:
-                    return getUnionType([strictNullChecks ? removeDefinitelyFalsyTypes(leftType) : leftType, rightType]);
+                    return !strictNullChecks ? getUnionType([leftType, rightType]) :
+                        getTypeFacts(leftType) & TypeFacts.Truthy ? getUnionType([removeDefinitelyFalsyTypes(leftType), rightType]) : rightType;
                 case SyntaxKind.EqualsToken:
                     checkAssignmentOperator(rightType);
                     return getRegularTypeOfObjectLiteral(rightType);
