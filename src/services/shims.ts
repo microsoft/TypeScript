@@ -927,7 +927,7 @@ namespace ts {
 
         public getEmitOutputObject(fileName: string): any {
             return forwardCall(
-                this.logger, 
+                this.logger,
                 `getEmitOutput('${fileName}')`,
                 /*returnJson*/ false,
                 () => this.languageService.getEmitOutput(fileName),
