@@ -178,9 +178,7 @@ namespace ts {
                     error = new Error("Extension loading not implemented in host!");
                 }
                 if (error) {
-                    diagnostics.push(createCompilerDiagnostic(Diagnostics.Extension_loading_failed_with_error_0, error.stack ? `${error}
-                    Stack trace:
-                    ${error.stack}` : error));
+                    diagnostics.push(createCompilerDiagnostic(Diagnostics.Extension_loading_failed_with_error_0, error));
                 }
                 return { name, result, error };
             });

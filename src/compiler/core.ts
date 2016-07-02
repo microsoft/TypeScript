@@ -1331,4 +1331,49 @@ namespace ts {
             : ((fileName) => fileName.toLowerCase());
     }
 
+    /**
+     * This isn't the strictest deep equal, but it's good enough for us
+     *  - +0 === -0 (though who really wants to consider them different?)
+     *  - arguments and arrays can be equal (both typeof === object, both have enumerable keys)
+     *  - doesn't inspect es6 iterables (not that they're used in this code base)
+     *  - doesn't inspect regex toString value (so only references to the same regex are equal)
+     *  - doesn't inspect date primitive number value (so only references to the same date are equal)
+     */
+    export function deepEqual(a: any, b: any, memo?: [any, any][]): boolean {
+        if (a === b) return true;
+        if (typeof a !== typeof b) return false;
+        // Special case NaN
+        if (typeof a === "number" && isNaN(a) && isNaN(b)) return true;
+        // We can't know if function arguments are deep equal, so we say they're equal if they look alike
+        if (typeof a === "object" || typeof a === "function") {
+            if (memo) {
+                for (let i = 0; i < memo.length; i++) {
+                    if (memo[i][0] === a && memo[i][1] === b) return true;
+                    if (memo[i][0] === b && memo[i][1] === a) return true;
+                }
+            }
+            else {
+                memo = [];
+            }
+
+            const aKeys = ts.getKeys(a);
+            const bKeys = ts.getKeys(b);
+            aKeys.sort();
+            bKeys.sort();
+
+            if (aKeys.length !== bKeys.length) return false;
+
+            for (let i = 0; i < aKeys.length; i++) {
+                if (aKeys[i] !== bKeys[i]) return false;
+            }
+
+            memo.push([a, b]);
+
+            for (const key of aKeys) {
+                if (!deepEqual(a[key], b[key], memo)) return false;
+            }
+            return true;
+        }
+        return false;
+    }
 }

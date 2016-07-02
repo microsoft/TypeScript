@@ -7,21 +7,3 @@ Found 'package.json' at 'node_modules/test-syntactic-lint/package.json'.
 'package.json' has 'main' field 'index.js' that references 'node_modules/test-syntactic-lint/index.js'.
 File 'node_modules/test-syntactic-lint/index.js' exist - use it as a name resolution result.
 ======== Module name 'test-syntactic-lint' was successfully resolved to 'node_modules/test-syntactic-lint/index.js'. ========
-======== Resolving module 'test-syntactic-lint' from 'tsconfig.json'. ========
-Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'test-syntactic-lint' from 'node_modules' folder.
-File 'node_modules/test-syntactic-lint.js' does not exist.
-File 'node_modules/test-syntactic-lint.jsx' does not exist.
-Found 'package.json' at 'node_modules/test-syntactic-lint/package.json'.
-'package.json' has 'main' field 'index.js' that references 'node_modules/test-syntactic-lint/index.js'.
-File 'node_modules/test-syntactic-lint/index.js' exist - use it as a name resolution result.
-======== Module name 'test-syntactic-lint' was successfully resolved to 'node_modules/test-syntactic-lint/index.js'. ========
-======== Resolving module 'test-syntactic-lint' from 'tsconfig.json'. ========
-Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'test-syntactic-lint' from 'node_modules' folder.
-File 'node_modules/test-syntactic-lint.js' does not exist.
-File 'node_modules/test-syntactic-lint.jsx' does not exist.
-Found 'package.json' at 'node_modules/test-syntactic-lint/package.json'.
-'package.json' has 'main' field 'index.js' that references 'node_modules/test-syntactic-lint/index.js'.
-File 'node_modules/test-syntactic-lint/index.js' exist - use it as a name resolution result.
-======== Module name 'test-syntactic-lint' was successfully resolved to 'node_modules/test-syntactic-lint/index.js'. ========

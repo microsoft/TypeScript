@@ -2925,6 +2925,7 @@ namespace ts {
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
+        let extensionCache: ExtensionCache;
         let lastProjectVersion: string;
 
         const useCaseSensitivefileNames = false;
@@ -3044,8 +3045,13 @@ namespace ts {
                 };
             }
 
+            const changesInCompilationSettingsAffectExtensions = oldSettings && !deepEqual(oldSettings.extensions, newSettings.extensions);
+            if (!extensionCache || changesInCompilationSettingsAffectExtensions) {
+                extensionCache = createExtensionCache(newSettings, compilerHost);
+            }
+
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
-            const newProgram = createProgram(hostCache.getRootFileNames(), newSettings, compilerHost, program);
+            const newProgram = createProgram(hostCache.getRootFileNames(), newSettings, compilerHost, program, extensionCache);
 
             // Release any files we have acquired in the old program but are
             // not part of the new program.
