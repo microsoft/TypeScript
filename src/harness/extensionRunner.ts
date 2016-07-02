@@ -15,7 +15,6 @@ class ExtensionRunner extends RunnerBase {
     private scenarioPath = ts.combinePaths(this.basePath, "scenarios");
     private extensionPath = ts.combinePaths(this.basePath, "available");
     private sourcePath = ts.combinePaths(this.basePath, "source");
-    private fourslashPath = ts.combinePaths(this.basePath, "fourslash");
     private extensionAPI: ts.Map<string> = {};
     private extensions: ts.Map<ts.Map<string>> = {};
     private virtualLib: ts.Map<string> = {};
@@ -140,7 +139,7 @@ class ExtensionRunner extends RunnerBase {
     getTraces(): string[] {
         const traces = this.traces;
         this.traces = [];
-        return traces;
+        return traces.map(t => t.replace(/\([0-9\.e\+\-]+ ms\)$/, "(REDACTED ms)"));
     }
 
     languageServiceCompile(typescriptFiles: string[], options: ts.CompilerOptions): Harness.Compiler.CompilerResult {
@@ -174,7 +173,7 @@ class ExtensionRunner extends RunnerBase {
         const self = this;
         const program = ts.createProgram(typescriptFiles, options, this.mockHost);
         const fileResults: Harness.Compiler.GeneratedFile[] = [];
-        const diagnostics = ts.getPreEmitDiagnostics(program)
+        const diagnostics = ts.getPreEmitDiagnostics(program);
         const emitResult = program.emit(/*targetSourceFile*/undefined, writeFile);
 
         const allDiagnostics = ts.sortAndDeduplicateDiagnostics(ts.concatenate(diagnostics, emitResult.diagnostics));
@@ -336,7 +335,7 @@ class ExtensionRunner extends RunnerBase {
                     if (!(testConfig.compilerOptions.sourceMap || testConfig.compilerOptions.inlineSourceMap)) {
                         return;
                     }
-                    Harness.Baseline.runBaseline(sourcemapTestName,`${name}/${shortCasePath}.sourcemap.txt`, () => {
+                    Harness.Baseline.runBaseline(sourcemapTestName, `${name}/${shortCasePath}.sourcemap.txt`, () => {
                         const record = result.getSourceMapRecord();
                         if (testConfig.compilerOptions.noEmitOnError && result.errors.length !== 0 && record === undefined) {
                             // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.

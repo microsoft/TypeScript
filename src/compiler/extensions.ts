@@ -53,10 +53,11 @@ namespace ts {
         profiles?: Map<ProfileData>;
     }
 
+    export type Timestamp = number & { __timestampBrand: void };
     export interface ProfileData {
         task: string;
-        start: number;
-        length: number;
+        start: Timestamp;
+        length?: Timestamp;
     }
 
     // @kind(ExtensionKind.SyntacticLint)
@@ -98,25 +99,46 @@ namespace ts {
         }
     }
 
+    declare var performance: { now?(): number }; // If we're running in a context with high resolution timers, make use of them
+    declare var process: { hrtime?(start?: [number, number]): [number, number] };
+
+    function getTimestampInternal(): number {
+        if (typeof performance !== "undefined" && performance.now) {
+            return performance.now();
+        }
+        if (typeof process !== "undefined" && process.hrtime) {
+            const time = process.hrtime();
+            return (time[0] * 1e9 + time[1]) / 1e6;
+        }
+        return +(new Date());
+    }
+
+    export function getTimestampMs(since?: Timestamp): Timestamp {
+        if (typeof since !== "number") {
+            return getTimestampInternal() as Timestamp;
+        }
+
+        return (getTimestampInternal() - since) as Timestamp;
+    }
+
     export function startExtensionProfile(ext: ExtensionBase, task: string, trace?: (s: string) => void) {
         if (!ext.profiles) ext.profiles = {};
 
         ext.profiles[task] = {
             task,
-            start: +(new Date()),
-            length: -1
+            start: getTimestampMs(),
+            length: undefined
         };
 
         profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_begin_1, ext.name, task);
     }
 
     export function completeExtensionProfile(ext: ExtensionBase, task: string, trace?: (s: string) => void) {
-        const endTime = +(new Date());
         Debug.assert(!!ext.profiles, "Completed profile, but extension has no started profiles.");
         Debug.assert(!!ext.profiles[task], "Completed profile did not have a corresponding start.");
-        ext.profiles[task].length = endTime - ext.profiles[task].start;
+        ext.profiles[task].length = getTimestampMs(ext.profiles[task].start);
 
-        profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, ext.name, task, ext.profiles[task].length.toFixed(4));
+        profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, ext.name, task, ext.profiles[task].length.toPrecision(5));
     }
 
     export function createExtensionCache(options: CompilerOptions, host: ExtensionHost): ExtensionCache {
@@ -155,15 +177,15 @@ namespace ts {
                     const resolved = resolveModuleName(name, combinePaths(currentDirectory, "tsconfig.json"), options, host, /*loadJs*/true).resolvedModule;
                     if (resolved) {
                         try {
-                            let startTime: number;
+                            let startTime: Timestamp;
                             if (shouldProfile) {
-                                startTime = +(new Date());
+                                startTime = getTimestampMs();
                                 trace(Diagnostics.PROFILE_Colon_Extension_0_begin_1, name, "load");
                             }
                             result = host.loadExtension(resolved.resolvedFileName);
                             if (shouldProfile) {
-                                const loadTime = +(new Date()) - startTime;
-                                trace(Diagnostics.PROFILE_Colon_Extension_0_begin_1, name, "load", loadTime.toFixed(4));
+                                const loadTime = getTimestampMs(startTime);
+                                trace(Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, name, "load", loadTime.toPrecision(5));
                             }
                         }
                         catch (e) {
