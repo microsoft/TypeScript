@@ -2512,7 +2512,6 @@ namespace ts {
         Warning,
         Error,
         Message,
-        Extension,
     }
 
     export enum ModuleResolutionKind {

@@ -456,20 +456,20 @@ namespace ts {
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2);
     }
 
-    export function createExtensionDiagnosticForNode(node: Node, extension: string, message: string): Diagnostic {
+    export function createExtensionDiagnosticForNode(node: Node, extension: string, message: string, isError?: boolean): Diagnostic {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);
-        return createExtensionDiagnostic(extension, message, sourceFile, span.start, span.length);
+        return createExtensionDiagnostic(extension, message, sourceFile, span.start, span.length, isError);
     }
 
-    export function createExtensionDiagnostic(extension: string, message: string, file?: SourceFile, start?: number, length?: number): Diagnostic {
+    export function createExtensionDiagnostic(extension: string, message: string, file?: SourceFile, start?: number, length?: number, isError?: boolean): Diagnostic {
         return {
             file: file,
             messageText: message,
             code: extension,
             start: start,
             length: length,
-            category: DiagnosticCategory.Extension
+            category: isError ? DiagnosticCategory.Error : DiagnosticCategory.Warning
         };
     }
 
