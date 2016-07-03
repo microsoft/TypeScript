@@ -250,27 +250,27 @@ namespace ts {
             // The presence of a particular fact means that the given test is true for some (and possibly all) values
             // of that kind of type.
             BaseStringStrictFacts = TypeofEQString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull,
-            BaseStringFacts = BaseStringStrictFacts  | EQUndefined | EQNull | EQUndefinedOrNull,
+            BaseStringFacts = BaseStringStrictFacts  | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
             StringStrictFacts = BaseStringStrictFacts | Truthy | Falsy,
-            StringFacts = BaseStringFacts | Truthy | Falsy,
+            StringFacts = BaseStringFacts | Truthy,
             EmptyStringStrictFacts = BaseStringStrictFacts | Falsy,
-            EmptyStringFacts = BaseStringFacts | Falsy,
+            EmptyStringFacts = BaseStringFacts,
             NonEmptyStringStrictFacts = BaseStringStrictFacts | Truthy,
             NonEmptyStringFacts = BaseStringFacts | Truthy,
             BaseNumberStrictFacts = TypeofEQNumber | TypeofNEString | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull,
-            BaseNumberFacts = BaseNumberStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull,
+            BaseNumberFacts = BaseNumberStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
             NumberStrictFacts = BaseNumberStrictFacts | Truthy | Falsy,
-            NumberFacts = BaseNumberFacts | Truthy | Falsy,
+            NumberFacts = BaseNumberFacts | Truthy,
             ZeroStrictFacts = BaseNumberStrictFacts | Falsy,
-            ZeroFacts = BaseNumberFacts | Falsy,
+            ZeroFacts = BaseNumberFacts,
             NonZeroStrictFacts = BaseNumberStrictFacts | Truthy,
             NonZeroFacts = BaseNumberFacts | Truthy,
             BaseBooleanStrictFacts = TypeofEQBoolean | TypeofNEString | TypeofNENumber | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull,
-            BaseBooleanFacts = BaseBooleanStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull,
+            BaseBooleanFacts = BaseBooleanStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
             BooleanStrictFacts = BaseBooleanStrictFacts | Truthy | Falsy,
-            BooleanFacts = BaseBooleanFacts | Truthy | Falsy,
+            BooleanFacts = BaseBooleanFacts | Truthy,
             FalseStrictFacts = BaseBooleanStrictFacts | Falsy,
-            FalseFacts = BaseBooleanFacts | Falsy,
+            FalseFacts = BaseBooleanFacts,
             TrueStrictFacts = BaseBooleanStrictFacts | Truthy,
             TrueFacts = BaseBooleanFacts | Truthy,
             SymbolStrictFacts = TypeofEQSymbol | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull | Truthy,
@@ -7635,8 +7635,8 @@ namespace ts {
                 const constraint = getConstraintOfTypeParameter(<TypeParameter>type);
                 return constraint ? getTypeFacts(constraint) : TypeFacts.All;
             }
-            if (flags & TypeFlags.Intersection) {
-                return reduceLeft((<IntersectionType>type).types, (flags, type) => flags |= getTypeFacts(type), TypeFacts.None);
+            if (flags & TypeFlags.UnionOrIntersection) {
+                return reduceLeft((<UnionOrIntersectionType>type).types, (flags, type) => flags |= getTypeFacts(type), TypeFacts.None);
             }
             return TypeFacts.All;
         }
@@ -12722,11 +12722,13 @@ namespace ts {
                 case SyntaxKind.InKeyword:
                     return checkInExpression(left, right, leftType, rightType);
                 case SyntaxKind.AmpersandAmpersandToken:
-                    return !strictNullChecks ? rightType :
-                        getTypeFacts(leftType) & TypeFacts.Truthy ? includeFalsyTypes(rightType, getFalsyFlags(leftType)) : leftType;
+                    return getTypeFacts(leftType) & TypeFacts.Truthy ?
+                        strictNullChecks ? includeFalsyTypes(rightType, getFalsyFlags(leftType)) : rightType :
+                        leftType;
                 case SyntaxKind.BarBarToken:
-                    return !strictNullChecks ? getUnionType([leftType, rightType]) :
-                        getTypeFacts(leftType) & TypeFacts.Truthy ? getUnionType([removeDefinitelyFalsyTypes(leftType), rightType]) : rightType;
+                    return getTypeFacts(leftType) & TypeFacts.Falsy ?
+                        getUnionType([removeDefinitelyFalsyTypes(leftType), rightType]) :
+                        leftType;
                 case SyntaxKind.EqualsToken:
                     checkAssignmentOperator(rightType);
                     return getRegularTypeOfObjectLiteral(rightType);
