@@ -233,7 +233,7 @@ function f3() {
 >x : undefined
 
     if (!x) {
->!x : boolean
+>!x : true
 >x : undefined
 
         return;

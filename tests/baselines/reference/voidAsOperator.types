@@ -1,7 +1,7 @@
 === tests/cases/compiler/voidAsOperator.ts ===
 if (!void 0 !== true) {
 >!void 0 !== true : boolean
->!void 0 : boolean
+>!void 0 : true
 >void 0 : undefined
 >0 : number
 >true : true
@@ -11,7 +11,7 @@ if (!void 0 !== true) {
 //CHECK#2
 if (!null !== true) {
 >!null !== true : boolean
->!null : boolean
+>!null : true
 >null : null
 >true : true
  

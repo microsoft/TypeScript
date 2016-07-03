@@ -230,26 +230,26 @@ const b8 = b && z;
 >z : string | number | undefined
 
 const v1 = v && a;
->v1 : number[] | void
->v && a : number[] | void
+>v1 : void
+>v && a : void
 >v : void
 >a : number[]
 
 const v2 = v && s;
->v2 : string | void
->v && s : string | void
+>v2 : void
+>v && s : void
 >v : void
 >s : string
 
 const v3 = v && x;
->v3 : number | void
->v && x : number | void
+>v3 : void
+>v && x : void
 >v : void
 >x : number
 
 const v4 = v && b;
->v4 : boolean | void
->v && b : boolean | void
+>v4 : void
+>v && b : void
 >v : void
 >b : boolean
 
@@ -266,44 +266,44 @@ const v6 = v && u;
 >u : undefined
 
 const v7 = v && n;
->v7 : void | null
->v && n : void | null
+>v7 : void
+>v && n : void
 >v : void
 >n : null
 
 const v8 = v && z;
->v8 : string | number | void
->v && z : string | number | void
+>v8 : void
+>v && z : void
 >v : void
 >z : string | number | undefined
 
 const u1 = u && a;
->u1 : number[] | undefined
->u && a : number[] | undefined
+>u1 : undefined
+>u && a : undefined
 >u : undefined
 >a : number[]
 
 const u2 = u && s;
->u2 : string | undefined
->u && s : string | undefined
+>u2 : undefined
+>u && s : undefined
 >u : undefined
 >s : string
 
 const u3 = u && x;
->u3 : number | undefined
->u && x : number | undefined
+>u3 : undefined
+>u && x : undefined
 >u : undefined
 >x : number
 
 const u4 = u && b;
->u4 : boolean | undefined
->u && b : boolean | undefined
+>u4 : undefined
+>u && b : undefined
 >u : undefined
 >b : boolean
 
 const u5 = u && v;
->u5 : void
->u && v : void
+>u5 : undefined
+>u && v : undefined
 >u : undefined
 >v : void
 
@@ -314,50 +314,50 @@ const u6 = u && u;
 >u : never
 
 const u7 = u && n;
->u7 : null | undefined
->u && n : null | undefined
+>u7 : undefined
+>u && n : undefined
 >u : undefined
 >n : null
 
 const u8 = u && z;
->u8 : string | number | undefined
->u && z : string | number | undefined
+>u8 : undefined
+>u && z : undefined
 >u : undefined
 >z : string | number | undefined
 
 const n1 = n && a;
->n1 : number[] | null
->n && a : number[] | null
+>n1 : null
+>n && a : null
 >n : null
 >a : number[]
 
 const n2 = n && s;
->n2 : string | null
->n && s : string | null
+>n2 : null
+>n && s : null
 >n : null
 >s : string
 
 const n3 = n && x;
->n3 : number | null
->n && x : number | null
+>n3 : null
+>n && x : null
 >n : null
 >x : number
 
 const n4 = n && b;
->n4 : boolean | null
->n && b : boolean | null
+>n4 : null
+>n && b : null
 >n : null
 >b : boolean
 
 const n5 = n && v;
->n5 : void | null
->n && v : void | null
+>n5 : null
+>n && v : null
 >n : null
 >v : void
 
 const n6 = n && u;
->n6 : null | undefined
->n && u : null | undefined
+>n6 : null
+>n && u : null
 >n : null
 >u : undefined
 
@@ -368,8 +368,8 @@ const n7 = n && n;
 >n : never
 
 const n8 = n && z;
->n8 : string | number | null | undefined
->n && z : string | number | null | undefined
+>n8 : null
+>n && z : null
 >n : null
 >z : string | number | undefined
 

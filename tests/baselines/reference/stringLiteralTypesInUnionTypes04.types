@@ -66,14 +66,14 @@ if (!x) {
 >x : "foo" | ""
 
     let f = x;
->f : ""
->x : ""
+>f : "foo" | ""
+>x : "foo" | ""
 }
 
 if (!!x) {
 >!!x : boolean
 >!x : boolean
->x : "" | "foo"
+>x : "foo" | ""
 
     let g = x;
 >g : "foo"
@@ -87,6 +87,6 @@ if (!!!x) {
 >x : "foo" | ""
 
     let h = x;
->h : ""
->x : ""
+>h : "foo" | ""
+>x : "foo" | ""
 }
