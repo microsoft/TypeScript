@@ -308,20 +308,15 @@ namespace ts.server {
             return ts.normalizePath(name);
         }
 
-        public fileCreated(file: string): void {
-        }
+        public abstract fileCreated(file: string): void;
 
-        public fileOpened(file: string): void {
-        }
+        public abstract fileOpened(file: string): void;
 
-        public fileChanged(file: string): void {
-        }
+        public abstract fileChanged(file: string): void;
 
-        public fileClosed(file: string): void {
-        }
+        public abstract fileClosed(file: string): void;
 
-        public fileDeleted(file: string): void {
-        }
+        public abstract fileDeleted(file: string): void;
 
         private formatDiagnostics(file: string, diagnostic: ts.Diagnostic): protocol.Diagnostic {
             const host = this.getProject().compilerService.host;
@@ -349,6 +344,19 @@ namespace ts.server {
                     queueLength: queueLength
                 }, "semanticDiag");
             }
+        }
+
+        protected clearDiagnostics(fileName: string): void {
+            this.host.event({
+                file: fileName,
+                diagnostics: []
+            }, "syntaxDiag");
+            this.host.event({
+                file: fileName,
+                diagnostics: [],
+                queueLength: this._compileQueue.length()
+            }, "semanticDiag");
+            
         }
 
         protected processCompileQueue() {
@@ -452,6 +460,15 @@ namespace ts.server {
             return this.openFiles[file];
         }
 
+        public fileCreated(file: string): void {
+            // if we have a new file, recompile the open once.
+            // We might be able to fix an import statement.
+            // Could be optimized in a way that we keep track
+            // of errors and only trigger a compile loop if
+            // there are errors to fix.
+            this.fileChanged(file);
+        }
+
         public fileOpened(file: string): void {
             if (path.basename(file) === "lib.d.ts") {
                 return;
@@ -490,6 +507,15 @@ namespace ts.server {
             this.unqueueFileInfo(file);
         }
 
+        public fileDeleted(file: string): void {
+            delete this.openFiles[file];
+            this.unqueueFileInfo(file);
+            Object.keys(this.openFiles).forEach((key) => {
+                this.queueFileInfo(new SingleRunFileInfo(this.openFiles[key]));
+            });
+            this.processCompileQueue();
+        }
+
         protected updateCompileQueue(fileInfo: SimpleFileInfo): void {
             if (!fileInfo.update(this)) {
                 return;
@@ -518,6 +544,7 @@ namespace ts.server {
         private contentSignature: string;
         private lastCheckedFingerPrint: string;
         private _isExternalModule: boolean;
+        private _forceUpdate: boolean;
 
         constructor(filename: string, sourceFile: SourceFile) {
             super(filename);
@@ -528,6 +555,7 @@ namespace ts.server {
             this.contentSignature = this.computeHash(sourceFile.text);
             this.lastCheckedFingerPrint = undefined;
             this._isExternalModule = ModuleFileInfo.isExternalModule(sourceFile);
+            this._forceUpdate = false;
         }
 
         private static binarySearch(array: ModuleFileInfo[], value: string): number {
@@ -607,6 +635,9 @@ namespace ts.server {
             return false;
         }
 
+        public forceUpdate(): void {
+            this._forceUpdate = true;
+        }
         public isExternalModule(): boolean  {
             return this._isExternalModule;
         }
@@ -631,7 +662,7 @@ namespace ts.server {
             }
         }
 
-        public needsInitialCompile(): boolean {
+        public hasProblems(): boolean {
             return !(this._hasSemanticProblems === false && this._hasSyntacticProblems === false);
         }
 
@@ -649,7 +680,7 @@ namespace ts.server {
         }
 
         public needsCheck(builder: BuilderAccessor<ModuleFileInfo>): boolean {
-            if (!this.lastCheckedFingerPrint || this.sourceFileVersion !== this.getSourceFile(builder).version) {
+            if (!this.lastCheckedFingerPrint || this.sourceFileVersion !== this.getSourceFile(builder).version || this._forceUpdate) {
                 return true;
             }
             return this.lastCheckedFingerPrint != this.computeCheckFingerPrint();
@@ -673,7 +704,7 @@ namespace ts.server {
         public buildDependencies(builder: BuilderAccessor<ModuleFileInfo>, program: Program): void {
             this.getReferencedFileInfos(builder, program.getSourceFile(this.fileName())).forEach((fileInfo) => {
                 fileInfo.addReferencedBy(this);
-                this.addReferences(fileInfo);
+                this.addReference(fileInfo);
             });
         }
 
@@ -719,7 +750,7 @@ namespace ts.server {
             const sourceFile = program.getSourceFile(this.fileName());
 
             const newVersion = sourceFile.version;
-            if (this.sourceFileVersion !== newVersion) {
+            if (this.sourceFileVersion !== newVersion || this._forceUpdate) {
                 const newReferences: ModuleFileInfo[] = this.getReferencedFileInfos(builder, sourceFile);
                 newReferences.sort(ModuleFileInfo.compareFileInfos);
 
@@ -761,13 +792,21 @@ namespace ts.server {
                 this._isExternalModule = ModuleFileInfo.isExternalModule(sourceFile);
                 this.contentSignature = this.computeHash(sourceFile.text);
                 this.sourceFileVersion = newVersion;
+                this._forceUpdate = false;
             }
             this.lastCheckedFingerPrint = this.computeCheckFingerPrint();
 
             return this.updateShapeSignature(builder, sourceFile, this.contentSignature);
         }
 
-        protected addReferencedBy(file: ModuleFileInfo): void {
+        public forEachReferencedBy(cb: (value: ModuleFileInfo, index: number, array: ModuleFileInfo[]) => void, thisArg?: any): void {
+            if (!this.referencedBy) {
+                return;
+            }
+            this.referencedBy.forEach(cb, thisArg);
+        }
+
+        public addReferencedBy(file: ModuleFileInfo): void {
             if (!this.referencedBy) {
                 this.referencedBy = [];
                 this.referencedBy.push(file);
@@ -776,7 +815,7 @@ namespace ts.server {
             ModuleFileInfo.addElement(this.referencedBy, this.finalized, file);
         }
 
-        protected removeReferencedBy(file: ModuleFileInfo): void {
+        public removeReferencedBy(file: ModuleFileInfo): void {
             ModuleFileInfo.removeElement(this.referencedBy, this.finalized, file);
         }
 
@@ -790,7 +829,14 @@ namespace ts.server {
             return this.references ? this.references.length > 0 : false;
         }
 
-        protected addReferences(file: ModuleFileInfo): void {
+        public forEachReference(cb: (value: ModuleFileInfo, index: number, array: ModuleFileInfo[]) => void, thisArg?: any): void {
+            if (!this.references) {
+                return;
+            }
+            this.references.forEach(cb, thisArg);
+        }
+
+        public addReference(file: ModuleFileInfo): void {
             if (!this.references) {
                 this.references = [];
                 this.references.push(file);
@@ -799,7 +845,7 @@ namespace ts.server {
             ModuleFileInfo.addElement(this.references, this.finalized, file);
         }
 
-        protected removeReferences(file: ModuleFileInfo): void {
+        public removeReference(file: ModuleFileInfo): void {
             ModuleFileInfo.removeElement(this.references, this.finalized, file);
         }
     }
@@ -829,12 +875,54 @@ namespace ts.server {
             return this.fileInfos[file];
         }
 
+        public fileCreated(file: string): void {
+            this.ensureDependencyGraph();
+            const info = this.getFileInfo(file);
+            if (info) {
+                return;
+            }
+            const sourceFile = this.getProject().compilerService.languageService.getProgram().getSourceFile(file);
+            if (sourceFile) {
+                const fileInfo = new ModuleFileInfo(file, sourceFile);
+                this.fileInfos[fileInfo.fileName()] = fileInfo;
+                this.queueFileInfo(fileInfo, true);
+            }
+            Object.keys(this.fileInfos).forEach((key) => {
+                const info = this.fileInfos[key];
+                if (info.hasProblems()) {
+                    this.queueFileInfo(info);
+                }
+            });
+            this.processCompileQueue();
+        }
+
         public fileOpened(file: string): void {
             this.computeDiagnostics(file);
         }
 
         public fileChanged(file: string): void {
             this.computeDiagnostics(file);
+        }
+
+        public fileClosed(file: string): void {
+            // Do nothing on close.
+        }
+
+        public fileDeleted(file: string): void {
+            this.ensureDependencyGraph();
+            const info = this.getFileInfo(file);
+            if (!info) {
+                return;
+            }
+            delete this.fileInfos[file];
+            this.clearDiagnostics(file);
+            info.forEachReference(element => element.removeReferencedBy(info));
+            info.forEachReferencedBy(element => {
+                element.removeReference(info);
+                element.forceUpdate();
+                this.queueFileInfo(element);
+            });
+            this.processCompileQueue();
         }
 
         protected updateCompileQueue(fileInfo: ModuleFileInfo): void {
@@ -925,7 +1013,7 @@ namespace ts.server {
                         fileInfo.initializeFromState(state);
                     }
                     fileInfo.finalize(this);
-                    if (fileInfo.needsInitialCompile()) {
+                    if (fileInfo.hasProblems()) {
                         this.queueFileInfo(fileInfo);
                     }
                 });

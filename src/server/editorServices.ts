@@ -466,14 +466,6 @@ namespace ts.server {
             this.builder.fileClosed(file);
         }
 
-        fileCreated(file: string): void {
-            this.sequenceNumber++;
-            if (this.languageServiceDiabled) {
-                return;
-            }
-            this.builder.fileCreated(file);
-        }
-
         addOpenRef() {
             this.openRefCount++;
         }
@@ -593,8 +585,9 @@ namespace ts.server {
             if (this.languageServiceDiabled) {
                 return;
             }
-
+            this.sequenceNumber++;
             this.compilerService.host.addRoot(info);
+            this.builder.fileCreated(info.fileName);
         }
 
         // remove a root file from project
@@ -758,7 +751,10 @@ namespace ts.server {
                 this.host.clearTimeout(this.timerForDetectingProjectFileListChanges[project.projectFilename]);
             }
             this.timerForDetectingProjectFileListChanges[project.projectFilename] = this.host.setTimeout(
-                () => this.handleProjectFileListChanges(project),
+                () => {
+                    delete this.timerForDetectingProjectFileListChanges[project.projectFilename];
+                    this.handleProjectFileListChanges(project)
+                },
                 250
             );
         }
