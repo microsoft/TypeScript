@@ -445,7 +445,7 @@ namespace ts.server {
             this.builder.fileOpened(file);
         }
 
-        fileChanged(file: string): void {
+        fileChanged(file: string, onDisk = false): void {
             this.sequenceNumber++;
             if (this.languageServiceDiabled) {
                 return;
@@ -466,14 +466,6 @@ namespace ts.server {
                 return;
             }
             this.builder.fileCreated(file);
-        }
-
-        fileDeleted(file: string): void {
-            this.sequenceNumber++;
-            if (this.languageServiceDiabled) {
-                return;
-            }
-            this.builder.fileDeleted(file);
         }
 
         addOpenRef() {
@@ -552,6 +544,7 @@ namespace ts.server {
 
             this.compilerService.host.removeReferencedFile(info);
             this.updateGraph();
+            this.builder.fileDeleted(info.fileName);
         }
 
         updateFileMap() {
@@ -580,7 +573,7 @@ namespace ts.server {
             if (this.languageServiceDiabled) {
                 return;
             }
-
+            this.sequenceNumber++;
             this.program = this.compilerService.languageService.getProgram();
             this.updateFileMap();
         }
@@ -603,8 +596,9 @@ namespace ts.server {
             if (this.languageServiceDiabled) {
                 return;
             }
-
+            this.sequenceNumber++;
             this.compilerService.host.removeRoot(info);
+            this.builder.fileDeleted(info.fileName);
         }
 
         filesToString() {
@@ -723,8 +717,14 @@ namespace ts.server {
                 this.fileDeletedInFilesystem(info);
             }
             else {
-                if (info && (!info.isOpen)) {
-                    info.svc.reloadFromFile(info.fileName);
+                if (info) {
+                    if (!info.isOpen) {
+                        info.svc.reloadFromFile(info.fileName, () =>  {
+                            this.fileChangedInFileSystem(info);
+                        });
+                    } else {
+                        this.fileChangedInFileSystem(info);
+                    }
                 }
             }
         }
@@ -870,6 +870,18 @@ namespace ts.server {
             project.finishGraph();
             this.inferredProjects.push(project);
             return project;
+        }
+
+        fileChangedInFileSystem(info: ScriptInfo) {
+            this.psLogger.info(info.fileName + " changed");
+            
+            const referencingProjects = this.findReferencingProjects(info);
+            if (info.defaultProject) {
+                info.defaultProject.fileChanged(info.fileName, /*onDisk*/ true);
+            }
+            for (let i = 0, len = referencingProjects.length; i < len; i++) {
+                referencingProjects[i].fileChanged(info.fileName, /*onDisk*/ true);
+            }
         }
 
         fileDeletedInFilesystem(info: ScriptInfo) {
