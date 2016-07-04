@@ -472,7 +472,7 @@ namespace ts.server {
             if (path.basename(file) === "lib.d.ts") {
                 return;
             }
-            let fileInfo = this.openFiles[file];
+            const fileInfo = this.openFiles[file];
             if (fileInfo) {
                 this.queueFileInfo(fileInfo, /*touch*/ true);
                 this.processCompileQueue();

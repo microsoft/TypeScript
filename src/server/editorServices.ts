@@ -722,7 +722,8 @@ namespace ts.server {
                         info.svc.reloadFromFile(info.fileName, () =>  {
                             this.fileChangedInFileSystem(info);
                         });
-                    } else {
+                    }
+                    else {
                         this.fileChangedInFileSystem(info);
                     }
                 }
@@ -874,7 +875,7 @@ namespace ts.server {
 
         fileChangedInFileSystem(info: ScriptInfo) {
             this.psLogger.info(info.fileName + " changed");
-            
+
             const referencingProjects = this.findReferencingProjects(info);
             if (info.defaultProject) {
                 info.defaultProject.fileChanged(info.fileName, /*onDisk*/ true);
