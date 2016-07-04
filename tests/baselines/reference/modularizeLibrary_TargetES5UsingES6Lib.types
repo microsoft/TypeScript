@@ -148,10 +148,10 @@ declare var console: any;
 
 out().then(() => {
 >out().then(() => {    console.log("Yea!");}) : Promise<void>
->out().then : { <TResult>(onfulfilled?: (value: {}) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled?: (value: {}) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): Promise<TResult>; }
+>out().then : { <TResult1, TResult2>(onfulfilled: (value: {}) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: {}) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: {}) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<{}>; }
 >out() : Promise<{}>
 >out : () => Promise<{}>
->then : { <TResult>(onfulfilled?: (value: {}) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled?: (value: {}) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): Promise<TResult>; }
+>then : { <TResult1, TResult2>(onfulfilled: (value: {}) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: {}) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: {}) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<{}>; }
 >() => {    console.log("Yea!");} : () => void
 
     console.log("Yea!");

@@ -2,23 +2,19 @@
 
 // @Filename: file1.ts
 //// class Foo {
-////     constructor(private /*0*/privateParam: number,
-////         public /*1*/publicParam: string,
-////         protected /*2*/protectedParam: boolean) {
+////     constructor(private [|privateParam|]: number,
+////         public [|publicParam|]: string,
+////         protected [|protectedParam|]: boolean) {
 //// 
-////         let localPrivate = /*3*/privateParam;
-////         this./*4*/privateParam += 10;
+////         let localPrivate = [|privateParam|];
+////         this.[|privateParam|] += 10;
 //// 
-////         let localPublic = /*5*/publicParam;
-////         this./*6*/publicParam += " Hello!";
+////         let localPublic = [|publicParam|];
+////         this.[|publicParam|] += " Hello!";
 //// 
-////         let localProtected = /*7*/protectedParam;
-////         this./*8*/protectedParam = false;
+////         let localProtected = [|protectedParam|];
+////         this.[|protectedParam|] = false;
 ////     }
 //// }
 
-let markers = test.markers()
-for (let marker of markers) {
-    goTo.position(marker.position);
-    verify.referencesCountIs(3);
-}
+verify.rangesWithSameTextReferenceEachOther();

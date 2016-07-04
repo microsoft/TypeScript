@@ -8,16 +8,16 @@
 //// var x = /*5*/{ a:true }
 
 goTo.marker('1');
-verify.isValidBraceCompletionAtPostion('(');
+verify.isValidBraceCompletionAtPosition('(');
 
 goTo.marker('2');
-verify.isValidBraceCompletionAtPostion('(');
+verify.isValidBraceCompletionAtPosition('(');
 
 goTo.marker('3');
-verify.isValidBraceCompletionAtPostion('(');
+verify.isValidBraceCompletionAtPosition('(');
 
 goTo.marker('4');
-verify.isValidBraceCompletionAtPostion('(');
+verify.isValidBraceCompletionAtPosition('(');
 
 goTo.marker('5');
-verify.isValidBraceCompletionAtPostion('(');
+verify.isValidBraceCompletionAtPosition('(');
