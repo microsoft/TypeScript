@@ -1,0 +1,32 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration9ES5.ts ===
+
+function three({} = {}) {}
+>three : ({}?: {}) => void
+>{} : {}
+
+function four([] = []) {}
+>four : ([]?: any[]) => void
+>[] : undefined[]
+
+// should not be an error
+
+three(undefined);
+>three(undefined) : void
+>three : ({}?: {}) => void
+>undefined : undefined
+
+three(null);
+>three(null) : void
+>three : ({}?: {}) => void
+>null : null
+
+four(undefined);
+>four(undefined) : void
+>four : ([]?: any[]) => void
+>undefined : undefined
+
+four(null)
+>four(null) : void
+>four : ([]?: any[]) => void
+>null : null
+

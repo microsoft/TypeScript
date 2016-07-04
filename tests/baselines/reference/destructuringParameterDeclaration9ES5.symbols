@@ -1,0 +1,24 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration9ES5.ts ===
+
+function three({} = {}) {}
+>three : Symbol(three, Decl(destructuringParameterDeclaration9ES5.ts, 0, 0))
+
+function four([] = []) {}
+>four : Symbol(four, Decl(destructuringParameterDeclaration9ES5.ts, 1, 26))
+
+// should not be an error
+
+three(undefined);
+>three : Symbol(three, Decl(destructuringParameterDeclaration9ES5.ts, 0, 0))
+>undefined : Symbol(undefined)
+
+three(null);
+>three : Symbol(three, Decl(destructuringParameterDeclaration9ES5.ts, 0, 0))
+
+four(undefined);
+>four : Symbol(four, Decl(destructuringParameterDeclaration9ES5.ts, 1, 26))
+>undefined : Symbol(undefined)
+
+four(null)
+>four : Symbol(four, Decl(destructuringParameterDeclaration9ES5.ts, 1, 26))
+
