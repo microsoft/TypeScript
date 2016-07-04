@@ -753,7 +753,7 @@ namespace ts.server {
             this.timerForDetectingProjectFileListChanges[project.projectFilename] = this.host.setTimeout(
                 () => {
                     delete this.timerForDetectingProjectFileListChanges[project.projectFilename];
-                    this.handleProjectFileListChanges(project)
+                    this.handleProjectFileListChanges(project);
                 },
                 250
             );

@@ -356,7 +356,6 @@ namespace ts.server {
                 diagnostics: [],
                 queueLength: this._compileQueue.length()
             }, "semanticDiag");
-            
         }
 
         protected processCompileQueue() {
@@ -885,7 +884,7 @@ namespace ts.server {
             if (sourceFile) {
                 const fileInfo = new ModuleFileInfo(file, sourceFile);
                 this.fileInfos[fileInfo.fileName()] = fileInfo;
-                this.queueFileInfo(fileInfo, true);
+                this.queueFileInfo(fileInfo, /*touch*/ true);
             }
             Object.keys(this.fileInfos).forEach((key) => {
                 const info = this.fileInfos[key];
