@@ -8,8 +8,6 @@ export {};
 //// [app.ts]
 import "A"
 
-//// [index.js]
-"use strict";
 //// [app.js]
 "use strict";
 require("A");

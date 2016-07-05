@@ -67,7 +67,7 @@ function getNightlyVersionString(versionString: string): string {
     const now = new Date();
     const timeStr = now.toISOString().replace(/:|T|\.|-/g, "").slice(0, 8);
 
-    return `${versionString}-dev.${timeStr}-1.0`;
+    return `${versionString}-dev.${timeStr}`;
 }
 
 main();

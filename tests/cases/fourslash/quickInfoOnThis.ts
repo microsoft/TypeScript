@@ -25,7 +25,7 @@
 goTo.marker('0');
 verify.quickInfoIs('this: this');
 goTo.marker('1');
-verify.quickInfoIs('void');
+verify.quickInfoIs('this: void');
 goTo.marker('2');
 verify.quickInfoIs('this: this');
 goTo.marker('3');

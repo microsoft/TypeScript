@@ -16,36 +16,16 @@ namespace ts {
 
         function assertParseErrorWithExcludesKeyword(jsonText: string) {
              const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
-             const parsedCommand = ts.parseJsonConfigFileContent(parsed, ts.sys, "tests/cases/unittests");
-             assert.isTrue(undefined !== parsedCommand.errors);
+             const parsedCommand = ts.parseJsonConfigFileContent(parsed.config, ts.sys, "tests/cases/unittests");
+             assert.isTrue(parsedCommand.errors && parsedCommand.errors.length === 1 &&
+                parsedCommand.errors[0].code === ts.Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
         }
 
         function assertParseFileList(jsonText: string, configFileName: string, basePath: string, allFileList: string[], expectedFileList: string[]) {
             const json = JSON.parse(jsonText);
-            const host: ParseConfigHost = { readDirectory: mockReadDirectory };
+            const host: ParseConfigHost = new Utils.MockParseConfigHost(basePath, true, allFileList);
             const parsed = ts.parseJsonConfigFileContent(json, host, basePath, /*existingOptions*/ undefined, configFileName);
             assert.isTrue(arrayIsEqualTo(parsed.fileNames.sort(), expectedFileList.sort()));
-
-            function mockReadDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
-                const result: string[] = [];
-                const fullExcludeDirectories = ts.map(exclude, directory => combinePaths(rootDir, directory));
-                for (const file of allFileList) {
-                    let shouldExclude = false;
-                    for (const fullExcludeDirectorie of fullExcludeDirectories) {
-                        if (file.indexOf(fullExcludeDirectorie) >= 0) {
-                            shouldExclude = true;
-                            break;
-                        }
-                    }
-                    if (shouldExclude) {
-                        continue;
-                    }
-                    if (fileExtensionIs(file, extension)) {
-                        result.push(file);
-                    }
-                }
-                return result;
-            }
         }
 
         it("returns empty config for file with only whitespaces", () => {
@@ -121,19 +101,19 @@ namespace ts {
             assertParseResult(
                 `{
                     "compilerOptions": {
-                        "lib": "es5"
+                        "lib": ["es5"]
                     }
                 }`, {
-                    config: { compilerOptions: { lib: "es5" } }
+                    config: { compilerOptions: { lib: ["es5"] } }
                 });
 
             assertParseResult(
                 `{
                     "compilerOptions": {
-                        "lib": "es5,es6"
+                        "lib": ["es5", "es6"]
                     }
                 }`, {
-                    config: { compilerOptions: { lib: "es5,es6" } }
+                    config: { compilerOptions: { lib: ["es5", "es6"] } }
                 });
         });
 
@@ -141,7 +121,7 @@ namespace ts {
             assertParseErrorWithExcludesKeyword(
                 `{
                     "compilerOptions": {
-                        "lib": "es5"
+                        "lib": ["es5"]
                     },
                     "excludes": [
                         "foge.ts"
