@@ -247,9 +247,10 @@ namespace ts.server {
             if (!info.isOpen) {
                 this.filenameToScriptInfo.remove(info.fileName);
 
-                // capture list of projects
+                // capture list of projects since detachAllProjects will wipe out original list 
                 const containingProjects = info.containingProjects.slice();
                 info.detachAllProjects();
+
                 // update projects to make sure that set of referenced files is correct
                 this.updateProjectGraphs(containingProjects);
 
@@ -298,7 +299,7 @@ namespace ts.server {
                 // just update the current project.
                 this.updateConfiguredProject(project);
 
-                // Call updateProjectStructure to clean up inferred projects we may have
+                // Call refreshInferredProjects to clean up inferred projects we may have
                 // created for the new files
                 this.refreshInferredProjects();
             }
@@ -321,7 +322,6 @@ namespace ts.server {
             }
 
             this.log(`Detected newly added tsconfig file: ${fileName}`);
-            // TODO: add tests to check correct migration of currently open file if it is referenced from the root file of configured project 
             this.reloadProjects();
         }
 

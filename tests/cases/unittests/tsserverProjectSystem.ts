@@ -133,6 +133,12 @@ namespace ts {
         assert.equal(projectService.inferredProjects.length, expected, `expected ${expected} inferred project(s)`);
     }
 
+    function checkNumberOfProjects(projectService: server.ProjectService, count: { inferredProjects?: number, configuredProjects?: number, externalProjects?: number }) {
+        checkNumberOfConfiguredProjects(projectService, count.configuredProjects || 0);
+        checkNumberOfExternalProjects(projectService, count.externalProjects || 0);
+        checkNumberOfInferredProjects(projectService, count.inferredProjects || 0);
+    }
+
     function checkWatchedFiles(host: TestServerHost, expectedFiles: string[]) {
         checkMapKeys("watchedFiles", host.watchedFiles, expectedFiles);
     }
@@ -844,36 +850,24 @@ namespace ts {
                 projectFileName: externalProjectName
             });
 
-            checkNumberOfExternalProjects(projectService, 0);
-            checkNumberOfConfiguredProjects(projectService, 2);
-            checkNumberOfInferredProjects(projectService, 0);
+            checkNumberOfProjects(projectService, { configuredProjects: 2 });
 
             // open client file - should not lead to creation of inferred project
             projectService.openClientFile(file1.path, file1.content);
-            checkNumberOfExternalProjects(projectService, 0);
-            checkNumberOfConfiguredProjects(projectService, 2);
-            checkNumberOfInferredProjects(projectService, 0);
+            checkNumberOfProjects(projectService, { configuredProjects: 2 });
 
             projectService.openClientFile(file3.path, file3.content);
-            checkNumberOfExternalProjects(projectService, 0);
-            checkNumberOfConfiguredProjects(projectService, 2);
-            checkNumberOfInferredProjects(projectService, 1);
+            checkNumberOfProjects(projectService, { configuredProjects: 2, inferredProjects: 1 });
 
             projectService.closeExternalProject(externalProjectName);
-            checkNumberOfExternalProjects(projectService, 0);
             // open file 'file1' from configured project keeps project alive
-            checkNumberOfConfiguredProjects(projectService, 1);
-            checkNumberOfInferredProjects(projectService, 1);
+            checkNumberOfProjects(projectService, { configuredProjects: 1, inferredProjects: 1 });
 
             projectService.closeClientFile(file3.path);
-            checkNumberOfExternalProjects(projectService, 0);
-            checkNumberOfConfiguredProjects(projectService, 1);
-            checkNumberOfInferredProjects(projectService, 0);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
             projectService.closeClientFile(file1.path);
-            checkNumberOfExternalProjects(projectService, 0);
-            checkNumberOfConfiguredProjects(projectService, 0);
-            checkNumberOfInferredProjects(projectService, 0);
+            checkNumberOfProjects(projectService, {});
         });
 
         it("external project with included config file opened after configured project", () => {
@@ -890,9 +884,7 @@ namespace ts {
             const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
 
             projectService.openClientFile(file1.path);
-            checkNumberOfExternalProjects(projectService, 0);
-            checkNumberOfConfiguredProjects(projectService, 1);
-            checkNumberOfInferredProjects(projectService, 0);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
             projectService.openExternalProject({
                 rootFiles: [ configFile.path ],
@@ -900,21 +892,14 @@ namespace ts {
                 projectFileName: externalProjectName
             });
 
-            checkNumberOfExternalProjects(projectService, 0);
-            checkNumberOfConfiguredProjects(projectService, 1);
-            checkNumberOfInferredProjects(projectService, 0);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
             projectService.closeClientFile(file1.path);
-            checkNumberOfExternalProjects(projectService, 0);
             // configured project is alive since it is opened as part of external project
-            checkNumberOfConfiguredProjects(projectService, 1);
-            checkNumberOfInferredProjects(projectService, 0);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
             projectService.closeExternalProject(externalProjectName);
-            checkNumberOfExternalProjects(projectService, 0);
-            // configured project is alive since it is opened as part of external project
-            checkNumberOfConfiguredProjects(projectService, 0);
-            checkNumberOfInferredProjects(projectService, 0);
+            checkNumberOfProjects(projectService, { configuredProjects: 0 });
         });
         it("external project with included config file opened after configured project and then closed", () => {
             const file1 = {
@@ -930,9 +915,7 @@ namespace ts {
             const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
 
             projectService.openClientFile(file1.path);
-            checkNumberOfExternalProjects(projectService, 0);
-            checkNumberOfConfiguredProjects(projectService, 1);
-            checkNumberOfInferredProjects(projectService, 0);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
             projectService.openExternalProject({
                 rootFiles: [ configFile.path ],
@@ -940,21 +923,14 @@ namespace ts {
                 projectFileName: externalProjectName
             });
 
-            checkNumberOfExternalProjects(projectService, 0);
-            checkNumberOfConfiguredProjects(projectService, 1);
-            checkNumberOfInferredProjects(projectService, 0);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
             projectService.closeExternalProject(externalProjectName);
-            checkNumberOfExternalProjects(projectService, 0);
             // configured project is alive since file is still open
-            checkNumberOfConfiguredProjects(projectService, 1);
-            checkNumberOfInferredProjects(projectService, 0);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
             projectService.closeClientFile(file1.path);
-            checkNumberOfExternalProjects(projectService, 0);
-            // configured project is alive since it is opened as part of external project
-            checkNumberOfConfiguredProjects(projectService, 0);
-            checkNumberOfInferredProjects(projectService, 0);
+            checkNumberOfProjects(projectService, {});
         });
 
         it("changes in closed files are reflected in project structure", () => {
@@ -1012,26 +988,56 @@ namespace ts {
 
             projectService.openClientFile(file1.path);
 
-            checkNumberOfInferredProjects(projectService, 1);
-            checkNumberOfExternalProjects(projectService, 0);
-            checkNumberOfConfiguredProjects(projectService, 0);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
 
             checkProjectActualFiles(projectService.inferredProjects[0], [ file1.path, file2.path, file3.path ]);
 
             projectService.openClientFile(file3.path);
-            checkNumberOfInferredProjects(projectService, 1);
-            checkNumberOfExternalProjects(projectService, 0);
-            checkNumberOfConfiguredProjects(projectService, 0);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
 
             host.reloadFS([file1, file3]);
             host.triggerFileWatcherCallback(file2.path, /*removed*/ true);
 
-            checkNumberOfInferredProjects(projectService, 2);
-            checkNumberOfExternalProjects(projectService, 0);
-            checkNumberOfConfiguredProjects(projectService, 0);
+            checkNumberOfProjects(projectService, { inferredProjects: 2 });
 
             checkProjectActualFiles(projectService.inferredProjects[0], [ file1.path ]);
             checkProjectActualFiles(projectService.inferredProjects[1], [ file3.path ]);
+        });
+
+        it("open file become a part of configured project if it is referenced from root file", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "export let x = 5"
+            };
+            const file2 = {
+                path: "/a/c/f2.ts",
+                content: `import {x} from "../b/f1"`
+            };
+            const file3 = {
+                path: "/a/c/f3.ts",
+                content: "export let y = 1"
+            };
+            const configFile = {
+                path: "/a/c/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: {}, files: [ "f2.ts", "f3.ts" ] })
+            };
+
+            const host = createServerHost([file1, file2, file3]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+
+            projectService.openClientFile(file1.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [ file1.path ]);
+
+            projectService.openClientFile(file3.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 2 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [ file1.path ]);
+            checkProjectActualFiles(projectService.inferredProjects[1], [ file3.path ]);
+
+            host.reloadFS([file1, file2, file3, configFile]);
+            host.triggerDirectoryWatcherCallback(getDirectoryPath(configFile.path), configFile.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [ file1.path, file2.path, file3.path ]);
         });
     });
 }
