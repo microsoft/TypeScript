@@ -3,11 +3,6 @@
 /// <reference path="core.ts" />
 
 namespace ts {
-    /* @internal */ export let programTime = 0;
-    /* @internal */ export let emitTime = 0;
-    /* @internal */ export let ioReadTime = 0;
-    /* @internal */ export let ioWriteTime = 0;
-
     /** The version of the TypeScript compiler release */
     export const version = "2.0.0";
 
@@ -871,9 +866,9 @@ namespace ts {
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             let text: string;
             try {
-                const start = new Date().getTime();
+                const start = performance.mark();
                 text = sys.readFile(fileName, options.charset);
-                ioReadTime += new Date().getTime() - start;
+                performance.measure("ioReadTime", start);
             }
             catch (e) {
                 if (onError) {
@@ -940,7 +935,7 @@ namespace ts {
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
-                const start = new Date().getTime();
+                const start = performance.mark();
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
                 if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
@@ -950,7 +945,7 @@ namespace ts {
                     sys.writeFile(fileName, data, writeByteOrderMark);
                 }
 
-                ioWriteTime += new Date().getTime() - start;
+                performance.measure("ioWriteTime", start);
             }
             catch (e) {
                 if (onError) {
@@ -1104,7 +1099,7 @@ namespace ts {
         // Track source files that are JavaScript files found by searching under node_modules, as these shouldn't be compiled.
         const sourceFilesFoundSearchingNodeModules: Map<boolean> = {};
 
-        const start = new Date().getTime();
+        const start = performance.mark();
 
         host = host || createCompilerHost(options);
 
@@ -1203,7 +1198,7 @@ namespace ts {
 
         verifyCompilerOptions();
 
-        programTime += new Date().getTime() - start;
+        performance.measure("programTime", start);
 
         return program;
 
@@ -1446,14 +1441,14 @@ namespace ts {
             // checked is to not pass the file to getEmitResolver.
             const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile);
 
-            const start = new Date().getTime();
+            const start = performance.mark();
 
             const emitResult = emitFiles(
                 emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile);
 
-            emitTime += new Date().getTime() - start;
+            performance.measure("emitTime", start);
             return emitResult;
         }
 

@@ -2,8 +2,6 @@
 /// <reference path="scanner.ts"/>
 
 namespace ts {
-    /* @internal */ export let parseTime = 0;
-
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
@@ -413,10 +411,10 @@ namespace ts {
     }
 
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
-        const start = new Date().getTime();
+        const start = performance.mark();
         const result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind);
 
-        parseTime += new Date().getTime() - start;
+        performance.measure("parseTime", start);
         return result;
     }
 

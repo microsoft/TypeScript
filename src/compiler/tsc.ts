@@ -554,12 +554,7 @@ namespace ts {
     }
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
-        ioReadTime = 0;
-        ioWriteTime = 0;
-        programTime = 0;
-        bindTime = 0;
-        checkTime = 0;
-        emitTime = 0;
+        if (compilerOptions.diagnostics) performance.enable();
 
         const program = createProgram(fileNames, compilerOptions, compilerHost);
         const exitStatus = compileProgram();
@@ -587,13 +582,13 @@ namespace ts {
             // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
             // I/O read time and processing time for triple-slash references and module imports, and the reported
             // emit time includes I/O write time. We preserve this behavior so we can accurately compare times.
-            reportTimeStatistic("I/O read", ioReadTime);
-            reportTimeStatistic("I/O write", ioWriteTime);
-            reportTimeStatistic("Parse time", programTime);
-            reportTimeStatistic("Bind time", bindTime);
-            reportTimeStatistic("Check time", checkTime);
-            reportTimeStatistic("Emit time", emitTime);
-            reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+            reportTimeStatistic("I/O read", performance.getDuration("ioReadTime"));
+            reportTimeStatistic("I/O write", performance.getDuration("ioWriteTime"));
+            reportTimeStatistic("Parse time", performance.getDuration("parseTime"));
+            reportTimeStatistic("Bind time", performance.getDuration("bindTime"));
+            reportTimeStatistic("Check time", performance.getDuration("checkTime"));
+            reportTimeStatistic("Emit time", performance.getDuration("emitTime"));
+            reportTimeStatistic("Total time", performance.getDuration("programTime") + performance.getDuration("bindTime") + performance.getDuration("checkTime") + performance.getDuration("emitTime"));
         }
 
         return { program, exitStatus };

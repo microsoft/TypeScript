@@ -1,4 +1,6 @@
 /// <reference path="types.ts"/>
+/// <reference path="performance.ts" />
+
 
 /* @internal */
 namespace ts {

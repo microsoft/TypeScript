@@ -34,6 +34,7 @@ if (process.env.path !== undefined) {
 
 var compilerSources = [
     "core.ts",
+    "performance.ts",
     "sys.ts",
     "types.ts",
     "scanner.ts",
@@ -54,6 +55,7 @@ var compilerSources = [
 
 var servicesSources = [
     "core.ts",
+    "performance.ts",
     "sys.ts",
     "types.ts",
     "scanner.ts",

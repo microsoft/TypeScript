@@ -15,8 +15,6 @@ namespace ts {
         return node.id;
     }
 
-    export let checkTime = 0;
-
     export function getSymbolId(symbol: Symbol): number {
         if (!symbol.id) {
             symbol.id = nextSymbolId;
@@ -17011,11 +17009,11 @@ namespace ts {
         }
 
         function checkSourceFile(node: SourceFile) {
-            const start = new Date().getTime();
+            const start = performance.mark();
 
             checkSourceFileWorker(node);
 
-            checkTime += new Date().getTime() - start;
+            performance.measure("checkTime", start);
         }
 
         // Fully type check a source file and collect the relevant diagnostics.
