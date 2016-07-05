@@ -676,44 +676,59 @@ namespace ts.server {
         }
 
         private updateNonInferredProject(project: ExternalProject | ConfiguredProject, newUncheckedRootFiles: string[], newOptions: CompilerOptions) {
-            const oldRootFiles = project.getRootFiles();
-            const newFileNames: NormalizedPath[] = [];
-            for (const f of newUncheckedRootFiles) {
-                if (this.host.fileExists(f)) {
-                    newFileNames.push(toNormalizedPath(f));
-                }
-            }
-            const fileNamesToRemove = oldRootFiles.filter(f => !contains(newFileNames, f));
-            const fileNamesToAdd = newFileNames.filter(f => !contains(oldRootFiles, f));
+            const oldRootScriptInfos = project.getRootScriptInfos();
+            const newRootScriptInfos: ScriptInfo[] = [];
+            const newRootScriptInfoMap: NormalizedPathMap<ScriptInfo> = createNormalizedPathMap<ScriptInfo>();
 
-            for (const fileName of fileNamesToRemove) {
-                const info = this.getScriptInfoForNormalizedPath(fileName);
-                if (info) {
-                    project.removeFile(info);
+            let rootFilesChanged = false;
+            for (const newRootFile of newUncheckedRootFiles) {
+                if (!this.host.fileExists(newRootFile)) {
+                    continue;
                 }
-            }
-
-            for (const fileName of fileNamesToAdd) {
-                let info = this.getScriptInfoForNormalizedPath(fileName);
-                if (!info) {
-                    info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ false);
-                }
-                else {
-                    if (info.isOpen) {
-                        // delete inferred project
-                        let toRemove: Project;
-                        if (isRootFileInInferredProject(info)) {
-                            toRemove = info.containingProjects[0];
-                        }
-                        if (toRemove) {
-                            toRemove.removeFile(info);
-                            if (!toRemove.hasRoots()) {
-                                this.removeProject(toRemove);
-                            }
-                        }
+                const normalizedPath = toNormalizedPath(newRootFile);
+                let scriptInfo = this.getScriptInfoForNormalizedPath(normalizedPath);
+                if (!scriptInfo || !project.isRoot(scriptInfo)) {
+                    rootFilesChanged = true;
+                    if (!scriptInfo) {
+                        scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ false);
                     }
                 }
-                project.addRoot(info);
+                newRootScriptInfos.push(scriptInfo);
+                newRootScriptInfoMap.set(scriptInfo.fileName, scriptInfo);
+            }
+
+            if (rootFilesChanged || newRootScriptInfos.length !== oldRootScriptInfos.length) {
+                let toAdd: ScriptInfo[];
+                let toRemove: ScriptInfo[];
+                for (const oldFile of oldRootScriptInfos) {
+                    if (!newRootScriptInfoMap.contains(oldFile.fileName)) {
+                        (toRemove || (toRemove = [])).push(oldFile);
+                    }
+                }
+                for (const newFile of newRootScriptInfos) {
+                    if (!project.isRoot(newFile)) {
+                        (toAdd || (toAdd = [])).push(newFile);
+                    }
+                }
+                if (toRemove) {
+                    for (const f of toRemove) {
+                        project.removeFile(f);
+                    }
+                }
+                if (toAdd) {
+                    for (const f of toAdd) {
+                        if (f.isOpen && isRootFileInInferredProject(f)) {
+                            // if file is already root in some inferred project 
+                            // - remove the file from that project and delete the project if necessary
+                            const inferredProject = f.containingProjects[0];
+                            inferredProject.removeFile(f);
+                            if (!inferredProject.hasRoots()) {
+                                this.removeProject(inferredProject);
+                            }
+                        }
+                        project.addRoot(f);
+                    }
+                }
             }
 
             project.setCompilerOptions(newOptions);

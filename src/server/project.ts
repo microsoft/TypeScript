@@ -129,6 +129,10 @@ namespace ts.server {
             return this.rootFiles && this.rootFiles.map(info => info.fileName);
         }
 
+        getRootScriptInfos() {
+            return this.rootFiles;
+        }
+
         getFileNames() {
             if (!this.program) {
                 return [];

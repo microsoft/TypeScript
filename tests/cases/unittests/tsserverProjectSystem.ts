@@ -1075,5 +1075,151 @@ namespace ts {
             projectService.closeClientFile(file1.path);
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
         });
+
+        it("can correctly update configured project when set of root files has changed (new file on disk)", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x = 1"
+            };
+            const file2 = {
+                path: "/a/b/f2.ts",
+                content: "let y = 1"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: {} })
+            };
+
+            const host = createServerHost([file1, configFile]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+
+            projectService.openClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [ file1.path ]);
+
+            host.reloadFS([file1, file2, configFile]);
+
+            host.triggerDirectoryWatcherCallback(getDirectoryPath(file2.path), file2.path);
+            host.checkTimeoutQueueLength(1);
+            host.runQueuedTimeoutCallbacks(); // to execute throttled requests
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectRootFiles(projectService.configuredProjects[0], [ file1.path, file2.path ]);
+        });
+
+        it("can correctly update configured project when set of root files has changed (new file in list of files)", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x = 1"
+            };
+            const file2 = {
+                path: "/a/b/f2.ts",
+                content: "let y = 1"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: {}, files: [ "f1.ts" ] })
+            };
+
+            const host = createServerHost([file1, file2, configFile]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+
+            projectService.openClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [ file1.path ]);
+
+            const modifiedConfigFile = {
+                path: configFile.path,
+                content: JSON.stringify({ compilerOptions: {}, files: [ "f1.ts", "f2.ts" ] })
+            };
+
+            host.reloadFS([file1, file2, modifiedConfigFile]);
+            host.triggerFileWatcherCallback(configFile.path, /*removed*/ false);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectRootFiles(projectService.configuredProjects[0], [ file1.path, file2.path ]);
+        });
+
+        it("can update configured project when set of root files was not changed", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x = 1"
+            };
+            const file2 = {
+                path: "/a/b/f2.ts",
+                content: "let y = 1"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: {}, files: [ "f1.ts", "f2.ts" ] })
+            };
+
+            const host = createServerHost([file1, file2, configFile]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+
+            projectService.openClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [ file1.path, file2.path ]);
+
+            const modifiedConfigFile = {
+                path: configFile.path,
+                content: JSON.stringify({ compilerOptions: { outFile: "out.js" }, files: [ "f1.ts", "f2.ts" ] })
+            };
+
+            host.reloadFS([file1, file2, modifiedConfigFile]);
+            host.triggerFileWatcherCallback(configFile.path, /*removed*/ false);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectRootFiles(projectService.configuredProjects[0], [ file1.path, file2.path ]);
+        });
+
+        it("can correctly update external project when set of root files has changed", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x = 1"
+            };
+            const file2 = {
+                path: "/a/b/f2.ts",
+                content: "let y = 1"
+            };
+            const host = createServerHost([file1, file2]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+
+            projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: [file1.path] });
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+            checkProjectActualFiles(projectService.externalProjects[0], [ file1.path ]);
+
+            projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: [file1.path, file2.path] });
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+            checkProjectRootFiles(projectService.externalProjects[0], [ file1.path, file2.path ]);
+        });
+
+        it("can update external project when set of root files was not changed", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: `export * from "m"`
+            };
+            const file2 = {
+                path: "/a/b/f2.ts",
+                content: "export let y = 1"
+            };
+            const file3 = {
+                path: "/a/m.ts",
+                content: "export let y = 1"
+            };
+
+            const host = createServerHost([file1, file2, file3]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+
+            projectService.openExternalProject({ projectFileName: "project", options: { moduleResolution: ModuleResolutionKind.NodeJs }, rootFiles: [file1.path, file2.path] });
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+            checkProjectRootFiles(projectService.externalProjects[0], [ file1.path, file2.path ]);
+            checkProjectActualFiles(projectService.externalProjects[0], [ file1.path, file2.path ]);
+
+            projectService.openExternalProject({ projectFileName: "project", options: { moduleResolution: ModuleResolutionKind.Classic }, rootFiles: [file1.path, file2.path] });
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+            checkProjectRootFiles(projectService.externalProjects[0], [ file1.path, file2.path ]);
+            checkProjectActualFiles(projectService.externalProjects[0], [ file1.path, file2.path, file3.path ]);
+        });
     });
 }
