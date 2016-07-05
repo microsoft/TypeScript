@@ -609,7 +609,7 @@ namespace ts.server {
             return false;
         }
 
-        private createAndAddExternalProject(projectFileName: string, files: string[], compilerOptions: CompilerOptions) {
+        private createAndAddExternalProject(projectFileName: string, files: NormalizedPath[], compilerOptions: CompilerOptions) {
             const project = new ExternalProject(
                 projectFileName,
                 this,
@@ -884,11 +884,11 @@ namespace ts.server {
             this.log("updating project structure from ...", "Info");
             this.printProjects();
 
-            const unattachedOpenFiles: ScriptInfo[] = [];
+            const orphantedFiles: ScriptInfo[] = [];
             // collect all orphanted script infos from open files
             for (const info of this.openFiles) {
                 if (info.containingProjects.length === 0) {
-                    unattachedOpenFiles.push(info);
+                    orphantedFiles.push(info);
                 }
                 else {
                     if (isRootFileInInferredProject(info) && info.containingProjects.length > 1) {
@@ -901,8 +901,8 @@ namespace ts.server {
                     }
                 }
             }
-            for (const unattached of unattachedOpenFiles) {
-                this.assignScriptInfoToInferredProjectIfNecessary(unattached, /*addToListOfOpenFiles*/ false);
+            for (const f of orphantedFiles) {
+                this.assignScriptInfoToInferredProjectIfNecessary(f, /*addToListOfOpenFiles*/ false);
             }
 
             for (const p of this.inferredProjects) {
@@ -1001,14 +1001,17 @@ namespace ts.server {
             const fileName = toNormalizedPath(uncheckedFileName);
             const configFiles = this.externalProjectToConfiguredProjectMap[fileName];
             if (configFiles) {
+                let shouldRefreshInferredProjects = false;
                 for (const configFile of configFiles) {
                     const configuredProject = this.findConfiguredProjectByProjectName(configFile);
                     if (configuredProject && configuredProject.deleteOpenRef() === 0) {
                         this.removeProject(configuredProject);
+                        shouldRefreshInferredProjects = true;
                     }
                 }
-                // TODO: do this only if ownership of files is changed
-                this.refreshInferredProjects();
+                if (shouldRefreshInferredProjects) {
+                    this.refreshInferredProjects();
+                }
             }
             else {
                 // close external project
@@ -1026,14 +1029,16 @@ namespace ts.server {
                 this.updateNonInferredProject(externalProject, proj.rootFiles, proj.options);
                 return;
             }
+
             let tsConfigFiles: NormalizedPath[];
-            const rootFiles: string[] = [];
+            const rootFiles: NormalizedPath[] = [];
             for (const file of proj.rootFiles) {
-                if (getBaseFileName(file) === "tsconfig.json") {
-                    (tsConfigFiles || (tsConfigFiles = [])).push(toNormalizedPath(file));
+                const normalized = toNormalizedPath(file);
+                if (getBaseFileName(normalized) === "tsconfig.json") {
+                    (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
                 }
                 else {
-                    rootFiles.push(file);
+                    rootFiles.push(normalized);
                 }
             }
             if (tsConfigFiles) {
@@ -1053,7 +1058,7 @@ namespace ts.server {
                 }
             }
             else {
-                this.createAndAddExternalProject(proj.projectFileName, proj.rootFiles, proj.options);
+                this.createAndAddExternalProject(proj.projectFileName, rootFiles, proj.options);
             }
         }
     }
