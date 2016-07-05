@@ -434,8 +434,12 @@ namespace ts {
         },
         {
             name: "profileExtensions",
-            type: "boolean",
-            description: Diagnostics.Enable_extension_profiling,
+            type: {
+                "none": ProfileLevel.None,
+                "summary": ProfileLevel.Summary,
+                "full": ProfileLevel.Full,
+            },
+            description: Diagnostics.Set_extension_profiling_level_Colon,
         }
     ];
 

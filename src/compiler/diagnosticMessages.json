@@ -2821,7 +2821,7 @@
         "category": "Error",
         "code": 6152
     },
-    "Enable extension profiling.": {
+    "Set extension profiling level:": {
         "category": "Message",
         "code": 6153
     },

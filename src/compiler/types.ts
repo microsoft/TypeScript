@@ -2598,9 +2598,15 @@ namespace ts {
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
         extensions?: string[] | Map<any>;
-        profileExtensions?: boolean;
+        profileExtensions?: ProfileLevel;
 
         [option: string]: CompilerOptionsValue | undefined;
+    }
+
+    export const enum ProfileLevel {
+        None,
+        Summary,
+        Full
     }
 
     export interface TypingOptions {

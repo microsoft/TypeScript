@@ -5,6 +5,6 @@
     "availableExtensions": ["test-multi-extension"],
     "compilerOptions": {
         "extensions": ["test-multi-extension"],
-        "profileExtensions": true
+        "profileExtensions": 2
     }
 }

@@ -50,11 +50,11 @@ namespace ts {
         name: string;
         args: any;
         kind: ExtensionKind;
-        profiles?: Map<ProfileData>;
     }
 
     export type Timestamp = number & { __timestampBrand: void };
     export interface ProfileData {
+        globalBucket: string;
         task: string;
         start: Timestamp;
         length?: Timestamp;
@@ -121,24 +121,43 @@ namespace ts {
         return (getTimestampInternal() - since) as Timestamp;
     }
 
-    export function startExtensionProfile(ext: ExtensionBase, task: string, trace?: (s: string) => void) {
-        if (!ext.profiles) ext.profiles = {};
+    export const perfTraces: Map<ProfileData> = {};
 
-        ext.profiles[task] = {
-            task,
-            start: getTimestampMs(),
-            length: undefined
-        };
-
-        profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_begin_1, ext.name, task);
+    function getExtensionRootName(ext: ExtensionBase) {
+        return ext.name.substring(0, ext.name.indexOf("[")) || ext.name;
     }
 
-    export function completeExtensionProfile(ext: ExtensionBase, task: string, trace?: (s: string) => void) {
-        Debug.assert(!!ext.profiles, "Completed profile, but extension has no started profiles.");
-        Debug.assert(!!ext.profiles[task], "Completed profile did not have a corresponding start.");
-        ext.profiles[task].length = getTimestampMs(ext.profiles[task].start);
+    function createTaskName(ext: ExtensionBase, task: string) {
+        return `${task}|${ext.name}`;
+    }
 
-        profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, ext.name, task, ext.profiles[task].length.toPrecision(5));
+    export function startProfile(key: string, bucket?: string) {
+        perfTraces[key] = {
+            task: key,
+            start: getTimestampMs(),
+            length: undefined,
+            globalBucket: bucket
+        };
+    }
+
+    export function completeProfile(key: string) {
+        Debug.assert(!!perfTraces[key], "Completed profile did not have a corresponding start.");
+        perfTraces[key].length = getTimestampMs(perfTraces[key].start);
+    }
+
+    export function startExtensionProfile(level: ProfileLevel, ext: ExtensionBase, task: string, trace?: (s: string) => void) {
+        if (!level) return;
+        if (level >= ProfileLevel.Full) profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_begin_1, ext.name, task);
+        const longTask = createTaskName(ext, task);
+        startProfile(longTask, getExtensionRootName(ext));
+    }
+
+    export function completeExtensionProfile(level: ProfileLevel, ext: ExtensionBase, task: string, trace?: (s: string) => void) {
+        if (!level) return;
+        const longTask = createTaskName(ext, task);
+        completeProfile(longTask);
+
+        if (level >= ProfileLevel.Full) profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, ext.name, task, perfTraces[longTask].length.toPrecision(5));
     }
 
     export function createExtensionCache(options: CompilerOptions, host: ExtensionHost): ExtensionCache {
@@ -169,7 +188,7 @@ namespace ts {
             const extOptions = options.extensions;
             const extensionNames = (extOptions instanceof Array) ? extOptions : getKeys(extOptions);
             const currentDirectory = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
-            const shouldProfile = !!options.profileExtensions;
+            const profileLevel = options.profileExtensions;
             const extensionLoadResults = map(extensionNames, name => {
                 let result: any;
                 let error: any;
@@ -177,15 +196,14 @@ namespace ts {
                     const resolved = resolveModuleName(name, combinePaths(currentDirectory, "tsconfig.json"), options, host, /*loadJs*/true).resolvedModule;
                     if (resolved) {
                         try {
-                            let startTime: Timestamp;
-                            if (shouldProfile) {
-                                startTime = getTimestampMs();
-                                trace(Diagnostics.PROFILE_Colon_Extension_0_begin_1, name, "load");
+                            if (profileLevel) {
+                                startProfile(name, name);
+                                if (profileLevel >= ProfileLevel.Full) trace(Diagnostics.PROFILE_Colon_Extension_0_begin_1, name, "load");
                             }
                             result = host.loadExtension(resolved.resolvedFileName);
-                            if (shouldProfile) {
-                                const loadTime = getTimestampMs(startTime);
-                                trace(Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, name, "load", loadTime.toPrecision(5));
+                            if (profileLevel) {
+                                completeProfile(name);
+                                if (profileLevel >= ProfileLevel.Full) trace(Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, name, "load", perfTraces[name].length.toPrecision(5));
                             }
                         }
                         catch (e) {

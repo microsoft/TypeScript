@@ -601,6 +601,22 @@ namespace ts {
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
         }
 
+        if (compilerOptions.profileExtensions) {
+            let totalExtensionTime  = 0;
+            const perfTotals = reduceProperties(perfTraces, (aggregate, value, key) => {
+                if (typeof aggregate[value.globalBucket] !== "number") {
+                    aggregate[value.globalBucket] = 0;
+                }
+                aggregate[value.globalBucket] += value.length;
+                totalExtensionTime += value.length;
+                return aggregate;
+            }, {} as {[index: string]: number});
+            forEachKey(perfTotals, (key) => {
+                reportTimeStatistic(`Extension '${key}' time`, perfTotals[key]);
+            });
+            reportTimeStatistic("Total extension time", totalExtensionTime);
+        }
+
         return { program, exitStatus };
 
         function compileProgram(): ExitStatus {
