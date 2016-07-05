@@ -497,7 +497,7 @@ namespace ts.formatting {
                     return childKind !== SyntaxKind.NamedExports;
                 case SyntaxKind.ImportDeclaration:
                     return childKind !== SyntaxKind.ImportClause ||
-                        (<ImportClause>child).namedBindings.kind !== SyntaxKind.NamedImports;
+                        ((<ImportClause>child).namedBindings && (<ImportClause>child).namedBindings.kind !== SyntaxKind.NamedImports);
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
             }
