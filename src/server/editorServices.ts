@@ -542,7 +542,6 @@ namespace ts.server {
 
             this.compilerService.host.removeReferencedFile(info);
             this.updateGraph();
-            this.builder.fileDeleted(info.fileName);
         }
 
         updateFileMap() {
@@ -587,7 +586,6 @@ namespace ts.server {
             }
             this.sequenceNumber++;
             this.compilerService.host.addRoot(info);
-            this.builder.fileCreated(info.fileName);
         }
 
         // remove a root file from project
@@ -597,7 +595,6 @@ namespace ts.server {
             }
             this.sequenceNumber++;
             this.compilerService.host.removeRoot(info);
-            this.builder.fileDeleted(info.fileName);
         }
 
         filesToString() {
@@ -1555,6 +1552,7 @@ namespace ts.server {
                             if (this.host.fileExists(rootFilename)) {
                                 const info = this.openFile(rootFilename, /*openedByClient*/ false);
                                 project.addRoot(info);
+                                project.builder.fileCreated(info.fileName);
                             }
                         }
                         project.finishGraph();
@@ -1573,6 +1571,7 @@ namespace ts.server {
                         const info = this.getScriptInfo(fileName);
                         if (info) {
                             project.removeRoot(info);
+                            project.builder.fileDeleted(info.fileName);
                         }
                     }
 
@@ -1599,6 +1598,7 @@ namespace ts.server {
                             }
                         }
                         project.addRoot(info);
+                        project.builder.fileCreated(info.fileName);
                     }
 
                     project.setProjectOptions(projectOptions);

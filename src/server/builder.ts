@@ -754,7 +754,7 @@ namespace ts.server {
                 newReferences.sort(ModuleFileInfo.compareFileInfos);
 
                 const currentReferences = this.references || [];
-                const end = Math.max(currentReferences.length, newReferences.length);
+                const end = Math.min(currentReferences.length, newReferences.length);
                 let currentIndex = 0;
                 let newIndex = 0;
                 while (currentIndex < end && newIndex < end) {
@@ -889,6 +889,7 @@ namespace ts.server {
             Object.keys(this.fileInfos).forEach((key) => {
                 const info = this.fileInfos[key];
                 if (info.hasProblems()) {
+                    info.forceUpdate();
                     this.queueFileInfo(info);
                 }
             });
