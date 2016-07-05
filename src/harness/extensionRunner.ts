@@ -101,7 +101,7 @@ class ExtensionRunner extends RunnerBase {
     };
 
     makeMockLSHost(files: string[], options: ts.CompilerOptions): ts.LanguageServiceHost {
-        files = ts.filter(files, file => ts.endsWith(file, ".ts") && !ts.endsWith(file, ".d.ts") && !(file.indexOf("node_modules") >= 0));
+        files = ts.filter(files, file => ts.endsWith(file, ".ts") && !ts.endsWith(file, ".d.ts") && (file.indexOf("node_modules") === -1));
         const host: ts.LanguageServiceHost = {
             getCompilationSettings: () => options,
             getScriptFileNames: () => files,

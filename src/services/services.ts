@@ -1741,6 +1741,7 @@ namespace ts {
         version: string;
         scriptSnapshot: IScriptSnapshot;
         scriptKind: ScriptKind;
+        isRoot: boolean;
     }
 
     interface DocumentRegistryEntry {
@@ -1817,7 +1818,7 @@ namespace ts {
             // Initialize the list with the root file names
             const rootFileNames = host.getScriptFileNames();
             for (const fileName of rootFileNames) {
-                this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName));
+                this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName), /*isRoot*/true);
             }
 
             // store the compilation settings
@@ -1828,7 +1829,7 @@ namespace ts {
             return this._compilationSettings;
         }
 
-        private createEntry(fileName: string, path: Path) {
+        private createEntry(fileName: string, path: Path, isRoot: boolean) {
             let entry: HostFileInformation;
             const scriptSnapshot = this.host.getScriptSnapshot(fileName);
             if (scriptSnapshot) {
@@ -1836,7 +1837,8 @@ namespace ts {
                     hostFileName: fileName,
                     version: this.host.getScriptVersion(fileName),
                     scriptSnapshot: scriptSnapshot,
-                    scriptKind: getScriptKind(fileName, this.host)
+                    scriptKind: getScriptKind(fileName, this.host),
+                    isRoot
                 };
             }
 
@@ -1860,14 +1862,14 @@ namespace ts {
         public getOrCreateEntryByPath(fileName: string, path: Path): HostFileInformation {
             return this.contains(path)
                 ? this.getEntry(path)
-                : this.createEntry(fileName, path);
+                : this.createEntry(fileName, path, /*isRoot*/false);
         }
 
         public getRootFileNames(): string[] {
             const fileNames: string[] = [];
 
             this.fileNameToEntry.forEachValue((path, value) => {
-                if (value) {
+                if (value && value.isRoot) {
                     fileNames.push(value.hostFileName);
                 }
             });
@@ -2978,7 +2980,7 @@ namespace ts {
             }
 
             // Get a fresh cache of the host information
-            const hostCache = new HostCache(host, getCanonicalFileName);
+            let hostCache = new HostCache(host, getCanonicalFileName);
 
             // If the program is already up-to-date, we can reuse it
             if (programUpToDate()) {
@@ -3015,11 +3017,13 @@ namespace ts {
                 getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => {
                     // stub missing host functionality
+                    Debug.assert(!!hostCache, "LS CompilerHost may not persist beyond the execution of a synchronize call");
                     Debug.assert(!host.resolveModuleNames || !host.resolveTypeReferenceDirectives);
                     return hostCache.getOrCreateEntry(fileName) !== undefined;
                 },
                 readFile: (fileName): string => {
                     // stub missing host functionality
+                    Debug.assert(!!hostCache, "LS CompilerHost may not persist beyond the execution of a synchronize call");
                     const entry = hostCache.getOrCreateEntry(fileName);
                     return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
                 },
@@ -3068,9 +3072,7 @@ namespace ts {
 
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
-            // TODO (weswig): hostCache needs to exist as long as its associated compilerHost exists, since it is used in fileExists.
-            //     As such, we cannot release it here - it must be tied to the lifetime of the compilerHost.
-            // hostCache = undefined;
+            hostCache = undefined;
 
             program = newProgram;
 

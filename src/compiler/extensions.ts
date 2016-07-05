@@ -160,9 +160,13 @@ namespace ts {
         if (level >= ProfileLevel.Full) profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, ext.name, task, perfTraces[longTask].length.toPrecision(5));
     }
 
-    export function createExtensionCache(options: CompilerOptions, host: ExtensionHost): ExtensionCache {
+    export function createExtensionCache(options: CompilerOptions, host: ExtensionHost, resolvedExtensionNames?: Map<string>): ExtensionCache {
 
         const diagnostics: Diagnostic[] = [];
+        const extOptions = options.extensions;
+        const extensionNames = (extOptions instanceof Array) ? extOptions : getKeys(extOptions);
+        // Eagerly evaluate extension paths, but lazily execute their contents
+        resolvedExtensionNames = resolvedExtensionNames || resolveExtensionNames();
         let extensions: ExtensionCollectionMap;
 
         const cache: ExtensionCache = {
@@ -184,37 +188,44 @@ namespace ts {
             profileTrace(host.trace, message, ...args);
         }
 
-        function collectCompilerExtensions(): ExtensionCollectionMap {
-            const extOptions = options.extensions;
-            const extensionNames = (extOptions instanceof Array) ? extOptions : getKeys(extOptions);
+        function resolveExtensionNames(): Map<string> {
             const currentDirectory = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
+            const extMap: Map<string> = {};
+            forEach(extensionNames, name => {
+                const resolved = resolveModuleName(name, combinePaths(currentDirectory, "tsconfig.json"), options, host, /*loadJs*/true).resolvedModule;
+                if (resolved) {
+                    extMap[name] = resolved.resolvedFileName;
+                }
+            })
+            return extMap;
+        }
+
+        function collectCompilerExtensions(): ExtensionCollectionMap {
             const profileLevel = options.profileExtensions;
-            const extensionLoadResults = map(extensionNames, name => {
+            const extensionLoadResults = map(extensionNames, (name) => {
+                const resolved = resolvedExtensionNames[name];
                 let result: any;
                 let error: any;
-                if (host.loadExtension) {
-                    const resolved = resolveModuleName(name, combinePaths(currentDirectory, "tsconfig.json"), options, host, /*loadJs*/true).resolvedModule;
-                    if (resolved) {
-                        try {
-                            if (profileLevel) {
-                                startProfile(name, name);
-                                if (profileLevel >= ProfileLevel.Full) trace(Diagnostics.PROFILE_Colon_Extension_0_begin_1, name, "load");
-                            }
-                            result = host.loadExtension(resolved.resolvedFileName);
-                            if (profileLevel) {
-                                completeProfile(name);
-                                if (profileLevel >= ProfileLevel.Full) trace(Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, name, "load", perfTraces[name].length.toPrecision(5));
-                            }
+                if (!resolved) {
+                    error = new Error(`Host could not locate extension '${name}'.`);
+                }
+                if (resolved && host.loadExtension) {
+                    try {
+                        if (profileLevel) {
+                            startProfile(name, name);
+                            if (profileLevel >= ProfileLevel.Full) trace(Diagnostics.PROFILE_Colon_Extension_0_begin_1, name, "load");
                         }
-                        catch (e) {
-                            error = e;
+                        result = host.loadExtension(resolved);
+                        if (profileLevel) {
+                            completeProfile(name);
+                            if (profileLevel >= ProfileLevel.Full) trace(Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, name, "load", perfTraces[name].length.toPrecision(5));
                         }
                     }
-                    else {
-                        error = new Error(`Host could not locate extension '${name}'.`);
+                    catch (e) {
+                        error = e;
                     }
                 }
-                else {
+                else if (!host.loadExtension) {
                     error = new Error("Extension loading not implemented in host!");
                 }
                 if (error) {
