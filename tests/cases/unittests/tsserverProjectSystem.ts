@@ -1039,5 +1039,41 @@ namespace ts {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(projectService.configuredProjects[0], [ file1.path, file2.path, file3.path ]);
         });
+
+        it("correctly migrate files between projects", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: `
+                export * from "../c/f2.ts";
+                export * from "../d/f3.ts";`
+            };
+            const file2 = {
+                path: "/a/c/f2.ts",
+                content: "export let x = 1;"
+            };
+            const file3 = {
+                path: "/a/d/f3.ts",
+                content: "export let y = 1;"
+            };
+            const host = createServerHost([file1, file2, file3]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+
+            projectService.openClientFile(file2.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [file2.path]);
+
+            projectService.openClientFile(file3.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 2 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [file2.path]);
+            checkProjectActualFiles(projectService.inferredProjects[1], [file3.path]);
+
+            projectService.openClientFile(file1.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkProjectRootFiles(projectService.inferredProjects[0], [file1.path]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, file2.path, file3.path]);
+
+            projectService.closeClientFile(file1.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 2 });
+        });
     });
 }

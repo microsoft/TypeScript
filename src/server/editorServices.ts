@@ -373,10 +373,16 @@ namespace ts.server {
                 const inferredProject = this.createInferredProjectWithRootFileIfNecessary(info);
                 if (!this.useSingleInferredProject) {
                     // if useOneInferredProject is not set then try to fixup ownership of open files
+                    // check 'defaultProject !== inferredProject' is necessary to handle cases 
+                    // when creation inferred project for some file has added other open files into this project (i.e. as referenced files)
+                    // we definitely don't want to delete the project that was just created
                     for (const f of this.openFiles) {
+                        if (f.containingProjects.length === 0) {
+                            // this is orphaned file that we have not processed yet - skip it
+                            continue;
+                        }
                         const defaultProject = f.getDefaultProject();
                         if (isRootFileInInferredProject(info) && defaultProject !== inferredProject && inferredProject.containsScriptInfo(f)) {
-
                             // open file used to be root in inferred project, 
                             // this inferred project is different from the one we've just created for current file
                             // and new inferred project references this open file.
