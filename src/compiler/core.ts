@@ -927,6 +927,22 @@ namespace ts {
             return undefined;
         }
 
+        /**
+         * Regex for the * wildcard. Matches all characters except for directory seperators. When
+         * used for including files, also does not match the file extension .min.js
+         *
+         * Breakdown for the "files" version:
+         *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
+         *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
+         */
+        const singleAsteriskRegexFragment = usage === "files" ? "([^./]*(\\.(?!min\\.js$))?)*" : "[^/]*";
+
+        /**
+         * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
+         * files or directories, does not match subdirectories that start with a . character
+         */
+        const doubleAsteriskRegexFragment = usage === "exclude" ? "(/.+?)?" : "(/[^/.][^/]*)*?"
+
         let pattern = "";
         let hasWrittenSubpattern = false;
         spec: for (const spec of specs) {
@@ -947,13 +963,13 @@ namespace ts {
             components[0] = removeTrailingDirectorySeparator(components[0]);
 
             let optionalCount = 0;
-            for (const component of components) {
+            for (let component of components) {
                 if (component === "**") {
                     if (hasRecursiveDirectoryWildcard) {
                         continue spec;
                     }
 
-                    subpattern += "(/.+?)?";
+                    subpattern += doubleAsteriskRegexFragment;
                     hasRecursiveDirectoryWildcard = true;
                     hasWrittenComponent = true;
                 }
@@ -965,6 +981,20 @@ namespace ts {
 
                     if (hasWrittenComponent) {
                         subpattern += directorySeparator;
+                    }
+
+                    if (usage !== "exclude") {
+                        // The * and ? wildcards should not match directories or files that start with . if they
+                        // appear first in a component. Dotted directories and files can be included explicitly
+                        // like so: **/.*/.*
+                        if (startsWith(component, "*")) {
+                            subpattern += "([^./]" + singleAsteriskRegexFragment + ")?";
+                            component = component.substr(1);
+                        }
+                        else if (startsWith(component, "?")) {
+                            subpattern += "[^./]";
+                            component = component.substr(1);
+                        }
                     }
 
                     subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
@@ -990,10 +1020,10 @@ namespace ts {
         }
 
         return "^(" + pattern + (usage === "exclude" ? ")($|/)" : ")$");
-    }
 
-    function replaceWildcardCharacter(match: string) {
-        return match === "*" ? "[^/]*" : match === "?" ? "[^/]" : "\\" + match;
+        function replaceWildcardCharacter(match: string) {
+            return match === "*" ? singleAsteriskRegexFragment : match === "?" ? "[^/]" : "\\" + match;
+        }
     }
 
     export interface FileSystemEntries {
