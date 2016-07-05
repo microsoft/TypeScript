@@ -1155,12 +1155,12 @@ namespace ts {
             if (token === SyntaxKind.ExportKeyword) {
                 nextToken();
                 if (token === SyntaxKind.DefaultKeyword) {
-                    return lookAhead(nextTokenIsClassOrFunction);
+                    return lookAhead(nextTokenIsClassOrFunctionOrAsync);
                 }
                 return token !== SyntaxKind.AsteriskToken && token !== SyntaxKind.AsKeyword && token !== SyntaxKind.OpenBraceToken && canFollowModifier();
             }
             if (token === SyntaxKind.DefaultKeyword) {
-                return nextTokenIsClassOrFunction();
+                return nextTokenIsClassOrFunctionOrAsync();
             }
             if (token === SyntaxKind.StaticKeyword) {
                 nextToken();
@@ -1182,9 +1182,9 @@ namespace ts {
                 || isLiteralPropertyName();
         }
 
-        function nextTokenIsClassOrFunction(): boolean {
+        function nextTokenIsClassOrFunctionOrAsync(): boolean {
             nextToken();
-            return token === SyntaxKind.ClassKeyword || token === SyntaxKind.FunctionKeyword;
+            return token === SyntaxKind.ClassKeyword || token === SyntaxKind.FunctionKeyword || token === SyntaxKind.AsyncKeyword;
         }
 
         // True if positioned at the start of a list element
@@ -3576,7 +3576,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function tagNamesAreEquivalent(lhs: EntityName, rhs: EntityName): boolean {
+        function tagNamesAreEquivalent(lhs: JsxTagNameExpression, rhs: JsxTagNameExpression): boolean {
             if (lhs.kind !== rhs.kind) {
                 return false;
             }
@@ -3585,8 +3585,15 @@ namespace ts {
                 return (<Identifier>lhs).text === (<Identifier>rhs).text;
             }
 
-            return (<QualifiedName>lhs).right.text === (<QualifiedName>rhs).right.text &&
-                tagNamesAreEquivalent((<QualifiedName>lhs).left, (<QualifiedName>rhs).left);
+            if (lhs.kind === SyntaxKind.ThisKeyword) {
+                return true;
+            }
+
+            // If we are at this statement then we must have PropertyAccessExpression and because tag name in Jsx element can only
+            // take forms of JsxTagNameExpression which includes an identifier, "this" expression, or another propertyAccessExpression
+            // it is safe to case the expression property as such. See parseJsxElementName for how we parse tag name in Jsx element
+            return (<PropertyAccessExpression>lhs).name.text === (<PropertyAccessExpression>rhs).name.text &&
+                tagNamesAreEquivalent((<PropertyAccessExpression>lhs).expression as JsxTagNameExpression, (<PropertyAccessExpression>rhs).expression as JsxTagNameExpression);
         }
 
 
@@ -3654,7 +3661,7 @@ namespace ts {
             Debug.fail("Unknown JSX child kind " + token);
         }
 
-        function parseJsxChildren(openingTagName: EntityName): NodeArray<JsxChild> {
+        function parseJsxChildren(openingTagName: LeftHandSideExpression): NodeArray<JsxChild> {
             const result = <NodeArray<JsxChild>>[];
             result.pos = scanner.getStartPos();
             const saveParsingContext = parsingContext;
@@ -3717,17 +3724,22 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseJsxElementName(): EntityName {
+        function parseJsxElementName(): JsxTagNameExpression {
             scanJsxIdentifier();
-            let elementName: EntityName = parseIdentifierName();
+            // JsxElement can have name in the form of
+            //      propertyAccessExpression
+            //      primaryExpression in the form of an identifier and "this" keyword
+            // We can't just simply use parseLeftHandSideExpressionOrHigher because then we will start consider class,function etc as a keyword
+            // We only want to consider "this" as a primaryExpression
+            let expression: JsxTagNameExpression = token === SyntaxKind.ThisKeyword ?
+                parseTokenNode<PrimaryExpression>() : parseIdentifierName();
             while (parseOptional(SyntaxKind.DotToken)) {
-                scanJsxIdentifier();
-                const node: QualifiedName = <QualifiedName>createNode(SyntaxKind.QualifiedName, elementName.pos);  // !!!
-                node.left = elementName;
-                node.right = parseIdentifierName();
-                elementName = finishNode(node);
+                const propertyAccess: PropertyAccessExpression = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
+                propertyAccess.expression = expression;
+                propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
+                expression = finishNode(propertyAccess);
             }
-            return elementName;
+            return expression;
         }
 
         function parseJsxExpression(inExpressionContext: boolean): JsxExpression {
@@ -5058,7 +5070,7 @@ namespace ts {
          * In such situations, 'permitInvalidConstAsModifier' should be set to true.
          */
         function parseModifiers(permitInvalidConstAsModifier?: boolean): ModifiersArray {
-            let flags = 0;
+            let flags: NodeFlags = 0;
             let modifiers: ModifiersArray;
             while (true) {
                 const modifierStart = scanner.getStartPos();

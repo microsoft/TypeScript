@@ -68,6 +68,7 @@ declare namespace FourSlashInterface {
         data?: any;
     }
     interface EditorOptions {
+        BaseIndentSize?: number,
         IndentSize: number;
         TabSize: number;
         NewLineCharacter: string;
@@ -84,7 +85,7 @@ declare namespace FourSlashInterface {
         InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-        [s: string]: boolean | number | string;
+        [s: string]: boolean | number | string | undefined;
     }
     interface Range {
         fileName: string;
@@ -135,13 +136,13 @@ declare namespace FourSlashInterface {
         typeDefinitionCountIs(expectedCount: number): void;
         definitionLocationExists(): void;
         verifyDefinitionsName(name: string, containerName: string): void;
-        isValidBraceCompletionAtPostion(openingBrace?: string): void;
+        isValidBraceCompletionAtPosition(openingBrace?: string): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
         indentationIs(numberOfSpaces: number): void;
-        indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle): void;
+        indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle, baseIndentSize?: number): void;
         textAtCaretIs(text: string): void;
         /**
          * Compiles the current file and evaluates 'expr' in a context containing

@@ -429,5 +429,43 @@ var x = 0;`, {
         transpilesCorrectly("Supports setting 'typeRoots'", "x;", {
             options: { compilerOptions: { typeRoots: ["./folder"] }, fileName: "input.js", reportDiagnostics: true }
         });
+
+        transpilesCorrectly("Correctly serialize metadata when transpile with CommonJS option",
+            `import * as ng from "angular2/core";` +
+            `declare function foo(...args: any[]);` +
+            `@foo` +
+            `export class MyClass1 {` +
+            `    constructor(private _elementRef: ng.ElementRef){}` +
+            `}`, {
+            options: {
+                compilerOptions: {
+                    target: ScriptTarget.ES5,
+                    module: ModuleKind.CommonJS,
+                    moduleResolution: ModuleResolutionKind.NodeJs,
+                    emitDecoratorMetadata: true,
+                    experimentalDecorators: true,
+                    isolatedModules: true,
+                }
+            }
+        });
+
+        transpilesCorrectly("Correctly serialize metadata when transpile with System option",
+            `import * as ng from "angular2/core";` +
+            `declare function foo(...args: any[]);` +
+            `@foo` +
+            `export class MyClass1 {` +
+            `    constructor(private _elementRef: ng.ElementRef){}` +
+            `}`, {
+            options: {
+                compilerOptions: {
+                    target: ScriptTarget.ES5,
+                    module: ModuleKind.System,
+                    moduleResolution: ModuleResolutionKind.NodeJs,
+                    emitDecoratorMetadata: true,
+                    experimentalDecorators: true,
+                    isolatedModules: true,
+                }
+            }
+        });
     });
 }

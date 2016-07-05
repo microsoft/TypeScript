@@ -233,9 +233,10 @@ namespace ts {
          * at the current position.
          * E.g. we don't want brace completion inside string-literals, comments, etc.
          */
-        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): string;
+        isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string;
 
         getEmitOutput(fileName: string): string;
+        getEmitOutputObject(fileName: string): EmitOutput;
     }
 
     export interface ClassifierShim extends Shim {
@@ -544,9 +545,13 @@ namespace ts {
     }
 
     function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): string {
+        return <string>forwardCall(logger, actionDescription, /*returnJson*/ true, action, logPerformance);
+    }
+
+    function forwardCall<T>(logger: Logger, actionDescription: string, returnJson: boolean, action: () => T, logPerformance: boolean): T | string {
         try {
             const result = simpleForwardCall(logger, actionDescription, action, logPerformance);
-            return JSON.stringify({ result });
+            return returnJson ? JSON.stringify({ result }) : result;
         }
         catch (err) {
             if (err instanceof OperationCanceledException) {
@@ -557,6 +562,7 @@ namespace ts {
             return JSON.stringify({ error: err });
         }
     }
+
 
     class ShimBase implements Shim {
         constructor(private factory: ShimFactory) {
@@ -799,10 +805,10 @@ namespace ts {
             );
         }
 
-        public isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): string {
+        public isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string {
             return this.forwardJSONCall(
-                `isValidBraceCompletionAtPostion('${fileName}', ${position}, ${openingBrace})`,
-                () => this.languageService.isValidBraceCompletionAtPostion(fileName, position, openingBrace)
+                `isValidBraceCompletionAtPosition('${fileName}', ${position}, ${openingBrace})`,
+                () => this.languageService.isValidBraceCompletionAtPosition(fileName, position, openingBrace)
             );
         }
 
@@ -943,6 +949,15 @@ namespace ts {
                 `getEmitOutput('${fileName}')`,
                 () => this.languageService.getEmitOutput(fileName)
             );
+        }
+
+        public getEmitOutputObject(fileName: string): any {
+            return forwardCall(
+                this.logger,
+                `getEmitOutput('${fileName}')`,
+                /*returnJson*/ false,
+                () => this.languageService.getEmitOutput(fileName),
+                this.logPerformance);
         }
     }
 

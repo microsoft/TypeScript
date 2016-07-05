@@ -35,6 +35,9 @@ namespace ts {
     export interface EmitHost extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
 
+        /* @internal */
+        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
@@ -1702,7 +1705,7 @@ namespace ts {
             node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier;
     }
 
-    export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration) {
+    export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration | InterfaceDeclaration) {
         const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
@@ -2275,7 +2278,8 @@ namespace ts {
         else {
             const sourceFiles = targetSourceFile === undefined ? host.getSourceFiles() : [targetSourceFile];
             for (const sourceFile of sourceFiles) {
-                if (!isDeclarationFile(sourceFile)) {
+                // Don't emit if source file is a declaration file, or was located under node_modules
+                if (!isDeclarationFile(sourceFile) && !host.isSourceFileFromExternalLibrary(sourceFile)) {
                     onSingleFileEmit(host, sourceFile);
                 }
             }
@@ -2307,11 +2311,13 @@ namespace ts {
         }
 
         function onBundledEmit(host: EmitHost) {
-            // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
-            const bundledSources = filter(host.getSourceFiles(), sourceFile =>
-                !isDeclarationFile(sourceFile)                                       // Not a declaration file
-                && (!isExternalModule(sourceFile) || !!getEmitModuleKind(options))); // and not a module, unless module emit enabled
-
+            // Can emit only sources that are not declaration file and are either non module code or module with
+            // --module or --target es6 specified. Files included by searching under node_modules are also not emitted.
+            const bundledSources = filter(host.getSourceFiles(),
+                sourceFile => !isDeclarationFile(sourceFile) &&
+                              !host.isSourceFileFromExternalLibrary(sourceFile) &&
+                              (!isExternalModule(sourceFile) ||
+                               !!getEmitModuleKind(options)));
             if (bundledSources.length) {
                 const jsFilePath = options.outFile || options.out;
                 const emitFileNames: EmitFileNames = {

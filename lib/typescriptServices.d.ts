@@ -753,9 +753,10 @@ declare namespace ts {
         children: NodeArray<JsxChild>;
         closingElement: JsxClosingElement;
     }
+    type JsxTagNameExpression = PrimaryExpression | PropertyAccessExpression;
     interface JsxOpeningElement extends Expression {
         _openingElementBrand?: any;
-        tagName: EntityName;
+        tagName: JsxTagNameExpression;
         attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>;
     }
     interface JsxSelfClosingElement extends PrimaryExpression, JsxOpeningElement {
@@ -770,7 +771,7 @@ declare namespace ts {
         expression: Expression;
     }
     interface JsxClosingElement extends Node {
-        tagName: EntityName;
+        tagName: JsxTagNameExpression;
     }
     interface JsxExpression extends Expression {
         expression?: Expression;
@@ -1271,7 +1272,7 @@ declare namespace ts {
         buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildDisplayForParametersAndDelimiters(thisType: Type, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildDisplayForParametersAndDelimiters(thisParameter: Symbol, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
     }
@@ -1483,7 +1484,6 @@ declare namespace ts {
         declaration: SignatureDeclaration;
         typeParameters: TypeParameter[];
         parameters: Symbol[];
-        thisType?: Type;
     }
     enum IndexKind {
         String = 0,
@@ -1564,6 +1564,8 @@ declare namespace ts {
         noImplicitAny?: boolean;
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;
+        noUnusedLocals?: boolean;
+        noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
@@ -1590,7 +1592,6 @@ declare namespace ts {
         types?: string[];
         /** Paths used to used to compute primary types search locations */
         typeRoots?: string[];
-        typesSearchPaths?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
     interface TypingOptions {
@@ -2055,7 +2056,7 @@ declare namespace ts {
         getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[];
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
-        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean;
+        isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         getEmitOutput(fileName: string): EmitOutput;
         getProgram(): Program;
         dispose(): void;
@@ -2133,6 +2134,7 @@ declare namespace ts {
         containerKind: string;
     }
     interface EditorOptions {
+        BaseIndentSize?: number;
         IndentSize: number;
         TabSize: number;
         NewLineCharacter: string;
@@ -2155,7 +2157,7 @@ declare namespace ts {
         InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-        [s: string]: boolean | number | string;
+        [s: string]: boolean | number | string | undefined;
     }
     interface DefinitionInfo {
         fileName: string;

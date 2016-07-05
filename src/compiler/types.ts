@@ -469,7 +469,7 @@ namespace ts {
     }
 
     export interface ModifiersArray extends NodeArray<Modifier> {
-        flags: number;
+        flags: NodeFlags;
     }
 
     // @kind(SyntaxKind.AbstractKeyword)
@@ -1042,11 +1042,13 @@ namespace ts {
         closingElement: JsxClosingElement;
     }
 
+    export type JsxTagNameExpression = PrimaryExpression | PropertyAccessExpression;
+
     /// The opening element of a <Tag>...</Tag> JsxElement
     // @kind(SyntaxKind.JsxOpeningElement)
     export interface JsxOpeningElement extends Expression {
         _openingElementBrand?: any;
-        tagName: EntityName;
+        tagName: JsxTagNameExpression;
         attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>;
     }
 
@@ -1073,7 +1075,7 @@ namespace ts {
 
     // @kind(SyntaxKind.JsxClosingElement)
     export interface JsxClosingElement extends Node {
-        tagName: EntityName;
+        tagName: JsxTagNameExpression;
     }
 
     // @kind(SyntaxKind.JsxExpression)
@@ -2106,6 +2108,8 @@ namespace ts {
         PropertyOrAccessor = Property | Accessor,
         Export = ExportNamespace | ExportType | ExportValue,
 
+        ClassMember = Method | Accessor | Property,
+
         /* @internal */
         // The set of things we consider semantically classifiable.  Used to speed up the LS during
         // classification.
@@ -2121,11 +2125,13 @@ namespace ts {
         members?: SymbolTable;                  // Class, interface or literal instance members
         exports?: SymbolTable;                  // Module exports
         globalExports?: SymbolTable;            // Conditional global UMD exports
+        /* @internal */ isReadonly?: boolean;   // readonly? (set only for intersections and unions)
         /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
         /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
+        /* @internal */ isReferenced?: boolean; // True if the symbol is referenced elsewhere
     }
 
     /* @internal */
@@ -2530,6 +2536,7 @@ namespace ts {
         declaration?: boolean;
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;
+        disableSizeLimit?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
@@ -2545,6 +2552,7 @@ namespace ts {
         /*@internal*/listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
+        maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
@@ -2556,6 +2564,8 @@ namespace ts {
         noImplicitAny?: boolean;
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;
+        noUnusedLocals?: boolean;
+        noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
@@ -2581,11 +2591,9 @@ namespace ts {
         /* @internal */ suppressOutputPathCheck?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
-        disableSizeLimit?: boolean;
         types?: string[];
         /** Paths used to used to compute primary types search locations */
         typeRoots?: string[];
-        typesSearchPaths?: string[];
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
 
