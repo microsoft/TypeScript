@@ -1221,5 +1221,37 @@ namespace ts {
             checkProjectRootFiles(projectService.externalProjects[0], [ file1.path, file2.path ]);
             checkProjectActualFiles(projectService.externalProjects[0], [ file1.path, file2.path, file3.path ]);
         });
+
+        it("config file is deleted", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x = 1;"
+            };
+            const file2 = {
+                path: "/a/b/f2.ts",
+                content: "let y = 2;"
+            };
+            const config = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: {} })
+            };
+            const host = createServerHost([file1, file2, config]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+
+            projectService.openClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [ file1.path, file2.path ]);
+
+            projectService.openClientFile(file2.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [ file1.path, file2.path ]);
+
+            host.reloadFS([file1, file2]);
+            host.triggerFileWatcherCallback(config.path, /*removed*/ true);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 2 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [file1.path]);
+            checkProjectActualFiles(projectService.inferredProjects[1], [file2.path]);
+        });
     });
 }
