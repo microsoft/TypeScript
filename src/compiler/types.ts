@@ -468,7 +468,7 @@ namespace ts {
     }
 
     export interface ModifiersArray extends NodeArray<Modifier> {
-        flags: number;
+        flags: NodeFlags;
     }
 
     // @kind(SyntaxKind.AbstractKeyword)
@@ -2111,6 +2111,8 @@ namespace ts {
         PropertyOrAccessor = Property | Accessor,
         Export = ExportNamespace | ExportType | ExportValue,
 
+        ClassMember = Method | Accessor | Property,
+
         /* @internal */
         // The set of things we consider semantically classifiable.  Used to speed up the LS during
         // classification.
@@ -2132,7 +2134,7 @@ namespace ts {
         /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
-        /* @internal */ hasReference?: boolean; // True if the symbol is referenced elsewhere
+        /* @internal */ isReferenced?: boolean; // True if the symbol is referenced elsewhere
     }
 
     /* @internal */
