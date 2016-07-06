@@ -61,6 +61,15 @@ namespace ts {
         }
 
         /**
+         * Iterate over each measure, performing some action
+         * 
+         * @param cb The action to perform for each measure
+         */
+        export function forEachMeasure(cb: (measureName: string, duration: number) => void) {
+            return forEachKey(measures, key => cb(key, measures[key]));
+        }
+
+        /**
          * Gets the total duration of all measurements with the supplied name.
          *
          * @param measureName The name of the measure whose durations should be accumulated.

@@ -17013,7 +17013,7 @@ namespace ts {
 
             checkSourceFileWorker(node);
 
-            performance.measure("checkTime", start);
+            performance.measure("Check", start);
         }
 
         // Fully type check a source file and collect the relevant diagnostics.

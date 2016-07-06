@@ -554,7 +554,8 @@ namespace ts {
     }
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
-        if (compilerOptions.diagnostics) performance.enable();
+        const hasDiagnostics = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
+        if (hasDiagnostics) performance.enable();
 
         const program = createProgram(fileNames, compilerOptions, compilerHost);
         const exitStatus = compileProgram();
@@ -565,7 +566,7 @@ namespace ts {
             });
         }
 
-        if (compilerOptions.diagnostics) {
+        if (hasDiagnostics) {
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
@@ -578,17 +579,28 @@ namespace ts {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
 
-            // Individual component times.
-            // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
-            // I/O read time and processing time for triple-slash references and module imports, and the reported
-            // emit time includes I/O write time. We preserve this behavior so we can accurately compare times.
-            reportTimeStatistic("I/O read", performance.getDuration("ioReadTime"));
-            reportTimeStatistic("I/O write", performance.getDuration("ioWriteTime"));
-            reportTimeStatistic("Parse time", performance.getDuration("parseTime"));
-            reportTimeStatistic("Bind time", performance.getDuration("bindTime"));
-            reportTimeStatistic("Check time", performance.getDuration("checkTime"));
-            reportTimeStatistic("Emit time", performance.getDuration("emitTime"));
-            reportTimeStatistic("Total time", performance.getDuration("programTime") + performance.getDuration("bindTime") + performance.getDuration("checkTime") + performance.getDuration("emitTime"));
+            if (compilerOptions.extendedDiagnostics) {
+                performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
+            }
+            else {
+                // Individual component times.
+                // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
+                // I/O read time and processing time for triple-slash references and module imports, and the reported
+                // emit time includes I/O write time. We preserve this behavior so we can accurately compare times.
+                reportTimeStatistic("I/O read", performance.getDuration("I/O Read"));
+                reportTimeStatistic("I/O write", performance.getDuration("I/O Write"));
+                const programTime = performance.getDuration("Program");
+                const bindTime = performance.getDuration("Bind");
+                const checkTime = performance.getDuration("Check");
+                const emitTime = performance.getDuration("Emit");
+                reportTimeStatistic("Parse time", programTime);
+                reportTimeStatistic("Bind time", bindTime);
+                reportTimeStatistic("Check time", checkTime);
+                reportTimeStatistic("Emit time", emitTime);
+                reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+            }
+
+            performance.disable();
         }
 
         return { program, exitStatus };

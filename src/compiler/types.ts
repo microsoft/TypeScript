@@ -2535,6 +2535,7 @@ namespace ts {
         declaration?: boolean;
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;
+        /* @internal */ extendedDiagnostics?: boolean;
         disableSizeLimit?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;

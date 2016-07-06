@@ -868,7 +868,7 @@ namespace ts {
             try {
                 const start = performance.mark();
                 text = sys.readFile(fileName, options.charset);
-                performance.measure("ioReadTime", start);
+                performance.measure("I/O Read", start);
             }
             catch (e) {
                 if (onError) {
@@ -945,7 +945,7 @@ namespace ts {
                     sys.writeFile(fileName, data, writeByteOrderMark);
                 }
 
-                performance.measure("ioWriteTime", start);
+                performance.measure("I/O Write", start);
             }
             catch (e) {
                 if (onError) {
@@ -1198,7 +1198,7 @@ namespace ts {
 
         verifyCompilerOptions();
 
-        performance.measure("programTime", start);
+        performance.measure("Program", start);
 
         return program;
 
@@ -1448,7 +1448,7 @@ namespace ts {
                 getEmitHost(writeFileCallback),
                 sourceFile);
 
-            performance.measure("emitTime", start);
+            performance.measure("Emit", start);
             return emitResult;
         }
 

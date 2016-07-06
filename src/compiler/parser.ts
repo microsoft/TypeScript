@@ -414,7 +414,7 @@ namespace ts {
         const start = performance.mark();
         const result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind);
 
-        performance.measure("parseTime", start);
+        performance.measure("Parse", start);
         return result;
     }
 
