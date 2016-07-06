@@ -23,7 +23,8 @@ namespace ts.server {
         setTimeout(callback, ms, ...args) { return 0; },
         clearTimeout(timeoutId) { },
         setImmediate: () => 0,
-        clearImmediate() {}
+        clearImmediate() {},
+        writeCompressedData() {}
     };
     const nullCancellationToken: HostCancellationToken = { isCancellationRequested: () => false };
     const mockLogger: Logger = {
@@ -42,7 +43,7 @@ namespace ts.server {
         let lastSent: protocol.Message;
 
         beforeEach(() => {
-            session = new Session(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, Utils.byteLength, process.hrtime, mockLogger);
+            session = new Session(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, Utils.byteLength, Utils.compress, process.hrtime, mockLogger);
             session.send = (msg: protocol.Message) => {
                 lastSent = msg;
             };
@@ -180,7 +181,7 @@ namespace ts.server {
 
                 session.send = Session.prototype.send;
                 assert(session.send);
-                expect(session.send(msg)).to.not.exist;
+                expect(session.send(msg, /*canCompressResponse*/ false)).to.not.exist;
                 expect(lastWrittenToHost).to.equal(resultMsg);
             });
         });
@@ -248,7 +249,7 @@ namespace ts.server {
                 };
                 const command = "test";
 
-                session.output(body, command);
+                session.output(body, command, /*canCompressResponse*/ false);
 
                 expect(lastSent).to.deep.equal({
                     seq: 0,
@@ -267,7 +268,7 @@ namespace ts.server {
             lastSent: protocol.Message;
             customHandler = "testhandler";
             constructor() {
-                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, Utils.byteLength, process.hrtime, mockLogger);
+                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, Utils.byteLength, Utils.compress, process.hrtime, mockLogger);
                 this.addProtocolHandler(this.customHandler, () => {
                     return { response: undefined, responseRequired: true };
                 });
@@ -286,7 +287,7 @@ namespace ts.server {
             };
             const command = "test";
 
-            session.output(body, command);
+            session.output(body, command, /*canCompressResponse*/ false);
 
             expect(session.lastSent).to.deep.equal({
                 seq: 0,
@@ -325,7 +326,7 @@ namespace ts.server {
         class InProcSession extends Session {
             private queue: protocol.Request[] = [];
             constructor(private client: InProcClient) {
-                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, Utils.byteLength, process.hrtime, mockLogger);
+                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, Utils.byteLength, Utils.compress, process.hrtime, mockLogger);
                 this.addProtocolHandler("echo", (req: protocol.Request) => ({
                     response: req.arguments,
                     responseRequired: true
@@ -346,11 +347,11 @@ namespace ts.server {
                     ({ response } = this.executeCommand(msg));
                 }
                 catch (e) {
-                    this.output(undefined, msg.command, msg.seq, e.toString());
+                    this.output(undefined, msg.command, /*canCompressResponse*/ false, msg.seq, e.toString());
                     return;
                 }
                 if (response) {
-                    this.output(response, msg.command, msg.seq);
+                    this.output(response, msg.command, /*canCompressResponse*/ false, msg.seq);
                 }
             }
 

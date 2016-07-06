@@ -10,6 +10,15 @@ namespace ts.server {
         stack?: string;
     }
 
+    export interface CompressedData {
+        __compressedDataTag: any;
+        length: number;
+    }
+
+    export interface ServerHost {
+        writeCompressedData(prefix: string, data: CompressedData, suffix: string): void;
+    }
+
     export function generateSpaces(n: number): string {
         if (!spaceCache[n]) {
             let strBuilder = "";
@@ -183,6 +192,7 @@ namespace ts.server {
             cancellationToken: HostCancellationToken,
             useSingleInferredProject: boolean,
             private byteLength: (buf: string, encoding?: string) => number,
+            private compress: (s: string) => CompressedData,
             private hrtime: (start?: number[]) => number[],
             private logger: Logger) {
             this.projectService =
@@ -215,13 +225,27 @@ namespace ts.server {
             this.host.write(line + this.host.newLine);
         }
 
-        public send(msg: protocol.Message) {
+        private sendCompressedDataToClient(prefix: string, data: CompressedData) {
+            this.host.writeCompressedData(prefix, data, this.host.newLine);
+        }
+
+        public send(msg: protocol.Message, canCompressResponse: boolean) {
             const json = JSON.stringify(msg);
             if (this.logger.isVerbose()) {
                 this.logger.info(msg.type + ": " + json);
             }
-            this.sendLineToClient("Content-Length: " + (1 + this.byteLength(json, "utf8")) +
-                "\r\n\r\n" + json);
+            const len = this.byteLength(json, "utf8");
+            if (len < 84000 || !canCompressResponse) {
+                this.sendLineToClient("Content-Length: " + (1 + this.byteLength(json, "utf8")) + "\r\n\r\n" + json);
+            }
+            else {
+                // TODO: measure time
+                const compressed = this.compress(json);
+                if (this.logger.isVerbose()) {
+                    this.logger.info(`compressed message to ${compressed.length}`);
+                }
+                this.sendCompressedDataToClient(`Content-Length: ${compressed.length + 1}`, compressed);
+            }
         }
 
         public configFileDiagnosticEvent(triggerFile: string, configFile: string, diagnostics: ts.Diagnostic[]) {
@@ -236,7 +260,7 @@ namespace ts.server {
                     diagnostics: bakedDiags
                 }
             };
-            this.send(ev);
+            this.send(ev, /*canCompressResponse*/ false);
         }
 
         public event(info: any, eventName: string) {
@@ -246,10 +270,10 @@ namespace ts.server {
                 event: eventName,
                 body: info,
             };
-            this.send(ev);
+            this.send(ev, /*canCompressResponse*/ false);
         }
 
-        private response(info: any, cmdName: string, reqSeq = 0, errorMsg?: string) {
+        private response(info: any, cmdName: string,  canCompressResponse: boolean, reqSeq = 0, errorMsg?: string) {
             const res: protocol.Response = {
                 seq: 0,
                 type: "response",
@@ -263,11 +287,11 @@ namespace ts.server {
             else {
                 res.message = errorMsg;
             }
-            this.send(res);
+            this.send(res, canCompressResponse);
         }
 
-        public output(body: any, commandName: string, requestSequence = 0, errorMessage?: string) {
-            this.response(body, commandName, requestSequence, errorMessage);
+        public output(body: any, commandName: string, canCompressResponse: boolean, requestSequence = 0, errorMessage?: string) {
+            this.response(body, commandName, canCompressResponse, requestSequence, errorMessage);
         }
 
         private getLocation(position: number, scriptInfo: ScriptInfo): protocol.Location {
@@ -1030,7 +1054,7 @@ namespace ts.server {
                 this.changeSeq++;
                 // make sure no changes happen before this one is finished
                 if (project.reloadScript(file)) {
-                    this.output(undefined, CommandNames.Reload, reqSeq);
+                    this.output(undefined, CommandNames.Reload, /*canCompressResponse*/ false, reqSeq);
                 }
             }
         }
@@ -1407,7 +1431,7 @@ namespace ts.server {
             },
             [CommandNames.Configure]: (request: protocol.ConfigureRequest) => {
                 this.projectService.setHostConfiguration(request.arguments);
-                this.output(undefined, CommandNames.Configure, request.seq);
+                this.output(undefined, CommandNames.Configure, /*canCompressResponse*/ false, request.seq);
                 return this.notRequired();
             },
             [CommandNames.Reload]: (request: protocol.ReloadRequest) => {
@@ -1473,7 +1497,7 @@ namespace ts.server {
             }
             else {
                 this.projectService.log("Unrecognized JSON command: " + JSON.stringify(request));
-                this.output(undefined, CommandNames.Unknown, request.seq, "Unrecognized JSON command: " + request.command);
+                this.output(undefined, CommandNames.Unknown, /*canCompressResponse*/ false, request.seq, "Unrecognized JSON command: " + request.command);
                 return { responseRequired: false };
             }
         }
@@ -1501,22 +1525,23 @@ namespace ts.server {
                     this.logger.msg(leader + ": " + elapsedMs.toFixed(4).toString(), "Perf");
                 }
                 if (response) {
-                    this.output(response, request.command, request.seq);
+                    this.output(response, request.command, request.canCompressResponse, request.seq);
                 }
                 else if (responseRequired) {
-                    this.output(undefined, request.command, request.seq, "No content available.");
+                    this.output(undefined, request.command, /*canCompressResponse*/ false, request.seq, "No content available.");
                 }
             }
             catch (err) {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
-                    this.output({ canceled: true }, request.command, request.seq);
+                    this.output({ canceled: true }, request.command, /*canCompressResponse*/ false, request.seq);
                     return;
                 }
                 this.logError(err, message);
                 this.output(
                     undefined,
                     request ? request.command : CommandNames.Unknown,
+                    /*canCompressResponse*/ false,
                     request ? request.seq : 0,
                     "Error processing request. " + (<StackTraceError>err).message + "\n" + (<StackTraceError>err).stack);
             }

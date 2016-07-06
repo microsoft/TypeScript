@@ -366,6 +366,7 @@ namespace ts {
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;
         readonly writeFile = (path: string, content: string) => notImplemented();
+        readonly writeCompressedData = () => notImplemented();
         readonly write = (s: string) => notImplemented();
         readonly createDirectory = (s: string) => notImplemented();
         readonly exit = () => notImplemented();

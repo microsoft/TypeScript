@@ -572,6 +572,8 @@ namespace Harness.LanguageService {
             this.writeMessage(message);
         }
 
+        writeCompressedData() {
+        }
 
         readFile(fileName: string): string {
             if (fileName.indexOf(Harness.Compiler.defaultLibFileName) >= 0) {
@@ -690,7 +692,8 @@ namespace Harness.LanguageService {
             const server = new ts.server.Session(serverHost,
                 { isCancellationRequested: () => false },
                 /*useOneInferredProject*/ false,
-                Buffer ? Buffer.byteLength : (string: string, encoding?: string) => string.length,
+                Utils.byteLength,
+                Utils.compress,
                 process.hrtime, serverHost);
 
             // Fake the connection between the client and the server

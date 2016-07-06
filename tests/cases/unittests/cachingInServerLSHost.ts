@@ -29,6 +29,9 @@ namespace ts {
             writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => {
                 throw new Error("NYI");
             },
+            writeCompressedData() {
+                throw new Error("NYI");
+            },
             resolvePath: (path: string): string => {
                 throw new Error("NYI");
             },

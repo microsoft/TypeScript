@@ -4,14 +4,21 @@
 /* tslint:disable:no-null-keyword */
 
 namespace ts.server {
+
     const readline: NodeJS.ReadLine = require("readline");
     const fs: typeof NodeJS.fs = require("fs");
+    const zlib: typeof NodeJS.zlib = require("zlib");
 
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
         terminal: false,
     });
+
+    function compress(s: string): CompressedData {
+        const gzip = zlib.createGZip();
+        return <CompressedData><any>gzip.gzipSync(new Buffer(s,  "utf8"));
+    }
 
     class Logger implements ts.server.Logger {
         private fd = -1;
@@ -92,7 +99,7 @@ namespace ts.server {
 
     class IOSession extends Session {
         constructor(host: ServerHost, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean, logger: ts.server.Logger) {
-            super(host, cancellationToken, useSingleInferredProject, Buffer.byteLength, process.hrtime, logger);
+            super(host, cancellationToken, useSingleInferredProject, Buffer.byteLength, compress, process.hrtime, logger);
         }
 
         exit() {
@@ -260,15 +267,16 @@ namespace ts.server {
     const pollingWatchedFileSet = createPollingWatchedFileSet();
     const logger = createLoggerFromEnv();
 
-    const pending: string[] = [];
+    const pending: Buffer[] = [];
     let canWrite = true;
-    function writeMessage(s: string) {
+
+    function writeMessage(buf: Buffer) {
         if (!canWrite) {
-            pending.push(s);
+            pending.push(buf);
         }
         else {
             canWrite = false;
-            process.stdout.write(new Buffer(s, "utf8"), setCanWriteFlagAndWriteMessageIfNecessary);
+            process.stdout.write(buf, setCanWriteFlagAndWriteMessageIfNecessary);
         }
     }
 
@@ -279,10 +287,16 @@ namespace ts.server {
         }
     }
 
+    function writeCompressedData(prefix: string, compressed: CompressedData, suffix: string): void {
+        sys.write(prefix);
+        writeMessage(<Buffer><any>compressed);
+        sys.write(suffix);
+    }
+
     const sys = <ServerHost>ts.sys;
 
     // Override sys.write because fs.writeSync is not reliable on Node 4
-    sys.write = (s: string) => writeMessage(s);
+    sys.write = (s: string) => writeMessage(new Buffer(s, "utf8"));
     sys.watchFile = (fileName, callback) => {
         const watchedFile = pollingWatchedFileSet.addFile(fileName, callback);
         return {
@@ -294,6 +308,7 @@ namespace ts.server {
     sys.clearTimeout = clearTimeout;
     sys.setImmediate = setImmediate;
     sys.clearImmediate = clearImmediate;
+    sys.writeCompressedData = writeCompressedData;
 
     let cancellationToken: HostCancellationToken;
     try {

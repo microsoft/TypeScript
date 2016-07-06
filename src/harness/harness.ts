@@ -70,6 +70,10 @@ namespace Utils {
         return Buffer ? Buffer.byteLength(s, encoding) : s.length;
     }
 
+    export function compress(s: string): any {
+        return Buffer ? new Buffer(s, "utf8") : { s, length: s.length };
+    }
+
     export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
         const environment = getExecutionEnvironment();
         switch (environment) {
