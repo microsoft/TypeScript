@@ -82,13 +82,13 @@ namespace ts {
         export function enable() {
             counters = { };
             measures = {
-                programTime: 0,
-                parseTime: 0,
-                bindTime: 0,
-                checkTime: 0,
-                emitTime: 0,
-                ioReadTime: 0,
-                ioWriteTime: 0,
+                "I/O Read": 0,
+                "I/O Write": 0,
+                "Program": 0,
+                "Parse": 0,
+                "Bind": 0,
+                "Check": 0,
+                "Emit": 0,
             };
 
             profilerEvent = typeof onProfilerEvent === "function" && onProfilerEvent.profiler === true

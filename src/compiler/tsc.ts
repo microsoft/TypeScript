@@ -579,6 +579,10 @@ namespace ts {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
 
+            const programTime = performance.getDuration("Program");
+            const bindTime = performance.getDuration("Bind");
+            const checkTime = performance.getDuration("Check");
+            const emitTime = performance.getDuration("Emit");
             if (compilerOptions.extendedDiagnostics) {
                 performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
             }
@@ -589,16 +593,12 @@ namespace ts {
                 // emit time includes I/O write time. We preserve this behavior so we can accurately compare times.
                 reportTimeStatistic("I/O read", performance.getDuration("I/O Read"));
                 reportTimeStatistic("I/O write", performance.getDuration("I/O Write"));
-                const programTime = performance.getDuration("Program");
-                const bindTime = performance.getDuration("Bind");
-                const checkTime = performance.getDuration("Check");
-                const emitTime = performance.getDuration("Emit");
                 reportTimeStatistic("Parse time", programTime);
                 reportTimeStatistic("Bind time", bindTime);
                 reportTimeStatistic("Check time", checkTime);
                 reportTimeStatistic("Emit time", emitTime);
-                reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
             }
+            reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
 
             performance.disable();
         }
