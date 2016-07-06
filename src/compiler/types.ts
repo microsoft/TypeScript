@@ -2510,6 +2510,7 @@ namespace ts {
         Warning,
         Error,
         Message,
+        CodeFix
     }
 
     export enum ModuleResolutionKind {

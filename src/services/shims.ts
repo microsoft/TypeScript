@@ -230,6 +230,7 @@ namespace ts {
          */
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string;
 
+        getCodeRefactors(fileName: string, start: number, end: number): string;
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
     }
@@ -883,6 +884,15 @@ namespace ts {
             return this.forwardJSONCall(
                 `getDocCommentTemplateAtPosition('${fileName}', ${position})`,
                 () => this.languageService.getDocCommentTemplateAtPosition(fileName, position)
+            );
+        }
+
+        public getCodeRefactors(fileName: string, start: number, end: number): string {
+            return this.forwardJSONCall(
+                `getCodeRefactors( '${fileName}', ${start}, ${end}')`,
+                () => {
+                    return this.languageService.getCodeRefactors(fileName, start, end);
+                }
             );
         }
 

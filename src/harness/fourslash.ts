@@ -1545,6 +1545,10 @@ namespace FourSlash {
             }
         }
 
+        private removeWhitespace(text: string): string {
+            return text.replace(/\s/g, "");
+        }
+
         public goToBOF() {
             this.goToPosition(0);
         }
@@ -1979,6 +1983,30 @@ namespace FourSlash {
             }
         }
 
+        public verifyCodeRefactor(expectedText: string) {
+            const fileName = this.activeFile.fileName;
+            const markers = this.getMarkers();
+            if (markers.length !== 2) {
+                this.raiseError("Markers expected.");
+            }
+            const actual = this.languageService.getCodeRefactors(this.activeFile.fileName, markers[0].position, markers[1].position);
+
+            if (!actual || actual.length == 0) {
+                this.raiseError("No codefixes returned.");
+            }
+
+            if (actual.length > 1) {
+                this.raiseError("More than 1 codefix returned.");
+            }
+
+            this.applyEdits(fileName, actual[0].textChanges, /*isFormattingEdit*/ false);
+            const actualText = this.getFileContent(fileName);
+
+            // We expect the editor to do the final formatting, so we can strip the compare ignoring whitespace
+            if (this.removeWhitespace(expectedText) !== this.removeWhitespace(actualText)) {
+                this.raiseError(`Expected insertion: '${expectedText}', actual insertion '${actualText}'.`);
+            }
+        }
         /*
             Verify that returned navigationItems from getNavigateToItems have matched searchValue, matchKind, and kind.
             Report an error if getNavigateToItems does not find any matched searchValue.
@@ -3072,6 +3100,10 @@ namespace FourSlashInterface {
 
         public navigationItemsListCount(count: number, searchValue: string, matchKind?: string) {
             this.state.verifyNavigationItemsCount(count, searchValue, matchKind);
+        }
+
+        public codeRefactor(expectedText: string) {
+            this.state.verifyCodeRefactor(expectedText);
         }
 
         public navigationItemsListContains(

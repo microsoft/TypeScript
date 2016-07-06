@@ -453,6 +453,9 @@ namespace Harness.LanguageService {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
         }
+        getCodeRefactors(fileName: string, start: number, end: number): ts.CodeFix[] {
+            return unwrapJSONCallResult(this.shim.getCodeRefactors(fileName, start, end));
+        }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }

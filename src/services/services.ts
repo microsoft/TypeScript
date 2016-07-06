@@ -11,6 +11,7 @@
 /// <reference path='jsTyping.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
+/// <reference path='coderefactors\references.ts' />
 
 namespace ts {
     /** The version of the language service API */
@@ -1147,6 +1148,7 @@ namespace ts {
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
+        getCodeRefactors(fileName: string, start: number, end: number): CodeFix[];
         getEmitOutput(fileName: string): EmitOutput;
 
         getProgram(): Program;
@@ -1191,6 +1193,11 @@ namespace ts {
     export class TextChange {
         span: TextSpan;
         newText: string;
+    }
+
+    export interface CodeFix {
+        name: string;
+        textChanges: TextChange[];
     }
 
     export interface TextInsertion {
@@ -2917,6 +2924,7 @@ namespace ts {
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
+        const codeRefactorProvider: codeRefactor.CodeRefactorProvider = new codeRefactor.CodeRefactorProvider();
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
         let lastProjectVersion: string;
@@ -7683,6 +7691,26 @@ namespace ts {
             return [];
         }
 
+
+        function getCodeRefactors(fileName: string, start: number, end: number): CodeFix[] {
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            const checker = program.getTypeChecker();
+            let fixes: CodeFix[] = [];
+
+            const context = {
+                errorCode: "",
+                sourceFile: sourceFile,
+                span: { start, length: end - start },
+                checker: checker,
+                newLineCharacter: getNewLineOrDefaultFromHost(host)
+            };
+
+            fixes = codeRefactorProvider.getCodeRefactors(context);
+
+            return fixes;
+        }
+
         /**
          * Checks if position points to a valid position to add JSDoc comments, and if so,
          * returns the appropriate template. Otherwise returns an empty string.
@@ -8153,6 +8181,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
+            getCodeRefactors,
             getEmitOutput,
             getNonBoundSourceFile,
             getProgram

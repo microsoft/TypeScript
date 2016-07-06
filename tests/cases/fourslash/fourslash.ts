@@ -226,6 +226,7 @@ declare namespace FourSlashInterface {
         getSyntacticDiagnostics(expected: string): void;
         getSemanticDiagnostics(expected: string): void;
         ProjectInfo(expected: string[]): void;
+        codeRefactor(expectedText: string);
     }
     class edit {
         backspace(count?: number): void;
