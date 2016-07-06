@@ -201,6 +201,7 @@ namespace ts {
             this.kind = kind;
             this.pos = pos;
             this.end = end;
+            this.flags = NodeFlags.None;
             this.parent = undefined;
         }
 
@@ -356,6 +357,7 @@ namespace ts {
         constructor(pos: number, end: number) {
             this.pos = pos;
             this.end = end;
+            this.flags = NodeFlags.None;
             this.parent = undefined;
         }
 
@@ -420,7 +422,6 @@ namespace ts {
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(pos, end);
             this.kind = kind;
-            this.flags = NodeFlags.None;
         }
     }
 
