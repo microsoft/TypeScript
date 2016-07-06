@@ -1,6 +1,8 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: test0.ts
+//// /// <reference path="./ambientModules.d.ts" />
+//// /// <reference path="./ambientModules2.d.ts" />
 //// import * as foo1 from "/*import_as0*/
 //// import * as foo2 from "a/*import_as1*/
 
@@ -12,10 +14,10 @@
 
 // @Filename: ambientModules.d.ts
 //// declare module "ambientModule" {}
-//// declare module "otherAmbientModule" {}
+//// declare module "otherAmbientModule" {} /*dummy0*/
 
 // @Filename: ambientModules2.d.ts
-//// declare module "otherOtherAmbientModule" {}
+//// declare module "otherOtherAmbientModule" {} /*dummy1*/
 
 const kinds = ["import_as", "import_equals", "require"];
 

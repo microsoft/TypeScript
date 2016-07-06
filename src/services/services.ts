@@ -4477,115 +4477,21 @@ namespace ts {
                     return moduleName;
                 });
 
-                // Check for node_modules. We only offer completions for modules that are listed in the
-                // package.json for a project for efficiency and to ensure that the completion list is
-                // not polluted with sub-dependencies
-                ts.forEach(findPackageJsons(scriptPath), (packageJson) => {
-                    const package = tryReadingPackageJson(packageJson);
-                    if (!package) {
-                        return;
+                forEach(enumerateNodeModulesVisibleToScript(host, scriptPath, moduleNameFragment), visibleModule => {
+                    if (!isNestedModule) {
+                        nonRelativeModules.push(visibleModule.canBeImported ? visibleModule.moduleName : ensureTrailingDirectorySeparator(visibleModule.moduleName));
                     }
+                    else {
+                        const nestedFiles = host.readDirectory(visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/undefined, /*include*/["./*"]);
 
-                    const nodeModulesDir = combinePaths(getDirectoryPath(packageJson), "node_modules");
-                    const foundModuleNames: string[] = [];
-
-                    if (package.dependencies) {
-                        addPotentialPackageNames(package.dependencies, moduleNameFragment, foundModuleNames);
+                        forEach(nestedFiles, (f) => {
+                            const nestedModule = removeFileExtension(getBaseFileName(f));
+                            nonRelativeModules.push(nestedModule);
+                        });
                     }
-                    if (package.devDependencies) {
-                        addPotentialPackageNames(package.devDependencies, moduleNameFragment, foundModuleNames);
-                    }
-
-                    ts.forEach(foundModuleNames, (moduleName) => {
-                        if (isNestedModule && moduleName === moduleNameFragment) {
-                            const moduleDir = combinePaths(nodeModulesDir, moduleName);
-                            if (directoryProbablyExists(moduleDir, host)) {
-                                const nestedFiles = host.readDirectory(moduleDir, supportedTypeScriptExtensions, /*exclude*/undefined, /*include*/["./*"]);
-
-                                ts.forEach(nestedFiles, (f) => {
-                                    const nestedModule = removeFileExtension(getBaseFileName(f));
-                                    nonRelativeModules.push(nestedModule);
-                                });
-                            }
-                        }
-                        else if (startsWith(moduleName, fragment)) {
-                            if (moduleCanBeImported(combinePaths(nodeModulesDir, moduleName))) {
-                                nonRelativeModules.push(moduleName);
-                            }
-                            else {
-                                nonRelativeModules.push(ensureTrailingDirectorySeparator(moduleName));
-                            }
-                        }
-                    });
                 });
 
                 return deduplicate(nonRelativeModules);
-            }
-
-            function findPackageJsons(currentDir: string): string[] {
-                const paths: string[] = [];
-                let currentConfigPath: string;
-                while (true) {
-                    currentConfigPath = findConfigFile(currentDir, (f) => host.fileExists(f), "package.json");
-                    if (currentConfigPath) {
-                        paths.push(currentConfigPath);
-
-                        currentDir = getDirectoryPath(currentConfigPath);
-                        const parent = getDirectoryPath(currentDir);
-                        if (currentDir === parent) {
-                            break;
-                        }
-                        currentDir = parent;
-                    }
-                    else {
-                        break;
-                    }
-                }
-
-                return paths;
-            }
-
-            function tryReadingPackageJson(filePath: string) {
-                try {
-                    const fileText = host.readFile(filePath);
-                    return JSON.parse(fileText);
-                }
-                catch (e) {
-                    return undefined;
-                }
-            }
-
-            function addPotentialPackageNames(dependencies: any, prefix: string, result: string[]) {
-                for (const dep in dependencies) {
-                    if (dependencies.hasOwnProperty(dep) && startsWith(dep, prefix)) {
-                        result.push(dep);
-                    }
-                }
-            }
-
-            /*
-             * A module can be imported by name alone if one of the following is true:
-             *     It defines the "typings" property in its package.json
-             *     The module has a "main" export and an index.d.ts file
-             *     The module has an index.ts
-             */
-            function moduleCanBeImported(modulePath: string): boolean {
-                const packagePath = combinePaths(modulePath, "package.json");
-
-                let hasMainExport = false;
-                if (host.fileExists(packagePath)) {
-                    const package = tryReadingPackageJson(packagePath);
-                    if (package) {
-                        if (package.typings) {
-                            return true;
-                        }
-                        hasMainExport = !!package.main;
-                    }
-                }
-
-                hasMainExport = hasMainExport || host.fileExists(combinePaths(modulePath, "index.js"));
-
-                return (hasMainExport && host.fileExists(combinePaths(modulePath, "index.d.ts"))) || host.fileExists(combinePaths(modulePath, "index.ts"));
             }
 
             function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number) {

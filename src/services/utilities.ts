@@ -6,6 +6,12 @@ namespace ts {
         list: Node;
     }
 
+    export interface VisibleModuleInfo {
+        moduleName: string;
+        moduleDir: string;
+        canBeImported: boolean;
+    }
+
     export function getLineStartPositionForPosition(position: number, sourceFile: SourceFile): number {
         const lineStarts = sourceFile.getLineStarts();
         const line = sourceFile.getLineAndCharacterOfPosition(position).line;
@@ -926,5 +932,102 @@ namespace ts {
             scriptKind = getScriptKindFromFileName(fileName);
         }
         return ensureScriptKind(fileName, scriptKind);
+    }
+
+    export function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string, modulePrefix?: string) {
+        const result: VisibleModuleInfo[] = [];
+        findPackageJsons(scriptPath).forEach((packageJson) => {
+            const package = tryReadingPackageJson(packageJson);
+            if (!package) {
+                return;
+            }
+
+            const nodeModulesDir = combinePaths(getDirectoryPath(packageJson), "node_modules");
+            const foundModuleNames: string[] = [];
+
+            if (package.dependencies) {
+                addPotentialPackageNames(package.dependencies, modulePrefix, foundModuleNames);
+            }
+            if (package.devDependencies) {
+                addPotentialPackageNames(package.devDependencies, modulePrefix, foundModuleNames);
+            }
+
+            forEach(foundModuleNames, (moduleName) => {
+                const moduleDir = combinePaths(nodeModulesDir, moduleName);
+                result.push({
+                    moduleName,
+                    moduleDir,
+                    canBeImported: moduleCanBeImported(moduleDir)
+                });
+            });
+        });
+
+        return result;
+
+        function findPackageJsons(currentDir: string): string[] {
+            const paths: string[] = [];
+            let currentConfigPath: string;
+            while (true) {
+                currentConfigPath = findConfigFile(currentDir, (f) => host.fileExists(f), "package.json");
+                if (currentConfigPath) {
+                    paths.push(currentConfigPath);
+
+                    currentDir = getDirectoryPath(currentConfigPath);
+                    const parent = getDirectoryPath(currentDir);
+                    if (currentDir === parent) {
+                        break;
+                    }
+                    currentDir = parent;
+                }
+                else {
+                    break;
+                }
+            }
+
+            return paths;
+        }
+
+        function tryReadingPackageJson(filePath: string) {
+            try {
+                const fileText = host.readFile(filePath);
+                return JSON.parse(fileText);
+            }
+            catch (e) {
+                return undefined;
+            }
+        }
+
+        function addPotentialPackageNames(dependencies: any, prefix: string, result: string[]) {
+            for (const dep in dependencies) {
+                if (dependencies.hasOwnProperty(dep) && (!prefix || startsWith(dep, prefix))) {
+                    result.push(dep);
+                }
+            }
+        }
+
+        /*
+         * A module can be imported by name alone if one of the following is true:
+         *     It defines the "typings" property in its package.json
+         *     The module has a "main" export and an index.d.ts file
+         *     The module has an index.ts
+         */
+        function moduleCanBeImported(modulePath: string): boolean {
+            const packagePath = combinePaths(modulePath, "package.json");
+
+            let hasMainExport = false;
+            if (host.fileExists(packagePath)) {
+                const package = tryReadingPackageJson(packagePath);
+                if (package) {
+                    if (package.typings) {
+                        return true;
+                    }
+                    hasMainExport = !!package.main;
+                }
+            }
+
+            hasMainExport = hasMainExport || host.fileExists(combinePaths(modulePath, "index.js"));
+
+            return (hasMainExport && host.fileExists(combinePaths(modulePath, "index.d.ts"))) || host.fileExists(combinePaths(modulePath, "index.ts"));
+        }
     }
 }
