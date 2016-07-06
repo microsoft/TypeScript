@@ -941,7 +941,7 @@ namespace ts {
          * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
          * files or directories, does not match subdirectories that start with a . character
          */
-        const doubleAsteriskRegexFragment = usage === "exclude" ? "(/.+?)?" : "(/[^/.][^/]*)*?"
+        const doubleAsteriskRegexFragment = usage === "exclude" ? "(/.+?)?" : "(/[^/.][^/]*)*?";
 
         let pattern = "";
         let hasWrittenSubpattern = false;
@@ -987,11 +987,11 @@ namespace ts {
                         // The * and ? wildcards should not match directories or files that start with . if they
                         // appear first in a component. Dotted directories and files can be included explicitly
                         // like so: **/.*/.*
-                        if (startsWith(component, "*")) {
+                        if (component.indexOf("*") === 0) {
                             subpattern += "([^./]" + singleAsteriskRegexFragment + ")?";
                             component = component.substr(1);
                         }
-                        else if (startsWith(component, "?")) {
+                        else if (component.indexOf("?") === 0) {
                             subpattern += "[^./]";
                             component = component.substr(1);
                         }
