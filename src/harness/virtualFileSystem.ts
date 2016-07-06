@@ -181,8 +181,14 @@ namespace Utils {
             return fileEntries;
 
             function getFilesRecursive(dir: VirtualDirectory<T>, result: VirtualFile<T>[]) {
-                ts.forEach(dir.getFiles(), (e) => result.push(e));
-                ts.forEach(dir.getDirectories(), (subDir) => getFilesRecursive(subDir, result));
+                const files = dir.getFiles();
+                const dirs = dir.getDirectories();
+                for (const file of files) {
+                    result.push(file);
+                }
+                for (const subDir of dirs) {
+                    getFilesRecursive(subDir, result);
+                }
             }
         }
 
