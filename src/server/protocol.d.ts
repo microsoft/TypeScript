@@ -111,7 +111,7 @@ declare namespace ts.server.protocol {
     }
 
     export interface IndentationRequestArgs extends FileLocationRequestArgs {
-        options: EditorSettings;
+        options?: EditorSettings;
     }
 
     /**

@@ -783,7 +783,8 @@ namespace ts.server {
         private getIndentation(args: protocol.IndentationRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPosition(args, project.getScriptInfoForNormalizedPath(file));
-            const indentation = project.languageService.getIndentationAtPosition(file, position, args.options);
+            const options = args.options || this.projectService.getFormatCodeOptions(file);
+            const indentation = project.languageService.getIndentationAtPosition(file, position, options);
             return { position, indentation };
         }
 
@@ -855,17 +856,20 @@ namespace ts.server {
 
         private getFormattingEditsForRangeFull(args: protocol.FormatRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
-            return project.languageService.getFormattingEditsForRange(file, args.position, args.endPosition, args.options);
+            const options = args.options || this.projectService.getFormatCodeOptions(file);
+            return project.languageService.getFormattingEditsForRange(file, args.position, args.endPosition, options);
         }
 
         private getFormattingEditsForDocumentFull(args: protocol.FormatRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
-            return project.languageService.getFormattingEditsForDocument(file, args.options);
+            const options = args.options || this.projectService.getFormatCodeOptions(file);
+            return project.languageService.getFormattingEditsForDocument(file, options);
         }
 
         private getFormattingEditsAfterKeystrokeFull(args: protocol.FormatOnKeyRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
-            return project.languageService.getFormattingEditsAfterKeystroke(file, args.position, args.key, args.options);
+            const options = args.options || this.projectService.getFormatCodeOptions(file);
+            return project.languageService.getFormattingEditsAfterKeystroke(file, args.position, args.key, options);
         }
 
         private getFormattingEditsAfterKeystroke(args: protocol.FormatOnKeyRequestArgs): protocol.CodeEdit[] {
