@@ -219,21 +219,7 @@ namespace Harness.LanguageService {
             return snapshot.getText(0, snapshot.getLength());
         }
         resolvePath(path: string): string {
-            // Reduce away "." and ".."
-            const parts = path.split("/");
-            const res: string[] = [];
-            for (let i = 0; i < parts.length; i++) {
-                if (parts[i] === ".") {
-                    continue;
-                }
-                else if (parts[i] === ".." && res.length > 0) {
-                    res.splice(res.length - 1, 1);
-                }
-                else {
-                    res.push(parts[i]);
-                }
-            }
-            return res.join("/");
+            return ts.normalizePath(ts.isRootedDiskPath(path) ? path : ts.combinePaths(this.getCurrentDirectory(), path));
         }
 
 

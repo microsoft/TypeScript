@@ -4389,13 +4389,13 @@ namespace ts {
 
                 const toComplete = getBaseFileName(fragment);
                 const absolutePath = normalizeSlashes(host.resolvePath(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment)));
-                const baseDir = getDirectoryPath(absolutePath);
+                const baseDir = toComplete ? getDirectoryPath(absolutePath) : absolutePath;
 
 
                 if (directoryProbablyExists(baseDir, host)) {
                     // Enumerate the available files
                     const files = host.readDirectory(baseDir, extensions, /*exclude*/undefined, /*include*/["./*"]);
-                    ts.forEach(files, (f) => {
+                    forEach(files, (f) => {
                         const fName = includeExtensions ? getBaseFileName(f) : removeFileExtension(getBaseFileName(f));
 
                         if (startsWith(fName, toComplete)) {
@@ -4411,7 +4411,7 @@ namespace ts {
                     // If possible, get folder completion as well
                     if (host.getDirectories) {
                         const directories = host.getDirectories(baseDir);
-                        ts.forEach(directories, (d) => {
+                        forEach(directories, (d) => {
                             const dName = getBaseFileName(removeTrailingDirectorySeparator(d));
 
                             if (startsWith(dName, toComplete)) {
