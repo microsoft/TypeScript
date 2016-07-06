@@ -109,8 +109,8 @@ namespace Commands {
     };
     listKnownAuthors.description = "List known authors as listed in .mailmap file.";
 
-    export const listAuthors: Command = function (spec = "") {
-        const cmd = "git shortlog -se " + spec;
+    export const listAuthors: Command = function (...specs:string[]) {
+        const cmd = "git shortlog -se " + specs.join(" ");
         console.log(cmd);
         const outputRegExp = /\d+\s+([^<]+)<([^>]+)>/;
         const tty = process.platform === 'win32' ? 'CON' : '/dev/tty';
