@@ -475,8 +475,7 @@ namespace ts {
 
                 for (; pos < end; pos++) {
                     const ch = sourceFile.text.charCodeAt(pos);
-                    if (!isWhiteSpace(ch) || isLineBreak(ch)) {
-                        // Either found lineBreak or non whiteSpace
+                    if (!isWhiteSpaceSingleLine(ch)) {
                         return pos;
                     }
                 }
@@ -495,8 +494,7 @@ namespace ts {
             function isName(pos: number, end: number, sourceFile: SourceFile, name: string) {
                 return pos + name.length < end &&
                     sourceFile.text.substr(pos, name.length) === name &&
-                    (isWhiteSpace(sourceFile.text.charCodeAt(pos + name.length)) ||
-                        isLineBreak(sourceFile.text.charCodeAt(pos + name.length)));
+                    isWhiteSpace(sourceFile.text.charCodeAt(pos + name.length));
             }
 
             function isParamTag(pos: number, end: number, sourceFile: SourceFile) {
@@ -691,7 +689,7 @@ namespace ts {
                 return paramDocComments;
 
                 function consumeWhiteSpaces(pos: number) {
-                    while (pos < end && isWhiteSpace(sourceFile.text.charCodeAt(pos))) {
+                    while (pos < end && isWhiteSpaceSingleLine(sourceFile.text.charCodeAt(pos))) {
                         pos++;
                     }
 
@@ -5747,7 +5745,7 @@ namespace ts {
 
                             // Avoid recalculating getStart() by iterating backwards.
                             for (let j = ifKeyword.getStart() - 1; j >= elseKeyword.end; j--) {
-                                if (!isWhiteSpace(sourceFile.text.charCodeAt(j))) {
+                                if (!isWhiteSpaceSingleLine(sourceFile.text.charCodeAt(j))) {
                                     shouldCombindElseAndIf = false;
                                     break;
                                 }
