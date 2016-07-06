@@ -157,7 +157,7 @@ class ExtensionRunner extends RunnerBase {
 
         const allDiagnostics = ts.sortAndDeduplicateDiagnostics(ts.concatenate(diagnostics, emitResult.diagnostics));
 
-        return new Harness.Compiler.CompilerResult(fileResults, allDiagnostics, service.getProgram(), host.getCurrentDirectory(), emitResult.sourceMaps, this.getTraces());
+        return new Harness.Compiler.CompilerResult(fileResults, allDiagnostics, /*program*/undefined, host.getCurrentDirectory(), emitResult.sourceMaps, this.getTraces());
 
         function writeFile(fileName: string, code: string, writeByteOrderMark: boolean, onError: (message: string) => void, sourceFiles: ts.SourceFile[]) {
             fileResults.push({
@@ -178,7 +178,7 @@ class ExtensionRunner extends RunnerBase {
 
         const allDiagnostics = ts.sortAndDeduplicateDiagnostics(ts.concatenate(diagnostics, emitResult.diagnostics));
 
-        return new Harness.Compiler.CompilerResult(fileResults, allDiagnostics, program, this.mockHost.getCurrentDirectory(), emitResult.sourceMaps, this.getTraces());
+        return new Harness.Compiler.CompilerResult(fileResults, allDiagnostics, /*program*/undefined, this.mockHost.getCurrentDirectory(), emitResult.sourceMaps, this.getTraces());
         function writeFile(fileName: string, code: string, writeByteOrderMark: boolean, onError: (message: string) => void, sourceFiles: ts.SourceFile[]) {
             fileResults.push({
                 fileName,
