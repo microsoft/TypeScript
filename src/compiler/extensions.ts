@@ -32,17 +32,30 @@ namespace ts {
         new (state: {ts: typeof ts, args: any, host: CompilerHost, program: Program, checker: TypeChecker}): LintWalker;
     }
 
+    export interface LanguageServiceHost {} // The members for these interfaces are provided in the services layer
+    export interface LanguageService {}
+    export interface LanguageServiceProvider {}
+    export interface DocumentRegistry {}
+
+    export interface LanguageServiceProviderStatic extends BaseProviderStatic {
+        readonly ["extension-kind"]: ExtensionKind.LanguageService;
+        new (state: { ts: typeof ts, args: any, host: LanguageServiceHost, service: LanguageService, registry: DocumentRegistry }): LanguageServiceProvider;
+    }
+
     export namespace ExtensionKind {
         export const SemanticLint: "semantic-lint" = "semantic-lint";
         export type SemanticLint = "semantic-lint";
         export const SyntacticLint: "syntactic-lint" = "syntactic-lint";
         export type SyntacticLint = "syntactic-lint";
+        export const LanguageService: "language-service" = "language-service";
+        export type LanguageService = "language-service";
     }
-    export type ExtensionKind = ExtensionKind.SemanticLint | ExtensionKind.SyntacticLint;
+    export type ExtensionKind = ExtensionKind.SemanticLint | ExtensionKind.SyntacticLint | ExtensionKind.LanguageService;
 
     export interface ExtensionCollectionMap {
         "syntactic-lint"?: SyntacticLintExtension[];
         "semantic-lint"?: SemanticLintExtension[];
+        "language-service"?: LanguageServiceExtension[];
         [index: string]: Extension[] | undefined;
     }
 
@@ -70,7 +83,12 @@ namespace ts {
         ctor: SemanticLintProviderStatic;
     }
 
-    export type Extension = SyntacticLintExtension | SemanticLintExtension;
+    // @kind(ExtensionKind.LanguageService)
+    export interface LanguageServiceExtension extends ExtensionBase {
+        ctor: LanguageServiceProviderStatic;
+    }
+
+    export type Extension = SyntacticLintExtension | SemanticLintExtension | LanguageServiceExtension;
 
     export interface ExtensionCache {
         getCompilerExtensions(): ExtensionCollectionMap;
@@ -196,7 +214,7 @@ namespace ts {
                 if (resolved) {
                     extMap[name] = resolved.resolvedFileName;
                 }
-            })
+            });
             return extMap;
         }
 
@@ -250,6 +268,7 @@ namespace ts {
                             switch (ext.kind) {
                                 case ExtensionKind.SemanticLint:
                                 case ExtensionKind.SyntacticLint:
+                                case ExtensionKind.LanguageService:
                                     if (typeof potentialExtension !== "function") {
                                         diagnostics.push(createCompilerDiagnostic(
                                             Diagnostics.Extension_0_exported_member_1_has_extension_kind_2_but_was_type_3_when_type_4_was_expected,
@@ -261,7 +280,7 @@ namespace ts {
                                         ));
                                         return;
                                     }
-                                    (ext as (SemanticLintExtension | SyntacticLintExtension)).ctor = potentialExtension as (SemanticLintProviderStatic | SyntacticLintProviderStatic);
+                                    (ext as (SemanticLintExtension | SyntacticLintExtension | LanguageServiceExtension)).ctor = potentialExtension as (SemanticLintProviderStatic | SyntacticLintProviderStatic | LanguageServiceProviderStatic);
                                     break;
                                 default:
                                     // Include a default case which just puts the extension unchecked onto the base extension

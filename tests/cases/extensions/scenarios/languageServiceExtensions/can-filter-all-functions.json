@@ -1,0 +1,9 @@
+{
+    "inputFiles": [
+        "atotc.ts"
+    ],
+    "availableExtensions": ["test-service-filters"],
+    "compilerOptions": {
+        "extensions": ["test-service-filters"]
+    }
+}

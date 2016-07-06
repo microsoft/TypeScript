@@ -1,0 +1,9 @@
+{
+    "inputFiles": [
+        "hello.ts"
+    ],
+    "availableExtensions": ["test-language-service"],
+    "compilerOptions": {
+        "extensions": ["test-language-service"]
+    }
+}
