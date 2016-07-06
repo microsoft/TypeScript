@@ -11,8 +11,8 @@ namespace ts.server {
     }
 
     export interface CompressedData {
-        __compressedDataTag: any;
         length: number;
+        data: any;
     }
 
     export interface ServerHost {

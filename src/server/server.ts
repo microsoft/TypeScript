@@ -17,7 +17,8 @@ namespace ts.server {
 
     function compress(s: string): CompressedData {
         const gzip = zlib.createGZip();
-        return <CompressedData><any>gzip.gzipSync(new Buffer(s,  "utf8"));
+        const data = gzip.gzipSync(new Buffer(s,  "utf8"));
+        return { data, length: data.length };
     }
 
     class Logger implements ts.server.Logger {
@@ -289,7 +290,7 @@ namespace ts.server {
 
     function writeCompressedData(prefix: string, compressed: CompressedData, suffix: string): void {
         sys.write(prefix);
-        writeMessage(<Buffer><any>compressed);
+        writeMessage(compressed.data);
         sys.write(suffix);
     }
 
