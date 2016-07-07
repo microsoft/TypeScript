@@ -1069,6 +1069,11 @@ namespace ts {
         error?(s: string): void;
         useCaseSensitiveFileNames?(): boolean;
 
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
+        resolvePath(path: string): string;
+        readFile(path: string, encoding?: string): string;
+        fileExists(path: string): boolean;
+
         /*
          * LS host can optionally implement this method if it wants to be completely in charge of module name resolution.
          * if implementation is omitted then language service will use built-in module resolution logic and get answers to
@@ -1961,7 +1966,16 @@ namespace ts {
         sourceMapText?: string;
     }
 
+    // Matches the beginning of a triple slash directive
+    const tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</;
 
+    /**
+     * Matches a triple slash reference directive with an incomplete string literal for its path. Used
+     * to determine if the caret is currently within the string literal and capture the literal fragment
+     * for completions.
+     * For example, this matches /// <reference path="fragment
+     */
+    const tripleSlashDirectiveFragmentRegex = /^\/\/\/\s*<reference\s+path\s*=\s*(?:'|")([^'"]+)$/;
 
     let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
 
@@ -2787,11 +2801,15 @@ namespace ts {
 
     function isNameOfExternalModuleImportOrDeclaration(node: Node): boolean {
         if (node.kind === SyntaxKind.StringLiteral) {
-            return isNameOfModuleDeclaration(node) ||
-                (isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node);
+            return isNameOfModuleDeclaration(node) || isExpressionOfExternalModuleImportEqualsDeclaration(node);
         }
 
         return false;
+    }
+
+    function isExpressionOfExternalModuleImportEqualsDeclaration(node: Node) {
+        return isExternalModuleImportEqualsDeclaration(node.parent.parent) &&
+            getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node;
     }
 
     /** Returns true if the position is within a comment */
@@ -2822,6 +2840,15 @@ namespace ts {
                 }
                 return false;
             });
+        }
+    }
+
+    function isInReferenceComment(sourceFile: SourceFile, position: number): boolean {
+        return isInCommentHelper(sourceFile, position, isReferenceComment);
+
+        function isReferenceComment(c: CommentRange): boolean {
+            const commentText = sourceFile.text.substring(c.pos, c.end);
+            return tripleSlashDirectivePrefixRegex.test(commentText);
         }
     }
 
@@ -4114,6 +4141,10 @@ namespace ts {
                 return getStringLiteralCompletionEntries(sourceFile, position);
             }
 
+            if (isInReferenceComment(sourceFile, position)) {
+                return getTripleSlashReferenceCompletion(sourceFile, position);
+            }
+
             const completionData = getCompletionData(fileName, position);
             if (!completionData) {
                 return undefined;
@@ -4256,12 +4287,26 @@ namespace ts {
 
                 const argumentInfo = SignatureHelp.getContainingArgumentInfo(node, position, sourceFile);
                 if (argumentInfo) {
-                    // Get string literal completions from specialized signatures of the target
-                    return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo);
+                    // Try to get string literal completions from specialized signatures of the target
+                    const callExpressionCompletionEntries = getStringLiteralCompletionEntriesFromCallExpression(argumentInfo);
+                    if (callExpressionCompletionEntries) {
+                        return callExpressionCompletionEntries;
+                    }
+                    else if (isRequireCall(node.parent, false)) {
+                        // If that failed but this call mataches the signature of a require call, treat the literal as an external module name
+                        return getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node);
+                    }
+                    else {
+                        return undefined;
+                    }
                 }
                 else if (isElementAccessExpression(node.parent) && node.parent.argumentExpression === node) {
                     // Get all names of properties on the expression
                     return getStringLiteralCompletionEntriesFromElementAccess(node.parent);
+                }
+                else if (node.parent.kind === SyntaxKind.ImportDeclaration || isExpressionOfExternalModuleImportEqualsDeclaration(node)) {
+                    // Get all known external module names or complete a path to a module
+                    return getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node);
                 }
                 else {
                     // Otherwise, get the completions from the contextual type if one exists
@@ -4333,6 +4378,159 @@ namespace ts {
                         });
                     }
                 }
+            }
+
+            function getStringLiteralCompletionEntriesFromModuleNames(node: StringLiteral) {
+                const literalValue = node.text;
+                let result: CompletionEntry[];
+
+                const isRelativePath = startsWith(literalValue, ".");
+                const scriptDir = getDirectoryPath(node.getSourceFile().path);
+                if (isRelativePath || isRootedDiskPath(literalValue)) {
+                    result = getCompletionEntriesForDirectoryFragment(literalValue, scriptDir, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/false);
+                }
+                else {
+                    // Check for node modules
+                    result = getCompletionEntriesForNonRelativeModules(literalValue, scriptDir);
+                }
+
+                return {
+                    isMemberCompletion: false,
+                    isNewIdentifierLocation: false,
+                    entries: result
+                };
+            }
+
+            function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean): CompletionEntry[] {
+                // Complete the path by looking for source files and directories
+                const result: CompletionEntry[] = [];
+
+                const toComplete = getBaseFileName(fragment);
+                const absolutePath = normalizeSlashes(host.resolvePath(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment)));
+                const baseDir = toComplete ? getDirectoryPath(absolutePath) : absolutePath;
+
+
+                if (directoryProbablyExists(baseDir, host)) {
+                    // Enumerate the available files
+                    const files = host.readDirectory(baseDir, extensions, /*exclude*/undefined, /*include*/["./*"]);
+                    forEach(files, (f) => {
+                        const fName = includeExtensions ? getBaseFileName(f) : removeFileExtension(getBaseFileName(f));
+
+                        if (startsWith(fName, toComplete)) {
+                            result.push({
+                                name: fName,
+                                kind: ScriptElementKind.unknown,
+                                kindModifiers: ScriptElementKindModifier.none,
+                                sortText: fName
+                            });
+                        }
+                    });
+
+                    // If possible, get folder completion as well
+                    if (host.getDirectories) {
+                        const directories = host.getDirectories(baseDir);
+                        forEach(directories, (d) => {
+                            const dName = getBaseFileName(removeTrailingDirectorySeparator(d));
+
+                            if (startsWith(dName, toComplete)) {
+                                result.push({
+                                    name: ensureTrailingDirectorySeparator(dName),
+                                    kind: ScriptElementKind.unknown,
+                                    kindModifiers: ScriptElementKindModifier.none,
+                                    sortText: dName
+                                });
+                            }
+                        });
+                    }
+                }
+
+                return includeExtensions ? result : deduplicate(result, (a, b) => a.name === b.name);
+            }
+
+            /**
+             * Check all of the declared modules and those in node modules. Possible sources of modules:
+             *      Modules that are found by the type checker
+             *      Modules from node_modules (i.e. those listed in package.json)
+             *          This includes all files that are found in node_modules/moduleName/ with acceptable file extensions
+             */
+            function getCompletionEntriesForNonRelativeModules(fragment: string, scriptPath: string): CompletionEntry[] {
+                return ts.map(enumeratePotentialNonRelativeModules(fragment, scriptPath), (moduleName) => {
+                    return {
+                        name: moduleName,
+                        kind: ScriptElementKind.unknown,
+                        kindModifiers: ScriptElementKindModifier.none,
+                        sortText: moduleName
+                    };
+                });
+            }
+
+            function enumeratePotentialNonRelativeModules(fragment: string, scriptPath: string) {
+                const ambientSymbolNameRegex = /^"(.+?)"$/;
+
+                // If this is a nested module, get the module name
+                const firstSeparator = fragment.indexOf(directorySeparator);
+                const moduleNameFragment = firstSeparator !== -1 ? fragment.substr(0, firstSeparator) : fragment;
+                const isNestedModule = fragment !== moduleNameFragment;
+
+                // Get modules that the type checker picked up
+                const ambientModules = ts.map(program.getTypeChecker().getAmbientModules(), (sym) => {
+                    const match = ambientSymbolNameRegex.exec(sym.name);
+                    if (match) {
+                        return match[1];
+                    }
+                    // This should never happen
+                    return sym.name;
+                });
+                let nonRelativeModules = ts.filter(ambientModules, (moduleName) => startsWith(moduleName, fragment));
+
+                // Nested modules of the form "module-name/sub" need to be adjusted to only return the string
+                // after the last '/' that appears in the fragment because editors insert the completion
+                // only after that character
+                nonRelativeModules = ts.map(nonRelativeModules, (moduleName) => {
+                    if (moduleName.indexOf(directorySeparator) !== -1) {
+                        if (isNestedModule) {
+                            return moduleName.substr(fragment.lastIndexOf(directorySeparator) + 1);
+                        }
+                    }
+                    return moduleName;
+                });
+
+                forEach(enumerateNodeModulesVisibleToScript(host, scriptPath, moduleNameFragment), visibleModule => {
+                    if (!isNestedModule) {
+                        nonRelativeModules.push(visibleModule.canBeImported ? visibleModule.moduleName : ensureTrailingDirectorySeparator(visibleModule.moduleName));
+                    }
+                    else {
+                        const nestedFiles = host.readDirectory(visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/undefined, /*include*/["./*"]);
+
+                        forEach(nestedFiles, (f) => {
+                            const nestedModule = removeFileExtension(getBaseFileName(f));
+                            nonRelativeModules.push(nestedModule);
+                        });
+                    }
+                });
+
+                return deduplicate(nonRelativeModules);
+            }
+
+            function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number) {
+                const node = getTokenAtPosition(sourceFile, position);
+                if (!node) {
+                    return undefined;
+                }
+
+                const text = sourceFile.text.substr(node.pos, position);
+                const match = tripleSlashDirectiveFragmentRegex.exec(text);
+                if (match) {
+                    const fragment = match[1];
+                    const scriptPath = getDirectoryPath(sourceFile.path);
+                    return {
+                        isMemberCompletion: false,
+                        isNewIdentifierLocation: false,
+                        entries: getCompletionEntriesForDirectoryFragment(fragment, scriptPath, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/true)
+                    };
+                }
+
+                return undefined;
             }
         }
 
@@ -6209,7 +6407,6 @@ namespace ts {
                 symbolToIndex: number[]): void {
 
                 const sourceFile = container.getSourceFile();
-                const tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</;
 
                 const start = findInComments ? container.getFullStart() : container.getStart();
                 const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, start, container.getEnd());

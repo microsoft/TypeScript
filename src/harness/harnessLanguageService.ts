@@ -123,7 +123,7 @@ namespace Harness.LanguageService {
     }
 
     export class LanguageServiceAdapterHost {
-        protected fileNameToScript: ts.Map<ScriptInfo> = {};
+        protected virtualFileSystem: Utils.VirtualFileSystem<ScriptInfo> = new Utils.VirtualFileSystem<ScriptInfo>(/*root*/"c:", /*useCaseSensitiveFilenames*/false);
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
                     protected settings = ts.getDefaultCompilerOptions()) {
@@ -135,7 +135,8 @@ namespace Harness.LanguageService {
 
         public getFilenames(): string[] {
             const fileNames: string[] = [];
-            ts.forEachValue(this.fileNameToScript, (scriptInfo) => {
+            ts.forEach(this.virtualFileSystem.getAllFileEntries(), (virtualEntry) => {
+                const scriptInfo = virtualEntry.content;
                 if (scriptInfo.isRootFile) {
                     // only include root files here
                     // usually it means that we won't include lib.d.ts in the list of root files so it won't mess the computation of compilation root dir.
@@ -146,11 +147,12 @@ namespace Harness.LanguageService {
         }
 
         public getScriptInfo(fileName: string): ScriptInfo {
-            return ts.lookUp(this.fileNameToScript, fileName);
+            const fileEntry = this.virtualFileSystem.traversePath(fileName);
+            return fileEntry && fileEntry.isFile() ? (<Utils.VirtualFile<ScriptInfo>>fileEntry).content : undefined;
         }
 
         public addScript(fileName: string, content: string, isRootFile: boolean): void {
-            this.fileNameToScript[fileName] = new ScriptInfo(fileName, content, isRootFile);
+            this.virtualFileSystem.addFile(fileName, new ScriptInfo(fileName, content, isRootFile));
         }
 
         public editScript(fileName: string, start: number, end: number, newText: string) {
@@ -171,7 +173,7 @@ namespace Harness.LanguageService {
           * @param col 0 based index
           */
         public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
-            const script: ScriptInfo = this.fileNameToScript[fileName];
+            const script: ScriptInfo = this.getScriptInfo(fileName);
             assert.isOk(script);
 
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
@@ -182,7 +184,13 @@ namespace Harness.LanguageService {
     class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost {
         getCompilationSettings() { return this.settings; }
         getCancellationToken() { return this.cancellationToken; }
-        getDirectories(path: string): string[] { return []; }
+        getDirectories(path: string): string[] {
+            const dir = this.virtualFileSystem.traversePath(path);
+            if (dir && dir.isDirectory()) {
+                return ts.map((<Utils.VirtualDirectory<ScriptInfo>>dir).getDirectories(), (d) => ts.combinePaths(path, d.name));
+            }
+            return [];
+        }
         getCurrentDirectory(): string { return ""; }
         getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
         getScriptFileNames(): string[] { return this.getFilenames(); }
@@ -195,6 +203,25 @@ namespace Harness.LanguageService {
             const script = this.getScriptInfo(fileName);
             return script ? script.version.toString() : undefined;
         }
+
+        fileExists(fileName: string): boolean {
+            const script = this.getScriptSnapshot(fileName);
+            return script !== undefined;
+        }
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
+            return ts.matchFiles(path, extensions, exclude, include,
+            /*useCaseSensitiveFileNames*/false,
+            /*currentDirectory*/"/",
+            (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
+        }
+        readFile(path: string, encoding?: string): string {
+            const snapshot = this.getScriptSnapshot(path);
+            return snapshot.getText(0, snapshot.getLength());
+        }
+        resolvePath(path: string): string {
+            return ts.normalizePath(ts.isRootedDiskPath(path) ? path : ts.combinePaths(this.getCurrentDirectory(), path));
+        }
+
 
         log(s: string): void { }
         trace(s: string): void { }
@@ -298,6 +325,9 @@ namespace Harness.LanguageService {
         readFile(fileName: string) {
             const snapshot = this.nativeHost.getScriptSnapshot(fileName);
             return snapshot && snapshot.getText(0, snapshot.getLength());
+        }
+        resolvePath(path: string): string {
+            return this.nativeHost.resolvePath(path);
         }
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }

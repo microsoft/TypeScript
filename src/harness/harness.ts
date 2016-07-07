@@ -742,14 +742,14 @@ namespace Harness {
             }
 
             export function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]) {
-                const fs = new Utils.VirtualFileSystem(path, useCaseSensitiveFileNames());
+                const fs = new Utils.VirtualFileSystem<string>(path, useCaseSensitiveFileNames());
                 for (const file in listFiles(path)) {
                     fs.addFile(file);
                 }
                 return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), path => {
                     const entry = fs.traversePath(path);
                     if (entry && entry.isDirectory()) {
-                        const directory = <Utils.VirtualDirectory>entry;
+                        const directory = <Utils.VirtualDirectory<string>>entry;
                         return {
                             files: ts.map(directory.getFiles(), f => f.name),
                             directories: ts.map(directory.getDirectories(), d => d.name)
