@@ -551,6 +551,9 @@ namespace ts {
                 case SyntaxKind.CaseBlock:
                     bindCaseBlock(<CaseBlock>node);
                     break;
+                case SyntaxKind.CaseClause:
+                    bindCaseClause(<CaseClause>node);
+                    break;
                 case SyntaxKind.LabeledStatement:
                     bindLabeledStatement(<LabeledStatement>node);
                     break;
@@ -987,6 +990,14 @@ namespace ts {
                     errorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
                 }
             }
+        }
+
+        function bindCaseClause(node: CaseClause): void {
+            const saveCurrentFlow = currentFlow;
+            currentFlow = preSwitchCaseFlow;
+            bind(node.expression);
+            currentFlow = saveCurrentFlow;
+            forEach(node.statements, bind);
         }
 
         function pushActiveLabel(name: string, breakTarget: FlowLabel, continueTarget: FlowLabel): ActiveLabel {
