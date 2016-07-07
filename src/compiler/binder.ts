@@ -266,7 +266,10 @@ namespace ts {
                     let index = indexOf(functionType.parameters, node);
                     return "p" + index;
                 case SyntaxKind.JSDocParameterTag:
-                    Debug.assert(node.parent.kind === SyntaxKind.JSDocCallbackType);
+                    // JSDocParameterTag can be used for either function parameter type notation
+                    // or in @callback tag declaration. We only create new symbol when the JSDocParameterTag
+                    // is part of a @callback tag declaration.
+                    Debug.assert(node.parent.kind === SyntaxKind.JSDocCallbackType, "Should not bind JSDocParameterTag if it is not part of a JSDocCallbackTag");
                     const preOrPostParameterName =(<JSDocParameterTag>node).preParameterName || (<JSDocParameterTag>node).postParameterName;
                     if (preOrPostParameterName) {
                         return preOrPostParameterName.text;

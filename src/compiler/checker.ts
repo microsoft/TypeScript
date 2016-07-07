@@ -4445,6 +4445,7 @@ namespace ts {
             if (node.typeExpression && node.typeExpression.type) {
                 return node.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
             }
+            return false;
         }
 
         function isJSDocOptionalParameter(node: ParameterDeclaration) {
@@ -4527,10 +4528,6 @@ namespace ts {
                     }
 
                     if (isJSDocParameterTag(param)) {
-                        if (param.typeExpression && param.typeExpression.type && param.typeExpression.type.kind === SyntaxKind.StringLiteralType) {
-                            hasStringLiterals = true;
-                        }
-
                         if (isJSDocOptionalParameterTag(param)) {
                             if (minArgumentCount < 0) {
                                 minArgumentCount = i - (hasThisParameter ? 1 : 0);
