@@ -1478,7 +1478,7 @@ namespace FourSlash {
             if (isFormattingEdit) {
                 const newContent = this.getFileContent(fileName);
 
-                if (newContent.replace(/\s/g, "") !== oldContent.replace(/\s/g, "")) {
+                if (this.removeWhitespace(newContent) !== this.removeWhitespace(oldContent)) {
                     this.raiseError("Formatting operation destroyed non-whitespace content");
                 }
             }
@@ -1545,7 +1545,7 @@ namespace FourSlash {
         }
 
         private removeWhitespace(text: string): string {
-            return text.replace(/[ \r\n\t]/g, "");
+            return text.replace(/\s/g, "");
         }
 
         public goToBOF() {
@@ -1866,6 +1866,12 @@ namespace FourSlash {
         }
 
         public verifyCodeFixAtPosition(expectedText: string, errorCode?: number) {
+
+            const ranges = this.getRanges();
+            if (ranges.length == 0) {
+                this.raiseError("At least one range should be specified in the testfile.")
+            }
+
             const fileName = this.activeFile.fileName;
             const diagnostics = this.getDiagnostics(fileName);
 
@@ -1889,12 +1895,8 @@ namespace FourSlash {
                 this.raiseError("More than 1 codefix returned.");
             }
 
-
-            // todo: handle multiple files, probably need to set the cursor in the test file, and loop over all the files
-
-
             this.applyEdits(actual[0].changes[0].fileName, actual[0].changes[0].textChanges, /*isFormattingEdit*/ false);
-            const actualText = this.getFileContent(actual[0].changes[0].fileName);
+            const actualText = this.rangeText(ranges[0]);
 
             if (this.removeWhitespace(actualText) !== this.removeWhitespace(expectedText)) {
                 this.raiseError(`Actual text doesn't match expected text. Actual: '${actualText}' Expected: '${expectedText}'`);
@@ -3105,8 +3107,16 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
-        public codeFixAtPosition(expectedText: string) {
-            this.state.verifyCodeFixAtPosition(expectedText);
+        public codeFixAtPosition(expectedText: string): void;
+        public codeFixAtPosition(expectedChanges: { file: string, expectedText: string }[]): void;
+        public codeFixAtPosition(expected: string | { file: string, expectedText: string }[]) {
+            if (typeof expected === "string") {
+                this.state.verifyCodeFixAtPosition(expected);
+            }
+            else {
+                // assume it actually is the other thing
+
+            }
         }
 
         public navigationBar(json: any) {

@@ -7714,7 +7714,8 @@ namespace ts {
                     errorCode: error,
                     sourceFile: sourceFile,
                     span: { start, length: end - start },
-                    checker: checker
+                    checker: checker,
+                    newLineCharacter: getNewLineOrDefaultFromHost(host)
                 };
 
                 const fixes = codeFixProvider.getFixes(context);

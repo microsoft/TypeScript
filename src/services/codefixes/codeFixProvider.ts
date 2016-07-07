@@ -11,6 +11,7 @@ namespace ts {
         sourceFile: SourceFile;
         span: TextSpan;
         checker: TypeChecker;
+        newLineCharacter: string;
     }
 
     export namespace codeFix {
