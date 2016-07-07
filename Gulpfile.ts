@@ -20,8 +20,7 @@ import * as insert from "gulp-insert";
 import * as sourcemaps from "gulp-sourcemaps";
 import Q = require("q");
 declare global {
-    // This is silly. We include Q because orchestrator (a part of gulp) depends on it, but its not included.
-    // `del` further depends on `Promise` (and is also not included), so we just, patch the global scope's Promise to Q's
+    // `del` further depends on `Promise` (and is also not included), so we just, patch the global scope's Promise to Q's (which we already include in our deps because gulp depends on it)
     type Promise<T> = Q.Promise<T>;
 }
 import del = require("del");
