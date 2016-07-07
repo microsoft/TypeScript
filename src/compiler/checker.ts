@@ -6946,12 +6946,12 @@ namespace ts {
         }
 
         function isUnitType(type: Type): boolean {
-            return type.flags & (TypeFlags.Literal | TypeFlags.Void | TypeFlags.Undefined | TypeFlags.Null) ||
+            return type.flags & (TypeFlags.Literal | TypeFlags.Undefined | TypeFlags.Null) ||
                 type.flags & TypeFlags.Enum && type.symbol.flags & SymbolFlags.EnumMember ? true : false;
         }
 
         function isUnitUnionType(type: Type): boolean {
-            return type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isUnitType) : isUnitType(type);
+            return type.flags & TypeFlags.Union ? !forEach((<UnionType>type).types, t => !isUnitType(t)) : isUnitType(type);
         }
 
         function getBaseTypeOfUnitType(type: Type): Type {
@@ -8209,9 +8209,7 @@ namespace ts {
             }
 
             function narrowTypeBySwitchOnDiscriminant(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
-                if (!isUnitUnionType(type)) {
-                    return type;
-                }
+                // We only narrow if all case expressions specify values with unit types
                 const switchTypes = getSwitchClauseTypes(switchStatement);
                 if (!switchTypes.length) {
                     return type;
@@ -8223,7 +8221,7 @@ namespace ts {
                 if (!hasDefaultClause) {
                     return caseType;
                 }
-                const defaultType = filterType(type, t => !eachTypeContainedIn(t, switchTypes));
+                const defaultType = filterType(type, t => !(isUnitType(t) && contains(switchTypes, t)));
                 return caseType === neverType ? defaultType : getUnionType([caseType, defaultType]);
             }
 
