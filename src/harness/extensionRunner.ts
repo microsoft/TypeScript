@@ -124,7 +124,7 @@ class ExtensionRunner extends RunnerBase {
         host.addScript = (fileName: string, content: string, isRootFile: boolean): void => {
             const canonical = this.getCanonicalFileName(fileName);
             host.fileNameToScript[canonical] = new Harness.LanguageService.ScriptInfo(canonical, content, isRootFile);
-        }
+        };
         ts.forEach(files, file => {
             host.addScript(file, this.virtualFs[file], looksLikeRootFile(file));
         });
