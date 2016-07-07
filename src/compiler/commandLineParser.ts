@@ -3,6 +3,7 @@
 /// <reference path="core.ts"/>
 /// <reference path="diagnosticInformationMap.generated.ts"/>
 /// <reference path="scanner.ts"/>
+/// <reference path="utilities.ts"/>
 
 namespace ts {
     /* @internal */
@@ -691,7 +692,7 @@ namespace ts {
 
     // Skip over any minified JavaScript files (ending in ".min.js")
     // Skip over dotted files and folders as well
-    const ignoreFileNamePattern = /(\.min\.js$)|([\\/]\.[\w.])/;
+    const ignoreFileNamePattern = /(\.min\.js$)|([\\/]\.{1,2}[\w])|(^\.{1,2}[\w])/;
     /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
@@ -1003,7 +1004,10 @@ namespace ts {
                     continue;
                 }
 
-                if (ignoreFileNamePattern.test(file)) {
+                const getCanonicalFileName = ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+                const projectRelativeFile = ts.convertToRelativePath(file, basePath, getCanonicalFileName);
+
+                if (ignoreFileNamePattern.test(projectRelativeFile)) {
                     continue;
                 }
 
