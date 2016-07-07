@@ -8388,7 +8388,6 @@ declare namespace ts.server {
     class ScriptInfo {
         private host;
         fileName: string;
-        content: string;
         isOpen: boolean;
         svc: ScriptVersionCache;
         children: ScriptInfo[];
