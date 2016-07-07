@@ -50,12 +50,12 @@ export default class extends LanguageServiceProvider {
         return {
             isMemberCompletion: false,
             isNewIdentifierLocation: false,
-            entries: [{name: fileName, kind: "", kindModifiers: "", sortText: fileName}]
+            entries: [{name: "fakeCompletion", kind: "", kindModifiers: "", sortText: "fakeCompletion"}]
         };
     }
     getCompletionEntryDetailsFilter(fileName, position, entryName, previous) {
         return {
-            name: fileName,
+            name: "fakeCompletion",
             kind: position.toString(),
             kindModifiers: entryName,
             displayParts: [],
@@ -72,7 +72,13 @@ export default class extends LanguageServiceProvider {
         return {};
     }
     getSignatureHelpItemsFilter(fileName, position, previous) {
-        return {};
+        return {
+            items: [],
+            applicableSpan: undefined,
+            selectedItemIndex: undefined,
+            argumentIndex: 0,
+            argumentCount: 0,
+        };
     }
     getRenameInfoFilter(fileName, position, previous) {
         return {};
@@ -105,10 +111,10 @@ export default class extends LanguageServiceProvider {
         return {};
     }
     getTodoCommentsFilter(fileName, descriptors, previous) {
-        return {};
+        return [];
     }
     getBraceMatchingAtPositionFilter(fileName, position, previous) {
-        return {};
+        return [];
     }
     getIndentationAtPositionFilter(fileName, position, options, previous) {
         return {};
@@ -123,6 +129,6 @@ export default class extends LanguageServiceProvider {
         return {};
     }
     getDocCommentTemplateAtPositionFilter(fileName, position, previous) {
-        return {};
+        return {newText: "/********Yes.*********/", caretOffset: 9};
     }
 }
