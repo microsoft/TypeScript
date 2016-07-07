@@ -7686,7 +7686,7 @@ const _super = (function (geti, seti) {
                         }
                         firstNonWhitespace = -1;
                     }
-                    else if (!isWhiteSpace(c)) {
+                    else if (!isWhiteSpaceSingleLine(c)) {
                         lastNonWhitespace = i;
                         if (firstNonWhitespace === -1) {
                             firstNonWhitespace = i;
