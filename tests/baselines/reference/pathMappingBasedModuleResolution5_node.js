@@ -31,9 +31,6 @@ exports.x = 1;
 //// [file2.js]
 "use strict";
 exports.y = 1;
-//// [file4.js]
-"use strict";
-exports.z1 = 1;
 //// [file1.js]
 "use strict";
 var file1_1 = require("folder2/file1");

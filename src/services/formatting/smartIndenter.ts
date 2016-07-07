@@ -42,7 +42,7 @@ namespace ts.formatting {
                 let current = position;
                 while (current > 0) {
                     const char = sourceFile.text.charCodeAt(current);
-                    if (!isWhiteSpace(char) && !isLineBreak(char)) {
+                    if (!isWhiteSpace(char)) {
                         break;
                     }
                     current--;
@@ -406,7 +406,7 @@ namespace ts.formatting {
             let column = 0;
             for (let pos = startPos; pos < endPos; pos++) {
                 const ch = sourceFile.text.charCodeAt(pos);
-                if (!isWhiteSpace(ch)) {
+                if (!isWhiteSpaceSingleLine(ch)) {
                     break;
                 }
 
@@ -497,7 +497,7 @@ namespace ts.formatting {
                     return childKind !== SyntaxKind.NamedExports;
                 case SyntaxKind.ImportDeclaration:
                     return childKind !== SyntaxKind.ImportClause ||
-                        (<ImportClause>child).namedBindings.kind !== SyntaxKind.NamedImports;
+                        ((<ImportClause>child).namedBindings && (<ImportClause>child).namedBindings.kind !== SyntaxKind.NamedImports);
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
             }
