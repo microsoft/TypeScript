@@ -337,6 +337,7 @@ namespace ts {
         JSDocVariadicType,
         JSDocConstructorType,
         JSDocThisType,
+        JSDocCallbackType,
         JSDocComment,
         JSDocTag,
         JSDocParameterTag,
@@ -344,6 +345,7 @@ namespace ts {
         JSDocTypeTag,
         JSDocTemplateTag,
         JSDocTypedefTag,
+        JSDocCallbackTag,
         JSDocPropertyTag,
         JSDocTypeLiteral,
 
@@ -1528,6 +1530,15 @@ namespace ts {
         jsDocTypeLiteral?: JSDocTypeLiteral;
     }
 
+    export interface JSDocCallbackTag extends JSDocTag, Declaration {
+        name: Identifier;
+        type: JSDocCallbackType;
+    }
+
+    export interface JSDocCallbackType extends JSDocType, Declaration {
+        parameterTags?: NodeArray<JSDocParameterTag>;
+    }
+
     // @kind(SyntaxKind.JSDocPropertyTag)
     export interface JSDocPropertyTag extends JSDocTag, TypeElement {
         name: Identifier;
@@ -1541,7 +1552,7 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.JSDocParameterTag)
-    export interface JSDocParameterTag extends JSDocTag {
+    export interface JSDocParameterTag extends JSDocTag, Declaration {
         preParameterName?: Identifier;
         typeExpression?: JSDocTypeExpression;
         postParameterName?: Identifier;
@@ -2395,7 +2406,7 @@ namespace ts {
     }
 
     export interface Signature {
-        declaration: SignatureDeclaration;  // Originating declaration
+        declaration: SignatureDeclaration | JSDocCallbackType;  // Originating declaration
         typeParameters: TypeParameter[];    // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
         /* @internal */

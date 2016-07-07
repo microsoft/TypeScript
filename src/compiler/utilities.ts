@@ -1463,26 +1463,50 @@ namespace ts {
         return undefined;
     }
 
-    export function hasRestParameter(s: SignatureDeclaration): boolean {
-        return isRestParameter(lastOrUndefined(s.parameters));
+    export function hasRestParameter(s: SignatureDeclaration | JSDocCallbackType): boolean {
+        if (isJSDocCallbackType(s)) {
+            return isRestParameter(lastOrUndefined(s.parameterTags));
+        }
+        else {
+            return isRestParameter(lastOrUndefined(s.parameters));
+        }
+    }
+
+    export function isJSDocCallbackType(node: Node): node is JSDocCallbackType {
+        return node && node.kind === SyntaxKind.JSDocCallbackType;
+    }
+
+    export function isJSDocParameterTag(node: Node): node is JSDocParameterTag {
+        return node && node.kind === SyntaxKind.JSDocParameterTag;
     }
 
     export function hasDeclaredRestParameter(s: SignatureDeclaration): boolean {
         return isDeclaredRestParam(lastOrUndefined(s.parameters));
     }
 
-    export function isRestParameter(node: ParameterDeclaration) {
-        if (node && (node.flags & NodeFlags.JavaScriptFile)) {
-            if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
-                return true;
-            }
-
-            const paramTag = getCorrespondingJSDocParameterTag(node);
-            if (paramTag && paramTag.typeExpression) {
-                return paramTag.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
+    export function isRestParameter(node: ParameterDeclaration | JSDocParameterTag) {
+        if (isJSDocParameterTag(node)) {
+            if (node.typeExpression && node.typeExpression.type) {
+                return node.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
             }
         }
-        return isDeclaredRestParam(node);
+        else {
+            if (node && (node.flags & NodeFlags.JavaScriptFile)) {
+                if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
+                    return true;
+                }
+
+                // This is different kind of jsDoc parameter tag. Here is the address the case when
+                // the parameter declaration is a normal one (in the code), while the type of the
+                // parameter may be found in the jsdoc comment.
+                const paramTag = getCorrespondingJSDocParameterTag(node);
+                if (paramTag && paramTag.typeExpression) {
+                    return paramTag.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
+                }
+            }
+            return isDeclaredRestParam(node);
+        }
+        return false;
     }
 
     export function isDeclaredRestParam(node: ParameterDeclaration) {
