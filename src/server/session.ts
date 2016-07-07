@@ -12,7 +12,14 @@ namespace ts.server {
 
     export interface CompressedData {
         length: number;
+        compressionKind: string;
         data: any;
+    }
+
+    function hrTimeToMilliseconds(time: number[]): number {
+        const seconds = time[0];
+        const nanoseconds = time[1];
+        return ((1e9 * seconds) + nanoseconds) / 1000000.0;
     }
 
     export interface ServerHost {
@@ -239,12 +246,14 @@ namespace ts.server {
                 this.sendLineToClient("Content-Length: " + (1 + this.byteLength(json, "utf8")) + "\r\n\r\n" + json);
             }
             else {
-                // TODO: measure time
+                const start = this.hrtime();
                 const compressed = this.compress(json);
+                var elapsed = this.hrtime(start);
+
                 if (this.logger.isVerbose()) {
-                    this.logger.info(`compressed message to ${compressed.length}`);
+                    this.logger.info(`compressed message ${json.length} to ${compressed.length} in ${hrTimeToMilliseconds(elapsed)} ms using ${compressed.compressionKind}`);
                 }
-                this.sendCompressedDataToClient(`Content-Length: ${compressed.length + 1}`, compressed);
+                this.sendCompressedDataToClient(`Content-Length: ${compressed.length + 1} ${compressed.compressionKind}\r\n\r\n`, compressed);
             }
         }
 
@@ -1515,9 +1524,7 @@ namespace ts.server {
 
                 if (this.logger.isVerbose()) {
                     const elapsed = this.hrtime(start);
-                    const seconds = elapsed[0];
-                    const nanoseconds = elapsed[1];
-                    const elapsedMs = ((1e9 * seconds) + nanoseconds) / 1000000.0;
+                    const elapsedMs = hrTimeToMilliseconds(elapsed);
                     let leader = "Elapsed time (in milliseconds)";
                     if (!responseRequired) {
                         leader = "Async elapsed time (in milliseconds)";

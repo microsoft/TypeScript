@@ -16,9 +16,8 @@ namespace ts.server {
     });
 
     function compress(s: string): CompressedData {
-        const gzip = zlib.createGZip();
-        const data = gzip.gzipSync(new Buffer(s,  "utf8"));
-        return { data, length: data.length };
+        const data = zlib.gzipSync(new Buffer(s,  "utf8"));
+        return { data, length: data.length, compressionKind: "gzip" };
     }
 
     class Logger implements ts.server.Logger {

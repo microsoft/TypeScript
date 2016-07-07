@@ -399,10 +399,7 @@ declare namespace NodeJS {
 
 declare namespace NodeJS {
     namespace zlib {
-        export interface GZip {
-            gzipSync(buf: Buffer): Buffer;
-        }
-        export function createGZip(): GZip;
+        export function gzipSync(buffer: Buffer): Buffer;
     }
 }
 
