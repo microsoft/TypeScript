@@ -1160,12 +1160,12 @@ namespace ts {
             if (token === SyntaxKind.ExportKeyword) {
                 nextToken();
                 if (token === SyntaxKind.DefaultKeyword) {
-                    return lookAhead(nextTokenIsClassOrFunction);
+                    return lookAhead(nextTokenIsClassOrFunctionOrAsync);
                 }
                 return token !== SyntaxKind.AsteriskToken && token !== SyntaxKind.AsKeyword && token !== SyntaxKind.OpenBraceToken && canFollowModifier();
             }
             if (token === SyntaxKind.DefaultKeyword) {
-                return nextTokenIsClassOrFunction();
+                return nextTokenIsClassOrFunctionOrAsync();
             }
             if (token === SyntaxKind.StaticKeyword) {
                 nextToken();
@@ -1187,9 +1187,10 @@ namespace ts {
                 || isLiteralPropertyName();
         }
 
-        function nextTokenIsClassOrFunction(): boolean {
+        function nextTokenIsClassOrFunctionOrAsync(): boolean {
             nextToken();
-            return token === SyntaxKind.ClassKeyword || token === SyntaxKind.FunctionKeyword;
+            return token === SyntaxKind.ClassKeyword || token === SyntaxKind.FunctionKeyword ||
+                (token === SyntaxKind.AsyncKeyword && lookAhead(nextTokenIsFunctionKeywordOnSameLine));
         }
 
         // True if positioned at the start of a list element
@@ -5075,7 +5076,7 @@ namespace ts {
          * In such situations, 'permitInvalidConstAsModifier' should be set to true.
          */
         function parseModifiers(permitInvalidConstAsModifier?: boolean): ModifiersArray {
-            let flags = 0;
+            let flags: NodeFlags = 0;
             let modifiers: ModifiersArray;
             while (true) {
                 const modifierStart = scanner.getStartPos();

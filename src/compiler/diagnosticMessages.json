@@ -2332,6 +2332,10 @@
         "category": "Error",
         "code": 5064
     },
+    "File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '{0}'.": {
+        "category": "Error",
+        "code": 5065
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001

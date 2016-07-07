@@ -36,7 +36,7 @@ namespace ts {
         getSourceFiles(): SourceFile[];
 
         /* @internal */
-        getFilesFromNodeModules(): Map<boolean>;
+        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
 
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
@@ -2301,10 +2301,9 @@ namespace ts {
         }
         else {
             const sourceFiles = targetSourceFile === undefined ? host.getSourceFiles() : [targetSourceFile];
-            const nodeModulesFiles = host.getFilesFromNodeModules();
             for (const sourceFile of sourceFiles) {
                 // Don't emit if source file is a declaration file, or was located under node_modules
-                if (!isDeclarationFile(sourceFile) && !lookUp(nodeModulesFiles, sourceFile.path)) {
+                if (!isDeclarationFile(sourceFile) && !host.isSourceFileFromExternalLibrary(sourceFile)) {
                     onSingleFileEmit(host, sourceFile);
                 }
             }
@@ -2338,10 +2337,9 @@ namespace ts {
         function onBundledEmit(host: EmitHost) {
             // Can emit only sources that are not declaration file and are either non module code or module with
             // --module or --target es6 specified. Files included by searching under node_modules are also not emitted.
-            const nodeModulesFiles = host.getFilesFromNodeModules();
             const bundledSources = filter(host.getSourceFiles(),
                 sourceFile => !isDeclarationFile(sourceFile) &&
-                              !lookUp(nodeModulesFiles, sourceFile.path) &&
+                              !host.isSourceFileFromExternalLibrary(sourceFile) &&
                               (!isExternalModule(sourceFile) ||
                                !!getEmitModuleKind(options)));
             if (bundledSources.length) {
@@ -2631,7 +2629,7 @@ namespace ts {
 
     function calculateIndent(text: string, pos: number, end: number) {
         let currentLineIndent = 0;
-        for (; pos < end && isWhiteSpace(text.charCodeAt(pos)); pos++) {
+        for (; pos < end && isWhiteSpaceSingleLine(text.charCodeAt(pos)); pos++) {
             if (text.charCodeAt(pos) === CharacterCodes.tab) {
                 // Tabs = TabSize = indent size and go to next tabStop
                 currentLineIndent += getIndentSize() - (currentLineIndent % getIndentSize());
