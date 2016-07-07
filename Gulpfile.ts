@@ -775,16 +775,16 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
             const originalMap = file.sourceMap;
             const prebundledContent = file.contents.toString();
             // Make paths absolute to help sorcery deal with all the terrible paths being thrown around
-            originalMap.sources = originalMap.sources.map(path.resolve);
+            originalMap.sources = originalMap.sources.map(s => path.resolve(s));
             // intoStream (below) makes browserify think the input file is named this, so this is what it puts in the sourcemap
             originalMap.file = "built/local/_stream_0.js";
 
             browserify(intoStream(file.contents), { debug: true })
                 .bundle((err, res) => {
                     // assumes file.contents is a Buffer
-                    let maps = JSON.parse(convertMap.fromSource(res.toString(), /*largeSource*/true).toJSON());
+                    const maps = JSON.parse(convertMap.fromSource(res.toString(), /*largeSource*/true).toJSON());
                     delete maps.sourceRoot;
-                    maps = maps.map(s => (s === "_stream_0.js") ? path.resolve("built/local/_stream_0.js") : path.resolve(s));
+                    maps.sources = maps.sources.map(s => (s === "_stream_0.js") ? path.resolve("built/local/_stream_0.js") : path.resolve(s));
                     // Strip browserify's inline comments away (could probably just let sorcery do this, but then we couldn't fix the paths)
                     file.contents = new Buffer(convertMap.removeComments(res.toString()));
                     const chain = sorcery.loadSync("built/local/bundle.js", {
