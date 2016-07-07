@@ -3,4 +3,4 @@ message test-plugin-loaded: Test language service plugin loaded!
 
 !!! message test-plugin-loaded: Test language service plugin loaded!
 ==== /hello.ts (0 errors) ====
-    console.log("Hello, world!");
+    console.log("Hello, world!");/*EOL*/

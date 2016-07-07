@@ -5,5 +5,6 @@
     "availableExtensions": ["test-language-service"],
     "compilerOptions": {
         "extensions": ["test-language-service"]
-    }
+    },
+    "fourslashTest": "test.ts"
 }

@@ -9,7 +9,7 @@ warning test-errors[Throws2](THROWS2): Not allowed.
 !!! warning test-errors: Not allowed.
 !!! warning test-errors[Throws2](THROWS2): Not allowed.
 ==== /hello.ts (4 errors) ====
-    console.log("Hello, world!");
+    console.log("Hello, world!");/*EOL*/
     ~~~~~~~
 !!! warning test-errors[Throws3](THROWS3): Not allowed.
     ~~~~~~~

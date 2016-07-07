@@ -1,5 +1,6 @@
 ///<reference path="harness.ts" />
 ///<reference path="runnerbase.ts" />
+/// <reference path="fourslash.ts" />
 
 interface ExtensionTestConfig {
     inputFiles: string[]; // Files from the source directory to include in the compilation
@@ -15,6 +16,7 @@ class ExtensionRunner extends RunnerBase {
     private scenarioPath = ts.combinePaths(this.basePath, "scenarios");
     private extensionPath = ts.combinePaths(this.basePath, "available");
     private sourcePath = ts.combinePaths(this.basePath, "source");
+    private fourslashPath = ts.combinePaths(this.basePath, "fourslash");
     private extensionAPI: ts.Map<string> = {};
     private extensions: ts.Map<ts.Map<string>> = {};
     private virtualLib: ts.Map<string> = {};
@@ -79,61 +81,64 @@ class ExtensionRunner extends RunnerBase {
                     fullpath => fullpath.substr(path.length + 1).indexOf("/") >= 0 ? fullpath.substr(0, 1 + path.length + fullpath.substr(path.length + 1).indexOf("/")) : fullpath),
                         fullpath => fullpath.lastIndexOf(".") === -1);
         },
-        loadExtension: (path) => {
-            const fullPath = this.mockHost.getCanonicalFileName(path);
-            const m = { exports: {} };
-            ((module, exports, require) => { eval(this.virtualFs[fullPath]); })(
-                m,
-                m.exports,
-                (name: string) => {
-                    return this.mockHost.loadExtension(
-                        this.mockHost.getCanonicalFileName(
-                            ts.resolveModuleName(name, fullPath, { module: ts.ModuleKind.CommonJS, moduleResolution: ts.ModuleResolutionKind.NodeJs }, this.mockHost, true).resolvedModule.resolvedFileName
-                        )
-                    );
-                }
-            );
-            return m.exports;
-        },
+        loadExtension: (path) => this.mockLoadExtension(path),
         trace: (s) => {
             this.traces.push(s);
         }
     };
 
-    makeMockLSHost(files: string[], options: ts.CompilerOptions): ts.LanguageServiceHost {
-        files = ts.filter(files, file => ts.endsWith(file, ".ts") && !ts.endsWith(file, ".d.ts") && (file.indexOf("node_modules") === -1));
-        const host: ts.LanguageServiceHost = {
-            getCompilationSettings: () => options,
-            getScriptFileNames: () => files,
-            getScriptVersion: (fileName) => "1",
-            getScriptSnapshot: (fileName): ts.IScriptSnapshot => {
-                const fileContents = this.virtualFs[this.getCanonicalFileName(fileName)];
-                if (!fileContents) return;
-                return ts.ScriptSnapshot.fromString(fileContents);
-            },
-            getCurrentDirectory: () => "",
-            getDefaultLibFileName: () => "/lib/lib.d.ts",
-            loadExtension: (path) => {
-                const fullPath = this.getCanonicalFileName(path);
-                const m = { exports: {} };
-                ((module, exports, require) => { eval(this.virtualFs[fullPath]); })(
-                    m,
-                    m.exports,
-                    (name: string) => {
-                        return host.loadExtension(
-                            this.getCanonicalFileName(
-                                ts.resolveModuleName(name, fullPath, { module: ts.ModuleKind.CommonJS, moduleResolution: ts.ModuleResolutionKind.NodeJs }, this.mockHost, true).resolvedModule.resolvedFileName
-                            )
-                        );
-                    }
+    mockLoadExtension(path: string) {
+        const fullPath = this.getCanonicalFileName(path);
+        const m = { exports: {} };
+        ((module, exports, require) => { eval(this.virtualFs[fullPath]); })(
+            m,
+            m.exports,
+            (name: string) => {
+                return this.mockLoadExtension(
+                    this.getCanonicalFileName(
+                        ts.resolveModuleName(name, fullPath, { module: ts.ModuleKind.CommonJS, moduleResolution: ts.ModuleResolutionKind.NodeJs }, this.mockHost, true).resolvedModule.resolvedFileName
+                    )
                 );
-                return m.exports;
-            },
-            trace: (s) => {
-                this.traces.push(s);
             }
+        );
+        return m.exports;
+    }
+
+    makeLSMockAdapter(files: string[], options: ts.CompilerOptions, token?: ts.HostCancellationToken) {
+        const adapter = new Harness.LanguageService.NativeLanguageServiceAdapter(token, options);
+        // The host returned by the harness is _mostly_ suitable for use here
+        //    it just needs to be monkeypatched to load extensions, report directories, and canonicalize script paths
+        const host = adapter.getHost();
+        host.getDefaultLibFileName = () => "/lib/lib.d.ts";
+        host.getCurrentDirectory = () => "/";
+        (host as ts.LanguageServiceHost).loadExtension = (path) => this.mockLoadExtension(path);
+        (host as ts.LanguageServiceHost).useCaseSensitiveFileNames = () => true;
+        host.trace = (s) => {
+            this.traces.push(s);
         };
-        return host;
+        host.getScriptInfo = (fileName: string) => {
+            fileName = this.getCanonicalFileName(fileName);
+            return ts.lookUp(host.fileNameToScript, fileName);
+        };
+        host.getDirectories = (s: string) => this.mockHost.getDirectories(s);
+        host.addScript = (fileName: string, content: string, isRootFile: boolean): void => {
+            const canonical = this.getCanonicalFileName(fileName);
+            host.fileNameToScript[canonical] = new Harness.LanguageService.ScriptInfo(canonical, content, isRootFile);
+        }
+        ts.forEach(files, file => {
+            host.addScript(file, this.virtualFs[file], looksLikeRootFile(file));
+        });
+
+        return adapter;
+
+        function looksLikeRootFile(file: string) {
+            return ts.endsWith(file, ".ts") && !ts.endsWith(file, ".d.ts") && (file.indexOf("node_modules") === -1);
+        }
+    }
+
+    makeMockLSHost(files: string[], options: ts.CompilerOptions) {
+        const adapter = this.makeLSMockAdapter(files, options);
+        return adapter.getHost();
     };
 
     getTraces(): string[] {
@@ -289,153 +294,199 @@ class ExtensionRunner extends RunnerBase {
      */
     private runTest(caseName: string) {
         const caseNameNoExtension = caseName.replace(/\.json$/, "");
-        const shortCasePath = caseName.substring(this.scenarioPath.length + 1).replace(/\.json$/, "");
-        const testConfigText = Harness.IO.readFile(caseName);
-        const testConfig: ExtensionTestConfig = JSON.parse(testConfigText);
-        const inputSources: ts.Map<string> = {};
-        const inputTestFiles: Harness.Compiler.TestFile[] = [];
-        ts.forEach(testConfig.inputFiles, name => {
-            inputSources[name] = Harness.IO.readFile(ts.combinePaths(this.sourcePath, name));
-            inputTestFiles.push({
-                unitName: this.getCanonicalFileName(name),
-                content: inputSources[name]
+        describe(caseNameNoExtension, () => {
+            let shortCasePath: string;
+            let testConfigText: string;
+            let testConfig: ExtensionTestConfig;
+            let inputSources: ts.Map<string>;
+            let inputTestFiles: Harness.Compiler.TestFile[];
+            before(() => {
+                shortCasePath = caseName.substring(this.scenarioPath.length + 1).replace(/\.json$/, "");
+                testConfigText = Harness.IO.readFile(caseName);
+                testConfig = JSON.parse(testConfigText);
+                inputSources = {};
+                inputTestFiles = [];
+                ts.forEach(testConfig.inputFiles, name => {
+                    inputSources[name] = Harness.IO.readFile(ts.combinePaths(this.sourcePath, name));
+                    inputTestFiles.push({
+                        unitName: this.getCanonicalFileName(name),
+                        content: inputSources[name]
+                    });
+                });
             });
-        });
 
-        ts.forEach(this.compileTargets, ([name, compileCb]) => {
-            describe(`${caseNameNoExtension} - ${name}`, () => {
-                this.traces = []; // Clear out any traces from tests which made traces, but didn't specify traceResolution or profileExtensions
-                const sources: ts.Map<string> = {};
-                ts.copyMap(inputSources, sources);
-                ts.forEach(testConfig.availableExtensions, ext => this.loadSetIntoFsAt(this.extensions[ext], `/node_modules/${ext}`));
-                const result = this.buildMap(compileCb, sources, sources, testConfig.compilerOptions, /*shouldError*/false);
+            after(() => {
+                shortCasePath = undefined;
+                testConfigText = undefined;
+                testConfig = undefined;
+                inputSources = undefined;
+                inputTestFiles = undefined;
+            });
 
-                const errorsTestName = `Correct errors`;
-                it(errorsTestName, () => {
-                    Harness.Baseline.runBaseline(errorsTestName, `${name}/${shortCasePath}.errors.txt`, () => {
-                        /* tslint:disable:no-null-keyword */
-                        if (result.errors.length === 0) return null;
-                        /* tslint:enable:no-null-keyword */
-                        return Harness.Compiler.getErrorBaseline(inputTestFiles, result.errors);
+            ts.forEach(this.compileTargets, ([name, compileCb]) => {
+                describe(`${name}`, () => {
+                    let sources: ts.Map<string>;
+                    let result: Harness.Compiler.CompilerResult;
+                    before(() => {
+                        this.traces = []; // Clear out any traces from tests which made traces, but didn't specify traceResolution or profileExtensions
+                        this.virtualFs = {}; // In case a fourslash test was run last (which doesn't clear FS on end like buildMap does), clear the FS
+                        sources = {};
+                        ts.copyMap(inputSources, sources);
+                        ts.forEach(testConfig.availableExtensions, ext => this.loadSetIntoFsAt(this.extensions[ext], `/node_modules/${ext}`));
+                        result = this.buildMap(compileCb, sources, sources, testConfig.compilerOptions, /*shouldError*/false);
                     });
-                });
 
-                const traceTestName = `Correct traces`;
-                it(traceTestName, () => {
-                    if (!(testConfig.compilerOptions.traceResolution || testConfig.compilerOptions.profileExtensions)) {
-                        return;
-                    }
-                    Harness.Baseline.runBaseline(traceTestName, `${name}/${shortCasePath}.trace.txt`, (): string => {
-                        return (result.traceResults || []).join("\n");
+                    after(() => {
+                        sources = undefined;
+                        result = undefined;
                     });
-                });
 
-                const sourcemapTestName = `Correct sourcemap content`;
-                it(sourcemapTestName, () => {
-                    if (!(testConfig.compilerOptions.sourceMap || testConfig.compilerOptions.inlineSourceMap)) {
-                        return;
-                    }
-                    Harness.Baseline.runBaseline(sourcemapTestName, `${name}/${shortCasePath}.sourcemap.txt`, () => {
-                        const record = result.getSourceMapRecord();
-                        if (testConfig.compilerOptions.noEmitOnError && result.errors.length !== 0 && record === undefined) {
-                            // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
+                    const errorsTestName = `Correct errors`;
+                    it(errorsTestName, () => {
+                        Harness.Baseline.runBaseline(errorsTestName, `${name}/${shortCasePath}.errors.txt`, () => {
                             /* tslint:disable:no-null-keyword */
-                            return null;
+                            if (result.errors.length === 0) return null;
                             /* tslint:enable:no-null-keyword */
-                        }
-                        return record;
+                            return Harness.Compiler.getErrorBaseline(inputTestFiles, result.errors);
+                        });
                     });
-                });
 
-                const sourcemapOutputTestName = `Correct sourcemap output`;
-                it(sourcemapOutputTestName, () => {
-                    if (testConfig.compilerOptions.inlineSourceMap) {
-                        if (result.sourceMaps.length > 0) {
-                            throw new Error("No sourcemap files should be generated if inlineSourceMaps was set.");
+                    const traceTestName = `Correct traces`;
+                    it(traceTestName, () => {
+                        if (!(testConfig.compilerOptions.traceResolution || testConfig.compilerOptions.profileExtensions)) {
+                            return;
                         }
-                        return;
-                    }
-                    else if (!testConfig.compilerOptions.sourceMap) {
-                        return;
-                    }
-                    if (result.sourceMaps.length !== result.files.length) {
-                        throw new Error("Number of sourcemap files should be same as js files.");
-                    }
-
-                    Harness.Baseline.runBaseline(sourcemapOutputTestName, `${name}/${shortCasePath}.js.map`, () => {
-                        if (testConfig.compilerOptions.noEmitOnError && result.errors.length !== 0 && result.sourceMaps.length === 0) {
-                            // We need to return null here or the runBaseLine will actually create a empty file.
-                            // Baselining isn't required here because there is no output.
-                            /* tslint:disable:no-null-keyword */
-                            return null;
-                            /* tslint:enable:no-null-keyword */
-                        }
-
-                        let sourceMapCode = "";
-                        for (let i = 0; i < result.sourceMaps.length; i++) {
-                            sourceMapCode += "//// [" + Harness.Path.getFileName(result.sourceMaps[i].fileName) + "]\r\n";
-                            sourceMapCode += this.getByteOrderMarkText(result.sourceMaps[i]);
-                            sourceMapCode += result.sourceMaps[i].code;
-                        }
-
-                        return sourceMapCode;
+                        Harness.Baseline.runBaseline(traceTestName, `${name}/${shortCasePath}.trace.txt`, (): string => {
+                            return (result.traceResults || []).join("\n");
+                        });
                     });
-                });
 
-                const emitOutputTestName = `Correct emit (JS/DTS)`;
-                it(emitOutputTestName, () => {
-                    if (!ts.forEach(testConfig.inputFiles, name => !ts.endsWith(name, ".d.ts"))) {
-                        return;
-                    }
-                    if (!testConfig.compilerOptions.noEmit && result.files.length === 0 && result.errors.length === 0) {
-                        throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
-                    }
-
-                    // check js output
-                    Harness.Baseline.runBaseline(emitOutputTestName, `${name}/${shortCasePath}.js`, () => {
-                        let tsCode = "";
-                        const tsSources = inputTestFiles;
-                        if (tsSources.length > 1) {
-                            tsCode += "//// [" + caseNameNoExtension + "] ////\r\n\r\n";
+                    const sourcemapTestName = `Correct sourcemap content`;
+                    it(sourcemapTestName, () => {
+                        if (!(testConfig.compilerOptions.sourceMap || testConfig.compilerOptions.inlineSourceMap)) {
+                            return;
                         }
-                        for (let i = 0; i < tsSources.length; i++) {
-                            tsCode += "//// [" + Harness.Path.getFileName(tsSources[i].unitName) + "]\r\n";
-                            tsCode += tsSources[i].content + (i < (tsSources.length - 1) ? "\r\n" : "");
-                        }
-
-                        let jsCode = "";
-                        for (let i = 0; i < result.files.length; i++) {
-                            jsCode += "//// [" + Harness.Path.getFileName(result.files[i].fileName) + "]\r\n";
-                            jsCode += this.getByteOrderMarkText(result.files[i]);
-                            jsCode += result.files[i].code;
-                        }
-
-                        if (result.declFilesCode.length > 0) {
-                            jsCode += "\r\n\r\n";
-                            for (let i = 0; i < result.declFilesCode.length; i++) {
-                                jsCode += "//// [" + Harness.Path.getFileName(result.declFilesCode[i].fileName) + "]\r\n";
-                                jsCode += this.getByteOrderMarkText(result.declFilesCode[i]);
-                                jsCode += result.declFilesCode[i].code;
+                        Harness.Baseline.runBaseline(sourcemapTestName, `${name}/${shortCasePath}.sourcemap.txt`, () => {
+                            const record = result.getSourceMapRecord();
+                            if (testConfig.compilerOptions.noEmitOnError && result.errors.length !== 0 && record === undefined) {
+                                // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
+                                /* tslint:disable:no-null-keyword */
+                                return null;
+                                /* tslint:enable:no-null-keyword */
                             }
+                            return record;
+                        });
+                    });
+
+                    const sourcemapOutputTestName = `Correct sourcemap output`;
+                    it(sourcemapOutputTestName, () => {
+                        if (testConfig.compilerOptions.inlineSourceMap) {
+                            if (result.sourceMaps.length > 0) {
+                                throw new Error("No sourcemap files should be generated if inlineSourceMaps was set.");
+                            }
+                            return;
+                        }
+                        else if (!testConfig.compilerOptions.sourceMap) {
+                            return;
+                        }
+                        if (result.sourceMaps.length !== result.files.length) {
+                            throw new Error("Number of sourcemap files should be same as js files.");
                         }
 
-                        if (jsCode.length > 0) {
-                            return tsCode + "\r\n\r\n" + jsCode;
+                        Harness.Baseline.runBaseline(sourcemapOutputTestName, `${name}/${shortCasePath}.js.map`, () => {
+                            if (testConfig.compilerOptions.noEmitOnError && result.errors.length !== 0 && result.sourceMaps.length === 0) {
+                                // We need to return null here or the runBaseLine will actually create a empty file.
+                                // Baselining isn't required here because there is no output.
+                                /* tslint:disable:no-null-keyword */
+                                return null;
+                                /* tslint:enable:no-null-keyword */
+                            }
+
+                            let sourceMapCode = "";
+                            for (let i = 0; i < result.sourceMaps.length; i++) {
+                                sourceMapCode += "//// [" + Harness.Path.getFileName(result.sourceMaps[i].fileName) + "]\r\n";
+                                sourceMapCode += this.getByteOrderMarkText(result.sourceMaps[i]);
+                                sourceMapCode += result.sourceMaps[i].code;
+                            }
+
+                            return sourceMapCode;
+                        });
+                    });
+
+                    const emitOutputTestName = `Correct emit (JS/DTS)`;
+                    it(emitOutputTestName, () => {
+                        if (!ts.forEach(testConfig.inputFiles, name => !ts.endsWith(name, ".d.ts"))) {
+                            return;
                         }
-                        else {
-                            /* tslint:disable:no-null-keyword */
-                            return null;
-                            /* tslint:enable:no-null-keyword */
+                        if (!testConfig.compilerOptions.noEmit && result.files.length === 0 && result.errors.length === 0) {
+                            throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
                         }
+
+                        // check js output
+                        Harness.Baseline.runBaseline(emitOutputTestName, `${name}/${shortCasePath}.js`, () => {
+                            let tsCode = "";
+                            const tsSources = inputTestFiles;
+                            if (tsSources.length > 1) {
+                                tsCode += "//// [" + caseNameNoExtension + "] ////\r\n\r\n";
+                            }
+                            for (let i = 0; i < tsSources.length; i++) {
+                                tsCode += "//// [" + Harness.Path.getFileName(tsSources[i].unitName) + "]\r\n";
+                                tsCode += tsSources[i].content + (i < (tsSources.length - 1) ? "\r\n" : "");
+                            }
+
+                            let jsCode = "";
+                            for (let i = 0; i < result.files.length; i++) {
+                                jsCode += "//// [" + Harness.Path.getFileName(result.files[i].fileName) + "]\r\n";
+                                jsCode += this.getByteOrderMarkText(result.files[i]);
+                                jsCode += result.files[i].code;
+                            }
+
+                            if (result.declFilesCode.length > 0) {
+                                jsCode += "\r\n\r\n";
+                                for (let i = 0; i < result.declFilesCode.length; i++) {
+                                    jsCode += "//// [" + Harness.Path.getFileName(result.declFilesCode[i].fileName) + "]\r\n";
+                                    jsCode += this.getByteOrderMarkText(result.declFilesCode[i]);
+                                    jsCode += result.declFilesCode[i].code;
+                                }
+                            }
+
+                            if (jsCode.length > 0) {
+                                return tsCode + "\r\n\r\n" + jsCode;
+                            }
+                            else {
+                                /* tslint:disable:no-null-keyword */
+                                return null;
+                                /* tslint:enable:no-null-keyword */
+                            }
+                        });
                     });
                 });
             });
-        });
 
-        if (testConfig.fourslashTest) {
-            describe(`${caseNameNoExtension} - Fourslash`, () => {
-                // TODO
+            it("passes fourslash verification", () => {
+                if (testConfig.fourslashTest) {
+                    this.virtualFs = {};
+                    const testFile = `${this.fourslashPath}/${testConfig.fourslashTest}`;
+                    let testFileContents = Harness.IO.readFile(testFile);
+                    testFileContents = testFileContents.replace(`/// <reference path="../../fourslash/fourslash.ts" />`, "");
+                    const testContent = [`/// <reference path="fourslash.ts" />`, ""];
+                    ts.forEach(inputTestFiles, testFile => {
+                        testContent.push(`// @Filename: ${testFile.unitName.substring(1)}`); // Drop leading /
+                        testContent.push(...testFile.content.split("\n").map(s => `////${s}`));
+                    });
+                    testContent.push("// @Filename: tsconfig.json");
+                    testContent.push(`////${JSON.stringify(testConfig.compilerOptions)}`);
+                    testContent.push(testFileContents);
+                    const finishedTestContent = testContent.join("\n");
+
+                    this.loadSetIntoFs(this.virtualLib);
+                    ts.forEach(testConfig.availableExtensions, ext => this.loadSetIntoFsAt(this.extensions[ext], `/node_modules/${ext}`));
+
+                    const adapterFactory = (token: ts.HostCancellationToken) => this.makeLSMockAdapter(ts.getKeys(this.virtualFs), testConfig.compilerOptions, token);
+
+                    FourSlash.runFourSlashTestContent(shortCasePath, adapterFactory, finishedTestContent, testFile);
+                }
             });
-        }
+        });
     }
 }

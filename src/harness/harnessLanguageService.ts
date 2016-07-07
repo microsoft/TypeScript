@@ -123,7 +123,7 @@ namespace Harness.LanguageService {
     }
 
     export class LanguageServiceAdapterHost {
-        protected fileNameToScript: ts.Map<ScriptInfo> = {};
+        public fileNameToScript: ts.Map<ScriptInfo> = {};
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
                     protected settings = ts.getDefaultCompilerOptions()) {
