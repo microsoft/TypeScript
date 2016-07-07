@@ -513,8 +513,8 @@ interface NumberConstructor {
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
 declare const Number: NumberConstructor;
 
-interface TemplateStringsArray extends Array<string> {
-    readonly raw: string[];
+interface TemplateStringsArray extends ReadonlyArray<string> {
+    readonly raw: ReadonlyArray<string>
 }
 
 interface Math {
