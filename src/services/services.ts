@@ -7911,7 +7911,9 @@ namespace ts {
                     errorCode: error,
                     sourceFile: sourceFile,
                     span: { start, length: end - start },
-                    checker: checker
+                    checker: checker,
+                    allFiles: program.getSourceFiles(),
+                    useCaseSensitiveFileNames: host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : true
                 };
 
                 const fixes = codeFixProvider.getFixes(context);

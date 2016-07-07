@@ -11,6 +11,8 @@ namespace ts {
         sourceFile: SourceFile;
         span: TextSpan;
         checker: TypeChecker;
+        allFiles: SourceFile[];
+        useCaseSensitiveFileNames: boolean;
     }
 
     export namespace codeFix {

@@ -4,3 +4,4 @@
 ///<reference path='unusedIdentifierFixes.ts' />
 ///<reference path='changeExtendsToImplementsFix.ts' />
 ///<reference path='interfaceFixes.ts' />
+///<reference path='importFixes.ts' />

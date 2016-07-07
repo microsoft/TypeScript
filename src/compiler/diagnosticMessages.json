@@ -3047,5 +3047,21 @@
     "Implement inherited abstract class": {
         "category": "CodeFix",
         "code": 90007
+    },
+    "Add missing import for unknown identifier": {
+        "category": "CodeFix",
+        "code": 90008
+    },
+    "Import {0} from {1}": {
+        "category": "CodeFix",
+        "code": 90009
+    },
+    "Change {0} to {1}": {
+        "category": "CodeFix",
+        "code": 90010
+    },
+    "Add {0} to existing import declaration from {1}": {
+        "category": "CodeFix",
+        "code": 90011
     }
 }
