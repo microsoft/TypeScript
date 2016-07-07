@@ -784,7 +784,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
                     // assumes file.contents is a Buffer
                     const maps = JSON.parse(convertMap.fromSource(res.toString(), /*largeSource*/true).toJSON());
                     delete maps.sourceRoot;
-                    maps.sources = maps.sources.map(s => (s === "_stream_0.js") ? path.resolve("built/local/_stream_0.js") : path.resolve(s));
+                    maps.sources = maps.sources.map(s => path.resolve(s === "_stream_0.js" ? "built/local/_stream_0.js" : s));
                     // Strip browserify's inline comments away (could probably just let sorcery do this, but then we couldn't fix the paths)
                     file.contents = new Buffer(convertMap.removeComments(res.toString()));
                     const chain = sorcery.loadSync("built/local/bundle.js", {
