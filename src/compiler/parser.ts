@@ -6374,6 +6374,9 @@ namespace ts {
                                 case SyntaxKind.AtToken:
                                     if (canParseTag) {
                                         parentTagTerminated = !tryParseChildTag(jsDocTypeLiteral);
+                                        if (!parentTagTerminated) {
+                                            resumePos = scanner.getStartPos();
+                                        }
                                     }
                                     seenAsterisk = false;
                                     break;
