@@ -248,7 +248,7 @@ namespace ts.server {
             else {
                 const start = this.hrtime();
                 const compressed = this.compress(json);
-                var elapsed = this.hrtime(start);
+                const elapsed = this.hrtime(start);
 
                 if (this.logger.isVerbose()) {
                     this.logger.info(`compressed message ${json.length} to ${compressed.length} in ${hrTimeToMilliseconds(elapsed)} ms using ${compressed.compressionKind}`);
