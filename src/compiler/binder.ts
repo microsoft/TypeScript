@@ -199,7 +199,7 @@ namespace ts {
                     // other kinds of value declarations take precedence over modules
                     symbol.valueDeclaration = node;
                 }
-        }
+            }
         }
 
         // Should not be called on a declaration with a computed property name,
@@ -226,6 +226,7 @@ namespace ts {
                     return "__constructor";
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.CallSignature:
+                case SyntaxKind.JSDocCallbackType:
                     return "__call";
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
@@ -264,6 +265,17 @@ namespace ts {
                     let functionType = <JSDocFunctionType>node.parent;
                     let index = indexOf(functionType.parameters, node);
                     return "p" + index;
+                case SyntaxKind.JSDocParameterTag:
+                    // JSDocParameterTag can be used for either function parameter type notation
+                    // or in @callback tag declaration. We only create new symbol when the JSDocParameterTag
+                    // is part of a @callback tag declaration.
+                    Debug.assert(node.parent.kind === SyntaxKind.JSDocCallbackType, "Should not bind JSDocParameterTag if it is not part of a JSDocCallbackTag");
+                    const preOrPostParameterName =(<JSDocParameterTag>node).preParameterName || (<JSDocParameterTag>node).postParameterName;
+                    if (preOrPostParameterName) {
+                        return preOrPostParameterName.text;
+                    }
+                    let jsDocCallbackType = <JSDocCallbackType>node.parent;
+                    return "p" + indexOf(jsDocCallbackType.parameterTags, node);
                 case SyntaxKind.JSDocTypedefTag:
                     const parentNode = node.parent && node.parent.parent;
                     let nameFromParentNode: string;
@@ -1199,6 +1211,7 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.CallSignature:
+                case SyntaxKind.JSDocCallbackType:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.FunctionType:
@@ -1289,6 +1302,7 @@ namespace ts {
                     return declareSymbol(container.symbol.members, container.symbol, node, symbolFlags, symbolExcludes);
 
                 case SyntaxKind.FunctionType:
+                case SyntaxKind.JSDocCallbackType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
@@ -1403,12 +1417,12 @@ namespace ts {
             }
         }
 
-        function bindFunctionOrConstructorType(node: SignatureDeclaration): void {
+        function bindFunctionOrConstructorType(node: SignatureDeclaration | JSDocCallbackType): void {
             // For a given function symbol "<...>(...) => T" we want to generate a symbol identical
             // to the one we would get for: { <...>(...): T }
             //
             // We do that by making an anonymous type literal symbol, and then setting the function
-            // symbol as its sole member. To the rest of the system, this symbol will be  indistinguishable
+            // symbol as its sole member. To the rest of the system, this symbol will be indistinguishable
             // from an actual type literal symbol you would have gotten had you used the long form.
             const symbol = createSymbol(SymbolFlags.Signature, getDeclarationName(node));
             addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
@@ -1820,7 +1834,8 @@ namespace ts {
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.JSDocFunctionType:
-                    return bindFunctionOrConstructorType(<SignatureDeclaration>node);
+                case SyntaxKind.JSDocCallbackType:
+                    return bindFunctionOrConstructorType(<SignatureDeclaration | JSDocCallbackType>node);
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JSDocRecordType:
@@ -1846,8 +1861,13 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
                 case SyntaxKind.JSDocTypedefTag:
+                case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.TypeAliasDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                case SyntaxKind.JSDocParameterTag:
+                    return container.kind === SyntaxKind.JSDocCallbackType
+                        ? bindJSDocParamTag(<JSDocParameterTag>node)
+                        : undefined;
                 case SyntaxKind.EnumDeclaration:
                     return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
@@ -2111,6 +2131,10 @@ namespace ts {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
                 }
             }
+        }
+
+        function bindJSDocParamTag(node: JSDocParameterTag) {
+            declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
         }
 
         function bindParameter(node: ParameterDeclaration) {

@@ -221,7 +221,7 @@ namespace ts.NavigationBar {
                 if (node.jsDocComments) {
                     for (const jsDocComment of node.jsDocComments) {
                         for (const tag of jsDocComment.tags) {
-                            if (tag.kind === SyntaxKind.JSDocTypedefTag) {
+                            if (tag.kind === SyntaxKind.JSDocTypedefTag || tag.kind === SyntaxKind.JSDocCallbackTag) {
                                 addLeafNode(tag);
                             }
                         }
@@ -460,6 +460,7 @@ namespace ts.NavigationBar {
                 case SyntaxKind.SourceFile:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.JSDocTypedefTag:
+                case SyntaxKind.JSDocCallbackTag:
                     return true;
 
                 case SyntaxKind.Constructor:
@@ -583,6 +584,7 @@ namespace ts.NavigationBar {
                 return ts.ScriptElementKind.functionElement;
 
             case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocCallbackTag:
                 return ScriptElementKind.typeElement;
 
             default:

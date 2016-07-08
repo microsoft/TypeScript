@@ -409,6 +409,11 @@ namespace ts {
             case SyntaxKind.JSDocPropertyTag:
                 return visitNode(cbNode, (<JSDocPropertyTag>node).typeExpression) ||
                     visitNode(cbNode, (<JSDocPropertyTag>node).name);
+            case SyntaxKind.JSDocCallbackTag:
+                return visitNode(cbNode, (<JSDocCallbackTag>node).name) ||
+                    visitNode(cbNode, (<JSDocCallbackTag>node).type);
+            case SyntaxKind.JSDocCallbackType:
+                return visitNodes(cbNodes, (<JSDocCallbackType>node).parameterTags);
         }
     }
 
@@ -6207,6 +6212,8 @@ namespace ts {
                                 return handleTypeTag(atToken, tagName);
                             case "typedef":
                                 return handleTypedefTag(atToken, tagName);
+                            case "callback":
+                                return handleCallbackTag(atToken, tagName);
                         }
                     }
 
@@ -6341,13 +6348,15 @@ namespace ts {
                     typedefTag.name = parseJSDocIdentifierName();
                     typedefTag.typeExpression = typeExpression;
 
+                    const jsDocTypeLiteral = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, scanner.getStartPos());
                     if (typeExpression) {
                         if (typeExpression.type.kind === SyntaxKind.JSDocTypeReference) {
                             const jsDocTypeReference = <JSDocTypeReference>typeExpression.type;
                             if (jsDocTypeReference.name.kind === SyntaxKind.Identifier) {
                                 const name = <Identifier>jsDocTypeReference.name;
                                 if (name.text === "Object") {
-                                    typedefTag.jsDocTypeLiteral = scanChildTags();
+                                    scanChildTags(tryParseChildTag, jsDocTypeLiteral);
+                                    typedefTag.jsDocTypeLiteral = finishNode(jsDocTypeLiteral);
                                 }
                             }
                         }
@@ -6356,78 +6365,111 @@ namespace ts {
                         }
                     }
                     else {
-                        typedefTag.jsDocTypeLiteral = scanChildTags();
+                        scanChildTags(tryParseChildTag, jsDocTypeLiteral);
+                        typedefTag.jsDocTypeLiteral = finishNode(jsDocTypeLiteral);
                     }
 
                     return finishNode(typedefTag);
 
-                    function scanChildTags(): JSDocTypeLiteral {
-                        const jsDocTypeLiteral = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, scanner.getStartPos());
-                        let resumePos = scanner.getStartPos();
-                        let canParseTag = true;
-                        let seenAsterisk = false;
-                        let parentTagTerminated = false;
+                    function tryParseChildTag(parentTag: JSDocTypeLiteral): boolean {
+                        Debug.assert(token === SyntaxKind.AtToken);
+                        const atToken = createNode(SyntaxKind.AtToken, scanner.getStartPos());
+                        atToken.end = scanner.getTextPos();
+                        nextJSDocToken();
 
-                        while (token !== SyntaxKind.EndOfFileToken && !parentTagTerminated) {
-                            nextJSDocToken();
-                            switch (token) {
-                                case SyntaxKind.AtToken:
-                                    if (canParseTag) {
-                                        parentTagTerminated = !tryParseChildTag(jsDocTypeLiteral);
-                                    }
-                                    seenAsterisk = false;
-                                    break;
-                                case SyntaxKind.NewLineTrivia:
-                                    resumePos = scanner.getStartPos() - 1;
-                                    canParseTag = true;
-                                    seenAsterisk = false;
-                                    break;
-                                case SyntaxKind.AsteriskToken:
-                                    if (seenAsterisk) {
-                                        canParseTag = false;
-                                    }
-                                    seenAsterisk = true;
-                                    break;
-                                case SyntaxKind.Identifier:
-                                    canParseTag = false;
-                                case SyntaxKind.EndOfFileToken:
-                                    break;
-                            }
+                        const tagName = parseJSDocIdentifierName();
+                        if (!tagName) {
+                            return false;
                         }
-                        scanner.setTextPos(resumePos);
-                        return finishNode(jsDocTypeLiteral);
+
+                        switch (tagName.text) {
+                            case "type":
+                                if (parentTag.jsDocTypeTag) {
+                                    // already has a @type tag, terminate the parent tag now.
+                                    return false;
+                                }
+                                parentTag.jsDocTypeTag = handleTypeTag(atToken, tagName);
+                                return true;
+                            case "prop":
+                            case "property":
+                                if (!parentTag.jsDocPropertyTags) {
+                                    parentTag.jsDocPropertyTags = <NodeArray<JSDocPropertyTag>>[];
+                                }
+                                const propertyTag = handlePropertyTag(atToken, tagName);
+                                parentTag.jsDocPropertyTags.push(propertyTag);
+                                return true;
+                        }
+                        return false;
                     }
                 }
 
-                function tryParseChildTag(parentTag: JSDocTypeLiteral): boolean {
-                    Debug.assert(token === SyntaxKind.AtToken);
-                    const atToken = createNode(SyntaxKind.AtToken, scanner.getStartPos());
-                    atToken.end = scanner.getTextPos();
-                    nextJSDocToken();
+                function handleCallbackTag(atToken: Node, tagName: Identifier): JSDocCallbackTag {
+                    const callbackTag = <JSDocCallbackTag>createNode(SyntaxKind.JSDocCallbackTag, atToken.pos);
+                    callbackTag.atToken = atToken;
+                    callbackTag.tagName = tagName;
+                    callbackTag.name = parseJSDocIdentifierName();
+                    const callbackTypeNode = <JSDocCallbackType>createNode(SyntaxKind.JSDocCallbackType, scanner.getStartPos());
+                    scanChildTags(tryParseChildTag, callbackTypeNode);
+                    callbackTag.type = finishNode(callbackTypeNode);
+                    return finishNode(callbackTag);
 
-                    const tagName = parseJSDocIdentifierName();
-                    if (!tagName) {
+                    function tryParseChildTag(parentTag: JSDocCallbackType) {
+                        Debug.assert(token === SyntaxKind.AtToken);
+                        const atToken = createNode(SyntaxKind.AtToken, scanner.getStartPos());
+                        atToken.end = scanner.getTextPos();
+                        nextJSDocToken();
+
+                        const tagName = parseJSDocIdentifierName();
+                        if (!tagName) {
+                            return false;
+                        }
+
+                        switch (tagName.text) {
+                            case "param":
+                                (parentTag.parameterTags || (parentTag.parameterTags = <NodeArray<JSDocParameterTag>>[])).push(handleParamTag(atToken, tagName));
+                                return true;
+                        }
                         return false;
                     }
+                }
 
-                    switch (tagName.text) {
-                        case "type":
-                            if (parentTag.jsDocTypeTag) {
-                                // already has a @type tag, terminate the parent tag now.
-                                return false;
-                            }
-                            parentTag.jsDocTypeTag = handleTypeTag(atToken, tagName);
-                            return true;
-                        case "prop":
-                        case "property":
-                            if (!parentTag.jsDocPropertyTags) {
-                                parentTag.jsDocPropertyTags = <NodeArray<JSDocPropertyTag>>[];
-                            }
-                            const propertyTag = handlePropertyTag(atToken, tagName);
-                            parentTag.jsDocPropertyTags.push(propertyTag);
-                            return true;
+                function scanChildTags<T extends Node>(tryParseChildTag: (parentTag: T) => boolean, parentTag: T): T {
+                    let resumePos = scanner.getStartPos();
+                    let canParseTag = true;
+                    let seenAsterisk = false;
+                    let parentTagTerminated = false;
+
+                    while (token !== SyntaxKind.EndOfFileToken && !parentTagTerminated) {
+                        nextJSDocToken();
+                        switch (token) {
+                            case SyntaxKind.AtToken:
+                                if (canParseTag) {
+                                    parentTagTerminated = !tryParseChildTag(parentTag);
+                                    if (!parentTagTerminated) {
+                                        resumePos = scanner.getStartPos();
+                                    }
+                                }
+                                seenAsterisk = false;
+                                break;
+                            case SyntaxKind.NewLineTrivia:
+                                resumePos = scanner.getStartPos() - 1;
+                                canParseTag = true;
+                                seenAsterisk = false;
+                                break;
+                            case SyntaxKind.AsteriskToken:
+                                if (seenAsterisk) {
+                                    canParseTag = false;
+                                }
+                                seenAsterisk = true;
+                                break;
+                            case SyntaxKind.Identifier:
+                                canParseTag = false;
+                            case SyntaxKind.EndOfFileToken:
+                                break;
+                        }
                     }
-                    return false;
+                    scanner.setTextPos(resumePos);
+                    return;
                 }
 
                 function handleTemplateTag(atToken: Node, tagName: Identifier): JSDocTemplateTag {

@@ -2391,7 +2391,7 @@ namespace ts {
             }
 
             function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                const parameterNode = <ParameterDeclaration>p.valueDeclaration;
+                const parameterNode = <ParameterDeclaration | JSDocParameterTag>p.valueDeclaration;
                 if (isRestParameter(parameterNode)) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
@@ -3178,6 +3178,14 @@ namespace ts {
                         type = checkExpressionCached((<BinaryExpression>declaration.parent).right);
                     }
                 }
+                else if (declaration.kind == SyntaxKind.JSDocParameterTag) {
+                    if ((<JSDocParameterTag>declaration).typeExpression) {
+                        const jsDocType = (<JSDocParameterTag>declaration).typeExpression.type;
+                        if (jsDocType) {
+                            type = getTypeFromTypeNode(jsDocType);
+                        }
+                    }
+                }
 
                 if (type === undefined) {
                     type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
@@ -3653,18 +3661,23 @@ namespace ts {
                 }
 
                 let type: Type;
-                let declaration: JSDocTypedefTag | TypeAliasDeclaration = <JSDocTypedefTag>getDeclarationOfKind(symbol, SyntaxKind.JSDocTypedefTag);
-                if (declaration) {
-                    if (declaration.jsDocTypeLiteral) {
-                        type = getTypeFromTypeNode(declaration.jsDocTypeLiteral);
+                let declaration: Declaration;
+                if (declaration = getDeclarationOfKind(symbol, SyntaxKind.JSDocTypedefTag)) {
+                    const jsDocTypedefTag = <JSDocTypedefTag>declaration;
+                    if (jsDocTypedefTag.jsDocTypeLiteral) {
+                        type = getTypeFromTypeNode(jsDocTypedefTag.jsDocTypeLiteral);
                     }
-                    else {
-                        type = getTypeFromTypeNode(declaration.typeExpression.type);
+                    else if (jsDocTypedefTag.typeExpression) {
+                        type = getTypeFromTypeNode(jsDocTypedefTag.typeExpression.type);
                     }
                 }
+                else if (declaration = getDeclarationOfKind(symbol, SyntaxKind.JSDocCallbackTag)) {
+                    const jsDocCallbackTag = <JSDocCallbackTag>declaration;
+                    type = getTypeFromTypeNode(jsDocCallbackTag.type);
+                }
                 else {
-                    declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
-                    type = getTypeFromTypeNode(declaration.type);
+                    declaration = getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
+                    type = getTypeFromTypeNode((<TypeAliasDeclaration>declaration).type);
                 }
 
                 if (popTypeResolution()) {
@@ -3906,7 +3919,7 @@ namespace ts {
             resolveObjectTypeMembers(type, source, typeParameters, typeArguments);
         }
 
-        function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[],
+        function createSignature(declaration: SignatureDeclaration | JSDocCallbackType, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[],
             resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasStringLiterals: boolean): Signature {
             const sig = new Signature(checker);
             sig.declaration = declaration;
@@ -4421,26 +4434,35 @@ namespace ts {
             return result;
         }
 
+        function isJSDocOptionalParameterTag(node: JSDocParameterTag) {
+            if (!node) {
+                return false;
+            }
+
+            if (node.isBracketed) {
+                return true;
+            }
+            if (node.typeExpression && node.typeExpression.type) {
+                return node.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+            }
+            return false;
+        }
+
         function isJSDocOptionalParameter(node: ParameterDeclaration) {
             if (node.flags & NodeFlags.JavaScriptFile) {
                 if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
                     return true;
                 }
 
-                const paramTag = getCorrespondingJSDocParameterTag(node);
-                if (paramTag) {
-                    if (paramTag.isBracketed) {
-                        return true;
-                    }
-
-                    if (paramTag.typeExpression) {
-                        return paramTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
-                    }
-                }
+                return isJSDocOptionalParameterTag(getCorrespondingJSDocParameterTag(node));
             }
         }
 
-        function isOptionalParameter(node: ParameterDeclaration) {
+        function isOptionalParameter(node: ParameterDeclaration | JSDocParameterTag) {
+            if (isJSDocParameterTag(node)) {
+                return isJSDocOptionalParameterTag(node);
+            }
+
             if (hasQuestionToken(node) || isJSDocOptionalParameter(node)) {
                 return true;
             }
@@ -4474,7 +4496,7 @@ namespace ts {
             }
         }
 
-        function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
+        function getSignatureFromDeclaration(declaration: SignatureDeclaration | JSDocCallbackType): Signature {
             const links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
                 const parameters: Symbol[] = [];
@@ -4487,8 +4509,9 @@ namespace ts {
                 // If this is a JSDoc construct signature, then skip the first parameter in the
                 // parameter list.  The first parameter represents the return type of the construct
                 // signature.
-                for (let i = isJSConstructSignature ? 1 : 0, n = declaration.parameters.length; i < n; i++) {
-                    const param = declaration.parameters[i];
+                const parameterNodes = isJSDocCallbackType(declaration) ? declaration.parameterTags : declaration.parameters;
+                for (let i = isJSConstructSignature ? 1 : 0, n = parameterNodes.length; i < n; i++) {
+                    const param = parameterNodes[i];
 
                     let paramSymbol = param.symbol;
                     // Include parameter symbol instead of property symbol in the signature
@@ -4504,18 +4527,30 @@ namespace ts {
                         parameters.push(paramSymbol);
                     }
 
-                    if (param.type && param.type.kind === SyntaxKind.StringLiteralType) {
-                        hasStringLiterals = true;
-                    }
-
-                    if (param.initializer || param.questionToken || param.dotDotDotToken || isJSDocOptionalParameter(param)) {
-                        if (minArgumentCount < 0) {
-                            minArgumentCount = i - (hasThisParameter ? 1 : 0);
+                    if (isJSDocParameterTag(param)) {
+                        if (isJSDocOptionalParameterTag(param)) {
+                            if (minArgumentCount < 0) {
+                                minArgumentCount = i - (hasThisParameter ? 1 : 0);
+                            }
+                        }
+                        else {
+                            minArgumentCount = -1;
                         }
                     }
                     else {
-                        // If we see any required parameters, it means the prior ones were not in fact optional.
-                        minArgumentCount = -1;
+                        if (param.type && param.type.kind === SyntaxKind.StringLiteralType) {
+                            hasStringLiterals = true;
+                        }
+
+                        if (param.initializer || param.questionToken || param.dotDotDotToken || isJSDocOptionalParameter(param)) {
+                            if (minArgumentCount < 0) {
+                                minArgumentCount = i - (hasThisParameter ? 1 : 0);
+                            }
+                        }
+                        else {
+                            // If we see any required parameters, it means the prior ones were not in fact optional.
+                            minArgumentCount = -1;
+                        }
                     }
                 }
 
@@ -4531,7 +4566,7 @@ namespace ts {
                 }
 
                 if (minArgumentCount < 0) {
-                    minArgumentCount = declaration.parameters.length - (hasThisParameter ? 1 : 0);
+                    minArgumentCount = parameterNodes.length - (hasThisParameter ? 1 : 0);
                 }
                 if (isJSConstructSignature) {
                     minArgumentCount--;
@@ -4540,11 +4575,14 @@ namespace ts {
                 const classType = declaration.kind === SyntaxKind.Constructor ?
                     getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
                     : undefined;
-                const typeParameters = classType ? classType.localTypeParameters :
-                    declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) :
+                let typeParameters: TypeParameter[];
+                if (!isJSDocCallbackType(declaration)) {
+                    typeParameters = classType ? classType.localTypeParameters :
+                        declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) :
                         getTypeParametersFromJSDocTemplate(declaration);
-                const returnType = getSignatureReturnTypeFromDeclaration(declaration, minArgumentCount, isJSConstructSignature, classType);
-                const typePredicate = declaration.type && declaration.type.kind === SyntaxKind.TypePredicate ?
+                }
+                const returnType = isJSDocCallbackType(declaration) ? voidType : getSignatureReturnTypeFromDeclaration(declaration, minArgumentCount, isJSConstructSignature, classType);
+                const typePredicate = !isJSDocCallbackType(declaration) && declaration.type && declaration.type.kind === SyntaxKind.TypePredicate ?
                     createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode) :
                     undefined;
 
@@ -4603,6 +4641,7 @@ namespace ts {
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
                     case SyntaxKind.JSDocFunctionType:
+                    case SyntaxKind.JSDocCallbackType:
                         // Don't include signature if node is the implementation of an overloaded function. A node is considered
                         // an implementation node if it has a body and the previous node is of the same kind and immediately
                         // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
@@ -4612,7 +4651,7 @@ namespace ts {
                                 break;
                             }
                         }
-                        result.push(getSignatureFromDeclaration(<SignatureDeclaration>node));
+                        result.push(getSignatureFromDeclaration(<SignatureDeclaration | JSDocCallbackType>node));
                 }
             }
             return result;
@@ -5357,6 +5396,7 @@ namespace ts {
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.JSDocRecordType:
+                case SyntaxKind.JSDocCallbackType:
                     return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
