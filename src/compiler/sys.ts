@@ -200,7 +200,7 @@ namespace ts {
                 directoryExists(path: string) {
                     return fso.FolderExists(path);
                 },
-                createDirectory(directoryName: string) {
+                createDirectory(this: System, directoryName: string) {
                     if (!this.directoryExists(directoryName)) {
                         fso.CreateFolder(directoryName);
                     }
@@ -500,7 +500,7 @@ namespace ts {
                 },
                 fileExists,
                 directoryExists,
-                createDirectory(directoryName: string) {
+                createDirectory(this: System, directoryName: string) {
                     if (!this.directoryExists(directoryName)) {
                         _fs.mkdirSync(directoryName);
                     }

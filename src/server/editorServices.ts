@@ -2081,7 +2081,7 @@ namespace ts.server {
             const walkFns = {
                 goSubtree: true,
                 done: false,
-                leaf: function (relativeStart: number, relativeLength: number, ll: LineLeaf) {
+                leaf: function (this: ILineIndexWalker, relativeStart: number, relativeLength: number, ll: LineLeaf) {
                     if (!f(ll, relativeStart, relativeLength)) {
                         this.done = true;
                     }

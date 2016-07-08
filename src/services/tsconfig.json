@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "noImplicitAny": true,
+        "noImplicitThis": true,
         "removeComments": false,
         "preserveConstEnums": true,
         "outFile": "../../built/local/typescriptServices.js",
