@@ -42,14 +42,15 @@ namespace ts.codeFix {
                     for (const exported in exports) {
                         if (exports.hasOwnProperty(exported) && exported === name) {
                             let moduleSpecifier: string;
-                            if (file.path.indexOf(nodeModulesDir) !== -1) {
-                                moduleSpecifier = extractModuleNameFromPath(file.path);
+                            const sourceDir = getDirectoryPath(sourceFile.fileName);
+                            if (file.fileName.indexOf(nodeModulesDir) !== -1) {
+                                moduleSpecifier = convertPathToModuleSpecifier(file.fileName, context);
                             } else {
                                 // Try and convert the file path into one relative to the source file
-                                const sourceDir = getDirectoryPath(sourceFile.path);
+
                                 const pathName = getRelativePathToDirectoryOrUrl(
                                     sourceDir,
-                                    file.path,
+                                    file.fileName,
                                     sourceDir,
                                     createGetCanonicalFileName(context.useCaseSensitiveFileNames),
                                     false
@@ -60,7 +61,9 @@ namespace ts.codeFix {
                                 moduleSpecifier = removeFileExtension(isRootedOrRelative ? pathName : combinePaths(".", pathName));
                             }
 
-                            allActions.push(getCodeActionForImport(moduleSpecifier, compareRelativeModuleSpecifiers));
+                            allActions.push(getCodeActionForImport(moduleSpecifier, (a, b) =>
+                                compareModuleSpecifiers(a, b, sourceDir, context.useCaseSensitiveFileNames)
+                            ));
                         }
                     }
                 }
@@ -81,16 +84,6 @@ namespace ts.codeFix {
                 }
 
                 return getCodeActionForNewImport(sourceFile, imports, name, moduleName);
-            }
-
-            /**
-             * Paths to modules can be relative or absolute and may optionally include the file
-             * extension of the module
-             */
-            function compareRelativeModuleSpecifiers(a: string, b: string): Comparison {
-                a = removeFileExtension(a);
-                b = removeFileExtension(b);
-                return comparePaths(a, b, getDirectoryPath(sourceFile.path), !context.useCaseSensitiveFileNames);
             }
         }
     });
@@ -234,14 +227,31 @@ namespace ts.codeFix {
         };
     }
 
-    function extractModuleNameFromPath(path: string): string {
+    function convertPathToModuleSpecifier(path: string, context: CodeFixContext): string {
         const i = path.lastIndexOf(nodeModulesDir);
         const moduleSpecifier = i !== -1 ? removeFileExtension(path.substring(i + nodeModulesDir.length)) : path;
 
-        // If this is the main export, it can be referenced by just the module name
-        if (endsWith(moduleSpecifier, "index")) {
-            return getDirectoryPath(moduleSpecifier);
+        // If this is a node module, check to see if the given file is the main export of the module or not. If so,
+        // it can be referenced by just the module name.
+        if (i !== -1) {
+            const moduleDir = getDirectoryPath(path);
+            let nodePackage: any;
+            try {
+                nodePackage = JSON.parse(context.readFile(combinePaths(moduleDir, "package.json")));
+            }
+            catch(e) {}
+
+            // If no main export is explicitly defined, check for the default (index.js)
+            const mainExport = (nodePackage && nodePackage.main) || "index.js";
+            const mainExportPath = isRootedDiskPath(mainExport) ? mainExport : combinePaths(moduleDir, mainExport);
+
+            const baseDir = getDirectoryPath(context.sourceFile.fileName);
+
+            if (compareModuleSpecifiers(path, mainExportPath, baseDir, context.useCaseSensitiveFileNames) === Comparison.EqualTo) {
+                return getDirectoryPath(moduleSpecifier);
+            }
         }
+
         return moduleSpecifier;
     }
 
@@ -251,6 +261,16 @@ namespace ts.codeFix {
         } else {
             return name;
         }
+    }
+
+    /**
+     * Paths to modules can be relative or absolute and may optionally include the file
+     * extension of the module
+     */
+    function compareModuleSpecifiers(a: string, b: string, basePath: string, useCaseSensitiveFileNames: boolean): Comparison {
+        a = removeFileExtension(a);
+        b = removeFileExtension(b);
+        return comparePaths(a, b, basePath, !useCaseSensitiveFileNames);
     }
 
     function createCodeAction(description: DiagnosticMessage, dArgs: string[], newText: string, span: TextSpan, fileName: string): CodeAction {

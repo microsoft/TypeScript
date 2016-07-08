@@ -13,6 +13,7 @@ namespace ts {
         checker: TypeChecker;
         allFiles: SourceFile[];
         useCaseSensitiveFileNames: boolean;
+        readFile: (path: string) => string;
     }
 
     export namespace codeFix {

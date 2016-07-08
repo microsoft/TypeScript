@@ -7913,7 +7913,8 @@ namespace ts {
                     span: { start, length: end - start },
                     checker: checker,
                     allFiles: program.getSourceFiles(),
-                    useCaseSensitiveFileNames: host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : true
+                    useCaseSensitiveFileNames: host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : true,
+                    readFile: (path: string) => host.readFile(path)
                 };
 
                 const fixes = codeFixProvider.getFixes(context);
