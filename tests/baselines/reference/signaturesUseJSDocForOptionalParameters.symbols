@@ -19,6 +19,8 @@ MyClass.prototype.optionalParam = function(required, notRequired) {
 >notRequired : Symbol(notRequired, Decl(jsDocOptionality.js, 8, 52))
 
     return this;
+>this : Symbol(MyClass, Decl(jsDocOptionality.js, 0, 0))
+
 };
 let pInst = new MyClass();
 >pInst : Symbol(pInst, Decl(jsDocOptionality.js, 11, 3))
