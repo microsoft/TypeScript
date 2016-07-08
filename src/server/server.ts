@@ -20,6 +20,8 @@ namespace ts.server {
         return { data, length: data.length, compressionKind: "gzip" };
     }
 
+    const maxUncompressedMessageSize = 84000;
+
     class Logger implements ts.server.Logger {
         private fd = -1;
         private seq = 0;
@@ -99,7 +101,7 @@ namespace ts.server {
 
     class IOSession extends Session {
         constructor(host: ServerHost, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean, logger: ts.server.Logger) {
-            super(host, cancellationToken, useSingleInferredProject, Buffer.byteLength, compress, process.hrtime, logger);
+            super(host, cancellationToken, useSingleInferredProject, Buffer.byteLength, maxUncompressedMessageSize, compress, process.hrtime, logger);
         }
 
         exit() {

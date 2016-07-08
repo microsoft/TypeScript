@@ -71,8 +71,10 @@ namespace Utils {
     }
 
     export function compress(s: string): any {
-        return Buffer ? new Buffer(s, "utf8") : { s, length: s.length };
+        return Buffer ? new Buffer(s, "utf8") : { data: s, length: s.length };
     }
+
+    export const maxUncompressedMessageSize = Number.MAX_VALUE;
 
     export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
         const environment = getExecutionEnvironment();

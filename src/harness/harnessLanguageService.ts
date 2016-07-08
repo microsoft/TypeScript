@@ -693,6 +693,7 @@ namespace Harness.LanguageService {
                 { isCancellationRequested: () => false },
                 /*useOneInferredProject*/ false,
                 Utils.byteLength,
+                Utils.maxUncompressedMessageSize,
                 Utils.compress,
                 process.hrtime, serverHost);
 

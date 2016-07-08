@@ -199,6 +199,7 @@ namespace ts.server {
             cancellationToken: HostCancellationToken,
             useSingleInferredProject: boolean,
             private byteLength: (buf: string, encoding?: string) => number,
+            private maxUncompressedMessageSize: number,
             private compress: (s: string) => CompressedData,
             private hrtime: (start?: number[]) => number[],
             private logger: Logger) {
