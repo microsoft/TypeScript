@@ -243,15 +243,14 @@ namespace ts.server {
                 this.logger.info(msg.type + ": " + json);
             }
             const len = this.byteLength(json, "utf8");
-            if (len < 84000 || !canCompressResponse) {
+            if (len < this.maxUncompressedMessageSize || !canCompressResponse) {
                 this.sendLineToClient("Content-Length: " + (1 + this.byteLength(json, "utf8")) + "\r\n\r\n" + json);
             }
             else {
-                const start = this.hrtime();
+                const start = this.logger.isVerbose() && this.hrtime();
                 const compressed = this.compress(json);
-                const elapsed = this.hrtime(start);
-
                 if (this.logger.isVerbose()) {
+                    const elapsed = this.hrtime(start);
                     this.logger.info(`compressed message ${json.length} to ${compressed.length} in ${hrTimeToMilliseconds(elapsed)} ms using ${compressed.compressionKind}`);
                 }
                 this.sendCompressedDataToClient(`Content-Length: ${compressed.length + 1} ${compressed.compressionKind}\r\n\r\n`, compressed);
