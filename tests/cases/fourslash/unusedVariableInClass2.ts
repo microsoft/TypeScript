@@ -2,11 +2,8 @@
 
 // @noUnusedLocals: true
 ////class greeter {
-////    public greeting1;/*0*/
-////    private greeting: string;/*1*/
+////    [|public greeting1;
+////    private greeting: string;|]
 ////}
 
-verify.codeFixAtPosition(`
-class greeter {
-    public greeting1;
-}`);
+verify.codeFixAtPosition("public greeting1;");

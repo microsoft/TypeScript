@@ -2,7 +2,7 @@
 
 // @noUnusedLocals: true
 // @Filename: file2.ts
-//// import c = require('./file1')
+//// [|import c = require('./file1')|]
 
 // @Filename: file1.ts
 //// export class Calculator {
@@ -17,6 +17,4 @@
 ////
 //// }
 
-verify.codeFixAtPosition(`
-import {} = require('./file1')
-`);
+verify.codeFixAtPosition("import {} = require('./file1')");

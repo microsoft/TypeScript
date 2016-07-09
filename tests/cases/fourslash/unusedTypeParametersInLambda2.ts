@@ -3,11 +3,7 @@
 // @noUnusedLocals: true
 // @noUnusedParameters: true
 //// var x : {
-////     new <T, U>(a: T): void;
+////     [|new <T, U>(a: T): void;|]
 //// }
 
-verify.codeFixAtPosition(`
-var x : {
-    new <T>(a: T): void;
-}
-`);
+verify.codeFixAtPosition("new <T>(a: T): void;");

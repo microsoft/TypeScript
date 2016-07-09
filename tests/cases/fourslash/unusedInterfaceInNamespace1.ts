@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts' />
 
 // @noUnusedLocals: true
-////namespace greeter {/*0*/
+//// [| namespace greeter {
 ////    interface interface1 {
-////    }/*1*/
-////}
+////    }
+////} |]
 
 verify.codeFixAtPosition(`
 namespace greeter {

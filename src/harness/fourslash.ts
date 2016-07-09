@@ -3107,16 +3107,8 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
-        public codeFixAtPosition(expectedText: string): void;
-        public codeFixAtPosition(expectedChanges: { file: string, expectedText: string }[]): void;
-        public codeFixAtPosition(expected: string | { file: string, expectedText: string }[]) {
-            if (typeof expected === "string") {
-                this.state.verifyCodeFixAtPosition(expected);
-            }
-            else {
-                // assume it actually is the other thing
-
-            }
+        public codeFixAtPosition(expectedText: string, errorCode?: number): void {
+            this.state.verifyCodeFixAtPosition(expectedText, errorCode);
         }
 
         public navigationBar(json: any) {

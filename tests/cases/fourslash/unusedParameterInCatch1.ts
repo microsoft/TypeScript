@@ -3,11 +3,7 @@
 // @noUnusedLocals: true
 // @noUnusedParameters: true
 //// function f1() {
-//// try {} catch(ex) {}
+//// try {} [|catch(ex)|] {}
 //// }
 
-verify.codeFixAtPosition(`
-function f1() {
-try {} catch() {}
-}
-`);
+verify.codeFixAtPosition("catch()");

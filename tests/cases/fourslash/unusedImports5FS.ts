@@ -2,7 +2,7 @@
 
 // @noUnusedLocals: true
 // @Filename: file2.ts
-//// import {Calculator, test/*0*/, test2/*1*/} from "./file1"
+//// [| import {Calculator, test, test2} from "./file1" |]
 ////
 //// var x = new Calculator();
 //// x.handleChar();
@@ -21,10 +21,4 @@
 ////
 //// }
 
-verify.codeFixAtPosition(`
-import {Calculator, test} from "./file1"
-
-var x = new Calculator();
-x.handleChar();
-test();
-`);
+verify.codeFixAtPosition(`import {Calculator, test} from "./file1"`);

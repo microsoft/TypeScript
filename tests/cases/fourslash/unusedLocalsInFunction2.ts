@@ -2,12 +2,8 @@
 
 // @noUnusedLocals: true
 ////function greeter() {
-////    var x/*0*/, y = 0/*1*/;
+////    [| var x, y = 0; |]
 ////    x++;
 ////}
 
-verify.codeFixAtPosition(`
-function greeter() {
-    var x;
-    x++;
-}`);
+verify.codeFixAtPosition("var x;");

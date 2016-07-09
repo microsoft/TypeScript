@@ -2,14 +2,11 @@
 
 // @noUnusedLocals: true
 ////class greeter {
-////    public function2(){
-////    }/*0*/
+////    [|public function2(){
+////    }
 ////    private function1 = function() {
-////    }/*1*/
+////    } |]
 ////}
 
-verify.codeFixAtPosition(`
-class greeter {
-    public function2(){
-    }
+verify.codeFixAtPosition(`public function2(){
 }`);
