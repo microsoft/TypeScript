@@ -208,7 +208,7 @@ namespace ts.codeFix {
         return "null";
     }
 
-    function handleMethods(interfaceMethod: MethodSignature, startPos: number, isReference: boolean, trackingAddedMembers: string[], textChanges: TextChange[], newLineCharacter:string) {
+    function handleMethods(interfaceMethod: MethodSignature, startPos: number, isReference: boolean, trackingAddedMembers: string[], textChanges: TextChange[], newLineCharacter: string) {
 
         const methodBody = "throw new Error('Method not Implemented');";
 

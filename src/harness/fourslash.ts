@@ -1869,7 +1869,7 @@ namespace FourSlash {
 
             const ranges = this.getRanges();
             if (ranges.length == 0) {
-                this.raiseError("At least one range should be specified in the testfile.")
+                this.raiseError("At least one range should be specified in the testfile.");
             }
 
             const fileName = this.activeFile.fileName;
