@@ -73,6 +73,9 @@ namespace ts.server {
 
         editContent(start: number, end: number, newText: string): void {
             this.svc.edit(start, end - start, newText);
+            if (this.defaultProject) {
+                this.defaultProject.markAsDirty();
+            }
         }
 
         getTextChangeRangeBetweenVersions(startVersion: number, endVersion: number): ts.TextChangeRange {
@@ -430,6 +433,10 @@ namespace ts.server {
 
         getProjectVersion(): string {
             return this.sequenceNumber.toString();
+        }
+
+        markAsDirty(): void {
+            this.sequenceNumber++;
         }
 
         enableLanguageService() {
