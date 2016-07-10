@@ -731,14 +731,33 @@ namespace ts.server {
                 // We need to use a set here since the code can contain the same import twice,
                 // but that will only be one dependency.
                 const referencedModules = createMap<boolean>();
+                let checker: TypeChecker = undefined;
                 for (const key of Object.keys(modules)) {
                     const module = modules[key];
-                    // ToDo@dirkb the resolved modules contain keys with undefined values for 
-                    // modules declared as declare module "fs" { .... }. Ignore for now.
                     if (!module || !module.resolvedFileName) {
-                        continue;
+                        for (const statement of sourceFile.statements) {
+                            if (statement.kind === SyntaxKind.ImportDeclaration) {
+                                const importDeclaration = <ImportDeclaration>statement;
+                                let name = importDeclaration.moduleSpecifier.getText();
+                                name = name.substr(1, name.length - 2);
+                                if (name === key) {
+                                    if (!checker) {
+                                        checker = builder.getProject().compilerService.languageService.getProgram().getTypeChecker();
+                                    }
+                                    const symbol = checker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
+                                    if (symbol && symbol.declarations[0]) {
+                                        const sourceFile = symbol.declarations[0].getSourceFile();
+                                        if (sourceFile) {
+                                            referencedModules[sourceFile.fileName] = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        referencedModules[module.resolvedFileName] = true;
                     }
-                    referencedModules[module.resolvedFileName] = true;
                 }
                 for (const key of Object.keys(referencedModules)) {
                     const fileInfo = builder.getFileInfo(key);
