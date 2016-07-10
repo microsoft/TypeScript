@@ -735,27 +735,45 @@ namespace ts.server {
                 for (const key of Object.keys(modules)) {
                     const module = modules[key];
                     if (!module || !module.resolvedFileName) {
+                        let symbol: Symbol = undefined;
                         for (const statement of sourceFile.statements) {
                             if (statement.kind === SyntaxKind.ImportDeclaration) {
                                 const importDeclaration = <ImportDeclaration>statement;
-                                let name = importDeclaration.moduleSpecifier.getText();
-                                name = name.substr(1, name.length - 2);
-                                if (name === key) {
+                                const name = importDeclaration.moduleSpecifier.getText();
+                                if (this.removeQuotes(name) === key) {
                                     if (!checker) {
                                         checker = builder.getProject().compilerService.languageService.getProgram().getTypeChecker();
                                     }
-                                    const symbol = checker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
-                                    if (symbol && symbol.declarations[0]) {
-                                        const sourceFile = symbol.declarations[0].getSourceFile();
-                                        if (sourceFile) {
-                                            referencedModules[sourceFile.fileName] = true;
-                                            break;
+                                    symbol = checker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
+                                    break;
+                                }
+                            }
+                            else if (statement.kind === SyntaxKind.ImportEqualsDeclaration) {
+                                const moduleReference = (<ImportEqualsDeclaration>statement).moduleReference;
+                                if (moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                                    const external = <ExternalModuleReference>moduleReference;
+                                    if (external.expression && this.removeQuotes(external.expression.getText()) === key) {
+                                        if (!checker) {
+                                            checker = builder.getProject().compilerService.languageService.getProgram().getTypeChecker();
                                         }
+                                        symbol = checker.getSymbolAtLocation(external.expression);
+                                        break;
                                     }
+                                }
+                                else if (moduleReference.kind === SyntaxKind.Identifier || moduleReference.kind === SyntaxKind.QualifiedName) {
+                                    // EntityName is for internal modules which are not
+                                    // handled by this external module builder. So do nothing.
                                 }
                             }
                         }
-                    } else {
+                        if (symbol && symbol.declarations[0]) {
+                            const sourceFile = symbol.declarations[0].getSourceFile();
+                            if (sourceFile) {
+                                referencedModules[sourceFile.fileName] = true;
+                            }
+                        }
+                    }
+                    else {
                         referencedModules[module.resolvedFileName] = true;
                     }
                 }
@@ -767,6 +785,13 @@ namespace ts.server {
                 }
             }
             return result;
+        }
+
+        private removeQuotes(value: string): string {
+            if (value.length > 0 && (value[0] === "\"" || value[0] === "'")) {
+                return value.substr(1, value.length - 2);
+            }
+            return value;
         }
 
         public finalize(builder: BuilderAccessor<ModuleFileInfo>): void {
