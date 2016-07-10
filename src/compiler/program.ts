@@ -1095,13 +1095,13 @@ namespace ts {
         // As all these operations happen - and are nested - within the createProgram call, they close over the below variables.
         // The current resolution depth is tracked by incrementing/decrementing as the depth first search progresses.
         const maxNodeModulesJsDepth = typeof options.maxNodeModuleJsDepth === "number" ? options.maxNodeModuleJsDepth : 2;
-        let currentNodeModulesJsDepth = 0;
+        let currentNodeModulesDepth = 0;
 
         // If a module has some of its imports skipped due to being at the depth limit under node_modules, then track
         // this, as it may be imported at a shallower depth later, and then it will need its skipped imports processed.
         const modulesWithElidedImports: Map<boolean> = {};
 
-        // Track source files that are JavaScript files found by searching under node_modules, as these shouldn't be compiled.
+        // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
         const sourceFilesFoundSearchingNodeModules: Map<boolean> = {};
 
         const start = new Date().getTime();
@@ -1918,9 +1918,20 @@ namespace ts {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
                 }
 
+                // If the file was previously found via a node_modules search, but is now being processed as a root file,
+                // then everything it sucks in may also be marked incorrectly, and needs to be checked again.
+                if (file && lookUp(sourceFilesFoundSearchingNodeModules, file.path) && currentNodeModulesDepth == 0) {
+                    if (!options.noResolve) {
+                        processReferencedFiles(file, getDirectoryPath(fileName), isDefaultLib);
+                        processTypeReferenceDirectives(file);
+                    }
+
+                    modulesWithElidedImports[file.path] = false;
+                    processImportedModules(file, getDirectoryPath(fileName));
+                }
                 // See if we need to reprocess the imports due to prior skipped imports
-                if (file && lookUp(modulesWithElidedImports, file.path)) {
-                    if (currentNodeModulesJsDepth < maxNodeModulesJsDepth) {
+                else if (file && lookUp(modulesWithElidedImports, file.path)) {
+                    if (currentNodeModulesDepth < maxNodeModulesJsDepth) {
                         modulesWithElidedImports[file.path] = false;
                         processImportedModules(file, getDirectoryPath(fileName));
                     }
@@ -2075,13 +2086,17 @@ namespace ts {
                     const isJsFileFromNodeModules = isFromNodeModulesSearch && hasJavaScriptFileExtension(resolution.resolvedFileName);
 
                     if (isFromNodeModulesSearch) {
-                        sourceFilesFoundSearchingNodeModules[resolvedPath] = true;
-                    }
-                    if (isJsFileFromNodeModules) {
-                        currentNodeModulesJsDepth++;
+                        currentNodeModulesDepth++;
                     }
 
-                    const elideImport = isJsFileFromNodeModules && currentNodeModulesJsDepth > maxNodeModulesJsDepth;
+                    if (currentNodeModulesDepth > 0) {
+                        // If its already present with false, its a root file also. Don't override this.
+                        if (!hasProperty(sourceFilesFoundSearchingNodeModules, resolvedPath)) {
+                            sourceFilesFoundSearchingNodeModules[resolvedPath] = true;
+                        }
+                    }
+
+                    const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModulesJsDepth;
                     const shouldAddFile = resolution && !options.noResolve && i < file.imports.length && !elideImport;
 
                     if (elideImport) {
@@ -2096,8 +2111,8 @@ namespace ts {
                                 file.imports[i].end);
                     }
 
-                    if (isJsFileFromNodeModules) {
-                        currentNodeModulesJsDepth--;
+                    if (isFromNodeModulesSearch) {
+                        currentNodeModulesDepth--;
                     }
                 }
             }
