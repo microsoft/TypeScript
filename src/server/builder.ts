@@ -204,6 +204,7 @@ namespace ts.server {
         fileName(): string;
         needsCheck(builder: BuilderAccessor<FileInfo>): boolean;
         syntacticCheck(builder: BuilderAccessor<FileInfo>): Diagnostic[];
+        hasSyntacticProblems(): boolean;
         semanticCheck(builder: BuilderAccessor<FileInfo>): Diagnostic[];
         update(builder: BuilderAccessor<FileInfo>): boolean;
     }
@@ -239,6 +240,10 @@ namespace ts.server {
             const diagnostics = builder.getProject().compilerService.languageService.getSyntacticDiagnostics(this._fileName);
             this._hasSyntacticProblems = diagnostics && diagnostics.length > 0;
             return diagnostics;
+        }
+
+        public hasSyntacticProblems(): boolean {
+            return !(this._hasSyntacticProblems === false);
         }
 
         public semanticCheck(builder: BuilderAccessor<FileInfo>): Diagnostic[] {
@@ -380,6 +385,10 @@ namespace ts.server {
                 catch (err) {
                     this.host.logError(err, "syntactic check");
                 }
+                // Don't continue to check if the file info has syntactic problems.
+                if (fileInfo.hasSyntacticProblems()) {
+                    return;
+                }
                 this.immediateId = setImmediate(() => {
                     this.immediateId = undefined;
                     let diagnostics: Diagnostic[];
@@ -435,6 +444,10 @@ namespace ts.server {
 
         public syntacticCheck(builder: BuilderAccessor<FileInfo>): Diagnostic[] {
             return this.info.syntacticCheck(builder);
+        }
+
+        public hasSyntacticProblems(): boolean {
+            return this.info.hasSyntacticProblems();
         }
 
         public semanticCheck(builder: BuilderAccessor<FileInfo>): Diagnostic[] {
@@ -661,8 +674,12 @@ namespace ts.server {
             }
         }
 
-        public hasProblems(): boolean {
+        public needsInitialCheck(): boolean {
             return !(this._hasSemanticProblems === false && this._hasSyntacticProblems === false);
+        }
+
+        public needsReCheckOnFileCreation(): boolean {
+            return !(this._hasSyntacticProblems === false);
         }
 
         public sameStateAs(state: ModuleFileInfoState): boolean {
@@ -888,7 +905,7 @@ namespace ts.server {
             }
             Object.keys(this.fileInfos).forEach((key) => {
                 const info = this.fileInfos[key];
-                if (info.hasProblems()) {
+                if (info.needsReCheckOnFileCreation()) {
                     info.forceUpdate();
                     this.queueFileInfo(info);
                 }
@@ -1013,7 +1030,7 @@ namespace ts.server {
                         fileInfo.initializeFromState(state);
                     }
                     fileInfo.finalize(this);
-                    if (fileInfo.hasProblems()) {
+                    if (fileInfo.needsInitialCheck()) {
                         this.queueFileInfo(fileInfo);
                     }
                 });
