@@ -182,7 +182,7 @@ namespace ts {
                 return matchFiles(path, extensions, excludes, includes, /*useCaseSensitiveFileNames*/ false, shell.CurrentDirectory, getAccessibleFileSystemEntries);
             }
 
-            return {
+            const wscriptSystem: System = {
                 args,
                 newLine: "\r\n",
                 useCaseSensitiveFileNames: false,
@@ -200,8 +200,8 @@ namespace ts {
                 directoryExists(path: string) {
                     return fso.FolderExists(path);
                 },
-                createDirectory(this: System, directoryName: string) {
-                    if (!this.directoryExists(directoryName)) {
+                createDirectory(directoryName: string) {
+                    if (!wscriptSystem.directoryExists(directoryName)) {
                         fso.CreateFolder(directoryName);
                     }
                 },
@@ -221,6 +221,7 @@ namespace ts {
                     }
                 }
             };
+            return wscriptSystem;
         }
 
         function getNodeSystem(): System {
@@ -439,7 +440,7 @@ namespace ts {
                 return filter<string>(_fs.readdirSync(path), p => fileSystemEntryExists(combinePaths(path, p), FileSystemEntryKind.Directory));
             }
 
-            return {
+            const nodeSystem: System = {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames: useCaseSensitiveFileNames,
@@ -500,8 +501,8 @@ namespace ts {
                 },
                 fileExists,
                 directoryExists,
-                createDirectory(this: System, directoryName: string) {
-                    if (!this.directoryExists(directoryName)) {
+                createDirectory(directoryName: string) {
+                    if (!nodeSystem.directoryExists(directoryName)) {
                         _fs.mkdirSync(directoryName);
                     }
                 },
@@ -549,6 +550,7 @@ namespace ts {
                     return _fs.realpathSync(path);
                 }
             };
+            return nodeSystem;
         }
 
         function getChakraSystem(): System {
