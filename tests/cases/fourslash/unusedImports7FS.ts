@@ -2,7 +2,7 @@
 
 // @noUnusedLocals: true
 // @Filename: file2.ts
-//// import * as n from "./file1"
+//// [| import * as n from "./file1" |]
 
 // @Filename: file1.ts
 //// export class Calculator {
@@ -17,6 +17,4 @@
 ////
 //// }
 
-verify.codeFixAtPosition(`
-import {} from "./file1"
-`);
+verify.codeFixAtPosition(`import {} from "./file1"`);

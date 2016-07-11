@@ -14,7 +14,7 @@ namespace ts.codeFix {
                 const children = (<HeritageClause>token.parent.parent).getChildren();
                 for (const child of children) {
                     if (child.kind === SyntaxKind.ExtendsKeyword) {
-                        textChanges.push({ newText: "implements", span: { start: child.pos, length: child.end - child.pos } });
+                        textChanges.push({ newText: " implements", span: { start: child.pos, length: child.end - child.pos } });
                     }
                 }
             }

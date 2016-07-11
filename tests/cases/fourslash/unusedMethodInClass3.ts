@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts' />
 
 // @noUnusedLocals: true
-////class greeter {/*0*/
+////[|class greeter {
 ////    private function1 = function() {
-////    }/*1*/
-////}
+////    }
+////} |]
 
 verify.codeFixAtPosition(`
 class greeter {

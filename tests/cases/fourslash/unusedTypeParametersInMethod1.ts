@@ -2,11 +2,7 @@
 
 // @noUnusedLocals: true
 //// class C1 {
-////    f1<T extends number>() {}
+////    [|f1<T extends number>()|] {}
 //// }
 
-verify.codeFixAtPosition(`
-class C1 {
-   f1() {}
-}
-`);
+verify.codeFixAtPosition("f1()");

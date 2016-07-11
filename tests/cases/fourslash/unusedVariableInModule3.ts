@@ -3,10 +3,7 @@
 // @noUnusedLocals: true
 // @noUnusedParameters: true
 //// export {}
-//// var x = function f1() {}
+//// [|var x = function f1() {}|]
 //// export var y: string;
 
-verify.codeFixAtPosition(`
-export {}
-export var y: string;
-`);
+verify.codeFixAtPosition("");

@@ -9,19 +9,8 @@
 //// }
 
 //// module B {
-////     import a = A;
+////     [|import a = A;|]
 //// }
 
-verify.codeFixAtPosition(`
-module A {
-   export class Calculator {
-        public handelChar() {
-        }
-    }
-}
-
-module B {
-    import {} = A;
-}
-`);
+verify.codeFixAtPosition(" import {} = A;");
 

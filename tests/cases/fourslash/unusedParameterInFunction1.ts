@@ -1,9 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @noUnusedParameters: true
-////function greeter(/*0*/ x/*1*/) {
+////function [|greeter( x)|] {
 ////}
 
-verify.codeFixAtPosition(`
-function greeter() {
-}`);
+verify.codeFixAtPosition("greeter()");

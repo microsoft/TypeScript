@@ -2,12 +2,11 @@
 
 // @noUnusedLocals: true
 // @noUnusedParameters:true
-////namespace Validation {/*0*/
+//// [| namespace Validation {
 ////    class c1 {
 ////
 ////   }/*1*/
-////}
+//// } |]
 
-verify.codeFixAtPosition(`
-namespace Validation {
+verify.codeFixAtPosition(`namespace Validation {
 }`);

@@ -14566,6 +14566,7 @@ namespace ts {
                                 const parameter = <ParameterDeclaration>local.valueDeclaration;
                                 if (compilerOptions.noUnusedParameters &&
                                     !isParameterPropertyDeclaration(parameter) &&
+                                    !parameterIsThisKeyword(parameter) &&
                                     !parameterNameStartsWithUnderscore(parameter)) {
                                     error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
                                 }
@@ -14577,6 +14578,10 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function parameterIsThisKeyword(parameter: ParameterDeclaration) {
+            return parameter.name && (<Identifier>parameter.name).originalKeywordKind === SyntaxKind.ThisKeyword;
         }
 
         function parameterNameStartsWithUnderscore(parameter: ParameterDeclaration) {

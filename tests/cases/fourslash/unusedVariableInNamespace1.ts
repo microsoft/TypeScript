@@ -1,10 +1,8 @@
 /// <reference path='fourslash.ts' />
 
 // @noUnusedLocals: true
-////namespace greeter {/*0*/
-////    let a = "dummy entry";/*1*/
+////namespace greeter {
+////    [|let a = "dummy entry";|]
 ////}
 
-verify.codeFixAtPosition(`
-namespace greeter {
-}`);
+verify.codeFixAtPosition("");

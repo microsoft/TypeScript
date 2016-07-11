@@ -3,15 +3,8 @@
 ////class Base{
 ////}
 ////class C extends Base{
-////    constructor() {/*0*/
+////    constructor() {[| |]
 ////    }
 ////}
 
-verify.codeFixAtPosition(`
-class Base {
-}
-class C extends Base {
-    constructor() {
-        super();
-    }
-}`);
+verify.codeFixAtPosition('super();');

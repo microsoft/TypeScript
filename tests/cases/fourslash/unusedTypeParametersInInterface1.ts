@@ -2,9 +2,6 @@
 
 // @noUnusedLocals: true
 // @noUnusedParameters: true
-//// interface I<T> {}
+//// [|interface I<T> {}|]
 
-
-verify.codeFixAtPosition(`
-interface I {}
-`);
+verify.codeFixAtPosition("interface I {}");

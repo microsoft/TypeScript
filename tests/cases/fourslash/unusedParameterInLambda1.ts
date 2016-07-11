@@ -3,11 +3,7 @@
 // @noUnusedLocals: true
 // @noUnusedParameters: true
 //// function f1() {
-////     return (x:number) => {}
+////     [|return (x:number) => {}|]
 //// }
 
-verify.codeFixAtPosition(`
-function f1() {
-    return () => {}
-}
-`);
+verify.codeFixAtPosition("return () => {}");

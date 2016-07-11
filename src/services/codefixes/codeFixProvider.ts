@@ -14,6 +14,7 @@ namespace ts {
         allFiles: SourceFile[];
         useCaseSensitiveFileNames: boolean;
         readFile: (path: string) => string;
+	newLineCharacter: string;
     }
 
     export namespace codeFix {

@@ -1,11 +1,8 @@
 /// <reference path='fourslash.ts' />
 
 // @noUnusedLocals: true
-////class greeter<X/*0*/, Y/*1*/> {
+////[|class greeter<X, Y> |] {
 ////    public a: X;
 ////}
 
-verify.codeFixAtPosition(`
-class greeter<X> {
-    public a: X;
-}`);
+verify.codeFixAtPosition("class greeter<X>");

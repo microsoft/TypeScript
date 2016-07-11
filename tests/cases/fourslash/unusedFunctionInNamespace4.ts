@@ -2,11 +2,10 @@
 
 // @noUnusedLocals: true
 // @noUnusedParameters:true
-////namespace Validation {/*0*/
+//// [| namespace Validation {
 ////    var function1 = function() {
-////    }/*1*/
-////}
+////    }
+////} |]
 
-verify.codeFixAtPosition(`
-namespace Validation {
+verify.codeFixAtPosition(`namespace Validation {
 }`);

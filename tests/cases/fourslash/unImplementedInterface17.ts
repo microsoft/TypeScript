@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts' />
 
-////    interface I1 {
-////        x:number;
-////    }
+//// interface I1 {
+////     x:number;
+//// }
 ////
-////
-////    var x: I1 ={/*0*//*1*/
-////    }
+//// var x: I1 ={[|
+//// |]}
 
-verify.codeFixAtPosition({ span: { start: 0, end: 0 }, newText: "x : 0 sys.newLine" });
+verify.codeFixAtPosition(`x : 0 
+`);

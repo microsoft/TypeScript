@@ -14,7 +14,6 @@ namespace ts.codeFix {
             Debug.assert(token.kind === SyntaxKind.ConstructorKeyword, "Failed to find the constructor.");
 
             const newPosition = getOpenBraceEnd(<ConstructorDeclaration>token.parent, sourceFile);
-
             return [{
                 description: getLocaleSpecificMessage(Diagnostics.Add_missing_super_call),
                 changes: [{ fileName: sourceFile.fileName, textChanges: [{ newText: "super();", span: { start: newPosition, length: 0 } }] }]

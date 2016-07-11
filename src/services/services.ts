@@ -7912,6 +7912,7 @@ namespace ts {
                     sourceFile: sourceFile,
                     span: { start, length: end - start },
                     checker: checker,
+		    newLineCharacter: getNewLineOrDefaultFromHost(host),
                     allFiles: program.getSourceFiles(),
                     useCaseSensitiveFileNames: host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : true,
                     readFile: (path: string) => host.readFile(path)
