@@ -11,8 +11,11 @@ import newer = require("gulp-newer");
 import tsc = require("gulp-typescript");
 declare module "gulp-typescript" {
     interface Settings {
-        stripInternal?: boolean;
+        pretty?: boolean;
         newLine?: string;
+        noImplicitThis?: boolean;
+        stripInternal?: boolean;
+        types?: string[];
     }
     interface CompileStream extends NodeJS.ReadWriteStream {} // Either gulp or gulp-typescript has some odd typings which don't reflect reality, making this required
 }
@@ -306,9 +309,11 @@ function needsUpdate(source: string | string[], dest: string | string[]): boolea
 
 function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): tsc.Settings {
     const copy: tsc.Settings = {};
-    // TODO: Add --noImplicitThis --types --pretty when gulp-typescript adds support for them
-    copy.noImplicitAny = true;
     copy.noEmitOnError = true;
+    copy.noImplicitAny = true;
+    copy.noImplicitThis = true;
+    copy.pretty = true;
+    copy.types = [];
     for (const key in base) {
         copy[key] = base[key];
     }
