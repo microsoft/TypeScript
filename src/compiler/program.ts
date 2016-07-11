@@ -9,7 +9,7 @@ namespace ts {
     /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
-    export const version = "2.0.0";
+    export const version = "2.1.0";
 
     const emptyArray: any[] = [];
 
