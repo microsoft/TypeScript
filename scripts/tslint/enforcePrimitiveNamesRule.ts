@@ -11,9 +11,6 @@ export class Rule extends Lint.Rules.AbstractRule {
             case "Boolean":
                 replacement = "boolean";
                 break;
-            case "Object":
-                replacement = "{}";
-                break;
             case "String":
                 replacement = "string";
                 break;
@@ -30,7 +27,7 @@ export class Rule extends Lint.Rules.AbstractRule {
 class EnforcePrimitiveNames extends Lint.RuleWalker {
     visitIdentifier(node: ts.Identifier): void {
         super.visitIdentifier(node);
-        if (node.text === "Number" || node.text === "Boolean" || node.text === "Object" || node.text === "String") {
+        if (node.text === "Number" || node.text === "Boolean" || node.text === "String") {
             if (node.parent && node.parent.kind === ts.SyntaxKind.TypeReference) {
                 this.addFailure(this.createFailure(node.getStart(), node.getWidth(), Rule.FAILURE_STRING_FACTORY(node.text, Rule.getReplacement(node.text))));
             }
