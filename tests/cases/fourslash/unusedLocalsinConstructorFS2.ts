@@ -3,11 +3,16 @@
 // @noUnusedLocals: true
 // @noUnusedParameters: true
 ////class greeter {
-////    constructor() {
-////      [|  var unused = 20;
-////        var used = "dummy"; |]
+////    [|constructor() {
+////        var unused = 20;
+////        var used = "dummy";
 ////        used = used + "second part";
-////    }
+////    }|]
 ////}
 
-verify.codeFixAtPosition(`var used = "dummy";`);
+verify.codeFixAtPosition(`
+    constructor() {
+        var used = "dummy";
+        used = used + "second part";
+    }
+`);

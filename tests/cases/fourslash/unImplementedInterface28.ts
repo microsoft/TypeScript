@@ -9,10 +9,13 @@
 //// }
 ////
 //// var x: I1|I2 ={[|
-////   
+////
 //// |]}
 
 verify.codeFixAtPosition(`f1(){
     throw new Error('Method not Implemented');
-} 
+}
+f2(){
+    throw new Error('Method not Implemented');
+}
 `);

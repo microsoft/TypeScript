@@ -4,12 +4,12 @@
 ////     f1();
 //// }
 ////
-//// [|var x: I1 = {
+//// var x: I1 = {[|
 ////
-//// }|]
+//// |]}
 
-verify.codeFixAtPosition(`var x: I1 = {
+verify.codeFixAtPosition(`
 f1(){
     throw new Error('Method not Implemented');
-} 
+}
 `);

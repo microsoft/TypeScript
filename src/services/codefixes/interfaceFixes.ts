@@ -125,7 +125,7 @@ namespace ts.codeFix {
                             }
                             else {
                                 propertyText = interfaceProperty.getText();
-                                const stringToAdd = propertyText.match(/;$/) === undefined ? `;${newLineCharacter}` : newLineCharacter;
+                                const stringToAdd = !(propertyText.match(/;$/)) ? `;${newLineCharacter}` : newLineCharacter;
                                 propertyText += stringToAdd;
                             }
                             changesArray.push({ newText: propertyText, span: { start: startPos, length: 0 } });
@@ -142,7 +142,7 @@ namespace ts.codeFix {
 
         if (reference && existingMembers.length === 0 && changesArray.length > 0) {
             let lastValue = changesArray[changesArray.length - 1].newText;
-            lastValue = `${lastValue.substr(0, lastValue.length - 12)} ${newLineCharacter}`;
+            lastValue = `${lastValue.substr(0, lastValue.length - (newLineCharacter.length + 1))} ${newLineCharacter}`;
             changesArray[changesArray.length - 1].newText = lastValue;
         }
 
@@ -183,8 +183,10 @@ namespace ts.codeFix {
 
         for (let i = 0; i < children.length; i++) {
             if (children[i].kind === SyntaxKind.ObjectLiteralExpression) {
-                startPos = children[i].pos + 1;
                 const properties = (<ObjectLiteralExpression>children[i]).properties;
+                if (properties) {
+                    startPos = properties.pos;
+                }
                 for (let j = 0; properties && j < properties.length; j++) {
                     if (properties[j].name) {
                         variableMembers.push(properties[j].name.getText());
@@ -249,7 +251,12 @@ namespace ts.codeFix {
                 }
             }
 
-            methodText += `){${newLineCharacter}${methodBody}${newLineCharacter}`;
+            methodText += `)`;
+            if (interfaceMethod.type) {
+                methodText += ":" + interfaceMethod.type.getText();
+            }
+
+            methodText += `{${newLineCharacter}${methodBody}${newLineCharacter}`;
             methodText = isReference ? methodText.concat(`},${newLineCharacter}`) : methodText.concat(`}${newLineCharacter}`);
 
             textChanges.push({ newText: methodText, span: { start: startPos, length: 0 } });
