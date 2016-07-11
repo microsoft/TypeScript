@@ -14,7 +14,7 @@ maxDepthExceeded/root.ts(4,1): error TS2322: Type 'number' is not assignable to 
 ==== relative.js (0 errors) ====
     exports.relativeProp = true;
     
-==== index.js (0 errors) ====
+==== maxDepthExceeded/node_modules/m1/index.js (0 errors) ====
     var m2 = require('m2');
     var rel = require('./relative');
     
