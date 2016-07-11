@@ -94,7 +94,7 @@ namespace ts {
             profilerEvent = typeof onProfilerEvent === "function" && onProfilerEvent.profiler === true
                 ? onProfilerEvent
                 : undefined;
-            markInternal = performance && performance.now ? performance.now : Date.now ? Date.now : () => +(new Date());
+            markInternal = performance && performance.now ? performance.now : Date.now ? Date.now : () => new Date().getTime();
         }
 
         /** Disables (and clears) performance measurements for the compiler. */
