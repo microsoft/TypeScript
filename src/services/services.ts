@@ -351,6 +351,7 @@ namespace ts {
         public flags: NodeFlags;
         public parent: Node;
         public jsDocComments: JSDocComment[];
+        public __tokenTag: any;
 
         constructor(public pos: number, public end: number) {
             this.flags = NodeFlags.None;

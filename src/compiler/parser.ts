@@ -1030,7 +1030,7 @@ namespace ts {
         }
 
         // note: this function creates only node
-        function createNode(kind: SyntaxKind, pos?: number): Node {
+        function createNode(kind: SyntaxKind, pos?: number): Node | Token | Identifier {
             nodeCount++;
             if (!(pos >= 0)) {
                 pos = scanner.getStartPos();
@@ -5109,7 +5109,7 @@ namespace ts {
                 }
 
                 flags |= modifierToFlag(modifierKind);
-                modifiers.push(finishNode(createNode(modifierKind, modifierStart)));
+                modifiers.push(finishNode(<Modifier>createNode(modifierKind, modifierStart)));
             }
             if (modifiers) {
                 modifiers.flags = flags;
@@ -5128,7 +5128,7 @@ namespace ts {
                 modifiers = <ModifiersArray>[];
                 modifiers.pos = modifierStart;
                 flags |= modifierToFlag(modifierKind);
-                modifiers.push(finishNode(createNode(modifierKind, modifierStart)));
+                modifiers.push(finishNode(<Modifier>createNode(modifierKind, modifierStart)));
                 modifiers.flags = flags;
                 modifiers.end = scanner.getStartPos();
             }

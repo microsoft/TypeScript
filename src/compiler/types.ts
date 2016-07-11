@@ -472,7 +472,9 @@ namespace ts {
         flags: NodeFlags;
     }
 
-    export interface Token extends Node { }
+    export interface Token extends Node {
+        __tokenTag: any;
+    }
 
     // @kind(SyntaxKind.AbstractKeyword)
     // @kind(SyntaxKind.AsyncKeyword)
