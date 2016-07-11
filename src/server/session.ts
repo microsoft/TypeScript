@@ -4,8 +4,6 @@
 /// <reference path="editorServices.ts" />
 
 namespace ts.server {
-    const spaceCache: string[] = [];
-
     interface StackTraceError extends Error {
         stack?: string;
     }
@@ -22,35 +20,12 @@ namespace ts.server {
         return ((1e9 * seconds) + nanoseconds) / 1000000.0;
     }
 
-    export interface ServerHost {
+    export interface ServerHost extends System {
+        setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
+        clearTimeout(timeoutId: any): void;
+        setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;
+        clearImmediate(timeoutId: any): void;
         writeCompressedData(prefix: string, data: CompressedData, suffix: string): void;
-    }
-
-    export function generateSpaces(n: number): string {
-        if (!spaceCache[n]) {
-            let strBuilder = "";
-            for (let i = 0; i < n; i++) {
-                strBuilder += " ";
-            }
-            spaceCache[n] = strBuilder;
-        }
-        return spaceCache[n];
-    }
-
-    export function generateIndentString(n: number, editorOptions: EditorSettings): string {
-        if (editorOptions.convertTabsToSpaces) {
-            return generateSpaces(n);
-        }
-        else {
-            let result = "";
-            for (let i = 0; i < Math.floor(n / editorOptions.tabSize); i++) {
-                result += "\t";
-            }
-            for (let i = 0; i < n % editorOptions.tabSize; i++) {
-                result += " ";
-            }
-            return result;
-        }
     }
 
     interface FileStart {
@@ -59,13 +34,7 @@ namespace ts.server {
     }
 
     function compareNumber(a: number, b: number) {
-        if (a < b) {
-            return -1;
-        }
-        else if (a === b) {
-            return 0;
-        }
-        else return 1;
+        return a - b;
     }
 
     function compareFileStart(a: FileStart, b: FileStart) {
@@ -107,8 +76,8 @@ namespace ts.server {
     }
 
     function allEditsBeforePos(edits: ts.TextChange[], pos: number) {
-        for (let i = 0, len = edits.length; i < len; i++) {
-            if (ts.textSpanEnd(edits[i].span) >= pos) {
+        for (const edit of edits) {
+            if (textSpanEnd(edit.span) >= pos) {
                 return false;
             }
         }
@@ -181,13 +150,6 @@ namespace ts.server {
         export const ProjectLanguageServiceDisabled = new Error("The project's language service is disabled.");
     }
 
-    export interface ServerHost extends System {
-        setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
-        clearTimeout(timeoutId: any): void;
-        setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;
-        clearImmediate(timeoutId: any): void;
-    }
-
     export class Session {
         protected projectService: ProjectService;
         private errorTimer: any; /*NodeJS.Timer | number*/
@@ -218,23 +180,14 @@ namespace ts.server {
         }
 
         public logError(err: Error, cmd: string) {
-            const typedErr = <StackTraceError>err;
             let msg = "Exception on executing command " + cmd;
-            if (typedErr.message) {
-                msg += ":\n" + typedErr.message;
-                if (typedErr.stack) {
-                    msg += "\n" + typedErr.stack;
+            if (err.message) {
+                msg += ":\n" + err.message;
+                if ((<StackTraceError>err).stack) {
+                    msg += "\n" + (<StackTraceError>err).stack;
                 }
             }
             this.projectService.log(msg);
-        }
-
-        private sendLineToClient(line: string) {
-            this.host.write(line + this.host.newLine);
-        }
-
-        private sendCompressedDataToClient(prefix: string, data: CompressedData) {
-            this.host.writeCompressedData(prefix, data, this.host.newLine);
         }
 
         public send(msg: protocol.Message, canCompressResponse: boolean) {
@@ -242,9 +195,10 @@ namespace ts.server {
             if (this.logger.isVerbose()) {
                 this.logger.info(msg.type + ": " + json);
             }
+
             const len = this.byteLength(json, "utf8");
             if (len < this.maxUncompressedMessageSize || !canCompressResponse) {
-                this.sendLineToClient("Content-Length: " + (1 + this.byteLength(json, "utf8")) + "\r\n\r\n" + json);
+                this.host.write(`Content-Length: ${1 + this.byteLength(json, "utf8")}\r\n\r\n${json}${this.host.newLine}`);
             }
             else {
                 const start = this.logger.isVerbose() && this.hrtime();
@@ -253,7 +207,7 @@ namespace ts.server {
                     const elapsed = this.hrtime(start);
                     this.logger.info(`compressed message ${json.length} to ${compressed.length} in ${hrTimeToMilliseconds(elapsed)} ms using ${compressed.compressionKind}`);
                 }
-                this.sendCompressedDataToClient(`Content-Length: ${compressed.length + 1} ${compressed.compressionKind}\r\n\r\n`, compressed);
+                this.host.writeCompressedData(`Content-Length: ${compressed.length + 1} ${compressed.compressionKind}\r\n\r\n`, compressed, this.host.newLine);
             }
         }
 
@@ -282,7 +236,7 @@ namespace ts.server {
             this.send(ev, /*canCompressResponse*/ false);
         }
 
-        private response(info: any, cmdName: string,  canCompressResponse: boolean, reqSeq = 0, errorMsg?: string) {
+        public output(info: any, cmdName: string, canCompressResponse: boolean, reqSeq = 0, errorMsg?: string) {
             const res: protocol.Response = {
                 seq: 0,
                 type: "response",
@@ -297,10 +251,6 @@ namespace ts.server {
                 res.message = errorMsg;
             }
             this.send(res, canCompressResponse);
-        }
-
-        public output(body: any, commandName: string, canCompressResponse: boolean, requestSequence = 0, errorMessage?: string) {
-            this.response(body, commandName, canCompressResponse, requestSequence, errorMessage);
         }
 
         private getLocation(position: number, scriptInfo: ScriptInfo): protocol.Location {
@@ -333,10 +283,6 @@ namespace ts.server {
             catch (err) {
                 this.logError(err, "syntactic check");
             }
-        }
-
-        private reloadProjects() {
-            this.projectService.reloadProjects();
         }
 
         private updateProjectStructure(seq: number, matchSeq: (seq: number) => boolean, ms = 1500) {
@@ -942,7 +888,7 @@ namespace ts.server {
                             const firstNoWhiteSpacePosition = lineInfo.offset + i;
                             edits.push({
                                 span: ts.createTextSpanFromBounds(lineInfo.offset, firstNoWhiteSpacePosition),
-                                newText: generateIndentString(preferredIndent, formatOptions)
+                                newText: formatting.getIndentationString(preferredIndent, formatOptions)
                             });
                         }
                     }
@@ -1488,7 +1434,7 @@ namespace ts.server {
                 return this.requiredResponse(this.getProjectInfo(request.arguments));
             },
             [CommandNames.ReloadProjects]: (request: protocol.ReloadProjectsRequest) => {
-                this.reloadProjects();
+                this.projectService.reloadProjects();
                 return this.notRequired();
             }
         };
