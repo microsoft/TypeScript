@@ -479,7 +479,7 @@ class ProjectRunner extends RunnerBase {
 
                     it("Baseline of emitted result (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (testCase.baselineCheck) {
-                            const errs = [];
+                            const errs: Error[] = [];
                             ts.forEach(compilerResult.outputFiles, outputFile => {
                                 // There may be multiple files with different baselines. Run all and report at the end, else
                                 // it stops copying the remaining emitted files from 'local/projectOutput' to 'local/project'.
