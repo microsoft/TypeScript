@@ -1398,8 +1398,8 @@ namespace ts {
             return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
         }
 
-        function emit(this: Program, sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult {
-            return runWithCancellationToken(() => emitWorker(this, sourceFile, writeFileCallback, cancellationToken));
+        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult {
+            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken));
         }
 
         function isEmitBlocked(emitFileName: string): boolean {
