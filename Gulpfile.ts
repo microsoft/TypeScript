@@ -306,6 +306,9 @@ function needsUpdate(source: string | string[], dest: string | string[]): boolea
 
 function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): tsc.Settings {
     const copy: tsc.Settings = {};
+    // TODO: Add --noImplicitThis --types --pretty when gulp-typescript adds support for them
+    copy.noImplicitAny = true;
+    copy.noEmitOnError = true;
     for (const key in base) {
         copy[key] = base[key];
     }
