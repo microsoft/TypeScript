@@ -198,11 +198,11 @@ namespace ts {
         private _children: Node[];
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
-            this.kind = kind;
             this.pos = pos;
             this.end = end;
             this.flags = NodeFlags.None;
             this.parent = undefined;
+            this.kind = kind;
         }
 
         public getSourceFile(): SourceFile {
@@ -348,15 +348,11 @@ namespace ts {
 
     class TokenOrIdentifierObject implements Token {
         public kind: SyntaxKind;
-        public pos: number;
-        public end: number;
         public flags: NodeFlags;
         public parent: Node;
         public jsDocComments: JSDocComment[];
 
-        constructor(pos: number, end: number) {
-            this.pos = pos;
-            this.end = end;
+        constructor(public pos: number, public end: number) {
             this.flags = NodeFlags.None;
             this.parent = undefined;
         }
@@ -419,9 +415,8 @@ namespace ts {
     }
 
     class TokenObject extends TokenOrIdentifierObject {
-        constructor(kind: SyntaxKind, pos: number, end: number) {
+        constructor(public kind: SyntaxKind, pos: number, end: number) {
             super(pos, end);
-            this.kind = kind;
         }
     }
 
