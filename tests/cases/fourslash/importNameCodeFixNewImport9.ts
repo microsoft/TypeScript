@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-//// f1/*0*/();
+//// [|f1/*0*/();|]
 
 // @Filename: ../package.json
 //// { "dependencies": { "fake-module": "latest" } }
@@ -19,5 +19,6 @@
 //// { "main":"./notindex.js", "typings":"./notindex.d.ts" }
 
 verify.codeFixAtPosition(
-`import { f1 } from "fake-module";sys.newLine f1();`
+`import { f1 } from "fake-module";
+f1();`
 );

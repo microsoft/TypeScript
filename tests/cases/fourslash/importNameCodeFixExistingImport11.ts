@@ -1,9 +1,9 @@
 /// <reference path="fourslash.ts" />
 
-//// import {
+//// import [|{
 ////    v1, v2,
 ////    v3
-//// } from "./module";
+//// }|] from "./module";
 //// f1/*0*/();
 
 // @Filename: module.ts
@@ -13,9 +13,8 @@
 //// export var v3 = 5;
 
 verify.codeFixAtPosition(
-`import {
+`{
     v1, v2,
     v3, f1
- } from "./module";
-f1();`
+ }`
 );

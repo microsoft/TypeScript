@@ -1,7 +1,6 @@
 /* @internal */
 namespace ts.codeFix {
     const nodeModulesDir = directorySeparator + "node_modules" + directorySeparator;
-    const newLine = "sys.newLine ";
 
     registerCodeFix({
         name: getLocaleSpecificMessage(Diagnostics.Add_missing_import_for_unknown_identifier),
@@ -80,15 +79,15 @@ namespace ts.codeFix {
                 });
 
                 if (existing) {
-                    return getCodeActionForExistingImport(sourceFile, existing, token);
+                    return getCodeActionForExistingImport(sourceFile, existing, token, context);
                 }
 
-                return getCodeActionForNewImport(sourceFile, imports, name, moduleName);
+                return getCodeActionForNewImport(sourceFile, imports, name, moduleName, context);
             }
         }
     });
 
-    function getCodeActionForExistingImport(sourceFile: SourceFile, declaration: ImportDeclaration, token: Node): CodeAction {
+    function getCodeActionForExistingImport(sourceFile: SourceFile, declaration: ImportDeclaration, token: Node, context: CodeFixContext): CodeAction {
         const name = token.getText();
         const moduleSpecifier = declaration.moduleSpecifier.getText();
 
@@ -123,7 +122,7 @@ namespace ts.codeFix {
                      *
                      * Because there is already an import list, just insert the identifier into it
                      */
-                    const textChange = getTextChangeForImportList(sourceFile, <NamedImports>namedBindings, name);
+                    const textChange = getTextChangeForImportList(sourceFile, <NamedImports>namedBindings, name, context);
                     return createCodeAction(
                         Diagnostics.Add_0_to_existing_import_declaration_from_1,
                         [name, moduleSpecifier],
@@ -163,7 +162,7 @@ namespace ts.codeFix {
         );
     }
 
-    function getCodeActionForNewImport(sourceFile: SourceFile, existing: ImportDeclaration[], tokenName: string, moduleName: string): CodeAction {
+    function getCodeActionForNewImport(sourceFile: SourceFile, existing: ImportDeclaration[], tokenName: string, moduleName: string, context: CodeFixContext): CodeAction {
         // Try to insert after any existing imports
         let lastDeclaration: ImportDeclaration;
         let lastEnd: number;
@@ -176,7 +175,7 @@ namespace ts.codeFix {
         });
 
         let newText = `import { ${tokenName} } from "${moduleName}";`;
-        newText = lastDeclaration ? newLine + newText : newText + newLine;
+        newText = lastDeclaration ? context.newLineCharacter + newText : newText + context.newLineCharacter;
 
         return createCodeAction(
             Diagnostics.Import_0_from_1,
@@ -187,7 +186,7 @@ namespace ts.codeFix {
         );
     }
 
-    function getTextChangeForImportList(sourceFile: SourceFile, importList: NamedImports, newSymbol: string): TextChange {
+    function getTextChangeForImportList(sourceFile: SourceFile, importList: NamedImports, newSymbol: string, context: CodeFixContext): TextChange {
         if (importList.elements.length === 0) {
             const start = importList.getStart();
             return {
@@ -222,7 +221,7 @@ namespace ts.codeFix {
         }
 
         return {
-            newText: oneImportPerLine ? "," + newLine + newSymbol : "," + newSymbol,
+            newText: oneImportPerLine ? "," + context.newLineCharacter + newSymbol : "," + newSymbol,
             span: { start: insertPoint, length: 0 }
         };
     }

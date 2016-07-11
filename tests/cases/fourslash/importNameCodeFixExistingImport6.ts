@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-//// import { v1 } from "fake-module";
+//// import [|{ v1 }|] from "fake-module";
 //// f1/*0*/();
 
 // @Filename: ../package.json
@@ -10,7 +10,4 @@
 //// export var v1 = 5;
 //// export function f1();
 
-verify.codeFixAtPosition(
-`import { v1, f1 } from "fake-module";
-f1();`
-);
+verify.codeFixAtPosition(`{ v1, f1 }`);

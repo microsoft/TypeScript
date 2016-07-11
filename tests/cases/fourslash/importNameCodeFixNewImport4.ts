@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
-//// /// <reference path="./tripleSlashReference.ts" />
-//// f1/*0*/();
+//// [|/// <reference path="./tripleSlashReference.ts" />
+//// f1/*0*/();|]
 
 // @Filename: module.ts
 //// export function f1() {}
@@ -12,5 +12,6 @@
 
 verify.codeFixAtPosition(
 `/// <reference path="./tripleSlashReference.ts" />
-import { f1 } from "./module";sys.newLine f1();`
+import { f1 } from "./module";
+f1();`
 );

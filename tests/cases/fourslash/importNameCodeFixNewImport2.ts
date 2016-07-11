@@ -1,9 +1,9 @@
 /// <reference path="fourslash.ts" />
 
-//// /*
+//// [|/*
 ////  * I'm a license or something
 ////  */
-//// f1/*0*/();
+//// f1/*0*/();|]
 
 // @Filename: ambientModule.ts
 //// declare module "ambient-module" {
@@ -15,5 +15,6 @@ verify.codeFixAtPosition(
 `/*
 * I'm a license or something
 */
-import { f1 } from "ambient-module";sys.newLine f1();`
+import { f1 } from "ambient-module";
+f1();`
 );

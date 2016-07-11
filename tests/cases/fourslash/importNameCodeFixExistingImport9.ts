@@ -1,8 +1,8 @@
 /// <reference path="fourslash.ts" />
 
-//// import {
+//// import [|{
 ////    v1
-//// } from "./module";
+//// }|] from "./module";
 //// f1/*0*/();
 
 // @Filename: module.ts
@@ -10,8 +10,8 @@
 //// export var v1 = 5;
 
 verify.codeFixAtPosition(
-`import {
-    v1,sys.newLine f1
- } from "./module";
-f1();`
+`{
+    v1,
+    f1
+ }`
 );

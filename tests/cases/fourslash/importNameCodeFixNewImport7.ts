@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-//// f1/*0*/();
+//// [|f1/*0*/();|]
 
 // @Filename: ../package.json
 //// { "dependencies": { "fake-module": "latest" } }
@@ -10,5 +10,6 @@
 //// export function f1();
 
 verify.codeFixAtPosition(
-`import { f1 } from "fake-module/nested";sys.newLine f1();`
+`import { f1 } from "fake-module/nested";
+f1();`
 );
