@@ -13,5 +13,7 @@ C.prototype.m = function() {
 >m : Symbol(C.m, Decl(input.js, 1, 14), Decl(input.js, 3, 1))
 
     this.nothing();
+>this : Symbol(C, Decl(input.js, 0, 0))
+
 };
 
