@@ -13,6 +13,8 @@
         "maxDepthExceeded/root.ts"
     ],
     "emittedFiles": [
-        "maxDepthExceeded/root.js"
+        "maxDepthExceeded/built/node_modules/m1/relative.js",
+        "maxDepthExceeded/built/node_modules/m1/index.js",
+        "maxDepthExceeded/built/root.js"
     ]
 }

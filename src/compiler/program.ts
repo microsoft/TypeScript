@@ -1921,6 +1921,7 @@ namespace ts {
                 // If the file was previously found via a node_modules search, but is now being processed as a root file,
                 // then everything it sucks in may also be marked incorrectly, and needs to be checked again.
                 if (file && lookUp(sourceFilesFoundSearchingNodeModules, file.path) && currentNodeModulesDepth == 0) {
+                    sourceFilesFoundSearchingNodeModules[file.path] = false;
                     if (!options.noResolve) {
                         processReferencedFiles(file, getDirectoryPath(fileName), isDefaultLib);
                         processTypeReferenceDirectives(file);
@@ -1953,6 +1954,7 @@ namespace ts {
 
             filesByName.set(path, file);
             if (file) {
+                sourceFilesFoundSearchingNodeModules[path] = (currentNodeModulesDepth > 0);
                 file.path = path;
 
                 if (host.useCaseSensitiveFileNames()) {
