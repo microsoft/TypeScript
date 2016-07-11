@@ -407,7 +407,7 @@ declare namespace ts {
         hasTrailingComma?: boolean;
     }
     interface ModifiersArray extends NodeArray<Modifier> {
-        flags: number;
+        flags: NodeFlags;
     }
     interface Modifier extends Node {
     }
@@ -1389,6 +1389,7 @@ declare namespace ts {
         BlockScoped = 418,
         PropertyOrAccessor = 98308,
         Export = 7340032,
+        ClassMember = 106500,
     }
     interface Symbol {
         flags: SymbolFlags;
@@ -1542,6 +1543,7 @@ declare namespace ts {
         charset?: string;
         declaration?: boolean;
         declarationDir?: string;
+        disableSizeLimit?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
@@ -1553,6 +1555,7 @@ declare namespace ts {
         lib?: string[];
         locale?: string;
         mapRoot?: string;
+        maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
@@ -1588,7 +1591,6 @@ declare namespace ts {
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
-        disableSizeLimit?: boolean;
         types?: string[];
         /** Paths used to used to compute primary types search locations */
         typeRoots?: string[];
@@ -1784,6 +1786,7 @@ declare namespace ts {
         scanJsxToken(): SyntaxKind;
         scanJSDocToken(): SyntaxKind;
         scan(): SyntaxKind;
+        getText(): string;
         setText(text: string, start?: number, length?: number): void;
         setOnError(onError: ErrorCallback): void;
         setScriptTarget(scriptTarget: ScriptTarget): void;
@@ -1797,6 +1800,8 @@ declare namespace ts {
     function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
     function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
     function isWhiteSpace(ch: number): boolean;
+    /** Does not include line breaks. For that, see isWhiteSpaceLike. */
+    function isWhiteSpaceSingleLine(ch: number): boolean;
     function isLineBreak(ch: number): boolean;
     function couldStartTrivia(text: string, pos: number): boolean;
     function getLeadingCommentRanges(text: string, pos: number): CommentRange[];
@@ -2155,6 +2160,7 @@ declare namespace ts {
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
+        InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
         [s: string]: boolean | number | string | undefined;

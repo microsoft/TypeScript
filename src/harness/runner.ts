@@ -193,7 +193,7 @@ if (taskConfigsFolder) {
         for (let i = 0; i < workerCount; i++) {
             const startPos = i * chunkSize;
             const len = Math.min(chunkSize, files.length - startPos);
-            if (len !== 0) {
+            if (len > 0) {
                 workerConfigs[i].tasks.push({
                     runner: runner.kind(),
                     files: files.slice(startPos, startPos + len)
@@ -214,5 +214,5 @@ else {
 }
 if (!runUnitTests) {
     // patch `describe` to skip unit tests
-    describe = <any>describe.skip;
+    describe = <any>(function () { });
 }

@@ -113,6 +113,7 @@ namespace ts {
             let diags = project.languageService.getSemanticDiagnostics(imported.name);
             assert.equal(diags.length, 1);
 
+
             const originalFileExists = serverHost.fileExists;
             {
                 // patch fileExists to make sure that disk is not touched
