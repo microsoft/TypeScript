@@ -2091,13 +2091,6 @@ namespace ts {
                         currentNodeModulesDepth++;
                     }
 
-                    if (currentNodeModulesDepth > 0) {
-                        // If its already present with false, its a root file also. Don't override this.
-                        if (!hasProperty(sourceFilesFoundSearchingNodeModules, resolvedPath)) {
-                            sourceFilesFoundSearchingNodeModules[resolvedPath] = true;
-                        }
-                    }
-
                     const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModulesJsDepth;
                     const shouldAddFile = resolution && !options.noResolve && i < file.imports.length && !elideImport;
 
