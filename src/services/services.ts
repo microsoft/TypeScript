@@ -348,12 +348,17 @@ namespace ts {
 
     class TokenOrIdentifierObject implements Token {
         public kind: SyntaxKind;
+        public pos: number;
+        public end: number;
         public flags: NodeFlags;
         public parent: Node;
         public jsDocComments: JSDocComment[];
         public __tokenTag: any;
 
-        constructor(public pos: number, public end: number) {
+        constructor(pos: number, end: number) {
+            // Set properties in same order as NodeObject
+            this.pos = pos;
+            this.end = end;
             this.flags = NodeFlags.None;
             this.parent = undefined;
         }
@@ -416,8 +421,10 @@ namespace ts {
     }
 
     class TokenObject extends TokenOrIdentifierObject {
-        constructor(public kind: SyntaxKind, pos: number, end: number) {
+        public kind: SyntaxKind;
+        constructor(kind: SyntaxKind, pos: number, end: number) {
             super(pos, end);
+            this.kind = kind;
         }
     }
 
