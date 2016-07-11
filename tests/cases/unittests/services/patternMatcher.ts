@@ -1,4 +1,3 @@
-/// <reference path="..\..\..\..\src\harness\external\mocha.d.ts" />
 /// <reference path="..\..\..\..\src\services\patternMatcher.ts" />
 
 describe("PatternMatcher", function () {

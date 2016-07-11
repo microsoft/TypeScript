@@ -1,5 +1,4 @@
-﻿/// <reference path="..\..\..\..\src\harness\external\mocha.d.ts" />
-/// <reference path="..\..\..\..\src\harness\harnessLanguageService.ts" />
+﻿/// <reference path="..\..\..\..\src\harness\harnessLanguageService.ts" />
 
 interface ClassificationEntry {
     value: any;
