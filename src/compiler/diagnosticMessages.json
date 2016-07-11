@@ -2796,7 +2796,7 @@
         "category": "Message",
         "code": 6132
     },
-    "'{0}' is declared but never used.": {
+    "Property '{0}' is declared but never used.": {
         "category": "Error",
         "code": 6133
     },
