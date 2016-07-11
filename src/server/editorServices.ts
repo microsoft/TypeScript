@@ -359,18 +359,23 @@ namespace ts.server {
          * @param line 1-based index
          * @param offset 1-based index
          */
-        positionToLineOffset(filename: string, position: number): ILineInfo {
+        positionToLineOffset(filename: string, position: number, lineIndex?:  LineIndex): ILineInfo {
+            lineIndex = lineIndex || this.getLineIndex(filename);
+            const lineOffset = lineIndex.charOffsetToLineNumberAndPos(position);
+            return { line: lineOffset.line, offset: lineOffset.offset + 1 };
+        }
+
+        getLineIndex(filename: string): LineIndex {
             const path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const script: ScriptInfo = this.filenameToScript.get(path);
-            const index = script.snap().index;
-            const lineOffset = index.charOffsetToLineNumberAndPos(position);
-            return { line: lineOffset.line, offset: lineOffset.offset + 1 };
+            return script.snap().index;
         }
     }
 
     export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
+        wildcardDirectories?: ts.Map<ts.WatchDirectoryFlags>;
         compilerOptions?: ts.CompilerOptions;
     }
 
@@ -379,6 +384,7 @@ namespace ts.server {
         projectFilename: string;
         projectFileWatcher: FileWatcher;
         directoryWatcher: FileWatcher;
+        directoriesWatchedForWildcards: Map<FileWatcher>;
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
         program: ts.Program;
@@ -848,6 +854,8 @@ namespace ts.server {
             if (project.isConfiguredProject()) {
                 project.projectFileWatcher.close();
                 project.directoryWatcher.close();
+                forEachValue(project.directoriesWatchedForWildcards, watcher => { watcher.close(); });
+                delete project.directoriesWatchedForWildcards;
                 this.configuredProjects = copyListRemovingItem(project, this.configuredProjects);
             }
             else {
@@ -1340,7 +1348,8 @@ namespace ts.server {
                 else {
                     const projectOptions: ProjectOptions = {
                         files: parsedCommandLine.fileNames,
-                        compilerOptions: parsedCommandLine.options
+                        wildcardDirectories: parsedCommandLine.wildcardDirectories,
+                        compilerOptions: parsedCommandLine.options,
                     };
                     return { succeeded: true, projectOptions };
                 }
@@ -1397,12 +1406,30 @@ namespace ts.server {
                 }
                 project.finishGraph();
                 project.projectFileWatcher = this.host.watchFile(configFilename, _ => this.watchedProjectConfigFileChanged(project));
-                this.log("Add recursive watcher for: " + ts.getDirectoryPath(configFilename));
+
+                const configDirectoryPath = ts.getDirectoryPath(configFilename);
+
+                this.log("Add recursive watcher for: " + configDirectoryPath);
                 project.directoryWatcher = this.host.watchDirectory(
-                    ts.getDirectoryPath(configFilename),
+                    configDirectoryPath,
                     path => this.directoryWatchedForSourceFilesChanged(project, path),
                     /*recursive*/ true
                 );
+
+                project.directoriesWatchedForWildcards = reduceProperties(projectOptions.wildcardDirectories, (watchers, flag, directory) => {
+                    if (comparePaths(configDirectoryPath, directory, ".", !this.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
+                        const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
+                        this.log(`Add ${ recursive ? "recursive " : ""}watcher for: ${directory}`);
+                        watchers[directory] = this.host.watchDirectory(
+                            directory,
+                            path => this.directoryWatchedForSourceFilesChanged(project, path),
+                            recursive
+                        );
+                    }
+
+                    return watchers;
+                }, <Map<FileWatcher>>{});
+
                 return { success: true, project: project, errors };
             }
         }
@@ -1452,7 +1479,7 @@ namespace ts.server {
                     }
 
                     // if the project is too large, the root files might not have been all loaded if the total
-                    // program size reached the upper limit. In that case project.projectOptions.files should 
+                    // program size reached the upper limit. In that case project.projectOptions.files should
                     // be more precise. However this would only happen for configured project.
                     const oldFileNames = project.projectOptions ? project.projectOptions.files : project.compilerService.host.roots.map(info => info.fileName);
                     const newFileNames = ts.filter(projectOptions.files, f => this.host.fileExists(f));

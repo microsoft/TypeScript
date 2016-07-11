@@ -30,12 +30,9 @@ verify.navigationBar([
         "kind": "module",
         "childItems": [
             {
-                "text": "Bar",
-                "kind": "class"
-            },
-            {
-                "text": "Foo",
-                "kind": "interface"
+                "text": "\"Multiline\\\nMadness\"",
+                "kind": "module",
+                "kindModifiers": "declare"
             },
             {
                 "text": "\"Multiline\\r\\nMadness\"",
@@ -43,16 +40,37 @@ verify.navigationBar([
                 "kindModifiers": "declare"
             },
             {
-                "text": "\"Multiline\\\nMadness\"",
+                "text": "\"MultilineMadness\"",
                 "kind": "module",
                 "kindModifiers": "declare"
             },
             {
-                "text": "\"MultilineMadness\"",
-                "kind": "module",
-                "kindModifiers": "declare"
+                "text": "Bar",
+                "kind": "class"
+            },
+            {
+                "text": "Foo",
+                "kind": "interface"
             }
         ]
+    },
+    {
+        "text": "\"Multiline\\\nMadness\"",
+        "kind": "module",
+        "kindModifiers": "declare",
+        "indent": 1
+    },
+    {
+        "text": "\"Multiline\\r\\nMadness\"",
+        "kind": "module",
+        "kindModifiers": "declare",
+        "indent": 1
+    },
+    {
+        "text": "\"MultilineMadness\"",
+        "kind": "module",
+        "kindModifiers": "declare",
+        "indent": 1
     },
     {
         "text": "Bar",
@@ -82,24 +100,6 @@ verify.navigationBar([
                 "kind": "method"
             }
         ],
-        "indent": 1
-    },
-    {
-        "text": "\"Multiline\\r\\nMadness\"",
-        "kind": "module",
-        "kindModifiers": "declare",
-        "indent": 1
-    },
-    {
-        "text": "\"Multiline\\\nMadness\"",
-        "kind": "module",
-        "kindModifiers": "declare",
-        "indent": 1
-    },
-    {
-        "text": "\"MultilineMadness\"",
-        "kind": "module",
-        "kindModifiers": "declare",
         "indent": 1
     }
 ]);

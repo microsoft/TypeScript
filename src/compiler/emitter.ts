@@ -1084,8 +1084,15 @@ const _super = (function (geti, seti) {
                 return;
             }
 
-            const indentBeforeDot = needsIndentation(node, node.expression, node.dotToken);
-            const indentAfterDot = needsIndentation(node, node.dotToken, node.name);
+            let indentBeforeDot = false;
+            let indentAfterDot = false;
+            if (!(node.emitFlags & NodeEmitFlags.NoIndentation)) {
+                const dotRangeStart = node.expression.end;
+                const dotRangeEnd = skipTrivia(currentText, node.expression.end) + 1;
+                const dotToken = <Node>{ kind: SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
+                indentBeforeDot = needsIndentation(node, node.expression, dotToken);
+                indentAfterDot = needsIndentation(node, dotToken, node.name);
+            }
             const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
 
             emitExpression(node.expression);

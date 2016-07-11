@@ -218,7 +218,12 @@ class ProjectRunner extends RunnerBase {
                 }
 
                 const configObject = result.config;
-                const configParseResult = ts.parseJsonConfigFileContent(configObject, { readDirectory }, ts.getDirectoryPath(configFileName), compilerOptions);
+                const configParseHost: ts.ParseConfigHost = {
+                    useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
+                    fileExists,
+                    readDirectory,
+                };
+                const configParseResult = ts.parseJsonConfigFileContent(configObject, configParseHost, ts.getDirectoryPath(configFileName), compilerOptions);
                 if (configParseResult.errors.length > 0) {
                     return {
                         moduleKind,
@@ -276,8 +281,8 @@ class ProjectRunner extends RunnerBase {
                     : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName);
             }
 
-            function readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
-                const harnessReadDirectoryResult = Harness.IO.readDirectory(getFileNameInTheProjectTest(rootDir), extension, exclude);
+            function readDirectory(rootDir: string, extension: string[], exclude: string[], include: string[]): string[] {
+                const harnessReadDirectoryResult = Harness.IO.readDirectory(getFileNameInTheProjectTest(rootDir), extension, exclude, include);
                 const result: string[] = [];
                 for (let i = 0; i < harnessReadDirectoryResult.length; i++) {
                     result[i] = ts.getRelativePathToDirectoryOrUrl(testCase.projectRoot, harnessReadDirectoryResult[i],

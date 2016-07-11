@@ -45,8 +45,9 @@ namespace ts.server {
             return lineMap;
         }
 
-        private lineOffsetToPosition(fileName: string, lineOffset: protocol.Location): number {
-            return ts.computePositionOfLineAndCharacter(this.getLineMap(fileName), lineOffset.line - 1, lineOffset.offset - 1);
+        private lineOffsetToPosition(fileName: string, lineOffset: protocol.Location, lineMap?: number[]): number {
+            lineMap = lineMap || this.getLineMap(fileName);
+            return ts.computePositionOfLineAndCharacter(lineMap, lineOffset.line - 1, lineOffset.offset - 1);
         }
 
         private positionToOneBasedLineOffset(fileName: string, position: number): protocol.Location {
@@ -449,7 +450,7 @@ namespace ts.server {
             return this.lastRenameEntry.locations;
         }
 
-        decodeNavigationBarItems(items: protocol.NavigationBarItem[], fileName: string): NavigationBarItem[] {
+        decodeNavigationBarItems(items: protocol.NavigationBarItem[], fileName: string, lineMap: number[]): NavigationBarItem[] {
             if (!items) {
                 return [];
             }
@@ -458,8 +459,11 @@ namespace ts.server {
                 text: item.text,
                 kind: item.kind,
                 kindModifiers: item.kindModifiers || "",
-                spans: item.spans.map(span => createTextSpanFromBounds(this.lineOffsetToPosition(fileName, span.start), this.lineOffsetToPosition(fileName, span.end))),
-                childItems: this.decodeNavigationBarItems(item.childItems, fileName),
+                spans: item.spans.map(span =>
+                    createTextSpanFromBounds(
+                        this.lineOffsetToPosition(fileName, span.start, lineMap),
+                        this.lineOffsetToPosition(fileName, span.end, lineMap))),
+                childItems: this.decodeNavigationBarItems(item.childItems, fileName, lineMap),
                 indent: item.indent,
                 bolded: false,
                 grayed: false
@@ -474,7 +478,8 @@ namespace ts.server {
             const request = this.processRequest<protocol.NavBarRequest>(CommandNames.NavBar, args);
             const response = this.processResponse<protocol.NavBarResponse>(request);
 
-            return this.decodeNavigationBarItems(response.body, fileName);
+            const lineMap = this.getLineMap(fileName);
+            return this.decodeNavigationBarItems(response.body, fileName, lineMap);
         }
 
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan {

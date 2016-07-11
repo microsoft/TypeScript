@@ -338,21 +338,20 @@ namespace ts {
         return node;
     }
 
-    export function createPropertyAccess(expression: Expression, name: string | Identifier, location?: TextRange) {
-        return createPropertyAccessWithDotToken(expression, createSynthesizedNode(SyntaxKind.DotToken), name, location, /*flags*/ undefined);
-    }
-
-    export function createPropertyAccessWithDotToken(expression: Expression, dotToken: Node, name: string | Identifier, location?: TextRange, flags?: NodeFlags) {
+    export function createPropertyAccess(expression: Expression, name: string | Identifier, location?: TextRange, flags?: NodeFlags) {
         const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, location, flags);
         node.expression = parenthesizeForAccess(expression);
-        node.dotToken = dotToken;
+        node.emitFlags = NodeEmitFlags.NoIndentation;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         return node;
     }
 
     export function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier) {
         if (node.expression !== expression || node.name !== name) {
-            return updateNode(createPropertyAccessWithDotToken(expression, node.dotToken, name, /*location*/ node, node.flags), node);
+            const propertyAccess = createPropertyAccess(expression, name, /*location*/ node, node.flags);
+            // Because we are updating existed propertyAccess we want to inherit its emitFlags instead of using default from createPropertyAccess
+            propertyAccess.emitFlags = node.emitFlags;
+            return updateNode(propertyAccess, node);
         }
         return node;
     }
@@ -937,16 +936,13 @@ namespace ts {
     }
 
     export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, setNodeEmitFlags: (node: Node, flags: NodeEmitFlags) => void, location?: TextRange): MemberExpression {
-        if (isIdentifier(memberName)) {
-            const expression = createPropertyAccess(target, memberName, location);
-            setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
-            return expression;
-        }
-        else if (isComputedPropertyName(memberName)) {
-            return createElementAccess(target, memberName.expression, location);
+        if (isComputedPropertyName(memberName)) {
+             return createElementAccess(target, memberName.expression, location);
         }
         else {
-            return createElementAccess(target, memberName, location);
+            const expression = isIdentifier(memberName) ? createPropertyAccess(target, memberName, location) : createElementAccess(target, memberName, location);
+            setNodeEmitFlags(expression, expression.emitFlags ? NodeEmitFlags.NoNestedSourceMaps | expression.emitFlags : NodeEmitFlags.NoNestedSourceMaps);
+            return expression;
         }
     }
 
