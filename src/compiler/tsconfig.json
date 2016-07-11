@@ -4,6 +4,7 @@
         "noImplicitThis": true,
         "removeComments": true,
         "preserveConstEnums": true,
+        "pretty": true,
         "outFile": "../../built/local/tsc.js",
         "sourceMap": true,
         "declaration": true,
