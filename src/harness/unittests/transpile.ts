@@ -1,4 +1,4 @@
-/// <reference path="..\..\..\src\harness\harness.ts" />
+/// <reference path="..\harness.ts" />
 
 namespace ts {
     describe("Transpile", () => {

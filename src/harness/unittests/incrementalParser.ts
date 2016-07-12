@@ -1,5 +1,5 @@
-/// <reference path="..\..\..\src\harness\harness.ts" />
-/// <reference path="..\..\..\src\compiler\parser.ts" />
+/// <reference path="..\harness.ts" />
+/// <reference path="..\..\compiler\parser.ts" />
 
 namespace ts {
     ts.disableIncrementalParsing = false;

@@ -14,7 +14,7 @@ var serverDirectory = "src/server/";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
-var unittestsDirectory = "tests/cases/unittests/";
+var unittestsDirectory = "src/harness/unittests/";
 var docDirectory = "doc/";
 
 var builtDirectory = "built/";

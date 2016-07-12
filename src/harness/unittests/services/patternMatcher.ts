@@ -1,4 +1,4 @@
-/// <reference path="..\..\..\..\src\services\patternMatcher.ts" />
+/// <reference path="..\..\..\services\patternMatcher.ts" />
 
 describe("PatternMatcher", function () {
     describe("BreakIntoCharacterSpans", function () {
