@@ -230,6 +230,14 @@ var x = 0;`, {
             options: { compilerOptions: { module: <ModuleKind><any>123 } }
         });
 
+        transpilesCorrectly("Report an error when compiler-options input is empty object", "", {
+            options: { compilerOptions: { module: <ModuleKind><any>{} }}
+        });
+
+        transpilesCorrectly("Report an error when compiler-options input is empty string", "", {
+            options: { compilerOptions: { module: <ModuleKind><any>"" }}
+        });
+
         transpilesCorrectly("Support options with lib values", "const a = 10;", {
             options: { compilerOptions: { lib: ["es6", "dom"], module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
         });
