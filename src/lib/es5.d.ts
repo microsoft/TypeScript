@@ -272,97 +272,97 @@ interface IArguments {
 
 interface String {
     /** Returns a string representation of a string. */
-    toString(this: string): string;
+    toString(this: String): string;
 
     /**
       * Returns the character at the specified index.
       * @param pos The zero-based index of the desired character.
       */
-    charAt(this: string, pos: number): string;
+    charAt(this: String, pos: number): string;
 
     /**
       * Returns the Unicode value of the character at the specified location.
       * @param index The zero-based index of the desired character. If there is no character at the specified index, NaN is returned.
       */
-    charCodeAt(this: string, index: number): number;
+    charCodeAt(this: String, index: number): number;
 
     /**
       * Returns a string that contains the concatenation of two or more strings.
       * @param strings The strings to append to the end of the string.
       */
-    concat(this: string, ...strings: string[]): string;
+    concat(this: String, ...strings: string[]): string;
 
     /**
       * Returns the position of the first occurrence of a substring.
       * @param searchString The substring to search for in the string
       * @param position The index at which to begin searching the String object. If omitted, search starts at the beginning of the string.
       */
-    indexOf(this: string, searchString: string, position?: number): number;
+    indexOf(this: String, searchString: string, position?: number): number;
 
     /**
       * Returns the last occurrence of a substring in the string.
       * @param searchString The substring to search for.
       * @param position The index at which to begin searching. If omitted, the search begins at the end of the string.
       */
-    lastIndexOf(this: string, searchString: string, position?: number): number;
+    lastIndexOf(this: String, searchString: string, position?: number): number;
 
     /**
       * Determines whether two strings are equivalent in the current locale.
       * @param that String to compare to target string
       */
-    localeCompare(this: string, that: string): number;
+    localeCompare(this: String, that: string): number;
 
     /**
       * Matches a string with a regular expression, and returns an array containing the results of that search.
       * @param regexp A variable name or string literal containing the regular expression pattern and flags.
       */
-    match(this: string, regexp: string): RegExpMatchArray | null;
+    match(this: String, regexp: string): RegExpMatchArray | null;
 
     /**
       * Matches a string with a regular expression, and returns an array containing the results of that search.
       * @param regexp A regular expression object that contains the regular expression pattern and applicable flags.
       */
-    match(this: string, regexp: RegExp): RegExpMatchArray | null;
+    match(this: String, regexp: RegExp): RegExpMatchArray | null;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
       * @param searchValue A string that represents the regular expression.
       * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
       */
-    replace(this: string, searchValue: string, replaceValue: string): string;
+    replace(this: String, searchValue: string, replaceValue: string): string;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
       * @param searchValue A string that represents the regular expression.
       * @param replacer A function that returns the replacement text.
       */
-    replace(this: string, searchValue: string, replacer: (substring: string, ...args: any[]) => string): string;
+    replace(this: String, searchValue: string, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
       * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags.
       * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
       */
-    replace(this: string, searchValue: RegExp, replaceValue: string): string;
+    replace(this: String, searchValue: RegExp, replaceValue: string): string;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
       * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags
       * @param replacer A function that returns the replacement text.
       */
-    replace(this: string, searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string;
+    replace(this: String, searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
       * Finds the first substring match in a regular expression search.
       * @param regexp The regular expression pattern and applicable flags.
       */
-    search(this: string, regexp: string): number;
+    search(this: String, regexp: string): number;
 
     /**
       * Finds the first substring match in a regular expression search.
       * @param regexp The regular expression pattern and applicable flags.
       */
-    search(this: string, regexp: RegExp): number;
+    search(this: String, regexp: RegExp): number;
 
     /**
       * Returns a section of a string.
@@ -370,21 +370,21 @@ interface String {
       * @param end The index to the end of the specified portion of stringObj. The substring includes the characters up to, but not including, the character indicated by end.
       * If this value is not specified, the substring continues to the end of stringObj.
       */
-    slice(this: string, start?: number, end?: number): string;
+    slice(this: String, start?: number, end?: number): string;
 
     /**
       * Split a string into substrings using the specified separator and return them as an array.
       * @param separator A string that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
       * @param limit A value used to limit the number of elements returned in the array.
       */
-    split(this: string, separator: string, limit?: number): string[];
+    split(this: String, separator: string, limit?: number): string[];
 
     /**
       * Split a string into substrings using the specified separator and return them as an array.
       * @param separator A Regular Express that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
       * @param limit A value used to limit the number of elements returned in the array.
       */
-    split(this: string, separator: RegExp, limit?: number): string[];
+    split(this: String, separator: RegExp, limit?: number): string[];
 
     /**
       * Returns the substring at the specified location within a String object.
@@ -392,22 +392,22 @@ interface String {
       * @param end Zero-based index number indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.
       * If end is omitted, the characters from start through the end of the original string are returned.
       */
-    substring(this: string, start: number, end?: number): string;
+    substring(this: String, start: number, end?: number): string;
 
     /** Converts all the alphabetic characters in a string to lowercase. */
-    toLowerCase(this: string): string;
+    toLowerCase(this: String): string;
 
     /** Converts all alphabetic characters to lowercase, taking into account the host environment's current locale. */
-    toLocaleLowerCase(this: string): string;
+    toLocaleLowerCase(this: String): string;
 
     /** Converts all the alphabetic characters in a string to uppercase. */
-    toUpperCase(this: string): string;
+    toUpperCase(this: String): string;
 
     /** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. */
-    toLocaleUpperCase(this: string): string;
+    toLocaleUpperCase(this: String): string;
 
     /** Removes the leading and trailing white space and line terminator characters from a string. */
-    trim(this: string): string;
+    trim(this: String): string;
 
     /** Returns the length of a String object. */
     readonly length: number;
@@ -418,10 +418,10 @@ interface String {
       * @param from The starting position of the desired substring. The index of the first character in the string is zero.
       * @param length The number of characters to include in the returned substring.
       */
-    substr(this: string, from: number, length?: number): string;
+    substr(this: String, from: number, length?: number): string;
 
     /** Returns the primitive value of the specified object. */
-    valueOf(this: string): string;
+    valueOf(this: String): string;
 
     readonly [index: number]: string;
 }
@@ -456,28 +456,28 @@ interface Number {
       * Returns a string representation of an object.
       * @param radix Specifies a radix for converting numeric values to strings. This value is only used for numbers.
       */
-    toString(this: number, radix?: number): string;
+    toString(this: Number, radix?: number): string;
 
     /**
       * Returns a string representing a number in fixed-point notation.
       * @param fractionDigits Number of digits after the decimal point. Must be in the range 0 - 20, inclusive.
       */
-    toFixed(this: number, fractionDigits?: number): string;
+    toFixed(this: Number, fractionDigits?: number): string;
 
     /**
       * Returns a string containing a number represented in exponential notation.
       * @param fractionDigits Number of digits after the decimal point. Must be in the range 0 - 20, inclusive.
       */
-    toExponential(this: number, fractionDigits?: number): string;
+    toExponential(this: Number, fractionDigits?: number): string;
 
     /**
       * Returns a string containing a number represented either in exponential or fixed-point notation with a specified number of digits.
       * @param precision Number of significant digits. Must be in the range 1 - 21, inclusive.
       */
-    toPrecision(this: number, precision?: number): string;
+    toPrecision(this: Number, precision?: number): string;
 
     /** Returns the primitive value of the specified object. */
-    valueOf(this: number): number;
+    valueOf(this: Number): number;
 }
 
 interface NumberConstructor {
@@ -1097,129 +1097,129 @@ interface Array<T> {
     /**
       * Returns a string representation of an array.
       */
-    toString(this: Array<T>): string;
-    toLocaleString(this: Array<T>): string;
+    toString(this: T[]): string;
+    toLocaleString(this: T[]): string;
     /**
       * Appends new elements to an array, and returns the new length of the array.
       * @param items New elements of the Array.
       */
-    push(this: Array<T>, ...items: T[]): number;
+    push(this: T[], ...items: T[]): number;
     /**
       * Removes the last element from an array and returns it.
       */
-    pop(this: Array<T>): T | undefined;
+    pop(this: T[]): T | undefined;
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(this: Array<T>, ...items: (T | T[])[]): T[];
+    concat(this: T[], ...items: (T | T[])[]): T[];
     /**
       * Adds all the elements of an array separated by the specified separator string.
       * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
       */
-    join(this: Array<T>, separator?: string): string;
+    join(this: T[], separator?: string): string;
     /**
       * Reverses the elements in an Array.
       */
-    reverse(this: Array<T>): T[];
+    reverse(this: T[]): T[];
     /**
       * Removes the first element from an array and returns it.
       */
-    shift(this: Array<T>): T | undefined;
+    shift(this: T[]): T | undefined;
     /**
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
       * @param end The end of the specified portion of the array.
       */
-    slice(this: Array<T>, start?: number, end?: number): T[];
+    slice(this: T[], start?: number, end?: number): T[];
     /**
       * Sorts an array.
       * @param compareFn The name of the function used to determine the order of the elements. If omitted, the elements are sorted in ascending, ASCII character order.
       */
-    sort(this: Array<T>, compareFn?: (a: T, b: T) => number): this;
+    sort(this: T[], compareFn?: (a: T, b: T) => number): this;
     /**
       * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
       * @param start The zero-based location in the array from which to start removing elements.
       */
-    splice(this: Array<T>, start: number): T[];
+    splice(this: T[], start: number): T[];
     /**
       * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
       * @param start The zero-based location in the array from which to start removing elements.
       * @param deleteCount The number of elements to remove.
       * @param items Elements to insert into the array in place of the deleted elements.
       */
-    splice(this: Array<T>, start: number, deleteCount: number, ...items: T[]): T[];
+    splice(this: T[], start: number, deleteCount: number, ...items: T[]): T[];
     /**
       * Inserts new elements at the start of an array.
       * @param items  Elements to insert at the start of the Array.
       */
-    unshift(this: Array<T>, ...items: T[]): number;
+    unshift(this: T[], ...items: T[]): number;
     /**
       * Returns the index of the first occurrence of a value in an array.
       * @param searchElement The value to locate in the array.
       * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the search starts at index 0.
       */
-    indexOf(this: Array<T>, searchElement: T, fromIndex?: number): number;
+    indexOf(this: T[], searchElement: T, fromIndex?: number): number;
     /**
       * Returns the index of the last occurrence of a specified value in an array.
       * @param searchElement The value to locate in the array.
       * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the search starts at the last index in the array.
       */
-    lastIndexOf(this: Array<T>, searchElement: T, fromIndex?: number): number;
+    lastIndexOf(this: T[], searchElement: T, fromIndex?: number): number;
     /**
       * Determines whether all the members of an array satisfy the specified test.
       * @param callbackfn A function that accepts up to three arguments. The every method calls the callbackfn function for each element in array1 until the callbackfn returns false, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    every(this: Array<T>, callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+    every(this: T[], callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
     /**
       * Determines whether the specified callback function returns true for any element of an array.
       * @param callbackfn A function that accepts up to three arguments. The some method calls the callbackfn function for each element in array1 until the callbackfn returns true, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    some(this: Array<T>, callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+    some(this: T[], callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
     /**
       * Performs the specified action for each element in an array.
       * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(this: Array<T>, callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
+    forEach(this: T[], callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
     /**
       * Calls a defined callback function on each element of an array, and returns an array that contains the results.
       * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    map<U>(this: Array<T>, callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
+    map<U>(this: T[], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
     /**
       * Returns the elements of an array that meet the condition specified in a callback function.
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    filter(this: Array<T>, callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): T[];
+    filter(this: T[], callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): T[];
     /**
       * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
       * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
       * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
       */
-    reduce(this: Array<T>, callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
+    reduce(this: T[], callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
     /**
       * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
       * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
       * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
       */
-    reduce<U>(this: Array<T>, callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
+    reduce<U>(this: T[], callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
     /**
       * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
       * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
       * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
       */
-    reduceRight(this: Array<T>, callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
+    reduceRight(this: T[], callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
     /**
       * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
       * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
       * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
       */
-    reduceRight<U>(this: Array<T>, callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
+    reduceRight<U>(this: T[], callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
 
     [n: number]: T;
 }
@@ -4035,7 +4035,7 @@ interface String {
       * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
       * @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
       */
-    localeCompare(this: string, that: string, locales: string[], options?: Intl.CollatorOptions): number;
+    localeCompare(this: String, that: string, locales: string[], options?: Intl.CollatorOptions): number;
 
     /**
       * Determines whether two strings are equivalent in the current locale.
@@ -4043,7 +4043,7 @@ interface String {
       * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
       * @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
       */
-    localeCompare(this: string, that: string, locale: string, options?: Intl.CollatorOptions): number;
+    localeCompare(this: String, that: string, locale: string, options?: Intl.CollatorOptions): number;
 }
 
 interface Number {
@@ -4052,14 +4052,14 @@ interface Number {
       * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleString(this: number, locales?: string[], options?: Intl.NumberFormatOptions): string;
+    toLocaleString(this: Number, locales?: string[], options?: Intl.NumberFormatOptions): string;
 
     /**
       * Converts a number to a string by using the current or specified locale.
       * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleString(this: number, locale?: string, options?: Intl.NumberFormatOptions): string;
+    toLocaleString(this: Number, locale?: string, options?: Intl.NumberFormatOptions): string;
 }
 
 interface Date {
