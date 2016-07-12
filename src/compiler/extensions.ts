@@ -100,18 +100,18 @@ namespace ts {
         length?: Timestamp;
     }
 
-    // @kind(ExtensionKind.SyntacticLint)
     export interface SyntacticLintExtension extends ExtensionBase {
+        kind: ExtensionKind.SyntacticLint;
         ctor: SyntacticLintProviderStatic;
     }
 
-    // @kind(ExtensionKind.SemanticLint)
     export interface SemanticLintExtension extends ExtensionBase {
+        kind: ExtensionKind.SemanticLint;
         ctor: SemanticLintProviderStatic;
     }
 
-    // @kind(ExtensionKind.LanguageService)
     export interface LanguageServiceExtension extends ExtensionBase {
+        kind: ExtensionKind.LanguageService;
         ctor: LanguageServiceProviderStatic;
     }
 
