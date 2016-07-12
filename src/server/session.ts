@@ -1015,12 +1015,9 @@ namespace ts.server {
         }
 
         private saveToTmp(fileName: string, tempFileName: string) {
-            const file = toNormalizedPath(fileName);
-            const tmpfile = toNormalizedPath(tempFileName);
-
-            const project = this.projectService.getDefaultProjectForFile(file);
-            if (project) {
-                project.saveTo(file, tmpfile);
+            const scriptInfo = this.projectService.getScriptInfo(fileName);
+            if (scriptInfo) {
+                scriptInfo.saveTo(tempFileName);
             }
         }
 

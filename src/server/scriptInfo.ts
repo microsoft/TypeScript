@@ -110,6 +110,11 @@ namespace ts.server {
             this.markContainingProjectsAsDirty();
         }
 
+        saveTo(fileName: string) {
+            const snap = this.snap();
+            this.host.writeFile(fileName, snap.getText(0, snap.getLength()));
+        }
+
         reloadFromFile() {
             this.svc.reloadFromFile(this.fileName);
             this.markContainingProjectsAsDirty();

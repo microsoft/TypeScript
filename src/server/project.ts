@@ -267,15 +267,6 @@ namespace ts.server {
             }
         }
 
-        saveTo(filename: NormalizedPath, tmpfilename: NormalizedPath) {
-            const script = this.projectService.getScriptInfoForNormalizedPath(filename);
-            if (script) {
-                Debug.assert(script.isAttached(this));
-                const snap = script.snap();
-                this.projectService.host.writeFile(tmpfilename, snap.getText(0, snap.getLength()));
-            }
-        }
-
         reloadScript(filename: NormalizedPath): boolean {
             const script = this.projectService.getScriptInfoForNormalizedPath(filename);
             if (script) {
