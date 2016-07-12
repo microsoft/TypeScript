@@ -33,15 +33,64 @@ namespace ts {
          * @param {number} length The length of the error span
          */
         (shortname: string, err: string, start: number, length: number): void;
+        /**
+         * @param {DiagnosticCategory} level The error level to report this error as (Message, Warning, or Error)
+         * @param {string} err The error message to report
+         */
+        (level: DiagnosticCategory, err: string): void;
+        /**
+         * @param {DiagnosticCategory} level The error level to report this error as (Message, Warning, or Error)
+         * @param {string} err The error message to report
+         * @param {Node} span The node on which to position the error
+         */
+        (level: DiagnosticCategory, err: string, span: Node): void;
+        /**
+         * @param {DiagnosticCategory} level The error level to report this error as (Message, Warning, or Error)
+         * @param {string} err The error message to report
+         * @param {number} start The start position of the error span
+         * @param {number} length The length of the error span
+         */
+        (level: DiagnosticCategory, err: string, start: number, length: number): void;
+        /**
+         * @param {DiagnosticCategory} level The error level to report this error as (Message, Warning, or Error)
+         * @param {string} shortname A short code uniquely identifying the error within the lint
+         * @param {string} err The error message to report
+         */
+        (level: DiagnosticCategory, shortname: string, err: string): void;
+        /**
+         * @param {DiagnosticCategory} level The error level to report this error as (Message, Warning, or Error)
+         * @param {string} shortname A short code uniquely identifying the error within the lint
+         * @param {string} err The error message to report
+         * @param {Node} span The node on which to position the error
+         */
+        (level: DiagnosticCategory, shortname: string, err: string, span: Node): void;
+        /**
+         * @param {DiagnosticCategory} level The error level to report this error as (Message, Warning, or Error)
+         * @param {string} shortname A short code uniquely identifying the error within the lint
+         * @param {string} err The error message to report
+         * @param {number} start The start position of the error span
+         * @param {number} length The length of the error span
+         */
+        (level: DiagnosticCategory, shortname: string, err: string, start: number, length: number): void;
     };
-    export type LintStopMethod = () => void;
 
     /*
     * Walkers call stop to halt recursion into the node's children
     * Walkers call error to add errors to the output.
     */
     export interface LintWalker {
-        visit(node: Node, stop: LintStopMethod, error: LintErrorMethod): void;
+        /**
+         * @param {Node} node The current node being visited (starts at every SourceFile and recurs into their children)
+         * @param {LintErrorMethod} error A callback to add errors to the output
+         * @returns boolean true if this lint no longer needs to recur into the active node
+         */
+        visit(node: Node, error: LintErrorMethod): boolean | void;
+        /**
+         * Yar
+         * @param {Node} node The current node which has just finished being visited
+         * @param {LintErrorMethod} error A callback to add errors to the output
+         */
+        afterVisit?(node: Node, error: LintErrorMethod): void;
     }
 
     export interface BaseProviderStatic {
@@ -168,12 +217,12 @@ namespace ts {
 
     export const perfTraces: Map<ProfileData> = {};
 
-    function getExtensionRootName(ext: ExtensionBase) {
-        return ext.name.substring(0, ext.name.indexOf("[")) || ext.name;
+    function getExtensionRootName(qualifiedName: string) {
+        return qualifiedName.substring(0, qualifiedName.indexOf("[")) || qualifiedName;
     }
 
-    function createTaskName(ext: ExtensionBase, task: string) {
-        return `${task}|${ext.name}`;
+    function createTaskName(qualifiedName: string, task: string) {
+        return `${task}|${qualifiedName}`;
     }
 
     export function startProfile(key: string, bucket?: string) {
@@ -190,19 +239,19 @@ namespace ts {
         perfTraces[key].length = getTimestampMs(perfTraces[key].start);
     }
 
-    export function startExtensionProfile(level: ProfileLevel, ext: ExtensionBase, task: string, trace?: (s: string) => void) {
+    export function startExtensionProfile(level: ProfileLevel, qualifiedName: string, task: string, trace?: (s: string) => void) {
         if (!level) return;
-        if (level >= ProfileLevel.Full) profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_begin_1, ext.name, task);
-        const longTask = createTaskName(ext, task);
-        startProfile(longTask, getExtensionRootName(ext));
+        if (level >= ProfileLevel.Full) profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_begin_1, qualifiedName, task);
+        const longTask = createTaskName(qualifiedName, task);
+        startProfile(longTask, getExtensionRootName(qualifiedName));
     }
 
-    export function completeExtensionProfile(level: ProfileLevel, ext: ExtensionBase, task: string, trace?: (s: string) => void) {
+    export function completeExtensionProfile(level: ProfileLevel, qualifiedName: string, task: string, trace?: (s: string) => void) {
         if (!level) return;
-        const longTask = createTaskName(ext, task);
+        const longTask = createTaskName(qualifiedName, task);
         completeProfile(longTask);
 
-        if (level >= ProfileLevel.Full) profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, ext.name, task, perfTraces[longTask].length.toPrecision(5));
+        if (level >= ProfileLevel.Full) profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, qualifiedName, task, perfTraces[longTask].length.toPrecision(5));
     }
 
     export function createExtensionCache(options: CompilerOptions, host: ExtensionHost, resolvedExtensionNames?: Map<string>): ExtensionCache {

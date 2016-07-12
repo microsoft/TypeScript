@@ -2,7 +2,7 @@ import {SyntacticLintWalker, SemanticLintWalker} from "extension-api";
 
 export class IsNamedFoo extends SyntacticLintWalker {
     constructor(state) { super(state); }
-    visit(node, stop, error) {
+    visit(node, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             if (node.text.toLowerCase() === "foo") {
                 error("Identifier 'foo' is forbidden.", node);
@@ -13,7 +13,7 @@ export class IsNamedFoo extends SyntacticLintWalker {
 
 export class IsNamedBar extends SyntacticLintWalker {
     constructor(state) { super(state); }
-    visit(node, stop, error) {
+    visit(node, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             if (node.text.toLowerCase() === "bar") {
                 error("Identifier 'bar' is forbidden.", node);
@@ -24,7 +24,7 @@ export class IsNamedBar extends SyntacticLintWalker {
 
 export class IsValueFoo extends SemanticLintWalker {
     constructor(state) { super(state); }
-    visit(node, stop, error) {
+    visit(node, error) {
         const type = this.checker.getTypeAtLocation(node);
         if (type.flags & this.ts.TypeFlags.StringLiteral) {
             if (node.text === "foo") {
@@ -36,7 +36,7 @@ export class IsValueFoo extends SemanticLintWalker {
 
 export class IsValueBar extends SemanticLintWalker {
     constructor(state) { super(state); }
-    visit(node, stop, error) {
+    visit(node, error) {
         const type = this.checker.getTypeAtLocation(node);
         if (type.flags & this.ts.TypeFlags.StringLiteral) {
             if (node.text === "bar") {

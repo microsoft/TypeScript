@@ -12,7 +12,7 @@ export abstract class SyntacticLintWalker implements tsi.LintWalker {
         this.host = state.host;
         this.program = state.program;
     }
-    abstract visit(node: tsi.Node, stop: tsi.LintStopMethod, error: tsi.LintErrorMethod): void;
+    abstract visit(node: tsi.Node, error: tsi.LintErrorMethod): boolean | void;
 }
 
 export abstract class SemanticLintWalker implements tsi.LintWalker {
@@ -29,7 +29,7 @@ export abstract class SemanticLintWalker implements tsi.LintWalker {
         this.program = state.program;
         this.checker = state.checker;
     }
-    abstract visit(node: tsi.Node, stop: tsi.LintStopMethod, error: tsi.LintErrorMethod): void;
+    abstract visit(node: tsi.Node, error: tsi.LintErrorMethod): boolean | void;
 }
 
 export abstract class LanguageServiceProvider implements tsi.LanguageServiceProvider {

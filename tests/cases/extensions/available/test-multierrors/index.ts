@@ -2,7 +2,7 @@ import {SyntacticLintWalker} from "extension-api";
 
 export default class IsNamedFooOrBar extends SyntacticLintWalker {
     constructor(state) { super(state); }
-    visit(node, stop, error) {
+    visit(node, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             if (node.text.toLowerCase() === "foo") {
                 error("FOO", "Identifier 'foo' is forbidden.", node);
@@ -16,7 +16,7 @@ export default class IsNamedFooOrBar extends SyntacticLintWalker {
 
 export class NoShortNames extends SyntacticLintWalker {
     constructor(state) { super(state); }
-    visit(node, stop, error) {
+    visit(node, error) {
         if (node.kind === this.ts.SyntaxKind.Identifier) {
             if (node.text.length == 1) {
                 error("SINGLE", "Single character identifiers are forbidden", node);
