@@ -13,6 +13,6 @@ const X: Invalid1 = 1;
 
 //// [file.js]
 "use strict";
-var React = require('react');
+var React = require("react");
 var X = 1;
 React.createElement(X, null);
