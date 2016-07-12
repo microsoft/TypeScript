@@ -1,10 +1,37 @@
 namespace ts {
     export type LintErrorMethod = {
+        /**
+         * @param {string} err The error message to report
+         */
         (err: string): void;
+        /**
+         * @param {string} err The error message to report
+         * @param {Node} span The node on which to position the error
+         */
         (err: string, span: Node): void;
+        /**
+         * @param {string} err The error message to report
+         * @param {number} start The start position of the error span
+         * @param {number} length The length of the error span
+         */
         (err: string, start: number, length: number): void;
+        /**
+         * @param {string} shortname A short code uniquely identifying the error within the lint
+         * @param {string} err The error message to report
+         */
         (shortname: string, err: string): void;
+        /**
+         * @param {string} shortname A short code uniquely identifying the error within the lint
+         * @param {string} err The error message to report
+         * @param {Node} span The node on which to position the error
+         */
         (shortname: string, err: string, span: Node): void;
+        /**
+         * @param {string} shortname A short code uniquely identifying the error within the lint
+         * @param {string} err The error message to report
+         * @param {number} start The start position of the error span
+         * @param {number} length The length of the error span
+         */
         (shortname: string, err: string, start: number, length: number): void;
     };
     export type LintStopMethod = () => void;

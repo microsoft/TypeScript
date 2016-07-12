@@ -186,12 +186,12 @@ namespace ts {
     export function groupBy<T>(array: T[], classifier: (item: T) => (string | number)): {[index: string]: T[], [index: number]: T[]} {
         if (!array || !array.length) return undefined;
         const ret: {[index: string]: T[], [index: number]: T[]} = {};
-        for (let i = 0, len = array.length; i < len; i++) {
-            const result = classifier(array[i]);
-            if (!ret[result]) {
-                ret[result] = [];
+        for (const elem of array) {
+            const key = classifier(elem);
+            if (!ret[key]) {
+                ret[key] = [];
             }
-            ret[result].push(array[i]);
+            ret[key].push(elem);
         }
         return ret;
     }
