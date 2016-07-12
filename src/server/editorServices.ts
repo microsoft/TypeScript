@@ -172,9 +172,22 @@ namespace ts.server {
                 return undefined;
             }
             if (isInferredProjectName(projectName)) {
+                this.ensureInferredProjectsUpToDate();
                 return findProjectByName(projectName, this.inferredProjects);
             }
             return this.findExternalProjectByProjectName(projectName) || this.findConfiguredProjectByProjectName(toNormalizedPath(projectName));
+        }
+
+        getDefaultProjectForFile(fileName: NormalizedPath, refreshInferredProjects: boolean) {
+            if (refreshInferredProjects) {
+                this.ensureInferredProjectsUpToDate();
+            }
+            const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
+            return scriptInfo && scriptInfo.getDefaultProject();
+        }
+
+        private ensureInferredProjectsUpToDate() {
+
         }
 
         private findContainingConfiguredProject(info: ScriptInfo): ConfiguredProject {
@@ -939,11 +952,6 @@ namespace ts.server {
                 info.isOpen = false;
             }
             this.printProjects();
-        }
-
-        getDefaultProjectForFile(fileName: NormalizedPath) {
-            const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
-            return scriptInfo && scriptInfo.getDefaultProject();
         }
 
         private collectChanges(lastKnownProjectVersions: protocol.ProjectVersionInfo[], currentProjects: Project[], result: protocol.ProjectFiles[]): void {
