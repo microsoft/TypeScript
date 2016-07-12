@@ -1937,7 +1937,7 @@ const _super = (function (geti, seti) {
             }
         }
 
-        function emitJsxTagName(node: EntityName) {
+        function emitJsxTagName(node: JsxTagNameExpression) {
             if (node.kind === SyntaxKind.Identifier) {
                 emitExpression(<Identifier>node);
             }
