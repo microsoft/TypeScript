@@ -286,7 +286,7 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts, callback) {
     file(outFile, prereqs, function() {
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--noImplicitAny --noEmitOnError --types --pretty";
+        var options = "--noImplicitAny --noImplicitThis --noEmitOnError --types --pretty";
         opts = opts || {};
         // Keep comments when specifically requested
         // or when in debug mode.

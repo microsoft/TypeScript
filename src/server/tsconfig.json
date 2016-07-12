@@ -1,8 +1,10 @@
 {
     "compilerOptions": {
         "noImplicitAny": true,
+        "noImplicitThis": true,
         "removeComments": true,
         "preserveConstEnums": true,
+        "pretty": true,
         "out": "../../built/local/tsserver.js",
         "sourceMap": true,
         "stripInternal": true

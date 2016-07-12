@@ -1,6 +1,4 @@
 /// <reference path="scripts/types/ambient.d.ts" />
-/// <reference types="q" />
-
 import * as cp from "child_process";
 import * as path from "path";
 import * as fs from "fs";
@@ -13,16 +11,19 @@ import newer = require("gulp-newer");
 import tsc = require("gulp-typescript");
 declare module "gulp-typescript" {
     interface Settings {
-        stripInternal?: boolean;
+        pretty?: boolean;
         newLine?: string;
+        noImplicitThis?: boolean;
+        stripInternal?: boolean;
+        types?: string[];
     }
     interface CompileStream extends NodeJS.ReadWriteStream {} // Either gulp or gulp-typescript has some odd typings which don't reflect reality, making this required
 }
 import * as insert from "gulp-insert";
 import * as sourcemaps from "gulp-sourcemaps";
+import Q = require("q");
 declare global {
-    // This is silly. We include Q because orchestrator (a part of gulp) depends on it, but its not included.
-    // `del` further depends on `Promise` (and is also not included), so we just, patch the global scope's Promise to Q's
+    // `del` further depends on `Promise` (and is also not included), so we just, patch the global scope's Promise to Q's (which we already include in our deps because gulp depends on it)
     type Promise<T> = Q.Promise<T>;
 }
 import del = require("del");
@@ -308,6 +309,11 @@ function needsUpdate(source: string | string[], dest: string | string[]): boolea
 
 function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): tsc.Settings {
     const copy: tsc.Settings = {};
+    copy.noEmitOnError = true;
+    copy.noImplicitAny = true;
+    copy.noImplicitThis = true;
+    copy.pretty = true;
+    copy.types = [];
     for (const key in base) {
         copy[key] = base[key];
     }
