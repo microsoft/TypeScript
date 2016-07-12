@@ -24,7 +24,8 @@ namespace ts {
         "c:/dev/x/y/b.ts",
         "c:/dev/js/a.js",
         "c:/dev/js/b.js",
-        "c:/ext/ext.ts"
+        "c:/ext/ext.ts",
+        "c:/ext/b/a..b.ts"
     ]);
 
     const caseSensitiveBasePath = "/dev/";
@@ -740,7 +741,7 @@ namespace ts {
                         "c:/dev/a.ts",
                         "c:/dev/b.ts",
                         "c:/dev/c.d.ts",
-                        "c:/ext/ext.ts",
+                        "c:/ext/ext.ts"
                     ],
                     wildcardDirectories: {
                         "c:/dev": ts.WatchDirectoryFlags.None,
@@ -752,6 +753,99 @@ namespace ts {
                 assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
                 assert.deepEqual(actual.errors, expected.errors);
             });
+
+            it("include paths outside of the project using relative paths", () => {
+                const json = {
+                    include: [
+                        "*",
+                        "../ext/*"
+                    ],
+                    exclude: [
+                        "**"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/ext/ext.ts"
+                    ],
+                    wildcardDirectories: {
+                        "c:/ext": ts.WatchDirectoryFlags.None
+                    }
+                };
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                assert.deepEqual(actual.fileNames, expected.fileNames);
+                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                assert.deepEqual(actual.errors, expected.errors);
+            });
+            it("exclude paths outside of the project using relative paths", () => {
+                const json = {
+                    include: [
+                        "c:/**/*"
+                    ],
+                    exclude: [
+                        "../**"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [],
+                    wildcardDirectories: {}
+                };
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                assert.deepEqual(actual.fileNames, expected.fileNames);
+                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                assert.deepEqual(actual.errors, expected.errors);
+            });
+            it("include files with .. in their name", () => {
+                const json = {
+                    include: [
+                        "c:/ext/b/a..b.ts"
+                    ],
+                    exclude: [
+                        "**"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/ext/b/a..b.ts"
+                    ],
+                    wildcardDirectories: {}
+                };
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                assert.deepEqual(actual.fileNames, expected.fileNames);
+                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                assert.deepEqual(actual.errors, expected.errors);
+            });
+            it("exclude files with .. in their name", () => {
+                const json = {
+                    include: [
+                        "c:/ext/**/*"
+                    ],
+                    exclude: [
+                        "c:/ext/b/a..b.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/ext/ext.ts",
+                    ],
+                    wildcardDirectories: {
+                        "c:/ext": ts.WatchDirectoryFlags.Recursive
+                    }
+                };
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                assert.deepEqual(actual.fileNames, expected.fileNames);
+                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                assert.deepEqual(actual.errors, expected.errors);
+            });
+
             it("with jsx=none, allowJs=false", () => {
                 const json = {
                     compilerOptions: {
@@ -934,6 +1028,108 @@ namespace ts {
                         options: {},
                         errors: [
                             ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, "**/x/**")
+                        ],
+                        fileNames: [
+                            "c:/dev/a.ts",
+                            "c:/dev/x/a.ts",
+                            "c:/dev/x/y/a.ts",
+                            "c:/dev/z/a.ts"
+                        ],
+                        wildcardDirectories: {
+                            "c:/dev": ts.WatchDirectoryFlags.Recursive
+                        }
+                    };
+                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                    assert.deepEqual(actual.fileNames, expected.fileNames);
+                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                    assert.deepEqual(actual.errors, expected.errors);
+                });
+            });
+
+            describe("with parent directory symbols after a recursive directory pattern", () => {
+                it("in includes immediately after", () => {
+                    const json = {
+                        include: [
+                            "**/../*"
+                        ]
+                    };
+                    const expected: ts.ParsedCommandLine = {
+                        options: {},
+                        errors: [
+                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/../*")
+                        ],
+                        fileNames: [],
+                        wildcardDirectories: {}
+                    };
+                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                    assert.deepEqual(actual.fileNames, expected.fileNames);
+                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                    assert.deepEqual(actual.errors, expected.errors);
+                });
+
+                it("in includes after a subdirectory", () => {
+                    const json = {
+                        include: [
+                            "**/y/../*"
+                        ]
+                    };
+                    const expected: ts.ParsedCommandLine = {
+                        options: {},
+                        errors: [
+                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/y/../*")
+                        ],
+                        fileNames: [],
+                        wildcardDirectories: {}
+                    };
+                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                    assert.deepEqual(actual.fileNames, expected.fileNames);
+                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                    assert.deepEqual(actual.errors, expected.errors);
+                });
+
+                it("in excludes immediately after", () => {
+                    const json = {
+                        include: [
+                            "**/a.ts"
+                        ],
+                        exclude: [
+                            "**/.."
+                        ]
+                    };
+                    const expected: ts.ParsedCommandLine = {
+                        options: {},
+                        errors: [
+                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/..")
+                        ],
+                        fileNames: [
+                            "c:/dev/a.ts",
+                            "c:/dev/x/a.ts",
+                            "c:/dev/x/y/a.ts",
+                            "c:/dev/z/a.ts"
+                        ],
+                        wildcardDirectories: {
+                            "c:/dev": ts.WatchDirectoryFlags.Recursive
+                        }
+                    };
+                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                    assert.deepEqual(actual.fileNames, expected.fileNames);
+                    assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                    assert.deepEqual(actual.errors, expected.errors);
+                });
+
+                it("in excludes after a subdirectory", () => {
+                    const json = {
+                        include: [
+                            "**/a.ts"
+                        ],
+                        exclude: [
+                            "**/y/.."
+                        ]
+                    };
+                    const expected: ts.ParsedCommandLine = {
+                        options: {},
+                        errors: [
+                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0,  "**/y/..")
                         ],
                         fileNames: [
                             "c:/dev/a.ts",

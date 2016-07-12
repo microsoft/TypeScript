@@ -1,24 +1,13 @@
-<!--
-Thank you for contributing to TypeScript! Please review this checklist
-       before submitting your issue.
-[ ] Many common issues and suggestions are addressed in the FAQ
-     https://github.com/Microsoft/TypeScript/wiki/FAQ
-[ ] Search for duplicates before logging new issues
-    https://github.com/Microsoft/TypeScript/issues?utf8=%E2%9C%93&q=is%3Aissue
-[ ] Questions are best asked and answered at Stack Overflow
-    http://stackoverflow.com/questions/tagged/typescript
+<!-- BUGS: Please use this template. -->
+<!-- QUESTIONS: This is not a general support forum! Ask Qs at http://stackoverflow.com/questions/tagged/typescript -->
+<!-- SUGGESTIONS: See https://github.com/Microsoft/TypeScript-wiki/blob/master/Writing-Good-Design-Proposals.md -->
 
-For bug reports, please include the information below.
-__________________________________________________________ -->
-
-**TypeScript Version:** 
-
-1.7.5 / 1.8.0-beta / nightly (1.9.0-dev.20160217)
+**TypeScript Version:**  1.8.0 / nightly (2.0.0-dev.201xxxxx)
 
 **Code**
 
 ```ts
-// A self-contained demonstration of the problem follows...
+// A *self-contained* demonstration of the problem follows...
 
 ```
 

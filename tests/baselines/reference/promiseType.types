@@ -1,0 +1,287 @@
+=== tests/cases/compiler/promiseType.ts ===
+declare var p: Promise<boolean>;
+>p : Promise<boolean>
+>Promise : Promise<T>
+
+const a = p.then();
+>a : Promise<boolean>
+>p.then() : Promise<boolean>
+>p.then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
+>p : Promise<boolean>
+>then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
+
+const b = p.then(b => 1);
+>b : Promise<number>
+>p.then(b => 1) : Promise<number>
+>p.then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
+>p : Promise<boolean>
+>then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
+>b => 1 : (b: boolean) => number
+>b : boolean
+>1 : number
+
+const c = p.then(b => 1, e => 'error');
+>c : Promise<number | string>
+>p.then(b => 1, e => 'error') : Promise<number | string>
+>p.then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
+>p : Promise<boolean>
+>then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
+>b => 1 : (b: boolean) => number
+>b : boolean
+>1 : number
+>e => 'error' : (e: any) => string
+>e : any
+>'error' : string
+
+const d = p.then(b => 1, e => { });
+>d : Promise<number | void>
+>p.then(b => 1, e => { }) : Promise<number | void>
+>p.then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
+>p : Promise<boolean>
+>then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
+>b => 1 : (b: boolean) => number
+>b : boolean
+>1 : number
+>e => { } : (e: any) => void
+>e : any
+
+const e = p.then(b => 1, e => { throw Error(); });
+>e : Promise<number>
+>p.then(b => 1, e => { throw Error(); }) : Promise<number>
+>p.then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
+>p : Promise<boolean>
+>then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
+>b => 1 : (b: boolean) => number
+>b : boolean
+>1 : number
+>e => { throw Error(); } : (e: any) => never
+>e : any
+>Error() : Error
+>Error : ErrorConstructor
+
+const f = p.then(b => 1, e => Promise.reject(Error()));
+>f : Promise<number>
+>p.then(b => 1, e => Promise.reject(Error())) : Promise<number>
+>p.then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
+>p : Promise<boolean>
+>then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
+>b => 1 : (b: boolean) => number
+>b : boolean
+>1 : number
+>e => Promise.reject(Error()) : (e: any) => Promise<never>
+>e : any
+>Promise.reject(Error()) : Promise<never>
+>Promise.reject : { (reason: any): Promise<never>; <T>(reason: any): Promise<T>; }
+>Promise : PromiseConstructor
+>reject : { (reason: any): Promise<never>; <T>(reason: any): Promise<T>; }
+>Error() : Error
+>Error : ErrorConstructor
+
+const g = p.catch(e => 'error');
+>g : Promise<boolean | string>
+>p.catch(e => 'error') : Promise<boolean | string>
+>p.catch : { <TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<boolean | TResult>; (onrejected: (reason: any) => boolean | PromiseLike<boolean>): Promise<boolean>; }
+>p : Promise<boolean>
+>catch : { <TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<boolean | TResult>; (onrejected: (reason: any) => boolean | PromiseLike<boolean>): Promise<boolean>; }
+>e => 'error' : (e: any) => string
+>e : any
+>'error' : string
+
+const h = p.catch(e => { });
+>h : Promise<boolean | void>
+>p.catch(e => { }) : Promise<boolean | void>
+>p.catch : { <TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<boolean | TResult>; (onrejected: (reason: any) => boolean | PromiseLike<boolean>): Promise<boolean>; }
+>p : Promise<boolean>
+>catch : { <TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<boolean | TResult>; (onrejected: (reason: any) => boolean | PromiseLike<boolean>): Promise<boolean>; }
+>e => { } : (e: any) => void
+>e : any
+
+const i = p.catch(e => { throw Error(); });
+>i : Promise<boolean>
+>p.catch(e => { throw Error(); }) : Promise<boolean>
+>p.catch : { <TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<boolean | TResult>; (onrejected: (reason: any) => boolean | PromiseLike<boolean>): Promise<boolean>; }
+>p : Promise<boolean>
+>catch : { <TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<boolean | TResult>; (onrejected: (reason: any) => boolean | PromiseLike<boolean>): Promise<boolean>; }
+>e => { throw Error(); } : (e: any) => never
+>e : any
+>Error() : Error
+>Error : ErrorConstructor
+
+const j = p.catch(e => Promise.reject(Error()));
+>j : Promise<boolean>
+>p.catch(e => Promise.reject(Error())) : Promise<boolean>
+>p.catch : { <TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<boolean | TResult>; (onrejected: (reason: any) => boolean | PromiseLike<boolean>): Promise<boolean>; }
+>p : Promise<boolean>
+>catch : { <TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<boolean | TResult>; (onrejected: (reason: any) => boolean | PromiseLike<boolean>): Promise<boolean>; }
+>e => Promise.reject(Error()) : (e: any) => Promise<never>
+>e : any
+>Promise.reject(Error()) : Promise<never>
+>Promise.reject : { (reason: any): Promise<never>; <T>(reason: any): Promise<T>; }
+>Promise : PromiseConstructor
+>reject : { (reason: any): Promise<never>; <T>(reason: any): Promise<T>; }
+>Error() : Error
+>Error : ErrorConstructor
+
+async function A() {
+>A : () => Promise<boolean>
+
+    const a = await p;
+>a : boolean
+>await p : boolean
+>p : Promise<boolean>
+
+    return a;
+>a : boolean
+}
+
+async function B() {
+>B : () => Promise<number>
+
+    const a = await p;
+>a : boolean
+>await p : boolean
+>p : Promise<boolean>
+
+    return 1;
+>1 : number
+}
+
+// NOTE: This reports a "No best comment type exists among return expressions." error, and is
+//       ignored to get the types result for the test.
+// async function C() {
+//     try {
+//         const a = await p;
+//         return 1;
+//     }
+//     catch (e) {
+//         return 'error';
+//     }
+// }
+
+async function D() {
+>D : () => Promise<number>
+
+    try {
+        const a = await p;
+>a : boolean
+>await p : boolean
+>p : Promise<boolean>
+
+        return 1;
+>1 : number
+    }
+    catch (e) {
+>e : any
+    }
+}
+
+async function E() {
+>E : () => Promise<number>
+
+    try {
+        const a = await p;
+>a : boolean
+>await p : boolean
+>p : Promise<boolean>
+
+        return 1;
+>1 : number
+    }
+    catch (e) {
+>e : any
+
+        throw Error();
+>Error() : Error
+>Error : ErrorConstructor
+    }
+}
+
+async function F() {
+>F : () => Promise<number>
+
+    try {
+        const a = await p;
+>a : boolean
+>await p : boolean
+>p : Promise<boolean>
+
+        return 1;
+>1 : number
+    }
+    catch (e) {
+>e : any
+
+        return Promise.reject(Error());
+>Promise.reject(Error()) : Promise<never>
+>Promise.reject : { (reason: any): Promise<never>; <T>(reason: any): Promise<T>; }
+>Promise : PromiseConstructor
+>reject : { (reason: any): Promise<never>; <T>(reason: any): Promise<T>; }
+>Error() : Error
+>Error : ErrorConstructor
+    }
+}
+
+async function G() {
+>G : () => Promise<boolean>
+
+    try {
+        const a = await p;
+>a : boolean
+>await p : boolean
+>p : Promise<boolean>
+
+        return a;
+>a : boolean
+    }
+    catch (e) {
+>e : any
+
+        return;
+    }
+}
+
+async function H() {
+>H : () => Promise<boolean>
+
+    try {
+        const a = await p;
+>a : boolean
+>await p : boolean
+>p : Promise<boolean>
+
+        return a;
+>a : boolean
+    }
+    catch (e) {
+>e : any
+
+        throw Error();
+>Error() : Error
+>Error : ErrorConstructor
+    }
+}
+
+async function I() {
+>I : () => Promise<boolean>
+
+    try {
+        const a = await p;
+>a : boolean
+>await p : boolean
+>p : Promise<boolean>
+
+        return a;
+>a : boolean
+    }
+    catch (e) {
+>e : any
+
+        return Promise.reject(Error());
+>Promise.reject(Error()) : Promise<never>
+>Promise.reject : { (reason: any): Promise<never>; <T>(reason: any): Promise<T>; }
+>Promise : PromiseConstructor
+>reject : { (reason: any): Promise<never>; <T>(reason: any): Promise<T>; }
+>Error() : Error
+>Error : ErrorConstructor
+    }
+}

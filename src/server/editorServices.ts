@@ -38,7 +38,7 @@ namespace ts.server {
         path: Path;
         scriptKind: ScriptKind;
 
-        constructor(private host: ServerHost, public fileName: string, public content: string, public isOpen = false) {
+        constructor(private host: ServerHost, public fileName: string, content: string, public isOpen = false) {
             this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
             this.svc = ScriptVersionCache.fromString(host, content);
         }
@@ -1566,6 +1566,7 @@ namespace ts.server {
 
         static getDefaultFormatCodeOptions(host: ServerHost): ts.FormatCodeOptions {
             return ts.clone({
+                BaseIndentSize: 0,
                 IndentSize: 4,
                 TabSize: 4,
                 NewLineCharacter: host.newLine || "\n",
@@ -1579,6 +1580,7 @@ namespace ts.server {
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
                 InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
+                InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
                 PlaceOpenBraceOnNewLineForFunctions: false,
                 PlaceOpenBraceOnNewLineForControlBlocks: false,
             });

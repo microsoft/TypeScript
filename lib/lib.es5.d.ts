@@ -987,7 +987,7 @@ interface JSON {
     /**
       * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
       * @param value A JavaScript value, usually an object or array, to be converted.
-      * @param replacer An array of strings and numbers that acts as a white list for selecting the object properties that will be stringified.
+      * @param replacer An array of strings and numbers that acts as a approved list for selecting the object properties that will be stringified.
       * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
       */
     stringify(value: any, replacer?: (number | string)[] | null, space?: string | number): string;
@@ -1540,7 +1540,7 @@ interface Int8Array {
       * Returns the index of the first element in the array where predicate is true, and undefined
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
-      * order, until it finds one where predicate returns true. If such an element is found, 
+      * order, until it finds one where predicate returns true. If such an element is found,
       * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
@@ -1813,7 +1813,7 @@ interface Uint8Array {
       * Returns the index of the first element in the array where predicate is true, and undefined
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
-      * order, until it finds one where predicate returns true. If such an element is found, 
+      * order, until it finds one where predicate returns true. If such an element is found,
       * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
@@ -2087,7 +2087,7 @@ interface Uint8ClampedArray {
       * Returns the index of the first element in the array where predicate is true, and undefined
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
-      * order, until it finds one where predicate returns true. If such an element is found, 
+      * order, until it finds one where predicate returns true. If such an element is found,
       * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
@@ -2360,7 +2360,7 @@ interface Int16Array {
       * Returns the index of the first element in the array where predicate is true, and undefined
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
-      * order, until it finds one where predicate returns true. If such an element is found, 
+      * order, until it finds one where predicate returns true. If such an element is found,
       * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
@@ -2634,7 +2634,7 @@ interface Uint16Array {
       * Returns the index of the first element in the array where predicate is true, and undefined
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
-      * order, until it finds one where predicate returns true. If such an element is found, 
+      * order, until it finds one where predicate returns true. If such an element is found,
       * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
@@ -2907,7 +2907,7 @@ interface Int32Array {
       * Returns the index of the first element in the array where predicate is true, and undefined
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
-      * order, until it finds one where predicate returns true. If such an element is found, 
+      * order, until it finds one where predicate returns true. If such an element is found,
       * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
@@ -3180,7 +3180,7 @@ interface Uint32Array {
       * Returns the index of the first element in the array where predicate is true, and undefined
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
-      * order, until it finds one where predicate returns true. If such an element is found, 
+      * order, until it finds one where predicate returns true. If such an element is found,
       * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
@@ -3453,7 +3453,7 @@ interface Float32Array {
       * Returns the index of the first element in the array where predicate is true, and undefined
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
-      * order, until it finds one where predicate returns true. If such an element is found, 
+      * order, until it finds one where predicate returns true. If such an element is found,
       * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
@@ -3727,7 +3727,7 @@ interface Float64Array {
       * Returns the index of the first element in the array where predicate is true, and undefined
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
-      * order, until it finds one where predicate returns true. If such an element is found, 
+      * order, until it finds one where predicate returns true. If such an element is found,
       * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
