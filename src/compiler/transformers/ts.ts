@@ -18,8 +18,10 @@ namespace ts {
         NamespaceExports = 1 << 1,
         /** Enables substitutions for async methods with `super` calls. */
         AsyncMethodsWithSuper = 1 << 2,
-        /* Enables substitutions for unqualified enum members */
-        NonQualifiedEnumMembers = 1 << 3
+        /** Enables substitutions for unqualified enum members */
+        NonQualifiedEnumMembers = 1 << 3,
+        /** Enables substitutions for classExpression referenced in its static property initializer */
+        ClassExpressionReferredInStaticPropertyInitializer = 1 << 4
     }
 
     export function transformTypeScript(context: TransformationContext) {
@@ -70,6 +72,29 @@ namespace ts {
          * when just-in-time substitution occurs while printing an expression identifier.
          */
         let currentDecoratedClassAliases: Map<Identifier>;
+
+        /**
+         * A map that keeps track between generated name of classExpression and original source-node classExpression that contains static propertyDeclaration.
+         * During transformation phase, when we visit classExpression that contains static propertyDeclaration, we will record the newly
+         * created name and its original source-node classExpression.
+         * During substitution, the map is used to determine what is the active generated name of classExpression given classExpression.
+         */
+        let generatedNameOfClassExpression: Map<Identifier>;
+
+        /**
+         * A map that keep track between static propertyDeclaration and its containing classExpression.
+         * During transformation phase, when we visit each static propertyDeclaration, we will record propertyDeclaration's
+         * containing classExpression.
+         * During substitution, the map is used to determine what is the source-node classExpression that contains currently
+         * visiting propertyDeclaration.
+         */
+        let classExpressionContainStaticPropertyDeclaration: Map<Expression>;
+
+        /**
+         * A map that keeps track of currently active generated name of classExpression defined in `generatedNameOfClassExpression`
+         * when just-in-time substitution occurs while printing an expression identifier.
+         */
+        let currentGeneratedNameOfClassExpression: Map<Identifier>;
 
         /**
          * Keeps track of whether  we are within any containing namespaces when performing
@@ -765,6 +790,11 @@ namespace ts {
                 // the body of a class with static initializers.
                 setNodeEmitFlags(classExpression, NodeEmitFlags.Indented | getNodeEmitFlags(classExpression));
                 addNode(expressions, createAssignment(temp, classExpression), true);
+
+                // Enable substitution when classExpression is referred inside its static propertyDeclaration
+                enableSubstitutionForClassExpressionReferredInStaticPropertyInitializer();
+                generatedNameOfClassExpression[getOriginalNodeId(node)] = temp;
+
                 addNodes(expressions, generateInitializedPropertyExpressions(node, staticProperties, temp), true);
                 addNode(expressions, temp, true);
                 return inlineExpressions(expressions);
@@ -1086,7 +1116,14 @@ namespace ts {
             const initializer = visitNode(property.initializer, visitor, isExpression);
             const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, setNodeEmitFlags, /*location*/ propertyName);
 
-            return createAssignment(memberAccess, initializer);
+            const assignment = createAssignment(memberAccess, initializer);
+            if (node.kind === SyntaxKind.ClassExpression && hasModifier(property, ModifierFlags.Static)) {
+                setOriginalNode(assignment, property);
+                setNodeEmitFlags(assignment, NodeEmitFlags.AdviseOnEmitNode);
+                classExpressionContainStaticPropertyDeclaration[getOriginalNodeId(property)] = <ClassExpression>node;
+            }
+
+            return assignment;
         }
 
         /**
@@ -3108,6 +3145,17 @@ namespace ts {
             }
         }
 
+        function enableSubstitutionForClassExpressionReferredInStaticPropertyInitializer() {
+            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.ClassExpressionReferredInStaticPropertyInitializer) === 0) {
+                enabledSubstitutions |= TypeScriptSubstitutionFlags.ClassExpressionReferredInStaticPropertyInitializer;
+                context.enableSubstitution(SyntaxKind.Identifier);
+
+                generatedNameOfClassExpression = {};
+                classExpressionContainStaticPropertyDeclaration = {};
+                currentGeneratedNameOfClassExpression = {};
+            }
+        }
+
         function isClassWithDecorators(node: Node): node is ClassDeclaration {
             return node.kind === SyntaxKind.ClassDeclaration && node.decorators !== undefined;
         }
@@ -3166,10 +3214,27 @@ namespace ts {
                 applicableSubstitutions |= TypeScriptSubstitutionFlags.NonQualifiedEnumMembers;
             }
 
+            let needClassExpressionSubstituation = false;
+            let classExpressionId: number;
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.ClassExpressionReferredInStaticPropertyInitializer &&
+                isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken) {
+                const original = getOriginalNode(node);
+                if (original.kind === SyntaxKind.PropertyDeclaration) {
+                    needClassExpressionSubstituation = true;
+                    const classExp = classExpressionContainStaticPropertyDeclaration[original.id];
+                    classExpressionId = getOriginalNodeId(classExp);
+                    currentGeneratedNameOfClassExpression[classExpressionId] = generatedNameOfClassExpression[classExpressionId];
+                }
+            }
+
             previousOnEmitNode(node, emit);
 
             if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses && isClassWithDecorators(node)) {
                 currentDecoratedClassAliases[getOriginalNodeId(node)] = undefined;
+            }
+
+            if (needClassExpressionSubstituation) {
+                currentGeneratedNameOfClassExpression[classExpressionId] = undefined;
             }
 
             applicableSubstitutions = savedApplicableSubstitutions;
@@ -3235,6 +3300,7 @@ namespace ts {
         function substituteExpressionIdentifier(node: Identifier): Expression {
             return trySubstituteDecoratedClassName(node)
                 || trySubstituteNamespaceExportedName(node)
+                || trySubstituteClassExpressionNameInStaticPropertyDeclaration(node)
                 || node;
         }
 
@@ -3276,6 +3342,17 @@ namespace ts {
                 }
             }
 
+            return undefined;
+        }
+
+        function trySubstituteClassExpressionNameInStaticPropertyDeclaration(node: Identifier): Expression {
+            if (!nodeIsSynthesized(node) && (enabledSubstitutions & TypeScriptSubstitutionFlags.ClassExpressionReferredInStaticPropertyInitializer)) {
+                const referenced = resolver.getReferencedValueDeclaration(node);
+                const substitute = currentGeneratedNameOfClassExpression[getOriginalNodeId(referenced)];
+                if (substitute) {
+                    return getSynthesizedClone(substitute, { sourceMapRange: node, commentRange: node });
+                }
+            }
             return undefined;
         }
 
