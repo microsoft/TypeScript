@@ -546,6 +546,16 @@ namespace ts.server {
 
     type ModuleFileInfoState = [string, string, string, boolean, boolean];
 
+    enum FingerPrintKind {
+        Version,
+        Shape
+    }
+
+    interface FingerPrint {
+        kind: FingerPrintKind;
+        value: string;
+    }
+
     class ModuleFileInfo extends AbstractFileInfo implements FileInfo {
 
         private finalized: boolean;
@@ -554,7 +564,7 @@ namespace ts.server {
         private referencedBy: ModuleFileInfo[];
 
         private contentSignature: string;
-        private lastCheckedFingerPrint: string;
+        private lastCheckedFingerPrint: FingerPrint;
         private _isExternalModule: boolean;
         private _forceUpdate: boolean;
 
@@ -699,25 +709,70 @@ namespace ts.server {
             if (!this.lastCheckedFingerPrint || this.sourceFileVersion !== this.getSourceFile(builder).version || this._forceUpdate) {
                 return true;
             }
-            return this.lastCheckedFingerPrint != this.computeCheckFingerPrint();
+            const fingerPrintKind = this.lastCheckedFingerPrint.kind;
+            // If we have a Version fingerprint kind, see if we can turn it into
+            // a shape kind to get better stability.
+            if (fingerPrintKind === FingerPrintKind.Version && this.canComputeShapeFingerPrint()) {
+                // Recompute the version fingerprint
+                const currentFingerPrint = this.computeCheckFingerPrint(FingerPrintKind.Version);
+                // They are still the same so we can switch the finger print kind
+                if (currentFingerPrint.value === this.lastCheckedFingerPrint.value) {
+                    this.lastCheckedFingerPrint = this.computeCheckFingerPrint(FingerPrintKind.Shape);
+                    // The version finger print was the same so no need for checking this file;
+                    return false;
+                }
+                else {
+                    // They were different. Keep the old finger print and recheck that file.
+                    return true;
+                }
+            }
+            else {
+                // Compute the current finger print using the last checked kind.
+                const currentFingerPrint = this.computeCheckFingerPrint(fingerPrintKind);
+                if (fingerPrintKind !== currentFingerPrint.kind) {
+                    // We couldn't recompute the same fingerprint kind. So recheck the file
+                    return true;
+                }
+                else {
+                    // Only recheck if the prints are different.
+                    return this.lastCheckedFingerPrint.value !== currentFingerPrint.value;
+                }
+            }
         }
 
-        private computeCheckFingerPrint(): string {
+        private computeCheckFingerPrint(computeKind?: FingerPrintKind): FingerPrint {
+            if (!computeKind || computeKind === FingerPrintKind.Shape) {
+                computeKind = this.canComputeShapeFingerPrint() ? FingerPrintKind.Shape : FingerPrintKind.Version;
+            }
             const hash = crypto.createHash("md5");
             hash.update(this.sourceFileVersion);
             if (this.references) {
                 for (const reference of this.references) {
-                    // If we have a shape signature prefer it over a version id
-                    // since it triggers less compiles.
-                    // ToDo@dirk: we need to switch between shape and version 
-                    const value = reference.sourceFileVersion;
-                    hash.update(value);
+                    if (computeKind === FingerPrintKind.Shape) {
+                        hash.update(reference.shapeSignature());
+                    }
+                    else {
+                        hash.update(reference.sourceFileVersion);
+                    }
                 }
             }
-            return hash.digest("base64");
+            return { kind: computeKind, value: hash.digest("base64") };
         }
 
-        public buildDependencies(builder: BuilderAccessor<ModuleFileInfo>, program: Program): void {
+        private canComputeShapeFingerPrint(): boolean {
+            if (!this.references) {
+                return true;
+            }
+            for (const reference of this.references) {
+                if (!reference.shapeSignature()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public buildDependencies(builder: BuilderAccessor<ModuleFileInfo>): void {
+            const program = builder.getProject().compilerService.languageService.getProgram();
             this.getReferencedFileInfos(builder, program.getSourceFile(this.fileName())).forEach((fileInfo) => {
                 fileInfo.addReferencedBy(this);
                 this.addReference(fileInfo);
@@ -1061,7 +1116,7 @@ namespace ts.server {
             const states = this.readState();
             const roots: ModuleFileInfo[] = [];
             fileInfos.forEach((fileInfo) => {
-                fileInfo.buildDependencies(this, program);
+                fileInfo.buildDependencies(this);
                 if (!fileInfo.hasReferences()) {
                     roots.push(fileInfo);
                 }
