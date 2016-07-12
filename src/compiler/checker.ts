@@ -1342,7 +1342,12 @@ namespace ts {
 
             if (moduleNotFoundError) {
                 // report errors only if it was requested
-                error(moduleReferenceLiteral, moduleNotFoundError, moduleName);
+                if (hasTypeScriptFileExtensionNonDts(moduleName)) {
+                    error(moduleReferenceLiteral, Diagnostics.Module_name_should_not_include_a_ts_extension_Colon_0, moduleName);
+                }
+                else {
+                    error(moduleReferenceLiteral, moduleNotFoundError, moduleName);
+                }
             }
             return undefined;
         }

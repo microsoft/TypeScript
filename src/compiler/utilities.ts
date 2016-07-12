@@ -2726,6 +2726,10 @@ namespace ts {
         return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
+    export function hasTypeScriptFileExtensionNonDts(fileName: string) {
+        return forEach(supportedTypeScriptExtensionsNonDts, extension => fileExtensionIs(fileName, extension));
+    }
+
     /**
      * Replace each instance of non-ascii characters by one, two, three, or four escape sequences
      * representing the UTF-8 encoding of the character, and return the expanded char code list.

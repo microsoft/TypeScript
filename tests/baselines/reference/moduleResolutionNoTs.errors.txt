@@ -1,11 +1,14 @@
-tests/cases/compiler/user.ts(1,15): error TS2307: Cannot find module './m.ts'.
+tests/cases/compiler/user.ts(4,15): error TS2690: Module name should not include a '.ts' extension: './m.ts'.
 
 
-==== tests/cases/compiler/m.ts (0 errors) ====
-    export default 0;
-    
 ==== tests/cases/compiler/user.ts (1 errors) ====
+    // '.ts' extension is OK in a reference
+    ///<reference path="./m.ts"/>
+    
     import x from "./m.ts";
                   ~~~~~~~~
-!!! error TS2307: Cannot find module './m.ts'.
+!!! error TS2690: Module name should not include a '.ts' extension: './m.ts'.
+    
+==== tests/cases/compiler/m.ts (0 errors) ====
+    export default 0;
     

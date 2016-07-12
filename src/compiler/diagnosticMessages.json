@@ -1943,6 +1943,10 @@
         "category": "Error",
         "code": 2689
     },
+    "Module name should not include a '.ts' extension: '{0}'.": {
+        "category": "Error",
+        "code": 2690
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

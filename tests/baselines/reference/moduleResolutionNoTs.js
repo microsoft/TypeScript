@@ -4,6 +4,9 @@
 export default 0;
 
 //// [user.ts]
+// '.ts' extension is OK in a reference
+///<reference path="./m.ts"/>
+
 import x from "./m.ts";
 
 
@@ -12,4 +15,6 @@ import x from "./m.ts";
 exports.__esModule = true;
 exports["default"] = 0;
 //// [user.js]
+// '.ts' extension is OK in a reference
+///<reference path="./m.ts"/>
 "use strict";
