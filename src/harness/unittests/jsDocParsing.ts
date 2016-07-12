@@ -1,7 +1,5 @@
-/// <reference path="..\..\..\src\harness\external\mocha.d.ts" />
-/// <reference path="..\..\..\src\harness\external\chai.d.ts" />
-/// <reference path="..\..\..\src\compiler\parser.ts" />
-/// <reference path="..\..\..\src\harness\harness.ts" />
+/// <reference path="..\..\compiler\parser.ts" />
+/// <reference path="..\harness.ts" />
 
 namespace ts {
     describe("JSDocParsing", () => {

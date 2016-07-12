@@ -1,5 +1,5 @@
-/// <reference path="..\..\..\src\harness\harness.ts" />
-/// <reference path="..\..\..\src\server\editorServices.ts" />
+/// <reference path="..\harness.ts" />
+/// <reference path="..\..\server\editorServices.ts" />
 
 namespace ts {
     function editFlat(position: number, deletedLength: number, newText: string, source: string) {

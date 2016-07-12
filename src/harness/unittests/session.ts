@@ -1,4 +1,4 @@
-/// <reference path="..\..\..\src\harness\harness.ts" />
+/// <reference path="..\harness.ts" />
 
 const expect: typeof _chai.expect = _chai.expect;
 

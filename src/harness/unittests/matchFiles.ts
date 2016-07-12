@@ -1,6 +1,5 @@
-/// <reference path="..\..\..\src\harness\external\mocha.d.ts" />
-/// <reference path="..\..\..\src\harness\harness.ts" />
-/// <reference path="..\..\..\src\harness\virtualFileSystem.ts" />
+/// <reference path="..\harness.ts" />
+/// <reference path="..\virtualFileSystem.ts" />
 
 namespace ts {
     const caseInsensitiveBasePath = "c:/dev/";

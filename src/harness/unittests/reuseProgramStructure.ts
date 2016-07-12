@@ -1,6 +1,5 @@
-/// <reference path="..\..\..\src\harness\external\mocha.d.ts" />
-/// <reference path='..\..\..\src\harness\harness.ts' />
-/// <reference path="..\..\..\src\harness\harnessLanguageService.ts" />
+/// <reference path="..\harness.ts" />
+/// <reference path="..\..\harness\harnessLanguageService.ts" />
 
 namespace ts {
 

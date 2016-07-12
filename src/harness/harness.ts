@@ -18,12 +18,13 @@
 /// <reference path="..\services\shims.ts" />
 /// <reference path="..\server\session.ts" />
 /// <reference path="..\server\client.ts" />
-/// <reference path="..\server\node.d.ts" />
-/// <reference path="external\mocha.d.ts"/>
-/// <reference path="external\chai.d.ts"/>
 /// <reference path="sourceMapRecorder.ts"/>
 /// <reference path="runnerbase.ts"/>
 /// <reference path="virtualFileSystem.ts" />
+/// <reference types="node" />
+/// <reference types="mocha" />
+/// <reference types="chai" />
+
 
 // Block scoped definitions work poorly for global variables, temporarily enable var
 /* tslint:disable:no-var-keyword */
@@ -32,7 +33,13 @@
 var _chai: typeof chai = require("chai");
 var assert: typeof _chai.assert = _chai.assert;
 declare var __dirname: string; // Node-specific
-var global = <any>Function("return this").call(undefined);
+var global: NodeJS.Global = <any>Function("return this").call(undefined);
+declare namespace NodeJS {
+    export interface Global {
+        WScript: typeof WScript;
+        ActiveXObject: typeof ActiveXObject;
+    }
+}
 /* tslint:enable:no-var-keyword */
 
 namespace Utils {
@@ -57,7 +64,7 @@ namespace Utils {
 
     export let currentExecutionEnvironment = getExecutionEnvironment();
 
-    const Buffer: BufferConstructor = currentExecutionEnvironment !== ExecutionEnvironment.Browser
+    const Buffer: typeof global.Buffer = currentExecutionEnvironment !== ExecutionEnvironment.Browser
         ? require("buffer").Buffer
         : undefined;
 

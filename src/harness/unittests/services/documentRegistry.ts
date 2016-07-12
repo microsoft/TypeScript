@@ -1,4 +1,4 @@
-///<reference path='..\..\..\..\src\harness\harness.ts' />
+/// <reference path="..\..\harness.ts" />
 
 describe("DocumentRegistry", () => {
     it("documents are shared between projects", () => {
