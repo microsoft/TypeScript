@@ -425,7 +425,6 @@ namespace ts.server {
                 this.compilerService = new CompilerService(this, projectOptions && projectOptions.compilerOptions);
                 this.builder = createBuilder(this, {
                     event: (info, eventName) => channel.event(info, eventName),
-                    useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames,
                     logError: (err: Error, cmd: string) => {}
                 });
             }
