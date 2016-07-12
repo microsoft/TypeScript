@@ -987,17 +987,17 @@ namespace ts {
                         // The * and ? wildcards should not match directories or files that start with . if they
                         // appear first in a component. Dotted directories and files can be included explicitly
                         // like so: **/.*/.*
-                        if (component.indexOf("*") === 0) {
+                        if (component.charCodeAt(0) === CharacterCodes.asterisk) {
                             subpattern += "([^./]" + singleAsteriskRegexFragment + ")?";
                             component = component.substr(1);
                         }
-                        else if (component.indexOf("?") === 0) {
+                        else if (component.charCodeAt(0) === CharacterCodes.question) {
                             subpattern += "[^./]";
                             component = component.substr(1);
                         }
                     }
 
-                    subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+                    subpattern += replaceWildcardCharacters(component, singleAsteriskRegexFragment);
                     hasWrittenComponent = true;
                 }
             }
@@ -1020,6 +1020,10 @@ namespace ts {
         }
 
         return "^(" + pattern + (usage === "exclude" ? ")($|/)" : ")$");
+    }
+
+    function replaceWildcardCharacters(component: string, singleAsteriskRegexFragment: string) {
+        return component.replace(reservedCharacterPattern, replaceWildcardCharacter);
 
         function replaceWildcardCharacter(match: string) {
             return match === "*" ? singleAsteriskRegexFragment : match === "?" ? "[^/]" : "\\" + match;
