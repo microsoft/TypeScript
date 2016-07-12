@@ -1,0 +1,17 @@
+=== tests/cases/compiler/index.ts ===
+export default 0;
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/a/index.ts ===
+export default 1;
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/a/a.ts ===
+import parent from "..";
+>parent : Symbol(parent, Decl(a.ts, 0, 6))
+
+import here from ".";
+>here : Symbol(here, Decl(a.ts, 1, 6))
+
+parent + here;
+>parent : Symbol(parent, Decl(a.ts, 0, 6))
+>here : Symbol(here, Decl(a.ts, 1, 6))
+

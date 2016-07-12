@@ -900,9 +900,7 @@ namespace ts {
     }
 
     export function fileExtensionIs(path: string, extension: string): boolean {
-        const pathLen = path.length;
-        const extLen = extension.length;
-        return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
+        return stringEndsWith(path, extension);
     }
 
     export function fileExtensionIsAny(path: string, extensions: string[]): boolean {
@@ -915,6 +913,17 @@ namespace ts {
         return false;
     }
 
+    // Should act like String.prototype.startsWith
+    export function stringStartsWith(s: string, start: string): boolean {
+        return s.length > start.length && s.substr(0, start.length) === start;
+    }
+
+    // Should act like String.prototype.endsWith
+    export function stringEndsWith(s: string, end: string): boolean {
+        const sLen = s.length;
+        const endLen = end.length;
+        return sLen > endLen && s.substr(sLen - endLen, endLen) === end;
+    }
 
     // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
     // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future

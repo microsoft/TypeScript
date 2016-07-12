@@ -1,0 +1,18 @@
+=== tests/cases/compiler/index.ts ===
+export default 0;
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/a/index.ts ===
+export default 1;
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/a/a.ts ===
+import parent from "..";
+>parent : number
+
+import here from ".";
+>here : number
+
+parent + here;
+>parent + here : number
+>parent : number
+>here : number
+
