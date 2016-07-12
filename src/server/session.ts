@@ -164,7 +164,7 @@ namespace ts.server {
             private maxUncompressedMessageSize: number,
             private compress: (s: string) => CompressedData,
             private hrtime: (start?: number[]) => number[],
-            private logger: Logger) {
+            protected logger: Logger) {
             this.projectService =
                 new ProjectService(host, logger, cancellationToken, useSingleInferredProject, (eventName, project, fileName) => {
                     this.handleEvent(eventName, project, fileName);
@@ -173,7 +173,7 @@ namespace ts.server {
 
         private handleEvent(eventName: string, project: Project, fileName: NormalizedPath) {
             if (eventName == "context") {
-                this.projectService.log("got context event, updating diagnostics for" + fileName, "Info");
+                this.logger.info("got context event, updating diagnostics for" + fileName);
                 this.updateErrorCheck([{ fileName, project }], this.changeSeq,
                     (n) => n === this.changeSeq, 100);
             }
@@ -187,7 +187,7 @@ namespace ts.server {
                     msg += "\n" + (<StackTraceError>err).stack;
                 }
             }
-            this.projectService.log(msg);
+            this.logger.msg(msg, Msg.Err);
         }
 
         public send(msg: protocol.Message, canCompressResponse: boolean) {
@@ -334,7 +334,7 @@ namespace ts.server {
             if (!projects) {
                 return;
             }
-            this.projectService.log(`cleaning ${caption}`);
+            this.logger.info(`cleaning ${caption}`);
             for (const p of projects) {
                 p.languageService.cleanupSemanticCache();
             }
@@ -345,7 +345,7 @@ namespace ts.server {
             this.cleanProjects("configured projects", this.projectService.configuredProjects);
             this.cleanProjects("external projects", this.projectService.externalProjects);
             if (typeof global !== "undefined" && global.gc) {
-                this.projectService.log(`global.gc()`);
+                this.logger.info(`global.gc()`);
                 global.gc();
                 global.gc();
                 global.gc();
@@ -1451,8 +1451,8 @@ namespace ts.server {
                 return handler(request);
             }
             else {
-                this.projectService.log("Unrecognized JSON command: " + JSON.stringify(request));
-                this.output(undefined, CommandNames.Unknown, /*canCompressResponse*/ false, request.seq, "Unrecognized JSON command: " + request.command);
+                this.logger.msg(`Unrecognized JSON command: ${JSON.stringify(request)}`, Msg.Err);
+                this.output(undefined, CommandNames.Unknown, /*canCompressResponse*/ false, request.seq, `Unrecognized JSON command: ${request.command}`);
                 return { responseRequired: false };
             }
         }

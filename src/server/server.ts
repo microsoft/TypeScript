@@ -44,11 +44,11 @@ namespace ts.server {
         }
 
         perftrc(s: string) {
-            this.msg(s, "Perf");
+            this.msg(s, Msg.Perf);
         }
 
         info(s: string) {
-            this.msg(s, "Info");
+            this.msg(s, Msg.Info);
         }
 
         startGroup() {
@@ -71,7 +71,7 @@ namespace ts.server {
         }
 
 
-        msg(s: string, type = "Err") {
+        msg(s: string, type: Msg.Types = Msg.Err) {
             if (this.fd < 0) {
                 if (this.logFilename) {
                     this.fd = fs.openSync(this.logFilename, "w");
@@ -105,7 +105,7 @@ namespace ts.server {
         }
 
         exit() {
-            this.projectService.log("Exiting...", "Info");
+            this.logger.info("Exiting...");
             this.projectService.closeLog();
             process.exit(0);
         }

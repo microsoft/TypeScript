@@ -9,7 +9,17 @@ namespace ts.server {
         info(s: string): void;
         startGroup(): void;
         endGroup(): void;
-        msg(s: string, type?: string): void;
+        msg(s: string, type?: Msg.Types): void;
+    }
+
+    export namespace Msg {
+        export type Err = "Err";
+        export const Err: Err = "Err";
+        export type Info = "Info";
+        export const Info: Info = "Info";
+        export type Perf = "Perf";
+        export const Perf: Perf = "Perf";
+        export type Types = Err | Info | Perf;
     }
 
     export function getDefaultFormatCodeSettings(host: ServerHost): FormatCodeSettings {
