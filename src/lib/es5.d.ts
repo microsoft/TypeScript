@@ -439,8 +439,11 @@ interface StringConstructor {
 declare const String: StringConstructor;
 
 interface Boolean {
+    /** Returns a string representation of a boolean. */
+    toString(this: Boolean): string;
+
     /** Returns the primitive value of the specified object. */
-    valueOf(this: boolean): boolean;
+    valueOf(this: Boolean): boolean;
 }
 
 interface BooleanConstructor {
