@@ -4571,14 +4571,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function emitRestParameter(node: FunctionLikeDeclaration) {
                 if (languageVersion < ScriptTarget.ES6 && hasDeclaredRestParameter(node)) {
-                    const restIndex = node.parameters.length - 1;
-                    const restParam = node.parameters[restIndex];
+                    const restParam = node.parameters[node.parameters.length - 1];
 
                     // A rest parameter cannot have a binding pattern, so let's just ignore it if it does.
                     if (isBindingPattern(restParam.name)) {
                         return;
                     }
 
+                    const skipThisCount = node.parameters.length && (<Identifier>node.parameters[0].name).text === "this" ? 1 : 0;
+                    const restIndex = node.parameters.length - 1 - skipThisCount;
                     const tempName = createTempVariable(TempFlags._i).text;
                     writeLine();
                     emitLeadingComments(restParam);
@@ -6155,10 +6156,11 @@ const _super = (function (geti, seti) {
 
                     if (valueDeclaration) {
                         const parameters = valueDeclaration.parameters;
+                        const skipThisCount = parameters.length && (<Identifier>parameters[0].name).text === "this" ? 1 : 0;
                         const parameterCount = parameters.length;
-                        if (parameterCount > 0) {
-                            for (let i = 0; i < parameterCount; i++) {
-                                if (i > 0) {
+                        if (parameterCount > skipThisCount) {
+                            for (let i = skipThisCount; i < parameterCount; i++) {
+                                if (i > skipThisCount) {
                                     write(", ");
                                 }
 
