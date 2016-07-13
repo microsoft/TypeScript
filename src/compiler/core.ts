@@ -922,20 +922,22 @@ namespace ts {
     const reservedCharacterPattern = /[^\w\s\/]/g;
     const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
 
+    /**
+     * Matches any single directory segment unless it is the last segment and a .min.js file
+     * Breakdown:
+     *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
+     *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
+     */
+    const singleAsteriskRegexFragmentFiles = "([^./]*(\\.(?!min\\.js$))?)*";
+    const singleAsteriskRegexFragmentOther = "[^/]*";
+
     export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude") {
         if (specs === undefined || specs.length === 0) {
             return undefined;
         }
 
-        /**
-         * Regex for the * wildcard. Matches all characters except for directory seperators. When
-         * used for including files, also does not match the file extension .min.js
-         *
-         * Breakdown for the "files" version:
-         *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
-         *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
-         */
-        const singleAsteriskRegexFragment = usage === "files" ? "([^./]*(\\.(?!min\\.js$))?)*" : "[^/]*";
+        const replaceWildcardCharacter =  usage === "files" ? replaceWildCardCharacterFiles : replaceWildCardCharacterOther;
+        const singleAsteriskRegexFragment = usage === "files" ? singleAsteriskRegexFragmentFiles : singleAsteriskRegexFragmentOther;
 
         /**
          * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
@@ -997,7 +999,7 @@ namespace ts {
                         }
                     }
 
-                    subpattern += replaceWildcardCharacters(component, singleAsteriskRegexFragment);
+                    subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
                     hasWrittenComponent = true;
                 }
             }
@@ -1022,12 +1024,16 @@ namespace ts {
         return "^(" + pattern + (usage === "exclude" ? ")($|/)" : ")$");
     }
 
-    function replaceWildcardCharacters(component: string, singleAsteriskRegexFragment: string) {
-        return component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+    function replaceWildCardCharacterFiles(match: string) {
+        return replaceWildcardCharacter(match, singleAsteriskRegexFragmentFiles);
+    }
 
-        function replaceWildcardCharacter(match: string) {
-            return match === "*" ? singleAsteriskRegexFragment : match === "?" ? "[^/]" : "\\" + match;
-        }
+    function replaceWildCardCharacterOther(match: string) {
+        return replaceWildcardCharacter(match, singleAsteriskRegexFragmentOther);
+    }
+
+    function replaceWildcardCharacter(match: string, singleAsteriskRegexFragment: string) {
+        return match === "*" ? singleAsteriskRegexFragment : match === "?" ? "[^/]" : "\\" + match;
     }
 
     export interface FileSystemEntries {
