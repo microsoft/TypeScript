@@ -2566,7 +2566,8 @@ namespace ts {
         }
         else {
             for (const sourceFile of sourceFiles) {
-                if (!isDeclarationFile(sourceFile)) {
+                 // Don't emit if source file is a declaration file, or was located under node_modules
+                if (!isDeclarationFile(sourceFile) && !host.isSourceFileFromExternalLibrary(sourceFile)) {
                     onSingleFileEmit(host, sourceFile);
                 }
             }
