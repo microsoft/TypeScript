@@ -3353,7 +3353,7 @@ interface Uint32ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from<T>(arrayLike: ArrayLike<number>, map: (this: T, v: number, k: number) => number, thisArg: T): Uint32Array;
+    from<T>(arrayLike: ArrayLike<number>, mapfn?: (this: T, v: number, k: number) => number, thisArg?: T): Uint32Array;
 }
 declare const Uint32Array: Uint32ArrayConstructor;
 
@@ -3626,7 +3626,7 @@ interface Float32ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from<T>(arrayLike: ArrayLike<number>, mapfn: (this: T, v: number, k: number) => number, thisArg: T): Float32Array;
+    from<T>(arrayLike: ArrayLike<number>, mapfn?: (this: T, v: number, k: number) => number, thisArg?: T): Float32Array;
 
 }
 declare const Float32Array: Float32ArrayConstructor;
@@ -3900,7 +3900,7 @@ interface Float64ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from<T>(arrayLike: ArrayLike<number>, mapfn: (this: T, v: number, k: number) => number, thisArg?: T): Float64Array;
+    from<T>(arrayLike: ArrayLike<number>, mapfn?: (this: T, v: number, k: number) => number, thisArg?: T): Float64Array;
 }
 declare const Float64Array: Float64ArrayConstructor;
 
