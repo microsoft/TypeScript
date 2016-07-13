@@ -1377,31 +1377,27 @@ namespace Harness {
             writeByteOrderMark: boolean;
         }
 
-        function stringEndsWith(str: string, end: string) {
-            return str.substr(str.length - end.length) === end;
-        }
-
         export function isTS(fileName: string) {
-            return stringEndsWith(fileName, ".ts");
+            return ts.endsWith(fileName, ".ts");
         }
 
         export function isTSX(fileName: string) {
-            return stringEndsWith(fileName, ".tsx");
+            return ts.endsWith(fileName, ".tsx");
         }
 
         export function isDTS(fileName: string) {
-            return stringEndsWith(fileName, ".d.ts");
+            return ts.endsWith(fileName, ".d.ts");
         }
 
         export function isJS(fileName: string) {
-            return stringEndsWith(fileName, ".js");
+            return ts.endsWith(fileName, ".js");
         }
         export function isJSX(fileName: string) {
-            return stringEndsWith(fileName, ".jsx");
+            return ts.endsWith(fileName, ".jsx");
         }
 
         export function isJSMap(fileName: string) {
-            return stringEndsWith(fileName, ".js.map") || stringEndsWith(fileName, ".jsx.map");
+            return ts.endsWith(fileName, ".js.map") || ts.endsWith(fileName, ".jsx.map");
         }
 
         /** Contains the code and errors of a compilation and some helper methods to check its status. */
