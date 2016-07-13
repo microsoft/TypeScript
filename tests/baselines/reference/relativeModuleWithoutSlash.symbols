@@ -1,13 +1,13 @@
-=== tests/cases/compiler/a.ts ===
+=== /a.ts ===
 
 export default { a: 0 };
 >a : Symbol(a, Decl(a.ts, 1, 16))
 
-=== tests/cases/compiler/a/index.ts ===
+=== /a/index.ts ===
 export default { aIndex: 0 };
 >aIndex : Symbol(aIndex, Decl(index.ts, 0, 16))
 
-=== tests/cases/compiler/a/test.ts ===
+=== /a/test.ts ===
 import a from ".";
 >a : Symbol(a, Decl(test.ts, 0, 6))
 
@@ -24,7 +24,7 @@ aIndex.a; //aIndex.aIndex; See GH#9690
 >aIndex : Symbol(aIndex, Decl(test.ts, 1, 6))
 >a : Symbol(a, Decl(a.ts, 1, 16))
 
-=== tests/cases/compiler/a/b/test.ts ===
+=== /a/b/test.ts ===
 import a from "..";
 >a : Symbol(a, Decl(test.ts, 0, 6))
 

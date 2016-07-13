@@ -1,17 +1,17 @@
-=== tests/cases/compiler/a.ts ===
+=== /a.ts ===
 
 export default { a: 0 };
 >{ a: 0 } : { a: number; }
 >a : number
 >0 : number
 
-=== tests/cases/compiler/a/index.ts ===
+=== /a/index.ts ===
 export default { aIndex: 0 };
 >{ aIndex: 0 } : { aIndex: number; }
 >aIndex : number
 >0 : number
 
-=== tests/cases/compiler/a/test.ts ===
+=== /a/test.ts ===
 import a from ".";
 >a : { a: number; }
 
@@ -28,7 +28,7 @@ aIndex.a; //aIndex.aIndex; See GH#9690
 >aIndex : { a: number; }
 >a : number
 
-=== tests/cases/compiler/a/b/test.ts ===
+=== /a/b/test.ts ===
 import a from "..";
 >a : { a: number; }
 
