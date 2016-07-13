@@ -997,6 +997,23 @@ namespace ts {
         return sortAndDeduplicateDiagnostics(diagnostics);
     }
 
+    export function formatDiagnostics(diagnostics: Diagnostic[], host: CompilerHost): string {
+        let output = "";
+
+        for (const diagnostic of diagnostics) {
+            if (diagnostic.file) {
+                const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+                const fileName = diagnostic.file.fileName;
+                const relativeFileName = convertToRelativePath(fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName));
+                output += `${ relativeFileName }(${ line + 1 },${ character + 1 }): `;
+            }
+
+            const category = DiagnosticCategory[diagnostic.category].toLowerCase();
+            output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+        }
+        return output;
+    }
+
     export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string {
         if (typeof messageText === "string") {
             return messageText;
