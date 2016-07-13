@@ -1218,23 +1218,7 @@ namespace ts {
     export function isExternalModuleNameRelative(moduleName: string): boolean {
         // TypeScript 1.0 spec (April 2014): 11.2.1
         // An external module name is "relative" if the first term is "." or "..".
-        if (moduleName.charCodeAt(0) === CharacterCodes.dot) {
-            if (moduleName.length === 1) {
-                return true;
-            }
-            switch (moduleName.charCodeAt(1)) {
-                case CharacterCodes.slash:
-                case CharacterCodes.backslash:
-                    return true;
-                case CharacterCodes.dot:
-                    if (moduleName.length === 2) {
-                        return true;
-                    }
-                    const ch2 = moduleName.charCodeAt(2);
-                    return ch2 === CharacterCodes.slash || ch2 === CharacterCodes.backslash;
-            }
-        }
-        return false;
+        return /^\.\.?($|[\\/])/.test(moduleName);
     }
 
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
