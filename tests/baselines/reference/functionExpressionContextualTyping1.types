@@ -20,9 +20,9 @@ var a0: (n: number, s: string) => number = (num, str) => {
 
     num.toExponential();
 >num.toExponential() : string
->num.toExponential : (fractionDigits?: number) => string
+>num.toExponential : (this: Number, fractionDigits?: number) => string
 >num : number
->toExponential : (fractionDigits?: number) => string
+>toExponential : (this: Number, fractionDigits?: number) => string
 
     return 0;
 >0 : number

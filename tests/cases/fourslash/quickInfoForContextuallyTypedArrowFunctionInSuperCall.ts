@@ -17,4 +17,4 @@ goTo.marker('2');
 verify.quickInfoIs('(parameter) value: number');
 
 goTo.marker('3');
-verify.quickInfoIs('(method) Number.toExponential(fractionDigits?: number): string');
+verify.quickInfoIs('(method) Number.toExponential(this: Number, fractionDigits?: number): string');

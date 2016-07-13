@@ -24,9 +24,9 @@ for (let x = 0; x < 2; ++x) {
 
     data.push(() => C);
 >data.push(() => C) : number
->data.push : (...items: any[]) => number
+>data.push : (this: any[], ...items: any[]) => number
 >data : any[]
->push : (...items: any[]) => number
+>push : (this: any[], ...items: any[]) => number
 >() => C : () => typeof C
 >C : typeof C
 }

@@ -111,9 +111,9 @@ null, true, 1;
 >++NUMBER : number
 >NUMBER : number
 >STRING.charAt(0) : string
->STRING.charAt : (pos: number) => string
+>STRING.charAt : (this: String, pos: number) => string
 >STRING : string
->charAt : (pos: number) => string
+>charAt : (this: String, pos: number) => string
 >0 : number
 >new Object() : Object
 >Object : ObjectConstructor
@@ -135,9 +135,9 @@ var resultIsObject2 = (++NUMBER, STRING.charAt(0), new Object());
 >++NUMBER : number
 >NUMBER : number
 >STRING.charAt(0) : string
->STRING.charAt : (pos: number) => string
+>STRING.charAt : (this: String, pos: number) => string
 >STRING : string
->charAt : (pos: number) => string
+>charAt : (this: String, pos: number) => string
 >0 : number
 >new Object() : Object
 >Object : ObjectConstructor

@@ -22,7 +22,7 @@ verify.memberListContains("y", "(property) IFoo.y: string");
 verify.memberListCount(2);
 
 goTo.marker("U");
-verify.memberListContains("toString", "(method) Object.toString(): string");
+verify.memberListContains("toString", "(method) Object.toString(this: Object): string");
 verify.memberListCount(7); // constructor, toString, toLocaleString, valueOf, hasOwnProperty, isPrototypeOf, propertyIsEnumerable
 
 goTo.marker("V");

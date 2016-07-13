@@ -21,11 +21,11 @@ var b:B;
 // Should not error
 b('foo').charAt(0);
 >b('foo').charAt(0) : string
->b('foo').charAt : (pos: number) => string
+>b('foo').charAt : (this: String, pos: number) => string
 >b('foo') : string
 >b : B
 >'foo' : "foo"
->charAt : (pos: number) => string
+>charAt : (this: String, pos: number) => string
 >0 : number
 
 interface A {

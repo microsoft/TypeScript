@@ -35,9 +35,9 @@ export class ConstructorWithRestParamters {
 >a + rests.join("") : string
 >a : string
 >rests.join("") : string
->rests.join : (separator?: string) => string
+>rests.join : (this: string[], separator?: string) => string
 >rests : string[]
->join : (separator?: string) => string
+>join : (this: string[], separator?: string) => string
 >"" : string
     }
 }
@@ -125,9 +125,9 @@ class GlobalConstructorWithRestParamters {
 >a + rests.join("") : string
 >a : string
 >rests.join("") : string
->rests.join : (separator?: string) => string
+>rests.join : (this: string[], separator?: string) => string
 >rests : string[]
->join : (separator?: string) => string
+>join : (this: string[], separator?: string) => string
 >"" : string
     }
 }

@@ -177,9 +177,9 @@ C.doIt() ? exprString1 : exprString2;
 condObject.valueOf() ? exprIsObject1 : exprIsObject2;
 >condObject.valueOf() ? exprIsObject1 : exprIsObject2 : Object
 >condObject.valueOf() : Object
->condObject.valueOf : () => Object
+>condObject.valueOf : (this: Object) => Object
 >condObject : Object
->valueOf : () => Object
+>valueOf : (this: Object) => Object
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
@@ -339,9 +339,9 @@ var resultIsObject3 = condObject.valueOf() ? exprIsObject1 : exprIsObject2;
 >resultIsObject3 : Object
 >condObject.valueOf() ? exprIsObject1 : exprIsObject2 : Object
 >condObject.valueOf() : Object
->condObject.valueOf : () => Object
+>condObject.valueOf : (this: Object) => Object
 >condObject : Object
->valueOf : () => Object
+>valueOf : (this: Object) => Object
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 

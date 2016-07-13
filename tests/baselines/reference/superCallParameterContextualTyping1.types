@@ -27,8 +27,8 @@ class B extends A<number, string> {
 >String(value.toExponential()) : string
 >String : StringConstructor
 >value.toExponential() : string
->value.toExponential : (fractionDigits?: number) => string
+>value.toExponential : (this: Number, fractionDigits?: number) => string
 >value : number
->toExponential : (fractionDigits?: number) => string
+>toExponential : (this: Number, fractionDigits?: number) => string
 }
 

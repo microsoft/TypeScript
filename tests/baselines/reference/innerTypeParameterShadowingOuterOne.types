@@ -18,9 +18,9 @@ function f<T extends Date>() {
 
         x.toFixed();
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number) => string
+>x.toFixed : (this: Number, fractionDigits?: number) => string
 >x : T
->toFixed : (fractionDigits?: number) => string
+>toFixed : (this: Number, fractionDigits?: number) => string
     }
     var x: T;
 >x : T
@@ -28,9 +28,9 @@ function f<T extends Date>() {
 
     x.getDate();
 >x.getDate() : number
->x.getDate : () => number
+>x.getDate : (this: Date) => number
 >x : T
->getDate : () => number
+>getDate : (this: Date) => number
 }
 
 function f2<T extends Date, U extends Date>() {
@@ -53,9 +53,9 @@ function f2<T extends Date, U extends Date>() {
 
         x.toFixed();
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number) => string
+>x.toFixed : (this: Number, fractionDigits?: number) => string
 >x : U
->toFixed : (fractionDigits?: number) => string
+>toFixed : (this: Number, fractionDigits?: number) => string
     }
     var x: U;
 >x : U
@@ -63,9 +63,9 @@ function f2<T extends Date, U extends Date>() {
 
     x.getDate();
 >x.getDate() : number
->x.getDate : () => number
+>x.getDate : (this: Date) => number
 >x : U
->getDate : () => number
+>getDate : (this: Date) => number
 }
 //function f2<T extends Date, U extends T>() {
 //    function g<T extends Number, U extends T>() {

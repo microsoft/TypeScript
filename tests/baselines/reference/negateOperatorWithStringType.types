@@ -120,9 +120,9 @@ var ResultIsNumber12 = -STRING.charAt(0);
 >ResultIsNumber12 : number
 >-STRING.charAt(0) : number
 >STRING.charAt(0) : string
->STRING.charAt : (pos: number) => string
+>STRING.charAt : (this: String, pos: number) => string
 >STRING : string
->charAt : (pos: number) => string
+>charAt : (this: String, pos: number) => string
 >0 : number
 
 // miss assignment operators

@@ -21,8 +21,8 @@ import foo from "./exp";
 
 foo.toExponential(2);
 >foo.toExponential(2) : string
->foo.toExponential : (fractionDigits?: number) => string
+>foo.toExponential : (this: Number, fractionDigits?: number) => string
 >foo : number
->toExponential : (fractionDigits?: number) => string
+>toExponential : (this: Number, fractionDigits?: number) => string
 >2 : number
 

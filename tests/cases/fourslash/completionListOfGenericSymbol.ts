@@ -7,5 +7,5 @@
 
 goTo.marker();
 verify.memberListContains('length', "(property) Array<number>.length: number", /*docComments*/ undefined, /*kind*/ "property");
-verify.memberListContains('toString', "(method) Array<number>.toString(): string", /*docComments*/ undefined, /*kind*/ "method");
+verify.memberListContains('toString', "(method) Array<number>.toString(this: number[]): string", /*docComments*/ undefined, /*kind*/ "method");
 

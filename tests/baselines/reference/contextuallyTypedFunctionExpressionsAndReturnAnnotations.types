@@ -16,9 +16,9 @@ foo((y): (y2: number) => void => {
     var z = y.charAt(0); // Should be string
 >z : string
 >y.charAt(0) : string
->y.charAt : (pos: number) => string
+>y.charAt : (this: String, pos: number) => string
 >y : string
->charAt : (pos: number) => string
+>charAt : (this: String, pos: number) => string
 >0 : number
 
     return null;
@@ -39,9 +39,9 @@ foo((y: string) => {
         var z = y2.toFixed(); // Should be string
 >z : string
 >y2.toFixed() : string
->y2.toFixed : (fractionDigits?: number) => string
+>y2.toFixed : (this: Number, fractionDigits?: number) => string
 >y2 : number
->toFixed : (fractionDigits?: number) => string
+>toFixed : (this: Number, fractionDigits?: number) => string
 
         return 0;
 >0 : number

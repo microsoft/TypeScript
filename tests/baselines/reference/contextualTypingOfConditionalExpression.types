@@ -7,15 +7,15 @@ var x: (a: number) => void = true ? (a) => a.toExponential() : (b) => b.toFixed(
 >(a) => a.toExponential() : (a: number) => string
 >a : number
 >a.toExponential() : string
->a.toExponential : (fractionDigits?: number) => string
+>a.toExponential : (this: Number, fractionDigits?: number) => string
 >a : number
->toExponential : (fractionDigits?: number) => string
+>toExponential : (this: Number, fractionDigits?: number) => string
 >(b) => b.toFixed() : (b: number) => string
 >b : number
 >b.toFixed() : string
->b.toFixed : (fractionDigits?: number) => string
+>b.toFixed : (this: Number, fractionDigits?: number) => string
 >b : number
->toFixed : (fractionDigits?: number) => string
+>toFixed : (this: Number, fractionDigits?: number) => string
 
 class A {
 >A : A

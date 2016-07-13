@@ -21,9 +21,9 @@ a.foo();
 
 a.bar.toString();
 >a.bar.toString() : string
->a.bar.toString : (radix?: number) => string
+>a.bar.toString : (this: Number, radix?: number) => string
 >a.bar : number
 >a : { "foo": () => void; "bar": number; }
 >bar : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
 

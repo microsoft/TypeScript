@@ -112,9 +112,9 @@ BOOLEAN = false, 1;
 STRING.trim(), NUMBER = 1;
 >STRING.trim(), NUMBER = 1 : number
 >STRING.trim() : string
->STRING.trim : () => string
+>STRING.trim : (this: String) => string
 >STRING : string
->trim : () => string
+>trim : (this: String) => string
 >NUMBER = 1 : number
 >NUMBER : number
 >1 : number
@@ -165,9 +165,9 @@ var resultIsNumber11 = (STRING.trim(), NUMBER = 1);
 >(STRING.trim(), NUMBER = 1) : number
 >STRING.trim(), NUMBER = 1 : number
 >STRING.trim() : string
->STRING.trim : () => string
+>STRING.trim : (this: String) => string
 >STRING : string
->trim : () => string
+>trim : (this: String) => string
 >NUMBER = 1 : number
 >NUMBER : number
 >1 : number

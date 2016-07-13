@@ -76,18 +76,18 @@ var r1a = _.map(c2, (x) => { return x.toFixed() });
 >(x) => { return x.toFixed() } : (x: number) => string
 >x : number
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number) => string
+>x.toFixed : (this: Number, fractionDigits?: number) => string
 >x : number
->toFixed : (fractionDigits?: number) => string
+>toFixed : (this: Number, fractionDigits?: number) => string
 
 var rf1 = (x: number) => { return x.toFixed() };
 >rf1 : (x: number) => string
 >(x: number) => { return x.toFixed() } : (x: number) => string
 >x : number
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number) => string
+>x.toFixed : (this: Number, fractionDigits?: number) => string
 >x : number
->toFixed : (fractionDigits?: number) => string
+>toFixed : (this: Number, fractionDigits?: number) => string
 
 var r1b = _.map(c2, rf1); 
 >r1b : Collection<number, string>

@@ -5,9 +5,9 @@ var fu: (s: string) => string = function (s) { return s.toLowerCase() };
 >function (s) { return s.toLowerCase() } : (s: string) => string
 >s : string
 >s.toLowerCase() : string
->s.toLowerCase : () => string
+>s.toLowerCase : (this: String) => string
 >s : string
->toLowerCase : () => string
+>toLowerCase : (this: String) => string
 
 var zu = fu = function (s) { return s.toLowerCase() };
 >zu : (s: string) => string
@@ -16,7 +16,7 @@ var zu = fu = function (s) { return s.toLowerCase() };
 >function (s) { return s.toLowerCase() } : (s: string) => string
 >s : string
 >s.toLowerCase() : string
->s.toLowerCase : () => string
+>s.toLowerCase : (this: String) => string
 >s : string
->toLowerCase : () => string
+>toLowerCase : (this: String) => string
 

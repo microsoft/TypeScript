@@ -22,9 +22,9 @@ _.each([1, 2, 3], (num) => alert(num.toString()));
 >alert(num.toString()) : void
 >alert : (x: string) => void
 >num.toString() : string
->num.toString : (radix?: number) => string
+>num.toString : (this: Number, radix?: number) => string
 >num : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
 
 _.each({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => alert(value.toString()));
 >_.each({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => alert(value.toString())) : void
@@ -44,9 +44,9 @@ _.each({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => alert(valu
 >alert(value.toString()) : void
 >alert : (x: string) => void
 >value.toString() : string
->value.toString : (radix?: number) => string
+>value.toString : (this: Number, radix?: number) => string
 >value : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
 
 _.map([1, 2, 3], (num) => num * 3);
 >_.map([1, 2, 3], (num) => num * 3) : number[]
@@ -124,9 +124,9 @@ var flat = _.reduceRight(list, (a, b) => a.concat(b), []);
 >a : number[]
 >b : number[]
 >a.concat(b) : number[]
->a.concat : (...items: (number | number[])[]) => number[]
+>a.concat : (this: number[], ...items: (number | number[])[]) => number[]
 >a : number[]
->concat : (...items: (number | number[])[]) => number[]
+>concat : (this: number[], ...items: (number | number[])[]) => number[]
 >b : number[]
 >[] : undefined[]
 

@@ -145,9 +145,9 @@ if (!test) {
 
     test.slice(1); // No error
 >test.slice(1) : string
->test.slice : (start?: number | undefined, end?: number | undefined) => string
+>test.slice : (this: String, start?: number | undefined, end?: number | undefined) => string
 >test : string
->slice : (start?: number | undefined, end?: number | undefined) => string
+>slice : (this: String, start?: number | undefined, end?: number | undefined) => string
 >1 : number
 
 })();

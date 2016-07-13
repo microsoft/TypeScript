@@ -42,9 +42,9 @@ genericFunction(genericObject, ({greeting}) => {
     var s = greeting.toLocaleLowerCase();  // Greeting should be of type string
 >s : string
 >greeting.toLocaleLowerCase() : string
->greeting.toLocaleLowerCase : () => string
+>greeting.toLocaleLowerCase : (this: String) => string
 >greeting : string
->toLocaleLowerCase : () => string
+>toLocaleLowerCase : (this: String) => string
 
 });
 

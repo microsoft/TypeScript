@@ -10,16 +10,16 @@ var c: C;
 var r = c.toString();
 >r : string
 >c.toString() : string
->c.toString : () => string
+>c.toString : (this: Object) => string
 >c : C
->toString : () => string
+>toString : (this: Object) => string
 
 var r2 = c.hasOwnProperty('');
 >r2 : boolean
 >c.hasOwnProperty('') : boolean
->c.hasOwnProperty : (v: string) => boolean
+>c.hasOwnProperty : (this: Object, v: string) => boolean
 >c : C
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (this: Object, v: string) => boolean
 >'' : string
 
 var o: Object = c;

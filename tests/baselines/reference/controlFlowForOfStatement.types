@@ -22,9 +22,9 @@ function a() {
 >x = x.toExponential() : string
 >x : string | number | boolean | RegExp
 >x.toExponential() : string
->x.toExponential : (fractionDigits?: number) => string
+>x.toExponential : (this: Number, fractionDigits?: number) => string
 >x : number
->toExponential : (fractionDigits?: number) => string
+>toExponential : (this: Number, fractionDigits?: number) => string
     }
     x; // string | boolean
 >x : boolean | string

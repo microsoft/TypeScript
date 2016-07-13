@@ -20,13 +20,13 @@ if(foo.M2.x){
 >new relMod(other.M2.x.charCodeAt(0)) : relMod
 >relMod : typeof relMod
 >other.M2.x.charCodeAt(0) : number
->other.M2.x.charCodeAt : (index: number) => number
+>other.M2.x.charCodeAt : (this: String, index: number) => number
 >other.M2.x : string
 >other.M2 : typeof other.M2
 >other : typeof other
 >M2 : typeof other.M2
 >x : string
->charCodeAt : (index: number) => number
+>charCodeAt : (this: String, index: number) => number
 >0 : number
 }
 

@@ -4,7 +4,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(7,29): error TS1005: ',' expected.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(8,4): error TS2345: Argument of type '[number, number, string[][], string]' is not assignable to parameter of type '[number, number, string[][]]'.
   Types of property 'pop' are incompatible.
-    Type '() => number | string[][] | string' is not assignable to type '() => number | string[][]'.
+    Type '(this: (number | string[][] | string)[]) => number | string[][] | string' is not assignable to type '(this: (number | string[][])[]) => number | string[][]'.
       Type 'number | string[][] | string' is not assignable to type 'number | string[][]'.
         Type 'string' is not assignable to type 'number | string[][]'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(16,8): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
@@ -70,7 +70,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[number, number, string[][], string]' is not assignable to parameter of type '[number, number, string[][]]'.
 !!! error TS2345:   Types of property 'pop' are incompatible.
-!!! error TS2345:     Type '() => number | string[][] | string' is not assignable to type '() => number | string[][]'.
+!!! error TS2345:     Type '(this: (number | string[][] | string)[]) => number | string[][] | string' is not assignable to type '(this: (number | string[][])[]) => number | string[][]'.
 !!! error TS2345:       Type 'number | string[][] | string' is not assignable to type 'number | string[][]'.
 !!! error TS2345:         Type 'string' is not assignable to type 'number | string[][]'.
     

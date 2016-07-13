@@ -11,9 +11,9 @@ function log(n:number) { return n;}
 void log(foo).toString();
 >void log(foo).toString() : undefined
 >log(foo).toString() : string
->log(foo).toString : (radix?: number) => string
+>log(foo).toString : (this: Number, radix?: number) => string
 >log(foo) : number
 >log : (n: number) => number
 >foo : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
 

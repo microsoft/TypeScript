@@ -1,9 +1,9 @@
 === tests/cases/compiler/toStringOnPrimitives.ts ===
 true.toString()
 >true.toString() : string
->true.toString : () => string
+>true.toString : (this: Boolean) => string
 >true : boolean
->toString : () => string
+>toString : (this: Boolean) => string
 
 var aBool = false;
 >aBool : boolean
@@ -11,13 +11,13 @@ var aBool = false;
 
 aBool.toString();
 >aBool.toString() : string
->aBool.toString : () => string
+>aBool.toString : (this: Boolean) => string
 >aBool : boolean
->toString : () => string
+>toString : (this: Boolean) => string
 
 1..toString();
 >1..toString() : string
->1..toString : (radix?: number) => string
+>1..toString : (this: Number, radix?: number) => string
 >1. : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
 

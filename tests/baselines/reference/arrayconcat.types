@@ -41,11 +41,11 @@ class parser {
 >this : this
 >options : IOptions[]
 >this.options.sort(function(a, b) {            var aName = a.name.toLowerCase();            var bName = b.name.toLowerCase();            if (aName > bName) {                return 1;            } else if (aName < bName) {                return -1;            } else {                return 0;            }        }) : IOptions[]
->this.options.sort : (compareFn?: (a: IOptions, b: IOptions) => number) => IOptions[]
+>this.options.sort : (this: IOptions[], compareFn?: (a: IOptions, b: IOptions) => number) => IOptions[]
 >this.options : IOptions[]
 >this : this
 >options : IOptions[]
->sort : (compareFn?: (a: IOptions, b: IOptions) => number) => IOptions[]
+>sort : (this: IOptions[], compareFn?: (a: IOptions, b: IOptions) => number) => IOptions[]
 >function(a, b) {            var aName = a.name.toLowerCase();            var bName = b.name.toLowerCase();            if (aName > bName) {                return 1;            } else if (aName < bName) {                return -1;            } else {                return 0;            }        } : (a: IOptions, b: IOptions) => number
 >a : IOptions
 >b : IOptions
@@ -53,20 +53,20 @@ class parser {
             var aName = a.name.toLowerCase();
 >aName : string
 >a.name.toLowerCase() : string
->a.name.toLowerCase : () => string
+>a.name.toLowerCase : (this: String) => string
 >a.name : string
 >a : IOptions
 >name : string
->toLowerCase : () => string
+>toLowerCase : (this: String) => string
 
             var bName = b.name.toLowerCase();
 >bName : string
 >b.name.toLowerCase() : string
->b.name.toLowerCase : () => string
+>b.name.toLowerCase : (this: String) => string
 >b.name : string
 >b : IOptions
 >name : string
->toLowerCase : () => string
+>toLowerCase : (this: String) => string
 
             if (aName > bName) {
 >aName > bName : boolean

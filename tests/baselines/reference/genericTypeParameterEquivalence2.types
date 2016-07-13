@@ -97,9 +97,9 @@ function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
 
             ret.push(el);
 >ret.push(el) : number
->ret.push : (...items: any[]) => number
+>ret.push : (this: any[], ...items: any[]) => number
 >ret : any[]
->push : (...items: any[]) => number
+>push : (this: any[], ...items: any[]) => number
 >el : A
         }
     } );

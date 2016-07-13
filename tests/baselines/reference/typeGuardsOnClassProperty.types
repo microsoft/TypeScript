@@ -27,9 +27,9 @@ class D {
 >"string" : string
 >data : string
 >data.join(" ") : string
->data.join : (separator?: string) => string
+>data.join : (this: string[], separator?: string) => string
 >data : string[]
->join : (separator?: string) => string
+>join : (this: string[], separator?: string) => string
 >" " : string
     }
 
@@ -48,11 +48,11 @@ class D {
 >this : this
 >data : string
 >this.data.join(" ") : string
->this.data.join : (separator?: string) => string
+>this.data.join : (this: string[], separator?: string) => string
 >this.data : string[]
 >this : this
 >data : string[]
->join : (separator?: string) => string
+>join : (this: string[], separator?: string) => string
 >" " : string
     }
 }
@@ -87,11 +87,11 @@ if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
 >prop1 : number | string
 >"string" : string
 >o.prop1.toLowerCase() : string
->o.prop1.toLowerCase : () => string
+>o.prop1.toLowerCase : (this: String) => string
 >o.prop1 : string
 >o : { prop1: number | string; prop2: boolean | string; }
 >prop1 : string
->toLowerCase : () => string
+>toLowerCase : (this: String) => string
 
 var prop1 = o.prop1;
 >prop1 : number | string
@@ -106,7 +106,7 @@ if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 >prop1 : number | string
 >"string" : string
 >prop1.toLocaleLowerCase() : string
->prop1.toLocaleLowerCase : () => string
+>prop1.toLocaleLowerCase : (this: String) => string
 >prop1 : string
->toLocaleLowerCase : () => string
+>toLocaleLowerCase : (this: String) => string
 

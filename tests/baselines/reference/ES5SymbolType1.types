@@ -4,7 +4,7 @@ var s: symbol;
 
 s.toString();
 >s.toString() : string
->s.toString : () => string
+>s.toString : (this: Object) => string
 >s : symbol
->toString : () => string
+>toString : (this: Object) => string
 

@@ -13,7 +13,7 @@ class C<T> {
         var a = x['toString'](); // should be string
 >a : string
 >x['toString']() : string
->x['toString'] : () => string
+>x['toString'] : (this: Object) => string
 >x : T
 >'toString' : string
 
@@ -21,9 +21,9 @@ class C<T> {
 >a + x.toString() : string
 >a : string
 >x.toString() : string
->x.toString : () => string
+>x.toString : (this: Object) => string
 >x : T
->toString : () => string
+>toString : (this: Object) => string
     }
 }
 
@@ -51,16 +51,16 @@ var i: I<number>;
 var r2 = i.foo.toString();
 >r2 : string
 >i.foo.toString() : string
->i.foo.toString : (radix?: number) => string
+>i.foo.toString : (this: Number, radix?: number) => string
 >i.foo : number
 >i : I<number>
 >foo : number
->toString : (radix?: number) => string
+>toString : (this: Number, radix?: number) => string
 
 var r2b = i.foo['toString']();
 >r2b : string
 >i.foo['toString']() : string
->i.foo['toString'] : (radix?: number) => string
+>i.foo['toString'] : (this: Number, radix?: number) => string
 >i.foo : number
 >i : I<number>
 >foo : number
@@ -76,15 +76,15 @@ var a: {
 var r3: string = a().toString();
 >r3 : string
 >a().toString() : string
->a().toString : () => string
+>a().toString : (this: Object) => string
 >a() : {}
 >a : <T>() => T
->toString : () => string
+>toString : (this: Object) => string
 
 var r3b: string = a()['toString']();
 >r3b : string
 >a()['toString']() : string
->a()['toString'] : () => string
+>a()['toString'] : (this: Object) => string
 >a() : {}
 >a : <T>() => T
 >'toString' : string
@@ -103,7 +103,7 @@ var b = {
         var a = x['toString'](); // should be string
 >a : string
 >x['toString']() : string
->x['toString'] : () => string
+>x['toString'] : (this: Object) => string
 >x : T
 >'toString' : string
 
@@ -111,9 +111,9 @@ var b = {
 >a + x.toString() : string
 >a : string
 >x.toString() : string
->x.toString : () => string
+>x.toString : (this: Object) => string
 >x : T
->toString : () => string
+>toString : (this: Object) => string
     }
 }
 

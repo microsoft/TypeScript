@@ -32,10 +32,10 @@ let x = [1];
 let y = x.getCountAsString().toLowerCase();
 >y : string
 >x.getCountAsString().toLowerCase() : string
->x.getCountAsString().toLowerCase : () => string
+>x.getCountAsString().toLowerCase : (this: String) => string
 >x.getCountAsString() : string
 >x.getCountAsString : () => string
 >x : number[]
 >getCountAsString : () => string
->toLowerCase : () => string
+>toLowerCase : (this: String) => string
 

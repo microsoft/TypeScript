@@ -11,16 +11,16 @@ if (typeof x !== "string") {
 
     x.push("");
 >x.push("") : number
->x.push : (...items: (string | StringTreeArray)[]) => number
+>x.push : (this: (string | StringTreeArray)[], ...items: (string | StringTreeArray)[]) => number
 >x : StringTreeArray
->push : (...items: (string | StringTreeArray)[]) => number
+>push : (this: (string | StringTreeArray)[], ...items: (string | StringTreeArray)[]) => number
 >"" : string
 
     x.push([""]);
 >x.push([""]) : number
->x.push : (...items: (string | StringTreeArray)[]) => number
+>x.push : (this: (string | StringTreeArray)[], ...items: (string | StringTreeArray)[]) => number
 >x : StringTreeArray
->push : (...items: (string | StringTreeArray)[]) => number
+>push : (this: (string | StringTreeArray)[], ...items: (string | StringTreeArray)[]) => number
 >[""] : string[]
 >"" : string
 }

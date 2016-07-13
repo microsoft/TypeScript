@@ -102,9 +102,9 @@ var x: any;
 "string".charAt(0), [null, 1];
 >"string".charAt(0), [null, 1] : number[]
 >"string".charAt(0) : string
->"string".charAt : (pos: number) => string
+>"string".charAt : (this: String, pos: number) => string
 >"string" : string
->charAt : (pos: number) => string
+>charAt : (this: String, pos: number) => string
 >0 : number
 >[null, 1] : number[]
 >null : null
@@ -153,9 +153,9 @@ var resultIsAny9 = ("string".charAt(0), undefined);
 >("string".charAt(0), undefined) : undefined
 >"string".charAt(0), undefined : undefined
 >"string".charAt(0) : string
->"string".charAt : (pos: number) => string
+>"string".charAt : (this: String, pos: number) => string
 >"string" : string
->charAt : (pos: number) => string
+>charAt : (this: String, pos: number) => string
 >0 : number
 >undefined : undefined
 
