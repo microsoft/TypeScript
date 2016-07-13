@@ -34,9 +34,9 @@ interface Document {
 var elements = names.map(function (name) {
 >elements : HTMLElement[]
 >names.map(function (name) {    return document.getElementById(name);}) : HTMLElement[]
->names.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>names.map : <U, V>(callbackfn: (this: V, value: string, index: number, array: string[]) => U, thisArg?: V) => U[]
 >names : string[]
->map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>map : <U, V>(callbackfn: (this: V, value: string, index: number, array: string[]) => U, thisArg?: V) => U[]
 >function (name) {    return document.getElementById(name);} : (name: string) => HTMLElement
 >name : string
 
@@ -53,9 +53,9 @@ var elements = names.map(function (name) {
 var xxx = elements.filter(function (e) {
 >xxx : HTMLElement[]
 >elements.filter(function (e) {    return !e.isDisabled;}) : HTMLElement[]
->elements.filter : (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => any, thisArg?: any) => HTMLElement[]
+>elements.filter : <U>(callbackfn: (this: U, value: HTMLElement, index: number, array: HTMLElement[]) => any, thisArg?: U) => HTMLElement[]
 >elements : HTMLElement[]
->filter : (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => any, thisArg?: any) => HTMLElement[]
+>filter : <U>(callbackfn: (this: U, value: HTMLElement, index: number, array: HTMLElement[]) => any, thisArg?: U) => HTMLElement[]
 >function (e) {    return !e.isDisabled;} : (e: HTMLElement) => boolean
 >e : HTMLElement
 
@@ -70,9 +70,9 @@ var xxx = elements.filter(function (e) {
 var widths:number[] = elements.map(function (e) { // should not error
 >widths : number[]
 >elements.map(function (e) { // should not error    return e.clientWidth;}) : number[]
->elements.map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[]
+>elements.map : <U, V>(callbackfn: (this: V, value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: V) => U[]
 >elements : HTMLElement[]
->map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[]
+>map : <U, V>(callbackfn: (this: V, value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: V) => U[]
 >function (e) { // should not error    return e.clientWidth;} : (e: HTMLElement) => number
 >e : HTMLElement
 

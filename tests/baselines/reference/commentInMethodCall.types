@@ -5,9 +5,9 @@ var s: string[];
 
 s.map(// do something
 >s.map(// do something    function () { }) : void[]
->s.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>s.map : <U, V>(callbackfn: (this: V, value: string, index: number, array: string[]) => U, thisArg?: V) => U[]
 >s : string[]
->map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>map : <U, V>(callbackfn: (this: V, value: string, index: number, array: string[]) => U, thisArg?: V) => U[]
 
     function () { });
 >function () { } : () => void

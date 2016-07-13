@@ -10,9 +10,9 @@ function suggest(){
 					
 	TypeScriptKeywords.forEach(function(keyword) {						
 >TypeScriptKeywords.forEach(function(keyword) {								result.push({text:keyword, type:"keyword"}); // this should not cause a crash - push should be typed to any	}) : void
->TypeScriptKeywords.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>TypeScriptKeywords.forEach : <U>(callbackfn: (this: U, value: string, index: number, array: string[]) => void, thisArg?: U) => void
 >TypeScriptKeywords : string[]
->forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>forEach : <U>(callbackfn: (this: U, value: string, index: number, array: string[]) => void, thisArg?: U) => void
 >function(keyword) {								result.push({text:keyword, type:"keyword"}); // this should not cause a crash - push should be typed to any	} : (keyword: string) => void
 >keyword : string
 

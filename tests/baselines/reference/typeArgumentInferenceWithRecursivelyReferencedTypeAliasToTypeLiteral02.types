@@ -27,9 +27,9 @@ var nodes: TreeNodeMiddleman[];
 
 nodes.map(n => n.name);
 >nodes.map(n => n.name) : string[]
->nodes.map : <U>(callbackfn: (value: { name: string; parent: { name: string; parent: TreeNode; }; }, index: number, array: { name: string; parent: { name: string; parent: TreeNode; }; }[]) => U, thisArg?: any) => U[]
+>nodes.map : <U, V>(callbackfn: (this: V, value: { name: string; parent: { name: string; parent: TreeNode; }; }, index: number, array: { name: string; parent: { name: string; parent: TreeNode; }; }[]) => U, thisArg?: V) => U[]
 >nodes : { name: string; parent: { name: string; parent: TreeNode; }; }[]
->map : <U>(callbackfn: (value: { name: string; parent: { name: string; parent: TreeNode; }; }, index: number, array: { name: string; parent: { name: string; parent: TreeNode; }; }[]) => U, thisArg?: any) => U[]
+>map : <U, V>(callbackfn: (this: V, value: { name: string; parent: { name: string; parent: TreeNode; }; }, index: number, array: { name: string; parent: { name: string; parent: TreeNode; }; }[]) => U, thisArg?: V) => U[]
 >n => n.name : (n: { name: string; parent: { name: string; parent: TreeNode; }; }) => string
 >n : { name: string; parent: { name: string; parent: TreeNode; }; }
 >n.name : string

@@ -8,9 +8,9 @@ var regexMatchList = ['', ''];
 
 regexMatchList.forEach(match => ''.replace(match, ''));
 >regexMatchList.forEach(match => ''.replace(match, '')) : void
->regexMatchList.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>regexMatchList.forEach : <U>(callbackfn: (this: U, value: string, index: number, array: string[]) => void, thisArg?: U) => void
 >regexMatchList : string[]
->forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>forEach : <U>(callbackfn: (this: U, value: string, index: number, array: string[]) => void, thisArg?: U) => void
 >match => ''.replace(match, '') : (match: string) => string
 >match : string
 >''.replace(match, '') : string
