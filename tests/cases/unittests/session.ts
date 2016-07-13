@@ -29,7 +29,7 @@ namespace ts.server {
     const nullCancellationToken: HostCancellationToken = { isCancellationRequested: () => false };
     const mockLogger: Logger = {
         close(): void {},
-        isVerbose(): boolean { return false; },
+        hasLevel(): boolean { return false; },
         loggingEnabled(): boolean { return false; },
         perftrc(s: string): void {},
         info(s: string): void {},

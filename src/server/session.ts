@@ -191,8 +191,10 @@ namespace ts.server {
         }
 
         public send(msg: protocol.Message, canCompressResponse: boolean) {
+            const verboseLogging = this.logger.hasLevel(LogLevel.verbose);
+
             const json = JSON.stringify(msg);
-            if (this.logger.isVerbose()) {
+            if (verboseLogging) {
                 this.logger.info(msg.type + ": " + json);
             }
 
@@ -201,9 +203,9 @@ namespace ts.server {
                 this.host.write(`Content-Length: ${1 + this.byteLength(json, "utf8")}\r\n\r\n${json}${this.host.newLine}`);
             }
             else {
-                const start = this.logger.isVerbose() && this.hrtime();
+                const start = verboseLogging && this.hrtime();
                 const compressed = this.compress(json);
-                if (this.logger.isVerbose()) {
+                if (verboseLogging) {
                     const elapsed = this.hrtime(start);
                     this.logger.info(`compressed message ${json.length} to ${compressed.length} in ${hrTimeToMilliseconds(elapsed)} ms using ${compressed.compressionKind}`);
                 }
@@ -1460,24 +1462,28 @@ namespace ts.server {
 
         public onMessage(message: string) {
             let start: number[];
-            if (this.logger.isVerbose()) {
-                this.logger.info("request: " + message);
+            if (this.logger.hasLevel(LogLevel.requestTime)) {
                 start = this.hrtime();
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`request: ${message}`);
+                }
             }
+
             let request: protocol.Request;
             try {
                 request = <protocol.Request>JSON.parse(message);
                 const {response, responseRequired} = this.executeCommand(request);
 
-                if (this.logger.isVerbose()) {
-                    const elapsed = this.hrtime(start);
-                    const elapsedMs = hrTimeToMilliseconds(elapsed);
-                    let leader = "Elapsed time (in milliseconds)";
-                    if (!responseRequired) {
-                        leader = "Async elapsed time (in milliseconds)";
+                if (this.logger.hasLevel(LogLevel.requestTime)) {
+                    const elapsedTime = hrTimeToMilliseconds(this.hrtime(start)).toFixed(4);
+                    if (responseRequired) {
+                        this.logger.perftrc(`${request.seq}::${request.command}: elapsed time (in milliseconds) ${elapsedTime}`);
                     }
-                    this.logger.msg(leader + ": " + elapsedMs.toFixed(4).toString(), "Perf");
+                    else {
+                        this.logger.perftrc(`${request.seq}::${request.command}: async elapsed time (in milliseconds) ${elapsedTime}`);
+                    }
                 }
+
                 if (response) {
                     this.output(response, request.command, request.canCompressResponse, request.seq);
                 }

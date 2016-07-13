@@ -75,7 +75,7 @@ namespace ts {
     function createProject(rootFile: string, serverHost: server.ServerHost): { project: server.Project, rootScriptInfo: server.ScriptInfo } {
         const logger: server.Logger = {
             close() { },
-            isVerbose: () => false,
+            hasLevel: () => false,
             loggingEnabled: () => false,
             perftrc: (s: string) => { },
             info: (s: string) => { },

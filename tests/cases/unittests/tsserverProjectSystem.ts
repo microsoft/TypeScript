@@ -7,7 +7,7 @@ namespace ts {
 
     const nullLogger: server.Logger = {
         close: () => void 0,
-        isVerbose: () => void 0,
+        hasLevel: () => void 0,
         loggingEnabled: () => false,
         perftrc: () => void 0,
         info: () => void 0,
@@ -1253,6 +1253,35 @@ namespace ts {
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
             checkProjectActualFiles(projectService.inferredProjects[0], [file1.path]);
             checkProjectActualFiles(projectService.inferredProjects[1], [file2.path]);
+        });
+
+        it("project structure update is deferred if files are not added\removed", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: `import {x} from "./f2"`
+            };
+            const file2 = {
+                path: "/a/b/f2.ts",
+                content: "export let x = 1"
+            };
+            const host = createServerHost([file1, file2]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+
+            projectService.openClientFile(file1.path);
+            projectService.openClientFile(file2.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            projectService.applyChangesInOpenFiles(
+                /*openFiles*/ undefined,
+                /*changedFiles*/ [{ fileName: file1.path, changes: [ { span: createTextSpan(0, file1.path.length), newText: "let y = 1" } ] }],
+                /*closedFiles*/ undefined);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const changedFiles = projectService.getChangedFiles_TestOnly();
+            assert(changedFiles && changedFiles.length === 1, `expected 1 changed file, got ${JSON.stringify(changedFiles && changedFiles.length || 0)}`);
+
+            projectService.ensureInferredProjectsUpToDate_TestOnly();
+            checkNumberOfProjects(projectService, { inferredProjects: 2 });
         });
     });
 }

@@ -30,7 +30,7 @@ namespace ts.server {
 
         constructor(private readonly logFilename: string,
             private readonly traceToConsole: boolean,
-            private readonly level: string) {
+            private readonly level: LogLevel) {
         }
 
         static padStringRight(str: string, padding: string) {
@@ -66,10 +66,9 @@ namespace ts.server {
             return !!this.logFilename || this.traceToConsole;
         }
 
-        isVerbose() {
-            return this.loggingEnabled() && (this.level == "verbose");
+        hasLevel(level: LogLevel) {
+            return this.loggingEnabled() && this.level >= level;
         }
-
 
         msg(s: string, type: Msg.Types = Msg.Err) {
             if (this.fd < 0) {
@@ -88,8 +87,8 @@ namespace ts.server {
                     this.seq++;
                     this.firstInGroup = true;
                 }
-                const buf = new Buffer(s);
                 if (this.fd >= 0) {
+                    const buf = new Buffer(s);
                     fs.writeSync(this.fd, buf, 0, buf.length, null);
                 }
                 if (this.traceToConsole) {
@@ -124,12 +123,13 @@ namespace ts.server {
 
     interface LogOptions {
         file?: string;
-        detailLevel?: string;
+        detailLevel?: LogLevel;
         traceToConsole?: boolean;
+        logToFile?: boolean;
     }
 
     function parseLoggingEnvironmentString(logEnvStr: string): LogOptions {
-        const logEnv: LogOptions = {};
+        const logEnv: LogOptions = { logToFile: true };
         const args = logEnvStr.split(" ");
         for (let i = 0, len = args.length; i < (len - 1); i += 2) {
             const option = args[i];
@@ -140,10 +140,14 @@ namespace ts.server {
                         logEnv.file = value;
                         break;
                     case "-level":
-                        logEnv.detailLevel = value;
+                        const level: LogLevel = (<any>LogLevel)[value];
+                        logEnv.detailLevel = typeof level === "number" ? level : LogLevel.normal;
                         break;
                     case "-traceToConsole":
                         logEnv.traceToConsole = value.toLowerCase() === "true";
+                        break;
+                    case "-logToFile":
+                        logEnv.logToFile = value.toLowerCase() === "true";
                         break;
                 }
             }
@@ -154,16 +158,18 @@ namespace ts.server {
     // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
     function createLoggerFromEnv() {
         let fileName: string = undefined;
-        let detailLevel = "normal";
+        let detailLevel = LogLevel.normal;
         let traceToConsole = false;
         const logEnvStr = process.env["TSS_LOG"];
         if (logEnvStr) {
             const logEnv = parseLoggingEnvironmentString(logEnvStr);
-            if (logEnv.file) {
-                fileName = logEnv.file;
-            }
-            else {
-                fileName = __dirname + "/.log" + process.pid.toString();
+            if (logEnv.logToFile) {
+                if (logEnv.file) {
+                    fileName = logEnv.file;
+                }
+                else {
+                    fileName = __dirname + "/.log" + process.pid.toString();
+                }
             }
             if (logEnv.detailLevel) {
                 detailLevel = logEnv.detailLevel;

@@ -145,6 +145,8 @@ namespace ts.server {
 
         private readonly hostConfiguration: HostConfiguration;
 
+        private changedFiles: ScriptInfo[];
+
         constructor(public readonly host: ServerHost,
             public readonly logger: Logger,
             public readonly cancellationToken: HostCancellationToken,
@@ -161,6 +163,14 @@ namespace ts.server {
             };
 
             this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames, host.getCurrentDirectory());
+        }
+
+        getChangedFiles_TestOnly() {
+            return this.changedFiles;
+        }
+
+        ensureInferredProjectsUpToDate_TestOnly() {
+            this.ensureInferredProjectsUpToDate();
         }
 
         stopWatchingDirectory(directory: string) {
@@ -187,7 +197,21 @@ namespace ts.server {
         }
 
         private ensureInferredProjectsUpToDate() {
-
+            if (this.changedFiles) {
+                let projectsToUpdate: Project[];
+                if (this.changedFiles.length === 1) {
+                    // simpliest case - no allocations
+                    projectsToUpdate = this.changedFiles[0].containingProjects;
+                }
+                else {
+                    projectsToUpdate = [];
+                    for (const f of this.changedFiles) {
+                         projectsToUpdate = projectsToUpdate.concat(f.containingProjects);
+                    }
+                }
+                this.updateProjectGraphs(projectsToUpdate);
+                this.changedFiles = undefined;
+            }
         }
 
         private findContainingConfiguredProject(info: ScriptInfo): ConfiguredProject {
@@ -532,7 +556,7 @@ namespace ts.server {
         }
 
         private printProjects() {
-            if (!this.logger.isVerbose()) {
+            if (!this.logger.hasLevel(LogLevel.verbose)) {
                 return;
             }
 
@@ -970,11 +994,13 @@ namespace ts.server {
         }
 
         applyChangesInOpenFiles(openFiles: protocol.NewOpenFile[], changedFiles: protocol.ChangedOpenFile[], closedFiles: string[]): void {
+            const recordChangedFiles = changedFiles && !openFiles && !closedFiles;
             if (openFiles) {
                 for (const file of openFiles) {
                     const scriptInfo = this.getScriptInfo(file.fileName);
                     Debug.assert(!scriptInfo || !scriptInfo.isOpen);
-                    this.openClientFileWithNormalizedPath(toNormalizedPath(file.fileName), file.content);
+                    const normalizedPath = scriptInfo ? scriptInfo.fileName : toNormalizedPath(file.fileName);
+                    this.openClientFileWithNormalizedPath(normalizedPath, file.content);
                 }
             }
 
@@ -987,6 +1013,14 @@ namespace ts.server {
                         const change = file.changes[i];
                         scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
                     }
+                    if (recordChangedFiles) {
+                        if (!this.changedFiles) {
+                            this.changedFiles = [scriptInfo];
+                        }
+                        else if (this.changedFiles.indexOf(scriptInfo) < 0) {
+                            this.changedFiles.push(scriptInfo);
+                        }
+                    }
                 }
             }
 
@@ -996,7 +1030,9 @@ namespace ts.server {
                 }
             }
 
-            if (openFiles || changedFiles || closedFiles) {
+            // if files were open or closed then explicitly refresh list of inferred projects
+            // otherwise if there were only changes in files - record changed files in `changedFiles` and defer the update
+            if (openFiles || closedFiles) {
                 this.refreshInferredProjects();
             }
         }

@@ -1,9 +1,16 @@
 /// <reference path="..\services\services.ts" />
 
 namespace ts.server {
+    export enum LogLevel {
+        terse,
+        normal,
+        requestTime,
+        verbose
+    }
+
     export interface Logger {
         close(): void;
-        isVerbose(): boolean;
+        hasLevel(level: LogLevel): boolean;
         loggingEnabled(): boolean;
         perftrc(s: string): void;
         info(s: string): void;
