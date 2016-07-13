@@ -4578,7 +4578,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         return;
                     }
 
-                    const skipThisCount = node.parameters.length && (<Identifier>node.parameters[0].name).text === "this" ? 1 : 0;
+                    const skipThisCount = node.parameters.length && (<Identifier>node.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword ? 1 : 0;
                     const restIndex = node.parameters.length - 1 - skipThisCount;
                     const tempName = createTempVariable(TempFlags._i).text;
                     writeLine();
@@ -4727,7 +4727,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 write("(");
                 if (node) {
                     const parameters = node.parameters;
-                    const skipCount = node.parameters.length && (<Identifier>node.parameters[0].name).text === "this" ? 1 : 0;
+                    const skipCount = node.parameters.length && (<Identifier>node.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword ? 1 : 0;
                     const omitCount = languageVersion < ScriptTarget.ES6 && hasDeclaredRestParameter(node) ? 1 : 0;
                     emitList(parameters, skipCount, parameters.length - omitCount - skipCount, /*multiLine*/ false, /*trailingComma*/ false);
                 }
@@ -6156,7 +6156,7 @@ const _super = (function (geti, seti) {
 
                     if (valueDeclaration) {
                         const parameters = valueDeclaration.parameters;
-                        const skipThisCount = parameters.length && (<Identifier>parameters[0].name).text === "this" ? 1 : 0;
+                        const skipThisCount = parameters.length && (<Identifier>parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword ? 1 : 0;
                         const parameterCount = parameters.length;
                         if (parameterCount > skipThisCount) {
                             for (let i = skipThisCount; i < parameterCount; i++) {
