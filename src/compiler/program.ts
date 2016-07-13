@@ -991,7 +991,12 @@ namespace ts {
         return sortAndDeduplicateDiagnostics(diagnostics);
     }
 
-    export function formatDiagnostics(diagnostics: Diagnostic[], host: CompilerHost): string {
+    export interface FormatDiagnosticsHost {
+        getCurrentDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+    }
+
+    export function formatDiagnostics(diagnostics: Diagnostic[], host: FormatDiagnosticsHost): string {
         let output = "";
 
         for (const diagnostic of diagnostics) {
