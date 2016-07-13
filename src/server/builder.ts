@@ -769,6 +769,17 @@ namespace ts.server {
             }
         }
 
+        /**
+         * Checks if the given source file is an external module. In addition to source files which
+         * have the externalModuleIndicator set it looks whether the source file has a declared string
+         * module. E.g. something like
+         * 
+         * declare module "myModule" {
+         * }
+         * 
+         * Since this are external modules as well. If a module is not external it is treated as a 
+         * global module.
+         */
         private static isExternalModule(sourceFile: SourceFile): boolean {
             if (!!sourceFile.externalModuleIndicator) {
                 return true;
@@ -792,6 +803,9 @@ namespace ts.server {
             return this._isExternalModule;
         }
 
+        /**
+         * Returns the savable state of a ExternalModuleFileInfo.
+         */
         public getState(): ModuleFileInfoState {
             if (this.contentSignature === undefined || this._shapeSignature === undefined || this._hasSyntacticProblems === undefined || this._hasSemanticProblems === undefined) {
                 return undefined;
@@ -799,6 +813,10 @@ namespace ts.server {
             return [this._fileName, this.contentSignature, this._shapeSignature, this._hasSyntacticProblems, this._hasSemanticProblems];
         }
 
+        /**
+         * Initializes this file info object from the given state iff the content has matches the content has
+         * of the current source file. If not the state is old and not restored.
+         */
         public initializeFromState(state: ModuleFileInfoState, builder: BuilderAccessor<ExternalModuleFileInfo>): boolean {
             const sourceFile = this.getSourceFile(builder);
             const stateSignature = state[1];
@@ -816,18 +834,40 @@ namespace ts.server {
             }
         }
 
+        /**
+         * Checks if the file needs an initial check after a state file has been restored. Since the
+         * state doen't remember concrete diagnostic objects a file need to be recheck if the state
+         * either had semantic or syntactic problem.
+         */
         public needsInitialCheck(): boolean {
             return !(this._hasSemanticProblems === false && this._hasSyntacticProblems === false);
         }
 
+        /**
+         * Checks if the file info needs to be rechecked when a new file gets created. Currently we
+         * recheck if a file has any kind of semantic problems (unresolve module imports are 
+         * semantic problems). This could be optimized by inspecting the problems and only recompile
+         * if the file has a import problem.
+         */
         public needsReCheckOnFileCreation(): boolean {
-            return !(this._hasSyntacticProblems === false);
+            return !(this._hasSemanticProblems === false);
         }
 
         public sameStateAs(state: ModuleFileInfoState): boolean {
             return sameState(this.getState(), state);
         }
 
+        /**
+         * Determines whether this file info needs to be rechecked. This is the case if no internal
+         * state is captured so far (e.g. finger print and source file version) or if an update 
+         * got forced. Otherwise it is only recheck if the `lastCheckedFingerPrint' differs from
+         * the current check finger print.
+         * 
+         * Besides checking teh finger print this method also turn a check finger print from a
+         * source file version based print to a shape based finger print if a shape hash exists
+         * for all dependent files. This is done since a shape based finger print is more stable
+         * then a version based print since it avoid recompiler if only module internals change.
+         */
         public needsCheck(builder: BuilderAccessor<ExternalModuleFileInfo>): boolean {
             if (!this.lastCheckedFingerPrint || this.sourceFileVersion !== this.getSourceFile(builder).version || this._forceUpdate) {
                 return true;
@@ -863,6 +903,11 @@ namespace ts.server {
             }
         }
 
+        /**
+         * Compute a check finger print using the given finger print kind. If the kind is omitted
+         * the method tries to compute a shape finger print. If this is not possible it computes
+         * a version based finger print.
+         */
         private computeCheckFingerPrint(computeKind?: FingerPrintKind): FingerPrint {
             if (!computeKind || computeKind === FingerPrintKind.Shape) {
                 computeKind = this.canComputeShapeFingerPrint() ? FingerPrintKind.Shape : FingerPrintKind.Version;
@@ -876,6 +921,9 @@ namespace ts.server {
                     }
                     else {
                         hash.update(reference.sourceFileVersion);
+                        // Since source file versions a number we separate them to
+                        // avoid '111' be interpreted as either first file 1 second 
+                        // file 11 or first file 11 and second file 1
                         hash.update("|");
                     }
                 }
@@ -895,6 +943,9 @@ namespace ts.server {
             return true;
         }
 
+        /**
+         * Build the dependencies for this file info.
+         */
         public buildDependencies(builder: BuilderAccessor<ExternalModuleFileInfo>): void {
             const program = builder.getProject().compilerService.languageService.getProgram();
             this.getReferencedFileInfos(builder, program.getSourceFile(this.fileName())).forEach((fileInfo) => {
@@ -903,6 +954,9 @@ namespace ts.server {
             });
         }
 
+        /**
+         * Computes the referenced file info.
+         */
         private getReferencedFileInfos(builder: BuilderAccessor<ExternalModuleFileInfo>, sourceFile: SourceFile): ExternalModuleFileInfo[] {
             const modules = sourceFile.resolvedModules;
             const result: ExternalModuleFileInfo[] = [];
@@ -913,6 +967,9 @@ namespace ts.server {
                 let checker: TypeChecker = undefined;
                 for (const key of Object.keys(modules)) {
                     const module = modules[key];
+                    // We have a module referenc, but the module couldn't be resolved during parsing time
+                    // For example for something like import * as fs from 'fs'; These imports are resolved
+                    // while resolving symbols so use the type checker for find the resolve module.
                     if (!module || !module.resolvedFileName) {
                         let symbol: Symbol = undefined;
                         for (const statement of sourceFile.statements) {
@@ -973,6 +1030,10 @@ namespace ts.server {
             return value;
         }
 
+        /**
+         * Finalizes the file info object. This sorts the references and referencedBy
+         * arrays for better speed on modifications.
+         */
         public finalize(builder: BuilderAccessor<ExternalModuleFileInfo>): void {
             if (this.references) {
                 this.references.sort(ExternalModuleFileInfo.compareFileInfos);
@@ -988,20 +1049,24 @@ namespace ts.server {
             this.finalized = true;
         }
 
+        /**
+         * Update this file info object with the latest state present in the underlying
+         * source file.
+         */
         public update(builder: BuilderAccessor<ExternalModuleFileInfo>): boolean {
             const program = builder.getProject().compilerService.languageService.getProgram();
             const sourceFile = program.getSourceFile(this.fileName());
 
             const newVersion = sourceFile.version;
+            // Only recompute internal state if the source file version has changed or an update has been requested.
             if (this.sourceFileVersion !== newVersion || this._forceUpdate) {
                 const newReferences: ExternalModuleFileInfo[] = this.getReferencedFileInfos(builder, sourceFile);
                 newReferences.sort(ExternalModuleFileInfo.compareFileInfos);
 
                 const currentReferences = this.references || [];
-                const end = Math.min(currentReferences.length, newReferences.length);
                 let currentIndex = 0;
                 let newIndex = 0;
-                while (currentIndex < end && newIndex < end) {
+                while (currentIndex < currentReferences.length && newIndex < newReferences.length) {
                     const currentInfo = currentReferences[currentIndex];
                     const newInfo = newReferences[newIndex];
                     const compare = ExternalModuleFileInfo.compareFileInfos(currentInfo, newInfo);
@@ -1037,8 +1102,13 @@ namespace ts.server {
                 this.sourceFileVersion = newVersion;
                 this._forceUpdate = false;
             }
+            // Always recompute last checked finger print since it depends on the
+            // referenced modules which could have changed.
             this.lastCheckedFingerPrint = this.computeCheckFingerPrint();
 
+            // Always update the shape signature. This is necessary since the shape
+            // signature can change even if the content doesn't change due to type
+            // inference.
             return this.updateShapeSignature(builder, sourceFile, this.contentSignature);
         }
 
@@ -1093,6 +1163,16 @@ namespace ts.server {
         }
     }
 
+    /**
+     * A builder for external module systems. The builder is responsible for:
+     * 
+     * - building the initial dependency tree
+     * - reading and saving the state file. State files are either complete states or delta states.
+     *   After the first build the builder writes a complete state file. After that a delta state
+     *   file is written when updates happen. This file is only written if more than 16 files change
+     *   to avoid to many IO operation. If some state is not present on restart the files will simply
+     *   be rechecked.
+     */
     class ExternalModuleBuilder extends AbstractBuilder<ExternalModuleFileInfo> implements Builder, BuilderAccessor<ExternalModuleFileInfo> {
 
         private static MinimalDeltaPackage = 16;
@@ -1125,18 +1205,29 @@ namespace ts.server {
                 return;
             }
             const sourceFile = this.getProject().compilerService.languageService.getProgram().getSourceFile(file);
-            if (sourceFile) {
-                const fileInfo = new ExternalModuleFileInfo(file, sourceFile);
-                this.fileInfos[fileInfo.fileName()] = fileInfo;
-                this.queueFileInfo(fileInfo, /*touch*/ true);
+            if (!sourceFile) {
+                return;
             }
-            Object.keys(this.fileInfos).forEach((key) => {
-                const info = this.fileInfos[key];
-                if (info.needsReCheckOnFileCreation()) {
-                    info.forceUpdate();
-                    this.queueFileInfo(info);
-                }
-            });
+            const fileInfo = new ExternalModuleFileInfo(file, sourceFile);
+            fileInfo.buildDependencies(this);
+            fileInfo.finalize(this);
+            this.fileInfos[fileInfo.fileName()] = fileInfo;
+            this.queueFileInfo(fileInfo, /*touch*/ true);
+            if (fileInfo.isExternalModule()) {
+                // Add all files that needs to be recheck on file creation. A new
+                // file might resolve imports.
+                Object.keys(this.fileInfos).forEach((key) => {
+                    const info = this.fileInfos[key];
+                    if (info.needsReCheckOnFileCreation()) {
+                        info.forceUpdate();
+                        this.queueFileInfo(info);
+                    }
+                });
+            }
+            else {
+                // A global module. Recheck everything.
+                this.recheckAll();
+            }
             this.processCompileQueue();
         }
 
@@ -1161,12 +1252,18 @@ namespace ts.server {
             delete this.fileInfos[file];
             delete this.deltaState[file];
             this.clearDiagnostics(file);
-            info.forEachReference(element => element.removeReferencedBy(info));
-            info.forEachReferencedBy(element => {
-                element.removeReference(info);
-                element.forceUpdate();
-                this.queueFileInfo(element);
-            });
+            if (info.isExternalModule()) {
+                info.forEachReference(element => element.removeReferencedBy(info));
+                info.forEachReferencedBy(element => {
+                    element.removeReference(info);
+                    element.forceUpdate();
+                    this.queueFileInfo(element);
+                });
+            }
+            else {
+                // We deleted a global module.
+                this.recheckAll();
+            }
             this.processCompileQueue();
         }
 
@@ -1176,23 +1273,7 @@ namespace ts.server {
                     fileInfo.queueReferencedBy(this);
                 }
                 else {
-                    const high: ExternalModuleFileInfo[] = [];
-                    const low: ExternalModuleFileInfo[] = [];
-                    Object.keys(this.fileInfos).forEach((key) => {
-                        const element = this.fileInfos[key];
-                        if (fileInfo.fileName() === element.fileName()) {
-                            return;
-                        }
-                        const scriptInfo = this.getProject().projectService.getScriptInfo(element.fileName());
-                        if (scriptInfo && scriptInfo.isOpen) {
-                            high.push(element);
-                        }
-                        else {
-                            low.push(element);
-                        }
-                    });
-                    high.forEach(info => this.queueFileInfo(info, /*touch*/ true, /*force*/ true));
-                    low.forEach(info => this.queueFileInfo(info, /*touch*/ false, /*force*/ true));
+                    this.recheckAll(fileInfo);
                 }
             }
             const state = fileInfo.getState();
@@ -1209,6 +1290,26 @@ namespace ts.server {
             else {
                 this.updateDeltaState();
             }
+        }
+
+        private recheckAll(ignore?: ExternalModuleFileInfo) {
+            const high: ExternalModuleFileInfo[] = [];
+            const low: ExternalModuleFileInfo[] = [];
+            Object.keys(this.fileInfos).forEach((key) => {
+                const element = this.fileInfos[key];
+                if (ignore && ignore.fileName() === element.fileName()) {
+                    return;
+                }
+                const scriptInfo = this.getProject().projectService.getScriptInfo(element.fileName());
+                if (scriptInfo && scriptInfo.isOpen) {
+                    high.push(element);
+                }
+                else {
+                    low.push(element);
+                }
+            });
+            high.forEach(info => this.queueFileInfo(info, /*touch*/ true, /*force*/ true));
+            low.forEach(info => this.queueFileInfo(info, /*touch*/ false, /*force*/ true));
         }
 
         private computeDiagnostics(changedFile: string): void {
@@ -1242,7 +1343,7 @@ namespace ts.server {
                 }
                 return memo;
             }, []);
-            const states = this.readState();
+            const { states, deleted } = this.readState();
             const roots: ExternalModuleFileInfo[] = [];
             fileInfos.forEach((fileInfo) => {
                 fileInfo.buildDependencies(this);
@@ -1252,23 +1353,25 @@ namespace ts.server {
             });
 
             if (states) {
-                for (const fileInfo of fileInfos) {
-                    const fileName = fileInfo.fileName();
-                    const state = states[fileName];
-                    if (state) {
-                        fileInfo.initializeFromState(state, this);
-                        delete states[fileName];
+                if (deleted && deleted.length > 0) {
+                    // We have deleted files which disappeared while the server
+                    // didn't observe the project. We need to recheck everything
+                    // since we don't know the impact onto the dependencies and therefore
+                    // the files to be rechecked.
+                    fileInfos.forEach((fileInfo) => this.queueFileInfo(fileInfo, /*touch*/ false, /*force*/ true));
+                } 
+                else {
+                    for (const fileInfo of fileInfos) {
+                        const fileName = fileInfo.fileName();
+                        const state = states[fileName];
+                        if (state) {
+                            fileInfo.initializeFromState(state, this);
+                        }
+                        fileInfo.finalize(this);
+                        if (fileInfo.needsInitialCheck()) {
+                            this.queueFileInfo(fileInfo);
+                        }
                     }
-                    fileInfo.finalize(this);
-                    if (fileInfo.needsInitialCheck()) {
-                        this.queueFileInfo(fileInfo);
-                    }
-                }
-                // We have left states. That means a file got deleted while
-                // the project was not observed. We need to recheck everything
-                // since we don't know the impact onto the dependencies.
-                if (Object.keys(states).length > 0) {
-                    fileInfos.forEach((fileInfo) => this.queueFileInfo(fileInfo));
                 }
             }
             else {
@@ -1291,6 +1394,9 @@ namespace ts.server {
             return this.stateDirectory;
         }
 
+        /**
+         * Writes a full state file to disk.
+         */
         private saveFullState(): void {
             const stateDirectory = this.getStateDirectory();
             if (!stateDirectory) {
@@ -1346,6 +1452,9 @@ namespace ts.server {
             }
         }
 
+        /**
+         * Appends delta state information to the delta state file.
+         */
         private updateDeltaState(): void {
             if (this.updatingDeltaState) {
                 return;
@@ -1384,7 +1493,14 @@ namespace ts.server {
             });
         }
 
-        private readState(): Map<ModuleFileInfoState> {
+        /**
+         * Reads the state from disk. The method looks for the youngest complete
+         * state file and for the youngest delta state file. The delta state file
+         * is dropped if the complete state is younger than the delta state. 
+         * Then the files are read and the delta state (if present) is merge with
+         * the complete state.
+         */
+        private readState(): { states: Map<ModuleFileInfoState>, deleted: string[] } {
             const metaDataDirectory = this.project.projectService.metaDataDirectory;
             const projectFilename = this.project.projectFilename;
             if (!metaDataDirectory || !projectFilename) {
@@ -1450,9 +1566,10 @@ namespace ts.server {
                     latestDeltaStateTime = undefined;
                 }
                 if (!latestCompleteStateFile) {
-                    return undefined;
+                    return { states: undefined, deleted: undefined };
                 }
                 let result: Map<ModuleFileInfoState> = createMap<ModuleFileInfoState>();
+                const deleted: string[] = [];
                 const parseContent = (content: string, stateFileTime: number) => {
                     let start = 0;
                     for (let index = 0; index < content.length; index++) {
@@ -1471,6 +1588,11 @@ namespace ts.server {
                                     }
                                 }
                                 catch (err) {
+                                    // We couldn't stat the file because it doesn't exist
+                                    // anymore. Rememeber it as a delted file.
+                                    if (err.code === "ENOENT") {
+                                        deleted.push(fileName);
+                                    }
                                     delete result[fileName];
                                 }
                             }
@@ -1494,11 +1616,11 @@ namespace ts.server {
                     // Can be done async. If an unlink fails we clean it up the next round.
                     fs.unlink(path.join(stateDirectory, file), (err: Error) => {});
                 });
-                return result;
+                return { states: result, deleted };
             }
             catch (err) {
                 // We couldn't read the state directory. Start with a fresh state.
-                return undefined;
+                return { states: undefined, deleted: undefined };
             }
         }
     }
