@@ -900,9 +900,7 @@ namespace ts {
     }
 
     export function fileExtensionIs(path: string, extension: string): boolean {
-        const pathLen = path.length;
-        const extLen = extension.length;
-        return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
+        return path.length > extension.length && endsWith(path, extension);
     }
 
     export function fileExtensionIsAny(path: string, extensions: string[]): boolean {
@@ -914,7 +912,6 @@ namespace ts {
 
         return false;
     }
-
 
     // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
     // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future

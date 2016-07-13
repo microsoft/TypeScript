@@ -112,13 +112,7 @@ namespace ts {
     }
 
     function moduleHasNonRelativeName(moduleName: string): boolean {
-        if (isRootedDiskPath(moduleName)) {
-            return false;
-        }
-
-        const i = moduleName.lastIndexOf("./", 1);
-        const startsWithDotSlashOrDotDotSlash = i === 0 || (i === 1 && moduleName.charCodeAt(0) === CharacterCodes.dot);
-        return !startsWithDotSlashOrDotDotSlash;
+        return !(isRootedDiskPath(moduleName) || isExternalModuleNameRelative(moduleName));
     }
 
     interface ModuleResolutionState {
