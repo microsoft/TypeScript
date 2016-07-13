@@ -3160,6 +3160,9 @@ namespace ts {
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
                     return links.type = checkExpression((<ExportAssignment>declaration).expression);
                 }
+                if (declaration.flags & NodeFlags.JavaScriptFile && declaration.kind === SyntaxKind.JSDocPropertyTag && (<JSDocPropertyTag>declaration).typeExpression) {
+                    return links.type = getTypeFromTypeNode((<JSDocPropertyTag>declaration).typeExpression.type);
+                }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return unknownType;
