@@ -4,5 +4,5 @@
 ////y.map/**/(
 
 goTo.marker();
-verify.quickInfoIs("(property) map: (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[])");
-verify.completionListContains('map', "(property) map: (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[])");
+verify.quickInfoIs("(property) map: (<U, V>(callbackfn: (this: V, value: string, index: number, array: string[]) => U, thisArg?: V) => U[]) | (<U, V>(callbackfn: (this: V, value: number, index: number, array: number[]) => U, thisArg?: V) => U[])");
+verify.completionListContains('map', "(property) map: (<U, V>(callbackfn: (this: V, value: string, index: number, array: string[]) => U, thisArg?: V) => U[]) | (<U, V>(callbackfn: (this: V, value: number, index: number, array: number[]) => U, thisArg?: V) => U[])");
