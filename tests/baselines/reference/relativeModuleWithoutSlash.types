@@ -1,18 +1,47 @@
-=== tests/cases/compiler/index.ts ===
-export default 0;
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/a/index.ts ===
-export default 1;
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/a/a.ts ===
-import parent from "..";
->parent : number
+=== tests/cases/compiler/a.ts ===
 
-import here from ".";
->here : number
+export default { a: 0 };
+>{ a: 0 } : { a: number; }
+>a : number
+>0 : number
 
-parent + here;
->parent + here : number
->parent : number
->here : number
+=== tests/cases/compiler/a/index.ts ===
+export default { aIndex: 0 };
+>{ aIndex: 0 } : { aIndex: number; }
+>aIndex : number
+>0 : number
+
+=== tests/cases/compiler/a/test.ts ===
+import a from ".";
+>a : { a: number; }
+
+import aIndex from "./";
+>aIndex : { a: number; }
+
+a.a;
+>a.a : number
+>a : { a: number; }
+>a : number
+
+aIndex.a; //aIndex.aIndex; See GH#9690
+>aIndex.a : number
+>aIndex : { a: number; }
+>a : number
+
+=== tests/cases/compiler/a/b/test.ts ===
+import a from "..";
+>a : { a: number; }
+
+import aIndex from "../";
+>aIndex : { a: number; }
+
+a.a;
+>a.a : number
+>a : { a: number; }
+>a : number
+
+aIndex.a; //aIndex.aIndex;
+>aIndex.a : number
+>aIndex : { a: number; }
+>a : number
 

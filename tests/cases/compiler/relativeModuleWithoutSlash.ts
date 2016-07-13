@@ -1,10 +1,20 @@
-// @Filename: index.ts
-export default 0;
+// @traceResolution: true
+// @moduleResolution: node
+
+// @Filename: a.ts
+export default { a: 0 };
 
 // @Filename: a/index.ts
-export default 1;
+export default { aIndex: 0 };
 
-// @Filename: a/a.ts
-import parent from "..";
-import here from ".";
-parent + here;
+// @Filename: a/test.ts
+import a from ".";
+import aIndex from "./";
+a.a;
+aIndex.a; //aIndex.aIndex; See GH#9690
+
+// @Filename: a/b/test.ts
+import a from "..";
+import aIndex from "../";
+a.a;
+aIndex.a; //aIndex.aIndex;
