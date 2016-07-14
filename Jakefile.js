@@ -466,15 +466,6 @@ task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "r
     exec(cmd);
 });
 
-var scriptsTsdJson = path.join(scriptsDirectory, "tsd.json");
-file(scriptsTsdJson);
-
-task("tsd-scripts", [scriptsTsdJson], function () {
-    var cmd = "tsd --config " + scriptsTsdJson + " install";
-    console.log(cmd);
-    exec(cmd);
-}, { async: true });
-
 var importDefinitelyTypedTestsDirectory = path.join(scriptsDirectory, "importDefinitelyTypedTests");
 var importDefinitelyTypedTestsJs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.js");
 var importDefinitelyTypedTestsTs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.ts");

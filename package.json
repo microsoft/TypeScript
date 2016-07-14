@@ -70,7 +70,6 @@
         "run-sequence": "latest",
         "through2": "latest",
         "ts-node": "latest",
-        "tsd": "latest",
         "tslint": "next",
         "typescript": "next"
     },
