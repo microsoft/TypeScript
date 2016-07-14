@@ -3113,13 +3113,4 @@ namespace ts {
     export function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean {
         return node.flags & NodeFlags.ParameterPropertyModifier && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
     }
-
-    export function startsWith(str: string, prefix: string): boolean {
-        return str.lastIndexOf(prefix, 0) === 0;
-    }
-
-    export function endsWith(str: string, suffix: string): boolean {
-        const expectedPos = str.length - suffix.length;
-        return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
-    }
 }
