@@ -642,7 +642,7 @@ namespace ts {
         // Build up the list of examples.
         const padding = makePadding(marginLength);
         output += getDiagnosticText(Diagnostics.Examples_Colon_0, makePadding(marginLength - examplesLength) + "tsc hello.ts") + sys.newLine;
-        output += padding + "tsc --out file.js file.ts" + sys.newLine;
+        output += padding + "tsc --outFile file.js file.ts" + sys.newLine;
         output += padding + "tsc @args.txt" + sys.newLine;
         output += sys.newLine;
 
