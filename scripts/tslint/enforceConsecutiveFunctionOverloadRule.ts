@@ -10,8 +10,8 @@ export class Rule extends Lint.Rules.AbstractRule {
     }
 }
 
-function isStringOrNumericLiteral(kind: number) {
-    return kind === 9 || kind === 8;
+function isStringOrNumericLiteral(kind: ts.SyntaxKind) {
+    return kind === ts.SyntaxKind.StringLiteral || kind === ts.SyntaxKind.NumericLiteral;
 }
 
 function getTextOfPropertyName(name: ts.PropertyName): string {
@@ -43,9 +43,9 @@ class NoNonConsecutiveFunctionOverload extends Lint.BlockScopeAwareRuleWalker<{}
     visitInterfaceDeclaration(node: ts.InterfaceDeclaration): void {
         const members = node.members;
         for (const member of members) {
-            if (member.name != undefined) {
+            if (member.name !== undefined) {
                 const methodName = getTextOfPropertyName(member.name);
-                if (methodName != undefined) {
+                if (methodName !== undefined) {
                     this.handleMethodName(member, methodName);
                 }
             }
