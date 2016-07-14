@@ -16,7 +16,7 @@
 /// <reference path='services.ts' />
 
 /* @internal */
-let debugObjectHost = (<any>this);
+let debugObjectHost = new Function("return this")();
 
 // We need to use 'null' to interface with the managed side.
 /* tslint:disable:no-null-keyword */
@@ -61,7 +61,7 @@ namespace ts {
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
-        getDirectories(path: string): string[];
+        getDirectories(path: string): string;
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
         getProjectVersion?(): string;
@@ -80,8 +80,9 @@ namespace ts {
          * @param exclude A JSON encoded string[] containing the paths to exclude
          *  when enumerating the directory.
          */
-        readDirectory(rootDir: string, extension: string, exclude?: string, depth?: number): string;
-
+        readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
+        useCaseSensitiveFileNames?(): boolean;
+        getCurrentDirectory(): string;
         trace(s: string): void;
     }
 
@@ -227,9 +228,10 @@ namespace ts {
          * at the current position.
          * E.g. we don't want brace completion inside string-literals, comments, etc.
          */
-        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): string;
+        isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string;
 
         getEmitOutput(fileName: string): string;
+        getEmitOutputObject(fileName: string): EmitOutput;
     }
 
     export interface ClassifierShim extends Shim {
@@ -402,7 +404,7 @@ namespace ts {
         }
 
         public getDirectories(path: string): string[] {
-            return this.shimHost.getDirectories(path);
+            return JSON.parse(this.shimHost.getDirectories(path));
         }
 
         public getDefaultLibFileName(options: CompilerOptions): string {
@@ -437,8 +439,10 @@ namespace ts {
 
         public directoryExists: (directoryName: string) => boolean;
         public realpath: (path: string) => string;
+        public useCaseSensitiveFileNames: boolean;
 
         constructor(private shimHost: CoreServicesShimHost) {
+        this.useCaseSensitiveFileNames = this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
             if ("directoryExists" in this.shimHost) {
                 this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
             }
@@ -447,17 +451,34 @@ namespace ts {
             }
         }
 
-        public readDirectory(rootDir: string, extension: string, exclude: string[], depth?: number): string[] {
+        public readDirectory(rootDir: string, extensions: string[], exclude: string[], include: string[], depth?: number): string[] {
             // Wrap the API changes for 2.0 release. This try/catch
             // should be removed once TypeScript 2.0 has shipped.
-            let encoded: string;
             try {
-                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude), depth);
+                const pattern = getFileMatcherPatterns(rootDir, extensions, exclude, include,
+                    this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
+                return JSON.parse(this.shimHost.readDirectory(
+                    rootDir,
+                    JSON.stringify(extensions),
+                    JSON.stringify(pattern.basePaths),
+                    pattern.excludePattern,
+                    pattern.includeFilePattern,
+                    pattern.includeDirectoryPattern,
+                    depth
+                ));
             }
             catch (e) {
-                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+                const results: string[] = [];
+                for (const extension of extensions) {
+                    for (const file of this.readDirectoryFallback(rootDir, extension, exclude))
+                    {
+                        if (!contains(results, file)) {
+                            results.push(file);
+                        }
+                    }
+                }
+                return results;
             }
-            return JSON.parse(encoded);
         }
 
         public fileExists(fileName: string): boolean {
@@ -466,6 +487,10 @@ namespace ts {
 
         public readFile(fileName: string): string {
             return this.shimHost.readFile(fileName);
+        }
+
+        private readDirectoryFallback(rootDir: string, extension: string, exclude: string[]) {
+            return JSON.parse(this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude)));
         }
     }
 
@@ -494,9 +519,13 @@ namespace ts {
     }
 
     function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): string {
+        return <string>forwardCall(logger, actionDescription, /*returnJson*/ true, action, logPerformance);
+    }
+
+    function forwardCall<T>(logger: Logger, actionDescription: string, returnJson: boolean, action: () => T, logPerformance: boolean): T | string {
         try {
             const result = simpleForwardCall(logger, actionDescription, action, logPerformance);
-            return JSON.stringify({ result });
+            return returnJson ? JSON.stringify({ result }) : result;
         }
         catch (err) {
             if (err instanceof OperationCanceledException) {
@@ -507,6 +536,7 @@ namespace ts {
             return JSON.stringify({ error: err });
         }
     }
+
 
     class ShimBase implements Shim {
         constructor(private factory: ShimFactory) {
@@ -749,10 +779,10 @@ namespace ts {
             );
         }
 
-        public isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): string {
+        public isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string {
             return this.forwardJSONCall(
-                `isValidBraceCompletionAtPostion('${fileName}', ${position}, ${openingBrace})`,
-                () => this.languageService.isValidBraceCompletionAtPostion(fileName, position, openingBrace)
+                `isValidBraceCompletionAtPosition('${fileName}', ${position}, ${openingBrace})`,
+                () => this.languageService.isValidBraceCompletionAtPosition(fileName, position, openingBrace)
             );
         }
 
@@ -893,6 +923,15 @@ namespace ts {
                 `getEmitOutput('${fileName}')`,
                 () => this.languageService.getEmitOutput(fileName)
             );
+        }
+
+        public getEmitOutputObject(fileName: string): any {
+            return forwardCall(
+                this.logger,
+                `getEmitOutput('${fileName}')`,
+                /*returnJson*/ false,
+                () => this.languageService.getEmitOutput(fileName),
+                this.logPerformance);
         }
     }
 

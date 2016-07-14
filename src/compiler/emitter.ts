@@ -753,6 +753,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         return generateNameForExportDefault();
                     case SyntaxKind.ClassExpression:
                         return generateNameForClassExpression();
+                    default:
+                        Debug.fail();
                 }
             }
 
@@ -1217,7 +1219,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             function jsxEmitReact(node: JsxElement | JsxSelfClosingElement) {
                 /// Emit a tag name, which is either '"div"' for lower-cased names, or
                 /// 'Div' for upper-cased or dotted names
-                function emitTagName(name: Identifier | QualifiedName) {
+                function emitTagName(name: LeftHandSideExpression) {
                     if (name.kind === SyntaxKind.Identifier && isIntrinsicJsxName((<Identifier>name).text)) {
                         write('"');
                         emit(name);
@@ -1671,6 +1673,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 return false;
             }
 
+            function getClassExpressionInPropertyAccessInStaticPropertyDeclaration(node: Identifier) {
+                if (languageVersion >= ScriptTarget.ES6) {
+                    let parent = node.parent;
+                    if (parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>parent).expression === node) {
+                        parent = parent.parent;
+                        while (parent && parent.kind !== SyntaxKind.PropertyDeclaration) {
+                            parent = parent.parent;
+                        }
+                        return parent && parent.kind === SyntaxKind.PropertyDeclaration && (parent.flags & NodeFlags.Static) !== 0 &&
+                            parent.parent.kind === SyntaxKind.ClassExpression ? parent.parent : undefined;
+                    }
+                }
+                return undefined;
+            }
+
             function emitIdentifier(node: Identifier) {
                 if (convertedLoopState) {
                     if (node.text == "arguments" && resolver.isArgumentsLocalBinding(node)) {
@@ -1685,6 +1702,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write(node.text);
                 }
                 else if (isExpressionIdentifier(node)) {
+                    const classExpression = getClassExpressionInPropertyAccessInStaticPropertyDeclaration(node);
+                    if (classExpression) {
+                        const declaration = resolver.getReferencedValueDeclaration(node);
+                        if (declaration === classExpression) {
+                            write(getGeneratedNameForNode(declaration.name));
+                            return;
+                        }
+                    }
                     emitExpressionIdentifier(node);
                 }
                 else if (isNameOfNestedBlockScopedRedeclarationOrCapturedBinding(node)) {
@@ -2076,7 +2101,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             function createPropertyAccessExpression(expression: Expression, name: Identifier): PropertyAccessExpression {
                 const result = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
                 result.expression = parenthesizeForAccess(expression);
-                result.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
                 result.name = name;
                 return result;
             }
@@ -2223,11 +2247,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             // Returns 'true' if the code was actually indented, false otherwise.
             // If the code is not indented, an optional valueToWriteWhenNotIndenting will be
             // emitted instead.
-            function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node, valueToWriteWhenNotIndenting?: string): boolean {
+            function indentIfOnDifferentLines(parent: Node, node1: TextRange, node2: TextRange, valueToWriteWhenNotIndenting?: string): boolean {
                 const realNodesAreOnDifferentLines = !nodeIsSynthesized(parent) && !nodeEndIsOnSameLineAsNodeStart(node1, node2);
 
                 // Always use a newline for synthesized code if the synthesizer desires it.
-                const synthesizedNodeIsOnDifferentLine = synthesizedNodeStartsOnNewLine(node2);
+                const synthesizedNodeIsOnDifferentLine = synthesizedNodeStartsOnNewLine(node2 as Node);
 
                 if (realNodesAreOnDifferentLines || synthesizedNodeIsOnDifferentLine) {
                     increaseIndent();
@@ -2257,7 +2281,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
 
                 emit(node.expression);
-                const indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
+                const dotRangeStart = nodeIsSynthesized(node.expression) ? -1 : node.expression.end;
+                const dotRangeEnd = nodeIsSynthesized(node.expression) ? -1 : skipTrivia(currentText, node.expression.end) + 1;
+                const dotToken = <TextRange>{ pos: dotRangeStart, end: dotRangeEnd };
+                const indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, dotToken);
 
                 // 1 .toString is a valid property access, emit a space after the literal
                 // Also emit a space if expression is a integer const enum value - it will appear in generated code as numeric literal
@@ -2283,7 +2310,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write(".");
                 }
 
-                const indentedAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
+                const indentedAfterDot = indentIfOnDifferentLines(node, dotToken, node.name);
                 emit(node.name);
                 decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
             }
@@ -2780,7 +2807,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         const identifier = emitTempVariableAssignment(leftHandSideExpression.expression, /*canDefineTempVariablesInPlace*/ false, /*shouldEmitCommaBeforeAssignment*/ false);
                         synthesizedLHS.expression = identifier;
 
-                        (<PropertyAccessExpression>synthesizedLHS).dotToken = leftHandSideExpression.dotToken;
                         (<PropertyAccessExpression>synthesizedLHS).name = leftHandSideExpression.name;
                         write(", ");
                     }
@@ -3758,7 +3784,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     getLineOfLocalPositionFromLineMap(currentLineMap, node2.end);
             }
 
-            function nodeEndIsOnSameLineAsNodeStart(node1: Node, node2: Node) {
+            function nodeEndIsOnSameLineAsNodeStart(node1: TextRange, node2: TextRange) {
                 return getLineOfLocalPositionFromLineMap(currentLineMap, node1.end) ===
                     getLineOfLocalPositionFromLineMap(currentLineMap, skipTrivia(currentText, node2.pos));
             }
@@ -4519,8 +4545,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                                 }
 
                                 write(";");
-                                tempIndex++;
                             }
+                            // Regardless of whether we will emit a var declaration for the binding pattern, we generate the temporary
+                            // variable for the parameter (see: emitParameter)
+                            tempIndex++;
                         }
                         else if (initializer) {
                             writeLine();
@@ -5083,13 +5111,13 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function emitPropertyDeclaration(node: ClassLikeDeclaration, property: PropertyDeclaration, receiver?: Identifier, isExpression?: boolean) {
+            function emitPropertyDeclaration(node: ClassLikeDeclaration, property: PropertyDeclaration, receiver?: string, isExpression?: boolean) {
                 writeLine();
                 emitLeadingComments(property);
                 emitStart(property);
                 emitStart(property.name);
                 if (receiver) {
-                    emit(receiver);
+                    write(receiver);
                 }
                 else {
                     if (property.flags & NodeFlags.Static) {
@@ -5508,13 +5536,16 @@ const _super = (function (geti, seti) {
                 // of it have been initialized by the time it is used.
                 const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
                 const isClassExpressionWithStaticProperties = staticProperties.length > 0 && node.kind === SyntaxKind.ClassExpression;
-                let tempVariable: Identifier;
+                let generatedName: string;
 
                 if (isClassExpressionWithStaticProperties) {
-                    tempVariable = createAndRecordTempVariable(TempFlags.Auto);
+                    generatedName = getGeneratedNameForNode(node.name);
+                    const synthesizedNode = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+                    synthesizedNode.text = generatedName;
+                    recordTempDeclaration(synthesizedNode);
                     write("(");
                     increaseIndent();
-                    emit(tempVariable);
+                    emit(synthesizedNode);
                     write(" = ");
                 }
 
@@ -5568,11 +5599,11 @@ const _super = (function (geti, seti) {
                     for (const property of staticProperties) {
                         write(",");
                         writeLine();
-                        emitPropertyDeclaration(node, property, /*receiver*/ tempVariable, /*isExpression*/ true);
+                        emitPropertyDeclaration(node, property, /*receiver*/ generatedName, /*isExpression*/ true);
                     }
                     write(",");
                     writeLine();
-                    emit(tempVariable);
+                    write(generatedName);
                     decreaseIndent();
                     write(")");
                 }
@@ -7655,7 +7686,7 @@ const _super = (function (geti, seti) {
                         }
                         firstNonWhitespace = -1;
                     }
-                    else if (!isWhiteSpace(c)) {
+                    else if (!isWhiteSpaceSingleLine(c)) {
                         lastNonWhitespace = i;
                         if (firstNonWhitespace === -1) {
                             firstNonWhitespace = i;

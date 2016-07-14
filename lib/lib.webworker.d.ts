@@ -19,6 +19,10 @@ and limitations under the License.
 /// IE Worker APIs
 /////////////////////////////
 
+interface Algorithm {
+    name: string;
+}
+
 interface EventInit {
     bubbles?: boolean;
     cancelable?: boolean;
@@ -32,6 +36,10 @@ interface IDBIndexParameters {
 interface IDBObjectStoreParameters {
     autoIncrement?: boolean;
     keyPath?: IDBKeyPath;
+}
+
+interface KeyAlgorithm {
+    name?: string;
 }
 
 interface EventListener {
@@ -121,6 +129,18 @@ interface Coordinates {
 declare var Coordinates: {
     prototype: Coordinates;
     new(): Coordinates;
+}
+
+interface CryptoKey {
+    readonly algorithm: KeyAlgorithm;
+    readonly extractable: boolean;
+    readonly type: string;
+    readonly usages: string[];
+}
+
+declare var CryptoKey: {
+    prototype: CryptoKey;
+    new(): CryptoKey;
 }
 
 interface DOMError {
@@ -338,8 +358,8 @@ declare var IDBCursorWithValue: {
 interface IDBDatabase extends EventTarget {
     readonly name: string;
     readonly objectStoreNames: DOMStringList;
-    onabort: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    onabort: (this: this, ev: Event) => any;
+    onerror: (this: this, ev: ErrorEvent) => any;
     version: number;
     onversionchange: (ev: IDBVersionChangeEvent) => any;
     close(): void;
@@ -347,8 +367,8 @@ interface IDBDatabase extends EventTarget {
     deleteObjectStore(name: string): void;
     transaction(storeNames: string | string[], mode?: string): IDBTransaction;
     addEventListener(type: "versionchange", listener: (ev: IDBVersionChangeEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -426,12 +446,12 @@ declare var IDBObjectStore: {
 }
 
 interface IDBOpenDBRequest extends IDBRequest {
-    onblocked: (ev: Event) => any;
-    onupgradeneeded: (ev: IDBVersionChangeEvent) => any;
-    addEventListener(type: "blocked", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "success", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "upgradeneeded", listener: (ev: IDBVersionChangeEvent) => any, useCapture?: boolean): void;
+    onblocked: (this: this, ev: Event) => any;
+    onupgradeneeded: (this: this, ev: IDBVersionChangeEvent) => any;
+    addEventListener(type: "blocked", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "success", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "upgradeneeded", listener: (this: this, ev: IDBVersionChangeEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -442,14 +462,14 @@ declare var IDBOpenDBRequest: {
 
 interface IDBRequest extends EventTarget {
     readonly error: DOMError;
-    onerror: (ev: Event) => any;
-    onsuccess: (ev: Event) => any;
+    onerror: (this: this, ev: ErrorEvent) => any;
+    onsuccess: (this: this, ev: Event) => any;
     readonly readyState: string;
     readonly result: any;
     source: IDBObjectStore | IDBIndex | IDBCursor;
     readonly transaction: IDBTransaction;
-    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "success", listener: (ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "success", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -462,17 +482,17 @@ interface IDBTransaction extends EventTarget {
     readonly db: IDBDatabase;
     readonly error: DOMError;
     readonly mode: string;
-    onabort: (ev: Event) => any;
-    oncomplete: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    onabort: (this: this, ev: Event) => any;
+    oncomplete: (this: this, ev: Event) => any;
+    onerror: (this: this, ev: ErrorEvent) => any;
     abort(): void;
     objectStore(name: string): IDBObjectStore;
     readonly READ_ONLY: string;
     readonly READ_WRITE: string;
     readonly VERSION_CHANGE: string;
-    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "complete", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "complete", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -531,16 +551,16 @@ declare var MSApp: MSApp;
 
 interface MSAppAsyncOperation extends EventTarget {
     readonly error: DOMError;
-    oncomplete: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    oncomplete: (this: this, ev: Event) => any;
+    onerror: (this: this, ev: ErrorEvent) => any;
     readonly readyState: number;
     readonly result: any;
     start(): void;
     readonly COMPLETED: number;
     readonly ERROR: number;
     readonly STARTED: number;
-    addEventListener(type: "complete", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "complete", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -624,11 +644,11 @@ declare var MessageEvent: {
 }
 
 interface MessagePort extends EventTarget {
-    onmessage: (ev: MessageEvent) => any;
+    onmessage: (this: this, ev: MessageEvent) => any;
     close(): void;
     postMessage(message?: any, ports?: any): void;
     start(): void;
-    addEventListener(type: "message", listener: (ev: MessageEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "message", listener: (this: this, ev: MessageEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -680,10 +700,10 @@ interface WebSocket extends EventTarget {
     binaryType: string;
     readonly bufferedAmount: number;
     readonly extensions: string;
-    onclose: (ev: CloseEvent) => any;
-    onerror: (ev: Event) => any;
-    onmessage: (ev: MessageEvent) => any;
-    onopen: (ev: Event) => any;
+    onclose: (this: this, ev: CloseEvent) => any;
+    onerror: (this: this, ev: ErrorEvent) => any;
+    onmessage: (this: this, ev: MessageEvent) => any;
+    onopen: (this: this, ev: Event) => any;
     readonly protocol: string;
     readonly readyState: number;
     readonly url: string;
@@ -693,10 +713,10 @@ interface WebSocket extends EventTarget {
     readonly CLOSING: number;
     readonly CONNECTING: number;
     readonly OPEN: number;
-    addEventListener(type: "close", listener: (ev: CloseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "message", listener: (ev: MessageEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "open", listener: (ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "close", listener: (this: this, ev: CloseEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "message", listener: (this: this, ev: MessageEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "open", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -710,11 +730,11 @@ declare var WebSocket: {
 }
 
 interface Worker extends EventTarget, AbstractWorker {
-    onmessage: (ev: MessageEvent) => any;
+    onmessage: (this: this, ev: MessageEvent) => any;
     postMessage(message: any, ports?: any): void;
     terminate(): void;
-    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "message", listener: (ev: MessageEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "message", listener: (this: this, ev: MessageEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -724,8 +744,7 @@ declare var Worker: {
 }
 
 interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
-    msCaching: string;
-    onreadystatechange: (ev: ProgressEvent) => any;
+    onreadystatechange: (this: this, ev: ProgressEvent) => any;
     readonly readyState: number;
     readonly response: any;
     readonly responseText: string;
@@ -736,6 +755,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     timeout: number;
     readonly upload: XMLHttpRequestUpload;
     withCredentials: boolean;
+    msCaching?: string;
     abort(): void;
     getAllResponseHeaders(): string;
     getResponseHeader(header: string): string | null;
@@ -750,14 +770,14 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     readonly LOADING: number;
     readonly OPENED: number;
     readonly UNSENT: number;
-    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "readystatechange", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "timeout", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "loadend", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "readystatechange", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "timeout", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -782,30 +802,30 @@ declare var XMLHttpRequestUpload: {
 }
 
 interface AbstractWorker {
-    onerror: (ev: Event) => any;
-    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
+    onerror: (this: this, ev: ErrorEvent) => any;
+    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 interface MSBaseReader {
-    onabort: (ev: Event) => any;
-    onerror: (ev: Event) => any;
-    onload: (ev: Event) => any;
-    onloadend: (ev: ProgressEvent) => any;
-    onloadstart: (ev: Event) => any;
-    onprogress: (ev: ProgressEvent) => any;
+    onabort: (this: this, ev: Event) => any;
+    onerror: (this: this, ev: ErrorEvent) => any;
+    onload: (this: this, ev: Event) => any;
+    onloadend: (this: this, ev: ProgressEvent) => any;
+    onloadstart: (this: this, ev: Event) => any;
+    onprogress: (this: this, ev: ProgressEvent) => any;
     readonly readyState: number;
     readonly result: any;
     abort(): void;
     readonly DONE: number;
     readonly EMPTY: number;
     readonly LOADING: number;
-    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "loadend", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -834,20 +854,20 @@ interface WindowConsole {
 }
 
 interface XMLHttpRequestEventTarget {
-    onabort: (ev: Event) => any;
-    onerror: (ev: Event) => any;
-    onload: (ev: Event) => any;
-    onloadend: (ev: ProgressEvent) => any;
-    onloadstart: (ev: Event) => any;
-    onprogress: (ev: ProgressEvent) => any;
-    ontimeout: (ev: ProgressEvent) => any;
-    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "timeout", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
+    onabort: (this: this, ev: Event) => any;
+    onerror: (this: this, ev: ErrorEvent) => any;
+    onload: (this: this, ev: Event) => any;
+    onloadend: (this: this, ev: ProgressEvent) => any;
+    onloadstart: (this: this, ev: Event) => any;
+    onprogress: (this: this, ev: ProgressEvent) => any;
+    ontimeout: (this: this, ev: ProgressEvent) => any;
+    addEventListener(type: "abort", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "loadend", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "timeout", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -865,13 +885,13 @@ declare var FileReaderSync: {
 
 interface WorkerGlobalScope extends EventTarget, WorkerUtils, DedicatedWorkerGlobalScope, WindowConsole {
     readonly location: WorkerLocation;
-    onerror: (ev: Event) => any;
+    onerror: (this: this, ev: ErrorEvent) => any;
     readonly self: WorkerGlobalScope;
     close(): void;
     msWriteProfilerMark(profilerMarkName: string): void;
     toString(): string;
-    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "message", listener: (ev: MessageEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "message", listener: (this: this, ev: MessageEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -907,9 +927,9 @@ declare var WorkerNavigator: {
 }
 
 interface DedicatedWorkerGlobalScope {
-    onmessage: (ev: MessageEvent) => any;
+    onmessage: (this: this, ev: MessageEvent) => any;
     postMessage(data: any): void;
-    addEventListener(type: "message", listener: (ev: MessageEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "message", listener: (this: this, ev: MessageEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -921,8 +941,11 @@ interface WorkerUtils extends Object, WindowBase64 {
     clearInterval(handle: number): void;
     clearTimeout(handle: number): void;
     importScripts(...urls: string[]): void;
+    setImmediate(handler: (...args: any[]) => void): number;
     setImmediate(handler: any, ...args: any[]): number;
+    setInterval(handler: (...args: any[]) => void, timeout: number): number;
     setInterval(handler: any, timeout?: any, ...args: any[]): number;
+    setTimeout(handler: (...args: any[]) => void, timeout: number): number;
     setTimeout(handler: any, timeout?: any, ...args: any[]): number;
 }
 
@@ -958,6 +981,177 @@ interface ProgressEventInit extends EventInit {
 interface IDBArrayKey extends Array<IDBValidKey> {
 }
 
+interface RsaKeyGenParams extends Algorithm {
+    modulusLength: number;
+    publicExponent: Uint8Array;
+}
+
+interface RsaHashedKeyGenParams extends RsaKeyGenParams {
+    hash: AlgorithmIdentifier;
+}
+
+interface RsaKeyAlgorithm extends KeyAlgorithm {
+    modulusLength: number;
+    publicExponent: Uint8Array;
+}
+
+interface RsaHashedKeyAlgorithm extends RsaKeyAlgorithm {
+    hash: AlgorithmIdentifier;
+}
+
+interface RsaHashedImportParams {
+    hash: AlgorithmIdentifier;
+}
+
+interface RsaPssParams {
+    saltLength: number;
+}
+
+interface RsaOaepParams extends Algorithm {
+    label?: BufferSource;
+}
+
+interface EcdsaParams extends Algorithm {
+    hash: AlgorithmIdentifier;
+}
+
+interface EcKeyGenParams extends Algorithm {
+    typedCurve: string;
+}
+
+interface EcKeyAlgorithm extends KeyAlgorithm {
+    typedCurve: string;
+}
+
+interface EcKeyImportParams {
+    namedCurve: string;
+}
+
+interface EcdhKeyDeriveParams extends Algorithm {
+    public: CryptoKey;
+}
+
+interface AesCtrParams extends Algorithm {
+    counter: BufferSource;
+    length: number;
+}
+
+interface AesKeyAlgorithm extends KeyAlgorithm {
+    length: number;
+}
+
+interface AesKeyGenParams extends Algorithm {
+    length: number;
+}
+
+interface AesDerivedKeyParams extends Algorithm {
+    length: number;
+}
+
+interface AesCbcParams extends Algorithm {
+    iv: BufferSource;
+}
+
+interface AesCmacParams extends Algorithm {
+    length: number;
+}
+
+interface AesGcmParams extends Algorithm {
+    iv: BufferSource;
+    additionalData?: BufferSource;
+    tagLength?: number;
+}
+
+interface AesCfbParams extends Algorithm {
+    iv: BufferSource;
+}
+
+interface HmacImportParams extends Algorithm {
+    hash?: AlgorithmIdentifier;
+    length?: number;
+}
+
+interface HmacKeyAlgorithm extends KeyAlgorithm {
+    hash: AlgorithmIdentifier;
+    length: number;
+}
+
+interface HmacKeyGenParams extends Algorithm {
+    hash: AlgorithmIdentifier;
+    length?: number;
+}
+
+interface DhKeyGenParams extends Algorithm {
+    prime: Uint8Array;
+    generator: Uint8Array;
+}
+
+interface DhKeyAlgorithm extends KeyAlgorithm {
+    prime: Uint8Array;
+    generator: Uint8Array;
+}
+
+interface DhKeyDeriveParams extends Algorithm {
+    public: CryptoKey;
+}
+
+interface DhImportKeyParams extends Algorithm {
+    prime: Uint8Array;
+    generator: Uint8Array;
+}
+
+interface ConcatParams extends Algorithm {
+    hash?: AlgorithmIdentifier;
+    algorithmId: Uint8Array;
+    partyUInfo: Uint8Array;
+    partyVInfo: Uint8Array;
+    publicInfo?: Uint8Array;
+    privateInfo?: Uint8Array;
+}
+
+interface HkdfCtrParams extends Algorithm {
+    hash: AlgorithmIdentifier;
+    label: BufferSource;
+    context: BufferSource;
+}
+
+interface Pbkdf2Params extends Algorithm {
+    salt: BufferSource;
+    iterations: number;
+    hash: AlgorithmIdentifier;
+}
+
+interface RsaOtherPrimesInfo {
+    r: string;
+    d: string;
+    t: string;
+}
+
+interface JsonWebKey {
+    kty: string;
+    use?: string;
+    key_ops?: string[];
+    alg?: string;
+    kid?: string;
+    x5u?: string;
+    x5c?: string;
+    x5t?: string;
+    ext?: boolean;
+    crv?: string;
+    x?: string;
+    y?: string;
+    d?: string;
+    n?: string;
+    e?: string;
+    p?: string;
+    q?: string;
+    dp?: string;
+    dq?: string;
+    qi?: string;
+    oth?: RsaOtherPrimesInfo[];
+    k?: string;
+}
+
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface ErrorEventHandler {
@@ -991,7 +1185,7 @@ interface FunctionStringCallback {
     (data: string): void;
 }
 declare var location: WorkerLocation;
-declare var onerror: (ev: Event) => any;
+declare var onerror: (this: WorkerGlobalScope, ev: ErrorEvent) => any;
 declare var self: WorkerGlobalScope;
 declare function close(): void;
 declare function msWriteProfilerMark(profilerMarkName: string): void;
@@ -1006,16 +1200,21 @@ declare function clearImmediate(handle: number): void;
 declare function clearInterval(handle: number): void;
 declare function clearTimeout(handle: number): void;
 declare function importScripts(...urls: string[]): void;
+declare function setImmediate(handler: (...args: any[]) => void): number;
 declare function setImmediate(handler: any, ...args: any[]): number;
+declare function setInterval(handler: (...args: any[]) => void, timeout: number): number;
 declare function setInterval(handler: any, timeout?: any, ...args: any[]): number;
+declare function setTimeout(handler: (...args: any[]) => void, timeout: number): number;
 declare function setTimeout(handler: any, timeout?: any, ...args: any[]): number;
 declare function atob(encodedString: string): string;
 declare function btoa(rawString: string): string;
-declare var onmessage: (ev: MessageEvent) => any;
+declare var onmessage: (this: WorkerGlobalScope, ev: MessageEvent) => any;
 declare function postMessage(data: any): void;
 declare var console: Console;
-declare function addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "message", listener: (ev: MessageEvent) => any, useCapture?: boolean): void;
+declare function addEventListener(type: "error", listener: (this: WorkerGlobalScope, ev: ErrorEvent) => any, useCapture?: boolean): void;
+declare function addEventListener(type: "message", listener: (this: WorkerGlobalScope, ev: MessageEvent) => any, useCapture?: boolean): void;
 declare function addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+type AlgorithmIdentifier = string | Algorithm;
 type IDBKeyPath = string;
 type IDBValidKey = number | string | Date | IDBArrayKey;
+type BufferSource = ArrayBuffer | ArrayBufferView;
