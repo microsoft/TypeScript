@@ -91,10 +91,10 @@ namespace ts {
         return undefined;
     }
 
-    export function contains<T>(array: T[], value: T, areEqual?: (a: T, b: T) => boolean): boolean {
+    export function contains<T>(array: T[], value: T): boolean {
         if (array) {
             for (const v of array) {
-                if (areEqual ? areEqual(v, value) : v === value) {
+                if (v === value) {
                     return true;
                 }
             }
@@ -180,10 +180,13 @@ namespace ts {
         let result: T[];
         if (array) {
             result = [];
-            for (const item of array) {
-                if (!contains(result, item, areEqual)) {
-                    result.push(item);
+            loop: for (const item of array) {
+                for (const res of result) {
+                    if (areEqual ? areEqual(res, item) : res === item) {
+                        continue loop;
+                    }
                 }
+                result.push(item);
             }
         }
         return result;

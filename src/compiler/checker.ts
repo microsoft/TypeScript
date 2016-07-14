@@ -6244,10 +6244,13 @@ namespace ts {
 
             function typeRelatedToSomeType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean): Ternary {
                 const targetTypes = target.types;
-                let len = targetTypes.length;
+                if (contains(targetTypes, source)) {
+                    return Ternary.True;
+                }
                 // The null and undefined types are guaranteed to be at the end of the constituent type list. In order
                 // to produce the best possible errors we first check the nullable types, such that the last type we
                 // check and report errors from is a non-nullable type if one is present.
+                let len = targetTypes.length;
                 while (len >= 2 && targetTypes[len - 1].flags & TypeFlags.Nullable) {
                     const related = isRelatedTo(source, targetTypes[len - 1], /*reportErrors*/ false);
                     if (related) {
@@ -6280,10 +6283,13 @@ namespace ts {
 
             function someTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean): Ternary {
                 const sourceTypes = source.types;
-                let len = sourceTypes.length;
+                if (contains(sourceTypes, target)) {
+                    return Ternary.True;
+                }
                 // The null and undefined types are guaranteed to be at the end of the constituent type list. In order
                 // to produce the best possible errors we first check the nullable types, such that the last type we
                 // check and report errors from is a non-nullable type if one is present.
+                let len = sourceTypes.length;
                 while (len >= 2 && sourceTypes[len - 1].flags & TypeFlags.Nullable) {
                     const related = isRelatedTo(sourceTypes[len - 1], target, /*reportErrors*/ false);
                     if (related) {
@@ -6803,9 +6809,11 @@ namespace ts {
             // A source signature partially matches a target signature if the target signature has no fewer required
             // parameters and no more overall parameters than the source signature (where a signature with a rest
             // parameter is always considered to have more overall parameters than one without).
+            const sourceRestCount = source.hasRestParameter ? 1 : 0;
+            const targetRestCount = target.hasRestParameter ? 1 : 0;
             if (partialMatch && source.minArgumentCount <= target.minArgumentCount && (
-                source.hasRestParameter && !target.hasRestParameter ||
-                source.hasRestParameter === target.hasRestParameter && source.parameters.length >= target.parameters.length)) {
+                sourceRestCount > targetRestCount ||
+                sourceRestCount === targetRestCount && source.parameters.length >= target.parameters.length)) {
                 return true;
             }
             return false;
@@ -7259,10 +7267,17 @@ namespace ts {
             function inferFromTypes(source: Type, target: Type) {
                 if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union ||
                     source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Intersection) {
-                    // Source and target are both unions or both intersections. First, find each
-                    // target constituent type that has an identically matching source constituent
-                    // type, and for each such target constituent type infer from the type to itself.
-                    // When inferring from a type to itself we effectively find all type parameter
+                    // Source and target are both unions or both intersections. If source and target
+                    // are the same type, just relate each constituent type to itself.
+                    if (source === target) {
+                        for (const t of (<UnionOrIntersectionType>source).types) {
+                            inferFromTypes(t, t);
+                        }
+                        return;
+                    }
+                    // Find each target constituent type that has an identically matching source
+                    // constituent type, and for each such target constituent type infer from the type to
+                    // itself. When inferring from a type to itself we effectively find all type parameter
                     // occurrences within that type and infer themselves as their type arguments.
                     let matchingTypes: Type[];
                     for (const t of (<UnionOrIntersectionType>target).types) {
@@ -7654,10 +7669,18 @@ namespace ts {
             if (declaredType !== assignedType && declaredType.flags & TypeFlags.Union) {
                 const reducedTypes = filter(declaredType.types, t => typeMaybeAssignableTo(assignedType, t));
                 if (reducedTypes.length) {
-                    return reducedTypes.length === 1 ? reducedTypes[0] : getUnionType(reducedTypes);
+                    return reducedTypes.length === 1 ? reducedTypes[0] : getUnionType(reducedTypes, /*noSubtypeReduction*/ true);
                 }
             }
             return declaredType;
+        }
+
+        function getTypeFactsOfTypes(types: Type[]): TypeFacts {
+            let result: TypeFacts = TypeFacts.None;
+            for (const t of types) {
+                result |= getTypeFacts(t);
+            }
+            return result;
         }
 
         function getTypeFacts(type: Type): TypeFacts {
@@ -7709,7 +7732,7 @@ namespace ts {
                 return constraint ? getTypeFacts(constraint) : TypeFacts.All;
             }
             if (flags & TypeFlags.UnionOrIntersection) {
-                return reduceLeft((<UnionOrIntersectionType>type).types, (flags, type) => flags |= getTypeFacts(type), TypeFacts.None);
+                return getTypeFactsOfTypes((<UnionOrIntersectionType>type).types);
             }
             return TypeFacts.All;
         }
@@ -7885,7 +7908,7 @@ namespace ts {
 
         function filterType(type: Type, f: (t: Type) => boolean): Type {
             return type.flags & TypeFlags.Union ?
-                getUnionType(filter((<UnionType>type).types, f)) :
+                getUnionType(filter((<UnionType>type).types, f), /*noSubtypeReduction*/ true) :
                 f(type) ? type : neverType;
         }
 
@@ -8039,7 +8062,7 @@ namespace ts {
                         antecedentTypes.push(type);
                     }
                 }
-                return getUnionType(antecedentTypes);
+                return getUnionType(antecedentTypes, /*noSubtypeReduction*/ true);
             }
 
             function getTypeAtFlowLoopLabel(flow: FlowLabel) {
@@ -8059,7 +8082,7 @@ namespace ts {
                 // the non-looping control flow path that leads to the top.
                 for (let i = flowLoopStart; i < flowLoopCount; i++) {
                     if (flowLoopNodes[i] === flow && flowLoopKeys[i] === key) {
-                        return getUnionType(flowLoopTypes[i]);
+                        return getUnionType(flowLoopTypes[i], /*noSubtypeReduction*/ true);
                     }
                 }
                 // Add the flow loop junction and reference to the in-process stack and analyze
@@ -8088,7 +8111,7 @@ namespace ts {
                         break;
                     }
                 }
-                return cache[key] = getUnionType(antecedentTypes);
+                return cache[key] = getUnionType(antecedentTypes, /*noSubtypeReduction*/ true);
             }
 
             function isMatchingPropertyAccess(expr: Expression) {
@@ -8216,13 +8239,13 @@ namespace ts {
                 }
                 const clauseTypes = switchTypes.slice(clauseStart, clauseEnd);
                 const hasDefaultClause = clauseStart === clauseEnd || contains(clauseTypes, neverType);
-                const discriminantType = getUnionType(clauseTypes);
+                const discriminantType = getUnionType(clauseTypes, /*noSubtypeReduction*/ true);
                 const caseType = discriminantType === neverType ? neverType : filterType(type, t => isTypeComparableTo(discriminantType, t));
                 if (!hasDefaultClause) {
                     return caseType;
                 }
                 const defaultType = filterType(type, t => !(isUnitType(t) && contains(switchTypes, t)));
-                return caseType === neverType ? defaultType : getUnionType([caseType, defaultType]);
+                return caseType === neverType ? defaultType : getUnionType([caseType, defaultType], /*noSubtypeReduction*/ true);
             }
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -8266,7 +8289,7 @@ namespace ts {
                         constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
                     }
                     if (constructSignatures && constructSignatures.length) {
-                        targetType = getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature))));
+                        targetType = getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature))), /*noSubtypeReduction*/ true);
                     }
                 }
 
@@ -8280,7 +8303,7 @@ namespace ts {
             function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean) {
                 if (!assumeTrue) {
                     return type.flags & TypeFlags.Union ?
-                        getUnionType(filter((<UnionType>type).types, t => !isTypeSubtypeOf(t, candidate))) :
+                        getUnionType(filter((<UnionType>type).types, t => !isTypeSubtypeOf(t, candidate)), /*noSubtypeReduction*/ true) :
                         type;
                 }
                 // If the current type is a union type, remove all constituents that aren't assignable to
@@ -8288,7 +8311,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Union) {
                     const assignableConstituents = filter((<UnionType>type).types, t => isTypeAssignableTo(t, candidate));
                     if (assignableConstituents.length) {
-                        return getUnionType(assignableConstituents);
+                        return getUnionType(assignableConstituents, /*noSubtypeReduction*/ true);
                     }
                 }
                 // If the candidate type is assignable to the target type, narrow to the candidate type.
