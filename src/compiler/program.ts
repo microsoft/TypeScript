@@ -994,6 +994,7 @@ namespace ts {
     export interface FormatDiagnosticsHost {
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
+        getNewLine(): string;
     }
 
     export function formatDiagnostics(diagnostics: Diagnostic[], host: FormatDiagnosticsHost): string {
@@ -1008,7 +1009,7 @@ namespace ts {
             }
 
             const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+            output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }${ host.getNewLine() }`;
         }
         return output;
     }
