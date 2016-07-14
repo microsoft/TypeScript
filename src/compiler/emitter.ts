@@ -2749,7 +2749,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
              *   if we should also export the value after its it changed
              * - check if node is a source level declaration to emit it differently,
              *   i.e non-exported variable statement 'var x = 1' is hoisted so
-             *   we we emit variable statement 'var' should be dropped.
+             *   when we emit variable statement 'var' should be dropped.
              */
             function isSourceFileLevelDeclarationInSystemJsModule(node: Node, isExported: boolean): boolean {
                 if (!node || !isCurrentFileSystemExternalModule()) {
@@ -5503,16 +5503,16 @@ const _super = (function (geti, seti) {
                             write("export ");
                         }
 
-                        if (!isHoistedDeclarationInSystemModule) {
-                            write("let ");
-                        }
                         if (decoratedClassAlias !== undefined) {
-                            write(`${decoratedClassAlias}`);
+                            // TODO (yuisu): comment
+                            write(`let ${decoratedClassAlias}`);
                         }
                         else {
+                            if (!isHoistedDeclarationInSystemModule) {
+                                write("let ");
+                            }
                             emitDeclarationName(node);
                         }
-
                         write(" = ");
                     }
                     else if (isES6ExportedDeclaration(node)) {
@@ -5530,7 +5530,9 @@ const _super = (function (geti, seti) {
                 //
                 // We'll emit:
                 //
-                //      (_temp = class C { ... }, _temp.a = 1, _temp.b = 2, _temp)
+                //      let C_1 = class C{};
+                //      C_1.a = 1;
+                //      C_1.b = 2; // so forth and so on
                 //
                 // This keeps the expression as an expression, while ensuring that the static parts
                 // of it have been initialized by the time it is used.
