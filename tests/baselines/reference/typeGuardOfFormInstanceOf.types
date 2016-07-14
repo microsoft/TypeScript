@@ -204,7 +204,7 @@ if (ctor5 instanceof C1) {
 
     ctor5.p1; // C1
 >ctor5.p1 : string
->ctor5 : C1
+>ctor5 : C1 | D1
 >p1 : string
 }
 else {

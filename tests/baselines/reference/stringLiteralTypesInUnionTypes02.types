@@ -14,49 +14,49 @@ var y: T = undefined;
 
 if (x === "foo") {
 >x === "foo" : boolean
->x : string
+>x : "foo" | "bar" | "baz" | string
 >"foo" : "foo"
 
     let a = x;
->a : string
->x : string
+>a : "foo" | string
+>x : "foo" | string
 }
 else if (x !== "bar") {
 >x !== "bar" : boolean
->x : string
+>x : "bar" | "baz" | string
 >"bar" : "bar"
 
     let b = x || y;
 >b : string
 >x || y : string
->x : string
->y : string
+>x : "baz" | string
+>y : string | "foo" | "bar" | "baz"
 }
 else {
     let c = x;
->c : string
->x : string
+>c : "bar" | string
+>x : "bar" | string
 
     let d = y;
->d : string
->y : string
+>d : string | "foo" | "bar" | "baz"
+>y : string | "foo" | "bar" | "baz"
 
     let e: (typeof x) | (typeof y) = c || d;
->e : string
->x : string
->y : string
+>e : "bar" | string | "foo" | "baz"
+>x : "bar" | string
+>y : string | "foo" | "bar" | "baz"
 >c || d : string
->c : string
->d : string
+>c : "bar" | string
+>d : string | "foo" | "bar" | "baz"
 }
 
 x = y;
->x = y : string
+>x = y : string | "foo" | "bar" | "baz"
 >x : "foo" | "bar" | "baz" | string
->y : string
+>y : string | "foo" | "bar" | "baz"
 
 y = x;
->y = x : string
+>y = x : "foo" | "bar" | "baz" | string
 >y : string | "foo" | "bar" | "baz"
->x : string
+>x : "foo" | "bar" | "baz" | string
 
