@@ -183,7 +183,7 @@ namespace ts {
                 return matchFiles(path, extensions, excludes, includes, /*useCaseSensitiveFileNames*/ false, shell.CurrentDirectory, getAccessibleFileSystemEntries);
             }
 
-            return {
+            const wscriptSystem: System = {
                 args,
                 newLine: "\r\n",
                 useCaseSensitiveFileNames: false,
@@ -202,7 +202,7 @@ namespace ts {
                     return fso.FolderExists(path);
                 },
                 createDirectory(directoryName: string) {
-                    if (!this.directoryExists(directoryName)) {
+                    if (!wscriptSystem.directoryExists(directoryName)) {
                         fso.CreateFolder(directoryName);
                     }
                 },
@@ -222,6 +222,7 @@ namespace ts {
                     }
                 }
             };
+            return wscriptSystem;
         }
 
         function getNodeSystem(): System {
@@ -440,7 +441,7 @@ namespace ts {
                 return filter<string>(_fs.readdirSync(path), p => fileSystemEntryExists(combinePaths(path, p), FileSystemEntryKind.Directory));
             }
 
-            return {
+            const nodeSystem: System = {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames: useCaseSensitiveFileNames,
@@ -502,7 +503,7 @@ namespace ts {
                 fileExists,
                 directoryExists,
                 createDirectory(directoryName: string) {
-                    if (!this.directoryExists(directoryName)) {
+                    if (!nodeSystem.directoryExists(directoryName)) {
                         _fs.mkdirSync(directoryName);
                     }
                 },
@@ -553,6 +554,7 @@ namespace ts {
                     return require(name);
                 }
             };
+            return nodeSystem;
         }
 
         function getChakraSystem(): System {

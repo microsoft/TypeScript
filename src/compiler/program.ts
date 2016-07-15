@@ -11,7 +11,7 @@ namespace ts {
     /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
-    export const version = "2.0.0";
+    export const version = "2.1.0";
 
     const emptyArray: any[] = [];
 
@@ -114,13 +114,7 @@ namespace ts {
     }
 
     function moduleHasNonRelativeName(moduleName: string): boolean {
-        if (isRootedDiskPath(moduleName)) {
-            return false;
-        }
-
-        const i = moduleName.lastIndexOf("./", 1);
-        const startsWithDotSlashOrDotDotSlash = i === 0 || (i === 1 && moduleName.charCodeAt(0) === CharacterCodes.dot);
-        return !startsWithDotSlashOrDotDotSlash;
+        return !(isRootedDiskPath(moduleName) || isExternalModuleNameRelative(moduleName));
     }
 
     interface ModuleResolutionState {
@@ -991,6 +985,34 @@ namespace ts {
         return sortAndDeduplicateDiagnostics(diagnostics);
     }
 
+    export interface FormatDiagnosticsHost {
+        getCurrentDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getNewLine(): string;
+    }
+
+    export function formatDiagnostics(diagnostics: Diagnostic[], host: FormatDiagnosticsHost): string {
+        let output = "";
+
+        for (const diagnostic of diagnostics) {
+            if (diagnostic.file) {
+                const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+                const fileName = diagnostic.file.fileName;
+                const relativeFileName = convertToRelativePath(fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName));
+                output += `${ relativeFileName }(${ line + 1 },${ character + 1 }): `;
+            }
+
+            const category = DiagnosticCategory[diagnostic.category].toLowerCase();
+            if (typeof diagnostic.category === "string") {
+                output += `${ category } ${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }${ host.getNewLine() }`;
+            }
+            else {
+                output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }${ host.getNewLine() }`;
+            }
+        }
+        return output;
+    }
+
     export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string {
         if (typeof messageText === "string") {
             return messageText;
@@ -1089,13 +1111,13 @@ namespace ts {
         // As all these operations happen - and are nested - within the createProgram call, they close over the below variables.
         // The current resolution depth is tracked by incrementing/decrementing as the depth first search progresses.
         const maxNodeModulesJsDepth = typeof options.maxNodeModuleJsDepth === "number" ? options.maxNodeModuleJsDepth : 2;
-        let currentNodeModulesJsDepth = 0;
+        let currentNodeModulesDepth = 0;
 
         // If a module has some of its imports skipped due to being at the depth limit under node_modules, then track
         // this, as it may be imported at a shallower depth later, and then it will need its skipped imports processed.
         const modulesWithElidedImports: Map<boolean> = {};
 
-        // Track source files that are JavaScript files found by searching under node_modules, as these shouldn't be compiled.
+        // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
         const sourceFilesFoundSearchingNodeModules: Map<boolean> = {};
 
         const start = new Date().getTime();
@@ -1401,7 +1423,7 @@ namespace ts {
         }
 
         function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult {
-            return runWithCancellationToken(() => emitWorker(this, sourceFile, writeFileCallback, cancellationToken));
+            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken));
         }
 
         function isEmitBlocked(emitFileName: string): boolean {
@@ -2212,9 +2234,21 @@ namespace ts {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
                 }
 
+                // If the file was previously found via a node_modules search, but is now being processed as a root file,
+                // then everything it sucks in may also be marked incorrectly, and needs to be checked again.
+                if (file && lookUp(sourceFilesFoundSearchingNodeModules, file.path) && currentNodeModulesDepth == 0) {
+                    sourceFilesFoundSearchingNodeModules[file.path] = false;
+                    if (!options.noResolve) {
+                        processReferencedFiles(file, getDirectoryPath(fileName), isDefaultLib);
+                        processTypeReferenceDirectives(file);
+                    }
+
+                    modulesWithElidedImports[file.path] = false;
+                    processImportedModules(file, getDirectoryPath(fileName));
+                }
                 // See if we need to reprocess the imports due to prior skipped imports
-                if (file && lookUp(modulesWithElidedImports, file.path)) {
-                    if (currentNodeModulesJsDepth < maxNodeModulesJsDepth) {
+                else if (file && lookUp(modulesWithElidedImports, file.path)) {
+                    if (currentNodeModulesDepth < maxNodeModulesJsDepth) {
                         modulesWithElidedImports[file.path] = false;
                         processImportedModules(file, getDirectoryPath(fileName));
                     }
@@ -2236,6 +2270,7 @@ namespace ts {
 
             filesByName.set(path, file);
             if (file) {
+                sourceFilesFoundSearchingNodeModules[path] = (currentNodeModulesDepth > 0);
                 file.path = path;
 
                 if (host.useCaseSensitiveFileNames()) {
@@ -2369,13 +2404,10 @@ namespace ts {
                     const isJsFileFromNodeModules = isFromNodeModulesSearch && hasJavaScriptFileExtension(resolution.resolvedFileName);
 
                     if (isFromNodeModulesSearch) {
-                        sourceFilesFoundSearchingNodeModules[resolvedPath] = true;
-                    }
-                    if (isJsFileFromNodeModules) {
-                        currentNodeModulesJsDepth++;
+                        currentNodeModulesDepth++;
                     }
 
-                    const elideImport = isJsFileFromNodeModules && currentNodeModulesJsDepth > maxNodeModulesJsDepth;
+                    const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModulesJsDepth;
                     const shouldAddFile = resolution && !options.noResolve && i < file.imports.length && !elideImport;
 
                     if (elideImport) {
@@ -2390,8 +2422,8 @@ namespace ts {
                                 file.imports[i].end);
                     }
 
-                    if (isJsFileFromNodeModules) {
-                        currentNodeModulesJsDepth--;
+                    if (isFromNodeModulesSearch) {
+                        currentNodeModulesDepth--;
                     }
                 }
             }

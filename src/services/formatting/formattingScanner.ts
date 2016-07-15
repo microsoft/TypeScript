@@ -26,7 +26,8 @@ namespace ts.formatting {
         RescanGreaterThanToken,
         RescanSlashToken,
         RescanTemplateToken,
-        RescanJsxIdentifier
+        RescanJsxIdentifier,
+        RescanJsxText,
     }
 
     export function getFormattingScanner(sourceFile: SourceFile, startPos: number, endPos: number): FormattingScanner {
@@ -140,6 +141,10 @@ namespace ts.formatting {
             return false;
         }
 
+        function shouldRescanJsxText(node: Node): boolean {
+            return node && node.kind === SyntaxKind.JsxText;
+        }
+
         function shouldRescanSlashToken(container: Node): boolean {
             return container.kind === SyntaxKind.RegularExpressionLiteral;
         }
@@ -176,6 +181,8 @@ namespace ts.formatting {
                         ? ScanAction.RescanTemplateToken
                         : shouldRescanJsxIdentifier(n)
                             ? ScanAction.RescanJsxIdentifier
+                            : shouldRescanJsxText(n)
+                            ? ScanAction.RescanJsxText
                             : ScanAction.Scan;
 
             if (lastTokenInfo && expectedScanAction === lastScanAction) {
@@ -214,6 +221,10 @@ namespace ts.formatting {
             else if (expectedScanAction === ScanAction.RescanJsxIdentifier && currentToken === SyntaxKind.Identifier) {
                 currentToken = scanner.scanJsxIdentifier();
                 lastScanAction = ScanAction.RescanJsxIdentifier;
+            }
+            else if (expectedScanAction === ScanAction.RescanJsxText) {
+                currentToken = scanner.reScanJsxToken();
+                lastScanAction = ScanAction.RescanJsxText;
             }
             else {
                 lastScanAction = ScanAction.Scan;

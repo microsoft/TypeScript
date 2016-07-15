@@ -180,9 +180,10 @@ namespace ts {
     ];
     let jsDocCompletionEntries: CompletionEntry[];
 
-    function createNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
-        const node = new NodeObject(kind, pos, end);
-        node.flags = flags;
+    function createNode(kind: SyntaxKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject | IdentifierObject {
+        const node = kind >= SyntaxKind.FirstNode ? new NodeObject(kind, pos, end) :
+            kind === SyntaxKind.Identifier ? new IdentifierObject(kind, pos, end) :
+                new TokenObject(kind, pos, end);
         node.parent = parent;
         return node;
     }
@@ -197,11 +198,11 @@ namespace ts {
         private _children: Node[];
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
-            this.kind = kind;
             this.pos = pos;
             this.end = end;
             this.flags = NodeFlags.None;
             this.parent = undefined;
+            this.kind = kind;
         }
 
         public getSourceFile(): SourceFile {
@@ -246,7 +247,7 @@ namespace ts {
                 const token = useJSDocScanner ? scanner.scanJSDocToken() : scanner.scan();
                 const textPos = scanner.getTextPos();
                 if (textPos <= end) {
-                    nodes.push(createNode(token, pos, textPos, 0, this));
+                    nodes.push(createNode(token, pos, textPos, this));
                 }
                 pos = textPos;
             }
@@ -254,7 +255,7 @@ namespace ts {
         }
 
         private createSyntaxList(nodes: NodeArray<Node>): Node {
-            const list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, 0, this);
+            const list = <NodeObject>createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, this);
             list._children = [];
             let pos = nodes.pos;
 
@@ -344,6 +345,95 @@ namespace ts {
             return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
         }
     }
+
+    class TokenOrIdentifierObject implements Token {
+        public kind: SyntaxKind;
+        public pos: number;
+        public end: number;
+        public flags: NodeFlags;
+        public parent: Node;
+        public jsDocComments: JSDocComment[];
+        public __tokenTag: any;
+
+        constructor(pos: number, end: number) {
+            // Set properties in same order as NodeObject
+            this.pos = pos;
+            this.end = end;
+            this.flags = NodeFlags.None;
+            this.parent = undefined;
+        }
+
+        public getSourceFile(): SourceFile {
+            return getSourceFileOfNode(this);
+        }
+
+        public getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number {
+            return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
+        }
+
+        public getFullStart(): number {
+            return this.pos;
+        }
+
+        public getEnd(): number {
+            return this.end;
+        }
+
+        public getWidth(sourceFile?: SourceFile): number {
+            return this.getEnd() - this.getStart(sourceFile);
+        }
+
+        public getFullWidth(): number {
+            return this.end - this.pos;
+        }
+
+        public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
+            return this.getStart(sourceFile) - this.pos;
+        }
+
+        public getFullText(sourceFile?: SourceFile): string {
+            return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
+        }
+
+        public getText(sourceFile?: SourceFile): string {
+            return (sourceFile || this.getSourceFile()).text.substring(this.getStart(), this.getEnd());
+        }
+
+        public getChildCount(sourceFile?: SourceFile): number {
+            return 0;
+        }
+
+        public getChildAt(index: number, sourceFile?: SourceFile): Node {
+            return undefined;
+        }
+
+        public getChildren(sourceFile?: SourceFile): Node[] {
+            return emptyArray;
+        }
+
+        public getFirstToken(sourceFile?: SourceFile): Node {
+            return undefined;
+        }
+
+        public getLastToken(sourceFile?: SourceFile): Node {
+            return undefined;
+        }
+    }
+
+    class TokenObject extends TokenOrIdentifierObject {
+        public kind: SyntaxKind;
+        constructor(kind: SyntaxKind, pos: number, end: number) {
+            super(pos, end);
+            this.kind = kind;
+        }
+    }
+
+    class IdentifierObject extends TokenOrIdentifierObject {
+        constructor(kind: SyntaxKind, pos: number, end: number) {
+            super(pos, end);
+        }
+    }
+    IdentifierObject.prototype.kind = SyntaxKind.Identifier;
 
     class SymbolObject implements Symbol {
         flags: SymbolFlags;
@@ -8863,6 +8953,8 @@ namespace ts {
     function initializeServices() {
         objectAllocator = {
             getNodeConstructor: () => NodeObject,
+            getTokenConstructor: () => TokenObject,
+            getIdentifierConstructor: () => IdentifierObject,
             getSourceFileConstructor: () => SourceFileObject,
             getSymbolConstructor: () => SymbolObject,
             getTypeConstructor: () => TypeObject,

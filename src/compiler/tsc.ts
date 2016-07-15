@@ -6,9 +6,19 @@ namespace ts {
         fileWatcher?: FileWatcher;
     }
 
-    let reportDiagnostic = reportDiagnosticSimply;
+    const defaultFormatDiagnosticsHost: FormatDiagnosticsHost = {
+        getCurrentDirectory: () => sys.getCurrentDirectory(),
+        getNewLine: () => sys.newLine,
+        getCanonicalFileName: createGetCanonicalFileName(sys.useCaseSensitiveFileNames)
+    };
 
-    function reportDiagnostics(diagnostics: Diagnostic[], host: CompilerHost): void {
+    let reportDiagnosticWorker = reportDiagnosticSimply;
+
+    function reportDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost) {
+        reportDiagnosticWorker(diagnostic, host || defaultFormatDiagnosticsHost);
+    }
+
+    function reportDiagnostics(diagnostics: Diagnostic[], host: FormatDiagnosticsHost): void {
         for (const diagnostic of diagnostics) {
             reportDiagnostic(diagnostic, host);
         }
@@ -101,28 +111,8 @@ namespace ts {
         return <string>diagnostic.messageText;
     }
 
-    function getRelativeFileName(fileName: string, host: CompilerHost): string {
-        return host ? convertToRelativePath(fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : fileName;
-    }
-
-    function reportDiagnosticSimply(diagnostic: Diagnostic, host: CompilerHost): void {
-        let output = "";
-
-        if (diagnostic.file) {
-            const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-            const relativeFileName = getRelativeFileName(diagnostic.file.fileName, host);
-            output += `${ relativeFileName }(${ line + 1 },${ character + 1 }): `;
-        }
-
-        const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        if (typeof diagnostic.category === "string") {
-            output += `${ category } ${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
-        }
-        else {
-            output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
-        }
-
-        sys.write(output);
+    function reportDiagnosticSimply(diagnostic: Diagnostic, host: FormatDiagnosticsHost): void {
+        sys.write(ts.formatDiagnostics([diagnostic], host));
     }
 
     const redForegroundEscapeSequence = "\u001b[91m";
@@ -142,7 +132,7 @@ namespace ts {
         return formatStyle + text + resetEscapeSequence;
     }
 
-    function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic, host: CompilerHost): void {
+    function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic, host: FormatDiagnosticsHost): void {
         let output = "";
 
         if (diagnostic.file) {
@@ -150,7 +140,7 @@ namespace ts {
             const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
             const { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
             const lastLineInFile = getLineAndCharacterOfPosition(file, file.text.length).line;
-            const relativeFileName = getRelativeFileName(file.fileName, host);
+            const relativeFileName = host ? convertToRelativePath(file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : file.fileName;
 
             const hasMoreThanFiveLines = (lastLine - firstLine) >= 4;
             let gutterWidth = (lastLine + 1 + "").length;
@@ -277,7 +267,7 @@ namespace ts {
 
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"), /* compilerHost */ undefined);
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"), /* host */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
@@ -308,11 +298,11 @@ namespace ts {
 
         if (commandLine.options.project) {
             if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"), /* compilerHost */ undefined);
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"), /* host */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (commandLine.fileNames.length !== 0) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line), /* compilerHost */ undefined);
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line), /* host */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
 
@@ -320,14 +310,14 @@ namespace ts {
             if (!fileOrDirectory /* current directory "." */ || sys.directoryExists(fileOrDirectory)) {
                 configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
                 if (!sys.fileExists(configFileName)) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project), /* compilerHost */ undefined);
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project), /* host */ undefined);
                     return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 }
             }
             else {
                 configFileName = fileOrDirectory;
                 if (!sys.fileExists(configFileName)) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, commandLine.options.project), /* compilerHost */ undefined);
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, commandLine.options.project), /* host */ undefined);
                     return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 }
             }
@@ -345,7 +335,7 @@ namespace ts {
 
         if (isWatchSet(commandLine.options)) {
             if (!sys.watchFile) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* compilerHost */ undefined);
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (configFileName) {
@@ -398,7 +388,7 @@ namespace ts {
             }
             if (isWatchSet(configParseResult.options)) {
                 if (!sys.watchFile) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* compilerHost */ undefined);
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
                     sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 }
 
@@ -437,7 +427,7 @@ namespace ts {
             }
 
             if (compilerOptions.pretty) {
-                reportDiagnostic = reportDiagnosticWithColorAndContext;
+                reportDiagnosticWorker = reportDiagnosticWithColorAndContext;
             }
 
             // reset the cache of existing files
@@ -679,7 +669,7 @@ namespace ts {
         // Build up the list of examples.
         const padding = makePadding(marginLength);
         output += getDiagnosticText(Diagnostics.Examples_Colon_0, makePadding(marginLength - examplesLength) + "tsc hello.ts") + sys.newLine;
-        output += padding + "tsc --out file.js file.ts" + sys.newLine;
+        output += padding + "tsc --outFile file.js file.ts" + sys.newLine;
         output += padding + "tsc @args.txt" + sys.newLine;
         output += sys.newLine;
 
@@ -779,7 +769,7 @@ namespace ts {
         const currentDirectory = sys.getCurrentDirectory();
         const file = normalizePath(combinePaths(currentDirectory, "tsconfig.json"));
         if (sys.fileExists(file)) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file), /* compilerHost */ undefined);
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file), /* host */ undefined);
         }
         else {
             const compilerOptions = extend(options, defaultInitCompilerOptions);
@@ -799,7 +789,7 @@ namespace ts {
             }
 
             sys.writeFile(file, JSON.stringify(configurations, undefined, 4));
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file), /* compilerHost */ undefined);
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file), /* host */ undefined);
         }
 
         return;
