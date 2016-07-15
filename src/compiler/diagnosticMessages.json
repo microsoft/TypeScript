@@ -2800,11 +2800,11 @@
         "category": "Error",
         "code": 6133
     },
-    "Report Errors on Unused Locals.": {
+    "Report errors on unused locals.": {
         "category": "Message",
         "code": 6134
     },
-    "Report Errors on Unused Parameters.": {
+    "Report errors on unused parameters.": {
         "category": "Message",
         "code": 6135
     },
