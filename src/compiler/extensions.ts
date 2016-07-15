@@ -329,49 +329,50 @@ namespace ts {
             });
             const successfulExtensionLoadResults = filter(extensionLoadResults, res => !res.error);
             const preparedExtensionObjects = map(successfulExtensionLoadResults, res => {
-                if (res.result) {
-                    return reduceProperties(res.result, (aggregate: Extension[], potentialExtension: BaseProviderStatic, key: string) => {
-                        if (!potentialExtension) {
-                            return; // Avoid errors on explicitly exported null/undefined (why would someone do that, though?)
-                        }
-                        const annotatedKind = potentialExtension["extension-kind"];
-                        if (typeof annotatedKind === "string") {
-                            const ext: ExtensionBase = {
-                                name: key !== "default" ? `${res.name}[${key}]` : res.name,
-                                args: extensionNames === extOptions ? undefined : (extOptions as Map<any>)[res.name],
-                                kind: annotatedKind,
-                            };
-                            switch (ext.kind) {
-                                case ExtensionKind.SemanticLint:
-                                case ExtensionKind.SyntacticLint:
-                                case ExtensionKind.LanguageService:
-                                    if (typeof potentialExtension !== "function") {
-                                        diagnostics.push(createCompilerDiagnostic(
-                                            Diagnostics.Extension_0_exported_member_1_has_extension_kind_2_but_was_type_3_when_type_4_was_expected,
-                                            res.name,
-                                            key,
-                                            (ts as any).ExtensionKind[annotatedKind],
-                                            typeof potentialExtension,
-                                            "function"
-                                        ));
-                                        return;
-                                    }
-                                    (ext as (SemanticLintExtension | SyntacticLintExtension | LanguageServiceExtension)).ctor = potentialExtension as (SemanticLintProviderStatic | SyntacticLintProviderStatic | LanguageServiceProviderStatic);
-                                    break;
-                                default:
-                                    // Include a default case which just puts the extension unchecked onto the base extension
-                                    // This can allow language service extensions to query for custom extension kinds
-                                    (ext as any).__extension =  potentialExtension;
-                                    break;
-                            }
-                            aggregate.push(ext as Extension);
-                        }
-                        return aggregate;
-                    }, []);
-                }
-                else {
+                if (!res.result) {
                     return [];
                 }
+                const aggregate: Extension[] = [];
+                forEachKey(res.result, key => {
+                    const potentialExtension = res.result[key] as BaseProviderStatic;
+                    if (!potentialExtension) {
+                        return; // Avoid errors on explicitly exported null/undefined (why would someone do that, though?)
+                    }
+                    const annotatedKind = potentialExtension["extension-kind"];
+                    if (typeof annotatedKind !== "string") {
+                        return;
+                    }
+                    const ext: ExtensionBase = {
+                        name: key !== "default" ? `${res.name}[${key}]` : res.name,
+                        args: extensionNames === extOptions ? undefined : (extOptions as Map<any>)[res.name],
+                        kind: annotatedKind,
+                    };
+                    switch (ext.kind) {
+                        case ExtensionKind.SemanticLint:
+                        case ExtensionKind.SyntacticLint:
+                        case ExtensionKind.LanguageService:
+                            if (typeof potentialExtension !== "function") {
+                                diagnostics.push(createCompilerDiagnostic(
+                                    Diagnostics.Extension_0_exported_member_1_has_extension_kind_2_but_was_type_3_when_type_4_was_expected,
+                                    res.name,
+                                    key,
+                                    (ts as any).ExtensionKind[annotatedKind],
+                                    typeof potentialExtension,
+                                    "function"
+                                ));
+                                return;
+                            }
+                            (ext as (SemanticLintExtension | SyntacticLintExtension | LanguageServiceExtension)).ctor = potentialExtension as (SemanticLintProviderStatic | SyntacticLintProviderStatic | LanguageServiceProviderStatic);
+                            break;
+                        default:
+                            // Include a default case which just puts the extension unchecked onto the base extension
+                            // This can allow language service extensions to query for custom extension kinds
+                            (ext as any).__extension =  potentialExtension;
+                            break;
+                    }
+                    aggregate.push(ext as Extension);
+                });
+                return aggregate;
             });
             return groupBy(flatten(preparedExtensionObjects), elem => elem.kind) || {};
         }
