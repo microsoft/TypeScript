@@ -1210,7 +1210,7 @@ namespace Harness {
         }
 
         export function minimalDiagnosticsToString(diagnostics: ts.Diagnostic[]) {
-            return ts.formatDiagnostics(diagnostics, {getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => Harness.IO.newLine()});
+            return ts.formatDiagnostics(diagnostics, { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => Harness.IO.newLine() });
         }
 
         export function getErrorBaseline(inputFiles: TestFile[], diagnostics: ts.Diagnostic[]) {
