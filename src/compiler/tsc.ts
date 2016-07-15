@@ -591,14 +591,15 @@ namespace ts {
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
         }
 
-        const perfTotals = reduceProperties(perfTraces, (aggregate, value, key) => {
-            if (!value.globalBucket) return aggregate;
-            if (typeof aggregate[value.globalBucket] !== "number") {
-                aggregate[value.globalBucket] = 0;
+        const perfTotals: Map<number> = {};
+        for (const key of getKeys(perfTraces)) {
+            const value = perfTraces[key];
+            if (!value) continue;
+            if (typeof perfTotals[value.globalBucket] !== "number") {
+                perfTotals[value.globalBucket] = 0;
             }
-            aggregate[value.globalBucket] += value.length;
-            return aggregate;
-        }, {} as {[index: string]: number});
+            perfTotals[value.globalBucket] += value.length;
+        }
         forEachKey(perfTotals, (key) => {
             reportTimeStatistic(`'${key}' time`, perfTotals[key]);
         });
@@ -612,14 +613,14 @@ namespace ts {
             diagnostics = program.getSyntacticDiagnostics();
 
             // Count warnings and ignore them for determining continued error reporting
-            const warningsCount = filter(diagnostics, d => d.category === DiagnosticCategory.Warning).length;
+            const warningsCount = countWhere(diagnostics, d => d.category === DiagnosticCategory.Warning);
 
             // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
             if (diagnostics.length === warningsCount) {
                 diagnostics = diagnostics.concat(program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics()));
 
-                const warningsCount = filter(diagnostics, d => d.category === DiagnosticCategory.Warning).length;
+                const warningsCount = countWhere(diagnostics, d => d.category === DiagnosticCategory.Warning);
 
                 if (diagnostics.length === warningsCount) {
                     diagnostics = diagnostics.concat(program.getSemanticDiagnostics());
