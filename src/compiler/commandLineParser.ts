@@ -133,6 +133,16 @@ namespace ts {
             description: Diagnostics.Raise_error_on_this_expressions_with_an_implied_any_type,
         },
         {
+            name: "noUnusedLocals",
+            type: "boolean",
+            description: Diagnostics.Report_errors_on_unused_locals,
+        },
+        {
+            name: "noUnusedParameters",
+            type: "boolean",
+            description: Diagnostics.Report_errors_on_unused_parameters,
+        },
+        {
             name: "noLib",
             type: "boolean",
         },
@@ -327,16 +337,6 @@ namespace ts {
             }
         },
         {
-            name: "typesSearchPaths",
-            type: "list",
-            isTSConfigOnly: true,
-            element: {
-                name: "typesSearchPaths",
-                type: "string",
-                isFilePath: true
-            }
-        },
-        {
             name: "typeRoots",
             type: "list",
             element: {
@@ -373,6 +373,11 @@ namespace ts {
             name: "noImplicitUseStrict",
             type: "boolean",
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
+        },
+        {
+            name: "maxNodeModuleJsDepth",
+            type: "number",
+            description: Diagnostics.The_maximum_dependency_depth_to_search_under_node_modules_and_load_JavaScript_files
         },
         {
             name: "listEmittedFiles",
@@ -413,7 +418,7 @@ namespace ts {
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
         },
         {
-            name: "disableProjectSizeLimit",
+            name: "disableSizeLimit",
             type: "boolean"
         },
         {
@@ -887,6 +892,21 @@ namespace ts {
     const invalidMultipleRecursionPatterns = /(^|\/)\*\*\/(.*\/)?\*\*($|\/)/;
 
     /**
+     * Tests for a path where .. appears after a recursive directory wildcard.
+     * Matches **\..\*, **\a\..\*, and **\.., but not ..\**\*
+     *
+     * NOTE: used \ in place of / above to avoid issues with multiline comments.
+     *
+     * Breakdown:
+     *  (^|\/)      # matches either the beginning of the string or a directory separator.
+     *  \*\*\/      # matches a recursive directory wildcard "**" followed by a directory separator.
+     *  (.*\/)?     # optionally matches any number of characters followed by a directory separator.
+     *  \.\.        # matches a parent directory path component ".."
+     *  ($|\/)      # matches either the end of the string or a directory separator.
+     */
+    const invalidDotDotAfterRecursiveWildcardPattern = /(^|\/)\*\*\/(.*\/)?\.\.($|\/)/;
+
+    /**
      * Tests for a path containing a wildcard character in a directory component of the path.
      * Matches \*\, \?\, and \a*b\, but not \a\ or \a\*.
      *
@@ -1018,6 +1038,9 @@ namespace ts {
             else if (invalidMultipleRecursionPatterns.test(spec)) {
                 errors.push(createCompilerDiagnostic(Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, spec));
             }
+            else if (invalidDotDotAfterRecursiveWildcardPattern.test(spec)) {
+                errors.push(createCompilerDiagnostic(Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec));
+            }
             else {
                 validSpecs.push(spec);
             }
@@ -1047,7 +1070,7 @@ namespace ts {
         if (include !== undefined) {
             const recursiveKeys: string[] = [];
             for (const file of include) {
-                const name = combinePaths(path, file);
+                const name = normalizePath(combinePaths(path, file));
                 if (excludeRegex && excludeRegex.test(name)) {
                     continue;
                 }

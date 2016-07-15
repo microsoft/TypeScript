@@ -10,7 +10,7 @@ namespace ts.formatting {
 
         export function getIndentation(position: number, sourceFile: SourceFile, options: EditorOptions): number {
             if (position > sourceFile.text.length) {
-                return 0; // past EOF
+                return getBaseIndentation(options); // past EOF
             }
 
             // no indentation when the indent style is set to none,
@@ -21,7 +21,7 @@ namespace ts.formatting {
 
             const precedingToken = findPrecedingToken(position, sourceFile);
             if (!precedingToken) {
-                return 0;
+                return getBaseIndentation(options);
             }
 
             // no indentation in string \regex\template literals
@@ -42,7 +42,7 @@ namespace ts.formatting {
                 let current = position;
                 while (current > 0) {
                     const char = sourceFile.text.charCodeAt(current);
-                    if (!isWhiteSpace(char) && !isLineBreak(char)) {
+                    if (!isWhiteSpace(char)) {
                         break;
                     }
                     current--;
@@ -96,11 +96,15 @@ namespace ts.formatting {
             }
 
             if (!current) {
-                // no parent was found - return 0 to be indented on the level of SourceFile
-                return 0;
+                // no parent was found - return the base indentation of the SourceFile
+                return getBaseIndentation(options);
             }
 
             return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
+        }
+
+        export function getBaseIndentation(options: EditorOptions) {
+            return options.BaseIndentSize || 0;
         }
 
         export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: FormatCodeOptions): number {
@@ -162,7 +166,7 @@ namespace ts.formatting {
                 parent = current.parent;
             }
 
-            return indentationDelta;
+            return indentationDelta + getBaseIndentation(options);
         }
 
 
@@ -402,7 +406,7 @@ namespace ts.formatting {
             let column = 0;
             for (let pos = startPos; pos < endPos; pos++) {
                 const ch = sourceFile.text.charCodeAt(pos);
-                if (!isWhiteSpace(ch)) {
+                if (!isWhiteSpaceSingleLine(ch)) {
                     break;
                 }
 
@@ -462,7 +466,10 @@ namespace ts.formatting {
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.AwaitExpression:
+                case SyntaxKind.NamedExports:
                 case SyntaxKind.NamedImports:
+                case SyntaxKind.ExportSpecifier:
+                case SyntaxKind.ImportSpecifier:
                     return true;
             }
             return false;
@@ -486,6 +493,11 @@ namespace ts.formatting {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     return childKind !== SyntaxKind.Block;
+                case SyntaxKind.ExportDeclaration:
+                    return childKind !== SyntaxKind.NamedExports;
+                case SyntaxKind.ImportDeclaration:
+                    return childKind !== SyntaxKind.ImportClause ||
+                        ((<ImportClause>child).namedBindings && (<ImportClause>child).namedBindings.kind !== SyntaxKind.NamedImports);
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
             }

@@ -10,3 +10,11 @@ sudo: false
 cache:
   directories:
     - node_modules
+
+os:
+  - linux
+  - osx
+
+matrix:
+  fast_finish: true
+

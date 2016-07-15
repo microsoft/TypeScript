@@ -899,10 +899,19 @@ namespace ts {
         return true;
     }
 
+    /* @internal */
+    export function startsWith(str: string, prefix: string): boolean {
+        return str.lastIndexOf(prefix, 0) === 0;
+    }
+
+    /* @internal */
+    export function endsWith(str: string, suffix: string): boolean {
+        const expectedPos = str.length - suffix.length;
+        return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
+    }
+
     export function fileExtensionIs(path: string, extension: string): boolean {
-        const pathLen = path.length;
-        const extLen = extension.length;
-        return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
+        return path.length > extension.length && endsWith(path, extension);
     }
 
     export function fileExtensionIsAny(path: string, extensions: string[]): boolean {
@@ -914,7 +923,6 @@ namespace ts {
 
         return false;
     }
-
 
     // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
     // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
@@ -1072,15 +1080,17 @@ namespace ts {
             // Storage for literal base paths amongst the include patterns.
             const includeBasePaths: string[] = [];
             for (const include of includes) {
-                if (isRootedDiskPath(include)) {
-                    const wildcardOffset = indexOfAnyCharCode(include, wildcardCharCodes);
-                    const includeBasePath = wildcardOffset < 0
-                        ? removeTrailingDirectorySeparator(getDirectoryPath(include))
-                        : include.substring(0, include.lastIndexOf(directorySeparator, wildcardOffset));
+                // We also need to check the relative paths by converting them to absolute and normalizing
+                // in case they escape the base path (e.g "..\somedirectory")
+                const absolute: string = isRootedDiskPath(include) ? include : normalizePath(combinePaths(path, include));
 
-                    // Append the literal and canonical candidate base paths.
-                    includeBasePaths.push(includeBasePath);
-                }
+                const wildcardOffset = indexOfAnyCharCode(absolute, wildcardCharCodes);
+                const includeBasePath = wildcardOffset < 0
+                    ? removeTrailingDirectorySeparator(getDirectoryPath(absolute))
+                    : absolute.substring(0, absolute.lastIndexOf(directorySeparator, wildcardOffset));
+
+                // Append the literal and canonical candidate base paths.
+                includeBasePaths.push(includeBasePath);
             }
 
             // Sort the offsets array using either the literal or canonical path representations.
@@ -1229,26 +1239,28 @@ namespace ts {
 
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
+        getTokenConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Token;
+        getIdentifierConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Token;
         getSourceFileConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => SourceFile;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
     }
 
-    function Symbol(flags: SymbolFlags, name: string) {
+    function Symbol(this: Symbol, flags: SymbolFlags, name: string) {
         this.flags = flags;
         this.name = name;
         this.declarations = undefined;
     }
 
-    function Type(checker: TypeChecker, flags: TypeFlags) {
+    function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
     }
 
     function Signature(checker: TypeChecker) {
     }
 
-    function Node(kind: SyntaxKind, pos: number, end: number) {
+    function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
         this.kind = kind;
         this.pos = pos;
         this.end = end;
@@ -1258,6 +1270,8 @@ namespace ts {
 
     export let objectAllocator: ObjectAllocator = {
         getNodeConstructor: () => <any>Node,
+        getTokenConstructor: () => <any>Node,
+        getIdentifierConstructor: () => <any>Node,
         getSourceFileConstructor: () => <any>Node,
         getSymbolConstructor: () => <any>Symbol,
         getTypeConstructor: () => <any>Type,

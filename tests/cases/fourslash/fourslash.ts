@@ -68,6 +68,7 @@ declare namespace FourSlashInterface {
         data?: any;
     }
     interface EditorOptions {
+        BaseIndentSize?: number,
         IndentSize: number;
         TabSize: number;
         NewLineCharacter: string;
@@ -84,7 +85,7 @@ declare namespace FourSlashInterface {
         InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-        [s: string]: boolean | number | string;
+        [s: string]: boolean | number | string | undefined;
     }
     interface Range {
         fileName: string;
@@ -100,6 +101,7 @@ declare namespace FourSlashInterface {
         markers(): Marker[];
         marker(name?: string): Marker;
         ranges(): Range[];
+        rangesByText(): { [text: string]: Range[] };
         markerByName(s: string): Marker;
     }
     class goTo {
@@ -134,13 +136,13 @@ declare namespace FourSlashInterface {
         typeDefinitionCountIs(expectedCount: number): void;
         definitionLocationExists(): void;
         verifyDefinitionsName(name: string, containerName: string): void;
-        isValidBraceCompletionAtPostion(openingBrace?: string): void;
+        isValidBraceCompletionAtPosition(openingBrace?: string): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
         indentationIs(numberOfSpaces: number): void;
-        indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle): void;
+        indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle, baseIndentSize?: number): void;
         textAtCaretIs(text: string): void;
         /**
          * Compiles the current file and evaluates 'expr' in a context containing
@@ -152,7 +154,6 @@ declare namespace FourSlashInterface {
         currentFileContentIs(text: string): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
-        referencesCountIs(count: number): void;
         /**
          * Asserts that the given ranges are the references from the current position.
          * If ranges have markers, those markers may have "isDefinition" and "isWriteAccess" data
@@ -170,6 +171,7 @@ declare namespace FourSlashInterface {
          * If `ranges` is omitted, this is `test.ranges()`.
          */
         rangesReferenceEachOther(ranges?: Range[]): void;
+        rangesWithSameTextReferenceEachOther(): void;
         currentParameterHelpArgumentNameIs(name: string): void;
         currentParameterSpanIs(parameter: string): void;
         currentParameterHelpArgumentDocCommentIs(docComment: string): void;
@@ -216,7 +218,7 @@ declare namespace FourSlashInterface {
         }[]): void;
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string): void;
         renameInfoFailed(message?: string): void;
-        renameLocations(findInStrings: boolean, findInComments: boolean): void;
+        renameLocations(findInStrings: boolean, findInComments: boolean, ranges?: Range[]): void;
         verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: {
             start: number;
             length: number;
