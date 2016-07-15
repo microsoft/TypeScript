@@ -91,6 +91,25 @@ namespace ts {
         return undefined;
     }
 
+    /**
+     * Iterates through 'array' by index and performs the callback on each element of array until the callback
+     * returns a truthy value, then returns that value.
+     * If no such value is found, the callback is applied to each element of array and undefined is returned.
+     */
+    export function forEachUnique<T, U>(array: T[], callback: (element: T, index: number) => U): U {
+        if (array) {
+            for (let i = 0, len = array.length; i < len; i++) {
+                if (indexOf(array, array[i]) === i) {
+                    const result = callback(array[i], i);
+                    if (result) {
+                        return result;
+                    }
+                }
+            }
+        }
+        return undefined;
+    }
+
     export function contains<T>(array: T[], value: T, areEqual?: (a: T, b: T) => boolean): boolean {
         if (array) {
             for (const v of array) {

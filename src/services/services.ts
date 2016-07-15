@@ -486,52 +486,13 @@ namespace ts {
             const paramTag = "@param";
             const jsDocCommentParts: SymbolDisplayPart[] = [];
 
-            ts.forEach(declarations, (declaration, indexOfDeclaration) => {
-                // Make sure we are collecting doc comment from declaration once,
-                // In case of union property there might be same declaration multiple times
-                // which only varies in type parameter
-                // Eg. const a: Array<string> | Array<number>; a.length
-                // The property length will have two declarations of property length coming
-                // from Array<T> - Array<string> and Array<number>
-                if (indexOf(declarations, declaration) === indexOfDeclaration) {
-                    const sourceFileOfDeclaration = getSourceFileOfNode(declaration);
-                    // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
-                    if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
-                        if ((declaration.parent.kind === SyntaxKind.FunctionExpression || declaration.parent.kind === SyntaxKind.ArrowFunction) &&
-                            declaration.parent.parent.kind === SyntaxKind.VariableDeclaration) {
-                            addCommentParts(declaration.parent.parent.parent, sourceFileOfDeclaration, getCleanedParamJsDocComment);
-                        }
-                        addCommentParts(declaration.parent, sourceFileOfDeclaration, getCleanedParamJsDocComment);
-                    }
-
-                    // If this is left side of dotted module declaration, there is no doc comments associated with this node
-                    if (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).body && (<ModuleDeclaration>declaration).body.kind === SyntaxKind.ModuleDeclaration) {
-                        return;
-                    }
-
-                    if ((declaration.kind === SyntaxKind.FunctionExpression || declaration.kind === SyntaxKind.ArrowFunction) &&
-                        declaration.parent.kind === SyntaxKind.VariableDeclaration) {
-                        addCommentParts(declaration.parent.parent, sourceFileOfDeclaration, getCleanedJsDocComment);
-                    }
-
-                    // If this is dotted module name, get the doc comments from the parent
-                    while (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.parent.kind === SyntaxKind.ModuleDeclaration) {
-                        declaration = <ModuleDeclaration>declaration.parent;
-                    }
-                    addCommentParts(declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration,
-                                    sourceFileOfDeclaration,
-                                    getCleanedJsDocComment);
-
-                    if (declaration.kind === SyntaxKind.VariableDeclaration) {
-                        const init = (declaration as VariableDeclaration).initializer;
-                        if (init && (init.kind === SyntaxKind.FunctionExpression || init.kind === SyntaxKind.ArrowFunction)) {
-                            // Get the cleaned js doc comment text from the initializer
-                            addCommentParts(init, sourceFileOfDeclaration, getCleanedJsDocComment);
-                        }
-                    }
-                }
-            });
-
+            // Only collect doc comments from duplicate declarations once:
+            // In case of a union property there might be same declaration multiple times
+            // which only varies in type parameter
+            // Eg. const a: Array<string> | Array<number>; a.length
+            // The property length will have two declarations of property length coming
+            // from Array<T> - Array<string> and Array<number>
+            ts.forEachUnique(declarations, getJsDocCommentsForSingleDeclaration);
             return jsDocCommentParts;
 
             function addCommentParts(commented: Node,
@@ -545,6 +506,49 @@ namespace ts {
                         addRange(jsDocCommentParts, cleanedComment);
                     }
                 });
+            }
+
+            function getJsDocCommentsForSingleDeclaration(declaration: Declaration) {
+                const sourceFileOfDeclaration = getSourceFileOfNode(declaration);
+                const comments = getJSDocComments(declaration, /*checkParentVariableStatement*/ true);
+                addRange(jsDocCommentParts, map(comments, c => textPart(c.comment)));
+                return;
+                /*
+                // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
+                if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
+                    if ((declaration.parent.kind === SyntaxKind.FunctionExpression || declaration.parent.kind === SyntaxKind.ArrowFunction) &&
+                        declaration.parent.parent.kind === SyntaxKind.VariableDeclaration) {
+                        addCommentParts(declaration.parent.parent.parent, sourceFileOfDeclaration, getCleanedParamJsDocComment);
+                    }
+                    addCommentParts(declaration.parent, sourceFileOfDeclaration, getCleanedParamJsDocComment);
+                }
+
+                // If this is left side of dotted module declaration, there is no doc comments associated with this node
+                if (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).body && (<ModuleDeclaration>declaration).body.kind === SyntaxKind.ModuleDeclaration) {
+                    return;
+                }
+
+                if ((declaration.kind === SyntaxKind.FunctionExpression || declaration.kind === SyntaxKind.ArrowFunction) &&
+                    declaration.parent.kind === SyntaxKind.VariableDeclaration) {
+                    addCommentParts(declaration.parent.parent, sourceFileOfDeclaration, getCleanedJsDocComment);
+                }
+
+                // If this is dotted module name, get the doc comments from the parent
+                while (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.parent.kind === SyntaxKind.ModuleDeclaration) {
+                    declaration = <ModuleDeclaration>declaration.parent;
+                }
+                addCommentParts(declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration,
+                                sourceFileOfDeclaration,
+                                getCleanedJsDocComment);
+
+                if (declaration.kind === SyntaxKind.VariableDeclaration) {
+                    const init = (declaration as VariableDeclaration).initializer;
+                    if (init && (init.kind === SyntaxKind.FunctionExpression || init.kind === SyntaxKind.ArrowFunction)) {
+                        // Get the cleaned js doc comment text from the initializer
+                        addCommentParts(init, sourceFileOfDeclaration, getCleanedJsDocComment);
+                    }
+                }
+                */
             }
 
             function getJsDocCommentTextRange(node: Node, sourceFile: SourceFile): TextRange[] {

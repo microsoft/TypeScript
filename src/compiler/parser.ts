@@ -6107,12 +6107,14 @@ namespace ts {
                 start = start || 0;
                 const end = length === undefined ? content.length : start + length;
                 length = end - start;
+                const triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, sourceFile.languageVariant, sourceFile.text);
 
                 Debug.assert(start >= 0);
                 Debug.assert(start <= end);
                 Debug.assert(end <= content.length);
 
                 let tags: NodeArray<JSDocTag>;
+                let comments: string[] = [];
                 let result: JSDocComment;
 
                 // Check for /** (JSDoc opening part)
@@ -6123,7 +6125,7 @@ namespace ts {
 
 
                     // + 3 for leading /**, - 5 in total for /** */
-                    scanner.scanRange(start + 3, length - 5, () => {
+                    triviaScanner.scanRange(start + 3, length - 5, () => {
                         // Initially we can parse out a tag.  We also have seen a starting asterisk.
                         // This is so that /** * @type */ doesn't parse.
                         let canParseTag = true;
@@ -6136,7 +6138,8 @@ namespace ts {
                                     if (canParseTag) {
                                         parseTag();
                                     }
-                                    // This will take us to the end of the line, so it's OK to parse a tag on the next pass through the loop
+                                    // This will take us past the end of the line, so it's OK to parse a tag on the next pass through the loop
+                                    canParseTag = true;
                                     seenAsterisk = false;
                                     break;
 
@@ -6160,12 +6163,20 @@ namespace ts {
                                     // wasn't a tag, we can no longer parse a tag on this line until we hit the next
                                     // line break.
                                     canParseTag = false;
+                                    comments.push(scanner.getTokenText());
                                     break;
 
+                                // case SyntaxKind.Unknown:
                                 case SyntaxKind.EndOfFileToken:
                                     break;
-                            }
 
+                                default:
+                                    comments.push(scanner.getTokenText());
+                                    break;
+                            }
+                            // TODO: 1. skip * (and others? newlines?)
+                            //       3. ugh. what about '('? I think I actually need whitespace and newlines too.
+                            // (1) and (3) will require some massive rewriting of the parsing code here.
                             nextJSDocToken();
                         }
 
@@ -6183,6 +6194,7 @@ namespace ts {
 
                     const result = <JSDocComment>createNode(SyntaxKind.JSDocComment, start);
                     result.tags = tags;
+                    result.comment = comments.join(' ');
                     return finishNode(result, end);
                 }
 
@@ -6203,31 +6215,45 @@ namespace ts {
                         return;
                     }
 
-                    const tag = handleTag(atToken, tagName) || handleUnknownTag(atToken, tagName);
-                    addTag(tag);
-                }
-
-                function handleTag(atToken: Node, tagName: Identifier): JSDocTag {
+                    let tag: JSDocTag;
                     if (tagName) {
                         switch (tagName.text) {
                             case "param":
-                                return handleParamTag(atToken, tagName);
+                                tag = parseParamTag(atToken, tagName);
+                                break;
                             case "return":
                             case "returns":
-                                return handleReturnTag(atToken, tagName);
+                                tag = parseReturnTag(atToken, tagName);
+                                break;
                             case "template":
-                                return handleTemplateTag(atToken, tagName);
+                                tag = handleTemplateTag(atToken, tagName);
+                                break;
                             case "type":
-                                return handleTypeTag(atToken, tagName);
+                                tag = parseTypeTag(atToken, tagName);
+                                break;
                             case "typedef":
-                                return handleTypedefTag(atToken, tagName);
+                                tag = parseTypedefTag(atToken, tagName);
+                                break;
+                            default:
+                                tag = parseUnknownTag(atToken, tagName);
+                                break;
                         }
                     }
-
-                    return undefined;
+                    else {
+                        tag = parseUnknownTag(atToken, tagName);
+                    }
+                    let comments: string[] = [];
+                    // TODO: Parse comments to end of line or something
+                    while (token !== SyntaxKind.NewLineTrivia) {
+                        comments.push(scanner.getTokenText());
+                        nextJSDocToken();
+                    }
+                    tag.comments = comments.join(' ');
+                    comments = [];
+                    addTag(tag);
                 }
 
-                function handleUnknownTag(atToken: Node, tagName: Identifier) {
+                function parseUnknownTag(atToken: Node, tagName: Identifier) {
                     const result = <JSDocTag>createNode(SyntaxKind.JSDocTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
@@ -6255,7 +6281,7 @@ namespace ts {
                     return typeExpression;
                 }
 
-                function handleParamTag(atToken: Node, tagName: Identifier) {
+                function parseParamTag(atToken: Node, tagName: Identifier) {
                     let typeExpression = tryParseTypeExpression();
 
                     skipWhitespace();
@@ -6304,7 +6330,7 @@ namespace ts {
                     return finishNode(result);
                 }
 
-                function handleReturnTag(atToken: Node, tagName: Identifier): JSDocReturnTag {
+                function parseReturnTag(atToken: Node, tagName: Identifier): JSDocReturnTag {
                     if (forEach(tags, t => t.kind === SyntaxKind.JSDocReturnTag)) {
                         parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
                     }
@@ -6316,7 +6342,7 @@ namespace ts {
                     return finishNode(result);
                 }
 
-                function handleTypeTag(atToken: Node, tagName: Identifier): JSDocTypeTag {
+                function parseTypeTag(atToken: Node, tagName: Identifier): JSDocTypeTag {
                     if (forEach(tags, t => t.kind === SyntaxKind.JSDocTypeTag)) {
                         parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
                     }
@@ -6328,7 +6354,7 @@ namespace ts {
                     return finishNode(result);
                 }
 
-                function handlePropertyTag(atToken: Node, tagName: Identifier): JSDocPropertyTag {
+                function parsePropertyTag(atToken: Node, tagName: Identifier): JSDocPropertyTag {
                     const typeExpression = tryParseTypeExpression();
                     skipWhitespace();
                     const name = parseJSDocIdentifierName();
@@ -6345,7 +6371,7 @@ namespace ts {
                     return finishNode(result);
                 }
 
-                function handleTypedefTag(atToken: Node, tagName: Identifier): JSDocTypedefTag {
+                function parseTypedefTag(atToken: Node, tagName: Identifier): JSDocTypedefTag {
                     const typeExpression = tryParseTypeExpression();
                     skipWhitespace();
 
@@ -6433,14 +6459,14 @@ namespace ts {
                                 // already has a @type tag, terminate the parent tag now.
                                 return false;
                             }
-                            parentTag.jsDocTypeTag = handleTypeTag(atToken, tagName);
+                            parentTag.jsDocTypeTag = parseTypeTag(atToken, tagName);
                             return true;
                         case "prop":
                         case "property":
                             if (!parentTag.jsDocPropertyTags) {
                                 parentTag.jsDocPropertyTags = <NodeArray<JSDocPropertyTag>>[];
                             }
-                            const propertyTag = handlePropertyTag(atToken, tagName);
+                            const propertyTag = parsePropertyTag(atToken, tagName);
                             parentTag.jsDocPropertyTags.push(propertyTag);
                             return true;
                     }

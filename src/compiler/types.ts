@@ -1502,12 +1502,14 @@ namespace ts {
     // @kind(SyntaxKind.JSDocComment)
     export interface JSDocComment extends Node {
         tags: NodeArray<JSDocTag>;
+        comment: string | undefined; // TODO: Probably shouldn't admit undefined (and maybe it should be comments: string[] | undefined)
     }
 
     // @kind(SyntaxKind.JSDocTag)
     export interface JSDocTag extends Node {
         atToken: Node;
         tagName: Identifier;
+        comments: string | undefined;
     }
 
     // @kind(SyntaxKind.JSDocTemplateTag)

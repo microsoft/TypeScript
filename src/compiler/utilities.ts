@@ -1385,7 +1385,8 @@ namespace ts {
         }
     }
 
-    function getJSDocComments(node: Node, checkParentVariableStatement: boolean): JSDocComment[] {
+    export function getJSDocComments(node: Node, checkParentVariableStatement: boolean): JSDocComment[] {
+        // TODO: Get rid of getJsDocComments and friends (note the lowercase 's' in Js)
         if (node.jsDocComments) {
             return node.jsDocComments;
         }
