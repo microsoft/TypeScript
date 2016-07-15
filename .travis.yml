@@ -7,6 +7,10 @@ node_js:
 
 sudo: false
 
+install:
+  - npm install
+  - npm update
+
 cache:
   directories:
     - node_modules
