@@ -1,5 +1,16 @@
 /// <reference path="types.ts"/>
 
+namespace ts {
+    export function startsWith(str: string, prefix: string): boolean {
+        return str.lastIndexOf(prefix, 0) === 0;
+    }
+
+    export function endsWith(str: string, suffix: string): boolean {
+        const expectedPos = str.length - suffix.length;
+        return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
+    }
+}
+
 /* @internal */
 namespace ts {
     /**
@@ -917,17 +928,6 @@ namespace ts {
         }
 
         return true;
-    }
-
-    /* @internal */
-    export function startsWith(str: string, prefix: string): boolean {
-        return str.lastIndexOf(prefix, 0) === 0;
-    }
-
-    /* @internal */
-    export function endsWith(str: string, suffix: string): boolean {
-        const expectedPos = str.length - suffix.length;
-        return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     }
 
     export function fileExtensionIs(path: string, extension: string): boolean {
