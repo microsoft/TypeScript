@@ -13007,8 +13007,22 @@ namespace ts {
                 false;
         }
 
+        function hasLiteralContextualType(node: Expression) {
+            const contextualType = getContextualType(node);
+            if (!contextualType) {
+                return false;
+            }
+            if (contextualType.flags & TypeFlags.TypeParameter) {
+                const apparentType = getApparentTypeOfTypeParameter(<TypeParameter>contextualType);
+                if (apparentType.flags & (TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.BooleanLike)) {
+                    return true;
+                }
+            }
+            return isLiteralUnionType(contextualType);
+        }
+
         function isLiteralTypeContext(node: Expression) {
-            return isLiteralTypeLocation(node) || isLiteralUnionType(getContextualType(node) || unknownType);
+            return isLiteralTypeLocation(node) || hasLiteralContextualType(node);
         }
 
         function checkLiteralExpression(node: Expression): Type {
