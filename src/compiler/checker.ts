@@ -4327,7 +4327,7 @@ namespace ts {
             result.containingType = containingType;
             result.declarations = declarations;
             result.isReadonly = isReadonly;
-            result.type = containingType.flags & TypeFlags.Union ? getUnionType(propTypes) : getIntersectionType(propTypes);
+            result.type = containingType.flags & TypeFlags.Union ? getUnionType(propTypes, /*noSubtypeReduction*/ true) : getIntersectionType(propTypes);
             return result;
         }
 
@@ -5148,7 +5148,8 @@ namespace ts {
                 if (type.flags & TypeFlags.Null) typeSet.containsNull = true;
                 if (!(type.flags & TypeFlags.ContainsWideningType)) typeSet.containsNonWideningType = true;
             }
-            else if (type !== neverType && !contains(typeSet, type)) {
+            else if (type !== neverType && !contains(typeSet, type) &&
+                !(type.flags & TypeFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
                 typeSet.push(type);
             }
         }
@@ -5159,6 +5160,15 @@ namespace ts {
             for (const type of types) {
                 addTypeToSet(typeSet, type, typeSetKind);
             }
+        }
+
+        function containsIdenticalType(types: Type[], type: Type) {
+            for (const t of types) {
+                if (isTypeIdenticalTo(t, type)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         function isSubtypeOfAny(candidate: Type, types: Type[]): boolean {
