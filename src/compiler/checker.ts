@@ -14568,11 +14568,11 @@ namespace ts {
                                     !isParameterPropertyDeclaration(parameter) &&
                                     !parameterIsThisKeyword(parameter) &&
                                     !parameterNameStartsWithUnderscore(parameter)) {
-                                    error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
+                                    error(local.valueDeclaration.name, Diagnostics.Property_0_is_declared_but_never_used, local.name);
                                 }
                             }
                             else if (compilerOptions.noUnusedLocals) {
-                                forEach(local.declarations, d => error(d.name || d, Diagnostics._0_is_declared_but_never_used, local.name));
+                                forEach(local.declarations, d => error(d.name || d, Diagnostics.Property_0_is_declared_but_never_used, local.name));
                             }
                         }
                     }
@@ -14594,13 +14594,13 @@ namespace ts {
                     for (const member of node.members) {
                         if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.PropertyDeclaration) {
                             if (!member.symbol.isReferenced && member.flags & NodeFlags.Private) {
-                                error(member.name, Diagnostics._0_is_declared_but_never_used, member.symbol.name);
+                                error(member.name, Diagnostics.Property_0_is_declared_but_never_used, member.symbol.name);
                             }
                         }
                         else if (member.kind === SyntaxKind.Constructor) {
                             for (const parameter of (<ConstructorDeclaration>member).parameters) {
                                 if (!parameter.symbol.isReferenced && parameter.flags & NodeFlags.Private) {
-                                    error(parameter.name, Diagnostics._0_is_declared_but_never_used, parameter.symbol.name);
+                                    error(parameter.name, Diagnostics.Property_0_is_declared_but_never_used, parameter.symbol.name);
                                 }
                             }
                         }
@@ -14614,7 +14614,7 @@ namespace ts {
                 if (node.typeParameters) {
                     for (const typeParameter of node.typeParameters) {
                         if (!typeParameter.symbol.isReferenced) {
-                            error(typeParameter.name, Diagnostics._0_is_declared_but_never_used, typeParameter.symbol.name);
+                            error(typeParameter.name, Diagnostics.Property_0_is_declared_but_never_used, typeParameter.symbol.name);
                         }
                     }
                 }
@@ -14629,7 +14629,7 @@ namespace ts {
                         if (!local.isReferenced && !local.exportSymbol) {
                             for (const declaration of local.declarations) {
                                 if (!isAmbientModule(declaration)) {
-                                    error(declaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
+                                    error(declaration.name, Diagnostics.Property_0_is_declared_but_never_used, local.name);
                                 }
                             }
                         }
