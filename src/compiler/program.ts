@@ -1403,15 +1403,15 @@ namespace ts {
             return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
         }
 
-        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult {
-            return runWithCancellationToken(() => emitWorker(this, sourceFile, writeFileCallback, cancellationToken));
+        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitDeclarationsOnly?: boolean): EmitResult {
+            return runWithCancellationToken(() => emitWorker(this, sourceFile, writeFileCallback, cancellationToken, emitDeclarationsOnly));
         }
 
         function isEmitBlocked(emitFileName: string): boolean {
             return hasEmitBlockingDiagnostics.contains(toPath(emitFileName, currentDirectory, getCanonicalFileName));
         }
 
-        function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken): EmitResult {
+        function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken, emitDeclarationsOnly?: boolean): EmitResult {
             let declarationDiagnostics: Diagnostic[] = [];
 
             if (options.noEmit) {
@@ -1456,7 +1456,8 @@ namespace ts {
             const emitResult = emitFiles(
                 emitResolver,
                 getEmitHost(writeFileCallback),
-                sourceFile);
+                sourceFile,
+                emitDeclarationsOnly);
 
             emitTime += new Date().getTime() - start;
             return emitResult;
