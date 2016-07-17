@@ -12,6 +12,10 @@ namespace ts {
             type: "string",
         },
         {
+            name: "compileOnSave",
+            type: "boolean",
+        },
+        {
             name: "declaration",
             shortName: "d",
             type: "boolean",

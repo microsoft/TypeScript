@@ -172,6 +172,19 @@ namespace ts.server {
         return `/dev/null/inferredProject${counter}*`;
     }
 
+    export function removeQuotes(value: string): string {
+        if (value.length > 0 && (value[0] === "\"" || value[0] === "'")) {
+            return value.substr(1, value.length - 2);
+        }
+        return value;
+    }
+
+    /* tslint:disable */
+    export function createMap<T>(): Map<T> {
+        return Object.create(null);
+    }
+    /* tslint:enable */
+
     export class ThrottledOperations {
         private pendingTimeouts: Map<any> = {};
         constructor(private readonly host: ServerHost) {

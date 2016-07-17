@@ -2,6 +2,7 @@
 /// <reference path="utilities.ts"/>
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="lsHost.ts"/>
+/// <reference path="builder\builder.ts"/>
 
 namespace ts.server {
 
@@ -25,6 +26,7 @@ namespace ts.server {
         private program: ts.Program;
 
         languageService: LanguageService;
+        builder: Builder;
 
         /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
@@ -71,7 +73,18 @@ namespace ts.server {
             else {
                 this.disableLanguageService();
             }
+
+            this.builder = createBuilder(this, {
+                logError: (err: Error, cmd: string) => {}
+            });
             this.markAsDirty();
+        }
+
+        getCompileOnSaveAffectedFileList(triggerFileName: string): string[] {
+            if (!this.languageServiceEnabled) {
+                return [];
+            }
+            return this.builder.getFilesAffectedBy(triggerFileName);
         }
 
         getProjectVersion() {
@@ -94,6 +107,13 @@ namespace ts.server {
         }
 
         abstract getProjectName(): string;
+
+        getSourceFile(filename: string) {
+            if (!this.program) {
+                return undefined;
+            }
+            return this.program.getSourceFile(filename);
+        }
 
         close() {
             if (this.program) {

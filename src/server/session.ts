@@ -93,6 +93,7 @@ namespace ts.server {
         export const Completions = "completions";
         export const CompletionsFull = "completions-full";
         export const CompletionDetails = "completionEntryDetails";
+        export const CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
         export const Configure = "configure";
         export const Definition = "definition";
         export const DefinitionFull = "definition-full";
@@ -946,6 +947,15 @@ namespace ts.server {
             }, []);
         }
 
+        private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs) {
+            const info = this.projectService.getScriptInfo(args.file);
+            let result: string[] = [];
+            for (const project of info.containingProjects) {
+                result = concatenate(result, project.getCompileOnSaveAffectedFileList(info.fileName));
+            }
+            return result;
+        }
+
         private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
@@ -1349,6 +1359,9 @@ namespace ts.server {
             },
             [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
                 return this.requiredResponse(this.getCompletionEntryDetails(request.arguments));
+            },
+            [CommandNames.CompileOnSaveAffectedFileList]: (request: protocol.CompileOnSaveAffectedFileListRequest) => {
+                return this.requiredResponse(this.getCompileOnSaveAffectedFileList(request.arguments));
             },
             [CommandNames.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true));
