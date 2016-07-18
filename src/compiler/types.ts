@@ -2261,8 +2261,8 @@ namespace ts {
         LoopWithCapturedBlockScopedBinding  = 0x00010000, // Loop that contains block scoped variable captured in closure
         CapturedBlockScopedBinding          = 0x00020000, // Block-scoped binding that is captured in some function
         BlockScopedBindingInLoop            = 0x00040000, // Block-scoped binding with declaration nested inside iteration statement
-        DecoratedClassWithSelfReference     = 0x00080000, // Decorated class that contains a binding to itself inside of the class body.
-        SelfReferenceInDecoratedClass       = 0x00100000, // Binding to a decorated class inside of the class's body.
+        ClassWithConstructorReference       = 0x00080000, // Class that contains a binding to its constructor inside of the class body.
+        ConstructorReferenceInClass         = 0x00100000, // Binding to a class constructor inside of the class's body.
         NeedsLoopOutParameter               = 0x00200000, // Block scoped binding whose value should be explicitly copied outside of the converted loop
     }
 
