@@ -1398,6 +1398,7 @@ namespace ts {
         // var x = function(name) { return name.length; }
         if (checkParentVariableStatement) {
             const isInitializerOfVariableDeclarationInStatement =
+                node.parent &&
                 node.parent.kind === SyntaxKind.VariableDeclaration &&
                 (<VariableDeclaration>node.parent).initializer === node &&
                 node.parent.parent.parent.kind === SyntaxKind.VariableStatement;

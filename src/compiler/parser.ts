@@ -650,20 +650,18 @@ namespace ts {
 
 
         function addJSDocComment<T extends Node>(node: T): T {
-            if (contextFlags & NodeFlags.JavaScriptFile) {
-                const comments = getLeadingCommentRangesOfNode(node, sourceFile);
-                if (comments) {
-                    for (const comment of comments) {
-                        const jsDocComment = JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos);
-                        if (!jsDocComment) {
-                            continue;
-                        }
-
-                        if (!node.jsDocComments) {
-                            node.jsDocComments = [];
-                        }
-                        node.jsDocComments.push(jsDocComment);
+            const comments = getLeadingCommentRangesOfNode(node, sourceFile);
+            if (comments) {
+                for (const comment of comments) {
+                    const jsDocComment = JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos);
+                    if (!jsDocComment) {
+                        continue;
                     }
+
+                    if (!node.jsDocComments) {
+                        node.jsDocComments = [];
+                    }
+                    node.jsDocComments.push(jsDocComment);
                 }
             }
 
@@ -5213,7 +5211,7 @@ namespace ts {
                 node.members = createMissingList<ClassElement>();
             }
 
-            return finishNode(node);
+            return addJSDocComment(finishNode(node));
         }
 
         function parseNameOfClassDeclarationOrExpression(): Identifier {
@@ -6193,9 +6191,7 @@ namespace ts {
                     //    b. otherwise, the indentation is the number of spaces after the * on the first line
                     // 4. child comments might need to cross lines until the next tag appears.
 
-                    // 5. crash when running paramtag
                     // 6. get *all* tests to pass
-                    // 7. cleanup in case this change fixes a good number of existing bugs
 
                     result = createJSDocComment();
 
@@ -6211,10 +6207,7 @@ namespace ts {
                 }
 
                 function createJSDocComment(): JSDocComment {
-                    if (!tags) {
-                        return undefined;
-                    }
-
+                    // TODO: Previously we bailed if tags wasn't defined, but now that we also care about comment, it should be OK to continue... right?
                     const result = <JSDocComment>createNode(SyntaxKind.JSDocComment, start);
                     result.tags = tags;
                     result.comment = comments.join("");
