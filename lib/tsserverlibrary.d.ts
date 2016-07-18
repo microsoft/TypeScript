@@ -8388,7 +8388,6 @@ declare namespace ts.server {
     class ScriptInfo {
         private host;
         fileName: string;
-        content: string;
         isOpen: boolean;
         svc: ScriptVersionCache;
         children: ScriptInfo[];
@@ -8729,7 +8728,7 @@ declare namespace ts {
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
-        getDirectories(path: string): string[];
+        getDirectories(path: string): string;
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
         getProjectVersion?(): string;
