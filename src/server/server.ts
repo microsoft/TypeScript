@@ -11,14 +11,6 @@ namespace ts.server {
         historySize?: number;
     }
 
-    interface Key {
-        sequence?: string;
-        name?: string;
-        ctrl?: boolean;
-        meta?: boolean;
-        shift?: boolean;
-    }
-
     interface Stats {
         isFile(): boolean;
         isDirectory(): boolean;
