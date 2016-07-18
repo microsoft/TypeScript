@@ -1693,7 +1693,7 @@ namespace ts {
             startPos = pos;
             tokenPos = pos;
 
-            let ch = text.charCodeAt(pos);
+            const ch = text.charCodeAt(pos);
             switch (ch) {
                 case CharacterCodes.tab:
                 case CharacterCodes.verticalTab:

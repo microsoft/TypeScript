@@ -6134,10 +6134,12 @@ namespace ts {
                             case SyntaxKind.AtToken:
                                 if (canParseTag) {
                                     parseTag();
+                                    // This will take us past the end of the line, so it's OK to parse a tag on the next pass through the loop
+                                    seenAsterisk = false;
                                 }
-                                // This will take us past the end of the line, so it's OK to parse a tag on the next pass through the loop
-                                canParseTag = true;
-                                seenAsterisk = false;
+                                else {
+                                    comments.push(scanner.getTokenText());
+                                }
                                 break;
 
                             case SyntaxKind.NewLineTrivia:
@@ -6150,6 +6152,7 @@ namespace ts {
                                 if (seenAsterisk) {
                                     // If we've already seen an asterisk, then we can no longer parse a tag on this line
                                     canParseTag = false;
+                                    comments.push(scanner.getTokenText());
                                 }
                                 // Ignore the first asterisk on a line
                                 seenAsterisk = true;
@@ -6201,7 +6204,7 @@ namespace ts {
 
                     const result = <JSDocComment>createNode(SyntaxKind.JSDocComment, start);
                     result.tags = tags;
-                    result.comment = comments.join('');
+                    result.comment = comments.join("");
                     return finishNode(result, end);
                 }
 
