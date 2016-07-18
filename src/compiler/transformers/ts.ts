@@ -758,16 +758,61 @@ namespace ts {
             );
 
             if (staticProperties.length > 0) {
-                const expressions: Expression[] = [];
-                const temp = createTempVariable(hoistVariableDeclaration);
+                /* If classExpression contains static properties that capture block-scoped binding, we will need to
+                 * wrap classExpression and its static properties initializers in an IIFE. Transforms this:
+                 * for (let i = 0; i < 3; i++) {
+                 *    arr.push(class C {
+                 *        static x = i;
+                 *        static y = () => C.x * 2;
+                 *    });
+                 * }
+                 * Into this:
+                 * for (let i = 0; i < 3; i++) {
+                 *     arr.push((() => {
+                 *         let _a = class C {
+                 *            };
+                 *        _a.x = i;
+                 *        _a.y = () => _a.x * 2;
+                 *        return _a;
+                 *     })());
+                 * }
+                 */
+                if (resolver.getNodeCheckFlags(classExpression) & NodeCheckFlags.ClassExpressionWithCapturedBlockScopedBinding) {
+                    const statements: Statement[] = [];
+                    const temp = createTempVariable(/*recordTempVariable*/ undefined);
+                    setNodeEmitFlags(classExpression, NodeEmitFlags.Indented | getNodeEmitFlags(classExpression));
+                    addNode(statements,
+                        createVariableStatement(
+                            /*modifier*/ undefined,
+                            createLetDeclarationList([createVariableDeclaration(temp, /*initializer*/ classExpression)])
+                        ),
+                        /*startOnNewLine*/ true
+                    );
+                    const staticPropertiesInitializedExpressions = generateInitializedPropertyExpressions(node, staticProperties, temp);
+                    for (let expression of staticPropertiesInitializedExpressions) {
+                        addNode(statements, createStatement(expression), /*startOnNewLine*/ true);
+                    }
+                    addNode(statements, createReturn(temp), /*startOnNewLine*/ true);
+                    return createCall(
+                            createArrowFunction(
+                                /*parameters*/[],
+                                createBlock(statements)
+                            ),
+                            /*argumentsArray*/[]
+                        )
+                }
+                else {
+                    const expressions: Expression[] = [];
+                    const temp = createTempVariable(hoistVariableDeclaration);
 
-                // To preserve the behavior of the old emitter, we explicitly indent
-                // the body of a class with static initializers.
-                setNodeEmitFlags(classExpression, NodeEmitFlags.Indented | getNodeEmitFlags(classExpression));
-                addNode(expressions, createAssignment(temp, classExpression), true);
-                addNodes(expressions, generateInitializedPropertyExpressions(node, staticProperties, temp), true);
-                addNode(expressions, temp, true);
-                return inlineExpressions(expressions);
+                    // To preserve the behavior of the old emitter, we explicitly indent
+                    // the body of a class with static initializers.
+                    setNodeEmitFlags(classExpression, NodeEmitFlags.Indented | getNodeEmitFlags(classExpression));
+                    addNode(expressions, createAssignment(temp, classExpression), /*startOnNewLine*/ true);
+                    addNodes(expressions, generateInitializedPropertyExpressions(node, staticProperties, temp), /*startOnNewLine*/ true);
+                    addNode(expressions, temp, /*startOnNewLine*/ true);
+                    return inlineExpressions(expressions);
+                }
             }
 
             return classExpression;

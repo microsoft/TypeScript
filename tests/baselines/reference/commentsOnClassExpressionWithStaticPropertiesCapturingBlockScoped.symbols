@@ -1,0 +1,62 @@
+=== tests/cases/compiler/commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts ===
+"use strict"
+declare var console: any;
+>console : Symbol(console, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 1, 11))
+
+const arr: any[] = [];
+>arr : Symbol(arr, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 2, 5))
+
+for (let i = 0; i < 3; i++) {
+>i : Symbol(i, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 3, 8))
+>i : Symbol(i, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 3, 8))
+>i : Symbol(i, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 3, 8))
+
+    /* comment1 */
+    arr.push(/* comment2 */ class C {
+>arr.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>arr : Symbol(arr, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 2, 5))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>C : Symbol(C, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 5, 13))
+
+        /* static-comment1 */ static x = i;
+>x : Symbol(C.x, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 5, 37))
+>i : Symbol(i, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 3, 8))
+
+        /* static-comment2 */ static y = () => C.x * 2;
+>y : Symbol(C.y, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 6, 43))
+>C.x : Symbol(C.x, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 5, 37))
+>C : Symbol(C, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 5, 13))
+>x : Symbol(C.x, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 5, 37))
+
+    });
+    arr.push(
+>arr.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>arr : Symbol(arr, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 2, 5))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+
+        /* comment3 */
+        class C {
+>C : Symbol(C, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 9, 13))
+
+            /* static-comment3 */ 
+            static x = i;
+>x : Symbol(C.x, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 11, 17))
+>i : Symbol(i, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 3, 8))
+
+            /* static-comment4 */ 
+            static y = () => C.x * 2;
+>y : Symbol(C.y, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 13, 25))
+>C.x : Symbol(C.x, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 11, 17))
+>C : Symbol(C, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 9, 13))
+>x : Symbol(C.x, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 11, 17))
+        }
+    );
+}
+arr.forEach(C => console.log(C.y()));
+>arr.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>arr : Symbol(arr, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 2, 5))
+>forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>C : Symbol(C, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 19, 12))
+>console : Symbol(console, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 1, 11))
+>C : Symbol(C, Decl(commentsOnClassExpressionWithStaticPropertiesCapturingBlockScoped.ts, 19, 12))
+

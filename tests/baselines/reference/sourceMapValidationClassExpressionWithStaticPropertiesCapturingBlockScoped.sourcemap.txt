@@ -1,0 +1,253 @@
+===================================================================
+JsFile: sourceMapValidationClassExpressionWithStaticPropertiesCapturingBlockScoped.js
+mapUrl: sourceMapValidationClassExpressionWithStaticPropertiesCapturingBlockScoped.js.map
+sourceRoot: 
+sources: sourceMapValidationClassExpressionWithStaticPropertiesCapturingBlockScoped.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationClassExpressionWithStaticPropertiesCapturingBlockScoped.js
+sourceFile:sourceMapValidationClassExpressionWithStaticPropertiesCapturingBlockScoped.ts
+-------------------------------------------------------------------
+>>>"use strict";
+1 >
+2 >^^^^^^^^^^^^
+3 >            ^
+4 >             ^^^->
+1 >
+2 >"use strict"
+3 >            
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
+3 >Emitted(1, 14) Source(1, 13) + SourceIndex(0)
+---
+>>>const arr = [];
+1->
+2 >^^^^^^
+3 >      ^^^
+4 >         ^^^
+5 >            ^^
+6 >              ^
+7 >               ^^^^^^^^^^^^^^^->
+1->
+  >declare var console: any;
+  >
+2 >const 
+3 >      arr
+4 >         : any[] = 
+5 >            []
+6 >              ;
+1->Emitted(2, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(2, 7) Source(3, 7) + SourceIndex(0)
+3 >Emitted(2, 10) Source(3, 10) + SourceIndex(0)
+4 >Emitted(2, 13) Source(3, 20) + SourceIndex(0)
+5 >Emitted(2, 15) Source(3, 22) + SourceIndex(0)
+6 >Emitted(2, 16) Source(3, 23) + SourceIndex(0)
+---
+>>>for (let i = 0; i < 3; i++) {
+1->
+2 >^^^
+3 >   ^
+4 >    ^
+5 >     ^^^^
+6 >         ^
+7 >          ^^^
+8 >             ^
+9 >              ^^
+10>                ^
+11>                 ^^^
+12>                    ^
+13>                     ^^
+14>                       ^
+15>                        ^^
+16>                          ^^
+17>                            ^
+1->
+  >
+2 >for
+3 >    
+4 >    (
+5 >     let 
+6 >         i
+7 >           = 
+8 >             0
+9 >              ; 
+10>                i
+11>                  < 
+12>                    3
+13>                     ; 
+14>                       i
+15>                        ++
+16>                          ) 
+17>                            {
+1->Emitted(3, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(3, 4) Source(4, 4) + SourceIndex(0)
+3 >Emitted(3, 5) Source(4, 5) + SourceIndex(0)
+4 >Emitted(3, 6) Source(4, 6) + SourceIndex(0)
+5 >Emitted(3, 10) Source(4, 10) + SourceIndex(0)
+6 >Emitted(3, 11) Source(4, 11) + SourceIndex(0)
+7 >Emitted(3, 14) Source(4, 14) + SourceIndex(0)
+8 >Emitted(3, 15) Source(4, 15) + SourceIndex(0)
+9 >Emitted(3, 17) Source(4, 17) + SourceIndex(0)
+10>Emitted(3, 18) Source(4, 18) + SourceIndex(0)
+11>Emitted(3, 21) Source(4, 21) + SourceIndex(0)
+12>Emitted(3, 22) Source(4, 22) + SourceIndex(0)
+13>Emitted(3, 24) Source(4, 24) + SourceIndex(0)
+14>Emitted(3, 25) Source(4, 25) + SourceIndex(0)
+15>Emitted(3, 27) Source(4, 27) + SourceIndex(0)
+16>Emitted(3, 29) Source(4, 29) + SourceIndex(0)
+17>Emitted(3, 30) Source(4, 30) + SourceIndex(0)
+---
+>>>    arr.push((() => {
+1 >^^^^
+2 >    ^^^
+3 >       ^
+4 >        ^^^^
+5 >            ^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    arr
+3 >       .
+4 >        push
+1 >Emitted(4, 5) Source(5, 5) + SourceIndex(0)
+2 >Emitted(4, 8) Source(5, 8) + SourceIndex(0)
+3 >Emitted(4, 9) Source(5, 9) + SourceIndex(0)
+4 >Emitted(4, 13) Source(5, 13) + SourceIndex(0)
+---
+>>>        let _a = class C {
+1->^^^^^^^^^^^^^^^^^
+1->(
+1->Emitted(5, 18) Source(5, 14) + SourceIndex(0)
+---
+>>>            };
+1 >^^^^^^^^^^^^^
+2 >             ^^^^^->
+1 >class C {
+  >        static x = i;
+  >        static y = () => C.x * 2;
+  >    }
+1 >Emitted(6, 14) Source(8, 6) + SourceIndex(0)
+---
+>>>        _a.x = i;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^^^
+4 >               ^
+5 >                ^^^^^^^^^^^^^^->
+1->
+2 >        x
+3 >             = 
+4 >               i;
+1->Emitted(7, 9) Source(6, 16) + SourceIndex(0)
+2 >Emitted(7, 13) Source(6, 17) + SourceIndex(0)
+3 >Emitted(7, 16) Source(6, 20) + SourceIndex(0)
+4 >Emitted(7, 17) Source(6, 22) + SourceIndex(0)
+---
+>>>        _a.y = () => C.x * 2;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^^^
+4 >               ^^^^^^
+5 >                     ^
+6 >                      ^
+7 >                       ^
+8 >                        ^^^
+9 >                           ^
+1->
+  >        static 
+2 >        y
+3 >             = 
+4 >               () => 
+5 >                     C
+6 >                      .
+7 >                       x
+8 >                         * 
+9 >                           2;
+1->Emitted(8, 9) Source(7, 16) + SourceIndex(0)
+2 >Emitted(8, 13) Source(7, 17) + SourceIndex(0)
+3 >Emitted(8, 16) Source(7, 20) + SourceIndex(0)
+4 >Emitted(8, 22) Source(7, 26) + SourceIndex(0)
+5 >Emitted(8, 23) Source(7, 27) + SourceIndex(0)
+6 >Emitted(8, 24) Source(7, 28) + SourceIndex(0)
+7 >Emitted(8, 25) Source(7, 29) + SourceIndex(0)
+8 >Emitted(8, 28) Source(7, 32) + SourceIndex(0)
+9 >Emitted(8, 29) Source(7, 34) + SourceIndex(0)
+---
+>>>        return _a;
+>>>    })());
+1 >^^^^^^^^^
+2 >         ^
+1 >
+  >    })
+2 >         ;
+1 >Emitted(10, 10) Source(8, 7) + SourceIndex(0)
+2 >Emitted(10, 11) Source(8, 8) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(11, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(11, 2) Source(9, 2) + SourceIndex(0)
+---
+>>>arr.forEach(C => console.log(C.y()));
+1->
+2 >^^^
+3 >   ^
+4 >    ^^^^^^^
+5 >           ^
+6 >            ^
+7 >             ^^^^
+8 >                 ^^^^^^^
+9 >                        ^
+10>                         ^^^
+11>                            ^
+12>                             ^
+13>                              ^
+14>                               ^
+15>                                ^^
+16>                                  ^
+17>                                   ^
+18>                                    ^
+19>                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >arr
+3 >   .
+4 >    forEach
+5 >           (
+6 >            C
+7 >              => 
+8 >                 console
+9 >                        .
+10>                         log
+11>                            (
+12>                             C
+13>                              .
+14>                               y
+15>                                ()
+16>                                  )
+17>                                   )
+18>                                    ;
+1->Emitted(12, 1) Source(10, 1) + SourceIndex(0)
+2 >Emitted(12, 4) Source(10, 4) + SourceIndex(0)
+3 >Emitted(12, 5) Source(10, 5) + SourceIndex(0)
+4 >Emitted(12, 12) Source(10, 12) + SourceIndex(0)
+5 >Emitted(12, 13) Source(10, 13) + SourceIndex(0)
+6 >Emitted(12, 14) Source(10, 14) + SourceIndex(0)
+7 >Emitted(12, 18) Source(10, 18) + SourceIndex(0)
+8 >Emitted(12, 25) Source(10, 25) + SourceIndex(0)
+9 >Emitted(12, 26) Source(10, 26) + SourceIndex(0)
+10>Emitted(12, 29) Source(10, 29) + SourceIndex(0)
+11>Emitted(12, 30) Source(10, 30) + SourceIndex(0)
+12>Emitted(12, 31) Source(10, 31) + SourceIndex(0)
+13>Emitted(12, 32) Source(10, 32) + SourceIndex(0)
+14>Emitted(12, 33) Source(10, 33) + SourceIndex(0)
+15>Emitted(12, 35) Source(10, 35) + SourceIndex(0)
+16>Emitted(12, 36) Source(10, 36) + SourceIndex(0)
+17>Emitted(12, 37) Source(10, 37) + SourceIndex(0)
+18>Emitted(12, 38) Source(10, 38) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationClassExpressionWithStaticPropertiesCapturingBlockScoped.js.map
