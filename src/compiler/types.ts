@@ -493,6 +493,10 @@ namespace ts {
         hasTrailingComma?: boolean;
     }
 
+    export interface ModifiersArray extends NodeArray<Modifier> {
+        flags: NodeFlags;
+    }
+
     // @kind(SyntaxKind.AbstractKeyword)
     // @kind(SyntaxKind.AsyncKeyword)
     // @kind(SyntaxKind.ConstKeyword)
@@ -1036,7 +1040,6 @@ namespace ts {
     // @kind(SyntaxKind.PropertyAccessExpression)
     export interface PropertyAccessExpression extends MemberExpression, Declaration {
         expression: LeftHandSideExpression;
-        dotToken: Node;
         name: Identifier;
     }
 
@@ -1099,12 +1102,14 @@ namespace ts {
         closingElement: JsxClosingElement;
     }
 
+    export type JsxTagNameExpression = PrimaryExpression | PropertyAccessExpression;
+
     /// The opening element of a <Tag>...</Tag> JsxElement
     // @kind(SyntaxKind.JsxOpeningElement)
     export interface JsxOpeningElement extends Expression {
         _openingElementBrand?: any;
-        tagName: EntityName;
-        attributes: NodeArray<JsxAttributeLike>;
+        tagName: JsxTagNameExpression;
+        attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>;
     }
 
     /// A JSX expression of the form <TagName attrs />
@@ -1132,7 +1137,7 @@ namespace ts {
 
     // @kind(SyntaxKind.JsxClosingElement)
     export interface JsxClosingElement extends Node {
-        tagName: EntityName;
+        tagName: JsxTagNameExpression;
     }
 
     // @kind(SyntaxKind.JsxExpression)
@@ -1256,6 +1261,7 @@ namespace ts {
     export interface SwitchStatement extends Statement {
         expression: Expression;
         caseBlock: CaseBlock;
+        possiblyExhaustive?: boolean;
     }
 
     // @kind(SyntaxKind.CaseBlock)
@@ -1628,8 +1634,9 @@ namespace ts {
         Assignment     = 1 << 4,  // Assignment
         TrueCondition  = 1 << 5,  // Condition known to be true
         FalseCondition = 1 << 6,  // Condition known to be false
-        Referenced     = 1 << 7,  // Referenced as antecedent once
-        Shared         = 1 << 8,  // Referenced as antecedent more than once
+        SwitchClause   = 1 << 7,  // Switch statement clause
+        Referenced     = 1 << 8,  // Referenced as antecedent once
+        Shared         = 1 << 9,  // Referenced as antecedent more than once
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }
@@ -1662,6 +1669,13 @@ namespace ts {
     // node's location in the control flow.
     export interface FlowCondition extends FlowNode {
         expression: Expression;
+        antecedent: FlowNode;
+    }
+
+    export interface FlowSwitchClause extends FlowNode {
+        switchStatement: SwitchStatement;
+        clauseStart: number;   // Start index of case/default clause range
+        clauseEnd: number;     // End index of case/default clause range
         antecedent: FlowNode;
     }
 
@@ -1745,7 +1759,15 @@ namespace ts {
     }
 
     export interface ParseConfigHost {
-        readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
+        useCaseSensitiveFileNames: boolean;
+
+        readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[]): string[];
+
+        /**
+          * Gets a value indicating whether the specified path exists and is a file.
+          * @param path The path to test.
+          */
+        fileExists(path: string): boolean;
     }
 
     export interface WriteFileCallback {
@@ -1934,7 +1956,7 @@ namespace ts {
         buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildDisplayForParametersAndDelimiters(thisType: Type, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildDisplayForParametersAndDelimiters(thisParameter: Symbol, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
     }
@@ -2166,6 +2188,8 @@ namespace ts {
         PropertyOrAccessor = Property | Accessor,
         Export = ExportNamespace | ExportType | ExportValue,
 
+        ClassMember = Method | Accessor | Property,
+
         /* @internal */
         // The set of things we consider semantically classifiable.  Used to speed up the LS during
         // classification.
@@ -2181,11 +2205,13 @@ namespace ts {
         members?: SymbolTable;                  // Class, interface or literal instance members
         exports?: SymbolTable;                  // Module exports
         globalExports?: SymbolTable;            // Conditional global UMD exports
+        /* @internal */ isReadonly?: boolean;   // readonly? (set only for intersections and unions)
         /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
         /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
+        /* @internal */ isReferenced?: boolean; // True if the symbol is referenced elsewhere
     }
 
     /* @internal */
@@ -2243,8 +2269,8 @@ namespace ts {
         LoopWithCapturedBlockScopedBinding  = 0x00010000, // Loop that contains block scoped variable captured in closure
         CapturedBlockScopedBinding          = 0x00020000, // Block-scoped binding that is captured in some function
         BlockScopedBindingInLoop            = 0x00040000, // Block-scoped binding with declaration nested inside iteration statement
-        DecoratedClassWithSelfReference     = 0x00080000, // Decorated class that contains a binding to itself inside of the class body.
-        SelfReferenceInDecoratedClass       = 0x00100000, // Binding to a decorated class inside of the class's body.
+        ClassWithConstructorReference       = 0x00080000, // Class that contains a binding to its constructor inside of the class body.
+        ConstructorReferenceInClass         = 0x00100000, // Binding to a class constructor inside of the class's body.
         NeedsLoopOutParameter               = 0x00200000, // Block scoped binding whose value should be explicitly copied outside of the converted loop
     }
 
@@ -2262,6 +2288,7 @@ namespace ts {
         resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
         superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
+        switchTypes?: Type[];             // Cached array of switch case expression types
     }
 
     export const enum TypeFlags {
@@ -2301,7 +2328,8 @@ namespace ts {
 
         /* @internal */
         Nullable = Undefined | Null,
-        Falsy = String | Number | Boolean | Void | Undefined | Null,
+        /* @internal */
+        Falsy = Void | Undefined | Null,       // TODO: Add false, 0, and ""
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
@@ -2453,7 +2481,8 @@ namespace ts {
         declaration: SignatureDeclaration;  // Originating declaration
         typeParameters: TypeParameter[];    // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
-        thisType?: Type;                    // type of this-type
+        /* @internal */
+        thisParameter?: Symbol;             // symbol of this-type parameter
         /* @internal */
         resolvedReturnType: Type;           // Resolved return type
         /* @internal */
@@ -2588,6 +2617,7 @@ namespace ts {
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;
         /*@internal*/ extendedDiagnostics?: boolean;
+        disableSizeLimit?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
@@ -2604,6 +2634,7 @@ namespace ts {
         /*@internal*/listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
+        maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
@@ -2615,6 +2646,8 @@ namespace ts {
         noImplicitAny?: boolean;
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;
+        noUnusedLocals?: boolean;
+        noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
@@ -2643,7 +2676,6 @@ namespace ts {
         types?: string[];
         /** Paths used to used to compute primary types search locations */
         typeRoots?: string[];
-        typesSearchPaths?: string[];
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
 
@@ -2728,6 +2760,17 @@ namespace ts {
         fileNames: string[];
         raw?: any;
         errors: Diagnostic[];
+        wildcardDirectories?: Map<WatchDirectoryFlags>;
+    }
+
+    export const enum WatchDirectoryFlags {
+        None = 0,
+        Recursive = 1 << 0,
+    }
+
+    export interface ExpandResult {
+        fileNames: string[];
+        wildcardDirectories: Map<WatchDirectoryFlags>;
     }
 
     /* @internal */
@@ -3063,16 +3106,17 @@ namespace ts {
         ExportName = 1 << 17,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
         LocalName = 1 << 18,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
         Indented = 1 << 19,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
-        AsyncFunctionBody = 1 << 20,
-        ReuseTempVariableScope = 1 << 21,        // Reuse the existing temp variable scope during emit.
-        CustomPrologue = 1 << 22,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+        NoIndentation = 1 << 20,                 // Do not indent the node.
+        AsyncFunctionBody = 1 << 21,
+        ReuseTempVariableScope = 1 << 22,        // Reuse the existing temp variable scope during emit.
+        CustomPrologue = 1 << 23,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
 
         // SourceMap Specialization.
         // TODO(rbuckton): These should be removed once source maps are aligned with the old
         //                 emitter and new baselines are taken. This exists solely to
         //                 align with the old emitter.
-        SourceMapEmitOpenBraceAsToken = 1 << 22,        // Emits the open brace of a block function body as a source mapped token.
-        SourceMapAdjustRestParameterLoop = 1 << 23,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
+        SourceMapEmitOpenBraceAsToken = 1 << 24,        // Emits the open brace of a block function body as a source mapped token.
+        SourceMapAdjustRestParameterLoop = 1 << 25,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
     }
 
     /** Additional context provided to `visitEachChild` */

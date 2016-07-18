@@ -310,6 +310,7 @@ namespace FourSlash {
             }
 
             this.formatCodeOptions = {
+                BaseIndentSize: 0,
                 IndentSize: 4,
                 TabSize: 4,
                 NewLineCharacter: Harness.IO.newLine(),
@@ -323,6 +324,7 @@ namespace FourSlash {
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
                 InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
+                InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
                 PlaceOpenBraceOnNewLineForFunctions: false,
                 PlaceOpenBraceOnNewLineForControlBlocks: false,
             };
@@ -730,30 +732,6 @@ namespace FourSlash {
             }
         }
 
-        public verifyReferencesAtPositionListContains(fileName: string, start: number, end: number, isWriteAccess?: boolean, isDefinition?: boolean) {
-            const references = this.getReferencesAtCaret();
-
-            if (!references || references.length === 0) {
-                this.raiseError("verifyReferencesAtPositionListContains failed - found 0 references, expected at least one.");
-            }
-
-            for (let i = 0; i < references.length; i++) {
-                const reference = references[i];
-                if (reference && reference.fileName === fileName && reference.textSpan.start === start && ts.textSpanEnd(reference.textSpan) === end) {
-                    if (typeof isWriteAccess !== "undefined" && reference.isWriteAccess !== isWriteAccess) {
-                        this.raiseError(`verifyReferencesAtPositionListContains failed - item isWriteAccess value does not match, actual: ${reference.isWriteAccess}, expected: ${isWriteAccess}.`);
-                    }
-                    if (typeof isDefinition !== "undefined" && reference.isDefinition !== isDefinition) {
-                        this.raiseError(`verifyReferencesAtPositionListContains failed - item isDefinition value does not match, actual: ${reference.isDefinition}, expected: ${isDefinition}.`);
-                    }
-                    return;
-                }
-            }
-
-            const missingItem = { fileName, start, end, isWriteAccess, isDefinition };
-            this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(references)})`);
-        }
-
         public verifyReferencesCountIs(count: number, localFilesOnly = true) {
             const references = this.getReferencesAtCaret();
             let referencesCount = 0;
@@ -775,6 +753,68 @@ namespace FourSlash {
                 const condition = localFilesOnly ? "excluding libs" : "including libs";
                 this.raiseError("Expected references count (" + condition + ") to be " + count + ", but is actually " + referencesCount);
             }
+        }
+
+        public verifyReferencesAre(expectedReferences: Range[]) {
+            const actualReferences = this.getReferencesAtCaret() || [];
+
+            if (actualReferences.length > expectedReferences.length) {
+                // Find the unaccounted-for reference.
+                for (const actual of actualReferences) {
+                    if (!ts.forEach(expectedReferences, r => r.start === actual.textSpan.start)) {
+                        this.raiseError(`A reference ${stringify(actual)} is unaccounted for.`);
+                    }
+                }
+                // Probably will never reach here.
+                this.raiseError(`There are ${actualReferences.length} references but only ${expectedReferences.length} were expected.`);
+            }
+
+            for (const reference of expectedReferences) {
+                const {fileName, start, end} = reference;
+                if (reference.marker && reference.marker.data) {
+                    const {isWriteAccess, isDefinition} = reference.marker.data;
+                    this.verifyReferencesWorker(actualReferences, fileName, start, end, isWriteAccess, isDefinition);
+                }
+                else {
+                    this.verifyReferencesWorker(actualReferences, fileName, start, end);
+                }
+            }
+        }
+
+        public verifyReferencesOf({fileName, start}: Range, references: Range[]) {
+            this.openFile(fileName);
+            this.goToPosition(start);
+            this.verifyReferencesAre(references);
+        }
+
+        public verifyRangesReferenceEachOther(ranges?: Range[]) {
+            ranges = ranges || this.getRanges();
+            assert(ranges.length);
+            for (const range of ranges) {
+                this.verifyReferencesOf(range, ranges);
+            }
+        }
+
+        public verifyRangesWithSameTextReferenceEachOther() {
+            ts.forEachValue(this.rangesByText(), ranges => this.verifyRangesReferenceEachOther(ranges));
+        }
+
+        private verifyReferencesWorker(references: ts.ReferenceEntry[], fileName: string, start: number, end: number, isWriteAccess?: boolean, isDefinition?: boolean) {
+            for (let i = 0; i < references.length; i++) {
+                const reference = references[i];
+                if (reference && reference.fileName === fileName && reference.textSpan.start === start && ts.textSpanEnd(reference.textSpan) === end) {
+                    if (typeof isWriteAccess !== "undefined" && reference.isWriteAccess !== isWriteAccess) {
+                        this.raiseError(`verifyReferencesAtPositionListContains failed - item isWriteAccess value does not match, actual: ${reference.isWriteAccess}, expected: ${isWriteAccess}.`);
+                    }
+                    if (typeof isDefinition !== "undefined" && reference.isDefinition !== isDefinition) {
+                        this.raiseError(`verifyReferencesAtPositionListContains failed - item isDefinition value does not match, actual: ${reference.isDefinition}, expected: ${isDefinition}.`);
+                    }
+                    return;
+                }
+            }
+
+            const missingItem = { fileName, start, end, isWriteAccess, isDefinition };
+            this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(references)})`);
         }
 
         private getMemberListAtCaret() {
@@ -864,13 +904,13 @@ namespace FourSlash {
             assert.equal(getDisplayPartsJson(actualQuickInfo.documentation), getDisplayPartsJson(documentation), this.messageAtLastKnownMarker("QuickInfo documentation"));
         }
 
-        public verifyRenameLocations(findInStrings: boolean, findInComments: boolean) {
+        public verifyRenameLocations(findInStrings: boolean, findInComments: boolean, ranges?: Range[]) {
             const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
             if (renameInfo.canRename) {
                 let references = this.languageService.findRenameLocations(
                     this.activeFile.fileName, this.currentCaretPosition, findInStrings, findInComments);
 
-                let ranges = this.getRanges();
+                ranges = ranges || this.getRanges();
 
                 if (!references) {
                     if (ranges.length !== 0) {
@@ -1498,19 +1538,32 @@ namespace FourSlash {
         }
 
         private updateMarkersForEdit(fileName: string, minChar: number, limChar: number, text: string) {
-            for (let i = 0; i < this.testData.markers.length; i++) {
-                const marker = this.testData.markers[i];
+            for (const marker of this.testData.markers) {
                 if (marker.fileName === fileName) {
-                    if (marker.position > minChar) {
-                        if (marker.position < limChar) {
-                            // Marker is inside the edit - mark it as invalidated (?)
-                            marker.position = -1;
-                        }
-                        else {
-                            // Move marker back/forward by the appropriate amount
-                            marker.position += (minChar - limChar) + text.length;
-                        }
+                    marker.position = updatePosition(marker.position);
+                }
+            }
+
+            for (const range of this.testData.ranges) {
+                if (range.fileName === fileName) {
+                    range.start = updatePosition(range.start);
+                    range.end = updatePosition(range.end);
+                }
+            }
+
+            function updatePosition(position: number) {
+                if (position > minChar) {
+                    if (position < limChar) {
+                        // Inside the edit - mark it as invalidated (?)
+                        return -1;
                     }
+                    else {
+                        // Move marker back/forward by the appropriate amount
+                        return position + (minChar - limChar) + text.length;
+                    }
+                }
+                else {
+                    return position;
                 }
             }
         }
@@ -1605,8 +1658,20 @@ namespace FourSlash {
         }
 
         public getRanges(): Range[] {
-            //  Return a copy of the list
-            return this.testData.ranges.slice(0);
+            return this.testData.ranges;
+        }
+
+        public rangesByText(): ts.Map<Range[]> {
+            const result: ts.Map<Range[]> = {};
+            for (const range of this.getRanges()) {
+                const text = this.rangeText(range);
+                (ts.getProperty(result, text) || (result[text] = [])).push(range);
+            }
+            return result;
+        }
+
+        private rangeText({fileName, start, end}: Range, more = false): string {
+            return this.getFileContent(fileName).slice(start, end);
         }
 
         public verifyCaretAtMarker(markerName = "") {
@@ -1619,24 +1684,25 @@ namespace FourSlash {
             }
         }
 
-        private getIndentation(fileName: string, position: number, indentStyle: ts.IndentStyle): number {
+        private getIndentation(fileName: string, position: number, indentStyle: ts.IndentStyle, baseIndentSize: number): number {
 
             const formatOptions = ts.clone(this.formatCodeOptions);
             formatOptions.IndentStyle = indentStyle;
+            formatOptions.BaseIndentSize = baseIndentSize;
 
             return this.languageService.getIndentationAtPosition(fileName, position, formatOptions);
         }
 
-        public verifyIndentationAtCurrentPosition(numberOfSpaces: number, indentStyle: ts.IndentStyle = ts.IndentStyle.Smart) {
-            const actual = this.getIndentation(this.activeFile.fileName, this.currentCaretPosition, indentStyle);
+        public verifyIndentationAtCurrentPosition(numberOfSpaces: number, indentStyle: ts.IndentStyle = ts.IndentStyle.Smart, baseIndentSize = 0) {
+            const actual = this.getIndentation(this.activeFile.fileName, this.currentCaretPosition, indentStyle, baseIndentSize);
             const lineCol = this.getLineColStringAtPosition(this.currentCaretPosition);
             if (actual !== numberOfSpaces) {
                 this.raiseError(`verifyIndentationAtCurrentPosition failed at ${lineCol} - expected: ${numberOfSpaces}, actual: ${actual}`);
             }
         }
 
-        public verifyIndentationAtPosition(fileName: string, position: number, numberOfSpaces: number, indentStyle: ts.IndentStyle = ts.IndentStyle.Smart) {
-            const actual = this.getIndentation(fileName, position, indentStyle);
+        public verifyIndentationAtPosition(fileName: string, position: number, numberOfSpaces: number, indentStyle: ts.IndentStyle = ts.IndentStyle.Smart, baseIndentSize = 0) {
+            const actual = this.getIndentation(fileName, position, indentStyle, baseIndentSize);
             const lineCol = this.getLineColStringAtPosition(position);
             if (actual !== numberOfSpaces) {
                 this.raiseError(`verifyIndentationAtPosition failed at ${lineCol} - expected: ${numberOfSpaces}, actual: ${actual}`);
@@ -1852,7 +1918,7 @@ namespace FourSlash {
             });
         }
 
-        public verifyBraceCompletionAtPostion(negative: boolean, openingBrace: string) {
+        public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
 
             const openBraceMap: ts.Map<ts.CharacterCodes> = {
                 "(": ts.CharacterCodes.openParen,
@@ -1872,7 +1938,7 @@ namespace FourSlash {
 
             const position = this.currentCaretPosition;
 
-            const validBraceCompletion = this.languageService.isValidBraceCompletionAtPostion(this.activeFile.fileName, position, charCode);
+            const validBraceCompletion = this.languageService.isValidBraceCompletionAtPosition(this.activeFile.fileName, position, charCode);
 
             if (!negative && !validBraceCompletion) {
                 this.raiseError(`${position} is not a valid brace completion position for ${openingBrace}`);
@@ -2729,6 +2795,10 @@ namespace FourSlashInterface {
             return this.state.getRanges();
         }
 
+        public rangesByText(): ts.Map<FourSlash.Range[]> {
+            return this.state.rangesByText();
+        }
+
         public markerByName(s: string): FourSlash.Marker {
             return this.state.getMarkerByName(s);
         }
@@ -2836,14 +2906,6 @@ namespace FourSlashInterface {
             this.state.verifyMemberListIsEmpty(this.negative);
         }
 
-        public referencesCountIs(count: number) {
-            this.state.verifyReferencesCountIs(count, /*localFilesOnly*/ false);
-        }
-
-        public referencesAtPositionContains(range: FourSlash.Range, isWriteAccess?: boolean, isDefinition?: boolean) {
-            this.state.verifyReferencesAtPositionListContains(range.fileName, range.start, range.end, isWriteAccess, isDefinition);
-        }
-
         public signatureHelpPresent() {
             this.state.verifySignatureHelpPresent(!this.negative);
         }
@@ -2884,8 +2946,8 @@ namespace FourSlashInterface {
             this.state.verifyDefinitionsName(this.negative, name, containerName);
         }
 
-        public isValidBraceCompletionAtPostion(openingBrace: string) {
-            this.state.verifyBraceCompletionAtPostion(this.negative, openingBrace);
+        public isValidBraceCompletionAtPosition(openingBrace: string) {
+            this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
         }
     }
 
@@ -2902,8 +2964,8 @@ namespace FourSlashInterface {
             this.state.verifyIndentationAtCurrentPosition(numberOfSpaces);
         }
 
-        public indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle = ts.IndentStyle.Smart) {
-            this.state.verifyIndentationAtPosition(fileName, position, numberOfSpaces, indentStyle);
+        public indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle = ts.IndentStyle.Smart, baseIndentSize = 0) {
+            this.state.verifyIndentationAtPosition(fileName, position, numberOfSpaces, indentStyle, baseIndentSize);
         }
 
         public textAtCaretIs(text: string) {
@@ -2933,6 +2995,26 @@ namespace FourSlashInterface {
 
         public verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void {
             this.state.verifyGetEmitOutputContentsForCurrentFile(expected);
+        }
+
+        public referencesCountIs(count: number) {
+            this.state.verifyReferencesCountIs(count, /*localFilesOnly*/ false);
+        }
+
+        public referencesAre(ranges: FourSlash.Range[]) {
+            this.state.verifyReferencesAre(ranges);
+        }
+
+        public referencesOf(start: FourSlash.Range, references: FourSlash.Range[]) {
+            this.state.verifyReferencesOf(start, references);
+        }
+
+        public rangesReferenceEachOther(ranges?: FourSlash.Range[]) {
+            this.state.verifyRangesReferenceEachOther(ranges);
+        }
+
+        public rangesWithSameTextReferenceEachOther() {
+            this.state.verifyRangesWithSameTextReferenceEachOther();
         }
 
         public currentParameterHelpArgumentNameIs(name: string) {
@@ -3077,8 +3159,8 @@ namespace FourSlashInterface {
             this.state.verifyRenameInfoFailed(message);
         }
 
-        public renameLocations(findInStrings: boolean, findInComments: boolean) {
-            this.state.verifyRenameLocations(findInStrings, findInComments);
+        public renameLocations(findInStrings: boolean, findInComments: boolean, ranges?: FourSlash.Range[]) {
+            this.state.verifyRenameLocations(findInStrings, findInComments, ranges);
         }
 
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },

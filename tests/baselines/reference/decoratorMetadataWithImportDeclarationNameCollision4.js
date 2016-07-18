@@ -48,6 +48,7 @@ var MyClass = (function () {
 }());
 MyClass = __decorate([
     someDecorator,
-    __metadata("design:paramtypes", [Object])
+    __metadata("design:paramtypes", [typeof (_a = (typeof db_1.default !== "undefined" && db_1.default).db) === "function" && _a || Object])
 ], MyClass);
 exports.MyClass = MyClass;
+var _a;

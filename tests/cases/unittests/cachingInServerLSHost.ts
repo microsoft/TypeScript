@@ -48,7 +48,7 @@ namespace ts {
             },
             getDirectories: (path: string) => [],
             getEnvironmentVariable: (name: string) => "",
-            readDirectory: (path: string, extension?: string, exclude?: string[]): string[] => {
+            readDirectory: (path: string, extension?: string[], exclude?: string[], include?: string[]): string[] => {
                 throw new Error("NYI");
             },
             exit: (exitCode?: number) => {
@@ -83,7 +83,7 @@ namespace ts {
         const projectService = new server.ProjectService(serverHost, logger);
         const rootScriptInfo = projectService.openFile(rootFile, /* openedByClient */true);
         const project = projectService.createInferredProject(rootScriptInfo);
-        project.setProjectOptions( {files: [rootScriptInfo.fileName], compilerOptions: {module: ts.ModuleKind.AMD} } );
+        project.setProjectOptions( { files: [rootScriptInfo.fileName], compilerOptions: { module: ts.ModuleKind.AMD } } );
         return {
             project,
             rootScriptInfo
@@ -109,6 +109,8 @@ namespace ts {
             let diags = project.compilerService.languageService.getSemanticDiagnostics(imported.name);
             assert.equal(diags.length, 1);
 
+            let content = rootScriptInfo.getText();
+
             const originalFileExists = serverHost.fileExists;
             {
                 // patch fileExists to make sure that disk is not touched
@@ -119,7 +121,8 @@ namespace ts {
 
                 const newContent = `import {x} from "f1"
                 var x: string = 1;`;
-                rootScriptInfo.editContent(0, rootScriptInfo.content.length, newContent);
+                rootScriptInfo.editContent(0, content.length, newContent);
+                content = newContent;
                 // trigger synchronization to make sure that import will be fetched from the cache
                 diags = project.compilerService.languageService.getSemanticDiagnostics(imported.name);
                 // ensure file has correct number of errors after edit
@@ -136,7 +139,8 @@ namespace ts {
                     return originalFileExists.call(serverHost, fileName);
                 };
                 const newContent = `import {x} from "f2"`;
-                rootScriptInfo.editContent(0, rootScriptInfo.content.length, newContent);
+                rootScriptInfo.editContent(0, content.length, newContent);
+                content = newContent;
 
                 try {
                     // trigger synchronization to make sure that LSHost will try to find 'f2' module on disk
@@ -146,6 +150,7 @@ namespace ts {
                 catch (e) {
                     assert.isTrue(e.message.indexOf(`Could not find file: '${imported.name}'.`) === 0);
                 }
+
                 assert.isTrue(fileExistsIsCalled);
             }
             {
@@ -160,7 +165,8 @@ namespace ts {
                 };
 
                 const newContent = `import {x} from "f1"`;
-                rootScriptInfo.editContent(0, rootScriptInfo.content.length, newContent);
+                rootScriptInfo.editContent(0, content.length, newContent);
+                content = newContent;
                 project.compilerService.languageService.getSemanticDiagnostics(imported.name);
                 assert.isTrue(fileExistsCalled);
 
@@ -205,7 +211,7 @@ namespace ts {
             };
 
             const { project, rootScriptInfo } = createProject(root.name, serverHost);
-
+            const content = rootScriptInfo.getText();
             let diags = project.compilerService.languageService.getSemanticDiagnostics(root.name);
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
             assert.isTrue(diags.length === 1, "one diagnostic expected");
@@ -214,7 +220,7 @@ namespace ts {
             // assert that import will success once file appear on disk
             fileMap[imported.name] = imported;
             fileExistsCalledForBar = false;
-            rootScriptInfo.editContent(0, rootScriptInfo.content.length, `import {y} from "bar"`);
+            rootScriptInfo.editContent(0, content.length, `import {y} from "bar"`);
 
             diags = project.compilerService.languageService.getSemanticDiagnostics(root.name);
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");

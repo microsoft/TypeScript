@@ -19,29 +19,29 @@
 //// </div>
 
 goTo.marker('1');
-verify.not.isValidBraceCompletionAtPostion('(');
-verify.isValidBraceCompletionAtPostion('{');
+verify.not.isValidBraceCompletionAtPosition('(');
+verify.isValidBraceCompletionAtPosition('{');
 
 goTo.marker('2');
-verify.not.isValidBraceCompletionAtPostion('(');
-verify.not.isValidBraceCompletionAtPostion('{');
+verify.not.isValidBraceCompletionAtPosition('(');
+verify.not.isValidBraceCompletionAtPosition('{');
 
 goTo.marker('3');
-verify.not.isValidBraceCompletionAtPostion('(');
-verify.isValidBraceCompletionAtPostion('{');
+verify.not.isValidBraceCompletionAtPosition('(');
+verify.isValidBraceCompletionAtPosition('{');
 
 goTo.marker('4');
-verify.not.isValidBraceCompletionAtPostion('(');
-verify.isValidBraceCompletionAtPostion('{');
+verify.not.isValidBraceCompletionAtPosition('(');
+verify.isValidBraceCompletionAtPosition('{');
 
 goTo.marker('5');
-verify.not.isValidBraceCompletionAtPostion('(');
-verify.isValidBraceCompletionAtPostion('{');
+verify.not.isValidBraceCompletionAtPosition('(');
+verify.isValidBraceCompletionAtPosition('{');
 
 goTo.marker('6');
-verify.not.isValidBraceCompletionAtPostion('(');
-verify.isValidBraceCompletionAtPostion('{');
+verify.not.isValidBraceCompletionAtPosition('(');
+verify.isValidBraceCompletionAtPosition('{');
 
 goTo.marker('7');
-verify.not.isValidBraceCompletionAtPostion('(');
-verify.isValidBraceCompletionAtPostion('{');
+verify.not.isValidBraceCompletionAtPosition('(');
+verify.isValidBraceCompletionAtPosition('{');

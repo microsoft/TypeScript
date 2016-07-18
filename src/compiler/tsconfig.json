@@ -3,14 +3,15 @@
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "out": "../../built/local/tsc.js",
-        "sourceMap": true
+        "outFile": "../../built/local/tsc.js",
+        "sourceMap": true,
+        "declaration": true,
+        "stripInternal": true
     },
     "files": [
-        "types.ts",
         "core.ts",
         "sys.ts",
-        "diagnosticInformationMap.generated.ts",
+        "types.ts",
         "scanner.ts",
         "parser.ts",
         "utilities.ts",
@@ -34,6 +35,7 @@
         "emitter.ts",
         "program.ts",
         "commandLineParser.ts",
-        "tsc.ts"
+        "tsc.ts",
+        "diagnosticInformationMap.generated.ts"
     ]
 }

@@ -31,6 +31,9 @@ namespace ts {
     export interface EmitHost extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
 
+        /* @internal */
+        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
@@ -1725,7 +1728,7 @@ namespace ts {
             node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier;
     }
 
-    export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration) {
+    export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration | InterfaceDeclaration) {
         const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
@@ -2563,7 +2566,8 @@ namespace ts {
         }
         else {
             for (const sourceFile of sourceFiles) {
-                if (!isDeclarationFile(sourceFile)) {
+                 // Don't emit if source file is a declaration file, or was located under node_modules
+                if (!isDeclarationFile(sourceFile) && !host.isSourceFileFromExternalLibrary(sourceFile)) {
                     onSingleFileEmit(host, sourceFile);
                 }
             }
@@ -2625,7 +2629,8 @@ namespace ts {
         else {
             const sourceFiles = targetSourceFile === undefined ? host.getSourceFiles() : [targetSourceFile];
             for (const sourceFile of sourceFiles) {
-                if (!isDeclarationFile(sourceFile)) {
+                // Don't emit if source file is a declaration file, or was located under node_modules
+                if (!isDeclarationFile(sourceFile) && !host.isSourceFileFromExternalLibrary(sourceFile)) {
                     onSingleFileEmit(host, sourceFile);
                 }
             }
@@ -2657,12 +2662,13 @@ namespace ts {
         }
 
         function onBundledEmit(host: EmitHost) {
-            const moduleKind = getEmitModuleKind(options);
-            const moduleEmitEnabled = moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.System;
-            // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
-            const bundledSources = filter(host.getSourceFiles(), sourceFile =>
-                !isDeclarationFile(sourceFile)                                       // Not a declaration file
-                && (!isExternalModule(sourceFile) || moduleEmitEnabled)); // and not a module, unless module emit enabled
+            // Can emit only sources that are not declaration file and are either non module code or module with
+            // --module or --target es6 specified. Files included by searching under node_modules are also not emitted.
+            const bundledSources = filter(host.getSourceFiles(),
+                sourceFile => !isDeclarationFile(sourceFile) &&
+                              !host.isSourceFileFromExternalLibrary(sourceFile) &&
+                              (!isExternalModule(sourceFile) ||
+                               !!getEmitModuleKind(options)));
 
             if (bundledSources.length) {
                 const jsFilePath = options.outFile || options.out;
@@ -2678,7 +2684,9 @@ namespace ts {
 
     export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
         let sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
-        sourceFilePath = sourceFilePath.replace(host.getCommonSourceDirectory(), "");
+        const commonSourceDirectory = host.getCommonSourceDirectory();
+        const isSourceFileInCommonSourceDirectory = host.getCanonicalFileName(sourceFilePath).indexOf(host.getCanonicalFileName(commonSourceDirectory)) === 0;
+        sourceFilePath = isSourceFileInCommonSourceDirectory ? sourceFilePath.substring(commonSourceDirectory.length) : sourceFilePath;
         return combinePaths(newDirPath, sourceFilePath);
     }
 
@@ -2971,7 +2979,7 @@ namespace ts {
 
     function calculateIndent(text: string, pos: number, end: number) {
         let currentLineIndent = 0;
-        for (; pos < end && isWhiteSpace(text.charCodeAt(pos)); pos++) {
+        for (; pos < end && isWhiteSpaceSingleLine(text.charCodeAt(pos)); pos++) {
             if (text.charCodeAt(pos) === CharacterCodes.tab) {
                 // Tabs = TabSize = indent size and go to next tabStop
                 currentLineIndent += getIndentSize() - (currentLineIndent % getIndentSize());
@@ -3098,6 +3106,10 @@ namespace ts {
 
     export function hasJavaScriptFileExtension(fileName: string) {
         return forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
+    }
+
+    export function hasTypeScriptFileExtension(fileName: string) {
+        return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
     /**

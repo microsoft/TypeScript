@@ -13,7 +13,7 @@ namespace ts {
 
     const enum TypeScriptSubstitutionFlags {
         /** Enables substitutions for decorated classes. */
-        DecoratedClasses = 1 << 0,
+        ClassAliases = 1 << 0,
         /** Enables substitutions for namespace exports. */
         NamespaceExports = 1 << 1,
         /** Enables substitutions for async methods with `super` calls. */
@@ -63,13 +63,7 @@ namespace ts {
          * A map that keeps track of aliases created for classes with decorators to avoid issues
          * with the double-binding behavior of classes.
          */
-        let decoratedClassAliases: Map<Identifier>;
-
-        /**
-         * A map that keeps track of currently active aliases defined in `decoratedClassAliases`
-         * when just-in-time substitution occurs while printing an expression identifier.
-         */
-        let currentDecoratedClassAliases: Map<Identifier>;
+        let classAliases: Map<Identifier>;
 
         /**
          * Keeps track of whether  we are within any containing namespaces when performing
@@ -495,7 +489,7 @@ namespace ts {
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             const hasExtendsClause = getClassExtendsHeritageClauseElement(node) !== undefined;
             const isDecoratedClass = shouldEmitDecorateCallForClass(node);
-            let decoratedClassAlias: Identifier;
+            let classAlias: Identifier;
 
             // emit name if
             // - node has a name
@@ -529,7 +523,7 @@ namespace ts {
                 statements.push(classDeclaration);
             }
             else {
-                decoratedClassAlias = addClassDeclarationHeadWithDecorators(statements, node, name, hasExtendsClause);
+                classAlias = addClassDeclarationHeadWithDecorators(statements, node, name, hasExtendsClause);
             }
 
             // Emit static property assignment. Because classDeclaration is lexically evaluated,
@@ -544,7 +538,7 @@ namespace ts {
             // Write any decorators of the node.
             addClassElementDecorationStatements(statements, node, /*isStatic*/ false);
             addClassElementDecorationStatements(statements, node, /*isStatic*/ true);
-            addConstructorDecorationStatement(statements, node, decoratedClassAlias);
+            addConstructorDecorationStatement(statements, node, classAlias);
 
             // If the class is exported as part of a TypeScript namespace, emit the namespace export.
             // Otherwise, if the class was exported at the top level and was decorated, emit an export
@@ -679,11 +673,11 @@ namespace ts {
             }
 
             // Record an alias to avoid class double-binding.
-            let decoratedClassAlias: Identifier;
-            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.DecoratedClassWithSelfReference) {
-                enableSubstitutionForDecoratedClasses();
-                decoratedClassAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? node.name.text : "default");
-                decoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAlias;
+            let classAlias: Identifier;
+            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
+                enableSubstitutionForClassAliases();
+                classAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? node.name.text : "default");
+                classAliases[getOriginalNodeId(node)] = classAlias;
             }
 
             const declaredName = getDeclarationName(node, /*allowComments*/ true);
@@ -696,7 +690,7 @@ namespace ts {
                         /*modifiers*/ undefined,
                         createLetDeclarationList([
                             createVariableDeclaration(
-                                decoratedClassAlias || declaredName,
+                                classAlias || declaredName,
                                 /*type*/ undefined,
                                 classExpression
                             )
@@ -707,7 +701,7 @@ namespace ts {
                 )
             );
 
-            if (decoratedClassAlias) {
+            if (classAlias) {
                 // We emit the class alias as a `let` declaration here so that it has the same
                 // TDZ as the class.
 
@@ -720,7 +714,7 @@ namespace ts {
                                 createVariableDeclaration(
                                     declaredName,
                                     /*type*/ undefined,
-                                    decoratedClassAlias
+                                    classAlias
                                 )
                             ]),
                             /*location*/ location
@@ -730,7 +724,7 @@ namespace ts {
                 );
             }
 
-            return decoratedClassAlias;
+            return classAlias;
         }
 
         /**
@@ -760,6 +754,11 @@ namespace ts {
             if (staticProperties.length > 0) {
                 const expressions: Expression[] = [];
                 const temp = createTempVariable(hoistVariableDeclaration);
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
+                    // record an alias as the class name is not in scope for statics.
+                    enableSubstitutionForClassAliases();
+                    classAliases[getOriginalNodeId(node)] = temp;
+                }
 
                 // To preserve the behavior of the old emitter, we explicitly indent
                 // the body of a class with static initializers.
@@ -1085,9 +1084,6 @@ namespace ts {
             const propertyName = visitPropertyNameOfClassElement(property);
             const initializer = visitNode(property.initializer, visitor, isExpression);
             const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
-            if (!isComputedPropertyName(propertyName)) {
-                setNodeEmitFlags(memberAccess, NodeEmitFlags.NoNestedSourceMaps);
-            }
 
             return createAssignment(memberAccess, initializer);
         }
@@ -3100,18 +3096,16 @@ namespace ts {
             }
         }
 
-        function enableSubstitutionForDecoratedClasses() {
-            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses) === 0) {
-                enabledSubstitutions |= TypeScriptSubstitutionFlags.DecoratedClasses;
+        function enableSubstitutionForClassAliases() {
+            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.ClassAliases) === 0) {
+                enabledSubstitutions |= TypeScriptSubstitutionFlags.ClassAliases;
 
                 // We need to enable substitutions for identifiers. This allows us to
                 // substitute class names inside of a class declaration.
                 context.enableSubstitution(SyntaxKind.Identifier);
-                context.enableEmitNotification(SyntaxKind.Identifier);
 
                 // Keep track of class aliases.
-                decoratedClassAliases = {};
-                currentDecoratedClassAliases = {};
+                classAliases = {};
             }
         }
 
@@ -3127,10 +3121,6 @@ namespace ts {
                 // We need to be notified when entering and exiting namespaces.
                 context.enableEmitNotification(SyntaxKind.ModuleDeclaration);
             }
-        }
-
-        function isClassWithDecorators(node: Node): node is ClassDeclaration {
-            return node.kind === SyntaxKind.ClassDeclaration && node.decorators !== undefined;
         }
 
         function isSuperContainer(node: Node): node is SuperContainer {
@@ -3159,21 +3149,6 @@ namespace ts {
         function onEmitNode(node: Node, emit: (node: Node) => void): void {
             const savedApplicableSubstitutions = applicableSubstitutions;
             const savedCurrentSuperContainer = currentSuperContainer;
-
-            // If we need support substitutions for aliases for decorated classes,
-            // we should enable it here.
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses) {
-                if (isClassWithDecorators(node)) {
-                    currentDecoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAliases[getOriginalNodeId(node)];
-                }
-                else if (node.kind === SyntaxKind.Identifier) {
-                    const declaration = resolver.getReferencedValueDeclaration(<Identifier>node);
-                    if (declaration && isClassWithDecorators(declaration)) {
-                        currentDecoratedClassAliases[getOriginalNodeId(declaration)] = decoratedClassAliases[getOriginalNodeId(declaration)];
-                    }
-                }
-            }
-
             // If we need to support substitutions for `super` in an async method,
             // we should track it here.
             if (enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
@@ -3183,15 +3158,12 @@ namespace ts {
             if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && isTransformedModuleDeclaration(node)) {
                 applicableSubstitutions |= TypeScriptSubstitutionFlags.NamespaceExports;
             }
+
             if (enabledSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && isTransformedEnumDeclaration(node)) {
                 applicableSubstitutions |= TypeScriptSubstitutionFlags.NonQualifiedEnumMembers;
             }
 
             previousOnEmitNode(node, emit);
-
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses && isClassWithDecorators(node)) {
-                currentDecoratedClassAliases[getOriginalNodeId(node)] = undefined;
-            }
 
             applicableSubstitutions = savedApplicableSubstitutions;
             currentSuperContainer = savedCurrentSuperContainer;
@@ -3254,20 +3226,22 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier): Expression {
-            return trySubstituteDecoratedClassName(node)
+            return trySubstituteClassAlias(node)
                 || trySubstituteNamespaceExportedName(node)
                 || node;
         }
 
-        function trySubstituteDecoratedClassName(node: Identifier): Expression {
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses) {
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.SelfReferenceInDecoratedClass) {
+        function trySubstituteClassAlias(node: Identifier): Expression {
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.ClassAliases) {
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConstructorReferenceInClass) {
                     // Due to the emit for class decorators, any reference to the class from inside of the class body
                     // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                     // behavior of class names in ES6.
+                    // Also, when emitting statics for class expressions, we must substitute a class alias for
+                    // constructor references in static property initializers.
                     const declaration = resolver.getReferencedValueDeclaration(node);
                     if (declaration) {
-                        const classAlias = currentDecoratedClassAliases[getOriginalNodeId(declaration)];
+                        const classAlias = classAliases[declaration.id];
                         if (classAlias) {
                             const clone = getSynthesizedClone(classAlias);
                             setSourceMapRange(clone, node);

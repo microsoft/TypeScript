@@ -218,7 +218,12 @@ class ProjectRunner extends RunnerBase {
                 }
 
                 const configObject = result.config;
-                const configParseResult = ts.parseJsonConfigFileContent(configObject, { readDirectory }, ts.getDirectoryPath(configFileName), compilerOptions);
+                const configParseHost: ts.ParseConfigHost = {
+                    useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
+                    fileExists,
+                    readDirectory,
+                };
+                const configParseResult = ts.parseJsonConfigFileContent(configObject, configParseHost, ts.getDirectoryPath(configFileName), compilerOptions);
                 if (configParseResult.errors.length > 0) {
                     return {
                         moduleKind,
@@ -276,8 +281,8 @@ class ProjectRunner extends RunnerBase {
                     : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName);
             }
 
-            function readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
-                const harnessReadDirectoryResult = Harness.IO.readDirectory(getFileNameInTheProjectTest(rootDir), extension, exclude);
+            function readDirectory(rootDir: string, extension: string[], exclude: string[], include: string[]): string[] {
+                const harnessReadDirectoryResult = Harness.IO.readDirectory(getFileNameInTheProjectTest(rootDir), extension, exclude, include);
                 const result: string[] = [];
                 for (let i = 0; i < harnessReadDirectoryResult.length; i++) {
                     result[i] = ts.getRelativePathToDirectoryOrUrl(testCase.projectRoot, harnessReadDirectoryResult[i],
@@ -473,8 +478,10 @@ class ProjectRunner extends RunnerBase {
 
                     it("Baseline of emitted result (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (testCase.baselineCheck) {
-                            let lastError: any = undefined;
+                            const errs: Error[] = [];
                             ts.forEach(compilerResult.outputFiles, outputFile => {
+                                // There may be multiple files with different baselines. Run all and report at the end, else
+                                // it stops copying the remaining emitted files from 'local/projectOutput' to 'local/project'.
                                 try {
                                     Harness.Baseline.runBaseline("Baseline of emitted result (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
                                         try {
@@ -486,15 +493,15 @@ class ProjectRunner extends RunnerBase {
                                     });
                                 }
                                 catch (e) {
-                                    lastError = e;
+                                    errs.push(e);
                                 }
                             });
-
-                            if (lastError) {
-                                throw lastError;
+                            if (errs.length) {
+                                throw Error(errs.join("\n     "));
                             }
                         }
                     });
+
 
                     // it("SourceMapRecord for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                     //     if (compilerResult.sourceMapData) {
