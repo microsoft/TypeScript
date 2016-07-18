@@ -138,6 +138,7 @@ namespace ts {
         }
         return -1;
     }
+
     export function countWhere<T>(array: T[], predicate: (x: T, i: number) => boolean): number {
         let count = 0;
         if (array) {
@@ -1242,15 +1243,17 @@ namespace ts {
             // Storage for literal base paths amongst the include patterns.
             const includeBasePaths: string[] = [];
             for (const include of includes) {
-                if (isRootedDiskPath(include)) {
-                    const wildcardOffset = indexOfAnyCharCode(include, wildcardCharCodes);
-                    const includeBasePath = wildcardOffset < 0
-                        ? removeTrailingDirectorySeparator(getDirectoryPath(include))
-                        : include.substring(0, include.lastIndexOf(directorySeparator, wildcardOffset));
+                // We also need to check the relative paths by converting them to absolute and normalizing
+                // in case they escape the base path (e.g "..\somedirectory")
+                const absolute: string = isRootedDiskPath(include) ? include : normalizePath(combinePaths(path, include));
 
-                    // Append the literal and canonical candidate base paths.
-                    includeBasePaths.push(includeBasePath);
-                }
+                const wildcardOffset = indexOfAnyCharCode(absolute, wildcardCharCodes);
+                const includeBasePath = wildcardOffset < 0
+                    ? removeTrailingDirectorySeparator(getDirectoryPath(absolute))
+                    : absolute.substring(0, absolute.lastIndexOf(directorySeparator, wildcardOffset));
+
+                // Append the literal and canonical candidate base paths.
+                includeBasePaths.push(includeBasePath);
             }
 
             // Sort the offsets array using either the literal or canonical path representations.

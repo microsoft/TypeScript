@@ -412,8 +412,7 @@ namespace ts.NavigationBar {
             case SyntaxKind.JSDocTypedefTag:
                 return getJSDocTypedefTagName(<JSDocTypedefTag>node);
             default:
-                Debug.fail();
-                return "";
+                return "<unknown>";
         }
     }
 

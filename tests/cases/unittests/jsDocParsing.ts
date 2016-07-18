@@ -281,6 +281,13 @@ namespace ts {
 `/**
   * @param foo
   */`);
+                parsesCorrectly("typedefTagWithChildrenTags",
+`/**
+  * @typedef People
+  * @type {Object}
+  * @property {number} age
+  * @property {string} name
+  */`);
             });
         });
     });

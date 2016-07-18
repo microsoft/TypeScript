@@ -31,14 +31,8 @@ abstract class RunnerBase {
 
     /** Replaces instances of full paths with fileNames only */
     static removeFullPaths(path: string) {
-        let fixedPath = path;
-
-        // full paths either start with a drive letter or / for *nix, shouldn't have \ in the path at this point
-        const fullPath = /(\w+:|\/)?([\w+\-\.]|\/)*\.tsx?/g;
-        const fullPathList = fixedPath.match(fullPath);
-        if (fullPathList) {
-            fullPathList.forEach((match: string) => fixedPath = fixedPath.replace(match, Harness.Path.getFileName(match)));
-        }
+        // If its a full path (starts with "C:" or "/") replace with just the filename
+        let fixedPath = /^(\w:|\/)/.test(path) ? Harness.Path.getFileName(path) : path;
 
         // when running in the browser the 'full path' is the host name, shows up in error baselines
         const localHost = /http:\/localhost:\d+/g;

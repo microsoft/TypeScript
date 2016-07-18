@@ -312,7 +312,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         }
 
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--noImplicitAny --noEmitOnError --pretty";
+        var options = "--noImplicitAny --noEmitOnError --types --pretty";
         opts = opts || {};
         // Keep comments when specifically requested
         // or when in debug mode.
@@ -790,7 +790,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
-        testTimeout = 100000;
+        testTimeout = 400000;
     }
 
     colors = process.env.colors || process.env.color;
@@ -1032,7 +1032,8 @@ var tslintRules = [
     "booleanTriviaRule",
     "typeOperatorSpacingRule",
     "noInOperatorRule",
-    "noIncrementDecrementRule"
+    "noIncrementDecrementRule",
+    "objectLiteralSurroundingSpaceRule",
 ];
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
@@ -1083,7 +1084,8 @@ var lintTargets = compilerSources
     .concat(["instrumenter.ts"].map(function(f) { return path.join(harnessDirectory, f) }))
     .concat(serverCoreSources)
     .concat(tslintRulesFiles)
-    .concat(servicesSources);
+    .concat(servicesSources)
+    .concat(["Gulpfile.ts"]);
 
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");

@@ -2,9 +2,9 @@
 
 import React = require('react');
 
-type Invalid1 = React.ComponentClass<any> | string;
+type Invalid1 = React.ComponentClass<any> | number;
 
-const X: Invalid1 = "Should fail to construct";
+const X: Invalid1 = 1;
 
 <X />;
 
@@ -14,5 +14,5 @@ const X: Invalid1 = "Should fail to construct";
 //// [file.js]
 "use strict";
 var React = require("react");
-var X = "Should fail to construct";
+var X = 1;
 React.createElement(X, null);
