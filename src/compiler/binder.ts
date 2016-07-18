@@ -2643,8 +2643,9 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertTypeScript;
             }
 
-            // If a FunctionDeclaration is exported or its subtree has marked the container as
-            // needing to capture the lexical `this`, then this node is ES6 syntax.
+            // If a FunctionDeclaration's subtree has marked the container as needing to capture the
+            // lexical this, or the function contains parameters with initializers, then this node is
+            // ES6 syntax.
             if (subtreeFlags & TransformFlags.ES6FunctionSyntaxMask) {
                 transformFlags |= TransformFlags.AssertES6;
             }
@@ -2673,8 +2674,9 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
-        // If a FunctionExpression contains an asterisk token, or its subtree has marked the container
-        // as needing to capture the lexical this, then this node is ES6 syntax.
+        // If a FunctionExpression's subtree has marked the container as needing to capture the
+        // lexical this, or the function contains parameters with initializers, then this node is
+        // ES6 syntax.
         if (subtreeFlags & TransformFlags.ES6FunctionSyntaxMask) {
             transformFlags |= TransformFlags.AssertES6;
         }
