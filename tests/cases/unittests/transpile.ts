@@ -231,11 +231,11 @@ var x = 0;`, {
         });
 
         transpilesCorrectly("Report an error when compiler-options input is empty object", "", {
-            options: { compilerOptions: { module: <ModuleKind><any>{} }}
+            options: { compilerOptions: { module: <ModuleKind><any>{ } } }
         });
 
         transpilesCorrectly("Report an error when compiler-options input is empty string", "", {
-            options: { compilerOptions: { module: <ModuleKind><any>"" }}
+            options: { compilerOptions: { module: <ModuleKind><any>"" } }
         });
 
         transpilesCorrectly("Support options with lib values", "const a = 10;", {
@@ -475,5 +475,5 @@ var x = 0;`, {
                 }
             }
         });
-    })
+    });
 }
