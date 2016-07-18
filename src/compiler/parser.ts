@@ -6185,6 +6185,7 @@ namespace ts {
                     }
                     // TODO:
                     // 1. Get jsdoc comments from params
+                    //    a. 'function': () => any, but should really be : Function
                     // 2. Get jsdoc comments from parents (this should already be in place)
                     //    (I think this is line-limited just like the new code.)
                     // 3. Still might want indentation-eating code. (maybe)
@@ -6264,15 +6265,14 @@ namespace ts {
                     else {
                         tag = parseUnknownTag(atToken, tagName);
                     }
-                    let comments: string[] = [];
-                    // TODO: Parse comments to end of line or something
-                    while (token !== SyntaxKind.NewLineTrivia) {
+
+                    const comments: string[] = [];
+                    while (token !== SyntaxKind.NewLineTrivia && token !== SyntaxKind.EndOfFileToken) {
                         comments.push(scanner.getTokenText());
                         nextJSDocToken();
                     }
-                    tag.comments = comments.join("");
-                    comments = [];
-                    addTag(tag);
+
+                    addTag(tag, comments);
                 }
 
                 function parseUnknownTag(atToken: Node, tagName: Identifier) {
@@ -6282,8 +6282,10 @@ namespace ts {
                     return finishNode(result);
                 }
 
-                function addTag(tag: JSDocTag): void {
+                function addTag(tag: JSDocTag, comments: string[]): void {
                     if (tag) {
+                        tag.comments = comments.join("");
+
                         if (!tags) {
                             tags = <NodeArray<JSDocTag>>[];
                             tags.pos = tag.pos;

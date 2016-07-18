@@ -479,11 +479,15 @@ namespace ts {
         // from Array<T> - Array<string> and Array<number>
         const documentationComment = <SymbolDisplayPart[]>[];
         ts.forEachUnique(declarations, declaration => {
-            for (const jsdoc of getJSDocComments(declaration, /*checkParentVariableStatement*/ true)) {
+            const comments = getJSDocComments(declaration, /*checkParentVariableStatement*/ true);
+            if (!comments) {
+                return;
+            }
+            for (const comment of comments) {
                 if (documentationComment.length) {
                     documentationComment.push(lineBreakPart());
                 }
-                documentationComment.push(textPart(jsdoc.comment));
+                documentationComment.push(textPart(comment.comment));
             }
         });
 
