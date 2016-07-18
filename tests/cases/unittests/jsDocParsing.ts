@@ -107,14 +107,6 @@ namespace ts {
                 });
             }
 
-           function reIndentJSDocComment(jsdocComment: string) {
-                const result = jsdocComment
-                    .replace(/[\t ]*\/\*\*/, "/**")
-                    .replace(/[\t ]*\*\s?@/g, "  * @")
-                    .replace(/[\t ]*\*\s?\//, "  */");
-                return result;
-            }
-
             function parsesIncorrectly(name: string, content: string) {
                 it(name, () => {
                     const type = parseIsolatedJSDocComment(content);
