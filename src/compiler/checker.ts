@@ -13274,7 +13274,7 @@ namespace ts {
                         checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
                     }
                 }
-                if (!(<FunctionDeclaration>node).body) {
+                if (noUnusedIdentifiers && !(<FunctionDeclaration>node).body) {
                     checkUnusedTypeParameters(node);
                 }
             }
@@ -14609,8 +14609,15 @@ namespace ts {
         function checkUnusedTypeParameters(node: ClassDeclaration | ClassExpression | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration | InterfaceDeclaration) {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 if (node.typeParameters) {
+                    // Only report errors on the last declaration for the type parameter container;
+                    // this ensures that all uses have been accounted for.
+                    const symbol = node.symbol && getMergedSymbol(node.symbol);
+                    const lastDeclaration = symbol && symbol.declarations && lastOrUndefined(symbol.declarations);
+                    if (lastDeclaration !== node) {
+                        return;
+                    }
                     for (const typeParameter of node.typeParameters) {
-                        if (!typeParameter.symbol.isReferenced) {
+                        if (!getMergedSymbol(typeParameter.symbol).isReferenced) {
                             error(typeParameter.name, Diagnostics._0_is_declared_but_never_used, typeParameter.symbol.name);
                         }
                     }
@@ -16119,7 +16126,7 @@ namespace ts {
 
             if (produceDiagnostics) {
                 checkTypeForDuplicateIndexSignatures(node);
-                checkUnusedTypeParameters(node);
+                registerForUnusedIdentifiersCheck(node);
             }
         }
 
