@@ -2239,11 +2239,11 @@ namespace ts {
         return emitOutputFilePathWithoutExtension + extension;
     }
 
-    export function getDeclarationEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost) {
+    export function getDeclarationEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, ignoreCompilerOptions = false) {
         const options = host.getCompilerOptions();
         const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
 
-        if (options.declaration) {
+        if (options.declaration || ignoreCompilerOptions) {
             const path = outputDir
                 ? getSourceFilePathInNewDir(sourceFile, host, outputDir)
                 : sourceFile.fileName;
@@ -2269,7 +2269,8 @@ namespace ts {
 
     export function forEachExpectedEmitFile(host: EmitHost,
         action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) => void,
-        targetSourceFile?: SourceFile) {
+        targetSourceFile?: SourceFile,
+        emitDeclarationsOnly?: boolean) {
         const options = host.getCompilerOptions();
         // Emit on each source file
         if (options.outFile || options.out) {
@@ -2305,7 +2306,7 @@ namespace ts {
             const emitFileNames: EmitFileNames = {
                 jsFilePath,
                 sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
-                declarationFilePath: !isSourceFileJavaScript(sourceFile) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined
+                declarationFilePath: !isSourceFileJavaScript(sourceFile) ? getDeclarationEmitOutputFilePath(sourceFile, host, /*ignoreCompilerOptions*/ emitDeclarationsOnly) : undefined
             };
             action(emitFileNames, [sourceFile], /*isBundledEmit*/false);
         }

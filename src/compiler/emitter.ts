@@ -396,7 +396,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         const newLine = host.getNewLine();
 
         const emitJavaScript = createFileEmitter();
-        forEachExpectedEmitFile(host, emitFile, targetSourceFile);
+        forEachExpectedEmitFile(host, emitFile, targetSourceFile, emitDeclarationsOnly);
 
         return {
             emitSkipped,

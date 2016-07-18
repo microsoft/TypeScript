@@ -335,7 +335,7 @@ namespace ts {
         }
 
         // TOOD: record and invoke callbacks to simulate timer events
-        setTimeout (callback: TimeOutCallback, time: number, ...args: any[]) {
+        setTimeout(callback: TimeOutCallback, time: number, ...args: any[]) {
             return this.timeoutCallbacks.register(callback, args);
         };
 
@@ -352,7 +352,7 @@ namespace ts {
             this.timeoutCallbacks.invoke();
         }
 
-        setImmediate (callback: TimeOutCallback, time: number, ...args: any[]) {
+        setImmediate(callback: TimeOutCallback, time: number, ...args: any[]) {
             return this.immediateCallbacks.register(callback, args);
         };
 
@@ -370,6 +370,24 @@ namespace ts {
         readonly write = (s: string) => notImplemented();
         readonly createDirectory = (s: string) => notImplemented();
         readonly exit = () => notImplemented();
+    }
+
+    function makeSessionRequest<T>(command: string, args: T) {
+        const newRequest: server.protocol.Request = {
+            seq: 0,
+            type: "request",
+            command,
+            canCompressResponse: false,
+            arguments: args
+        };
+        return newRequest;
+    }
+
+    function openFilesForSession(files: FileOrFolder[], session: server.Session) {
+        for (const file of files) {
+            const request = makeSessionRequest<server.protocol.OpenRequestArgs>(server.CommandNames.Open, { file: file.path });
+            session.executeCommand(request);
+        }
     }
 
     describe("tsserver-project-system", () => {
@@ -752,7 +770,7 @@ namespace ts {
             checkProjectActualFiles(projectService.inferredProjects[0], [file2.path, file3.path, libFile.path]);
         });
 
-        it ("should close configured project after closing last open file", () => {
+        it("should close configured project after closing last open file", () => {
             const file1 = {
                 path: "/a/b/main.ts",
                 content: "let x =1;"
@@ -775,7 +793,7 @@ namespace ts {
             checkNumberOfConfiguredProjects(projectService, 0);
         });
 
-        it ("should not close external project with no open files", () => {
+        it("should not close external project with no open files", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
                 content: "let x =1;"
@@ -788,7 +806,7 @@ namespace ts {
             const host = createServerHost([file1, file2]);
             const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
             projectService.openExternalProject({
-                rootFiles: [ file1.path, file2.path ],
+                rootFiles: [file1.path, file2.path],
                 options: {},
                 projectFileName: externalProjectName
             });
@@ -811,7 +829,7 @@ namespace ts {
             checkNumberOfInferredProjects(projectService, 0);
         });
 
-        it ("external project that included config files", () => {
+        it("external project that included config files", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
                 content: "let x =1;"
@@ -846,7 +864,7 @@ namespace ts {
             const host = createServerHost([file1, file2, file3, config1, config2]);
             const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
             projectService.openExternalProject({
-                rootFiles: [ config1.path, config2.path, file3.path ],
+                rootFiles: [config1.path, config2.path, file3.path],
                 options: {},
                 projectFileName: externalProjectName
             });
@@ -888,7 +906,7 @@ namespace ts {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
             projectService.openExternalProject({
-                rootFiles: [ configFile.path ],
+                rootFiles: [configFile.path],
                 options: {},
                 projectFileName: externalProjectName
             });
@@ -919,7 +937,7 @@ namespace ts {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
             projectService.openExternalProject({
-                rootFiles: [ configFile.path ],
+                rootFiles: [configFile.path],
                 options: {},
                 projectFileName: externalProjectName
             });
@@ -953,11 +971,11 @@ namespace ts {
             projectService.openClientFile(file1.path);
 
             checkNumberOfInferredProjects(projectService, 1);
-            checkProjectActualFiles(projectService.inferredProjects[0], [ file1.path, file2.path ]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, file2.path]);
 
             projectService.openClientFile(file3.path);
             checkNumberOfInferredProjects(projectService, 2);
-            checkProjectActualFiles(projectService.inferredProjects[1], [ file3.path ]);
+            checkProjectActualFiles(projectService.inferredProjects[1], [file3.path]);
 
             const modifiedFile2 = {
                 path: file2.path,
@@ -968,7 +986,7 @@ namespace ts {
             host.triggerFileWatcherCallback(modifiedFile2.path, /*removed*/ false);
 
             checkNumberOfInferredProjects(projectService, 1);
-            checkProjectActualFiles(projectService.inferredProjects[0], [ file1.path, modifiedFile2.path, file3.path ]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, modifiedFile2.path, file3.path]);
         });
 
         it("deleted files affect project structure", () => {
@@ -991,7 +1009,7 @@ namespace ts {
 
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
 
-            checkProjectActualFiles(projectService.inferredProjects[0], [ file1.path, file2.path, file3.path ]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, file2.path, file3.path]);
 
             projectService.openClientFile(file3.path);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
@@ -1001,8 +1019,8 @@ namespace ts {
 
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
 
-            checkProjectActualFiles(projectService.inferredProjects[0], [ file1.path ]);
-            checkProjectActualFiles(projectService.inferredProjects[1], [ file3.path ]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [file1.path]);
+            checkProjectActualFiles(projectService.inferredProjects[1], [file3.path]);
         });
 
         it("open file become a part of configured project if it is referenced from root file", () => {
@@ -1020,7 +1038,7 @@ namespace ts {
             };
             const configFile = {
                 path: "/a/c/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: {}, files: [ "f2.ts", "f3.ts" ] })
+                content: JSON.stringify({ compilerOptions: {}, files: ["f2.ts", "f3.ts"] })
             };
 
             const host = createServerHost([file1, file2, file3]);
@@ -1028,17 +1046,17 @@ namespace ts {
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
-            checkProjectActualFiles(projectService.inferredProjects[0], [ file1.path ]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [file1.path]);
 
             projectService.openClientFile(file3.path);
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
-            checkProjectActualFiles(projectService.inferredProjects[0], [ file1.path ]);
-            checkProjectActualFiles(projectService.inferredProjects[1], [ file3.path ]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [file1.path]);
+            checkProjectActualFiles(projectService.inferredProjects[1], [file3.path]);
 
             host.reloadFS([file1, file2, file3, configFile]);
             host.triggerDirectoryWatcherCallback(getDirectoryPath(configFile.path), configFile.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [ file1.path, file2.path, file3.path ]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, file3.path]);
         });
 
         it("correctly migrate files between projects", () => {
@@ -1256,8 +1274,8 @@ namespace ts {
         });
     });
 
-    describe("compileOnSave-tests", () => {
-        it("affected file list contains only itself if a non-module file's shape didn't change", () => {
+    describe("API tests", () => {
+        describe("compileOnSave-tests", () => {
             const file1: FileOrFolder = {
                 path: "/a/b/file1.ts",
                 content: "export function Foo() { };"
@@ -1268,53 +1286,73 @@ namespace ts {
             };
             const configFile: FileOrFolder = {
                 path: "/a/b/tsconfig.json",
-                content: `{
-                    "compilerOptions": {
-                        "declaration": true
-                    }
-                }`
-            }
-            const host = createServerHost([file1, file2, configFile, libFile]);
-            const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
-
-            const openFile1Request: server.protocol.OpenRequest = {
-                seq: 0,
-                type: "request",
-                command: server.CommandNames.Open,
-                canCompressResponse: false,
-                arguments: {
-                    file: file1.path,
-                    projectFileName: undefined
-                }
+                content: `{}`
             };
-            const openFile2Request: server.protocol.OpenRequest = {
-                seq: 0,
-                type: "request",
-                command: server.CommandNames.Open,
-                canCompressResponse: false,
-                arguments: {
-                    file: file2.path,
-                    projectFileName: undefined
-                }
-            };
-            session.executeCommand(openFile2Request);
-            session.executeCommand(openFile1Request);
 
-            const compileOnSaveFileListRequest: server.protocol.CompileOnSaveAffectedFileListRequest = {
-                seq: 0,
-                type: "request",
-                command: server.CommandNames.CompileOnSaveAffectedFileList,
-                canCompressResponse: false,
-                arguments: {
-                    file: file1.path,
-                    projectFileName: undefined
-                }
-            };
-            assert.isTrue(arrayIsEqualTo(session.executeCommand(compileOnSaveFileListRequest).response, [file1.path, file2.path]));
+            it("affected file list should contain all the root files for the first request", () => {
+                const host = createServerHost([file1, file2, configFile, libFile]);
+                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
 
-            file1.content = "export function Foo() { console.log('hi') };"
-            host.reloadFS([file1, file2, configFile, libFile]);
-            assert.isTrue(arrayIsEqualTo(session.executeCommand(compileOnSaveFileListRequest).response, [file1.path]));
+                openFilesForSession([file1, file2], session);
+
+                const compileOnSaveFileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
+                const firstResult = session.executeCommand(compileOnSaveFileListRequest).response;
+                assert.isTrue(isArray(firstResult));
+                assert.isTrue(arrayIsEqualTo(firstResult.sort(), [file2.path, file1.path].sort()),  `The actual response is: ${firstResult}, while expecting: ${[file2.path, file1.path].sort()}`);
+
+            });
+
+            it("affected file list contains only itself if a non-module file's shape didn't change", () => {
+                const host = createServerHost([file1, file2, configFile, libFile]);
+                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
+
+                openFilesForSession([file1, file2], session);
+
+                const compileOnSaveFileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
+                session.executeCommand(compileOnSaveFileListRequest);
+
+                // change the content of file1 to `export function Foo() { console.log('hi'); };`
+                const changeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                    insertString: `console.log('hi');`,
+                    line: 1,
+                    offset: 25,
+                    endLine: 1,
+                    endOffset: 25,
+                    file: file1.path
+                });
+                session.executeCommand(changeRequest);
+
+                const secondResult = session.executeCommand(compileOnSaveFileListRequest).response;
+                assert.isTrue(isArray(secondResult));
+                assert.isTrue(arrayIsEqualTo(secondResult.sort(), [file1.path]), `The actual response is: ${secondResult}, while expecting: ${[file1.path]}`);
+            });
+
+            it("affected file list should be up-to-date with the reference map changes", () => {
+                const file3: FileOrFolder = {
+                    path: "/a/b/file3.ts",
+                    content: `let z = 10;`
+                };
+                const host = createServerHost([file1, file2, file3, configFile, libFile]);
+                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
+
+                openFilesForSession([file1, file2, file3], session);
+                const compileOnSaveFileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
+                session.executeCommand(compileOnSaveFileListRequest);
+
+                const changeFile3Request = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                    insertString: `import {Foo} from "./file1";\n`,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    file: file3.path
+                });
+                session.executeCommand(changeFile3Request);
+
+                const secondResult = session.executeCommand(compileOnSaveFileListRequest).response;
+                assert.isTrue(isArray(secondResult));
+                assert.isTrue(arrayIsEqualTo(secondResult.sort(), [file1.path, file3.path].sort()), `The actual response is: ${secondResult}, while expecting: ${[file1.path, file3.path].sort()}`);
+            })
         })
     });
 }

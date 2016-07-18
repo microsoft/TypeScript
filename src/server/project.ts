@@ -74,9 +74,7 @@ namespace ts.server {
                 this.disableLanguageService();
             }
 
-            this.builder = createBuilder(this, {
-                logError: (err: Error, cmd: string) => {}
-            });
+            this.builder = createBuilder(this);
             this.markAsDirty();
         }
 
@@ -346,6 +344,76 @@ namespace ts.server {
                 this.lastReportedFileNames = arrayToMap(projectFileNames, x => x);
                 this.lastReportedVersion = this.projectStructureVersion;
                 return { info, files: projectFileNames };
+            }
+        }
+
+        getReferencedFiles(filename: string): string[] {
+            if (!this.languageServiceEnabled) {
+                return [];
+            }
+
+            const sourceFile = this.program.getSourceFile(filename);
+            const modules = sourceFile.resolvedModules;
+            const result: string[] = [];
+            if (modules) {
+                // We need to use a set here since the code can contain the same import twice,
+                // but that will only be one dependency.
+                const referencedModules: Map<boolean> = {};
+                let checker: TypeChecker = undefined;
+                for (const key of Object.keys(modules)) {
+                    const module = modules[key];
+                    // We have a module references, but the module couldn't be resolved during parsing time
+                    // For example for something like import * as fs from 'fs'; These imports are resolved
+                    // while resolving symbols so use the type checker for find the resolve module.
+                    if (!module || !module.resolvedFileName) {
+                        let symbol: Symbol = undefined;
+                        for (const statement of sourceFile.statements) {
+                            if (statement.kind === SyntaxKind.ImportDeclaration) {
+                                const importDeclaration = <ImportDeclaration>statement;
+                                const name = importDeclaration.moduleSpecifier.getText();
+                                if (removeQuotes(name) === key) {
+                                    if (!checker) {
+                                        checker = this.program.getTypeChecker();
+                                    }
+                                    symbol = checker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
+                                    break;
+                                }
+                            }
+                            else if (statement.kind === SyntaxKind.ImportEqualsDeclaration) {
+                                const moduleReference = (<ImportEqualsDeclaration>statement).moduleReference;
+                                if (moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                                    const external = <ExternalModuleReference>moduleReference;
+                                    if (external.expression && removeQuotes(external.expression.getText()) === key) {
+                                        if (!checker) {
+                                            checker = this.program.getTypeChecker();
+                                        }
+                                        symbol = checker.getSymbolAtLocation(external.expression);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (symbol && symbol.declarations[0]) {
+                            const sourceFile = symbol.declarations[0].getSourceFile();
+                            if (sourceFile) {
+                                referencedModules[sourceFile.fileName] = true;
+                            }
+                        }
+                    }
+                    else {
+                        referencedModules[module.resolvedFileName] = true;
+                    }
+                }
+                for (const key of getKeys(referencedModules)) {
+                    result.push(key);
+                }
+            }
+            return result;
+        }
+
+        onFileChanged(changedFile: string) {
+            if (this.builder) {
+                this.builder.onFileChanged(changedFile);
             }
         }
 
