@@ -6113,7 +6113,7 @@ namespace ts {
                 Debug.assert(end <= content.length);
 
                 let tags: NodeArray<JSDocTag>;
-                let comments: string[] = [];
+                const comments: string[] = [];
                 let result: JSDocComment;
 
                 // Check for /** (JSDoc opening part)
@@ -6183,6 +6183,18 @@ namespace ts {
                         }
                         nextJSDocToken();
                     }
+                    // TODO:
+                    // 1. Get jsdoc comments from params
+                    // 2. Get jsdoc comments from parents (this should already be in place)
+                    //    (I think this is line-limited just like the new code.)
+                    // 3. Still might want indentation-eating code. (maybe)
+                    //    a. if there is no leading * on the first line, then there is no whitespace-eating
+                    //    b. otherwise, the indentation is the number of spaces after the * on the first line
+                    // 4. child comments might need to cross lines until the next tag appears.
+
+                    // 5. crash when running paramtag
+                    // 6. get *all* tests to pass
+                    // 7. cleanup in case this change fixes a good number of existing bugs
 
                     result = createJSDocComment();
 
@@ -6258,7 +6270,7 @@ namespace ts {
                         comments.push(scanner.getTokenText());
                         nextJSDocToken();
                     }
-                    tag.comments = comments.join(' ');
+                    tag.comments = comments.join("");
                     comments = [];
                     addTag(tag);
                 }
