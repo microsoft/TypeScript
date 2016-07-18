@@ -17860,7 +17860,13 @@ namespace ts {
                     (augmentations || (augmentations = [])).push(file.moduleAugmentations);
                 }
                 if (file.symbol && file.symbol.globalExports) {
-                    mergeSymbolTable(globals, file.symbol.globalExports);
+                    // Merge in UMD exports with first-in-wins semantics (see #9771)
+                    const source = file.symbol.globalExports;
+                    for (const id in source) {
+                        if (hasProperty(source, id) && !hasProperty(globals, id)) {
+                            globals[id] = source[id];
+                        }
+                    }
                 }
             });
 
