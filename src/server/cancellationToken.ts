@@ -1,4 +1,4 @@
-/// <reference path="node.d.ts"/>
+/// <reference types="node"/>
 
 
 // TODO: extract services types 
@@ -6,7 +6,7 @@ interface HostCancellationToken {
     isCancellationRequested(): boolean;
 }
 
-const fs: typeof NodeJS.fs = require("fs");
+import fs = require("fs");
 
 function createCancellationToken(args: string[]): HostCancellationToken {
     let cancellationPipeName: string;
