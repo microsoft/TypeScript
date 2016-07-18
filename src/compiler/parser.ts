@@ -6107,7 +6107,6 @@ namespace ts {
                 start = start || 0;
                 const end = length === undefined ? content.length : start + length;
                 length = end - start;
-                const triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, sourceFile.languageVariant, sourceFile.text);
 
                 Debug.assert(start >= 0);
                 Debug.assert(start <= end);
@@ -6118,74 +6117,77 @@ namespace ts {
                 let result: JSDocComment;
 
                 // Check for /** (JSDoc opening part)
-                if (content.charCodeAt(start) === CharacterCodes.slash &&
-                    content.charCodeAt(start + 1) === CharacterCodes.asterisk &&
-                    content.charCodeAt(start + 2) === CharacterCodes.asterisk &&
-                    content.charCodeAt(start + 3) !== CharacterCodes.asterisk) {
-
-
-                    // + 3 for leading /**, - 5 in total for /** */
-                    triviaScanner.scanRange(start + 3, length - 5, () => {
-                        // Initially we can parse out a tag.  We also have seen a starting asterisk.
-                        // This is so that /** * @type */ doesn't parse.
-                        let canParseTag = true;
-                        let seenAsterisk = true;
-
-                        nextJSDocToken();
-                        while (token !== SyntaxKind.EndOfFileToken) {
-                            switch (token) {
-                                case SyntaxKind.AtToken:
-                                    if (canParseTag) {
-                                        parseTag();
-                                    }
-                                    // This will take us past the end of the line, so it's OK to parse a tag on the next pass through the loop
-                                    canParseTag = true;
-                                    seenAsterisk = false;
-                                    break;
-
-                                case SyntaxKind.NewLineTrivia:
-                                    // After a line break, we can parse a tag, and we haven't seen an asterisk on the next line yet
-                                    canParseTag = true;
-                                    seenAsterisk = false;
-                                    break;
-
-                                case SyntaxKind.AsteriskToken:
-                                    if (seenAsterisk) {
-                                        // If we've already seen an asterisk, then we can no longer parse a tag on this line
-                                        canParseTag = false;
-                                    }
-                                    // Ignore the first asterisk on a line
-                                    seenAsterisk = true;
-                                    break;
-
-                                case SyntaxKind.Identifier:
-                                    // Anything else is doc comment text.  We can't do anything with it.  Because it
-                                    // wasn't a tag, we can no longer parse a tag on this line until we hit the next
-                                    // line break.
-                                    canParseTag = false;
-                                    comments.push(scanner.getTokenText());
-                                    break;
-
-                                // case SyntaxKind.Unknown:
-                                case SyntaxKind.EndOfFileToken:
-                                    break;
-
-                                default:
-                                    comments.push(scanner.getTokenText());
-                                    break;
-                            }
-                            // TODO: 1. skip * (and others? newlines?)
-                            //       3. ugh. what about '('? I think I actually need whitespace and newlines too.
-                            // (1) and (3) will require some massive rewriting of the parsing code here.
-                            nextJSDocToken();
-                        }
-
-                        result = createJSDocComment();
-
-                    });
+                if (!isJsDocStart(content, start)) {
+                    return result;
                 }
 
+                // + 3 for leading /**, - 5 in total for /** */
+                scanner.scanRange(start + 3, length - 5, () => {
+                    // Initially we can parse out a tag.  We also have seen a starting asterisk.
+                    // This is so that /** * @type */ doesn't parse.
+                    let canParseTag = true;
+                    let seenAsterisk = true;
+
+                    nextJSDocToken();
+                    while (token !== SyntaxKind.EndOfFileToken) {
+                        switch (token) {
+                            case SyntaxKind.AtToken:
+                                if (canParseTag) {
+                                    parseTag();
+                                }
+                                // This will take us past the end of the line, so it's OK to parse a tag on the next pass through the loop
+                                canParseTag = true;
+                                seenAsterisk = false;
+                                break;
+
+                            case SyntaxKind.NewLineTrivia:
+                                // After a line break, we can parse a tag, and we haven't seen an asterisk on the next line yet
+                                canParseTag = true;
+                                seenAsterisk = false;
+                                break;
+
+                            case SyntaxKind.AsteriskToken:
+                                if (seenAsterisk) {
+                                    // If we've already seen an asterisk, then we can no longer parse a tag on this line
+                                    canParseTag = false;
+                                }
+                                // Ignore the first asterisk on a line
+                                seenAsterisk = true;
+                                break;
+
+                            case SyntaxKind.Identifier:
+                                // Anything else is doc comment text.  We can't do anything with it.  Because it
+                                // wasn't a tag, we can no longer parse a tag on this line until we hit the next
+                                // line break.
+                                canParseTag = false;
+                                comments.push(scanner.getTokenText());
+                                break;
+
+                            case SyntaxKind.EndOfFileToken:
+                                break;
+
+                            default:
+                                comments.push(scanner.getTokenText());
+                                break;
+                        }
+                        // TODO: 1. skip * (and others? newlines?)
+                        //       3. ugh. what about '('? I think I actually need whitespace and newlines too.
+                        // (1) and (3) will require some massive rewriting of the parsing code here.
+                        nextJSDocToken();
+                    }
+
+                    result = createJSDocComment();
+
+                });
+
                 return result;
+
+                function isJsDocStart(content: string, start: number) {
+                    return content.charCodeAt(start) === CharacterCodes.slash &&
+                        content.charCodeAt(start + 1) === CharacterCodes.asterisk &&
+                        content.charCodeAt(start + 2) === CharacterCodes.asterisk &&
+                        content.charCodeAt(start + 3) !== CharacterCodes.asterisk;
+                }
 
                 function createJSDocComment(): JSDocComment {
                     if (!tags) {
