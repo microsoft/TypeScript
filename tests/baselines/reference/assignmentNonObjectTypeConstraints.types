@@ -24,9 +24,9 @@ foo(5);
 foo(E.A);
 >foo(E.A) : void
 >foo : <T extends number>(x: T) => void
->E.A : E.A
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 
 class A { a }
 >A : A

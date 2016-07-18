@@ -148,7 +148,7 @@ function f() {
 >cond : boolean
 
         if (cond) {
->cond : boolean
+>cond : true
 
             x = 42;
 >x = 42 : number
@@ -158,7 +158,7 @@ function f() {
             break;
         }
         if (cond) {
->cond : boolean
+>cond : true
 
             x = true;
 >x = true : boolean

@@ -25,7 +25,7 @@ x = "";
 >"" : string
 
 cond || (x = 0);
->cond || (x = 0) : boolean | number
+>cond || (x = 0) : true | number
 >cond : boolean
 >(x = 0) : number
 >x = 0 : number

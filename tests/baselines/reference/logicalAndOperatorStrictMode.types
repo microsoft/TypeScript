@@ -203,7 +203,7 @@ const b4 = b && b;
 >b4 : boolean
 >b && b : boolean
 >b : boolean
->b : boolean
+>b : true
 
 const b5 = b && v;
 >b5 : void | false

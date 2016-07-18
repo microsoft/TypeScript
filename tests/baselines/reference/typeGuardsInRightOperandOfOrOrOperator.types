@@ -19,12 +19,12 @@ function foo(x: number | string) {
 >10 : 10
 }
 function foo2(x: number | string) {
->foo2 : (x: number | string) => boolean | number
+>foo2 : (x: number | string) => true | number
 >x : number | string
 
     // modify x in right hand operand
     return typeof x !== "string" || ((x = 10) || x); // string | number
->typeof x !== "string" || ((x = 10) || x) : boolean | number
+>typeof x !== "string" || ((x = 10) || x) : true | number
 >typeof x !== "string" : boolean
 >typeof x : string
 >x : number | string
@@ -38,12 +38,12 @@ function foo2(x: number | string) {
 >x : number
 }
 function foo3(x: number | string) {
->foo3 : (x: number | string) => boolean | string
+>foo3 : (x: number | string) => true | string
 >x : number | string
 
     // modify x in right hand operand with string type itself
     return typeof x !== "string" || ((x = "hello") || x); // string | number
->typeof x !== "string" || ((x = "hello") || x) : boolean | string
+>typeof x !== "string" || ((x = "hello") || x) : true | string
 >typeof x !== "string" : boolean
 >typeof x : string
 >x : number | string
@@ -138,7 +138,7 @@ function foo6(x: number | string | boolean) {
 >10 : 10
 }
 function foo7(x: number | string | boolean) {
->foo7 : (x: number | string | boolean) => boolean | number | string
+>foo7 : (x: number | string | boolean) => true | number | string
 >x : number | string | boolean
 
     var y: number| boolean | string;
@@ -149,15 +149,15 @@ function foo7(x: number | string | boolean) {
 
     // Mixing typeguard narrowing
     return typeof x === "string"
->typeof x === "string"        || ((z = x) // number | boolean        || (typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // number | boolean | string        // do not change value        : ((y = x) && x.toString()))) : boolean | number | string
+>typeof x === "string"        || ((z = x) // number | boolean        || (typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // number | boolean | string        // do not change value        : ((y = x) && x.toString()))) : true | number | string
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number | string | boolean
 >"string" : "string"
 
         || ((z = x) // number | boolean
->((z = x) // number | boolean        || (typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // number | boolean | string        // do not change value        : ((y = x) && x.toString()))) : number | boolean | string
->(z = x) // number | boolean        || (typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // number | boolean | string        // do not change value        : ((y = x) && x.toString())) : number | boolean | string
+>((z = x) // number | boolean        || (typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // number | boolean | string        // do not change value        : ((y = x) && x.toString()))) : number | true | string
+>(z = x) // number | boolean        || (typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // number | boolean | string        // do not change value        : ((y = x) && x.toString())) : number | true | string
 >(z = x) : number | boolean
 >z = x : number | boolean
 >z : number | boolean | string

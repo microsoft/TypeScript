@@ -180,7 +180,7 @@ function f5(x: string | number | boolean) {
 >true : true
 
             x;
->x : boolean
+>x : true
 
             break;
         case "hello":
@@ -195,6 +195,6 @@ function f5(x: string | number | boolean) {
             break;
         default:
             x;
->x : string | number | boolean
+>x : string | number | false
     }
 }

@@ -103,7 +103,7 @@ var rb2 = a2 && a2;
 >rb2 : boolean
 >a2 && a2 : boolean
 >a2 : boolean
->a2 : boolean
+>a2 : true
 
 var rb3 = a3 && a2;
 >rb3 : boolean

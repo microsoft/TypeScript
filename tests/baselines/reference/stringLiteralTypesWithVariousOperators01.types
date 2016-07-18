@@ -16,9 +16,9 @@ let abcOrXyz: "ABC" | "XYZ" = abc || xyz;
 
 let abcOrXyzOrNumber: "ABC" | "XYZ" | number = abcOrXyz || 100;
 >abcOrXyzOrNumber : "ABC" | "XYZ" | number
->abcOrXyz || 100 : "ABC" | "XYZ" | 100
+>abcOrXyz || 100 : "ABC" | "XYZ" | number
 >abcOrXyz : "ABC" | "XYZ"
->100 : 100
+>100 : number
 
 let a = "" + abc;
 >a : string

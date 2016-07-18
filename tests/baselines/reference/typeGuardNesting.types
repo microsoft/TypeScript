@@ -14,7 +14,7 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >strOrBool : boolean
 >typeof strOrBool === 'string' : boolean
 >typeof strOrBool : string
->strOrBool : string | boolean
+>strOrBool : string | true
 >'string' : "string"
 
 	let label: string = (typeof strOrBool === 'string') ? strOrBool : "string";
@@ -74,7 +74,7 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >strOrBool : boolean
 >typeof strOrBool !== 'boolean' : boolean
 >typeof strOrBool : string
->strOrBool : string | boolean
+>strOrBool : string | true
 >'boolean' : "boolean"
 
 	let label: string = (typeof strOrBool === 'string') ? strOrBool : "string";
