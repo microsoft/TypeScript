@@ -285,15 +285,6 @@ namespace ts.server {
             }
         }
 
-        saveTo(filename: NormalizedPath, tmpfilename: NormalizedPath) {
-            const script = this.projectService.getScriptInfoForNormalizedPath(filename);
-            if (script) {
-                Debug.assert(script.isAttached(this));
-                const snap = script.snap();
-                this.projectService.host.writeFile(tmpfilename, snap.getText(0, snap.getLength()));
-            }
-        }
-
         reloadScript(filename: NormalizedPath): boolean {
             const script = this.projectService.getScriptInfoForNormalizedPath(filename);
             if (script) {
@@ -494,7 +485,7 @@ namespace ts.server {
             }
 
             const directoryToWatch = getDirectoryPath(this.configFileName);
-            this.projectService.log(`Add recursive watcher for: ${directoryToWatch}`);
+            this.projectService.logger.info(`Add recursive watcher for: ${directoryToWatch}`);
             this.directoryWatcher = this.projectService.host.watchDirectory(directoryToWatch, path => callback(this, path), /*recursive*/ true);
         }
 
@@ -506,7 +497,7 @@ namespace ts.server {
             this.directoriesWatchedForWildcards = reduceProperties(this.wildcardDirectories, (watchers, flag, directory) => {
                 if (comparePaths(configDirectoryPath, directory, ".", !this.projectService.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
                     const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
-                    this.projectService.log(`Add ${recursive ? "recursive " : ""}watcher for: ${directory}`);
+                    this.projectService.logger.info(`Add ${recursive ? "recursive " : ""}watcher for: ${directory}`);
                     watchers[directory] = this.projectService.host.watchDirectory(
                         directory,
                         path => callback(this, path),

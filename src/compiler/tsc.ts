@@ -101,23 +101,8 @@ namespace ts {
         return <string>diagnostic.messageText;
     }
 
-    function getRelativeFileName(fileName: string, host: CompilerHost): string {
-        return host ? convertToRelativePath(fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : fileName;
-    }
-
     function reportDiagnosticSimply(diagnostic: Diagnostic, host: CompilerHost): void {
-        let output = "";
-
-        if (diagnostic.file) {
-            const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-            const relativeFileName = getRelativeFileName(diagnostic.file.fileName, host);
-            output += `${ relativeFileName }(${ line + 1 },${ character + 1 }): `;
-        }
-
-        const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
-
-        sys.write(output);
+        sys.write(ts.formatDiagnostics([diagnostic], host));
     }
 
     const redForegroundEscapeSequence = "\u001b[91m";
@@ -145,7 +130,7 @@ namespace ts {
             const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
             const { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
             const lastLineInFile = getLineAndCharacterOfPosition(file, file.text.length).line;
-            const relativeFileName = getRelativeFileName(file.fileName, host);
+            const relativeFileName = host ? convertToRelativePath(file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : file.fileName;
 
             const hasMoreThanFiveLines = (lastLine - firstLine) >= 4;
             let gutterWidth = (lastLine + 1 + "").length;

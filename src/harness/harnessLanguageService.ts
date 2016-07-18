@@ -646,7 +646,7 @@ namespace Harness.LanguageService {
             return true;
         }
 
-        isVerbose() {
+        hasLevel() {
             return false;
         }
 

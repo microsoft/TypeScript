@@ -1,13 +1,66 @@
-/// <reference path="node.d.ts" />
+/// <reference types="node" />
 /// <reference path="session.ts" />
 // used in fs.writeSync
 /* tslint:disable:no-null-keyword */
 
 namespace ts.server {
 
-    const readline: NodeJS.ReadLine = require("readline");
-    const fs: typeof NodeJS.fs = require("fs");
-    const zlib: typeof NodeJS.zlib = require("zlib");
+    const zlib: {
+        gzipSync(buf: Buffer): Buffer
+    } = require("zlib");
+
+    interface ReadLineOptions {
+        input: NodeJS.ReadableStream;
+        output?: NodeJS.WritableStream;
+        terminal?: boolean;
+        historySize?: number;
+    }
+
+    interface Key {
+        sequence?: string;
+        name?: string;
+        ctrl?: boolean;
+        meta?: boolean;
+        shift?: boolean;
+    }
+
+    interface Stats {
+        isFile(): boolean;
+        isDirectory(): boolean;
+        isBlockDevice(): boolean;
+        isCharacterDevice(): boolean;
+        isSymbolicLink(): boolean;
+        isFIFO(): boolean;
+        isSocket(): boolean;
+        dev: number;
+        ino: number;
+        mode: number;
+        nlink: number;
+        uid: number;
+        gid: number;
+        rdev: number;
+        size: number;
+        blksize: number;
+        blocks: number;
+        atime: Date;
+        mtime: Date;
+        ctime: Date;
+        birthtime: Date;
+    }
+
+    const readline: {
+        createInterface(options: ReadLineOptions): NodeJS.EventEmitter;
+    } = require("readline");
+
+    const fs: {
+        openSync(path: string, options: string): number;
+        close(fd: number): void;
+        writeSync(fd: number, buffer: Buffer, offset: number, length: number, position?: number): number;
+        writeSync(fd: number, data: any, position?: number, enconding?: string): number;
+        statSync(path: string): Stats;
+        stat(path: string, callback?: (err: NodeJS.ErrnoException, stats: Stats) => any): void;
+    } = require("fs");
+
 
     const rl = readline.createInterface({
         input: process.stdin,
@@ -30,7 +83,7 @@ namespace ts.server {
 
         constructor(private readonly logFilename: string,
             private readonly traceToConsole: boolean,
-            private readonly level: string) {
+            private readonly level: LogLevel) {
         }
 
         static padStringRight(str: string, padding: string) {
@@ -44,11 +97,11 @@ namespace ts.server {
         }
 
         perftrc(s: string) {
-            this.msg(s, "Perf");
+            this.msg(s, Msg.Perf);
         }
 
         info(s: string) {
-            this.msg(s, "Info");
+            this.msg(s, Msg.Info);
         }
 
         startGroup() {
@@ -66,12 +119,11 @@ namespace ts.server {
             return !!this.logFilename || this.traceToConsole;
         }
 
-        isVerbose() {
-            return this.loggingEnabled() && (this.level == "verbose");
+        hasLevel(level: LogLevel) {
+            return this.loggingEnabled() && this.level >= level;
         }
 
-
-        msg(s: string, type = "Err") {
+        msg(s: string, type: Msg.Types = Msg.Err) {
             if (this.fd < 0) {
                 if (this.logFilename) {
                     this.fd = fs.openSync(this.logFilename, "w");
@@ -88,8 +140,8 @@ namespace ts.server {
                     this.seq++;
                     this.firstInGroup = true;
                 }
-                const buf = new Buffer(s);
                 if (this.fd >= 0) {
+                    const buf = new Buffer(s);
                     fs.writeSync(this.fd, buf, 0, buf.length, null);
                 }
                 if (this.traceToConsole) {
@@ -105,7 +157,7 @@ namespace ts.server {
         }
 
         exit() {
-            this.projectService.log("Exiting...", "Info");
+            this.logger.info("Exiting...");
             this.projectService.closeLog();
             process.exit(0);
         }
@@ -124,12 +176,13 @@ namespace ts.server {
 
     interface LogOptions {
         file?: string;
-        detailLevel?: string;
+        detailLevel?: LogLevel;
         traceToConsole?: boolean;
+        logToFile?: boolean;
     }
 
     function parseLoggingEnvironmentString(logEnvStr: string): LogOptions {
-        const logEnv: LogOptions = {};
+        const logEnv: LogOptions = { logToFile: true };
         const args = logEnvStr.split(" ");
         for (let i = 0, len = args.length; i < (len - 1); i += 2) {
             const option = args[i];
@@ -140,10 +193,14 @@ namespace ts.server {
                         logEnv.file = value;
                         break;
                     case "-level":
-                        logEnv.detailLevel = value;
+                        const level: LogLevel = (<any>LogLevel)[value];
+                        logEnv.detailLevel = typeof level === "number" ? level : LogLevel.normal;
                         break;
                     case "-traceToConsole":
                         logEnv.traceToConsole = value.toLowerCase() === "true";
+                        break;
+                    case "-logToFile":
+                        logEnv.logToFile = value.toLowerCase() === "true";
                         break;
                 }
             }
@@ -154,16 +211,18 @@ namespace ts.server {
     // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
     function createLoggerFromEnv() {
         let fileName: string = undefined;
-        let detailLevel = "normal";
+        let detailLevel = LogLevel.normal;
         let traceToConsole = false;
         const logEnvStr = process.env["TSS_LOG"];
         if (logEnvStr) {
             const logEnv = parseLoggingEnvironmentString(logEnvStr);
-            if (logEnv.file) {
-                fileName = logEnv.file;
-            }
-            else {
-                fileName = __dirname + "/.log" + process.pid.toString();
+            if (logEnv.logToFile) {
+                if (logEnv.file) {
+                    fileName = logEnv.file;
+                }
+                else {
+                    fileName = __dirname + "/.log" + process.pid.toString();
+                }
             }
             if (logEnv.detailLevel) {
                 detailLevel = logEnv.detailLevel;

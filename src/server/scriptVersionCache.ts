@@ -267,14 +267,26 @@ namespace ts.server {
 
     export class ScriptVersionCache {
         changes: TextChange[] = [];
-        versions: LineIndexSnapshot[] = [];
+        versions: LineIndexSnapshot[] = new Array<LineIndexSnapshot>(ScriptVersionCache.maxVersions);
         minVersion = 0;  // no versions earlier than min version will maintain change history
-        private currentVersion = 0;
+
         private host: ServerHost;
+        private currentVersion = 0;
 
         static changeNumberThreshold = 8;
         static changeLengthThreshold = 256;
         static maxVersions = 8;
+
+        private versionToIndex(version: number) {
+            if (version < this.minVersion || version > this.currentVersion) {
+                return undefined;
+            }
+            return version % ScriptVersionCache.maxVersions;
+        }
+
+        private currentVersionToIndex() {
+            return this.currentVersion % ScriptVersionCache.maxVersions;
+        }
 
         // REVIEW: can optimize by coalescing simple edits
         edit(pos: number, deleteLen: number, insertedText?: string) {
@@ -287,7 +299,7 @@ namespace ts.server {
         }
 
         latest() {
-            return this.versions[this.currentVersion];
+            return this.versions[this.currentVersionToIndex()];
         }
 
         latestVersion() {
@@ -312,22 +324,24 @@ namespace ts.server {
             this.currentVersion++;
             this.changes = []; // history wiped out by reload
             const snap = new LineIndexSnapshot(this.currentVersion, this);
-            this.versions[this.currentVersion] = snap;
+
+            // delete all versions
+            for (let i = 0; i < this.versions.length; i++) {
+                this.versions[i] = undefined;
+            }
+
+            this.versions[this.currentVersionToIndex()] = snap;
             snap.index = new LineIndex();
             const lm = LineIndex.linesFromText(script);
             snap.index.load(lm.lines);
-            // REVIEW: could use linked list
-            for (let i = this.minVersion; i < this.currentVersion; i++) {
-                this.versions[i] = undefined;
-            }
-            this.minVersion = this.currentVersion;
 
+            this.minVersion = this.currentVersion;
         }
 
         getSnapshot() {
-            let snap = this.versions[this.currentVersion];
+            let snap = this.versions[this.currentVersionToIndex()];
             if (this.changes.length > 0) {
-                let snapIndex = this.latest().index;
+                let snapIndex = snap.index;
                 for (let i = 0, len = this.changes.length; i < len; i++) {
                     const change = this.changes[i];
                     snapIndex = snapIndex.edit(change.pos, change.deleteLen, change.insertedText);
@@ -335,15 +349,13 @@ namespace ts.server {
                 snap = new LineIndexSnapshot(this.currentVersion + 1, this);
                 snap.index = snapIndex;
                 snap.changesSincePreviousVersion = this.changes;
+
                 this.currentVersion = snap.version;
-                this.versions[snap.version] = snap;
+                this.versions[this.currentVersionToIndex()] = snap;
                 this.changes = [];
+
                 if ((this.currentVersion - this.minVersion) >= ScriptVersionCache.maxVersions) {
-                    const oldMin = this.minVersion;
                     this.minVersion = (this.currentVersion - ScriptVersionCache.maxVersions) + 1;
-                    for (let j = oldMin; j < this.minVersion; j++) {
-                        this.versions[j] = undefined;
-                    }
                 }
             }
             return snap;
@@ -354,7 +366,7 @@ namespace ts.server {
                 if (oldVersion >= this.minVersion) {
                     const textChangeRanges: ts.TextChangeRange[] = [];
                     for (let i = oldVersion + 1; i <= newVersion; i++) {
-                        const snap = this.versions[i];
+                        const snap = this.versions[this.versionToIndex(i)];
                         for (let j = 0, len = snap.changesSincePreviousVersion.length; j < len; j++) {
                             const textChange = snap.changesSincePreviousVersion[j];
                             textChangeRanges[textChangeRanges.length] = textChange.getTextChangeRange();
@@ -498,7 +510,7 @@ namespace ts.server {
             const walkFns = {
                 goSubtree: true,
                 done: false,
-                leaf: function (relativeStart: number, relativeLength: number, ll: LineLeaf) {
+                leaf: function (this: ILineIndexWalker, relativeStart: number, relativeLength: number, ll: LineLeaf) {
                     if (!f(ll, relativeStart, relativeLength)) {
                         this.done = true;
                     }

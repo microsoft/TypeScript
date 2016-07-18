@@ -907,10 +907,19 @@ namespace ts {
         return true;
     }
 
+    /* @internal */
+    export function startsWith(str: string, prefix: string): boolean {
+        return str.lastIndexOf(prefix, 0) === 0;
+    }
+
+    /* @internal */
+    export function endsWith(str: string, suffix: string): boolean {
+        const expectedPos = str.length - suffix.length;
+        return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
+    }
+
     export function fileExtensionIs(path: string, extension: string): boolean {
-        const pathLen = path.length;
-        const extLen = extension.length;
-        return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
+        return path.length > extension.length && endsWith(path, extension);
     }
 
     export function fileExtensionIsAny(path: string, extensions: string[]): boolean {
@@ -922,7 +931,6 @@ namespace ts {
 
         return false;
     }
-
 
     // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
     // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
@@ -1245,20 +1253,20 @@ namespace ts {
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
     }
 
-    function Symbol(flags: SymbolFlags, name: string) {
+    function Symbol(this: Symbol, flags: SymbolFlags, name: string) {
         this.flags = flags;
         this.name = name;
         this.declarations = undefined;
     }
 
-    function Type(checker: TypeChecker, flags: TypeFlags) {
+    function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
     }
 
     function Signature(checker: TypeChecker) {
     }
 
-    function Node(kind: SyntaxKind, pos: number, end: number) {
+    function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
         this.kind = kind;
         this.pos = pos;
         this.end = end;
