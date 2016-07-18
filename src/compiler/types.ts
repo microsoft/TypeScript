@@ -2254,7 +2254,6 @@ namespace ts {
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
         PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
-        AlwaysPossiblyFalsy = String | Number | Boolean | Void | Undefined | Null,
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
@@ -2269,7 +2268,7 @@ namespace ts {
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | StructuredType | TypeParameter | StringLike | NumberLike | BooleanLike | ESSymbol,
-        NotUnionOrUnit = Any | String | Number | Boolean | ESSymbol | ObjectType,
+        NotUnionOrUnit = Any | String | Number | ESSymbol | ObjectType,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */

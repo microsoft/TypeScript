@@ -108,15 +108,21 @@ namespace ts {
             isOptionalParameter
         };
 
+        const tupleTypes: Map<TupleType> = {};
+        const unionTypes: Map<UnionType> = {};
+        const intersectionTypes: Map<IntersectionType> = {};
+        const stringLiteralTypes: Map<LiteralType> = {};
+        const numericLiteralTypes: Map<LiteralType> = {};
+
         const unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
         const resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
 
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
         const stringType = createIntrinsicType(TypeFlags.String, "string");
         const numberType = createIntrinsicType(TypeFlags.Number, "number");
-        const booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean");
         const trueType = createIntrinsicType(TypeFlags.BooleanLiteral, "true");
         const falseType = createIntrinsicType(TypeFlags.BooleanLiteral, "false");
+        const booleanType = createBooleanType([trueType, falseType]);
         const esSymbolType = createIntrinsicType(TypeFlags.ESSymbol, "symbol");
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
         const undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
@@ -196,14 +202,8 @@ namespace ts {
         let flowLoopCount = 0;
         let visitedFlowCount = 0;
 
-        const tupleTypes: Map<TupleType> = {};
-        const unionTypes: Map<UnionType> = {};
-        const intersectionTypes: Map<IntersectionType> = {};
-        const stringLiteralTypes: Map<LiteralType> = {};
-        const numericLiteralTypes: Map<LiteralType> = {};
         const emptyStringType = getLiteralTypeForText(TypeFlags.StringLiteral, "");
         const zeroType = getLiteralTypeForText(TypeFlags.NumberLiteral, "0");
-        const trueFalseType = getUnionType([trueType, falseType]);
 
         const resolutionTargets: TypeSystemEntity[] = [];
         const resolutionResults: boolean[] = [];
@@ -1547,6 +1547,13 @@ namespace ts {
             return type;
         }
 
+        function createBooleanType(trueFalseTypes: Type[]): IntrinsicType {
+            const type = <IntrinsicType>getUnionType(trueFalseTypes, /*noSubtypeReduction*/ true);
+            type.flags |= TypeFlags.Boolean;
+            type.intrinsicName = "boolean";
+            return type;
+        }
+
         function createObjectType(kind: TypeFlags, symbol?: Symbol): ObjectType {
             const type = <ObjectType>createType(kind);
             type.symbol = symbol;
@@ -1921,6 +1928,19 @@ namespace ts {
             return result;
         }
 
+        function replaceTrueFalseWithBoolean(types: Type[]): Type[] {
+            if (contains(types, trueType) && contains(types, falseType)) {
+                const result: Type[] = [];
+                for (const t of types) {
+                    if (t !== falseType) {
+                        result.push(t === trueType ? booleanType : t);
+                    }
+                }
+                return result;
+            }
+            return types;
+        }
+
         function visibilityToString(flags: NodeFlags) {
             if (flags === NodeFlags.Private) {
                 return "private";
@@ -2213,7 +2233,12 @@ namespace ts {
                     if (flags & TypeFormatFlags.InElementType) {
                         writePunctuation(writer, SyntaxKind.OpenParenToken);
                     }
-                    writeTypeList(type.types, type.flags & TypeFlags.Union ? SyntaxKind.BarToken : SyntaxKind.AmpersandToken);
+                    if (type.flags & TypeFlags.Union) {
+                        writeTypeList(replaceTrueFalseWithBoolean(type.types), SyntaxKind.BarToken);
+                    }
+                    else {
+                        writeTypeList(type.types, SyntaxKind.AmpersandToken);
+                    }
                     if (flags & TypeFormatFlags.InElementType) {
                         writePunctuation(writer, SyntaxKind.CloseParenToken);
                     }
@@ -5661,7 +5686,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Tuple) {
                     return createTupleType(instantiateList((<TupleType>type).elementTypes, mapper, instantiateType));
                 }
-                if (type.flags & TypeFlags.Union) {
+                if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Primitive)) {
                     return getUnionType(instantiateList((<UnionType>type).types, mapper, instantiateType), /*noSubtypeReduction*/ true);
                 }
                 if (type.flags & TypeFlags.Intersection) {
@@ -6070,10 +6095,10 @@ namespace ts {
                 // Note that these checks are specifically ordered to produce correct results.
                 if (source.flags & TypeFlags.Union) {
                     if (relation === comparableRelation) {
-                        result = someTypeRelatedToType(source as UnionType, target, reportErrors);
+                        result = someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive));
                     }
                     else {
-                        result = eachTypeRelatedToType(source as UnionType, target, reportErrors);
+                        result = eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive));
                     }
 
                     if (result) {
@@ -6110,11 +6135,8 @@ namespace ts {
                         }
                     }
                     if (target.flags & TypeFlags.Union) {
-                        if (result = typeRelatedToSomeType(source, <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive))) {
+                        if (result = typeRelatedToSomeType(source, <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive))) {
                             return result;
-                        }
-                        if (source === booleanType && contains((<UnionType>target).types, trueType) && contains((<UnionType>target).types, falseType)) {
-                            return Ternary.True;
                         }
                     }
                 }
@@ -6969,7 +6991,9 @@ namespace ts {
         }
 
         function isUnitUnionType(type: Type): boolean {
-            return type.flags & TypeFlags.Union ? !forEach((<UnionType>type).types, t => !isUnitType(t)) : isUnitType(type);
+            return type.flags & TypeFlags.Boolean ? true :
+                type.flags & TypeFlags.Union ? !forEach((<UnionType>type).types, t => !isUnitType(t)) :
+                isUnitType(type);
         }
 
         function getBaseTypeOfUnitType(type: Type): Type {
@@ -6979,10 +7003,6 @@ namespace ts {
                 type.flags & TypeFlags.Enum && type.symbol.flags & SymbolFlags.EnumMember ? getDeclaredTypeOfSymbol(getParentOfSymbol(type.symbol)) :
                 type.flags & TypeFlags.Union ? getUnionType(map((<UnionType>type).types, getBaseTypeOfUnitType)) :
                 type;
-        }
-
-        function isUnionWithTrueOrFalse(type: Type) {
-            return type.flags & TypeFlags.Union && (contains((<UnionType>type).types, trueType) || contains((<UnionType>type).types, falseType));
         }
 
         /**
@@ -7001,12 +7021,15 @@ namespace ts {
             return result;
         }
 
+        // Returns the String, Number, Boolean, StringLiteral, NumberLiteral, BooleanLiteral, Void, Undefined, or Null
+        // flags for the string, number, boolean, "", 0, false, void, undefined, or null types respectively. Returns
+        // no flags for all other types (including non-falsy literal types).
         function getFalsyFlags(type: Type): TypeFlags {
-            return type === emptyStringType ? TypeFlags.StringLiteral :
-                type === zeroType ? TypeFlags.NumberLiteral :
-                type === falseType ? TypeFlags.BooleanLiteral :
-                type.flags & TypeFlags.Union ? getFalsyFlagsOfTypes((<UnionType>type).types) :
-                type.flags & TypeFlags.AlwaysPossiblyFalsy;
+            return type.flags & TypeFlags.Union ? getFalsyFlagsOfTypes((<UnionType>type).types) :
+                type.flags & TypeFlags.StringLiteral ? type === emptyStringType ? TypeFlags.StringLiteral : 0 :
+                type.flags & TypeFlags.NumberLiteral ? type === zeroType ? TypeFlags.NumberLiteral : 0 :
+                type.flags & TypeFlags.BooleanLiteral ? type === falseType ? TypeFlags.BooleanLiteral : 0 :
+                type.flags & TypeFlags.PossiblyFalsy;
         }
 
         function includeFalsyTypes(type: Type, flags: TypeFlags) {
@@ -10403,8 +10426,11 @@ namespace ts {
                 checkClassPropertyAccess(node, left, apparentType, prop);
             }
 
-            const propType = prop.flags & SymbolFlags.EnumMember && getParentOfSymbol(prop).flags & SymbolFlags.ConstEnum &&
-                isLiteralTypeContext(<Expression>node) ? getDeclaredTypeOfSymbol(prop) : getTypeOfSymbol(prop);
+            let propType = getTypeOfSymbol(prop);
+            if (prop.flags & SymbolFlags.EnumMember && getParentOfSymbol(prop).flags & SymbolFlags.ConstEnum && isLiteralContextForType(<Expression>node, propType)) {
+                propType = getDeclaredTypeOfSymbol(prop);
+            }
+
             // Only compute control flow type if this is a property access expression that isn't an
             // assignment target, and the referenced property was declared as a variable, property,
             // accessor, or optional method.
@@ -12460,7 +12486,7 @@ namespace ts {
 
         function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {
             const operandType = checkExpression(node.operand);
-            if (node.operator === SyntaxKind.MinusToken && node.operand.kind === SyntaxKind.NumericLiteral && isLiteralTypeContext(node)) {
+            if (node.operator === SyntaxKind.MinusToken && node.operand.kind === SyntaxKind.NumericLiteral && isLiteralContextForType(node, numberType)) {
                 return getLiteralTypeForText(TypeFlags.NumberLiteral, "" + -(<LiteralExpression>node.operand).text);
             }
             switch (node.operator) {
@@ -12475,7 +12501,6 @@ namespace ts {
                     const facts = getTypeFacts(operandType) & (TypeFacts.Truthy | TypeFacts.Falsy);
                     return facts === TypeFacts.Truthy ? falseType :
                         facts === TypeFacts.Falsy ? trueType :
-                        isUnionWithTrueOrFalse(operandType) ? trueFalseType :
                         booleanType;
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
@@ -12866,7 +12891,7 @@ namespace ts {
                     return checkInExpression(left, right, leftType, rightType);
                 case SyntaxKind.AmpersandAmpersandToken:
                     return getTypeFacts(leftType) & TypeFacts.Truthy ?
-                        strictNullChecks ? includeFalsyTypes(rightType, getFalsyFlags(leftType)) : rightType :
+                        includeFalsyTypes(rightType, getFalsyFlags(strictNullChecks ? leftType : getBaseTypeOfUnitType(rightType))) :
                         leftType;
                 case SyntaxKind.BarBarToken:
                     return getTypeFacts(leftType) & TypeFacts.Falsy ?
@@ -13000,45 +13025,64 @@ namespace ts {
             return getUnionType([type1, type2]);
         }
 
-        function isLiteralUnionType(type: Type): boolean {
-            return type.flags & TypeFlags.Literal ? true :
-                type.flags & TypeFlags.Enum ? (type.symbol.flags & SymbolFlags.EnumMember) !== 0 :
-                type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isLiteralUnionType) :
-                false;
-        }
-
-        function hasLiteralContextualType(node: Expression) {
-            const contextualType = getContextualType(node);
-            if (!contextualType) {
-                return false;
-            }
-            if (contextualType.flags & TypeFlags.TypeParameter) {
-                const apparentType = getApparentTypeOfTypeParameter(<TypeParameter>contextualType);
-                if (apparentType.flags & (TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.BooleanLike)) {
-                    return true;
+        function typeContainsEnumLiteral(type: Type, enumType: Type) {
+            if (type.flags & TypeFlags.Union) {
+                for (const t of (<UnionType>type).types) {
+                    if (t.flags & TypeFlags.Enum && t.symbol.flags & SymbolFlags.EnumMember && t.symbol.parent === enumType.symbol) {
+                        return true;
+                    }
                 }
             }
-            return isLiteralUnionType(contextualType);
+            if (type.flags & TypeFlags.Enum) {
+                return type.symbol.flags & SymbolFlags.EnumMember && type.symbol.parent === enumType.symbol;
+            }
+            return false;
         }
 
-        function isLiteralTypeContext(node: Expression) {
-            return isLiteralTypeLocation(node) || hasLiteralContextualType(node);
+        function isLiteralContextForType(node: Expression, type: Type) {
+            if (isLiteralTypeLocation(node)) {
+                return true;
+            }
+            let contextualType = getContextualType(node);
+            if (contextualType) {
+                if (contextualType.flags & TypeFlags.TypeParameter) {
+                    const apparentType = getApparentTypeOfTypeParameter(<TypeParameter>contextualType);
+                    // If the type parameter is constrained to the base primitive type we're checking for,
+                    // consider this a literal context. For example, given a type parameter 'T extends string',
+                    // this causes us to infer string literal types for T.
+                    if (type === apparentType) {
+                        return true;
+                    }
+                    contextualType = apparentType;
+                }
+                if (type.flags & TypeFlags.String) {
+                    return maybeTypeOfKind(contextualType, TypeFlags.StringLiteral);
+                }
+                if (type.flags & TypeFlags.Number) {
+                    return maybeTypeOfKind(contextualType, TypeFlags.NumberLiteral);
+                }
+                if (type.flags & TypeFlags.Boolean) {
+                    return maybeTypeOfKind(contextualType, TypeFlags.BooleanLiteral) && !isTypeAssignableTo(booleanType, contextualType);
+                }
+                if (type.flags & TypeFlags.Enum && type.symbol.flags & SymbolFlags.ConstEnum) {
+                    return typeContainsEnumLiteral(contextualType, type);
+                }
+            }
+            return false;
         }
 
         function checkLiteralExpression(node: Expression): Type {
             if (node.kind === SyntaxKind.NumericLiteral) {
                 checkGrammarNumericLiteral(<LiteralExpression>node);
             }
-            const hasLiteralType = isLiteralTypeContext(node);
             switch (node.kind) {
                 case SyntaxKind.StringLiteral:
-                    return hasLiteralType ? getLiteralTypeForText(TypeFlags.StringLiteral, (<LiteralExpression>node).text) : stringType;
+                    return isLiteralContextForType(node, stringType) ? getLiteralTypeForText(TypeFlags.StringLiteral, (<LiteralExpression>node).text) : stringType;
                 case SyntaxKind.NumericLiteral:
-                    return hasLiteralType ? getLiteralTypeForText(TypeFlags.NumberLiteral, (<LiteralExpression>node).text) : numberType;
+                    return isLiteralContextForType(node, numberType) ? getLiteralTypeForText(TypeFlags.NumberLiteral, (<LiteralExpression>node).text) : numberType;
                 case SyntaxKind.TrueKeyword:
-                    return hasLiteralType ? trueType : booleanType;
                 case SyntaxKind.FalseKeyword:
-                    return hasLiteralType ? falseType : booleanType;
+                    return isLiteralContextForType(node, booleanType) ? node.kind === SyntaxKind.TrueKeyword ? trueType : falseType : booleanType;
             }
         }
 
@@ -18323,6 +18367,9 @@ namespace ts {
                     }
                 }
             }
+
+            // The built-in boolean type is 'true | false', also mark 'false | true' as a boolean type
+            createBooleanType([falseType, trueType]);
 
             // Setup global builtins
             addToSymbolTable(globals, builtinGlobals, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0);
