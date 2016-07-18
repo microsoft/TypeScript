@@ -21,17 +21,23 @@
 ////function bind(callback) {
 ////}
 ////
-/////** Here? {@link bind}
+/////** Here? {@link bind} + x * y
 //// * @return An object to be passed to {@link find}.
 //// */
 ////function convert(name) {
 ////}
-////find/*1*/(''/*2*/);
-////getName(/*4*/);
-////bind(/*6*/() => { });
-////convert(/*8*/'');
+////find/*1*/('');
+////getName/*2*/();
+////bind/*3*/(() => { });
+////convert/*4*/('');
 
 
 goTo.marker('1');
 verify.quickInfoIs('function find(targetName: any): string | string[]', 'Find an item or item(s)');
+goTo.marker('2');
+verify.quickInfoIs('function getName(): string', '');
+goTo.marker('3');
+verify.quickInfoIs('function bind(callback: any): void', '');
+goTo.marker('4');
+verify.quickInfoIs('function convert(name: any): void', 'Here? {@link bind} + x * y');
 // TODO: Not sure how to verify the @returns text
