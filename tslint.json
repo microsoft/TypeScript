@@ -45,6 +45,7 @@
         "prefer-const": true,
         "no-in-operator": true,
         "no-increment-decrement": true,
-        "object-literal-surrounding-space": true
+        "object-literal-surrounding-space": true,
+        "enforce-unified-signatures": true
   }
 }
