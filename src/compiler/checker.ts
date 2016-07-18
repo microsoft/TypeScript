@@ -14614,7 +14614,7 @@ namespace ts {
                 if (node.typeParameters) {
                     // Only report errors on the last declaration for the type parameter container;
                     // this ensures that all uses have been accounted for.
-                    const symbol = node.symbol && getMergedSymbol(node.symbol);
+                    const symbol = getSymbolOfNode(node);
                     const lastDeclaration = symbol && symbol.declarations && lastOrUndefined(symbol.declarations);
                     if (lastDeclaration !== node) {
                         return;
