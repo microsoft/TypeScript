@@ -1,0 +1,32 @@
+=== tests/cases/conformance/jsdoc/returnstag.js ===
+/**
+ * @returns {string|Array<string>}  The names of the found item(s).
+ */
+function find(targetName) {
+>find : Symbol(find, Decl(returnstag.js, 0, 0))
+>targetName : Symbol(targetName, Decl(returnstag.js, 3, 14))
+}
+
+/**
+ * @returns {!string} The name, if defined.
+ */
+function getName() {
+>getName : Symbol(getName, Decl(returnstag.js, 4, 1))
+}
+
+/**
+ * @return The binding id.
+ */
+function bind(callback) {
+>bind : Symbol(bind, Decl(returnstag.js, 10, 1))
+>callback : Symbol(callback, Decl(returnstag.js, 15, 14))
+}
+
+/**
+ * @return An object to be passed to {@link find}.
+ */
+function convert(name) {
+>convert : Symbol(convert, Decl(returnstag.js, 16, 1))
+>name : Symbol(name, Decl(returnstag.js, 21, 17))
+}
+

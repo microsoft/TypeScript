@@ -1,0 +1,32 @@
+=== tests/cases/conformance/jsdoc/returnstag.js ===
+/**
+ * @returns {string|Array<string>}  The names of the found item(s).
+ */
+function find(targetName) {
+>find : (targetName: any) => string | string[]
+>targetName : any
+}
+
+/**
+ * @returns {!string} The name, if defined.
+ */
+function getName() {
+>getName : () => string
+}
+
+/**
+ * @return The binding id.
+ */
+function bind(callback) {
+>bind : (callback: any) => void
+>callback : any
+}
+
+/**
+ * @return An object to be passed to {@link find}.
+ */
+function convert(name) {
+>convert : (name: any) => void
+>name : any
+}
+

@@ -1,9 +1,8 @@
-// @allowJs: true
-// @Filename: in.js
-// @out: out.js
 ///<reference path="fourslash.ts" />
+//// @allowJs: true
+//// @filename: returnstagFourslash.js
 /////**
-//// * Find an item or item(s)
+//// * Find an item
 //// * @returns {string|Array<string>}  The names of the found item(s).
 //// */
 ////function find(targetName) {
@@ -21,7 +20,7 @@
 ////function bind(callback) {
 ////}
 ////
-/////** Here? {@link bind}
+/////**
 //// * @return An object to be passed to {@link find}.
 //// */
 ////function convert(name) {
@@ -32,6 +31,8 @@
 ////convert(/*8*/'');
 
 
+goTo.marker('2');
+verify.currentSignatureHelpIs('find(targetName: any): string | string[]')
 goTo.marker('1');
-verify.quickInfoIs('function find(targetName: any): string | string[]', 'Find an item or item(s)');
-// TODO: Not sure how to verify the @returns text
+verify.quickInfoIs('Find an item!!');
+// TODO: Verify doc text as well
