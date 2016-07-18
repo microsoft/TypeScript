@@ -1691,20 +1691,9 @@ namespace ts {
             }
 
             startPos = pos;
-
-            // Eat leading whitespace
-            let ch = text.charCodeAt(pos);
-            while (pos < end) {
-                ch = text.charCodeAt(pos);
-                if (isWhiteSpaceSingleLine(ch)) {
-                    pos++;
-                }
-                else {
-                    break;
-                }
-            }
             tokenPos = pos;
 
+            let ch = text.charCodeAt(pos);
             switch (ch) {
                 case CharacterCodes.tab:
                 case CharacterCodes.verticalTab:

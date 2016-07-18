@@ -6163,6 +6163,14 @@ namespace ts {
                                 comments.push(scanner.getTokenText());
                                 break;
 
+
+                            case SyntaxKind.WhitespaceTrivia:
+                                // only collect whitespace if we *know* that we're just looking at comments, not a possible jsdoc tag
+                                if (!canParseTag) {
+                                    comments.push(scanner.getTokenText());
+                                }
+                                break;
+
                             case SyntaxKind.EndOfFileToken:
                                 break;
 
@@ -6170,9 +6178,6 @@ namespace ts {
                                 comments.push(scanner.getTokenText());
                                 break;
                         }
-                        // TODO: 1. skip * (and others? newlines?)
-                        //       3. ugh. what about '('? I think I actually need whitespace and newlines too.
-                        // (1) and (3) will require some massive rewriting of the parsing code here.
                         nextJSDocToken();
                     }
 
@@ -6196,7 +6201,7 @@ namespace ts {
 
                     const result = <JSDocComment>createNode(SyntaxKind.JSDocComment, start);
                     result.tags = tags;
-                    result.comment = comments.join(' ');
+                    result.comment = comments.join('');
                     return finishNode(result, end);
                 }
 
@@ -6535,6 +6540,7 @@ namespace ts {
                     finishNode(result, end);
 
                     nextJSDocToken();
+                    skipWhitespace();
                     return result;
                 }
             }
