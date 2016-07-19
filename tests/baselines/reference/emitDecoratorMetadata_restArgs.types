@@ -1,15 +1,15 @@
 === tests/cases/compiler/emitDecoratorMetadata_restArgs.ts ===
 
 declare const MyClassDecorator: ClassDecorator;
->MyClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
->ClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+>MyClassDecorator : <TFunction extends Function>(target: TFunction) => void | TFunction
+>ClassDecorator : <TFunction extends Function>(target: TFunction) => void | TFunction
 
 declare const MyMethodDecorator: MethodDecorator;
->MyMethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
->MethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
+>MyMethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => void | TypedPropertyDescriptor<T>
+>MethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => void | TypedPropertyDescriptor<T>
 
 @MyClassDecorator
->MyClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+>MyClassDecorator : <TFunction extends Function>(target: TFunction) => void | TFunction
 
 class A {
 >A : A
@@ -18,7 +18,7 @@ class A {
 >args : any[]
 
     @MyMethodDecorator
->MyMethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
+>MyMethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => void | TypedPropertyDescriptor<T>
 
     method(...args) {}
 >method : (...args: any[]) => void
@@ -26,7 +26,7 @@ class A {
 }
 
 @MyClassDecorator
->MyClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+>MyClassDecorator : <TFunction extends Function>(target: TFunction) => void | TFunction
 
 class B {
 >B : B
@@ -35,7 +35,7 @@ class B {
 >args : number[]
 
     @MyMethodDecorator
->MyMethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
+>MyMethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => void | TypedPropertyDescriptor<T>
 
     method(...args: string[]) {}
 >method : (...args: string[]) => void

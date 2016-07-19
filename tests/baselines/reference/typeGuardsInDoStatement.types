@@ -13,7 +13,7 @@ function a(x: string | number | boolean) {
 
     do {
         x; // boolean | string
->x : boolean | string
+>x : string | boolean
 
         x = undefined;
 >x = undefined : undefined
@@ -40,7 +40,7 @@ function b(x: string | number | boolean) {
 
     do {
         x; // boolean | string
->x : boolean | string
+>x : string | boolean
 
         if (cond) continue;
 >cond : boolean

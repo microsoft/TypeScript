@@ -217,19 +217,19 @@ function test8(a: boolean | void) {
 }
 
 function test9(a: boolean | number) {
->test9 : (a: boolean | number) => void
->a : boolean | number
+>test9 : (a: number | boolean) => void
+>a : number | boolean
 
     if (typeof a !== "undefined") {
 >typeof a !== "undefined" : boolean
 >typeof a : string
->a : boolean | number
+>a : number | boolean
 >"undefined" : "undefined"
 
         if (typeof a === "boolean") {
 >typeof a === "boolean" : boolean
 >typeof a : string
->a : boolean | number
+>a : number | boolean
 >"boolean" : "boolean"
 
             a;
@@ -242,24 +242,24 @@ function test9(a: boolean | number) {
     }
     else {
         a;
->a : boolean | number
+>a : number | boolean
     }
 }
 
 function test10(a: boolean | number) {
->test10 : (a: boolean | number) => void
->a : boolean | number
+>test10 : (a: number | boolean) => void
+>a : number | boolean
 
     if (typeof a === "undefined") {
 >typeof a === "undefined" : boolean
 >typeof a : string
->a : boolean | number
+>a : number | boolean
 >"undefined" : "undefined"
 
         if (typeof a === "boolean") {
 >typeof a === "boolean" : boolean
 >typeof a : string
->a : boolean | number
+>a : number | boolean
 >"boolean" : "boolean"
 
             a;
@@ -272,27 +272,27 @@ function test10(a: boolean | number) {
     }
     else {
         a;
->a : boolean | number
+>a : number | boolean
     }
 }
 
 function test11(a: boolean | number) {
->test11 : (a: boolean | number) => void
->a : boolean | number
+>test11 : (a: number | boolean) => void
+>a : number | boolean
 
     if (typeof a === "undefined" || typeof a === "boolean") {
 >typeof a === "undefined" || typeof a === "boolean" : boolean
 >typeof a === "undefined" : boolean
 >typeof a : string
->a : boolean | number
+>a : number | boolean
 >"undefined" : "undefined"
 >typeof a === "boolean" : boolean
 >typeof a : string
->a : boolean | number
+>a : number | boolean
 >"boolean" : "boolean"
 
 		a;
->a : boolean | number
+>a : number | boolean
     }
     else {
         a;
@@ -301,18 +301,18 @@ function test11(a: boolean | number) {
 }
 
 function test12(a: boolean | number) {
->test12 : (a: boolean | number) => void
->a : boolean | number
+>test12 : (a: number | boolean) => void
+>a : number | boolean
 
     if (typeof a !== "undefined" && typeof a === "boolean") {
 >typeof a !== "undefined" && typeof a === "boolean" : boolean
 >typeof a !== "undefined" : boolean
 >typeof a : string
->a : boolean | number
+>a : number | boolean
 >"undefined" : "undefined"
 >typeof a === "boolean" : boolean
 >typeof a : string
->a : boolean | number
+>a : number | boolean
 >"boolean" : "boolean"
 
 		a;
@@ -320,24 +320,24 @@ function test12(a: boolean | number) {
     }
     else {
         a;
->a : boolean | number
+>a : number | boolean
     }
 }
 
 function test13(a: boolean | number | void) {
->test13 : (a: boolean | number | void) => void
->a : boolean | number | void
+>test13 : (a: number | boolean | void) => void
+>a : number | boolean | void
 
     if (typeof a !== "undefined") {
 >typeof a !== "undefined" : boolean
 >typeof a : string
->a : boolean | number | void
+>a : number | boolean | void
 >"undefined" : "undefined"
 
         if (typeof a === "boolean") {
 >typeof a === "boolean" : boolean
 >typeof a : string
->a : boolean | number
+>a : number | boolean
 >"boolean" : "boolean"
 
             a;
@@ -350,24 +350,24 @@ function test13(a: boolean | number | void) {
     }
     else {
         a;
->a : boolean | number | void
+>a : number | boolean | void
     }
 }
 
 function test14(a: boolean | number | void) {
->test14 : (a: boolean | number | void) => void
->a : boolean | number | void
+>test14 : (a: number | boolean | void) => void
+>a : number | boolean | void
 
     if (typeof a === "undefined") {
 >typeof a === "undefined" : boolean
 >typeof a : string
->a : boolean | number | void
+>a : number | boolean | void
 >"undefined" : "undefined"
 
         if (typeof a === "boolean") {
 >typeof a === "boolean" : boolean
 >typeof a : string
->a : boolean | number | void
+>a : number | boolean | void
 >"boolean" : "boolean"
 
             a;
@@ -380,27 +380,27 @@ function test14(a: boolean | number | void) {
     }
     else {
         a;
->a : boolean | number
+>a : number | boolean
     }
 }
 
 function test15(a: boolean | number | void) {
->test15 : (a: boolean | number | void) => void
->a : boolean | number | void
+>test15 : (a: number | boolean | void) => void
+>a : number | boolean | void
 
     if (typeof a === "undefined" || typeof a === "boolean") {
 >typeof a === "undefined" || typeof a === "boolean" : boolean
 >typeof a === "undefined" : boolean
 >typeof a : string
->a : boolean | number | void
+>a : number | boolean | void
 >"undefined" : "undefined"
 >typeof a === "boolean" : boolean
 >typeof a : string
->a : boolean | number
+>a : number | boolean
 >"boolean" : "boolean"
 
 		a;
->a : boolean | number | void
+>a : number | boolean | void
     }
     else {
         a;
@@ -409,18 +409,18 @@ function test15(a: boolean | number | void) {
 }
 
 function test16(a: boolean | number | void) {
->test16 : (a: boolean | number | void) => void
->a : boolean | number | void
+>test16 : (a: number | boolean | void) => void
+>a : number | boolean | void
 
     if (typeof a !== "undefined" && typeof a === "boolean") {
 >typeof a !== "undefined" && typeof a === "boolean" : boolean
 >typeof a !== "undefined" : boolean
 >typeof a : string
->a : boolean | number | void
+>a : number | boolean | void
 >"undefined" : "undefined"
 >typeof a === "boolean" : boolean
 >typeof a : string
->a : boolean | number
+>a : number | boolean
 >"boolean" : "boolean"
 
 		a;
@@ -428,7 +428,7 @@ function test16(a: boolean | number | void) {
     }
     else {
         a;
->a : boolean | number | void
+>a : number | boolean | void
     }
 }
 

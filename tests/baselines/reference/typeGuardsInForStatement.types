@@ -72,6 +72,6 @@ function c(x: string | number) {
 >cond : boolean
     }
     x; // string | number
->x : number | string
+>x : string | number
 }
 

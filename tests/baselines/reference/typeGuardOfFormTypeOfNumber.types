@@ -134,7 +134,7 @@ else {
 if (typeof strOrNum !== "number") {
 >typeof strOrNum !== "number" : boolean
 >typeof strOrNum : string
->strOrNum : number | string
+>strOrNum : string | number
 >"number" : "number"
 
     str === strOrNum; // string
@@ -167,7 +167,7 @@ else {
 if (typeof strOrNumOrBool !== "number") {
 >typeof strOrNumOrBool !== "number" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : number | string | boolean
+>strOrNumOrBool : string | number | boolean
 >"number" : "number"
 
     strOrBool = strOrNumOrBool; // string | boolean

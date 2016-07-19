@@ -86,8 +86,8 @@ const a8 = a && z;
 >z : string | number | undefined
 
 const s1 = s && a;
->s1 : number[] | ""
->s && a : number[] | ""
+>s1 : "" | number[]
+>s && a : "" | number[]
 >s : string
 >a : number[]
 
@@ -134,8 +134,8 @@ const s8 = s && z;
 >z : string | number | undefined
 
 const x1 = x && a;
->x1 : number[] | 0
->x && a : number[] | 0
+>x1 : 0 | number[]
+>x && a : 0 | number[]
 >x : number
 >a : number[]
 
@@ -182,8 +182,8 @@ const x8 = x && z;
 >z : string | number | undefined
 
 const b1 = b && a;
->b1 : number[] | false
->b && a : number[] | false
+>b1 : false | number[]
+>b && a : false | number[]
 >b : boolean
 >a : number[]
 
@@ -206,8 +206,8 @@ const b4 = b && b;
 >b : true
 
 const b5 = b && v;
->b5 : void | false
->b && v : void | false
+>b5 : false | void
+>b && v : false | void
 >b : boolean
 >v : void
 
@@ -374,8 +374,8 @@ const n8 = n && z;
 >z : string | number | undefined
 
 const z1 = z && a;
->z1 : number[] | "" | 0 | undefined
->z && a : number[] | "" | 0 | undefined
+>z1 : "" | 0 | number[] | undefined
+>z && a : "" | 0 | number[] | undefined
 >z : string | number | undefined
 >a : number[]
 

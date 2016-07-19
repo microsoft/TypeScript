@@ -119,7 +119,7 @@ else {
 if (typeof strOrC !== "Object") {
 >typeof strOrC !== "Object" : boolean
 >typeof strOrC : string
->strOrC : C | string
+>strOrC : string | C
 >"Object" : "Object"
 
     var r2: string = strOrC; // string
@@ -135,7 +135,7 @@ else {
 if (typeof numOrC !== "Object") {
 >typeof numOrC !== "Object" : boolean
 >typeof numOrC : string
->numOrC : C | number
+>numOrC : number | C
 >"Object" : "Object"
 
     var r3: number = numOrC; // number
@@ -151,7 +151,7 @@ else {
 if (typeof boolOrC !== "Object") {
 >typeof boolOrC !== "Object" : boolean
 >typeof boolOrC : string
->boolOrC : C | boolean
+>boolOrC : boolean | C
 >"Object" : "Object"
 
     var r4: boolean = boolOrC; // boolean

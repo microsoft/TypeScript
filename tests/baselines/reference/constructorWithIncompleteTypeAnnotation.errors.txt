@@ -38,9 +38,9 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(160,30): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(160,31): error TS2304: Cannot find name 'Property'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(167,13): error TS2365: Operator '+=' cannot be applied to types 'number' and 'void'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(181,40): error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(182,13): error TS2322: Type 'boolean' is not assignable to type 'true | number'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(184,13): error TS2322: Type 'boolean' is not assignable to type 'true | number'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(192,13): error TS2322: Type 'boolean' is not assignable to type 'true | number'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(182,13): error TS2322: Type 'boolean' is not assignable to type 'number | true'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(184,13): error TS2322: Type 'boolean' is not assignable to type 'number | true'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(192,13): error TS2322: Type 'boolean' is not assignable to type 'number | true'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(206,28): error TS1109: Expression expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(214,16): error TS2304: Cannot find name 'bool'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(219,10): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
@@ -353,11 +353,11 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(262,1): error TS
 !!! error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
                 b = !b;/*!*/
                 ~
-!!! error TS2322: Type 'boolean' is not assignable to type 'true | number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'number | true'.
                 i = ~i;/*~i*/
                 b = i < (i - 1) && (i + 1) > i;/*< && >*/
                 ~
-!!! error TS2322: Type 'boolean' is not assignable to type 'true | number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'number | true'.
                 var f = true ? 1 : 0;/*? :*/   // YES :
                 i++;/*++*/
                 i--;/*--*/
@@ -367,7 +367,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(262,1): error TS
                 var j = i;
                 b = i == j && i != j && i <= j && i >= j;/*= == && != <= >=*/
                 ~
-!!! error TS2322: Type 'boolean' is not assignable to type 'true | number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'number | true'.
                 i += <number>5.0;/*+=*/
                 i -= i;/*-=*/
                 i *= i;/**=*/

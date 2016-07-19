@@ -69,6 +69,6 @@ function c(x: string | number) {
 >undefined : undefined
     }
     x; // string | number
->x : number | string
+>x : string | number
 }
 

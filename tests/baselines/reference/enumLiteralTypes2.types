@@ -14,14 +14,14 @@ type YesNo = Choice.Yes | Choice.No;
 >No : Choice.No
 
 type NoYes = Choice.No | Choice.Yes;
->NoYes : Choice.No | Choice.Yes
+>NoYes : Choice.Yes | Choice.No
 >Choice : any
 >No : Choice.No
 >Choice : any
 >Yes : Choice.Yes
 
 type UnknownYesNo = Choice.Unknown | Choice.Yes | Choice.No;
->UnknownYesNo : Choice.Unknown | Choice.Yes | Choice.No
+>UnknownYesNo : Choice.Yes | Choice.No | Choice.Unknown
 >Choice : any
 >Unknown : Choice.Unknown
 >Choice : any
@@ -38,7 +38,7 @@ function f1() {
 
     var a: NoYes;
 >a : Choice.Yes | Choice.No
->NoYes : Choice.No | Choice.Yes
+>NoYes : Choice.Yes | Choice.No
 
     var a: Choice.Yes | Choice.No;
 >a : Choice.Yes | Choice.No
@@ -56,17 +56,17 @@ function f1() {
 }
 
 function f2(a: YesNo, b: UnknownYesNo, c: Choice) {
->f2 : (a: Choice.Yes | Choice.No, b: Choice.Unknown | Choice.Yes | Choice.No, c: Choice) => void
+>f2 : (a: Choice.Yes | Choice.No, b: Choice.Yes | Choice.No | Choice.Unknown, c: Choice) => void
 >a : Choice.Yes | Choice.No
 >YesNo : Choice.Yes | Choice.No
->b : Choice.Unknown | Choice.Yes | Choice.No
->UnknownYesNo : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
+>UnknownYesNo : Choice.Yes | Choice.No | Choice.Unknown
 >c : Choice
 >Choice : Choice
 
     b = a;
 >b = a : Choice.Yes | Choice.No
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 >a : Choice.Yes | Choice.No
 
     c = a;
@@ -81,132 +81,132 @@ function f2(a: YesNo, b: UnknownYesNo, c: Choice) {
 }
 
 function f3(a: Choice.Yes, b: UnknownYesNo) {
->f3 : (a: Choice.Yes, b: Choice.Unknown | Choice.Yes | Choice.No) => void
+>f3 : (a: Choice.Yes, b: Choice.Yes | Choice.No | Choice.Unknown) => void
 >a : Choice.Yes
 >Choice : any
 >Yes : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
->UnknownYesNo : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
+>UnknownYesNo : Choice.Yes | Choice.No | Choice.Unknown
 
     var x = a + b;
 >x : number
 >a + b : number
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var x = a - b;
 >x : number
 >a - b : number
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var x = a * b;
 >x : number
 >a * b : number
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var x = a / b;
 >x : number
 >a / b : number
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var x = a % b;
 >x : number
 >a % b : number
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var x = a | b;
 >x : number
 >a | b : number
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var x = a & b;
 >x : number
 >a & b : number
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var x = a ^ b;
 >x : number
 >a ^ b : number
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var x = -b;
 >x : number
 >-b : number
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var x = ~b;
 >x : number
 >~b : number
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var y = a == b;
 >y : boolean
 >a == b : boolean
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var y = a != b;
 >y : boolean
 >a != b : boolean
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var y = a === b;
 >y : boolean
 >a === b : boolean
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var y = a !== b;
 >y : boolean
 >a !== b : boolean
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var y = a > b;
 >y : boolean
 >a > b : boolean
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var y = a < b;
 >y : boolean
 >a < b : boolean
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var y = a >= b;
 >y : boolean
 >a >= b : boolean
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var y = a <= b;
 >y : boolean
 >a <= b : boolean
 >a : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var y = !b;
 >y : boolean
 >!b : boolean
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 }
 
 function f4(a: Choice.Yes, b: UnknownYesNo) {
->f4 : (a: Choice.Yes, b: Choice.Unknown | Choice.Yes | Choice.No) => void
+>f4 : (a: Choice.Yes, b: Choice.Yes | Choice.No | Choice.Unknown) => void
 >a : Choice.Yes
 >Choice : any
 >Yes : Choice.Yes
->b : Choice.Unknown | Choice.Yes | Choice.No
->UnknownYesNo : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
+>UnknownYesNo : Choice.Yes | Choice.No | Choice.Unknown
 
     a++;
 >a++ : number
@@ -214,7 +214,7 @@ function f4(a: Choice.Yes, b: UnknownYesNo) {
 
     b++;
 >b++ : number
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 }
 
 declare function g(x: Choice.Yes): string;
@@ -235,11 +235,11 @@ declare function g(x: Choice): number;
 >Choice : Choice
 
 function f5(a: YesNo, b: UnknownYesNo, c: Choice) {
->f5 : (a: Choice.Yes | Choice.No, b: Choice.Unknown | Choice.Yes | Choice.No, c: Choice) => void
+>f5 : (a: Choice.Yes | Choice.No, b: Choice.Yes | Choice.No | Choice.Unknown, c: Choice) => void
 >a : Choice.Yes | Choice.No
 >YesNo : Choice.Yes | Choice.No
->b : Choice.Unknown | Choice.Yes | Choice.No
->UnknownYesNo : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
+>UnknownYesNo : Choice.Yes | Choice.No | Choice.Unknown
 >c : Choice
 >Choice : Choice
 
@@ -269,7 +269,7 @@ function f5(a: YesNo, b: UnknownYesNo, c: Choice) {
 >z4 : number
 >g(b) : number
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
->b : Choice.Unknown | Choice.Yes | Choice.No
+>b : Choice.Yes | Choice.No | Choice.Unknown
 
     var z5 = g(c);
 >z5 : number
@@ -337,12 +337,12 @@ function f11(x: YesNo) {
 }
 
 function f12(x: UnknownYesNo) {
->f12 : (x: Choice.Unknown | Choice.Yes | Choice.No) => void
->x : Choice.Unknown | Choice.Yes | Choice.No
->UnknownYesNo : Choice.Unknown | Choice.Yes | Choice.No
+>f12 : (x: Choice.Yes | Choice.No | Choice.Unknown) => void
+>x : Choice.Yes | Choice.No | Choice.Unknown
+>UnknownYesNo : Choice.Yes | Choice.No | Choice.Unknown
 
     if (x) {
->x : Choice.Unknown | Choice.Yes | Choice.No
+>x : Choice.Yes | Choice.No | Choice.Unknown
 
         x;
 >x : Choice.Yes | Choice.No
@@ -354,13 +354,13 @@ function f12(x: UnknownYesNo) {
 }
 
 function f13(x: UnknownYesNo) {
->f13 : (x: Choice.Unknown | Choice.Yes | Choice.No) => void
->x : Choice.Unknown | Choice.Yes | Choice.No
->UnknownYesNo : Choice.Unknown | Choice.Yes | Choice.No
+>f13 : (x: Choice.Yes | Choice.No | Choice.Unknown) => void
+>x : Choice.Yes | Choice.No | Choice.Unknown
+>UnknownYesNo : Choice.Yes | Choice.No | Choice.Unknown
 
     if (x === Choice.Yes) {
 >x === Choice.Yes : boolean
->x : Choice.Unknown | Choice.Yes | Choice.No
+>x : Choice.Yes | Choice.No | Choice.Unknown
 >Choice.Yes : Choice.Yes
 >Choice : typeof Choice
 >Yes : Choice.Yes
@@ -370,7 +370,7 @@ function f13(x: UnknownYesNo) {
     }
     else {
         x;
->x : Choice.Unknown | Choice.No
+>x : Choice.No | Choice.Unknown
     }
 }
 

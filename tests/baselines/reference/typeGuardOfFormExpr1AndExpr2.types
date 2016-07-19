@@ -26,7 +26,7 @@ var c: C;
 >C : C
 
 var cOrBool: C| boolean;
->cOrBool : C | boolean
+>cOrBool : boolean | C
 >C : C
 
 var strOrNumOrBoolOrC: string | number | boolean | C;
@@ -95,11 +95,11 @@ if (typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "numbe
 >typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "number" : boolean
 >typeof strOrNumOrBoolOrC !== "string" : boolean
 >typeof strOrNumOrBoolOrC : string
->strOrNumOrBoolOrC : C | string | number | boolean
+>strOrNumOrBoolOrC : string | number | boolean | C
 >"string" : "string"
 >typeof strOrNumOrBoolOrC !== "number" : boolean
 >typeof strOrNumOrBoolOrC : string
->strOrNumOrBoolOrC : C | number | boolean
+>strOrNumOrBoolOrC : number | boolean | C
 >"number" : "number"
 >typeof strOrNumOrBool === "boolean" : boolean
 >typeof strOrNumOrBool : string
@@ -107,9 +107,9 @@ if (typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "numbe
 >"boolean" : "boolean"
 
     cOrBool = strOrNumOrBoolOrC; // C | boolean
->cOrBool = strOrNumOrBoolOrC : C | boolean
->cOrBool : C | boolean
->strOrNumOrBoolOrC : C | boolean
+>cOrBool = strOrNumOrBoolOrC : boolean | C
+>cOrBool : boolean | C
+>strOrNumOrBoolOrC : boolean | C
 
     bool = strOrNumOrBool; // boolean
 >bool = strOrNumOrBool : boolean
@@ -120,7 +120,7 @@ else {
     var r1: string | number | boolean | C = strOrNumOrBoolOrC; // string | number | boolean | C
 >r1 : string | number | boolean | C
 >C : C
->strOrNumOrBoolOrC : string | number | C | boolean
+>strOrNumOrBoolOrC : string | number | boolean | C
 
     var r2: string | number | boolean = strOrNumOrBool;
 >r2 : string | number | boolean

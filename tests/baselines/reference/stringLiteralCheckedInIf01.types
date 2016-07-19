@@ -4,18 +4,18 @@ type S = "a" | "b";
 >S : "a" | "b"
 
 type T = S[] | S;
->T : ("a" | "b")[] | "a" | "b"
+>T : "a" | "b" | ("a" | "b")[]
 >S : "a" | "b"
 >S : "a" | "b"
 
 function f(foo: T) {
->f : (foo: ("a" | "b")[] | "a" | "b") => "a" | "b"
->foo : ("a" | "b")[] | "a" | "b"
->T : ("a" | "b")[] | "a" | "b"
+>f : (foo: "a" | "b" | ("a" | "b")[]) => "a" | "b"
+>foo : "a" | "b" | ("a" | "b")[]
+>T : "a" | "b" | ("a" | "b")[]
 
     if (foo === "a") {
 >foo === "a" : boolean
->foo : ("a" | "b")[] | "a" | "b"
+>foo : "a" | "b" | ("a" | "b")[]
 >"a" : "a"
 
         return foo;
@@ -23,7 +23,7 @@ function f(foo: T) {
     }
     else if (foo === "b") {
 >foo === "b" : boolean
->foo : ("a" | "b")[] | "b"
+>foo : "b" | ("a" | "b")[]
 >"b" : "b"
 
         return foo;

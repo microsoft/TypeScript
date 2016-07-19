@@ -4,7 +4,7 @@ type S = "a" | "b";
 >S : "a" | "b"
 
 type T = S[] | S;
->T : ("a" | "b")[] | "a" | "b"
+>T : "a" | "b" | ("a" | "b")[]
 >S : "a" | "b"
 >S : "a" | "b"
 
@@ -13,8 +13,8 @@ var s: S;
 >S : "a" | "b"
 
 var t: T;
->t : ("a" | "b")[] | "a" | "b"
->T : ("a" | "b")[] | "a" | "b"
+>t : "a" | "b" | ("a" | "b")[]
+>T : "a" | "b" | ("a" | "b")[]
 
 var str: string;
 >str : string
@@ -26,13 +26,13 @@ s = <S>t;
 >s : "a" | "b"
 ><S>t : "a" | "b"
 >S : "a" | "b"
->t : ("a" | "b")[] | "a" | "b"
+>t : "a" | "b" | ("a" | "b")[]
 
 s = t as S;
 >s = t as S : "a" | "b"
 >s : "a" | "b"
 >t as S : "a" | "b"
->t : ("a" | "b")[] | "a" | "b"
+>t : "a" | "b" | ("a" | "b")[]
 >S : "a" | "b"
 
 s = <S>str;
@@ -52,32 +52,32 @@ s = str as S;
 ////////////////
 
 t = <T>s;
->t = <T>s : ("a" | "b")[] | "a" | "b"
->t : ("a" | "b")[] | "a" | "b"
-><T>s : ("a" | "b")[] | "a" | "b"
->T : ("a" | "b")[] | "a" | "b"
+>t = <T>s : "a" | "b" | ("a" | "b")[]
+>t : "a" | "b" | ("a" | "b")[]
+><T>s : "a" | "b" | ("a" | "b")[]
+>T : "a" | "b" | ("a" | "b")[]
 >s : "a" | "b"
 
 t = s as T;
->t = s as T : ("a" | "b")[] | "a" | "b"
->t : ("a" | "b")[] | "a" | "b"
->s as T : ("a" | "b")[] | "a" | "b"
+>t = s as T : "a" | "b" | ("a" | "b")[]
+>t : "a" | "b" | ("a" | "b")[]
+>s as T : "a" | "b" | ("a" | "b")[]
 >s : "a" | "b"
->T : ("a" | "b")[] | "a" | "b"
+>T : "a" | "b" | ("a" | "b")[]
 
 t = <T>str;
->t = <T>str : ("a" | "b")[] | "a" | "b"
->t : ("a" | "b")[] | "a" | "b"
-><T>str : ("a" | "b")[] | "a" | "b"
->T : ("a" | "b")[] | "a" | "b"
+>t = <T>str : "a" | "b" | ("a" | "b")[]
+>t : "a" | "b" | ("a" | "b")[]
+><T>str : "a" | "b" | ("a" | "b")[]
+>T : "a" | "b" | ("a" | "b")[]
 >str : string
 
 t = str as T;
->t = str as T : ("a" | "b")[] | "a" | "b"
->t : ("a" | "b")[] | "a" | "b"
->str as T : ("a" | "b")[] | "a" | "b"
+>t = str as T : "a" | "b" | ("a" | "b")[]
+>t : "a" | "b" | ("a" | "b")[]
+>str as T : "a" | "b" | ("a" | "b")[]
 >str : string
->T : ("a" | "b")[] | "a" | "b"
+>T : "a" | "b" | ("a" | "b")[]
 
 ////////////////
 
@@ -97,11 +97,11 @@ str = <string>t;
 >str = <string>t : string
 >str : string
 ><string>t : string
->t : ("a" | "b")[] | "a" | "b"
+>t : "a" | "b" | ("a" | "b")[]
 
 str = t as string;
 >str = t as string : string
 >str : string
 >t as string : string
->t : ("a" | "b")[] | "a" | "b"
+>t : "a" | "b" | ("a" | "b")[]
 

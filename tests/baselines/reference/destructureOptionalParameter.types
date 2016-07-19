@@ -40,7 +40,7 @@ interface QueryMetadataFactory {
 >QueryMetadataFactory : QueryMetadataFactory
 
     (selector: Type | string, {descendants, read}?: {
->selector : Type | string
+>selector : string | Type
 >Type : Type
 >descendants : boolean | undefined
 >read : any
@@ -55,7 +55,7 @@ interface QueryMetadataFactory {
 >ParameterDecorator : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
 
     new (selector: Type | string, {descendants, read}?: {
->selector : Type | string
+>selector : string | Type
 >Type : Type
 >descendants : boolean | undefined
 >read : any

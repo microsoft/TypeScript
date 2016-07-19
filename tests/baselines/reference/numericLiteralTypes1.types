@@ -44,17 +44,17 @@ function f1() {
 }
 
 type B1 = -1 | 0 | 1;
->B1 : -1 | 0 | 1
+>B1 : 0 | 1 | -1
 >-1 : -1
 >1 : number
 
 type B2 = 1 | 0 | -1;
->B2 : 1 | 0 | -1
+>B2 : 0 | 1 | -1
 >-1 : -1
 >1 : number
 
 type B3 = 0 | -1 | 1;
->B3 : 0 | -1 | 1
+>B3 : 0 | 1 | -1
 >-1 : -1
 >1 : number
 
@@ -62,19 +62,19 @@ function f2() {
 >f2 : () => void
 
     var b: B1 = -1;
->b : -1 | 0 | 1
->B1 : -1 | 0 | 1
+>b : 0 | 1 | -1
+>B1 : 0 | 1 | -1
 >-1 : -1
 >1 : number
 
     var b: B2 = 0;
->b : -1 | 0 | 1
->B2 : 1 | 0 | -1
+>b : 0 | 1 | -1
+>B2 : 0 | 1 | -1
 >0 : 0
 
     var b: B3 = 1;
->b : -1 | 0 | 1
->B3 : 0 | -1 | 1
+>b : 0 | 1 | -1
+>B3 : 0 | 1 | -1
 >1 : 1
 }
 
@@ -370,46 +370,46 @@ function f14(x: 0 | 1 | 2, y: string) {
 >y : string
 
     var b = x || y;
->b : 1 | 2 | string
->x || y : 1 | 2 | string
+>b : string | 1 | 2
+>x || y : string | 1 | 2
 >x : 0 | 1 | 2
 >y : string
 }
 
 function f15(x: 0 | false, y: 1 | "one") {
->f15 : (x: 0 | false, y: 1 | "one") => void
->x : 0 | false
+>f15 : (x: false | 0, y: 1 | "one") => void
+>x : false | 0
 >false : false
 >y : 1 | "one"
 
     var a = x && y;
->a : 0 | false
->x && y : 0 | false
->x : 0 | false
+>a : false | 0
+>x && y : false | 0
+>x : false | 0
 >y : 1 | "one"
 
     var b = y && x;
->b : 0 | false
->y && x : 0 | false
+>b : false | 0
+>y && x : false | 0
 >y : 1 | "one"
->x : 0 | false
+>x : false | 0
 
     var c = x || y;
 >c : 1 | "one"
 >x || y : 1 | "one"
->x : 0 | false
+>x : false | 0
 >y : 1 | "one"
 
     var d = y || x;
->d : 1 | "one" | 0 | false
->y || x : 1 | "one" | 0 | false
+>d : false | 0 | 1 | "one"
+>y || x : false | 0 | 1 | "one"
 >y : 1 | "one"
->x : 0 | false
+>x : false | 0
 
     var e = !x;
 >e : true
 >!x : true
->x : 0 | false
+>x : false | 0
 
     var f = !y;
 >f : boolean

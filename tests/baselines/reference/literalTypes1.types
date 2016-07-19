@@ -79,34 +79,34 @@ function f2(x: 0 | 1 | 2) {
 }
 
 type Falsy = false | 0 | "" | null | undefined;
->Falsy : false | 0 | "" | null | undefined
+>Falsy : false | "" | 0 | null | undefined
 >false : false
 >null : null
 
 function f3(x: Falsy) {
->f3 : (x: false | 0 | "" | null | undefined) => void
->x : false | 0 | "" | null | undefined
->Falsy : false | 0 | "" | null | undefined
+>f3 : (x: false | "" | 0 | null | undefined) => void
+>x : false | "" | 0 | null | undefined
+>Falsy : false | "" | 0 | null | undefined
 
     if (x) {
->x : false | 0 | "" | null | undefined
+>x : false | "" | 0 | null | undefined
 
         x;
 >x : never
     }
     else {
         x;
->x : false | 0 | "" | null | undefined
+>x : false | "" | 0 | null | undefined
     }
 }
 
 function f4(x: 0 | 1 | true | string) {
->f4 : (x: 0 | 1 | true | string) => void
->x : 0 | 1 | true | string
+>f4 : (x: string | true | 0 | 1) => void
+>x : string | true | 0 | 1
 >true : true
 
     switch (x) {
->x : 0 | 1 | true | string
+>x : string | true | 0 | 1
 
         case 0:
 >0 : 0
@@ -148,7 +148,7 @@ function f4(x: 0 | 1 | true | string) {
             break;
         default:
             x;
->x : true | string
+>x : string | true
     }
 }
 

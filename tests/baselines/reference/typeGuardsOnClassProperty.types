@@ -58,13 +58,13 @@ class D {
 }
 
 var o: {
->o : { prop1: number | string; prop2: boolean | string; }
+>o : { prop1: string | number; prop2: string | boolean; }
 
     prop1: number|string;
->prop1 : number | string
+>prop1 : string | number
 
     prop2: boolean|string;
->prop2 : boolean | string
+>prop2 : string | boolean
 
 } = {
 >{        prop1: "string" ,        prop2: true    } : { prop1: string; prop2: boolean; }
@@ -82,28 +82,28 @@ if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
 >typeof o.prop1 === "string" && o.prop1.toLowerCase() : string
 >typeof o.prop1 === "string" : boolean
 >typeof o.prop1 : string
->o.prop1 : number | string
->o : { prop1: number | string; prop2: boolean | string; }
->prop1 : number | string
+>o.prop1 : string | number
+>o : { prop1: string | number; prop2: string | boolean; }
+>prop1 : string | number
 >"string" : "string"
 >o.prop1.toLowerCase() : string
 >o.prop1.toLowerCase : () => string
 >o.prop1 : string
->o : { prop1: number | string; prop2: boolean | string; }
+>o : { prop1: string | number; prop2: string | boolean; }
 >prop1 : string
 >toLowerCase : () => string
 
 var prop1 = o.prop1;
->prop1 : number | string
->o.prop1 : number | string
->o : { prop1: number | string; prop2: boolean | string; }
->prop1 : number | string
+>prop1 : string | number
+>o.prop1 : string | number
+>o : { prop1: string | number; prop2: string | boolean; }
+>prop1 : string | number
 
 if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 >typeof prop1 === "string" && prop1.toLocaleLowerCase() : string
 >typeof prop1 === "string" : boolean
 >typeof prop1 : string
->prop1 : number | string
+>prop1 : string | number
 >"string" : "string"
 >prop1.toLocaleLowerCase() : string
 >prop1.toLocaleLowerCase : () => string

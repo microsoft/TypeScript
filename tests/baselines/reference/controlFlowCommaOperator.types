@@ -66,6 +66,6 @@ function f(x: string | number | boolean) {
 >y : string
 
     z; // number | boolean
->z : boolean | number
+>z : number | boolean
 }
 

@@ -1,21 +1,21 @@
 === tests/cases/conformance/es6/moduleExportsCommonjs/a.ts ===
 var decorator: ClassDecorator;
->decorator : <TFunction extends Function>(target: TFunction) => TFunction | void
->ClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+>decorator : <TFunction extends Function>(target: TFunction) => void | TFunction
+>ClassDecorator : <TFunction extends Function>(target: TFunction) => void | TFunction
 
 @decorator
->decorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+>decorator : <TFunction extends Function>(target: TFunction) => void | TFunction
 
 export default class Foo {}
 >Foo : Foo
 
 === tests/cases/conformance/es6/moduleExportsCommonjs/b.ts ===
 var decorator: ClassDecorator;
->decorator : <TFunction extends Function>(target: TFunction) => TFunction | void
->ClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+>decorator : <TFunction extends Function>(target: TFunction) => void | TFunction
+>ClassDecorator : <TFunction extends Function>(target: TFunction) => void | TFunction
 
 @decorator
->decorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+>decorator : <TFunction extends Function>(target: TFunction) => void | TFunction
 
 export default class {}
 
