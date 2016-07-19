@@ -146,7 +146,7 @@ function baz1<a>(value: void|a): void {
 // Repro from #5417
 
 type Maybe<T> = T | void;
->Maybe : void | T
+>Maybe : Maybe<T>
 >T : T
 >T : T
 
@@ -162,15 +162,15 @@ function get<U>(x: U | void): U {
 }
 
 let foo: Maybe<string>;
->foo : string | void
->Maybe : void | T
+>foo : Maybe<string>
+>Maybe : Maybe<T>
 
 get(foo).toUpperCase(); // Ok
 >get(foo).toUpperCase() : string
 >get(foo).toUpperCase : () => string
 >get(foo) : string
 >get : <U>(x: void | U) => U
->foo : string | void
+>foo : Maybe<string>
 >toUpperCase : () => string
 
 // Repro from #5456

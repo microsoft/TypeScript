@@ -52,7 +52,7 @@ interface QueryMetadataFactory {
 >read : any
 
     }): ParameterDecorator;
->ParameterDecorator : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
+>ParameterDecorator : ParameterDecorator
 
     new (selector: Type | string, {descendants, read}?: {
 >selector : string | Type

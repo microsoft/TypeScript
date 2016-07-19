@@ -6,7 +6,7 @@ let cond: boolean;
 >cond : boolean
 
 export type Optional<a> = Some<a> | None;
->Optional : Some<a> | None
+>Optional : Optional<a>
 >a : a
 >Some : Some<a>
 >a : a
@@ -30,10 +30,10 @@ export const none : None = { none: '' };
 >'' : string
 
 export function isSome<a>(value: Optional<a>): value is Some<a> {
->isSome : <a>(value: None | Some<a>) => value is Some<a>
+>isSome : <a>(value: Optional<a>) => value is Some<a>
 >a : a
->value : None | Some<a>
->Optional : Some<a> | None
+>value : Optional<a>
+>Optional : Optional<a>
 >a : a
 >value : any
 >Some : Some<a>
@@ -42,7 +42,7 @@ export function isSome<a>(value: Optional<a>): value is Some<a> {
     return 'some' in value;
 >'some' in value : boolean
 >'some' : string
->value : None | Some<a>
+>value : Optional<a>
 }
 
 function someFrom<a>(some: a) {
@@ -63,8 +63,8 @@ export function fn<r>(makeSome: () => r): void {
 >r : r
 
     let result: Optional<r> = none;
->result : None | Some<r>
->Optional : Some<a> | None
+>result : Optional<r>
+>Optional : Optional<a>
 >r : r
 >none : None
 
@@ -75,17 +75,17 @@ export function fn<r>(makeSome: () => r): void {
 >cond : boolean
 
         result;  // Some<r> | None
->result : None | Some<r>
+>result : Optional<r>
 
         result = someFrom(isSome(result) ? result.some : makeSome());
 >result = someFrom(isSome(result) ? result.some : makeSome()) : { some: r; }
->result : None | Some<r>
+>result : Optional<r>
 >someFrom(isSome(result) ? result.some : makeSome()) : { some: r; }
 >someFrom : <a>(some: a) => { some: a; }
 >isSome(result) ? result.some : makeSome() : r
 >isSome(result) : boolean
->isSome : <a>(value: None | Some<a>) => value is Some<a>
->result : None | Some<r>
+>isSome : <a>(value: Optional<a>) => value is Some<a>
+>result : Optional<r>
 >result.some : r
 >result : Some<r>
 >some : r

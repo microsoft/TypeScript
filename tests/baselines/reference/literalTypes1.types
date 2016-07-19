@@ -79,24 +79,24 @@ function f2(x: 0 | 1 | 2) {
 }
 
 type Falsy = false | 0 | "" | null | undefined;
->Falsy : false | "" | 0 | null | undefined
+>Falsy : Falsy
 >false : false
 >null : null
 
 function f3(x: Falsy) {
->f3 : (x: false | "" | 0 | null | undefined) => void
->x : false | "" | 0 | null | undefined
->Falsy : false | "" | 0 | null | undefined
+>f3 : (x: Falsy) => void
+>x : Falsy
+>Falsy : Falsy
 
     if (x) {
->x : false | "" | 0 | null | undefined
+>x : Falsy
 
         x;
 >x : never
     }
     else {
         x;
->x : false | "" | 0 | null | undefined
+>x : Falsy
     }
 }
 

@@ -45,17 +45,17 @@ function f1() {
 }
 
 type B1 = -1 | 0 | 1;
->B1 : 0 | 1 | -1
+>B1 : B1
 >-1 : -1
 >1 : number
 
 type B2 = 1 | 0 | -1;
->B2 : 0 | 1 | -1
+>B2 : B1
 >-1 : -1
 >1 : number
 
 type B3 = 0 | -1 | 1;
->B3 : 0 | 1 | -1
+>B3 : B1
 >-1 : -1
 >1 : number
 
@@ -63,19 +63,19 @@ function f2() {
 >f2 : () => void
 
     var b: B1 = -1;
->b : 0 | 1 | -1
->B1 : 0 | 1 | -1
+>b : B1
+>B1 : B1
 >-1 : -1
 >1 : number
 
     var b: B2 = 0;
->b : 0 | 1 | -1
->B2 : 0 | 1 | -1
+>b : B1
+>B2 : B1
 >0 : 0
 
     var b: B3 = 1;
->b : 0 | 1 | -1
->B3 : 0 | 1 | -1
+>b : B1
+>B3 : B1
 >1 : 1
 }
 
@@ -419,7 +419,7 @@ function f15(x: 0 | false, y: 1 | "one") {
 }
 
 type Item =
->Item : { kind: 0; a: string; } | { kind: 1; b: string; } | { kind: 2; c: string; }
+>Item : Item
 
     { kind: 0, a: string } |
 >kind : 0
@@ -434,13 +434,13 @@ type Item =
 >c : string
 
 function f20(x: Item) {
->f20 : (x: { kind: 0; a: string; } | { kind: 1; b: string; } | { kind: 2; c: string; }) => string
->x : { kind: 0; a: string; } | { kind: 1; b: string; } | { kind: 2; c: string; }
->Item : { kind: 0; a: string; } | { kind: 1; b: string; } | { kind: 2; c: string; }
+>f20 : (x: Item) => string
+>x : Item
+>Item : Item
 
     switch (x.kind) {
 >x.kind : 0 | 1 | 2
->x : { kind: 0; a: string; } | { kind: 1; b: string; } | { kind: 2; c: string; }
+>x : Item
 >kind : 0 | 1 | 2
 
         case 0: return x.a;
@@ -464,13 +464,13 @@ function f20(x: Item) {
 }
 
 function f21(x: Item) {
->f21 : (x: { kind: 0; a: string; } | { kind: 1; b: string; } | { kind: 2; c: string; }) => string
->x : { kind: 0; a: string; } | { kind: 1; b: string; } | { kind: 2; c: string; }
->Item : { kind: 0; a: string; } | { kind: 1; b: string; } | { kind: 2; c: string; }
+>f21 : (x: Item) => string
+>x : Item
+>Item : Item
 
     switch (x.kind) {
 >x.kind : 0 | 1 | 2
->x : { kind: 0; a: string; } | { kind: 1; b: string; } | { kind: 2; c: string; }
+>x : Item
 >kind : 0 | 1 | 2
 
         case 0: return x.a;

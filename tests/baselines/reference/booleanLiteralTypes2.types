@@ -247,7 +247,7 @@ function f13(x: true | false) {
 }
 
 type Item =
->Item : { kind: true; a: string; } | { kind: false; b: string; }
+>Item : Item
 
     { kind: true, a: string } |
 >kind : true
@@ -260,13 +260,13 @@ type Item =
 >b : string
 
 function f20(x: Item) {
->f20 : (x: { kind: true; a: string; } | { kind: false; b: string; }) => string
->x : { kind: true; a: string; } | { kind: false; b: string; }
->Item : { kind: true; a: string; } | { kind: false; b: string; }
+>f20 : (x: Item) => string
+>x : Item
+>Item : Item
 
     switch (x.kind) {
 >x.kind : boolean
->x : { kind: true; a: string; } | { kind: false; b: string; }
+>x : Item
 >kind : boolean
 
         case true: return x.a;
@@ -284,13 +284,13 @@ function f20(x: Item) {
 }
 
 function f21(x: Item) {
->f21 : (x: { kind: true; a: string; } | { kind: false; b: string; }) => string
->x : { kind: true; a: string; } | { kind: false; b: string; }
->Item : { kind: true; a: string; } | { kind: false; b: string; }
+>f21 : (x: Item) => string
+>x : Item
+>Item : Item
 
     switch (x.kind) {
 >x.kind : boolean
->x : { kind: true; a: string; } | { kind: false; b: string; }
+>x : Item
 >kind : boolean
 
         case true: return x.a;
