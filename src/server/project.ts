@@ -224,6 +224,8 @@ namespace ts.server {
             const oldProgram = this.program;
             this.program = this.languageService.getProgram();
 
+            this.builder.onProjectUpdateGraph();
+
             const oldProjectStructureVersion = this.projectStructureVersion;
             // bump up the version if
             // - oldProgram is not set - this is a first time updateGraph is called
@@ -400,12 +402,6 @@ namespace ts.server {
                 }
             }
             return result;
-        }
-
-        onFileChanged(changedFile: string) {
-            if (this.builder) {
-                this.builder.onFileChanged(changedFile);
-            }
         }
 
         // remove a root file from project

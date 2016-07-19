@@ -2,7 +2,8 @@
 /// <reference path="..\..\services\services.ts" />
 /// <reference path="..\protocol.d.ts" />
 /// <reference path="..\session.ts" />
-/// <reference path="..\node.d.ts" />
+/// <reference types="node" />
+
 namespace ts.server {
 
     const crypto: any = require("crypto");
@@ -12,10 +13,11 @@ namespace ts.server {
      */
     export class BuilderFileInfo {
 
-        public shapeSignature: string;
+        public lastCheckedShapeSignature: string;
+        scriptInfo: ScriptInfo;
 
         constructor(public fileName: string) {
-            this.shapeSignature = undefined;
+            this.lastCheckedShapeSignature = undefined;
         }
 
         public isExternalModule(builder: Builder) {
@@ -44,6 +46,13 @@ namespace ts.server {
             return builder.project.getSourceFile(this.fileName);
         }
 
+        public getScriptInfo(builder: Builder): ScriptInfo {
+            if (!this.scriptInfo) {
+                this.scriptInfo = builder.project.getScriptInfo(this.fileName);
+            }
+            return this.scriptInfo;
+        }
+
         /**
          * Update the state of the file info object. This is usually called
          * after a file has been checked for syntax and semantic problems.
@@ -58,10 +67,10 @@ namespace ts.server {
                 return false;
             }
 
-            const lastSignature: string = this.shapeSignature;
-            this.shapeSignature = undefined;
+            const lastSignature: string = this.lastCheckedShapeSignature;
+            this.lastCheckedShapeSignature = undefined;
             if (sourceFile.isDeclarationFile) {
-                this.shapeSignature =  contentSignature ? contentSignature : this.computeHash(sourceFile.text);
+                this.lastCheckedShapeSignature =  contentSignature ? contentSignature : this.computeHash(sourceFile.text);
             }
             else {
                 // ToDo@dirkb for now we can only get the declaration file if we emit all files.
@@ -70,15 +79,15 @@ namespace ts.server {
                 let dtsFound = false;
                 for (const file of emitOutput.outputFiles) {
                     if (/\.d\.ts$/.test(file.name)) {
-                        this.shapeSignature = this.computeHash(file.text);
+                        this.lastCheckedShapeSignature = this.computeHash(file.text);
                         dtsFound = true;
                     }
                 }
                 if (!dtsFound && contentSignature) {
-                    this.shapeSignature = contentSignature;
+                    this.lastCheckedShapeSignature = contentSignature;
                 }
             }
-            return !this.shapeSignature || lastSignature !== this.shapeSignature;
+            return !this.lastCheckedShapeSignature || lastSignature !== this.lastCheckedShapeSignature;
         }
     }
 
@@ -86,7 +95,7 @@ namespace ts.server {
     export interface Builder {
         readonly project: Project;
         getFilesAffectedBy(fileName: string): string[];
-        onFileChanged(changedFile: string): void;
+        onProjectUpdateGraph(): void;
     }
 
     abstract class AbstractBuilder<T extends BuilderFileInfo> implements Builder {
@@ -100,13 +109,12 @@ namespace ts.server {
             return this.fileInfos[fileName];
         }
         abstract getFilesAffectedBy(fileName: string): string[];
-        abstract onFileChanged(changedFile: string): void;
+        abstract onProjectUpdateGraph(): void;
     }
-
 
     class NonModuleBuilder extends AbstractBuilder<BuilderFileInfo> {
 
-        onFileChanged(changedFile: string) {
+        onProjectUpdateGraph() {
         }
 
         getFileInfo(fileName: string) {
@@ -138,10 +146,16 @@ namespace ts.server {
     class ModuleBuilderFileInfo extends BuilderFileInfo {
         references: ModuleBuilderFileInfo[] = [];
         referencedBy: ModuleBuilderFileInfo[] = [];
+        scriptVersionForReferences: string;
 
         private finalized = false;
 
         updateReferences(builder: ModuleBuilder) {
+            // Only need to update if the content of the file changed.
+            if (this.scriptVersionForReferences === this.getScriptInfo(builder).getLatestVersion()) {
+                return;
+            }
+
             const newReferences = builder.getReferecedFileInfos(this.fileName);
             const oldReferences = this.references;
 
@@ -179,6 +193,14 @@ namespace ts.server {
             }
 
             this.references = newReferences;
+            this.scriptVersionForReferences = this.getScriptInfo(builder).getLatestVersion();
+        }
+
+        removeAllReferences(builder: ModuleBuilder) {
+            for (const reference of this.references) {
+                reference.removeReferencedBy(this);
+            }
+            this.referencedBy = [];
         }
 
         getReferencedByFileNames() {
@@ -272,21 +294,43 @@ namespace ts.server {
                 if (sourceFile) {
                     const fileInfo = new ModuleBuilderFileInfo(fileName);
                     fileInfo.updateReferences(this);
-                    this.fileInfos[fileInfo.fileName] = fileInfo;
+                    this.fileInfos[fileName] = fileInfo;
                 }
             }
             fileInfos.forEach(info => info.finalize());
             this.isDependencyGraphBuilt = true;
         }
 
-        onFileChanged(changedFile: string) {
+        onProjectUpdateGraph() {
+            this.ensureDependencyGraph();
+            this.updateDependencyGraph();
+        }
+
+        updateDependencyGraph() {
             this.ensureDependencyGraph();
 
-            const info = this.getFileInfo(changedFile);
-            if(!info) {
-                return;
+            const fileNames = this.project.getRootFiles();
+            for (const fileName of fileNames) {
+                if (!this.fileInfos[fileName]) {
+                    const sourceFile = this.project.getSourceFile(fileName);
+                    if (sourceFile) {
+                        const fileInfo = new ModuleBuilderFileInfo(fileName);
+                        fileInfo.updateReferences(this);
+                        this.fileInfos[fileName] = fileInfo;
+                    }
+                }
             }
-            info.updateReferences(this);
+
+            for (const key of getKeys(this.fileInfos)) {
+                if (fileNames.indexOf(<NormalizedPath>key) < 0) {
+                    // This file was deleted from this project
+                    this.fileInfos[key].removeAllReferences(this);
+                    delete this.fileInfos[key];
+                }
+                else {
+                    this.fileInfos[key].updateReferences(this);
+                }
+            }
         }
 
         getFilesAffectedBy(fileName: string): string[] {
