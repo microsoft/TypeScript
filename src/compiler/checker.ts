@@ -5215,6 +5215,10 @@ namespace ts {
             }
         }
 
+        function compareTypeIds(type1: Type, type2: Type): number {
+            return type1.id - type2.id;
+        }
+
         // We reduce the constituent type set to only include types that aren't subtypes of other types, unless
         // the noSubtypeReduction flag is specified, in which case we perform a simple deduplication based on
         // object identity. Subtype reduction is possible only when union types are known not to circularly
@@ -5234,6 +5238,7 @@ namespace ts {
             if (typeSet.containsAny) {
                 return anyType;
             }
+            typeSet.sort(compareTypeIds);
             if (strictNullChecks) {
                 if (typeSet.containsNull) typeSet.push(nullType);
                 if (typeSet.containsUndefined) typeSet.push(undefinedType);
