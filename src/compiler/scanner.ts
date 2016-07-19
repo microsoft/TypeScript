@@ -601,10 +601,11 @@ namespace ts {
      * If false, whitespace is skipped until the first line break and comments between that location
      * and the next token are returned.
      * If true, comments occurring between the given position and the next line break are returned.
+     * If there is no line break, then no comments are returned.
      */
     function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
         let result: CommentRange[];
-        let collecting = trailing || pos === 0;
+        let needToSkipTrailingComment = pos > 0;
         while (pos < text.length) {
             const ch = text.charCodeAt(pos);
             switch (ch) {
@@ -617,7 +618,11 @@ namespace ts {
                     if (trailing) {
                         return result;
                     }
-                    collecting = true;
+                    else if (needToSkipTrailingComment) {
+                        // skip the first line if not trailing.
+                        needToSkipTrailingComment = false;
+                        result = undefined;
+                    }
                     if (result && result.length) {
                         lastOrUndefined(result).hasTrailingNewLine = true;
                     }
@@ -653,13 +658,11 @@ namespace ts {
                                 pos++;
                             }
                         }
-                        if (collecting) {
-                            if (!result) {
-                                result = [];
-                            }
 
-                            result.push({ pos: startPos, end: pos, hasTrailingNewLine, kind });
+                        if (!result) {
+                            result = [];
                         }
+                        result.push({ pos: startPos, end: pos, hasTrailingNewLine, kind });
                         continue;
                     }
                     break;
