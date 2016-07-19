@@ -1913,6 +1913,7 @@ namespace ts {
         InElementType                   = 0x00000040,  // Writing an array or union element type
         UseFullyQualifiedType           = 0x00000080,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         InFirstTypeArgument             = 0x00000100,  // Writing first type argument of the instantiated type
+        InTypeAlias                     = 0x00000200,  // Writing type in type alias declaration
     }
 
     export const enum SymbolFormatFlags {
