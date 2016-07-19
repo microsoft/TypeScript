@@ -319,7 +319,7 @@ namespace ts {
             // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
             const useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
 
-            function readFile(fileName: string, encoding?: string): string {
+            function readFile(fileName: string, _encoding?: string): string {
                 if (!fileExists(fileName)) {
                     return undefined;
                 }
@@ -556,7 +556,7 @@ namespace ts {
                 args: ChakraHost.args,
                 useCaseSensitiveFileNames: !!ChakraHost.useCaseSensitiveFileNames,
                 write: ChakraHost.echo,
-                readFile(path: string, encoding?: string) {
+                readFile(path: string, _encoding?: string) {
                     // encoding is automatically handled by the implementation in ChakraHost
                     return ChakraHost.readFile(path);
                 },

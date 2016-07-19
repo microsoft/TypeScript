@@ -573,9 +573,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             let isOwnFileEmit: boolean;
 
             /** If removeComments is true, no leading-comments needed to be emitted **/
-            const emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function (pos: number) { } : emitLeadingCommentsOfPositionWorker;
+            const emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function () { } : emitLeadingCommentsOfPositionWorker;
 
-            const setSourceMapWriterEmit = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? changeSourceMapEmit : function (writer: SourceMapWriter) { };
+            const setSourceMapWriterEmit = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? changeSourceMapEmit : function () { };
 
             const moduleEmitDelegates: Map<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
                 [ModuleKind.ES6]: emitES6Module,
