@@ -1,4 +1,4 @@
-/// <reference path='..\src\harness\external\node.d.ts'/>
+/// <reference types='node'/>
 
 import http = require("http");
 import fs = require("fs");

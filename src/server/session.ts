@@ -1015,7 +1015,6 @@ namespace ts.server {
                     this.changeSeq++;
                 }
                 this.updateProjectStructure(this.changeSeq, n => n === this.changeSeq);
-                project.onFileChanged(file);
             }
         }
 

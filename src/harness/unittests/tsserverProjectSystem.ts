@@ -1341,15 +1341,8 @@ namespace ts {
                 session.executeCommand(compileOnSaveFileListRequest);
 
                 // change the content of file1 to `export function Foo() { console.log('hi'); };`
-                const changeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
-                    insertString: `console.log('hi');`,
-                    line: 1,
-                    offset: 25,
-                    endLine: 1,
-                    endOffset: 25,
-                    file: file1.path
-                });
-                session.executeCommand(changeRequest);
+                file1.content = `export function Foo() { console.log('hi'); };`
+                host.reloadFS([file1, file2, configFile, libFile]);
 
                 const secondResult = session.executeCommand(compileOnSaveFileListRequest).response;
                 assert.isTrue(isArray(secondResult));
@@ -1368,15 +1361,8 @@ namespace ts {
                 const compileOnSaveFileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
                 session.executeCommand(compileOnSaveFileListRequest);
 
-                const changeFile3Request = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
-                    insertString: `import {Foo} from "./file1";\n`,
-                    line: 1,
-                    offset: 1,
-                    endLine: 1,
-                    endOffset: 1,
-                    file: file3.path
-                });
-                session.executeCommand(changeFile3Request);
+                file3.content = `import {Foo} from "./file1";\nlet z = 10;`
+                host.reloadFS([file1, file2, file3, configFile, libFile]);
 
                 const secondResult = session.executeCommand(compileOnSaveFileListRequest).response;
                 assert.isTrue(isArray(secondResult));
