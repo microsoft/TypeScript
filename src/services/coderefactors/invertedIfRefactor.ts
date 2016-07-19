@@ -3,7 +3,7 @@ namespace ts.codeRefactor {
     registerCodeRefactor({
         name: "Invert If and Else Condition",
         nodeLabel: ts.SyntaxKind.IfStatement,
-        getTextChanges: (token: Node, context: CodeFixContext):TextChange[] => {
+        getTextChanges: (token: Node, context: CodeFixContext):CodeAction[] => {
             if(token.kind == SyntaxKind.IfStatement) {
                 let ifStatement = <IfStatement>token;
                 if(ifStatement.elseStatement) {
@@ -37,8 +37,19 @@ namespace ts.codeRefactor {
                     if (thenStatementText.charAt(0) !== "{") {
                         newText += context.newLineCharacter + "}" + context.newLineCharacter;
                     }
-
-                    return [{ newText: newText, span: { start: context.span.start, length: context.span.length } }];
+                    return [{
+                        description: getLocaleSpecificMessage(Diagnostics.Invert_If_and_Else_Condition),
+                        changes: [{
+                            fileName: context.sourceFile.fileName,
+                            textChanges: [{
+                                span: {
+                                    start: context.span.start,
+                                    length: context.span.length
+                                },
+                                newText: newText
+                            }]
+                        }]
+                    }];
                 }
             }
             Debug.fail("No refactor found.");

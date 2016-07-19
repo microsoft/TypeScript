@@ -93,6 +93,11 @@ namespace FourSlash {
         end: number;
     }
 
+    export interface ExpectedOutput {
+        fileName: string;
+        expectedText: string;
+    }
+
     export import IndentStyle = ts.IndentStyle;
 
     const entityMap: ts.Map<string> = {
@@ -384,7 +389,7 @@ namespace FourSlash {
 
             if (exists !== negative) {
                 this.printErrorLog(negative, this.getAllDiagnostics());
-                throw new Error("Failure between markers: " + startMarkerName + ", " + endMarkerName);
+                throw new Error(`Failure between markers: '${startMarkerName}', '${endMarkerName}'`);
             }
         }
 
@@ -637,7 +642,6 @@ namespace FourSlash {
                 this.raiseError("Completion list is not empty at caret at position " + this.activeFile.fileName + " " + this.currentCaretPosition + errorMsg);
             }
         }
-
 
         public verifyCompletionListAllowsNewIdentifier(negative: boolean) {
             const completions = this.getCompletionListAtCaret();
@@ -1479,7 +1483,7 @@ namespace FourSlash {
             if (isFormattingEdit) {
                 const newContent = this.getFileContent(fileName);
 
-                if (newContent.replace(/\s/g, "") !== oldContent.replace(/\s/g, "")) {
+                if (this.removeWhitespace(newContent) !== this.removeWhitespace(oldContent)) {
                     this.raiseError("Formatting operation destroyed non-whitespace content");
                 }
             }
@@ -1866,6 +1870,44 @@ namespace FourSlash {
             }
         }
 
+        public verifyCodeFixAtPosition(expectedText: string, errorCode?: number) {
+
+            const ranges = this.getRanges();
+            if (ranges.length == 0) {
+                this.raiseError("At least one range should be specified in the testfile.");
+            }
+
+            const fileName = this.activeFile.fileName;
+            const diagnostics = this.getDiagnostics(fileName);
+
+            if (diagnostics.length === 0) {
+                this.raiseError("Errors expected.");
+            }
+
+            if (diagnostics.length > 1 && !errorCode) {
+                this.raiseError("When there's more than one error, you must specify the errror to fix.");
+            }
+
+            const diagnostic = !errorCode ? diagnostics[0] : ts.firstOrUndefined(diagnostics, d => d.code == errorCode);
+
+            const actual = this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [`TS${diagnostic.code}`]);
+
+            if (!actual || actual.length == 0) {
+                this.raiseError("No codefixes returned.");
+            }
+
+            if (actual.length > 1) {
+                this.raiseError("More than 1 codefix returned.");
+            }
+
+            this.applyEdits(actual[0].changes[0].fileName, actual[0].changes[0].textChanges, /*isFormattingEdit*/ false);
+            const actualText = this.rangeText(ranges[0]);
+
+            if (this.removeWhitespace(actualText) !== this.removeWhitespace(expectedText)) {
+                this.raiseError(`Actual text doesn't match expected text. Actual: '${actualText}' Expected: '${expectedText}'`);
+            }
+        }
+
         public verifyDocCommentTemplate(expected?: ts.TextInsertion) {
             const name = "verifyDocCommentTemplate";
             const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition);
@@ -1983,8 +2025,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyCodeRefactor(expectedText: string) {
-            const fileName = this.activeFile.fileName;
+        public verifyCodeRefactor(expected: ExpectedOutput[]) {
             const markers = this.getMarkers();
             if (markers.length !== 2) {
                 this.raiseError("Markers expected.");
@@ -1999,14 +2040,36 @@ namespace FourSlash {
                 this.raiseError("More than 1 codefix returned.");
             }
 
-            this.applyEdits(fileName, actual[0].textChanges, /*isFormattingEdit*/ false);
-            const actualText = this.getFileContent(fileName);
+            for (const file of this.testData.files) {
+                const fileName = file.fileName;
 
-            // We expect the editor to do the final formatting, so we can strip the compare ignoring whitespace
-            if (this.removeWhitespace(expectedText) !== this.removeWhitespace(actualText)) {
-                this.raiseError(`Expected insertion: '${expectedText}', actual insertion '${actualText}'.`);
+                let i = 0;
+                for (; i < actual[0].changes.length; i++) {
+                    if (actual[0].changes[i].fileName === fileName) {
+                        break;
+                    }
+                }
+
+                this.applyEdits(fileName, actual[0].changes[i].textChanges, /*isFormattingEdit*/ false);
+                const actualText = this.getFileContent(fileName);
+
+                i = 0;
+                for (; i < expected.length; i++) {
+                    if (this.isFileNameMatch(fileName, expected[i].fileName)) {
+                        break;
+                    }
+                }
+
+                if (this.removeWhitespace(expected[i].expectedText) !== this.removeWhitespace(actualText)) {
+                    this.raiseError(`Expected insertion: '${expected[i].expectedText}', actual insertion '${actualText}'.`);
+                }
             }
         }
+
+        private isFileNameMatch(actualFileName: string, expectedFileName: string): boolean {
+            return (actualFileName.substr(actualFileName.lastIndexOf("/") + 1) === expectedFileName);
+        }
+
         /*
             Verify that returned navigationItems from getNavigateToItems have matched searchValue, matchKind, and kind.
             Report an error if getNavigateToItems does not find any matched searchValue.
@@ -3094,6 +3157,10 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
+        public codeFixAtPosition(expectedText: string, errorCode?: number): void {
+            this.state.verifyCodeFixAtPosition(expectedText, errorCode);
+        }
+
         public navigationBar(json: any) {
             this.state.verifyNavigationBar(json);
         }
@@ -3102,8 +3169,8 @@ namespace FourSlashInterface {
             this.state.verifyNavigationItemsCount(count, searchValue, matchKind);
         }
 
-        public codeRefactor(expectedText: string) {
-            this.state.verifyCodeRefactor(expectedText);
+        public codeRefactor(expected: FourSlash.ExpectedOutput[]) {
+            this.state.verifyCodeRefactor(expected);
         }
 
         public navigationItemsListContains(

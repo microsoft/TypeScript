@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @Filename: file1.ts
 //// namespace n1 {
 //// class C1 {
 ////    private x:number;
@@ -12,7 +13,9 @@
 //// }
 
 
-verify.codeRefactor(`
+verify.codeRefactor([{
+    fileName: "file1.ts",
+    expectedText:`
 namespace n1 {
 interface newInterface_y {
     f1();
@@ -26,4 +29,5 @@ class C1 {
     }
 }
 }
-`);
+`
+}]);

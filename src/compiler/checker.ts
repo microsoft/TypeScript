@@ -3160,23 +3160,26 @@ namespace ts {
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
                     return links.type = checkExpression((<ExportAssignment>declaration).expression);
                 }
+                if (declaration.flags & NodeFlags.JavaScriptFile && declaration.kind === SyntaxKind.JSDocPropertyTag && (<JSDocPropertyTag>declaration).typeExpression) {
+                    return links.type = getTypeFromTypeNode((<JSDocPropertyTag>declaration).typeExpression.type);
+                }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return unknownType;
                 }
 
                 let type: Type = undefined;
-                // Handle module.exports = expr or this.p = expr
-                if (declaration.kind === SyntaxKind.BinaryExpression) {
-                    type = getUnionType(map(symbol.declarations, (decl: BinaryExpression) => checkExpressionCached(decl.right)));
-                }
-                else if (declaration.kind === SyntaxKind.PropertyAccessExpression) {
-                    // Declarations only exist for property access expressions for certain
-                    // special assignment kinds
-                    if (declaration.parent.kind === SyntaxKind.BinaryExpression) {
-                        // Handle exports.p = expr  or className.prototype.method = expr
-                        type = checkExpressionCached((<BinaryExpression>declaration.parent).right);
-                    }
+                // Handle certain special assignment kinds, which happen to union across multiple declarations:
+                // * module.exports = expr
+                // * exports.p = expr
+                // * this.p = expr
+                // * className.prototype.method = expr
+                if (declaration.kind === SyntaxKind.BinaryExpression ||
+                    declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
+                    type = getUnionType(map(symbol.declarations,
+                                            decl => decl.kind === SyntaxKind.BinaryExpression ?
+                                                        checkExpressionCached((<BinaryExpression>decl).right) :
+                                                        checkExpressionCached((<BinaryExpression>decl.parent).right)));
                 }
 
                 if (type === undefined) {
@@ -11673,7 +11676,7 @@ namespace ts {
         function getInferredClassType(symbol: Symbol) {
             const links = getSymbolLinks(symbol);
             if (!links.inferredClassType) {
-                links.inferredClassType = createAnonymousType(undefined, symbol.members, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
+                links.inferredClassType = createAnonymousType(symbol, symbol.members, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
             }
             return links.inferredClassType;
         }
@@ -14563,6 +14566,7 @@ namespace ts {
                                 const parameter = <ParameterDeclaration>local.valueDeclaration;
                                 if (compilerOptions.noUnusedParameters &&
                                     !isParameterPropertyDeclaration(parameter) &&
+                                    !parameterIsThisKeyword(parameter) &&
                                     !parameterNameStartsWithUnderscore(parameter)) {
                                     error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
                                 }
@@ -14574,6 +14578,10 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function parameterIsThisKeyword(parameter: ParameterDeclaration) {
+            return parameter.name && (<Identifier>parameter.name).originalKeywordKind === SyntaxKind.ThisKeyword;
         }
 
         function parameterNameStartsWithUnderscore(parameter: ParameterDeclaration) {

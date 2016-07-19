@@ -1,23 +1,15 @@
 /* @internal */
 namespace ts {
-    export interface CodeRefactorAction {
+    export interface CodeRefactor {
         name: string;
         nodeLabel: ts.SyntaxKind;
-        getTextChanges(token: Node, context: CodeFixContext): TextChange[];
-    }
-
-    export interface CodeFixContext {
-        errorCode: string;
-        sourceFile: SourceFile;
-        span: TextSpan;
-        checker: TypeChecker;
-        newLineCharacter: string;
+        getTextChanges(token: Node, context: CodeFixContext): CodeAction[];
     }
 
     export namespace codeRefactor {
-        var codeActions: Map<CodeRefactorAction[]> = {};
+        var codeActions: Map<CodeRefactor[]> = {};
 
-        export function registerCodeRefactor(refactor: CodeRefactorAction) {
+        export function registerCodeRefactor(refactor: CodeRefactor) {
             let refactors = codeActions[refactor.nodeLabel];
             if(!refactors) {
                 refactors = [];
@@ -28,8 +20,8 @@ namespace ts {
 
         export class CodeRefactorProvider {
 
-            public getCodeRefactors(context: CodeFixContext): CodeFix[] {
-                const refactors: CodeFix[] = [];
+            public getCodeRefactors(context: CodeFixContext): CodeAction[] {
+                let refactors: CodeAction[] = [];
                 const token = getTokenAtRange(context.sourceFile, context.span.start, context.span.length + context.span.start);
                 const actions = codeActions[token.kind];
 
@@ -40,7 +32,7 @@ namespace ts {
                 actions.forEach(a => {
                     const textChanges = a.getTextChanges(token, context);
                     if (textChanges && textChanges.length > 0) {
-                        refactors.push({ name: a.name, textChanges: textChanges });
+                        refactors = refactors.concat(textChanges);
                     }
                 });
 

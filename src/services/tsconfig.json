@@ -1,8 +1,10 @@
 {
     "compilerOptions": {
         "noImplicitAny": true,
+        "noImplicitThis": true,
         "removeComments": false,
         "preserveConstEnums": true,
+        "pretty": true,
         "outFile": "../../built/local/typescriptServices.js",
         "sourceMap": true,
         "stripInternal": true,
@@ -49,6 +51,12 @@
         "formatting/rulesMap.ts",
         "formatting/rulesProvider.ts",
         "formatting/smartIndenter.ts",
-        "formatting/tokenRange.ts"
+        "formatting/tokenRange.ts",
+        "codeFixes/changeExtendsToImplementsFix.ts",
+        "codeFixes/codeFixProvider.ts",
+        "codeFixes/interfaceFixes.ts",
+        "codeFixes/references.ts",
+        "codeFixes/superFixes.ts",
+        "codeFixes/unusedIdentifierFixes.ts"
     ]
 }

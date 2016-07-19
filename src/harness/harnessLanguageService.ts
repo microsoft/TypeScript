@@ -274,7 +274,7 @@ namespace Harness.LanguageService {
         getCompilationSettings(): string { return JSON.stringify(this.nativeHost.getCompilationSettings()); }
         getCancellationToken(): ts.HostCancellationToken { return this.nativeHost.getCancellationToken(); }
         getCurrentDirectory(): string { return this.nativeHost.getCurrentDirectory(); }
-        getDirectories(path: string) { return this.nativeHost.getDirectories(path); }
+        getDirectories(path: string): string { return JSON.stringify(this.nativeHost.getDirectories(path)); }
         getDefaultLibFileName(): string { return this.nativeHost.getDefaultLibFileName(); }
         getScriptFileNames(): string { return JSON.stringify(this.nativeHost.getScriptFileNames()); }
         getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
@@ -453,8 +453,11 @@ namespace Harness.LanguageService {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
         }
-        getCodeRefactors(fileName: string, start: number, end: number): ts.CodeFix[] {
+        getCodeRefactors(fileName: string, start: number, end: number): ts.CodeAction[] {
             return unwrapJSONCallResult(this.shim.getCodeRefactors(fileName, start, end));
+        }
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): ts.CodeAction[] {
+            return unwrapJSONCallResult(this.shim.getCodeFixesAtPosition(fileName, start, end, JSON.stringify(errorCodes)));
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));

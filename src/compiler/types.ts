@@ -472,6 +472,10 @@ namespace ts {
         flags: NodeFlags;
     }
 
+    export interface Token extends Node {
+        __tokenTag: any;
+    }
+
     // @kind(SyntaxKind.AbstractKeyword)
     // @kind(SyntaxKind.AsyncKeyword)
     // @kind(SyntaxKind.ConstKeyword)
@@ -482,7 +486,7 @@ namespace ts {
     // @kind(SyntaxKind.PrivateKeyword)
     // @kind(SyntaxKind.ProtectedKeyword)
     // @kind(SyntaxKind.StaticKeyword)
-    export interface Modifier extends Node { }
+    export interface Modifier extends Token { }
 
     // @kind(SyntaxKind.Identifier)
     export interface Identifier extends PrimaryExpression {
@@ -2510,7 +2514,8 @@ namespace ts {
         Warning,
         Error,
         Message,
-        CodeFix
+        CodeFix,
+        CodeRefactor
     }
 
     export enum ModuleResolutionKind {

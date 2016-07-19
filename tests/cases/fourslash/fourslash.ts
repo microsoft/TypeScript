@@ -97,6 +97,10 @@ declare namespace FourSlashInterface {
         start: number;
         end: number;
     }
+    interface ExpectedOutput {
+        fileName: string;
+        expectedText: string;
+    }
     class test_ {
         markers(): Marker[];
         marker(name?: string): Marker;
@@ -192,6 +196,7 @@ declare namespace FourSlashInterface {
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
+        codeFixAtPosition(expectedText: string, errorCode?: number): void;
 
         navigationBar(json: any): void;
         navigationItemsListCount(count: number, searchValue: string, matchKind?: string): void;
@@ -226,7 +231,7 @@ declare namespace FourSlashInterface {
         getSyntacticDiagnostics(expected: string): void;
         getSemanticDiagnostics(expected: string): void;
         ProjectInfo(expected: string[]): void;
-        codeRefactor(expectedText: string);
+        codeRefactor(expected: ExpectedOutput[]);
     }
     class edit {
         backspace(count?: number): void;

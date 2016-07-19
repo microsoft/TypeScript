@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @Filename: file1.ts
 //// function f1() {
 ////    let x = 0;
 ////    /*0*/if(true){
@@ -9,7 +10,9 @@
 ////    }/*1*/
 //// }
 
-verify.codeRefactor(`
+verify.codeRefactor([{
+    fileName: "file1.ts",
+    expectedText: `
 function f1() {
    let x = 0;
    if(!(true)){
@@ -18,4 +21,5 @@ function f1() {
        x++;
    }
 }
-`);
+`
+}]);
