@@ -14,7 +14,6 @@ declare module "gulp-typescript" {
         pretty?: boolean;
         newLine?: string;
         noImplicitThis?: boolean;
-        noUnusedLocals?: boolean;
         stripInternal?: boolean;
         types?: string[];
     }
@@ -247,7 +246,6 @@ function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): ts
     copy.noEmitOnError = true;
     copy.noImplicitAny = true;
     copy.noImplicitThis = true;
-    copy.noUnusedLocals = true;
     copy.pretty = true;
     copy.types = [];
     for (const key in base) {
