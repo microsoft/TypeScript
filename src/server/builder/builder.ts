@@ -2,7 +2,8 @@
 /// <reference path="..\..\services\services.ts" />
 /// <reference path="..\protocol.d.ts" />
 /// <reference path="..\session.ts" />
-/// <reference path="..\node.d.ts" />
+/// <reference types="node" />
+
 namespace ts.server {
 
     const crypto: any = require("crypto");
