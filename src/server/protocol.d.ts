@@ -718,6 +718,9 @@ declare namespace ts.server.protocol {
     export interface CompileOnSaveAffectedFileListRequest extends FileRequest {
     }
 
+    export interface CompileFileRequest extends FileRequest {
+    }
+
     /**
       * Quickinfo request; value of command field is
       * "quickinfo". Return response giving a quick type and

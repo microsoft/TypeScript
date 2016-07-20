@@ -365,7 +365,15 @@ namespace ts {
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;
-        readonly writeFile = (path: string, content: string) => notImplemented();
+        readonly writeFile = (fileName: string, content: string) => {
+            const path = this.toPath(fileName);
+            const newEntry: File = {
+                content,
+                fullPath: path,
+                path
+            };
+            this.fs.set(path, newEntry);
+        };
         readonly writeCompressedData = () => notImplemented();
         readonly write = (s: string) => notImplemented();
         readonly createDirectory = (s: string) => notImplemented();
@@ -1493,6 +1501,33 @@ namespace ts {
                 session.executeCommand(changeFile1ShapeRequest1);
                 sendAffectedFileRequestAndCheckResult(session, file1FileListRequest, [file1, file2, file3, file4]);
             });
+        });
+    });
+
+    describe("CompileFile test", () => {
+        it("should emit specified file", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: `export function Foo() { return 10; }`
+            };
+            const file2 = {
+                path: "/a/b/f2.ts",
+                content: `import {Foo} from "./f1"; let y = Foo();`
+            };
+            const config = {
+                path: "/a/b/tsconfig.json",
+                content: `{}`
+            };
+            const host = createServerHost([file1, file2, config, libFile]);
+            const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
+
+            openFilesForSession([file1, file2], session);
+            const compileFileRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileFile, { file: file1.path, projectFileName: config.path });
+            session.executeCommand(compileFileRequest);
+
+            const expectedEmittedFileName = "/a/b/f1.js";
+            assert.isTrue(host.fileExists(expectedEmittedFileName));
+            assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
         });
     });
 }

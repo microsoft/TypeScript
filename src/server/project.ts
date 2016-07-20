@@ -2,7 +2,7 @@
 /// <reference path="utilities.ts"/>
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="lsHost.ts"/>
-/// <reference path="builder\builder.ts"/>
+/// <reference path="builder.ts"/>
 
 namespace ts.server {
 
@@ -150,6 +150,13 @@ namespace ts.server {
 
         getRootScriptInfos() {
             return this.rootFiles;
+        }
+
+        getFileEmitOutput(info: ScriptInfo) {
+            if (!this.languageServiceEnabled) {
+                return undefined;
+            }
+            return this.languageService.getEmitOutput(info.fileName);
         }
 
         getFileNames() {

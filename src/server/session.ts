@@ -94,6 +94,7 @@ namespace ts.server {
         export const CompletionsFull = "completions-full";
         export const CompletionDetails = "completionEntryDetails";
         export const CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
+        export const CompileFile = "compileFile";
         export const Configure = "configure";
         export const Definition = "definition";
         export const DefinitionFull = "definition-full";
@@ -962,6 +963,19 @@ namespace ts.server {
             return result;
         }
 
+        private CompileFile(args: protocol.FileRequestArgs) {
+            const { file, project } = this.getFileAndProject(args);
+            const info = this.projectService.getScriptInfo(file);
+            if (project) {
+                const { emitSkipped, outputFiles } = project.getFileEmitOutput(info);
+                if (!emitSkipped) {
+                    for (const outputFile of outputFiles) {
+                        this.host.writeFile(outputFile.name, outputFile.text, outputFile.writeByteOrderMark);
+                    }
+                }
+            }
+        }
+
         private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
@@ -1365,6 +1379,10 @@ namespace ts.server {
             },
             [CommandNames.CompileOnSaveAffectedFileList]: (request: protocol.CompileOnSaveAffectedFileListRequest) => {
                 return this.requiredResponse(this.getCompileOnSaveAffectedFileList(request.arguments));
+            },
+            [CommandNames.CompileFile]: (request: protocol.CompileFileRequest) => {
+                this.CompileFile(request.arguments);
+                return this.notRequired();
             },
             [CommandNames.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true));
