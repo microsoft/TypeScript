@@ -506,8 +506,10 @@ namespace ts {
                 //      ${members}
                 //  }
                 const classDeclaration = createClassDeclaration(
+                    /*decorators*/ undefined,
                     visitNodes(node.modifiers, visitor, isModifier),
                     name,
+                    /*typeParameters*/ undefined,
                     visitNodes(node.heritageClauses, visitor, isHeritageClause),
                     transformClassMembers(node, hasExtendsClause),
                     /*location*/ node
@@ -548,7 +550,7 @@ namespace ts {
             }
             else if (isDecoratedClass) {
                 if (isDefaultExternalModuleExport(node)) {
-                    statements.push(createExportDefault(getLocalName(node)));
+                    statements.push(createExportAssignment(/*isExportEquals*/ false, getLocalName(node)));
                 }
                 else if (isNamedExternalModuleExport(node)) {
                     statements.push(createExternalModuleExport(name));
@@ -660,7 +662,9 @@ namespace ts {
             //  }
             const classExpression: Expression = setOriginalNode(
                 createClassExpression(
+                    /*modifiers*/ undefined,
                     name,
+                    /*typeParameters*/ undefined,
                     visitNodes(node.heritageClauses, visitor, isHeritageClause),
                     transformClassMembers(node, hasExtendsClause),
                     /*location*/ location
@@ -743,7 +747,9 @@ namespace ts {
 
             const classExpression = setOriginalNode(
                 createClassExpression(
+                    /*modifiers*/ undefined,
                     node.name,
+                    /*typeParameters*/ undefined,
                     heritageClauses,
                     members,
                     /*location*/ node
@@ -1871,7 +1877,9 @@ namespace ts {
                     createTypeOf(createIdentifier("Symbol")),
                     createLiteral("function")
                 ),
+                createToken(SyntaxKind.QuestionToken),
                 createIdentifier("Symbol"),
+                createToken(SyntaxKind.ColonToken),
                 createIdentifier("Object")
             );
         }
@@ -1957,6 +1965,7 @@ namespace ts {
         function visitExpressionWithTypeArguments(node: ExpressionWithTypeArguments): ExpressionWithTypeArguments {
             const expression = visitNode(node.expression, visitor, isLeftHandSideExpression);
             return createExpressionWithTypeArguments(
+                /*typeArguments*/ undefined,
                 expression,
                 node
             );
@@ -2360,6 +2369,7 @@ namespace ts {
         function visitAwaitExpression(node: AwaitExpression): Expression {
             return setOriginalNode(
                 createYield(
+                    /*asteriskToken*/ undefined,
                     visitNode(node.expression, visitor, isExpression),
                     /*location*/ node
                 ),

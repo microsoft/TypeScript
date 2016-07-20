@@ -720,7 +720,9 @@ namespace ts {
                     createAssignment(
                         name,
                         createClassExpression(
+                            /*modifiers*/ undefined,
                             node.name,
+                            /*typeParameters*/ undefined,
                             node.heritageClauses,
                             node.members,
                             /*location*/ node

@@ -1441,6 +1441,7 @@ namespace ts {
             // checked is to not pass the file to getEmitResolver.
             const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile);
 
+            performance.emit("beforeEmit");
             const emitStart = performance.mark();
 
             const emitResult = emitFiles(
@@ -1449,6 +1450,7 @@ namespace ts {
                 sourceFile);
 
             performance.measure("emitTime", emitStart);
+            performance.emit("afterEmit");
 
             return emitResult;
         }
