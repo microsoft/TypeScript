@@ -1,10 +1,17 @@
 namespace ts {
 
-    export namespace ExtensionKind {
+    export interface BaseProviderStatic {
+        readonly ["extension-kind"]: ExtensionKind;
     }
-    export type ExtensionKind = string;
+
+    export namespace ExtensionKind {
+        export const TypeDiscovery: "type-discovery" = "type-discovery";
+        export type TypeDiscovery = "type-discovery";
+    }
+    export type ExtensionKind = ExtensionKind.TypeDiscovery;
 
     export interface ExtensionCollectionMap {
+        "type-discovery"?: TypeDiscoveryExtension[];
         [index: string]: Extension[] | undefined;
     }
 
@@ -21,7 +28,12 @@ namespace ts {
         length?: number;
     }
 
-    export type Extension = ExtensionBase;
+    export interface TypeDiscoveryExtension extends ExtensionBase {
+        kind: ExtensionKind.TypeDiscovery;
+        lookup: (searchDir: string, args: any) => string[];
+    }
+
+    export type Extension = TypeDiscoveryExtension;
 
     export interface ExtensionCache {
         getCompilerExtensions(): ExtensionCollectionMap;
@@ -87,6 +99,21 @@ namespace ts {
         if (!enabled) return;
         const longTask = createTaskName(qualifiedName, task);
         completeProfile(/*enabled*/true, longTask);
+    }
+
+    function verifyType(thing: any, type: string, diagnostics: Diagnostic[], extName: string, extMember: string, extKind: ExtensionKind) {
+        if (typeof thing !== type) {
+            diagnostics.push(createCompilerDiagnostic(
+                Diagnostics.Extension_0_exported_member_1_has_extension_kind_2_but_was_type_3_when_type_4_was_expected,
+                extName,
+                extMember,
+                extKind,
+                typeof thing,
+                type
+            ));
+            return false;
+        }
+        return true;
     }
 
     export function createExtensionCache(options: CompilerOptions, host: ExtensionHost, resolvedExtensionNames?: Map<string>): ExtensionCache {
@@ -173,6 +200,12 @@ namespace ts {
                         kind: annotatedKind as ExtensionKind,
                     };
                     switch (ext.kind) {
+                        case ExtensionKind.TypeDiscovery: {
+                            const verified = verifyType(potentialExtension, "function", diagnostics, res.name, key, annotatedKind);
+                            if (!verified) return aggregate;
+                            (ext as TypeDiscoveryExtension).lookup = potentialExtension as any;
+                            break;
+                        }
                         default:
                             // Include a default case which just puts the extension unchecked onto the base extension
                             // This can allow language service extensions to query for custom extension kinds
