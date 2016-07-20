@@ -1,4 +1,6 @@
 /// <reference path="types.ts"/>
+/// <reference path="performance.ts" />
+
 
 namespace ts {
     export function startsWith(str: string, prefix: string): boolean {

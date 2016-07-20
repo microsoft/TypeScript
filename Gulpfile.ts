@@ -694,6 +694,12 @@ gulp.task(nodeServerOutFile, false, [servicesFile], () => {
         .pipe(gulp.dest(path.dirname(nodeServerOutFile)));
 });
 
+import convertMap = require("convert-source-map");
+import sorcery = require("sorcery");
+declare module "convert-source-map" {
+    export function fromSource(source: string, largeSource?: boolean): SourceMapConverter;
+}
+
 gulp.task("browserify", "Runs browserify on run.js to produce a file suitable for running tests in the browser", [servicesFile], (done) => {
     const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({ outFile: "built/local/bundle.js" }, /*useBuiltCompiler*/ true));
     return testProject.src()
@@ -701,14 +707,37 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
         .pipe(sourcemaps.init())
         .pipe(tsc(testProject))
         .pipe(through2.obj((file, enc, next) => {
-            browserify(intoStream(file.contents))
+            const originalMap = file.sourceMap;
+            const prebundledContent = file.contents.toString();
+            // Make paths absolute to help sorcery deal with all the terrible paths being thrown around
+            originalMap.sources = originalMap.sources.map(s => path.resolve(s));
+            // intoStream (below) makes browserify think the input file is named this, so this is what it puts in the sourcemap
+            originalMap.file = "built/local/_stream_0.js";
+
+            browserify(intoStream(file.contents), { debug: true })
                 .bundle((err, res) => {
                     // assumes file.contents is a Buffer
-                    file.contents = res;
+                    const maps = JSON.parse(convertMap.fromSource(res.toString(), /*largeSource*/true).toJSON());
+                    delete maps.sourceRoot;
+                    maps.sources = maps.sources.map(s => path.resolve(s === "_stream_0.js" ? "built/local/_stream_0.js" : s));
+                    // Strip browserify's inline comments away (could probably just let sorcery do this, but then we couldn't fix the paths)
+                    file.contents = new Buffer(convertMap.removeComments(res.toString()));
+                    const chain = sorcery.loadSync("built/local/bundle.js", {
+                        content: {
+                            "built/local/_stream_0.js": prebundledContent,
+                            "built/local/bundle.js": file.contents.toString()
+                        },
+                        sourcemaps: {
+                            "built/local/_stream_0.js": originalMap,
+                            "built/local/bundle.js": maps,
+                        }
+                    });
+                    const finalMap = chain.apply();
+                    file.sourceMap = finalMap;
                     next(undefined, file);
                 });
         }))
-        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "../../" }))
+        .pipe(sourcemaps.write(".", { includeContent: false }))
         .pipe(gulp.dest("."));
 });
 

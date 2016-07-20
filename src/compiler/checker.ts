@@ -15,8 +15,6 @@ namespace ts {
         return node.id;
     }
 
-    export let checkTime = 0;
-
     export function getSymbolId(symbol: Symbol): number {
         if (!symbol.id) {
             symbol.id = nextSymbolId;
@@ -976,7 +974,7 @@ namespace ts {
 
             Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
 
-            if (!isBlockScopedNameDeclaredBeforeUse(<Declaration>getAncestor(declaration, SyntaxKind.VariableDeclaration), errorLocation)) {
+            if (!isInAmbientContext(declaration) && !isBlockScopedNameDeclaredBeforeUse(<Declaration>getAncestor(declaration, SyntaxKind.VariableDeclaration), errorLocation)) {
                 error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
             }
         }
@@ -13277,7 +13275,7 @@ namespace ts {
                         checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
                     }
                 }
-                if (!(<FunctionDeclaration>node).body) {
+                if (noUnusedIdentifiers && !(<FunctionDeclaration>node).body) {
                     checkUnusedTypeParameters(node);
                 }
             }
@@ -14612,8 +14610,15 @@ namespace ts {
         function checkUnusedTypeParameters(node: ClassDeclaration | ClassExpression | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration | InterfaceDeclaration) {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 if (node.typeParameters) {
+                    // Only report errors on the last declaration for the type parameter container;
+                    // this ensures that all uses have been accounted for.
+                    const symbol = getSymbolOfNode(node);
+                    const lastDeclaration = symbol && symbol.declarations && lastOrUndefined(symbol.declarations);
+                    if (lastDeclaration !== node) {
+                        return;
+                    }
                     for (const typeParameter of node.typeParameters) {
-                        if (!typeParameter.symbol.isReferenced) {
+                        if (!getMergedSymbol(typeParameter.symbol).isReferenced) {
                             error(typeParameter.name, Diagnostics._0_is_declared_but_never_used, typeParameter.symbol.name);
                         }
                     }
@@ -16122,7 +16127,7 @@ namespace ts {
 
             if (produceDiagnostics) {
                 checkTypeForDuplicateIndexSignatures(node);
-                checkUnusedTypeParameters(node);
+                registerForUnusedIdentifiersCheck(node);
             }
         }
 
@@ -17019,11 +17024,11 @@ namespace ts {
         }
 
         function checkSourceFile(node: SourceFile) {
-            const start = new Date().getTime();
+            const start = performance.mark();
 
             checkSourceFileWorker(node);
 
-            checkTime += new Date().getTime() - start;
+            performance.measure("Check", start);
         }
 
         // Fully type check a source file and collect the relevant diagnostics.
