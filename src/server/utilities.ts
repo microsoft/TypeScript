@@ -196,12 +196,6 @@ namespace ts.server {
         return value;
     }
 
-    /* tslint:disable */
-    export function createMap<T>(): Map<T> {
-        return Object.create(null);
-    }
-    /* tslint:enable */
-
     export class ThrottledOperations {
         private pendingTimeouts: Map<any> = {};
         constructor(private readonly host: ServerHost) {
