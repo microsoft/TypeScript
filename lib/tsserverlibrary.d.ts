@@ -302,9 +302,13 @@ declare namespace ts {
         JSDocPropertyTag = 280,
         JSDocTypeLiteral = 281,
         SyntaxList = 282,
-        Count = 283,
+        NotEmittedStatement = 283,
+        PartiallyEmittedExpression = 284,
+        Count = 285,
         FirstAssignment = 56,
         LastAssignment = 68,
+        FirstCompoundAssignment = 57,
+        LastCompoundAssignment = 68,
         FirstReservedWord = 70,
         LastReservedWord = 105,
         FirstKeyword = 70,
@@ -333,6 +337,38 @@ declare namespace ts {
     }
     const enum NodeFlags {
         None = 0,
+        Let = 1,
+        Const = 2,
+        NestedNamespace = 4,
+        Synthesized = 8,
+        Namespace = 16,
+        ExportContext = 32,
+        ContainsThis = 64,
+        HasImplicitReturn = 128,
+        HasExplicitReturn = 256,
+        GlobalAugmentation = 512,
+        HasClassExtends = 1024,
+        HasDecorators = 2048,
+        HasParamDecorators = 4096,
+        HasAsyncFunctions = 8192,
+        HasJsxSpreadAttributes = 16384,
+        DisallowInContext = 32768,
+        YieldContext = 65536,
+        DecoratorContext = 131072,
+        AwaitContext = 262144,
+        ThisNodeHasError = 524288,
+        JavaScriptFile = 1048576,
+        ThisNodeOrAnySubNodesHasError = 2097152,
+        HasAggregatedChildData = 4194304,
+        BlockScoped = 3,
+        ReachabilityCheckFlags = 384,
+        EmitHelperFlags = 31744,
+        ReachabilityAndEmitFlags = 32128,
+        ContextFlags = 1540096,
+        TypeExcludesFlags = 327680,
+    }
+    const enum ModifierFlags {
+        None = 0,
         Export = 1,
         Ambient = 2,
         Public = 4,
@@ -343,36 +379,11 @@ declare namespace ts {
         Abstract = 128,
         Async = 256,
         Default = 512,
-        Let = 1024,
         Const = 2048,
-        Namespace = 4096,
-        ExportContext = 8192,
-        ContainsThis = 16384,
-        HasImplicitReturn = 32768,
-        HasExplicitReturn = 65536,
-        GlobalAugmentation = 131072,
-        HasClassExtends = 262144,
-        HasDecorators = 524288,
-        HasParamDecorators = 1048576,
-        HasAsyncFunctions = 2097152,
-        DisallowInContext = 4194304,
-        YieldContext = 8388608,
-        DecoratorContext = 16777216,
-        AwaitContext = 33554432,
-        ThisNodeHasError = 67108864,
-        JavaScriptFile = 134217728,
-        ThisNodeOrAnySubNodesHasError = 268435456,
-        HasAggregatedChildData = 536870912,
-        HasJsxSpreadAttribute = 1073741824,
-        Modifier = 1023,
+        HasComputedFlags = 536870912,
         AccessibilityModifier = 28,
         ParameterPropertyModifier = 92,
-        BlockScoped = 3072,
-        ReachabilityCheckFlags = 98304,
-        EmitHelperFlags = 3932160,
-        ReachabilityAndEmitFlags = 4030464,
-        ContextFlags = 197132288,
-        TypeExcludesFlags = 41943040,
+        NonPublicAccessibilityModifier = 24,
     }
     const enum JsxFlags {
         None = 0,
@@ -388,18 +399,26 @@ declare namespace ts {
     interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
+        modifierFlagsCache?: ModifierFlags;
+        transformFlags?: TransformFlags;
         decorators?: NodeArray<Decorator>;
-        modifiers?: ModifiersArray;
+        modifiers?: NodeArray<Modifier>;
         id?: number;
         parent?: Node;
+        original?: Node;
+        startsOnNewLine?: boolean;
         jsDocComments?: JSDocComment[];
         symbol?: Symbol;
         locals?: SymbolTable;
         nextContainer?: Node;
         localSymbol?: Symbol;
         flowNode?: FlowNode;
+        transformId?: number;
+        emitFlags?: NodeEmitFlags;
+        sourceMapRange?: TextRange;
+        commentRange?: TextRange;
     }
-    interface NodeArray<T> extends Array<T>, TextRange {
+    interface NodeArray<T extends Node> extends Array<T>, TextRange {
         hasTrailingComma?: boolean;
     }
     interface ModifiersArray extends NodeArray<Modifier> {
@@ -407,9 +426,21 @@ declare namespace ts {
     }
     interface Modifier extends Node {
     }
+    const enum GeneratedIdentifierKind {
+        None = 0,
+        Auto = 1,
+        Loop = 2,
+        Unique = 3,
+        Node = 4,
+    }
     interface Identifier extends PrimaryExpression {
         text: string;
         originalKeywordKind?: SyntaxKind;
+        autoGenerateKind?: GeneratedIdentifierKind;
+        autoGenerateId?: number;
+    }
+    interface TransientIdentifier extends Identifier {
+        resolvedSymbol: Symbol;
     }
     interface QualifiedName extends Node {
         left: EntityName;
@@ -446,9 +477,10 @@ declare namespace ts {
     }
     interface ConstructSignatureDeclaration extends SignatureDeclaration, TypeElement {
     }
+    type BindingName = Identifier | ObjectBindingPattern | ArrayBindingPattern;
     interface VariableDeclaration extends Declaration {
         parent?: VariableDeclarationList;
-        name: Identifier | BindingPattern;
+        name: BindingName;
         type?: TypeNode;
         initializer?: Expression;
     }
@@ -457,7 +489,7 @@ declare namespace ts {
     }
     interface ParameterDeclaration extends Declaration {
         dotDotDotToken?: Node;
-        name: Identifier | BindingPattern;
+        name: BindingName;
         questionToken?: Node;
         type?: TypeNode;
         initializer?: Expression;
@@ -465,7 +497,7 @@ declare namespace ts {
     interface BindingElement extends Declaration {
         propertyName?: PropertyName;
         dotDotDotToken?: Node;
-        name: Identifier | BindingPattern;
+        name: BindingName;
         initializer?: Expression;
     }
     interface PropertySignature extends TypeElement {
@@ -597,12 +629,16 @@ declare namespace ts {
     }
     interface StringLiteral extends LiteralExpression {
         _stringLiteralBrand: any;
+        textSourceNode?: Identifier | StringLiteral;
     }
     interface Expression extends Node {
         _expressionBrand: any;
         contextualType?: Type;
     }
     interface OmittedExpression extends Expression {
+    }
+    interface PartiallyEmittedExpression extends LeftHandSideExpression {
+        expression: Expression;
     }
     interface UnaryExpression extends Expression {
         _unaryExpressionBrand: any;
@@ -677,9 +713,14 @@ declare namespace ts {
     interface LiteralExpression extends LiteralLikeNode, PrimaryExpression {
         _literalExpressionBrand: any;
     }
+    interface NumericLiteral extends LiteralExpression {
+        _numericLiteralBrand: any;
+        trailingComment?: string;
+    }
     interface TemplateLiteralFragment extends LiteralLikeNode {
         _templateLiteralFragmentBrand: any;
     }
+    type Template = TemplateExpression | LiteralExpression;
     interface TemplateExpression extends PrimaryExpression {
         head: TemplateLiteralFragment;
         templateSpans: NodeArray<TemplateSpan>;
@@ -724,7 +765,7 @@ declare namespace ts {
     }
     interface TaggedTemplateExpression extends MemberExpression {
         tag: LeftHandSideExpression;
-        template: LiteralExpression | TemplateExpression;
+        template: Template;
     }
     type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator;
     interface AsExpression extends Expression {
@@ -754,9 +795,10 @@ declare namespace ts {
         _selfClosingElementBrand?: any;
     }
     type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
+    type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
     interface JsxAttribute extends Node {
         name: Identifier;
-        initializer?: Expression;
+        initializer?: StringLiteral | JsxExpression;
     }
     interface JsxSpreadAttribute extends Node {
         expression: Expression;
@@ -774,6 +816,8 @@ declare namespace ts {
     interface Statement extends Node {
         _statementBrand: any;
     }
+    interface NotEmittedStatement extends Statement {
+    }
     interface EmptyStatement extends Statement {
     }
     interface DebuggerStatement extends Statement {
@@ -784,6 +828,7 @@ declare namespace ts {
     type BlockLike = SourceFile | Block | ModuleBlock | CaseClause;
     interface Block extends Statement {
         statements: NodeArray<Statement>;
+        multiLine?: boolean;
     }
     interface VariableStatement extends Statement {
         declarationList: VariableDeclarationList;
@@ -805,17 +850,18 @@ declare namespace ts {
     interface WhileStatement extends IterationStatement {
         expression: Expression;
     }
+    type ForInitializer = VariableDeclarationList | Expression;
     interface ForStatement extends IterationStatement {
-        initializer?: VariableDeclarationList | Expression;
+        initializer?: ForInitializer;
         condition?: Expression;
         incrementor?: Expression;
     }
     interface ForInStatement extends IterationStatement {
-        initializer: VariableDeclarationList | Expression;
+        initializer: ForInitializer;
         expression: Expression;
     }
     interface ForOfStatement extends IterationStatement {
-        initializer: VariableDeclarationList | Expression;
+        initializer: ForInitializer;
         expression: Expression;
     }
     interface BreakStatement extends Statement {
@@ -901,7 +947,7 @@ declare namespace ts {
         type: TypeNode;
     }
     interface EnumMember extends Declaration {
-        name: DeclarationName;
+        name: PropertyName;
         initializer?: Expression;
     }
     interface EnumDeclaration extends DeclarationStatement {
@@ -909,6 +955,7 @@ declare namespace ts {
         members: NodeArray<EnumMember>;
     }
     type ModuleBody = ModuleBlock | ModuleDeclaration;
+    type ModuleName = Identifier | StringLiteral;
     interface ModuleDeclaration extends DeclarationStatement {
         name: Identifier | LiteralExpression;
         body?: ModuleBlock | ModuleDeclaration;
@@ -916,9 +963,10 @@ declare namespace ts {
     interface ModuleBlock extends Node, Statement {
         statements: NodeArray<Statement>;
     }
+    type ModuleReference = EntityName | ExternalModuleReference;
     interface ImportEqualsDeclaration extends DeclarationStatement {
         name: Identifier;
-        moduleReference: EntityName | ExternalModuleReference;
+        moduleReference: ModuleReference;
     }
     interface ExternalModuleReference extends Node {
         expression?: Expression;
@@ -927,9 +975,10 @@ declare namespace ts {
         importClause?: ImportClause;
         moduleSpecifier: Expression;
     }
+    type NamedImportBindings = NamespaceImport | NamedImports;
     interface ImportClause extends Declaration {
         name?: Identifier;
-        namedBindings?: NamespaceImport | NamedImports;
+        namedBindings?: NamedImportBindings;
     }
     interface NamespaceImport extends Declaration {
         name: Identifier;
@@ -1132,6 +1181,7 @@ declare namespace ts {
         imports: LiteralExpression[];
         moduleAugmentations: LiteralExpression[];
         patternAmbientModules?: PatternAmbientModule[];
+        externalHelpersModuleName?: Identifier;
     }
     interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
@@ -1334,18 +1384,19 @@ declare namespace ts {
     enum TypeReferenceSerializationKind {
         Unknown = 0,
         TypeWithConstructSignatureAndValue = 1,
-        VoidType = 2,
+        VoidNullableOrNeverType = 2,
         NumberLikeType = 3,
         StringLikeType = 4,
         BooleanType = 5,
         ArrayLikeType = 6,
         ESSymbolType = 7,
-        TypeWithCallSignature = 8,
-        ObjectType = 9,
+        Promise = 8,
+        TypeWithCallSignature = 9,
+        ObjectType = 10,
     }
     interface EmitResolver {
         hasGlobalName(name: string): boolean;
-        getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration;
+        getReferencedExportContainer(node: Identifier, prefixLocals?: boolean): SourceFile | ModuleDeclaration | EnumDeclaration;
         getReferencedImportDeclaration(node: Identifier): Declaration;
         getReferencedDeclarationWithCollidingName(node: Identifier): Declaration;
         isDeclarationWithCollidingName(node: Declaration): boolean;
@@ -1364,7 +1415,7 @@ declare namespace ts {
         isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
+        getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
@@ -1500,8 +1551,8 @@ declare namespace ts {
         LoopWithCapturedBlockScopedBinding = 65536,
         CapturedBlockScopedBinding = 131072,
         BlockScopedBindingInLoop = 262144,
-        ClassWithBodyScopedClassBinding = 524288,
-        BodyScopedClassBinding = 1048576,
+        ClassWithConstructorReference = 524288,
+        ConstructorReferenceInClass = 1048576,
         NeedsLoopOutParameter = 2097152,
     }
     interface NodeLinks {
@@ -1735,12 +1786,14 @@ declare namespace ts {
         declaration?: boolean;
         declarationDir?: string;
         diagnostics?: boolean;
+        extendedDiagnostics?: boolean;
         disableSizeLimit?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         help?: boolean;
+        importHelpers?: boolean;
         init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
@@ -2059,6 +2112,89 @@ declare namespace ts {
         getNewLine(): string;
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+        getEnvironmentVariable?(name: string): string;
+    }
+    const enum TransformFlags {
+        None = 0,
+        TypeScript = 1,
+        ContainsTypeScript = 2,
+        Jsx = 4,
+        ContainsJsx = 8,
+        ES7 = 16,
+        ContainsES7 = 32,
+        ES6 = 64,
+        ContainsES6 = 128,
+        DestructuringAssignment = 256,
+        Generator = 512,
+        ContainsGenerator = 1024,
+        ContainsDecorators = 2048,
+        ContainsPropertyInitializer = 4096,
+        ContainsLexicalThis = 8192,
+        ContainsCapturedLexicalThis = 16384,
+        ContainsLexicalThisInComputedPropertyName = 32768,
+        ContainsDefaultValueAssignments = 65536,
+        ContainsParameterPropertyAssignments = 131072,
+        ContainsSpreadElementExpression = 262144,
+        ContainsComputedPropertyName = 524288,
+        ContainsBlockScopedBinding = 1048576,
+        ContainsBindingPattern = 2097152,
+        ContainsYield = 4194304,
+        ContainsHoistedDeclarationOrCompletion = 8388608,
+        HasComputedFlags = 536870912,
+        AssertTypeScript = 3,
+        AssertJsx = 12,
+        AssertES7 = 48,
+        AssertES6 = 192,
+        AssertGenerator = 1536,
+        NodeExcludes = 536871765,
+        ArrowFunctionExcludes = 550710101,
+        FunctionExcludes = 550726485,
+        ConstructorExcludes = 550593365,
+        MethodOrAccessorExcludes = 550593365,
+        ClassExcludes = 537590613,
+        ModuleExcludes = 546335573,
+        TypeExcludes = -3,
+        ObjectLiteralExcludes = 537430869,
+        ArrayLiteralOrCallOrNewExcludes = 537133909,
+        VariableDeclarationListExcludes = 538968917,
+        ParameterExcludes = 538968917,
+        TypeScriptClassSyntaxMask = 137216,
+        ES6FunctionSyntaxMask = 81920,
+    }
+    const enum NodeEmitFlags {
+        EmitEmitHelpers = 1,
+        EmitExportStar = 2,
+        EmitSuperHelper = 4,
+        EmitAdvancedSuperHelper = 8,
+        UMDDefine = 16,
+        SingleLine = 32,
+        AdviseOnEmitNode = 64,
+        NoSubstitution = 128,
+        CapturesThis = 256,
+        NoLeadingSourceMap = 512,
+        NoTrailingSourceMap = 1024,
+        NoSourceMap = 1536,
+        NoNestedSourceMaps = 2048,
+        NoTokenLeadingSourceMaps = 4096,
+        NoTokenTrailingSourceMaps = 8192,
+        NoTokenSourceMaps = 12288,
+        NoLeadingComments = 16384,
+        NoTrailingComments = 32768,
+        NoComments = 49152,
+        NoNestedComments = 65536,
+        ExportName = 131072,
+        LocalName = 262144,
+        Indented = 524288,
+        NoIndentation = 1048576,
+        AsyncFunctionBody = 2097152,
+        ReuseTempVariableScope = 4194304,
+        CustomPrologue = 8388608,
+        SourceMapEmitOpenBraceAsToken = 16777216,
+        SourceMapAdjustRestParameterLoop = 33554432,
+    }
+    interface LexicalEnvironment {
+        startLexicalEnvironment(): void;
+        endLexicalEnvironment(): Statement[];
     }
     interface TextSpan {
         start: number;
@@ -2093,24 +2229,34 @@ declare namespace ts {
         GreaterThan = 1,
     }
     function forEach<T, U>(array: T[], callback: (element: T, index: number) => U): U;
+    function every<T>(array: T[], callback: (element: T, index: number) => boolean): boolean;
     function contains<T>(array: T[], value: T, areEqual?: (a: T, b: T) => boolean): boolean;
     function indexOf<T>(array: T[], value: T): number;
     function indexOfAnyCharCode(text: string, charCodes: number[], start?: number): number;
-    function countWhere<T>(array: T[], predicate: (x: T) => boolean): number;
-    function filter<T>(array: T[], f: (x: T) => boolean): T[];
+    function countWhere<T>(array: T[], predicate: (x: T, i: number) => boolean): number;
+    function filter<T, U extends T>(array: T[], f: (x: T, i: number) => x is U): U[];
+    function filter<T>(array: T[], f: (x: T, i: number) => boolean): T[];
     function filterMutate<T>(array: T[], f: (x: T) => boolean): void;
-    function map<T, U>(array: T[], f: (x: T) => U): U[];
+    function map<T, U>(array: T[], f: (x: T, i: number) => U): U[];
+    function flatten<T>(array: (T | T[])[]): T[];
+    function flatMap<T, U>(array: T[], mapfn: (x: T, i: number) => U | U[]): U[];
+    function span<T>(array: T[], f: (x: T, i: number) => boolean): [T[], T[]];
+    function spanMap<T, K, U>(array: T[], keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K, start: number, end: number) => U): U[];
     function concatenate<T>(array1: T[], array2: T[]): T[];
     function deduplicate<T>(array: T[], areEqual?: (a: T, b: T) => boolean): T[];
+    function compact<T>(array: T[]): T[];
     function sum(array: any[], prop: string): number;
     function addRange<T>(to: T[], from: T[]): void;
     function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number): boolean;
+    function firstOrUndefined<T>(array: T[]): T;
+    function singleOrUndefined<T>(array: T[]): T;
+    function singleOrMany<T>(array: T[]): T | T[];
     function lastOrUndefined<T>(array: T[]): T;
     function binarySearch(array: number[], value: number): number;
-    function reduceLeft<T>(array: T[], f: (a: T, x: T) => T): T;
-    function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
-    function reduceRight<T>(array: T[], f: (a: T, x: T) => T): T;
-    function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    function reduceLeft<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U;
+    function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T): T;
+    function reduceRight<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U;
+    function reduceRight<T>(array: T[], f: (memo: T, value: T, i: number) => T): T;
     function hasProperty<T>(map: Map<T>, key: string): boolean;
     function getKeys<T>(map: Map<T>): string[];
     function getProperty<T>(map: Map<T>, key: string): T;
@@ -2210,8 +2356,19 @@ declare namespace ts {
         function assert(expression: boolean, message?: string, verboseDebugInfo?: () => string): void;
         function fail(message?: string): void;
     }
+    function getEnvironmentVariable(name: string, host?: CompilerHost): string;
     function copyListRemovingItem<T>(item: T, list: T[]): T[];
     function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string;
+    namespace performance {
+        function emit(eventName: string): void;
+        function increment(counterName: string): void;
+        function getCount(counterName: string): number;
+        function mark(): number;
+        function measure(measureName: string, marker: number): void;
+        function getDuration(measureName: string): number;
+        function enable(): void;
+        function disable(): void;
+    }
 }
 declare namespace ts {
     type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
@@ -2244,6 +2401,8 @@ declare namespace ts {
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
         realpath?(path: string): string;
+        getEnvironmentVariable(name: string): string;
+        tryEnableSourceMapsForHost?(): void;
     }
     interface FileWatcher {
         close(): void;
@@ -3493,12 +3652,6 @@ declare namespace ts {
             message: string;
         };
         await_expression_is_only_allowed_within_an_async_function: {
-            code: number;
-            category: DiagnosticCategory;
-            key: string;
-            message: string;
-        };
-        Async_functions_are_only_available_when_targeting_ECMAScript_2015_or_higher: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -4812,7 +4965,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        The_arguments_object_cannot_be_referenced_in_an_async_arrow_function_Consider_using_a_standard_async_function_expression: {
+        The_arguments_object_cannot_be_referenced_in_an_async_function_or_method_in_ES3_and_ES5_Consider_using_a_standard_function_or_method: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -6480,6 +6633,12 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        Import_emit_helpers_from_tslib: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
         Variable_0_implicitly_has_an_1_type: {
             code: number;
             category: DiagnosticCategory;
@@ -6841,12 +7000,16 @@ declare namespace ts {
     function isOctalDigit(ch: number): boolean;
     function couldStartTrivia(text: string, pos: number): boolean;
     function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean, stopAtComments?: boolean): number;
+    function forEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: T) => U, state?: T): U;
+    function forEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: T) => U, state?: T): U;
+    function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U): U;
+    function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U): U;
     function getLeadingCommentRanges(text: string, pos: number): CommentRange[];
     function getTrailingCommentRanges(text: string, pos: number): CommentRange[];
     function getShebang(text: string): string;
     function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean;
     function isIdentifierPart(ch: number, languageVersion: ScriptTarget): boolean;
-    function isIdentifier(name: string, languageVersion: ScriptTarget): boolean;
+    function isIdentifierText(name: string, languageVersion: ScriptTarget): boolean;
     function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant?: LanguageVariant, text?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
 }
 declare namespace ts {
@@ -6880,16 +7043,12 @@ declare namespace ts {
     };
 }
 declare namespace ts {
+    const externalHelpersModuleNameText: string;
     interface ReferencePathMatchResult {
         fileReference?: FileReference;
         diagnosticMessage?: DiagnosticMessage;
         isNoDefaultLib?: boolean;
         isTypeReferenceDirective?: boolean;
-    }
-    interface SynthesizedNode extends Node {
-        leadingCommentRanges?: CommentRange[];
-        trailingCommentRanges?: CommentRange[];
-        startsOnNewLine: boolean;
     }
     function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration;
     interface StringSymbolWriter extends SymbolWriter {
@@ -6922,6 +7081,7 @@ declare namespace ts {
     function getStartPositionOfLine(line: number, sourceFile: SourceFile): number;
     function nodePosToString(node: Node): string;
     function getStartPosOfNode(node: Node): number;
+    function isDefined(value: any): boolean;
     function getEndLinePosition(line: number, sourceFile: SourceFile): number;
     function nodeIsMissing(node: Node): boolean;
     function nodeIsPresent(node: Node): boolean;
@@ -6931,6 +7091,8 @@ declare namespace ts {
     function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia?: boolean): string;
     function getTextOfNodeFromSourceText(sourceText: string, node: Node): string;
     function getTextOfNode(node: Node, includeTrivia?: boolean): string;
+    function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, languageVersion: ScriptTarget): string;
+    function isBinaryOrOctalIntegerLiteral(node: LiteralLikeNode, text: string): boolean;
     function escapeIdentifier(identifier: string): string;
     function unescapeIdentifier(identifier: string): string;
     function makeIdentifierFromModuleName(moduleName: string): string;
@@ -6940,6 +7102,7 @@ declare namespace ts {
     function isBlockScopedContainerTopLevel(node: Node): boolean;
     function isGlobalScopeAugmentation(module: ModuleDeclaration): boolean;
     function isExternalModuleAugmentation(node: Node): boolean;
+    function isBlockScope(node: Node, parentNode: Node): boolean;
     function getEnclosingBlockScopeContainer(node: Node): Node;
     function isCatchClauseVariableDeclaration(declaration: Declaration): boolean;
     function declarationNameToString(name: DeclarationName): string;
@@ -6950,6 +7113,7 @@ declare namespace ts {
     function isExternalOrCommonJsModule(file: SourceFile): boolean;
     function isDeclarationFile(file: SourceFile): boolean;
     function isConstEnumDeclaration(node: Node): boolean;
+    function getCombinedModifierFlags(node: Node): ModifierFlags;
     function getCombinedNodeFlags(node: Node): NodeFlags;
     function isConst(node: Node): boolean;
     function isLet(node: Node): boolean;
@@ -6962,7 +7126,7 @@ declare namespace ts {
     let fullTripleSlashReferencePathRegEx: RegExp;
     let fullTripleSlashReferenceTypeReferenceDirectiveRegEx: RegExp;
     let fullTripleSlashAMDReferencePathRegEx: RegExp;
-    function isTypeNode(node: Node): boolean;
+    function isPartOfTypeNode(node: Node): boolean;
     function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T;
     function forEachYieldExpression(body: Block, visitor: (expr: YieldExpression) => void): void;
     function isVariableLike(node: Node): node is VariableLikeDeclaration;
@@ -6971,7 +7135,7 @@ declare namespace ts {
     function isFunctionLike(node: Node): node is FunctionLikeDeclaration;
     function isFunctionLikeKind(kind: SyntaxKind): boolean;
     function introducesArgumentsExoticObject(node: Node): boolean;
-    function isIterationStatement(node: Node, lookInLabeledStatements: boolean): boolean;
+    function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement;
     function isFunctionBlock(node: Node): boolean;
     function isObjectLiteralMethod(node: Node): node is MethodDeclaration;
     function isIdentifierTypePredicate(predicate: TypePredicate): predicate is IdentifierTypePredicate;
@@ -6981,15 +7145,17 @@ declare namespace ts {
     function getThisContainer(node: Node, includeArrowFunctions: boolean): Node;
     function getSuperContainer(node: Node, stopOnFunctions: boolean): Node;
     function getImmediatelyInvokedFunctionExpression(func: Node): CallExpression;
-    function isSuperPropertyOrElementAccess(node: Node): boolean;
+    function isSuperProperty(node: Node): node is (PropertyAccessExpression | ElementAccessExpression);
+    function isSuperPropertyCall(node: Node): node is CallExpression;
+    function isSuperCall(node: Node): node is CallExpression;
     function getEntityNameFromTypeNode(node: TypeNode): EntityName | Expression;
     function getInvokedExpression(node: CallLikeExpression): Expression;
     function nodeCanBeDecorated(node: Node): boolean;
     function nodeIsDecorated(node: Node): boolean;
-    function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression;
-    function isElementAccessExpression(node: Node): node is ElementAccessExpression;
+    function nodeOrChildIsDecorated(node: Node): boolean;
+    function childIsDecorated(node: Node): boolean;
     function isJSXTagName(node: Node): boolean;
-    function isExpression(node: Node): boolean;
+    function isPartOfExpression(node: Node): boolean;
     function isExternalModuleNameRelative(moduleName: string): boolean;
     function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean): boolean;
     function isExternalModuleImportEqualsDeclaration(node: Node): boolean;
@@ -7002,6 +7168,8 @@ declare namespace ts {
     function isDeclarationOfFunctionExpression(s: Symbol): boolean;
     function getSpecialPropertyAssignmentKind(expression: Node): SpecialPropertyAssignmentKind;
     function getExternalModuleName(node: Node): Expression;
+    function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): NamespaceImport;
+    function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): boolean;
     function hasQuestionToken(node: Node): boolean;
     function isJSDocConstructSignature(node: Node): boolean;
     function getJSDocTypeTag(node: Node): JSDocTypeTag;
@@ -7012,16 +7180,9 @@ declare namespace ts {
     function hasDeclaredRestParameter(s: SignatureDeclaration): boolean;
     function isRestParameter(node: ParameterDeclaration): boolean;
     function isDeclaredRestParam(node: ParameterDeclaration): boolean;
-    function isLiteralKind(kind: SyntaxKind): boolean;
-    function isTextualLiteralKind(kind: SyntaxKind): boolean;
-    function isTemplateLiteralKind(kind: SyntaxKind): boolean;
-    function isBindingPattern(node: Node): node is BindingPattern;
     function isAssignmentTarget(node: Node): boolean;
-    function isNodeDescendentOf(node: Node, ancestor: Node): boolean;
+    function isNodeDescendantOf(node: Node, ancestor: Node): boolean;
     function isInAmbientContext(node: Node): boolean;
-    function isDeclaration(node: Node): boolean;
-    function isStatement(n: Node): boolean;
-    function isClassElement(n: Node): boolean;
     function isDeclarationName(name: Node): boolean;
     function isLiteralComputedPropertyDeclarationName(node: Node): boolean;
     function isIdentifierName(node: Identifier): boolean;
@@ -7046,13 +7207,24 @@ declare namespace ts {
     function isModifierKind(token: SyntaxKind): boolean;
     function isParameterDeclaration(node: VariableLikeDeclaration): boolean;
     function getRootDeclaration(node: Node): Node;
-    function nodeStartsNewLexicalEnvironment(n: Node): boolean;
-    function cloneNode<T extends Node>(node: T, location?: TextRange, flags?: NodeFlags, parent?: Node): T;
-    function cloneEntityName(node: EntityName, parent?: Node): EntityName;
-    function isQualifiedName(node: Node): node is QualifiedName;
-    function nodeIsSynthesized(node: Node): boolean;
-    function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node;
-    function createSynthesizedNodeArray(): NodeArray<any>;
+    function nodeStartsNewLexicalEnvironment(node: Node): boolean;
+    function nodeIsSynthesized(node: TextRange): boolean;
+    function positionIsSynthesized(pos: number): boolean;
+    function getOriginalNode(node: Node): Node;
+    function isParseTreeNode(node: Node): boolean;
+    function getParseTreeNode(node: Node): Node;
+    function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
+    function getOriginalSourceFiles(sourceFiles: SourceFile[]): SourceFile[];
+    function getOriginalNodeId(node: Node): number;
+    const enum Associativity {
+        Left = 0,
+        Right = 1,
+    }
+    function getExpressionAssociativity(expression: Expression): Associativity;
+    function getOperatorAssociativity(kind: SyntaxKind, operator: SyntaxKind, hasArguments?: boolean): Associativity;
+    function getExpressionPrecedence(expression: Expression): number;
+    function getOperator(expression: Expression): SyntaxKind;
+    function getOperatorPrecedence(nodeKind: SyntaxKind, operatorKind: SyntaxKind, hasArguments?: boolean): number;
     function createDiagnosticCollection(): DiagnosticCollection;
     function escapeString(s: string): string;
     function isIntrinsicJsxName(name: string): boolean;
@@ -7070,11 +7242,14 @@ declare namespace ts {
         getLine(): number;
         getColumn(): number;
         getIndent(): number;
+        isAtStartOfLine(): boolean;
         reset(): void;
     }
     function getIndentString(level: number): string;
     function getIndentSize(): number;
     function createTextWriter(newLine: String): EmitTextWriter;
+    function getResolvedExternalModuleName(host: EmitHost, file: SourceFile): string;
+    function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): string;
     function getExternalModuleNameFromPath(host: EmitHost, fileName: string): string;
     function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string): string;
     function getDeclarationEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost): string;
@@ -7085,6 +7260,8 @@ declare namespace ts {
         sourceMapFilePath: string;
         declarationFilePath: string;
     }
+    function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile): SourceFile[];
+    function forEachTransformedEmitFile(host: EmitHost, sourceFiles: SourceFile[], action: (jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) => void): void;
     function forEachExpectedEmitFile(host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) => void, targetSourceFile?: SourceFile): void;
     function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string): string;
     function writeFile(host: EmitHost, diagnostics: DiagnosticCollection, fileName: string, data: string, writeByteOrderMark: boolean, sourceFiles?: SourceFile[]): void;
@@ -7092,23 +7269,30 @@ declare namespace ts {
     function getLineOfLocalPositionFromLineMap(lineMap: number[], pos: number): number;
     function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration;
     function getSetAccessorTypeAnnotationNode(accessor: AccessorDeclaration): TypeNode;
-    function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): {
+    interface AllAccessorDeclarations {
         firstAccessor: AccessorDeclaration;
         secondAccessor: AccessorDeclaration;
         getAccessor: AccessorDeclaration;
         setAccessor: AccessorDeclaration;
-    };
+    }
+    function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): AllAccessorDeclarations;
     function emitNewLineBeforeLeadingComments(lineMap: number[], writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]): void;
-    function emitComments(text: string, lineMap: number[], writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string, writeComment: (text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) => void): void;
-    function emitDetachedComments(text: string, lineMap: number[], writer: EmitTextWriter, writeComment: (text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) => void, node: TextRange, newLine: string, removeComments: boolean): {
+    function emitNewLineBeforeLeadingCommentsOfPosition(lineMap: number[], writer: EmitTextWriter, pos: number, leadingComments: CommentRange[]): void;
+    function emitNewLineBeforeLeadingCommentOfPosition(lineMap: number[], writer: EmitTextWriter, pos: number, commentPos: number): void;
+    function emitComments(text: string, lineMap: number[], writer: EmitTextWriter, comments: CommentRange[], leadingSeparator: boolean, trailingSeparator: boolean, newLine: string, writeComment: (text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void): void;
+    function emitDetachedComments(text: string, lineMap: number[], writer: EmitTextWriter, writeComment: (text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void, node: TextRange, newLine: string, removeComments: boolean): {
         nodePos: number;
         detachedCommentEndPos: number;
     };
-    function writeCommentRange(text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string): void;
-    function modifierToFlag(token: SyntaxKind): NodeFlags;
-    function isLeftHandSideExpression(expr: Expression): boolean;
+    function writeCommentRange(text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string): void;
+    function hasModifiers(node: Node): boolean;
+    function hasModifier(node: Node, flags: ModifierFlags): boolean;
+    function getModifierFlags(node: Node): ModifierFlags;
+    function modifierToFlag(token: SyntaxKind): ModifierFlags;
+    function isLogicalOperator(token: SyntaxKind): boolean;
     function isAssignmentOperator(token: SyntaxKind): boolean;
     function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean;
+    function isDestructuringAssignment(node: Node): node is BinaryExpression;
     function isSupportedExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean;
     function isRightSideOfQualifiedNameOrPropertyAccess(node: Node): boolean;
     function isEmptyObjectLiteralOrArrayLiteral(expression: Node): boolean;
@@ -7119,6 +7303,109 @@ declare namespace ts {
     function convertToBase64(input: string): string;
     function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string;
     function getNewLineCharacter(options: CompilerOptions): string;
+    function isSimpleExpression(node: Expression): boolean;
+    function formatSyntaxKind(kind: SyntaxKind): string;
+    function movePos(pos: number, value: number): number;
+    function createRange(pos: number, end: number): TextRange;
+    function moveRangeEnd(range: TextRange, end: number): TextRange;
+    function moveRangePos(range: TextRange, pos: number): TextRange;
+    function moveRangePastDecorators(node: Node): TextRange;
+    function moveRangePastModifiers(node: Node): TextRange;
+    function isCollapsedRange(range: TextRange): boolean;
+    function collapseRangeToStart(range: TextRange): TextRange;
+    function collapseRangeToEnd(range: TextRange): TextRange;
+    function createTokenRange(pos: number, token: SyntaxKind): TextRange;
+    function rangeIsOnSingleLine(range: TextRange, sourceFile: SourceFile): boolean;
+    function rangeStartPositionsAreOnSameLine(range1: TextRange, range2: TextRange, sourceFile: SourceFile): boolean;
+    function rangeEndPositionsAreOnSameLine(range1: TextRange, range2: TextRange, sourceFile: SourceFile): boolean;
+    function rangeStartIsOnSameLineAsRangeEnd(range1: TextRange, range2: TextRange, sourceFile: SourceFile): boolean;
+    function rangeEndIsOnSameLineAsRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile): boolean;
+    function positionsAreOnSameLine(pos1: number, pos2: number, sourceFile: SourceFile): boolean;
+    function getStartPositionOfRange(range: TextRange, sourceFile: SourceFile): number;
+    function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver): {
+        externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
+        exportSpecifiers: Map<ExportSpecifier[]>;
+        exportEquals: ExportAssignment;
+        hasExportStarsToExportValues: boolean;
+    };
+    function getInitializedVariables(node: VariableDeclarationList): VariableDeclaration[];
+    function isMergedWithClass(node: Node): boolean;
+    function isFirstDeclarationOfKind(node: Node, kind: SyntaxKind): boolean;
+    function isNodeArray<T extends Node>(array: T[]): array is NodeArray<T>;
+    function isNoSubstitutionTemplateLiteral(node: Node): node is LiteralExpression;
+    function isLiteralKind(kind: SyntaxKind): boolean;
+    function isTextualLiteralKind(kind: SyntaxKind): boolean;
+    function isLiteralExpression(node: Node): node is LiteralExpression;
+    function isTemplateLiteralKind(kind: SyntaxKind): boolean;
+    function isTemplateLiteralFragment(node: Node): node is TemplateLiteralFragment;
+    function isIdentifier(node: Node): node is Identifier;
+    function isGeneratedIdentifier(node: Node): node is Identifier;
+    function isModifier(node: Node): node is Modifier;
+    function isQualifiedName(node: Node): node is QualifiedName;
+    function isComputedPropertyName(node: Node): node is ComputedPropertyName;
+    function isEntityName(node: Node): node is EntityName;
+    function isPropertyName(node: Node): node is PropertyName;
+    function isModuleName(node: Node): node is ModuleName;
+    function isBindingName(node: Node): node is BindingName;
+    function isTypeParameter(node: Node): node is TypeParameterDeclaration;
+    function isParameter(node: Node): node is ParameterDeclaration;
+    function isDecorator(node: Node): node is Decorator;
+    function isMethodDeclaration(node: Node): node is MethodDeclaration;
+    function isClassElement(node: Node): node is ClassElement;
+    function isObjectLiteralElement(node: Node): node is ObjectLiteralElement;
+    function isTypeNode(node: Node): node is TypeNode;
+    function isBindingPattern(node: Node): node is BindingPattern;
+    function isBindingElement(node: Node): node is BindingElement;
+    function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression;
+    function isElementAccessExpression(node: Node): node is ElementAccessExpression;
+    function isBinaryExpression(node: Node): node is BinaryExpression;
+    function isConditionalExpression(node: Node): node is ConditionalExpression;
+    function isCallExpression(node: Node): node is CallExpression;
+    function isTemplate(node: Node): node is Template;
+    function isSpreadElementExpression(node: Node): node is SpreadElementExpression;
+    function isExpressionWithTypeArguments(node: Node): node is ExpressionWithTypeArguments;
+    function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression;
+    function isUnaryExpression(node: Node): node is UnaryExpression;
+    function isExpression(node: Node): node is Expression;
+    function isAssertionExpression(node: Node): node is AssertionExpression;
+    function isPartiallyEmittedExpression(node: Node): node is PartiallyEmittedExpression;
+    function isNotEmittedStatement(node: Node): node is NotEmittedStatement;
+    function isNotEmittedOrPartiallyEmittedNode(node: Node): node is NotEmittedStatement | PartiallyEmittedExpression;
+    function isTemplateSpan(node: Node): node is TemplateSpan;
+    function isBlock(node: Node): node is Block;
+    function isConciseBody(node: Node): node is ConciseBody;
+    function isFunctionBody(node: Node): node is FunctionBody;
+    function isForInitializer(node: Node): node is ForInitializer;
+    function isVariableDeclaration(node: Node): node is VariableDeclaration;
+    function isVariableDeclarationList(node: Node): node is VariableDeclarationList;
+    function isCaseBlock(node: Node): node is CaseBlock;
+    function isModuleBody(node: Node): node is ModuleBody;
+    function isImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration;
+    function isImportClause(node: Node): node is ImportClause;
+    function isNamedImportBindings(node: Node): node is NamedImportBindings;
+    function isImportSpecifier(node: Node): node is ImportSpecifier;
+    function isNamedExports(node: Node): node is NamedExports;
+    function isExportSpecifier(node: Node): node is ExportSpecifier;
+    function isModuleOrEnumDeclaration(node: Node): node is ModuleDeclaration | EnumDeclaration;
+    function isDeclaration(node: Node): node is Declaration;
+    function isDeclarationStatement(node: Node): node is DeclarationStatement;
+    function isStatementButNotDeclaration(node: Node): node is Statement;
+    function isStatement(node: Node): node is Statement;
+    function isModuleReference(node: Node): node is ModuleReference;
+    function isJsxOpeningElement(node: Node): node is JsxOpeningElement;
+    function isJsxClosingElement(node: Node): node is JsxClosingElement;
+    function isJsxChild(node: Node): node is JsxChild;
+    function isJsxAttributeLike(node: Node): node is JsxAttributeLike;
+    function isJsxSpreadAttribute(node: Node): node is JsxSpreadAttribute;
+    function isJsxAttribute(node: Node): node is JsxAttribute;
+    function isStringLiteralOrJsxExpression(node: Node): node is StringLiteral | JsxExpression;
+    function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
+    function isHeritageClause(node: Node): node is HeritageClause;
+    function isCatchClause(node: Node): node is CatchClause;
+    function isPropertyAssignment(node: Node): node is PropertyAssignment;
+    function isShorthandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment;
+    function isEnumMember(node: Node): node is EnumMember;
+    function isSourceFile(node: Node): node is SourceFile;
     function isWatchSet(options: CompilerOptions): boolean;
 }
 declare namespace ts {
@@ -7147,6 +7434,188 @@ declare namespace ts {
     function endsWith(str: string, suffix: string): boolean;
 }
 declare namespace ts {
+    function updateNode<T extends Node>(updated: T, original: T): T;
+    function createNodeArray<T extends Node>(elements?: T[], location?: TextRange, hasTrailingComma?: boolean): NodeArray<T>;
+    function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node;
+    function createSynthesizedNodeArray<T extends Node>(elements?: T[]): NodeArray<T>;
+    function getSynthesizedClone<T extends Node>(node: T): T;
+    function getMutableClone<T extends Node>(node: T): T;
+    function createLiteral(textSource: StringLiteral | Identifier, location?: TextRange): StringLiteral;
+    function createLiteral(value: string, location?: TextRange): StringLiteral;
+    function createLiteral(value: number, location?: TextRange): NumericLiteral;
+    function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression;
+    function createIdentifier(text: string, location?: TextRange): Identifier;
+    function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, location?: TextRange): Identifier;
+    function createLoopVariable(location?: TextRange): Identifier;
+    function createUniqueName(text: string, location?: TextRange): Identifier;
+    function getGeneratedNameForNode(node: Node, location?: TextRange): Identifier;
+    function createSuper(): PrimaryExpression;
+    function createThis(location?: TextRange): PrimaryExpression;
+    function createNull(): PrimaryExpression;
+    function createComputedPropertyName(expression: Expression, location?: TextRange): ComputedPropertyName;
+    function createMethod(decorators: Decorator[], modifiers: Modifier[], asteriskToken: Node, name: string | PropertyName, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block, location?: TextRange, flags?: NodeFlags): MethodDeclaration;
+    function updateMethod(node: MethodDeclaration, decorators: Decorator[], modifiers: Modifier[], asteriskToken: Node, name: PropertyName, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block): MethodDeclaration;
+    function createConstructor(decorators: Decorator[], modifiers: Modifier[], parameters: ParameterDeclaration[], body: Block, location?: TextRange, flags?: NodeFlags): ConstructorDeclaration;
+    function updateConstructor(node: ConstructorDeclaration, decorators: Decorator[], modifiers: Modifier[], parameters: ParameterDeclaration[], body: Block): ConstructorDeclaration;
+    function createGetAccessor(decorators: Decorator[], modifiers: Modifier[], name: string | PropertyName, parameters: ParameterDeclaration[], type: TypeNode, body: Block, location?: TextRange, flags?: NodeFlags): GetAccessorDeclaration;
+    function updateGetAccessor(node: GetAccessorDeclaration, decorators: Decorator[], modifiers: Modifier[], name: PropertyName, parameters: ParameterDeclaration[], type: TypeNode, body: Block): GetAccessorDeclaration;
+    function createSetAccessor(decorators: Decorator[], modifiers: Modifier[], name: string | PropertyName, parameters: ParameterDeclaration[], body: Block, location?: TextRange, flags?: NodeFlags): SetAccessorDeclaration;
+    function updateSetAccessor(node: SetAccessorDeclaration, decorators: Decorator[], modifiers: Modifier[], name: PropertyName, parameters: ParameterDeclaration[], body: Block): SetAccessorDeclaration;
+    function createParameter(name: string | Identifier | BindingPattern, initializer?: Expression, location?: TextRange): ParameterDeclaration;
+    function createParameterDeclaration(decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: Node, name: string | Identifier | BindingPattern, questionToken: Node, type: TypeNode, initializer: Expression, location?: TextRange, flags?: NodeFlags): ParameterDeclaration;
+    function updateParameterDeclaration(node: ParameterDeclaration, decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: Node, name: BindingName, questionToken: Node, type: TypeNode, initializer: Expression): ParameterDeclaration;
+    function createArrayLiteral(elements?: Expression[], location?: TextRange, multiLine?: boolean): ArrayLiteralExpression;
+    function createObjectLiteral(properties?: ObjectLiteralElement[], location?: TextRange, multiLine?: boolean): ObjectLiteralExpression;
+    function createPropertyAccess(expression: Expression, name: string | Identifier, location?: TextRange, flags?: NodeFlags): PropertyAccessExpression;
+    function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier): PropertyAccessExpression;
+    function createElementAccess(expression: Expression, index: number | Expression, location?: TextRange): ElementAccessExpression;
+    function updateElementAccess(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression): ElementAccessExpression;
+    function createCall(expression: Expression, typeArguments: TypeNode[], argumentsArray: Expression[], location?: TextRange, flags?: NodeFlags): CallExpression;
+    function updateCall(node: CallExpression, expression: Expression, typeArguments: TypeNode[], argumentsArray: Expression[]): CallExpression;
+    function createNew(expression: Expression, typeArguments: TypeNode[], argumentsArray: Expression[], location?: TextRange, flags?: NodeFlags): NewExpression;
+    function updateNew(node: NewExpression, expression: Expression, typeArguments: TypeNode[], argumentsArray: Expression[]): NewExpression;
+    function createParen(expression: Expression, location?: TextRange): ParenthesizedExpression;
+    function createFunctionExpression(asteriskToken: Node, name: string | Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block, location?: TextRange, flags?: NodeFlags): FunctionExpression;
+    function updateFunctionExpression(node: FunctionExpression, name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block): FunctionExpression;
+    function createArrowFunction(modifiers: Modifier[], typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, equalsGreaterThanToken: Node, body: ConciseBody, location?: TextRange, flags?: NodeFlags): ArrowFunction;
+    function updateArrowFunction(node: ArrowFunction, modifiers: Modifier[], typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: ConciseBody): ArrowFunction;
+    function createTypeOf(expression: Expression): TypeOfExpression;
+    function createVoid(expression: Expression): VoidExpression;
+    function createPrefix(operator: SyntaxKind, operand: Expression, location?: TextRange): PrefixUnaryExpression;
+    function createPostfix(operand: Expression, operator: SyntaxKind, location?: TextRange): PostfixUnaryExpression;
+    function createBinary(left: Expression, operator: SyntaxKind, right: Expression, location?: TextRange): BinaryExpression;
+    function createBinaryWithOperatorToken(left: Expression, operatorToken: Node, right: Expression, location?: TextRange): BinaryExpression;
+    function updateBinary(node: BinaryExpression, left: Expression, right: Expression): BinaryExpression;
+    function createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
+    function createYield(expression: Expression, location?: TextRange): YieldExpression;
+    function createSpread(expression: Expression): SpreadElementExpression;
+    function createClassExpression(name: Identifier, heritageClauses: HeritageClause[], members: ClassElement[], location?: TextRange): ClassExpression;
+    function createOmittedExpression(location?: TextRange): OmittedExpression;
+    function createExpressionWithTypeArguments(expression: Expression, location?: TextRange): ExpressionWithTypeArguments;
+    function createBlock(statements: Statement[], location?: TextRange, multiLine?: boolean, flags?: NodeFlags): Block;
+    function updateBlock(node: Block, statements: Statement[]): Block;
+    function createVariableStatement(modifiers: Modifier[], declarationList: VariableDeclarationList | VariableDeclaration[], location?: TextRange, flags?: NodeFlags): VariableStatement;
+    function updateVariableStatement(node: VariableStatement, modifiers: Modifier[], declarationList: VariableDeclarationList): VariableStatement;
+    function createVariableDeclarationList(declarations: VariableDeclaration[], location?: TextRange, flags?: NodeFlags): VariableDeclarationList;
+    function updateVariableDeclarationList(node: VariableDeclarationList, declarations: VariableDeclaration[]): VariableDeclarationList;
+    function createLetDeclarationList(declarations: VariableDeclaration[], location?: TextRange): VariableDeclarationList;
+    function createConstDeclarationList(declarations: VariableDeclaration[], location?: TextRange): VariableDeclarationList;
+    function createVariableDeclaration(name: string | BindingPattern | Identifier, type?: TypeNode, initializer?: Expression, location?: TextRange, flags?: NodeFlags): VariableDeclaration;
+    function updateVariableDeclaration(node: VariableDeclaration, name: BindingName, type: TypeNode, initializer: Expression): VariableDeclaration;
+    function createEmptyStatement(location: TextRange): EmptyStatement;
+    function createStatement(expression: Expression, location?: TextRange, flags?: NodeFlags): ExpressionStatement;
+    function updateStatement(node: ExpressionStatement, expression: Expression): ExpressionStatement;
+    function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement, location?: TextRange): IfStatement;
+    function updateIf(node: IfStatement, expression: Expression, thenStatement: Statement, elseStatement: Statement): IfStatement;
+    function createSwitch(expression: Expression, caseBlock: CaseBlock, location?: TextRange): SwitchStatement;
+    function createCaseBlock(clauses: CaseOrDefaultClause[], location?: TextRange): CaseBlock;
+    function createFor(initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement, location?: TextRange): ForStatement;
+    function updateFor(node: ForStatement, initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement): ForStatement;
+    function createLabel(label: string | Identifier, statement: Statement, location?: TextRange): LabeledStatement;
+    function createDo(statement: Statement, expression: Expression, location?: TextRange): DoStatement;
+    function createWhile(expression: Expression, statement: Statement, location?: TextRange): WhileStatement;
+    function createForIn(initializer: ForInitializer, expression: Expression, statement: Statement, location?: TextRange): ForInStatement;
+    function updateForIn(node: ForInStatement, initializer: ForInitializer, expression: Expression, statement: Statement): ForInStatement;
+    function createForOf(initializer: ForInitializer, expression: Expression, statement: Statement, location?: TextRange): ForOfStatement;
+    function createReturn(expression?: Expression, location?: TextRange): ReturnStatement;
+    function createWith(expression: Expression, statement: Statement, location?: TextRange): ReturnStatement;
+    function createThrow(expression: Expression, location?: TextRange): ReturnStatement;
+    function createTryCatchFinally(tryBlock: Block, catchClause: CatchClause, finallyBlock: Block, location?: TextRange): TryStatement;
+    function createTryCatch(tryBlock: Block, catchClause: CatchClause, location?: TextRange): TryStatement;
+    function createTryFinally(tryBlock: Block, finallyBlock: Block, location?: TextRange): TryStatement;
+    function updateReturn(node: ReturnStatement, expression: Expression): ReturnStatement;
+    function createFunctionDeclaration(decorators: Decorator[], modifiers: Modifier[], asteriskToken: Node, name: string | Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block, location?: TextRange, flags?: NodeFlags): FunctionDeclaration;
+    function updateFunctionDeclaration(node: FunctionDeclaration, decorators: Decorator[], modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block): FunctionDeclaration;
+    function createClassDeclaration(modifiers: Modifier[], name: Identifier, heritageClauses: HeritageClause[], members: ClassElement[], location?: TextRange): ClassDeclaration;
+    function createExportDefault(expression: Expression): ExportAssignment;
+    function createExportDeclaration(exportClause: NamedExports, moduleSpecifier?: Expression): ExportDeclaration;
+    function createNamedExports(elements: ExportSpecifier[]): NamedExports;
+    function createExportSpecifier(name: string | Identifier, propertyName?: string | Identifier): ExportSpecifier;
+    function createHeritageClause(token: SyntaxKind, types: ExpressionWithTypeArguments[], location?: TextRange): HeritageClause;
+    function createCaseClause(expression: Expression, statements: Statement[], location?: TextRange): CaseClause;
+    function createPropertyAssignment(name: string | PropertyName, initializer: Expression, location?: TextRange): PropertyAssignment;
+    function updateSourceFileNode(node: SourceFile, statements: Statement[]): SourceFile;
+    function createNotEmittedStatement(original: Node): NotEmittedStatement;
+    function createPartiallyEmittedExpression(expression: Expression, original?: Node, location?: TextRange): PartiallyEmittedExpression;
+    function createComma(left: Expression, right: Expression): Expression;
+    function createLessThan(left: Expression, right: Expression, location?: TextRange): Expression;
+    function createAssignment(left: Expression, right: Expression, location?: TextRange): BinaryExpression;
+    function createStrictEquality(left: Expression, right: Expression): BinaryExpression;
+    function createStrictInequality(left: Expression, right: Expression): BinaryExpression;
+    function createAdd(left: Expression, right: Expression): BinaryExpression;
+    function createSubtract(left: Expression, right: Expression): BinaryExpression;
+    function createPostfixIncrement(operand: Expression, location?: TextRange): PostfixUnaryExpression;
+    function createLogicalAnd(left: Expression, right: Expression): BinaryExpression;
+    function createLogicalOr(left: Expression, right: Expression): BinaryExpression;
+    function createLogicalNot(operand: Expression): PrefixUnaryExpression;
+    function createVoidZero(): VoidExpression;
+    function createImportDeclaration(importClause: ImportClause, moduleSpecifier?: Expression, location?: TextRange): ImportDeclaration;
+    function createImportClause(name: Identifier, namedBindings: NamedImportBindings, location?: TextRange): ImportClause;
+    function createNamespaceImport(name: Identifier): NamespaceImport;
+    function createNamedImports(elements: NodeArray<ImportSpecifier>, location?: TextRange): NamedImports;
+    function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression;
+    function createRestParameter(name: string | Identifier): ParameterDeclaration;
+    function createFunctionCall(func: Expression, thisArg: Expression, argumentsList: Expression[], location?: TextRange): CallExpression;
+    function createBreak(label?: Identifier, location?: TextRange): BreakStatement;
+    function createContinue(label?: Identifier, location?: TextRange): BreakStatement;
+    function createFunctionApply(func: Expression, thisArg: Expression, argumentsExpression: Expression, location?: TextRange): CallExpression;
+    function createArraySlice(array: Expression, start?: number | Expression): CallExpression;
+    function createArrayConcat(array: Expression, values: Expression[]): CallExpression;
+    function createMathPow(left: Expression, right: Expression, location?: TextRange): CallExpression;
+    function createReactCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression;
+    function createHelperName(externalHelpersModuleName: Identifier | undefined, name: string): PropertyAccessExpression | Identifier;
+    function createExtendsHelper(externalHelpersModuleName: Identifier | undefined, name: Identifier): CallExpression;
+    function createAssignHelper(externalHelpersModuleName: Identifier | undefined, attributesSegments: Expression[]): CallExpression;
+    function createParamHelper(externalHelpersModuleName: Identifier | undefined, expression: Expression, parameterOffset: number, location?: TextRange): CallExpression;
+    function createMetadataHelper(externalHelpersModuleName: Identifier | undefined, metadataKey: string, metadataValue: Expression): CallExpression;
+    function createDecorateHelper(externalHelpersModuleName: Identifier | undefined, decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression, location?: TextRange): CallExpression;
+    function createAwaiterHelper(externalHelpersModuleName: Identifier | undefined, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block): CallExpression;
+    function createHasOwnProperty(target: LeftHandSideExpression, propertyName: Expression): CallExpression;
+    function createAdvancedAsyncSuperHelper(): VariableStatement;
+    function createSimpleAsyncSuperHelper(): VariableStatement;
+    interface CallBinding {
+        target: LeftHandSideExpression;
+        thisArg: Expression;
+    }
+    function createCallBinding(expression: Expression, recordTempVariable: (temp: Identifier) => void, languageVersion?: ScriptTarget, cacheIdentifiers?: boolean): CallBinding;
+    function inlineExpressions(expressions: Expression[]): Expression;
+    function createExpressionFromEntityName(node: EntityName | Expression): Expression;
+    function createExpressionForPropertyName(memberName: PropertyName): Expression;
+    function createExpressionForObjectLiteralElement(node: ObjectLiteralExpression, property: ObjectLiteralElement, receiver: Expression): Expression;
+    function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number;
+    function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand?: Expression): Expression;
+    function parenthesizeForNew(expression: Expression): LeftHandSideExpression;
+    function parenthesizeForAccess(expression: Expression): LeftHandSideExpression;
+    function parenthesizePostfixOperand(operand: Expression): LeftHandSideExpression;
+    function parenthesizePrefixOperand(operand: Expression): UnaryExpression;
+    function parenthesizeExpressionForList(expression: Expression): Expression;
+    function parenthesizeExpressionForExpressionStatement(expression: Expression): Expression;
+    function parenthesizeConciseBody(body: ConciseBody): ConciseBody;
+    const enum OuterExpressionKinds {
+        Parentheses = 1,
+        Assertions = 2,
+        PartiallyEmittedExpressions = 4,
+        All = 7,
+    }
+    function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
+    function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
+    function skipParentheses(node: Expression): Expression;
+    function skipParentheses(node: Node): Node;
+    function skipAssertions(node: Expression): Expression;
+    function skipAssertions(node: Node): Node;
+    function skipPartiallyEmittedExpressions(node: Expression): Expression;
+    function skipPartiallyEmittedExpressions(node: Node): Node;
+    function startOnNewLine<T extends Node>(node: T): T;
+    function setOriginalNode<T extends Node>(node: T, original: Node): T;
+    function setTextRange<T extends TextRange>(node: T, location: TextRange): T;
+    function setNodeFlags<T extends Node>(node: T, flags: NodeFlags): T;
+    function setMultiLine<T extends ObjectLiteralExpression | ArrayLiteralExpression | Block>(node: T, multiLine: boolean): T;
+    function setHasTrailingComma<T extends Node>(nodes: NodeArray<T>, hasTrailingComma: boolean): NodeArray<T>;
+    function getLocalNameForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, sourceFile: SourceFile): Identifier;
+    function getExternalModuleNameLiteral(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions): StringLiteral;
+    function tryGetModuleNameFromFile(file: SourceFile, host: EmitHost, options: CompilerOptions): StringLiteral;
+}
+declare namespace ts {
     let parseTime: number;
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
@@ -7163,7 +7632,6 @@ declare namespace ts {
     };
 }
 declare namespace ts {
-    let bindTime: number;
     const enum ModuleInstanceState {
         NonInstantiated = 0,
         Instantiated = 1,
@@ -7171,43 +7639,139 @@ declare namespace ts {
     }
     function getModuleInstanceState(node: Node): ModuleInstanceState;
     function bindSourceFile(file: SourceFile, options: CompilerOptions): void;
+    function computeTransformFlagsForNode(node: Node, subtreeFlags: TransformFlags): TransformFlags;
 }
 declare namespace ts {
     function getNodeId(node: Node): number;
-    let checkTime: number;
     function getSymbolId(symbol: Symbol): number;
     function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker;
 }
 declare namespace ts {
-    interface SourceMapWriter {
-        getSourceMapData(): SourceMapData;
-        setSourceFile(sourceFile: SourceFile): void;
-        emitPos(pos: number): void;
-        emitStart(range: TextRange): void;
-        emitEnd(range: TextRange, stopOverridingSpan?: boolean): void;
-        changeEmitSourcePos(): void;
-        getText(): string;
-        getSourceMappingURL(): string;
-        initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void;
-        reset(): void;
+    type VisitResult<T extends Node> = T | T[];
+    function reduceEachChild<T>(node: Node, f: (memo: T, node: Node) => T, initial: T): T;
+    function visitNode<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T;
+    function visitNodes<T extends Node, TArray extends NodeArray<T>>(nodes: TArray, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, start?: number, count?: number): TArray;
+    function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): T;
+    function addNode<T extends Node>(to: T[], from: VisitResult<T>, startOnNewLine?: boolean): void;
+    function addNodes<T extends Node>(to: T[], from: VisitResult<T>[], startOnNewLine?: boolean): void;
+    function mergeSourceFileLexicalEnvironment(node: SourceFile, declarations: Statement[]): SourceFile;
+    function mergeModuleDeclarationLexicalEnvironment(node: ModuleDeclaration, declarations: Statement[]): ModuleDeclaration;
+    function mergeFunctionBodyLexicalEnvironment(body: FunctionBody, declarations: Statement[]): FunctionBody;
+    function mergeConciseBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[]): ConciseBody;
+    function liftToBlock(nodes: Node[]): Statement;
+    function aggregateTransformFlags<T extends Node>(node: T): T;
+    namespace Debug {
+        function failNotOptional(message?: string): void;
+        function failBadSyntaxKind(node: Node, message?: string): void;
+        function assertNode<T extends Node>(node: Node, test: (node: Node) => boolean, message?: string): void;
     }
-    function getNullSourceMapWriter(): SourceMapWriter;
-    function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter): SourceMapWriter;
+}
+declare namespace ts {
+    function flattenDestructuringAssignment(context: TransformationContext, node: BinaryExpression, needsValue: boolean, recordTempVariable: (node: Identifier) => void, visitor?: (node: Node) => VisitResult<Node>): Expression;
+    function flattenParameterDestructuring(context: TransformationContext, node: ParameterDeclaration, value: Expression, visitor?: (node: Node) => VisitResult<Node>): VariableDeclaration[];
+    function flattenVariableDestructuring(context: TransformationContext, node: VariableDeclaration, value?: Expression, visitor?: (node: Node) => VisitResult<Node>): VariableDeclaration[];
+    function flattenVariableDestructuringToExpression(context: TransformationContext, node: VariableDeclaration, recordTempVariable: (name: Identifier) => void, nameSubstitution?: (name: Identifier) => Expression, visitor?: (node: Node) => VisitResult<Node>): Expression;
+}
+declare namespace ts {
+    function transformTypeScript(context: TransformationContext): (node: SourceFile) => SourceFile;
+}
+declare namespace ts {
+    function transformJsx(context: TransformationContext): (node: SourceFile) => SourceFile;
+}
+declare namespace ts {
+    function transformES7(context: TransformationContext): (node: SourceFile) => SourceFile;
+}
+declare namespace ts {
+    function transformES6(context: TransformationContext): (node: SourceFile) => SourceFile;
+}
+declare namespace ts {
+    function transformGenerators(context: TransformationContext): (node: SourceFile) => SourceFile;
+}
+declare namespace ts {
+    function transformModule(context: TransformationContext): (node: SourceFile) => SourceFile;
+}
+declare namespace ts {
+    function transformSystemModule(context: TransformationContext): (node: SourceFile) => SourceFile;
+}
+declare namespace ts {
+    function transformES6Module(context: TransformationContext): (node: SourceFile) => SourceFile;
+}
+declare namespace ts {
+    interface TransformationResult {
+        getSourceFiles(): SourceFile[];
+        getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange;
+        isSubstitutionEnabled(node: Node): boolean;
+        isEmitNotificationEnabled(node: Node): boolean;
+        onSubstituteNode(node: Node, isExpression: boolean): Node;
+        onEmitNode(node: Node, emitCallback: (node: Node) => void): void;
+        dispose(): void;
+    }
+    interface TransformationContext extends LexicalEnvironment {
+        getCompilerOptions(): CompilerOptions;
+        getEmitResolver(): EmitResolver;
+        getEmitHost(): EmitHost;
+        getNodeEmitFlags(node: Node): NodeEmitFlags;
+        setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags): T;
+        getSourceMapRange(node: Node): TextRange;
+        setSourceMapRange<T extends Node>(node: T, range: TextRange): T;
+        getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange;
+        setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange): T;
+        getCommentRange(node: Node): TextRange;
+        setCommentRange<T extends Node>(node: T, range: TextRange): T;
+        hoistFunctionDeclaration(node: FunctionDeclaration): void;
+        hoistVariableDeclaration(node: Identifier): void;
+        enableSubstitution(kind: SyntaxKind): void;
+        isSubstitutionEnabled(node: Node): boolean;
+        onSubstituteNode?: (node: Node, isExpression: boolean) => Node;
+        enableEmitNotification(kind: SyntaxKind): void;
+        isEmitNotificationEnabled(node: Node): boolean;
+        onEmitNode?: (node: Node, emit: (node: Node) => void) => void;
+    }
+    type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
+    function getTransformers(compilerOptions: CompilerOptions): ((context: TransformationContext) => (node: SourceFile) => SourceFile)[];
+    function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]): TransformationResult;
 }
 declare namespace ts {
     function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[];
     function writeDeclarationFile(declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection): boolean;
 }
 declare namespace ts {
-    function getResolvedExternalModuleName(host: EmitHost, file: SourceFile): string;
-    function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): string;
+    interface SourceMapWriter {
+        initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void;
+        reset(): void;
+        getSourceMapData(): SourceMapData;
+        setSourceFile(sourceFile: SourceFile): void;
+        emitPos(pos: number): void;
+        emitStart(range: TextRange): void;
+        emitStart(range: TextRange, contextNode: Node, ignoreNodeCallback: (node: Node) => boolean, ignoreChildrenCallback: (node: Node) => boolean, getTextRangeCallbackCallback: (node: Node) => TextRange): void;
+        emitEnd(range: TextRange): void;
+        emitEnd(range: TextRange, contextNode: Node, ignoreNodeCallback: (node: Node) => boolean, ignoreChildrenCallback: (node: Node) => boolean, getTextRangeCallbackCallback: (node: Node) => TextRange): void;
+        emitTokenStart(token: SyntaxKind, tokenStartPos: number): number;
+        emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode: Node, ignoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback: (node: Node, token: SyntaxKind) => TextRange): number;
+        emitTokenEnd(token: SyntaxKind, tokenEndPos: number): number;
+        emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode: Node, ignoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback: (node: Node, token: SyntaxKind) => TextRange): number;
+        changeEmitSourcePos(): void;
+        stopOverridingSpan(): void;
+        getText(): string;
+        getSourceMappingURL(): string;
+    }
+    function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter): SourceMapWriter;
+    function getNullSourceMapWriter(): SourceMapWriter;
+}
+declare namespace ts {
+    interface CommentWriter {
+        reset(): void;
+        setSourceFile(sourceFile: SourceFile): void;
+        emitNodeWithComments(node: Node, emitCallback: (node: Node) => void): void;
+        emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void): void;
+        emitTrailingCommentsOfPosition(pos: number): void;
+    }
+    function createCommentWriter(host: EmitHost, writer: EmitTextWriter, sourceMap: SourceMapWriter): CommentWriter;
+}
+declare namespace ts {
     function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult;
 }
 declare namespace ts {
-    let programTime: number;
-    let emitTime: number;
-    let ioReadTime: number;
-    let ioWriteTime: number;
     const version: string;
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
@@ -8388,7 +8952,6 @@ declare namespace ts.server {
     class ScriptInfo {
         private host;
         fileName: string;
-        content: string;
         isOpen: boolean;
         svc: ScriptVersionCache;
         children: ScriptInfo[];
@@ -8729,7 +9292,7 @@ declare namespace ts {
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
-        getDirectories(path: string): string[];
+        getDirectories(path: string): string;
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
         getProjectVersion?(): string;

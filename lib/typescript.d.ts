@@ -316,9 +316,13 @@ declare namespace ts {
         JSDocPropertyTag = 280,
         JSDocTypeLiteral = 281,
         SyntaxList = 282,
-        Count = 283,
+        NotEmittedStatement = 283,
+        PartiallyEmittedExpression = 284,
+        Count = 285,
         FirstAssignment = 56,
         LastAssignment = 68,
+        FirstCompoundAssignment = 57,
+        LastCompoundAssignment = 68,
         FirstReservedWord = 70,
         LastReservedWord = 105,
         FirstKeyword = 70,
@@ -347,6 +351,38 @@ declare namespace ts {
     }
     enum NodeFlags {
         None = 0,
+        Let = 1,
+        Const = 2,
+        NestedNamespace = 4,
+        Synthesized = 8,
+        Namespace = 16,
+        ExportContext = 32,
+        ContainsThis = 64,
+        HasImplicitReturn = 128,
+        HasExplicitReturn = 256,
+        GlobalAugmentation = 512,
+        HasClassExtends = 1024,
+        HasDecorators = 2048,
+        HasParamDecorators = 4096,
+        HasAsyncFunctions = 8192,
+        HasJsxSpreadAttributes = 16384,
+        DisallowInContext = 32768,
+        YieldContext = 65536,
+        DecoratorContext = 131072,
+        AwaitContext = 262144,
+        ThisNodeHasError = 524288,
+        JavaScriptFile = 1048576,
+        ThisNodeOrAnySubNodesHasError = 2097152,
+        HasAggregatedChildData = 4194304,
+        BlockScoped = 3,
+        ReachabilityCheckFlags = 384,
+        EmitHelperFlags = 31744,
+        ReachabilityAndEmitFlags = 32128,
+        ContextFlags = 1540096,
+        TypeExcludesFlags = 327680,
+    }
+    enum ModifierFlags {
+        None = 0,
         Export = 1,
         Ambient = 2,
         Public = 4,
@@ -357,36 +393,11 @@ declare namespace ts {
         Abstract = 128,
         Async = 256,
         Default = 512,
-        Let = 1024,
         Const = 2048,
-        Namespace = 4096,
-        ExportContext = 8192,
-        ContainsThis = 16384,
-        HasImplicitReturn = 32768,
-        HasExplicitReturn = 65536,
-        GlobalAugmentation = 131072,
-        HasClassExtends = 262144,
-        HasDecorators = 524288,
-        HasParamDecorators = 1048576,
-        HasAsyncFunctions = 2097152,
-        DisallowInContext = 4194304,
-        YieldContext = 8388608,
-        DecoratorContext = 16777216,
-        AwaitContext = 33554432,
-        ThisNodeHasError = 67108864,
-        JavaScriptFile = 134217728,
-        ThisNodeOrAnySubNodesHasError = 268435456,
-        HasAggregatedChildData = 536870912,
-        HasJsxSpreadAttribute = 1073741824,
-        Modifier = 1023,
+        HasComputedFlags = 536870912,
         AccessibilityModifier = 28,
         ParameterPropertyModifier = 92,
-        BlockScoped = 3072,
-        ReachabilityCheckFlags = 98304,
-        EmitHelperFlags = 3932160,
-        ReachabilityAndEmitFlags = 4030464,
-        ContextFlags = 197132288,
-        TypeExcludesFlags = 41943040,
+        NonPublicAccessibilityModifier = 24,
     }
     enum JsxFlags {
         None = 0,
@@ -400,10 +411,10 @@ declare namespace ts {
         kind: SyntaxKind;
         flags: NodeFlags;
         decorators?: NodeArray<Decorator>;
-        modifiers?: ModifiersArray;
+        modifiers?: NodeArray<Modifier>;
         parent?: Node;
     }
-    interface NodeArray<T> extends Array<T>, TextRange {
+    interface NodeArray<T extends Node> extends Array<T>, TextRange {
         hasTrailingComma?: boolean;
     }
     interface ModifiersArray extends NodeArray<Modifier> {
@@ -414,6 +425,9 @@ declare namespace ts {
     interface Identifier extends PrimaryExpression {
         text: string;
         originalKeywordKind?: SyntaxKind;
+    }
+    interface TransientIdentifier extends Identifier {
+        resolvedSymbol: Symbol;
     }
     interface QualifiedName extends Node {
         left: EntityName;
@@ -450,9 +464,10 @@ declare namespace ts {
     }
     interface ConstructSignatureDeclaration extends SignatureDeclaration, TypeElement {
     }
+    type BindingName = Identifier | ObjectBindingPattern | ArrayBindingPattern;
     interface VariableDeclaration extends Declaration {
         parent?: VariableDeclarationList;
-        name: Identifier | BindingPattern;
+        name: BindingName;
         type?: TypeNode;
         initializer?: Expression;
     }
@@ -461,7 +476,7 @@ declare namespace ts {
     }
     interface ParameterDeclaration extends Declaration {
         dotDotDotToken?: Node;
-        name: Identifier | BindingPattern;
+        name: BindingName;
         questionToken?: Node;
         type?: TypeNode;
         initializer?: Expression;
@@ -469,7 +484,7 @@ declare namespace ts {
     interface BindingElement extends Declaration {
         propertyName?: PropertyName;
         dotDotDotToken?: Node;
-        name: Identifier | BindingPattern;
+        name: BindingName;
         initializer?: Expression;
     }
     interface PropertySignature extends TypeElement {
@@ -688,9 +703,14 @@ declare namespace ts {
     interface LiteralExpression extends LiteralLikeNode, PrimaryExpression {
         _literalExpressionBrand: any;
     }
+    interface NumericLiteral extends LiteralExpression {
+        _numericLiteralBrand: any;
+        trailingComment?: string;
+    }
     interface TemplateLiteralFragment extends LiteralLikeNode {
         _templateLiteralFragmentBrand: any;
     }
+    type Template = TemplateExpression | LiteralExpression;
     interface TemplateExpression extends PrimaryExpression {
         head: TemplateLiteralFragment;
         templateSpans: NodeArray<TemplateSpan>;
@@ -733,7 +753,7 @@ declare namespace ts {
     }
     interface TaggedTemplateExpression extends MemberExpression {
         tag: LeftHandSideExpression;
-        template: LiteralExpression | TemplateExpression;
+        template: Template;
     }
     type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator;
     interface AsExpression extends Expression {
@@ -763,9 +783,10 @@ declare namespace ts {
         _selfClosingElementBrand?: any;
     }
     type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
+    type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
     interface JsxAttribute extends Node {
         name: Identifier;
-        initializer?: Expression;
+        initializer?: StringLiteral | JsxExpression;
     }
     interface JsxSpreadAttribute extends Node {
         expression: Expression;
@@ -814,17 +835,18 @@ declare namespace ts {
     interface WhileStatement extends IterationStatement {
         expression: Expression;
     }
+    type ForInitializer = VariableDeclarationList | Expression;
     interface ForStatement extends IterationStatement {
-        initializer?: VariableDeclarationList | Expression;
+        initializer?: ForInitializer;
         condition?: Expression;
         incrementor?: Expression;
     }
     interface ForInStatement extends IterationStatement {
-        initializer: VariableDeclarationList | Expression;
+        initializer: ForInitializer;
         expression: Expression;
     }
     interface ForOfStatement extends IterationStatement {
-        initializer: VariableDeclarationList | Expression;
+        initializer: ForInitializer;
         expression: Expression;
     }
     interface BreakStatement extends Statement {
@@ -910,7 +932,7 @@ declare namespace ts {
         type: TypeNode;
     }
     interface EnumMember extends Declaration {
-        name: DeclarationName;
+        name: PropertyName;
         initializer?: Expression;
     }
     interface EnumDeclaration extends DeclarationStatement {
@@ -918,6 +940,7 @@ declare namespace ts {
         members: NodeArray<EnumMember>;
     }
     type ModuleBody = ModuleBlock | ModuleDeclaration;
+    type ModuleName = Identifier | StringLiteral;
     interface ModuleDeclaration extends DeclarationStatement {
         name: Identifier | LiteralExpression;
         body?: ModuleBlock | ModuleDeclaration;
@@ -925,9 +948,10 @@ declare namespace ts {
     interface ModuleBlock extends Node, Statement {
         statements: NodeArray<Statement>;
     }
+    type ModuleReference = EntityName | ExternalModuleReference;
     interface ImportEqualsDeclaration extends DeclarationStatement {
         name: Identifier;
-        moduleReference: EntityName | ExternalModuleReference;
+        moduleReference: ModuleReference;
     }
     interface ExternalModuleReference extends Node {
         expression?: Expression;
@@ -936,9 +960,10 @@ declare namespace ts {
         importClause?: ImportClause;
         moduleSpecifier: Expression;
     }
+    type NamedImportBindings = NamespaceImport | NamedImports;
     interface ImportClause extends Declaration {
         name?: Identifier;
-        namedBindings?: NamespaceImport | NamedImports;
+        namedBindings?: NamedImportBindings;
     }
     interface NamespaceImport extends Declaration {
         name: Identifier;
@@ -1548,6 +1573,7 @@ declare namespace ts {
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
+        importHelpers?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
@@ -1708,6 +1734,7 @@ declare namespace ts {
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+        getEnvironmentVariable?(name: string): string;
     }
     interface TextSpan {
         start: number;
@@ -1804,6 +1831,10 @@ declare namespace ts {
     function isWhiteSpaceSingleLine(ch: number): boolean;
     function isLineBreak(ch: number): boolean;
     function couldStartTrivia(text: string, pos: number): boolean;
+    function forEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: T) => U, state?: T): U;
+    function forEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: T) => U, state?: T): U;
+    function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U): U;
+    function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U): U;
     function getLeadingCommentRanges(text: string, pos: number): CommentRange[];
     function getTrailingCommentRanges(text: string, pos: number): CommentRange[];
     /** Optionally, get the shebang */
