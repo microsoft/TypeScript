@@ -42,7 +42,7 @@ async function f() {
 >await d : number | string
 >d : number | PromiseLike<string>
 
-	let await_e = await e; 
+	let await_e = await e;
 >await_e : number | string
 >await e : number | string
 >e : number | PromiseLike<number | string>

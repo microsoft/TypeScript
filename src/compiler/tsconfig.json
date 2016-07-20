@@ -23,6 +23,7 @@
         "transformers/jsx.ts",
         "transformers/es7.ts",
         "transformers/es6.ts",
+        "transformers/generators.ts",
         "transformers/destructuring.ts",
         "transformers/module/module.ts",
         "transformers/module/system.ts",

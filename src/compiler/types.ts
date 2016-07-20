@@ -359,6 +359,8 @@ namespace ts {
         // Markers
         FirstAssignment = EqualsToken,
         LastAssignment = CaretEqualsToken,
+        FirstCompoundAssignment = PlusEqualsToken,
+        LastCompoundAssignment = CaretEqualsToken,
         FirstReservedWord = BreakKeyword,
         LastReservedWord = WithKeyword,
         FirstKeyword = BreakKeyword,
@@ -975,11 +977,16 @@ namespace ts {
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
     // or any literal of a template, this means quotes have been removed and escapes have been converted to actual characters.
     // For a NumericLiteral, the stored value is the toString() representation of the number. For example 1, 1.00, and 1e0 are all stored as just "1".
-    // @kind(SyntaxKind.NumericLiteral)
     // @kind(SyntaxKind.RegularExpressionLiteral)
     // @kind(SyntaxKind.NoSubstitutionTemplateLiteral)
     export interface LiteralExpression extends LiteralLikeNode, PrimaryExpression {
         _literalExpressionBrand: any;
+    }
+
+    // @kind(SyntaxKind.NumericLiteral)
+    export interface NumericLiteral extends LiteralExpression {
+        _numericLiteralBrand: any;
+        trailingComment?: string;
     }
 
     // @kind(SyntaxKind.TemplateHead)
@@ -2058,12 +2065,13 @@ namespace ts {
                                             // function that can be reached at runtime (e.g. a `class`
                                             // declaration or a `var` declaration for the static side
                                             // of a type, such as the global `Promise` type in lib.d.ts).
-        VoidType,                           // The TypeReferenceNode resolves to a Void-like type.
+        VoidNullableOrNeverType,            // The TypeReferenceNode resolves to a Void-like, Nullable, or Never type.
         NumberLikeType,                     // The TypeReferenceNode resolves to a Number-like type.
         StringLikeType,                     // The TypeReferenceNode resolves to a String-like type.
         BooleanType,                        // The TypeReferenceNode resolves to a Boolean-like type.
         ArrayLikeType,                      // The TypeReferenceNode resolves to an Array-like type.
         ESSymbolType,                       // The TypeReferenceNode resolves to the ESSymbol type.
+        Promise,                            // The TypeReferenceNode resolved to the global Promise constructor symbol.
         TypeWithCallSignature,              // The TypeReferenceNode resolves to a Function type or a type
                                             // with call signatures.
         ObjectType,                         // The TypeReferenceNode resolves to any other type.
@@ -3022,20 +3030,24 @@ namespace ts {
         ES6 = 1 << 6,
         ContainsES6 = 1 << 7,
         DestructuringAssignment = 1 << 8,
+        Generator = 1 << 9,
+        ContainsGenerator = 1 << 10,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsDecorators = 1 << 9,
-        ContainsPropertyInitializer = 1 << 10,
-        ContainsLexicalThis = 1 << 11,
-        ContainsCapturedLexicalThis = 1 << 12,
-        ContainsLexicalThisInComputedPropertyName = 1 << 13,
-        ContainsDefaultValueAssignments = 1 << 14,
-        ContainsParameterPropertyAssignments = 1 << 15,
-        ContainsSpreadElementExpression = 1 << 16,
-        ContainsComputedPropertyName = 1 << 17,
-        ContainsBlockScopedBinding = 1 << 18,
-        ContainsBindingPattern = 1 << 19,
+        ContainsDecorators = 1 << 11,
+        ContainsPropertyInitializer = 1 << 12,
+        ContainsLexicalThis = 1 << 13,
+        ContainsCapturedLexicalThis = 1 << 14,
+        ContainsLexicalThisInComputedPropertyName = 1 << 15,
+        ContainsDefaultValueAssignments = 1 << 16,
+        ContainsParameterPropertyAssignments = 1 << 17,
+        ContainsSpreadElementExpression = 1 << 18,
+        ContainsComputedPropertyName = 1 << 19,
+        ContainsBlockScopedBinding = 1 << 20,
+        ContainsBindingPattern = 1 << 21,
+        ContainsYield = 1 << 22,
+        ContainsHoistedDeclarationOrCompletion = 1 << 23,
 
         HasComputedFlags = 1 << 29, // Transform flags have been computed.
 
@@ -3045,17 +3057,18 @@ namespace ts {
         AssertJsx = Jsx | ContainsJsx,
         AssertES7 = ES7 | ContainsES7,
         AssertES6 = ES6 | ContainsES6,
+        AssertGenerator = Generator | ContainsGenerator,
 
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
-        NodeExcludes = TypeScript | Jsx | ES7 | ES6 | DestructuringAssignment | HasComputedFlags,
-        ArrowFunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding,
-        FunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding,
-        ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
-        MethodOrAccessorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
+        NodeExcludes = TypeScript | Jsx | ES7 | ES6 | DestructuringAssignment | Generator | HasComputedFlags,
+        ArrowFunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
+        FunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
+        ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
+        MethodOrAccessorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
         ClassExcludes = NodeExcludes | ContainsDecorators | ContainsPropertyInitializer | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsParameterPropertyAssignments | ContainsLexicalThisInComputedPropertyName,
-        ModuleExcludes = NodeExcludes | ContainsDecorators | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
+        ModuleExcludes = NodeExcludes | ContainsDecorators | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsHoistedDeclarationOrCompletion,
         TypeExcludes = ~ContainsTypeScript,
         ObjectLiteralExcludes = NodeExcludes | ContainsDecorators | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName,
         ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsSpreadElementExpression,
@@ -3093,14 +3106,17 @@ namespace ts {
         ExportName = 1 << 17,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
         LocalName = 1 << 18,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
         Indented = 1 << 19,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
-        NoIndentation = 1 << 20,                    // Do not indent the node.
+        NoIndentation = 1 << 20,                 // Do not indent the node.
+        AsyncFunctionBody = 1 << 21,
+        ReuseTempVariableScope = 1 << 22,        // Reuse the existing temp variable scope during emit.
+        CustomPrologue = 1 << 23,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
 
         // SourceMap Specialization.
         // TODO(rbuckton): These should be removed once source maps are aligned with the old
         //                 emitter and new baselines are taken. This exists solely to
         //                 align with the old emitter.
-        SourceMapEmitOpenBraceAsToken = 1 << 21,        // Emits the open brace of a block function body as a source mapped token.
-        SourceMapAdjustRestParameterLoop = 1 << 22,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
+        SourceMapEmitOpenBraceAsToken = 1 << 24,        // Emits the open brace of a block function body as a source mapped token.
+        SourceMapAdjustRestParameterLoop = 1 << 25,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
     }
 
     /** Additional context provided to `visitEachChild` */

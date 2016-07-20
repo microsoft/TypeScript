@@ -149,6 +149,7 @@ namespace ts {
         let getGlobalESSymbolConstructorSymbol: () => Symbol;
 
         let getGlobalPromiseConstructorSymbol: () => Symbol;
+        let tryGetGlobalPromiseConstructorSymbol: () => Symbol;
 
         let globalObjectType: ObjectType;
         let globalFunctionType: ObjectType;
@@ -8337,9 +8338,12 @@ namespace ts {
             // can explicitly bound arguments objects
             if (symbol === argumentsSymbol) {
                 const container = getContainingFunction(node);
-                if (container.kind === SyntaxKind.ArrowFunction) {
-                    if (languageVersion < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6) {
+                    if (container.kind === SyntaxKind.ArrowFunction) {
                         error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
+                    }
+                    else if (hasModifier(container, ModifierFlags.Async)) {
+                        error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_async_function_or_method_in_ES3_and_ES5_Consider_using_a_standard_function_or_method);
                     }
                 }
 
@@ -12991,7 +12995,7 @@ namespace ts {
             return type;
         }
 
-        function checkNumericLiteral(node: LiteralExpression): Type {
+        function checkNumericLiteral(node: NumericLiteral): Type {
             // Grammar checking
             checkGrammarNumericLiteral(node);
             return numberType;
@@ -13011,7 +13015,7 @@ namespace ts {
                 case SyntaxKind.FalseKeyword:
                     return booleanType;
                 case SyntaxKind.NumericLiteral:
-                    return checkNumericLiteral(<LiteralExpression>node);
+                    return checkNumericLiteral(<NumericLiteral>node);
                 case SyntaxKind.TemplateExpression:
                     return checkTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.StringLiteral:
@@ -14194,7 +14198,7 @@ namespace ts {
          * @param returnType The return type of a FunctionLikeDeclaration
          * @param location The node on which to report the error.
          */
-        function checkCorrectPromiseType(returnType: Type, location: Node) {
+        function checkCorrectPromiseType(returnType: Type, location: Node, diagnostic: DiagnosticMessage, typeName?: string) {
             if (returnType === unknownType) {
                 // The return type already had some other error, so we ignore and return
                 // the unknown type.
@@ -14213,7 +14217,7 @@ namespace ts {
 
             // The promise type was not a valid type reference to the global promise type, so we
             // report an error and return the unknown type.
-            error(location, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type);
+            error(location, diagnostic, typeName);
             return unknownType;
         }
 
@@ -14233,7 +14237,7 @@ namespace ts {
         function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration): Type {
             if (languageVersion >= ScriptTarget.ES6) {
                 const returnType = getTypeFromTypeNode(node.type);
-                return checkCorrectPromiseType(returnType, node.type);
+                return checkCorrectPromiseType(returnType, node.type, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type);
             }
 
             const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType();
@@ -14279,11 +14283,11 @@ namespace ts {
 
             const promiseConstructor = getNodeLinks(node.type).resolvedSymbol;
             if (!promiseConstructor || !symbolIsValue(promiseConstructor)) {
+                // try to fall back to global promise type.
                 const typeName = promiseConstructor
                     ? symbolToString(promiseConstructor)
                     : typeToString(promiseType);
-                error(node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeName);
-                return unknownType;
+                return checkCorrectPromiseType(promiseType, node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeName);
             }
 
             // If the Promise constructor, resolved locally, is an alias symbol we should mark it as referenced.
@@ -14291,7 +14295,7 @@ namespace ts {
 
             // Validate the promise constructor type.
             const promiseConstructorType = getTypeOfSymbol(promiseConstructor);
-            if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type)) {
+            if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type)) {
                 return unknownType;
             }
 
@@ -16272,7 +16276,7 @@ namespace ts {
                             }
                             return undefined;
                         case SyntaxKind.NumericLiteral:
-                            return +(<LiteralExpression>e).text;
+                            return +(<NumericLiteral>e).text;
                         case SyntaxKind.ParenthesizedExpression:
                             return evalConstant((<ParenthesizedExpression>e).expression);
                         case SyntaxKind.Identifier:
@@ -17491,7 +17495,7 @@ namespace ts {
                         if (objectType === unknownType) return undefined;
                         const apparentType = getApparentType(objectType);
                         if (apparentType === unknownType) return undefined;
-                        return getPropertyOfType(apparentType, (<LiteralExpression>node).text);
+                        return getPropertyOfType(apparentType, (<NumericLiteral>node).text);
                     }
                     break;
             }
@@ -17976,6 +17980,11 @@ namespace ts {
         function getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind {
             // Resolve the symbol as a value to ensure the type can be reached at runtime during emit.
             const valueSymbol = resolveEntityName(typeName, SymbolFlags.Value, /*ignoreErrors*/ true, /*dontResolveAlias*/ false, location);
+            const globalPromiseSymbol = tryGetGlobalPromiseConstructorSymbol();
+            if (globalPromiseSymbol && valueSymbol === globalPromiseSymbol) {
+                return TypeReferenceSerializationKind.Promise;
+            }
+
             const constructorType = valueSymbol ? getTypeOfSymbol(valueSymbol) : undefined;
             if (constructorType && isConstructorType(constructorType)) {
                 return TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue;
@@ -17994,8 +18003,8 @@ namespace ts {
             else if (type.flags & TypeFlags.Any) {
                 return TypeReferenceSerializationKind.ObjectType;
             }
-            else if (isTypeOfKind(type, TypeFlags.Void)) {
-                return TypeReferenceSerializationKind.VoidType;
+            else if (isTypeOfKind(type, TypeFlags.Void | TypeFlags.Nullable | TypeFlags.Never)) {
+                return TypeReferenceSerializationKind.VoidNullableOrNeverType;
             }
             else if (isTypeOfKind(type, TypeFlags.Boolean)) {
                 return TypeReferenceSerializationKind.BooleanType;
@@ -18293,6 +18302,7 @@ namespace ts {
             getGlobalPromiseLikeType = memoize(() => getGlobalType("PromiseLike", /*arity*/ 1));
             getInstantiatedGlobalPromiseLikeType = memoize(createInstantiatedPromiseLikeType);
             getGlobalPromiseConstructorSymbol = memoize(() => getGlobalValueSymbol("Promise"));
+            tryGetGlobalPromiseConstructorSymbol = memoize(() => getGlobalSymbol("Promise", SymbolFlags.Value, /*diagnostic*/ undefined) && getGlobalPromiseConstructorSymbol());
             getGlobalPromiseConstructorLikeType = memoize(() => getGlobalType("PromiseConstructorLike"));
             getGlobalThenableType = memoize(createThenableType);
 
@@ -18348,6 +18358,9 @@ namespace ts {
                     }
                     if (requestedExternalEmitHelpers & NodeFlags.HasAsyncFunctions) {
                         verifyHelperSymbol(exports, "__awaiter", SymbolFlags.Value);
+                        if (languageVersion < ScriptTarget.ES6) {
+                            verifyHelperSymbol(exports, "__generator", SymbolFlags.Value);
+                        }
                     }
                 }
             }
@@ -18654,10 +18667,6 @@ namespace ts {
         }
 
         function checkGrammarAsyncModifier(node: Node, asyncModifier: Node): boolean {
-            if (languageVersion < ScriptTarget.ES6) {
-                return grammarErrorOnNode(asyncModifier, Diagnostics.Async_functions_are_only_available_when_targeting_ECMAScript_2015_or_higher);
-            }
-
             switch (node.kind) {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.FunctionDeclaration:
@@ -18967,7 +18976,7 @@ namespace ts {
                     // Grammar checking for computedPropertyName and shorthandPropertyAssignment
                     checkGrammarForInvalidQuestionMark(prop, (<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                     if (name.kind === SyntaxKind.NumericLiteral) {
-                        checkGrammarNumericLiteral(<LiteralExpression>name);
+                        checkGrammarNumericLiteral(<NumericLiteral>name);
                     }
                     currentKind = Property;
                 }
@@ -19489,7 +19498,7 @@ namespace ts {
             }
         }
 
-        function checkGrammarNumericLiteral(node: LiteralExpression): boolean {
+        function checkGrammarNumericLiteral(node: NumericLiteral): boolean {
             // Grammar checking
             if (node.isOctalLiteral && languageVersion >= ScriptTarget.ES5) {
                 return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
