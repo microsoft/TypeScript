@@ -436,15 +436,6 @@ namespace ts {
             type: "boolean",
             description: Diagnostics.Enable_strict_null_checks
         },
-        {
-            name: "profileExtensions",
-            type: {
-                "none": ProfileLevel.None,
-                "summary": ProfileLevel.Summary,
-                "full": ProfileLevel.Full,
-            },
-            description: Diagnostics.Set_extension_profiling_level_Colon,
-        }
     ];
 
     /* @internal */

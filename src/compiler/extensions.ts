@@ -141,12 +141,11 @@ namespace ts {
         kind: ExtensionKind;
     }
 
-    export type Timestamp = number & { __timestampBrand: void };
     export interface ProfileData {
         globalBucket: string;
         task: string;
-        start: Timestamp;
-        length?: Timestamp;
+        start: number;
+        length?: number;
     }
 
     export interface SyntacticLintExtension extends ExtensionBase {
@@ -187,34 +186,6 @@ namespace ts {
         getCompilerExtensions(): ExtensionCollectionMap;
     }
 
-    function profileTrace(trace: (s: string) => void | undefined, message: DiagnosticMessage, ...args: any[]) {
-        if (trace) {
-            trace(flattenDiagnosticMessageText(createCompilerDiagnostic(message, ...args).messageText, (sys && sys.newLine || "\n")));
-        }
-    }
-
-    declare var performance: { now?(): number }; // If we're running in a context with high resolution timers, make use of them
-    declare var process: { hrtime?(start?: [number, number]): [number, number] };
-
-    function getTimestampInternal(): number {
-        if (typeof performance !== "undefined" && performance.now) {
-            return performance.now();
-        }
-        if (typeof process !== "undefined" && process.hrtime) {
-            const time = process.hrtime();
-            return (time[0] * 1e9 + time[1]) / 1e6;
-        }
-        return +(new Date());
-    }
-
-    export function getTimestampMs(since?: Timestamp): Timestamp {
-        if (typeof since !== "number") {
-            return getTimestampInternal() as Timestamp;
-        }
-
-        return (getTimestampInternal() - since) as Timestamp;
-    }
-
     export const perfTraces: Map<ProfileData> = {};
 
     function getExtensionRootName(qualifiedName: string) {
@@ -225,33 +196,34 @@ namespace ts {
         return `${task}|${qualifiedName}`;
     }
 
-    export function startProfile(key: string, bucket?: string) {
+    export function startProfile(enabled: boolean, key: string, bucket?: string) {
+        if (!enabled) return;
+        performance.emit(`start|${key}`);
         perfTraces[key] = {
             task: key,
-            start: getTimestampMs(),
+            start: performance.mark(),
             length: undefined,
             globalBucket: bucket
         };
     }
 
-    export function completeProfile(key: string) {
+    export function completeProfile(enabled: boolean, key: string) {
+        if (!enabled) return;
         Debug.assert(!!perfTraces[key], "Completed profile did not have a corresponding start.");
-        perfTraces[key].length = getTimestampMs(perfTraces[key].start);
+        perfTraces[key].length = performance.measure(perfTraces[key].globalBucket, perfTraces[key].start);
+        performance.emit(`end|${key}`);
     }
 
-    export function startExtensionProfile(level: ProfileLevel, qualifiedName: string, task: string, trace?: (s: string) => void) {
-        if (!level) return;
-        if (level >= ProfileLevel.Full) profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_begin_1, qualifiedName, task);
+    export function startExtensionProfile(enabled: boolean, qualifiedName: string, task: string) {
+        if (!enabled) return;
         const longTask = createTaskName(qualifiedName, task);
-        startProfile(longTask, getExtensionRootName(qualifiedName));
+        startProfile(/*enabled*/true, longTask, getExtensionRootName(qualifiedName));
     }
 
-    export function completeExtensionProfile(level: ProfileLevel, qualifiedName: string, task: string, trace?: (s: string) => void) {
-        if (!level) return;
+    export function completeExtensionProfile(enabled: boolean, qualifiedName: string, task: string) {
+        if (!enabled) return;
         const longTask = createTaskName(qualifiedName, task);
-        completeProfile(longTask);
-
-        if (level >= ProfileLevel.Full) profileTrace(trace, Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, qualifiedName, task, perfTraces[longTask].length.toPrecision(5));
+        completeProfile(/*enabled*/true, longTask);
     }
 
     export function createExtensionCache(options: CompilerOptions, host: ExtensionHost, resolvedExtensionNames?: Map<string>): ExtensionCache {
@@ -278,10 +250,6 @@ namespace ts {
         };
         return cache;
 
-        function trace(message: DiagnosticMessage, ...args: any[]) {
-            profileTrace(host.trace, message, ...args);
-        }
-
         function resolveExtensionNames(): Map<string> {
             const currentDirectory = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
             const extMap: Map<string> = {};
@@ -295,7 +263,7 @@ namespace ts {
         }
 
         function collectCompilerExtensions(): ExtensionCollectionMap {
-            const profileLevel = options.profileExtensions;
+            const profilingEnabled = options.extendedDiagnostics;
             const extensionLoadResults = map(extensionNames, (name) => {
                 const resolved = resolvedExtensionNames[name];
                 let result: any;
@@ -305,15 +273,9 @@ namespace ts {
                 }
                 if (resolved && host.loadExtension) {
                     try {
-                        if (profileLevel) {
-                            startProfile(name, name);
-                            if (profileLevel >= ProfileLevel.Full) trace(Diagnostics.PROFILE_Colon_Extension_0_begin_1, name, "load");
-                        }
+                        startProfile(profilingEnabled, name, name);
                         result = host.loadExtension(resolved);
-                        if (profileLevel) {
-                            completeProfile(name);
-                            if (profileLevel >= ProfileLevel.Full) trace(Diagnostics.PROFILE_Colon_Extension_0_end_1_2_ms, name, "load", perfTraces[name].length.toPrecision(5));
-                        }
+                        completeProfile(profilingEnabled, name);
                     }
                     catch (e) {
                         error = e;

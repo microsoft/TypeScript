@@ -1535,29 +1535,29 @@ namespace ts {
             const diagnostics: Diagnostic[] = [];
             let activeLint: UniqueLint;
             let parent: Node | undefined = undefined;
-            const profileLevel = options.profileExtensions;
+            const profilingEnabled = options.extendedDiagnostics;
             for (const {name, args, ctor} of lints) {
                 let walker: LintWalker;
                 if (kind === ExtensionKind.SemanticLint) {
                     const checker = getTypeChecker();
-                    startExtensionProfile(profileLevel, name, "construct", host.trace);
+                    startExtensionProfile(profilingEnabled, name, "construct");
                     try {
                         walker = new (ctor as SemanticLintProviderStatic)({ ts, checker, args, host, program });
                     }
                     catch (e) {
                         diagnostics.push(createExtensionDiagnostic(name, `Lint construction failed: ${(e as Error).message}`, sourceFile, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
                     }
-                    completeExtensionProfile(profileLevel, name, "construct", host.trace);
+                    completeExtensionProfile(profilingEnabled, name, "construct");
                 }
                 else if (kind === ExtensionKind.SyntacticLint) {
-                    startExtensionProfile(profileLevel, name, "construct", host.trace);
+                    startExtensionProfile(profilingEnabled, name, "construct");
                     try {
                         walker = new (ctor as SyntacticLintProviderStatic)({ ts, args, host, program });
                     }
                     catch (e) {
                         diagnostics.push(createExtensionDiagnostic(name, `Lint construction failed: ${(e as Error).message}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
                     }
-                    completeExtensionProfile(profileLevel, name, "construct", host.trace);
+                    completeExtensionProfile(profilingEnabled, name, "construct");
                 }
                 if (walker) initializedLints.push({ name, walker, accepted: true, errored: false });
             }
@@ -1577,7 +1577,7 @@ namespace ts {
                     activeLint = initializedLints[i];
                     if (activeLint.accepted) {
                         if (!activeLint.errored) {
-                            startExtensionProfile(profileLevel, activeLint.name, `visitNode|${nodesVisited}`, host.trace);
+                            startExtensionProfile(profilingEnabled, activeLint.name, `visitNode|${nodesVisited}`);
                             try {
                                 activeLint.accepted = !activeLint.walker.visit(node, error);
                             }
@@ -1585,7 +1585,7 @@ namespace ts {
                                 activeLint.errored = true;
                                 diagnostics.push(createExtensionDiagnostic(errorQualifiedName("!!!"), `visit failed with error: ${e}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
                             }
-                            completeExtensionProfile(profileLevel, activeLint.name, `visitNode|${nodesVisited}`, host.trace);
+                            completeExtensionProfile(profilingEnabled, activeLint.name, `visitNode|${nodesVisited}`);
                         }
                         if (activeLint.accepted) {
                             oneAccepted = true;

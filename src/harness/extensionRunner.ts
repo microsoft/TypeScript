@@ -328,7 +328,7 @@ class ExtensionRunner extends RunnerBase {
                     let sources: ts.Map<string>;
                     let result: Harness.Compiler.CompilerResult;
                     before(() => {
-                        this.traces = []; // Clear out any traces from tests which made traces, but didn't specify traceResolution or profileExtensions
+                        this.traces = []; // Clear out any traces from tests which made traces, but didn't specify traceResolution
                         this.virtualFs = {}; // In case a fourslash test was run last (which doesn't clear FS on end like buildMap does), clear the FS
                         sources = {};
                         ts.copyMap(inputSources, sources);
@@ -353,7 +353,7 @@ class ExtensionRunner extends RunnerBase {
 
                     const traceTestName = `Correct traces`;
                     it(traceTestName, () => {
-                        if (!(testConfig.compilerOptions.traceResolution || testConfig.compilerOptions.profileExtensions)) {
+                        if (!(testConfig.compilerOptions.traceResolution)) {
                             return;
                         }
                         Harness.Baseline.runBaseline(traceTestName, `${name}/${shortCasePath}.trace.txt`, (): string => {

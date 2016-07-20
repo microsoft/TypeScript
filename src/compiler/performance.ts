@@ -54,10 +54,11 @@ namespace ts {
          * @param measureName The name of the performance measurement.
          * @param marker The timestamp of the starting mark.
          */
-        export function measure(measureName: string, marker: number) {
+        export function measure(measureName: string, marker: number): number {
             if (measures) {
-                measures[measureName] = (getProperty(measures, measureName) || 0) + (Date.now() - marker);
+                return measures[measureName] = (getProperty(measures, measureName) || 0) + (Date.now() - marker);
             }
+            return 0;
         }
 
         /**
