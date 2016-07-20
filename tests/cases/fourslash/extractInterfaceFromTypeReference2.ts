@@ -8,7 +8,9 @@
 //// }
 
 
-verify.codeRefactor([{
+verify.codeRefactor({
+    description: "Extract Interface from Variable",
+    expectedFileChanges: [{
     fileName: "file1.ts",
     expectedText:`
 namespace n1 {
@@ -20,4 +22,4 @@ var y:newInterface_y = {
 }
 }
 `
-}]);
+}]});

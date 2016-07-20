@@ -7,7 +7,9 @@
 ////    }/*1*/, x1 = 0;
 
 
-verify.codeRefactor([{
+verify.codeRefactor({
+    description: "Extract Interface from Variable",
+    expectedFileChanges: [{
     fileName: "file1.ts",
     expectedText:`
 interface newInterface_y {
@@ -19,4 +21,4 @@ var y:newInterface_y = {
     x : 0
 }, x1 = 0;
 `
-}]);
+}]});

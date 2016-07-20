@@ -52,7 +52,7 @@ namespace ts.codeRefactor {
     });
 
     registerCodeRefactor({
-        name: "Extract Interface from Variable Declaration",
+        name: "Extract Interface from Variable",
         nodeLabel: ts.SyntaxKind.VariableDeclaration,
         getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
             if (token.kind == SyntaxKind.VariableDeclaration) {

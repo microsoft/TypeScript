@@ -14,7 +14,9 @@
 ////    }
 //// }
 
-verify.codeRefactor([{
+verify.codeRefactor({
+  description: "Invert If and Else Condition",
+  expectedFileChanges: [{
   fileName: "file1.ts",
   expectedText:`
 function f1() {
@@ -30,4 +32,4 @@ function f1() {
    }
 }
 `
-}]);
+}]});

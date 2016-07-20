@@ -93,9 +93,14 @@ namespace FourSlash {
         end: number;
     }
 
-    export interface ExpectedOutput {
+    export interface ExpectedFileChanges {
         fileName: string;
         expectedText: string;
+    }
+
+    export interface ExpectedOutput {
+        description: string;
+        expectedFileChanges: ExpectedFileChanges[];
     }
 
     export import IndentStyle = ts.IndentStyle;
@@ -2025,7 +2030,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyCodeRefactor(expected: ExpectedOutput[]) {
+        public verifyCodeRefactor(expected: ExpectedOutput) {
             const markers = this.getMarkers();
             if (markers.length !== 2) {
                 this.raiseError("Markers expected.");
@@ -2036,32 +2041,36 @@ namespace FourSlash {
                 this.raiseError("No codefixes returned.");
             }
 
-            if (actual.length > 1) {
-                this.raiseError("More than 1 codefix returned.");
+            let actualIndex = -1;
+            for (let i = 0; i < actual.length; i++) {
+                if (actual[i].description === expected.description) {
+                    actualIndex = i;
+                    break;
+                }
             }
 
             for (const file of this.testData.files) {
                 const fileName = file.fileName;
 
                 let i = 0;
-                for (; i < actual[0].changes.length; i++) {
-                    if (actual[0].changes[i].fileName === fileName) {
+                for (; i < actual[actualIndex].changes.length; i++) {
+                    if (actual[actualIndex].changes[i].fileName === fileName) {
                         break;
                     }
                 }
 
-                this.applyEdits(fileName, actual[0].changes[i].textChanges, /*isFormattingEdit*/ false);
+                this.applyEdits(fileName, actual[actualIndex].changes[i].textChanges, /*isFormattingEdit*/ false);
                 const actualText = this.getFileContent(fileName);
 
                 i = 0;
-                for (; i < expected.length; i++) {
-                    if (this.isFileNameMatch(fileName, expected[i].fileName)) {
+                for (; i < expected.expectedFileChanges.length; i++) {
+                    if (this.isFileNameMatch(fileName, expected.expectedFileChanges[i].fileName)) {
                         break;
                     }
                 }
 
-                if (this.removeWhitespace(expected[i].expectedText) !== this.removeWhitespace(actualText)) {
-                    this.raiseError(`Expected insertion: '${expected[i].expectedText}', actual insertion '${actualText}'.`);
+                if (this.removeWhitespace(expected.expectedFileChanges[i].expectedText) !== this.removeWhitespace(actualText)) {
+                    this.raiseError(`Expected insertion: '${expected.expectedFileChanges[i].expectedText}', actual insertion '${actualText}'.`);
                 }
             }
         }
@@ -3169,7 +3178,7 @@ namespace FourSlashInterface {
             this.state.verifyNavigationItemsCount(count, searchValue, matchKind);
         }
 
-        public codeRefactor(expected: FourSlash.ExpectedOutput[]) {
+        public codeRefactor(expected: FourSlash.ExpectedOutput) {
             this.state.verifyCodeRefactor(expected);
         }
 

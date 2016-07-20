@@ -97,9 +97,13 @@ declare namespace FourSlashInterface {
         start: number;
         end: number;
     }
-    interface ExpectedOutput {
+    interface ExpectedFileChanges {
         fileName: string;
         expectedText: string;
+    }
+    interface ExpectedOutput {
+        description: string;
+        expectedFileChanges: ExpectedFileChanges[];
     }
     class test_ {
         markers(): Marker[];
@@ -231,7 +235,7 @@ declare namespace FourSlashInterface {
         getSyntacticDiagnostics(expected: string): void;
         getSemanticDiagnostics(expected: string): void;
         ProjectInfo(expected: string[]): void;
-        codeRefactor(expected: ExpectedOutput[]);
+        codeRefactor(expected: ExpectedOutput);
     }
     class edit {
         backspace(count?: number): void;

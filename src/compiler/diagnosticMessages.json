@@ -3063,5 +3063,25 @@
     "Extract Interface from Class": {
         "category": "CodeRefactor",
         "code": 100004
+    },
+    "Add JSDoc Comments to Method": {
+        "category": "CodeRefactor",
+        "code": 100005
+    },
+    "Add JSDoc Comments to Constructor": {
+        "category": "CodeRefactor",
+        "code": 100006
+    },
+    "Add JSDoc Comments to Function": {
+        "category": "CodeRefactor",
+        "code": 100007
+    },
+    "Add JSDoc Comments to Class": {
+        "category": "CodeRefactor",
+        "code": 100008
+    },
+    "Add JSDoc Comments to Module": {
+        "category": "CodeRefactor",
+        "code": 100009
     }
 }

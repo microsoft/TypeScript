@@ -7861,83 +7861,8 @@ namespace ts {
          */
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-
-            // Check if in a context where we don't want to perform any insertion
-            if (isInString(sourceFile, position) || isInComment(sourceFile, position) || hasDocComment(sourceFile, position)) {
-                return undefined;
-            }
-
-            const tokenAtPos = getTokenAtPosition(sourceFile, position);
-            const tokenStart = tokenAtPos.getStart();
-            if (!tokenAtPos || tokenStart < position) {
-                return undefined;
-            }
-
-            // TODO: add support for:
-            // - enums/enum members
-            // - interfaces
-            // - property declarations
-            // - potentially property assignments
-            let commentOwner: Node;
-            findOwner: for (commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
-                switch (commentOwner.kind) {
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.VariableStatement:
-                        break findOwner;
-                    case SyntaxKind.SourceFile:
-                        return undefined;
-                    case SyntaxKind.ModuleDeclaration:
-                        // If in walking up the tree, we hit a a nested namespace declaration,
-                        // then we must be somewhere within a dotted namespace name; however we don't
-                        // want to give back a JSDoc template for the 'b' or 'c' in 'namespace a.b.c { }'.
-                        if (commentOwner.parent.kind === SyntaxKind.ModuleDeclaration) {
-                            return undefined;
-                        }
-                        break findOwner;
-                }
-            }
-
-            if (!commentOwner || commentOwner.getStart() < position) {
-                return undefined;
-            }
-
-            const parameters = getParametersForJsDocOwningNode(commentOwner);
-            const posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
-            const lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
-
-            const indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character);
-
             const newLine = getNewLineOrDefaultFromHost(host);
-
-            let docParams = "";
-            for (let i = 0, numParams = parameters.length; i < numParams; i++) {
-                const currentName = parameters[i].name;
-                const paramName = currentName.kind === SyntaxKind.Identifier ?
-                    (<Identifier>currentName).text :
-                    "param" + i;
-
-                docParams += `${indentationStr} * @param ${paramName}${newLine}`;
-            }
-
-            // A doc comment consists of the following
-            // * The opening comment line
-            // * the first line (without a param) for the object's untagged info (this is also where the caret ends up)
-            // * the '@param'-tagged lines
-            // * TODO: other tags.
-            // * the closing comment line
-            // * if the caret was directly in front of the object, then we add an extra line and indentation.
-            const preamble = "/**" + newLine +
-                indentationStr + " * ";
-            const result =
-                preamble + newLine +
-                docParams +
-                indentationStr + " */" +
-                (tokenStart === position ? newLine + indentationStr : "");
-
-            return { newText: result, caretOffset: preamble.length };
+            return codeRefactor.getDocCommentTemplateAtPosition(sourceFile, position, newLine);
         }
 
         function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
@@ -7968,52 +7893,6 @@ namespace ts {
             }
 
             return true;
-        }
-
-        function getParametersForJsDocOwningNode(commentOwner: Node): ParameterDeclaration[] {
-            if (isFunctionLike(commentOwner)) {
-                return commentOwner.parameters;
-            }
-
-            if (commentOwner.kind === SyntaxKind.VariableStatement) {
-                const varStatement = <VariableStatement>commentOwner;
-                const varDeclarations = varStatement.declarationList.declarations;
-
-                if (varDeclarations.length === 1 && varDeclarations[0].initializer) {
-                    return getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer);
-                }
-            }
-
-            return emptyArray;
-        }
-
-        /**
-         * Digs into an an initializer or RHS operand of an assignment operation
-         * to get the parameters of an apt signature corresponding to a
-         * function expression or a class expression.
-         *
-         * @param rightHandSide the expression which may contain an appropriate set of parameters
-         * @returns the parameters of a signature found on the RHS if one exists; otherwise 'emptyArray'.
-         */
-        function getParametersFromRightHandSideOfAssignment(rightHandSide: Expression): ParameterDeclaration[] {
-            while (rightHandSide.kind === SyntaxKind.ParenthesizedExpression) {
-                rightHandSide = (<ParenthesizedExpression>rightHandSide).expression;
-            }
-
-            switch (rightHandSide.kind) {
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                    return (<FunctionExpression>rightHandSide).parameters;
-                case SyntaxKind.ClassExpression:
-                    for (const member of (<ClassExpression>rightHandSide).members) {
-                        if (member.kind === SyntaxKind.Constructor) {
-                            return (<ConstructorDeclaration>member).parameters;
-                        }
-                    }
-                    break;
-            }
-
-            return emptyArray;
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {

@@ -8,7 +8,9 @@
 ////        private f2() {}
 //// }/*1*/
 
-verify.codeRefactor([{
+verify.codeRefactor({
+    description: "Extract Interface from Class",
+    expectedFileChanges: [{
     fileName: "file1.ts",
     expectedText:`
 interface newInterface_C1 {
@@ -22,4 +24,4 @@ class C1 implements newInterface_C1{
        private f2() {}
 }
 `
-}]);
+}]});

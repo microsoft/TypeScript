@@ -13,7 +13,9 @@
 //// }
 
 
-verify.codeRefactor([{
+verify.codeRefactor({
+    description: "Extract Interface from Property",
+    expectedFileChanges: [{
     fileName: "file1.ts",
     expectedText:`
 namespace n1 {
@@ -30,4 +32,4 @@ class C1 {
 }
 }
 `
-}]);
+}]});
