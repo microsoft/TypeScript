@@ -50,6 +50,7 @@ var compilerSources = [
     "transformers/module/module.ts",
     "transformers/jsx.ts",
     "transformers/es7.ts",
+    "transformers/generators.ts",
     "transformers/es6.ts",
     "transformer.ts",
     "sourcemap.ts",
@@ -82,6 +83,7 @@ var servicesSources = [
     "transformers/module/module.ts",
     "transformers/jsx.ts",
     "transformers/es7.ts",
+    "transformers/generators.ts",
     "transformers/es6.ts",
     "transformer.ts",
     "sourcemap.ts",
@@ -747,7 +749,6 @@ function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stack
         taskConfigsFolder: taskConfigsFolder,
         stackTraceLimit: stackTraceLimit
     });
-    console.log('Running tests with config: ' + testConfigContents);
     fs.writeFileSync('test.config', testConfigContents);
 }
 

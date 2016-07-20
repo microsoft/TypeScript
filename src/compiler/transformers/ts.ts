@@ -425,7 +425,7 @@ namespace ts {
                 && (isExternalModule(node) || compilerOptions.isolatedModules)) {
                 startLexicalEnvironment();
                 const statements: Statement[] = [];
-                const statementOffset = addPrologueDirectives(statements, node.statements);
+                const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ false, visitor);
                 const externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText);
                 const externalHelpersModuleImport = createImportDeclaration(
                     createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
@@ -938,7 +938,7 @@ namespace ts {
             if (ctor.body) {
                 const statements = ctor.body.statements;
                 // add prologue directives to the list (if any)
-                const index = addPrologueDirectives(result, statements);
+                const index = addPrologueDirectives(result, statements, /*ensureUseStrict*/ false, visitor);
                 if (index === statements.length) {
                     // list contains nothing but prologue directives (or empty) - exit
                     return index;
@@ -1089,7 +1089,7 @@ namespace ts {
         function transformInitializedProperty(node: ClassExpression | ClassDeclaration, property: PropertyDeclaration, receiver: LeftHandSideExpression) {
             const propertyName = visitPropertyNameOfClassElement(property);
             const initializer = visitNode(property.initializer, visitor, isExpression);
-            const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, setNodeEmitFlags, /*location*/ propertyName);
+            const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
 
             return createAssignment(memberAccess, initializer);
         }
@@ -1776,7 +1776,7 @@ namespace ts {
                 case TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue:
                     return serializeEntityNameAsExpression(node.typeName, /*useFallback*/ false);
 
-                case TypeReferenceSerializationKind.VoidType:
+                case TypeReferenceSerializationKind.VoidNullableOrNeverType:
                     return createVoidZero();
 
                 case TypeReferenceSerializationKind.BooleanType:
@@ -1798,6 +1798,9 @@ namespace ts {
 
                 case TypeReferenceSerializationKind.TypeWithCallSignature:
                     return createIdentifier("Function");
+
+                case TypeReferenceSerializationKind.Promise:
+                    return createIdentifier("Promise");
 
                 case TypeReferenceSerializationKind.ObjectType:
                 default:
@@ -2186,11 +2189,13 @@ namespace ts {
             return transformFunctionBodyWorker(node.body);
         }
 
-        function transformFunctionBodyWorker(body: Block) {
+        function transformFunctionBodyWorker(body: Block, start = 0) {
             const savedCurrentScope = currentScope;
             currentScope = body;
             startLexicalEnvironment();
-            const visited = visitEachChild(body, visitor, context);
+
+            const statements = visitNodes(body.statements, visitor, isStatement, start);
+            const visited = updateBlock(body, statements);
             const declarations = endLexicalEnvironment();
             currentScope = savedCurrentScope;
             return mergeFunctionBodyLexicalEnvironment(visited, declarations);
@@ -2224,8 +2229,21 @@ namespace ts {
             }
         }
 
+        function getPromiseConstructor(type: TypeNode) {
+            const typeName = getEntityNameFromTypeNode(type);
+            if (typeName && isEntityName(typeName)) {
+                const serializationKind = resolver.getTypeReferenceSerializationKind(typeName);
+                if (serializationKind === TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue
+                    || serializationKind === TypeReferenceSerializationKind.Unknown) {
+                    return typeName;
+                }
+            }
+
+            return undefined;
+        }
+
         function transformAsyncFunctionBody(node: FunctionLikeDeclaration): ConciseBody | FunctionBody {
-            const promiseConstructor = languageVersion < ScriptTarget.ES6 ? getEntityNameFromTypeNode(node.type) : undefined;
+            const promiseConstructor = languageVersion < ScriptTarget.ES6 ? getPromiseConstructor(node.type) : undefined;
             const isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
             const hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
 
@@ -2238,14 +2256,14 @@ namespace ts {
 
             if (!isArrowFunction) {
                 const statements: Statement[] = [];
-
+                const statementOffset = addPrologueDirectives(statements, (<Block>node.body).statements, /*ensureUseStrict*/ false, visitor);
                 statements.push(
                     createReturn(
                         createAwaiterHelper(
                             currentSourceFileExternalHelpersModuleName,
                             hasLexicalArguments,
                             promiseConstructor,
-                            transformFunctionBodyWorker(<Block>node.body)
+                            transformFunctionBodyWorker(<Block>node.body, statementOffset)
                         )
                     )
                 );

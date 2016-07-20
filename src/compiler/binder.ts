@@ -1638,7 +1638,7 @@ namespace ts {
             }
         }
 
-        function checkStrictModeNumericLiteral(node: LiteralExpression) {
+        function checkStrictModeNumericLiteral(node: NumericLiteral) {
             if (inStrictMode && node.isOctalLiteral) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
             }
@@ -1786,7 +1786,7 @@ namespace ts {
                 case SyntaxKind.DeleteExpression:
                     return checkStrictModeDeleteExpression(<DeleteExpression>node);
                 case SyntaxKind.NumericLiteral:
-                    return checkStrictModeNumericLiteral(<LiteralExpression>node);
+                    return checkStrictModeNumericLiteral(<NumericLiteral>node);
                 case SyntaxKind.PostfixUnaryExpression:
                     return checkStrictModePostfixUnaryExpression(<PostfixUnaryExpression>node);
                 case SyntaxKind.PrefixUnaryExpression:
@@ -2568,6 +2568,7 @@ namespace ts {
         const modifierFlags = getModifierFlags(node);
         const body = node.body;
         const typeParameters = node.typeParameters;
+        const asteriskToken = node.asteriskToken;
 
         // A MethodDeclaration is TypeScript syntax if it is either async, abstract, overloaded,
         // generic, or has a decorator.
@@ -2576,6 +2577,11 @@ namespace ts {
             || (modifierFlags & (ModifierFlags.Async | ModifierFlags.Abstract))
             || (subtreeFlags & TransformFlags.ContainsDecorators)) {
             transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        // Currently, we only support generators that were originally async function bodies.
+        if (asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+            transformFlags |= TransformFlags.AssertGenerator;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -2625,7 +2631,7 @@ namespace ts {
             transformFlags = TransformFlags.AssertTypeScript;
         }
         else {
-            transformFlags = subtreeFlags;
+            transformFlags = subtreeFlags | TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
             // If a FunctionDeclaration is exported, then it is either ES6 or TypeScript syntax.
             if (modifierFlags & ModifierFlags.Export) {
@@ -2637,11 +2643,20 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertTypeScript;
             }
 
-            // If a FunctionDeclaration has an asterisk token, is exported, or its
-            // subtree has marked the container as needing to capture the lexical `this`,
-            // then this node is ES6 syntax.
-            if (asteriskToken || (subtreeFlags & TransformFlags.ES6FunctionSyntaxMask)) {
+            // If a FunctionDeclaration's subtree has marked the container as needing to capture the
+            // lexical this, or the function contains parameters with initializers, then this node is
+            // ES6 syntax.
+            if (subtreeFlags & TransformFlags.ES6FunctionSyntaxMask) {
                 transformFlags |= TransformFlags.AssertES6;
+            }
+
+            // If a FunctionDeclaration is generator function and is the body of a
+            // transformed async function, then this node can be transformed to a
+            // down-level generator.
+            // Currently we do not support transforming any other generator fucntions
+            // down level.
+            if (asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+                transformFlags |= TransformFlags.AssertGenerator;
             }
         }
 
@@ -2659,10 +2674,20 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
-        // If a FunctionExpression contains an asterisk token, or its subtree has marked the container
-        // as needing to capture the lexical this, then this node is ES6 syntax.
-        if (asteriskToken || (subtreeFlags & TransformFlags.ES6FunctionSyntaxMask)) {
+        // If a FunctionExpression's subtree has marked the container as needing to capture the
+        // lexical this, or the function contains parameters with initializers, then this node is
+        // ES6 syntax.
+        if (subtreeFlags & TransformFlags.ES6FunctionSyntaxMask) {
             transformFlags |= TransformFlags.AssertES6;
+        }
+
+        // If a FunctionExpression is generator function and is the body of a
+        // transformed async function, then this node can be transformed to a
+        // down-level generator.
+        // Currently we do not support transforming any other generator fucntions
+        // down level.
+        if (asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+            transformFlags |= TransformFlags.AssertGenerator;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -2794,7 +2819,7 @@ namespace ts {
     }
 
     function computeVariableDeclarationList(node: VariableDeclarationList, subtreeFlags: TransformFlags) {
-        let transformFlags = subtreeFlags;
+        let transformFlags = subtreeFlags | TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
         if (subtreeFlags & TransformFlags.ContainsBindingPattern) {
             transformFlags |= TransformFlags.AssertES6;
@@ -2859,9 +2884,13 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.ForOfStatement:
-            case SyntaxKind.YieldExpression:
                 // These nodes are ES6 syntax.
                 transformFlags |= TransformFlags.AssertES6;
+                break;
+
+            case SyntaxKind.YieldExpression:
+                // This node is ES6 syntax.
+                transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsYield;
                 break;
 
             case SyntaxKind.AnyKeyword:
@@ -2984,6 +3013,12 @@ namespace ts {
                     transformFlags |= TransformFlags.AssertES6;
                 }
 
+                break;
+
+            case SyntaxKind.ReturnStatement:
+            case SyntaxKind.ContinueStatement:
+            case SyntaxKind.BreakStatement:
+                transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;
                 break;
         }
 

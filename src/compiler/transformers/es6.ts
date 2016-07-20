@@ -376,6 +376,9 @@ namespace ts {
                 case SyntaxKind.TemplateExpression:
                     return visitTemplateExpression(<TemplateExpression>node);
 
+                case SyntaxKind.YieldExpression:
+                    return visitYieldExpression(<YieldExpression>node);
+
                 case SyntaxKind.SuperKeyword:
                     return visitSuperKeyword(<PrimaryExpression>node);
 
@@ -927,21 +930,27 @@ namespace ts {
             // of an initializer, we must emit that expression to preserve side effects.
             if (name.elements.length > 0) {
                 statements.push(
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createVariableDeclarationList(
-                            flattenParameterDestructuring(context, parameter, temp, visitor)
-                        )
+                    setNodeEmitFlags(
+                        createVariableStatement(
+                            /*modifiers*/ undefined,
+                            createVariableDeclarationList(
+                                flattenParameterDestructuring(context, parameter, temp, visitor)
+                            )
+                        ),
+                        NodeEmitFlags.CustomPrologue
                     )
                 );
             }
             else if (initializer) {
                 statements.push(
-                    createStatement(
-                        createAssignment(
-                            temp,
-                            visitNode(initializer, visitor, isExpression)
-                        )
+                    setNodeEmitFlags(
+                        createStatement(
+                            createAssignment(
+                                temp,
+                                visitNode(initializer, visitor, isExpression)
+                            )
+                        ),
+                        NodeEmitFlags.CustomPrologue
                     )
                 );
             }
@@ -978,7 +987,7 @@ namespace ts {
                 /*location*/ parameter
             );
             statement.startsOnNewLine = true;
-            setNodeEmitFlags(statement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoTrailingSourceMap);
+            setNodeEmitFlags(statement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoTrailingSourceMap | NodeEmitFlags.CustomPrologue);
             statements.push(statement);
         }
 
@@ -1020,16 +1029,19 @@ namespace ts {
 
             // var param = [];
             statements.push(
-                createVariableStatement(
-                    /*modifiers*/ undefined,
-                    createVariableDeclarationList([
-                        createVariableDeclaration(
-                            declarationName,
-                            /*type*/ undefined,
-                            createArrayLiteral([])
-                        )
-                    ]),
-                    /*location*/ parameter
+                setNodeEmitFlags(
+                    createVariableStatement(
+                        /*modifiers*/ undefined,
+                        createVariableDeclarationList([
+                            createVariableDeclaration(
+                                declarationName,
+                                /*type*/ undefined,
+                                createArrayLiteral([])
+                            )
+                        ]),
+                        /*location*/ parameter
+                    ),
+                    NodeEmitFlags.CustomPrologue
                 )
             );
 
@@ -1062,7 +1074,7 @@ namespace ts {
                 ])
             );
 
-            setNodeEmitFlags(forStatement, NodeEmitFlags.SourceMapAdjustRestParameterLoop);
+            setNodeEmitFlags(forStatement, NodeEmitFlags.SourceMapAdjustRestParameterLoop | NodeEmitFlags.CustomPrologue);
             startOnNewLine(forStatement);
             statements.push(forStatement);
         }
@@ -1087,7 +1099,7 @@ namespace ts {
                     ])
                 );
 
-                setNodeEmitFlags(captureThisStatement, NodeEmitFlags.NoComments);
+                setNodeEmitFlags(captureThisStatement, NodeEmitFlags.NoComments | NodeEmitFlags.CustomPrologue);
                 setSourceMapRange(captureThisStatement, node);
                 statements.push(captureThisStatement);
             }
@@ -1159,7 +1171,6 @@ namespace ts {
                     createMemberAccessForPropertyName(
                         receiver,
                         visitNode(member.name, visitor, isPropertyName),
-                        setNodeEmitFlags,
                         /*location*/ member.name
                     ),
                     func
@@ -1345,7 +1356,7 @@ namespace ts {
             if (isBlock(body)) {
                 // ensureUseStrict is false because no new prologue-directive should be added.
                 // addPrologueDirectives will simply put already-existing directives at the beginning of the target statement-array
-                statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false);
+                statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
             }
 
             addCaptureThisForNodeIfNeeded(statements, node);
@@ -1859,22 +1870,24 @@ namespace ts {
          *
          * @param node An ObjectLiteralExpression node.
          */
-        function visitObjectLiteralExpression(node: ObjectLiteralExpression): LeftHandSideExpression {
+        function visitObjectLiteralExpression(node: ObjectLiteralExpression): Expression {
             // We are here because a ComputedPropertyName was used somewhere in the expression.
             const properties = node.properties;
             const numProperties = properties.length;
 
             // Find the first computed property.
             // Everything until that point can be emitted as part of the initial object literal.
-            let numInitialNonComputedProperties = numProperties;
-            for (let i = 0, n = properties.length; i < n; i++) {
-                if (properties[i].name.kind === SyntaxKind.ComputedPropertyName) {
-                    numInitialNonComputedProperties = i;
+            let numInitialProperties = numProperties;
+            for (let i = 0; i < numProperties; i++) {
+                const property = properties[i];
+                if (property.transformFlags & TransformFlags.ContainsYield
+                    || property.name.kind === SyntaxKind.ComputedPropertyName) {
+                    numInitialProperties = i;
                     break;
                 }
             }
 
-            Debug.assert(numInitialNonComputedProperties !== numProperties);
+            Debug.assert(numInitialProperties !== numProperties);
 
             // For computed properties, we need to create a unique handle to the object
             // literal so we can modify it without risking internal assignments tainting the object.
@@ -1887,7 +1900,7 @@ namespace ts {
                     temp,
                     setNodeEmitFlags(
                         createObjectLiteral(
-                            visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialNonComputedProperties),
+                            visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialProperties),
                             /*location*/ undefined,
                             node.multiLine
                         ),
@@ -1897,12 +1910,12 @@ namespace ts {
                 node.multiLine
             );
 
-            addObjectLiteralMembers(expressions, node, temp, numInitialNonComputedProperties);
+            addObjectLiteralMembers(expressions, node, temp, numInitialProperties);
 
             // We need to clone the temporary identifier so that we can write it on a
             // new line
             addNode(expressions, getMutableClone(temp), node.multiLine);
-            return createParen(inlineExpressions(expressions));
+            return inlineExpressions(expressions);
         }
 
         function shouldConvertIterationStatementBody(node: IterationStatement): boolean {
@@ -2290,10 +2303,10 @@ namespace ts {
          * @param numInitialNonComputedProperties The number of initial properties without
          *                                        computed property names.
          */
-        function addObjectLiteralMembers(expressions: Expression[], node: ObjectLiteralExpression, receiver: Identifier, numInitialNonComputedProperties: number) {
+        function addObjectLiteralMembers(expressions: Expression[], node: ObjectLiteralExpression, receiver: Identifier, start: number) {
             const properties = node.properties;
             const numProperties = properties.length;
-            for (let i = numInitialNonComputedProperties; i < numProperties; i++) {
+            for (let i = start; i < numProperties; i++) {
                 const property = properties[i];
                 switch (property.kind) {
                     case SyntaxKind.GetAccessor:
@@ -2335,8 +2348,7 @@ namespace ts {
             return createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
-                    visitNode(property.name, visitor, isPropertyName),
-                    setNodeEmitFlags
+                    visitNode(property.name, visitor, isPropertyName)
                 ),
                 visitNode(property.initializer, visitor, isExpression),
                 /*location*/ property
@@ -2354,8 +2366,7 @@ namespace ts {
             return createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
-                    visitNode(property.name, visitor, isPropertyName),
-                    setNodeEmitFlags
+                    visitNode(property.name, visitor, isPropertyName)
                 ),
                 getSynthesizedClone(property.name),
                 /*location*/ property
@@ -2373,8 +2384,7 @@ namespace ts {
             return createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
-                    visitNode(method.name, visitor, isPropertyName),
-                    setNodeEmitFlags
+                    visitNode(method.name, visitor, isPropertyName)
                 ),
                 transformFunctionLikeToExpression(method, /*location*/ method, /*name*/ undefined),
                 /*location*/ method
@@ -2412,6 +2422,16 @@ namespace ts {
                 getSynthesizedClone(node.name),
                 /*location*/ node
             );
+        }
+
+        /**
+         * Visits a YieldExpression node.
+         *
+         * @param node A YieldExpression node.
+         */
+        function visitYieldExpression(node: YieldExpression): Expression {
+            // `yield` expressions are transformed using the generators transformer.
+            return visitEachChild(node, visitor, context);
         }
 
         /**

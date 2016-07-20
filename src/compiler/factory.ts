@@ -104,7 +104,7 @@ namespace ts {
 
     export function createLiteral(textSource: StringLiteral | Identifier, location?: TextRange): StringLiteral;
     export function createLiteral(value: string, location?: TextRange): StringLiteral;
-    export function createLiteral(value: number, location?: TextRange): LiteralExpression;
+    export function createLiteral(value: number, location?: TextRange): NumericLiteral;
     export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression;
     export function createLiteral(value: string | number | boolean | StringLiteral | Identifier, location?: TextRange): PrimaryExpression {
         if (typeof value === "number") {
@@ -141,7 +141,7 @@ namespace ts {
         return node;
     }
 
-    export function createTempVariable(recordTempVariable: (node: Identifier) => void, location?: TextRange): Identifier {
+    export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, location?: TextRange): Identifier {
         const name = <Identifier>createNode(SyntaxKind.Identifier, location);
         name.text = "";
         name.originalKeywordKind = SyntaxKind.Unknown;
@@ -430,8 +430,9 @@ namespace ts {
         const node = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression, location);
         node.elements = parenthesizeListElements(createNodeArray(elements));
         if (multiLine) {
-            node.multiLine = multiLine;
+            node.multiLine = true;
         }
+
         return node;
     }
 
@@ -446,7 +447,7 @@ namespace ts {
         const node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression, location);
         node.properties = createNodeArray(properties);
         if (multiLine) {
-            node.multiLine = multiLine;
+            node.multiLine = true;
         }
         return node;
     }
@@ -996,6 +997,22 @@ namespace ts {
         return node;
     }
 
+    export function createTryCatchFinally(tryBlock: Block, catchClause: CatchClause, finallyBlock: Block, location?: TextRange) {
+        const node = <TryStatement>createNode(SyntaxKind.TryStatement, location);
+        node.tryBlock = tryBlock;
+        node.catchClause = catchClause;
+        node.finallyBlock = finallyBlock;
+        return node;
+    }
+
+    export function createTryCatch(tryBlock: Block, catchClause: CatchClause, location?: TextRange) {
+        return createTryCatchFinally(tryBlock, catchClause, /*finallyBlock*/ undefined, location);
+    }
+
+    export function createTryFinally(tryBlock: Block, finallyBlock: Block, location?: TextRange) {
+        return createTryCatchFinally(tryBlock, /*catchClause*/ undefined, finallyBlock, location);
+    }
+
     export function updateReturn(node: ReturnStatement, expression: Expression) {
         if (node.expression !== expression) {
             return updateNode(createReturn(expression, /*location*/ node), node);
@@ -1391,13 +1408,13 @@ namespace ts {
         return node;
     }
 
-    export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, setNodeEmitFlags: (node: Node, flags: NodeEmitFlags) => void, location?: TextRange): MemberExpression {
+    export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
         if (isComputedPropertyName(memberName)) {
              return createElementAccess(target, memberName.expression, location);
         }
         else {
             const expression = isIdentifier(memberName) ? createPropertyAccess(target, memberName, location) : createElementAccess(target, memberName, location);
-            setNodeEmitFlags(expression, expression.emitFlags ? NodeEmitFlags.NoNestedSourceMaps | expression.emitFlags : NodeEmitFlags.NoNestedSourceMaps);
+            expression.emitFlags |= NodeEmitFlags.NoNestedSourceMaps;
             return expression;
         }
     }
@@ -1564,6 +1581,18 @@ namespace ts {
     }
 
     export function createAwaiterHelper(externalHelpersModuleName: Identifier | undefined, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
+        const generatorFunc = createFunctionExpression(
+            createNode(SyntaxKind.AsteriskToken),
+            /*name*/ undefined,
+            /*typeParameters*/ undefined,
+            /*parameters*/ [],
+            /*type*/ undefined,
+            body
+        );
+
+        // Mark this node as originally an async function
+        generatorFunc.emitFlags |= NodeEmitFlags.AsyncFunctionBody;
+
         return createCall(
             createHelperName(externalHelpersModuleName, "__awaiter"),
             /*typeArguments*/ undefined,
@@ -1571,14 +1600,7 @@ namespace ts {
                 createThis(),
                 hasLexicalArguments ? createIdentifier("arguments") : createVoidZero(),
                 promiseConstructor ? createExpressionFromEntityName(promiseConstructor) : createVoidZero(),
-                createFunctionExpression(
-                    createNode(SyntaxKind.AsteriskToken),
-                    /*name*/ undefined,
-                    /*typeParameters*/ undefined,
-                    /*parameters*/ [],
-                    /*type*/ undefined,
-                    body
-                )
+                generatorFunc
             ]
         );
     }
@@ -1776,19 +1798,29 @@ namespace ts {
         thisArg: Expression;
     }
 
-    function shouldBeCapturedInTempVariable(node: Expression): boolean {
-        switch (skipParentheses(node).kind) {
+    function shouldBeCapturedInTempVariable(node: Expression, cacheIdentifiers: boolean): boolean {
+        const target = skipParentheses(node);
+        switch (target.kind) {
             case SyntaxKind.Identifier:
+                return cacheIdentifiers;
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
                 return false;
+            case SyntaxKind.ArrayLiteralExpression:
+                const elements = (<ArrayLiteralExpression>target).elements;
+                if (elements.length === 0) {
+                    return false;
+                }
+                return true;
+            case SyntaxKind.ObjectLiteralExpression:
+                return (<ObjectLiteralExpression>target).properties.length > 0;
             default:
                 return true;
         }
     }
 
-    export function createCallBinding(expression: Expression, recordTempVariable: (temp: Identifier) => void, languageVersion?: ScriptTarget): CallBinding {
+    export function createCallBinding(expression: Expression, recordTempVariable: (temp: Identifier) => void, languageVersion?: ScriptTarget, cacheIdentifiers?: boolean): CallBinding {
         const callee = skipOuterExpressions(expression, OuterExpressionKinds.All);
         let thisArg: Expression;
         let target: LeftHandSideExpression;
@@ -1803,7 +1835,7 @@ namespace ts {
         else {
             switch (callee.kind) {
                 case SyntaxKind.PropertyAccessExpression: {
-                    if (shouldBeCapturedInTempVariable((<PropertyAccessExpression>callee).expression)) {
+                    if (shouldBeCapturedInTempVariable((<PropertyAccessExpression>callee).expression, cacheIdentifiers)) {
                         // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
                         thisArg = createTempVariable(recordTempVariable);
                         target = createPropertyAccess(
@@ -1824,7 +1856,7 @@ namespace ts {
                 }
 
                 case SyntaxKind.ElementAccessExpression: {
-                    if (shouldBeCapturedInTempVariable((<ElementAccessExpression>callee).expression)) {
+                    if (shouldBeCapturedInTempVariable((<ElementAccessExpression>callee).expression, cacheIdentifiers)) {
                         // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
                         thisArg = createTempVariable(recordTempVariable);
                         target = createElementAccess(
@@ -1884,6 +1916,124 @@ namespace ts {
         }
     }
 
+    export function createExpressionForObjectLiteralElement(node: ObjectLiteralExpression, property: ObjectLiteralElement, receiver: Expression): Expression {
+        switch (property.kind) {
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return createExpressionForAccessorDeclaration(node.properties, <AccessorDeclaration>property, receiver, node.multiLine);
+            case SyntaxKind.PropertyAssignment:
+                return createExpressionForPropertyAssignment(<PropertyAssignment>property, receiver);
+            case SyntaxKind.ShorthandPropertyAssignment:
+                return createExpressionForShorthandPropertyAssignment(<ShorthandPropertyAssignment>property, receiver);
+            case SyntaxKind.MethodDeclaration:
+                return createExpressionForMethodDeclaration(<MethodDeclaration>property, receiver);
+        }
+    }
+
+    function createExpressionForAccessorDeclaration(properties: NodeArray<Declaration>, property: AccessorDeclaration, receiver: Expression, multiLine: boolean) {
+        const { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(properties, property);
+        if (property === firstAccessor) {
+            const properties: ObjectLiteralElement[] = [];
+            if (getAccessor) {
+                const getterFunction = createFunctionExpression(
+                    /*asteriskToken*/ undefined,
+                    /*name*/ undefined,
+                    /*typeParameters*/ undefined,
+                    getAccessor.parameters,
+                    /*type*/ undefined,
+                    getAccessor.body,
+                    /*location*/ getAccessor
+                );
+                setOriginalNode(getterFunction, getAccessor);
+                const getter = createPropertyAssignment("get", getterFunction);
+                properties.push(getter);
+            }
+
+            if (setAccessor) {
+                const setterFunction = createFunctionExpression(
+                    /*asteriskToken*/ undefined,
+                    /*name*/ undefined,
+                    /*typeParameters*/ undefined,
+                    setAccessor.parameters,
+                    /*type*/ undefined,
+                    setAccessor.body,
+                    /*location*/ setAccessor
+                );
+                setOriginalNode(setterFunction, setAccessor);
+                const setter = createPropertyAssignment("set", setterFunction);
+                properties.push(setter);
+            }
+
+            properties.push(createPropertyAssignment("enumerable", createLiteral(true)));
+            properties.push(createPropertyAssignment("configurable", createLiteral(true)));
+
+            const expression = createCall(
+                createPropertyAccess(createIdentifier("Object"), "defineProperty"),
+                /*typeArguments*/ undefined,
+                [
+                    receiver,
+                    createExpressionForPropertyName(property.name),
+                    createObjectLiteral(properties, /*location*/ undefined, multiLine)
+                ],
+                /*location*/ firstAccessor
+            );
+
+            return aggregateTransformFlags(expression);
+        }
+
+        return undefined;
+    }
+
+    function createExpressionForPropertyAssignment(property: PropertyAssignment, receiver: Expression) {
+        return aggregateTransformFlags(
+            setOriginalNode(
+                createAssignment(
+                    createMemberAccessForPropertyName(receiver, property.name, /*location*/ property.name),
+                    property.initializer,
+                    /*location*/ property
+                ),
+                /*original*/ property
+            )
+        );
+    }
+
+    function createExpressionForShorthandPropertyAssignment(property: ShorthandPropertyAssignment, receiver: Expression) {
+        return aggregateTransformFlags(
+            setOriginalNode(
+                createAssignment(
+                    createMemberAccessForPropertyName(receiver, property.name, /*location*/ property.name),
+                    getSynthesizedClone(property.name),
+                    /*location*/ property
+                ),
+                /*original*/ property
+            )
+        );
+    }
+
+    function createExpressionForMethodDeclaration(method: MethodDeclaration, receiver: Expression) {
+        return aggregateTransformFlags(
+            setOriginalNode(
+                createAssignment(
+                    createMemberAccessForPropertyName(receiver, method.name, /*location*/ method.name),
+                    setOriginalNode(
+                        createFunctionExpression(
+                            method.asteriskToken,
+                            /*name*/ undefined,
+                            /*typeParameters*/ undefined,
+                            method.parameters,
+                            /*type*/ undefined,
+                            method.body,
+                            /*location*/ method
+                        ),
+                        /*original*/ method
+                    ),
+                    /*location*/ method
+                ),
+                /*original*/ method
+            )
+        );
+    }
+
     // Utilities
 
     function isUseStrictPrologue(node: ExpressionStatement): boolean {
@@ -1899,28 +2049,36 @@ namespace ts {
      * @param target: result statements array
      * @param source: origin statements array
      * @param ensureUseStrict: boolean determining whether the function need to add prologue-directives
+     * @param visitor: Optional callback used to visit any custom prologue directives.
      */
-    export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean): number {
+    export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
         Debug.assert(target.length === 0, "PrologueDirectives should be at the first statement in the target statements array");
         let foundUseStrict = false;
-        for (let i = 0; i < source.length; i++) {
-            if (isPrologueDirective(source[i])) {
-                if (isUseStrictPrologue(source[i] as ExpressionStatement)) {
+        let statementOffset = 0;
+        const numStatements = source.length;
+        while (statementOffset < numStatements) {
+            const statement = source[statementOffset];
+            if (isPrologueDirective(statement)) {
+                if (isUseStrictPrologue(statement as ExpressionStatement)) {
                     foundUseStrict = true;
                 }
-
-                target.push(source[i]);
+                target.push(statement);
             }
             else {
                 if (ensureUseStrict && !foundUseStrict) {
                     target.push(startOnNewLine(createStatement(createLiteral("use strict"))));
+                    foundUseStrict = true;
                 }
-
-                return i;
+                if (statement.emitFlags & NodeEmitFlags.CustomPrologue) {
+                    target.push(visitor ? visitNode(statement, visitor, isStatement) : statement);
+                }
+                else {
+                    break;
+                }
             }
+            statementOffset++;
         }
-
-        return source.length;
+        return statementOffset;
     }
 
     /**

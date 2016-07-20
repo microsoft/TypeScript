@@ -3,6 +3,7 @@
 /// <reference path="transformers/jsx.ts" />
 /// <reference path="transformers/es7.ts" />
 /// <reference path="transformers/es6.ts" />
+/// <reference path="transformers/generators.ts" />
 /// <reference path="transformers/module/module.ts" />
 /// <reference path="transformers/module/system.ts" />
 /// <reference path="transformers/module/es6.ts" />
@@ -179,6 +180,7 @@ namespace ts {
 
         if (languageVersion < ScriptTarget.ES6) {
             transformers.push(transformES6);
+            transformers.push(transformGenerators);
         }
 
         return transformers;

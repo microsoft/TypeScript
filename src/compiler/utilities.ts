@@ -3038,6 +3038,12 @@ namespace ts {
         return ModifierFlags.None;
     }
 
+    export function isLogicalOperator(token: SyntaxKind): boolean {
+        return token === SyntaxKind.BarBarToken
+            || token === SyntaxKind.AmpersandAmpersandToken
+            || token === SyntaxKind.ExclamationToken;
+    }
+
     export function isAssignmentOperator(token: SyntaxKind): boolean {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }

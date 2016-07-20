@@ -71,6 +71,45 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };`;
 
+        const generatorHelper = `
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (sent[0] === 1) throw sent[1]; return sent[1]; }, trys: [], stack: [] }, sent, f;
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (1) {
+            if (_.done) switch (op[0]) {
+                case 0: return { value: void 0, done: true };
+                case 1: case 6: throw op[1];
+                case 2: return { value: op[1], done: true };
+            }
+            try {
+                switch (f = 1, op[0]) {
+                    case 0: case 1: sent = op; break;
+                    case 4: return _.label++, { value: op[1], done: false };
+                    case 7: op = _.stack.pop(), _.trys.pop(); continue;
+                    default:
+                        var r = _.trys.length > 0 && _.trys[_.trys.length - 1];
+                        if (!r && (op[0] === 6 || op[0] === 2)) { _.done = 1; continue; }
+                        if (op[0] === 3 && (!r || (op[1] > r[0] && op[1] < r[3]))) { _.label = op[1]; break; }
+                        if (op[0] === 6 && _.label < r[1]) { _.label = r[1], sent = op; break; }
+                        if (r && _.label < r[2]) { _.label = r[2], _.stack.push(op); break; }
+                        if (r[2]) { _.stack.pop(); }
+                        _.trys.pop();
+                        continue;
+                }
+                op = body.call(thisArg, _);
+            }
+            catch (e) { op = [6, e]; }
+            finally { f = 0, sent = void 0; }
+        }
+    }
+    return {
+        next: function (v) { return step([0, v]); },
+        "throw": function (v) { return step([1, v]); },
+        "return": function (v) { return step([2, v]); }
+    };
+};`;
+
         // emit output for the __export helper function
         const exportStarHelper = `
 function __export(m) {
@@ -685,6 +724,8 @@ const _super = (function (geti, seti) {
             switch (kind) {
                 // Literals
                 case SyntaxKind.NumericLiteral:
+                    return emitNumericLiteral(<NumericLiteral>node);
+
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.RegularExpressionLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -773,6 +814,13 @@ const _super = (function (geti, seti) {
         //
 
         // SyntaxKind.NumericLiteral
+        function emitNumericLiteral(node: NumericLiteral) {
+            emitLiteral(node);
+            if (node.trailingComment) {
+                write(` /*${node.trailingComment}*/`);
+            }
+        }
+
         // SyntaxKind.StringLiteral
         // SyntaxKind.RegularExpressionLiteral
         // SyntaxKind.NoSubstitutionTemplateLiteral
@@ -1563,15 +1611,21 @@ const _super = (function (geti, seti) {
                         increaseIndent();
                     }
 
-                    const savedTempFlags = tempFlags;
-                    tempFlags = 0;
-                    emitSignatureHead(node);
-                    emitBlockFunctionBody(node, body);
+                    if (node.emitFlags & NodeEmitFlags.ReuseTempVariableScope) {
+                        emitSignatureHead(node);
+                        emitBlockFunctionBody(node, body);
+                    }
+                    else {
+                        const savedTempFlags = tempFlags;
+                        tempFlags = 0;
+                        emitSignatureHead(node);
+                        emitBlockFunctionBody(node, body);
+                        tempFlags = savedTempFlags;
+                    }
+
                     if (indentedFlag) {
                         decreaseIndent();
                     }
-
-                    tempFlags = savedTempFlags;
                 }
                 else {
                     emitSignatureHead(node);
@@ -2157,6 +2211,10 @@ const _super = (function (geti, seti) {
 
             if (!awaiterEmitted && node.flags & NodeFlags.HasAsyncFunctions) {
                 writeLines(awaiterHelper);
+                if (languageVersion < ScriptTarget.ES6) {
+                    writeLines(generatorHelper);
+                }
+
                 awaiterEmitted = true;
                 helpersEmitted = true;
             }

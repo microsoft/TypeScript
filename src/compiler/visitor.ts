@@ -1197,8 +1197,9 @@ namespace ts {
     /**
      * Aggregates the TransformFlags for a Node and its subtree.
      */
-    export function aggregateTransformFlags(node: Node): void {
+    export function aggregateTransformFlags<T extends Node>(node: T): T {
         aggregateTransformFlagsForNode(node);
+        return node;
     }
 
     /**
