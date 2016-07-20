@@ -190,7 +190,7 @@ namespace ts.server {
             if (option && value) {
                 switch (option) {
                     case "-file":
-                        logEnv.file = value;
+                        logEnv.file = stripQuotes(value);
                         break;
                     case "-level":
                         const level: LogLevel = (<any>LogLevel)[value];

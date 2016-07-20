@@ -6,7 +6,7 @@ interface HostCancellationToken {
     isCancellationRequested(): boolean;
 }
 
-const fs: any = require("fs");
+import fs = require("fs");
 
 function createCancellationToken(args: string[]): HostCancellationToken {
     let cancellationPipeName: string;

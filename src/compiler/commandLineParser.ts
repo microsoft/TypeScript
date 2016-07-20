@@ -139,12 +139,12 @@ namespace ts {
         {
             name: "noUnusedLocals",
             type: "boolean",
-            description: Diagnostics.Report_Errors_on_Unused_Locals,
+            description: Diagnostics.Report_errors_on_unused_locals,
         },
         {
             name: "noUnusedParameters",
             type: "boolean",
-            description: Diagnostics.Report_Errors_on_Unused_Parameters
+            description: Diagnostics.Report_errors_on_unused_parameters,
         },
         {
             name: "noLib",
