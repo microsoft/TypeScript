@@ -6,7 +6,7 @@
 /* @internal */
 namespace ts.JsTyping {
 
-    export interface TypingResolutionHost {
+    export interface TypingResolutionHost extends ExtensionHost {
         directoryExists: (path: string) => boolean;
         fileExists: (fileName: string) => boolean;
         readFile: (path: string, encoding?: string) => string;
@@ -35,6 +35,7 @@ namespace ts.JsTyping {
      * @param packageNameToTypingLocation is the map of package names to their cached typing locations
      * @param typingOptions are used to customize the typing inference process
      * @param compilerOptions are used as a source for typing inference
+     * @param cache is the optional extension cache to lookup type discovery extensions in - one will be made if it cannot be provided
      */
     export function discoverTypings(
         host: TypingResolutionHost,
@@ -43,7 +44,8 @@ namespace ts.JsTyping {
         safeListPath: Path,
         packageNameToTypingLocation: Map<string>,
         typingOptions: TypingOptions,
-        compilerOptions: CompilerOptions):
+        compilerOptions: CompilerOptions,
+        cache: ExtensionCache = createExtensionCache(compilerOptions, host)):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         // A typing name to typing file path mapping
@@ -88,6 +90,8 @@ namespace ts.JsTyping {
 
             const nodeModulesPath = combinePaths(searchDir, "node_modules");
             getTypingNamesFromNodeModuleFolder(nodeModulesPath);
+
+            getTypingNamesFromExtensions(searchDir, cache);
         }
         getTypingNamesFromSourceFileNames(fileNames);
 
@@ -223,5 +227,24 @@ namespace ts.JsTyping {
             mergeTypings(typingNames);
         }
 
+
+        function getTypingNamesFromExtensions(searchPath: string, cache: ExtensionCache) {
+            // We don't report issues loading type discovery extensions (if the host cares about them, it should load them in advance and pass in a cache)
+            const extensions = cache.getCompilerExtensions()["type-discovery"];
+            for (const extension of extensions) {
+                let results: string[];
+                try {
+                    startExtensionProfile(compilerOptions.extendedDiagnostics, extension.name, "lookup");
+                    results = extension.lookup(searchPath, extension.args);
+                    completeExtensionProfile(compilerOptions.extendedDiagnostics, extension.name, "lookup");
+                }
+                catch (e) {
+                    // There's presently no way to report errors during discover typings other than a hard failure (which is to be avoided)
+                }
+                if (results) {
+                    mergeTypings(results);
+                }
+            }
+        }
     }
 }

@@ -95,7 +95,6 @@ namespace ts {
 
     export interface BaseProviderStatic {
         readonly ["extension-kind"]: ExtensionKind;
-        new (state: {ts: typeof ts, args: any}): any;
     }
 
     export interface SyntacticLintProviderStatic extends BaseProviderStatic {
@@ -125,13 +124,16 @@ namespace ts {
         export type SyntacticLint = "syntactic-lint";
         export const LanguageService: "language-service" = "language-service";
         export type LanguageService = "language-service";
+        export const TypeDiscovery: "type-discovery" = "type-discovery";
+        export type TypeDiscovery = "type-discovery";
     }
-    export type ExtensionKind = ExtensionKind.SemanticLint | ExtensionKind.SyntacticLint | ExtensionKind.LanguageService;
+    export type ExtensionKind = ExtensionKind.SemanticLint | ExtensionKind.SyntacticLint | ExtensionKind.LanguageService | ExtensionKind.TypeDiscovery;
 
     export interface ExtensionCollectionMap {
         "syntactic-lint"?: SyntacticLintExtension[];
         "semantic-lint"?: SemanticLintExtension[];
         "language-service"?: LanguageServiceExtension[];
+        "type-discovery"?: TypeDiscoveryExtension[];
         [index: string]: Extension[] | undefined;
     }
 
@@ -163,7 +165,12 @@ namespace ts {
         ctor: LanguageServiceProviderStatic;
     }
 
-    export type Extension = SyntacticLintExtension | SemanticLintExtension | LanguageServiceExtension;
+    export interface TypeDiscoveryExtension extends ExtensionBase {
+        kind: ExtensionKind.TypeDiscovery;
+        lookup: (searchDir: string, args: any) => string[];
+    }
+
+    export type Extension = SyntacticLintExtension | SemanticLintExtension | LanguageServiceExtension | TypeDiscoveryExtension;
 
     export interface ExtensionCache {
         getCompilerExtensions(): ExtensionCollectionMap;
@@ -224,6 +231,21 @@ namespace ts {
         if (!enabled) return;
         const longTask = createTaskName(qualifiedName, task);
         completeProfile(/*enabled*/true, longTask);
+    }
+
+    function verifyType(thing: any, type: string, diagnostics: Diagnostic[], extName: string, extMember: string, extKind: ExtensionKind) {
+        if (typeof thing !== type) {
+            diagnostics.push(createCompilerDiagnostic(
+                Diagnostics.Extension_0_exported_member_1_has_extension_kind_2_but_was_type_3_when_type_4_was_expected,
+                extName,
+                extMember,
+                extKind,
+                typeof thing,
+                type
+            ));
+            return false;
+        }
+        return true;
     }
 
     export function createExtensionCache(options: CompilerOptions, host: ExtensionHost, resolvedExtensionNames?: Map<string>): ExtensionCache {
@@ -312,20 +334,18 @@ namespace ts {
                     switch (ext.kind) {
                         case ExtensionKind.SemanticLint:
                         case ExtensionKind.SyntacticLint:
-                        case ExtensionKind.LanguageService:
-                            if (typeof potentialExtension !== "function") {
-                                diagnostics.push(createCompilerDiagnostic(
-                                    Diagnostics.Extension_0_exported_member_1_has_extension_kind_2_but_was_type_3_when_type_4_was_expected,
-                                    res.name,
-                                    key,
-                                    (ts as any).ExtensionKind[annotatedKind],
-                                    typeof potentialExtension,
-                                    "function"
-                                ));
-                                return;
-                            }
+                        case ExtensionKind.LanguageService: {
+                            const verified = verifyType(potentialExtension, "function", diagnostics, res.name, key, annotatedKind);
+                            if (!verified) return;
                             (ext as (SemanticLintExtension | SyntacticLintExtension | LanguageServiceExtension)).ctor = potentialExtension as (SemanticLintProviderStatic | SyntacticLintProviderStatic | LanguageServiceProviderStatic);
                             break;
+                        }
+                        case ExtensionKind.TypeDiscovery: {
+                            const verified = verifyType(potentialExtension, "function", diagnostics, res.name, key, annotatedKind);
+                            if (!verified) return;
+                            (ext as TypeDiscoveryExtension).lookup = potentialExtension as any;
+                            break;
+                        }
                         default:
                             // Include a default case which just puts the extension unchecked onto the base extension
                             // This can allow language service extensions to query for custom extension kinds
