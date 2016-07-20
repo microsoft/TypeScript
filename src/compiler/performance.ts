@@ -1,3 +1,4 @@
+/*@internal*/
 namespace ts {
     declare const performance: { now?(): number } | undefined;
     /** Gets a timestamp with (at least) ms resolution */
@@ -9,7 +10,6 @@ namespace ts.performance {
     /** Performance measurements for the compiler. */
     declare const onProfilerEvent: { (markName: string): void; profiler: boolean; };
     let profilerEvent: (markName: string) => void;
-    let markInternal: () => number;
     let counters: Map<number>;
     let measures: Map<number>;
 
@@ -49,7 +49,7 @@ namespace ts.performance {
      * Marks the start of a performance measurement.
      */
     export function mark() {
-        return measures ? markInternal() : 0;
+        return measures ? timestamp() : 0;
     }
 
     /**
@@ -60,7 +60,7 @@ namespace ts.performance {
      */
     export function measure(measureName: string, marker: number) {
         if (measures) {
-            measures[measureName] = (getProperty(measures, measureName) || 0) + (markInternal() - marker);
+            measures[measureName] = (getProperty(measures, measureName) || 0) + (timestamp() - marker);
         }
     }
 
@@ -98,7 +98,6 @@ namespace ts.performance {
         profilerEvent = typeof onProfilerEvent === "function" && onProfilerEvent.profiler === true
             ? onProfilerEvent
             : undefined;
-        markInternal = timestamp;
     }
 
     /** Disables (and clears) performance measurements for the compiler. */
