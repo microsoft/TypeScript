@@ -5779,23 +5779,23 @@ namespace ts {
         // TYPE CHECKING
 
         function isTypeIdenticalTo(source: Type, target: Type): boolean {
-            return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined);
+            return isTypeRelatedTo(source, target, identityRelation);
         }
 
         function compareTypesIdentical(source: Type, target: Type): Ternary {
-            return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined) ? Ternary.True : Ternary.False;
+            return isTypeRelatedTo(source, target, identityRelation) ? Ternary.True : Ternary.False;
         }
 
         function compareTypesAssignable(source: Type, target: Type): Ternary {
-            return checkTypeRelatedTo(source, target, assignableRelation, /*errorNode*/ undefined) ? Ternary.True : Ternary.False;
+            return isTypeRelatedTo(source, target, assignableRelation) ? Ternary.True : Ternary.False;
         }
 
         function isTypeSubtypeOf(source: Type, target: Type): boolean {
-            return checkTypeSubtypeOf(source, target, /*errorNode*/ undefined);
+            return isTypeRelatedTo(source, target, subtypeRelation);
         }
 
         function isTypeAssignableTo(source: Type, target: Type): boolean {
-            return checkTypeAssignableTo(source, target, /*errorNode*/ undefined);
+            return isTypeRelatedTo(source, target, assignableRelation);
         }
 
         /**
@@ -5803,7 +5803,7 @@ namespace ts {
          * If one needs to check both directions for comparability, use a second call to this function or 'checkTypeComparableTo'.
          */
         function isTypeComparableTo(source: Type, target: Type): boolean {
-            return checkTypeComparableTo(source, target, /*errorNode*/ undefined);
+            return isTypeRelatedTo(source, target, comparableRelation);
         }
 
         function areTypesComparable(type1: Type, type2: Type): boolean {
@@ -5994,6 +5994,51 @@ namespace ts {
                     targetNonRestParamCount :
                     sourceNonRestParamCount;
             }
+        }
+
+        function isPrimtiveTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>) {
+            if (target.flags & TypeFlags.Any || source.flags & TypeFlags.Never) return true;
+            if (source.flags & TypeFlags.Undefined) {
+                if (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void)) return true;
+            }
+            if (source.flags & TypeFlags.Null) {
+                if (!strictNullChecks || target.flags & TypeFlags.Null) return true;
+            }
+            if (source.flags & TypeFlags.NumberLike && target === numberType) return true;
+            if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum && source.symbol.flags & SymbolFlags.EnumMember && source.symbol.parent === target.symbol) {
+                return true;
+            }
+            if (source.flags & TypeFlags.StringLike && target === stringType) return true;
+            if (relation === assignableRelation || relation === comparableRelation) {
+                if (source.flags & TypeFlags.Any) return true;
+                if (source === numberType && target.flags & TypeFlags.Enum) return true;
+            }
+            if (source.flags & TypeFlags.BooleanLike && target.flags & TypeFlags.Boolean) return true;
+            return false;
+        }
+
+        function isTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>) {
+            if (source === target) {
+                return true;
+            }
+            if (relation !== identityRelation) {
+                if (source.flags & TypeFlags.Primitive && target.flags & TypeFlags.Primitive) {
+                    if (isPrimtiveTypeRelatedTo(source, target, relation)) {
+                        return true;
+                    }
+                    if (!(source.flags & TypeFlags.Union || target.flags & TypeFlags.Union)) {
+                        return false;
+                    }
+                }
+            }
+            if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType) {
+                const id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
+                const related = relation[id];
+                if (related !== undefined) {
+                    return related === RelationComparisonResult.Succeeded;
+                }
+            }
+            return checkTypeRelatedTo(source, target, relation, undefined, undefined, undefined);
         }
 
         /**
