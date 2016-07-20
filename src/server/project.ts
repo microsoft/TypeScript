@@ -82,6 +82,7 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return [];
             }
+            this.updateGraph();
             return this.builder.getFilesAffectedBy(triggerFileName);
         }
 
@@ -224,8 +225,6 @@ namespace ts.server {
             const oldProgram = this.program;
             this.program = this.languageService.getProgram();
 
-            this.builder.onProjectUpdateGraph();
-
             const oldProjectStructureVersion = this.projectStructureVersion;
             // bump up the version if
             // - oldProgram is not set - this is a first time updateGraph is called
@@ -245,6 +244,7 @@ namespace ts.server {
                     }
                 }
             }
+            this.builder.onProjectUpdateGraph();
             return oldProjectStructureVersion === this.projectStructureVersion;
         }
 

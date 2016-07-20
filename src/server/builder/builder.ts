@@ -98,6 +98,18 @@ namespace ts.server {
         onProjectUpdateGraph(): void;
     }
 
+    class NullBuilder implements Builder {
+        constructor(readonly project: Project) {
+        }
+
+        getFilesAffectedBy(fileName: string): string[] {
+            return undefined;
+        }
+
+        onProjectUpdateGraph() {
+        }
+    }
+
     abstract class AbstractBuilder<T extends BuilderFileInfo> implements Builder {
 
         protected fileInfos: Map<T> = {};
@@ -131,12 +143,7 @@ namespace ts.server {
         getFilesAffectedBy(fileName: string): string[] {
             const info = this.getOrCreateFileInfo(fileName);
             if(info.updateAndCheckIfShapeSignatureChanged(this)) {
-                if (!info.isExternalModule(this)) {
-                    return this.project.getRootFiles();
-                }
-                else {
-                    return this.project.getReferencedFiles(fileName);
-                }
+                return this.project.getFileNames();
             }
             return [fileName];
         }
@@ -200,7 +207,7 @@ namespace ts.server {
             for (const reference of this.references) {
                 reference.removeReferencedBy(this);
             }
-            this.referencedBy = [];
+            this.references = [];
         }
 
         getReferencedByFileNames() {
@@ -302,7 +309,6 @@ namespace ts.server {
         }
 
         onProjectUpdateGraph() {
-            this.ensureDependencyGraph();
             this.updateDependencyGraph();
         }
 
@@ -353,18 +359,19 @@ namespace ts.server {
     }
 
     export function createBuilder(project: Project): Builder {
+        if (!project.getCompilerOptions().compileOnSave) {
+            return new NullBuilder(project);
+        }
+
         if (project.projectKind === ProjectKind.Configured) {
             const moduleKind = project.getCompilerOptions().module;
             switch (moduleKind) {
-                case ModuleKind.AMD:
-                case ModuleKind.CommonJS:
-                case ModuleKind.UMD:
-                case ModuleKind.System:
-                    return new ModuleBuilder(project);
+                case ModuleKind.None:
+                    return new NonModuleBuilder(project);
                 default:
                     return new ModuleBuilder(project);
             }
         }
-        return new ModuleBuilder(project);
+        return new NonModuleBuilder(project);
     }
 }

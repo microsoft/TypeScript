@@ -687,7 +687,7 @@ namespace ts {
                 content: `{
                     "compilerOptions": {
                         "target": "es6"
-                    }, 
+                    },
                     "files": [ "main.ts" ]
                 }`
             };
@@ -714,7 +714,7 @@ namespace ts {
                 content: `{
                     "compilerOptions": {
                         "target": "es6"
-                    }, 
+                    },
                     "files": [ "main.ts" ]
                 }`
             };
@@ -737,7 +737,7 @@ namespace ts {
                 content: `{
                     "compilerOptions": {
                         "target": "es6"
-                    }, 
+                    },
                     "files": [ "main.ts" ]
                 }`
             };
@@ -780,7 +780,7 @@ namespace ts {
                 content: `{
                     "compilerOptions": {
                         "target": "es6"
-                    }, 
+                    },
                     "files": [ "main.ts" ]
                 }`
             };
@@ -1291,7 +1291,7 @@ namespace ts {
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             projectService.applyChangesInOpenFiles(
                 /*openFiles*/ undefined,
-                /*changedFiles*/ [{ fileName: file1.path, changes: [ { span: createTextSpan(0, file1.path.length), newText: "let y = 1" } ] }],
+                /*changedFiles*/[{ fileName: file1.path, changes: [{ span: createTextSpan(0, file1.path.length), newText: "let y = 1" }] }],
                 /*closedFiles*/ undefined);
 
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
@@ -1303,71 +1303,196 @@ namespace ts {
         });
     });
 
-    describe("API tests", () => {
-        describe("compileOnSave-tests", () => {
-            const file1: FileOrFolder = {
-                path: "/a/b/file1.ts",
-                content: "export function Foo() { };"
-            };
-            const file2: FileOrFolder = {
-                path: "/a/b/file2.ts",
-                content: `import {Foo} from "./file1"; let y = Foo();`
-            };
-            const configFile: FileOrFolder = {
-                path: "/a/b/tsconfig.json",
-                content: `{}`
-            };
+    describe("CompileOnSave affected list tests", () => {
+        function sendAffectedFileRequestAndCheckResult(session: server.Session, request: server.protocol.Request, expectedFileList: FileOrFolder[]) {
+            const actualResult = session.executeCommand(request).response;
+            const expectedFileNameList = ts.map(expectedFileList, f => f.path).sort();
+            const actualFileNameList = actualResult.sort();
+            assert.isTrue(arrayIsEqualTo(actualFileNameList, expectedFileNameList), `Actual result is ${actualFileNameList}, while expected ${expectedFileNameList}`);
+        }
 
-            it("affected file list should contain all the root files for the first request", () => {
-                const host = createServerHost([file1, file2, configFile, libFile]);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
+        describe("for configured projects", () => {
+            let file1: FileOrFolder;
+            let file2: FileOrFolder;
+            let file3: FileOrFolder;
+            let configFile: FileOrFolder;
+            let changeFile1ShapeRequest1: server.protocol.Request;
+            let changeFile1InternalRequest1: server.protocol.Request;
+            let changeFile1ShapeRequest2: server.protocol.Request;
+            // A compile on save affected file request using file1
+            let file1FileListRequest: server.protocol.Request;
+            let host: TestServerHost;
+            let session: server.Session;
 
-                openFilesForSession([file1, file2], session);
-
-                const compileOnSaveFileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
-                const firstResult = session.executeCommand(compileOnSaveFileListRequest).response;
-                assert.isTrue(isArray(firstResult));
-                assert.isTrue(arrayIsEqualTo(firstResult.sort(), [file2.path, file1.path].sort()),  `The actual response is: ${firstResult}, while expecting: ${[file2.path, file1.path].sort()}`);
-
-            });
-
-            it("affected file list contains only itself if a non-module file's shape didn't change", () => {
-                const host = createServerHost([file1, file2, configFile, libFile]);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
-
-                openFilesForSession([file1, file2], session);
-
-                const compileOnSaveFileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
-                session.executeCommand(compileOnSaveFileListRequest);
-
-                // change the content of file1 to `export function Foo() { console.log('hi'); };`
-                file1.content = `export function Foo() { console.log('hi'); };`
-                host.reloadFS([file1, file2, configFile, libFile]);
-
-                const secondResult = session.executeCommand(compileOnSaveFileListRequest).response;
-                assert.isTrue(isArray(secondResult));
-                assert.isTrue(arrayIsEqualTo(secondResult.sort(), [file1.path]), `The actual response is: ${secondResult}, while expecting: ${[file1.path]}`);
-            });
-
-            it("affected file list should be up-to-date with the reference map changes", () => {
-                const file3: FileOrFolder = {
-                    path: "/a/b/file3.ts",
-                    content: `let z = 10;`
+            beforeEach(() => {
+                file1 = {
+                    path: "/a/b/file1.ts",
+                    content: "export function Foo() { };"
                 };
-                const host = createServerHost([file1, file2, file3, configFile, libFile]);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
 
-                openFilesForSession([file1, file2, file3], session);
-                const compileOnSaveFileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
-                session.executeCommand(compileOnSaveFileListRequest);
+                file2 = {
+                    path: "/a/b/file2.ts",
+                    content: `import {Foo} from "./file1"; let y = Foo();`
+                };
 
-                file3.content = `import {Foo} from "./file1";\nlet z = 10;`
+                file3 = {
+                    path: "/a/b/file3.ts",
+                    content: `import {Foo} from "./file1"; let z = 10;`
+                };
+
+                configFile = {
+                    path: "/a/b/tsconfig.json",
+                    content: `{
+                        "compilerOptions": {
+                            "compileOnSave": true
+                        }
+                    }`
+                };
+
+                // Change the content of file1 to `export var T: number;export function Foo() { };`
+                changeFile1ShapeRequest1 = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                    file: file1.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `export var T: number;`
+                });
+
+                // Change the content of file1 to `export var T: number;export function Foo() { };`
+                changeFile1InternalRequest1 = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                    file: file1.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `var T1: number;`
+                });
+
+                // Change the content of file1 to `export var T: number;export function Foo() { };`
+                changeFile1ShapeRequest2 = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                    file: file1.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `export var T2: number;`
+                });
+
+                file1FileListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
+
+                host = createServerHost([file1, file2, file3, configFile, libFile]);
+                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
+            });
+
+            it("should contain all the root files for the first request", () => {
+                openFilesForSession([file1], session);
+                sendAffectedFileRequestAndCheckResult(session, file1FileListRequest, [file1, file2, file3]);
+            });
+
+            it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
+                openFilesForSession([file1, file2], session);
+
+                // Send an initial compileOnSave request
+                session.executeCommand(file1FileListRequest);
+                session.executeCommand(changeFile1ShapeRequest1);
+                sendAffectedFileRequestAndCheckResult(session, file1FileListRequest, [file1, file2, file3]);
+
+                // Change the content of file1 to `export var T: number;export function Foo() { console.log('hi'); };`
+                const changeFile1InternalRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                    file: file1.path,
+                    line: 1,
+                    offset: 46,
+                    endLine: 1,
+                    endOffset: 46,
+                    insertString: `console.log('hi');`
+                });
+                session.executeCommand(changeFile1InternalRequest);
+                sendAffectedFileRequestAndCheckResult(session, file1FileListRequest, [file1]);
+            });
+
+            it("should be up-to-date with the reference map changes", () => {
+                openFilesForSession([file1, file2], session);
+
+                // Send an initial compileOnSave request
+                session.executeCommand(file1FileListRequest);
+
+                // Change file2 content to `let y = Foo();`
+                const removeFile2ImportRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                    file: file2.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 28,
+                    insertString: ""
+                });
+                session.executeCommand(removeFile2ImportRequest);
+                session.executeCommand(changeFile1ShapeRequest1);
+                sendAffectedFileRequestAndCheckResult(session, file1FileListRequest, [file1, file3]);
+
+                // Add the import statements back to file2
+                const addFile2ImportRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                    file: file2.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `import {Foo} from "./file1";`
+                });
+                session.executeCommand(addFile2ImportRequest);
+
+                // Change the content of file1 to `export var T2: string;export var T: number;export function Foo() { };`
+                const changeFile1ShapeRequest2 = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                    file: file1.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `export var T2: string;`
+                });
+                session.executeCommand(changeFile1ShapeRequest2);
+                sendAffectedFileRequestAndCheckResult(session, file1FileListRequest, [file1, file2, file3]);
+            });
+
+            it("should be up-to-date with changes made in non-open files", () => {
+                openFilesForSession([file1], session);
+
+                // Send an initial compileOnSave request
+                session.executeCommand(file1FileListRequest);
+
+                file2.content = `let y = 10;`;
                 host.reloadFS([file1, file2, file3, configFile, libFile]);
+                host.triggerFileWatcherCallback(file2.path, /*removed*/ false);
 
-                const secondResult = session.executeCommand(compileOnSaveFileListRequest).response;
-                assert.isTrue(isArray(secondResult));
-                assert.isTrue(arrayIsEqualTo(secondResult.sort(), [file1.path, file3.path].sort()), `The actual response is: ${secondResult}, while expecting: ${[file1.path, file3.path].sort()}`);
-            })
-        })
+                session.executeCommand(changeFile1ShapeRequest1);
+                sendAffectedFileRequestAndCheckResult(session, file1FileListRequest, [file1, file3]);
+            });
+
+            it("should be up-to-date with deleted files", () => {
+                openFilesForSession([file1], session);
+                session.executeCommand(file1FileListRequest);
+
+                session.executeCommand(changeFile1ShapeRequest1);
+                // Delete file3
+                host.reloadFS([file1, file2, configFile, libFile]);
+                host.triggerFileWatcherCallback(file3.path, /*removed*/ true);
+                sendAffectedFileRequestAndCheckResult(session, file1FileListRequest, [file1, file2]);
+            });
+
+            it("should be up-to-date with newly created files", () => {
+                openFilesForSession([file1], session);
+                session.executeCommand(file1FileListRequest);
+
+                const file4: FileOrFolder = {
+                    path: "/a/b/file4.ts",
+                    content: `import {Foo} from "./file1"; let y = Foo();`
+                };
+                host.reloadFS([file1, file2, file3, file4, configFile, libFile]);
+                host.triggerDirectoryWatcherCallback(ts.getDirectoryPath(file4.path), file4.path);
+                host.runQueuedTimeoutCallbacks();
+                session.executeCommand(changeFile1ShapeRequest1);
+                sendAffectedFileRequestAndCheckResult(session, file1FileListRequest, [file1, file2, file3, file4]);
+            });
+        });
     });
 }
