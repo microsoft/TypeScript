@@ -1861,6 +1861,8 @@ namespace ts {
         getJsxIntrinsicTagNames(): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
 
+        getSymbolWalker(accept?: (symbol: Symbol) => boolean): SymbolWalker;
+
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
@@ -1870,6 +1872,12 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+    }
+
+    export interface SymbolWalker {
+        visitType(type: Type): void;
+        visitSymbol(symbol: Symbol): void;
+        reset(accept?: (symbol: Symbol) => boolean): void;
     }
 
     export interface SymbolDisplayBuilder {
