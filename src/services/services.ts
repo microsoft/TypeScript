@@ -4296,10 +4296,7 @@ namespace ts {
                 for (const candidate of candidates) {
                     if (candidate.parameters.length > argumentInfo.argumentIndex) {
                         const parameter = candidate.parameters[argumentInfo.argumentIndex];
-                        const type = typeChecker.getTypeAtLocation(parameter.valueDeclaration);
-                        if (type.flags & TypeFlags.Union || type.flags & TypeFlags.StringLiteral) {
-                            addStringLiteralCompletionsFromType(typeChecker.getTypeAtLocation(parameter.valueDeclaration), entries);
-                        }
+                        addStringLiteralCompletionsFromType(typeChecker.getTypeAtLocation(parameter.valueDeclaration), entries);
                     }
                 }
 
