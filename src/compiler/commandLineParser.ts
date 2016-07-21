@@ -60,6 +60,10 @@ namespace ts {
             type: "boolean",
         },
         {
+            name: "jsxExtName",
+            type: "string",
+        },
+        {
             name: "jsx",
             type: {
                 "preserve": JsxEmit.Preserve,
