@@ -1158,8 +1158,8 @@ namespace ts {
             const typeReferences: string[] = getAutomaticTypeDirectiveNames(options, host);
 
             if (typeReferences) {
-                const inferredRoot = getInferredTypesRoot(options, rootNames, host);
-                const containingFilename = combinePaths(inferredRoot, "__inferred type names__.ts");
+                // This containgFilename needs to matched with the one used in managed-side
+                const containingFilename = "__inferred type names__.ts"
                 const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, containingFilename);
                 for (let i = 0; i < typeReferences.length; i++) {
                     processTypeReferenceDirective(typeReferences[i], resolutions[i]);
