@@ -746,7 +746,9 @@ namespace ts.server {
                 if (!scriptInfo || !project.isRoot(scriptInfo)) {
                     rootFilesChanged = true;
                     if (!scriptInfo) {
-                        scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ false);
+                        const scriptKind = propertyReader.getScriptKind(f);
+                        const hasMixedContent = propertyReader.hasMixedContent(f);
+                        scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     }
                 }
                 newRootScriptInfos.push(scriptInfo);
@@ -855,12 +857,14 @@ namespace ts.server {
             return this.getScriptInfoForNormalizedPath(toNormalizedPath(uncheckedFileName));
         }
 
-        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
+        getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean) {
             let info = this.getScriptInfoForNormalizedPath(fileName);
             if (!info) {
                 let content: string;
                 if (this.host.fileExists(fileName)) {
-                    content = fileContent || this.host.readFile(fileName);
+                    // by default pick whatever content was supplied as the argument
+                    // if argument was not given - then for mixed content files assume that its content is empty string
+                    content = fileContent || (hasMixedContent ? "" : this.host.readFile(fileName));
                 }
                 if (!content) {
                     if (openedByClient) {
@@ -871,7 +875,8 @@ namespace ts.server {
                     info = new ScriptInfo(this.host, fileName, content, scriptKind, openedByClient);
                     info.setFormatOptions(toEditorSettings(this.getFormatCodeOptions()));
                     this.filenameToScriptInfo.set(fileName, info);
-                    if (!info.isOpen) {
+                    if (!info.isOpen && !hasMixedContent) {
+                        // do not watch files with mixed content - server doesn't know how to interpret it
                         info.setWatcher(this.host.watchFile(fileName, _ => this.onSourceFileChanged(fileName)));
                     }
                 }

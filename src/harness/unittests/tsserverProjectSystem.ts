@@ -31,7 +31,7 @@ namespace ts {
     }
 
     function toExternalFile(fileName: string): server.protocol.ExternalFile {
-        return { fileName }
+        return { fileName };
     }
 
     function toExternalFiles(fileNames: string[]) {
