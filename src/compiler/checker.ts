@@ -5832,6 +5832,8 @@ namespace ts {
             return compareSignaturesRelated(source, target, ignoreReturnTypes, /*reportErrors*/ false, /*errorReporter*/ undefined, compareTypesAssignable) !== Ternary.False;
         }
 
+        type ErrorReporter = (message: DiagnosticMessage, arg0?: string, arg1?: string) => void;
+
         /**
          * See signatureRelatedTo, compareSignaturesIdentical
          */
@@ -5839,7 +5841,7 @@ namespace ts {
             target: Signature,
             ignoreReturnTypes: boolean,
             reportErrors: boolean,
-            errorReporter: (d: DiagnosticMessage, arg0?: string, arg1?: string) => void,
+            errorReporter: ErrorReporter,
             compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {
             // TODO (drosen): De-duplicate code between related functions.
             if (source === target) {
@@ -5924,7 +5926,7 @@ namespace ts {
         function compareTypePredicateRelatedTo(source: TypePredicate,
             target: TypePredicate,
             reportErrors: boolean,
-            errorReporter: (d: DiagnosticMessage, arg0?: string, arg1?: string) => void,
+            errorReporter: ErrorReporter,
             compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {
             if (source.kind !== target.kind) {
                 if (reportErrors) {
@@ -5961,8 +5963,8 @@ namespace ts {
             const sourceReturnType = getReturnTypeOfSignature(erasedSource);
             const targetReturnType = getReturnTypeOfSignature(erasedTarget);
             if (targetReturnType === voidType
-                || checkTypeRelatedTo(targetReturnType, sourceReturnType, assignableRelation, /*errorNode*/ undefined)
-                || checkTypeRelatedTo(sourceReturnType, targetReturnType, assignableRelation, /*errorNode*/ undefined)) {
+                || isTypeRelatedTo(targetReturnType, sourceReturnType, assignableRelation)
+                || isTypeRelatedTo(sourceReturnType, targetReturnType, assignableRelation)) {
 
                 return isSignatureAssignableTo(erasedSource, erasedTarget, /*ignoreReturnTypes*/ true);
             }
@@ -5996,40 +5998,48 @@ namespace ts {
             }
         }
 
-        function isPrimtiveTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>) {
-            if (target.flags & TypeFlags.Any || source.flags & TypeFlags.Never) return true;
-            if (source.flags & TypeFlags.Undefined) {
-                if (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void)) return true;
-            }
-            if (source.flags & TypeFlags.Null) {
-                if (!strictNullChecks || target.flags & TypeFlags.Null) return true;
-            }
-            if (source.flags & TypeFlags.NumberLike && target === numberType) return true;
-            if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum && source.symbol.flags & SymbolFlags.EnumMember && source.symbol.parent === target.symbol) {
+        function isEnumTypeRelatedTo(source: Type, target: Type, errorReporter?: ErrorReporter) {
+            if (source.symbol.flags & SymbolFlags.EnumMember && source.symbol.parent === target.symbol) {
                 return true;
             }
-            if (source.flags & TypeFlags.StringLike && target === stringType) return true;
+            if (source.symbol.name !== target.symbol.name || !(source.symbol.flags & SymbolFlags.RegularEnum) || !(target.symbol.flags & SymbolFlags.RegularEnum)) {
+                return false;
+            }
+            const targetEnumType = getTypeOfSymbol(target.symbol);
+            for (const property of getPropertiesOfType(getTypeOfSymbol(source.symbol))) {
+                if (property.flags & SymbolFlags.EnumMember) {
+                    const targetProperty = getPropertyOfType(targetEnumType, property.name);
+                    if (!targetProperty || !(targetProperty.flags & SymbolFlags.EnumMember)) {
+                        if (errorReporter) {
+                            errorReporter(Diagnostics.Property_0_is_missing_in_type_1, property.name,
+                                typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
+                        }
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        function isSimpleTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorReporter?: ErrorReporter) {
+            if (target.flags & TypeFlags.Never) return false;
+            if (target.flags & TypeFlags.Any || source.flags & TypeFlags.Never) return true;
+            if (source.flags & TypeFlags.StringLike && target.flags & TypeFlags.String) return true;
+            if (source.flags & TypeFlags.NumberLike && target.flags & TypeFlags.Number) return true;
+            if (source.flags & TypeFlags.BooleanLike && target.flags & TypeFlags.Boolean) return true;
+            if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum && isEnumTypeRelatedTo(source, target, errorReporter)) return true;
+            if (source.flags & TypeFlags.Undefined && (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void))) return true;
+            if (source.flags & TypeFlags.Null && (!strictNullChecks || target.flags & TypeFlags.Null)) return true;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (source.flags & TypeFlags.Any) return true;
-                if (source === numberType && target.flags & TypeFlags.Enum) return true;
+                if (source.flags & TypeFlags.Number && target.flags & TypeFlags.Enum) return true;
             }
-            if (source.flags & TypeFlags.BooleanLike && target.flags & TypeFlags.Boolean) return true;
             return false;
         }
 
         function isTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>) {
-            if (source === target) {
+            if (source === target || relation !== identityRelation && isSimpleTypeRelatedTo(source, target, relation)) {
                 return true;
-            }
-            if (relation !== identityRelation) {
-                if (source.flags & TypeFlags.Primitive && target.flags & TypeFlags.Primitive) {
-                    if (isPrimtiveTypeRelatedTo(source, target, relation)) {
-                        return true;
-                    }
-                    if (!(source.flags & TypeFlags.Union || target.flags & TypeFlags.Union)) {
-                        return false;
-                    }
-                }
             }
             if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType) {
                 const id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
@@ -6038,7 +6048,10 @@ namespace ts {
                     return related === RelationComparisonResult.Succeeded;
                 }
             }
-            return checkTypeRelatedTo(source, target, relation, undefined, undefined, undefined);
+            if (source.flags & TypeFlags.StructuredOrTypeParameter || target.flags & TypeFlags.StructuredOrTypeParameter) {
+                return checkTypeRelatedTo(source, target, relation, undefined, undefined, undefined);
+            }
+            return false;
         }
 
         /**
@@ -6112,33 +6125,12 @@ namespace ts {
                 let result: Ternary;
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
+
                 if (relation === identityRelation) {
                     return isIdenticalTo(source, target);
                 }
 
-                if (!(target.flags & TypeFlags.Never)) {
-                    if (target.flags & TypeFlags.Any || source.flags & TypeFlags.Never) return Ternary.True;
-                    if (source.flags & TypeFlags.Undefined) {
-                        if (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void)) return Ternary.True;
-                    }
-                    if (source.flags & TypeFlags.Null) {
-                        if (!strictNullChecks || target.flags & TypeFlags.Null) return Ternary.True;
-                    }
-                    if (source.flags & TypeFlags.NumberLike && target === numberType) return Ternary.True;
-                    if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum) {
-                        if (result = enumRelatedTo(source, target, reportErrors)) {
-                            return result;
-                        }
-                    }
-                    if (source.flags & TypeFlags.StringLike && target === stringType) return Ternary.True;
-                    if (relation === assignableRelation || relation === comparableRelation) {
-                        if (source.flags & TypeFlags.Any) return Ternary.True;
-                        if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
-                    }
-                    if (source.flags & TypeFlags.BooleanLike && target.flags & TypeFlags.Boolean) {
-                        return Ternary.True;
-                    }
-                }
+                if (isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
                 if (source.flags & TypeFlags.FreshObjectLiteral) {
                     if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
@@ -6770,32 +6762,6 @@ namespace ts {
                     return isRelatedTo(sourceInfo.type, targetInfo.type);
                 }
                 return Ternary.False;
-            }
-
-            function enumRelatedTo(source: Type, target: Type, reportErrors?: boolean) {
-                if (source.symbol.flags & SymbolFlags.EnumMember && source.symbol.parent === target.symbol) {
-                    return Ternary.True;
-                }
-                if (source.symbol.name !== target.symbol.name ||
-                    !(source.symbol.flags & SymbolFlags.RegularEnum) ||
-                    !(target.symbol.flags & SymbolFlags.RegularEnum)) {
-                    return Ternary.False;
-                }
-                const targetEnumType = getTypeOfSymbol(target.symbol);
-                for (const property of getPropertiesOfType(getTypeOfSymbol(source.symbol))) {
-                    if (property.flags & SymbolFlags.EnumMember) {
-                        const targetProperty = getPropertyOfType(targetEnumType, property.name);
-                        if (!targetProperty || !(targetProperty.flags & SymbolFlags.EnumMember)) {
-                            if (reportErrors) {
-                                reportError(Diagnostics.Property_0_is_missing_in_type_1,
-                                    property.name,
-                                    typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
-                            }
-                            return Ternary.False;
-                        }
-                    }
-                }
-                return Ternary.True;
             }
 
             function constructorVisibilitiesAreCompatible(sourceSignature: Signature, targetSignature: Signature, reportErrors: boolean) {
