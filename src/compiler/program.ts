@@ -1562,59 +1562,70 @@ namespace ts {
                 if (walker) initializedLints.push({ name, walker, accepted: true, errored: false });
             }
 
-            let nodesVisited = 0;
-            visitNode(sourceFile);
-
-            return diagnostics;
-
             function visitNode(node: Node) {
-                node.parent = parent;
-                nodesVisited++;
                 let oneAccepted = false;
-                const oldParent = parent;
                 const needsReset: Map<boolean> = {};
+
+                // Ensure parent pointer is set
+                node.parent = parent;
+
+                // For each lint, except those which have errored or have not accepted a parental node, call its rule
                 for (let i = 0; i < initializedLints.length; i++) {
                     activeLint = initializedLints[i];
+                    if (activeLint.errored || !activeLint.accepted) {
+                        continue;
+                    }
+
+                    startExtensionProfile(profilingEnabled, activeLint.name, "visit");
+                    try {
+                        activeLint.accepted = !activeLint.walker.visit(node, error);
+                    }
+                    catch (e) {
+                        activeLint.errored = true;
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName("!!!"), `visit failed with error: ${e}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
+                    }
+                    completeExtensionProfile(profilingEnabled, activeLint.name, "visit");
+
                     if (activeLint.accepted) {
-                        if (!activeLint.errored) {
-                            startExtensionProfile(profilingEnabled, activeLint.name, `visitNode|${nodesVisited}`);
-                            try {
-                                activeLint.accepted = !activeLint.walker.visit(node, error);
-                            }
-                            catch (e) {
-                                activeLint.errored = true;
-                                diagnostics.push(createExtensionDiagnostic(errorQualifiedName("!!!"), `visit failed with error: ${e}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
-                            }
-                            completeExtensionProfile(profilingEnabled, activeLint.name, `visitNode|${nodesVisited}`);
-                        }
-                        if (activeLint.accepted) {
-                            oneAccepted = true;
-                        }
-                        else {
-                            needsReset[i] = true;
-                        }
+                        oneAccepted = true;
+                    }
+                    else {
+                        needsReset[i] = true;
                     }
                 }
+
+                // Save the parent, then recur into the child nodes
+                const oldParent = parent;
                 parent = node;
                 if (oneAccepted) {
                     forEachChild(node, visitNode);
                 }
                 parent = oldParent;
+
+                // All this node's children have been processed, for each lint
+                //  - If it set accepted to false during this node (needsReset), set it back to true
+                //  - If it has an afterVisit method, call it
                 for (let i = 0; i < initializedLints.length; i++) {
                     activeLint = initializedLints[i];
+                    if (activeLint.errored) {
+                        continue;
+                    }
                     if (!needsReset[i]) {
                         activeLint.accepted = true;
                         needsReset[i] = false;
                     }
-                    if (!activeLint.errored && activeLint.walker.afterVisit) {
-                        try {
-                            activeLint.walker.afterVisit(node, error);
-                        }
-                        catch (e) {
-                            activeLint.errored = true;
-                            diagnostics.push(createExtensionDiagnostic(errorQualifiedName("!!!"), `afterVisit failed with error: ${e}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
-                        }
+                    if (!activeLint.walker.afterVisit) {
+                        continue;
                     }
+                    startExtensionProfile(profilingEnabled, activeLint.name, "afterVisit");
+                    try {
+                        activeLint.walker.afterVisit(node, error);
+                    }
+                    catch (e) {
+                        activeLint.errored = true;
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName("!!!"), `afterVisit failed with error: ${e}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
+                    }
+                    completeExtensionProfile(profilingEnabled, activeLint.name, "afterVisit");
                 }
             }
 
@@ -1623,74 +1634,19 @@ namespace ts {
                 return `${activeLint.name}(${shortname})`;
             }
 
-            function error(err: string): void;
-            function error(err: string, node: Node): void;
-            function error(err: string, start: number, length: number): void;
-            function error(shortname: string, err: string): void;
-            function error(shortname: string, err: string, span: Node): void;
-            function error(shortname: string, err: string, start: number, length: number): void;
-            function error(level: DiagnosticCategory, err: string): void;
-            function error(level: DiagnosticCategory, err: string, node: Node): void;
-            function error(level: DiagnosticCategory, err: string, start: number, length: number): void;
-            function error(level: DiagnosticCategory, shortname: string, err: string): void;
-            function error(level: DiagnosticCategory, shortname: string, err: string, span: Node): void;
-            function error(level: DiagnosticCategory, shortname: string, err: string, start: number, length: number): void;
-            function error(
-                levelErrOrShortname: DiagnosticCategory | string,
-                errShortnameSpanOrStart?: string | Node | number,
-                errSpanStartOrLength?: string | Node | number,
-                startSpanOrLength?: number | Node,
-                length?: number): void {
-                if (typeof levelErrOrShortname === "undefined") {
-                    Debug.fail("You must at least provide an error message to error.");
-                    return;
+            function ensure(param: any, paramName: string, istype: string) {
+                if (typeof param !== istype) {
+                    Debug.fail(`${paramName} must be a ${istype}.`);
                 }
-                if (typeof errShortnameSpanOrStart === "undefined") {
-                    if (typeof levelErrOrShortname !== "string") {
-                        Debug.fail("If only one argument is passed to error, it must be the error message string.");
-                        return;
-                    }
-                    // error(err: string): void;
-                    diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), levelErrOrShortname));
-                    return;
-                }
-                if (typeof errSpanStartOrLength === "undefined") {
-                    error2Arguments(levelErrOrShortname, errShortnameSpanOrStart);
-                    return;
-                }
-                if (typeof startSpanOrLength === "undefined") {
-                    error3Arguments(levelErrOrShortname, errShortnameSpanOrStart, errSpanStartOrLength);
-                    return;
-                }
-                if (typeof length === "undefined") {
-                    error4Arguments(levelErrOrShortname, errShortnameSpanOrStart, errSpanStartOrLength, startSpanOrLength);
-                    return;
-                }
-                if (typeof levelErrOrShortname !== "number") {
-                    Debug.fail("When five arguments are passed to error, the first must be the diagnostic category of the error.");
-                    return;
-                }
-                if (typeof errShortnameSpanOrStart !== "string") {
-                    Debug.fail("When five arguments are passed to error, the second argument must be the shortname of the error.");
-                    return;
-                }
-                if (typeof errSpanStartOrLength !== "string") {
-                    Debug.fail("When five arguments are passed to error, the third argument must be the error message.");
-                    return;
-                }
-                if (typeof startSpanOrLength !== "number") {
-                    Debug.fail("When five arguments are passed to error, the fourth argument must be the start position of the error span.");
-                    return;
-                }
-                if (typeof length !== "number") {
-                    Debug.fail("When five arguments are passed to error, the fifth argument must be the length of the error span.");
-                    return;
-                }
-                // error(level: DiagnosticCategory, shortname: string, err: string, start: number, length: number): void;
-                diagnostics.push(createExtensionDiagnostic(errorQualifiedName(errShortnameSpanOrStart), errSpanStartOrLength, sourceFile, startSpanOrLength, length, levelErrOrShortname));
             }
 
-            function error2Arguments(errShortnameOrLevel: string | DiagnosticCategory, spanOrErr: Node | string | number): void {
+            const errorOverloads: ((...args: any[]) => void)[] = [() => {
+                Debug.fail("You must at least provide an error message to the error function.");
+            },
+            (err: string) => {
+                diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), err));
+            },
+            (errShortnameOrLevel: string | DiagnosticCategory, spanOrErr: Node | string | number) => {
                 if (typeof errShortnameOrLevel === "string") {
                     if (typeof spanOrErr === "string") {
                         // error(shortname: string, err: string): void;
@@ -1705,31 +1661,26 @@ namespace ts {
                     }
                 }
                 else if (typeof errShortnameOrLevel === "number") {
-                    if (typeof spanOrErr !== "string") {
-                        Debug.fail("When two arguments are passed to error and the first is a DiagnosticCategory, the second must be the error message string.");
-                        return;
-                    }
+                    ensure(spanOrErr, "Error message", "string");
+
                     // error(level: DiagnosticCategory, err: string): void;
-                    diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), spanOrErr, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, errShortnameOrLevel));
+                    diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), spanOrErr as string, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, errShortnameOrLevel));
                 }
                 else {
                     Debug.fail("When two arguments are passed to error, the first argument must be either the error message, the error shortname, or the DiagnosticCategory of the error.");
                 }
-            }
-
-            function error3Arguments(errShortnameOrLevel: string | DiagnosticCategory, startErrOrShortname: number | string | Node, lengthSpanOrErr: number | Node | string) {
+            },
+            (errShortnameOrLevel: string | DiagnosticCategory, startErrOrShortname: number | string | Node, lengthSpanOrErr: number | Node | string) => {
                 if (typeof errShortnameOrLevel === "number") {
-                    if (typeof startErrOrShortname !== "string") {
-                        Debug.fail("When three arguments are passed to error and the first is a diagnostic category, the second argument must be either an error message or shortcode.");
-                        return;
-                    }
+                    ensure(startErrOrShortname, "Error message or error shortcode", "string");
+
                     if (typeof lengthSpanOrErr === "string") {
                         // error(level: DiagnosticCategory, shortname: string, err: string): void;
-                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName(startErrOrShortname), lengthSpanOrErr, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, errShortnameOrLevel));
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName(startErrOrShortname as string), lengthSpanOrErr, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, errShortnameOrLevel));
                     }
                     else if (typeof lengthSpanOrErr === "object") {
                         // error(level: DiagnosticCategory, err: string, node: Node): void;
-                        diagnostics.push(createExtensionDiagnosticForNode(lengthSpanOrErr, errorQualifiedName(), startErrOrShortname, errShortnameOrLevel));
+                        diagnostics.push(createExtensionDiagnosticForNode(lengthSpanOrErr, errorQualifiedName(), startErrOrShortname as string, errShortnameOrLevel));
                     }
                     else {
                         Debug.fail("When three arguments are passed to error and the first is a diagnostic category, the third argument must either be an error message or the node errored on.");
@@ -1737,20 +1688,16 @@ namespace ts {
                 }
                 else if (typeof errShortnameOrLevel === "string") {
                     if (typeof startErrOrShortname === "number") {
-                        if (typeof lengthSpanOrErr !== "number") {
-                            Debug.fail("When three arguments are passed to error and the first is an error message, the third must be the message length.");
-                            return;
-                        }
+                        ensure(lengthSpanOrErr, "Error span length", "number");
+
                         // error(err: string, start: number, length: number): void;
-                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), errShortnameOrLevel, sourceFile, startErrOrShortname, lengthSpanOrErr));
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), errShortnameOrLevel, sourceFile, startErrOrShortname, lengthSpanOrErr as number));
                     }
                     else if (typeof startErrOrShortname === "string") {
-                        if (typeof lengthSpanOrErr !== "object") {
-                            Debug.fail("When three arguments are passed to error and the first is an error shortcode, the third must be the node errored on.");
-                            return;
-                        }
+                        ensure(lengthSpanOrErr, "Error node", "object");
+
                         // error(shortname: string, err: string, span: Node): void;
-                        diagnostics.push(createExtensionDiagnosticForNode(lengthSpanOrErr, errorQualifiedName(errShortnameOrLevel), startErrOrShortname));
+                        diagnostics.push(createExtensionDiagnosticForNode(lengthSpanOrErr as Node, errorQualifiedName(errShortnameOrLevel), startErrOrShortname));
                     }
                     else {
                         Debug.fail("When three arguments are passed to error and the first is an error shortcode or message, the second must be either an error message or a span start number, respectively.");
@@ -1759,29 +1706,22 @@ namespace ts {
                 else {
                     Debug.fail("When three arguments are passed to error, the first argument must be either a diagnostic category, a error shortname, or an error message.");
                 }
-            }
+            },
+            (levelOrShortname: DiagnosticCategory | string, errOrShortname: string | number | Node, startOrErr: string | number | Node, lengthOrSpan: number | Node) => {
+                ensure(errOrShortname, "Error message or error shortcode", "string");
 
-            function error4Arguments(levelOrShortname: DiagnosticCategory | string, errOrShortname: string | number | Node, startOrErr: string | number | Node, lengthOrSpan: number | Node) {
-                if (typeof errOrShortname !== "string") {
-                    Debug.fail("When four arguments are passed to error, the second argument must either be an error message string or an error shortcode.");
-                    return;
-                }
                 if (typeof levelOrShortname === "number") {
                     if (typeof startOrErr === "string") {
-                        if (typeof lengthOrSpan !== "object") {
-                            Debug.fail("When four arguments are passed to error and the first is a DiagnosticCategory, the fourth argument must be the node errored on.");
-                            return;
-                        }
+                        ensure(lengthOrSpan, "Error node", "object");
+
                         // error(level: DiagnosticCategory, shortname: string, err: string, span: Node): void;
-                        diagnostics.push(createExtensionDiagnosticForNode(lengthOrSpan, errorQualifiedName(errOrShortname), startOrErr, levelOrShortname));
+                        diagnostics.push(createExtensionDiagnosticForNode(lengthOrSpan as Node, errorQualifiedName(errOrShortname as string), startOrErr, levelOrShortname));
                     }
                     else if (typeof startOrErr === "number") {
-                        if (typeof lengthOrSpan !== "number") {
-                            Debug.fail("When four arguments are passed to error and the first is a DiagnosticCategory, the fourth argument must be the error span length.");
-                            return;
-                        }
+                        ensure(lengthOrSpan, "Error span length", "number");
+
                         // error(level: DiagnosticCategory, err: string, start: number, length: number): void;
-                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), errOrShortname, sourceFile, startOrErr, lengthOrSpan, levelOrShortname));
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), errOrShortname as string, sourceFile, startOrErr, lengthOrSpan as number, levelOrShortname));
                     }
                     else {
                         Debug.fail("When four arguments are passed to error and the first is a DiagnosticCategory, the third argument must be the error message.");
@@ -1789,21 +1729,48 @@ namespace ts {
                     }
                 }
                 else if (typeof levelOrShortname === "string") {
-                    if (typeof startOrErr !== "number") {
-                        Debug.fail("When four arguments are passed to error and the first is a error shortname string, the third argument must be the error span start.");
-                        return;
-                    }
-                    if (typeof lengthOrSpan !== "number") {
-                        Debug.fail("When four arguments are passed to error and the first is a error shortname string, the third argument must be the error span length.");
-                        return;
-                    }
+                    ensure(startOrErr, "Error span start", "number");
+                    ensure(lengthOrSpan, "Error span length", "number");
+
                     // error(shortname: string, err: string, start: number, length: number): void;
-                    diagnostics.push(createExtensionDiagnostic(errorQualifiedName(levelOrShortname), errOrShortname, sourceFile, startOrErr, lengthOrSpan));
+                    diagnostics.push(createExtensionDiagnostic(errorQualifiedName(levelOrShortname), errOrShortname as string, sourceFile, startOrErr as number, lengthOrSpan as number));
                 }
                 else {
                     Debug.fail("When four arguments are passed to error, the first argument must be either a DiagnosticCategory or a error shortname string.");
                 }
+            },
+            (level: DiagnosticCategory, shortname: string, err: string, start: number, length: number) => {
+                ensure(level, "Diagnostic level", "number");
+                ensure(shortname, "Error shortcode", "string");
+                ensure(err, "Error message", "string");
+                ensure(start, "Error span start", "number");
+                ensure(length, "Error span length", "number");
+
+                diagnostics.push(createExtensionDiagnostic(errorQualifiedName(shortname), err, sourceFile, start, length, level));
+            }];
+
+            function tooManyArguments(length: number, found: number) {
+                return () => Debug.fail(`Too many arguments provided to error (Expected up to ${length}, but found ${found}).`);
             }
+
+            function error(err: string): void;
+            function error(err: string, node: Node): void;
+            function error(err: string, start: number, length: number): void;
+            function error(shortname: string, err: string): void;
+            function error(shortname: string, err: string, span: Node): void;
+            function error(shortname: string, err: string, start: number, length: number): void;
+            function error(level: DiagnosticCategory, err: string): void;
+            function error(level: DiagnosticCategory, err: string, node: Node): void;
+            function error(level: DiagnosticCategory, err: string, start: number, length: number): void;
+            function error(level: DiagnosticCategory, shortname: string, err: string): void;
+            function error(level: DiagnosticCategory, shortname: string, err: string, span: Node): void;
+            function error(level: DiagnosticCategory, shortname: string, err: string, start: number, length: number): void;
+            function error(): void {
+                (errorOverloads[arguments.length] || tooManyArguments(errorOverloads.length - 1, arguments.length)).apply(/*thisArg*/undefined, arguments);
+            }
+
+            visitNode(sourceFile);
+            return diagnostics;
         }
 
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
