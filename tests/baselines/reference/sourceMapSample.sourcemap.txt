@@ -121,26 +121,20 @@ sourceFile:sourceMapSample.ts
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^
-4 >                  ^^
-5 >                    ^
-6 >                     ^->
+4 >                  ^^^^->
 1->
 2 >    
 3 >               Bar
-4 >                   
-5 >                    {
 1->Emitted(4, 5) Source(1, 12) + SourceIndex(0)
 2 >Emitted(4, 16) Source(1, 12) + SourceIndex(0)
 3 >Emitted(4, 19) Source(1, 15) + SourceIndex(0)
-4 >Emitted(4, 21) Source(1, 16) + SourceIndex(0)
-5 >Emitted(4, 22) Source(1, 17) + SourceIndex(0)
 ---
 >>>        "use strict";
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^
 3 >                    ^
 4 >                     ^^^^^^^^^^^^^^^^->
-1->
+1-> {
   >    
 2 >        "use strict"
 3 >                    ;

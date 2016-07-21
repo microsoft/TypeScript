@@ -2836,14 +2836,6 @@ namespace ts {
                 /*location*/ blockLocation,
                 /*multiLine*/ true
             );
-
-            // TODO(rbuckton): This should be removed once source maps are aligned with the old
-            //                 emitter and new baselines are taken. This exists solely to
-            //                 align with the old emitter.
-            if (body.kind === SyntaxKind.ModuleBlock) {
-                setNodeEmitFlags(block, NodeEmitFlags.SourceMapEmitOpenBraceAsToken);
-            }
-
             return block;
         }
 

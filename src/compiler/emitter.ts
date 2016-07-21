@@ -1651,17 +1651,7 @@ const _super = (function (geti, seti) {
         }
 
         function emitBlockFunctionBody(parentNode: Node, body: Block) {
-            // TODO(rbuckton): This should be removed once source maps are aligned with the old
-            //                 emitter and new baselines are taken. This exists solely to
-            //                 align with the old emitter.
-            if (body.emitFlags & NodeEmitFlags.SourceMapEmitOpenBraceAsToken) {
-                write(" ");
-                writeToken(SyntaxKind.OpenBraceToken, body.pos);
-            }
-            else {
-                write(" {");
-            }
-
+            write(" {");
             increaseIndent();
 
             emitBodyWithDetachedComments(body, body.statements,

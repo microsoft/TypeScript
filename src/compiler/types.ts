@@ -3110,12 +3110,6 @@ namespace ts {
         AsyncFunctionBody = 1 << 21,
         ReuseTempVariableScope = 1 << 22,        // Reuse the existing temp variable scope during emit.
         CustomPrologue = 1 << 23,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
-
-        // SourceMap Specialization.
-        // TODO(rbuckton): These should be removed once source maps are aligned with the old
-        //                 emitter and new baselines are taken. This exists solely to
-        //                 align with the old emitter.
-        SourceMapEmitOpenBraceAsToken = 1 << 24,        // Emits the open brace of a block function body as a source mapped token.
     }
 
     /** Additional context provided to `visitEachChild` */
