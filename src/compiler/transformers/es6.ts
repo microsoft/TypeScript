@@ -1196,7 +1196,7 @@ namespace ts {
          */
         function transformAccessorsToStatement(receiver: LeftHandSideExpression, accessors: AllAccessorDeclarations): Statement {
             const statement = createStatement(
-                transformAccessorsToExpression(receiver, accessors),
+                transformAccessorsToExpression(receiver, accessors, /*startsOnNewLine*/ false),
                 /*location*/ getSourceMapRange(accessors.firstAccessor)
             );
 
@@ -1213,7 +1213,7 @@ namespace ts {
          *
          * @param receiver The receiver for the member.
          */
-        function transformAccessorsToExpression(receiver: LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations): Expression {
+        function transformAccessorsToExpression(receiver: LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations, startsOnNewLine: boolean): Expression {
             // To align with source maps in the old emitter, the receiver and property name
             // arguments are both mapped contiguously to the accessor name.
             const target = getMutableClone(receiver);
@@ -1246,7 +1246,7 @@ namespace ts {
                 createPropertyAssignment("configurable", createLiteral(true))
             );
 
-            return createCall(
+            const call = createCall(
                 createPropertyAccess(createIdentifier("Object"), "defineProperty"),
                 /*typeArguments*/ undefined,
                 [
@@ -1255,6 +1255,10 @@ namespace ts {
                     createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)
                 ]
             );
+            if (startsOnNewLine) {
+                call.startsOnNewLine = true;
+            }
+            return call;
         }
 
         /**
@@ -1895,26 +1899,28 @@ namespace ts {
 
             // Write out the first non-computed properties, then emit the rest through indexing on the temp variable.
             const expressions: Expression[] = [];
-            addNode(expressions,
-                createAssignment(
-                    temp,
-                    setNodeEmitFlags(
-                        createObjectLiteral(
-                            visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialProperties),
-                            /*location*/ undefined,
-                            node.multiLine
-                        ),
-                        NodeEmitFlags.Indented
-                    )
-                ),
-                node.multiLine
+            expressions.push(
+                startOnNewLine(
+                    createAssignment(
+                        temp,
+                        setNodeEmitFlags(
+                            createObjectLiteral(
+                                visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialProperties),
+                                /*location*/ undefined,
+                                node.multiLine
+                            ),
+                            NodeEmitFlags.Indented
+                        )
+                    ),
+                    node.multiLine
+                )
             );
 
             addObjectLiteralMembers(expressions, node, temp, numInitialProperties);
 
             // We need to clone the temporary identifier so that we can write it on a
             // new line
-            addNode(expressions, getMutableClone(temp), node.multiLine);
+            expressions.push(startOnNewLine(getMutableClone(temp), node.multiLine));
             return inlineExpressions(expressions);
         }
 
@@ -2313,21 +2319,21 @@ namespace ts {
                     case SyntaxKind.SetAccessor:
                         const accessors = getAllAccessorDeclarations(node.properties, <AccessorDeclaration>property);
                         if (property === accessors.firstAccessor) {
-                            addNode(expressions, transformAccessorsToExpression(receiver, accessors), node.multiLine);
+                            expressions.push(transformAccessorsToExpression(receiver, accessors, node.multiLine));
                         }
 
                         break;
 
                     case SyntaxKind.PropertyAssignment:
-                        addNode(expressions, transformPropertyAssignmentToExpression(node, <PropertyAssignment>property, receiver), node.multiLine);
+                        expressions.push(transformPropertyAssignmentToExpression(node, <PropertyAssignment>property, receiver, node.multiLine));
                         break;
 
                     case SyntaxKind.ShorthandPropertyAssignment:
-                        addNode(expressions, transformShorthandPropertyAssignmentToExpression(node, <ShorthandPropertyAssignment>property, receiver), node.multiLine);
+                        expressions.push(transformShorthandPropertyAssignmentToExpression(node, <ShorthandPropertyAssignment>property, receiver, node.multiLine));
                         break;
 
                     case SyntaxKind.MethodDeclaration:
-                        addNode(expressions, transformObjectLiteralMethodDeclarationToExpression(node, <MethodDeclaration>property, receiver), node.multiLine);
+                        expressions.push(transformObjectLiteralMethodDeclarationToExpression(node, <MethodDeclaration>property, receiver, node.multiLine));
                         break;
 
                     default:
@@ -2344,8 +2350,8 @@ namespace ts {
          * @param property The PropertyAssignment node.
          * @param receiver The receiver for the assignment.
          */
-        function transformPropertyAssignmentToExpression(node: ObjectLiteralExpression, property: PropertyAssignment, receiver: Expression) {
-            return createAssignment(
+        function transformPropertyAssignmentToExpression(node: ObjectLiteralExpression, property: PropertyAssignment, receiver: Expression, startsOnNewLine: boolean) {
+            const expression = createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
                     visitNode(property.name, visitor, isPropertyName)
@@ -2353,6 +2359,10 @@ namespace ts {
                 visitNode(property.initializer, visitor, isExpression),
                 /*location*/ property
             );
+            if (startsOnNewLine) {
+                expression.startsOnNewLine = true;
+            }
+            return expression;
         }
 
         /**
@@ -2362,8 +2372,8 @@ namespace ts {
          * @param property The ShorthandPropertyAssignment node.
          * @param receiver The receiver for the assignment.
          */
-        function transformShorthandPropertyAssignmentToExpression(node: ObjectLiteralExpression, property: ShorthandPropertyAssignment, receiver: Expression) {
-            return createAssignment(
+        function transformShorthandPropertyAssignmentToExpression(node: ObjectLiteralExpression, property: ShorthandPropertyAssignment, receiver: Expression, startsOnNewLine: boolean) {
+            const expression = createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
                     visitNode(property.name, visitor, isPropertyName)
@@ -2371,6 +2381,10 @@ namespace ts {
                 getSynthesizedClone(property.name),
                 /*location*/ property
             );
+            if (startsOnNewLine) {
+                expression.startsOnNewLine = true;
+            }
+            return expression;
         }
 
         /**
@@ -2380,8 +2394,8 @@ namespace ts {
          * @param method The MethodDeclaration node.
          * @param receiver The receiver for the assignment.
          */
-        function transformObjectLiteralMethodDeclarationToExpression(node: ObjectLiteralExpression, method: MethodDeclaration, receiver: Expression) {
-            return createAssignment(
+        function transformObjectLiteralMethodDeclarationToExpression(node: ObjectLiteralExpression, method: MethodDeclaration, receiver: Expression, startsOnNewLine: boolean) {
+            const expression = createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
                     visitNode(method.name, visitor, isPropertyName)
@@ -2389,6 +2403,10 @@ namespace ts {
                 transformFunctionLikeToExpression(method, /*location*/ method, /*name*/ undefined),
                 /*location*/ method
             );
+            if (startsOnNewLine) {
+                expression.startsOnNewLine = true;
+            }
+            return expression;
         }
 
         /**

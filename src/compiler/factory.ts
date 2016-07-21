@@ -210,20 +210,6 @@ namespace ts {
 
     // Names
 
-    export function createQualifiedName(left: EntityName, right: Identifier, location?: TextRange) {
-        const node = <QualifiedName>createNode(SyntaxKind.QualifiedName, location);
-        node.left = left;
-        node.right = right;
-        return node;
-    }
-
-    export function updateQualifiedName(node: QualifiedName, left: EntityName, right: Identifier) {
-        if (node.left !== left || node.right !== right) {
-            return updateNode(createQualifiedName(left, right, node), node);
-        }
-        return node;
-    }
-
     export function createComputedPropertyName(expression: Expression, location?: TextRange) {
         const node = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName, location);
         node.expression = expression;
@@ -269,19 +255,6 @@ namespace ts {
             return updateNode(createParameterDeclaration(decorators, modifiers, node.dotDotDotToken, name, node.questionToken, type, initializer, /*location*/ node, /*flags*/ node.flags), node);
         }
 
-        return node;
-    }
-
-    export function createDecorator(expression: LeftHandSideExpression, location?: TextRange) {
-        const node = <Decorator>createNode(SyntaxKind.Decorator, location);
-        node.expression = expression;
-        return node;
-    }
-
-    export function updateDecorator(node: Decorator, expression: LeftHandSideExpression) {
-        if (node.expression !== expression) {
-            return updateNode(createDecorator(expression, node), node);
-        }
         return node;
     }
 
@@ -506,7 +479,6 @@ namespace ts {
         if (expression !== node.expression || typeArguments !== node.typeArguments || argumentsArray !== node.arguments) {
             return updateNode(createCall(expression, typeArguments, argumentsArray, /*location*/ node, node.flags), node);
         }
-
         return node;
     }
 
@@ -624,6 +596,19 @@ namespace ts {
     export function updateVoid(node: VoidExpression, expression: Expression) {
         if (node.expression !== expression) {
             return updateNode(createVoid(expression, node), node);
+        }
+        return node;
+    }
+
+    export function createAwait(expression: Expression, location?: TextRange) {
+        const node = <AwaitExpression>createNode(SyntaxKind.AwaitExpression, location);
+        node.expression = parenthesizePrefixOperand(expression);
+        return node;
+    }
+
+    export function updateAwait(node: AwaitExpression, expression: Expression) {
+        if (node.expression !== expression) {
+            return updateNode(createAwait(expression, node), node);
         }
         return node;
     }
@@ -768,6 +753,7 @@ namespace ts {
         return node;
     }
 
+
     // Misc
 
     export function createTemplateSpan(expression: Expression, literal: TemplateLiteralFragment, location?: TextRange) {
@@ -829,14 +815,6 @@ namespace ts {
             return updateNode(createVariableDeclarationList(declarations, /*location*/ node, node.flags), node);
         }
         return node;
-    }
-
-    export function createLetDeclarationList(declarations: VariableDeclaration[], location?: TextRange) {
-        return createVariableDeclarationList(declarations, location, NodeFlags.Let);
-    }
-
-    export function createConstDeclarationList(declarations: VariableDeclaration[], location?: TextRange) {
-        return createVariableDeclarationList(declarations, location, NodeFlags.Const);
     }
 
     export function createVariableDeclaration(name: string | BindingPattern | Identifier, type?: TypeNode, initializer?: Expression, location?: TextRange, flags?: NodeFlags): VariableDeclaration {
@@ -997,22 +975,6 @@ namespace ts {
         return node;
     }
 
-    export function createTryCatchFinally(tryBlock: Block, catchClause: CatchClause, finallyBlock: Block, location?: TextRange) {
-        const node = <TryStatement>createNode(SyntaxKind.TryStatement, location);
-        node.tryBlock = tryBlock;
-        node.catchClause = catchClause;
-        node.finallyBlock = finallyBlock;
-        return node;
-    }
-
-    export function createTryCatch(tryBlock: Block, catchClause: CatchClause, location?: TextRange) {
-        return createTryCatchFinally(tryBlock, catchClause, /*finallyBlock*/ undefined, location);
-    }
-
-    export function createTryFinally(tryBlock: Block, finallyBlock: Block, location?: TextRange) {
-        return createTryCatchFinally(tryBlock, /*catchClause*/ undefined, finallyBlock, location);
-    }
-
     export function updateReturn(node: ReturnStatement, expression: Expression) {
         if (node.expression !== expression) {
             return updateNode(createReturn(expression, /*location*/ node), node);
@@ -1075,6 +1037,21 @@ namespace ts {
         return node;
     }
 
+    export function createTry(tryBlock: Block, catchClause: CatchClause, finallyBlock: Block, location?: TextRange) {
+        const node = <TryStatement>createNode(SyntaxKind.TryStatement, location);
+        node.tryBlock = tryBlock;
+        node.catchClause = catchClause;
+        node.finallyBlock = finallyBlock;
+        return node;
+    }
+
+    export function updateTry(node: TryStatement, tryBlock: Block, catchClause: CatchClause, finallyBlock: Block) {
+        if (node.tryBlock !== tryBlock || node.catchClause !== catchClause || node.finallyBlock !== finallyBlock) {
+            return updateNode(createTry(tryBlock, catchClause, finallyBlock, node), node);
+        }
+        return node;
+    }
+
     export function createCaseBlock(clauses: CaseOrDefaultClause[], location?: TextRange): CaseBlock {
         const node = <CaseBlock>createNode(SyntaxKind.CaseBlock, location);
         node.clauses = createNodeArray(clauses);
@@ -1126,30 +1103,104 @@ namespace ts {
         return node;
     }
 
-    export function createExportAssignment(isExportEquals: boolean, expression: Expression, location?: TextRange) {
+    export function createImportDeclaration(decorators: Decorator[], modifiers: Modifier[], importClause: ImportClause, moduleSpecifier?: Expression, location?: TextRange): ImportDeclaration {
+        const node = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, location);
+        node.decorators = decorators ? createNodeArray(decorators) : undefined;
+        node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
+        node.importClause = importClause;
+        node.moduleSpecifier = moduleSpecifier;
+        return node;
+    }
+
+    export function updateImportDeclaration(node: ImportDeclaration, decorators: Decorator[], modifiers: Modifier[], importClause: ImportClause, moduleSpecifier: Expression) {
+        if (node.decorators !== decorators || node.modifiers !== modifiers || node.importClause !== importClause || node.moduleSpecifier !== moduleSpecifier) {
+            return updateNode(createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier, node), node);
+        }
+        return node;
+    }
+
+    export function createImportClause(name: Identifier, namedBindings: NamedImportBindings, location?: TextRange): ImportClause {
+        const node = <ImportClause>createNode(SyntaxKind.ImportClause, location);
+        node.name = name;
+        node.namedBindings = namedBindings;
+        return node;
+    }
+
+    export function updateImportClause(node: ImportClause, name: Identifier, namedBindings: NamedImportBindings) {
+        if (node.name !== name || node.namedBindings !== namedBindings) {
+            return updateNode(createImportClause(name, namedBindings, node), node);
+        }
+        return node;
+    }
+
+    export function createNamespaceImport(name: Identifier, location?: TextRange): NamespaceImport {
+        const node = <NamespaceImport>createNode(SyntaxKind.NamespaceImport, location);
+        node.name = name;
+        return node;
+    }
+
+    export function updateNamespaceImport(node: NamespaceImport, name: Identifier) {
+        if (node.name !== name) {
+            return updateNode(createNamespaceImport(name, node), node);
+        }
+        return node;
+    }
+
+    export function createNamedImports(elements: ImportSpecifier[], location?: TextRange): NamedImports {
+        const node = <NamedImports>createNode(SyntaxKind.NamedImports, location);
+        node.elements = createNodeArray(elements);
+        return node;
+    }
+
+    export function updateNamedImports(node: NamedImports, elements: ImportSpecifier[]) {
+        if (node.elements !== elements) {
+            return updateNode(createNamedImports(elements, node), node);
+        }
+        return node;
+    }
+
+    export function createImportSpecifier(propertyName: Identifier, name: Identifier, location?: TextRange) {
+        const node = <ImportSpecifier>createNode(SyntaxKind.ImportSpecifier, location);
+        node.propertyName = propertyName;
+        node.name = name;
+        return node;
+    }
+
+    export function updateImportSpecifier(node: ImportSpecifier, propertyName: Identifier, name: Identifier) {
+        if (node.propertyName !== propertyName || node.name !== name) {
+            return updateNode(createImportSpecifier(propertyName, name, node), node);
+        }
+        return node;
+    }
+
+    export function createExportAssignment(decorators: Decorator[], modifiers: Modifier[], isExportEquals: boolean, expression: Expression, location?: TextRange) {
         const node = <ExportAssignment>createNode(SyntaxKind.ExportAssignment, location);
+        node.decorators = decorators ? createNodeArray(decorators) : undefined;
+        node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.isExportEquals = isExportEquals;
         node.expression = expression;
         return node;
     }
 
-    export function updateExportAssignment(node: ExportAssignment, expression: Expression) {
-        if (node.expression !== expression) {
-            return updateNode(createExportAssignment(node.isExportEquals, expression, node), node);
+    export function updateExportAssignment(node: ExportAssignment, decorators: Decorator[], modifiers: Modifier[], expression: Expression) {
+        if (node.decorators !== decorators || node.modifiers !== modifiers || node.expression !== expression) {
+            return updateNode(createExportAssignment(decorators, modifiers, node.isExportEquals, expression, node), node);
         }
         return node;
     }
 
-    export function createExportDeclaration(exportClause: NamedExports, moduleSpecifier?: Expression, location?: TextRange) {
+    export function createExportDeclaration(decorators: Decorator[], modifiers: Modifier[], exportClause: NamedExports, moduleSpecifier?: Expression, location?: TextRange) {
         const node = <ExportDeclaration>createNode(SyntaxKind.ExportDeclaration, location);
+        node.decorators = decorators ? createNodeArray(decorators) : undefined;
+        node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.exportClause = exportClause;
         node.moduleSpecifier = moduleSpecifier;
         return node;
     }
 
-    export function updateExportDeclaration(node: ExportDeclaration, exportClause: NamedExports, moduleSpecifier: Expression) {
-        if (node.exportClause !== exportClause || node.moduleSpecifier !== moduleSpecifier) {
-            return updateNode(createExportDeclaration(exportClause, moduleSpecifier, node), node);
+    export function updateExportDeclaration(node: ExportDeclaration, decorators: Decorator[], modifiers: Modifier[], exportClause: NamedExports, moduleSpecifier: Expression) {
+        if (node.decorators !== decorators || node.modifiers !== modifiers || node.exportClause !== exportClause || node.moduleSpecifier !== moduleSpecifier) {
+            return updateNode(createExportDeclaration(decorators, modifiers, exportClause, moduleSpecifier, node), node);
         }
         return node;
     }
@@ -1177,6 +1228,104 @@ namespace ts {
     export function updateExportSpecifier(node: ExportSpecifier, name: Identifier, propertyName: Identifier) {
         if (node.name !== name || node.propertyName !== propertyName) {
             return updateNode(createExportSpecifier(name, propertyName, node), node);
+        }
+        return node;
+    }
+
+    // JSX
+
+    export function createJsxElement(openingElement: JsxOpeningElement, children: JsxChild[], closingElement: JsxClosingElement, location?: TextRange) {
+        const node = <JsxElement>createNode(SyntaxKind.JsxElement, location);
+        node.openingElement = openingElement;
+        node.children = createNodeArray(children);
+        node.closingElement = closingElement;
+        return node;
+    }
+
+    export function updateJsxElement(node: JsxElement, openingElement: JsxOpeningElement, children: JsxChild[], closingElement: JsxClosingElement) {
+        if (node.openingElement !== openingElement || node.children !== children || node.closingElement !== closingElement) {
+            return updateNode(createJsxElement(openingElement, children, closingElement, node), node);
+        }
+        return node;
+    }
+
+    export function createJsxSelfClosingElement(tagName: JsxTagNameExpression, attributes: JsxAttributeLike[], location?: TextRange) {
+        const node = <JsxSelfClosingElement>createNode(SyntaxKind.JsxSelfClosingElement, location);
+        node.tagName = tagName;
+        node.attributes = createNodeArray(attributes);
+        return node;
+    }
+
+    export function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]) {
+        if (node.tagName !== tagName || node.attributes !== attributes) {
+            return updateNode(createJsxSelfClosingElement(tagName, attributes, node), node);
+        }
+        return node;
+    }
+
+    export function createJsxOpeningElement(tagName: JsxTagNameExpression, attributes: JsxAttributeLike[], location?: TextRange) {
+        const node = <JsxOpeningElement>createNode(SyntaxKind.JsxOpeningElement, location);
+        node.tagName = tagName;
+        node.attributes = createNodeArray(attributes);
+        return node;
+    }
+
+    export function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]) {
+        if (node.tagName !== tagName || node.attributes !== attributes) {
+            return updateNode(createJsxOpeningElement(tagName, attributes, node), node);
+        }
+        return node;
+    }
+
+    export function createJsxClosingElement(tagName: JsxTagNameExpression, location?: TextRange) {
+        const node = <JsxClosingElement>createNode(SyntaxKind.JsxClosingElement, location);
+        node.tagName = tagName;
+        return node;
+    }
+
+    export function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression) {
+        if (node.tagName !== tagName) {
+            return updateNode(createJsxClosingElement(tagName, node), node);
+        }
+        return node;
+    }
+
+    export function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression, location?: TextRange) {
+        const node = <JsxAttribute>createNode(SyntaxKind.JsxAttribute, location);
+        node.name = name;
+        node.initializer = initializer;
+        return node;
+    }
+
+    export function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression) {
+        if (node.name !== name || node.initializer !== initializer) {
+            return updateNode(createJsxAttribute(name, initializer, node), node);
+        }
+        return node;
+    }
+
+    export function createJsxSpreadAttribute(expression: Expression, location?: TextRange) {
+        const node = <JsxSpreadAttribute>createNode(SyntaxKind.JsxSpreadAttribute, location);
+        node.expression = expression;
+        return node;
+    }
+
+    export function updateJsxSpreadAttribute(node: JsxSpreadAttribute, expression: Expression) {
+        if (node.expression !== expression) {
+            return updateNode(createJsxSpreadAttribute(expression, node), node);
+        }
+        return node;
+    }
+
+    export function createJsxExpression(expression: Expression, location?: TextRange) {
+        const node = <JsxExpression>createNode(SyntaxKind.JsxExpression, location);
+        node.expression = expression;
+        return node;
+    }
+
+    export function updateJsxExpression(node: JsxExpression, expression: Expression) {
+        if (node.expression !== expression) {
+            return updateNode(createJsxExpression(expression, node), node);
         }
         return node;
     }
@@ -1220,6 +1369,20 @@ namespace ts {
     export function updateDefaultClause(node: DefaultClause, statements: Statement[]) {
         if (node.statements !== statements) {
             return updateNode(createDefaultClause(statements, node), node);
+        }
+        return node;
+    }
+
+    export function createCatchClause(variableDeclaration: string | VariableDeclaration, block: Block, location?: TextRange) {
+        const node = <CatchClause>createNode(SyntaxKind.CatchClause, location);
+        node.variableDeclaration = typeof variableDeclaration === "string" ? createVariableDeclaration(variableDeclaration) : variableDeclaration;
+        node.block = block;
+        return node;
+    }
+
+    export function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration, block: Block) {
+        if (node.variableDeclaration !== variableDeclaration || node.block !== block) {
+            return updateNode(createCatchClause(variableDeclaration, block, node), node);
         }
         return node;
     }
@@ -1382,32 +1545,6 @@ namespace ts {
         return createVoid(createLiteral(0));
     }
 
-    export function createImportDeclaration(importClause: ImportClause, moduleSpecifier?: Expression, location?: TextRange): ImportDeclaration {
-        const node = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, location);
-        node.importClause = importClause;
-        node.moduleSpecifier = moduleSpecifier;
-        return node;
-    }
-
-    export function createImportClause(name: Identifier, namedBindings: NamedImportBindings, location?: TextRange): ImportClause {
-        const node = <ImportClause>createNode(SyntaxKind.ImportClause, location);
-        node.name = name;
-        node.namedBindings = namedBindings;
-        return node;
-    }
-
-    export function createNamespaceImport(name: Identifier): NamespaceImport {
-        const node = <NamespaceImport>createNode(SyntaxKind.NamespaceImport);
-        node.name = name;
-        return node;
-    }
-
-    export function createNamedImports(elements: NodeArray<ImportSpecifier>, location?: TextRange): NamedImports {
-        const node = <NamedImports>createNode(SyntaxKind.NamedImports, location);
-        node.elements = elements;
-        return node;
-    }
-
     export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
         if (isComputedPropertyName(memberName)) {
              return createElementAccess(target, memberName.expression, location);
@@ -1502,7 +1639,15 @@ namespace ts {
                 argumentsList.push(createNull());
             }
 
-            addNodes(argumentsList, children, /*startOnNewLine*/ children.length > 1);
+            if (children.length > 1) {
+                for (const child of children) {
+                    child.startsOnNewLine = true;
+                    argumentsList.push(child);
+                }
+            }
+            else {
+                argumentsList.push(children[0]);
+            }
         }
 
         return createCall(
@@ -1514,6 +1659,14 @@ namespace ts {
             argumentsList,
             location
         );
+    }
+
+    export function createLetDeclarationList(declarations: VariableDeclaration[], location?: TextRange) {
+        return createVariableDeclarationList(declarations, location, NodeFlags.Let);
+    }
+
+    export function createConstDeclarationList(declarations: VariableDeclaration[], location?: TextRange) {
+        return createVariableDeclarationList(declarations, location, NodeFlags.Const);
     }
 
     // Helpers
@@ -2482,8 +2635,8 @@ namespace ts {
         return node;
     }
 
-    export function startOnNewLine<T extends Node>(node: T): T {
-        node.startsOnNewLine = true;
+    export function startOnNewLine<T extends Node>(node: T, startsOnNewLine?: boolean): T {
+        node.startsOnNewLine = startsOnNewLine !== false;
         return node;
     }
 

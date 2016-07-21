@@ -38,6 +38,8 @@ namespace ts {
      * Each edge corresponds to a property in a Node subtype that should be traversed when visiting
      * each child. The properties are assigned in the order in which traversal should occur.
      *
+     * We only add entries for nodes that do not have a create/update pair defined in factory.ts
+     *
      * NOTE: This needs to be kept up to date with changes to nodes in "types.ts". Currently, this
      *       map is not comprehensive. Only node edges relevant to tree transformation are
      *       currently defined. We may extend this to be more comprehensive, and eventually
@@ -45,12 +47,16 @@ namespace ts {
      *       significantly impacted.
      */
     const nodeEdgeTraversalMap: Map<NodeTraversalPath> = {
+        [SyntaxKind.QualifiedName]: [
+            { name: "left", test: isEntityName },
+            { name: "right", test: isIdentifier }
+        ],
+        [SyntaxKind.Decorator]: [
+            { name: "expression", test: isLeftHandSideExpression }
+        ],
         [SyntaxKind.TypeAssertionExpression]: [
             { name: "type", test: isTypeNode },
             { name: "expression", test: isUnaryExpression }
-        ],
-        [SyntaxKind.AwaitExpression]: [
-            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand }
         ],
         [SyntaxKind.AsExpression]: [
             { name: "expression", test: isExpression },
@@ -58,11 +64,6 @@ namespace ts {
         ],
         [SyntaxKind.NonNullExpression]: [
             { name: "expression", test: isLeftHandSideExpression }
-        ],
-        [SyntaxKind.TryStatement]: [
-            { name: "tryBlock", test: isBlock },
-            { name: "catchClause", test: isCatchClause, optional: true },
-            { name: "finallyBlock", test: isBlock, optional: true }
         ],
         [SyntaxKind.EnumDeclaration]: [
             { name: "decorators", test: isDecorator },
@@ -85,76 +86,8 @@ namespace ts {
             { name: "name", test: isIdentifier },
             { name: "moduleReference", test: isModuleReference }
         ],
-        [SyntaxKind.ImportDeclaration]: [
-            { name: "decorators", test: isDecorator },
-            { name: "modifiers", test: isModifier },
-            { name: "importClause", test: isImportClause, optional: true },
-            { name: "moduleSpecifier", test: isExpression }
-        ],
-        [SyntaxKind.ImportClause]: [
-            { name: "name", test: isIdentifier, optional: true },
-            { name: "namedBindings", test: isNamedImportBindings, optional: true }
-        ],
-        [SyntaxKind.NamespaceImport]: [
-            { name: "name", test: isIdentifier }
-        ],
-        [SyntaxKind.NamedImports]: [
-            { name: "elements", test: isImportSpecifier }
-        ],
-        [SyntaxKind.ImportSpecifier]: [
-            { name: "propertyName", test: isIdentifier, optional: true },
-            { name: "name", test: isIdentifier }
-        ],
-        [SyntaxKind.ExportAssignment]: [
-            { name: "decorators", test: isDecorator },
-            { name: "modifiers", test: isModifier },
-            { name: "expression", test: isExpression }
-        ],
-        [SyntaxKind.ExportDeclaration]: [
-            { name: "decorators", test: isDecorator },
-            { name: "modifiers", test: isModifier },
-            { name: "exportClause", test: isNamedExports, optional: true },
-            { name: "moduleSpecifier", test: isExpression, optional: true }
-        ],
-        [SyntaxKind.NamedExports]: [
-            { name: "elements", test: isExportSpecifier }
-        ],
-        [SyntaxKind.ExportSpecifier]: [
-            { name: "propertyName", test: isIdentifier, optional: true },
-            { name: "name", test: isIdentifier }
-        ],
         [SyntaxKind.ExternalModuleReference]: [
             { name: "expression", test: isExpression, optional: true }
-        ],
-        [SyntaxKind.JsxElement]: [
-            { name: "openingElement", test: isJsxOpeningElement },
-            { name: "children", test: isJsxChild },
-            { name: "closingElement", test: isJsxClosingElement }
-        ],
-        [SyntaxKind.JsxSelfClosingElement]: [
-            { name: "tagName", test: isEntityName },
-            { name: "attributes", test: isJsxAttributeLike }
-        ],
-        [SyntaxKind.JsxOpeningElement]: [
-            { name: "tagName", test: isEntityName },
-            { name: "attributes", test: isJsxAttributeLike }
-        ],
-        [SyntaxKind.JsxClosingElement]: [
-            { name: "tagName", test: isEntityName }
-        ],
-        [SyntaxKind.JsxAttribute]: [
-            { name: "name", test: isIdentifier },
-            { name: "initializer", test: isStringLiteralOrJsxExpression, optional: true }
-        ],
-        [SyntaxKind.JsxSpreadAttribute]: [
-            { name: "expression", test: isExpression }
-        ],
-        [SyntaxKind.JsxExpression]: [
-            { name: "expression", test: isExpression, optional: true }
-        ],
-        [SyntaxKind.CatchClause]: [
-            { name: "variableDeclaration", test: isVariableDeclaration },
-            { name: "block", test: isBlock }
         ],
         [SyntaxKind.EnumMember]: [
             { name: "name", test: isPropertyName },
@@ -187,24 +120,23 @@ namespace ts {
             return initial;
         }
 
+        // We do not yet support types.
+        if ((kind >= SyntaxKind.TypePredicate && kind <= SyntaxKind.StringLiteralType)) {
+            return initial;
+        }
+
         let result = initial;
-        switch (kind) {
+        switch (node.kind) {
             // Leaf nodes
-            case SyntaxKind.ThisType:
-            case SyntaxKind.StringLiteralType:
             case SyntaxKind.SemicolonClassElement:
             case SyntaxKind.EmptyStatement:
             case SyntaxKind.OmittedExpression:
             case SyntaxKind.DebuggerStatement:
+            case SyntaxKind.NotEmittedStatement:
                 // No need to visit nodes with no children.
                 break;
 
             // Names
-            case SyntaxKind.QualifiedName:
-                result = reduceNode((<QualifiedName>node).left, f, result);
-                result = reduceNode((<QualifiedName>node).right, f, result);
-                break;
-
             case SyntaxKind.ComputedPropertyName:
                 result = reduceNode((<ComputedPropertyName>node).expression, f, result);
                 break;
@@ -290,6 +222,11 @@ namespace ts {
                 result = reduceNode((<PropertyAccessExpression>node).name, f, result);
                 break;
 
+            case SyntaxKind.ElementAccessExpression:
+                result = reduceNode((<ElementAccessExpression>node).expression, f, result);
+                result = reduceNode((<ElementAccessExpression>node).argumentExpression, f, result);
+                break;
+
             case SyntaxKind.CallExpression:
                 result = reduceNode((<CallExpression>node).expression, f, result);
                 result = reduceLeft((<CallExpression>node).typeArguments, f, result);
@@ -331,7 +268,8 @@ namespace ts {
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.YieldExpression:
             case SyntaxKind.SpreadElementExpression:
-                result = reduceNode((<ParenthesizedExpression | DeleteExpression | TypeOfExpression | VoidExpression | AwaitExpression | YieldExpression | SpreadElementExpression>node).expression, f, result);
+            case SyntaxKind.NonNullExpression:
+                result = reduceNode((<ParenthesizedExpression | DeleteExpression | TypeOfExpression | VoidExpression | AwaitExpression | YieldExpression | SpreadElementExpression | NonNullExpression>node).expression, f, result);
                 break;
 
             case SyntaxKind.PrefixUnaryExpression:
@@ -375,7 +313,6 @@ namespace ts {
                 break;
 
             // Element
-
             case SyntaxKind.Block:
                 result = reduceLeft((<Block>node).statements, f, result);
                 break;
@@ -474,10 +411,81 @@ namespace ts {
                 result = reduceLeft((<CaseBlock>node).clauses, f, result);
                 break;
 
+            case SyntaxKind.ImportDeclaration:
+                result = reduceLeft((<ImportDeclaration>node).decorators, f, result);
+                result = reduceLeft((<ImportDeclaration>node).modifiers, f, result);
+                result = reduceNode((<ImportDeclaration>node).importClause, f, result);
+                result = reduceNode((<ImportDeclaration>node).moduleSpecifier, f, result);
+                break;
+
+            case SyntaxKind.ImportClause:
+                result = reduceNode((<ImportClause>node).name, f, result);
+                result = reduceNode((<ImportClause>node).namedBindings, f, result);
+                break;
+
+            case SyntaxKind.NamespaceImport:
+                result = reduceNode((<NamespaceImport>node).name, f, result);
+                break;
+
+            case SyntaxKind.NamedImports:
+            case SyntaxKind.NamedExports:
+                result = reduceLeft((<NamedImports | NamedExports>node).elements, f, result);
+                break;
+
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.ExportSpecifier:
+                result = reduceNode((<ImportSpecifier | ExportSpecifier>node).propertyName, f, result);
+                result = reduceNode((<ImportSpecifier | ExportSpecifier>node).name, f, result);
+                break;
+
+            case SyntaxKind.ExportAssignment:
+                result = reduceLeft((<ExportAssignment>node).decorators, f, result);
+                result = reduceLeft((<ExportAssignment>node).modifiers, f, result);
+                result = reduceNode((<ExportAssignment>node).expression, f, result);
+                break;
+
+            case SyntaxKind.ExportDeclaration:
+                result = reduceLeft((<ExportDeclaration>node).decorators, f, result);
+                result = reduceLeft((<ExportDeclaration>node).modifiers, f, result);
+                result = reduceNode((<ExportDeclaration>node).exportClause, f, result);
+                result = reduceNode((<ExportDeclaration>node).moduleSpecifier, f, result);
+                break;
+
+            // JSX
+            case SyntaxKind.JsxElement:
+                result = reduceNode((<JsxElement>node).openingElement, f, result);
+                result = reduceLeft((<JsxElement>node).children, f, result);
+                result = reduceNode((<JsxElement>node).closingElement, f, result);
+                break;
+
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxOpeningElement:
+                result = reduceNode((<JsxSelfClosingElement | JsxOpeningElement>node).tagName, f, result);
+                result = reduceLeft((<JsxSelfClosingElement | JsxOpeningElement>node).attributes, f, result);
+                break;
+
+            case SyntaxKind.JsxClosingElement:
+                result = reduceNode((<JsxClosingElement>node).tagName, f, result);
+                break;
+
+            case SyntaxKind.JsxAttribute:
+                result = reduceNode((<JsxAttribute>node).name, f, result);
+                result = reduceNode((<JsxAttribute>node).initializer, f, result);
+                break;
+
+            case SyntaxKind.JsxSpreadAttribute:
+                result = reduceNode((<JsxSpreadAttribute>node).expression, f, result);
+                break;
+
+            case SyntaxKind.JsxExpression:
+                result = reduceNode((<JsxExpression>node).expression, f, result);
+                break;
+
             // Clauses
             case SyntaxKind.CaseClause:
                 result = reduceNode((<CaseClause>node).expression, f, result);
                 // fall-through
+
             case SyntaxKind.DefaultClause:
                 result = reduceLeft((<CaseClause | DefaultClause>node).statements, f, result);
                 break;
@@ -507,6 +515,10 @@ namespace ts {
                 result = reduceLeft((<SourceFile>node).statements, f, result);
                 break;
 
+            case SyntaxKind.PartiallyEmittedExpression:
+                result = reduceNode((<PartiallyEmittedExpression>node).expression, f, result);
+                break;
+
             default:
                 const edgeTraversalPath = nodeEdgeTraversalMap[kind];
                 if (edgeTraversalPath) {
@@ -523,7 +535,6 @@ namespace ts {
         }
 
         return result;
-
     }
 
     /**
@@ -616,8 +627,26 @@ namespace ts {
                     // Ensure we have a copy of `nodes`, up to the current index.
                     updated = createNodeArray(nodes.slice(0, i), /*location*/ nodes, nodes.hasTrailingComma);
                 }
-
-                addNode(updated, visited, /*addOnNewLine*/ undefined, test, parenthesize, parentNode, /*isVisiting*/ visited !== node);
+                if (visited) {
+                    if (isArray(visited)) {
+                        for (let visitedNode of visited) {
+                            visitedNode = parenthesize
+                                ? parenthesize(visitedNode, parentNode)
+                                : visitedNode;
+                            Debug.assertNode(visitedNode, test);
+                            aggregateTransformFlags(visitedNode);
+                            updated.push(visitedNode);
+                        }
+                    }
+                    else {
+                        const visitedNode = parenthesize
+                            ? parenthesize(visited, parentNode)
+                            : visited;
+                        Debug.assertNode(visitedNode, test);
+                        aggregateTransformFlags(visitedNode);
+                        updated.push(visitedNode);
+                    }
+                }
             }
         }
 
@@ -643,10 +672,12 @@ namespace ts {
             return node;
         }
 
-        // Special cases for frequent visitors to improve performance.
-        switch (kind) {
-            case SyntaxKind.ThisType:
-            case SyntaxKind.StringLiteralType:
+        // We do not yet support types.
+        if ((kind >= SyntaxKind.TypePredicate && kind <= SyntaxKind.StringLiteralType)) {
+            return node;
+        }
+
+        switch (node.kind) {
             case SyntaxKind.SemicolonClassElement:
             case SyntaxKind.EmptyStatement:
             case SyntaxKind.OmittedExpression:
@@ -655,27 +686,18 @@ namespace ts {
                 return node;
 
             // Names
-            case SyntaxKind.QualifiedName:
-                return updateQualifiedName(<QualifiedName>node,
-                    visitNode((<QualifiedName>node).left, visitor, isEntityName),
-                    visitNode((<QualifiedName>node).right, visitor, isIdentifier));
-
             case SyntaxKind.ComputedPropertyName:
                 return updateComputedPropertyName(<ComputedPropertyName>node,
                     visitNode((<ComputedPropertyName>node).expression, visitor, isExpression));
 
             // Signature elements
             case SyntaxKind.Parameter:
-                return updateParameterDeclaration((<ParameterDeclaration>node),
+                return updateParameterDeclaration(<ParameterDeclaration>node,
                     visitNodes((<ParameterDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<ParameterDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<ParameterDeclaration>node).name, visitor, isBindingName),
                     visitNode((<ParameterDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
                     visitNode((<ParameterDeclaration>node).initializer, visitor, isExpression, /*optional*/ true));
-
-            case SyntaxKind.Decorator:
-                return updateDecorator(<Decorator>node,
-                    visitNode((<Decorator>node).expression, visitor, isLeftHandSideExpression));
 
             // Type member
             case SyntaxKind.PropertyDeclaration:
@@ -692,41 +714,41 @@ namespace ts {
                     visitNodes((<MethodDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<MethodDeclaration>node).name, visitor, isPropertyName),
                     visitNodes((<MethodDeclaration>node).typeParameters, visitor, isTypeParameter),
-                    startLexicalEnvironmentAndVisitParameters((<MethodDeclaration>node).parameters, visitor, context),
+                    (context.startLexicalEnvironment(), visitNodes((<MethodDeclaration>node).parameters, visitor, isParameter)),
                     visitNode((<MethodDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
-                    endLexicalEnvironmentAndUpdateBody(
+                    mergeFunctionBodyLexicalEnvironment(
                         visitNode((<MethodDeclaration>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context));
+                        context.endLexicalEnvironment()));
 
             case SyntaxKind.Constructor:
                 return updateConstructor(<ConstructorDeclaration>node,
                     visitNodes((<ConstructorDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<ConstructorDeclaration>node).modifiers, visitor, isModifier),
-                    startLexicalEnvironmentAndVisitParameters((<ConstructorDeclaration>node).parameters, visitor, context),
-                    endLexicalEnvironmentAndUpdateBody(
+                    (context.startLexicalEnvironment(), visitNodes((<ConstructorDeclaration>node).parameters, visitor, isParameter)),
+                    mergeFunctionBodyLexicalEnvironment(
                         visitNode((<ConstructorDeclaration>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context));
+                        context.endLexicalEnvironment()));
 
             case SyntaxKind.GetAccessor:
                 return updateGetAccessor(<GetAccessorDeclaration>node,
                     visitNodes((<GetAccessorDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<GetAccessorDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<GetAccessorDeclaration>node).name, visitor, isPropertyName),
-                    startLexicalEnvironmentAndVisitParameters((<GetAccessorDeclaration>node).parameters, visitor, context),
+                    (context.startLexicalEnvironment(), visitNodes((<GetAccessorDeclaration>node).parameters, visitor, isParameter)),
                     visitNode((<GetAccessorDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
-                    endLexicalEnvironmentAndUpdateBody(
+                    mergeFunctionBodyLexicalEnvironment(
                         visitNode((<GetAccessorDeclaration>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context));
+                        context.endLexicalEnvironment()));
 
             case SyntaxKind.SetAccessor:
                 return updateSetAccessor(<SetAccessorDeclaration>node,
                     visitNodes((<SetAccessorDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<SetAccessorDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<SetAccessorDeclaration>node).name, visitor, isPropertyName),
-                    startLexicalEnvironmentAndVisitParameters((<SetAccessorDeclaration>node).parameters, visitor, context),
-                    endLexicalEnvironmentAndUpdateBody(
+                    (context.startLexicalEnvironment(), visitNodes((<SetAccessorDeclaration>node).parameters, visitor, isParameter)),
+                    mergeFunctionBodyLexicalEnvironment(
                         visitNode((<SetAccessorDeclaration>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context));
+                        context.endLexicalEnvironment()));
 
             // Binding patterns
             case SyntaxKind.ObjectBindingPattern:
@@ -750,10 +772,10 @@ namespace ts {
 
             case SyntaxKind.ObjectLiteralExpression:
                 return updateObjectLiteral(<ObjectLiteralExpression>node,
-                    visitNodes((<ObjectLiteralExpression>node).properties, visitor, isExpression));
+                    visitNodes((<ObjectLiteralExpression>node).properties, visitor, isObjectLiteralElement));
 
             case SyntaxKind.PropertyAccessExpression:
-                return updatePropertyAccess((<PropertyAccessExpression>node),
+                return updatePropertyAccess(<PropertyAccessExpression>node,
                     visitNode((<PropertyAccessExpression>node).expression, visitor, isExpression),
                     visitNode((<PropertyAccessExpression>node).name, visitor, isIdentifier));
 
@@ -763,13 +785,13 @@ namespace ts {
                     visitNode((<ElementAccessExpression>node).argumentExpression, visitor, isExpression));
 
             case SyntaxKind.CallExpression:
-                return updateCall((<CallExpression>node),
+                return updateCall(<CallExpression>node,
                     visitNode((<CallExpression>node).expression, visitor, isExpression),
                     visitNodes((<CallExpression>node).typeArguments, visitor, isTypeNode),
                     visitNodes((<CallExpression>node).arguments, visitor, isExpression));
 
             case SyntaxKind.NewExpression:
-                return updateNew((<NewExpression>node),
+                return updateNew(<NewExpression>node,
                     visitNode((<NewExpression>node).expression, visitor, isExpression),
                     visitNodes((<NewExpression>node).typeArguments, visitor, isTypeNode),
                     visitNodes((<NewExpression>node).arguments, visitor, isExpression));
@@ -780,28 +802,28 @@ namespace ts {
                     visitNode((<TaggedTemplateExpression>node).template, visitor, isTemplate));
 
             case SyntaxKind.ParenthesizedExpression:
-                return updateParen((<ParenthesizedExpression>node),
+                return updateParen(<ParenthesizedExpression>node,
                     visitNode((<ParenthesizedExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.FunctionExpression:
                 return updateFunctionExpression(<FunctionExpression>node,
                     visitNode((<FunctionExpression>node).name, visitor, isPropertyName),
                     visitNodes((<FunctionExpression>node).typeParameters, visitor, isTypeParameter),
-                    startLexicalEnvironmentAndVisitParameters((<FunctionExpression>node).parameters, visitor, context),
+                    (context.startLexicalEnvironment(), visitNodes((<FunctionExpression>node).parameters, visitor, isParameter)),
                     visitNode((<FunctionExpression>node).type, visitor, isTypeNode, /*optional*/ true),
-                    endLexicalEnvironmentAndUpdateBody(
+                    mergeFunctionBodyLexicalEnvironment(
                         visitNode((<FunctionExpression>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context));
+                        context.endLexicalEnvironment()));
 
             case SyntaxKind.ArrowFunction:
                 return updateArrowFunction(<ArrowFunction>node,
                     visitNodes((<ArrowFunction>node).modifiers, visitor, isModifier),
                     visitNodes((<ArrowFunction>node).typeParameters, visitor, isTypeParameter),
-                    startLexicalEnvironmentAndVisitParameters((<ArrowFunction>node).parameters, visitor, context),
+                    (context.startLexicalEnvironment(), visitNodes((<ArrowFunction>node).parameters, visitor, isParameter)),
                     visitNode((<ArrowFunction>node).type, visitor, isTypeNode, /*optional*/ true),
-                    endLexicalEnvironmentAndUpdateBody(
+                    mergeFunctionBodyLexicalEnvironment(
                         visitNode((<ArrowFunction>node).body, visitor, isConciseBody, /*optional*/ true),
-                        context));
+                        context.endLexicalEnvironment()));
 
             case SyntaxKind.DeleteExpression:
                 return updateDelete(<DeleteExpression>node,
@@ -815,8 +837,12 @@ namespace ts {
                 return updateVoid(<VoidExpression>node,
                     visitNode((<VoidExpression>node).expression, visitor, isUnaryExpression));
 
+            case SyntaxKind.AwaitExpression:
+                return updateAwait(<AwaitExpression>node,
+                    visitNode((<AwaitExpression>node).expression, visitor, isUnaryExpression));
+
             case SyntaxKind.BinaryExpression:
-                return updateBinary((<BinaryExpression>node),
+                return updateBinary(<BinaryExpression>node,
                     visitNode((<BinaryExpression>node).left, visitor, isExpression),
                     visitNode((<BinaryExpression>node).right, visitor, isExpression));
 
@@ -868,20 +894,20 @@ namespace ts {
 
             // Element
             case SyntaxKind.Block:
-                return updateBlock((<Block>node),
+                return updateBlock(<Block>node,
                     visitNodes((<Block>node).statements, visitor, isStatement));
 
             case SyntaxKind.VariableStatement:
-                return updateVariableStatement((<VariableStatement>node),
+                return updateVariableStatement(<VariableStatement>node,
                     visitNodes((<VariableStatement>node).modifiers, visitor, isModifier),
                     visitNode((<VariableStatement>node).declarationList, visitor, isVariableDeclarationList));
 
             case SyntaxKind.ExpressionStatement:
-                return updateStatement((<ExpressionStatement>node),
+                return updateStatement(<ExpressionStatement>node,
                     visitNode((<ExpressionStatement>node).expression, visitor, isExpression));
 
             case SyntaxKind.IfStatement:
-                return updateIf((<IfStatement>node),
+                return updateIf(<IfStatement>node,
                     visitNode((<IfStatement>node).expression, visitor, isExpression),
                     visitNode((<IfStatement>node).thenStatement, visitor, isStatement, /*optional*/ false, liftToBlock),
                     visitNode((<IfStatement>node).elseStatement, visitor, isStatement, /*optional*/ true, liftToBlock));
@@ -946,14 +972,20 @@ namespace ts {
                 return updateThrow(<ThrowStatement>node,
                     visitNode((<ThrowStatement>node).expression, visitor, isExpression));
 
+            case SyntaxKind.TryStatement:
+                return updateTry(<TryStatement>node,
+                    visitNode((<TryStatement>node).tryBlock, visitor, isBlock),
+                    visitNode((<TryStatement>node).catchClause, visitor, isCatchClause, /*optional*/ true),
+                    visitNode((<TryStatement>node).finallyBlock, visitor, isBlock, /*optional*/ true));
+
             case SyntaxKind.VariableDeclaration:
-                return updateVariableDeclaration((<VariableDeclaration>node),
+                return updateVariableDeclaration(<VariableDeclaration>node,
                     visitNode((<VariableDeclaration>node).name, visitor, isBindingName),
                     visitNode((<VariableDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
                     visitNode((<VariableDeclaration>node).initializer, visitor, isExpression, /*optional*/ true));
 
             case SyntaxKind.VariableDeclarationList:
-                return updateVariableDeclarationList((<VariableDeclarationList>node),
+                return updateVariableDeclarationList(<VariableDeclarationList>node,
                     visitNodes((<VariableDeclarationList>node).declarations, visitor, isVariableDeclaration));
 
             case SyntaxKind.FunctionDeclaration:
@@ -962,11 +994,11 @@ namespace ts {
                     visitNodes((<FunctionDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<FunctionDeclaration>node).name, visitor, isPropertyName),
                     visitNodes((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter),
-                    startLexicalEnvironmentAndVisitParameters((<FunctionDeclaration>node).parameters, visitor, context),
+                    (context.startLexicalEnvironment(), visitNodes((<FunctionDeclaration>node).parameters, visitor, isParameter)),
                     visitNode((<FunctionDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
-                    endLexicalEnvironmentAndUpdateBody(
+                    mergeFunctionBodyLexicalEnvironment(
                         visitNode((<FunctionDeclaration>node).body, visitor, isFunctionBody, /*optional*/ true),
-                        context));
+                        context.endLexicalEnvironment()));
 
             case SyntaxKind.ClassDeclaration:
                 return updateClassDeclaration(<ClassDeclaration>node,
@@ -980,6 +1012,87 @@ namespace ts {
             case SyntaxKind.CaseBlock:
                 return updateCaseBlock(<CaseBlock>node,
                     visitNodes((<CaseBlock>node).clauses, visitor, isCaseOrDefaultClause));
+
+            case SyntaxKind.ImportDeclaration:
+                return updateImportDeclaration(<ImportDeclaration>node,
+                    visitNodes((<ImportDeclaration>node).decorators, visitor, isDecorator),
+                    visitNodes((<ImportDeclaration>node).modifiers, visitor, isModifier),
+                    visitNode((<ImportDeclaration>node).importClause, visitor, isImportClause, /*optional*/ true),
+                    visitNode((<ImportDeclaration>node).moduleSpecifier, visitor, isExpression));
+
+            case SyntaxKind.ImportClause:
+                return updateImportClause(<ImportClause>node,
+                    visitNode((<ImportClause>node).name, visitor, isIdentifier, /*optional*/ true),
+                    visitNode((<ImportClause>node).namedBindings, visitor, isNamedImportBindings, /*optional*/ true));
+
+            case SyntaxKind.NamespaceImport:
+                return updateNamespaceImport(<NamespaceImport>node,
+                    visitNode((<NamespaceImport>node).name, visitor, isIdentifier));
+
+            case SyntaxKind.NamedImports:
+                return updateNamedImports(<NamedImports>node,
+                    visitNodes((<NamedImports>node).elements, visitor, isImportSpecifier));
+
+            case SyntaxKind.ImportSpecifier:
+                return updateImportSpecifier(<ImportSpecifier>node,
+                    visitNode((<ImportSpecifier>node).propertyName, visitor, isIdentifier, /*optional*/ true),
+                    visitNode((<ImportSpecifier>node).name, visitor, isIdentifier));
+
+            case SyntaxKind.ExportAssignment:
+                return updateExportAssignment(<ExportAssignment>node,
+                    visitNodes((<ExportAssignment>node).decorators, visitor, isDecorator),
+                    visitNodes((<ExportAssignment>node).modifiers, visitor, isModifier),
+                    visitNode((<ExportAssignment>node).expression, visitor, isExpression));
+
+            case SyntaxKind.ExportDeclaration:
+                return updateExportDeclaration(<ExportDeclaration>node,
+                    visitNodes((<ExportDeclaration>node).decorators, visitor, isDecorator),
+                    visitNodes((<ExportDeclaration>node).modifiers, visitor, isModifier),
+                    visitNode((<ExportDeclaration>node).exportClause, visitor, isNamedExports, /*optional*/ true),
+                    visitNode((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression, /*optional*/ true));
+
+            case SyntaxKind.NamedExports:
+                return updateNamedExports(<NamedExports>node,
+                    visitNodes((<NamedExports>node).elements, visitor, isExportSpecifier));
+
+            case SyntaxKind.ExportSpecifier:
+                return updateExportSpecifier(<ExportSpecifier>node,
+                    visitNode((<ExportSpecifier>node).propertyName, visitor, isIdentifier, /*optional*/ true),
+                    visitNode((<ExportSpecifier>node).name, visitor, isIdentifier));
+
+            // JSX
+            case SyntaxKind.JsxElement:
+                return updateJsxElement(<JsxElement>node,
+                    visitNode((<JsxElement>node).openingElement, visitor, isJsxOpeningElement),
+                    visitNodes((<JsxElement>node).children, visitor, isJsxChild),
+                    visitNode((<JsxElement>node).closingElement, visitor, isJsxClosingElement));
+
+            case SyntaxKind.JsxSelfClosingElement:
+                return updateJsxSelfClosingElement(<JsxSelfClosingElement>node,
+                    visitNode((<JsxSelfClosingElement>node).tagName, visitor, isJsxTagNameExpression),
+                    visitNodes((<JsxSelfClosingElement>node).attributes, visitor, isJsxAttributeLike));
+
+            case SyntaxKind.JsxOpeningElement:
+                return updateJsxOpeningElement(<JsxOpeningElement>node,
+                    visitNode((<JsxOpeningElement>node).tagName, visitor, isJsxTagNameExpression),
+                    visitNodes((<JsxOpeningElement>node).attributes, visitor, isJsxAttributeLike));
+
+            case SyntaxKind.JsxClosingElement:
+                return updateJsxClosingElement(<JsxClosingElement>node,
+                    visitNode((<JsxClosingElement>node).tagName, visitor, isJsxTagNameExpression));
+
+            case SyntaxKind.JsxAttribute:
+                return updateJsxAttribute(<JsxAttribute>node,
+                    visitNode((<JsxAttribute>node).name, visitor, isIdentifier),
+                    visitNode((<JsxAttribute>node).initializer, visitor, isStringLiteralOrJsxExpression));
+
+            case SyntaxKind.JsxSpreadAttribute:
+                return updateJsxSpreadAttribute(<JsxSpreadAttribute>node,
+                    visitNode((<JsxSpreadAttribute>node).expression, visitor, isExpression));
+
+            case SyntaxKind.JsxExpression:
+                return updateJsxExpression(<JsxExpression>node,
+                    visitNode((<JsxExpression>node).expression, visitor, isExpression));
 
             // Clauses
             case SyntaxKind.CaseClause:
@@ -995,6 +1108,11 @@ namespace ts {
                 return updateHeritageClause(<HeritageClause>node,
                     visitNodes((<HeritageClause>node).types, visitor, isExpressionWithTypeArguments));
 
+            case SyntaxKind.CatchClause:
+                return updateCatchClause(<CatchClause>node,
+                    visitNode((<CatchClause>node).variableDeclaration, visitor, isVariableDeclaration),
+                    visitNode((<CatchClause>node).block, visitor, isBlock));
+
             // Property assignments
             case SyntaxKind.PropertyAssignment:
                 return updatePropertyAssignment(<PropertyAssignment>node,
@@ -1009,7 +1127,7 @@ namespace ts {
             // Top-level nodes
             case SyntaxKind.SourceFile:
                 context.startLexicalEnvironment();
-                return updateSourceFileNode((<SourceFile>node),
+                return updateSourceFileNode(<SourceFile>node,
                     createNodeArray(
                         concatenate(
                             visitNodes((<SourceFile>node).statements, visitor, isStatement),
@@ -1044,76 +1162,8 @@ namespace ts {
                 }
                 return updated ? updateNode(updated, node) : node;
         }
-    }
 
-    function startLexicalEnvironmentAndVisitParameters(nodes: NodeArray<ParameterDeclaration>, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): NodeArray<ParameterDeclaration> {
-        context.startLexicalEnvironment();
-        return visitNodes(nodes, visitor, isParameter);
-    }
-
-    function endLexicalEnvironmentAndUpdateBody(body: FunctionBody, context: LexicalEnvironment): FunctionBody;
-    function endLexicalEnvironmentAndUpdateBody(body: ConciseBody, context: LexicalEnvironment): ConciseBody;
-    function endLexicalEnvironmentAndUpdateBody(body: ConciseBody, context: LexicalEnvironment) {
-        const declarations = context.endLexicalEnvironment();
-        if (body && declarations && declarations.length) {
-            if (isBlock(body)) {
-                return updateBlock(body, createNodeArray(concatenate(body.statements, declarations), body.statements));
-            }
-            return createBlock(
-                createNodeArray([createReturn(body, /*location*/ body), ...declarations], body),
-                /*location*/ body,
-                /*multiLine*/ true);
-        }
-        return body;
-    }
-
-    /**
-     * Appends a node to an array.
-     *
-     * @param to The destination array.
-     * @param from The source Node or NodeArrayNode.
-     */
-    export function addNode<T extends Node>(to: T[], from: VisitResult<T>, startOnNewLine?: boolean): void;
-    export function addNode(to: Node[], from: VisitResult<Node>, startOnNewLine: boolean, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, isVisiting: boolean): void;
-    export function addNode(to: Node[], from: VisitResult<Node>, startOnNewLine?: boolean, test?: (node: Node) => boolean, parenthesize?: (node: Node, parentNode: Node) => Node, parentNode?: Node, isVisiting?: boolean): void {
-        if (to && from) {
-            if (isArray(from)) {
-                addNodes(to, from, startOnNewLine, test, parenthesize, parentNode, isVisiting);
-            }
-            else {
-                const node = parenthesize !== undefined
-                    ? parenthesize(from, parentNode)
-                    : from;
-
-                Debug.assertNode(node, test);
-
-                if (startOnNewLine) {
-                    node.startsOnNewLine = true;
-                }
-
-                if (isVisiting) {
-                    aggregateTransformFlags(node);
-                }
-
-                to.push(node);
-            }
-        }
-    }
-
-    /**
-     * Appends an array of nodes to an array.
-     *
-     * @param to The destination NodeArray.
-     * @param from The source array of Node or NodeArrayNode.
-     */
-    export function addNodes<T extends Node>(to: T[], from: VisitResult<T>[], startOnNewLine?: boolean): void;
-    export function addNodes(to: Node[], from: VisitResult<Node>[], startOnNewLine: boolean, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, isVisiting: boolean): void;
-    export function addNodes(to: Node[], from: VisitResult<Node>[], startOnNewLine?: boolean, test?: (node: Node) => boolean, parenthesize?: (node: Node, parentNode: Node) => Node, parentNode?: Node, isVisiting?: boolean): void {
-        if (to && from) {
-            for (const node of from) {
-                addNode(to, node, startOnNewLine, test, parenthesize, parentNode, isVisiting);
-            }
-        }
+        // return node;
     }
 
     /**
@@ -1122,13 +1172,7 @@ namespace ts {
      * @param node The ConciseBody of an arrow function.
      * @param declarations The lexical declarations to merge.
      */
-    export function mergeFunctionBodyLexicalEnvironment(body: FunctionBody, declarations: Statement[]): FunctionBody {
-        if (declarations !== undefined && declarations.length > 0) {
-            return mergeBlockLexicalEnvironment(body, declarations);
-        }
-
-        return body;
-    }
+    export function mergeFunctionBodyLexicalEnvironment(body: FunctionBody, declarations: Statement[]): FunctionBody;
 
     /**
      * Merges generated lexical declarations into the ConciseBody of an ArrowFunction.
@@ -1136,42 +1180,21 @@ namespace ts {
      * @param node The ConciseBody of an arrow function.
      * @param declarations The lexical declarations to merge.
      */
-    export function mergeConciseBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[]): ConciseBody {
-        if (declarations !== undefined && declarations.length > 0) {
+    export function mergeFunctionBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[]): ConciseBody;
+
+    export function mergeFunctionBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[]): ConciseBody {
+        if (body && declarations !== undefined && declarations.length > 0) {
             if (isBlock(body)) {
-                return mergeBlockLexicalEnvironment(body, declarations);
+                return updateBlock(body, createNodeArray(concatenate(body.statements, declarations), body.statements));
             }
             else {
-                return createBlock([
-                    createReturn(body),
-                    ...declarations
-                ]);
+                return createBlock(
+                    createNodeArray([createReturn(body, /*location*/ body), ...declarations], body),
+                    /*location*/ body,
+                    /*multiLine*/ true);
             }
         }
-
         return body;
-    }
-
-    /**
-     * Merge generated declarations of a lexical environment into a FunctionBody or ModuleBlock.
-     *
-     * @param node The block into which to merge lexical declarations.
-     * @param declarations The lexical declarations to merge.
-     */
-    function mergeBlockLexicalEnvironment<T extends Block>(node: T, declarations: Statement[]): T {
-        const mutableNode = getMutableClone(node);
-        mutableNode.statements = mergeStatements(node.statements, declarations);
-        return mutableNode;
-    }
-
-    /**
-     * Merge generated declarations of a lexical environment into a NodeArray of Statement.
-     *
-     * @param statements The node array to concatentate with the supplied lexical declarations.
-     * @param declarations The lexical declarations to merge.
-     */
-    function mergeStatements(statements: NodeArray<Statement>, declarations: Statement[]): NodeArray<Statement> {
-        return createNodeArray(concatenate(statements, declarations), /*location*/ statements);
     }
 
     /**

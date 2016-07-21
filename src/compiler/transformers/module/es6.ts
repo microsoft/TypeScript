@@ -65,7 +65,11 @@ namespace ts {
                 return node;
             }
             return newExportClause
-                ? createExportDeclaration(newExportClause, node.moduleSpecifier)
+                ? createExportDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    newExportClause,
+                    node.moduleSpecifier)
                 : undefined;
         }
 
@@ -92,7 +96,11 @@ namespace ts {
                     return undefined;
                 }
                 else if (newImportClause !== node.importClause) {
-                    return createImportDeclaration(newImportClause, node.moduleSpecifier);
+                    return createImportDeclaration(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        newImportClause,
+                        node.moduleSpecifier);
                 }
             }
             return node;

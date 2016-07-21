@@ -4057,6 +4057,13 @@ namespace ts {
         return node.kind === SyntaxKind.JsxClosingElement;
     }
 
+    export function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression {
+        const kind = node.kind;
+        return kind === SyntaxKind.ThisKeyword
+            || kind === SyntaxKind.Identifier
+            || kind === SyntaxKind.PropertyAccessExpression;
+    }
+
     export function isJsxChild(node: Node): node is JsxChild {
         const kind = node.kind;
         return kind === SyntaxKind.JsxElement
