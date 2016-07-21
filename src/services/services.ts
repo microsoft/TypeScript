@@ -1255,7 +1255,7 @@ namespace ts {
         // Overrides
 
         // A plugin can implement one of the override methods to replace the results that would
-        // be returned by the TypeScript language service. If a plugin returns a defined results
+        // be returned by the TypeScript language service. If a plugin returns a defined result
         // (that is, is not undefined) then that result is used instead of invoking the
         // corresponding TypeScript method. If multiple plugins are registered, they are
         // consulted in the order they are returned from the program. The first defined result
