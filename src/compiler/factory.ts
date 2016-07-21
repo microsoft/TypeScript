@@ -2635,8 +2635,8 @@ namespace ts {
         return node;
     }
 
-    export function startOnNewLine<T extends Node>(node: T, startsOnNewLine?: boolean): T {
-        node.startsOnNewLine = startsOnNewLine !== false;
+    export function startOnNewLine<T extends Node>(node: T): T {
+        node.startsOnNewLine = true;
         return node;
     }
 

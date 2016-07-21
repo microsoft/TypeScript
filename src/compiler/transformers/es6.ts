@@ -1899,28 +1899,27 @@ namespace ts {
 
             // Write out the first non-computed properties, then emit the rest through indexing on the temp variable.
             const expressions: Expression[] = [];
-            expressions.push(
-                startOnNewLine(
-                    createAssignment(
-                        temp,
-                        setNodeEmitFlags(
-                            createObjectLiteral(
-                                visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialProperties),
-                                /*location*/ undefined,
-                                node.multiLine
-                            ),
-                            NodeEmitFlags.Indented
-                        )
+            const assignment = createAssignment(
+                temp,
+                setNodeEmitFlags(
+                    createObjectLiteral(
+                        visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialProperties),
+                        /*location*/ undefined,
+                        node.multiLine
                     ),
-                    node.multiLine
+                    NodeEmitFlags.Indented
                 )
             );
+            if (node.multiLine) {
+                assignment.startsOnNewLine = true;
+            }
+            expressions.push(assignment);
 
             addObjectLiteralMembers(expressions, node, temp, numInitialProperties);
 
             // We need to clone the temporary identifier so that we can write it on a
             // new line
-            expressions.push(startOnNewLine(getMutableClone(temp), node.multiLine));
+            expressions.push(node.multiLine ? startOnNewLine(getMutableClone(temp)) : temp);
             return inlineExpressions(expressions);
         }
 

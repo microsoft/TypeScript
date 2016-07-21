@@ -827,19 +827,19 @@ namespace ts {
 
             case SyntaxKind.DeleteExpression:
                 return updateDelete(<DeleteExpression>node,
-                    visitNode((<DeleteExpression>node).expression, visitor, isUnaryExpression));
+                    visitNode((<DeleteExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.TypeOfExpression:
                 return updateTypeOf(<TypeOfExpression>node,
-                    visitNode((<TypeOfExpression>node).expression, visitor, isUnaryExpression));
+                    visitNode((<TypeOfExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.VoidExpression:
                 return updateVoid(<VoidExpression>node,
-                    visitNode((<VoidExpression>node).expression, visitor, isUnaryExpression));
+                    visitNode((<VoidExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.AwaitExpression:
                 return updateAwait(<AwaitExpression>node,
-                    visitNode((<AwaitExpression>node).expression, visitor, isUnaryExpression));
+                    visitNode((<AwaitExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.BinaryExpression:
                 return updateBinary(<BinaryExpression>node,
