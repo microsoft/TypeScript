@@ -1443,31 +1443,6 @@ const _super = (function (geti, seti) {
         }
 
         function emitForStatement(node: ForStatement) {
-            if (node.emitFlags & NodeEmitFlags.SourceMapAdjustRestParameterLoop) {
-                // TODO(rbuckton): This should be removed once source maps are aligned with the old
-                //                 emitter and new baselines are taken. This exists solely to
-                //                 align with the old emitter.
-                const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
-                write(" ");
-                writeToken(SyntaxKind.OpenParenToken, openParenPos);
-                const initializer = node.initializer;
-                initializer.emitFlags |= NodeEmitFlags.NoTrailingSourceMap;
-                emitForBinding(initializer);
-                write(";");
-                emitEnd(initializer);
-                const condition = node.condition;
-                condition.emitFlags |= NodeEmitFlags.NoTrailingSourceMap;
-                write(" ");
-                emitExpression(condition);
-                write(";");
-                emitEnd(condition);
-                write(" ");
-                emitExpression(node.incrementor);
-                write(")");
-                emitEmbeddedStatement(node.statement);
-                return;
-            }
-
             const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
             write(" ");
             writeToken(SyntaxKind.OpenParenToken, openParenPos, /*contextNode*/ node);

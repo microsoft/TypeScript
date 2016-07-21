@@ -1074,7 +1074,7 @@ namespace ts {
                 ])
             );
 
-            setNodeEmitFlags(forStatement, NodeEmitFlags.SourceMapAdjustRestParameterLoop | NodeEmitFlags.CustomPrologue);
+            setNodeEmitFlags(forStatement, NodeEmitFlags.CustomPrologue);
             startOnNewLine(forStatement);
             statements.push(forStatement);
         }

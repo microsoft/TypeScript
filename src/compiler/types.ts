@@ -3116,7 +3116,6 @@ namespace ts {
         //                 emitter and new baselines are taken. This exists solely to
         //                 align with the old emitter.
         SourceMapEmitOpenBraceAsToken = 1 << 24,        // Emits the open brace of a block function body as a source mapped token.
-        SourceMapAdjustRestParameterLoop = 1 << 25,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
     }
 
     /** Additional context provided to `visitEachChild` */
