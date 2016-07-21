@@ -13,12 +13,14 @@ namespace ts.server {
         private fileWatcher: FileWatcher;
         private svc: ScriptVersionCache;
 
+        // TODO: allow to update hasMixedContent from the outside
         constructor(
             private readonly host: ServerHost,
             readonly fileName: NormalizedPath,
             content: string,
             readonly scriptKind: ScriptKind,
-            public isOpen = false) {
+            public isOpen = false,
+            private hasMixedContent = false) {
 
             this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
             this.svc = ScriptVersionCache.fromString(host, content);
@@ -116,8 +118,13 @@ namespace ts.server {
         }
 
         reloadFromFile() {
-            this.svc.reloadFromFile(this.fileName);
-            this.markContainingProjectsAsDirty();
+            if (this.hasMixedContent) {
+                this.reload("");
+            }
+            else {
+                this.svc.reloadFromFile(this.fileName);
+                this.markContainingProjectsAsDirty();
+            }
         }
 
         snap() {

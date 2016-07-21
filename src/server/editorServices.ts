@@ -647,12 +647,13 @@ namespace ts.server {
             return { success: true, projectOptions };
         }
 
-        private exceededTotalSizeLimitForNonTsFiles(options: CompilerOptions, fileNames: string[]) {
+        private exceededTotalSizeLimitForNonTsFiles<T>(options: CompilerOptions, fileNames: T[], propertyReader: FilePropertyReader<T>) {
             if (options && options.disableSizeLimit || !this.host.getFileSize) {
                 return false;
             }
             let totalNonTsFileSize = 0;
-            for (const fileName of fileNames) {
+            for (const f of fileNames) {
+                const fileName = propertyReader.getFileName(f);
                 if (hasTypeScriptFileExtension(fileName)) {
                     continue;
                 }
@@ -664,21 +665,21 @@ namespace ts.server {
             return false;
         }
 
-        private createAndAddExternalProject(projectFileName: string, files: NormalizedPath[], compilerOptions: CompilerOptions) {
+        private createAndAddExternalProject(projectFileName: string, files: protocol.ExternalFile[], compilerOptions: CompilerOptions) {
             const project = new ExternalProject(
                 projectFileName,
                 this,
                 this.documentRegistry,
                 compilerOptions,
-                /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(compilerOptions, files));
+                /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(compilerOptions, files, externalFilePropertyReader));
 
-            const errors = this.addFilesToProjectAndUpdateGraph(project, files, /*clientFileName*/ undefined);
+            const errors = this.addFilesToProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined);
             this.externalProjects.push(project);
             return { project, errors };
         }
 
         private createAndAddConfiguredProject(configFileName: NormalizedPath, projectOptions: ProjectOptions, clientFileName?: string) {
-            const sizeLimitExceeded = this.exceededTotalSizeLimitForNonTsFiles(projectOptions.compilerOptions, projectOptions.files);
+            const sizeLimitExceeded = this.exceededTotalSizeLimitForNonTsFiles(projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
             const project = new ConfiguredProject(
                 configFileName,
                 this,
@@ -688,7 +689,7 @@ namespace ts.server {
                 projectOptions.wildcardDirectories,
                 /*languageServiceEnabled*/ !sizeLimitExceeded);
 
-            const errors = this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, clientFileName);
+            const errors = this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName);
 
             project.watchConfigFile(project => this.onConfigChangedForConfiguredProject(project));
             if (!sizeLimitExceeded) {
@@ -706,11 +707,14 @@ namespace ts.server {
             }
         }
 
-        private addFilesToProjectAndUpdateGraph(project: ConfiguredProject | ExternalProject, files: string[], clientFileName: string): Diagnostic[] {
+        private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string): Diagnostic[] {
             let errors: Diagnostic[];
-            for (const rootFilename of files) {
+            for (const f of files) {
+                const rootFilename = propertyReader.getFileName(f);
+                const scriptKind = propertyReader.getScriptKind(f);
+                const hasMixedContent = propertyReader.hasMixedContent(f);
                 if (this.host.fileExists(rootFilename)) {
-                    const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName == rootFilename);
+                    const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName == rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     project.addRoot(info);
                 }
                 else {
@@ -805,7 +809,7 @@ namespace ts.server {
                 return errors;
             }
 
-            if (this.exceededTotalSizeLimitForNonTsFiles(projectOptions.compilerOptions, projectOptions.files)) {
+            if (this.exceededTotalSizeLimitForNonTsFiles(projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader)) {
                 project.setCompilerOptions(projectOptions.compilerOptions);
                 if (!project.languageServiceEnabled) {
                     // language service is already disabled
@@ -872,7 +876,7 @@ namespace ts.server {
                     }
                 }
                 if (content !== undefined) {
-                    info = new ScriptInfo(this.host, fileName, content, scriptKind, openedByClient);
+                    info = new ScriptInfo(this.host, fileName, content, scriptKind, openedByClient, hasMixedContent);
                     info.setFormatOptions(toEditorSettings(this.getFormatCodeOptions()));
                     this.filenameToScriptInfo.set(fileName, info);
                     if (!info.isOpen && !hasMixedContent) {
@@ -1095,14 +1099,14 @@ namespace ts.server {
             }
 
             let tsConfigFiles: NormalizedPath[];
-            const rootFiles: NormalizedPath[] = [];
+            const rootFiles: protocol.ExternalFile[] = [];
             for (const file of proj.rootFiles) {
                 const normalized = toNormalizedPath(file.fileName);
                 if (getBaseFileName(normalized) === "tsconfig.json") {
                     (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
                 }
                 else {
-                    rootFiles.push(normalized);
+                    rootFiles.push(file);
                 }
             }
             if (tsConfigFiles) {

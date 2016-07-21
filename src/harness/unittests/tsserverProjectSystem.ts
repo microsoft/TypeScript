@@ -1291,5 +1291,39 @@ namespace ts {
             projectService.ensureInferredProjectsUpToDate_TestOnly();
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
         });
+
+        it("files with mixed content are handled correctly", () => {
+            const file1 = {
+                path: "/a/b/f1.html",
+                content: `<html><script language="javascript">var x = 1;</></html>`
+            };
+            const host = createServerHost([file1]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectFileName = "projectFileName";
+            projectService.openExternalProject({ projectFileName, options: {}, rootFiles: [{ fileName: file1.path, scriptKind: ScriptKind.JS, hasMixedContent: true }] });
+
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+            checkWatchedFiles(host, []);
+
+            const project = projectService.externalProjects[0];
+
+            const scriptInfo = project.getScriptInfo(file1.path);
+            const snap = scriptInfo.snap();
+            const actualText = snap.getText(0, snap.getLength());
+            assert.equal(actualText, "", `expected content to be empty string, got "${actualText}"`);
+
+            projectService.openClientFile(file1.path, `var x = 1;`);
+            project.updateGraph();
+
+            const quickInfo = project.languageService.getQuickInfoAtPosition(file1.path, 4);
+            assert.equal(quickInfo.kind, ScriptElementKind.variableElement);
+
+            projectService.closeClientFile(file1.path);
+
+            const scriptInfo2 = project.getScriptInfo(file1.path);
+            const snap2 = scriptInfo2.snap();
+            const actualText2 = snap2.getText(0, snap.getLength());
+            assert.equal(actualText2, "", `expected content to be empty string, got "${actualText2}"`);
+        });
     });
 }
