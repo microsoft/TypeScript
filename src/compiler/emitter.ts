@@ -314,25 +314,6 @@ const _super = (function (geti, seti) {
             emitNodeWithNotification(node, emitWithComments);
         }
 
-        /**
-         * Emits a node with specialized emit flags.
-         */
-        // TODO(rbuckton): This should be removed once source maps are aligned with the old
-        //                 emitter and new baselines are taken. This exists solely to
-        //                 align with the old emitter.
-        function emitSpecialized(node: Node, flags: NodeEmitFlags) {
-            if (node) {
-                const flagsToAdd = flags & ~node.emitFlags;
-                if (flagsToAdd) {
-                    node.emitFlags |= flagsToAdd;
-                    emit(node);
-                    node.emitFlags &= ~flagsToAdd;
-                    return;
-                }
-
-                emit(node);
-            }
-        }
 
         /**
          * Emits a node with comments.
@@ -352,6 +333,16 @@ const _super = (function (geti, seti) {
          */
         function emitWithSourceMap(node: Node) {
             emitNodeWithSourceMap(node, emitWorker);
+        }
+
+        function emitIdentifierName(node: Identifier) {
+            if (node) {
+                emitNodeWithNotification(node, emitIdentifierNameWithComments);
+            }
+        }
+
+        function emitIdentifierNameWithComments(node: Identifier) {
+            emitNodeWithComments(node, emitWorker);
         }
 
         /**
@@ -1573,7 +1564,7 @@ const _super = (function (geti, seti) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             write(node.asteriskToken ? "function* " : "function ");
-            emitSpecialized(node.name, NodeEmitFlags.NoSourceMap);
+            emitIdentifierName(node.name);
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
@@ -1709,7 +1700,7 @@ const _super = (function (geti, seti) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             write("class");
-            emitSpecializedWithPrefix(" ", node.name, NodeEmitFlags.NoSourceMap);
+            emitNodeWithPrefix(" ", node.name, emitIdentifierName);
 
             const indentedFlag = node.emitFlags & NodeEmitFlags.Indented;
             if (indentedFlag) {
@@ -2235,16 +2226,6 @@ const _super = (function (geti, seti) {
 
         function emitWithPrefix(prefix: string, node: Node) {
             emitNodeWithPrefix(prefix, node, emit);
-        }
-
-        // TODO(rbuckton): This should be removed once source maps are aligned with the old
-        //                 emitter and new baselines are taken. This exists solely to
-        //                 align with the old emitter.
-        function emitSpecializedWithPrefix(prefix: string, node: Node, flags: NodeEmitFlags) {
-            if (node) {
-                write(prefix);
-                emitSpecialized(node, flags);
-            }
         }
 
         function emitExpressionWithPrefix(prefix: string, node: Node) {
