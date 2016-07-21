@@ -94,7 +94,7 @@ namespace ts {
          * change range cannot be determined.  However, in that case, incremental parsing will
          * not happen and the entire document will be re - parsed.
          */
-        getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange;
+        getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined;
 
         /** Releases all resources held by this script snapshot */
         dispose?(): void;
@@ -3436,14 +3436,14 @@ namespace ts {
 
             let isJsDocTagName = false;
 
-            let start = new Date().getTime();
+            let start = timestamp();
             const currentToken = getTokenAtPosition(sourceFile, position);
-            log("getCompletionData: Get current token: " + (new Date().getTime() - start));
+            log("getCompletionData: Get current token: " + (timestamp() - start));
 
-            start = new Date().getTime();
+            start = timestamp();
             // Completion not allowed inside comments, bail out if this is the case
             const insideComment = isInsideComment(sourceFile, currentToken, position);
-            log("getCompletionData: Is inside comment: " + (new Date().getTime() - start));
+            log("getCompletionData: Is inside comment: " + (timestamp() - start));
 
             if (insideComment) {
                 // The current position is next to the '@' sign, when no tag name being provided yet.
@@ -3486,9 +3486,9 @@ namespace ts {
                 }
             }
 
-            start = new Date().getTime();
+            start = timestamp();
             const previousToken = findPrecedingToken(position, sourceFile);
-            log("getCompletionData: Get previous token 1: " + (new Date().getTime() - start));
+            log("getCompletionData: Get previous token 1: " + (timestamp() - start));
 
             // The decision to provide completion depends on the contextToken, which is determined through the previousToken.
             // Note: 'previousToken' (and thus 'contextToken') can be undefined if we are the beginning of the file
@@ -3497,9 +3497,9 @@ namespace ts {
             // Check if the caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
             // Skip this partial identifier and adjust the contextToken to the token that precedes it.
             if (contextToken && position <= contextToken.end && isWord(contextToken.kind)) {
-                const start = new Date().getTime();
+                const start = timestamp();
                 contextToken = findPrecedingToken(contextToken.getFullStart(), sourceFile);
-                log("getCompletionData: Get previous token 2: " + (new Date().getTime() - start));
+                log("getCompletionData: Get previous token 2: " + (timestamp() - start));
             }
 
             // Find the node where completion is requested on.
@@ -3546,7 +3546,7 @@ namespace ts {
                 }
             }
 
-            const semanticStart = new Date().getTime();
+            const semanticStart = timestamp();
             let isMemberCompletion: boolean;
             let isNewIdentifierLocation: boolean;
             let symbols: Symbol[] = [];
@@ -3584,7 +3584,7 @@ namespace ts {
                 }
             }
 
-            log("getCompletionData: Semantic work: " + (new Date().getTime() - semanticStart));
+            log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
             return { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), isJsDocTagName };
 
@@ -3728,12 +3728,12 @@ namespace ts {
             }
 
             function isCompletionListBlocker(contextToken: Node): boolean {
-                const start = new Date().getTime();
+                const start = timestamp();
                 const result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
                     isSolelyIdentifierDefinitionLocation(contextToken) ||
                     isDotOfNumericLiteral(contextToken) ||
                     isInJsxText(contextToken);
-                log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
+                log("getCompletionsAtPosition: isCompletionListBlocker: " + (timestamp() - start));
                 return result;
             }
 
@@ -4386,7 +4386,7 @@ namespace ts {
             }
 
             function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[], location: Node, performCharacterChecks: boolean): Map<string> {
-                const start = new Date().getTime();
+                const start = timestamp();
                 const uniqueNames: Map<string> = {};
                 if (symbols) {
                     for (const symbol of symbols) {
@@ -4401,7 +4401,7 @@ namespace ts {
                     }
                 }
 
-                log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
+                log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (timestamp() - start));
                 return uniqueNames;
             }
 
@@ -7822,15 +7822,15 @@ namespace ts {
         }
 
         function getIndentationAtPosition(fileName: string, position: number, optionsOrSettings: EditorOptions | EditorSettings) {
-            let start = new Date().getTime();
+            let start = timestamp();
             const settings = toEditorSettings(optionsOrSettings);
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
+            log("getIndentationAtPosition: getCurrentSourceFile: " + (timestamp() - start));
 
-            start = new Date().getTime();
+            start = timestamp();
 
             const result = formatting.SmartIndenter.getIndentation(position, sourceFile, settings);
-            log("getIndentationAtPosition: computeIndentation  : " + (new Date().getTime() - start));
+            log("getIndentationAtPosition: computeIndentation  : " + (timestamp() - start));
 
             return result;
         }
