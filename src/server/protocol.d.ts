@@ -490,9 +490,15 @@ declare namespace ts.server.protocol {
         body?: RenameResponseBody;
     }
 
+    export interface ExternalFile {
+        fileName: string;
+        scriptKind?: ScriptKind;
+        hasMixedContent?: boolean;
+    }
+
     export interface ExternalProject {
         projectFileName: string;
-        rootFiles: string[];
+        rootFiles: ExternalFile[];
         options: CompilerOptions;
     }
 

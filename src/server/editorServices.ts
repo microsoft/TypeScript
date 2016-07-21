@@ -46,6 +46,24 @@ namespace ts.server {
         configFileErrors?: Diagnostic[];
     }
 
+    interface FilePropertyReader<T> {
+        getFileName(f: T): string;
+        getScriptKind(f: T): ScriptKind;
+        hasMixedContent(f: T): boolean;
+    }
+
+    const fileNamePropertyReader: FilePropertyReader<string> = {
+        getFileName: x => x,
+        getScriptKind: _ => undefined,
+        hasMixedContent: _ => false
+    };
+
+    const externalFilePropertyReader: FilePropertyReader<protocol.ExternalFile> = {
+        getFileName: x => x.fileName,
+        getScriptKind: x => x.scriptKind,
+        hasMixedContent: x => x.hasMixedContent
+    };
+
     function findProjectByName<T extends Project>(projectName: string, projects: T[]): T {
         for (const proj of projects) {
             if (proj.getProjectName() === projectName) {
@@ -712,13 +730,14 @@ namespace ts.server {
             return { success: true, project, errors };
         }
 
-        private updateNonInferredProject(project: ExternalProject | ConfiguredProject, newUncheckedRootFiles: string[], newOptions: CompilerOptions) {
+        private updateNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions) {
             const oldRootScriptInfos = project.getRootScriptInfos();
             const newRootScriptInfos: ScriptInfo[] = [];
             const newRootScriptInfoMap: NormalizedPathMap<ScriptInfo> = createNormalizedPathMap<ScriptInfo>();
 
             let rootFilesChanged = false;
-            for (const newRootFile of newUncheckedRootFiles) {
+            for (const f of newUncheckedFiles) {
+                const newRootFile = propertyReader.getFileName(f);
                 if (!this.host.fileExists(newRootFile)) {
                     continue;
                 }
@@ -798,7 +817,7 @@ namespace ts.server {
                     project.enableLanguageService();
                 }
                 this.watchConfigDirectoryForProject(project, projectOptions);
-                this.updateNonInferredProject(project, projectOptions.files, projectOptions.compilerOptions);
+                this.updateNonInferredProject(project, projectOptions.files, fileNamePropertyReader, projectOptions.compilerOptions);
             }
         }
 
@@ -1066,14 +1085,14 @@ namespace ts.server {
         openExternalProject(proj: protocol.ExternalProject): void {
             const externalProject = this.findExternalProjectByProjectName(proj.projectFileName);
             if (externalProject) {
-                this.updateNonInferredProject(externalProject, proj.rootFiles, proj.options);
+                this.updateNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, proj.options);
                 return;
             }
 
             let tsConfigFiles: NormalizedPath[];
             const rootFiles: NormalizedPath[] = [];
             for (const file of proj.rootFiles) {
-                const normalized = toNormalizedPath(file);
+                const normalized = toNormalizedPath(file.fileName);
                 if (getBaseFileName(normalized) === "tsconfig.json") {
                     (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
                 }
