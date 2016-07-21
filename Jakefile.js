@@ -14,7 +14,7 @@ var serverDirectory = "src/server/";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
-var unittestsDirectory = "tests/cases/unittests/";
+var unittestsDirectory = "src/harness/unittests/";
 var docDirectory = "doc/";
 
 var builtDirectory = "built/";
@@ -34,6 +34,7 @@ if (process.env.path !== undefined) {
 
 var compilerSources = [
     "core.ts",
+    "performance.ts",
     "sys.ts",
     "types.ts",
     "scanner.ts",
@@ -54,6 +55,7 @@ var compilerSources = [
 
 var servicesSources = [
     "core.ts",
+    "performance.ts",
     "sys.ts",
     "types.ts",
     "scanner.ts",
@@ -100,7 +102,6 @@ var servicesSources = [
 }));
 
 var serverCoreSources = [
-    "node.d.ts",
     "editorServices.ts",
     "protocol.d.ts",
     "session.ts",
@@ -279,13 +280,18 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
     * @param {boolean} opts.stripInternal: true if compiler should remove declarations marked as @internal
     * @param {boolean} opts.noMapRoot: true if compiler omit mapRoot option
     * @param {boolean} opts.inlineSourceMap: true if compiler should inline sourceMap
+    * @param {Array} opts.types: array of types to include in compilation
     * @param callback: a function to execute after the compilation process ends
     */
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts, callback) {
     file(outFile, prereqs, function() {
-        var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--noImplicitAny --noEmitOnError --types --pretty";
         opts = opts || {};
+        var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
+        var options = "--noImplicitAny --noImplicitThis --noEmitOnError --types " 
+        if (opts.types) {
+            options += opts.types.join(",");
+        }
+        options += " --pretty";
         // Keep comments when specifically requested
         // or when in debug mode.
         if (!(opts.keepComments || useDebugMode)) {
@@ -548,8 +554,7 @@ compileFile(
      });
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
-compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
-
+compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"] });
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 compileFile(
@@ -652,7 +657,7 @@ compileFile(
     /*prereqs*/ [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources),
     /*prefixes*/ [],
     /*useBuiltCompiler:*/ true,
-    /*opts*/ { inlineSourceMap: true });
+    /*opts*/ { inlineSourceMap: true, types: ["node", "mocha", "chai"] });
 
 var internalTests = "internal/";
 

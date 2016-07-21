@@ -328,7 +328,7 @@ class ProjectRunner extends RunnerBase {
 
                 if (Harness.Compiler.isJS(fileName)) {
                     // Make sure if there is URl we have it cleaned up
-                    const indexOfSourceMapUrl = data.lastIndexOf("//# sourceMappingURL=");
+                    const indexOfSourceMapUrl = data.lastIndexOf(`//# ${"sourceMappingURL"}=`); // This line can be seen as a sourceMappingURL comment
                     if (indexOfSourceMapUrl !== -1) {
                         data = data.substring(0, indexOfSourceMapUrl + 21) + cleanProjectUrl(data.substring(indexOfSourceMapUrl + 21));
                     }
@@ -479,17 +479,27 @@ class ProjectRunner extends RunnerBase {
 
                     it("Baseline of emitted result (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (testCase.baselineCheck) {
+                            const errs: Error[] = [];
                             ts.forEach(compilerResult.outputFiles, outputFile => {
-
-                                Harness.Baseline.runBaseline("Baseline of emitted result (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
-                                    try {
-                                        return Harness.IO.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
-                                    }
-                                    catch (e) {
-                                        return undefined;
-                                    }
-                                });
+                                // There may be multiple files with different baselines. Run all and report at the end, else
+                                // it stops copying the remaining emitted files from 'local/projectOutput' to 'local/project'.
+                                try {
+                                    Harness.Baseline.runBaseline("Baseline of emitted result (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
+                                        try {
+                                            return Harness.IO.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
+                                        }
+                                        catch (e) {
+                                            return undefined;
+                                        }
+                                    });
+                                }
+                                catch (e) {
+                                    errs.push(e);
+                                }
                             });
+                            if (errs.length) {
+                                throw Error(errs.join("\n     "));
+                            }
                         }
                     });
 
