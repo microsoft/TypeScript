@@ -24,7 +24,7 @@ namespace ts.server {
         private lsHost: ServerLanguageServiceHost;
         private program: ts.Program;
 
-        languageService: LanguageService;
+        private languageService: LanguageService;
 
         /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
@@ -72,6 +72,13 @@ namespace ts.server {
                 this.disableLanguageService();
             }
             this.markAsDirty();
+        }
+
+        getLanguageService(ensureSynchronized = true): LanguageService  {
+            if (ensureSynchronized) {
+                this.updateGraph();
+            }
+            return this.languageService;
         }
 
         getProjectVersion() {
@@ -225,6 +232,7 @@ namespace ts.server {
                     }
                 }
             }
+
             return oldProjectStructureVersion === this.projectStructureVersion;
         }
 
@@ -278,6 +286,8 @@ namespace ts.server {
         }
 
         getChangesSinceVersion(lastKnownVersion?: number): protocol.ProjectFiles {
+            this.updateGraph();
+
             const info = {
                 projectName: this.getProjectName(),
                 version: this.projectStructureVersion,
