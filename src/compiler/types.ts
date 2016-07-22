@@ -2308,7 +2308,7 @@ namespace ts {
 
     // Enum types (TypeFlags.EnumLiteral)
     export interface EnumLiteralType extends LiteralType {
-        baseType: EnumType;
+        baseType: EnumType & UnionType;
     }
 
     // Object types (TypeFlags.ObjectType)

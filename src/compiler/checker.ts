@@ -1547,8 +1547,8 @@ namespace ts {
             return type;
         }
 
-        function createBooleanType(trueFalseTypes: Type[]): IntrinsicType {
-            const type = <IntrinsicType>getUnionType(trueFalseTypes, /*noSubtypeReduction*/ true);
+        function createBooleanType(trueFalseTypes: Type[]): IntrinsicType & UnionType {
+            const type = <IntrinsicType & UnionType>getUnionType(trueFalseTypes, /*noSubtypeReduction*/ true);
             type.flags |= TypeFlags.Boolean;
             type.intrinsicName = "boolean";
             return type;
@@ -1928,17 +1928,24 @@ namespace ts {
             return result;
         }
 
-        function replaceTrueFalseWithBoolean(types: Type[]): Type[] {
-            if (contains(types, trueType) && contains(types, falseType)) {
-                const result: Type[] = [];
-                for (const t of types) {
-                    if (t !== falseType) {
-                        result.push(t === trueType ? booleanType : t);
+        function reduceLiteralTypes(types: Type[]): Type[] {
+            let result: Type[];
+            for (let i = 0; i < types.length; i++) {
+                const t = types[i];
+                if (t.flags & (TypeFlags.BooleanLiteral | TypeFlags.EnumLiteral)) {
+                    const baseType = t.flags & TypeFlags.BooleanLiteral ? booleanType : (<EnumLiteralType>t).baseType;
+                    const count = baseType.types.length;
+                    if (i + count <= types.length && types[i + count - 1] === baseType.types[count - 1]) {
+                        (result || (result = types.slice(0, i))).push(baseType);
+                        i += count - 1;
+                        continue;
                     }
                 }
-                return result;
+                if (result) {
+                    result.push(t);
+                }
             }
-            return types;
+            return result || types;
         }
 
         function visibilityToString(flags: NodeFlags) {
@@ -2239,7 +2246,7 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.OpenParenToken);
                     }
                     if (type.flags & TypeFlags.Union) {
-                        writeTypeList(replaceTrueFalseWithBoolean(type.types), SyntaxKind.BarToken);
+                        writeTypeList(reduceLiteralTypes(type.types), SyntaxKind.BarToken);
                     }
                     else {
                         writeTypeList(type.types, SyntaxKind.AmpersandToken);
@@ -3784,7 +3791,7 @@ namespace ts {
                                 if (!memberTypes[value]) {
                                     const memberType = memberTypes[value] = <EnumLiteralType>createType(TypeFlags.EnumLiteral);
                                     memberType.symbol = memberSymbol;
-                                    memberType.baseType = enumType;
+                                    memberType.baseType = <EnumType & UnionType>enumType;
                                     memberType.text = "" + value;
                                     memberTypeList.push(memberType);
                                 }
