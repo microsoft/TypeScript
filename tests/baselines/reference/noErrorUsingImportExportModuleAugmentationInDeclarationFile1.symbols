@@ -1,6 +1,6 @@
 === tests/cases/compiler/0.d.ts ===
 
-export = a; //  error TS1148: Cannot use imports, exports, or module augmentations when '--module' is 'none'.
+export = a;
 >a : Symbol(a, Decl(0.d.ts, 2, 11))
 
 declare var a: number;
