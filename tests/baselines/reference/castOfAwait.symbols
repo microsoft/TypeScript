@@ -1,0 +1,7 @@
+=== tests/cases/compiler/castOfAwait.ts ===
+async function f() {
+>f : Symbol(f, Decl(castOfAwait.ts, 0, 0))
+
+    return <number> await 0;
+}
+

@@ -1,0 +1,10 @@
+=== tests/cases/compiler/castOfAwait.ts ===
+async function f() {
+>f : () => Promise<number>
+
+    return <number> await 0;
+><number> await 0 : number
+>await 0 : number
+>0 : number
+}
+

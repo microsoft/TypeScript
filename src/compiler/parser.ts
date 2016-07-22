@@ -3400,6 +3400,8 @@ namespace ts {
                     return parseTypeOfExpression();
                 case SyntaxKind.VoidKeyword:
                     return parseVoidExpression();
+                case SyntaxKind.AwaitKeyword:
+                    return parseAwaitExpression();
                 case SyntaxKind.LessThanToken:
                     // This is modified UnaryExpression grammar in TypeScript
                     //  UnaryExpression (modified):
