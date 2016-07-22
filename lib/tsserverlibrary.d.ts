@@ -405,7 +405,10 @@ declare namespace ts {
     interface ModifiersArray extends NodeArray<Modifier> {
         flags: NodeFlags;
     }
-    interface Modifier extends Node {
+    interface Token extends Node {
+        __tokenTag: any;
+    }
+    interface Modifier extends Token {
     }
     interface Identifier extends PrimaryExpression {
         text: string;
@@ -2050,7 +2053,6 @@ declare namespace ts {
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
-        getDefaultTypeDirectiveNames?(rootPath: string): string[];
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
@@ -2156,6 +2158,8 @@ declare namespace ts {
     function ensureTrailingDirectorySeparator(path: string): string;
     function comparePaths(a: string, b: string, currentDirectory: string, ignoreCase?: boolean): Comparison;
     function containsPath(parent: string, child: string, currentDirectory: string, ignoreCase?: boolean): boolean;
+    function startsWith(str: string, prefix: string): boolean;
+    function endsWith(str: string, suffix: string): boolean;
     function fileExtensionIs(path: string, extension: string): boolean;
     function fileExtensionIsAny(path: string, extensions: string[]): boolean;
     function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude"): string;
@@ -2193,6 +2197,8 @@ declare namespace ts {
     function changeExtension<T extends string | Path>(path: T, newExtension: string): T;
     interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
+        getTokenConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Token;
+        getIdentifierConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Token;
         getSourceFileConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => SourceFile;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
@@ -6456,13 +6462,13 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Report_Errors_on_Unused_Locals: {
+        Report_errors_on_unused_locals: {
             code: number;
             category: DiagnosticCategory;
             key: string;
             message: string;
         };
-        Report_Errors_on_Unused_Parameters: {
+        Report_errors_on_unused_parameters: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -7143,8 +7149,6 @@ declare namespace ts {
     function collapseTextChangeRangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange;
     function getTypeParameterOwner(d: Declaration): Declaration;
     function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean;
-    function startsWith(str: string, prefix: string): boolean;
-    function endsWith(str: string, suffix: string): boolean;
 }
 declare namespace ts {
     let parseTime: number;
@@ -7225,6 +7229,12 @@ declare namespace ts {
     const defaultInitCompilerOptions: CompilerOptions;
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
     function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
+    interface FormatDiagnosticsHost {
+        getCurrentDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getNewLine(): string;
+    }
+    function formatDiagnostics(diagnostics: Diagnostic[], host: FormatDiagnosticsHost): string;
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
     function getAutomaticTypeDirectiveNames(options: CompilerOptions, rootFiles: string[], host: CompilerHost): string[];
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program;

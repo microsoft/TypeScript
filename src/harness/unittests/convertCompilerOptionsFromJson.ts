@@ -1,5 +1,5 @@
-/// <reference path="..\..\..\src\harness\harness.ts" />
-/// <reference path="..\..\..\src\compiler\commandLineParser.ts" />
+/// <reference path="..\harness.ts" />
+/// <reference path="..\..\compiler\commandLineParser.ts" />
 
 namespace ts {
     describe("convertCompilerOptionsFromJson", () => {

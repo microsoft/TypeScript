@@ -1,11 +1,4 @@
-/// <reference path="..\..\..\src\harness\external\mocha.d.ts" />
-/// <reference path='..\..\..\src\harness\harness.ts' />
-
-declare namespace chai.assert {
-    /* tslint:disable no-unused-variable */
-    function deepEqual(actual: any, expected: any): void;
-    /* tslint:enable no-unused-variable */
-}
+/// <reference path="..\harness.ts" />
 
 namespace ts {
     function diagnosticToString(diagnostic: Diagnostic) {
