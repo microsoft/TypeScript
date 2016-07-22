@@ -30,6 +30,7 @@
     },
     "devDependencies": {
         "@types/browserify": "latest",
+        "@types/convert-source-map": "latest",
         "@types/chai": "latest",
         "@types/del": "latest",
         "@types/glob": "latest",
@@ -50,6 +51,7 @@
         "@types/through2": "latest",
         "browserify": "latest",
         "chai": "latest",
+        "convert-source-map": "latest",
         "del": "latest",
         "gulp": "latest",
         "gulp-clone": "latest",
@@ -68,9 +70,9 @@
         "mocha": "latest",
         "mocha-fivemat-progress-reporter": "latest",
         "run-sequence": "latest",
+        "sorcery": "latest",
         "through2": "latest",
         "ts-node": "latest",
-        "tsd": "latest",
         "tslint": "next",
         "typescript": "next"
     },

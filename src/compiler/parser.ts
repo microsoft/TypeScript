@@ -2,14 +2,20 @@
 /// <reference path="scanner.ts"/>
 
 namespace ts {
-    /* @internal */ export let parseTime = 0;
-
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
     export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
         if (kind === SyntaxKind.SourceFile) {
             return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, pos, end);
+        }
+        else if (kind === SyntaxKind.Identifier) {
+            return new (IdentifierConstructor || (IdentifierConstructor = objectAllocator.getIdentifierConstructor()))(kind, pos, end);
+        }
+        else if (kind < SyntaxKind.FirstNode) {
+            return new (TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor()))(kind, pos, end);
         }
         else {
             return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, pos, end);
@@ -413,10 +419,10 @@ namespace ts {
     }
 
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
-        const start = new Date().getTime();
+        const start = performance.mark();
         const result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind);
 
-        parseTime += new Date().getTime() - start;
+        performance.measure("Parse", start);
         return result;
     }
 
@@ -466,6 +472,8 @@ namespace ts {
 
         // capture constructors in 'initializeState' to avoid null checks
         let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+        let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+        let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
         let sourceFile: SourceFile;
@@ -576,6 +584,8 @@ namespace ts {
 
         function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, scriptKind: ScriptKind) {
             NodeConstructor = objectAllocator.getNodeConstructor();
+            TokenConstructor = objectAllocator.getTokenConstructor();
+            IdentifierConstructor = objectAllocator.getIdentifierConstructor();
             SourceFileConstructor = objectAllocator.getSourceFileConstructor();
 
             sourceText = _sourceText;
@@ -1018,13 +1028,15 @@ namespace ts {
         }
 
         // note: this function creates only node
-        function createNode(kind: SyntaxKind, pos?: number): Node {
+        function createNode(kind: SyntaxKind, pos?: number): Node | Token | Identifier {
             nodeCount++;
             if (!(pos >= 0)) {
                 pos = scanner.getStartPos();
             }
 
-            return new NodeConstructor(kind, pos, pos);
+            return kind >= SyntaxKind.FirstNode ? new NodeConstructor(kind, pos, pos) :
+                kind === SyntaxKind.Identifier ? new IdentifierConstructor(kind, pos, pos) :
+                    new TokenConstructor(kind, pos, pos);
         }
 
         function finishNode<T extends Node>(node: T, end?: number): T {
@@ -5096,7 +5108,7 @@ namespace ts {
                 }
 
                 flags |= modifierToFlag(modifierKind);
-                modifiers.push(finishNode(createNode(modifierKind, modifierStart)));
+                modifiers.push(finishNode(<Modifier>createNode(modifierKind, modifierStart)));
             }
             if (modifiers) {
                 modifiers.flags = flags;
@@ -5115,7 +5127,7 @@ namespace ts {
                 modifiers = <ModifiersArray>[];
                 modifiers.pos = modifierStart;
                 flags |= modifierToFlag(modifierKind);
-                modifiers.push(finishNode(createNode(modifierKind, modifierStart)));
+                modifiers.push(finishNode(<Modifier>createNode(modifierKind, modifierStart)));
                 modifiers.flags = flags;
                 modifiers.end = scanner.getStartPos();
             }

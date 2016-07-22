@@ -8,7 +8,7 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTyped
 
 ==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTagsES6.ts (6 errors) ====
     interface I {
-        (stringParts: string[], ...rest: boolean[]): I;
+        (stringParts: TemplateStringsArray, ...rest: boolean[]): I;
         g: I;
         h: I;
         member: I;

@@ -514,16 +514,6 @@ namespace ts {
         return str === str.toLowerCase();
     }
 
-    function startsWith(string: string, search: string) {
-        for (let i = 0, n = search.length; i < n; i++) {
-            if (string.charCodeAt(i) !== search.charCodeAt(i)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     // Assumes 'value' is already lowercase.
     function indexOfIgnoringCase(string: string, value: string): number {
         for (let i = 0, n = string.length - value.length; i <= n; i++) {
