@@ -1755,6 +1755,10 @@
         "category": "Error",
         "code": 2534
     },
+    "Enum type '{0}' has members with initializers that are not literals.": {
+        "category": "Error",
+        "code": 2535
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600

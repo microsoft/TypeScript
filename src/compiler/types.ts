@@ -2068,7 +2068,7 @@ namespace ts {
         Variable = FunctionScopedVariable | BlockScopedVariable,
         Value = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
         Type = Class | Interface | Enum | EnumMember | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias,
-        Namespace = ValueModule | NamespaceModule | ConstEnum,
+        Namespace = ValueModule | NamespaceModule | Enum,
         Module = ValueModule | NamespaceModule,
         Accessor = GetAccessor | SetAccessor,
 
@@ -2151,7 +2151,6 @@ namespace ts {
         isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
-        enumMemberTypes?: Map<Type>;        // Enum member types indexed by enum value
     }
 
     /* @internal */
@@ -2218,50 +2217,52 @@ namespace ts {
         String                  = 1 << 1,
         Number                  = 1 << 2,
         Boolean                 = 1 << 3,
-        StringLiteral           = 1 << 4,   // String literal type
-        NumberLiteral           = 1 << 5,
-        BooleanLiteral          = 1 << 6,
-        ESSymbol                = 1 << 7,   // Type of symbol primitive introduced in ES6
-        Void                    = 1 << 8,
-        Undefined               = 1 << 9,
-        Null                    = 1 << 10,
-        Never                   = 1 << 11,  // Never type
-        Enum                    = 1 << 12,  // Enum type
-        TypeParameter           = 1 << 13,  // Type parameter
-        Class                   = 1 << 14,  // Class
-        Interface               = 1 << 15,  // Interface
-        Reference               = 1 << 16,  // Generic type reference
-        Tuple                   = 1 << 17,  // Tuple
-        Union                   = 1 << 18,  // Union (T | U)
-        Intersection            = 1 << 19,  // Intersection (T & U)
-        Anonymous               = 1 << 20,  // Anonymous
-        Instantiated            = 1 << 21,  // Instantiated anonymous type
+        Enum                    = 1 << 4,
+        StringLiteral           = 1 << 5,
+        NumberLiteral           = 1 << 6,
+        BooleanLiteral          = 1 << 7,
+        EnumLiteral             = 1 << 8,
+        ESSymbol                = 1 << 9,   // Type of symbol primitive introduced in ES6
+        Void                    = 1 << 10,
+        Undefined               = 1 << 11,
+        Null                    = 1 << 12,
+        Never                   = 1 << 13,  // Never type
+        TypeParameter           = 1 << 14,  // Type parameter
+        Class                   = 1 << 15,  // Class
+        Interface               = 1 << 16,  // Interface
+        Reference               = 1 << 17,  // Generic type reference
+        Tuple                   = 1 << 18,  // Tuple
+        Union                   = 1 << 19,  // Union (T | U)
+        Intersection            = 1 << 20,  // Intersection (T & U)
+        Anonymous               = 1 << 21,  // Anonymous
+        Instantiated            = 1 << 22,  // Instantiated anonymous type
         /* @internal */
-        ObjectLiteral           = 1 << 22,  // Originates in an object literal
+        ObjectLiteral           = 1 << 23,  // Originates in an object literal
         /* @internal */
-        FreshObjectLiteral      = 1 << 23,  // Fresh object literal type
+        FreshObjectLiteral      = 1 << 24,  // Fresh object literal type
         /* @internal */
-        ContainsWideningType    = 1 << 24,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 25,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 25,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 26,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 26,  // Type is or contains object literal type
-        ThisType                = 1 << 27,  // This type
-        ObjectLiteralPatternWithComputedProperties = 1 << 28,  // Object literal type implied by binding pattern has computed properties
+        ContainsAnyFunctionType = 1 << 27,  // Type is or contains object literal type
+        ThisType                = 1 << 28,  // This type
+        ObjectLiteralPatternWithComputedProperties = 1 << 29,  // Object literal type implied by binding pattern has computed properties
 
         /* @internal */
         Nullable = Undefined | Null,
-        Literal = StringLiteral | NumberLiteral | BooleanLiteral,
+        Literal = StringLiteral | NumberLiteral | BooleanLiteral | EnumLiteral,
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
         PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
-        Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | Literal | Enum,
+        Primitive = String | Number | Boolean | Enum | ESSymbol | Void | Undefined | Null | Literal,
         StringLike = String | StringLiteral,
-        NumberLike = Number | NumberLiteral | Enum,
+        NumberLike = Number | NumberLiteral | Enum | EnumLiteral,
         BooleanLike = Boolean | BooleanLiteral,
+        EnumLike = Enum | EnumLiteral,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
@@ -2298,6 +2299,16 @@ namespace ts {
     // String literal types (TypeFlags.StringLiteral)
     export interface LiteralType extends Type {
         text: string;  // Text of string literal
+    }
+
+    // Enum types (TypeFlags.Enum)
+    export interface EnumType extends Type {
+        memberTypes: Map<EnumLiteralType>;
+    }
+
+    // Enum types (TypeFlags.EnumLiteral)
+    export interface EnumLiteralType extends LiteralType {
+        baseType: EnumType;
     }
 
     // Object types (TypeFlags.ObjectType)

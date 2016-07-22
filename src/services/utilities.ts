@@ -920,7 +920,7 @@ namespace ts {
         if (host && host.getScriptKind) {
             scriptKind = host.getScriptKind(fileName);
         }
-        if (!scriptKind || scriptKind === ScriptKind.Unknown) {
+        if (!scriptKind) {
             scriptKind = getScriptKindFromFileName(fileName);
         }
         return ensureScriptKind(fileName, scriptKind);
