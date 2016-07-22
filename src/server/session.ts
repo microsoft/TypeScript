@@ -1147,12 +1147,12 @@ namespace ts.server {
         }
 
         private getBraceMatching(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.TextSpan[] | TextSpan[] {
-            const { file, project } = this.getFileAndProject(args);
+            const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
 
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
 
-            const spans = project.getLanguageService().getBraceMatchingAtPosition(file, position);
+            const spans = project.getLanguageService(/*ensureSynchronized*/ false).getBraceMatchingAtPosition(file, position);
             if (!spans) {
                 return undefined;
             }
