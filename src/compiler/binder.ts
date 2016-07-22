@@ -1971,7 +1971,7 @@ namespace ts {
         function bindThisPropertyAssignment(node: BinaryExpression) {
             // Declare a 'member' in case it turns out the container was an ES5 class or ES6 constructor
             let assignee: Node;
-            if (container.kind === SyntaxKind.FunctionDeclaration || container.kind === SyntaxKind.FunctionDeclaration) {
+            if (container.kind === SyntaxKind.FunctionDeclaration || container.kind === SyntaxKind.FunctionExpression) {
                 assignee = container;
             }
             else if (container.kind === SyntaxKind.Constructor) {
