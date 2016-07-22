@@ -580,8 +580,8 @@ namespace ts {
             transformAndEmitStatements(body.statements, statementOffset);
 
             const buildResult = build();
-            addNodes(statements, endLexicalEnvironment());
-            addNode(statements, createReturn(buildResult));
+            addRange(statements, endLexicalEnvironment());
+            statements.push(createReturn(buildResult));
 
             // Restore previous generator state
             inGeneratorFunctionBody = savedInGeneratorFunctionBody;
@@ -1019,7 +1019,7 @@ namespace ts {
             );
 
             const expressions = reduceLeft(properties, reduceProperty, <Expression[]>[], numInitialProperties);
-            addNode(expressions, getMutableClone(temp), multiLine);
+            expressions.push(multiLine ? startOnNewLine(getMutableClone(temp)) : temp);
             return inlineExpressions(expressions);
 
             function reduceProperty(expressions: Expression[], property: ObjectLiteralElement) {
@@ -1029,7 +1029,13 @@ namespace ts {
                 }
 
                 const expression = createExpressionForObjectLiteralElement(node, property, temp);
-                addNode(expressions, visitNode(expression, visitor, isExpression), multiLine);
+                const visited = visitNode(expression, visitor, isExpression);
+                if (visited) {
+                    if (multiLine) {
+                        visited.startsOnNewLine = true;
+                    }
+                    expressions.push(visited);
+                }
                 return expressions;
             }
         }

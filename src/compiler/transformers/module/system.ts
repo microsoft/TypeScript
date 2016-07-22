@@ -197,7 +197,7 @@ namespace ts {
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, visitSourceElement);
 
             // var __moduleName = context_1 && context_1.id;
-            addNode(statements,
+            statements.push(
                 createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
@@ -226,14 +226,14 @@ namespace ts {
             // - Temporary variables will appear at the top rather than at the bottom of the file
             // - Calls to the exporter for exported function declarations are grouped after
             //   the declarations.
-            addNodes(statements, endLexicalEnvironment());
+            addRange(statements, endLexicalEnvironment());
 
             // Emit early exports for function declarations.
-            addNodes(statements, exportedFunctionDeclarations);
+            addRange(statements, exportedFunctionDeclarations);
 
             const exportStarFunction = addExportStarIfNeeded(statements);
 
-            addNode(statements,
+            statements.push(
                 createReturn(
                     setMultiLine(
                         createObjectLiteral([
@@ -292,7 +292,7 @@ namespace ts {
             if (exportedLocalNames) {
                 for (const exportedLocalName of exportedLocalNames) {
                     // write name of exported declaration, i.e 'export var x...'
-                    addNode(exportedNames,
+                    exportedNames.push(
                         createPropertyAssignment(
                             createLiteral(exportedLocalName.text),
                             createLiteral(true)
@@ -314,7 +314,7 @@ namespace ts {
 
                 for (const element of exportDecl.exportClause.elements) {
                     // write name of indirectly exported entry, i.e. 'export {x} from ...'
-                    addNode(exportedNames,
+                    exportedNames.push(
                         createPropertyAssignment(
                             createLiteral((element.name || element.propertyName).text),
                             createLiteral(true)
@@ -324,7 +324,7 @@ namespace ts {
             }
 
             const exportedNamesStorageRef = createUniqueName("exportedNames");
-            addNode(statements,
+            statements.push(
                 createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
@@ -365,7 +365,7 @@ namespace ts {
                         case SyntaxKind.ImportEqualsDeclaration:
                             Debug.assert(importVariableName !== undefined);
                             // save import into the local
-                            addNode(statements,
+                            statements.push(
                                 createStatement(
                                     createAssignment(importVariableName, parameterName)
                                 )
@@ -396,7 +396,7 @@ namespace ts {
                                     );
                                 }
 
-                                addNode(statements,
+                                statements.push(
                                     createStatement(
                                         createCall(
                                             exportFunctionForFile,
@@ -412,7 +412,7 @@ namespace ts {
                                 // emit as:
                                 //
                                 //  exportStar(foo_1_1);
-                                addNode(statements,
+                                statements.push(
                                     createStatement(
                                         createCall(
                                             exportStarFunction,
@@ -426,7 +426,7 @@ namespace ts {
                     }
                 }
 
-                addNode(setters,
+                setters.push(
                     createFunctionExpression(
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
@@ -563,7 +563,7 @@ namespace ts {
         function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
             if (!node.moduleSpecifier) {
                 const statements: Statement[] = [];
-                addNodes(statements, map(node.exportClause.elements, visitExportSpecifier));
+                addRange(statements, map(node.exportClause.elements, visitExportSpecifier));
                 return statements;
             }
 
@@ -612,7 +612,10 @@ namespace ts {
             const isExported = hasModifier(node, ModifierFlags.Export);
             const expressions: Expression[] = [];
             for (const variable of node.declarationList.declarations) {
-                addNode(expressions, <Expression>transformVariable(variable, isExported));
+                const visited = <Expression>transformVariable(variable, isExported);
+                if (visited) {
+                    expressions.push(visited);
+                }
             }
 
             if (expressions.length) {
@@ -715,12 +718,14 @@ namespace ts {
             const statements: Statement[] = [];
 
             // Rewrite the class declaration into an assignment of a class expression.
-            addNode(statements,
+            statements.push(
                 createStatement(
                     createAssignment(
                         name,
                         createClassExpression(
+                            /*modifiers*/ undefined,
                             node.name,
+                            /*typeParameters*/ undefined,
                             node.heritageClauses,
                             node.members,
                             /*location*/ node
@@ -736,7 +741,7 @@ namespace ts {
                     recordExportName(name);
                 }
 
-                addNode(statements, createDeclarationExport(node));
+                statements.push(createDeclarationExport(node));
             }
 
             return statements;
@@ -756,7 +761,10 @@ namespace ts {
             if (shouldHoistLoopInitializer(initializer)) {
                 const expressions: Expression[] = [];
                 for (const variable of (<VariableDeclarationList>initializer).declarations) {
-                    addNode(expressions, <Expression>transformVariable(variable, /*isExported*/ false));
+                    const visited = <Expression>transformVariable(variable, /*isExported*/ false);
+                    if (visited) {
+                        expressions.push(visited);
+                    }
                 };
 
                 return createFor(
@@ -1207,7 +1215,7 @@ namespace ts {
                 );
             }
 
-            addNode(statements,
+            statements.push(
                 createFunctionDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,

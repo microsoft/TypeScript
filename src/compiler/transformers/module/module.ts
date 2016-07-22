@@ -734,8 +734,10 @@ namespace ts {
                 statements.push(
                     setOriginalNode(
                         createClassDeclaration(
+                            /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             name,
+                            /*typeParameters*/ undefined,
                             node.heritageClauses,
                             node.members,
                             /*location*/ node
@@ -908,7 +910,7 @@ namespace ts {
                     setNodeEmitFlags(node, NodeEmitFlags.NoSubstitution);
                     let transformedUnaryExpression: BinaryExpression;
                     if (node.kind === SyntaxKind.PostfixUnaryExpression) {
-                        transformedUnaryExpression = createBinaryWithOperatorToken(
+                        transformedUnaryExpression = createBinary(
                             operand,
                             createNode(operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusEqualsToken : SyntaxKind.MinusEqualsToken),
                             createLiteral(1),

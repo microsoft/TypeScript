@@ -355,7 +355,9 @@ namespace ts {
     export function addRange<T>(to: T[], from: T[]): void {
         if (to && from) {
             for (const v of from) {
-                to.push(v);
+                if (v !== undefined) {
+                    to.push(v);
+                }
             }
         }
     }

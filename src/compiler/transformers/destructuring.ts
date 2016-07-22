@@ -351,7 +351,9 @@ namespace ts {
             value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, location, emitTempVariableAssignment);
             return createConditional(
                 createStrictEquality(value, createVoidZero()),
+                createToken(SyntaxKind.QuestionToken),
                 defaultValue,
+                createToken(SyntaxKind.ColonToken),
                 value
             );
         }

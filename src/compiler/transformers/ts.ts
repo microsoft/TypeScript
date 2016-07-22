@@ -428,6 +428,8 @@ namespace ts {
                 const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ false, visitor);
                 const externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText);
                 const externalHelpersModuleImport = createImportDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
                     createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
                     createLiteral(externalHelpersModuleNameText)
                 );
@@ -506,8 +508,10 @@ namespace ts {
                 //      ${members}
                 //  }
                 const classDeclaration = createClassDeclaration(
+                    /*decorators*/ undefined,
                     visitNodes(node.modifiers, visitor, isModifier),
                     name,
+                    /*typeParameters*/ undefined,
                     visitNodes(node.heritageClauses, visitor, isHeritageClause),
                     transformClassMembers(node, hasExtendsClause),
                     /*location*/ node
@@ -548,7 +552,11 @@ namespace ts {
             }
             else if (isDecoratedClass) {
                 if (isDefaultExternalModuleExport(node)) {
-                    statements.push(createExportDefault(getLocalName(node)));
+                    statements.push(createExportAssignment(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        /*isExportEquals*/ false,
+                        getLocalName(node)));
                 }
                 else if (isNamedExternalModuleExport(node)) {
                     statements.push(createExternalModuleExport(name));
@@ -660,7 +668,9 @@ namespace ts {
             //  }
             const classExpression: Expression = setOriginalNode(
                 createClassExpression(
+                    /*modifiers*/ undefined,
                     name,
+                    /*typeParameters*/ undefined,
                     visitNodes(node.heritageClauses, visitor, isHeritageClause),
                     transformClassMembers(node, hasExtendsClause),
                     /*location*/ location
@@ -684,7 +694,7 @@ namespace ts {
 
             //  let ${name} = ${classExpression} where name is either declaredName if the class doesn't contain self-reference
             //                                         or decoratedClassAlias if the class contain self-reference.
-            addNode(statements,
+            statements.push(
                 setOriginalNode(
                     createVariableStatement(
                         /*modifiers*/ undefined,
@@ -706,7 +716,7 @@ namespace ts {
                 // TDZ as the class.
 
                 // let ${declaredName} = ${decoratedClassAlias}
-                addNode(statements,
+                statements.push(
                     setOriginalNode(
                         createVariableStatement(
                             /*modifiers*/ undefined,
@@ -743,7 +753,9 @@ namespace ts {
 
             const classExpression = setOriginalNode(
                 createClassExpression(
+                    /*modifiers*/ undefined,
                     node.name,
+                    /*typeParameters*/ undefined,
                     heritageClauses,
                     members,
                     /*location*/ node
@@ -757,15 +769,15 @@ namespace ts {
                 if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
                     // record an alias as the class name is not in scope for statics.
                     enableSubstitutionForClassAliases();
-                    classAliases[getOriginalNodeId(node)] = temp;
+                    classAliases[getOriginalNodeId(node)] = getSynthesizedClone(temp);
                 }
 
                 // To preserve the behavior of the old emitter, we explicitly indent
                 // the body of a class with static initializers.
                 setNodeEmitFlags(classExpression, NodeEmitFlags.Indented | getNodeEmitFlags(classExpression));
-                addNode(expressions, createAssignment(temp, classExpression), true);
-                addNodes(expressions, generateInitializedPropertyExpressions(node, staticProperties, temp), true);
-                addNode(expressions, temp, true);
+                expressions.push(startOnNewLine(createAssignment(temp, classExpression)));
+                addRange(expressions, generateInitializedPropertyExpressions(node, staticProperties, temp));
+                expressions.push(startOnNewLine(temp));
                 return inlineExpressions(expressions);
             }
 
@@ -780,8 +792,12 @@ namespace ts {
          */
         function transformClassMembers(node: ClassDeclaration | ClassExpression, hasExtendsClause: boolean) {
             const members: ClassElement[] = [];
-            addNode(members, transformConstructor(node, hasExtendsClause));
-            addNodes(members, visitNodes(node.members, classElementVisitor, isClassElement));
+            const constructor = transformConstructor(node, hasExtendsClause);
+            if (constructor) {
+                members.push(constructor);
+            }
+
+            addRange(members, visitNodes(node.members, classElementVisitor, isClassElement));
             return createNodeArray(members, /*location*/ node.members);
         }
 
@@ -870,7 +886,7 @@ namespace ts {
                 //  }
                 //
                 const propertyAssignments = getParametersWithPropertyAssignments(constructor);
-                addNodes(statements, map(propertyAssignments, transformParameterWithPropertyAssignment));
+                addRange(statements, map(propertyAssignments, transformParameterWithPropertyAssignment));
             }
             else if (hasExtendsClause) {
                 Debug.assert(parameters.length === 1 && isIdentifier(parameters[0].name));
@@ -879,7 +895,7 @@ namespace ts {
                 //
                 //  super(...args);
                 //
-                addNode(statements,
+                statements.push(
                     createStatement(
                         createCall(
                             createSuper(),
@@ -905,11 +921,11 @@ namespace ts {
 
             if (constructor) {
                 // The class already had a constructor, so we should add the existing statements, skipping the initial super call.
-                addNodes(statements, visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatement));
+                addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatement));
             }
 
             // End the lexical environment.
-            addNodes(statements, endLexicalEnvironment());
+            addRange(statements, endLexicalEnvironment());
             return setMultiLine(
                 createBlock(
                     createNodeArray(
@@ -1065,6 +1081,7 @@ namespace ts {
             const expressions: Expression[] = [];
             for (const property of properties) {
                 const expression = transformInitializedProperty(node, property, receiver);
+                expression.startsOnNewLine = true;
                 setSourceMapRange(expression, moveRangePastModifiers(property));
                 setCommentRange(expression, property);
                 expressions.push(expression);
@@ -1277,8 +1294,8 @@ namespace ts {
             }
 
             const decoratorExpressions: Expression[] = [];
-            addNodes(decoratorExpressions, map(allDecorators.decorators, transformDecorator));
-            addNodes(decoratorExpressions, flatMap(allDecorators.parameters, transformDecoratorsOfParameter));
+            addRange(decoratorExpressions, map(allDecorators.decorators, transformDecorator));
+            addRange(decoratorExpressions, flatMap(allDecorators.parameters, transformDecoratorsOfParameter));
             addTypeMetadata(node, decoratorExpressions);
             return decoratorExpressions;
         }
@@ -1874,7 +1891,9 @@ namespace ts {
                     createTypeOf(createIdentifier("Symbol")),
                     createLiteral("function")
                 ),
+                createToken(SyntaxKind.QuestionToken),
                 createIdentifier("Symbol"),
+                createToken(SyntaxKind.ColonToken),
                 createIdentifier("Object")
             );
         }
@@ -1960,6 +1979,7 @@ namespace ts {
         function visitExpressionWithTypeArguments(node: ExpressionWithTypeArguments): ExpressionWithTypeArguments {
             const expression = visitNode(node.expression, visitor, isLeftHandSideExpression);
             return createExpressionWithTypeArguments(
+                /*typeArguments*/ undefined,
                 expression,
                 node
             );
@@ -2208,7 +2228,7 @@ namespace ts {
                 startLexicalEnvironment();
                 const visited: Expression | Block = visitNode(body, visitor, isConciseBody);
                 const declarations = endLexicalEnvironment();
-                const merged = mergeConciseBodyLexicalEnvironment(visited, declarations);
+                const merged = mergeFunctionBodyLexicalEnvironment(visited, declarations);
                 if (forceBlockFunctionBody && !isBlock(merged)) {
                     return createBlock([
                         createReturn(<Expression>merged)
@@ -2378,6 +2398,7 @@ namespace ts {
         function visitAwaitExpression(node: AwaitExpression): Expression {
             return setOriginalNode(
                 createYield(
+                    /*asteriskToken*/ undefined,
                     visitNode(node.expression, visitor, isExpression),
                     /*location*/ node
                 ),
@@ -2546,8 +2567,8 @@ namespace ts {
 
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            addNodes(statements, map(node.members, transformEnumMember));
-            addNodes(statements, endLexicalEnvironment());
+            addRange(statements, map(node.members, transformEnumMember));
+            addRange(statements, endLexicalEnvironment());
 
             currentNamespaceContainerName = savedCurrentNamespaceLocalName;
             return createBlock(
@@ -2784,17 +2805,26 @@ namespace ts {
             let blockLocation: TextRange;
             const body = node.body;
             if (body.kind === SyntaxKind.ModuleBlock) {
-                addNodes(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement));
+                addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement));
                 statementsLocation = (<ModuleBlock>body).statements;
                 blockLocation = body;
             }
             else {
-                addNode(statements, visitModuleDeclaration(<ModuleDeclaration>body));
+                const result = visitModuleDeclaration(<ModuleDeclaration>body);
+                if (result) {
+                    if (isArray(result)) {
+                        addRange(statements, result);
+                    }
+                    else {
+                        statements.push(result);
+                    }
+                }
+
                 const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node).body;
                 statementsLocation = moveRangePos(moduleBlock.statements, -1);
             }
 
-            addNodes(statements, endLexicalEnvironment());
+            addRange(statements, endLexicalEnvironment());
 
             currentNamespaceContainerName = savedCurrentNamespaceContainerName;
             currentNamespace = savedCurrentNamespace;
@@ -2955,6 +2985,8 @@ namespace ts {
 
         function createExternalModuleExport(exportName: Identifier) {
             return createExportDeclaration(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
                 createNamedExports([
                     createExportSpecifier(exportName)
                 ])
