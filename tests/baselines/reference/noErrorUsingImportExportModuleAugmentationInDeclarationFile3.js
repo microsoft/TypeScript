@@ -6,9 +6,9 @@ export = a;
 declare var a: number;
 
 //// [1.ts]
-export var j = "hello"
+export var j = "hello";  // error
 
 
 //// [1.js]
 "use strict";
-exports.j = "hello";
+exports.j = "hello"; // error
