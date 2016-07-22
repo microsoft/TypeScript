@@ -17697,7 +17697,7 @@ namespace ts {
 
         // When resolved as an expression identifier, if the given node references an exported entity, return the declaration
         // node of the exported entity's container. Otherwise, return undefined.
-        function getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration {
+        function getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration | undefined {
             let symbol = getReferencedValueSymbol(node);
             if (symbol) {
                 if (symbol.flags & SymbolFlags.ExportValue) {
@@ -17713,21 +17713,21 @@ namespace ts {
                 const parentSymbol = getParentOfSymbol(symbol);
                 if (parentSymbol) {
                     if (parentSymbol.flags & SymbolFlags.ValueModule && parentSymbol.valueDeclaration.kind === SyntaxKind.SourceFile) {
-                        const symbolFile = <SourceFile> parentSymbol.valueDeclaration;
+                        const symbolFile = <SourceFile>parentSymbol.valueDeclaration;
                         const referenceFile = getSourceFileOfNode(node);
                         // If `node` accesses an export and that export isn't in the same file, then symbol is a namespace export, so return undefined.
                         const symbolIsUmdExport = symbolFile !== referenceFile;
                         return symbolIsUmdExport ? undefined : symbolFile;
                     }
-                    else {
-                        for (let n = node.parent; n; n = n.parent) {
-                            if ((n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(n) === parentSymbol) {
-                                return <ModuleDeclaration | EnumDeclaration>n;
-                            }
+
+                    for (let n = node.parent; n; n = n.parent) {
+                        if ((n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(n) === parentSymbol) {
+                            return <ModuleDeclaration | EnumDeclaration>n;
                         }
                     }
                 }
             }
+            return undefined;
         }
 
         // When resolved as an expression identifier, if the given node references an import, return the declaration of
