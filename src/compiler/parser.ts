@@ -3337,7 +3337,10 @@ namespace ts {
         function parseAwaitExpression() {
             const node = <AwaitExpression>createNode(SyntaxKind.AwaitExpression);
             nextToken();
-            node.expression = parseSimpleUnaryExpression();
+            node.expression = token === SyntaxKind.AwaitKeyword
+                // Forbid `await await`
+                ? <UnaryExpression>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, Diagnostics.Expression_expected)
+                : parseSimpleUnaryExpression();
             return finishNode(node);
         }
 
