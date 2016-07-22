@@ -17713,14 +17713,17 @@ namespace ts {
                 const parentSymbol = getParentOfSymbol(symbol);
                 if (parentSymbol) {
                     if (parentSymbol.flags & SymbolFlags.ValueModule && parentSymbol.valueDeclaration.kind === SyntaxKind.SourceFile) {
+                        const symbolFile = <SourceFile> parentSymbol.valueDeclaration;
+                        const referenceFile = getSourceFileOfNode(node);
                         // If `node` accesses an export and that export isn't in the same file, then symbol is a namespace export, so return undefined.
-                        if (parentSymbol.valueDeclaration === getSourceFileOfNode(node)) {
-                            return <SourceFile>parentSymbol.valueDeclaration;
-                        }
+                        const symbolIsUmdExport = symbolFile !== referenceFile;
+                        return symbolIsUmdExport ? undefined : symbolFile;
                     }
-                    for (let n = node.parent; n; n = n.parent) {
-                        if ((n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(n) === parentSymbol) {
-                            return <ModuleDeclaration | EnumDeclaration>n;
+                    else {
+                        for (let n = node.parent; n; n = n.parent) {
+                            if ((n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(n) === parentSymbol) {
+                                return <ModuleDeclaration | EnumDeclaration>n;
+                            }
                         }
                     }
                 }
