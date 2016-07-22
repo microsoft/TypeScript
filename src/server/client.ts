@@ -353,6 +353,10 @@ namespace ts.server {
             });
         }
 
+        getImplementationAtPosition(fileName: string, position: number): ReferenceEntry[] {
+            throw new Error('Not yet implemented!');
+        }
+
         findReferences(fileName: string, position: number): ReferencedSymbol[] {
             // Not yet implemented.
             return [];

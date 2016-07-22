@@ -110,6 +110,7 @@ declare namespace FourSlashInterface {
         eof(): void;
         definition(definitionIndex?: number): void;
         type(definitionIndex?: number): void;
+        implementation(implementationIndex?: number): void;
         position(position: number, fileIndex?: number): any;
         position(position: number, fileName?: string): any;
         file(index: number, content?: string, scriptKindName?: string): any;
@@ -226,6 +227,7 @@ declare namespace FourSlashInterface {
         getSyntacticDiagnostics(expected: string): void;
         getSemanticDiagnostics(expected: string): void;
         ProjectInfo(expected: string[]): void;
+        allRangesAppearInImplementationList(): void;
     }
     class edit {
         backspace(count?: number): void;
