@@ -1,5 +1,5 @@
-/// <reference path="..\harness.ts" />
-/// <reference path="..\..\compiler\parser.ts" />
+/// <reference path="..\..\..\src\harness\external\mocha.d.ts" />
+/// <reference path="..\..\..\src\compiler\parser.ts" />
 
 namespace ts {
     ts.disableIncrementalParsing = false;

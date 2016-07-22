@@ -50,9 +50,7 @@ class CompilerBaselineRunner extends RunnerBase {
     }
 
     private makeUnitName(name: string, root: string) {
-        const path = ts.toPath(name, root, (fileName) => Harness.Compiler.getCanonicalFileName(fileName));
-        const pathStart = ts.toPath(Harness.IO.getCurrentDirectory(), "", (fileName) => Harness.Compiler.getCanonicalFileName(fileName));
-        return path.replace(pathStart, "/");
+        return ts.isRootedDiskPath(name) ? name : ts.combinePaths(root, name);
     };
 
     public checkTestCodeOutput(fileName: string) {

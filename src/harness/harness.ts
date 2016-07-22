@@ -18,13 +18,12 @@
 /// <reference path="..\services\shims.ts" />
 /// <reference path="..\server\session.ts" />
 /// <reference path="..\server\client.ts" />
+/// <reference path="..\server\node.d.ts" />
+/// <reference path="external\mocha.d.ts"/>
+/// <reference path="external\chai.d.ts"/>
 /// <reference path="sourceMapRecorder.ts"/>
 /// <reference path="runnerbase.ts"/>
 /// <reference path="virtualFileSystem.ts" />
-/// <reference types="node" />
-/// <reference types="mocha" />
-/// <reference types="chai" />
-
 
 // Block scoped definitions work poorly for global variables, temporarily enable var
 /* tslint:disable:no-var-keyword */
@@ -33,13 +32,7 @@
 var _chai: typeof chai = require("chai");
 var assert: typeof _chai.assert = _chai.assert;
 declare var __dirname: string; // Node-specific
-var global: NodeJS.Global = <any>Function("return this").call(undefined);
-declare namespace NodeJS {
-    export interface Global {
-        WScript: typeof WScript;
-        ActiveXObject: typeof ActiveXObject;
-    }
-}
+var global = <any>Function("return this").call(undefined);
 /* tslint:enable:no-var-keyword */
 
 namespace Utils {
@@ -64,7 +57,7 @@ namespace Utils {
 
     export let currentExecutionEnvironment = getExecutionEnvironment();
 
-    const Buffer: typeof global.Buffer = currentExecutionEnvironment !== ExecutionEnvironment.Browser
+    const Buffer: BufferConstructor = currentExecutionEnvironment !== ExecutionEnvironment.Browser
         ? require("buffer").Buffer
         : undefined;
 
@@ -134,7 +127,7 @@ namespace Utils {
     export function memoize<T extends Function>(f: T): T {
         const cache: { [idx: string]: any } = {};
 
-        return <any>(function(this: any) {
+        return <any>(function() {
             const key = Array.prototype.join.call(arguments);
             const cachedResult = cache[key];
             if (cachedResult) {
@@ -1377,27 +1370,31 @@ namespace Harness {
             writeByteOrderMark: boolean;
         }
 
+        function stringEndsWith(str: string, end: string) {
+            return str.substr(str.length - end.length) === end;
+        }
+
         export function isTS(fileName: string) {
-            return ts.endsWith(fileName, ".ts");
+            return stringEndsWith(fileName, ".ts");
         }
 
         export function isTSX(fileName: string) {
-            return ts.endsWith(fileName, ".tsx");
+            return stringEndsWith(fileName, ".tsx");
         }
 
         export function isDTS(fileName: string) {
-            return ts.endsWith(fileName, ".d.ts");
+            return stringEndsWith(fileName, ".d.ts");
         }
 
         export function isJS(fileName: string) {
-            return ts.endsWith(fileName, ".js");
+            return stringEndsWith(fileName, ".js");
         }
         export function isJSX(fileName: string) {
-            return ts.endsWith(fileName, ".jsx");
+            return stringEndsWith(fileName, ".jsx");
         }
 
         export function isJSMap(fileName: string) {
-            return ts.endsWith(fileName, ".js.map") || ts.endsWith(fileName, ".jsx.map");
+            return stringEndsWith(fileName, ".js.map") || stringEndsWith(fileName, ".jsx.map");
         }
 
         /** Contains the code and errors of a compilation and some helper methods to check its status. */

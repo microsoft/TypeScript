@@ -1,6 +1,6 @@
 ﻿// @target: ES6
 interface I {
-    (stringParts: TemplateStringsArray, ...rest: number[]): I;
+    (stringParts: string[], ...rest: number[]): I;
     g: I;
     h: I;
     member: I;

@@ -1,4 +1,11 @@
-﻿/// <reference path="..\..\harnessLanguageService.ts" />
+﻿/// <reference path="..\..\..\..\src\harness\external\mocha.d.ts" />
+/// <reference path="..\..\..\..\src\harness\harnessLanguageService.ts" />
+
+declare namespace chai.assert {
+    /* tslint:disable no-unused-variable */
+    function deepEqual(actual: any, expected: any): void;
+    /* tslint:enable no-unused-variable */
+}
 
 describe("PreProcessFile:", function () {
     function test(sourceText: string, readImportFile: boolean, detectJavaScriptImports: boolean, expectedPreProcess: ts.PreProcessedFileInfo): void {

@@ -6,10 +6,3 @@ node_js:
   - '0.10'
 
 sudo: false
-
-os:
-  - linux
-  - osx
-
-matrix:
-  fast_finish: true

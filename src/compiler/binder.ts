@@ -3,6 +3,8 @@
 
 /* @internal */
 namespace ts {
+    export let bindTime = 0;
+
     export const enum ModuleInstanceState {
         NonInstantiated = 0,
         Instantiated = 1,
@@ -89,9 +91,9 @@ namespace ts {
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
-        const start = performance.mark();
+        const start = new Date().getTime();
         binder(file, options);
-        performance.measure("Bind", start);
+        bindTime += new Date().getTime() - start;
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {

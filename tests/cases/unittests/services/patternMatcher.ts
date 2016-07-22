@@ -1,4 +1,5 @@
-/// <reference path="..\..\..\services\patternMatcher.ts" />
+/// <reference path="..\..\..\..\src\harness\external\mocha.d.ts" />
+/// <reference path="..\..\..\..\src\services\patternMatcher.ts" />
 
 describe("PatternMatcher", function () {
     describe("BreakIntoCharacterSpans", function () {

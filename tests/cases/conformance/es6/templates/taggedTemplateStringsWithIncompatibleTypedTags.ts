@@ -1,5 +1,5 @@
 ﻿interface I {
-    (stringParts: TemplateStringsArray, ...rest: boolean[]): I;
+    (stringParts: string[], ...rest: boolean[]): I;
     g: I;
     h: I;
     member: I;

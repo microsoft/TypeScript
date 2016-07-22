@@ -1,4 +1,4 @@
-/// <reference path="..\harness.ts" />
+/// <reference path="..\..\..\src\harness\harness.ts" />
 
 namespace ts {
     interface File {

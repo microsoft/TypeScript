@@ -3,8 +3,13 @@
 /// <reference path="core.ts" />
 
 namespace ts {
+    /* @internal */ export let programTime = 0;
+    /* @internal */ export let emitTime = 0;
+    /* @internal */ export let ioReadTime = 0;
+    /* @internal */ export let ioWriteTime = 0;
+
     /** The version of the TypeScript compiler release */
-    export const version = "2.1.0";
+    export const version = "2.0.0";
 
     const emptyArray: any[] = [];
 
@@ -107,7 +112,13 @@ namespace ts {
     }
 
     function moduleHasNonRelativeName(moduleName: string): boolean {
-        return !(isRootedDiskPath(moduleName) || isExternalModuleNameRelative(moduleName));
+        if (isRootedDiskPath(moduleName)) {
+            return false;
+        }
+
+        const i = moduleName.lastIndexOf("./", 1);
+        const startsWithDotSlashOrDotDotSlash = i === 0 || (i === 1 && moduleName.charCodeAt(0) === CharacterCodes.dot);
+        return !startsWithDotSlashOrDotDotSlash;
     }
 
     interface ModuleResolutionState {
@@ -860,9 +871,9 @@ namespace ts {
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             let text: string;
             try {
-                const start = performance.mark();
+                const start = new Date().getTime();
                 text = sys.readFile(fileName, options.charset);
-                performance.measure("I/O Read", start);
+                ioReadTime += new Date().getTime() - start;
             }
             catch (e) {
                 if (onError) {
@@ -929,7 +940,7 @@ namespace ts {
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
-                const start = performance.mark();
+                const start = new Date().getTime();
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
                 if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
@@ -939,7 +950,7 @@ namespace ts {
                     sys.writeFile(fileName, data, writeByteOrderMark);
                 }
 
-                performance.measure("I/O Write", start);
+                ioWriteTime += new Date().getTime() - start;
             }
             catch (e) {
                 if (onError) {
@@ -1116,7 +1127,7 @@ namespace ts {
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
         const sourceFilesFoundSearchingNodeModules: Map<boolean> = {};
 
-        const start = performance.mark();
+        const start = new Date().getTime();
 
         host = host || createCompilerHost(options);
 
@@ -1215,7 +1226,7 @@ namespace ts {
 
         verifyCompilerOptions();
 
-        performance.measure("Program", start);
+        programTime += new Date().getTime() - start;
 
         return program;
 
@@ -1411,7 +1422,7 @@ namespace ts {
         }
 
         function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult {
-            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken));
+            return runWithCancellationToken(() => emitWorker(this, sourceFile, writeFileCallback, cancellationToken));
         }
 
         function isEmitBlocked(emitFileName: string): boolean {
@@ -1458,14 +1469,14 @@ namespace ts {
             // checked is to not pass the file to getEmitResolver.
             const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile);
 
-            const start = performance.mark();
+            const start = new Date().getTime();
 
             const emitResult = emitFiles(
                 emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile);
 
-            performance.measure("Emit", start);
+            emitTime += new Date().getTime() - start;
             return emitResult;
         }
 

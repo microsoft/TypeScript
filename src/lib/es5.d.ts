@@ -513,8 +513,8 @@ interface NumberConstructor {
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
 declare const Number: NumberConstructor;
 
-interface TemplateStringsArray extends ReadonlyArray<string> {
-    readonly raw: ReadonlyArray<string>
+interface TemplateStringsArray extends Array<string> {
+    readonly raw: string[];
 }
 
 interface Math {
@@ -971,7 +971,7 @@ interface JSON {
     /**
       * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
       * @param value A JavaScript value, usually an object or array, to be converted.
-      * @param replacer An array of strings and numbers that acts as a approved list for selecting the object properties that will be stringified.
+      * @param replacer An array of strings and numbers that acts as a white list for selecting the object properties that will be stringified.
       * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
       */
     stringify(value: any, replacer?: (number | string)[] | null, space?: string | number): string;

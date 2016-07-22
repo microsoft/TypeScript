@@ -28,10 +28,6 @@ namespace ts {
             type: "boolean",
         },
         {
-            name: "extendedDiagnostics",
-            type: "boolean",
-        },
-        {
             name: "emitBOM",
             type: "boolean"
         },
@@ -139,12 +135,12 @@ namespace ts {
         {
             name: "noUnusedLocals",
             type: "boolean",
-            description: Diagnostics.Report_errors_on_unused_locals,
+            description: Diagnostics.Report_Errors_on_Unused_Locals,
         },
         {
             name: "noUnusedParameters",
             type: "boolean",
-            description: Diagnostics.Report_errors_on_unused_parameters,
+            description: Diagnostics.Report_Errors_on_Unused_Parameters
         },
         {
             name: "noLib",

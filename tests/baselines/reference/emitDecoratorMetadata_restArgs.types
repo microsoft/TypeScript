@@ -37,9 +37,8 @@ class B {
     @MyMethodDecorator
 >MyMethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
 
-    method(this: this, ...args: string[]) {}
->method : (this: this, ...args: string[]) => void
->this : this
+    method(...args: string[]) {}
+>method : (...args: string[]) => void
 >args : string[]
 }
 

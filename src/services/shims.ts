@@ -16,7 +16,7 @@
 /// <reference path='services.ts' />
 
 /* @internal */
-let debugObjectHost = new Function("return this")();
+let debugObjectHost = (<any>this);
 
 // We need to use 'null' to interface with the managed side.
 /* tslint:disable:no-null-keyword */
@@ -423,7 +423,7 @@ namespace ts {
         }
 
         public isCancellationRequested(): boolean {
-            const time = timestamp();
+            const time = Date.now();
             const duration = Math.abs(time - this.lastCancellationCheckTime);
             if (duration > 10) {
                 // Check no more than once every 10 ms.
@@ -498,13 +498,13 @@ namespace ts {
         let start: number;
         if (logPerformance) {
             logger.log(actionDescription);
-            start = timestamp();
+            start = Date.now();
         }
 
         const result = action();
 
         if (logPerformance) {
-            const end = timestamp();
+            const end = Date.now();
             logger.log(`${actionDescription} completed in ${end - start} msec`);
             if (typeof result === "string") {
                 let str = result;

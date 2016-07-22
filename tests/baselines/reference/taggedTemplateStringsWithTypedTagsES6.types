@@ -2,9 +2,8 @@
 interface I {
 >I : I
 
-    (stringParts: TemplateStringsArray, ...rest: number[]): I;
->stringParts : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
+    (stringParts: string[], ...rest: number[]): I;
+>stringParts : string[]
 >rest : number[]
 >I : I
 

@@ -2083,7 +2083,7 @@ namespace ts.server {
                 done: false,
                 leaf: function (relativeStart: number, relativeLength: number, ll: LineLeaf) {
                     if (!f(ll, relativeStart, relativeLength)) {
-                        walkFns.done = true;
+                        this.done = true;
                     }
                 }
             };
