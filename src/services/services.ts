@@ -4206,6 +4206,7 @@ namespace ts {
                     kindModifiers: getSymbolModifiers(symbol),
                     sortText: "0",
                 };
+
             }
 
             function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[], location: Node, performCharacterChecks: boolean): Map<string> {
@@ -4234,22 +4235,58 @@ namespace ts {
                     return undefined;
                 }
 
-                const argumentInfo = SignatureHelp.getContainingArgumentInfo(node, position, sourceFile);
-                if (argumentInfo) {
-                    // Get string literal completions from specialized signatures of the target
-                    return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo);
+                if (node.parent.kind === SyntaxKind.PropertyAssignment && node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                    // Get quoted name of properties of the object literal expression
+                    // i.e. interface ConfigFiles {
+                    //          'jspm:dev': string
+                    //      }
+                    //      let files: ConfigFiles = {
+                    //          '/*completion position*/'
+                    //      }
+                    //
+                    //      function foo(c: ConfigFiles) {}
+                    //      foo({
+                    //          '/*completion position*/'
+                    //      });
+                    return getStringLiteralCompletionEntriesFromPropertyAssignment(<ObjectLiteralElement>node.parent);
                 }
                 else if (isElementAccessExpression(node.parent) && node.parent.argumentExpression === node) {
                     // Get all names of properties on the expression
+                    // i.e. interface A {
+                    //      'prop1': string
+                    // }
+                    // let a: A;
+                    // a['/*completion position*/']
                     return getStringLiteralCompletionEntriesFromElementAccess(node.parent);
                 }
                 else {
-                    // Otherwise, get the completions from the contextual type if one exists
+                    const argumentInfo = SignatureHelp.getContainingArgumentInfo(node, position, sourceFile);
+                    if (argumentInfo) {
+                        // Get string literal completions from specialized signatures of the target
+                        // i.e. declare function f(a: 'A');
+                        // f("/*completion position*/")
+                        return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, node);
+                    }
+
+                    // Get completion for string literal from string literal type
+                    // i.e. var x: "hi" | "hello" = "/*completion position*/"
                     return getStringLiteralCompletionEntriesFromContextualType(<StringLiteral>node);
                 }
             }
 
-            function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo) {
+            function getStringLiteralCompletionEntriesFromPropertyAssignment(element: ObjectLiteralElement) {
+                const typeChecker = program.getTypeChecker();
+                const type = typeChecker.getContextualType((<ObjectLiteralExpression>element.parent));
+                const entries: CompletionEntry[] = [];
+                if (type) {
+                    getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, element, /*performCharacterChecks*/false);
+                    if (entries.length) {
+                        return { isMemberCompletion: true, isNewIdentifierLocation: true, entries };
+                    }
+                }
+            }
+
+            function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo, location: Node) {
                 const typeChecker = program.getTypeChecker();
                 const candidates: Signature[] = [];
                 const entries: CompletionEntry[] = [];
