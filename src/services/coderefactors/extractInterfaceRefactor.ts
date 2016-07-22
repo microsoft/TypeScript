@@ -113,7 +113,7 @@ namespace ts.codeRefactor {
                 const interfaceName: string = "newInterface_" + classDeclaration.name.getText();
                 let interfaceText: string = getInterfaceBeginning(interfaceName, context.newLineCharacter);
                 for (const member of classDeclaration.members) {
-                    if ((member.flags & NodeFlags.Public || member.flags & NodeFlags.None) &&
+                    if ((member.flags & NodeFlags.Public || member.flags === 0) &&
                         !(member.flags & NodeFlags.Static) &&
                          (member.kind === SyntaxKind.PropertyDeclaration ||
                           member.kind === SyntaxKind.MethodDeclaration)

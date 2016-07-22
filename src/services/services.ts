@@ -1239,7 +1239,7 @@ namespace ts {
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
-        getCodeRefactors(fileName: string, start: number, end: number): CodeAction[];
+        getCodeRefactors(fileName: string, start: number, end: number, serviceInstance: LanguageService): CodeAction[];
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeAction[];
 
         getEmitOutput(fileName: string): EmitOutput;
@@ -7796,7 +7796,7 @@ namespace ts {
             return [];
         }
 
-        function getCodeRefactors(fileName: string, start: number, end: number): CodeAction[] {
+        function getCodeRefactors(fileName: string, start: number, end: number, serviceInstance: LanguageService): CodeAction[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const checker = program.getTypeChecker();
@@ -7807,7 +7807,8 @@ namespace ts {
                 sourceFile: sourceFile,
                 span: { start, length: end - start },
                 checker: checker,
-                newLineCharacter: getNewLineOrDefaultFromHost(host)
+                newLineCharacter: getNewLineOrDefaultFromHost(host),
+                service: serviceInstance
             };
 
             fixes = codeRefactorProvider.getCodeRefactors(context);

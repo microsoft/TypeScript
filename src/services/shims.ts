@@ -230,7 +230,7 @@ namespace ts {
          */
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string;
 
-        getCodeRefactors(fileName: string, start: number, end: number): string;
+        getCodeRefactors(fileName: string, start: number, end: number, serviceInstance: LanguageService): string;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string): string;
 
         getEmitOutput(fileName: string): string;
@@ -890,11 +890,11 @@ namespace ts {
             );
         }
 
-        public getCodeRefactors(fileName: string, start: number, end: number): string {
+        public getCodeRefactors(fileName: string, start: number, end: number, serviceInstance: LanguageService): string {
             return this.forwardJSONCall(
-                `getCodeRefactors( '${fileName}', ${start}, ${end}')`,
+                `getCodeRefactors( '${fileName}', ${start}, ${end}, ${serviceInstance}')`,
                 () => {
-                    return this.languageService.getCodeRefactors(fileName, start, end);
+                    return this.languageService.getCodeRefactors(fileName, start, end, serviceInstance);
                 }
             );
         }

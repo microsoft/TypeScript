@@ -2035,7 +2035,7 @@ namespace FourSlash {
             if (markers.length !== 2) {
                 this.raiseError("Markers expected.");
             }
-            const actual = this.languageService.getCodeRefactors(this.activeFile.fileName, markers[0].position, markers[1].position);
+            const actual = this.languageService.getCodeRefactors(this.activeFile.fileName, markers[0].position, markers[1].position, this.languageService);
 
             if (!actual || actual.length == 0) {
                 this.raiseError("No codefixes returned.");

@@ -12,6 +12,7 @@ namespace ts {
         span: TextSpan;
         checker: TypeChecker;
         newLineCharacter: string;
+        service?: LanguageService;
     }
 
     export namespace codeFix {
