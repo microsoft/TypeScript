@@ -1,6 +1,9 @@
 //// [castOfAwait.ts]
 async function f() {
-    return <number> await 0;
+    <number> await 0;
+    typeof await 0;
+    void await 0;
+    await void <string> typeof <number> void await 0;
 }
 
 
@@ -15,6 +18,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 function f() {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield 0;
+        yield 0;
+        typeof yield 0;
+        void yield 0;
+        yield void typeof void yield 0;
     });
 }

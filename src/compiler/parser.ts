@@ -3386,6 +3386,7 @@ namespace ts {
          *      6) - UnaryExpression[?yield]
          *      7) ~ UnaryExpression[?yield]
          *      8) ! UnaryExpression[?yield]
+         *      9) await AwaitExpression[?yield]
          */
         function parseSimpleUnaryExpression(): UnaryExpression {
             switch (token) {
