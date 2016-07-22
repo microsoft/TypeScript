@@ -32,6 +32,10 @@ namespace ts {
             type: "boolean",
         },
         {
+            name: "extendedDiagnostics",
+            type: "boolean",
+        },
+        {
             name: "emitBOM",
             type: "boolean"
         },

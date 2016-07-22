@@ -25,7 +25,7 @@ namespace ts.server {
         private lsHost: ServerLanguageServiceHost;
         private program: ts.Program;
 
-        languageService: LanguageService;
+        private languageService: LanguageService;
         builder: Builder;
 
         /**
@@ -77,6 +77,13 @@ namespace ts.server {
             this.builder = createBuilder(this);
             this.markAsDirty();
         }
+	
+	getLanguageService(ensureSynchronized = true): LanguageService  {
+            if (ensureSynchronized) {
+                this.updateGraph();
+            }
+            return this.languageService;
+        }
 
         getCompileOnSaveAffectedFileList(triggerFileName: string): string[] {
             if (!this.languageServiceEnabled) {
@@ -85,6 +92,7 @@ namespace ts.server {
             this.updateGraph();
             return this.builder.getFilesAffectedBy(triggerFileName);
         }
+
 
         getProjectVersion() {
             return this.projectStateVersion.toString();
@@ -305,6 +313,8 @@ namespace ts.server {
         }
 
         getChangesSinceVersion(lastKnownVersion?: number): protocol.ProjectFiles {
+            this.updateGraph();
+
             const info = {
                 projectName: this.getProjectName(),
                 version: this.projectStructureVersion,
