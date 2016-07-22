@@ -24,7 +24,7 @@ import b = a.weekend;
 export var bVal: b = b.Sunday;
 >bVal : b
 >b : b
->b.Sunday : b
+>b.Sunday : b.Sunday
 >b : typeof b
->Sunday : b
+>Sunday : b.Sunday
 

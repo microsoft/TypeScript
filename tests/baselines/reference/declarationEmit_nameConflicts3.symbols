@@ -52,11 +52,11 @@ module M.P {
 
     export var w = M.D.f; // error, should be typeof M.D.f
 >w : Symbol(w, Decl(declarationEmit_nameConflicts3.ts, 22, 14))
->M.D.f : Symbol(D.f, Decl(declarationEmit_nameConflicts3.ts, 2, 21))
+>M.D.f : Symbol(M.D.f, Decl(declarationEmit_nameConflicts3.ts, 2, 21))
 >M.D : Symbol(D, Decl(declarationEmit_nameConflicts3.ts, 0, 10), Decl(declarationEmit_nameConflicts3.ts, 1, 26))
 >M : Symbol(M, Decl(declarationEmit_nameConflicts3.ts, 0, 0), Decl(declarationEmit_nameConflicts3.ts, 11, 1))
 >D : Symbol(D, Decl(declarationEmit_nameConflicts3.ts, 0, 10), Decl(declarationEmit_nameConflicts3.ts, 1, 26))
->f : Symbol(D.f, Decl(declarationEmit_nameConflicts3.ts, 2, 21))
+>f : Symbol(M.D.f, Decl(declarationEmit_nameConflicts3.ts, 2, 21))
 
     export var x = M.C.f; // error, should be typeof M.C.f
 >x : Symbol(x, Decl(declarationEmit_nameConflicts3.ts, 23, 14), Decl(declarationEmit_nameConflicts3.ts, 24, 14))

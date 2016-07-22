@@ -314,16 +314,16 @@ function foo0(e: I): void {
     if (e === I.V1) {
 >e === I.V1 : boolean
 >e : I
->I.V1 : I.V1
+>I.V1 : I
 >I : typeof I
->V1 : I.V1
+>V1 : I
     }
     else if (e === I.V2) {
 >e === I.V2 : boolean
 >e : I
->I.V2 : I.V2
+>I.V2 : I
 >I : typeof I
->V2 : I.V2
+>V2 : I
     }
 }
 
@@ -347,7 +347,7 @@ function foo1(e: I1.C.E): void {
     }
     else if (e === I1.C.E.V2) {
 >e === I1.C.E.V2 : boolean
->e : I1.C.E
+>e : I1.C.E.V2
 >I1.C.E.V2 : I1.C.E.V2
 >I1.C.E : typeof I1.C.E
 >I1.C : typeof I1.C
@@ -378,7 +378,7 @@ function foo2(e: I2.C.E): void {
     }
     else if (e === I2.C.E.V2) {
 >e === I2.C.E.V2 : boolean
->e : I2.C.E
+>e : I2.C.E.V2
 >I2.C.E.V2 : I2.C.E.V2
 >I2.C.E : typeof I2.C.E
 >I2.C : typeof I2.C
@@ -399,99 +399,99 @@ function foo(x: Enum1) {
 >x : Enum1
 
         case Enum1.A:
->Enum1.A : Enum1.A
+>Enum1.A : Enum1
 >Enum1 : typeof Enum1
->A : Enum1.A
+>A : Enum1
 
         case Enum1.B:
->Enum1.B : Enum1.B
+>Enum1.B : Enum1
 >Enum1 : typeof Enum1
->B : Enum1.B
+>B : Enum1
 
         case Enum1.C:
->Enum1.C : Enum1.C
+>Enum1.C : Enum1
 >Enum1 : typeof Enum1
->C : Enum1.C
+>C : Enum1
 
         case Enum1.D:
->Enum1.D : Enum1.B
+>Enum1.D : Enum1
 >Enum1 : typeof Enum1
->D : Enum1.B
+>D : Enum1
 
         case Enum1.E:
->Enum1.E : Enum1.B
+>Enum1.E : Enum1
 >Enum1 : typeof Enum1
->E : Enum1.B
+>E : Enum1
 
         case Enum1.F:
->Enum1.F : Enum1.B
+>Enum1.F : Enum1
 >Enum1 : typeof Enum1
->F : Enum1.B
+>F : Enum1
 
         case Enum1.G:
->Enum1.G : Enum1.B
+>Enum1.G : Enum1
 >Enum1 : typeof Enum1
->G : Enum1.B
+>G : Enum1
 
         case Enum1.H:
->Enum1.H : Enum1.H
+>Enum1.H : Enum1
 >Enum1 : typeof Enum1
->H : Enum1.H
+>H : Enum1
 
         case Enum1.I:
->Enum1.I : Enum1.A
+>Enum1.I : Enum1
 >Enum1 : typeof Enum1
->I : Enum1.A
+>I : Enum1
 
         case Enum1.J:
->Enum1.J : Enum1.A
+>Enum1.J : Enum1
 >Enum1 : typeof Enum1
->J : Enum1.A
+>J : Enum1
 
         case Enum1.K:
->Enum1.K : Enum1.K
+>Enum1.K : Enum1
 >Enum1 : typeof Enum1
->K : Enum1.K
+>K : Enum1
 
         case Enum1.L:
->Enum1.L : Enum1.H
+>Enum1.L : Enum1
 >Enum1 : typeof Enum1
->L : Enum1.H
+>L : Enum1
 
         case Enum1.M:
->Enum1.M : Enum1.M
+>Enum1.M : Enum1
 >Enum1 : typeof Enum1
->M : Enum1.M
+>M : Enum1
 
         case Enum1.N:
->Enum1.N : Enum1.M
+>Enum1.N : Enum1
 >Enum1 : typeof Enum1
->N : Enum1.M
+>N : Enum1
 
         case Enum1.O:
->Enum1.O : Enum1.A
+>Enum1.O : Enum1
 >Enum1 : typeof Enum1
->O : Enum1.A
+>O : Enum1
 
         case Enum1.P:
->Enum1.P : Enum1.A
+>Enum1.P : Enum1
 >Enum1 : typeof Enum1
->P : Enum1.A
+>P : Enum1
 
         case Enum1.Q:
->Enum1.Q : Enum1.Q
+>Enum1.Q : Enum1
 >Enum1 : typeof Enum1
->Q : Enum1.Q
+>Q : Enum1
 
         case Enum1.R:
->Enum1.R : Enum1.A
+>Enum1.R : Enum1
 >Enum1 : typeof Enum1
->R : Enum1.A
+>R : Enum1
 
         case Enum1.S:
->Enum1.S : Enum1.A
+>Enum1.S : Enum1
 >Enum1 : typeof Enum1
->S : Enum1.A
+>S : Enum1
 
         case Enum1["T"]:
 >Enum1["T"] : Enum1
@@ -499,39 +499,39 @@ function foo(x: Enum1) {
 >"T" : string
 
         case Enum1.U:
->Enum1.U : Enum1.U
+>Enum1.U : Enum1
 >Enum1 : typeof Enum1
->U : Enum1.U
+>U : Enum1
 
         case Enum1.V:
->Enum1.V : Enum1.U
+>Enum1.V : Enum1
 >Enum1 : typeof Enum1
->V : Enum1.U
+>V : Enum1
 
         case Enum1.W:
->Enum1.W : Enum1.U
+>Enum1.W : Enum1
 >Enum1 : typeof Enum1
->W : Enum1.U
+>W : Enum1
 
         case Enum1.W1:
->Enum1.W1 : Enum1.W1
+>Enum1.W1 : Enum1
 >Enum1 : typeof Enum1
->W1 : Enum1.W1
+>W1 : Enum1
 
         case Enum1.W2:
->Enum1.W2 : Enum1.W1
+>Enum1.W2 : Enum1
 >Enum1 : typeof Enum1
->W2 : Enum1.W1
+>W2 : Enum1
 
         case Enum1.W3:
->Enum1.W3 : Enum1.W1
+>Enum1.W3 : Enum1
 >Enum1 : typeof Enum1
->W3 : Enum1.W1
+>W3 : Enum1
 
         case Enum1.W4:
->Enum1.W4 : Enum1.U
+>Enum1.W4 : Enum1
 >Enum1 : typeof Enum1
->W4 : Enum1.U
+>W4 : Enum1
 
             break;
     }
@@ -549,7 +549,7 @@ function bar(e: A.B.C.E): number {
 >e : I
 
         case A.B.C.E.V1: return 1;
->A.B.C.E.V1 : I.V1
+>A.B.C.E.V1 : I
 >A.B.C.E : typeof I
 >A.B.C : typeof A.B.C
 >A.B : typeof A.B
@@ -557,11 +557,11 @@ function bar(e: A.B.C.E): number {
 >B : typeof A.B
 >C : typeof A.B.C
 >E : typeof I
->V1 : I.V1
+>V1 : I
 >1 : number
 
         case A.B.C.E.V2: return 1;
->A.B.C.E.V2 : I.V2
+>A.B.C.E.V2 : I
 >A.B.C.E : typeof I
 >A.B.C : typeof A.B.C
 >A.B : typeof A.B
@@ -569,11 +569,11 @@ function bar(e: A.B.C.E): number {
 >B : typeof A.B
 >C : typeof A.B.C
 >E : typeof I
->V2 : I.V2
+>V2 : I
 >1 : number
 
         case A.B.C.E.V3: return 1;
->A.B.C.E.V3 : I.V3
+>A.B.C.E.V3 : I
 >A.B.C.E : typeof I
 >A.B.C : typeof A.B.C
 >A.B : typeof A.B
@@ -581,7 +581,7 @@ function bar(e: A.B.C.E): number {
 >B : typeof A.B
 >C : typeof A.B.C
 >E : typeof I
->V3 : I.V3
+>V3 : I
 >1 : number
     }
 }
