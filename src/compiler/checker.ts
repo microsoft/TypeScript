@@ -1548,7 +1548,7 @@ namespace ts {
         }
 
         function createBooleanType(trueFalseTypes: Type[]): IntrinsicType & UnionType {
-            const type = <IntrinsicType & UnionType>getUnionType(trueFalseTypes, /*subtypeReduction*/ true);
+            const type = <IntrinsicType & UnionType>getUnionType(trueFalseTypes);
             type.flags |= TypeFlags.Boolean;
             type.intrinsicName = "boolean";
             return type;
@@ -5284,13 +5284,13 @@ namespace ts {
             return type1.id - type2.id;
         }
 
-        // We reduce the constituent type set to only include types that aren't subtypes of other types, unless
-        // the noSubtypeReduction flag is specified, in which case we perform a simple deduplication based on
-        // object identity. Subtype reduction is possible only when union types are known not to circularly
-        // reference themselves (as is the case with union types created by expression constructs such as array
-        // literals and the || and ?: operators). Named types can circularly reference themselves and therefore
-        // cannot be deduplicated during their declaration. For example, "type Item = string | (() => Item" is
-        // a named type that circularly references itself.
+        // We deduplicate the constituent types based on object identity. If the subtypeReduction flag is
+        // specified we also reduce the constituent type set to only include types that aren't subtypes of
+        // other types. Subtype reduction is expensive for large union types and is possible only when union
+        // types are known not to circularly reference themselves (as is the case with union types created by
+        // expression constructs such as array literals and the || and ?: operators). Named types can
+        // circularly reference themselves and therefore cannot be deduplicated during their declaration.
+        // For example, "type Item = string | (() => Item" is a named type that circularly references itself.
         function getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             if (types.length === 0) {
                 return neverType;
@@ -7885,7 +7885,7 @@ namespace ts {
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
             if (defaultExpression) {
                 const defaultType = checkExpression(defaultExpression);
-                return getUnionType([getTypeWithFacts(type, TypeFacts.NEUndefined), defaultType], /*subtypeReduction*/ true);
+                return getUnionType([getTypeWithFacts(type, TypeFacts.NEUndefined), defaultType]);
             }
             return type;
         }
@@ -9125,7 +9125,7 @@ namespace ts {
                             for (let i = indexOfParameter; i < iife.arguments.length; i++) {
                                 restTypes.push(getTypeOfExpression(iife.arguments[i]));
                             }
-                            return createArrayType(getUnionType(restTypes, /*subtypeReduction*/ true));
+                            return createArrayType(getUnionType(restTypes));
                         }
                         const links = getNodeLinks(iife);
                         const cached = links.resolvedSignature;
@@ -9328,7 +9328,7 @@ namespace ts {
                     }
                 }
             }
-            return mappedTypes ? getUnionType(mappedTypes, /*subtypeReduction*/ true) : mappedType;
+            return mappedTypes ? getUnionType(mappedTypes) : mappedType;
         }
 
         function getTypeOfPropertyOfContextualType(type: Type, name: string) {
@@ -14619,7 +14619,7 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                     const classSymbol = getSymbolOfNode(node.parent);
                     const classConstructorType = getTypeOfSymbol(classSymbol);
-                    expectedReturnType = getUnionType([classConstructorType, voidType], /*subtypeReduction*/ true);
+                    expectedReturnType = getUnionType([classConstructorType, voidType]);
                     break;
 
                 case SyntaxKind.Parameter:
@@ -14642,7 +14642,7 @@ namespace ts {
                 case SyntaxKind.SetAccessor:
                     const methodType = getTypeOfNode(node.parent);
                     const descriptorType = createTypedPropertyDescriptorType(methodType);
-                    expectedReturnType = getUnionType([descriptorType, voidType], /*subtypeReduction*/ true);
+                    expectedReturnType = getUnionType([descriptorType, voidType]);
                     break;
             }
 
