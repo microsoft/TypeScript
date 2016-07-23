@@ -118,6 +118,11 @@ namespace ts {
         const resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
 
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
+        const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
+        const undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
+        const undefinedWideningType = strictNullChecks ? undefinedType : createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsWideningType, "undefined");
+        const nullType = createIntrinsicType(TypeFlags.Null, "null");
+        const nullWideningType = strictNullChecks ? nullType : createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsWideningType, "null");
         const stringType = createIntrinsicType(TypeFlags.String, "string");
         const numberType = createIntrinsicType(TypeFlags.Number, "number");
         const trueType = createIntrinsicType(TypeFlags.BooleanLiteral, "true");
@@ -125,11 +130,6 @@ namespace ts {
         const booleanType = createBooleanType([trueType, falseType]);
         const esSymbolType = createIntrinsicType(TypeFlags.ESSymbol, "symbol");
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
-        const undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
-        const undefinedWideningType = strictNullChecks ? undefinedType : createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsWideningType, "undefined");
-        const nullType = createIntrinsicType(TypeFlags.Null, "null");
-        const nullWideningType = strictNullChecks ? nullType : createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsWideningType, "null");
-        const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         const neverType = createIntrinsicType(TypeFlags.Never, "never");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -1928,23 +1928,27 @@ namespace ts {
             return result;
         }
 
-        function reduceLiteralTypes(types: Type[]): Type[] {
-            let result: Type[];
+        function formatUnionTypes(types: Type[]): Type[] {
+            const result: Type[] = [];
+            let flags: TypeFlags = 0;
             for (let i = 0; i < types.length; i++) {
                 const t = types[i];
-                if (t.flags & (TypeFlags.BooleanLiteral | TypeFlags.EnumLiteral)) {
-                    const baseType = t.flags & TypeFlags.BooleanLiteral ? booleanType : (<EnumLiteralType>t).baseType;
-                    const count = baseType.types.length;
-                    if (i + count <= types.length && types[i + count - 1] === baseType.types[count - 1]) {
-                        (result || (result = types.slice(0, i))).push(baseType);
-                        i += count - 1;
-                        continue;
+                flags |= t.flags;
+                if (!(t.flags & TypeFlags.Nullable)) {
+                    if (t.flags & (TypeFlags.BooleanLiteral | TypeFlags.EnumLiteral)) {
+                        const baseType = t.flags & TypeFlags.BooleanLiteral ? booleanType : (<EnumLiteralType>t).baseType;
+                        const count = baseType.types.length;
+                        if (i + count <= types.length && types[i + count - 1] === baseType.types[count - 1]) {
+                            result.push(baseType);
+                            i += count - 1;
+                            continue;
+                        }
                     }
-                }
-                if (result) {
                     result.push(t);
                 }
             }
+            if (flags & TypeFlags.Null) result.push(nullType);
+            if (flags & TypeFlags.Undefined) result.push(undefinedType);
             return result || types;
         }
 
@@ -2246,7 +2250,7 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.OpenParenToken);
                     }
                     if (type.flags & TypeFlags.Union) {
-                        writeTypeList(reduceLiteralTypes(type.types), SyntaxKind.BarToken);
+                        writeTypeList(formatUnionTypes(type.types), SyntaxKind.BarToken);
                     }
                     else {
                         writeTypeList(type.types, SyntaxKind.AmpersandToken);
@@ -5228,27 +5232,58 @@ namespace ts {
             containsNonWideningType?: boolean;
         }
 
-        function addTypeToSet(typeSet: TypeSet, type: Type, typeSetKind: TypeFlags) {
-            if (type.flags & typeSetKind) {
-                addTypesToSet(typeSet, (<UnionOrIntersectionType>type).types, typeSetKind);
+        function binarySearchTypes(types: Type[], type: Type): number {
+            let low = 0;
+            let high = types.length - 1;
+            const typeId = type.id;
+            while (low <= high) {
+                const middle = low + ((high - low) >> 1);
+                const id = types[middle].id;
+                if (id === typeId) {
+                    return middle;
+                }
+                else if (id > typeId) {
+                    high = middle - 1;
+                }
+                else {
+                    low = middle + 1;
+                }
             }
-            else if (type.flags & (TypeFlags.Any | TypeFlags.Undefined | TypeFlags.Null)) {
-                if (type.flags & TypeFlags.Any) typeSet.containsAny = true;
+            return ~low;
+        }
+
+        function containsType(types: Type[], type: Type): boolean {
+            return binarySearchTypes(types, type) >= 0;
+        }
+
+        function addTypeToUnion(typeSet: TypeSet, type: Type) {
+            if (type.flags & TypeFlags.Union) {
+                addTypesToUnion(typeSet, (<UnionType>type).types);
+            }
+            else if (type.flags & TypeFlags.Any) {
+                typeSet.containsAny = true;
+            }
+            else if (!strictNullChecks && type.flags & TypeFlags.Nullable) {
                 if (type.flags & TypeFlags.Undefined) typeSet.containsUndefined = true;
                 if (type.flags & TypeFlags.Null) typeSet.containsNull = true;
                 if (!(type.flags & TypeFlags.ContainsWideningType)) typeSet.containsNonWideningType = true;
             }
-            else if (type !== neverType && !contains(typeSet, type) &&
-                !(type.flags & TypeFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
-                typeSet.push(type);
+            else if (!(type.flags & TypeFlags.Never)) {
+                const len = typeSet.length;
+                const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearchTypes(typeSet, type);
+                if (index < 0) {
+                    if (!(type.flags & TypeFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
+                        typeSet.splice(~index, 0, type);
+                    }
+                }
             }
         }
 
         // Add the given types to the given type set. Order is preserved, duplicates are removed,
         // and nested types of the given kind are flattened into the set.
-        function addTypesToSet(typeSet: TypeSet, types: Type[], typeSetKind: TypeFlags) {
+        function addTypesToUnion(typeSet: TypeSet, types: Type[]) {
             for (const type of types) {
-                addTypeToSet(typeSet, type, typeSetKind);
+                addTypeToUnion(typeSet, type);
             }
         }
 
@@ -5280,10 +5315,6 @@ namespace ts {
             }
         }
 
-        function compareTypeIds(type1: Type, type2: Type): number {
-            return type1.id - type2.id;
-        }
-
         // We deduplicate the constituent types based on object identity. If the subtypeReduction flag is
         // specified we also reduce the constituent type set to only include types that aren't subtypes of
         // other types. Subtype reduction is expensive for large union types and is possible only when union
@@ -5299,14 +5330,9 @@ namespace ts {
                 return types[0];
             }
             const typeSet = [] as TypeSet;
-            addTypesToSet(typeSet, types, TypeFlags.Union);
+            addTypesToUnion(typeSet, types);
             if (typeSet.containsAny) {
                 return anyType;
-            }
-            typeSet.sort(compareTypeIds);
-            if (strictNullChecks) {
-                if (typeSet.containsNull) typeSet.push(nullType);
-                if (typeSet.containsUndefined) typeSet.push(undefinedType);
             }
             if (subtypeReduction) {
                 removeSubtypes(typeSet);
@@ -5339,6 +5365,26 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function addTypeToIntersection(typeSet: TypeSet, type: Type) {
+            if (type.flags & TypeFlags.Intersection) {
+                addTypesToIntersection(typeSet, (<IntersectionType>type).types);
+            }
+            else if (type.flags & TypeFlags.Any) {
+                typeSet.containsAny = true;
+            }
+            else if (!(type.flags & TypeFlags.Never) && (strictNullChecks || !(type.flags & TypeFlags.Nullable)) && !contains(typeSet, type)) {
+                typeSet.push(type);
+            }
+        }
+
+        // Add the given types to the given type set. Order is preserved, duplicates are removed,
+        // and nested types of the given kind are flattened into the set.
+        function addTypesToIntersection(typeSet: TypeSet, types: Type[]) {
+            for (const type of types) {
+                addTypeToIntersection(typeSet, type);
+            }
+        }
+
         // We do not perform structural deduplication on intersection types. Intersection types are created only by the &
         // type operator and we can't reduce those because we want to support recursive intersection types. For example,
         // a type alias of the form "type List<T> = T & { next: List<T> }" cannot be reduced during its declaration.
@@ -5349,13 +5395,9 @@ namespace ts {
                 return emptyObjectType;
             }
             const typeSet = [] as TypeSet;
-            addTypesToSet(typeSet, types, TypeFlags.Intersection);
+            addTypesToIntersection(typeSet, types);
             if (typeSet.containsAny) {
                 return anyType;
-            }
-            if (strictNullChecks) {
-                if (typeSet.containsNull) typeSet.push(nullType);
-                if (typeSet.containsUndefined) typeSet.push(undefinedType);
             }
             if (typeSet.length === 1) {
                 return typeSet[0];
@@ -6395,21 +6437,10 @@ namespace ts {
 
             function typeRelatedToSomeType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean): Ternary {
                 const targetTypes = target.types;
-                if (contains(targetTypes, source)) {
+                if (target.flags & TypeFlags.Union && containsType(targetTypes, source)) {
                     return Ternary.True;
                 }
-                // The null and undefined types are guaranteed to be at the end of the constituent type list. In order
-                // to produce the best possible errors we first check the nullable types, such that the last type we
-                // check and report errors from is a non-nullable type if one is present.
-                let len = targetTypes.length;
-                while (len >= 2 && targetTypes[len - 1].flags & TypeFlags.Nullable) {
-                    const related = isRelatedTo(source, targetTypes[len - 1], /*reportErrors*/ false);
-                    if (related) {
-                        return related;
-                    }
-                    len--;
-                }
-                // Now check the non-nullable types and report errors on the last one.
+                const len = targetTypes.length;
                 for (let i = 0; i < len; i++) {
                     const related = isRelatedTo(source, targetTypes[i], reportErrors && i === len - 1);
                     if (related) {
@@ -6434,21 +6465,10 @@ namespace ts {
 
             function someTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean): Ternary {
                 const sourceTypes = source.types;
-                if (contains(sourceTypes, target)) {
+                if (source.flags & TypeFlags.Union && containsType(sourceTypes, target)) {
                     return Ternary.True;
                 }
-                // The null and undefined types are guaranteed to be at the end of the constituent type list. In order
-                // to produce the best possible errors we first check the nullable types, such that the last type we
-                // check and report errors from is a non-nullable type if one is present.
-                let len = sourceTypes.length;
-                while (len >= 2 && sourceTypes[len - 1].flags & TypeFlags.Nullable) {
-                    const related = isRelatedTo(sourceTypes[len - 1], target, /*reportErrors*/ false);
-                    if (related) {
-                        return related;
-                    }
-                    len--;
-                }
-                // Now check the non-nullable types and report errors on the last one.
+                const len = sourceTypes.length;
                 for (let i = 0; i < len; i++) {
                     const related = isRelatedTo(sourceTypes[i], target, reportErrors && i === len - 1);
                     if (related) {
