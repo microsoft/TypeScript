@@ -7,5 +7,6 @@
         }
     }
 }
+
 // @filename: a.ts
 let x = 1;
