@@ -2200,6 +2200,9 @@ namespace ts {
                         programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, key));
                     }
                     if (isArray(options.paths[key])) {
+                        if (options.paths[key].length === 0) {
+                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substitutions_for_pattern_0_shouldn_t_be_an_empty_array, key));
+                        }
                         for (const subst of options.paths[key]) {
                             const typeOfSubst = typeof subst;
                             if (typeOfSubst === "string") {
