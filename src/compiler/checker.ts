@@ -1548,7 +1548,7 @@ namespace ts {
         }
 
         function createBooleanType(trueFalseTypes: Type[]): IntrinsicType & UnionType {
-            const type = <IntrinsicType & UnionType>getUnionType(trueFalseTypes, /*noSubtypeReduction*/ true);
+            const type = <IntrinsicType & UnionType>getUnionType(trueFalseTypes, /*subtypeReduction*/ true);
             type.flags |= TypeFlags.Boolean;
             type.intrinsicName = "boolean";
             return type;
@@ -3232,7 +3232,7 @@ namespace ts {
                 let type: Type = undefined;
                 // Handle module.exports = expr or this.p = expr
                 if (declaration.kind === SyntaxKind.BinaryExpression) {
-                    type = getUnionType(map(symbol.declarations, (decl: BinaryExpression) => checkExpressionCached(decl.right)));
+                    type = getUnionType(map(symbol.declarations, (decl: BinaryExpression) => checkExpressionCached(decl.right)), /*subtypeReduction*/ true);
                 }
                 else if (declaration.kind === SyntaxKind.PropertyAccessExpression) {
                     // Declarations only exist for property access expressions for certain
@@ -4087,7 +4087,7 @@ namespace ts {
         }
 
         function resolveTupleTypeMembers(type: TupleType) {
-            const arrayElementType = getUnionType(type.elementTypes, /*noSubtypeReduction*/ true);
+            const arrayElementType = getUnionType(type.elementTypes);
             // Make the tuple type itself the 'this' type by including an extra type argument
             const arrayType = resolveStructuredTypeMembers(createTypeFromGenericGlobalType(globalArrayType, [arrayElementType, type]));
             const members = createTupleTypeMemberSymbols(type.elementTypes);
@@ -4149,7 +4149,7 @@ namespace ts {
                             if (unionSignatures.length > 1) {
                                 s = cloneSignature(signature);
                                 if (forEach(unionSignatures, sig => sig.thisParameter)) {
-                                    const thisType = getUnionType(map(unionSignatures, sig => getTypeOfSymbol(sig.thisParameter) || anyType));
+                                    const thisType = getUnionType(map(unionSignatures, sig => getTypeOfSymbol(sig.thisParameter) || anyType), /*subtypeReduction*/ true);
                                     s.thisParameter = createTransientSymbol(signature.thisParameter, thisType);
                                 }
                                 // Clear resolved return type we possibly got from cloneSignature
@@ -4175,7 +4175,7 @@ namespace ts {
                 indexTypes.push(indexInfo.type);
                 isAnyReadonly = isAnyReadonly || indexInfo.isReadonly;
             }
-            return createIndexInfo(getUnionType(indexTypes), isAnyReadonly);
+            return createIndexInfo(getUnionType(indexTypes, /*subtypeReduction*/ true), isAnyReadonly);
         }
 
         function resolveUnionTypeMembers(type: UnionType) {
@@ -4417,7 +4417,7 @@ namespace ts {
             result.containingType = containingType;
             result.declarations = declarations;
             result.isReadonly = isReadonly;
-            result.type = containingType.flags & TypeFlags.Union ? getUnionType(propTypes, /*noSubtypeReduction*/ true) : getIntersectionType(propTypes);
+            result.type = containingType.flags & TypeFlags.Union ? getUnionType(propTypes) : getIntersectionType(propTypes);
             return result;
         }
 
@@ -4509,7 +4509,7 @@ namespace ts {
                     }
                 }
                 if (propTypes.length) {
-                    return getUnionType(propTypes);
+                    return getUnionType(propTypes, /*subtypeReduction*/ true);
                 }
             }
             return undefined;
@@ -4774,7 +4774,7 @@ namespace ts {
                     type = instantiateType(getReturnTypeOfSignature(signature.target), signature.mapper);
                 }
                 else if (signature.unionSignatures) {
-                    type = getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature));
+                    type = getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
                 }
                 else {
                     type = getReturnTypeFromBody(<FunctionLikeDeclaration>signature.declaration);
@@ -5291,7 +5291,7 @@ namespace ts {
         // literals and the || and ?: operators). Named types can circularly reference themselves and therefore
         // cannot be deduplicated during their declaration. For example, "type Item = string | (() => Item" is
         // a named type that circularly references itself.
-        function getUnionType(types: Type[], noSubtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+        function getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -5308,7 +5308,7 @@ namespace ts {
                 if (typeSet.containsNull) typeSet.push(nullType);
                 if (typeSet.containsUndefined) typeSet.push(undefinedType);
             }
-            if (!noSubtypeReduction) {
+            if (subtypeReduction) {
                 removeSubtypes(typeSet);
             }
             if (typeSet.length === 0) {
@@ -5334,7 +5334,7 @@ namespace ts {
         function getTypeFromUnionTypeNode(node: UnionTypeNode, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), /*noSubtypeReduction*/ true, aliasSymbol, aliasTypeArguments);
+                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
             }
             return links.resolvedType;
         }
@@ -5767,7 +5767,7 @@ namespace ts {
                     return createTupleType(instantiateList((<TupleType>type).elementTypes, mapper, instantiateType));
                 }
                 if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Primitive)) {
-                    return getUnionType(instantiateList((<UnionType>type).types, mapper, instantiateType), /*noSubtypeReduction*/ true, type.aliasSymbol, mapper.targetTypes);
+                    return getUnionType(instantiateList((<UnionType>type).types, mapper, instantiateType), /*subtypeReduction*/ false, type.aliasSymbol, mapper.targetTypes);
                 }
                 if (type.flags & TypeFlags.Intersection) {
                     return getIntersectionType(instantiateList((<IntersectionType>type).types, mapper, instantiateType), type.aliasSymbol, mapper.targetTypes);
@@ -7016,7 +7016,7 @@ namespace ts {
             }
             const primaryTypes = filter(types, t => !(t.flags & TypeFlags.Nullable));
             if (!primaryTypes.length) {
-                return getUnionType(types);
+                return getUnionType(types, /*subtypeReduction*/ true);
             }
             const supertype = forEach(primaryTypes, t => isSupertypeOfEach(t, primaryTypes) ? t : undefined);
             return supertype && includeFalsyTypes(supertype, getFalsyFlagsOfTypes(types) & TypeFlags.Nullable);
@@ -7093,7 +7093,7 @@ namespace ts {
                 type.flags & TypeFlags.NumberLiteral ? numberType :
                 type.flags & TypeFlags.BooleanLiteral ? booleanType :
                 type.flags & TypeFlags.EnumLiteral ? (<EnumLiteralType>type).baseType :
-                type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Enum) ? getUnionType(map((<UnionType>type).types, getBaseTypeOfUnitType), /*noSubtypeReduction*/ true) :
+                type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Enum) ? getUnionType(map((<UnionType>type).types, getBaseTypeOfUnitType)) :
                 type;
         }
 
@@ -7135,7 +7135,7 @@ namespace ts {
             if (flags & TypeFlags.Void) types.push(voidType);
             if (flags & TypeFlags.Undefined) types.push(undefinedType);
             if (flags & TypeFlags.Null) types.push(nullType);
-            return getUnionType(types);
+            return getUnionType(types, /*subtypeReduction*/ true);
         }
 
         function removeDefinitelyFalsyTypes(type: Type): Type {
@@ -7232,7 +7232,7 @@ namespace ts {
                     return getWidenedTypeOfObjectLiteral(type);
                 }
                 if (type.flags & TypeFlags.Union) {
-                    return getUnionType(map((<UnionType>type).types, getWidenedConstituentType), /*noSubtypeReduction*/ true);
+                    return getUnionType(map((<UnionType>type).types, getWidenedConstituentType));
                 }
                 if (isArrayType(type)) {
                     return createArrayType(getWidenedType((<TypeReference>type).typeArguments[0]));
@@ -7608,7 +7608,7 @@ namespace ts {
                     reducedTypes.push(t);
                 }
             }
-            return type.flags & TypeFlags.Union ? getUnionType(reducedTypes, /*noSubtypeReduction*/ true) : getIntersectionType(reducedTypes);
+            return type.flags & TypeFlags.Union ? getUnionType(reducedTypes) : getIntersectionType(reducedTypes);
         }
 
         function getInferenceCandidates(context: InferenceContext, index: number): Type[] {
@@ -7623,7 +7623,7 @@ namespace ts {
                 const inferences = getInferenceCandidates(context, index);
                 if (inferences.length) {
                     // Infer widened union or supertype, or the unknown type for no common supertype
-                    const unionOrSuperType = context.inferUnionTypes ? getUnionType(inferences) : getCommonSupertype(inferences);
+                    const unionOrSuperType = context.inferUnionTypes ? getUnionType(inferences, /*subtypeReduction*/ true) : getCommonSupertype(inferences);
                     inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : unknownType;
                     inferenceSucceeded = !!unionOrSuperType;
                 }
@@ -7794,7 +7794,7 @@ namespace ts {
             if (declaredType !== assignedType && declaredType.flags & TypeFlags.Union) {
                 const reducedTypes = filter(declaredType.types, t => typeMaybeAssignableTo(assignedType, t));
                 if (reducedTypes.length) {
-                    return reducedTypes.length === 1 ? reducedTypes[0] : getUnionType(reducedTypes, /*noSubtypeReduction*/ true);
+                    return reducedTypes.length === 1 ? reducedTypes[0] : getUnionType(reducedTypes);
                 }
             }
             return declaredType;
@@ -7879,13 +7879,13 @@ namespace ts {
                     }
                 }
             }
-            return firstType ? types ? getUnionType(types, /*noSubtypeReduction*/ true) : firstType : neverType;
+            return firstType ? types ? getUnionType(types) : firstType : neverType;
         }
 
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
             if (defaultExpression) {
                 const defaultType = checkExpression(defaultExpression);
-                return getUnionType([getTypeWithFacts(type, TypeFacts.NEUndefined), defaultType]);
+                return getUnionType([getTypeWithFacts(type, TypeFacts.NEUndefined), defaultType], /*subtypeReduction*/ true);
             }
             return type;
         }
@@ -8031,7 +8031,7 @@ namespace ts {
 
         function filterType(type: Type, f: (t: Type) => boolean): Type {
             return type.flags & TypeFlags.Union ?
-                getUnionType(filter((<UnionType>type).types, f), /*noSubtypeReduction*/ true) :
+                getUnionType(filter((<UnionType>type).types, f)) :
                 f(type) ? type : neverType;
         }
 
@@ -8185,7 +8185,7 @@ namespace ts {
                         antecedentTypes.push(type);
                     }
                 }
-                return getUnionType(antecedentTypes, /*noSubtypeReduction*/ true);
+                return getUnionType(antecedentTypes);
             }
 
             function getTypeAtFlowLoopLabel(flow: FlowLabel) {
@@ -8205,7 +8205,7 @@ namespace ts {
                 // the non-looping control flow path that leads to the top.
                 for (let i = flowLoopStart; i < flowLoopCount; i++) {
                     if (flowLoopNodes[i] === flow && flowLoopKeys[i] === key) {
-                        return getUnionType(flowLoopTypes[i], /*noSubtypeReduction*/ true);
+                        return getUnionType(flowLoopTypes[i]);
                     }
                 }
                 // Add the flow loop junction and reference to the in-process stack and analyze
@@ -8234,7 +8234,7 @@ namespace ts {
                         break;
                     }
                 }
-                return cache[key] = getUnionType(antecedentTypes, /*noSubtypeReduction*/ true);
+                return cache[key] = getUnionType(antecedentTypes);
             }
 
             function isMatchingPropertyAccess(expr: Expression) {
@@ -8362,13 +8362,13 @@ namespace ts {
                 }
                 const clauseTypes = switchTypes.slice(clauseStart, clauseEnd);
                 const hasDefaultClause = clauseStart === clauseEnd || contains(clauseTypes, neverType);
-                const discriminantType = getUnionType(clauseTypes, /*noSubtypeReduction*/ true);
+                const discriminantType = getUnionType(clauseTypes);
                 const caseType = discriminantType === neverType ? neverType : filterType(type, t => isTypeComparableTo(discriminantType, t));
                 if (!hasDefaultClause) {
                     return caseType;
                 }
                 const defaultType = filterType(type, t => !(isUnitType(t) && contains(switchTypes, t)));
-                return caseType === neverType ? defaultType : getUnionType([caseType, defaultType], /*noSubtypeReduction*/ true);
+                return caseType === neverType ? defaultType : getUnionType([caseType, defaultType]);
             }
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -8412,7 +8412,7 @@ namespace ts {
                         constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
                     }
                     if (constructSignatures && constructSignatures.length) {
-                        targetType = getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature))), /*noSubtypeReduction*/ true);
+                        targetType = getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature))));
                     }
                 }
 
@@ -8426,7 +8426,7 @@ namespace ts {
             function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean) {
                 if (!assumeTrue) {
                     return type.flags & TypeFlags.Union ?
-                        getUnionType(filter((<UnionType>type).types, t => !isTypeSubtypeOf(t, candidate)), /*noSubtypeReduction*/ true) :
+                        getUnionType(filter((<UnionType>type).types, t => !isTypeSubtypeOf(t, candidate))) :
                         type;
                 }
                 // If the current type is a union type, remove all constituents that aren't assignable to
@@ -8434,7 +8434,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Union) {
                     const assignableConstituents = filter((<UnionType>type).types, t => isTypeAssignableTo(t, candidate));
                     if (assignableConstituents.length) {
-                        return getUnionType(assignableConstituents, /*noSubtypeReduction*/ true);
+                        return getUnionType(assignableConstituents);
                     }
                 }
                 // If the candidate type is assignable to the target type, narrow to the candidate type.
@@ -9125,7 +9125,7 @@ namespace ts {
                             for (let i = indexOfParameter; i < iife.arguments.length; i++) {
                                 restTypes.push(getTypeOfExpression(iife.arguments[i]));
                             }
-                            return createArrayType(getUnionType(restTypes));
+                            return createArrayType(getUnionType(restTypes, /*subtypeReduction*/ true));
                         }
                         const links = getNodeLinks(iife);
                         const cached = links.resolvedSignature;
@@ -9328,7 +9328,7 @@ namespace ts {
                     }
                 }
             }
-            return mappedTypes ? getUnionType(mappedTypes) : mappedType;
+            return mappedTypes ? getUnionType(mappedTypes, /*subtypeReduction*/ true) : mappedType;
         }
 
         function getTypeOfPropertyOfContextualType(type: Type, name: string) {
@@ -9694,7 +9694,9 @@ namespace ts {
                     }
                 }
             }
-            return createArrayType(elementTypes.length ? getUnionType(elementTypes) : strictNullChecks ? neverType : undefinedWideningType);
+            return createArrayType(elementTypes.length ?
+                getUnionType(elementTypes, /*subtypeReduction*/ true) :
+                strictNullChecks ? neverType : undefinedWideningType);
         }
 
         function isNumericName(name: DeclarationName): boolean {
@@ -9761,7 +9763,7 @@ namespace ts {
                     propTypes.push(getTypeOfSymbol(properties[i]));
                 }
             }
-            const unionType = propTypes.length ? getUnionType(propTypes) : undefinedType;
+            const unionType = propTypes.length ? getUnionType(propTypes, /*subtypeReduction*/ true) : undefinedType;
             return createIndexInfo(unionType, /*isReadonly*/ false);
         }
 
@@ -10072,7 +10074,7 @@ namespace ts {
                 }
             }
 
-            return getUnionType(signatures.map(getReturnTypeOfSignature));
+            return getUnionType(signatures.map(getReturnTypeOfSignature), /*subtypeReduction*/ true);
         }
 
         /// e.g. "props" for React.d.ts,
@@ -10124,7 +10126,7 @@ namespace ts {
                 const types = (<UnionOrIntersectionType>elemType).types;
                 return getUnionType(types.map(type => {
                     return getResolvedJsxType(node, type, elemClassType);
-                }));
+                }), /*subtypeReduction*/ true);
             }
 
             // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
@@ -12178,7 +12180,7 @@ namespace ts {
                 }
                 // When yield/return statements are contextually typed we allow the return type to be a union type.
                 // Otherwise we require the yield/return expressions to have a best common supertype.
-                type = contextualSignature ? getUnionType(types) : getCommonSupertype(types);
+                type = contextualSignature ? getUnionType(types, /*subtypeReduction*/ true) : getCommonSupertype(types);
                 if (!type) {
                     if (funcIsGenerator) {
                         error(func, Diagnostics.No_best_common_type_exists_among_yield_expressions);
@@ -12187,7 +12189,7 @@ namespace ts {
                     else {
                         error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
                         // Defer to unioning the return types so we get a) downstream errors earlier and b) better Salsa experience
-                        return isAsync ? createPromiseReturnType(func, getUnionType(types)) : getUnionType(types);
+                        return isAsync ? createPromiseReturnType(func, getUnionType(types, /*subtypeReduction*/ true)) : getUnionType(types, /*subtypeReduction*/ true);
                     }
                 }
 
@@ -12985,7 +12987,7 @@ namespace ts {
                         leftType;
                 case SyntaxKind.BarBarToken:
                     return getTypeFacts(leftType) & TypeFacts.Falsy ?
-                        getUnionType([removeDefinitelyFalsyTypes(leftType), rightType]) :
+                        getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], /*subtypeReduction*/ true) :
                         leftType;
                 case SyntaxKind.EqualsToken:
                     checkAssignmentOperator(rightType);
@@ -13112,7 +13114,7 @@ namespace ts {
             checkExpression(node.condition);
             const type1 = checkExpression(node.whenTrue, contextualMapper);
             const type2 = checkExpression(node.whenFalse, contextualMapper);
-            return getUnionType([type1, type2]);
+            return getUnionType([type1, type2], /*subtypeReduction*/ true);
         }
 
         function typeContainsLiteralFromEnum(type: Type, enumType: EnumType) {
@@ -14373,7 +14375,7 @@ namespace ts {
                 return undefined;
             }
 
-            return getUnionType(map(onfulfilledParameterSignatures, getTypeOfFirstParameterOfSignature));
+            return getUnionType(map(onfulfilledParameterSignatures, getTypeOfFirstParameterOfSignature), /*subtypeReduction*/ true);
         }
 
         function getTypeOfFirstParameterOfSignature(signature: Signature) {
@@ -14401,7 +14403,7 @@ namespace ts {
                         types.push(checkAwaitedTypeWorker(constituentType));
                     }
 
-                    return getUnionType(types);
+                    return getUnionType(types, /*subtypeReduction*/ true);
                 }
                 else {
                     const promisedType = getPromisedType(type);
@@ -14617,7 +14619,7 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                     const classSymbol = getSymbolOfNode(node.parent);
                     const classConstructorType = getTypeOfSymbol(classSymbol);
-                    expectedReturnType = getUnionType([classConstructorType, voidType]);
+                    expectedReturnType = getUnionType([classConstructorType, voidType], /*subtypeReduction*/ true);
                     break;
 
                 case SyntaxKind.Parameter:
@@ -14640,7 +14642,7 @@ namespace ts {
                 case SyntaxKind.SetAccessor:
                     const methodType = getTypeOfNode(node.parent);
                     const descriptorType = createTypedPropertyDescriptorType(methodType);
-                    expectedReturnType = getUnionType([descriptorType, voidType]);
+                    expectedReturnType = getUnionType([descriptorType, voidType], /*subtypeReduction*/ true);
                     break;
             }
 
@@ -15614,7 +15616,7 @@ namespace ts {
                         return undefined;
                     }
 
-                    typeAsIterable.iterableElementType = getElementTypeOfIterator(getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature)), errorNode);
+                    typeAsIterable.iterableElementType = getElementTypeOfIterator(getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature), /*subtypeReduction*/ true), errorNode);
                 }
             }
 
@@ -15660,7 +15662,7 @@ namespace ts {
                         return undefined;
                     }
 
-                    const iteratorNextResult = getUnionType(map(iteratorNextFunctionSignatures, getReturnTypeOfSignature));
+                    const iteratorNextResult = getUnionType(map(iteratorNextFunctionSignatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
                     if (isTypeAny(iteratorNextResult)) {
                         return undefined;
                     }
@@ -15719,7 +15721,7 @@ namespace ts {
             // based on whether the remaining type is the same as the initial type.
             let arrayType = arrayOrStringType;
             if (arrayOrStringType.flags & TypeFlags.Union) {
-                arrayType = getUnionType(filter((arrayOrStringType as UnionType).types, t => !(t.flags & TypeFlags.StringLike)));
+                arrayType = getUnionType(filter((arrayOrStringType as UnionType).types, t => !(t.flags & TypeFlags.StringLike)), /*subtypeReduction*/ true);
             }
             else if (arrayOrStringType.flags & TypeFlags.StringLike) {
                 arrayType = neverType;
@@ -15760,7 +15762,7 @@ namespace ts {
                     return stringType;
                 }
 
-                return getUnionType([arrayElementType, stringType]);
+                return getUnionType([arrayElementType, stringType], /*subtypeReduction*/ true);
             }
 
             return arrayElementType;
