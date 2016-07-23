@@ -5093,7 +5093,7 @@ namespace ts {
                 return undefined;
             }
 
-            if (type.flags & TypeFlags.Union) {
+            if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Enum)) {
                 const result: DefinitionInfo[] = [];
                 forEach((<UnionType>type).types, t => {
                     if (t.symbol) {
