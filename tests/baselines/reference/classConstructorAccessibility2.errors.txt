@@ -1,4 +1,3 @@
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(28,28): error TS2674: Constructor of class 'BaseB' is protected and only accessible within the class declaration.
 tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(32,24): error TS2675: Cannot extend a class 'BaseC'. Class constructor is marked as private.
 tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(35,28): error TS2673: Constructor of class 'BaseC' is private and only accessible within the class declaration.
 tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(36,35): error TS2673: Constructor of class 'BaseC' is private and only accessible within the class declaration.
@@ -6,7 +5,7 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessib
 tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(41,10): error TS2673: Constructor of class 'BaseC' is private and only accessible within the class declaration.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts (6 errors) ====
+==== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts (5 errors) ====
     
     class BaseA {
         public constructor(public x: number) { }
@@ -34,9 +33,7 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessib
     class DerivedB extends BaseB {
         constructor(public x: number) { super(x); }
         createInstance() { new DerivedB(7); }
-        createBaseInstance() { new BaseB(8); } // error
-                               ~~~~~~~~~~~~
-!!! error TS2674: Constructor of class 'BaseB' is protected and only accessible within the class declaration.
+        createBaseInstance() { new BaseB(8); } // ok
         static staticBaseInstance() { new BaseB(9); } // ok
     }
     

@@ -26,7 +26,7 @@ class DerivedA extends BaseA {
 class DerivedB extends BaseB {
     constructor(public x: number) { super(x); }
     createInstance() { new DerivedB(7); }
-    createBaseInstance() { new BaseB(8); } // error
+    createBaseInstance() { new BaseB(8); } // ok
     static staticBaseInstance() { new BaseB(9); } // ok
 }
 
