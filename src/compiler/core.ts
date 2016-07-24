@@ -938,7 +938,7 @@ namespace ts {
      *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
      *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
      */
-    const singleAsteriskRegexFragmentFiles = "([^./]*(\\.(?!min\\.js$))?)*";
+    const singleAsteriskRegexFragmentFiles = "([^./]|(\\.(?!min\\.js$))?)*";
     const singleAsteriskRegexFragmentOther = "[^/]*";
 
     export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude") {
