@@ -37,8 +37,9 @@ class B {
     @MyMethodDecorator
 >MyMethodDecorator : MethodDecorator
 
-    method(...args: string[]) {}
->method : (...args: string[]) => void
+    method(this: this, ...args: string[]) {}
+>method : (this: this, ...args: string[]) => void
+>this : this
 >args : string[]
 }
 

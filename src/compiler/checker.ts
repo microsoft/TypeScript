@@ -15,8 +15,6 @@ namespace ts {
         return node.id;
     }
 
-    export let checkTime = 0;
-
     export function getSymbolId(symbol: Symbol): number {
         if (!symbol.id) {
             symbol.id = nextSymbolId;
@@ -1000,7 +998,7 @@ namespace ts {
 
             Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
 
-            if (!isBlockScopedNameDeclaredBeforeUse(<Declaration>getAncestor(declaration, SyntaxKind.VariableDeclaration), errorLocation)) {
+            if (!isInAmbientContext(declaration) && !isBlockScopedNameDeclaredBeforeUse(<Declaration>getAncestor(declaration, SyntaxKind.VariableDeclaration), errorLocation)) {
                 error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
             }
         }
@@ -3228,26 +3226,29 @@ namespace ts {
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
                     return links.type = checkExpression((<ExportAssignment>declaration).expression);
                 }
+                if (declaration.flags & NodeFlags.JavaScriptFile && declaration.kind === SyntaxKind.JSDocPropertyTag && (<JSDocPropertyTag>declaration).typeExpression) {
+                    return links.type = getTypeFromTypeNode((<JSDocPropertyTag>declaration).typeExpression.type);
+                }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return unknownType;
                 }
 
-                let type: Type = undefined;
-                // Handle module.exports = expr or this.p = expr
-                if (declaration.kind === SyntaxKind.BinaryExpression) {
-                    type = getUnionType(map(symbol.declarations, (decl: BinaryExpression) => checkExpressionCached(decl.right)), /*subtypeReduction*/ true);
+                let type: Type;
+                // Handle certain special assignment kinds, which happen to union across multiple declarations:
+                // * module.exports = expr
+                // * exports.p = expr
+                // * this.p = expr
+                // * className.prototype.method = expr
+                if (declaration.kind === SyntaxKind.BinaryExpression ||
+                    declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
+                    const declaredTypes = map(symbol.declarations,
+                        decl => decl.kind === SyntaxKind.BinaryExpression ?
+                            checkExpressionCached((<BinaryExpression>decl).right) :
+                            checkExpressionCached((<BinaryExpression>decl.parent).right));
+                    type = getUnionType(declaredTypes, /*subtypeReduction*/ true);
                 }
-                else if (declaration.kind === SyntaxKind.PropertyAccessExpression) {
-                    // Declarations only exist for property access expressions for certain
-                    // special assignment kinds
-                    if (declaration.parent.kind === SyntaxKind.BinaryExpression) {
-                        // Handle exports.p = expr  or className.prototype.method = expr
-                        type = checkExpressionCached((<BinaryExpression>declaration.parent).right);
-                    }
-                }
-
-                if (type === undefined) {
+                else {
                     type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
                 }
 
@@ -11954,7 +11955,7 @@ namespace ts {
         function getInferredClassType(symbol: Symbol) {
             const links = getSymbolLinks(symbol);
             if (!links.inferredClassType) {
-                links.inferredClassType = createAnonymousType(undefined, symbol.members, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
+                links.inferredClassType = createAnonymousType(symbol, symbol.members, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
             }
             return links.inferredClassType;
         }
@@ -13609,7 +13610,7 @@ namespace ts {
                         checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
                     }
                 }
-                if (!(<FunctionDeclaration>node).body) {
+                if (noUnusedIdentifiers && !(<FunctionDeclaration>node).body) {
                     checkUnusedTypeParameters(node);
                 }
             }
@@ -14901,6 +14902,7 @@ namespace ts {
                                 const parameter = <ParameterDeclaration>local.valueDeclaration;
                                 if (compilerOptions.noUnusedParameters &&
                                     !isParameterPropertyDeclaration(parameter) &&
+                                    !parameterIsThisKeyword(parameter) &&
                                     !parameterNameStartsWithUnderscore(parameter)) {
                                     error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
                                 }
@@ -14912,6 +14914,10 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function parameterIsThisKeyword(parameter: ParameterDeclaration) {
+            return parameter.name && (<Identifier>parameter.name).originalKeywordKind === SyntaxKind.ThisKeyword;
         }
 
         function parameterNameStartsWithUnderscore(parameter: ParameterDeclaration) {
@@ -14942,8 +14948,15 @@ namespace ts {
         function checkUnusedTypeParameters(node: ClassDeclaration | ClassExpression | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration | InterfaceDeclaration) {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 if (node.typeParameters) {
+                    // Only report errors on the last declaration for the type parameter container;
+                    // this ensures that all uses have been accounted for.
+                    const symbol = getSymbolOfNode(node);
+                    const lastDeclaration = symbol && symbol.declarations && lastOrUndefined(symbol.declarations);
+                    if (lastDeclaration !== node) {
+                        return;
+                    }
                     for (const typeParameter of node.typeParameters) {
-                        if (!typeParameter.symbol.isReferenced) {
+                        if (!getMergedSymbol(typeParameter.symbol).isReferenced) {
                             error(typeParameter.name, Diagnostics._0_is_declared_but_never_used, typeParameter.symbol.name);
                         }
                     }
@@ -16452,7 +16465,7 @@ namespace ts {
 
             if (produceDiagnostics) {
                 checkTypeForDuplicateIndexSignatures(node);
-                checkUnusedTypeParameters(node);
+                registerForUnusedIdentifiersCheck(node);
             }
         }
 
@@ -17349,11 +17362,11 @@ namespace ts {
         }
 
         function checkSourceFile(node: SourceFile) {
-            const start = new Date().getTime();
+            const start = performance.mark();
 
             checkSourceFileWorker(node);
 
-            checkTime += new Date().getTime() - start;
+            performance.measure("Check", start);
         }
 
         // Fully type check a source file and collect the relevant diagnostics.

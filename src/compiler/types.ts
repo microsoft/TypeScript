@@ -472,6 +472,10 @@ namespace ts {
         flags: NodeFlags;
     }
 
+    export interface Token extends Node {
+        __tokenTag: any;
+    }
+
     // @kind(SyntaxKind.AbstractKeyword)
     // @kind(SyntaxKind.AsyncKeyword)
     // @kind(SyntaxKind.ConstKeyword)
@@ -482,7 +486,7 @@ namespace ts {
     // @kind(SyntaxKind.PrivateKeyword)
     // @kind(SyntaxKind.ProtectedKeyword)
     // @kind(SyntaxKind.StaticKeyword)
-    export interface Modifier extends Node { }
+    export interface Modifier extends Token { }
 
     // @kind(SyntaxKind.Identifier)
     export interface Identifier extends PrimaryExpression {
@@ -2558,6 +2562,7 @@ namespace ts {
         declaration?: boolean;
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;
+        /* @internal */ extendedDiagnostics?: boolean;
         disableSizeLimit?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
@@ -2931,7 +2936,6 @@ namespace ts {
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
-        getDefaultTypeDirectiveNames?(rootPath: string): string[];
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
