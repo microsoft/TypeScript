@@ -1665,6 +1665,10 @@ namespace ts {
         export const constElement = "const";
 
         export const letElement = "let";
+
+        export const directory = "directory";
+
+        export const externalModuleName = "external module name";
     }
 
     export namespace ScriptElementKindModifier {
@@ -4378,7 +4382,7 @@ namespace ts {
 
                 return {
                     isMemberCompletion: false,
-                    isNewIdentifierLocation: false,
+                    isNewIdentifierLocation: true,
                     entries: result
                 };
             }
@@ -4389,44 +4393,46 @@ namespace ts {
 
                 const toComplete = getBaseFileName(fragment);
                 const absolutePath = normalizeSlashes(host.resolvePath(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment)));
-                const baseDir = toComplete ? getDirectoryPath(absolutePath) : absolutePath;
+                const baseDirectory = toComplete ? getDirectoryPath(absolutePath) : absolutePath;
 
 
-                if (directoryProbablyExists(baseDir, host)) {
+                if (directoryProbablyExists(baseDirectory, host)) {
                     // Enumerate the available files
-                    const files = host.readDirectory(baseDir, extensions, /*exclude*/undefined, /*include*/["./*"]);
-                    forEach(files, (f) => {
-                        const fName = includeExtensions ? getBaseFileName(f) : removeFileExtension(getBaseFileName(f));
+                    const files = host.readDirectory(baseDirectory, extensions, /*exclude*/undefined, /*include*/["./*"]);
+                    forEach(files, f => {
+                        const fileName = includeExtensions ? getBaseFileName(f) : removeFileExtension(getBaseFileName(f));
 
-                        if (startsWith(fName, toComplete)) {
+                        const duplicate = includeExtensions ? false : forEach(result, entry => entry.name === fileName);
+
+                        if (startsWith(fileName, toComplete) && !duplicate) {
                             result.push({
-                                name: fName,
-                                kind: ScriptElementKind.unknown,
+                                name: fileName,
+                                kind: ScriptElementKind.directory,
                                 kindModifiers: ScriptElementKindModifier.none,
-                                sortText: fName
+                                sortText: fileName
                             });
                         }
                     });
 
                     // If possible, get folder completion as well
                     if (host.getDirectories) {
-                        const directories = host.getDirectories(baseDir);
-                        forEach(directories, (d) => {
-                            const dName = getBaseFileName(removeTrailingDirectorySeparator(d));
+                        const directories = host.getDirectories(baseDirectory);
+                        forEach(directories, d => {
+                            const directoryName = getBaseFileName(removeTrailingDirectorySeparator(d));
 
-                            if (startsWith(dName, toComplete)) {
+                            if (startsWith(directoryName, toComplete)) {
                                 result.push({
-                                    name: ensureTrailingDirectorySeparator(dName),
-                                    kind: ScriptElementKind.unknown,
+                                    name: ensureTrailingDirectorySeparator(directoryName),
+                                    kind: ScriptElementKind.directory,
                                     kindModifiers: ScriptElementKindModifier.none,
-                                    sortText: dName
+                                    sortText: directoryName
                                 });
                             }
                         });
                     }
                 }
 
-                return includeExtensions ? result : deduplicate(result, (a, b) => a.name === b.name);
+                return result;
             }
 
             /**
@@ -4439,36 +4445,27 @@ namespace ts {
                 return ts.map(enumeratePotentialNonRelativeModules(fragment, scriptPath), (moduleName) => {
                     return {
                         name: moduleName,
-                        kind: ScriptElementKind.unknown,
+                        kind: ScriptElementKind.externalModuleName,
                         kindModifiers: ScriptElementKindModifier.none,
                         sortText: moduleName
                     };
                 });
             }
 
-            function enumeratePotentialNonRelativeModules(fragment: string, scriptPath: string) {
-                const ambientSymbolNameRegex = /^"(.+?)"$/;
-
+            function enumeratePotentialNonRelativeModules(fragment: string, scriptPath: string): string[] {
                 // If this is a nested module, get the module name
                 const firstSeparator = fragment.indexOf(directorySeparator);
                 const moduleNameFragment = firstSeparator !== -1 ? fragment.substr(0, firstSeparator) : fragment;
                 const isNestedModule = fragment !== moduleNameFragment;
 
                 // Get modules that the type checker picked up
-                const ambientModules = ts.map(program.getTypeChecker().getAmbientModules(), (sym) => {
-                    const match = ambientSymbolNameRegex.exec(sym.name);
-                    if (match) {
-                        return match[1];
-                    }
-                    // This should never happen
-                    return sym.name;
-                });
-                let nonRelativeModules = ts.filter(ambientModules, (moduleName) => startsWith(moduleName, fragment));
+                const ambientModules = ts.map(program.getTypeChecker().getAmbientModules(), sym => stripQuotes(sym.name));
+                let nonRelativeModules = ts.filter(ambientModules, moduleName => startsWith(moduleName, fragment));
 
                 // Nested modules of the form "module-name/sub" need to be adjusted to only return the string
                 // after the last '/' that appears in the fragment because editors insert the completion
                 // only after that character
-                nonRelativeModules = ts.map(nonRelativeModules, (moduleName) => {
+                nonRelativeModules = ts.map(nonRelativeModules, moduleName => {
                     if (moduleName.indexOf(directorySeparator) !== -1) {
                         if (isNestedModule) {
                             return moduleName.substr(fragment.lastIndexOf(directorySeparator) + 1);
