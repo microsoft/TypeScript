@@ -604,7 +604,7 @@ namespace ts {
      */
     function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
         let result: CommentRange[];
-        let collecting = trailing || pos === 0;
+        let needToSkipTrailingComment = pos > 0;
         while (pos < text.length) {
             const ch = text.charCodeAt(pos);
             switch (ch) {
@@ -617,7 +617,11 @@ namespace ts {
                     if (trailing) {
                         return result;
                     }
-                    collecting = true;
+                    else if (needToSkipTrailingComment) {
+                        // skip the first line if not trailing (it'll be part of the trailing comment).
+                        needToSkipTrailingComment = false;
+                        result = undefined;
+                    }
                     if (result && result.length) {
                         lastOrUndefined(result).hasTrailingNewLine = true;
                     }
@@ -653,11 +657,13 @@ namespace ts {
                                 pos++;
                             }
                         }
-                        if (collecting) {
+
+                        // if we are at the end of the file, don't add trailing comments.
+                        // end-of-file comments are added as leading comment of the end-of-file token.
+                        if (pos < text.length || !trailing) {
                             if (!result) {
                                 result = [];
                             }
-
                             result.push({ pos: startPos, end: pos, hasTrailingNewLine, kind });
                         }
                         continue;
@@ -673,10 +679,10 @@ namespace ts {
                     }
                     break;
             }
-            return result;
+            return !trailing ? result : undefined;
         }
 
-        return result;
+        return !trailing ? result : undefined;
     }
 
     export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] {

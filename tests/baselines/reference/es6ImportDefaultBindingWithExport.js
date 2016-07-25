@@ -21,7 +21,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "server"], function (require, exports, server_1) {
     "use strict";
     exports.x = server_1.default;
-});
+}); // non referenced
 
 
 //// [server.d.ts]
