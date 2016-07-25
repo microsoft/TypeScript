@@ -1055,7 +1055,7 @@ namespace ts {
         return resolutions;
     }
 
-    function getInferredTypesRoot(options: CompilerOptions, rootFiles: string[], host: CompilerHost) {
+    function getInferredTypesRoot(options: CompilerOptions, rootFiles: string[], host: CompilerHost): string {
         return computeCommonSourceDirectoryOfFilenames(rootFiles, host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
     }
 
@@ -1159,7 +1159,7 @@ namespace ts {
 
             if (typeReferences) {
                 // This containgFilename needs to matched with the one used in managed-side
-                const containingFilename = "__inferred type names__.ts"
+                const containingFilename = combinePaths(host.getCurrentDirectory(), "__inferred type names__.ts");
                 const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, containingFilename);
                 for (let i = 0; i < typeReferences.length; i++) {
                     processTypeReferenceDirective(typeReferences[i], resolutions[i]);

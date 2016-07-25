@@ -2,6 +2,7 @@
 // @traceResolution: true
 // @declaration: true
 // @typeRoots: /types
+// @currentDirectory: /
 
 // $ comes from d.ts file - no need to add type reference directive
 

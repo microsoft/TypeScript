@@ -1,5 +1,6 @@
 // @traceResolution: true
 // @noImplicitReferences: true
+// @currentDirectory: /
 
 // @filename: /tsconfig.json
 { "files": "a.ts" }
