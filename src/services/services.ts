@@ -94,7 +94,7 @@ namespace ts {
          * change range cannot be determined.  However, in that case, incremental parsing will
          * not happen and the entire document will be re - parsed.
          */
-        getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange;
+        getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined;
 
         /** Releases all resources held by this script snapshot */
         dispose?(): void;
@@ -3027,14 +3027,14 @@ namespace ts {
 
             let isJsDocTagName = false;
 
-            let start = new Date().getTime();
+            let start = timestamp();
             const currentToken = getTokenAtPosition(sourceFile, position);
-            log("getCompletionData: Get current token: " + (new Date().getTime() - start));
+            log("getCompletionData: Get current token: " + (timestamp() - start));
 
-            start = new Date().getTime();
+            start = timestamp();
             // Completion not allowed inside comments, bail out if this is the case
             const insideComment = isInsideComment(sourceFile, currentToken, position);
-            log("getCompletionData: Is inside comment: " + (new Date().getTime() - start));
+            log("getCompletionData: Is inside comment: " + (timestamp() - start));
 
             if (insideComment) {
                 // The current position is next to the '@' sign, when no tag name being provided yet.
@@ -3077,9 +3077,9 @@ namespace ts {
                 }
             }
 
-            start = new Date().getTime();
+            start = timestamp();
             const previousToken = findPrecedingToken(position, sourceFile);
-            log("getCompletionData: Get previous token 1: " + (new Date().getTime() - start));
+            log("getCompletionData: Get previous token 1: " + (timestamp() - start));
 
             // The decision to provide completion depends on the contextToken, which is determined through the previousToken.
             // Note: 'previousToken' (and thus 'contextToken') can be undefined if we are the beginning of the file
@@ -3088,9 +3088,9 @@ namespace ts {
             // Check if the caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
             // Skip this partial identifier and adjust the contextToken to the token that precedes it.
             if (contextToken && position <= contextToken.end && isWord(contextToken.kind)) {
-                const start = new Date().getTime();
+                const start = timestamp();
                 contextToken = findPrecedingToken(contextToken.getFullStart(), sourceFile);
-                log("getCompletionData: Get previous token 2: " + (new Date().getTime() - start));
+                log("getCompletionData: Get previous token 2: " + (timestamp() - start));
             }
 
             // Find the node where completion is requested on.
@@ -3137,7 +3137,7 @@ namespace ts {
                 }
             }
 
-            const semanticStart = new Date().getTime();
+            const semanticStart = timestamp();
             let isMemberCompletion: boolean;
             let isNewIdentifierLocation: boolean;
             let symbols: Symbol[] = [];
@@ -3175,7 +3175,7 @@ namespace ts {
                 }
             }
 
-            log("getCompletionData: Semantic work: " + (new Date().getTime() - semanticStart));
+            log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
             return { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), isJsDocTagName };
 
@@ -3319,12 +3319,12 @@ namespace ts {
             }
 
             function isCompletionListBlocker(contextToken: Node): boolean {
-                const start = new Date().getTime();
+                const start = timestamp();
                 const result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
                     isSolelyIdentifierDefinitionLocation(contextToken) ||
                     isDotOfNumericLiteral(contextToken) ||
                     isInJsxText(contextToken);
-                log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
+                log("getCompletionsAtPosition: isCompletionListBlocker: " + (timestamp() - start));
                 return result;
             }
 
@@ -3974,10 +3974,11 @@ namespace ts {
                     kindModifiers: getSymbolModifiers(symbol),
                     sortText: "0",
                 };
+
             }
 
             function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[], location: Node, performCharacterChecks: boolean): Map<string> {
-                const start = new Date().getTime();
+                const start = timestamp();
                 const uniqueNames: Map<string> = {};
                 if (symbols) {
                     for (const symbol of symbols) {
@@ -3992,7 +3993,7 @@ namespace ts {
                     }
                 }
 
-                log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
+                log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (timestamp() - start));
                 return uniqueNames;
             }
 
@@ -4002,22 +4003,58 @@ namespace ts {
                     return undefined;
                 }
 
-                const argumentInfo = SignatureHelp.getContainingArgumentInfo(node, position, sourceFile);
-                if (argumentInfo) {
-                    // Get string literal completions from specialized signatures of the target
-                    return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo);
+                if (node.parent.kind === SyntaxKind.PropertyAssignment && node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                    // Get quoted name of properties of the object literal expression
+                    // i.e. interface ConfigFiles {
+                    //          'jspm:dev': string
+                    //      }
+                    //      let files: ConfigFiles = {
+                    //          '/*completion position*/'
+                    //      }
+                    //
+                    //      function foo(c: ConfigFiles) {}
+                    //      foo({
+                    //          '/*completion position*/'
+                    //      });
+                    return getStringLiteralCompletionEntriesFromPropertyAssignment(<ObjectLiteralElement>node.parent);
                 }
                 else if (isElementAccessExpression(node.parent) && node.parent.argumentExpression === node) {
                     // Get all names of properties on the expression
+                    // i.e. interface A {
+                    //      'prop1': string
+                    // }
+                    // let a: A;
+                    // a['/*completion position*/']
                     return getStringLiteralCompletionEntriesFromElementAccess(node.parent);
                 }
                 else {
-                    // Otherwise, get the completions from the contextual type if one exists
+                    const argumentInfo = SignatureHelp.getContainingArgumentInfo(node, position, sourceFile);
+                    if (argumentInfo) {
+                        // Get string literal completions from specialized signatures of the target
+                        // i.e. declare function f(a: 'A');
+                        // f("/*completion position*/")
+                        return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, node);
+                    }
+
+                    // Get completion for string literal from string literal type
+                    // i.e. var x: "hi" | "hello" = "/*completion position*/"
                     return getStringLiteralCompletionEntriesFromContextualType(<StringLiteral>node);
                 }
             }
 
-            function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo) {
+            function getStringLiteralCompletionEntriesFromPropertyAssignment(element: ObjectLiteralElement) {
+                const typeChecker = program.getTypeChecker();
+                const type = typeChecker.getContextualType((<ObjectLiteralExpression>element.parent));
+                const entries: CompletionEntry[] = [];
+                if (type) {
+                    getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, element, /*performCharacterChecks*/false);
+                    if (entries.length) {
+                        return { isMemberCompletion: true, isNewIdentifierLocation: true, entries };
+                    }
+                }
+            }
+
+            function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo, location: Node) {
                 const typeChecker = program.getTypeChecker();
                 const candidates: Signature[] = [];
                 const entries: CompletionEntry[] = [];
@@ -7413,14 +7450,14 @@ namespace ts {
         }
 
         function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions) {
-            let start = new Date().getTime();
+            let start = timestamp();
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
+            log("getIndentationAtPosition: getCurrentSourceFile: " + (timestamp() - start));
 
-            start = new Date().getTime();
+            start = timestamp();
 
             const result = formatting.SmartIndenter.getIndentation(position, sourceFile, editorOptions);
-            log("getIndentationAtPosition: computeIndentation  : " + (new Date().getTime() - start));
+            log("getIndentationAtPosition: computeIndentation  : " + (timestamp() - start));
 
             return result;
         }
