@@ -7800,6 +7800,17 @@ namespace ts {
         }
 
         function filterType(type: Type, f: (t: Type) => boolean): Type {
+            if (type.flags & TypeFlags.Intersection) {
+                const filteredSubtypes: Type[] = [];
+                for (const subType of (<IntersectionType> type).types) {
+                    const filtered = filterType(subType, f);
+                    if (filtered === neverType) {
+                        return neverType;
+                    }
+                    filteredSubtypes.push(filtered);
+                }
+                return getIntersectionType(filteredSubtypes);
+            }
             return type.flags & TypeFlags.Union ?
                 getUnionType(filter((<UnionType>type).types, f)) :
                 f(type) ? type : neverType;
@@ -8095,7 +8106,7 @@ namespace ts {
                 }
                 const propName = propAccess.name.text;
                 const propType = getTypeOfPropertyOfType(type, propName);
-                if (!propType || !isStringLiteralUnionType(propType)) {
+                if (!propType || !(isStringLiteralUnionType(propType) || (type.flags & TypeFlags.UnionOrIntersection))) {
                     return type;
                 }
                 const discriminantType = value.kind === SyntaxKind.StringLiteral ? getStringLiteralTypeForText((<StringLiteral>value).text) : checkExpression(value);
@@ -8106,7 +8117,10 @@ namespace ts {
                     assumeTrue = !assumeTrue;
                 }
                 if (assumeTrue) {
-                    return filterType(type, t => areTypesComparable(getTypeOfPropertyOfType(t, propName), discriminantType));
+                    return filterType(type, t => {
+                        const propType = getTypeOfPropertyOfType(t, propName);
+                        return !propType || areTypesComparable(propType, discriminantType);
+                    });
                 }
                 if (discriminantType.flags & TypeFlags.StringLiteral) {
                     return filterType(type, t => getTypeOfPropertyOfType(t, propName) !== discriminantType);
@@ -8121,7 +8135,7 @@ namespace ts {
                 }
                 const propName = (<PropertyAccessExpression>switchStatement.expression).name.text;
                 const propType = getTypeOfPropertyOfType(type, propName);
-                if (!propType || !isStringLiteralUnionType(propType)) {
+                if (!propType || !(isStringLiteralUnionType(propType) || (type.flags & TypeFlags.UnionOrIntersection))) {
                     return type;
                 }
                 const switchTypes = getSwitchClauseTypes(switchStatement);
@@ -8132,7 +8146,10 @@ namespace ts {
                 const hasDefaultClause = clauseStart === clauseEnd || contains(clauseTypes, undefined);
                 const caseTypes = hasDefaultClause ? filter(clauseTypes, t => !!t) : clauseTypes;
                 const discriminantType = caseTypes.length ? getUnionType(caseTypes) : undefined;
-                const caseType = discriminantType && filterType(type, t => isTypeComparableTo(discriminantType, getTypeOfPropertyOfType(t, propName)));
+                const caseType = discriminantType && filterType(type, t => {
+                    const propType = getTypeOfPropertyOfType(t, propName);
+                    return !propType || isTypeComparableTo(discriminantType, propType);
+                });
                 if (!hasDefaultClause) {
                     return caseType;
                 }
