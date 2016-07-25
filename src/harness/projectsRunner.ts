@@ -222,6 +222,7 @@ class ProjectRunner extends RunnerBase {
                     useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
                     fileExists,
                     readDirectory,
+                    readFile
                 };
                 const configParseResult = ts.parseJsonConfigFileContent(configObject, configParseHost, ts.getDirectoryPath(configFileName), compilerOptions);
                 if (configParseResult.errors.length > 0) {
@@ -293,6 +294,10 @@ class ProjectRunner extends RunnerBase {
 
             function fileExists(fileName: string): boolean {
                 return Harness.IO.fileExists(getFileNameInTheProjectTest(fileName));
+            }
+
+            function readFile(fileName: string): string {
+                return Harness.IO.readFile(getFileNameInTheProjectTest(fileName));
             }
 
             function getSourceFileText(fileName: string): string {

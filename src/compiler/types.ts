@@ -1693,6 +1693,8 @@ namespace ts {
           * @param path The path to test.
           */
         fileExists(path: string): boolean;
+
+        readFile(path: string): string;
     }
 
     export interface WriteFileCallback {

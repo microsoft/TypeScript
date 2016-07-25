@@ -86,6 +86,7 @@
         "./unittests/moduleResolution.ts",
         "./unittests/tsconfigParsing.ts",
         "./unittests/commandLineParsing.ts",
+        "./unittests/configurationExtension.ts",
         "./unittests/convertCompilerOptionsFromJson.ts",
         "./unittests/convertTypingOptionsFromJson.ts",
         "./unittests/tsserverProjectSystem.ts",

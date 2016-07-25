@@ -1540,7 +1540,8 @@ namespace Harness {
             const parseConfigHost: ts.ParseConfigHost = {
                 useCaseSensitiveFileNames: false,
                 readDirectory: (name) => [],
-                fileExists: (name) => true
+                fileExists: (name) => true,
+                readFile: (name) => ts.forEach(testUnitData, data => data.name.toLowerCase() === name.toLowerCase() ? data.content : undefined)
             };
 
             // check if project has tsconfig.json in the list of files

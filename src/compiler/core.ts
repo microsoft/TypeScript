@@ -171,6 +171,20 @@ namespace ts {
         return result;
     }
 
+    export function mapObject<T, U>(object: Map<T>, f: (key: string, x: T) => [string, U]): Map<U> {
+        let result: Map<U> = {};
+        if (object) {
+            result = {};
+            for (const v of getKeys(object)) {
+                const [key, value]: [string, U] = f(v, object[v]) || [undefined, undefined];
+                if (key !== undefined) {
+                    result[key] = value;
+                }
+            }
+        }
+        return result;
+    }
+
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;
@@ -355,6 +369,20 @@ namespace ts {
             }
         }
         return result;
+    }
+
+    export function assign<T1 extends Map<{}>, T2, T3>(t: T1, arg1: T2, arg2: T3): T1 & T2 & T3;
+    export function assign<T1 extends Map<{}>, T2>(t: T1, arg1: T2): T1 & T2;
+    export function assign<T1 extends Map<{}>>(t: T1, ...args: any[]): any;
+    export function assign<T1 extends Map<{}>>(t: T1, ...args: any[]) {
+        for (const arg of args) {
+            for (const p of getKeys(arg)) {
+                if (hasProperty(arg, p)) {
+                    t[p] = arg[p];
+                }
+            }
+        }
+        return t;
     }
 
     export function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U {
