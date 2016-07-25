@@ -7393,6 +7393,24 @@ namespace ts {
             };
         }
 
+        // Return true if the given type could possibly reference a type parameter for which
+        // we perform type inference (i.e. a type parameter of a generic function). We cache
+        // results for union and intersection types for performance reasons.
+        function couldContainTypeParameters(type: Type): boolean {
+            return !!(type.flags & TypeFlags.TypeParameter ||
+                type.flags & TypeFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeParameters) ||
+                type.flags & TypeFlags.Tuple && forEach((<TupleType>type).elementTypes, couldContainTypeParameters) ||
+                type.flags & TypeFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class) ||
+                type.flags & TypeFlags.UnionOrIntersection && couldUnionOrIntersectionContainTypeParameters(<UnionOrIntersectionType>type));
+        }
+
+        function couldUnionOrIntersectionContainTypeParameters(type: UnionOrIntersectionType): boolean {
+            if (type.couldContainTypeParameters === undefined) {
+                type.couldContainTypeParameters = forEach(type.types, couldContainTypeParameters);
+            }
+            return type.couldContainTypeParameters;
+        }
+
         function inferTypes(context: InferenceContext, source: Type, target: Type) {
             let sourceStack: Type[];
             let targetStack: Type[];
@@ -7411,6 +7429,9 @@ namespace ts {
             }
 
             function inferFromTypes(source: Type, target: Type) {
+                if (!couldContainTypeParameters(target)) {
+                    return;
+                }
                 if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union && !(source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum) ||
                     source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Intersection) {
                     // Source and target are both unions or both intersections. If source and target
@@ -7521,25 +7542,18 @@ namespace ts {
                 }
                 else {
                     source = getApparentType(source);
-                    if (source.flags & TypeFlags.ObjectType && (
-                        target.flags & TypeFlags.Reference && (<TypeReference>target).typeArguments ||
-                        target.flags & TypeFlags.Tuple ||
-                        target.flags & TypeFlags.Anonymous && target.symbol && target.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class))) {
-                        // If source is an object type, and target is a type reference with type arguments, a tuple type,
-                        // the type of a method, or a type literal, infer from members
+                    if (source.flags & TypeFlags.ObjectType) {
                         if (isInProcess(source, target)) {
                             return;
                         }
                         if (isDeeplyNestedGeneric(source, sourceStack, depth) && isDeeplyNestedGeneric(target, targetStack, depth)) {
                             return;
                         }
-
                         const key = source.id + "," + target.id;
                         if (hasProperty(visited, key)) {
                             return;
                         }
                         visited[key] = true;
-
                         if (depth === 0) {
                             sourceStack = [];
                             targetStack = [];
