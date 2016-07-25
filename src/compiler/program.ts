@@ -1066,10 +1066,6 @@ namespace ts {
         return resolutions;
     }
 
-    function getInferredTypesRoot(options: CompilerOptions, rootFiles: string[], host: CompilerHost): string {
-        return computeCommonSourceDirectoryOfFilenames(rootFiles, host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
-    }
-
     /**
       * Given a set of options, returns the set of type directive names
       *   that should be included for this program automatically.
