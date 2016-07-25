@@ -73,9 +73,7 @@ namespace ts.server {
                 this.lastCheckedShapeSignature =  contentSignature ? contentSignature : this.computeHash(sourceFile.text);
             }
             else {
-                // ToDo@dirkb for now we can only get the declaration file if we emit all files.
-                // We need to get better here since we can't emit JS files on type. Or ???
-                const emitOutput = builder.project.languageService.getEmitOutput(this.fileName, /*emitDeclarationsOnly*/ true);
+                const emitOutput = builder.project.getLanguageService(/*ensureSynchronized*/true).getEmitOutput(this.fileName, /*emitDeclarationsOnly*/ true);
                 let dtsFound = false;
                 for (const file of emitOutput.outputFiles) {
                     if (/\.d\.ts$/.test(file.name)) {

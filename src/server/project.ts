@@ -77,8 +77,8 @@ namespace ts.server {
             this.builder = createBuilder(this);
             this.markAsDirty();
         }
-	
-	getLanguageService(ensureSynchronized = true): LanguageService  {
+
+    getLanguageService(ensureSynchronized = true): LanguageService  {
             if (ensureSynchronized) {
                 this.updateGraph();
             }
