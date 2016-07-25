@@ -11544,8 +11544,20 @@ namespace ts {
             const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(declaration.parent.symbol);
             const declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(declaration.parent.symbol);
 
-            // A private or protected constructor can only be instantiated within it's own class
+            // A private or protected constructor can only be instantiated within its own class (or a subclass, for protected)
             if (!isNodeWithinClass(node, declaringClassDeclaration)) {
+                const containingClass = getContainingClass(node);
+                if (containingClass) {
+                    const containingType = getTypeOfNode(containingClass);
+                    const baseTypes = getBaseTypes(<InterfaceType>containingType);
+                    if (baseTypes.length) {
+                        const baseType = baseTypes[0];
+                        if (flags & NodeFlags.Protected &&
+                            baseType.symbol === declaration.parent.symbol) {
+                            return true;
+                        }
+                    }
+                }
                 if (flags & NodeFlags.Private) {
                     error(node, Diagnostics.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration, typeToString(declaringClass));
                 }
