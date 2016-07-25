@@ -26,5 +26,10 @@ async function f() {
 >void await 0 : undefined
 >await 0 : number
 >0 : number
+
+    await await 0;
+>await await 0 : number
+>await 0 : number
+>0 : number
 }
 

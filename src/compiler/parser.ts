@@ -3337,10 +3337,7 @@ namespace ts {
         function parseAwaitExpression() {
             const node = <AwaitExpression>createNode(SyntaxKind.AwaitExpression);
             nextToken();
-            node.expression = token === SyntaxKind.AwaitKeyword
-                // Forbid `await await`
-                ? <UnaryExpression>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, Diagnostics.Expression_expected)
-                : parseSimpleUnaryExpression();
+            node.expression = parseSimpleUnaryExpression();
             return finishNode(node);
         }
 
@@ -3389,7 +3386,7 @@ namespace ts {
          *      6) - UnaryExpression[?yield]
          *      7) ~ UnaryExpression[?yield]
          *      8) ! UnaryExpression[?yield]
-         *      9) await AwaitExpression[?yield]
+         *      9) [+Await] await AwaitExpression[?yield]
          */
         function parseSimpleUnaryExpression(): UnaryExpression {
             switch (token) {

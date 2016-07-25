@@ -4,6 +4,7 @@ async function f() {
     typeof await 0;
     void await 0;
     await void <string> typeof <number> void await 0;
+    await await 0;
 }
 
 
@@ -22,5 +23,6 @@ function f() {
         typeof yield 0;
         void yield 0;
         yield void typeof void yield 0;
+        yield yield 0;
     });
 }
