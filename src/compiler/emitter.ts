@@ -2667,7 +2667,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     isNameOfExportedDeclarationInNonES6Module(node.operand);
 
                 if (internalExportChanged) {
-                    emitAliasEqual(<Identifier> node.operand);
+                    emitAliasEqual(<Identifier>node.operand);
                 }
 
                 write(tokenToString(node.operator));
@@ -2722,7 +2722,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     }
                 }
                 else if (internalExportChanged) {
-                    emitAliasEqual(<Identifier> node.operand);
+                    emitAliasEqual(<Identifier>node.operand);
                     emit(node.operand);
                     if (node.operator === SyntaxKind.PlusPlusToken) {
                         write(" += 1");

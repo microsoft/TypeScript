@@ -1082,7 +1082,7 @@ namespace ts {
                     // fall through
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement: {
-                        const decl = <VariableDeclaration> node;
+                        const decl = <VariableDeclaration>node;
                         if (isBindingPattern(decl.name)) {
                             forEachChild(decl.name, visit);
                             break;
@@ -2040,7 +2040,7 @@ namespace ts {
     function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
         commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
-            typeof o.type === "object" && !forEachValue(<Map<any>> o.type, v => typeof v !== "number"));
+            typeof o.type === "object" && !forEachValue(<Map<any>>o.type, v => typeof v !== "number"));
 
         options = clone(options);
 
