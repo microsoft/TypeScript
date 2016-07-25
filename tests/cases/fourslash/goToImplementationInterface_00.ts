@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// Should go to definitions in object literals in variable like declarations when invoked on interface
+
 //// interface Fo/*interface_definition*/o {
 ////     hello: () => void
 //// }

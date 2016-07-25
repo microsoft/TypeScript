@@ -1,7 +1,9 @@
 /// <reference path='fourslash.ts'/>
 
+// Should not return implementations in classes with a shared parent that implements the interface
+
 //// interface Foo {
-////     hello (): void;
+////     he/*declaration*/llo (): void;
 //// }
 ////
 //// class Bar extends SuperBar {
@@ -20,4 +22,7 @@
 //// }
 
 goTo.marker("function_call");
+verify.allRangesAppearInImplementationList();
+
+goTo.marker("declaration");
 verify.allRangesAppearInImplementationList();

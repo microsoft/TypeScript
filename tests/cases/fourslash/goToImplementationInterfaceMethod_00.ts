@@ -1,7 +1,9 @@
 /// <reference path='fourslash.ts'/>
 
+// Should return method implementations in object literals within variable-like declarations
+
 //// interface Foo {
-////     hello: () => void
+////     he/*declaration*/llo: () => void
 //// }
 ////
 //// var bar: Foo = { [|hello: helloImpl|] };
@@ -19,4 +21,7 @@
 //// }
 
 goTo.marker("function_call");
+verify.allRangesAppearInImplementationList();
+
+goTo.marker("declaration");
 verify.allRangesAppearInImplementationList();

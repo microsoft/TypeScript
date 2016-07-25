@@ -1,7 +1,9 @@
 /// <reference path='fourslash.ts'/>
 
+// Should handle calls made on this
+
 //// interface Foo {
-////     hello (): void;
+////     he/*declaration*/llo (): void;
 //// }
 ////
 //// class SuperBar implements Foo {
@@ -18,4 +20,7 @@
 
 
 goTo.marker("function_call");
+verify.allRangesAppearInImplementationList();
+
+goTo.marker("declaration");
 verify.allRangesAppearInImplementationList();

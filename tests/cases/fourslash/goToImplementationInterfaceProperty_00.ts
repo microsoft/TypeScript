@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// Should handle property assignments in object literals within variable like declarations
+
 //// interface Foo {
 ////     hello: number
 //// }
@@ -8,7 +10,7 @@
 ////
 ////
 //// function whatever(x: Foo = { [|hello: 5 * 9|] }) {
-////     x.he/*reference*/llo()
+////     x.he/*reference*/llo
 //// }
 ////
 //// class Bar {

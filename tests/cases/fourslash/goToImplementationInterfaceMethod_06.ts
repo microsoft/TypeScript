@@ -1,7 +1,9 @@
 /// <reference path='fourslash.ts'/>
 
+// Should not return references to parent interfaces even if the method is declared there
+
 //// interface SuperFoo {
-////     hello (): void;
+////     hel/*declaration*/lo (): void;
 //// }
 ////
 //// interface Foo extends SuperFoo {}
@@ -25,4 +27,7 @@
 //// }
 
 goTo.marker("function_call");
+verify.allRangesAppearInImplementationList();
+
+goTo.marker("declaration");
 verify.allRangesAppearInImplementationList();

@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// Should go to function literals that implement the interface within variable like declarations when invoked on an interface
+
 //// interface Fo/*interface_definition*/o {
 ////     (a: number): void
 //// }

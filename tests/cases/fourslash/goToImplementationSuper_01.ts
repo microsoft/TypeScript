@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// Should go to the super class declaration when invoked on the super keyword in a property access expression
+
 //// [|class Foo {
 ////     hello() {}
 //// }|]

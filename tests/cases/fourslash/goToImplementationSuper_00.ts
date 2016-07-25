@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// Should go to super class declaration when invoked on a super call expression
+
 //// [|class Foo {
 ////     constructor() {}
 //// }|]

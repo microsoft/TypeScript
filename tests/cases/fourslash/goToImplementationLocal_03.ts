@@ -1,6 +1,8 @@
 /// <reference path='fourslash.ts'/>
 
-//// const he/*local_var*/llo = [|{}|];
+// Should return the definition when invoked on variable assignment
+
+//// let [|he/*local_var*/llo = {}|];
 ////
 //// x.hello();
 ////

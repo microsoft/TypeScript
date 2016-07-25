@@ -1,7 +1,9 @@
 /// <reference path='fourslash.ts'/>
 
+// Should handle calls made on super
+
 //// interface Foo {
-////     hello (): void;
+////     hell/*declaration*/o (): void;
 //// }
 ////
 //// class Bar extends SuperBar {
@@ -19,4 +21,7 @@
 //// }
 
 goTo.marker("function_call");
+verify.allRangesAppearInImplementationList();
+
+goTo.marker("declaration");
 verify.allRangesAppearInImplementationList();

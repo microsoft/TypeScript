@@ -1,7 +1,9 @@
 /// <reference path='fourslash.ts'/>
 
+// Should return implementations when left hand side of function call is an abstract class
+
 //// interface Foo {
-////     hello(): void
+////     he/*declaration*/llo(): void
 //// }
 ////
 //// abstract class AbstractBar implements Foo {
@@ -12,9 +14,12 @@
 ////     [|hello() {}|]
 //// }
 ////
-//// function whatever(a: Foo) {
+//// function whatever(a: AbstractBar) {
 ////     a.he/*function_call*/llo();
 //// }
 
 goTo.marker("function_call");
+verify.allRangesAppearInImplementationList();
+
+goTo.marker("declaration");
 verify.allRangesAppearInImplementationList();

@@ -1,6 +1,8 @@
 /// <reference path='fourslash.ts'/>
 
-//// interface Foo { hello(): void }
+// Should return implementations in a simple class
+
+//// interface Foo { hel/*declaration*/lo(): void }
 ////
 //// class Bar implements Foo {
 ////     [|hello () {}|]
@@ -13,4 +15,7 @@
 //// whatever(new Bar());
 
 goTo.marker("function_call");
+verify.allRangesAppearInImplementationList();
+
+goTo.marker("declaration");
 verify.allRangesAppearInImplementationList();
