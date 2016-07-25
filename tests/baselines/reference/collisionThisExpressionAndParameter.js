@@ -167,3 +167,4 @@ function f3(_this) {
     var _this = this;
     (function (x) { console.log(_this.x); });
 }
+ // no code gen - no error

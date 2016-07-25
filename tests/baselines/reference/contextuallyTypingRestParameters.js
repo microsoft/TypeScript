@@ -9,9 +9,9 @@ var x: (...y: string[]) => void = function (.../*3*/y) {
 
 //// [contextuallyTypingRestParameters.js]
 var x = function () {
-    var y = [];
+    var /*3*/ y = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        y[_i - 0] = arguments[_i];
+        /*3*/ y[_i - 0] = arguments[_i];
     }
     var t = y;
     var x2 = t; // This should be error

@@ -34,5 +34,5 @@ extractIndexer((_b = {},
 extractIndexer((_c = {},
     _c["" || 0] = "",
     _c
-)); // Should return any (widened form of undefined)
-var _a, _b, _c;
+));
+var _a, _b, _c; // Should return any (widened form of undefined)

@@ -12,7 +12,7 @@ var /*2*/x = point.x;
 point./*3*/x = 30;
 
 //// [declFileObjectLiteralWithAccessors.js]
-function makePoint(x) {
+function /*1*/ makePoint(x) {
     return {
         b: 10,
         get x() { return x; },
@@ -22,7 +22,7 @@ function makePoint(x) {
 ;
 var /*4*/ point = makePoint(2);
 var /*2*/ x = point.x;
-point.x = 30;
+point./*3*/ x = 30;
 
 
 //// [declFileObjectLiteralWithAccessors.d.ts]

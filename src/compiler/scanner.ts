@@ -619,7 +619,7 @@ namespace ts {
                         return result;
                     }
                     else if (needToSkipTrailingComment) {
-                        // skip the first line if not trailing.
+                        // skip the first line if not trailing (it'll be part of the trailing comment).
                         needToSkipTrailingComment = false;
                         result = undefined;
                     }
@@ -659,10 +659,14 @@ namespace ts {
                             }
                         }
 
-                        if (!result) {
-                            result = [];
+                        // if we are at the end of the file, don't add trailing comments.
+                        // end-of-file comments are added as leading comment of the end-of-file token.
+                        if (pos < text.length || !trailing) {
+                            if (!result) {
+                                result = [];
+                            }
+                            result.push({ pos: startPos, end: pos, hasTrailingNewLine, kind });
                         }
-                        result.push({ pos: startPos, end: pos, hasTrailingNewLine, kind });
                         continue;
                     }
                     break;
@@ -676,10 +680,10 @@ namespace ts {
                     }
                     break;
             }
-            return result;
+            return !trailing ? result : undefined;
         }
 
-        return result;
+        return !trailing ? result : undefined;
     }
 
     export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] {
