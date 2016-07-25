@@ -6,11 +6,11 @@ export class Rule extends Lint.Rules.AbstractRule {
     public static TRAILING_FAILURE_STRING = "Excess trailing whitespace found around type assertion.";
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
-        return this.applyWithWalker(new TypeAssertionWhitesapceWalker(sourceFile, this.getOptions()));
+        return this.applyWithWalker(new TypeAssertionWhitespaceWalker(sourceFile, this.getOptions()));
     }
 }
 
-class TypeAssertionWhitesapceWalker extends Lint.RuleWalker {
+class TypeAssertionWhitespaceWalker extends Lint.RuleWalker {
     public visitNode(node: ts.Node) {
         if (node.kind === ts.SyntaxKind.TypeAssertionExpression) {
             const refined = node as ts.TypeAssertion;
