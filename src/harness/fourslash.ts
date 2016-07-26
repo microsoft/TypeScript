@@ -245,14 +245,7 @@ namespace FourSlash {
         constructor(private basePath: string, private testType: FourSlashTestType, public testData: FourSlashData) {
             // Create a new Services Adapter
             this.cancellationToken = new TestCancellationToken();
-            const compilationOptions = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
-            if (compilationOptions.typeRoots) {
-                compilationOptions.typeRoots = compilationOptions.typeRoots.map(p => ts.getNormalizedAbsolutePath(p, this.basePath));
-            }
-
-            const languageServiceAdapter = this.getLanguageServiceAdapter(testType, this.cancellationToken, compilationOptions);
-            this.languageServiceAdapterHost = languageServiceAdapter.getHost();
-            this.languageService = languageServiceAdapter.getLanguageService();
+            let compilationOptions = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
 
             // Initialize the language service with all the scripts
             let startResolveFileRef: FourSlashFile;
@@ -260,6 +253,22 @@ namespace FourSlash {
             ts.forEach(testData.files, file => {
                 // Create map between fileName and its content for easily looking up when resolveReference flag is specified
                 this.inputFiles[file.fileName] = file.content;
+
+                if (ts.getBaseFileName(file.fileName).toLowerCase() === "tsconfig.json") {
+                    const configJson = ts.parseConfigFileTextToJson(file.fileName, file.content);
+                    assert.isTrue(configJson.config !== undefined);
+
+                    // Extend our existing compiler options so that we can also support tsconfig only options
+                    if (configJson.config.compilerOptions) {
+                        let baseDir = ts.normalizePath(ts.getDirectoryPath(file.fileName));
+                        let tsConfig = ts.convertCompilerOptionsFromJson(configJson.config.compilerOptions, baseDir, file.fileName);
+
+                        if (!tsConfig.errors || !tsConfig.errors.length) {
+                            compilationOptions = ts.extend(compilationOptions, tsConfig.options);
+                        }
+                    }
+                }
+
                 if (!startResolveFileRef && file.fileOptions[metadataOptionNames.resolveReference] === "true") {
                     startResolveFileRef = file;
                 }
@@ -268,6 +277,15 @@ namespace FourSlash {
                     throw new Error("There exists a Fourslash file which has resolveReference flag specified; remove duplicated resolveReference flag");
                 }
             });
+
+
+            if (compilationOptions.typeRoots) {
+                compilationOptions.typeRoots = compilationOptions.typeRoots.map(p => ts.getNormalizedAbsolutePath(p, this.basePath));
+            }
+
+            const languageServiceAdapter = this.getLanguageServiceAdapter(testType, this.cancellationToken, compilationOptions);
+            this.languageServiceAdapterHost = languageServiceAdapter.getHost();
+            this.languageService = languageServiceAdapter.getLanguageService();
 
             if (startResolveFileRef) {
                 // Add the entry-point file itself into the languageServiceShimHost

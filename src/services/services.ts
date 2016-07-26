@@ -1757,6 +1757,12 @@ namespace ts {
         owners: string[];
     }
 
+    interface VisibleModuleInfo {
+        moduleName: string;
+        moduleDir: string;
+        canBeImported: boolean;
+    }
+
     export interface DisplayPartsSymbolWriter extends SymbolWriter {
         displayParts(): SymbolDisplayPart[];
     }
@@ -4438,18 +4444,100 @@ namespace ts {
             /**
              * Check all of the declared modules and those in node modules. Possible sources of modules:
              *      Modules that are found by the type checker
+             *      Modules found relative to "baseUrl" compliler options (including patterns from "paths" compiler option)
              *      Modules from node_modules (i.e. those listed in package.json)
              *          This includes all files that are found in node_modules/moduleName/ with acceptable file extensions
              */
             function getCompletionEntriesForNonRelativeModules(fragment: string, scriptPath: string): CompletionEntry[] {
-                return ts.map(enumeratePotentialNonRelativeModules(fragment, scriptPath), (moduleName) => {
-                    return {
-                        name: moduleName,
-                        kind: ScriptElementKind.externalModuleName,
-                        kindModifiers: ScriptElementKindModifier.none,
-                        sortText: moduleName
-                    };
+                const options = program.getCompilerOptions();
+                const { baseUrl, paths } = options;
+
+                let result: CompletionEntry[];
+
+                if (baseUrl) {
+                    const fileExtensions = getSupportedExtensions(options);
+                    const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(host.getCurrentDirectory(), baseUrl)
+                    result = getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/false);
+
+                    if (paths) {
+                        for (var path in paths) {
+                            if (paths.hasOwnProperty(path)) {
+                                if (path === "*") {
+                                    if (paths[path]) {
+                                        forEach(paths[path], pattern => {
+                                            forEach(getModulesForPathsPattern(fragment, baseUrl, pattern, fileExtensions), match => {
+                                                result.push(createCompletionEntryForModule(match, ScriptElementKind.externalModuleName));
+                                            });
+                                        });
+                                    }
+                                }
+                                else if (startsWith(path, fragment)) {
+                                    const entry = paths[path] && paths[path].length === 1 && paths[path][0];
+                                    if (entry) {
+                                        result.push(createCompletionEntryForModule(path, ScriptElementKind.externalModuleName));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else {
+                    result = [];
+                }
+
+
+
+                forEach(enumeratePotentialNonRelativeModules(fragment, scriptPath), moduleName => {
+                    result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName));
                 });
+
+                return result;
+            }
+
+            function getModulesForPathsPattern(fragment: string, baseUrl: string, pattern: string, fileExtensions: string[]): string[] {
+                const parsed = hasZeroOrOneAsteriskCharacter(pattern) ? tryParsePattern(pattern) : undefined;
+                if (parsed) {
+                    const hasTrailingSlash = parsed.prefix.charAt(parsed.prefix.length - 1) === "/" || parsed.prefix.charAt(parsed.prefix.length - 1) === "\\";
+
+                    // The prefix has two effective parts: the directory path and the base component after the filepath that is not a
+                    // full directory component. For example: directory/path/of/prefix/base*
+                    const normalizedPrefix = hasTrailingSlash ? ensureTrailingDirectorySeparator(normalizePath(parsed.prefix)) : normalizePath(parsed.prefix);
+                    const normalizedPrefixDirectory = getDirectoryPath(normalizedPrefix);
+                    const normalizedPrefixBase = getBaseFileName(normalizedPrefix);
+
+                    const fragmentHasPath = fragment.indexOf(directorySeparator) !== -1;
+
+                    // Try and expand the prefix to include any path from the fragment so that we can limit the readDirectory call
+                    const expandedPrefixDir = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + getDirectoryPath(fragment)) : normalizedPrefixDirectory;
+
+                    const normalizedSuffix = normalizePath(parsed.suffix);
+                    const baseDirectory = combinePaths(baseUrl, expandedPrefixDir);
+                    const completePrefix = fragmentHasPath ? baseDirectory : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
+
+                    // If we have a suffix, then we need to read the directory all the way down. We could create a glob
+                    // that encodes the suffix, but we would have to escape the character "?" which readDirectory
+                    // doesn't support. For now, this is safer but slower
+                    const includeGlob = normalizedSuffix ? "**/*" : "./*"
+
+                    const matches = host.readDirectory(baseDirectory, fileExtensions, undefined, [includeGlob]);
+                    const result: string[] = [];
+
+                    // Trim away prefix and suffix
+                    forEach(matches, match => {
+                        const normalizedMatch = normalizePath(match);
+                        if (!endsWith(normalizedMatch, normalizedSuffix) || !startsWith(normalizedMatch, completePrefix)) {
+                            return;
+                        }
+
+                        const start = completePrefix.length;
+                        const length = normalizedMatch.length - start - normalizedSuffix.length;
+
+                        result.push(removeFileExtension(normalizedMatch.substr(start, length)));
+                    });
+                    return result;
+                }
+
+                return undefined;
             }
 
             function enumeratePotentialNonRelativeModules(fragment: string, scriptPath: string): string[] {
@@ -4510,6 +4598,112 @@ namespace ts {
                 }
 
                 return undefined;
+            }
+        }
+
+        function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string, modulePrefix?: string) {
+            const result: VisibleModuleInfo[] = [];
+            findPackageJsons(scriptPath).forEach((packageJson) => {
+                const package = tryReadingPackageJson(packageJson);
+                if (!package) {
+                    return;
+                }
+
+                const nodeModulesDir = combinePaths(getDirectoryPath(packageJson), "node_modules");
+                const foundModuleNames: string[] = [];
+
+                if (package.dependencies) {
+                    addPotentialPackageNames(package.dependencies, modulePrefix, foundModuleNames);
+                }
+                if (package.devDependencies) {
+                    addPotentialPackageNames(package.devDependencies, modulePrefix, foundModuleNames);
+                }
+
+                forEach(foundModuleNames, (moduleName) => {
+                    const moduleDir = combinePaths(nodeModulesDir, moduleName);
+                    result.push({
+                        moduleName,
+                        moduleDir,
+                        canBeImported: moduleCanBeImported(moduleDir)
+                    });
+                });
+            });
+
+            return result;
+
+            function findPackageJsons(currentDir: string): string[] {
+                const paths: string[] = [];
+                let currentConfigPath: string;
+                while (true) {
+                    currentConfigPath = findConfigFile(currentDir, (f) => host.fileExists(f), "package.json");
+                    if (currentConfigPath) {
+                        paths.push(currentConfigPath);
+
+                        currentDir = getDirectoryPath(currentConfigPath);
+                        const parent = getDirectoryPath(currentDir);
+                        if (currentDir === parent) {
+                            break;
+                        }
+                        currentDir = parent;
+                    }
+                    else {
+                        break;
+                    }
+                }
+
+                return paths;
+            }
+
+            function tryReadingPackageJson(filePath: string) {
+                try {
+                    const fileText = host.readFile(filePath);
+                    return JSON.parse(fileText);
+                }
+                catch (e) {
+                    return undefined;
+                }
+            }
+
+            function addPotentialPackageNames(dependencies: any, prefix: string, result: string[]) {
+                for (const dep in dependencies) {
+                    if (dependencies.hasOwnProperty(dep) && (!prefix || startsWith(dep, prefix))) {
+                        result.push(dep);
+                    }
+                }
+            }
+
+            /*
+            * A module can be imported by name alone if one of the following is true:
+            *     It defines the "typings" property in its package.json
+            *     The module has a "main" export and an index.d.ts file
+            *     The module has an index.ts
+            */
+            function moduleCanBeImported(modulePath: string): boolean {
+                const packagePath = combinePaths(modulePath, "package.json");
+
+                let hasMainExport = false;
+                if (host.fileExists(packagePath)) {
+                    const package = tryReadingPackageJson(packagePath);
+                    if (package) {
+                        if (package.typings) {
+                            return true;
+                        }
+                        hasMainExport = !!package.main;
+                    }
+                }
+
+                hasMainExport = hasMainExport || host.fileExists(combinePaths(modulePath, "index.js"));
+
+                return (hasMainExport && host.fileExists(combinePaths(modulePath, "index.d.ts"))) || host.fileExists(combinePaths(modulePath, "index.ts"));
+            }
+        }
+
+        function createCompletionEntryForModule(name: string, kind: string): CompletionEntry {
+            return {
+                name,
+                kind,
+                kindModifiers: ScriptElementKindModifier.none,
+                sortText: name
             }
         }
 
