@@ -1434,10 +1434,11 @@ namespace ts {
                 const func = node.parent as FunctionLikeDeclaration;
                 const comments = getJSDocComments(func, checkParentVariableStatement);
                 const parameters = concatMap(comments, comment => filter(comment.tags, tag => tag.kind === SyntaxKind.JSDocParameterTag));
+                // TODO: Use name instead of index
                 const i = indexOf(func.parameters, node);
                 if (parameters && i < parameters.length) {
                     Debug.assert(i > -1);
-                    Debug.assert(!!parameters[i]); // ?
+                    Debug.assert(!!parameters[i]);
                     result = append(result, [parameters[i]]);
                 }
             }

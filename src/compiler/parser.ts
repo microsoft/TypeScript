@@ -6125,12 +6125,20 @@ namespace ts {
                     let seenAsterisk = true;
 
                     nextJSDocToken();
+                    skipSpaces();
+                    if (token === SyntaxKind.NewLineTrivia) {
+                        canParseTag = true;
+                        seenAsterisk = false;
+                        nextJSDocToken();
+                    }
                     while (token !== SyntaxKind.EndOfFileToken) {
                         switch (token) {
                             case SyntaxKind.AtToken:
                                 if (canParseTag) {
+                                    popLastNewline(comments);
                                     parseTag();
                                     // This will take us past the end of the line, so it's OK to parse a tag on the next pass through the loop
+                                    // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag. But real-world comments may break this rule.
                                     seenAsterisk = false;
                                 }
                                 else {
@@ -6140,6 +6148,7 @@ namespace ts {
 
                             case SyntaxKind.NewLineTrivia:
                                 // After a line break, we can parse a tag, and we haven't seen an asterisk on the next line yet
+                                comments.push(scanner.getTokenText());
                                 canParseTag = true;
                                 seenAsterisk = false;
                                 break;
@@ -6155,7 +6164,7 @@ namespace ts {
                                 break;
 
                             case SyntaxKind.Identifier:
-                                // Anything else is doc comment text.  We can't do anything with it.  Because it
+                                // Anything else is doc comment text. We just save it. Because it
                                 // wasn't a tag, we can no longer parse a tag on this line until we hit the next
                                 // line break.
                                 canParseTag = false;
@@ -6190,12 +6199,18 @@ namespace ts {
                     // 4. child comments might need to cross lines until the next tag appears.
 
                     // 6. get *all* tests to pass
-
+                    popLastNewline(comments);
                     result = createJSDocComment();
 
                 });
 
                 return result;
+
+                function popLastNewline(comments: string[]) {
+                    if (comments.length && comments[comments.length - 1] === "\n") {
+                        comments.pop();
+                    }
+                }
 
                 function isJsDocStart(content: string, start: number) {
                     return content.charCodeAt(start) === CharacterCodes.slash &&
@@ -6208,8 +6223,14 @@ namespace ts {
                     // TODO: Previously we bailed if tags wasn't defined, but now that we also care about comment, it should be OK to continue... right?
                     const result = <JSDocComment>createNode(SyntaxKind.JSDocComment, start);
                     result.tags = tags;
-                    result.comment = comments.join("");
+                    result.comment = comments.length ? comments.join("") : undefined;
                     return finishNode(result, end);
+                }
+
+                function skipSpaces(): void {
+                    while (token === SyntaxKind.WhitespaceTrivia) {
+                        nextJSDocToken();
+                    }
                 }
 
                 function skipWhitespace(): void {
