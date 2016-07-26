@@ -1,3 +1,4 @@
+/** @internal */
 namespace ts {
     export function createGetSymbolWalker(
         getRestTypeOfSignature: (sig: Signature) => Type,
