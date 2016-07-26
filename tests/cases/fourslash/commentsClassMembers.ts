@@ -131,7 +131,6 @@
 ////        th/*116*/is./*114*/a = /*115*/a + 2 + bb/*117*/bb;
 ////    }
 ////}
-
 goTo.marker('1');
 verify.quickInfoIs("class c1", "This is comment for c1");
 
@@ -686,8 +685,8 @@ goTo.marker('113');
 verify.quickInfoIs("(property) cProperties.nc_p1: number", "");
 
 goTo.marker('114');
-verify.memberListContains("a", "(property) cWithConstructorProperty.a: number", "more info about a");
-verify.quickInfoIs("(property) cWithConstructorProperty.a: number", "more info about a");
+verify.memberListContains("a", "(property) cWithConstructorProperty.a: number", "this is first parameter a\nmore info about a");
+verify.quickInfoIs("(property) cWithConstructorProperty.a: number", "this is first parameter a\nmore info about a");
 
 goTo.marker('115');
 verify.completionListContains("a", "(parameter) a: number", "this is first parameter a\nmore info about a");
