@@ -8,7 +8,7 @@ edit.deleteAtCaret('class Bar { }'.length);
 verify.navigationBar([
     {
         "text": "<global>",
-        "kind": "module",
+        "kind": "script",
         "childItems": [
             {
                 "text": "Foo",
