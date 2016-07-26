@@ -20,3 +20,5 @@ declare module "into-stream" {
     }
     export = IntoStream;
 }
+
+declare module "sorcery";

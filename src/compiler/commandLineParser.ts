@@ -28,6 +28,10 @@ namespace ts {
             type: "boolean",
         },
         {
+            name: "extendedDiagnostics",
+            type: "boolean",
+        },
+        {
             name: "emitBOM",
             type: "boolean"
         },
@@ -689,9 +693,6 @@ namespace ts {
         return output;
     }
 
-    // Skip over any minified JavaScript files (ending in ".min.js")
-    // Skip over dotted files and folders as well
-    const ignoreFileNamePattern = /(\.min\.js$)|([\\/]\.[\w.])/;
     /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
@@ -1000,10 +1001,6 @@ namespace ts {
                 // <file>.d.ts (or <file>.js if "allowJs" is enabled) in the same
                 // directory when they are compilation outputs.
                 if (hasFileWithHigherPriorityExtension(file, literalFileMap, wildcardFileMap, supportedExtensions, keyMapper)) {
-                    continue;
-                }
-
-                if (ignoreFileNamePattern.test(file)) {
                     continue;
                 }
 
