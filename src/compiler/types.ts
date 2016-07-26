@@ -2625,7 +2625,7 @@ namespace ts {
 
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol | undefined;
 
-        getSymbolWalker(accept?: (symbol: Symbol) => boolean): SymbolWalker;
+        /* @internal */ getSymbolWalker(accept?: (symbol: Symbol) => boolean): SymbolWalker;
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
@@ -2671,6 +2671,7 @@ namespace ts {
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
     }
 
+    /* @internal */
     export interface SymbolWalker {
         visitType(type: Type): void;
         visitSymbol(symbol: Symbol): void;
