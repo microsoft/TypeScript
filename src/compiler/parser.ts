@@ -6275,7 +6275,7 @@ namespace ts {
 
                 function addTag(tag: JSDocTag, comments: string[]): void {
                     if (tag) {
-                        tag.comments = comments.join("");
+                        tag.comment = comments.join("");
 
                         if (!tags) {
                             tags = <NodeArray<JSDocTag>>[];

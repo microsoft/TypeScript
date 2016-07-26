@@ -190,6 +190,22 @@ namespace ts {
         return result;
     }
 
+    export function concatMap<T, U>(array: T[], f: (x: T) => U[]): U[] {
+        let result: U[];
+        if (array) {
+            result = [];
+            for (const v of array) {
+                const xs = f(v);
+                if (xs) {
+                    for (const x of xs) {
+                        result.push(x);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;

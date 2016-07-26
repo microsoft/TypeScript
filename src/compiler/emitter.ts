@@ -8330,7 +8330,7 @@ const _super = (function (geti, seti) {
              * from x because there is no token for ','.
              */
             function emitLeadingCommentsAtEnd(node: Node | NodeArray<any>) {
-                emitLeadingCommentsOfPositionWorker(node.end, false);
+                emitLeadingCommentsOfPositionWorker(node.end, /*trailingSeparator*/ false);
             }
 
             function emitLeadingCommentsOfPositionWorker(pos: number, trailingSeparator = true) {

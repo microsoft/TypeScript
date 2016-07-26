@@ -1501,15 +1501,14 @@ namespace ts {
 
     // @kind(SyntaxKind.JSDocComment)
     export interface JSDocComment extends Node {
-        tags: NodeArray<JSDocTag>;
+        tags: NodeArray<JSDocTag>; // TODO: Rename to children
         comment: string | undefined; // TODO: Probably shouldn't admit undefined (and maybe it should be comments: string[] | undefined)
     }
 
     // @kind(SyntaxKind.JSDocTag)
-    export interface JSDocTag extends Node {
-        atToken: Node;
-        tagName: Identifier;
-        comments: string | undefined;
+    export interface JSDocTag extends JSDocComment {
+        atToken: Node; // TODO: Push fields to superclass, make optional and get rid of this class
+        tagName: Identifier; // -OR- reflatten hierarchy and create a union alias.
     }
 
     // @kind(SyntaxKind.JSDocTemplateTag)
