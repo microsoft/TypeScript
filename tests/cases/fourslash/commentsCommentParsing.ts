@@ -48,7 +48,7 @@
 ////}
 ////jsDocMi/*7q*/xedComments2(/*7*/);
 ////
-/////** jsdoc comment */ /*** another jsDocComment*/
+/////** jsdoc comment */ /*** malformed jsDocComment*/
 /////// Triple slash comment
 ////function jsDocMixedComments3() {
 ////}
@@ -238,9 +238,9 @@ goTo.marker('7q');
 verify.quickInfoIs("function jsDocMixedComments2(): void", "jsdoc comment \nanother jsDocComment");
 
 goTo.marker('8');
-verify.currentSignatureHelpDocCommentIs("jsdoc comment \n* another jsDocComment");
+verify.currentSignatureHelpDocCommentIs("jsdoc comment ");
 goTo.marker('8q');
-verify.quickInfoIs("function jsDocMixedComments3(): void", "jsdoc comment \n* another jsDocComment");
+verify.quickInfoIs("function jsDocMixedComments3(): void", "jsdoc comment ");
 
 goTo.marker('9');
 verify.currentSignatureHelpDocCommentIs("jsdoc comment \nanother jsDocComment");
@@ -295,33 +295,33 @@ verify.completionListContains("a", "(parameter) a: number", "first number");
 verify.completionListContains("b", "(parameter) b: number", "second number");
 
 goTo.marker('19');
-verify.currentSignatureHelpDocCommentIs("This is multiplication function\n@anotherTag\n@anotherTag");
+verify.currentSignatureHelpDocCommentIs("This is multiplication function");
 verify.currentParameterHelpArgumentDocCommentIs("first number");
 goTo.marker('19q');
-verify.quickInfoIs("function multiply(a: number, b: number, c?: number, d?: any, e?: any): void", "This is multiplication function\n@anotherTag\n@anotherTag");
+verify.quickInfoIs("function multiply(a: number, b: number, c?: number, d?: any, e?: any): void", "This is multiplication function");
 goTo.marker('19aq');
 verify.quickInfoIs("(parameter) a: number", "first number");
 
 goTo.marker('20');
-verify.currentSignatureHelpDocCommentIs("This is multiplication function\n@anotherTag\n@anotherTag");
+verify.currentSignatureHelpDocCommentIs("This is multiplication function");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('20aq');
 verify.quickInfoIs("(parameter) b: number", "");
 
 goTo.marker('21');
-verify.currentSignatureHelpDocCommentIs("This is multiplication function\n@anotherTag\n@anotherTag");
+verify.currentSignatureHelpDocCommentIs("This is multiplication function");
 verify.currentParameterHelpArgumentDocCommentIs("{");
 goTo.marker('21aq');
 verify.quickInfoIs("(parameter) c: number", "{");
 
 goTo.marker('22');
-verify.currentSignatureHelpDocCommentIs("This is multiplication function\n@anotherTag\n@anotherTag");
+verify.currentSignatureHelpDocCommentIs("This is multiplication function");
 verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('22aq');
 verify.quickInfoIs("(parameter) d: any", "");
 
 goTo.marker('23');
-verify.currentSignatureHelpDocCommentIs("This is multiplication function\n@anotherTag\n@anotherTag");
+verify.currentSignatureHelpDocCommentIs("This is multiplication function");
 verify.currentParameterHelpArgumentDocCommentIs("LastParam ");
 goTo.marker('23aq');
 verify.quickInfoIs("(parameter) e: any", "LastParam ");
