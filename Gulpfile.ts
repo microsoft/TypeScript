@@ -928,6 +928,7 @@ const tslintRules = [
     "noInOperatorRule",
     "noIncrementDecrementRule",
     "objectLiteralSurroundingSpaceRule",
+    "enforceConsecutiveFunctionOverloadRule"
 ];
 const tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
