@@ -551,7 +551,7 @@ var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibr
 compileFile(
     tsserverLibraryFile,
     languageServiceLibrarySources,
-    [builtLocalDirectory, copyright].concat(languageServiceLibrarySources),
+    [builtLocalDirectory, copyright, builtLocalCompiler].concat(languageServiceLibrarySources).concat(libraryTargets),
     /*prefixes*/ [copyright],
     /*useBuiltCompiler*/ true,
     { noOutFile: false, generateDeclarations: true });
@@ -562,7 +562,7 @@ task("lssl", [tsserverLibraryFile, tsserverLibraryDefinitionFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON]);
+task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON, "lssl"]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -617,7 +617,7 @@ task("generate-spec", [specMd]);
 
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
-task("LKG", ["clean", "release", "local", "lssl"].concat(libraryTargets), function() {
+task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
     var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
