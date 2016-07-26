@@ -3087,5 +3087,9 @@
     "Encapsulate Field": {
         "category": "CodeRefactor",
         "code": 100010
+    },
+    "Convert Get property to Method": {
+        "category": "CodeRefactor",
+        "code": 100011
     }
 }
