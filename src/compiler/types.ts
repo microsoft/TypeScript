@@ -1872,6 +1872,100 @@ namespace ts {
         getJsxIntrinsicTagNames(): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
 
+        /**
+         * Two types are considered identical when
+         *  - they are both the `any` type,
+         *  - they are the same primitive type,
+         *  - they are the same type parameter,
+         *  - they are union types with identical sets of constituent types, or
+         *  - they are intersection types with identical sets of constituent types, or
+         *  - they are object types with identical sets of members.
+         *
+         * This relationship is bidirectional.
+         * See [here](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.11.2) for more information.
+         */
+        isIdenticalTo(a: Type, b: Type): boolean;
+        /**
+         * `a` is a ___subtype___ of `b` (and `b` is a ___supertype___ of `a`) if `a` has no excess properties with respect to `b`,
+         *  and one of the following is true:
+         *  - `a` and `b` are identical types.
+         *  - `b` is the `any` type.
+         *  - `a` is the `undefined` type.
+         *  - `a` is the `null` type and `b` is _not_ the `undefined` type.
+         *  - `a` is an enum type and `b` is the primitive type `number`.
+         *  - `a` is a string literal type and `b` is the primitive type `string`.
+         *  - `a` is a union type and each constituient type of `b` is a subtype of `b`.
+         *  - `a` is an intersection type and at least one constituent type of `a` is a subtype of `b`.
+         *  - `b` is a union type and `a` is a subtype of at least one constituent type of `b`.
+         *  - `b` is an intersection type and `a` is a subtype of each constituent type of `b`.
+         *  - `a` is a type parameter and the constraint of `a` is a subtype of `b`.
+         *  - `a` has a subset of the structural members of `b`.
+         *
+         * This relationship is directional.
+         * See [here](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.11.3) for more information.
+         */
+        isSubtypeOf(a: Type, b: Type): boolean;
+        /**
+         * The assignable relationship differs only from the subtype relationship in that:
+         *  - the `any` type is assignable to, but not a subtype of, all types
+         *  - the primitive type `number` is assignable to, but not a subtype of, all enum types, and
+         *  - an object type without a particular property is assignable to an object type in which that property is optional.
+         *
+         * This relationship is directional.
+         * See [here](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#3.11.4) for more information.
+         */
+        isAssignableTo(a: Type, b: Type): boolean;
+        /**
+         * True if `a` is assignable to `b`, or `b` is assignable to `a`. Additionally, all unions with
+         * overlapping constituient types are comparable, and unit types in the same domain are comparable.
+         * This relationship is bidirectional.
+         */
+        isComparableTo(a: Type, b: Type): boolean;
+        /**
+         * Not a formal relationship - returns true if a is an instantiation of the generic type b
+         */
+        isInstantiationOf(a: GenericType, b: GenericType): boolean;
+
+        /**
+         * Returns the declared type of the globally named symbol with meaning SymbolFlags.Type
+         *  Returns the unknown type on failure.
+         */
+        lookupGlobalType(name: string): Type;
+        /**
+         * Returns the declared type of the globally named symbol with meaning SymbolFlags.Value
+         *  Returns the unknown type on failure.
+         */
+        lookupGlobalValueType(name: string): Type;
+        /**
+         * Returns the declared type of the named symbol lexically at the position specified with meaning SymbolFlags.Type
+         *  Returns the unknown type on failure.
+         */
+        lookupTypeAt(name: string, position: Node): Type;
+        /**
+         * Returns the declared type of the named symbol lexically at the position specified with meaning SymbolFlags.Value
+         *  Returns the unknown type on failure.
+         */
+        lookupValueTypeAt(name: string, position: Node): Type;
+        /**
+         * Returns the type of a symbol
+         */
+        getTypeOfSymbol(symbol: Symbol): Type;
+
+        getAnyType(): Type;
+        getStringType(): Type;
+        getNumberType(): Type;
+        getBooleanType(): Type;
+        getVoidType(): Type;
+        getUndefinedType(): Type;
+        getNullType(): Type;
+        getESSymbolType(): Type;
+        getNeverType(): Type;
+        getUnknownType(): Type;
+        getStringLiteralType(text: string): LiteralType;
+        getNumberLiteralType(text: string): LiteralType;
+        getFalseType(): Type;
+        getTrueType(): Type;
+
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];

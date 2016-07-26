@@ -83,6 +83,7 @@
         "./unittests/transpile.ts",
         "./unittests/reuseProgramStructure.ts",
         "./unittests/cachingInServerLSHost.ts",
+        "./unittests/checkerPublicRelationships.ts",
         "./unittests/moduleResolution.ts",
         "./unittests/tsconfigParsing.ts",
         "./unittests/commandLineParsing.ts",

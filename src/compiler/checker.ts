@@ -103,7 +103,59 @@ namespace ts {
 
             getJsxElementAttributesType,
             getJsxIntrinsicTagNames,
-            isOptionalParameter
+            isOptionalParameter,
+
+            isIdenticalTo: (a, b) => checkTypeRelatedTo(a, b, identityRelation, /*errorNode*/undefined),
+            isSubtypeOf: (a, b) => checkTypeRelatedTo(a, b, subtypeRelation, /*errorNode*/undefined),
+            isAssignableTo: (a, b) => checkTypeRelatedTo(a, b, assignableRelation, /*errorNode*/undefined),
+            isComparableTo: areTypesComparable,
+            isInstantiationOf: (a, b) => {
+                return a && b && (a.target === b);
+            },
+
+            lookupGlobalType: name => {
+                const symbol = getSymbol(globals, name, SymbolFlags.Type);
+                return symbol ? getDeclaredTypeOfSymbol(symbol) : unknownType;
+            },
+            lookupGlobalValueType: name => {
+                const symbol = getSymbol(globals, name, SymbolFlags.Value);
+                return symbol ? getTypeOfSymbol(symbol) : unknownType;
+            },
+            lookupTypeAt: (name, node) => {
+                const symbol = resolveName(node, name, SymbolFlags.Type, /*nameNotFoundMessage*/undefined, /*nameArg*/undefined);
+                return symbol ? getDeclaredTypeOfSymbol(symbol) : unknownType;
+            },
+            lookupValueTypeAt: (name, node) => {
+                const symbol = resolveName(node, name, SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/undefined);
+                return symbol ? getTypeOfSymbol(symbol) : unknownType;
+            },
+            getTypeOfSymbol,
+
+            getAnyType: () => anyType,
+            getStringType: () => stringType,
+            getNumberType: () => numberType,
+            getBooleanType: () => booleanType,
+            getVoidType: () => voidType,
+            getUndefinedType: () => undefinedType,
+            getNullType: () => nullType,
+            getESSymbolType: () => esSymbolType,
+            getNeverType: () => neverType,
+            getUnknownType: () => unknownType,
+            getStringLiteralType: (text: string) => {
+                /* tslint:disable:no-null-keyword */
+                Debug.assert(text !== undefined && text !== null);
+                /* tslint:enable:no-null-keyword */
+                return getLiteralTypeForText(TypeFlags.StringLiteral, "" + text);
+            },
+            getNumberLiteralType: (text: string) => {
+                /* tslint:disable:no-null-keyword */
+                Debug.assert(text !== undefined && text !== null);
+                /* tslint:enable:no-null-keyword */
+                Debug.assert(typeof text === "string" || typeof text === "number"); // While not formally part of the function signature, allow coercions from numbers
+                return getLiteralTypeForText(TypeFlags.NumberLiteral, "" + text);
+            },
+            getFalseType: () => falseType,
+            getTrueType: () => trueType,
         };
 
         const tupleTypes: Map<TupleType> = {};
