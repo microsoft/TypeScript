@@ -1,19 +1,9 @@
 /// <reference path="..\harness.ts" />
 
 namespace ts {
+    const diagnosticHost: FormatDiagnosticsHost = {getNewLine: () => sys.newLine, getCanonicalFileName: name => name, getCurrentDirectory: () => ""};
     function diagnosticToString(diagnostic: Diagnostic) {
-        let output = "";
-
-        if (diagnostic.file) {
-            const loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-
-            output += `${diagnostic.file.fileName}(${loc.line + 1},${loc.character + 1}): `;
-        }
-
-        const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += `${category} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine)}${sys.newLine}`;
-
-        return output;
+        return formatDiagnostics([diagnostic], diagnosticHost);
     }
 
     interface File {
