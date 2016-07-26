@@ -1,11 +1,6 @@
 /// <reference path="..\harness.ts" />
 
 namespace ts {
-    const diagnosticHost: FormatDiagnosticsHost = {getNewLine: () => sys.newLine, getCanonicalFileName: name => name, getCurrentDirectory: () => ""};
-    function diagnosticToString(diagnostic: Diagnostic) {
-        return formatDiagnostics([diagnostic], diagnosticHost);
-    }
-
     interface File {
         name: string;
         content?: string;
@@ -312,9 +307,9 @@ namespace ts {
 
             assert.equal(program.getSourceFiles().length, expectedFilesCount);
             const syntacticDiagnostics = program.getSyntacticDiagnostics();
-            assert.equal(syntacticDiagnostics.length, 0, `expect no syntactic diagnostics, got: ${JSON.stringify(syntacticDiagnostics.map(diagnosticToString))}`);
+            assert.equal(syntacticDiagnostics.length, 0, `expect no syntactic diagnostics, got: ${JSON.stringify(Harness.Compiler.minimalDiagnosticsToString(syntacticDiagnostics))}`);
             const semanticDiagnostics = program.getSemanticDiagnostics();
-            assert.equal(semanticDiagnostics.length, 0, `expect no semantic diagnostics, got: ${JSON.stringify(semanticDiagnostics.map(diagnosticToString))}`);
+            assert.equal(semanticDiagnostics.length, 0, `expect no semantic diagnostics, got: ${JSON.stringify(Harness.Compiler.minimalDiagnosticsToString(semanticDiagnostics))}`);
 
             // try to get file using a relative name
             for (const relativeFileName of relativeNamesToCheck) {
@@ -393,7 +388,7 @@ export = C;
             };
             const program = createProgram(rootFiles, options, host);
             const diagnostics = sortAndDeduplicateDiagnostics(program.getSemanticDiagnostics().concat(program.getOptionsDiagnostics()));
-            assert.equal(diagnostics.length, diagnosticCodes.length, `Incorrect number of expected diagnostics, expected ${diagnosticCodes.length}, got '${map(diagnostics, diagnosticToString).join("\r\n")}'`);
+            assert.equal(diagnostics.length, diagnosticCodes.length, `Incorrect number of expected diagnostics, expected ${diagnosticCodes.length}, got '${Harness.Compiler.minimalDiagnosticsToString(diagnostics)}'`);
             for (let i = 0; i < diagnosticCodes.length; i++) {
                 assert.equal(diagnostics[i].code, diagnosticCodes[i], `Expected diagnostic code ${diagnosticCodes[i]}, got '${diagnostics[i].code}': '${diagnostics[i].messageText}'`);
             }
