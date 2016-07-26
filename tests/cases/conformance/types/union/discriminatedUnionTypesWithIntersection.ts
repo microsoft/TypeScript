@@ -97,3 +97,46 @@ function getValueAsString_switch_never(value: BoxIntersection & { kind: number }
             return value.str;
     }
 }
+
+type Ext = { strVal: string } & { kind:    'int' }
+         | { intVal: string } & { kind: 'string' }
+
+type Boxed2 = { kind: 'null' }
+            | BoxIntersection & Ext;
+
+function arbitraryNesting_if(value: Boxed2): void {
+    if (value.kind === 'null') {
+        return;
+    }
+
+    if (value.kind === 'int') {
+        value; // { kind: 'int', num: number } & { x: string; }
+        value.x;
+        value.num;
+        value.strVal;
+        return;
+    }
+
+    value; // { kind: 'string', str: string } & { x: string } & { intVal: string } & { kind: 'string' }
+    value.x;
+    value.str;
+    value.intVal;
+}
+
+function arbitraryNesting_switch(value: Boxed2): void {
+    switch (value.kind) {
+        case 'null':
+            return;
+
+        case 'int':
+            value.x;
+            value.num;
+            value.strVal;
+            return;
+
+        case 'string':
+            value.x;
+            value.str;
+            value.intVal;
+    }
+}

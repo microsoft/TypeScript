@@ -7811,9 +7811,12 @@ namespace ts {
                 }
                 return getIntersectionType(filteredSubtypes);
             }
-            return type.flags & TypeFlags.Union ?
-                getUnionType(filter((<UnionType>type).types, f)) :
-                f(type) ? type : neverType;
+            if (type.flags & TypeFlags.Union) {
+                return getUnionType(
+                    map((<UnionType>type).types, t => filterType(t, f))
+                );
+            }
+            return  f(type) ? type : neverType;
         }
 
         function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, includeOuterFunctions: boolean) {
