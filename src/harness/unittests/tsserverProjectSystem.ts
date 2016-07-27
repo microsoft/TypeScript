@@ -1315,7 +1315,7 @@ namespace ts {
             projectService.openClientFile(file1.path, `var x = 1;`);
             project.updateGraph();
 
-            const quickInfo = project.languageService.getQuickInfoAtPosition(file1.path, 4);
+            const quickInfo = project.getLanguageService().getQuickInfoAtPosition(file1.path, 4);
             assert.equal(quickInfo.kind, ScriptElementKind.variableElement);
 
             projectService.closeClientFile(file1.path);

@@ -135,7 +135,7 @@ namespace ts.server {
         /**
          * Container of all known scripts
          */
-        private readonly filenameToScriptInfo = createNormalizedPathMap<ScriptInfo>();
+        private readonly filenameToScriptInfo = createFileMap<ScriptInfo>();
         /**
          * maps external project file name to list of config files that were the part of this project
          */
@@ -165,12 +165,15 @@ namespace ts.server {
 
         private changedFiles: ScriptInfo[];
 
+        private toCanonicalFileName: (f: string) => string;
+
         constructor(public readonly host: ServerHost,
             public readonly logger: Logger,
             public readonly cancellationToken: HostCancellationToken,
             private readonly useSingleInferredProject: boolean,
             private readonly eventHandler?: ProjectServiceEventHandler) {
 
+            this.toCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
             this.directoryWatchers = new DirectoryWatchers(this);
             this.throttledOperations = new ThrottledOperations(host);
             // ts.disableIncrementalParsing = true;
@@ -300,7 +303,7 @@ namespace ts.server {
             // TODO: handle isOpen = true case
 
             if (!info.isOpen) {
-                this.filenameToScriptInfo.remove(info.fileName);
+                this.filenameToScriptInfo.remove(info.path);
 
                 // capture list of projects since detachAllProjects will wipe out original list 
                 const containingProjects = info.containingProjects.slice();
@@ -504,7 +507,7 @@ namespace ts.server {
             }
             if (info.containingProjects.length === 0) {
                 // if there are not projects that include this script info - delete it
-                this.filenameToScriptInfo.remove(info.fileName);
+                this.filenameToScriptInfo.remove(info.path);
             }
         }
 
@@ -878,9 +881,9 @@ namespace ts.server {
                 if (content !== undefined) {
                     info = new ScriptInfo(this.host, fileName, content, scriptKind, openedByClient, hasMixedContent);
                     info.setFormatOptions(toEditorSettings(this.getFormatCodeOptions()));
-                    this.filenameToScriptInfo.set(fileName, info);
+                    // do not watch files with mixed content - server doesn't know how to interpret it
+                    this.filenameToScriptInfo.set(info.path, info);
                     if (!info.isOpen && !hasMixedContent) {
-                        // do not watch files with mixed content - server doesn't know how to interpret it
                         info.setWatcher(this.host.watchFile(fileName, _ => this.onSourceFileChanged(fileName)));
                     }
                 }
@@ -897,7 +900,7 @@ namespace ts.server {
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
-            return this.filenameToScriptInfo.get(fileName);
+            return this.filenameToScriptInfo.get(normalizedPathToPath(fileName, this.host.getCurrentDirectory(), this.toCanonicalFileName));
         }
 
         setHostConfiguration(args: protocol.ConfigureRequestArguments) {
@@ -1057,7 +1060,6 @@ namespace ts.server {
                     this.closeClientFile(file);
                 }
             }
-
             // if files were open or closed then explicitly refresh list of inferred projects
             // otherwise if there were only changes in files - record changed files in `changedFiles` and defer the update
             if (openFiles || closedFiles) {
