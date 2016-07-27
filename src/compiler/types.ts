@@ -377,9 +377,9 @@ namespace ts {
         LastBinaryOperator = CaretEqualsToken,
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
-        LastJSDocNode = JSDocTypeLiteral,
+        LastJSDocNode = JSDocStringLiteralType,
         FirstJSDocTagNode = JSDocComment,
-        LastJSDocTagNode = JSDocTypeLiteral
+        LastJSDocTagNode = JSDocStringLiteralType
     }
 
     export const enum NodeFlags {
