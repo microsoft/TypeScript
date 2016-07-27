@@ -1,0 +1,14 @@
+=== tests/cases/compiler/in.js ===
+/**
+ * @param {'literal'} input
+ */
+function f(input) {
+>f : (input: "literal") => string
+>input : "literal"
+
+    return input + '.';
+>input + '.' : string
+>input : "literal"
+>'.' : string
+}
+

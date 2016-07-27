@@ -5860,9 +5860,10 @@ namespace ts {
                     case SyntaxKind.SymbolKeyword:
                     case SyntaxKind.VoidKeyword:
                         return parseTokenNode<JSDocType>();
+                    case SyntaxKind.StringLiteral:
+                        return parseJSDocStringLiteralType();
                 }
 
-                // TODO (drosen): Parse string literal types in JSDoc as well.
                 return parseJSDocTypeReference();
             }
 
@@ -6038,6 +6039,12 @@ namespace ts {
             function parseJSDocAllType(): JSDocAllType {
                 const result = <JSDocAllType>createNode(SyntaxKind.JSDocAllType);
                 nextToken();
+                return finishNode(result);
+            }
+
+            function parseJSDocStringLiteralType(): JSDocStringLiteralType {
+                const result = <JSDocStringLiteralType>createNode(SyntaxKind.JSDocStringLiteralType);
+                result.stringLiteral = parseStringLiteralTypeNode();
                 return finishNode(result);
             }
 

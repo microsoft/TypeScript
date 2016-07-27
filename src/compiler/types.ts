@@ -346,6 +346,7 @@ namespace ts {
         JSDocTypedefTag,
         JSDocPropertyTag,
         JSDocTypeLiteral,
+        JSDocStringLiteralType,
 
         // Synthesized list
         SyntaxList,
@@ -1489,6 +1490,10 @@ namespace ts {
     // @kind(SyntaxKind.JSDocThisType)
     export interface JSDocThisType extends JSDocType {
         type: JSDocType;
+    }
+
+    export interface JSDocStringLiteralType extends JSDocType {
+        stringLiteral: StringLiteralTypeNode;
     }
 
     export type JSDocTypeReferencingNode = JSDocThisType | JSDocConstructorType | JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;

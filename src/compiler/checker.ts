@@ -5326,6 +5326,8 @@ namespace ts {
                     return getTypeFromThisTypeNode(node);
                 case SyntaxKind.StringLiteralType:
                     return getTypeFromStringLiteralTypeNode(<StringLiteralTypeNode>node);
+                case SyntaxKind.JSDocStringLiteralType:
+                    return getTypeFromStringLiteralTypeNode((<JSDocStringLiteralType>node).stringLiteral);
                 case SyntaxKind.TypeReference:
                 case SyntaxKind.JSDocTypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);

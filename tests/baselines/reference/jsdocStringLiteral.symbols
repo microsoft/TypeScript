@@ -1,0 +1,12 @@
+=== tests/cases/compiler/in.js ===
+/**
+ * @param {'literal'} input
+ */
+function f(input) {
+>f : Symbol(f, Decl(in.js, 0, 0))
+>input : Symbol(input, Decl(in.js, 3, 11))
+
+    return input + '.';
+>input : Symbol(input, Decl(in.js, 3, 11))
+}
+
