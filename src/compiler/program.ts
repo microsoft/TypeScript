@@ -1087,7 +1087,10 @@ namespace ts {
             if (typeRoots) {
                 for (const root of typeRoots) {
                     if (host.directoryExists(root)) {
-                        result = result.concat(host.getDirectories(root));
+                        for (const typeDirectivePath of host.getDirectories(root)) {
+                            // Return just the type directive names
+                            result = result.concat(getBaseFileName(normalizePath(typeDirectivePath)));
+                        }
                     }
                 }
             }

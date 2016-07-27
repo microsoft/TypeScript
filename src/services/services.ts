@@ -1794,7 +1794,7 @@ namespace ts {
         };
     }
 
-    // Cache host information about scrip Should be refreshed
+    // Cache host information about script should be refreshed
     // at each language service public entry point, since we don't know when
     // set of scripts handled by the host changes.
     class HostCache {
