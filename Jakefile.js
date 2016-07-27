@@ -1041,7 +1041,8 @@ var lintTargets = compilerSources
     .concat(serverCoreSources)
     .concat(tslintRulesFiles)
     .concat(servicesSources)
-    .concat(["Gulpfile.ts"]);
+    .concat(["Gulpfile.ts"])
+    .concat([nodeServerInFile, perftscPath, "tests/perfsys.ts", webhostPath]);
 
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
