@@ -93,8 +93,9 @@ namespace ts.server {
         export const Completions = "completions";
         export const CompletionsFull = "completions-full";
         export const CompletionDetails = "completionEntryDetails";
+        export const IsCompileOnSaveEnabledForProject = "isCompileOnSaveEnabled";
         export const CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
-        export const CompileFile = "compileFile";
+        export const EmitFile = "emitFile";
         export const Configure = "configure";
         export const Definition = "definition";
         export const DefinitionFull = "definition-full";
@@ -954,6 +955,15 @@ namespace ts.server {
             }, []);
         }
 
+        private isCompileOnSaveEnabledForProject(args: protocol.ProjectRequestArgs): boolean {
+            const { projectFileName } = args;
+            const project = this.projectService.findProject(projectFileName);
+            if (project.projectKind === ProjectKind.Configured || project.projectKind === ProjectKind.External) {
+                return (<ConfiguredProject | ExternalProject>project).compileOnSaveEnabled;
+            }
+            return false;
+        }
+
         private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs) {
             const info = this.projectService.getScriptInfo(args.file);
             let result: string[] = [];
@@ -963,15 +973,16 @@ namespace ts.server {
             return result;
         }
 
-        private CompileFile(args: protocol.FileRequestArgs) {
+        private EmitFile(args: protocol.FileRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
             const info = this.projectService.getScriptInfo(file);
-            if (project) {
-                const { emitSkipped, outputFiles } = project.getFileEmitOutput(info);
-                if (!emitSkipped) {
-                    for (const outputFile of outputFiles) {
-                        this.host.writeFile(outputFile.name, outputFile.text, outputFile.writeByteOrderMark);
-                    }
+            if (!project) {
+                throw Errors.NoProject;
+            }
+            const { emitSkipped, outputFiles } = project.getFileEmitOutput(info);
+            if (!emitSkipped) {
+                for (const outputFile of outputFiles) {
+                    this.host.writeFile(outputFile.name, outputFile.text, outputFile.writeByteOrderMark);
                 }
             }
         }
@@ -1377,12 +1388,15 @@ namespace ts.server {
             [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
                 return this.requiredResponse(this.getCompletionEntryDetails(request.arguments));
             },
+            [CommandNames.IsCompileOnSaveEnabledForProject]: (request: protocol.IsCompileOnSaveEnabledForProjectRequest) => {
+                return this.requiredResponse(this.isCompileOnSaveEnabledForProject(request.arguments));
+            },
             [CommandNames.CompileOnSaveAffectedFileList]: (request: protocol.CompileOnSaveAffectedFileListRequest) => {
                 return this.requiredResponse(this.getCompileOnSaveAffectedFileList(request.arguments));
             },
-            [CommandNames.CompileFile]: (request: protocol.CompileFileRequest) => {
-                this.CompileFile(request.arguments);
-                return this.notRequired();
+            [CommandNames.EmitFile]: (request: protocol.CompileFileRequest) => {
+                this.EmitFile(request.arguments);
+                return this.requiredResponse(true);
             },
             [CommandNames.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true));

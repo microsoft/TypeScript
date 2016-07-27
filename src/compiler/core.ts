@@ -93,6 +93,17 @@ namespace ts {
         return undefined;
     }
 
+    export function findFirst<T>(array: T[], predicate: (item: T) => boolean): T {
+        if (array && array.length > 0) {
+            for (const item of array) {
+                if (predicate(item)) {
+                    return item;
+                }
+            }
+        }
+        return undefined;
+    }
+
     export function contains<T>(array: T[], value: T, areEqual?: (a: T, b: T) => boolean): boolean {
         if (array) {
             for (const v of array) {

@@ -2685,6 +2685,7 @@ namespace ts {
         raw?: any;
         errors: Diagnostic[];
         wildcardDirectories?: Map<WatchDirectoryFlags>;
+        compileOnSave?: boolean;
     }
 
     export const enum WatchDirectoryFlags {

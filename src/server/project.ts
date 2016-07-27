@@ -480,8 +480,17 @@ namespace ts.server {
             hasExplicitListOfFiles: boolean,
             compilerOptions: CompilerOptions,
             private wildcardDirectories: Map<WatchDirectoryFlags>,
-            languageServiceEnabled: boolean) {
+            languageServiceEnabled: boolean,
+            public compileOnSaveEnabled = false) {
             super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions);
+        }
+
+        enableCompileOnSave() {
+            this.compileOnSaveEnabled = true;
+        }
+
+        disableCompileOnSave() {
+            this.compileOnSaveEnabled = false;
         }
 
         getProjectName() {
@@ -556,8 +565,17 @@ namespace ts.server {
             projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,
             compilerOptions: CompilerOptions,
-            languageServiceEnabled: boolean) {
+            languageServiceEnabled: boolean,
+            public compileOnSaveEnabled = false) {
             super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions);
+        }
+
+        enableCompileOnSave() {
+            this.compileOnSaveEnabled = true;
+        }
+
+        disableCompileOnSave() {
+            this.compileOnSaveEnabled = false;
         }
 
         getProjectName() {

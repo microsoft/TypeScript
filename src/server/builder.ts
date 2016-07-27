@@ -278,6 +278,7 @@ namespace ts.server {
     class ModuleBuilder extends AbstractBuilder<ModuleBuilderFileInfo> {
 
         private isDependencyGraphBuilt = false;
+        private lastCheckProjectVersion: string;
 
         getReferecedFileInfos(fileName: string): ModuleBuilderFileInfo[] {
             const referencedFileNames = this.project.getReferencedFiles(fileName);
@@ -292,7 +293,7 @@ namespace ts.server {
                 return;
             }
 
-            const fileNames = this.project.getRootFiles();
+            const fileNames = this.project.getFileNames();
             const fileInfos: ModuleBuilderFileInfo[] = []; 
             for (const fileName of fileNames) {
                 const sourceFile = this.project.getSourceFile(fileName);
@@ -313,28 +314,32 @@ namespace ts.server {
         updateDependencyGraph() {
             this.ensureDependencyGraph();
 
-            const fileNames = this.project.getRootFiles();
-            for (const fileName of fileNames) {
-                if (!this.fileInfos[fileName]) {
-                    const sourceFile = this.project.getSourceFile(fileName);
-                    if (sourceFile) {
-                        const fileInfo = new ModuleBuilderFileInfo(fileName);
-                        fileInfo.updateReferences(this);
-                        this.fileInfos[fileName] = fileInfo;
+            if (!this.lastCheckProjectVersion || this.project.getProjectVersion() !== this.lastCheckProjectVersion) {
+                const fileNames = this.project.getFileNames();
+                for (const fileName of fileNames) {
+                    if (!this.fileInfos[fileName]) {
+                        const sourceFile = this.project.getSourceFile(fileName);
+                        if (sourceFile) {
+                            const fileInfo = new ModuleBuilderFileInfo(fileName);
+                            fileInfo.updateReferences(this);
+                            this.fileInfos[fileName] = fileInfo;
+                        }
                     }
                 }
-            }
 
-            for (const key of getKeys(this.fileInfos)) {
-                if (fileNames.indexOf(<NormalizedPath>key) < 0) {
-                    // This file was deleted from this project
-                    this.fileInfos[key].removeAllReferences(this);
-                    delete this.fileInfos[key];
+                for (const key of getKeys(this.fileInfos)) {
+                    if (fileNames.indexOf(<NormalizedPath>key) < 0) {
+                        // This file was deleted from this project
+                        this.fileInfos[key].removeAllReferences(this);
+                        delete this.fileInfos[key];
+                    }
+                    else {
+                        this.fileInfos[key].updateReferences(this);
+                    }
                 }
-                else {
-                    this.fileInfos[key].updateReferences(this);
-                }
+                this.lastCheckProjectVersion = this.project.getProjectVersion();
             }
+            return;
         }
 
         getFilesAffectedBy(fileName: string): string[] {
@@ -343,7 +348,7 @@ namespace ts.server {
             const info = this.getFileInfo(fileName);
             if(info && info.updateAndCheckIfShapeSignatureChanged(this)) {
                 if (!info.isExternalModule(this)) {
-                    return this.project.getRootFiles();
+                    return this.project.getFileNames();
                 }
                 else {
                     const result = info.getReferencedByFileNames();
@@ -357,10 +362,6 @@ namespace ts.server {
     }
 
     export function createBuilder(project: Project): Builder {
-        if (!project.getCompilerOptions().compileOnSave) {
-            return new NullBuilder(project);
-        }
-
         if (project.projectKind === ProjectKind.Configured) {
             const moduleKind = project.getCompilerOptions().module;
             switch (moduleKind) {

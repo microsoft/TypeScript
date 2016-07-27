@@ -178,6 +178,7 @@ namespace ts.server {
         files?: string[];
         wildcardDirectories?: Map<WatchDirectoryFlags>;
         compilerOptions?: CompilerOptions;
+        compileOnSave?: boolean;
     }
 
     export function isInferredProjectName(name: string) {

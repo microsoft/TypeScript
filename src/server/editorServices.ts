@@ -625,6 +625,7 @@ namespace ts.server {
                 compilerOptions: parsedCommandLine.options,
                 configHasFilesProperty: configObj.config["files"] !== undefined,
                 wildcardDirectories: parsedCommandLine.wildcardDirectories,
+                compileOnSave: parsedCommandLine.compileOnSave
             };
             return { success: true, projectOptions };
         }
@@ -668,7 +669,8 @@ namespace ts.server {
                 projectOptions.configHasFilesProperty,
                 projectOptions.compilerOptions,
                 projectOptions.wildcardDirectories,
-                /*languageServiceEnabled*/ !sizeLimitExceeded);
+                /*languageServiceEnabled*/ !sizeLimitExceeded,
+                /*compileOnSaveEnabled*/ projectOptions.compileOnSave);
 
             const errors = this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, clientFileName);
 
