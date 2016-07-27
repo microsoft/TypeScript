@@ -2960,9 +2960,9 @@ namespace ts {
             case SyntaxKind.TypeAliasDeclaration: return ScriptElementKind.typeElement;
             case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
             case SyntaxKind.VariableDeclaration:
-                return variableDeclarationKind(<VariableDeclaration> node);
+                return getKindOfVariableDeclaration(<VariableDeclaration> node);
             case SyntaxKind.BindingElement:
-                return variableDeclarationKind(<VariableDeclaration> getRootDeclaration(node));
+                return getKindOfVariableDeclaration(<VariableDeclaration> getRootDeclaration(node));
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
@@ -2990,10 +2990,11 @@ namespace ts {
                 return ScriptElementKind.alias;
             case SyntaxKind.JSDocTypedefTag:
                 return ScriptElementKind.typeElement;
+            default:
+                return ScriptElementKind.unknown;
         }
-        return ScriptElementKind.unknown;
 
-        function variableDeclarationKind(v: VariableDeclaration): string {
+        function getKindOfVariableDeclaration(v: VariableDeclaration): string {
             return isConst(v)
                 ? ScriptElementKind.constElement
                 : isLet(v)

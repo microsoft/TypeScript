@@ -22,15 +22,15 @@ verify.navigationBar([
         "childItems": [
             {
                 "text": "a",
-                "kind": "property"
+                "kind": "const"
             },
             {
                 "text": "b",
-                "kind": "property"
+                "kind": "const"
             },
             {
                 "text": "c",
-                "kind": "property"
+                "kind": "const"
             }
         ],
         "indent": 1
