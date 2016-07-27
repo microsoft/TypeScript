@@ -635,13 +635,13 @@ namespace ts {
             }
         }
 
-        if (resolvedFileName && host.realpath) {
-            const originalFileName = resolvedFileName;
-            resolvedFileName = normalizePath(host.realpath(resolvedFileName));
-            if (traceEnabled) {
-                trace(host, Diagnostics.Resolving_real_path_for_0_result_1, originalFileName, resolvedFileName);
-            }
-        }
+        //if (resolvedFileName && host.realpath) {
+         //   const originalFileName = resolvedFileName;
+        //    resolvedFileName = normalizePath(host.realpath(resolvedFileName));
+        //    if (traceEnabled) {
+        //        trace(host, Diagnostics.Resolving_real_path_for_0_result_1, originalFileName, resolvedFileName);
+        //    }
+        //}
 
         return createResolvedModule(resolvedFileName, isExternalLibraryImport, failedLookupLocations);
     }

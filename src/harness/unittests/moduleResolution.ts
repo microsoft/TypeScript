@@ -1,5 +1,6 @@
 /// <reference path="..\harness.ts" />
 
+//do tests here?
 namespace ts {
     interface File {
         name: string;

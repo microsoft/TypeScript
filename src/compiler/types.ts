@@ -2875,7 +2875,7 @@ namespace ts {
         readFile(fileName: string): string;
         trace?(s: string): void;
         directoryExists?(directoryName: string): boolean;
-        realpath?(path: string): string;
+        //realpath?(path: string): string;
         getCurrentDirectory?(): string;
     }
 
@@ -2919,6 +2919,8 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
+
+        realpath?(path: string): string;
 
         /*
          * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of
