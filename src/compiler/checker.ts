@@ -7022,6 +7022,7 @@ namespace ts {
         function getWidenedType(type: Type): Type {
             if (type.flags & TypeFlags.RequiresWidening) {
                 if (type.flags & TypeFlags.Nullable) {
+                    //!!!!!!!!!
                     return anyType;
                 }
                 if (type.flags & TypeFlags.ObjectLiteral) {

@@ -2239,7 +2239,7 @@ namespace ts {
         /* @internal */
         FreshObjectLiteral      = 0x00100000,  // Fresh object literal type
         /* @internal */
-        ContainsWideningType    = 0x00200000,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 0x00200000,  //Type is or contains undefined or null widening type
         /* @internal */
         ContainsObjectLiteral   = 0x00400000,  // Type is or contains object literal type
         /* @internal */
