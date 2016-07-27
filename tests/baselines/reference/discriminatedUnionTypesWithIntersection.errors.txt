@@ -1,0 +1,161 @@
+tests/cases/conformance/types/union/discriminatedUnionTypesWithIntersection.ts(64,18): error TS2339: Property 'str' does not exist on type 'never'.
+tests/cases/conformance/types/union/discriminatedUnionTypesWithIntersection.ts(75,26): error TS2339: Property 'str' does not exist on type 'never'.
+tests/cases/conformance/types/union/discriminatedUnionTypesWithIntersection.ts(82,27): error TS2339: Property 'num' does not exist on type 'never'.
+tests/cases/conformance/types/union/discriminatedUnionTypesWithIntersection.ts(93,31): error TS2339: Property 'num' does not exist on type 'never'.
+tests/cases/conformance/types/union/discriminatedUnionTypesWithIntersection.ts(97,26): error TS2339: Property 'str' does not exist on type 'never'.
+
+
+==== tests/cases/conformance/types/union/discriminatedUnionTypesWithIntersection.ts (5 errors) ====
+    type WithX = {
+        x: string;
+    }
+    
+    type BoxedValue = { kind: 'int',    num: number }
+                    | { kind: 'string', str: string }
+    
+    type BoxIntersection = BoxedValue & WithX
+    
+    type BoxInline = { kind: 'int',    num: number } & WithX
+                   | { kind: 'string', str: string } & WithX
+    
+    function getValueAsString_inline_if(value: BoxInline): string {
+        if (value.kind === 'int') {
+            value; // { kind: "int", num: number } & { x: string }
+            return '' + value.num;
+        }
+    
+        value; // { kind: "string", str: string } & { x: string }
+        return value.str;
+    }
+    
+    function getValueAsString_inline_switch(value: BoxInline): string {
+        switch (value.kind) {
+            case 'int':
+                value; // { kind: "int", num: number } & { x: string }
+                return '' + value.num;
+    
+            case 'string':
+                value; // { kind: "string", str: string } & { x: string }
+                return value.str;
+        }
+    }
+    
+    function getValueAsString_if(value: BoxIntersection): string {
+        if (value.kind === 'int') {
+            value; // { kind: "int", num: number } & { x: string }
+            return '' + value.num;
+        }
+    
+        value; // { kind: "string", str: string } & { x: string }
+        return value.str;
+    }
+    
+    function getValueAsString_switch(value: BoxIntersection): string {
+        switch (value.kind) {
+            case 'int':
+                value; // { kind: "int", num: number } & { x: string }
+                return '' + value.num;
+    
+            case 'string':
+                value; // { kind: "string", str: string } & { x: string }
+                return value.str;
+        }
+    }
+    
+    function getValueAsString_if_fixed(value: BoxIntersection & { kind: 'int' }): string {
+        if (value.kind === 'int') {
+            value; // { kind: "int", num: number } & { x: string } & { kind: "number" }
+            return '' + value.num;
+        }
+    
+        value; // never
+        return value.str;
+                     ~~~
+!!! error TS2339: Property 'str' does not exist on type 'never'.
+    }
+    
+    function getValueAsString_switch_fixed(value: BoxIntersection & { kind: 'int' }): string {
+        switch (value.kind) {
+            case 'int':
+                value; // { kind: "int", num: number } & { x: string } & { kind: "number" }
+                return '' + value.num;
+    
+            case 'string':
+                value; // never
+                return value.str;
+                             ~~~
+!!! error TS2339: Property 'str' does not exist on type 'never'.
+        }
+    }
+    
+    function getValueAsString_if_never(value: BoxIntersection & { kind: number }): string {
+        if (value.kind === 'int') {
+            value; // never
+            return '' + value.num;
+                              ~~~
+!!! error TS2339: Property 'num' does not exist on type 'never'.
+        }
+    
+        value; // { kind: "string", str: string } & { x: string } & { kind: "number" }
+        return value.str;
+    }
+    
+    function getValueAsString_switch_never(value: BoxIntersection & { kind: number }): string {
+        switch (value.kind) {
+            case 'int':
+                value; // never
+                return '' + value.num;
+                                  ~~~
+!!! error TS2339: Property 'num' does not exist on type 'never'.
+    
+            case 'string':
+                value; // never
+                return value.str;
+                             ~~~
+!!! error TS2339: Property 'str' does not exist on type 'never'.
+        }
+    }
+    
+    type Ext = { strVal: string } & { kind:    'int' }
+             | { intVal: string } & { kind: 'string' }
+    
+    type Boxed2 = { kind: 'null' }
+                | BoxIntersection & Ext;
+    
+    function arbitraryNesting_if(value: Boxed2): void {
+        if (value.kind === 'null') {
+            return;
+        }
+    
+        if (value.kind === 'int') {
+            value; // { kind: 'int', num: number } & { x: string; }
+            value.x;
+            value.num;
+            value.strVal;
+            return;
+        }
+    
+        value; // { kind: 'string', str: string } & { x: string } & { intVal: string } & { kind: 'string' }
+        value.x;
+        value.str;
+        value.intVal;
+    }
+    
+    function arbitraryNesting_switch(value: Boxed2): void {
+        switch (value.kind) {
+            case 'null':
+                return;
+    
+            case 'int':
+                value.x;
+                value.num;
+                value.strVal;
+                return;
+    
+            case 'string':
+                value.x;
+                value.str;
+                value.intVal;
+        }
+    }
+    

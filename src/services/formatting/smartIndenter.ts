@@ -350,7 +350,8 @@ namespace ts.formatting {
 
             return Value.Unknown;
 
-            function getStartingExpression(node: PropertyAccessExpression | CallExpression | ElementAccessExpression) {
+            // inferred type is (correctly) `never` as all known node kinds are handled, thus resulting in an infinite loop
+            function getStartingExpression(node: PropertyAccessExpression | CallExpression | ElementAccessExpression): LeftHandSideExpression {
                 while (true) {
                     switch (node.kind) {
                         case SyntaxKind.CallExpression:
