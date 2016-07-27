@@ -20,8 +20,7 @@ function switchToForwardSlashes(path: string) {
     return path.replace(/\\/g, "/").replace(/\/\//g, '/');
 }
 
-var defaultPort = 8888;
-var port = process.argv[2] || defaultPort;
+var port = parseInt(process.argv[2], 10) || 8888;
 var rootDir = switchToForwardSlashes(__dirname + '/../');
 
 var browser: string;
@@ -267,7 +266,7 @@ http.createServer(function (req: http.ServerRequest, res: http.ServerResponse) {
     var reqPath = path.join(process.cwd(), uri);
     var operation = getRequestOperation(req, reqPath);
     handleRequestOperation(req, res, operation, reqPath);
-}).listen(8888);
+}).listen(port);
 
 var browserPath: string;
 if ((browser && browser === 'chrome')) {
