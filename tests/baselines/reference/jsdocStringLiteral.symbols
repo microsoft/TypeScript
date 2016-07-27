@@ -1,12 +1,21 @@
 === tests/cases/compiler/in.js ===
 /**
- * @param {'literal'} input
+ * @param {'literal'} p1
+ * @param {"literal"} p2
+ * @param {'literal' | 'other'} p3
+ * @param {'literal' | number} p4
  */
-function f(input) {
+function f(p1, p2, p3, p4) {
 >f : Symbol(f, Decl(in.js, 0, 0))
->input : Symbol(input, Decl(in.js, 3, 11))
+>p1 : Symbol(p1, Decl(in.js, 6, 11))
+>p2 : Symbol(p2, Decl(in.js, 6, 14))
+>p3 : Symbol(p3, Decl(in.js, 6, 18))
+>p4 : Symbol(p4, Decl(in.js, 6, 22))
 
-    return input + '.';
->input : Symbol(input, Decl(in.js, 3, 11))
+    return p1 + p2 + p3 + p4 + '.';
+>p1 : Symbol(p1, Decl(in.js, 6, 11))
+>p2 : Symbol(p2, Decl(in.js, 6, 14))
+>p3 : Symbol(p3, Decl(in.js, 6, 18))
+>p4 : Symbol(p4, Decl(in.js, 6, 22))
 }
 
