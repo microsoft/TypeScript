@@ -198,7 +198,7 @@ namespace ts.codeRefactor {
         }
     }
 
-    function getChildOfType(node: Node, kind: SyntaxKind): Node {
+    export function getChildOfType(node: Node, kind: SyntaxKind): Node {
         for (let i = 0, n = node.getChildCount(); i < n; i++) {
             const child = node.getChildAt(i);
             if (child.kind === kind) {
@@ -208,7 +208,7 @@ namespace ts.codeRefactor {
         return null;
     }
 
-    function getOrCreateFileTextChangesEntry(reference: ReferenceEntry, fileTextChanges: FileTextChanges[]): FileTextChanges {
+    export function getOrCreateFileTextChangesEntry(reference: ReferenceEntry, fileTextChanges: FileTextChanges[]): FileTextChanges {
         let fileTextChangesEntry = findEntry(reference.fileName, fileTextChanges);
         if (!fileTextChangesEntry) {
             fileTextChangesEntry = {

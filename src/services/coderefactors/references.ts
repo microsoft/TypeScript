@@ -4,3 +4,4 @@
 ///<reference path='extractInterfaceRefactor.ts' />
 ///<reference path='addJSDocRefactor.ts' />
 ///<reference path='enacpsulateFieldAndGetterSetterRefactor.ts' />
+///<reference path='extractInterfaceFromParametersRefactor.ts' />

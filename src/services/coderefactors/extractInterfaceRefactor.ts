@@ -147,15 +147,15 @@ namespace ts.codeRefactor {
         }
     });
 
-    function getInterfaceBeginning(interfaceName: string, newLineCharacter: string) {
-        return "interface " + interfaceName + "{" + newLineCharacter;
+    export function getInterfaceBeginning(interfaceName: string, newLineCharacter: string) {
+        return newLineCharacter + "interface " + interfaceName + "{" + newLineCharacter;
     }
 
-    function getInterfaceEndAndRemoveSpaces(interfaceText: string, newLineCharacter: string) {
+    export function getInterfaceEndAndRemoveSpaces(interfaceText: string, newLineCharacter: string) {
         return (interfaceText + "}" + newLineCharacter).replace(/  +/g, " ");
     }
 
-    function handleSemiColon(interfaceText: string, newLineCharacter: string): string {
+    export function handleSemiColon(interfaceText: string, newLineCharacter: string): string {
         return (interfaceText.match(/.*;$/)) ? newLineCharacter : ";" + newLineCharacter;
     }
 

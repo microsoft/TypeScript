@@ -3091,5 +3091,9 @@
     "Convert Get property to Method": {
         "category": "CodeRefactor",
         "code": 100011
+    },
+    "Extract Interface from Parameters": {
+        "category": "CodeRefactor",
+        "code": 100012
     }
 }
