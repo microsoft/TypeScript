@@ -4379,7 +4379,15 @@ namespace ts {
                 const isRelativePath = startsWith(literalValue, ".");
                 const scriptDir = getDirectoryPath(node.getSourceFile().path);
                 if (isRelativePath || isRootedDiskPath(literalValue)) {
-                    result = getCompletionEntriesForDirectoryFragment(literalValue, scriptDir, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/false);
+                    const compilerOptions = program.getCompilerOptions();
+                    if (compilerOptions.rootDirs) {
+                        result = getCompletionEntriesForDirectoryFragmentWithRootDirs(
+                            compilerOptions.rootDirs, literalValue, scriptDir, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/false);
+                    }
+                    else {
+                        result = getCompletionEntriesForDirectoryFragment(
+                            literalValue, scriptDir, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/false);
+                    }
                 }
                 else {
                     // Check for node modules
@@ -4393,10 +4401,42 @@ namespace ts {
                 };
             }
 
-            function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean): CompletionEntry[] {
-                // Complete the path by looking for source files and directories
+            /**
+             * Takes a script path and returns paths for all potential folders that could be merged with its
+             * containing folder via the "rootDirs" compiler option
+             */
+            function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, scriptPath: string, ignoreCase: boolean) {
+                // Make all paths absolute/normalized if they are not already
+                rootDirs = map(rootDirs, rootDirectory => normalizePath(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory)));
+
+                // Determine the path to the directory containing the script relative to the root directory it is contained within
+                let relativeDirectory: string;
+                forEach(rootDirs, rootDirectory => {
+                    if (containsPath(rootDirectory, scriptPath, basePath, ignoreCase)) {
+                        relativeDirectory = scriptPath.substr(rootDirectory.length);
+                        return true;
+                    }
+                });
+
+                // Now find a path for each potential directory that is to be merged with the one containing the script
+                return deduplicate(map(rootDirs, rootDirectory => combinePaths(rootDirectory, relativeDirectory)));
+            }
+
+            function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean): CompletionEntry[] {
+                const basePath = program.getCompilerOptions().project || host.getCurrentDirectory();
+
+                const baseDirectories = getBaseDirectoriesFromRootDirs(
+                    rootDirs, basePath, scriptPath, host.useCaseSensitiveFileNames && !host.useCaseSensitiveFileNames());
                 const result: CompletionEntry[] = [];
 
+                for (const baseDirectory of baseDirectories) {
+                    getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensions, includeExtensions, result);
+                }
+
+                return result;
+            }
+
+            function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, result: CompletionEntry[] = []): CompletionEntry[] {
                 const toComplete = getBaseFileName(fragment);
                 const absolutePath = normalizeSlashes(host.resolvePath(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment)));
                 const baseDirectory = toComplete ? getDirectoryPath(absolutePath) : absolutePath;
@@ -4456,7 +4496,8 @@ namespace ts {
 
                 if (baseUrl) {
                     const fileExtensions = getSupportedExtensions(options);
-                    const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(host.getCurrentDirectory(), baseUrl)
+                    const projectDir = options.project || host.getCurrentDirectory();
+                    const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);
                     result = getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/false);
 
                     if (paths) {

@@ -219,7 +219,22 @@ namespace Harness.LanguageService {
             return snapshot.getText(0, snapshot.getLength());
         }
         resolvePath(path: string): string {
-            return ts.normalizePath(ts.isRootedDiskPath(path) ? path : ts.combinePaths(this.getCurrentDirectory(), path));
+            if (!ts.isRootedDiskPath(path)) {
+                // An "absolute" path for fourslash is one that is contained within the tests directory
+                const components = ts.getNormalizedPathComponents(path, this.getCurrentDirectory());
+                if (components.length) {
+                    // If this is still a relative path after normalization (i.e. currentDirectory is relative), the root will be the empty string
+                    if (!components[0]) {
+                        components.splice(0, 1);
+                        if (components[0] !== "tests") {
+                            // If not contained within test, assume its relative to the directory containing the test files
+                            return ts.normalizePath(ts.combinePaths("tests/cases/fourslash", components.join(ts.directorySeparator)));
+                        }
+                    }
+                    return ts.normalizePath(components.join(ts.directorySeparator));
+                }
+            }
+            return ts.normalizePath(path);
         }
 
 
