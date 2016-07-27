@@ -484,10 +484,12 @@ namespace ts {
                 return;
             }
             for (const comment of comments) {
-                if (documentationComment.length) {
-                    documentationComment.push(lineBreakPart());
+                if (comment.comment) {
+                    if (documentationComment.length) {
+                        documentationComment.push(lineBreakPart());
+                    }
+                    documentationComment.push(textPart(comment.comment));
                 }
-                documentationComment.push(textPart(comment.comment));
             }
         });
 

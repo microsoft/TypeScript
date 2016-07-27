@@ -6123,6 +6123,7 @@ namespace ts {
                     // This is so that /** * @type */ doesn't parse.
                     let canParseTag = true;
                     let seenAsterisk = true;
+                    let advanceToken = true;
 
                     nextJSDocToken();
                     skipSpaces();
@@ -6140,6 +6141,7 @@ namespace ts {
                                     // This will take us past the end of the line, so it's OK to parse a tag on the next pass through the loop
                                     // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag. But real-world comments may break this rule.
                                     seenAsterisk = false;
+                                    advanceToken = false;
                                 }
                                 else {
                                     comments.push(scanner.getTokenText());
@@ -6186,7 +6188,12 @@ namespace ts {
                                 comments.push(scanner.getTokenText());
                                 break;
                         }
-                        nextJSDocToken();
+                        if (advanceToken) {
+                            nextJSDocToken();
+                        }
+                        else {
+                            advanceToken = true;
+                        }
                     }
                     // TODO:
                     // 1. Get jsdoc comments from params
@@ -6279,11 +6286,77 @@ namespace ts {
                     }
 
                     const comments: string[] = [];
-                    while (token !== SyntaxKind.NewLineTrivia && token !== SyntaxKind.EndOfFileToken) {
-                        comments.push(scanner.getTokenText());
-                        nextJSDocToken();
+                    let savingComments = true;
+                    let seenAsterisk = true;
+                    let done = false;
+                    while (!done && token !== SyntaxKind.EndOfFileToken) {
+                        if (savingComments && seenAsterisk) {
+                            switch (token) {
+                            case SyntaxKind.NewLineTrivia:
+                                // put this newline in, just in case it ISN"T the last line
+                                // (we'll chomp it off afterward)
+                                savingComments = false;
+                                seenAsterisk = false;
+                                comments.push(scanner.getTokenText());
+                                break;
+                            case SyntaxKind.AtToken:
+                            case SyntaxKind.AsteriskToken:
+                            default:
+                                comments.push(scanner.getTokenText());
+                                break;
+                            }
+                        }
+                        else if (!savingComments && !seenAsterisk) {
+                            switch (token) {
+                            case SyntaxKind.AsteriskToken:
+                                savingComments = false; // ... I guess?
+                                seenAsterisk = true; // almost ready to start recording
+                                break;
+                            case SyntaxKind.NewLineTrivia: // ignore doubled newlines
+                            case SyntaxKind.WhitespaceTrivia: // ignore leading whitespace
+                                break;
+                            case SyntaxKind.AtToken:
+                                // STOP
+                                done = true;
+                                break;
+                            default:
+                                // somebody decided to start writing with no whitespace or anything!
+                                savingComments = true;
+                                seenAsterisk = true;
+                                comments.push(scanner.getTokenText());
+                                break;
+                            }
+                        }
+                        else if (seenAsterisk && !savingComments) {
+                            switch (token) {
+                            case SyntaxKind.NewLineTrivia: // record newlines if they have pretty punctuation (could be wrong)
+                                savingComments = false;
+                                seenAsterisk = false;
+                                comments.push(scanner.getText());
+                                break;
+                            case SyntaxKind.WhitespaceTrivia: // ignore leading whitespace
+                                break;
+                            case SyntaxKind.AtToken:
+                                // STOP
+                                done = true;
+                                break;
+                            default:
+                                savingComments = true; // start recording again for real
+                                seenAsterisk = true;
+                                comments.push(scanner.getTokenText());
+                                break;
+                            }
+
+                        }
+                        else if (!savingComments && seenAsterisk) {
+                            Debug.assert(false, "Shouldn't happen");
+                        }
+                        if (!done) {
+                            nextJSDocToken();
+                        }
                     }
 
+                    popLastNewline(comments);
                     addTag(tag, comments);
                 }
 
@@ -6309,6 +6382,8 @@ namespace ts {
                 }
 
                 function tryParseTypeExpression(): JSDocTypeExpression {
+                    // TODO: @ should stop parsing immediately because it's the start of a new tag
+                    // TODO: Newline should stop type parsing (AND not consume tokens?). I don't like newlines.
                     if (token !== SyntaxKind.OpenBraceToken) {
                         return undefined;
                     }
