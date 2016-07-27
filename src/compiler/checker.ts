@@ -18268,50 +18268,9 @@ namespace ts {
         }
 
         function checkGrammarModifiers(node: Node): boolean {
-            switch (node.kind) {
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.Constructor:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.IndexSignature:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.ImportDeclaration:
-                case SyntaxKind.ImportEqualsDeclaration:
-                case SyntaxKind.ExportDeclaration:
-                case SyntaxKind.ExportAssignment:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.Parameter:
-                    break;
-                case SyntaxKind.FunctionDeclaration:
-                    if (node.modifiers && (node.modifiers.length > 1 || node.modifiers[0].kind !== SyntaxKind.AsyncKeyword) &&
-                        node.parent.kind !== SyntaxKind.ModuleBlock && node.parent.kind !== SyntaxKind.SourceFile) {
-                        return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
-                    }
-                    break;
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.VariableStatement:
-                case SyntaxKind.TypeAliasDeclaration:
-                    if (node.modifiers && node.parent.kind !== SyntaxKind.ModuleBlock && node.parent.kind !== SyntaxKind.SourceFile) {
-                        return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
-                    }
-                    break;
-                case SyntaxKind.EnumDeclaration:
-                    if (node.modifiers && (node.modifiers.length > 1 || node.modifiers[0].kind !== SyntaxKind.ConstKeyword) &&
-                        node.parent.kind !== SyntaxKind.ModuleBlock && node.parent.kind !== SyntaxKind.SourceFile) {
-                        return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
-                    }
-                    break;
-                default:
-                    return false;
-            }
-
-            if (!node.modifiers) {
-                return;
+            const quickResult = reportObviousModifierErrors(node);
+            if (quickResult !== undefined) {
+                return quickResult;
             }
 
             let lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastDeclare: Node, lastAsync: Node, lastReadonly: Node;
@@ -18514,6 +18473,61 @@ namespace ts {
             if (flags & NodeFlags.Async) {
                 return checkGrammarAsyncModifier(node, lastAsync);
             }
+        }
+
+        /**
+         * true | false: Early return this value from checkGrammarModifiers.
+         * undefined: Need to do full checking on the modifiers.
+         */
+        function reportObviousModifierErrors(node: Node): boolean | undefined {
+            return !node.modifiers
+                ? false
+                : shouldReportBadModifier(node)
+                    ? grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here)
+                    : undefined;
+        }
+        function shouldReportBadModifier(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.IndexSignature:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ExportDeclaration:
+                case SyntaxKind.ExportAssignment:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.Parameter:
+                    return false;
+                default:
+                    if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
+                        return false;
+                    }
+                    switch (node.kind) {
+                        case SyntaxKind.FunctionDeclaration:
+                            return nodeHasAnyModifiersExcept(node, SyntaxKind.AsyncKeyword);
+                        case SyntaxKind.ClassDeclaration:
+                            return nodeHasAnyModifiersExcept(node, SyntaxKind.AbstractKeyword);
+                        case SyntaxKind.InterfaceDeclaration:
+                        case SyntaxKind.VariableStatement:
+                        case SyntaxKind.TypeAliasDeclaration:
+                            return true;
+                        case SyntaxKind.EnumDeclaration:
+                            return nodeHasAnyModifiersExcept(node, SyntaxKind.ConstKeyword)
+                        default:
+                            Debug.fail();
+                            return false;
+                    }
+            }
+        }
+        function nodeHasAnyModifiersExcept(node: Node, allowedModifier: SyntaxKind): boolean {
+            return node.modifiers.length > 1 || node.modifiers[0].kind !== allowedModifier;
         }
 
         function checkGrammarAsyncModifier(node: Node, asyncModifier: Node): boolean {
