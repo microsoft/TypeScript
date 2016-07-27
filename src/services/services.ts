@@ -2950,7 +2950,7 @@ namespace ts {
     /* @internal */ export function getNodeKind(node: Node): string {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
-                return isExternalModule(<SourceFile> node) ? ScriptElementKind.moduleElement : ScriptElementKind.scriptElement;
+                return isExternalModule(<SourceFile>node) ? ScriptElementKind.moduleElement : ScriptElementKind.scriptElement;
             case SyntaxKind.ModuleDeclaration:
                 return ScriptElementKind.moduleElement;
             case SyntaxKind.ClassDeclaration:
@@ -2960,9 +2960,9 @@ namespace ts {
             case SyntaxKind.TypeAliasDeclaration: return ScriptElementKind.typeElement;
             case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
             case SyntaxKind.VariableDeclaration:
-                return getKindOfVariableDeclaration(<VariableDeclaration> node);
+                return getKindOfVariableDeclaration(<VariableDeclaration>node);
             case SyntaxKind.BindingElement:
-                return getKindOfVariableDeclaration(<VariableDeclaration> getRootDeclaration(node));
+                return getKindOfVariableDeclaration(<VariableDeclaration>getRootDeclaration(node));
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
