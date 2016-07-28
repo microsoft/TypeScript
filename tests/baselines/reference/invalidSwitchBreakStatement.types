@@ -5,7 +5,7 @@ switch (12) {
 >12 : number
 
     case 5:
->5 : number
+>5 : 5
 
         break;
 }

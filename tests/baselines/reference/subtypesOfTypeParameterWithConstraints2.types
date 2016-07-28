@@ -244,7 +244,7 @@ function f5<T extends Number>(x: T) {
 
     var r1 = true ? x : 1; // ok
 >r1 : number | T
->true ? x : 1 : T | number
+>true ? x : 1 : number | T
 >true : boolean
 >x : T
 >1 : number
@@ -266,7 +266,7 @@ function f6<T extends String>(x: T) {
 
     var r2 = true ? x : ''; // ok
 >r2 : string | T
->true ? x : '' : T | string
+>true ? x : '' : string | T
 >true : boolean
 >x : T
 >'' : string
@@ -288,7 +288,7 @@ function f7<T extends Boolean>(x: T) {
 
     var r3 = true ? x : true; // ok
 >r3 : boolean | T
->true ? x : true : T | boolean
+>true ? x : true : boolean | T
 >true : boolean
 >x : T
 >true : boolean
@@ -506,14 +506,14 @@ function f16<T extends E>(x: T) {
 >T : T
 
     var r13 = true ? E : x; // ok
->r13 : typeof E | T
->true ? E : x : typeof E | T
+>r13 : T | typeof E
+>true ? E : x : T | typeof E
 >true : boolean
 >E : typeof E
 >x : T
 
     var r13 = true ? x : E; // ok
->r13 : typeof E | T
+>r13 : T | typeof E
 >true ? x : E : T | typeof E
 >true : boolean
 >x : T

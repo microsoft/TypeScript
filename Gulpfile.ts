@@ -710,7 +710,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
             const originalMap = file.sourceMap;
             const prebundledContent = file.contents.toString();
             // Make paths absolute to help sorcery deal with all the terrible paths being thrown around
-            originalMap.sources = originalMap.sources.map(s => path.resolve(s));
+            originalMap.sources = originalMap.sources.map(s => path.resolve("src", s));
             // intoStream (below) makes browserify think the input file is named this, so this is what it puts in the sourcemap
             originalMap.file = "built/local/_stream_0.js";
 
@@ -918,36 +918,19 @@ gulp.task("update-sublime", "Updates the sublime plugin's tsserver", ["local", s
     return gulp.src([serverFile, serverFile + ".map"]).pipe(gulp.dest("../TypeScript-Sublime-Plugin/tsserver/"));
 });
 
-
-const tslintRuleDir = "scripts/tslint";
-const tslintRules = [
-    "nextLineRule",
-    "preferConstRule",
-    "booleanTriviaRule",
-    "typeOperatorSpacingRule",
-    "noInOperatorRule",
-    "noIncrementDecrementRule",
-    "objectLiteralSurroundingSpaceRule",
-];
-const tslintRulesFiles = tslintRules.map(function(p) {
-    return path.join(tslintRuleDir, p + ".ts");
+gulp.task("build-rules", "Compiles tslint rules to js", () => {
+    const settings: tsc.Settings = getCompilerSettings({ module: "commonjs" }, /*useBuiltCompiler*/ false);
+    const dest = path.join(builtLocalDirectory, "tslint");
+    return gulp.src("scripts/tslint/**/*.ts")
+        .pipe(newer({
+            dest,
+            ext: ".js"
+        }))
+        .pipe(sourcemaps.init())
+        .pipe(tsc(settings))
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(dest));
 });
-const tslintRulesOutFiles = tslintRules.map(function(p, i) {
-    const pathname = path.join(builtLocalDirectory, "tslint", p + ".js");
-    gulp.task(pathname, false, [], () => {
-        const settings: tsc.Settings = getCompilerSettings({ module: "commonjs" }, /*useBuiltCompiler*/ false);
-        return gulp.src(tslintRulesFiles[i])
-            .pipe(newer(pathname))
-            .pipe(sourcemaps.init())
-            .pipe(tsc(settings))
-            .pipe(sourcemaps.write("."))
-            .pipe(gulp.dest(path.join(builtLocalDirectory, "tslint")));
-    });
-    return pathname;
-});
-
-gulp.task("build-rules", "Compiles tslint rules to js", tslintRulesOutFiles);
-
 
 function getLinterOptions() {
     return {

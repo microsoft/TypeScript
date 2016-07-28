@@ -491,15 +491,6 @@ task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "r
     exec(cmd);
 });
 
-var scriptsTsdJson = path.join(scriptsDirectory, "tsd.json");
-file(scriptsTsdJson);
-
-task("tsd-scripts", [scriptsTsdJson], function () {
-    var cmd = "tsd --config " + scriptsTsdJson + " install";
-    console.log(cmd);
-    exec(cmd);
-}, { async: true });
-
 var importDefinitelyTypedTestsDirectory = path.join(scriptsDirectory, "importDefinitelyTypedTests");
 var importDefinitelyTypedTestsJs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.js");
 var importDefinitelyTypedTestsTs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.ts");
@@ -680,7 +671,7 @@ var run = path.join(builtLocalDirectory, "run.js");
 compileFile(
     /*outFile*/ run,
     /*source*/ harnessSources,
-    /*prereqs*/ [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources),
+    /*prereqs*/ [builtLocalDirectory, tscFile].concat(libraryTargets).concat(servicesSources).concat(harnessSources),
     /*prefixes*/ [],
     /*useBuiltCompiler:*/ true,
     /*opts*/ { inlineSourceMap: true, types: ["node", "mocha", "chai"] });
@@ -1025,6 +1016,7 @@ var tslintRules = [
     "noInOperatorRule",
     "noIncrementDecrementRule",
     "objectLiteralSurroundingSpaceRule",
+    "noTypeAssertionWhitespaceRule"
 ];
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
