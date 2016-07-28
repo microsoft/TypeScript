@@ -1171,6 +1171,11 @@ namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
+
+        /**
+         * getDirectories is also required for full import and type reference completions. Without it defined, certain
+         * completions will not be provided
+         */
         getDirectories?(directoryName: string): string[];
     }
 
@@ -4652,7 +4657,7 @@ namespace ts {
 
                 getCompletionEntriesFromTypings(host, options, scriptPath, result);
 
-                forEach(enumeratePotentialNonRelativeModules(fragment, scriptPath), moduleName => {
+                forEach(enumeratePotentialNonRelativeModules(fragment, scriptPath, options), moduleName => {
                     result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName));
                 });
 
@@ -4704,7 +4709,7 @@ namespace ts {
                 return undefined;
             }
 
-            function enumeratePotentialNonRelativeModules(fragment: string, scriptPath: string): string[] {
+            function enumeratePotentialNonRelativeModules(fragment: string, scriptPath: string, options: CompilerOptions): string[] {
                 const trailingSeperator = hasTrailingDirectorySeparator(fragment);
                 fragment = normalizePath(fragment);
 
@@ -4733,19 +4738,21 @@ namespace ts {
                     return moduleName;
                 });
 
-                forEach(enumerateNodeModulesVisibleToScript(host, scriptPath, moduleNameFragment), visibleModule => {
-                    if (!isNestedModule) {
-                        nonRelativeModules.push(visibleModule.canBeImported ? visibleModule.moduleName : ensureTrailingDirectorySeparator(visibleModule.moduleName));
-                    }
-                    else {
-                        const nestedFiles = host.readDirectory(visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/undefined, /*include*/["./*"]);
+                if (!options.moduleResolution || options.moduleResolution === ModuleResolutionKind.NodeJs) {
+                    forEach(enumerateNodeModulesVisibleToScript(host, scriptPath, moduleNameFragment), visibleModule => {
+                        if (!isNestedModule) {
+                            nonRelativeModules.push(visibleModule.canBeImported ? visibleModule.moduleName : ensureTrailingDirectorySeparator(visibleModule.moduleName));
+                        }
+                        else {
+                            const nestedFiles = host.readDirectory(visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/undefined, /*include*/["./*"]);
 
-                        forEach(nestedFiles, (f) => {
-                            const nestedModule = removeFileExtension(getBaseFileName(f));
-                            nonRelativeModules.push(nestedModule);
-                        });
-                    }
-                });
+                            forEach(nestedFiles, (f) => {
+                                const nestedModule = removeFileExtension(getBaseFileName(f));
+                                nonRelativeModules.push(nestedModule);
+                            });
+                        }
+                    });
+                }
 
                 return deduplicate(nonRelativeModules);
             }
@@ -4791,16 +4798,18 @@ namespace ts {
                     result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName));
                 });
             }
-            else if (options.typeRoots) {
+            else if (host.getDirectories && options.typeRoots) {
                 const absoluteRoots = map(options.typeRoots, rootDirectory => getAbsoluteProjectPath(rootDirectory, host, options.project));
-                forEach(absoluteRoots, absoluteRoot => getCompletionEntriesFromDirectory(host, options, absoluteRoot, result));
+                forEach(absoluteRoots, absoluteRoot => getCompletionEntriesFromDirectories(host, options, absoluteRoot, result));
             }
 
-            // Also get all @types typings installed in visible node_modules directories
-            forEach(findPackageJsons(scriptPath), package => {
-                const typesDir = combinePaths(getDirectoryPath(package), "node_modules/@types");
-                getCompletionEntriesFromDirectory(host, options, typesDir, result);
-            });
+            if (host.getDirectories) {
+                // Also get all @types typings installed in visible node_modules directories
+                forEach(findPackageJsons(scriptPath), package => {
+                    const typesDir = combinePaths(getDirectoryPath(package), "node_modules/@types");
+                    getCompletionEntriesFromDirectories(host, options, typesDir, result);
+                });
+            }
 
             return result;
         }
@@ -4817,16 +4826,10 @@ namespace ts {
             return normalizePath(host.resolvePath(path));
         }
 
-        function getCompletionEntriesFromDirectory(host: LanguageServiceHost, options: CompilerOptions, directory: string, result: CompletionEntry[]) {
-            if (directoryProbablyExists(directory, host)) {
-                const typeDirectories = host.readDirectory(directory, getSupportedExtensions(options), /*exclude*/undefined, /*include*/["./*/*"]);
-                const seen: {[index: string]: boolean} = {};
-                forEach(typeDirectories, typeFile => {
-                    const typeDirectory = getDirectoryPath(typeFile);
-                    if (!hasProperty(seen, typeDirectory)) {
-                        seen[typeDirectory] = true;
-                        result.push(createCompletionEntryForModule(getBaseFileName(typeDirectory), ScriptElementKind.externalModuleName));
-                    }
+        function getCompletionEntriesFromDirectories(host: LanguageServiceHost, options: CompilerOptions, directory: string, result: CompletionEntry[]) {
+            if (host.getDirectories && directoryProbablyExists(directory, host)) {
+                forEach(host.getDirectories(directory), typeDirectory => {
+                    result.push(createCompletionEntryForModule(getBaseFileName(typeDirectory), ScriptElementKind.externalModuleName));
                 });
             }
         }
