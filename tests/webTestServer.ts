@@ -1,4 +1,4 @@
-/// <reference path='..\src\harness\external\node.d.ts'/>
+/// <reference types="node" />
 
 import http = require("http");
 import fs = require("fs");
@@ -111,7 +111,7 @@ function writeFile(path: string, data: any, opts: { recursive: boolean }) {
 
 /// Request Handling ///
 
-function handleResolutionRequest(filePath: string, res: http.ServerResponse) {    
+function handleResolutionRequest(filePath: string, res: http.ServerResponse) {
     var resolvedPath = path.resolve(filePath, '');
     resolvedPath = resolvedPath.substring(resolvedPath.indexOf('tests'));
     resolvedPath = switchToForwardSlashes(resolvedPath);
@@ -202,14 +202,13 @@ function handleRequestOperation(req: http.ServerRequest, res: http.ServerRespons
             break;
         case RequestType.GetFile:
             fs.readFile(reqPath, function (err, file) {
-                var ext = reqPath.substr(reqPath.lastIndexOf('.'));
-                var contentType = 'binary';
-                if (ext === '.js') contentType = 'text/javascript'
-                else if (ext === '.css') contentType = 'text/javascript'
-                else if (ext === '.html') contentType = 'text/html'
-                err
-                ? send('fail', res, err.message, contentType)
-                : send('success', res, (<any>file), contentType);
+                const contentType = contentTypeForExtension(path.extname(reqPath));
+                if (err) {
+                    send('fail', res, err.message, contentType);
+                }
+                else {
+                    send('success', res, <any>file, contentType);
+                }
             });
             break;
         case RequestType.ResolveFile:
@@ -248,6 +247,15 @@ function handleRequestOperation(req: http.ServerRequest, res: http.ServerRespons
         default:
             send('unknown', res, null);
             break;
+    }
+
+    function contentTypeForExtension(ext: string) {
+        switch (ext) {
+            case '.js': return 'text/javascript';
+            case '.css': return 'text/css';
+            case '.html': return 'text/html';
+            default: return 'binary';
+        }
     }
 }
 

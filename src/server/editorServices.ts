@@ -38,7 +38,7 @@ namespace ts.server {
         path: Path;
         scriptKind: ScriptKind;
 
-        constructor(private host: ServerHost, public fileName: string, public content: string, public isOpen = false) {
+        constructor(private host: ServerHost, public fileName: string, content: string, public isOpen = false) {
             this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
             this.svc = ScriptVersionCache.fromString(host, content);
         }
@@ -2091,7 +2091,7 @@ namespace ts.server {
                 done: false,
                 leaf: function (relativeStart: number, relativeLength: number, ll: LineLeaf) {
                     if (!f(ll, relativeStart, relativeLength)) {
-                        this.done = true;
+                        walkFns.done = true;
                     }
                 }
             };

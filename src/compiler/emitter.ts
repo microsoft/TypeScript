@@ -614,7 +614,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 const sourceMappingURL = sourceMap.getSourceMappingURL();
                 if (sourceMappingURL) {
-                    write(`//# sourceMappingURL=${sourceMappingURL}`);
+                    write(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Sometimes tools can sometimes see this line as a source mapping url comment
                 }
 
                 writeEmittedFiles(writer.getText(), jsFilePath, sourceMapFilePath, /*writeByteOrderMark*/ compilerOptions.emitBOM, sourceFiles);
@@ -2667,7 +2667,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     isNameOfExportedDeclarationInNonES6Module(node.operand);
 
                 if (internalExportChanged) {
-                    emitAliasEqual(<Identifier> node.operand);
+                    emitAliasEqual(<Identifier>node.operand);
                 }
 
                 write(tokenToString(node.operator));
@@ -2722,7 +2722,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     }
                 }
                 else if (internalExportChanged) {
-                    emitAliasEqual(<Identifier> node.operand);
+                    emitAliasEqual(<Identifier>node.operand);
                     emit(node.operand);
                     if (node.operator === SyntaxKind.PlusPlusToken) {
                         write(" += 1");
@@ -2749,7 +2749,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
              *   if we should also export the value after its it changed
              * - check if node is a source level declaration to emit it differently,
              *   i.e non-exported variable statement 'var x = 1' is hoisted so
-             *   we we emit variable statement 'var' should be dropped.
+             *   when we emit variable statement 'var' should be dropped.
              */
             function isSourceFileLevelDeclarationInSystemJsModule(node: Node, isExported: boolean): boolean {
                 if (!node || !isCurrentFileSystemExternalModule()) {
@@ -4571,14 +4571,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function emitRestParameter(node: FunctionLikeDeclaration) {
                 if (languageVersion < ScriptTarget.ES6 && hasDeclaredRestParameter(node)) {
-                    const restIndex = node.parameters.length - 1;
-                    const restParam = node.parameters[restIndex];
+                    const restParam = node.parameters[node.parameters.length - 1];
 
                     // A rest parameter cannot have a binding pattern, so let's just ignore it if it does.
                     if (isBindingPattern(restParam.name)) {
                         return;
                     }
 
+                    const skipThisCount = node.parameters.length && (<Identifier>node.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword ? 1 : 0;
+                    const restIndex = node.parameters.length - 1 - skipThisCount;
                     const tempName = createTempVariable(TempFlags._i).text;
                     writeLine();
                     emitLeadingComments(restParam);
@@ -4726,7 +4727,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 write("(");
                 if (node) {
                     const parameters = node.parameters;
-                    const skipCount = node.parameters.length && (<Identifier>node.parameters[0].name).text === "this" ? 1 : 0;
+                    const skipCount = node.parameters.length && (<Identifier>node.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword ? 1 : 0;
                     const omitCount = languageVersion < ScriptTarget.ES6 && hasDeclaredRestParameter(node) ? 1 : 0;
                     emitList(parameters, skipCount, parameters.length - omitCount - skipCount, /*multiLine*/ false, /*trailingComma*/ false);
                 }
@@ -5503,16 +5504,15 @@ const _super = (function (geti, seti) {
                             write("export ");
                         }
 
-                        if (!isHoistedDeclarationInSystemModule) {
-                            write("let ");
-                        }
                         if (decoratedClassAlias !== undefined) {
-                            write(`${decoratedClassAlias}`);
+                            write(`let ${decoratedClassAlias}`);
                         }
                         else {
+                            if (!isHoistedDeclarationInSystemModule) {
+                                write("let ");
+                            }
                             emitDeclarationName(node);
                         }
-
                         write(" = ");
                     }
                     else if (isES6ExportedDeclaration(node)) {
@@ -5526,11 +5526,17 @@ const _super = (function (geti, seti) {
                 // If the class has static properties, and it's a class expression, then we'll need
                 // to specialize the emit a bit.  for a class expression of the form:
                 //
-                //      class C { static a = 1; static b = 2; ... }
+                //      (class C { static a = 1; static b = 2; ... })
                 //
                 // We'll emit:
                 //
-                //      (_temp = class C { ... }, _temp.a = 1, _temp.b = 2, _temp)
+                //    ((C_1 = class C {
+                //            // Normal class body
+                //        },
+                //        C_1.a = 1,
+                //        C_1.b = 2,
+                //        C_1));
+                //    var C_1;
                 //
                 // This keeps the expression as an expression, while ensuring that the static parts
                 // of it have been initialized by the time it is used.
@@ -5539,7 +5545,7 @@ const _super = (function (geti, seti) {
                 let generatedName: string;
 
                 if (isClassExpressionWithStaticProperties) {
-                    generatedName = getGeneratedNameForNode(node.name);
+                    generatedName = node.name ? getGeneratedNameForNode(node.name) : makeUniqueName("classExpression");
                     const synthesizedNode = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
                     synthesizedNode.text = generatedName;
                     recordTempDeclaration(synthesizedNode);
@@ -6039,7 +6045,7 @@ const _super = (function (geti, seti) {
                             return;
 
                         case SyntaxKind.StringKeyword:
-                        case SyntaxKind.StringLiteralType:
+                        case SyntaxKind.LiteralType:
                             write("String");
                             return;
 
@@ -6155,10 +6161,11 @@ const _super = (function (geti, seti) {
 
                     if (valueDeclaration) {
                         const parameters = valueDeclaration.parameters;
+                        const skipThisCount = parameters.length && (<Identifier>parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword ? 1 : 0;
                         const parameterCount = parameters.length;
-                        if (parameterCount > 0) {
-                            for (let i = 0; i < parameterCount; i++) {
-                                if (i > 0) {
+                        if (parameterCount > skipThisCount) {
+                            for (let i = skipThisCount; i < parameterCount; i++) {
+                                if (i > skipThisCount) {
                                     write(", ");
                                 }
 
@@ -7686,7 +7693,7 @@ const _super = (function (geti, seti) {
                         }
                         firstNonWhitespace = -1;
                     }
-                    else if (!isWhiteSpace(c)) {
+                    else if (!isWhiteSpaceSingleLine(c)) {
                         lastNonWhitespace = i;
                         if (firstNonWhitespace === -1) {
                             firstNonWhitespace = i;

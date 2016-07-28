@@ -6,3 +6,20 @@ node_js:
   - '0.10'
 
 sudo: false
+
+os:
+  - linux
+  - osx
+
+matrix:
+  fast_finish: true
+  exclude:
+  - os: osx
+    node_js: '4'
+  - os: osx
+    node_js: '0.10'
+
+branches:
+  only:
+  - master
+  - transforms

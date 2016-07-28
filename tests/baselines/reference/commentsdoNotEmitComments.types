@@ -165,7 +165,7 @@ const enum color { red, green, blue }
 var shade: color = color.green;
 >shade : color
 >color : color
->color.green : color
+>color.green : color.green
 >color : typeof color
->green : color
+>green : color.green
 

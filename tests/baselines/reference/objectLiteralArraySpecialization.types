@@ -52,5 +52,5 @@ thing.doSomething((x, y) => x.name === "bob"); // should not error
 >x.name : string
 >x : { name: string; id: number; }
 >name : string
->"bob" : string
+>"bob" : "bob"
 
