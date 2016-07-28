@@ -10394,10 +10394,11 @@ namespace ts {
             }
 
             // Check for compatible indexer types.
-            if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
+            const allowedOptionalFlags = strictNullChecks ? 0 : TypeFlags.Null | TypeFlags.Undefined;
+            if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol | allowedOptionalFlags)) {
 
                 // Try to use a number indexer.
-                if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike) || isForInVariableForNumericPropertyNames(node.argumentExpression)) {
+                if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike | allowedOptionalFlags) || isForInVariableForNumericPropertyNames(node.argumentExpression)) {
                     const numberIndexInfo = getIndexInfoOfType(objectType, IndexKind.Number);
                     if (numberIndexInfo) {
                         getNodeLinks(node).resolvedIndexInfo = numberIndexInfo;
