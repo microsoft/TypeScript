@@ -4,10 +4,7 @@ namespace ts.codeRefactor {
         name: "Add JSDoc Comments to Method",
         nodeLabel: ts.SyntaxKind.MethodDeclaration,
         getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
-            if (token.kind === SyntaxKind.MethodDeclaration) {
-                return getJSDocCodeRefactor(token.pos + 1, context, Diagnostics.Add_JSDoc_Comments_to_Method);
-            }            
-            Debug.fail("No refactor found.");
+            return getJSDocCodeRefactor(token.pos + 1, context, Diagnostics.Add_JSDoc_Comments_to_Method);
         }
     });
 
@@ -15,10 +12,7 @@ namespace ts.codeRefactor {
         name: "Add JSDoc Comments to Constructor",
         nodeLabel: ts.SyntaxKind.Constructor,
         getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
-            if (token.kind === SyntaxKind.Constructor) {
-                return getJSDocCodeRefactor(token.pos + 1, context, Diagnostics.Add_JSDoc_Comments_to_Constructor);
-            }
-            Debug.fail("No refactor found.");
+            return getJSDocCodeRefactor(token.pos + 1, context, Diagnostics.Add_JSDoc_Comments_to_Constructor);
         }
     });
 
@@ -26,10 +20,7 @@ namespace ts.codeRefactor {
         name: "Add JSDoc Comments to Function",
         nodeLabel: ts.SyntaxKind.FunctionDeclaration,
         getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
-            if (token.kind === SyntaxKind.FunctionDeclaration) {
-                return getJSDocCodeRefactor(token.pos, context, Diagnostics.Add_JSDoc_Comments_to_Function);
-            }
-            Debug.fail("No refactor found.");
+            return getJSDocCodeRefactor(token.pos, context, Diagnostics.Add_JSDoc_Comments_to_Function);
         }
     });
 
@@ -37,10 +28,7 @@ namespace ts.codeRefactor {
         name: "Add JSDoc Comments to Class",
         nodeLabel: ts.SyntaxKind.ClassDeclaration,
         getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
-            if (token.kind === SyntaxKind.ClassDeclaration) {
-                return getJSDocCodeRefactor(token.pos, context, Diagnostics.Add_JSDoc_Comments_to_Class);
-            }
-            Debug.fail("No refactor found.");
+            return getJSDocCodeRefactor(token.pos, context, Diagnostics.Add_JSDoc_Comments_to_Class);
         }
     });
 
@@ -48,10 +36,7 @@ namespace ts.codeRefactor {
         name: "Add JSDoc Comments to Module",
         nodeLabel: ts.SyntaxKind.ModuleDeclaration,
         getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
-            if (token.kind === SyntaxKind.ModuleDeclaration) {
-                return getJSDocCodeRefactor(token.pos, context, Diagnostics.Add_JSDoc_Comments_to_Module);
-            }
-            Debug.fail("No refactor found.");
+            return getJSDocCodeRefactor(token.pos, context, Diagnostics.Add_JSDoc_Comments_to_Module);
         }
     });
 

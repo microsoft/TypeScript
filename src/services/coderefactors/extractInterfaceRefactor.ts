@@ -3,50 +3,49 @@ namespace ts.codeRefactor {
     registerCodeRefactor({
         name: "Extract Interface from Property",
         nodeLabel: ts.SyntaxKind.PropertyDeclaration,
-        getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {            
-            if (token.kind == SyntaxKind.PropertyDeclaration) {
-                let propertyDeclaration = <PropertyDeclaration>token;
-                let textChanges: TextChange[] = [];
-                if (propertyDeclaration.initializer) {
-                    const interfaceName: string = "newInterface_" + propertyDeclaration.name.getText();
-                    let interfaceText: string = getInterfaceBeginning(interfaceName, context.newLineCharacter);
+        getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
+            let propertyDeclaration = <PropertyDeclaration>token;
+            let textChanges: TextChange[] = [];
+            if (propertyDeclaration.initializer) {
+                const interfaceName: string = "newInterface_" + propertyDeclaration.name.getText();
+                let interfaceText: string = getInterfaceBeginning(interfaceName, context.newLineCharacter);
 
-                    let syntaxList: SyntaxList = getSyntaxList(propertyDeclaration);
-                    if (syntaxList && syntaxList.getChildCount() > 0) {
-                        for (let i = 0, n = syntaxList.getChildCount(); i < n; i++) {
-                            const member = syntaxList.getChildAt(i);
-                            if (member.kind === SyntaxKind.PropertyAssignment || member.kind === SyntaxKind.MethodDeclaration) {
-                                if (member.kind === SyntaxKind.PropertyAssignment) {
-                                    interfaceText += extractPropertySignature(<PropertyAssignment>member);
-                                }
-                                else if (member.kind === SyntaxKind.MethodDeclaration) {
-                                    interfaceText += extractMethodSignature(<MethodDeclaration>member);
-                                }
-                                interfaceText += handleSemiColon(interfaceText, context.newLineCharacter);
+                let syntaxList: SyntaxList = getSyntaxList(propertyDeclaration);
+                if (syntaxList && syntaxList.getChildCount() > 0) {
+                    for (let i = 0, n = syntaxList.getChildCount(); i < n; i++) {
+                        const member = syntaxList.getChildAt(i);
+                        if (member.kind === SyntaxKind.PropertyAssignment || member.kind === SyntaxKind.MethodDeclaration) {
+                            if (member.kind === SyntaxKind.PropertyAssignment) {
+                                interfaceText += extractPropertySignature(<PropertyAssignment>member);
                             }
+                            else if (member.kind === SyntaxKind.MethodDeclaration) {
+                                interfaceText += extractMethodSignature(<MethodDeclaration>member);
+                            }
+                            interfaceText += handleSemiColon(interfaceText, context.newLineCharacter);
                         }
                     }
-
-                    interfaceText = getInterfaceEndAndRemoveSpaces(interfaceText, context.newLineCharacter);
-
-                    if (token.parent.kind === SyntaxKind.ClassDeclaration) {
-                        textChanges.push({ newText: interfaceText, span: { start: token.parent.pos, length: 0 } });
-                    } else {
-                        textChanges.push({ newText: interfaceText, span: { start: token.pos, length: 0 } });
-                    }
-
-                    let firstAssignmentPosition: number = getFirstPositionOf(propertyDeclaration, SyntaxKind.FirstAssignment);
-                    textChanges.push({ newText: " : " + interfaceName, span: { start: firstAssignmentPosition, length: 0 } });
-
-                    return [{
-                        description: getLocaleSpecificMessage(Diagnostics.Extract_Interface_from_Property),
-                        changes: [{
-                            fileName: context.sourceFile.fileName,
-                            textChanges: textChanges
-                        }]
-                    }];
                 }
+
+                interfaceText = getInterfaceEndAndRemoveSpaces(interfaceText, context.newLineCharacter);
+
+                if (token.parent.kind === SyntaxKind.ClassDeclaration) {
+                    textChanges.push({ newText: interfaceText, span: { start: token.parent.pos, length: 0 } });
+                } else {
+                    textChanges.push({ newText: interfaceText, span: { start: token.pos, length: 0 } });
+                }
+
+                let firstAssignmentPosition: number = getFirstPositionOf(propertyDeclaration, SyntaxKind.FirstAssignment);
+                textChanges.push({ newText: " : " + interfaceName, span: { start: firstAssignmentPosition, length: 0 } });
+
+                return [{
+                    description: getLocaleSpecificMessage(Diagnostics.Extract_Interface_from_Property),
+                    changes: [{
+                        fileName: context.sourceFile.fileName,
+                        textChanges: textChanges
+                    }]
+                }];
             }
+                        
             Debug.fail("No refactor found.");
         }
     });
@@ -55,49 +54,48 @@ namespace ts.codeRefactor {
         name: "Extract Interface from Variable",
         nodeLabel: ts.SyntaxKind.VariableDeclaration,
         getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
-            if (token.kind == SyntaxKind.VariableDeclaration) {
-                let declaration = <VariableDeclaration>token;
-                let textChanges: TextChange[] = [];
+            let declaration = <VariableDeclaration>token;
+            let textChanges: TextChange[] = [];
 
-                if (declaration.initializer) {
-                    const interfaceName: string = "newInterface_" + declaration.name.getText();
-                    let interfaceText: string = getInterfaceBeginning(interfaceName, context.newLineCharacter);
-                    let syntaxList: SyntaxList = getSyntaxList(declaration);
-                    if (syntaxList && syntaxList.getChildCount() > 0) {
-                        for (let i = 0, n = syntaxList.getChildCount(); i < n; i++) {
-                            const member = syntaxList.getChildAt(i);
-                            if (member.kind === SyntaxKind.PropertyAssignment || member.kind === SyntaxKind.MethodDeclaration) {
-                                if (member.kind === SyntaxKind.PropertyAssignment) {
-                                    interfaceText += extractPropertySignature(<PropertyAssignment>member);
-                                }
-                                else if (member.kind === SyntaxKind.MethodDeclaration) {
-                                    interfaceText += extractMethodSignature(<MethodDeclaration>member);
-                                }
-                                interfaceText += handleSemiColon(interfaceText, context.newLineCharacter);
+            if (declaration.initializer) {
+                const interfaceName: string = "newInterface_" + declaration.name.getText();
+                let interfaceText: string = getInterfaceBeginning(interfaceName, context.newLineCharacter);
+                let syntaxList: SyntaxList = getSyntaxList(declaration);
+                if (syntaxList && syntaxList.getChildCount() > 0) {
+                    for (let i = 0, n = syntaxList.getChildCount(); i < n; i++) {
+                        const member = syntaxList.getChildAt(i);
+                        if (member.kind === SyntaxKind.PropertyAssignment || member.kind === SyntaxKind.MethodDeclaration) {
+                            if (member.kind === SyntaxKind.PropertyAssignment) {
+                                interfaceText += extractPropertySignature(<PropertyAssignment>member);
                             }
+                            else if (member.kind === SyntaxKind.MethodDeclaration) {
+                                interfaceText += extractMethodSignature(<MethodDeclaration>member);
+                            }
+                            interfaceText += handleSemiColon(interfaceText, context.newLineCharacter);
                         }
                     }
-
-                    interfaceText = getInterfaceEndAndRemoveSpaces(interfaceText, context.newLineCharacter)
-
-                    if (token.parent.kind === SyntaxKind.ClassDeclaration || token.parent.kind === SyntaxKind.VariableDeclarationList) {
-                        textChanges.push({ newText: interfaceText, span: { start: token.parent.pos, length: 0 } });
-                    } else {
-                        textChanges.push({ newText: interfaceText, span: { start: token.pos, length: 0 } });
-                    }
-
-                    let firstAssignmentPosition: number = getFirstPositionOf(declaration, SyntaxKind.FirstAssignment);
-                    textChanges.push({ newText: " : " + interfaceName, span: { start: firstAssignmentPosition, length: 0 } });
-
-                    return [{
-                        description: getLocaleSpecificMessage(Diagnostics.Extract_Interface_from_Variable),
-                        changes: [{
-                            fileName: context.sourceFile.fileName,
-                            textChanges: textChanges
-                        }]
-                    }];
                 }
+
+                interfaceText = getInterfaceEndAndRemoveSpaces(interfaceText, context.newLineCharacter)
+
+                if (token.parent.kind === SyntaxKind.ClassDeclaration || token.parent.kind === SyntaxKind.VariableDeclarationList) {
+                    textChanges.push({ newText: interfaceText, span: { start: token.parent.pos, length: 0 } });
+                } else {
+                    textChanges.push({ newText: interfaceText, span: { start: token.pos, length: 0 } });
+                }
+
+                let firstAssignmentPosition: number = getFirstPositionOf(declaration, SyntaxKind.FirstAssignment);
+                textChanges.push({ newText: " : " + interfaceName, span: { start: firstAssignmentPosition, length: 0 } });
+
+                return [{
+                    description: getLocaleSpecificMessage(Diagnostics.Extract_Interface_from_Variable),
+                    changes: [{
+                        fileName: context.sourceFile.fileName,
+                        textChanges: textChanges
+                    }]
+                }];
             }
+            
             Debug.fail("No refactor found.");
         }
     });
@@ -106,44 +104,41 @@ namespace ts.codeRefactor {
         name: "Extract Interface from Class",
         nodeLabel: ts.SyntaxKind.ClassDeclaration,
         getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
-            if (token.kind == SyntaxKind.ClassDeclaration) {
-                let classDeclaration = <ClassDeclaration>token;
-                let textChanges: TextChange[] = [];
+            let classDeclaration = <ClassDeclaration>token;
+            let textChanges: TextChange[] = [];
 
-                const interfaceName: string = "newInterface_" + classDeclaration.name.getText();
-                let interfaceText: string = getInterfaceBeginning(interfaceName, context.newLineCharacter);
-                for (const member of classDeclaration.members) {
-                    if ((member.flags & NodeFlags.Public || member.flags === 0) &&
-                        !(member.flags & NodeFlags.Static) &&
-                         (member.kind === SyntaxKind.PropertyDeclaration ||
-                          member.kind === SyntaxKind.MethodDeclaration)
-                    ) {
-                        if (member.kind === SyntaxKind.PropertyDeclaration) {
-                            interfaceText += extractPropertySignature(<PropertyDeclaration>member);
-                        }
-                        else if (member.kind === SyntaxKind.MethodDeclaration) {
-                            interfaceText += extractMethodSignature(<MethodDeclaration>member);
-                        }
-                        interfaceText += handleSemiColon(interfaceText, context.newLineCharacter);
+            const interfaceName: string = "newInterface_" + classDeclaration.name.getText();
+            let interfaceText: string = getInterfaceBeginning(interfaceName, context.newLineCharacter);
+            for (const member of classDeclaration.members) {
+                if ((member.flags & NodeFlags.Public || member.flags === 0) &&
+                    !(member.flags & NodeFlags.Static) &&
+                        (member.kind === SyntaxKind.PropertyDeclaration ||
+                        member.kind === SyntaxKind.MethodDeclaration)
+                ) {
+                    if (member.kind === SyntaxKind.PropertyDeclaration) {
+                        interfaceText += extractPropertySignature(<PropertyDeclaration>member);
                     }
+                    else if (member.kind === SyntaxKind.MethodDeclaration) {
+                        interfaceText += extractMethodSignature(<MethodDeclaration>member);
+                    }
+                    interfaceText += handleSemiColon(interfaceText, context.newLineCharacter);
                 }
-
-                interfaceText = getInterfaceEndAndRemoveSpaces(interfaceText, context.newLineCharacter)
-
-                textChanges.push({ newText: interfaceText, span: { start: token.pos, length: 0 } });
-
-                let firstPunctuationPosition: number = getFirstPositionOf(classDeclaration, SyntaxKind.FirstPunctuation);
-                textChanges.push({ newText: " implements " + interfaceName, span: { start: firstPunctuationPosition, length: 0 } });
-
-                return [{
-                    description: getLocaleSpecificMessage(Diagnostics.Extract_Interface_from_Class),
-                    changes: [{
-                        fileName: context.sourceFile.fileName,
-                        textChanges: textChanges
-                    }]
-                }];
             }
-            Debug.fail("No refactor found.");
+
+            interfaceText = getInterfaceEndAndRemoveSpaces(interfaceText, context.newLineCharacter)
+
+            textChanges.push({ newText: interfaceText, span: { start: token.pos, length: 0 } });
+
+            let firstPunctuationPosition: number = getFirstPositionOf(classDeclaration, SyntaxKind.FirstPunctuation);
+            textChanges.push({ newText: " implements " + interfaceName, span: { start: firstPunctuationPosition, length: 0 } });
+
+            return [{
+                description: getLocaleSpecificMessage(Diagnostics.Extract_Interface_from_Class),
+                changes: [{
+                    fileName: context.sourceFile.fileName,
+                    textChanges: textChanges
+                }]
+            }];
         }
     });
 

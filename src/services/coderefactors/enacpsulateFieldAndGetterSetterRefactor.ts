@@ -4,29 +4,26 @@ namespace ts.codeRefactor {
         name: "Convert Get Property to Method",
         nodeLabel: ts.SyntaxKind.GetAccessor,
         getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
-            if (token.kind === SyntaxKind.GetAccessor) {
-                let textChanges: TextChange[] = [];
-                let fileTextChanges: FileTextChanges[] = [];
+            let textChanges: TextChange[] = [];
+            let fileTextChanges: FileTextChanges[] = [];
 
-                let getChild: Node = getChildOfType(token, SyntaxKind.GetKeyword);
-                let identifierChild: Node = getChildOfType(token, SyntaxKind.Identifier);
+            let getChild: Node = getChildOfType(token, SyntaxKind.GetKeyword);
+            let identifierChild: Node = getChildOfType(token, SyntaxKind.Identifier);
 
-                textChanges.push({ newText: context.newLineCharacter + "function", span: { start: getChild.pos, length: getChild.end - getChild.pos } });
-                textChanges.push({ newText: "get", span: { start: identifierChild.getStart(), length: 0 } });
+            textChanges.push({ newText: context.newLineCharacter + "function", span: { start: getChild.pos, length: getChild.end - getChild.pos } });
+            textChanges.push({ newText: "get", span: { start: identifierChild.getStart(), length: 0 } });
 
-                fileTextChanges.push({
-                    fileName: context.sourceFile.fileName,
-                    textChanges: textChanges
-                });
+            fileTextChanges.push({
+                fileName: context.sourceFile.fileName,
+                textChanges: textChanges
+            });
 
-                processReferences(identifierChild, fileTextChanges, context, true, false);
+            processReferences(identifierChild, fileTextChanges, context, true, false);
 
-                return [{
-                    description: getLocaleSpecificMessage(Diagnostics.Convert_Get_property_to_Method),
-                    changes: fileTextChanges
-                }];
-            }
-            Debug.fail("No refactor found.");
+            return [{
+                description: getLocaleSpecificMessage(Diagnostics.Convert_Get_property_to_Method),
+                changes: fileTextChanges
+            }];
         }
     });
 
@@ -34,29 +31,26 @@ namespace ts.codeRefactor {
         name: "Convert Set Property to Method",
         nodeLabel: ts.SyntaxKind.SetAccessor,
         getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
-            if (token.kind === SyntaxKind.SetAccessor) {
-                let textChanges: TextChange[] = [];
-                let fileTextChanges: FileTextChanges[] = [];
+            let textChanges: TextChange[] = [];
+            let fileTextChanges: FileTextChanges[] = [];
 
-                let setChild: Node = getChildOfType(token, SyntaxKind.SetKeyword);
-                let identifierChild: Node = getChildOfType(token, SyntaxKind.Identifier);
+            let setChild: Node = getChildOfType(token, SyntaxKind.SetKeyword);
+            let identifierChild: Node = getChildOfType(token, SyntaxKind.Identifier);
 
-                textChanges.push({ newText: context.newLineCharacter + "function", span: { start: setChild.pos, length: setChild.end - setChild.pos } });
-                textChanges.push({ newText: "set", span: { start: identifierChild.getStart(), length: 0 } });
+            textChanges.push({ newText: context.newLineCharacter + "function", span: { start: setChild.pos, length: setChild.end - setChild.pos } });
+            textChanges.push({ newText: "set", span: { start: identifierChild.getStart(), length: 0 } });
 
-                fileTextChanges.push({
-                    fileName: context.sourceFile.fileName,
-                    textChanges: textChanges
-                });
+            fileTextChanges.push({
+                fileName: context.sourceFile.fileName,
+                textChanges: textChanges
+            });
 
-                processReferences(identifierChild, fileTextChanges, context, false, true);
+            processReferences(identifierChild, fileTextChanges, context, false, true);
 
-                return [{
-                    description: getLocaleSpecificMessage(Diagnostics.Convert_Get_property_to_Method),
-                    changes: fileTextChanges
-                }];
-            }
-            Debug.fail("No refactor found.");
+            return [{
+                description: getLocaleSpecificMessage(Diagnostics.Convert_Get_property_to_Method),
+                changes: fileTextChanges
+            }];
         }
     });
 
@@ -64,8 +58,7 @@ namespace ts.codeRefactor {
         name: "Encapsulate Field",
         nodeLabel: ts.SyntaxKind.Identifier,
         getTextChanges: (token: Node, context: CodeFixContext): CodeAction[] => {
-            if (token.kind === SyntaxKind.Identifier && // It is an Identifier
-                token.parent && token.parent.kind === SyntaxKind.PropertyDeclaration && // It is Property
+            if (token.parent && token.parent.kind === SyntaxKind.PropertyDeclaration && // It is Property
                 (token.parent.flags & NodeFlags.Public || token.parent.flags === 0) && // It has modifier public or none
                 !(token.parent.flags & NodeFlags.Static)) // It is not static
             {
