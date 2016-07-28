@@ -38,6 +38,15 @@ function f5() {
     }
 }
 
+declare function getReadonlyFieldStringOrNumber(): { readonly a: string | number };
+function f6() {
+    const x = getReadonlyFieldStringOrNumber();
+    if (typeof x.a === 'string') {
+        const f: () => number = () => x.a.length;
+    }
+}
+
+
 //// [constLocalsInFunctionExpressions.js]
 function f1() {
     var x = getStringOrNumber();
@@ -69,5 +78,11 @@ function f5() {
     var x = getStringOrNumber();
     if (typeof x === "string") {
         var f = function () { return function () { return x.length; }; };
+    }
+}
+function f6() {
+    var x = getReadonlyFieldStringOrNumber();
+    if (typeof x.a === 'string') {
+        var f = function () { return x.a.length; };
     }
 }
