@@ -11,7 +11,7 @@ import os = require("os");
 
 if (process.argv[2] == '--help') {
     console.log('Runs a node server on port 8888, looking for tests folder in the current directory\n');
-    console.log('Syntax: node nodeServer.js [port] [typescriptEnlistmentDirectory] [tests] [--browser] [--verbose]\n');
+    console.log('Syntax: node nodeServer.js [typescriptEnlistmentDirectory] [tests] [--browser] [--verbose]\n');
     console.log('Examples: \n\tnode nodeServer.js .');
     console.log('\tnode nodeServer.js 3000 D:/src/typescript/public --verbose IE');
 }
