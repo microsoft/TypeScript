@@ -10,4 +10,4 @@
 //// /// <reference path="0.d.ts" />
 //// [|myLib|].doThing();
 
-verify.rangesReferenceEachOther()
+verify.rangesReferenceEachOther();
