@@ -10,9 +10,9 @@ import os = require("os");
 /// Command line processing ///
 
 if (process.argv[2] == '--help') {
-    console.log('Runs a node server on port 8888 by default, looking for tests folder in the current directory\n');
+    console.log('Runs a node server on port 8888, looking for tests folder in the current directory\n');
     console.log('Syntax: node nodeServer.js [port] [typescriptEnlistmentDirectory] [tests] [--browser] [--verbose]\n');
-    console.log('Examples: \n\tnode nodeServer.js 8888 .');
+    console.log('Examples: \n\tnode nodeServer.js .');
     console.log('\tnode nodeServer.js 3000 D:/src/typescript/public --verbose IE');
 }
 
@@ -20,27 +20,24 @@ function switchToForwardSlashes(path: string) {
     return path.replace(/\\/g, "/").replace(/\/\//g, '/');
 }
 
-var port = parseInt(process.argv[2], 10) || 8888;
-if (port !== 8888) {
-    throw new Error(`Port must be 8888. Got ${port}. See GH#9987`);
-}
+var port = 8888; // harness.ts and webTestResults.html depend on this exact port number.
 var rootDir = switchToForwardSlashes(__dirname + '/../');
 
 var browser: string;
-if (process.argv[3]) {
-    browser = process.argv[3];
+if (process.argv[2]) {
+    browser = process.argv[2];
     if (browser !== 'chrome' && browser !== 'IE') {
         console.log('Invalid command line arguments. Got ' + browser + ' but expected chrome, IE or nothing.');
     }
 }
 
-var grep = process.argv[4];
+var grep = process.argv[3];
 
 var verbose = false;
-if (process.argv[5] == '--verbose') {
+if (process.argv[4] == '--verbose') {
     verbose = true;
-} else if (process.argv[5] && process.argv[5] !== '--verbose') {
-    console.log('Invalid command line arguments. Got ' + process.argv[5] + ' but expected --verbose or nothing.');
+} else if (process.argv[4] && process.argv[4] !== '--verbose') {
+    console.log('Invalid command line arguments. Got ' + process.argv[4] + ' but expected --verbose or nothing.');
 }
 
 /// Utils ///
