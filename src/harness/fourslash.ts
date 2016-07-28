@@ -260,8 +260,8 @@ namespace FourSlash {
 
                     // Extend our existing compiler options so that we can also support tsconfig only options
                     if (configJson.config.compilerOptions) {
-                        let baseDir = ts.normalizePath(ts.getDirectoryPath(file.fileName));
-                        let tsConfig = ts.convertCompilerOptionsFromJson(configJson.config.compilerOptions, baseDir, file.fileName);
+                        const baseDirectory = ts.normalizePath(ts.getDirectoryPath(file.fileName));
+                        const tsConfig = ts.convertCompilerOptionsFromJson(configJson.config.compilerOptions, baseDirectory, file.fileName);
 
                         if (!tsConfig.errors || !tsConfig.errors.length) {
                             compilationOptions = ts.extend(compilationOptions, tsConfig.options);

@@ -20,7 +20,7 @@
 
 // @Filename: dir1/package.json
 //// { "dependencies": { "fake-module2": "latest" } }
-// @Filename: dir1/node_modules/@types/fake-module2/js.d.ts
+// @Filename: dir1/node_modules/fake-module2/index.ts
 //// declare module "ambient-module-test" {}
 
 // @Filename: dir1/dir2/dir3/package.json
@@ -34,7 +34,7 @@ for (const kind of kinds) {
     goTo.marker(kind + "0");
 
     verify.completionListContains("fake-module/");
-    verify.completionListContains("fake-module2/");
+    verify.completionListContains("fake-module2");
     verify.completionListContains("fake-module3/");
     verify.not.completionListItemsCountIsGreaterThan(3);
 
@@ -46,7 +46,7 @@ for (const kind of kinds) {
     goTo.marker(kind + "2");
 
     verify.completionListContains("fake-module/");
-    verify.completionListContains("fake-module2/");
+    verify.completionListContains("fake-module2");
     verify.completionListContains("fake-module3/");
     verify.not.completionListItemsCountIsGreaterThan(3);
 }

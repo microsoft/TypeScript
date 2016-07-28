@@ -1968,7 +1968,7 @@ namespace ts {
      * for completions.
      * For example, this matches /// <reference path="fragment
      */
-    const tripleSlashDirectiveFragmentRegex = /^\/\/\/\s*<reference\s+path\s*=\s*(?:'|")([^'"]+)$/;
+    const tripleSlashDirectiveFragmentRegex = /^\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|")([^'"]+)$/;
 
     let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
 
@@ -4501,7 +4501,7 @@ namespace ts {
                     result = getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/false);
 
                     if (paths) {
-                        for (var path in paths) {
+                        for (const path in paths) {
                             if (paths.hasOwnProperty(path)) {
                                 if (path === "*") {
                                     if (paths[path]) {
@@ -4526,7 +4526,7 @@ namespace ts {
                     result = [];
                 }
 
-
+                getCompletionEntriesFromTypings(host, options, scriptPath, result);
 
                 forEach(enumeratePotentialNonRelativeModules(fragment, scriptPath), moduleName => {
                     result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName));
@@ -4558,7 +4558,7 @@ namespace ts {
                     // If we have a suffix, then we need to read the directory all the way down. We could create a glob
                     // that encodes the suffix, but we would have to escape the character "?" which readDirectory
                     // doesn't support. For now, this is safer but slower
-                    const includeGlob = normalizedSuffix ? "**/*" : "./*"
+                    const includeGlob = normalizedSuffix ? "**/*" : "./*";
 
                     const matches = host.readDirectory(baseDirectory, fileExtensions, undefined, [includeGlob]);
                     const result: string[] = [];
@@ -4629,18 +4629,96 @@ namespace ts {
                 const text = sourceFile.text.substr(node.pos, position);
                 const match = tripleSlashDirectiveFragmentRegex.exec(text);
                 if (match) {
-                    const fragment = match[1];
-                    const scriptPath = getDirectoryPath(sourceFile.path);
-                    return {
-                        isMemberCompletion: false,
-                        isNewIdentifierLocation: false,
-                        entries: getCompletionEntriesForDirectoryFragment(fragment, scriptPath, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/true)
-                    };
+                    const kind= match[1];
+                    const fragment = match[2];
+                    if (kind === "path") {
+                        // Give completions for a relative path
+                        const scriptPath = getDirectoryPath(sourceFile.path);
+                        return {
+                            isMemberCompletion: false,
+                            isNewIdentifierLocation: false,
+                            entries: getCompletionEntriesForDirectoryFragment(fragment, scriptPath, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/true)
+                        };
+                    }
+                    else {
+                        // Give completions based on what is available in the types directory
+                    }
                 }
 
                 return undefined;
             }
         }
+
+        function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, result: CompletionEntry[]): CompletionEntry[] {
+            // Check for typings specified in compiler options
+            if (options.types) {
+                forEach(options.types, moduleName => {
+                    result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName));
+                });
+            }
+            else if (options.typeRoots) {
+                const absoluteRoots = map(options.typeRoots, rootDirectory => getAbsoluteProjectPath(rootDirectory, host, options.project));
+                forEach(absoluteRoots, absoluteRoot => getCompletionEntriesFromDirectory(host, options, absoluteRoot, result));
+            }
+
+            // Also get all @types typings installed in visible node_modules directories
+            forEach(findPackageJsons(scriptPath), package => {
+                const typesDir = combinePaths(getDirectoryPath(package), "node_modules/@types");
+                getCompletionEntriesFromDirectory(host, options, typesDir, result);
+            });
+
+            return result;
+        }
+
+        function getAbsoluteProjectPath(path: string, host: LanguageServiceHost, projectDir?: string) {
+            if (isRootedDiskPath(path)) {
+                return normalizePath(path);
+            }
+
+            if (projectDir) {
+                return normalizePath(combinePaths(projectDir, path));
+            }
+
+            return normalizePath(host.resolvePath(path));
+        }
+
+        function getCompletionEntriesFromDirectory(host: LanguageServiceHost, options: CompilerOptions, directory: string, result: CompletionEntry[]) {
+            if (directoryProbablyExists(directory, host)) {
+                const typeDirectories = host.readDirectory(directory, getSupportedExtensions(options), /*exclude*/undefined, /*include*/["./*/*"]);
+                const seen: {[index: string]: boolean} = {};
+                forEach(typeDirectories, typeFile => {
+                    const typeDirectory = getDirectoryPath(typeFile);
+                    if (!hasProperty(seen, typeDirectory)) {
+                        seen[typeDirectory] = true;
+                        result.push(createCompletionEntryForModule(getBaseFileName(typeDirectory), ScriptElementKind.externalModuleName));
+                    }
+                });
+            }
+        }
+
+        function findPackageJsons(currentDir: string): string[] {
+            const paths: string[] = [];
+            let currentConfigPath: string;
+            while (true) {
+                currentConfigPath = findConfigFile(currentDir, (f) => host.fileExists(f), "package.json");
+                if (currentConfigPath) {
+                    paths.push(currentConfigPath);
+
+                    currentDir = getDirectoryPath(currentConfigPath);
+                    const parent = getDirectoryPath(currentDir);
+                    if (currentDir === parent) {
+                        break;
+                    }
+                    currentDir = parent;
+                }
+                else {
+                    break;
+                }
+            }
+
+            return paths;
+        }
+
 
         function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string, modulePrefix?: string) {
             const result: VisibleModuleInfo[] = [];
@@ -4671,29 +4749,6 @@ namespace ts {
             });
 
             return result;
-
-            function findPackageJsons(currentDir: string): string[] {
-                const paths: string[] = [];
-                let currentConfigPath: string;
-                while (true) {
-                    currentConfigPath = findConfigFile(currentDir, (f) => host.fileExists(f), "package.json");
-                    if (currentConfigPath) {
-                        paths.push(currentConfigPath);
-
-                        currentDir = getDirectoryPath(currentConfigPath);
-                        const parent = getDirectoryPath(currentDir);
-                        if (currentDir === parent) {
-                            break;
-                        }
-                        currentDir = parent;
-                    }
-                    else {
-                        break;
-                    }
-                }
-
-                return paths;
-            }
 
             function tryReadingPackageJson(filePath: string) {
                 try {
@@ -4745,7 +4800,7 @@ namespace ts {
                 kind,
                 kindModifiers: ScriptElementKindModifier.none,
                 sortText: name
-            }
+            };
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {

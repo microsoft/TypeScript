@@ -22,11 +22,8 @@
 // @Filename: node_modules/unlisted-module/index.js
 //// /*unlisted-module*/
 
-// @Filename: node_modules/@types/fake-module/other.d.ts
-//// declare module "fake-module/other" {}
-
-// @Filename: node_modules/@types/unlisted-module/index.d.ts
-//// /*unlisted-types*/
+// @Filename: ambient.ts
+//// declare module "fake-module/other"
 
 const kinds = ["import_as", "import_equals", "require"];
 
