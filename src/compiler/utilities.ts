@@ -1033,14 +1033,14 @@ namespace ts {
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
     }
 
-
-    export function getEntityNameFromTypeNode(node: TypeNode): EntityName | Expression {
+    export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.TypeReference:
                     return (<TypeReferenceNode>node).typeName;
                 case SyntaxKind.ExpressionWithTypeArguments:
-                    return (<ExpressionWithTypeArguments>node).expression;
+                    Debug.assert(isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node));
+                    return (<SupportedExpressionWithTypeArguments>node).expression;
                 case SyntaxKind.Identifier:
                 case SyntaxKind.QualifiedName:
                     return (<EntityName><Node>node);
@@ -2680,22 +2680,26 @@ namespace ts {
             isClassLike(node.parent.parent);
     }
 
-    // Returns false if this heritage clause element's expression contains something unsupported
-    // (i.e. not a name or dotted name).
-    export function isSupportedExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
-        return isSupportedExpressionWithTypeArgumentsRest(node.expression);
+    export function isSupportedExpressionWithTypeArguments(node: ExpressionWithTypeArguments): node is SupportedExpressionWithTypeArguments {
+        return isEntityNameExpression(node.expression);
     }
 
-    function isSupportedExpressionWithTypeArgumentsRest(node: Expression): boolean {
-        if (node.kind === SyntaxKind.Identifier) {
-            return true;
+    export function isEntityNameExpression(node: Expression): node is EntityNameExpression {
+        for (; ; ) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    return true;
+                case SyntaxKind.PropertyAccessExpression:
+                    node = (<PropertyAccessExpression>node).expression;
+                    break;
+                default:
+                    return false;
+            }
         }
-        else if (isPropertyAccessExpression(node)) {
-            return isSupportedExpressionWithTypeArgumentsRest(node.expression);
-        }
-        else {
-            return false;
-        }
+    }
+
+    export function isPropertyAccessAnEntityNameExpression(node: PropertyAccessExpression): node is PropertyAccessEntityNameExpression {
+        return isEntityNameExpression(node.expression);
     }
 
     export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {

@@ -441,7 +441,7 @@ namespace ts {
                 }
             }
 
-            function emitEntityName(entityName: EntityName | PropertyAccessExpression) {
+            function emitEntityName(entityName: EntityNameOrEntityNameExpression) {
                 const visibilityResult = resolver.isEntityNameVisible(entityName,
                     // Aliases can be written asynchronously so use correct enclosing declaration
                     entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration ? entityName.parent : enclosingDeclaration);
@@ -454,7 +454,7 @@ namespace ts {
             function emitExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
                 if (isSupportedExpressionWithTypeArguments(node)) {
                     Debug.assert(node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression);
-                    emitEntityName(<Identifier | PropertyAccessExpression>node.expression);
+                    emitEntityName(node.expression);
                     if (node.typeArguments) {
                         write("<");
                         emitCommaList(node.typeArguments, emitType);

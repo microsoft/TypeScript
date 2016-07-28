@@ -1,0 +1,5 @@
+=== tests/cases/compiler/exportDefaultProperty.ts ===
+export default "".length
+>"".length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
+

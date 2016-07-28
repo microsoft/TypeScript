@@ -1,0 +1,6 @@
+=== tests/cases/compiler/exportDefaultProperty.ts ===
+export default "".length
+>"".length : number
+>"" : string
+>length : number
+
