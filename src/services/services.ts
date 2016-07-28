@@ -4538,11 +4538,10 @@ namespace ts {
             function getModulesForPathsPattern(fragment: string, baseUrl: string, pattern: string, fileExtensions: string[]): string[] {
                 const parsed = hasZeroOrOneAsteriskCharacter(pattern) ? tryParsePattern(pattern) : undefined;
                 if (parsed) {
-                    const hasTrailingSlash = parsed.prefix.charAt(parsed.prefix.length - 1) === "/" || parsed.prefix.charAt(parsed.prefix.length - 1) === "\\";
-
                     // The prefix has two effective parts: the directory path and the base component after the filepath that is not a
                     // full directory component. For example: directory/path/of/prefix/base*
-                    const normalizedPrefix = hasTrailingSlash ? ensureTrailingDirectorySeparator(normalizePath(parsed.prefix)) : normalizePath(parsed.prefix);
+                    const normalizedPrefix = hasTrailingDirectorySeparator(parsed.prefix) ?
+                        ensureTrailingDirectorySeparator(normalizePath(parsed.prefix)) : normalizePath(parsed.prefix);
                     const normalizedPrefixDirectory = getDirectoryPath(normalizedPrefix);
                     const normalizedPrefixBase = getBaseFileName(normalizedPrefix);
 
@@ -4582,6 +4581,13 @@ namespace ts {
             }
 
             function enumeratePotentialNonRelativeModules(fragment: string, scriptPath: string): string[] {
+                const trailingSeperator = hasTrailingDirectorySeparator(fragment);
+                fragment = normalizePath(fragment);
+
+                if (trailingSeperator) {
+                    fragment = ensureTrailingDirectorySeparator(fragment);
+                }
+
                 // If this is a nested module, get the module name
                 const firstSeparator = fragment.indexOf(directorySeparator);
                 const moduleNameFragment = firstSeparator !== -1 ? fragment.substr(0, firstSeparator) : fragment;
@@ -4631,9 +4637,9 @@ namespace ts {
                 if (match) {
                     const kind= match[1];
                     const fragment = match[2];
+                    const scriptPath = getDirectoryPath(sourceFile.path);
                     if (kind === "path") {
                         // Give completions for a relative path
-                        const scriptPath = getDirectoryPath(sourceFile.path);
                         return {
                             isMemberCompletion: false,
                             isNewIdentifierLocation: false,
@@ -4641,7 +4647,12 @@ namespace ts {
                         };
                     }
                     else {
-                        // Give completions based on what is available in the types directory
+                        // Give completions based on the typings available
+                        return {
+                            isMemberCompletion: false,
+                            isNewIdentifierLocation: false,
+                            entries: getCompletionEntriesFromTypings(host, program.getCompilerOptions(), scriptPath)
+                        };
                     }
                 }
 
@@ -4649,7 +4660,7 @@ namespace ts {
             }
         }
 
-        function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, result: CompletionEntry[]): CompletionEntry[] {
+        function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, result: CompletionEntry[] = []): CompletionEntry[] {
             // Check for typings specified in compiler options
             if (options.types) {
                 forEach(options.types, moduleName => {

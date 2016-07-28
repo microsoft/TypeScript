@@ -4,6 +4,7 @@
 
 
 // @Filename: tests/test0.ts
+//// /// <reference types="m/*types_ref0*/" />
 //// import * as foo1 from "m/*import_as0*/
 //// import foo2 = require("m/*import_equals0*/
 //// var foo3 = require("m/*require0*/
@@ -21,7 +22,7 @@
 //// export var z = 9;
 
 
-const kinds = ["import_as", "import_equals", "require"];
+const kinds = ["types_ref", "import_as", "import_equals", "require"];
 
 for (const kind of kinds) {
     goTo.marker(kind + "0");

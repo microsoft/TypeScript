@@ -927,4 +927,9 @@ namespace ts {
         }
         return ensureScriptKind(fileName, scriptKind);
     }
+
+    export function hasTrailingDirectorySeparator(path: string) {
+        const lastCharacter = path.charAt(path.length - 1);
+        return lastCharacter === "/" || lastCharacter === "\\";
+    }
 }
