@@ -18519,7 +18519,7 @@ namespace ts {
                         case SyntaxKind.TypeAliasDeclaration:
                             return true;
                         case SyntaxKind.EnumDeclaration:
-                            return nodeHasAnyModifiersExcept(node, SyntaxKind.ConstKeyword)
+                            return nodeHasAnyModifiersExcept(node, SyntaxKind.ConstKeyword);
                         default:
                             Debug.fail();
                             return false;
