@@ -14,5 +14,5 @@ export = Thing;
 >Thing : () => number
 
 export as namespace Foo;
->Foo : any
+>Foo : () => number
 
