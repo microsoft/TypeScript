@@ -29,13 +29,13 @@ function f1() {
         if (x == 1)
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
             break;
         else if (y == 2)
 >y == 2 : boolean
 >y : number
->2 : number
+>2 : 2
 
             y = 5;
 >y = 5 : number
@@ -85,13 +85,13 @@ function f2() {
         if (x == 1)
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
             break;
         else if (y == 2)
 >y == 2 : boolean
 >y : number
->2 : number
+>2 : 2
 
             y = 5;
 >y = 5 : number

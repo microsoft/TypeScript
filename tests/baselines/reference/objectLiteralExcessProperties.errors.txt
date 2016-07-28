@@ -1,7 +1,7 @@
 tests/cases/compiler/objectLiteralExcessProperties.ts(9,18): error TS2322: Type '{ forword: string; }' is not assignable to type 'Book'.
   Object literal may only specify known properties, and 'forword' does not exist in type 'Book'.
-tests/cases/compiler/objectLiteralExcessProperties.ts(11,27): error TS2322: Type '{ foreward: string; }' is not assignable to type 'Book | string'.
-  Object literal may only specify known properties, and 'foreward' does not exist in type 'Book | string'.
+tests/cases/compiler/objectLiteralExcessProperties.ts(11,27): error TS2322: Type '{ foreward: string; }' is not assignable to type 'string | Book'.
+  Object literal may only specify known properties, and 'foreward' does not exist in type 'string | Book'.
 tests/cases/compiler/objectLiteralExcessProperties.ts(13,53): error TS2322: Type '({ foreword: string; } | { forwards: string; })[]' is not assignable to type 'Book | Book[]'.
   Type '({ foreword: string; } | { forwards: string; })[]' is not assignable to type 'Book[]'.
     Type '{ foreword: string; } | { forwards: string; }' is not assignable to type 'Book'.
@@ -41,8 +41,8 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(33,27): error TS2322: Type
     
     var b2: Book | string = { foreward: "nope" };
                               ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ foreward: string; }' is not assignable to type 'Book | string'.
-!!! error TS2322:   Object literal may only specify known properties, and 'foreward' does not exist in type 'Book | string'.
+!!! error TS2322: Type '{ foreward: string; }' is not assignable to type 'string | Book'.
+!!! error TS2322:   Object literal may only specify known properties, and 'foreward' does not exist in type 'string | Book'.
     
     var b3: Book | (Book[]) = [{ foreword: "hello" }, { forwards: "back" }];
                                                         ~~~~~~~~~~~~~~~~

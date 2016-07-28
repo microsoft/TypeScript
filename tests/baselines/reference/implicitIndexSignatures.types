@@ -147,14 +147,14 @@ function f3() {
 >b : string
 
     const v1 = getStringIndexValue(o1);
->v1 : number | string
->getStringIndexValue(o1) : number | string
+>v1 : string | number
+>getStringIndexValue(o1) : string | number
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
 >o1 : { a: number; b: string; }
 
     const v2 = getStringIndexValue(o2);
->v2 : number | string
->getStringIndexValue(o2) : number | string
+>v2 : string | number
+>getStringIndexValue(o2) : string | number
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
 >o2 : { a: number; b: string; }
 }

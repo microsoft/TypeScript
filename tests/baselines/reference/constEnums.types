@@ -337,24 +337,24 @@ function foo1(e: I1.C.E): void {
     if (e === I1.C.E.V1) {
 >e === I1.C.E.V1 : boolean
 >e : I1.C.E
->I1.C.E.V1 : I1.C.E
+>I1.C.E.V1 : I1.C.E.V1
 >I1.C.E : typeof I1.C.E
 >I1.C : typeof I1.C
 >I1 : typeof I1
 >C : typeof I1.C
 >E : typeof I1.C.E
->V1 : I1.C.E
+>V1 : I1.C.E.V1
     }
     else if (e === I1.C.E.V2) {
 >e === I1.C.E.V2 : boolean
->e : I1.C.E
->I1.C.E.V2 : I1.C.E
+>e : I1.C.E.V2
+>I1.C.E.V2 : I1.C.E.V2
 >I1.C.E : typeof I1.C.E
 >I1.C : typeof I1.C
 >I1 : typeof I1
 >C : typeof I1.C
 >E : typeof I1.C.E
->V2 : I1.C.E
+>V2 : I1.C.E.V2
     }
 }
 
@@ -368,24 +368,24 @@ function foo2(e: I2.C.E): void {
     if (e === I2.C.E.V1) {
 >e === I2.C.E.V1 : boolean
 >e : I2.C.E
->I2.C.E.V1 : I2.C.E
+>I2.C.E.V1 : I2.C.E.V1
 >I2.C.E : typeof I2.C.E
 >I2.C : typeof I2.C
 >I2 : typeof I2
 >C : typeof I2.C
 >E : typeof I2.C.E
->V1 : I2.C.E
+>V1 : I2.C.E.V1
     }
     else if (e === I2.C.E.V2) {
 >e === I2.C.E.V2 : boolean
->e : I2.C.E
->I2.C.E.V2 : I2.C.E
+>e : I2.C.E.V2
+>I2.C.E.V2 : I2.C.E.V2
 >I2.C.E : typeof I2.C.E
 >I2.C : typeof I2.C
 >I2 : typeof I2
 >C : typeof I2.C
 >E : typeof I2.C.E
->V2 : I2.C.E
+>V2 : I2.C.E.V2
     }
 }
 
