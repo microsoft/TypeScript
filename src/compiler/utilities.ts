@@ -1523,7 +1523,7 @@ namespace ts {
                 continue;
             }
             return parent.kind === SyntaxKind.BinaryExpression &&
-                (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken &&
+                isAssignmentOperator((<BinaryExpression>parent).operatorToken.kind) &&
                 (<BinaryExpression>parent).left === node ||
                 (parent.kind === SyntaxKind.ForInStatement || parent.kind === SyntaxKind.ForOfStatement) &&
                 (<ForInStatement | ForOfStatement>parent).initializer === node;

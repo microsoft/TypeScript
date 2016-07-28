@@ -671,7 +671,7 @@ var run = path.join(builtLocalDirectory, "run.js");
 compileFile(
     /*outFile*/ run,
     /*source*/ harnessSources,
-    /*prereqs*/ [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources),
+    /*prereqs*/ [builtLocalDirectory, tscFile].concat(libraryTargets).concat(servicesSources).concat(harnessSources),
     /*prefixes*/ [],
     /*useBuiltCompiler:*/ true,
     /*opts*/ { inlineSourceMap: true, types: ["node", "mocha", "chai"] });
@@ -1016,6 +1016,7 @@ var tslintRules = [
     "noInOperatorRule",
     "noIncrementDecrementRule",
     "objectLiteralSurroundingSpaceRule",
+    "noTypeAssertionWhitespaceRule"
 ];
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");

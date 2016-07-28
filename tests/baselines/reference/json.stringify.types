@@ -6,27 +6,27 @@ var value = null;
 
 JSON.stringify(value, undefined, 2);
 >JSON.stringify(value, undefined, 2) : string
->JSON.stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (number | string)[] | null | undefined, space?: string | number | undefined): string; }
+>JSON.stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >JSON : JSON
->stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (number | string)[] | null | undefined, space?: string | number | undefined): string; }
+>stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >value : null
 >undefined : undefined
 >2 : number
 
 JSON.stringify(value, null, 2);
 >JSON.stringify(value, null, 2) : string
->JSON.stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (number | string)[] | null | undefined, space?: string | number | undefined): string; }
+>JSON.stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >JSON : JSON
->stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (number | string)[] | null | undefined, space?: string | number | undefined): string; }
+>stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >value : null
 >null : null
 >2 : number
 
 JSON.stringify(value, ["a", 1], 2);
 >JSON.stringify(value, ["a", 1], 2) : string
->JSON.stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (number | string)[] | null | undefined, space?: string | number | undefined): string; }
+>JSON.stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >JSON : JSON
->stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (number | string)[] | null | undefined, space?: string | number | undefined): string; }
+>stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >value : null
 >["a", 1] : (string | number)[]
 >"a" : string
@@ -35,9 +35,9 @@ JSON.stringify(value, ["a", 1], 2);
 
 JSON.stringify(value, (k) => undefined, 2);
 >JSON.stringify(value, (k) => undefined, 2) : string
->JSON.stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (number | string)[] | null | undefined, space?: string | number | undefined): string; }
+>JSON.stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >JSON : JSON
->stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (number | string)[] | null | undefined, space?: string | number | undefined): string; }
+>stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >value : null
 >(k) => undefined : (k: string) => undefined
 >k : string
@@ -46,9 +46,9 @@ JSON.stringify(value, (k) => undefined, 2);
 
 JSON.stringify(value, undefined, 2);
 >JSON.stringify(value, undefined, 2) : string
->JSON.stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (number | string)[] | null | undefined, space?: string | number | undefined): string; }
+>JSON.stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >JSON : JSON
->stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (number | string)[] | null | undefined, space?: string | number | undefined): string; }
+>stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >value : null
 >undefined : undefined
 >2 : number

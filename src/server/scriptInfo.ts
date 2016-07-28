@@ -25,7 +25,7 @@ namespace ts.server {
             this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
             this.svc = ScriptVersionCache.fromString(host, content);
             this.formatCodeSettings = getDefaultFormatCodeSettings(this.host);
-            this.scriptKind = scriptKind && scriptKind !== ScriptKind.Unknown
+            this.scriptKind = scriptKind
                 ? scriptKind
                 : getScriptKindFromFileName(fileName);
         }

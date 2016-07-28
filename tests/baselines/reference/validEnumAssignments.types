@@ -54,18 +54,18 @@ e = e;
 >e : E
 
 e = E.A;
->e = E.A : E
+>e = E.A : E.A
 >e : E
->E.A : E
+>E.A : E.A
 >E : typeof E
->A : E
+>A : E.A
 
 e = E.B;
->e = E.B : E
+>e = E.B : E.B
 >e : E
->E.B : E
+>E.B : E.B
 >E : typeof E
->B : E
+>B : E.B
 
 e = n;
 >e = n : number
@@ -83,23 +83,23 @@ e = undefined;
 >undefined : undefined
 
 e = 1;
->e = 1 : number
+>e = 1 : 1
 >e : E
->1 : number
+>1 : 1
 
 e = 1.;
->e = 1. : number
+>e = 1. : 1
 >e : E
->1. : number
+>1. : 1
 
 e = 1.0;
->e = 1.0 : number
+>e = 1.0 : 1
 >e : E
->1.0 : number
+>1.0 : 1
 
 e = -1;
->e = -1 : number
+>e = -1 : -1
 >e : E
->-1 : number
+>-1 : -1
 >1 : number
 
