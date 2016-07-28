@@ -19267,7 +19267,7 @@ namespace ts {
         }
 
         function checkGrammarTopLevelElementForRequiredDeclareModifier(node: Node): boolean {
-            // A declare modifier is required for any top level .d.ts declaration except export=, export default,
+            // A declare modifier is required for any top level .d.ts declaration except export=, export default, export as namespace
             // interfaces and imports categories:
             //
             //  DeclarationElement:
@@ -19285,6 +19285,7 @@ namespace ts {
                 node.kind === SyntaxKind.ImportEqualsDeclaration ||
                 node.kind === SyntaxKind.ExportDeclaration ||
                 node.kind === SyntaxKind.ExportAssignment ||
+                node.kind === SyntaxKind.NamespaceExportDeclaration ||
                 (node.flags & NodeFlags.Ambient) ||
                 (node.flags & (NodeFlags.Export | NodeFlags.Default))) {
 
