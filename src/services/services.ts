@@ -3097,7 +3097,9 @@ namespace ts {
                  oldSettings.noResolve !== newSettings.noResolve ||
                  oldSettings.jsx !== newSettings.jsx ||
                  oldSettings.allowJs !== newSettings.allowJs ||
-                 oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit);
+                 oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit ||
+                 oldSettings.baseUrl !== newSettings.baseUrl ||
+                 !mapIsEqualTo(oldSettings.paths, newSettings.paths));
 
             // Now create a new compiler
             const compilerHost: CompilerHost = {
