@@ -17699,13 +17699,11 @@ namespace ts {
                     /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
 
-            if (entityName.kind !== SyntaxKind.PropertyAccessExpression) {
-                if (isInRightSideOfImportOrExportAssignment(<EntityName>entityName)) {
-                    // Since we already checked for ExportAssignment, this really could only be an Import
-                    const importEqualsDeclaration = <ImportEqualsDeclaration>getAncestor(entityName, SyntaxKind.ImportEqualsDeclaration);
-                    Debug.assert(importEqualsDeclaration !== undefined);
-                    return getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>entityName, importEqualsDeclaration, /*dontResolveAlias*/ true);
-                }
+            if (entityName.kind !== SyntaxKind.PropertyAccessExpression && isInRightSideOfImportOrExportAssignment(<EntityName>entityName)) {
+                // Since we already checked for ExportAssignment, this really could only be an Import
+                const importEqualsDeclaration = <ImportEqualsDeclaration>getAncestor(entityName, SyntaxKind.ImportEqualsDeclaration);
+                Debug.assert(importEqualsDeclaration !== undefined);
+                return getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>entityName, importEqualsDeclaration, /*dontResolveAlias*/ true);
             }
 
             if (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
