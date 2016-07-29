@@ -18,3 +18,13 @@ branches:
   only:
   - master
   - transforms
+
+install:
+  - npm uninstall typescript
+  - npm uninstall tslint
+  - npm install
+  - npm update
+
+cache:
+  directories:
+    - node_modules
