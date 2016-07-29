@@ -494,6 +494,7 @@ declare namespace ts.server.protocol {
         fileName: string;
         scriptKind?: ScriptKind;
         hasMixedContent?: boolean;
+        content?: string;
     }
 
     export interface ExternalProject {
@@ -524,15 +525,6 @@ declare namespace ts.server.protocol {
         info?: ProjectVersionInfo;
         files?: string[];
         changes?: ProjectChanges;
-    }
-
-    /**
-     * Represents a set of changes for open document with a given file name.
-     * Either content of textChanges should be present.
-     */
-    export interface NewOpenFile {
-        fileName: string;
-        content: string;
     }
 
     export interface ChangedOpenFile {
@@ -699,7 +691,7 @@ declare namespace ts.server.protocol {
     }
 
     export interface ApplyChangedToOpenFilesRequestArgs {
-        openFiles?: NewOpenFile[];
+        openFiles?: ExternalFile[];
         changedFiles?: ChangedOpenFile[];
         closedFiles?: string[];
     }

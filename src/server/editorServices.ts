@@ -984,13 +984,13 @@ namespace ts.server {
             return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind);
         }
 
-        openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind): OpenConfiguredProjectResult {
+        openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean): OpenConfiguredProjectResult {
             const { configFileName = undefined, configFileErrors = undefined }: OpenConfiguredProjectResult = this.findContainingExternalProject(fileName)
                 ? {}
                 : this.openOrUpdateConfiguredProjectForFile(fileName);
 
             // at this point if file is the part of some configured/external project then this project should be created
-            const info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ true, fileContent, scriptKind);
+            const info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent);
             this.assignScriptInfoToInferredProjectIfNecessary(info, /*addToListOfOpenFiles*/ true);
             this.printProjects();
             return { configFileName, configFileErrors };
@@ -1024,14 +1024,14 @@ namespace ts.server {
             return files;
         }
 
-        applyChangesInOpenFiles(openFiles: protocol.NewOpenFile[], changedFiles: protocol.ChangedOpenFile[], closedFiles: string[]): void {
+        applyChangesInOpenFiles(openFiles: protocol.ExternalFile[], changedFiles: protocol.ChangedOpenFile[], closedFiles: string[]): void {
             const recordChangedFiles = changedFiles && !openFiles && !closedFiles;
             if (openFiles) {
                 for (const file of openFiles) {
                     const scriptInfo = this.getScriptInfo(file.fileName);
                     Debug.assert(!scriptInfo || !scriptInfo.isOpen);
                     const normalizedPath = scriptInfo ? scriptInfo.fileName : toNormalizedPath(file.fileName);
-                    this.openClientFileWithNormalizedPath(normalizedPath, file.content);
+                    this.openClientFileWithNormalizedPath(normalizedPath, file.content, file.scriptKind, file.hasMixedContent);
                 }
             }
 
