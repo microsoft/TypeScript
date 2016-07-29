@@ -13,11 +13,11 @@ namespace ts.server {
      */
     export class BuilderFileInfo {
 
-        public lastCheckedShapeSignature: string;
+        private lastCheckedShapeSignature: string;
+        private lastEmittedContentSignature: string;
         scriptInfo: ScriptInfo;
 
         constructor(public fileName: string) {
-            this.lastCheckedShapeSignature = undefined;
         }
 
         public isExternalModule(builder: Builder) {
@@ -54,38 +54,34 @@ namespace ts.server {
         }
 
         /**
-         * Update the state of the file info object. This is usually called
-         * after a file has been checked for syntax and semantic problems.
-         *
-         * @return true if the public visible shape of this file has changed.
-         *  This usually requires a recheck of all dependent files. Returns
-         *  false otherwise.
+         * Thie method should only be called upon emitting
          */
-        public updateAndCheckIfShapeSignatureChanged(builder: Builder, contentSignature?: string): boolean {
+        public updateLastEmittedContentSignature(builder: Builder) {
+            this.lastEmittedContentSignature = this.getScriptInfo(builder).getLatestVersion();
+        }
+
+        public checkIfShapeSignatureChanged(builder: Builder) {
             const sourceFile = builder.project.getSourceFile(this.fileName);
             if (!sourceFile) {
-                return false;
+                return true;
             }
 
-            const lastSignature: string = this.lastCheckedShapeSignature;
-            this.lastCheckedShapeSignature = undefined;
+            const lastSignature = this.lastCheckedShapeSignature;
             if (sourceFile.isDeclarationFile) {
-                this.lastCheckedShapeSignature =  contentSignature ? contentSignature : this.computeHash(sourceFile.text);
+                this.lastCheckedShapeSignature = this.computeHash(sourceFile.text);
             }
-            else {
-                const emitOutput = builder.project.getLanguageService(/*ensureSynchronized*/true).getEmitOutput(this.fileName, /*emitDeclarationsOnly*/ true);
-                let dtsFound = false;
-                for (const file of emitOutput.outputFiles) {
-                    if (/\.d\.ts$/.test(file.name)) {
-                        this.lastCheckedShapeSignature = this.computeHash(file.text);
-                        dtsFound = true;
-                    }
-                }
-                if (!dtsFound && contentSignature) {
-                    this.lastCheckedShapeSignature = contentSignature;
+            const emitOutput = builder.project.getLanguageService(/*ensureSynchronized*/true).getEmitOutput(this.fileName, /*emitDeclarationsOnly*/ true);
+            for (const file of emitOutput.outputFiles) {
+                if (/\.d\.ts$/.test(file.name)) {
+                    this.lastCheckedShapeSignature = this.computeHash(file.text);
                 }
             }
-            return !this.lastCheckedShapeSignature || lastSignature !== this.lastCheckedShapeSignature;
+            return !lastSignature || this.lastCheckedShapeSignature !== lastSignature;
+        }
+
+        public isContentSignatureChangedSinceLastEmit(builder: Builder): boolean {
+            const info = this.getScriptInfo(builder);
+            return !this.lastEmittedContentSignature || info.getLatestVersion() !== this.lastEmittedContentSignature;
         }
     }
 
@@ -94,6 +90,7 @@ namespace ts.server {
         readonly project: Project;
         getFilesAffectedBy(fileName: string): string[];
         onProjectUpdateGraph(): void;
+        emitFile(fileName: string, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void, forced?: boolean): boolean;
     }
 
     class NullBuilder implements Builder {
@@ -105,6 +102,13 @@ namespace ts.server {
         }
 
         onProjectUpdateGraph() {
+        }
+
+        updateEmittedFileContentSignature(fileName: string): void {
+        }
+
+        emitFile(fileName: string, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void, forced?: boolean): boolean {
+            return true;
         }
     }
 
@@ -120,6 +124,22 @@ namespace ts.server {
         }
         abstract getFilesAffectedBy(fileName: string): string[];
         abstract onProjectUpdateGraph(): void;
+
+        emitFile(fileName: string, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void, forced?: boolean): boolean {
+            const fileInfo = this.getFileInfo(fileName);
+            if (!fileInfo || (!forced && !fileInfo.isContentSignatureChangedSinceLastEmit(this))) {
+                return false;
+            }
+
+            const { emitSkipped, outputFiles } = this.project.getFileEmitOutput(fileInfo.getScriptInfo(this));
+            if (!emitSkipped) {
+                fileInfo.updateLastEmittedContentSignature(this);
+                for (const outputFile of outputFiles) {
+                    writeFile(outputFile.name, outputFile.text, outputFile.writeByteOrderMark);
+                }
+            }
+            return !emitSkipped;
+        }
     }
 
     class NonModuleBuilder extends AbstractBuilder<BuilderFileInfo> {
@@ -140,10 +160,15 @@ namespace ts.server {
 
         getFilesAffectedBy(fileName: string): string[] {
             const info = this.getOrCreateFileInfo(fileName);
-            if(info.updateAndCheckIfShapeSignatureChanged(this)) {
-                return this.project.getFileNames();
+            let result: string[];
+            if (info.checkIfShapeSignatureChanged(this)) {
+                result = filter(this.project.getFileNames(), file => this.getFileInfo(file).isContentSignatureChangedSinceLastEmit(this));
+                result.push(fileName);
             }
-            return [fileName];
+            else {
+                result = info.isContentSignatureChangedSinceLastEmit(this) ? [fileName] : [];
+            }
+            return result;
         }
     }
 
@@ -346,18 +371,22 @@ namespace ts.server {
             this.ensureDependencyGraph();
 
             const info = this.getFileInfo(fileName);
-            if(info && info.updateAndCheckIfShapeSignatureChanged(this)) {
+            if(info && info.checkIfShapeSignatureChanged(this)) {
+                let result: string[];
                 if (!info.isExternalModule(this)) {
-                    return this.project.getFileNames();
+                    result = filter(this.project.getFileNames(), file => this.getFileInfo(file).isContentSignatureChangedSinceLastEmit(this));
                 }
                 else {
-                    const result = info.getReferencedByFileNames();
-                    // Needs to count the trigger file itself
-                    result.push(fileName);
-                    return result;
+                    const allReferencedByFiles = info.getReferencedByFileNames();
+                    result = ts.filter(allReferencedByFiles, file => this.getFileInfo(file).isContentSignatureChangedSinceLastEmit(this));
                 }
+                // Needs to count the trigger file itself because it for sure has changed.
+                result.push(fileName);
+                return result;
             }
-            return [fileName];
+            // If it goes here, we know the shape of the file wasn't changed. So we only need to check if the
+            // file content changed or not.
+            return info.isContentSignatureChangedSinceLastEmit(this) ? [fileName] : [];
         }
     }
 

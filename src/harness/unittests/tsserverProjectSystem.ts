@@ -1522,7 +1522,7 @@ namespace ts {
             const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
 
             openFilesForSession([file1, file2], session);
-            const compileFileRequest = makeSessionRequest<server.protocol.FileRequestArgs>(server.CommandNames.EmitFile, { file: file1.path, projectFileName: config.path });
+            const compileFileRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(server.CommandNames.CompileOnSaveEmitFile, { file: file1.path, projectFileName: config.path });
             session.executeCommand(compileFileRequest);
 
             const expectedEmittedFileName = "/a/b/f1.js";

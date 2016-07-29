@@ -93,9 +93,9 @@ namespace ts.server {
         export const Completions = "completions";
         export const CompletionsFull = "completions-full";
         export const CompletionDetails = "completionEntryDetails";
-        export const IsCompileOnSaveEnabledForProject = "isCompileOnSaveEnabled";
+        export const IsCompileOnSaveEnabledForProject = "isCompileOnSaveEnabledForProject";
         export const CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
-        export const EmitFile = "emitFile";
+        export const CompileOnSaveEmitFile = "compileOnSaveEmitFile";
         export const Configure = "configure";
         export const Definition = "definition";
         export const DefinitionFull = "definition-full";
@@ -973,18 +973,12 @@ namespace ts.server {
             return result;
         }
 
-        private EmitFile(args: protocol.FileRequestArgs) {
+        private EmitFile(args: protocol.CompileOnSaveEmitFileRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
-            const info = this.projectService.getScriptInfo(file);
             if (!project) {
                 throw Errors.NoProject;
             }
-            const { emitSkipped, outputFiles } = project.getFileEmitOutput(info);
-            if (!emitSkipped) {
-                for (const outputFile of outputFiles) {
-                    this.host.writeFile(outputFile.name, outputFile.text, outputFile.writeByteOrderMark);
-                }
-            }
+            return project.builder.emitFile(file, this.host.writeFile, !!args.forced);
         }
 
         private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems {
@@ -1394,9 +1388,8 @@ namespace ts.server {
             [CommandNames.CompileOnSaveAffectedFileList]: (request: protocol.CompileOnSaveAffectedFileListRequest) => {
                 return this.requiredResponse(this.getCompileOnSaveAffectedFileList(request.arguments));
             },
-            [CommandNames.EmitFile]: (request: protocol.CompileFileRequest) => {
-                this.EmitFile(request.arguments);
-                return this.requiredResponse(true);
+            [CommandNames.CompileOnSaveEmitFile]: (request: protocol.CompileOnSaveEmitFileRequest) => {
+                return this.requiredResponse(this.EmitFile(request.arguments));
             },
             [CommandNames.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true));

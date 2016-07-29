@@ -721,7 +721,12 @@ declare namespace ts.server.protocol {
     export interface CompileOnSaveAffectedFileListRequest extends FileRequest {
     }
 
-    export interface CompileFileRequest extends FileRequest {
+    export interface CompileOnSaveEmitFileRequest extends FileRequest {
+        args: CompileOnSaveEmitFileRequestArgs;
+    }
+
+    export interface CompileOnSaveEmitFileRequestArgs extends FileRequestArgs {
+        forced?: boolean;
     }
 
     /**
