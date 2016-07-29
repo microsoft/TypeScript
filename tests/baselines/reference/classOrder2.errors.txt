@@ -1,0 +1,25 @@
+tests/cases/compiler/classOrder2.ts(2,17): error TS2690: A class must be declared after its base class.
+
+
+==== tests/cases/compiler/classOrder2.ts (1 errors) ====
+    
+    class A extends B {
+                    ~
+!!! error TS2690: A class must be declared after its base class.
+    
+      foo() { this.bar(); }
+    
+    }
+    
+    class B {
+    
+      bar() { }
+    
+    }
+    
+    
+    var a = new A();
+    
+    a.foo();
+    
+    

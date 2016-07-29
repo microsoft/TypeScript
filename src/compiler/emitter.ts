@@ -5526,13 +5526,17 @@ const _super = (function (geti, seti) {
                 // If the class has static properties, and it's a class expression, then we'll need
                 // to specialize the emit a bit.  for a class expression of the form:
                 //
-                //      class C { static a = 1; static b = 2; ... }
+                //      (class C { static a = 1; static b = 2; ... })
                 //
                 // We'll emit:
                 //
-                //      let C_1 = class C{};
-                //      C_1.a = 1;
-                //      C_1.b = 2; // so forth and so on
+                //    ((C_1 = class C {
+                //            // Normal class body
+                //        },
+                //        C_1.a = 1,
+                //        C_1.b = 2,
+                //        C_1));
+                //    var C_1;
                 //
                 // This keeps the expression as an expression, while ensuring that the static parts
                 // of it have been initialized by the time it is used.
@@ -5541,7 +5545,7 @@ const _super = (function (geti, seti) {
                 let generatedName: string;
 
                 if (isClassExpressionWithStaticProperties) {
-                    generatedName = getGeneratedNameForNode(node.name);
+                    generatedName = node.name ? getGeneratedNameForNode(node.name) : makeUniqueName("classExpression");
                     const synthesizedNode = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
                     synthesizedNode.text = generatedName;
                     recordTempDeclaration(synthesizedNode);
@@ -6041,7 +6045,7 @@ const _super = (function (geti, seti) {
                             return;
 
                         case SyntaxKind.StringKeyword:
-                        case SyntaxKind.StringLiteralType:
+                        case SyntaxKind.LiteralType:
                             write("String");
                             return;
 

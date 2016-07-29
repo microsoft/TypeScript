@@ -36,7 +36,7 @@ module Bugs {
 >args[index] : any
 >args : any[]
 >index : any
->'undefined' : string
+>'undefined' : "undefined"
 
         ? args[index]
 >args[index] : any

@@ -71,7 +71,7 @@ function c() {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number
->"string" : string
+>"string" : "string"
 
         break;
     }
@@ -135,57 +135,57 @@ function f() {
 >f : () => void
 
     let x: string | number | boolean | RegExp | Function;
->x : string | number | boolean | RegExp | Function
+>x : string | number | boolean | Function | RegExp
 >RegExp : RegExp
 >Function : Function
 
     x = "";
 >x = "" : string
->x : string | number | boolean | RegExp | Function
+>x : string | number | boolean | Function | RegExp
 >"" : string
 
     while (cond) {
 >cond : boolean
 
         if (cond) {
->cond : boolean
+>cond : true
 
             x = 42;
 >x = 42 : number
->x : string | number | boolean | RegExp | Function
+>x : string | number | boolean | Function | RegExp
 >42 : number
 
             break;
         }
         if (cond) {
->cond : boolean
+>cond : true
 
             x = true;
 >x = true : boolean
->x : string | number | boolean | RegExp | Function
+>x : string | number | boolean | Function | RegExp
 >true : boolean
 
             continue;
         }
         x = /a/;
 >x = /a/ : RegExp
->x : string | number | boolean | RegExp | Function
+>x : string | number | boolean | Function | RegExp
 >/a/ : RegExp
     }
     x; // string | number | boolean | RegExp
->x : string | boolean | RegExp | number
+>x : string | number | boolean | RegExp
 }
 function g() {
 >g : () => void
 
     let x: string | number | boolean | RegExp | Function;
->x : string | number | boolean | RegExp | Function
+>x : string | number | boolean | Function | RegExp
 >RegExp : RegExp
 >Function : Function
 
     x = "";
 >x = "" : string
->x : string | number | boolean | RegExp | Function
+>x : string | number | boolean | Function | RegExp
 >"" : string
 
     while (true) {
@@ -196,7 +196,7 @@ function g() {
 
             x = 42;
 >x = 42 : number
->x : string | number | boolean | RegExp | Function
+>x : string | number | boolean | Function | RegExp
 >42 : number
 
             break;
@@ -206,14 +206,14 @@ function g() {
 
             x = true;
 >x = true : boolean
->x : string | number | boolean | RegExp | Function
+>x : string | number | boolean | Function | RegExp
 >true : boolean
 
             continue;
         }
         x = /a/;
 >x = /a/ : RegExp
->x : string | number | boolean | RegExp | Function
+>x : string | number | boolean | Function | RegExp
 >/a/ : RegExp
     }
     x; // number

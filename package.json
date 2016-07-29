@@ -72,7 +72,7 @@
         "run-sequence": "latest",
         "sorcery": "latest",
         "through2": "latest",
-        "ts-node": "~1.1.0",
+        "ts-node": "latest",
         "tslint": "next",
         "typescript": "next"
     },

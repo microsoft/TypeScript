@@ -52,8 +52,8 @@ for (let x = 0; x < 1; ++x) {
 
 while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
     let x;
 >x : any
@@ -85,8 +85,8 @@ do {
 
 } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 for (let y = 0; y < 1; ++y) {
 >y : number
@@ -140,8 +140,8 @@ for (let x = 0, y = 1; x < 1; ++x) {
 
 while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
     let x, y;
 >x : any
@@ -183,8 +183,8 @@ do {
 
 } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 for (let y = 0; y < 1; ++y) {
 >y : number
@@ -265,8 +265,8 @@ for (const x = 0; x < 1;) {
 
 while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
     const x = 1;
 >x : number
@@ -300,8 +300,8 @@ do {
 
 } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 for (const y = 0; y < 1;) {
 >y : number
@@ -351,8 +351,8 @@ for (const x = 0, y = 1; x < 1;) {
 
 while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
     const x = 1, y = 1;
 >x : number
@@ -398,8 +398,8 @@ do {
 
 } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 for (const y = 0; y < 1;) {
 >y : number

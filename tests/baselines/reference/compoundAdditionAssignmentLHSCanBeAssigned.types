@@ -152,14 +152,14 @@ x4 += a;
 x4 += 0;
 >x4 += 0 : number
 >x4 : E
->0 : number
+>0 : 0
 
 x4 += E.a;
 >x4 += E.a : number
 >x4 : E
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 x4 += null;
 >x4 += null : number
