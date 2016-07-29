@@ -679,8 +679,8 @@ namespace ts.formatting {
 
                 let inheritedIndentation = Constants.Unknown;
                 let listDeltaRemoved = false;
-                for (let child of nodes) {
-                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListElement*/ true)
+                for (const child of nodes) {
+                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListItem*/ true);
                     if (!listDeltaRemoved && SmartIndenter.nodeStretchesFromLine(child, startLine, sourceFile)) {
                         listDynamicIndentation.clearDelta();
                         listDeltaRemoved = true;
