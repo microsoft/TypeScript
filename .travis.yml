@@ -7,17 +7,12 @@ node_js:
 
 sudo: false
 
-os:
-  - linux
-  - osx
-
 matrix:
   fast_finish: true
-  exclude:
+  include:
   - os: osx
-    node_js: '4'
-  - os: osx
-    node_js: '0.10'
+    node_js: stable
+    osx_image: xcode7.3
 
 branches:
   only:
