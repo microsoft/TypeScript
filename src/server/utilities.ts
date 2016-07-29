@@ -82,6 +82,11 @@ namespace ts.server {
         return <NormalizedPath>normalizePath(fileName);
     }
 
+    export function normalizedPathToPath(normalizedPath: NormalizedPath, currentDirectory: string, getCanonicalFileName: (f: string) => string): Path {
+        const f = isRootedDiskPath(normalizedPath) ? normalizedPath : getNormalizedAbsolutePath(normalizedPath, currentDirectory);
+        return <Path>getCanonicalFileName(f);
+    }
+
     export function asNormalizedPath(fileName: string): NormalizedPath {
         return <NormalizedPath>fileName;
     }

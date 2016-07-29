@@ -20,7 +20,7 @@ if (x /* RegExp */, (x = true)) {
 >true : boolean
 
     x; // boolean
->x : boolean
+>x : true
 
     x = "";
 >x = "" : string
