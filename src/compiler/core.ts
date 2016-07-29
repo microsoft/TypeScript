@@ -81,7 +81,7 @@ namespace ts {
      * returns a truthy value, then returns that value.
      * If no such value is found, the callback is applied to each element of array and undefined is returned.
      */
-    export function forEach<T, U>(array: T[], callback: (element: T, index: number) => U): U {
+    export function forEach<T, U>(array: T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
         if (array) {
             for (let i = 0, len = array.length; i < len; i++) {
                 const result = callback(array[i], i);
@@ -91,6 +91,17 @@ namespace ts {
             }
         }
         return undefined;
+    }
+
+    /** Like `forEach`, but assumes existence of array and fails if no truthy value is found. */
+    export function find<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U {
+        for (let i = 0, len = array.length; i < len; i++) {
+            const result = callback(array[i], i);
+            if (result) {
+                return result;
+            }
+        }
+        Debug.fail();
     }
 
     export function contains<T>(array: T[], value: T): boolean {

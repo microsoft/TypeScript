@@ -1693,8 +1693,8 @@ namespace ts {
     // import * as <symbol> from ...
     // import { x as <symbol> } from ...
     // export { x as <symbol> } from ...
-    // export = ...
-    // export default ...
+    // export = <EntityNameExpression>
+    // export default <EntityNameExpression>
     export function isAliasSymbolDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.ImportEqualsDeclaration ||
             node.kind === SyntaxKind.NamespaceExportDeclaration ||
@@ -1702,7 +1702,11 @@ namespace ts {
             node.kind === SyntaxKind.NamespaceImport ||
             node.kind === SyntaxKind.ImportSpecifier ||
             node.kind === SyntaxKind.ExportSpecifier ||
-            node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier;
+            node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node);
+    }
+
+    export function exportAssignmentIsAlias(node: ExportAssignment): boolean {
+        return isEntityNameExpression(node.expression);
     }
 
     export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration | InterfaceDeclaration) {

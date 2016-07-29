@@ -1,7 +1,7 @@
-//// [tests/cases/compiler/exportDefaultProperty.ts] ////
+//// [tests/cases/compiler/exportEqualsProperty.ts] ////
 
 //// [declarations.d.ts]
-// This test is just like exportEqualsProperty, but with `export default`.
+// This test is just like exportDefaultProperty, but with `export =`.
 
 declare namespace foo.bar {
     export type X = number;
@@ -9,11 +9,11 @@ declare namespace foo.bar {
 }
 
 declare module "foobar" {
-    export default foo.bar;
+    export = foo.bar;
 }
 
 declare module "foobarx" {
-    export default foo.bar.X;
+    export = foo.bar.X;
 }
 
 //// [a.ts]
@@ -21,23 +21,22 @@ namespace A {
     export class B { constructor(b: number) {} }
     export namespace B { export const b: number = 0; }
 }
-export default A.B;
+export = A.B;
 
 //// [b.ts]
-export default "foo".length;
+export = "foo".length;
 
 //// [index.ts]
 /// <reference path="declarations.d.ts" />
-import fooBar from "foobar";
-import X = fooBar.X;
-import X2 from "foobarx";
+import { X } from "foobar";
+import X2 = require("foobarx");
 const x: X = X;
 const x2: X2 = X2;
 
-import B from "./a";
+import B = require("./a");
 const b: B = new B(B.b);
 
-import fooLength from "./b";
+import fooLength = require("./b");
 fooLength + 1;
 
 
@@ -56,21 +55,18 @@ var A;
         B.b = 0;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
-exports.__esModule = true;
-exports["default"] = A.B;
+module.exports = A.B;
 //// [b.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = "foo".length;
+module.exports = "foo".length;
 //// [index.js]
 "use strict";
 /// <reference path="declarations.d.ts" />
 var foobar_1 = require("foobar");
-var X = foobar_1["default"].X;
-var foobarx_1 = require("foobarx");
-var x = X;
-var x2 = foobarx_1["default"];
-var a_1 = require("./a");
-var b = new a_1["default"](a_1["default"].b);
-var b_1 = require("./b");
-b_1["default"] + 1;
+var X2 = require("foobarx");
+var x = foobar_1.X;
+var x2 = X2;
+var B = require("./a");
+var b = new B(B.b);
+var fooLength = require("./b");
+fooLength + 1;

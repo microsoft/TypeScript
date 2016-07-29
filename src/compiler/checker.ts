@@ -1044,7 +1044,7 @@ namespace ts {
         }
 
         function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration {
-            return forEach(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
+            return find(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
         }
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration): Symbol {
@@ -1175,7 +1175,7 @@ namespace ts {
         }
 
         function getTargetOfExportAssignment(node: ExportAssignment): Symbol {
-            return resolveEntityName(<Identifier>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
+            return resolveEntityName(<EntityNameExpression>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
         }
 
         function getTargetOfAliasDeclaration(node: Declaration): Symbol {

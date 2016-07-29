@@ -1,14 +1,9 @@
 === tests/cases/compiler/index.ts ===
 /// <reference path="declarations.d.ts" />
-import fooBar from "foobar";
->fooBar : typeof fooBar
-
-import X = fooBar.X;
->X : number
->fooBar : typeof fooBar
+import { X } from "foobar";
 >X : number
 
-import X2 from "foobarx";
+import X2 = require("foobarx");
 >X2 : number
 
 const x: X = X;
@@ -21,7 +16,7 @@ const x2: X2 = X2;
 >X2 : number
 >X2 : number
 
-import B from "./a";
+import B = require("./a");
 >B : typeof B
 
 const b: B = new B(B.b);
@@ -33,7 +28,7 @@ const b: B = new B(B.b);
 >B : typeof B
 >b : number
 
-import fooLength from "./b";
+import fooLength = require("./b");
 >fooLength : number
 
 fooLength + 1;
@@ -42,7 +37,7 @@ fooLength + 1;
 >1 : number
 
 === tests/cases/compiler/declarations.d.ts ===
-// This test is just like exportEqualsProperty, but with `export default`.
+// This test is just like exportDefaultProperty, but with `export =`.
 
 declare namespace foo.bar {
 >foo : typeof foo
@@ -56,14 +51,14 @@ declare namespace foo.bar {
 }
 
 declare module "foobar" {
-    export default foo.bar;
->foo.bar : typeof default
+    export = foo.bar;
+>foo.bar : typeof foo.bar
 >foo : typeof foo
->bar : typeof default
+>bar : typeof foo.bar
 }
 
 declare module "foobarx" {
-    export default foo.bar.X;
+    export = foo.bar.X;
 >foo.bar.X : number
 >foo.bar : typeof foo.bar
 >foo : typeof foo
@@ -84,13 +79,13 @@ namespace A {
 >b : number
 >0 : number
 }
-export default A.B;
->A.B : typeof default
+export = A.B;
+>A.B : typeof A.B
 >A : typeof A
->B : typeof default
+>B : typeof A.B
 
 === tests/cases/compiler/b.ts ===
-export default "foo".length;
+export = "foo".length;
 >"foo".length : number
 >"foo" : string
 >length : number

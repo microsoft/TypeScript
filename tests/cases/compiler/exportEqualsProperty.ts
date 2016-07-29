@@ -1,4 +1,4 @@
-// This test is just like exportEqualsProperty, but with `export default`.
+// This test is just like exportDefaultProperty, but with `export =`.
 
 // @Filename: declarations.d.ts
 declare namespace foo.bar {
@@ -7,11 +7,11 @@ declare namespace foo.bar {
 }
 
 declare module "foobar" {
-    export default foo.bar;
+    export = foo.bar;
 }
 
 declare module "foobarx" {
-    export default foo.bar.X;
+    export = foo.bar.X;
 }
 
 // @Filename: a.ts
@@ -19,21 +19,20 @@ namespace A {
     export class B { constructor(b: number) {} }
     export namespace B { export const b: number = 0; }
 }
-export default A.B;
+export = A.B;
 
 // @Filename: b.ts
-export default "foo".length;
+export = "foo".length;
 
 // @Filename: index.ts
 /// <reference path="declarations.d.ts" />
-import fooBar from "foobar";
-import X = fooBar.X;
-import X2 from "foobarx";
+import { X } from "foobar";
+import X2 = require("foobarx");
 const x: X = X;
 const x2: X2 = X2;
 
-import B from "./a";
+import B = require("./a");
 const b: B = new B(B.b);
 
-import fooLength from "./b";
+import fooLength = require("./b");
 fooLength + 1;
