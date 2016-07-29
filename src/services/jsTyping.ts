@@ -10,7 +10,7 @@ namespace ts.JsTyping {
         directoryExists: (path: string) => boolean;
         fileExists: (fileName: string) => boolean;
         readFile: (path: string, encoding?: string) => string;
-        readDirectory: (path: string, extension?: string, exclude?: string[], depth?: number) => string[];
+        readDirectory: (rootDir: string, extensions: string[], excludes: string[], includes: string[], depth?: number) => string[];
     };
 
     interface PackageJson {
@@ -187,7 +187,7 @@ namespace ts.JsTyping {
             }
 
             const typingNames: string[] = [];
-            const fileNames = host.readDirectory(nodeModulesPath, "*.json", /*exclude*/ undefined, /*depth*/ 2);
+            const fileNames = host.readDirectory(nodeModulesPath, ["*.json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
             for (const fileName of fileNames) {
                 const normalizedFileName = normalizePath(fileName);
                 if (getBaseFileName(normalizedFileName) !== "package.json") {

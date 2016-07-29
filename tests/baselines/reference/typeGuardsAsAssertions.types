@@ -259,7 +259,7 @@ function f4() {
 >"boolean" : string
 
         x;  // nothing (boolean not in declared type)
->x : nothing
+>x : never
     }
     x;  // undefined
 >x : undefined

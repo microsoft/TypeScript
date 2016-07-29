@@ -4,7 +4,7 @@
 /////////////////////////////
 
 interface Algorithm {
-    name?: string;
+    name: string;
 }
 
 interface AriaRequestEventInit extends EventInit {
@@ -851,6 +851,7 @@ interface UIEventInit extends EventInit {
 }
 
 interface WebGLContextAttributes {
+    failIfMajorPerformanceCaveat?: boolean;
     alpha?: boolean;
     depth?: boolean;
     stencil?: boolean;
@@ -919,7 +920,7 @@ interface ApplicationCache extends EventTarget {
     oncached: (ev: Event) => any;
     onchecking: (ev: Event) => any;
     ondownloading: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     onnoupdate: (ev: Event) => any;
     onobsolete: (ev: Event) => any;
     onprogress: (ev: ProgressEvent) => any;
@@ -2289,7 +2290,7 @@ declare var DeviceRotationRate: {
 
 interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEvent {
     /**
-      * Sets or gets the URL for the current document. 
+      * Sets or gets the URL for the current document.
       */
     readonly URL: string;
     /**
@@ -2317,7 +2318,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     applets: HTMLCollectionOf<HTMLAppletElement>;
     /**
-      * Deprecated. Sets or retrieves a value that indicates the background color behind the object. 
+      * Deprecated. Sets or retrieves a value that indicates the background color behind the object.
       */
     bgColor: string;
     /**
@@ -2345,19 +2346,19 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     designMode: string;
     /**
-      * Sets or retrieves a value that indicates the reading order of the object. 
+      * Sets or retrieves a value that indicates the reading order of the object.
       */
     dir: string;
     /**
-      * Gets an object representing the document type declaration associated with the current document. 
+      * Gets an object representing the document type declaration associated with the current document.
       */
     readonly doctype: DocumentType;
     /**
-      * Gets a reference to the root node of the document. 
+      * Gets a reference to the root node of the document.
       */
     documentElement: HTMLElement;
     /**
-      * Sets or gets the security domain of the document. 
+      * Sets or gets the security domain of the document.
       */
     domain: string;
     /**
@@ -2381,7 +2382,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     images: HTMLCollectionOf<HTMLImageElement>;
     /**
-      * Gets the implementation object of the current document. 
+      * Gets the implementation object of the current document.
       */
     readonly implementation: DOMImplementation;
     /**
@@ -2389,11 +2390,11 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     readonly inputEncoding: string | null;
     /**
-      * Gets the date that the page was last modified, if the page supplies one. 
+      * Gets the date that the page was last modified, if the page supplies one.
       */
     readonly lastModified: string;
     /**
-      * Sets or gets the color of the document links. 
+      * Sets or gets the color of the document links.
       */
     linkColor: string;
     /**
@@ -2401,7 +2402,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     links: HTMLCollectionOf<HTMLAnchorElement | HTMLAreaElement>;
     /**
-      * Contains information about the current URL. 
+      * Contains information about the current URL.
       */
     readonly location: Location;
     msCSSOMElementFloatMetrics: boolean;
@@ -2410,7 +2411,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Fires when the user aborts the download.
       * @param ev The event.
       */
-    onabort: (ev: Event) => any;
+    onabort: (ev: UIEvent) => any;
     /**
       * Fires when the object is set as the active element.
       * @param ev The event.
@@ -2426,19 +2427,19 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * @param ev The event.
       */
     onbeforedeactivate: (ev: UIEvent) => any;
-    /** 
-      * Fires when the object loses the input focus. 
+    /**
+      * Fires when the object loses the input focus.
       * @param ev The focus event.
       */
     onblur: (ev: FocusEvent) => any;
     /**
-      * Occurs when playback is possible, but would require further buffering. 
+      * Occurs when playback is possible, but would require further buffering.
       * @param ev The event.
       */
     oncanplay: (ev: Event) => any;
     oncanplaythrough: (ev: Event) => any;
     /**
-      * Fires when the contents of the object or selection have changed. 
+      * Fires when the contents of the object or selection have changed.
       * @param ev The event.
       */
     onchange: (ev: Event) => any;
@@ -2448,7 +2449,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     onclick: (ev: MouseEvent) => any;
     /**
-      * Fires when the user clicks the right mouse button in the client area, opening the context menu. 
+      * Fires when the user clicks the right mouse button in the client area, opening the context menu.
       * @param ev The mouse event.
       */
     oncontextmenu: (ev: PointerEvent) => any;
@@ -2472,12 +2473,12 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * @param ev The event.
       */
     ondragend: (ev: DragEvent) => any;
-    /** 
+    /**
       * Fires on the target element when the user drags the object to a valid drop target.
       * @param ev The drag event.
       */
     ondragenter: (ev: DragEvent) => any;
-    /** 
+    /**
       * Fires on the target object when the user moves the mouse out of a valid drop target during a drag operation.
       * @param ev The drag event.
       */
@@ -2488,23 +2489,23 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     ondragover: (ev: DragEvent) => any;
     /**
-      * Fires on the source object when the user starts to drag a text selection or selected object. 
+      * Fires on the source object when the user starts to drag a text selection or selected object.
       * @param ev The event.
       */
     ondragstart: (ev: DragEvent) => any;
     ondrop: (ev: DragEvent) => any;
     /**
-      * Occurs when the duration attribute is updated. 
+      * Occurs when the duration attribute is updated.
       * @param ev The event.
       */
     ondurationchange: (ev: Event) => any;
     /**
-      * Occurs when the media element is reset to its initial state. 
+      * Occurs when the media element is reset to its initial state.
       * @param ev The event.
       */
     onemptied: (ev: Event) => any;
     /**
-      * Occurs when the end of playback is reached. 
+      * Occurs when the end of playback is reached.
       * @param ev The event
       */
     onended: (ev: MediaStreamErrorEvent) => any;
@@ -2512,9 +2513,9 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Fires when an error occurs during object loading.
       * @param ev The event.
       */
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     /**
-      * Fires when the object receives focus. 
+      * Fires when the object receives focus.
       * @param ev The event.
       */
     onfocus: (ev: FocusEvent) => any;
@@ -2538,12 +2539,12 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     onkeyup: (ev: KeyboardEvent) => any;
     /**
-      * Fires immediately after the browser loads the object. 
+      * Fires immediately after the browser loads the object.
       * @param ev The event.
       */
     onload: (ev: Event) => any;
     /**
-      * Occurs when media data is loaded at the current playback position. 
+      * Occurs when media data is loaded at the current playback position.
       * @param ev The event.
       */
     onloadeddata: (ev: Event) => any;
@@ -2553,22 +2554,22 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     onloadedmetadata: (ev: Event) => any;
     /**
-      * Occurs when Internet Explorer begins looking for media data. 
+      * Occurs when Internet Explorer begins looking for media data.
       * @param ev The event.
       */
     onloadstart: (ev: Event) => any;
     /**
-      * Fires when the user clicks the object with either mouse button. 
+      * Fires when the user clicks the object with either mouse button.
       * @param ev The mouse event.
       */
     onmousedown: (ev: MouseEvent) => any;
     /**
-      * Fires when the user moves the mouse over the object. 
+      * Fires when the user moves the mouse over the object.
       * @param ev The mouse event.
       */
     onmousemove: (ev: MouseEvent) => any;
     /**
-      * Fires when the user moves the mouse pointer outside the boundaries of the object. 
+      * Fires when the user moves the mouse pointer outside the boundaries of the object.
       * @param ev The mouse event.
       */
     onmouseout: (ev: MouseEvent) => any;
@@ -2578,12 +2579,12 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     onmouseover: (ev: MouseEvent) => any;
     /**
-      * Fires when the user releases a mouse button while the mouse is over the object. 
+      * Fires when the user releases a mouse button while the mouse is over the object.
       * @param ev The mouse event.
       */
     onmouseup: (ev: MouseEvent) => any;
     /**
-      * Fires when the wheel button is rotated. 
+      * Fires when the wheel button is rotated.
       * @param ev The mouse event
       */
     onmousewheel: (ev: WheelEvent) => any;
@@ -2605,7 +2606,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     onmspointerover: (ev: MSPointerEvent) => any;
     onmspointerup: (ev: MSPointerEvent) => any;
     /**
-      * Occurs when an item is removed from a Jump List of a webpage running in Site Mode. 
+      * Occurs when an item is removed from a Jump List of a webpage running in Site Mode.
       * @param ev The event.
       */
     onmssitemodejumplistitemremoved: (ev: MSSiteModeEvent) => any;
@@ -2620,24 +2621,24 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     onpause: (ev: Event) => any;
     /**
-      * Occurs when the play method is requested. 
+      * Occurs when the play method is requested.
       * @param ev The event.
       */
     onplay: (ev: Event) => any;
     /**
-      * Occurs when the audio or video has started playing. 
+      * Occurs when the audio or video has started playing.
       * @param ev The event.
       */
     onplaying: (ev: Event) => any;
     onpointerlockchange: (ev: Event) => any;
     onpointerlockerror: (ev: Event) => any;
     /**
-      * Occurs to indicate progress while downloading media data. 
+      * Occurs to indicate progress while downloading media data.
       * @param ev The event.
       */
     onprogress: (ev: ProgressEvent) => any;
     /**
-      * Occurs when the playback rate is increased or decreased. 
+      * Occurs when the playback rate is increased or decreased.
       * @param ev The event.
       */
     onratechange: (ev: Event) => any;
@@ -2647,22 +2648,22 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     onreadystatechange: (ev: ProgressEvent) => any;
     /**
-      * Fires when the user resets a form. 
+      * Fires when the user resets a form.
       * @param ev The event.
       */
     onreset: (ev: Event) => any;
     /**
-      * Fires when the user repositions the scroll box in the scroll bar on the object. 
+      * Fires when the user repositions the scroll box in the scroll bar on the object.
       * @param ev The event.
       */
     onscroll: (ev: UIEvent) => any;
     /**
-      * Occurs when the seek operation ends. 
+      * Occurs when the seek operation ends.
       * @param ev The event.
       */
     onseeked: (ev: Event) => any;
     /**
-      * Occurs when the current playback position is moved. 
+      * Occurs when the current playback position is moved.
       * @param ev The event.
       */
     onseeking: (ev: Event) => any;
@@ -2678,7 +2679,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     onselectionchange: (ev: Event) => any;
     onselectstart: (ev: Event) => any;
     /**
-      * Occurs when the download has stopped. 
+      * Occurs when the download has stopped.
       * @param ev The event.
       */
     onstalled: (ev: Event) => any;
@@ -2689,7 +2690,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     onstop: (ev: Event) => any;
     onsubmit: (ev: Event) => any;
     /**
-      * Occurs if the load operation has been intentionally halted. 
+      * Occurs if the load operation has been intentionally halted.
       * @param ev The event.
       */
     onsuspend: (ev: Event) => any;
@@ -2708,7 +2709,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     onvolumechange: (ev: Event) => any;
     /**
-      * Occurs when playback stops because the next frame of a video resource is not available. 
+      * Occurs when playback stops because the next frame of a video resource is not available.
       * @param ev The event.
       */
     onwaiting: (ev: Event) => any;
@@ -2742,7 +2743,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     title: string;
     readonly visibilityState: string;
-    /** 
+    /**
       * Sets or gets the color of the links that the user has visited.
       */
     vlinkColor: string;
@@ -2932,7 +2933,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     createExpression(expression: string, resolver: XPathNSResolver): XPathExpression;
     createNSResolver(nodeResolver: Node): XPathNSResolver;
     /**
-      * Creates a NodeIterator object that you can use to traverse filtered lists of nodes or elements in a document. 
+      * Creates a NodeIterator object that you can use to traverse filtered lists of nodes or elements in a document.
       * @param root The root element or node to start traversing on.
       * @param whatToShow The type of nodes or elements to appear in the node list
       * @param filter A custom NodeFilter function to use. For more information, see filter. Use null for no filter.
@@ -2941,11 +2942,11 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     createNodeIterator(root: Node, whatToShow?: number, filter?: NodeFilter, entityReferenceExpansion?: boolean): NodeIterator;
     createProcessingInstruction(target: string, data: string): ProcessingInstruction;
     /**
-      *  Returns an empty range object that has both of its boundary points positioned at the beginning of the document. 
+      *  Returns an empty range object that has both of its boundary points positioned at the beginning of the document.
       */
     createRange(): Range;
     /**
-      * Creates a text string from the specified value. 
+      * Creates a text string from the specified value.
       * @param data String that specifies the nodeValue property of the text node.
       */
     createTextNode(data: string): Text;
@@ -2960,7 +2961,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     createTreeWalker(root: Node, whatToShow?: number, filter?: NodeFilter, entityReferenceExpansion?: boolean): TreeWalker;
     /**
-      * Returns the element for the specified x coordinate and the specified y coordinate. 
+      * Returns the element for the specified x coordinate and the specified y coordinate.
       * @param x The x-offset
       * @param y The y-offset
       */
@@ -2988,7 +2989,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Returns a reference to the first object with the specified value of the ID or NAME attribute.
       * @param elementId String that specifies the ID value. Case-insensitive.
       */
-    getElementById(elementId: string): HTMLElement;
+    getElementById(elementId: string): HTMLElement | null;
     getElementsByClassName(classNames: string): HTMLCollectionOf<Element>;
     /**
       * Gets a collection of objects based on the value of the NAME or ID attribute.
@@ -3198,7 +3199,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * @param replace Specifies whether the existing entry for the document is replaced in the history list.
       */
     open(url?: string, name?: string, features?: string, replace?: boolean): Document;
-    /** 
+    /**
       * Returns a Boolean value that indicates whether a specified command can be successfully executed using execCommand, given the current state of the document.
       * @param commandId Specifies a command identifier.
       */
@@ -3220,7 +3221,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     queryCommandSupported(commandId: string): boolean;
     /**
       * Retrieves the string associated with a command.
-      * @param commandId String that contains the identifier of a command. This can be any command identifier given in the list of Command Identifiers. 
+      * @param commandId String that contains the identifier of a command. This can be any command identifier given in the list of Command Identifiers.
       */
     queryCommandText(commandId: string): string;
     /**
@@ -3236,12 +3237,12 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     webkitCancelFullScreen(): void;
     webkitExitFullscreen(): void;
     /**
-      * Writes one or more HTML expressions to a document in the specified window. 
+      * Writes one or more HTML expressions to a document in the specified window.
       * @param content Specifies the text and HTML tags to write.
       */
     write(...content: string[]): void;
     /**
-      * Writes one or more HTML expressions, followed by a carriage return, to a document in the specified window. 
+      * Writes one or more HTML expressions, followed by a carriage return, to a document in the specified window.
       * @param content The text and HTML tags to write.
       */
     writeln(...content: string[]): void;
@@ -3463,7 +3464,7 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     readonly scrollWidth: number;
     readonly tagName: string;
     innerHTML: string;
-    getAttribute(name?: string): string | null;
+    getAttribute(name: string): string | null;
     getAttributeNS(namespaceURI: string, localName: string): string;
     getAttributeNode(name: string): Attr;
     getAttributeNodeNS(namespaceURI: string, localName: string): Attr;
@@ -3673,6 +3674,7 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     webkitRequestFullscreen(): void;
     getElementsByClassName(classNames: string): NodeListOf<Element>;
     matches(selector: string): boolean;
+    closest(selector: string): Element | null;
     addEventListener(type: "MSGestureChange", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureEnd", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -3969,12 +3971,12 @@ interface HTMLAnchorElement extends HTMLElement {
       */
     target: string;
     /**
-      * Retrieves or sets the text of the object as a string. 
+      * Retrieves or sets the text of the object as a string.
       */
     text: string;
     type: string;
     urn: string;
-    /** 
+    /**
       * Returns a string representation of an object.
       */
     toString(): string;
@@ -4076,7 +4078,7 @@ interface HTMLAreaElement extends HTMLElement {
       */
     host: string;
     /**
-      * Sets or retrieves the host name part of the location or URL. 
+      * Sets or retrieves the host name part of the location or URL.
       */
     hostname: string;
     /**
@@ -4112,7 +4114,7 @@ interface HTMLAreaElement extends HTMLElement {
       * Sets or retrieves the window or frame at which to target content.
       */
     target: string;
-    /** 
+    /**
       * Returns a string representation of an object.
       */
     toString(): string;
@@ -4203,7 +4205,7 @@ interface HTMLBodyElement extends HTMLElement {
     onbeforeprint: (ev: Event) => any;
     onbeforeunload: (ev: BeforeUnloadEvent) => any;
     onblur: (ev: FocusEvent) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     onfocus: (ev: FocusEvent) => any;
     onhashchange: (ev: HashChangeEvent) => any;
     onload: (ev: Event) => any;
@@ -4378,7 +4380,7 @@ interface HTMLButtonElement extends HTMLElement {
       * Overrides the target attribute on a form element.
       */
     formTarget: string;
-    /** 
+    /**
       * Sets or retrieves the name of the object.
       */
     name: string;
@@ -4395,7 +4397,7 @@ interface HTMLButtonElement extends HTMLElement {
       * Returns a  ValidityState object that represents the validity states of an element.
       */
     readonly validity: ValidityState;
-    /** 
+    /**
       * Sets or retrieves the default or selected value of the control.
       */
     value: string;
@@ -4432,9 +4434,9 @@ interface HTMLCanvasElement extends HTMLElement {
       * Returns an object that provides methods and properties for drawing and manipulating images and graphics on a canvas element in a document. A context object includes information about colors, line widths, fonts, and other graphic parameters that can be drawn on a canvas.
       * @param contextId The identifier (ID) of the type of canvas to create. Internet Explorer 9 and Internet Explorer 10 support only a 2-D context using canvas.getContext("2d"); IE11 Preview also supports 3-D or WebGL context using canvas.getContext("experimental-webgl");
       */
-    getContext(contextId: "2d"): CanvasRenderingContext2D;
-    getContext(contextId: "experimental-webgl"): WebGLRenderingContext;
-    getContext(contextId: string, ...args: any[]): CanvasRenderingContext2D | WebGLRenderingContext;
+    getContext(contextId: "2d", contextAttributes?: Canvas2DContextAttributes): CanvasRenderingContext2D | null;
+    getContext(contextId: "webgl" | "experimental-webgl", contextAttributes?: WebGLContextAttributes): WebGLRenderingContext | null;
+    getContext(contextId: string, contextAttributes?: {}): CanvasRenderingContext2D | WebGLRenderingContext | null;
     /**
       * Returns a blob object encoded as a Portable Network Graphics (PNG) format from a canvas image or drawing.
       */
@@ -4444,7 +4446,7 @@ interface HTMLCanvasElement extends HTMLElement {
       * @param type The standard MIME type for the image format to return. If you do not specify this parameter, the default value is a PNG format image.
       */
     toDataURL(type?: string, ...args: any[]): string;
-    toBlob(): Blob;
+    toBlob(callback: (result: Blob | null) => void, ... arguments: any[]): void;
 }
 
 declare var HTMLCanvasElement: {
@@ -4502,7 +4504,7 @@ declare var HTMLDirectoryElement: {
 
 interface HTMLDivElement extends HTMLElement {
     /**
-      * Sets or retrieves how the object is aligned with adjacent text. 
+      * Sets or retrieves how the object is aligned with adjacent text.
       */
     align: string;
     /**
@@ -4542,7 +4544,7 @@ interface HTMLElement extends Element {
     readonly offsetParent: Element;
     readonly offsetTop: number;
     readonly offsetWidth: number;
-    onabort: (ev: Event) => any;
+    onabort: (ev: UIEvent) => any;
     onactivate: (ev: UIEvent) => any;
     onbeforeactivate: (ev: UIEvent) => any;
     onbeforecopy: (ev: ClipboardEvent) => any;
@@ -4570,7 +4572,7 @@ interface HTMLElement extends Element {
     ondurationchange: (ev: Event) => any;
     onemptied: (ev: Event) => any;
     onended: (ev: MediaStreamErrorEvent) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     onfocus: (ev: FocusEvent) => any;
     oninput: (ev: Event) => any;
     oninvalid: (ev: Event) => any;
@@ -5120,7 +5122,7 @@ interface HTMLFrameSetElement extends HTMLElement {
       * Fires when the object loses the input focus.
       */
     onblur: (ev: FocusEvent) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     /**
       * Fires when the object receives focus.
       */
@@ -5643,9 +5645,9 @@ interface HTMLInputElement extends HTMLElement {
     /**
       * Returns a FileList object on a file type input object.
       */
-    readonly files: FileList;
+    readonly files: FileList | null;
     /**
-      * Retrieves a reference to the form that the object is embedded in. 
+      * Retrieves a reference to the form that the object is embedded in.
       */
     readonly form: HTMLFormElement;
     /**
@@ -6365,7 +6367,7 @@ interface HTMLMetaElement extends HTMLElement {
       */
     scheme: string;
     /**
-      * Sets or retrieves the URL property that will be loaded after the specified time has elapsed. 
+      * Sets or retrieves the URL property that will be loaded after the specified time has elapsed.
       */
     url: string;
 }
@@ -6614,7 +6616,7 @@ declare var HTMLOptionElement: {
     create(): HTMLOptionElement;
 }
 
-interface HTMLOptionsCollection extends HTMLCollection {
+interface HTMLOptionsCollection extends HTMLCollectionOf<HTMLOptionElement> {
     length: number;
     selectedIndex: number;
     add(element: HTMLOptionElement | HTMLOptGroupElement, before?: HTMLElement | number): void;
@@ -6628,7 +6630,7 @@ declare var HTMLOptionsCollection: {
 
 interface HTMLParagraphElement extends HTMLElement {
     /**
-      * Sets or retrieves how the object is aligned with adjacent text. 
+      * Sets or retrieves how the object is aligned with adjacent text.
       */
     align: string;
     clear: string;
@@ -6730,10 +6732,10 @@ interface HTMLScriptElement extends HTMLElement {
       */
     defer: boolean;
     /**
-      * Sets or retrieves the event for which the script is written. 
+      * Sets or retrieves the event for which the script is written.
       */
     event: string;
-    /** 
+    /**
       * Sets or retrieves the object that is bound to the event script.
       */
     htmlFor: string;
@@ -6742,7 +6744,7 @@ interface HTMLScriptElement extends HTMLElement {
       */
     src: string;
     /**
-      * Retrieves or sets the text of the object as a string. 
+      * Retrieves or sets the text of the object as a string.
       */
     text: string;
     /**
@@ -6763,7 +6765,7 @@ interface HTMLSelectElement extends HTMLElement {
     autofocus: boolean;
     disabled: boolean;
     /**
-      * Retrieves a reference to the form that the object is embedded in. 
+      * Retrieves a reference to the form that the object is embedded in.
       */
     readonly form: HTMLFormElement;
     /**
@@ -6778,7 +6780,7 @@ interface HTMLSelectElement extends HTMLElement {
       * Sets or retrieves the name of the object.
       */
     name: string;
-    options: HTMLCollectionOf<HTMLOptionElement>;
+    readonly options: HTMLOptionsCollection;
     /**
       * When present, marks an element that can't be submitted without a value.
       */
@@ -6789,7 +6791,7 @@ interface HTMLSelectElement extends HTMLElement {
     selectedIndex: number;
     selectedOptions: HTMLCollectionOf<HTMLOptionElement>;
     /**
-      * Sets or retrieves the number of rows in the list box. 
+      * Sets or retrieves the number of rows in the list box.
       */
     size: number;
     /**
@@ -6815,7 +6817,7 @@ interface HTMLSelectElement extends HTMLElement {
     /**
       * Adds an element to the areas, controlRange, or options collection.
       * @param element Variant of type Number that specifies the index position in the collection where the element is placed. If no value is given, the method places the element at the end of the collection.
-      * @param before Variant of type Object that specifies an element to insert before, or null to append the object to the collection. 
+      * @param before Variant of type Object that specifies an element to insert before, or null to append the object to the collection.
       */
     add(element: HTMLElement, before?: HTMLElement | number): void;
     /**
@@ -7010,7 +7012,7 @@ interface HTMLTableElement extends HTMLElement {
       */
     border: string;
     /**
-      * Sets or retrieves the border color of the object. 
+      * Sets or retrieves the border color of the object.
       */
     borderColor: any;
     /**
@@ -7305,7 +7307,7 @@ declare var HTMLTextAreaElement: {
 
 interface HTMLTitleElement extends HTMLElement {
     /**
-      * Retrieves or sets the text of the object as a string. 
+      * Retrieves or sets the text of the object as a string.
       */
     text: string;
 }
@@ -7574,7 +7576,7 @@ interface IDBDatabase extends EventTarget {
     readonly name: string;
     readonly objectStoreNames: DOMStringList;
     onabort: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     version: number;
     onversionchange: (ev: IDBVersionChangeEvent) => any;
     close(): void;
@@ -7677,7 +7679,7 @@ declare var IDBOpenDBRequest: {
 
 interface IDBRequest extends EventTarget {
     readonly error: DOMError;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     onsuccess: (ev: Event) => any;
     readonly readyState: string;
     readonly result: any;
@@ -7699,7 +7701,7 @@ interface IDBTransaction extends EventTarget {
     readonly mode: string;
     onabort: (ev: Event) => any;
     oncomplete: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     abort(): void;
     objectStore(name: string): IDBObjectStore;
     readonly READ_ONLY: string;
@@ -7842,7 +7844,7 @@ declare var MSApp: MSApp;
 interface MSAppAsyncOperation extends EventTarget {
     readonly error: DOMError;
     oncomplete: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     readonly readyState: number;
     readonly result: any;
     start(): void;
@@ -8202,7 +8204,7 @@ declare var MSStreamReader: {
 interface MSWebViewAsyncOperation extends EventTarget {
     readonly error: DOMError;
     oncomplete: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     readonly readyState: number;
     readonly result: any;
     readonly target: MSHTMLWebViewElement;
@@ -8738,7 +8740,7 @@ interface Node extends EventTarget {
     contains(child: Node): boolean;
     hasAttributes(): boolean;
     hasChildNodes(): boolean;
-    insertBefore(newChild: Node, refChild: Node): Node;
+    insertBefore(newChild: Node, refChild: Node | null): Node;
     isDefaultNamespace(namespaceURI: string | null): boolean;
     isEqualNode(arg: Node): boolean;
     isSameNode(other: Node): boolean;
@@ -8747,7 +8749,6 @@ interface Node extends EventTarget {
     normalize(): void;
     removeChild(oldChild: Node): Node;
     replaceChild(newChild: Node, oldChild: Node): Node;
-    contains(node: Node): boolean;
     readonly ATTRIBUTE_NODE: number;
     readonly CDATA_SECTION_NODE: number;
     readonly COMMENT_NODE: number;
@@ -9283,7 +9284,7 @@ declare var RTCDTMFToneChangeEvent: {
 
 interface RTCDtlsTransport extends RTCStatsProvider {
     ondtlsstatechange: ((ev: RTCDtlsTransportStateChangedEvent) => any) | null;
-    onerror: ((ev: Event) => any) | null;
+    onerror: ((ev: ErrorEvent) => any) | null;
     readonly state: string;
     readonly transport: RTCIceTransport;
     getLocalParameters(): RTCDtlsParameters;
@@ -9338,7 +9339,7 @@ declare var RTCIceCandidatePairChangedEvent: {
 
 interface RTCIceGatherer extends RTCStatsProvider {
     readonly component: string;
-    onerror: ((ev: Event) => any) | null;
+    onerror: ((ev: ErrorEvent) => any) | null;
     onlocalcandidate: ((ev: RTCIceGathererEvent) => any) | null;
     createAssociatedGatherer(): RTCIceGatherer;
     getLocalCandidates(): RTCIceCandidate[];
@@ -9397,7 +9398,7 @@ declare var RTCIceTransportStateChangedEvent: {
 }
 
 interface RTCRtpReceiver extends RTCStatsProvider {
-    onerror: ((ev: Event) => any) | null;
+    onerror: ((ev: ErrorEvent) => any) | null;
     readonly rtcpTransport: RTCDtlsTransport;
     readonly track: MediaStreamTrack | null;
     readonly transport: RTCDtlsTransport | RTCSrtpSdesTransport;
@@ -9417,7 +9418,7 @@ declare var RTCRtpReceiver: {
 }
 
 interface RTCRtpSender extends RTCStatsProvider {
-    onerror: ((ev: Event) => any) | null;
+    onerror: ((ev: ErrorEvent) => any) | null;
     onssrcconflict: ((ev: RTCSsrcConflictEvent) => any) | null;
     readonly rtcpTransport: RTCDtlsTransport;
     readonly track: MediaStreamTrack;
@@ -9438,7 +9439,7 @@ declare var RTCRtpSender: {
 }
 
 interface RTCSrtpSdesTransport extends EventTarget {
-    onerror: ((ev: Event) => any) | null;
+    onerror: ((ev: ErrorEvent) => any) | null;
     readonly transport: RTCIceTransport;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -11478,18 +11479,24 @@ declare var StyleSheetPageList: {
 }
 
 interface SubtleCrypto {
-    decrypt(algorithm: string | Algorithm, key: CryptoKey, data: ArrayBufferView): PromiseLike<any>;
-    deriveBits(algorithm: string | Algorithm, baseKey: CryptoKey, length: number): PromiseLike<any>;
-    deriveKey(algorithm: string | Algorithm, baseKey: CryptoKey, derivedKeyType: string | Algorithm, extractable: boolean, keyUsages: string[]): PromiseLike<any>;
-    digest(algorithm: string | Algorithm, data: ArrayBufferView): PromiseLike<any>;
-    encrypt(algorithm: string | Algorithm, key: CryptoKey, data: ArrayBufferView): PromiseLike<any>;
-    exportKey(format: string, key: CryptoKey): PromiseLike<any>;
-    generateKey(algorithm: string | Algorithm, extractable: boolean, keyUsages: string[]): PromiseLike<any>;
-    importKey(format: string, keyData: ArrayBufferView, algorithm: string | Algorithm | null, extractable: boolean, keyUsages: string[]): PromiseLike<any>;
-    sign(algorithm: string | Algorithm, key: CryptoKey, data: ArrayBufferView): PromiseLike<any>;
-    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: string | Algorithm, unwrappedKeyAlgorithm: string | Algorithm | null, extractable: boolean, keyUsages: string[]): PromiseLike<any>;
-    verify(algorithm: string | Algorithm, key: CryptoKey, signature: ArrayBufferView, data: ArrayBufferView): PromiseLike<any>;
-    wrapKey(format: string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: string | Algorithm): PromiseLike<any>;
+    decrypt(algorithm: string | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: BufferSource): PromiseLike<ArrayBuffer>;
+    deriveBits(algorithm: string | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, baseKey: CryptoKey, length: number): PromiseLike<ArrayBuffer>;
+    deriveKey(algorithm: string | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: string | AesDerivedKeyParams | HmacImportParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
+    digest(algorithm: AlgorithmIdentifier, data: BufferSource): PromiseLike<ArrayBuffer>;
+    encrypt(algorithm: string | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: BufferSource): PromiseLike<ArrayBuffer>;
+    exportKey(format: "jwk", key: CryptoKey): PromiseLike<JsonWebKey>;
+    exportKey(format: "raw" | "pkcs8" | "spki", key: CryptoKey): PromiseLike<ArrayBuffer>;
+    exportKey(format: string, key: CryptoKey): PromiseLike<JsonWebKey | ArrayBuffer>;
+    generateKey(algorithm: string, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKeyPair | CryptoKey>;
+    generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams | DhKeyGenParams, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKeyPair>;
+    generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
+    importKey(format: "jwk", keyData: JsonWebKey, algorithm: string | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams, extractable:boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
+    importKey(format: "raw" | "pkcs8" | "spki", keyData: BufferSource, algorithm: string | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams, extractable:boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
+    importKey(format: string, keyData: JsonWebKey | BufferSource, algorithm: string | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams, extractable:boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
+    sign(algorithm: string | RsaPssParams | EcdsaParams | AesCmacParams, key: CryptoKey, data: BufferSource): PromiseLike<ArrayBuffer>;
+    unwrapKey(format: string, wrappedKey: BufferSource, unwrappingKey: CryptoKey, unwrapAlgorithm: AlgorithmIdentifier, unwrappedKeyAlgorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
+    verify(algorithm: string | RsaPssParams | EcdsaParams | AesCmacParams, key: CryptoKey, signature: BufferSource, data: BufferSource): PromiseLike<boolean>;
+    wrapKey(format: string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: AlgorithmIdentifier): PromiseLike<ArrayBuffer>;
 }
 
 declare var SubtleCrypto: {
@@ -11557,7 +11564,7 @@ interface TextTrack extends EventTarget {
     readonly language: string;
     mode: any;
     oncuechange: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     onload: (ev: Event) => any;
     readonly readyState: number;
     addCue(cue: TextTrackCue): void;
@@ -12046,18 +12053,12 @@ interface WebGLRenderingContext {
     stencilMaskSeparate(face: number, mask: number): void;
     stencilOp(fail: number, zfail: number, zpass: number): void;
     stencilOpSeparate(face: number, fail: number, zfail: number, zpass: number): void;
-    texImage2D(target: number, level: number, internalformat: number, width: number, height: number, border: number, format: number, type: number, pixels: ArrayBufferView): void;
-    texImage2D(target: number, level: number, internalformat: number, format: number, type: number, image: HTMLImageElement): void;
-    texImage2D(target: number, level: number, internalformat: number, format: number, type: number, canvas: HTMLCanvasElement): void;
-    texImage2D(target: number, level: number, internalformat: number, format: number, type: number, video: HTMLVideoElement): void;
-    texImage2D(target: number, level: number, internalformat: number, format: number, type: number, pixels: ImageData): void;
+    texImage2D(target: number, level: number, internalformat: number, width: number, height: number, border: number, format: number, type: number, pixels?: ArrayBufferView): void;
+    texImage2D(target: number, level: number, internalformat: number, format: number, type: number, pixels?: ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement): void;
     texParameterf(target: number, pname: number, param: number): void;
     texParameteri(target: number, pname: number, param: number): void;
-    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, type: number, pixels: ArrayBufferView): void;
-    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, image: HTMLImageElement): void;
-    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, canvas: HTMLCanvasElement): void;
-    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, video: HTMLVideoElement): void;
-    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, pixels: ImageData): void;
+    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, type: number, pixels?: ArrayBufferView): void;
+    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, pixels?: ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement): void;
     uniform1f(location: WebGLUniformLocation | null, x: number): void;
     uniform1fv(location: WebGLUniformLocation, v: Float32Array | number[]): void;
     uniform1i(location: WebGLUniformLocation | null, x: number): void;
@@ -12780,7 +12781,7 @@ interface WebSocket extends EventTarget {
     readonly bufferedAmount: number;
     readonly extensions: string;
     onclose: (ev: CloseEvent) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     onmessage: (ev: MessageEvent) => any;
     onopen: (ev: Event) => any;
     readonly protocol: string;
@@ -12855,7 +12856,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     name: string;
     readonly navigator: Navigator;
     offscreenBuffering: string | boolean;
-    onabort: (ev: Event) => any;
+    onabort: (ev: UIEvent) => any;
     onafterprint: (ev: Event) => any;
     onbeforeprint: (ev: Event) => any;
     onbeforeunload: (ev: BeforeUnloadEvent) => any;
@@ -12971,6 +12972,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly top: Window;
     readonly window: Window;
     URL: typeof URL;
+    Blob: typeof Blob;
     alert(message?: any): void;
     blur(): void;
     cancelAnimationFrame(handle: number): void;
@@ -13127,7 +13129,6 @@ declare var XMLDocument: {
 }
 
 interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
-    msCaching: string;
     onreadystatechange: (ev: ProgressEvent) => any;
     readonly readyState: number;
     readonly response: any;
@@ -13139,6 +13140,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     timeout: number;
     readonly upload: XMLHttpRequestUpload;
     withCredentials: boolean;
+    msCaching?: string;
     abort(): void;
     getAllResponseHeaders(): string;
     getResponseHeader(header: string): string | null;
@@ -13277,7 +13279,7 @@ declare var XSLTProcessor: {
 }
 
 interface AbstractWorker {
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -13436,7 +13438,7 @@ interface LinkStyle {
 
 interface MSBaseReader {
     onabort: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     onload: (ev: Event) => any;
     onloadend: (ev: ProgressEvent) => any;
     onloadstart: (ev: Event) => any;
@@ -13501,7 +13503,359 @@ interface NavigatorUserMedia {
 }
 
 interface NodeSelector {
+    querySelector(selectors: "a"): HTMLAnchorElement;
+    querySelector(selectors: "abbr"): HTMLElement;
+    querySelector(selectors: "acronym"): HTMLElement;
+    querySelector(selectors: "address"): HTMLElement;
+    querySelector(selectors: "applet"): HTMLAppletElement;
+    querySelector(selectors: "area"): HTMLAreaElement;
+    querySelector(selectors: "article"): HTMLElement;
+    querySelector(selectors: "aside"): HTMLElement;
+    querySelector(selectors: "audio"): HTMLAudioElement;
+    querySelector(selectors: "b"): HTMLElement;
+    querySelector(selectors: "base"): HTMLBaseElement;
+    querySelector(selectors: "basefont"): HTMLBaseFontElement;
+    querySelector(selectors: "bdo"): HTMLElement;
+    querySelector(selectors: "big"): HTMLElement;
+    querySelector(selectors: "blockquote"): HTMLQuoteElement;
+    querySelector(selectors: "body"): HTMLBodyElement;
+    querySelector(selectors: "br"): HTMLBRElement;
+    querySelector(selectors: "button"): HTMLButtonElement;
+    querySelector(selectors: "canvas"): HTMLCanvasElement;
+    querySelector(selectors: "caption"): HTMLTableCaptionElement;
+    querySelector(selectors: "center"): HTMLElement;
+    querySelector(selectors: "circle"): SVGCircleElement;
+    querySelector(selectors: "cite"): HTMLElement;
+    querySelector(selectors: "clippath"): SVGClipPathElement;
+    querySelector(selectors: "code"): HTMLElement;
+    querySelector(selectors: "col"): HTMLTableColElement;
+    querySelector(selectors: "colgroup"): HTMLTableColElement;
+    querySelector(selectors: "datalist"): HTMLDataListElement;
+    querySelector(selectors: "dd"): HTMLElement;
+    querySelector(selectors: "defs"): SVGDefsElement;
+    querySelector(selectors: "del"): HTMLModElement;
+    querySelector(selectors: "desc"): SVGDescElement;
+    querySelector(selectors: "dfn"): HTMLElement;
+    querySelector(selectors: "dir"): HTMLDirectoryElement;
+    querySelector(selectors: "div"): HTMLDivElement;
+    querySelector(selectors: "dl"): HTMLDListElement;
+    querySelector(selectors: "dt"): HTMLElement;
+    querySelector(selectors: "ellipse"): SVGEllipseElement;
+    querySelector(selectors: "em"): HTMLElement;
+    querySelector(selectors: "embed"): HTMLEmbedElement;
+    querySelector(selectors: "feblend"): SVGFEBlendElement;
+    querySelector(selectors: "fecolormatrix"): SVGFEColorMatrixElement;
+    querySelector(selectors: "fecomponenttransfer"): SVGFEComponentTransferElement;
+    querySelector(selectors: "fecomposite"): SVGFECompositeElement;
+    querySelector(selectors: "feconvolvematrix"): SVGFEConvolveMatrixElement;
+    querySelector(selectors: "fediffuselighting"): SVGFEDiffuseLightingElement;
+    querySelector(selectors: "fedisplacementmap"): SVGFEDisplacementMapElement;
+    querySelector(selectors: "fedistantlight"): SVGFEDistantLightElement;
+    querySelector(selectors: "feflood"): SVGFEFloodElement;
+    querySelector(selectors: "fefunca"): SVGFEFuncAElement;
+    querySelector(selectors: "fefuncb"): SVGFEFuncBElement;
+    querySelector(selectors: "fefuncg"): SVGFEFuncGElement;
+    querySelector(selectors: "fefuncr"): SVGFEFuncRElement;
+    querySelector(selectors: "fegaussianblur"): SVGFEGaussianBlurElement;
+    querySelector(selectors: "feimage"): SVGFEImageElement;
+    querySelector(selectors: "femerge"): SVGFEMergeElement;
+    querySelector(selectors: "femergenode"): SVGFEMergeNodeElement;
+    querySelector(selectors: "femorphology"): SVGFEMorphologyElement;
+    querySelector(selectors: "feoffset"): SVGFEOffsetElement;
+    querySelector(selectors: "fepointlight"): SVGFEPointLightElement;
+    querySelector(selectors: "fespecularlighting"): SVGFESpecularLightingElement;
+    querySelector(selectors: "fespotlight"): SVGFESpotLightElement;
+    querySelector(selectors: "fetile"): SVGFETileElement;
+    querySelector(selectors: "feturbulence"): SVGFETurbulenceElement;
+    querySelector(selectors: "fieldset"): HTMLFieldSetElement;
+    querySelector(selectors: "figcaption"): HTMLElement;
+    querySelector(selectors: "figure"): HTMLElement;
+    querySelector(selectors: "filter"): SVGFilterElement;
+    querySelector(selectors: "font"): HTMLFontElement;
+    querySelector(selectors: "footer"): HTMLElement;
+    querySelector(selectors: "foreignobject"): SVGForeignObjectElement;
+    querySelector(selectors: "form"): HTMLFormElement;
+    querySelector(selectors: "frame"): HTMLFrameElement;
+    querySelector(selectors: "frameset"): HTMLFrameSetElement;
+    querySelector(selectors: "g"): SVGGElement;
+    querySelector(selectors: "h1"): HTMLHeadingElement;
+    querySelector(selectors: "h2"): HTMLHeadingElement;
+    querySelector(selectors: "h3"): HTMLHeadingElement;
+    querySelector(selectors: "h4"): HTMLHeadingElement;
+    querySelector(selectors: "h5"): HTMLHeadingElement;
+    querySelector(selectors: "h6"): HTMLHeadingElement;
+    querySelector(selectors: "head"): HTMLHeadElement;
+    querySelector(selectors: "header"): HTMLElement;
+    querySelector(selectors: "hgroup"): HTMLElement;
+    querySelector(selectors: "hr"): HTMLHRElement;
+    querySelector(selectors: "html"): HTMLHtmlElement;
+    querySelector(selectors: "i"): HTMLElement;
+    querySelector(selectors: "iframe"): HTMLIFrameElement;
+    querySelector(selectors: "image"): SVGImageElement;
+    querySelector(selectors: "img"): HTMLImageElement;
+    querySelector(selectors: "input"): HTMLInputElement;
+    querySelector(selectors: "ins"): HTMLModElement;
+    querySelector(selectors: "isindex"): HTMLUnknownElement;
+    querySelector(selectors: "kbd"): HTMLElement;
+    querySelector(selectors: "keygen"): HTMLElement;
+    querySelector(selectors: "label"): HTMLLabelElement;
+    querySelector(selectors: "legend"): HTMLLegendElement;
+    querySelector(selectors: "li"): HTMLLIElement;
+    querySelector(selectors: "line"): SVGLineElement;
+    querySelector(selectors: "lineargradient"): SVGLinearGradientElement;
+    querySelector(selectors: "link"): HTMLLinkElement;
+    querySelector(selectors: "listing"): HTMLPreElement;
+    querySelector(selectors: "map"): HTMLMapElement;
+    querySelector(selectors: "mark"): HTMLElement;
+    querySelector(selectors: "marker"): SVGMarkerElement;
+    querySelector(selectors: "marquee"): HTMLMarqueeElement;
+    querySelector(selectors: "mask"): SVGMaskElement;
+    querySelector(selectors: "menu"): HTMLMenuElement;
+    querySelector(selectors: "meta"): HTMLMetaElement;
+    querySelector(selectors: "metadata"): SVGMetadataElement;
+    querySelector(selectors: "meter"): HTMLMeterElement;
+    querySelector(selectors: "nav"): HTMLElement;
+    querySelector(selectors: "nextid"): HTMLUnknownElement;
+    querySelector(selectors: "nobr"): HTMLElement;
+    querySelector(selectors: "noframes"): HTMLElement;
+    querySelector(selectors: "noscript"): HTMLElement;
+    querySelector(selectors: "object"): HTMLObjectElement;
+    querySelector(selectors: "ol"): HTMLOListElement;
+    querySelector(selectors: "optgroup"): HTMLOptGroupElement;
+    querySelector(selectors: "option"): HTMLOptionElement;
+    querySelector(selectors: "p"): HTMLParagraphElement;
+    querySelector(selectors: "param"): HTMLParamElement;
+    querySelector(selectors: "path"): SVGPathElement;
+    querySelector(selectors: "pattern"): SVGPatternElement;
+    querySelector(selectors: "picture"): HTMLPictureElement;
+    querySelector(selectors: "plaintext"): HTMLElement;
+    querySelector(selectors: "polygon"): SVGPolygonElement;
+    querySelector(selectors: "polyline"): SVGPolylineElement;
+    querySelector(selectors: "pre"): HTMLPreElement;
+    querySelector(selectors: "progress"): HTMLProgressElement;
+    querySelector(selectors: "q"): HTMLQuoteElement;
+    querySelector(selectors: "radialgradient"): SVGRadialGradientElement;
+    querySelector(selectors: "rect"): SVGRectElement;
+    querySelector(selectors: "rt"): HTMLElement;
+    querySelector(selectors: "ruby"): HTMLElement;
+    querySelector(selectors: "s"): HTMLElement;
+    querySelector(selectors: "samp"): HTMLElement;
+    querySelector(selectors: "script"): HTMLScriptElement;
+    querySelector(selectors: "section"): HTMLElement;
+    querySelector(selectors: "select"): HTMLSelectElement;
+    querySelector(selectors: "small"): HTMLElement;
+    querySelector(selectors: "source"): HTMLSourceElement;
+    querySelector(selectors: "span"): HTMLSpanElement;
+    querySelector(selectors: "stop"): SVGStopElement;
+    querySelector(selectors: "strike"): HTMLElement;
+    querySelector(selectors: "strong"): HTMLElement;
+    querySelector(selectors: "style"): HTMLStyleElement;
+    querySelector(selectors: "sub"): HTMLElement;
+    querySelector(selectors: "sup"): HTMLElement;
+    querySelector(selectors: "svg"): SVGSVGElement;
+    querySelector(selectors: "switch"): SVGSwitchElement;
+    querySelector(selectors: "symbol"): SVGSymbolElement;
+    querySelector(selectors: "table"): HTMLTableElement;
+    querySelector(selectors: "tbody"): HTMLTableSectionElement;
+    querySelector(selectors: "td"): HTMLTableDataCellElement;
+    querySelector(selectors: "template"): HTMLTemplateElement;
+    querySelector(selectors: "text"): SVGTextElement;
+    querySelector(selectors: "textpath"): SVGTextPathElement;
+    querySelector(selectors: "textarea"): HTMLTextAreaElement;
+    querySelector(selectors: "tfoot"): HTMLTableSectionElement;
+    querySelector(selectors: "th"): HTMLTableHeaderCellElement;
+    querySelector(selectors: "thead"): HTMLTableSectionElement;
+    querySelector(selectors: "title"): HTMLTitleElement;
+    querySelector(selectors: "tr"): HTMLTableRowElement;
+    querySelector(selectors: "track"): HTMLTrackElement;
+    querySelector(selectors: "tspan"): SVGTSpanElement;
+    querySelector(selectors: "tt"): HTMLElement;
+    querySelector(selectors: "u"): HTMLElement;
+    querySelector(selectors: "ul"): HTMLUListElement;
+    querySelector(selectors: "use"): SVGUseElement;
+    querySelector(selectors: "var"): HTMLElement;
+    querySelector(selectors: "video"): HTMLVideoElement;
+    querySelector(selectors: "view"): SVGViewElement;
+    querySelector(selectors: "wbr"): HTMLElement;
+    querySelector(selectors: "x-ms-webview"): MSHTMLWebViewElement;
+    querySelector(selectors: "xmp"): HTMLPreElement;
     querySelector(selectors: string): Element;
+    querySelectorAll(selectors: "a"): NodeListOf<HTMLAnchorElement>;
+    querySelectorAll(selectors: "abbr"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "acronym"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "address"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "applet"): NodeListOf<HTMLAppletElement>;
+    querySelectorAll(selectors: "area"): NodeListOf<HTMLAreaElement>;
+    querySelectorAll(selectors: "article"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "aside"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "audio"): NodeListOf<HTMLAudioElement>;
+    querySelectorAll(selectors: "b"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "base"): NodeListOf<HTMLBaseElement>;
+    querySelectorAll(selectors: "basefont"): NodeListOf<HTMLBaseFontElement>;
+    querySelectorAll(selectors: "bdo"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "big"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "blockquote"): NodeListOf<HTMLQuoteElement>;
+    querySelectorAll(selectors: "body"): NodeListOf<HTMLBodyElement>;
+    querySelectorAll(selectors: "br"): NodeListOf<HTMLBRElement>;
+    querySelectorAll(selectors: "button"): NodeListOf<HTMLButtonElement>;
+    querySelectorAll(selectors: "canvas"): NodeListOf<HTMLCanvasElement>;
+    querySelectorAll(selectors: "caption"): NodeListOf<HTMLTableCaptionElement>;
+    querySelectorAll(selectors: "center"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "circle"): NodeListOf<SVGCircleElement>;
+    querySelectorAll(selectors: "cite"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "clippath"): NodeListOf<SVGClipPathElement>;
+    querySelectorAll(selectors: "code"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "col"): NodeListOf<HTMLTableColElement>;
+    querySelectorAll(selectors: "colgroup"): NodeListOf<HTMLTableColElement>;
+    querySelectorAll(selectors: "datalist"): NodeListOf<HTMLDataListElement>;
+    querySelectorAll(selectors: "dd"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "defs"): NodeListOf<SVGDefsElement>;
+    querySelectorAll(selectors: "del"): NodeListOf<HTMLModElement>;
+    querySelectorAll(selectors: "desc"): NodeListOf<SVGDescElement>;
+    querySelectorAll(selectors: "dfn"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "dir"): NodeListOf<HTMLDirectoryElement>;
+    querySelectorAll(selectors: "div"): NodeListOf<HTMLDivElement>;
+    querySelectorAll(selectors: "dl"): NodeListOf<HTMLDListElement>;
+    querySelectorAll(selectors: "dt"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "ellipse"): NodeListOf<SVGEllipseElement>;
+    querySelectorAll(selectors: "em"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "embed"): NodeListOf<HTMLEmbedElement>;
+    querySelectorAll(selectors: "feblend"): NodeListOf<SVGFEBlendElement>;
+    querySelectorAll(selectors: "fecolormatrix"): NodeListOf<SVGFEColorMatrixElement>;
+    querySelectorAll(selectors: "fecomponenttransfer"): NodeListOf<SVGFEComponentTransferElement>;
+    querySelectorAll(selectors: "fecomposite"): NodeListOf<SVGFECompositeElement>;
+    querySelectorAll(selectors: "feconvolvematrix"): NodeListOf<SVGFEConvolveMatrixElement>;
+    querySelectorAll(selectors: "fediffuselighting"): NodeListOf<SVGFEDiffuseLightingElement>;
+    querySelectorAll(selectors: "fedisplacementmap"): NodeListOf<SVGFEDisplacementMapElement>;
+    querySelectorAll(selectors: "fedistantlight"): NodeListOf<SVGFEDistantLightElement>;
+    querySelectorAll(selectors: "feflood"): NodeListOf<SVGFEFloodElement>;
+    querySelectorAll(selectors: "fefunca"): NodeListOf<SVGFEFuncAElement>;
+    querySelectorAll(selectors: "fefuncb"): NodeListOf<SVGFEFuncBElement>;
+    querySelectorAll(selectors: "fefuncg"): NodeListOf<SVGFEFuncGElement>;
+    querySelectorAll(selectors: "fefuncr"): NodeListOf<SVGFEFuncRElement>;
+    querySelectorAll(selectors: "fegaussianblur"): NodeListOf<SVGFEGaussianBlurElement>;
+    querySelectorAll(selectors: "feimage"): NodeListOf<SVGFEImageElement>;
+    querySelectorAll(selectors: "femerge"): NodeListOf<SVGFEMergeElement>;
+    querySelectorAll(selectors: "femergenode"): NodeListOf<SVGFEMergeNodeElement>;
+    querySelectorAll(selectors: "femorphology"): NodeListOf<SVGFEMorphologyElement>;
+    querySelectorAll(selectors: "feoffset"): NodeListOf<SVGFEOffsetElement>;
+    querySelectorAll(selectors: "fepointlight"): NodeListOf<SVGFEPointLightElement>;
+    querySelectorAll(selectors: "fespecularlighting"): NodeListOf<SVGFESpecularLightingElement>;
+    querySelectorAll(selectors: "fespotlight"): NodeListOf<SVGFESpotLightElement>;
+    querySelectorAll(selectors: "fetile"): NodeListOf<SVGFETileElement>;
+    querySelectorAll(selectors: "feturbulence"): NodeListOf<SVGFETurbulenceElement>;
+    querySelectorAll(selectors: "fieldset"): NodeListOf<HTMLFieldSetElement>;
+    querySelectorAll(selectors: "figcaption"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "figure"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "filter"): NodeListOf<SVGFilterElement>;
+    querySelectorAll(selectors: "font"): NodeListOf<HTMLFontElement>;
+    querySelectorAll(selectors: "footer"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "foreignobject"): NodeListOf<SVGForeignObjectElement>;
+    querySelectorAll(selectors: "form"): NodeListOf<HTMLFormElement>;
+    querySelectorAll(selectors: "frame"): NodeListOf<HTMLFrameElement>;
+    querySelectorAll(selectors: "frameset"): NodeListOf<HTMLFrameSetElement>;
+    querySelectorAll(selectors: "g"): NodeListOf<SVGGElement>;
+    querySelectorAll(selectors: "h1"): NodeListOf<HTMLHeadingElement>;
+    querySelectorAll(selectors: "h2"): NodeListOf<HTMLHeadingElement>;
+    querySelectorAll(selectors: "h3"): NodeListOf<HTMLHeadingElement>;
+    querySelectorAll(selectors: "h4"): NodeListOf<HTMLHeadingElement>;
+    querySelectorAll(selectors: "h5"): NodeListOf<HTMLHeadingElement>;
+    querySelectorAll(selectors: "h6"): NodeListOf<HTMLHeadingElement>;
+    querySelectorAll(selectors: "head"): NodeListOf<HTMLHeadElement>;
+    querySelectorAll(selectors: "header"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "hgroup"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "hr"): NodeListOf<HTMLHRElement>;
+    querySelectorAll(selectors: "html"): NodeListOf<HTMLHtmlElement>;
+    querySelectorAll(selectors: "i"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "iframe"): NodeListOf<HTMLIFrameElement>;
+    querySelectorAll(selectors: "image"): NodeListOf<SVGImageElement>;
+    querySelectorAll(selectors: "img"): NodeListOf<HTMLImageElement>;
+    querySelectorAll(selectors: "input"): NodeListOf<HTMLInputElement>;
+    querySelectorAll(selectors: "ins"): NodeListOf<HTMLModElement>;
+    querySelectorAll(selectors: "isindex"): NodeListOf<HTMLUnknownElement>;
+    querySelectorAll(selectors: "kbd"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "keygen"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "label"): NodeListOf<HTMLLabelElement>;
+    querySelectorAll(selectors: "legend"): NodeListOf<HTMLLegendElement>;
+    querySelectorAll(selectors: "li"): NodeListOf<HTMLLIElement>;
+    querySelectorAll(selectors: "line"): NodeListOf<SVGLineElement>;
+    querySelectorAll(selectors: "lineargradient"): NodeListOf<SVGLinearGradientElement>;
+    querySelectorAll(selectors: "link"): NodeListOf<HTMLLinkElement>;
+    querySelectorAll(selectors: "listing"): NodeListOf<HTMLPreElement>;
+    querySelectorAll(selectors: "map"): NodeListOf<HTMLMapElement>;
+    querySelectorAll(selectors: "mark"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "marker"): NodeListOf<SVGMarkerElement>;
+    querySelectorAll(selectors: "marquee"): NodeListOf<HTMLMarqueeElement>;
+    querySelectorAll(selectors: "mask"): NodeListOf<SVGMaskElement>;
+    querySelectorAll(selectors: "menu"): NodeListOf<HTMLMenuElement>;
+    querySelectorAll(selectors: "meta"): NodeListOf<HTMLMetaElement>;
+    querySelectorAll(selectors: "metadata"): NodeListOf<SVGMetadataElement>;
+    querySelectorAll(selectors: "meter"): NodeListOf<HTMLMeterElement>;
+    querySelectorAll(selectors: "nav"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "nextid"): NodeListOf<HTMLUnknownElement>;
+    querySelectorAll(selectors: "nobr"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "noframes"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "noscript"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "object"): NodeListOf<HTMLObjectElement>;
+    querySelectorAll(selectors: "ol"): NodeListOf<HTMLOListElement>;
+    querySelectorAll(selectors: "optgroup"): NodeListOf<HTMLOptGroupElement>;
+    querySelectorAll(selectors: "option"): NodeListOf<HTMLOptionElement>;
+    querySelectorAll(selectors: "p"): NodeListOf<HTMLParagraphElement>;
+    querySelectorAll(selectors: "param"): NodeListOf<HTMLParamElement>;
+    querySelectorAll(selectors: "path"): NodeListOf<SVGPathElement>;
+    querySelectorAll(selectors: "pattern"): NodeListOf<SVGPatternElement>;
+    querySelectorAll(selectors: "picture"): NodeListOf<HTMLPictureElement>;
+    querySelectorAll(selectors: "plaintext"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "polygon"): NodeListOf<SVGPolygonElement>;
+    querySelectorAll(selectors: "polyline"): NodeListOf<SVGPolylineElement>;
+    querySelectorAll(selectors: "pre"): NodeListOf<HTMLPreElement>;
+    querySelectorAll(selectors: "progress"): NodeListOf<HTMLProgressElement>;
+    querySelectorAll(selectors: "q"): NodeListOf<HTMLQuoteElement>;
+    querySelectorAll(selectors: "radialgradient"): NodeListOf<SVGRadialGradientElement>;
+    querySelectorAll(selectors: "rect"): NodeListOf<SVGRectElement>;
+    querySelectorAll(selectors: "rt"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "ruby"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "s"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "samp"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "script"): NodeListOf<HTMLScriptElement>;
+    querySelectorAll(selectors: "section"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "select"): NodeListOf<HTMLSelectElement>;
+    querySelectorAll(selectors: "small"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "source"): NodeListOf<HTMLSourceElement>;
+    querySelectorAll(selectors: "span"): NodeListOf<HTMLSpanElement>;
+    querySelectorAll(selectors: "stop"): NodeListOf<SVGStopElement>;
+    querySelectorAll(selectors: "strike"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "strong"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "style"): NodeListOf<HTMLStyleElement>;
+    querySelectorAll(selectors: "sub"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "sup"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "svg"): NodeListOf<SVGSVGElement>;
+    querySelectorAll(selectors: "switch"): NodeListOf<SVGSwitchElement>;
+    querySelectorAll(selectors: "symbol"): NodeListOf<SVGSymbolElement>;
+    querySelectorAll(selectors: "table"): NodeListOf<HTMLTableElement>;
+    querySelectorAll(selectors: "tbody"): NodeListOf<HTMLTableSectionElement>;
+    querySelectorAll(selectors: "td"): NodeListOf<HTMLTableDataCellElement>;
+    querySelectorAll(selectors: "template"): NodeListOf<HTMLTemplateElement>;
+    querySelectorAll(selectors: "text"): NodeListOf<SVGTextElement>;
+    querySelectorAll(selectors: "textpath"): NodeListOf<SVGTextPathElement>;
+    querySelectorAll(selectors: "textarea"): NodeListOf<HTMLTextAreaElement>;
+    querySelectorAll(selectors: "tfoot"): NodeListOf<HTMLTableSectionElement>;
+    querySelectorAll(selectors: "th"): NodeListOf<HTMLTableHeaderCellElement>;
+    querySelectorAll(selectors: "thead"): NodeListOf<HTMLTableSectionElement>;
+    querySelectorAll(selectors: "title"): NodeListOf<HTMLTitleElement>;
+    querySelectorAll(selectors: "tr"): NodeListOf<HTMLTableRowElement>;
+    querySelectorAll(selectors: "track"): NodeListOf<HTMLTrackElement>;
+    querySelectorAll(selectors: "tspan"): NodeListOf<SVGTSpanElement>;
+    querySelectorAll(selectors: "tt"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "u"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "ul"): NodeListOf<HTMLUListElement>;
+    querySelectorAll(selectors: "use"): NodeListOf<SVGUseElement>;
+    querySelectorAll(selectors: "var"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "video"): NodeListOf<HTMLVideoElement>;
+    querySelectorAll(selectors: "view"): NodeListOf<SVGViewElement>;
+    querySelectorAll(selectors: "wbr"): NodeListOf<HTMLElement>;
+    querySelectorAll(selectors: "x-ms-webview"): NodeListOf<MSHTMLWebViewElement>;
+    querySelectorAll(selectors: "xmp"): NodeListOf<HTMLPreElement>;
     querySelectorAll(selectors: string): NodeListOf<Element>;
 }
 
@@ -13589,18 +13943,21 @@ interface WindowSessionStorage {
 interface WindowTimers extends Object, WindowTimersExtension {
     clearInterval(handle: number): void;
     clearTimeout(handle: number): void;
+    setInterval(handler: (...args: any[]) => void, timeout: number): number;
     setInterval(handler: any, timeout?: any, ...args: any[]): number;
+    setTimeout(handler: (...args: any[]) => void, timeout: number): number;
     setTimeout(handler: any, timeout?: any, ...args: any[]): number;
 }
 
 interface WindowTimersExtension {
     clearImmediate(handle: number): void;
-    setImmediate(expression: any, ...args: any[]): number;
+    setImmediate(handler: (...args: any[]) => void): number;
+    setImmediate(handler: any, ...args: any[]): number;
 }
 
 interface XMLHttpRequestEventTarget {
     onabort: (ev: Event) => any;
-    onerror: (ev: Event) => any;
+    onerror: (ev: ErrorEvent) => any;
     onload: (ev: Event) => any;
     onloadend: (ev: ProgressEvent) => any;
     onloadstart: (ev: Event) => any;
@@ -13622,6 +13979,13 @@ interface StorageEventInit extends EventInit {
     newValue?: string;
     url: string;
     storageArea?: Storage;
+}
+
+interface Canvas2DContextAttributes {
+    alpha?: boolean;
+    willReadFrequently?: boolean;
+    storage?: boolean;
+    [attribute: string]: boolean | string | undefined;
 }
 
 interface NodeListOf<TNode extends Node> extends NodeList {
@@ -13671,6 +14035,177 @@ interface ClipboardEventInit extends EventInit {
 }
 
 interface IDBArrayKey extends Array<IDBValidKey> {
+}
+
+interface RsaKeyGenParams extends Algorithm {
+    modulusLength: number;
+    publicExponent: Uint8Array;
+}
+
+interface RsaHashedKeyGenParams extends RsaKeyGenParams {
+    hash: AlgorithmIdentifier;
+}
+
+interface RsaKeyAlgorithm extends KeyAlgorithm {
+    modulusLength: number;
+    publicExponent: Uint8Array;
+}
+
+interface RsaHashedKeyAlgorithm extends RsaKeyAlgorithm {
+    hash: AlgorithmIdentifier;
+}
+
+interface RsaHashedImportParams {
+    hash: AlgorithmIdentifier;
+}
+
+interface RsaPssParams {
+    saltLength: number;
+}
+
+interface RsaOaepParams extends Algorithm {
+    label?: BufferSource;
+}
+
+interface EcdsaParams extends Algorithm {
+    hash: AlgorithmIdentifier;
+}
+
+interface EcKeyGenParams extends Algorithm {
+    typedCurve: string;
+}
+
+interface EcKeyAlgorithm extends KeyAlgorithm {
+    typedCurve: string;
+}
+
+interface EcKeyImportParams {
+    namedCurve: string;
+}
+
+interface EcdhKeyDeriveParams extends Algorithm {
+    public: CryptoKey;
+}
+
+interface AesCtrParams extends Algorithm {
+    counter: BufferSource;
+    length: number;
+}
+
+interface AesKeyAlgorithm extends KeyAlgorithm {
+    length: number;
+}
+
+interface AesKeyGenParams extends Algorithm {
+    length: number;
+}
+
+interface AesDerivedKeyParams extends Algorithm {
+    length: number;
+}
+
+interface AesCbcParams extends Algorithm {
+    iv: BufferSource;
+}
+
+interface AesCmacParams extends Algorithm {
+    length: number;
+}
+
+interface AesGcmParams extends Algorithm {
+    iv: BufferSource;
+    additionalData?: BufferSource;
+    tagLength?: number;
+}
+
+interface AesCfbParams extends Algorithm {
+    iv: BufferSource;
+}
+
+interface HmacImportParams extends Algorithm {
+    hash?: AlgorithmIdentifier;
+    length?: number;
+}
+
+interface HmacKeyAlgorithm extends KeyAlgorithm {
+    hash: AlgorithmIdentifier;
+    length: number;
+}
+
+interface HmacKeyGenParams extends Algorithm {
+    hash: AlgorithmIdentifier;
+    length?: number;
+}
+
+interface DhKeyGenParams extends Algorithm {
+    prime: Uint8Array;
+    generator: Uint8Array;
+}
+
+interface DhKeyAlgorithm extends KeyAlgorithm {
+    prime: Uint8Array;
+    generator: Uint8Array;
+}
+
+interface DhKeyDeriveParams extends Algorithm {
+    public: CryptoKey;
+}
+
+interface DhImportKeyParams extends Algorithm {
+    prime: Uint8Array;
+    generator: Uint8Array;
+}
+
+interface ConcatParams extends Algorithm {
+    hash?: AlgorithmIdentifier;
+    algorithmId: Uint8Array;
+    partyUInfo: Uint8Array;
+    partyVInfo: Uint8Array;
+    publicInfo?: Uint8Array;
+    privateInfo?: Uint8Array;
+}
+
+interface HkdfCtrParams extends Algorithm {
+    hash: AlgorithmIdentifier;
+    label: BufferSource;
+    context: BufferSource;
+}
+
+interface Pbkdf2Params extends Algorithm {
+    salt: BufferSource;
+    iterations: number;
+    hash: AlgorithmIdentifier;
+}
+
+interface RsaOtherPrimesInfo {
+    r: string;
+    d: string;
+    t: string;
+}
+
+interface JsonWebKey {
+    kty: string;
+    use?: string;
+    key_ops?: string[];
+    alg?: string;
+    kid?: string;
+    x5u?: string;
+    x5c?: string;
+    x5t?: string;
+    ext?: boolean;
+    crv?: string;
+    x?: string;
+    y?: string;
+    d?: string;
+    n?: string;
+    e?: string;
+    p?: string;
+    q?: string;
+    dp?: string;
+    dq?: string;
+    qi?: string;
+    oth?: RsaOtherPrimesInfo[];
+    k?: string;
 }
 
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
@@ -13746,7 +14281,7 @@ declare var msCredentials: MSCredentials;
 declare var name: string;
 declare var navigator: Navigator;
 declare var offscreenBuffering: string | boolean;
-declare var onabort: (ev: Event) => any;
+declare var onabort: (ev: UIEvent) => any;
 declare var onafterprint: (ev: Event) => any;
 declare var onbeforeprint: (ev: Event) => any;
 declare var onbeforeunload: (ev: BeforeUnloadEvent) => any;
@@ -13896,10 +14431,13 @@ declare function dispatchEvent(evt: Event): boolean;
 declare function removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 declare function clearInterval(handle: number): void;
 declare function clearTimeout(handle: number): void;
+declare function setInterval(handler: (...args: any[]) => void, timeout: number): number;
 declare function setInterval(handler: any, timeout?: any, ...args: any[]): number;
+declare function setTimeout(handler: (...args: any[]) => void, timeout: number): number;
 declare function setTimeout(handler: any, timeout?: any, ...args: any[]): number;
 declare function clearImmediate(handle: number): void;
-declare function setImmediate(expression: any, ...args: any[]): number;
+declare function setImmediate(handler: (...args: any[]) => void): number;
+declare function setImmediate(handler: any, ...args: any[]): number;
 declare var sessionStorage: Storage;
 declare var localStorage: Storage;
 declare var console: Console;
@@ -14043,3 +14581,5 @@ type RTCIceGatherCandidate = RTCIceCandidate | RTCIceCandidateComplete;
 type RTCTransport = RTCDtlsTransport | RTCSrtpSdesTransport;
 type payloadtype = number;
 type IDBValidKey = number | string | Date | IDBArrayKey;
+type BufferSource = ArrayBuffer | ArrayBufferView;
+type MouseWheelEvent = WheelEvent;

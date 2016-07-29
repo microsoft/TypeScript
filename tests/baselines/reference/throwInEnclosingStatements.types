@@ -9,7 +9,7 @@ function fn(x) {
 }
 
 <T>(x: T) => { throw x; }
-><T>(x: T) => { throw x; } : <T>(x: T) => void
+><T>(x: T) => { throw x; } : <T>(x: T) => never
 >T : T
 >x : T
 >T : T

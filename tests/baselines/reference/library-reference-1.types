@@ -1,4 +1,4 @@
-=== /consumer.ts ===
+=== /src/consumer.ts ===
 /// <reference types="jquery" />
 $.foo();
 >$.foo() : void
@@ -6,7 +6,7 @@ $.foo();
 >$ : { foo(): void; }
 >foo : () => void
 
-=== /types/jquery/index.d.ts ===
+=== /src/types/jquery/index.d.ts ===
 
 // We can find typings in the ./types folder
 
