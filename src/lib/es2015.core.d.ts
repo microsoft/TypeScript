@@ -226,7 +226,7 @@ interface NumberConstructor {
     /**
       * The value of the largest integer n such that n and n + 1 are both exactly representable as
       * a Number value.
-      * The value of Number.MIN_SAFE_INTEGER is 9007199254740991 2^53 − 1.
+      * The value of Number.MAX_SAFE_INTEGER is 9007199254740991 2^53 − 1.
       */
     readonly MAX_SAFE_INTEGER: number;
 
