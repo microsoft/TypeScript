@@ -7764,16 +7764,17 @@ namespace ts {
         }
 
         function isMatchingReference(source: Node, target: Node): boolean {
-            if (source.kind === target.kind) {
-                switch (source.kind) {
-                    case SyntaxKind.Identifier:
-                        return getResolvedSymbol(<Identifier>source) === getResolvedSymbol(<Identifier>target);
-                    case SyntaxKind.ThisKeyword:
-                        return true;
-                    case SyntaxKind.PropertyAccessExpression:
-                        return (<PropertyAccessExpression>source).name.text === (<PropertyAccessExpression>target).name.text &&
-                            isMatchingReference((<PropertyAccessExpression>source).expression, (<PropertyAccessExpression>target).expression);
-                }
+            switch (source.kind) {
+                case SyntaxKind.Identifier:
+                    return target.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>source) === getResolvedSymbol(<Identifier>target) ||
+                        (target.kind === SyntaxKind.VariableDeclaration || target.kind === SyntaxKind.BindingElement) &&
+                        getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>source)) === getSymbolOfNode(target);
+                case SyntaxKind.ThisKeyword:
+                    return target.kind === SyntaxKind.ThisKeyword;
+                case SyntaxKind.PropertyAccessExpression:
+                    return target.kind === SyntaxKind.PropertyAccessExpression &&
+                        (<PropertyAccessExpression>source).name.text === (<PropertyAccessExpression>target).name.text &&
+                        isMatchingReference((<PropertyAccessExpression>source).expression, (<PropertyAccessExpression>target).expression);
             }
             return false;
         }
@@ -7786,6 +7787,10 @@ namespace ts {
                 }
             }
             return false;
+        }
+
+        function rootContainsMatchingReference(source: Node, target: Node) {
+            return target.kind === SyntaxKind.PropertyAccessExpression && containsMatchingReference(source, (<PropertyAccessExpression>target).expression);
         }
 
         function isOrContainsMatchingReference(source: Node, target: Node) {
@@ -8031,6 +8036,12 @@ namespace ts {
                 getInitialTypeOfBindingElement(<BindingElement>node);
         }
 
+        function getInitialOrAssignedType(node: VariableDeclaration | BindingElement | Expression) {
+            return node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement ?
+                getInitialType(<VariableDeclaration | BindingElement>node) :
+                getAssignedType(<Expression>node);
+        }
+
         function getReferenceCandidate(node: Expression): Expression {
             switch (node.kind) {
                 case SyntaxKind.ParenthesizedExpression:
@@ -8153,19 +8164,9 @@ namespace ts {
                 const node = flow.node;
                 // Assignments only narrow the computed type if the declared type is a union type. Thus, we
                 // only need to evaluate the assigned type if the declared type is a union type.
-                if ((node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) &&
-                    reference.kind === SyntaxKind.Identifier &&
-                    getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>reference)) === getSymbolOfNode(node)) {
-                    return declaredType.flags & TypeFlags.Union ?
-                        getAssignmentReducedType(<UnionType>declaredType, getInitialType(<VariableDeclaration | BindingElement>node)) :
-                        declaredType;
-                }
-                // If the node is not a variable declaration or binding element, it is an identifier
-                // or a dotted name that is the target of an assignment. If we have a match, reduce
-                // the declared type by the assigned type.
                 if (isMatchingReference(reference, node)) {
                     return declaredType.flags & TypeFlags.Union ?
-                        getAssignmentReducedType(<UnionType>declaredType, getAssignedType(<Expression>node)) :
+                        getAssignmentReducedType(<UnionType>declaredType, getInitialOrAssignedType(node)) :
                         declaredType;
                 }
                 // We didn't have a direct match. However, if the reference is a dotted name, this
@@ -8297,6 +8298,9 @@ namespace ts {
                 if (isMatchingPropertyAccess(expr)) {
                     return narrowTypeByDiscriminant(type, <PropertyAccessExpression>expr, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy));
                 }
+                if (rootContainsMatchingReference(reference, expr)) {
+                    return declaredType;
+                }
                 return type;
             }
 
@@ -8328,6 +8332,9 @@ namespace ts {
                         }
                         if (isMatchingPropertyAccess(right)) {
                             return narrowTypeByDiscriminant(type, <PropertyAccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
+                        }
+                        if (rootContainsMatchingReference(reference, left) || rootContainsMatchingReference(reference, right)) {
+                            return declaredType;
                         }
                         break;
                     case SyntaxKind.InstanceOfKeyword:
