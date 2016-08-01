@@ -3090,7 +3090,7 @@ namespace ts {
 
             const oldSettings = program && program.getCompilerOptions();
             const newSettings = hostCache.compilationSettings();
-            const changesInCompilationSettingsAffectSyntax = oldSettings &&
+            const shouldCreateNewSourceFiles = oldSettings &&
                 (oldSettings.target !== newSettings.target ||
                  oldSettings.module !== newSettings.module ||
                  oldSettings.moduleResolution !== newSettings.moduleResolution ||
@@ -3151,7 +3151,7 @@ namespace ts {
                 const oldSourceFiles = program.getSourceFiles();
                 const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldSettings);
                 for (const oldSourceFile of oldSourceFiles) {
-                    if (!newProgram.getSourceFile(oldSourceFile.fileName) || changesInCompilationSettingsAffectSyntax) {
+                    if (!newProgram.getSourceFile(oldSourceFile.fileName) || shouldCreateNewSourceFiles) {
                         documentRegistry.releaseDocumentWithKey(oldSourceFile.path, oldSettingsKey);
                     }
                 }
@@ -3185,7 +3185,7 @@ namespace ts {
                 // Check if the language version has changed since we last created a program; if they are the same,
                 // it is safe to reuse the sourceFiles; if not, then the shape of the AST can change, and the oldSourceFile
                 // can not be reused. we have to dump all syntax trees and create new ones.
-                if (!changesInCompilationSettingsAffectSyntax) {
+                if (!shouldCreateNewSourceFiles) {
                     // Check if the old program had this file already
                     const oldSourceFile = program && program.getSourceFileByPath(path);
                     if (oldSourceFile) {
