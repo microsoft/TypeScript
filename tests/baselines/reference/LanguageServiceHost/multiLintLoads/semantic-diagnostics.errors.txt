@@ -1,9 +1,12 @@
+/foo-const.ts(1,7): warning test-semantic-lint: String literal type 'foo' is forbidden.
 /foo-const.ts(1,10): warning test-semantic-lint: String literal type 'foo' is forbidden.
 /foo-const.ts(1,18): warning test-semantic-lint: String literal type 'foo' is forbidden.
 
 
-==== /foo-const.ts (2 errors) ====
+==== /foo-const.ts (3 errors) ====
     const s: "foo" = "foo";
+          ~
+!!! warning test-semantic-lint: String literal type 'foo' is forbidden.
              ~~~~~
 !!! warning test-semantic-lint: String literal type 'foo' is forbidden.
                      ~~~~~

@@ -1,4 +1,5 @@
 import {SyntacticLintWalker, SemanticLintWalker} from "extension-api";
+import {LiteralType} from "typescript";
 
 export class IsNamedFoo extends SyntacticLintWalker {
     constructor(state) { super(state); }
@@ -27,7 +28,7 @@ export class IsValueFoo extends SemanticLintWalker {
     visit(node, error) {
         const type = this.checker.getTypeAtLocation(node);
         if (type.flags & this.ts.TypeFlags.StringLiteral) {
-            if (node.text === "foo") {
+            if ((type as LiteralType).text === "foo") {
                 error("String literal type 'foo' is forbidden.", node);
             }
         }
@@ -39,7 +40,7 @@ export class IsValueBar extends SemanticLintWalker {
     visit(node, error) {
         const type = this.checker.getTypeAtLocation(node);
         if (type.flags & this.ts.TypeFlags.StringLiteral) {
-            if (node.text === "bar") {
+            if ((type as LiteralType).text === "bar") {
                 error("String literal type 'bar' is forbidden.", node);
             }
         }

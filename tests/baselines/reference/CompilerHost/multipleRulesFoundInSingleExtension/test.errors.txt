@@ -1,12 +1,14 @@
 /foo-bar-const-interface.ts(1,11): warning test-multi-extension[IsNamedFoo]: Identifier 'foo' is forbidden.
 /foo-bar-const-interface.ts(2,11): warning test-multi-extension[IsNamedBar]: Identifier 'bar' is forbidden.
+/foo-bar-const-interface.ts(3,7): warning test-multi-extension[IsValueFoo]: String literal type 'foo' is forbidden.
 /foo-bar-const-interface.ts(3,10): warning test-multi-extension[IsValueFoo]: String literal type 'foo' is forbidden.
 /foo-bar-const-interface.ts(3,18): warning test-multi-extension[IsValueFoo]: String literal type 'foo' is forbidden.
+/foo-bar-const-interface.ts(4,5): warning test-multi-extension[IsValueBar]: String literal type 'bar' is forbidden.
 /foo-bar-const-interface.ts(4,8): warning test-multi-extension[IsValueBar]: String literal type 'bar' is forbidden.
 /foo-bar-const-interface.ts(4,16): warning test-multi-extension[IsValueBar]: String literal type 'bar' is forbidden.
 
 
-==== /foo-bar-const-interface.ts (6 errors) ====
+==== /foo-bar-const-interface.ts (8 errors) ====
     interface Foo {b;}
               ~~~
 !!! warning test-multi-extension[IsNamedFoo]: Identifier 'foo' is forbidden.
@@ -14,11 +16,15 @@
               ~~~
 !!! warning test-multi-extension[IsNamedBar]: Identifier 'bar' is forbidden.
     const f: "foo" = "foo";
+          ~
+!!! warning test-multi-extension[IsValueFoo]: String literal type 'foo' is forbidden.
              ~~~~~
 !!! warning test-multi-extension[IsValueFoo]: String literal type 'foo' is forbidden.
                      ~~~~~
 !!! warning test-multi-extension[IsValueFoo]: String literal type 'foo' is forbidden.
     let b: "bar" = "bar";
+        ~
+!!! warning test-multi-extension[IsValueBar]: String literal type 'bar' is forbidden.
            ~~~~~
 !!! warning test-multi-extension[IsValueBar]: String literal type 'bar' is forbidden.
                    ~~~~~
