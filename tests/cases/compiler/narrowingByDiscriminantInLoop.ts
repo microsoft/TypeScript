@@ -1,3 +1,5 @@
+// @strictNullChecks: true
+
 // Repro from #9977
 
 type IDLMemberTypes = OperationMemberType | ConstantMemberType;
@@ -12,7 +14,7 @@ interface InterfaceType {
 
 interface OperationMemberType {
     type: "operation";
-    idlType: IDLTypeDescription | null;
+    idlType: IDLTypeDescription;
 }
 
 interface ConstantMemberType {
@@ -46,5 +48,40 @@ function foo(memberType: IDLMemberTypes) {
     }
     else if (memberType.type === "operation") {
         memberType.idlType.origin;  // string
+    }
+}
+
+// Repro for issue similar to #8383
+
+interface A {
+    kind: true;
+    prop: { a: string; };
+}
+
+interface B {
+    kind: false;
+    prop: { b: string; }
+}
+
+function f1(x: A | B) {
+    while (true) {
+        x.prop;
+        if (x.kind === true) {
+            x.prop.a;
+        }
+        if (x.kind === false) {
+            x.prop.b;
+        }
+    }
+}
+
+function f2(x: A | B) {
+    while (true) {
+        if (x.kind) {
+            x.prop.a;
+        }
+        if (!x.kind) {
+            x.prop.b;
+        }
     }
 }
