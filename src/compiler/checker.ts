@@ -7789,6 +7789,10 @@ namespace ts {
             return false;
         }
 
+        function rootContainsMatchingReference(source: Node, target: Node) {
+            return target.kind === SyntaxKind.PropertyAccessExpression && containsMatchingReference(source, (<PropertyAccessExpression>target).expression);
+        }
+
         function isOrContainsMatchingReference(source: Node, target: Node) {
             return isMatchingReference(source, target) || containsMatchingReference(source, target);
         }
@@ -8294,6 +8298,9 @@ namespace ts {
                 if (isMatchingPropertyAccess(expr)) {
                     return narrowTypeByDiscriminant(type, <PropertyAccessExpression>expr, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy));
                 }
+                if (rootContainsMatchingReference(reference, expr)) {
+                    return declaredType;
+                }
                 return type;
             }
 
@@ -8325,6 +8332,9 @@ namespace ts {
                         }
                         if (isMatchingPropertyAccess(right)) {
                             return narrowTypeByDiscriminant(type, <PropertyAccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
+                        }
+                        if (rootContainsMatchingReference(reference, left) || rootContainsMatchingReference(reference, right)) {
+                            return declaredType;
                         }
                         break;
                     case SyntaxKind.InstanceOfKeyword:
