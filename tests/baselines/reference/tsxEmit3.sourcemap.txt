@@ -41,24 +41,18 @@ sourceFile:file.tsx
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^
-5 >              ^
-6 >               ^^^^^^^^^^^^^^->
+4 >            ^^^^^^^^^^^^^^^^^->
 1->
 2 >module 
 3 >           M
-4 >             
-5 >              {
 1->Emitted(2, 1) Source(7, 1) + SourceIndex(0)
 2 >Emitted(2, 12) Source(7, 8) + SourceIndex(0)
 3 >Emitted(2, 13) Source(7, 9) + SourceIndex(0)
-4 >Emitted(2, 15) Source(7, 10) + SourceIndex(0)
-5 >Emitted(2, 16) Source(7, 11) + SourceIndex(0)
 ---
 >>>    var Foo = (function () {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^->
-1->
+1-> {
   >	
 1->Emitted(3, 5) Source(8, 2) + SourceIndex(0)
 ---
@@ -139,24 +133,18 @@ sourceFile:file.tsx
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^
-4 >                ^^
-5 >                  ^
-6 >                   ^^^^^^^^^^^^^^->
+4 >                ^^^^^^^^^^^^^^^^^->
 1->
 2 >    export module 
 3 >               S
-4 >                 
-5 >                  {
 1->Emitted(10, 5) Source(9, 2) + SourceIndex(0)
 2 >Emitted(10, 16) Source(9, 16) + SourceIndex(0)
 3 >Emitted(10, 17) Source(9, 17) + SourceIndex(0)
-4 >Emitted(10, 19) Source(9, 18) + SourceIndex(0)
-5 >Emitted(10, 20) Source(9, 19) + SourceIndex(0)
 ---
 >>>        var Bar = (function () {
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^->
-1->
+1-> {
   >		
 1->Emitted(11, 9) Source(10, 3) + SourceIndex(0)
 ---
@@ -333,25 +321,19 @@ sourceFile:file.tsx
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^
-5 >              ^
-6 >               ^^^->
+4 >            ^^^^^^->
 1->
 2 >module 
 3 >           M
-4 >             
-5 >              {
 1->Emitted(22, 1) Source(17, 1) + SourceIndex(0)
 2 >Emitted(22, 12) Source(17, 8) + SourceIndex(0)
 3 >Emitted(22, 13) Source(17, 9) + SourceIndex(0)
-4 >Emitted(22, 15) Source(17, 10) + SourceIndex(0)
-5 >Emitted(22, 16) Source(17, 11) + SourceIndex(0)
 ---
 >>>    // Emit M.Foo
 1->^^^^
 2 >    ^^^^^^^^^^^^^
 3 >                 ^^^^^->
-1->
+1-> {
   >	
 2 >    // Emit M.Foo
 1->Emitted(23, 5) Source(18, 2) + SourceIndex(0)
@@ -414,25 +396,19 @@ sourceFile:file.tsx
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^
-4 >                ^^
-5 >                  ^
-6 >                   ^^^->
+4 >                ^^^^^^->
 1->
 2 >    export module 
 3 >               S
-4 >                 
-5 >                  {
 1->Emitted(26, 5) Source(21, 2) + SourceIndex(0)
 2 >Emitted(26, 16) Source(21, 16) + SourceIndex(0)
 3 >Emitted(26, 17) Source(21, 17) + SourceIndex(0)
-4 >Emitted(26, 19) Source(21, 18) + SourceIndex(0)
-5 >Emitted(26, 20) Source(21, 19) + SourceIndex(0)
 ---
 >>>        // Emit M.Foo
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^
 3 >                     ^^^^^->
-1->
+1-> {
   >		
 2 >        // Emit M.Foo
 1->Emitted(27, 9) Source(22, 3) + SourceIndex(0)
@@ -607,25 +583,19 @@ sourceFile:file.tsx
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^
-5 >              ^
-6 >               ^^^^^->
+4 >            ^^^^^^^^->
 1->
 2 >module 
 3 >           M
-4 >             
-5 >              {
 1->Emitted(34, 1) Source(31, 1) + SourceIndex(0)
 2 >Emitted(34, 12) Source(31, 8) + SourceIndex(0)
 3 >Emitted(34, 13) Source(31, 9) + SourceIndex(0)
-4 >Emitted(34, 15) Source(31, 10) + SourceIndex(0)
-5 >Emitted(34, 16) Source(31, 11) + SourceIndex(0)
 ---
 >>>    // Emit M.S.Bar
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^
 3 >                   ^^^^^^^->
-1->
+1-> {
   >	
 2 >    // Emit M.S.Bar
 1->Emitted(35, 5) Source(32, 2) + SourceIndex(0)
@@ -725,35 +695,30 @@ sourceFile:file.tsx
 1->
 2 >^^^^^^^^^^^
 3 >           ^^^
-4 >              ^^
-5 >                ^
+4 >              ^^^->
 1->
 2 >module 
 3 >           M
-4 >               
-5 >                {
 1->Emitted(39, 1) Source(36, 1) + SourceIndex(0)
 2 >Emitted(39, 12) Source(36, 8) + SourceIndex(0)
 3 >Emitted(39, 15) Source(36, 9) + SourceIndex(0)
-4 >Emitted(39, 17) Source(36, 10) + SourceIndex(0)
-5 >Emitted(39, 18) Source(36, 11) + SourceIndex(0)
 ---
 >>>    var M = 100;
-1 >^^^^
+1->^^^^
 2 >    ^^^^
 3 >        ^
 4 >         ^^^
 5 >            ^^^
 6 >               ^
 7 >                ^^^^->
-1 >
+1-> {
   >	
 2 >    var 
 3 >        M
 4 >          = 
 5 >            100
 6 >               ;
-1 >Emitted(40, 5) Source(37, 2) + SourceIndex(0)
+1->Emitted(40, 5) Source(37, 2) + SourceIndex(0)
 2 >Emitted(40, 9) Source(37, 6) + SourceIndex(0)
 3 >Emitted(40, 10) Source(37, 7) + SourceIndex(0)
 4 >Emitted(40, 13) Source(37, 10) + SourceIndex(0)

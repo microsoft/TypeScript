@@ -314,25 +314,6 @@ const _super = (function (geti, seti) {
             emitNodeWithNotification(node, emitWithComments);
         }
 
-        /**
-         * Emits a node with specialized emit flags.
-         */
-        // TODO(rbuckton): This should be removed once source maps are aligned with the old
-        //                 emitter and new baselines are taken. This exists solely to
-        //                 align with the old emitter.
-        function emitSpecialized(node: Node, flags: NodeEmitFlags) {
-            if (node) {
-                const flagsToAdd = flags & ~node.emitFlags;
-                if (flagsToAdd) {
-                    node.emitFlags |= flagsToAdd;
-                    emit(node);
-                    node.emitFlags &= ~flagsToAdd;
-                    return;
-                }
-
-                emit(node);
-            }
-        }
 
         /**
          * Emits a node with comments.
@@ -352,6 +333,16 @@ const _super = (function (geti, seti) {
          */
         function emitWithSourceMap(node: Node) {
             emitNodeWithSourceMap(node, emitWorker);
+        }
+
+        function emitIdentifierName(node: Identifier) {
+            if (node) {
+                emitNodeWithNotification(node, emitIdentifierNameWithComments);
+            }
+        }
+
+        function emitIdentifierNameWithComments(node: Identifier) {
+            emitNodeWithComments(node, emitWorker);
         }
 
         /**
@@ -1443,31 +1434,6 @@ const _super = (function (geti, seti) {
         }
 
         function emitForStatement(node: ForStatement) {
-            if (node.emitFlags & NodeEmitFlags.SourceMapAdjustRestParameterLoop) {
-                // TODO(rbuckton): This should be removed once source maps are aligned with the old
-                //                 emitter and new baselines are taken. This exists solely to
-                //                 align with the old emitter.
-                const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
-                write(" ");
-                writeToken(SyntaxKind.OpenParenToken, openParenPos);
-                const initializer = node.initializer;
-                initializer.emitFlags |= NodeEmitFlags.NoTrailingSourceMap;
-                emitForBinding(initializer);
-                write(";");
-                emitEnd(initializer);
-                const condition = node.condition;
-                condition.emitFlags |= NodeEmitFlags.NoTrailingSourceMap;
-                write(" ");
-                emitExpression(condition);
-                write(";");
-                emitEnd(condition);
-                write(" ");
-                emitExpression(node.incrementor);
-                write(")");
-                emitEmbeddedStatement(node.statement);
-                return;
-            }
-
             const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
             write(" ");
             writeToken(SyntaxKind.OpenParenToken, openParenPos, /*contextNode*/ node);
@@ -1598,7 +1564,7 @@ const _super = (function (geti, seti) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             write(node.asteriskToken ? "function* " : "function ");
-            emitSpecialized(node.name, NodeEmitFlags.NoSourceMap);
+            emitIdentifierName(node.name);
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
@@ -1685,17 +1651,7 @@ const _super = (function (geti, seti) {
         }
 
         function emitBlockFunctionBody(parentNode: Node, body: Block) {
-            // TODO(rbuckton): This should be removed once source maps are aligned with the old
-            //                 emitter and new baselines are taken. This exists solely to
-            //                 align with the old emitter.
-            if (body.emitFlags & NodeEmitFlags.SourceMapEmitOpenBraceAsToken) {
-                write(" ");
-                writeToken(SyntaxKind.OpenBraceToken, body.pos);
-            }
-            else {
-                write(" {");
-            }
-
+            write(" {");
             increaseIndent();
 
             emitBodyWithDetachedComments(body, body.statements,
@@ -1734,7 +1690,7 @@ const _super = (function (geti, seti) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             write("class");
-            emitSpecializedWithPrefix(" ", node.name, NodeEmitFlags.NoSourceMap);
+            emitNodeWithPrefix(" ", node.name, emitIdentifierName);
 
             const indentedFlag = node.emitFlags & NodeEmitFlags.Indented;
             if (indentedFlag) {
@@ -2260,16 +2216,6 @@ const _super = (function (geti, seti) {
 
         function emitWithPrefix(prefix: string, node: Node) {
             emitNodeWithPrefix(prefix, node, emit);
-        }
-
-        // TODO(rbuckton): This should be removed once source maps are aligned with the old
-        //                 emitter and new baselines are taken. This exists solely to
-        //                 align with the old emitter.
-        function emitSpecializedWithPrefix(prefix: string, node: Node, flags: NodeEmitFlags) {
-            if (node) {
-                write(prefix);
-                emitSpecialized(node, flags);
-            }
         }
 
         function emitExpressionWithPrefix(prefix: string, node: Node) {

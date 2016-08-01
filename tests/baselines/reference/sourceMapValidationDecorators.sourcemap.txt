@@ -62,21 +62,21 @@ sourceFile:sourceMapValidationDecorators.ts
 ---
 >>>        for (var _i = 1; _i < arguments.length; _i++) {
 1->^^^^^^^^^^^^^
-2 >             ^^^^^^^^^^^
-3 >                        ^
-4 >                         ^^^^^^^^^^^^^^^^^^^^^^
-5 >                                               ^
+2 >             ^^^^^^^^^^
+3 >                       ^^
+4 >                         ^^^^^^^^^^^^^^^^^^^^^
+5 >                                              ^^
 6 >                                                ^^^^
 1->
 2 >             ...b: string[]
-3 >                        
+3 >                       
 4 >                         ...b: string[]
-5 >                                               
+5 >                                              
 6 >                                                ...b: string[]
 1->Emitted(13, 14) Source(18, 7) + SourceIndex(0)
-2 >Emitted(13, 25) Source(18, 21) + SourceIndex(0)
+2 >Emitted(13, 24) Source(18, 21) + SourceIndex(0)
 3 >Emitted(13, 26) Source(18, 7) + SourceIndex(0)
-4 >Emitted(13, 48) Source(18, 21) + SourceIndex(0)
+4 >Emitted(13, 47) Source(18, 21) + SourceIndex(0)
 5 >Emitted(13, 49) Source(18, 7) + SourceIndex(0)
 6 >Emitted(13, 53) Source(18, 21) + SourceIndex(0)
 ---
