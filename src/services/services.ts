@@ -3115,16 +3115,18 @@ namespace ts {
             function wrap(key: string): Function {
                 if (extensionCount) {
                     return (...args: any[]) => {
+                        let result: any;
                         for (let i = 0; i < extensionCount; i++) {
                             const extension = instantiatedExtensions[i];
                             if ((extension as any)[key]) {
                                 const temp = (extension as any)[key](...args);
                                 if (temp !== undefined) {
-                                    return temp;
+                                    result = temp;
+                                    break;
                                 }
                             }
                         }
-                        let result: any = (baseService as any)[key](...args);
+                        result = result !== undefined ? result : (baseService as any)[key](...args);
                         const filterKey = `${key}Filter`;
                         for (let i = 0; i < extensionCount; i++) {
                             const extension = instantiatedExtensions[i];
