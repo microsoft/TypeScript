@@ -766,12 +766,28 @@ namespace FourSlash {
             }
         }
 
-        public verifyImportModuleCompletionListContains(symbol: string) {
+        public verifyImportModuleCompletionListContains(symbol: string, rangeIndex?: number) {
             const completions = this.getImportModuleCompletionListAtCaret();
             if (completions) {
-                if (!ts.forEach(completions, completion => completion.name === symbol)) {
+                const completion = ts.forEach(completions, completion => completion.name === symbol ? completion : undefined);
+                if (!completion) {
                     const itemsString = completions.map(item => stringify({ name: item.name, span: item.span })).join(",\n");
                     this.raiseError(`Expected "${symbol}" to be in list [${itemsString}]`);
+                }
+                else if (rangeIndex !== undefined) {
+                    const ranges = this.getRanges();
+                    if (ranges && ranges.length > rangeIndex) {
+                        const range = ranges[rangeIndex];
+
+                        const start = completion.span.start;
+                        const end = start + completion.span.length;
+                        if (range.start !== start || range.end !== end) {
+                            this.raiseError(`Expected completion span for '${symbol}', ${stringify(completion.span)}, to cover range ${stringify(range)}`);
+                        }
+                    }
+                    else {
+                        this.raiseError(`Expected completion span for '${symbol}' to cover range at index ${rangeIndex}, but no range was found at that index`);
+                    }
                 }
             }
             else {
@@ -2943,12 +2959,12 @@ namespace FourSlashInterface {
             this.state.verifyCompletionListItemsCountIsGreaterThan(count, this.negative);
         }
 
-        public importModuleCompletionListContains(symbol: string): void {
+        public importModuleCompletionListContains(symbol: string, rangeIndex?: number): void {
             if (this.negative) {
                 this.state.verifyImportModuleCompletionListDoesNotContain(symbol);
             }
             else {
-                this.state.verifyImportModuleCompletionListContains(symbol);
+                this.state.verifyImportModuleCompletionListContains(symbol, rangeIndex);
             }
         }
 

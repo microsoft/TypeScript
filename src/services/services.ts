@@ -2069,7 +2069,7 @@ namespace ts {
      * for completions.
      * For example, this matches /// <reference path="fragment
      */
-    const tripleSlashDirectiveFragmentRegex = /^\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|")([^'"]+)$/;
+    const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^'"]+)$/;
 
     let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
 
@@ -4517,8 +4517,8 @@ namespace ts {
                 const literalValue = node.text;
                 let result: ImportCompletionEntry[];
 
-                const nodeStart = node.getStart();
-                const span: TextSpan = { start: nodeStart, length: nodeStart - node.getEnd() };
+                // Replace the entire text of the string literal (excluding the quotes)
+                const span: TextSpan = { start: node.getStart() + 1, length: literalValue.length };
 
                 const isRelativePath = startsWith(literalValue, ".");
                 const scriptDir = getDirectoryPath(node.getSourceFile().path);
@@ -4768,22 +4768,36 @@ namespace ts {
             }
 
             function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number): ImportCompletionEntry[] {
-                const node = getTokenAtPosition(sourceFile, position);
-                if (!node) {
+                const token = getTokenAtPosition(sourceFile, position);
+                if (!token) {
+                    return undefined;
+                }
+                const commentRanges: CommentRange[] = getLeadingCommentRanges(sourceFile.text, token.pos);
+
+                if (!commentRanges || !commentRanges.length) {
                     return undefined;
                 }
 
-                const span: TextSpan = undefined;
+                const range = forEach(commentRanges, commentRange => position >= commentRange.pos && position <= commentRange.end && commentRange);
 
-                const text = sourceFile.text.substr(node.pos, position);
+                if (!range) {
+                    return undefined;
+                }
+
+                const text = sourceFile.text.substr(range.pos, position - range.pos);
+
                 const match = tripleSlashDirectiveFragmentRegex.exec(text);
                 if (match) {
-                    const kind= match[1];
-                    const fragment = match[2];
+                    const prefix = match[1];
+                    const kind = match[2];
+                    const toComplete = match[3];
+
+                    const span: TextSpan = { start: range.pos + prefix.length, length: match[0].length - prefix.length };
+
                     const scriptPath = getDirectoryPath(sourceFile.path);
                     if (kind === "path") {
                         // Give completions for a relative path
-                        return getCompletionEntriesForDirectoryFragment(fragment, scriptPath, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/true, span);
+                        return getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/true, span);
                     }
                     else {
                         // Give completions based on the typings available

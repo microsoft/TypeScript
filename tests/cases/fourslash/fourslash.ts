@@ -125,7 +125,7 @@ declare namespace FourSlashInterface {
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
         completionListAllowsNewIdentifier(): void;
-        importModuleCompletionListContains(symbol: string): void;
+        importModuleCompletionListContains(symbol: string, rangeIndex?: number): void;
         importModuleCompletionListItemsCountIsGreaterThan(count: number): void;
         importModuleCompletionListIsEmpty(): void;
         memberListIsEmpty(): void;
