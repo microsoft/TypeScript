@@ -1208,6 +1208,7 @@ namespace ts {
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
+        getImportModuleCompletionsAtPosition(fileName: string, position: number): ImportCompletionEntry[];
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
@@ -1477,6 +1478,13 @@ namespace ts {
         name: string;
         kind: string;            // see ScriptElementKind
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
+        sortText: string;
+    }
+
+    export interface ImportCompletionEntry {
+        name: string;
+        kind: string;            // see ScriptElementKind
+        span: TextSpan;
         sortText: string;
     }
 
@@ -4225,10 +4233,6 @@ namespace ts {
                 return getStringLiteralCompletionEntries(sourceFile, position);
             }
 
-            if (isInReferenceComment(sourceFile, position)) {
-                return getTripleSlashReferenceCompletion(sourceFile, position);
-            }
-
             const completionData = getCompletionData(fileName, position);
             if (!completionData) {
                 return undefined;
@@ -4394,27 +4398,13 @@ namespace ts {
                     // a['/*completion position*/']
                     return getStringLiteralCompletionEntriesFromElementAccess(node.parent);
                 }
-                else if (node.parent.kind === SyntaxKind.ImportDeclaration || isExpressionOfExternalModuleImportEqualsDeclaration(node)) {
-                    // Get all known external module names or complete a path to a module
-                    return getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node);
-                }
                 else {
                     const argumentInfo = SignatureHelp.getContainingArgumentInfo(node, position, sourceFile);
                     if (argumentInfo) {
                         // Get string literal completions from specialized signatures of the target
                         // i.e. declare function f(a: 'A');
                         // f("/*completion position*/")
-                        const callExpressionCompletionEntries = getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, node);
-                        if (callExpressionCompletionEntries) {
-                            return callExpressionCompletionEntries;
-                        }
-                        else if (isRequireCall(node.parent, false)) {
-                            // If that failed but this call mataches the signature of a require call, treat the literal as an external module name
-                            return getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node);
-                        }
-                        else {
-                            return undefined;
-                        }
+                        return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, node);
                     }
 
                     // Get completion for string literal from string literal type
@@ -4500,10 +4490,35 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function getImportModuleCompletionsAtPosition(fileName: string, position: number): ImportCompletionEntry[] {
+            synchronizeHostData();
+
+            const sourceFile = getValidSourceFile(fileName);
+            if (isInReferenceComment(sourceFile, position)) {
+                return getTripleSlashReferenceCompletion(sourceFile, position);
+            }
+            else if (isInString(sourceFile, position)) {
+                const node = findPrecedingToken(position, sourceFile);
+                if (!node || node.kind !== SyntaxKind.StringLiteral) {
+                    return undefined;
+                }
+
+                if (node.parent.kind === SyntaxKind.ImportDeclaration || isExpressionOfExternalModuleImportEqualsDeclaration(node) || isRequireCall(node.parent, false)) {
+                    // Get all known external module names or complete a path to a module
+                    return getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node);
+                }
+            }
+
+            return undefined;
 
             function getStringLiteralCompletionEntriesFromModuleNames(node: StringLiteral) {
                 const literalValue = node.text;
-                let result: CompletionEntry[];
+                let result: ImportCompletionEntry[];
+
+                const nodeStart = node.getStart();
+                const span: TextSpan = { start: nodeStart, length: nodeStart - node.getEnd() };
 
                 const isRelativePath = startsWith(literalValue, ".");
                 const scriptDir = getDirectoryPath(node.getSourceFile().path);
@@ -4511,30 +4526,26 @@ namespace ts {
                     const compilerOptions = program.getCompilerOptions();
                     if (compilerOptions.rootDirs) {
                         result = getCompletionEntriesForDirectoryFragmentWithRootDirs(
-                            compilerOptions.rootDirs, literalValue, scriptDir, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/false);
+                            compilerOptions.rootDirs, literalValue, scriptDir, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/false, span);
                     }
                     else {
                         result = getCompletionEntriesForDirectoryFragment(
-                            literalValue, scriptDir, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/false);
+                            literalValue, scriptDir, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/false, span);
                     }
                 }
                 else {
                     // Check for node modules
-                    result = getCompletionEntriesForNonRelativeModules(literalValue, scriptDir);
+                    result = getCompletionEntriesForNonRelativeModules(literalValue, scriptDir, span);
                 }
 
-                return {
-                    isMemberCompletion: false,
-                    isNewIdentifierLocation: true,
-                    entries: result
-                };
+                return result;
             }
 
             /**
              * Takes a script path and returns paths for all potential folders that could be merged with its
              * containing folder via the "rootDirs" compiler option
              */
-            function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, scriptPath: string, ignoreCase: boolean) {
+            function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, scriptPath: string, ignoreCase: boolean): string[] {
                 // Make all paths absolute/normalized if they are not already
                 rootDirs = map(rootDirs, rootDirectory => normalizePath(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory)));
 
@@ -4551,25 +4562,24 @@ namespace ts {
                 return deduplicate(map(rootDirs, rootDirectory => combinePaths(rootDirectory, relativeDirectory)));
             }
 
-            function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean): CompletionEntry[] {
+            function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, span: TextSpan): ImportCompletionEntry[] {
                 const basePath = program.getCompilerOptions().project || host.getCurrentDirectory();
 
                 const baseDirectories = getBaseDirectoriesFromRootDirs(
                     rootDirs, basePath, scriptPath, host.useCaseSensitiveFileNames && !host.useCaseSensitiveFileNames());
-                const result: CompletionEntry[] = [];
+                const result: ImportCompletionEntry[] = [];
 
                 for (const baseDirectory of baseDirectories) {
-                    getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensions, includeExtensions, result);
+                    getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensions, includeExtensions, span, result);
                 }
 
                 return result;
             }
 
-            function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, result: CompletionEntry[] = []): CompletionEntry[] {
+            function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: string[], includeExtensions: boolean, span: TextSpan, result: ImportCompletionEntry[] = []): ImportCompletionEntry[] {
                 const toComplete = getBaseFileName(fragment);
                 const absolutePath = normalizeSlashes(host.resolvePath(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment)));
                 const baseDirectory = toComplete ? getDirectoryPath(absolutePath) : absolutePath;
-
 
                 if (directoryProbablyExists(baseDirectory, host)) {
                     // Enumerate the available files
@@ -4583,8 +4593,8 @@ namespace ts {
                             result.push({
                                 name: fileName,
                                 kind: ScriptElementKind.directory,
-                                kindModifiers: ScriptElementKindModifier.none,
-                                sortText: fileName
+                                sortText: fileName,
+                                span
                             });
                         }
                     });
@@ -4599,8 +4609,8 @@ namespace ts {
                                 result.push({
                                     name: ensureTrailingDirectorySeparator(directoryName),
                                     kind: ScriptElementKind.directory,
-                                    kindModifiers: ScriptElementKindModifier.none,
-                                    sortText: directoryName
+                                    sortText: directoryName,
+                                    span
                                 });
                             }
                         });
@@ -4617,17 +4627,17 @@ namespace ts {
              *      Modules from node_modules (i.e. those listed in package.json)
              *          This includes all files that are found in node_modules/moduleName/ with acceptable file extensions
              */
-            function getCompletionEntriesForNonRelativeModules(fragment: string, scriptPath: string): CompletionEntry[] {
+            function getCompletionEntriesForNonRelativeModules(fragment: string, scriptPath: string, span: TextSpan): ImportCompletionEntry[] {
                 const options = program.getCompilerOptions();
                 const { baseUrl, paths } = options;
 
-                let result: CompletionEntry[];
+                let result: ImportCompletionEntry[];
 
                 if (baseUrl) {
                     const fileExtensions = getSupportedExtensions(options);
                     const projectDir = options.project || host.getCurrentDirectory();
                     const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);
-                    result = getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/false);
+                    result = getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/false, span);
 
                     if (paths) {
                         for (const path in paths) {
@@ -4636,7 +4646,7 @@ namespace ts {
                                     if (paths[path]) {
                                         forEach(paths[path], pattern => {
                                             forEach(getModulesForPathsPattern(fragment, baseUrl, pattern, fileExtensions), match => {
-                                                result.push(createCompletionEntryForModule(match, ScriptElementKind.externalModuleName));
+                                                result.push(createCompletionEntryForModule(match, ScriptElementKind.externalModuleName, span));
                                             });
                                         });
                                     }
@@ -4644,7 +4654,7 @@ namespace ts {
                                 else if (startsWith(path, fragment)) {
                                     const entry = paths[path] && paths[path].length === 1 && paths[path][0];
                                     if (entry) {
-                                        result.push(createCompletionEntryForModule(path, ScriptElementKind.externalModuleName));
+                                        result.push(createCompletionEntryForModule(path, ScriptElementKind.externalModuleName, span));
                                     }
                                 }
                             }
@@ -4655,10 +4665,10 @@ namespace ts {
                     result = [];
                 }
 
-                getCompletionEntriesFromTypings(host, options, scriptPath, result);
+                getCompletionEntriesFromTypings(host, options, scriptPath, span, result);
 
                 forEach(enumeratePotentialNonRelativeModules(fragment, scriptPath, options), moduleName => {
-                    result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName));
+                    result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName, span));
                 });
 
                 return result;
@@ -4757,11 +4767,13 @@ namespace ts {
                 return deduplicate(nonRelativeModules);
             }
 
-            function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number) {
+            function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number): ImportCompletionEntry[] {
                 const node = getTokenAtPosition(sourceFile, position);
                 if (!node) {
                     return undefined;
                 }
+
+                const span: TextSpan = undefined;
 
                 const text = sourceFile.text.substr(node.pos, position);
                 const match = tripleSlashDirectiveFragmentRegex.exec(text);
@@ -4771,174 +4783,161 @@ namespace ts {
                     const scriptPath = getDirectoryPath(sourceFile.path);
                     if (kind === "path") {
                         // Give completions for a relative path
-                        return {
-                            isMemberCompletion: false,
-                            isNewIdentifierLocation: false,
-                            entries: getCompletionEntriesForDirectoryFragment(fragment, scriptPath, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/true)
-                        };
+                        return getCompletionEntriesForDirectoryFragment(fragment, scriptPath, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/true, span);
                     }
                     else {
                         // Give completions based on the typings available
-                        return {
-                            isMemberCompletion: false,
-                            isNewIdentifierLocation: false,
-                            entries: getCompletionEntriesFromTypings(host, program.getCompilerOptions(), scriptPath)
-                        };
+                        return getCompletionEntriesFromTypings(host, program.getCompilerOptions(), scriptPath, span);
                     }
                 }
 
                 return undefined;
             }
-        }
 
-        function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, result: CompletionEntry[] = []): CompletionEntry[] {
-            // Check for typings specified in compiler options
-            if (options.types) {
-                forEach(options.types, moduleName => {
-                    result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName));
-                });
-            }
-            else if (host.getDirectories && options.typeRoots) {
-                const absoluteRoots = map(options.typeRoots, rootDirectory => getAbsoluteProjectPath(rootDirectory, host, options.project));
-                forEach(absoluteRoots, absoluteRoot => getCompletionEntriesFromDirectories(host, options, absoluteRoot, result));
-            }
+            function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, span: TextSpan, result: ImportCompletionEntry[] = []): ImportCompletionEntry[] {
+                // Check for typings specified in compiler options
+                if (options.types) {
+                    forEach(options.types, moduleName => {
+                        result.push(createCompletionEntryForModule(moduleName, ScriptElementKind.externalModuleName, span));
+                    });
+                }
+                else if (host.getDirectories && options.typeRoots) {
+                    const absoluteRoots = map(options.typeRoots, rootDirectory => getAbsoluteProjectPath(rootDirectory, host, options.project));
+                    forEach(absoluteRoots, absoluteRoot => getCompletionEntriesFromDirectories(host, options, absoluteRoot, span, result));
+                }
 
-            if (host.getDirectories) {
-                // Also get all @types typings installed in visible node_modules directories
-                forEach(findPackageJsons(scriptPath), package => {
-                    const typesDir = combinePaths(getDirectoryPath(package), "node_modules/@types");
-                    getCompletionEntriesFromDirectories(host, options, typesDir, result);
-                });
-            }
+                if (host.getDirectories) {
+                    // Also get all @types typings installed in visible node_modules directories
+                    forEach(findPackageJsons(scriptPath), package => {
+                        const typesDir = combinePaths(getDirectoryPath(package), "node_modules/@types");
+                        getCompletionEntriesFromDirectories(host, options, typesDir, span, result);
+                    });
+                }
 
-            return result;
-        }
-
-        function getAbsoluteProjectPath(path: string, host: LanguageServiceHost, projectDir?: string) {
-            if (isRootedDiskPath(path)) {
-                return normalizePath(path);
+                return result;
             }
 
-            if (projectDir) {
-                return normalizePath(combinePaths(projectDir, path));
+            function getAbsoluteProjectPath(path: string, host: LanguageServiceHost, projectDir?: string) {
+                if (isRootedDiskPath(path)) {
+                    return normalizePath(path);
+                }
+
+                if (projectDir) {
+                    return normalizePath(combinePaths(projectDir, path));
+                }
+
+                return normalizePath(host.resolvePath(path));
             }
 
-            return normalizePath(host.resolvePath(path));
-        }
-
-        function getCompletionEntriesFromDirectories(host: LanguageServiceHost, options: CompilerOptions, directory: string, result: CompletionEntry[]) {
-            if (host.getDirectories && directoryProbablyExists(directory, host)) {
-                forEach(host.getDirectories(directory), typeDirectory => {
-                    result.push(createCompletionEntryForModule(getBaseFileName(typeDirectory), ScriptElementKind.externalModuleName));
-                });
+            function getCompletionEntriesFromDirectories(host: LanguageServiceHost, options: CompilerOptions, directory: string, span: TextSpan, result: ImportCompletionEntry[]) {
+                if (host.getDirectories && directoryProbablyExists(directory, host)) {
+                    forEach(host.getDirectories(directory), typeDirectory => {
+                        result.push(createCompletionEntryForModule(getBaseFileName(typeDirectory), ScriptElementKind.externalModuleName, span));
+                    });
+                }
             }
-        }
 
-        function findPackageJsons(currentDir: string): string[] {
-            const paths: string[] = [];
-            let currentConfigPath: string;
-            while (true) {
-                currentConfigPath = findConfigFile(currentDir, (f) => host.fileExists(f), "package.json");
-                if (currentConfigPath) {
-                    paths.push(currentConfigPath);
+            function findPackageJsons(currentDir: string): string[] {
+                const paths: string[] = [];
+                let currentConfigPath: string;
+                while (true) {
+                    currentConfigPath = findConfigFile(currentDir, (f) => host.fileExists(f), "package.json");
+                    if (currentConfigPath) {
+                        paths.push(currentConfigPath);
 
-                    currentDir = getDirectoryPath(currentConfigPath);
-                    const parent = getDirectoryPath(currentDir);
-                    if (currentDir === parent) {
+                        currentDir = getDirectoryPath(currentConfigPath);
+                        const parent = getDirectoryPath(currentDir);
+                        if (currentDir === parent) {
+                            break;
+                        }
+                        currentDir = parent;
+                    }
+                    else {
                         break;
                     }
-                    currentDir = parent;
                 }
-                else {
-                    break;
-                }
+
+                return paths;
             }
 
-            return paths;
-        }
 
+            function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string, modulePrefix?: string) {
+                const result: VisibleModuleInfo[] = [];
+                findPackageJsons(scriptPath).forEach((packageJson) => {
+                    const package = tryReadingPackageJson(packageJson);
+                    if (!package) {
+                        return;
+                    }
 
-        function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string, modulePrefix?: string) {
-            const result: VisibleModuleInfo[] = [];
-            findPackageJsons(scriptPath).forEach((packageJson) => {
-                const package = tryReadingPackageJson(packageJson);
-                if (!package) {
-                    return;
-                }
+                    const nodeModulesDir = combinePaths(getDirectoryPath(packageJson), "node_modules");
+                    const foundModuleNames: string[] = [];
 
-                const nodeModulesDir = combinePaths(getDirectoryPath(packageJson), "node_modules");
-                const foundModuleNames: string[] = [];
+                    if (package.dependencies) {
+                        addPotentialPackageNames(package.dependencies, modulePrefix, foundModuleNames);
+                    }
+                    if (package.devDependencies) {
+                        addPotentialPackageNames(package.devDependencies, modulePrefix, foundModuleNames);
+                    }
 
-                if (package.dependencies) {
-                    addPotentialPackageNames(package.dependencies, modulePrefix, foundModuleNames);
-                }
-                if (package.devDependencies) {
-                    addPotentialPackageNames(package.devDependencies, modulePrefix, foundModuleNames);
-                }
-
-                forEach(foundModuleNames, (moduleName) => {
-                    const moduleDir = combinePaths(nodeModulesDir, moduleName);
-                    result.push({
-                        moduleName,
-                        moduleDir,
-                        canBeImported: moduleCanBeImported(moduleDir)
+                    forEach(foundModuleNames, (moduleName) => {
+                        const moduleDir = combinePaths(nodeModulesDir, moduleName);
+                        result.push({
+                            moduleName,
+                            moduleDir,
+                            canBeImported: moduleCanBeImported(moduleDir)
+                        });
                     });
                 });
-            });
 
-            return result;
+                return result;
 
-            function tryReadingPackageJson(filePath: string) {
-                try {
-                    const fileText = host.readFile(filePath);
-                    return JSON.parse(fileText);
-                }
-                catch (e) {
-                    return undefined;
-                }
-            }
-
-            function addPotentialPackageNames(dependencies: any, prefix: string, result: string[]) {
-                for (const dep in dependencies) {
-                    if (dependencies.hasOwnProperty(dep) && (!prefix || startsWith(dep, prefix))) {
-                        result.push(dep);
+                function tryReadingPackageJson(filePath: string) {
+                    try {
+                        const fileText = host.readFile(filePath);
+                        return JSON.parse(fileText);
+                    }
+                    catch (e) {
+                        return undefined;
                     }
                 }
-            }
 
-            /*
-            * A module can be imported by name alone if one of the following is true:
-            *     It defines the "typings" property in its package.json
-            *     The module has a "main" export and an index.d.ts file
-            *     The module has an index.ts
-            */
-            function moduleCanBeImported(modulePath: string): boolean {
-                const packagePath = combinePaths(modulePath, "package.json");
-
-                let hasMainExport = false;
-                if (host.fileExists(packagePath)) {
-                    const package = tryReadingPackageJson(packagePath);
-                    if (package) {
-                        if (package.typings) {
-                            return true;
+                function addPotentialPackageNames(dependencies: any, prefix: string, result: string[]) {
+                    for (const dep in dependencies) {
+                        if (dependencies.hasOwnProperty(dep) && (!prefix || startsWith(dep, prefix))) {
+                            result.push(dep);
                         }
-                        hasMainExport = !!package.main;
                     }
                 }
 
-                hasMainExport = hasMainExport || host.fileExists(combinePaths(modulePath, "index.js"));
+                /*
+                * A module can be imported by name alone if one of the following is true:
+                *     It defines the "typings" property in its package.json
+                *     The module has a "main" export and an index.d.ts file
+                *     The module has an index.ts
+                */
+                function moduleCanBeImported(modulePath: string): boolean {
+                    const packagePath = combinePaths(modulePath, "package.json");
 
-                return (hasMainExport && host.fileExists(combinePaths(modulePath, "index.d.ts"))) || host.fileExists(combinePaths(modulePath, "index.ts"));
+                    let hasMainExport = false;
+                    if (host.fileExists(packagePath)) {
+                        const package = tryReadingPackageJson(packagePath);
+                        if (package) {
+                            if (package.typings) {
+                                return true;
+                            }
+                            hasMainExport = !!package.main;
+                        }
+                    }
+
+                    hasMainExport = hasMainExport || host.fileExists(combinePaths(modulePath, "index.js"));
+
+                    return (hasMainExport && host.fileExists(combinePaths(modulePath, "index.d.ts"))) || host.fileExists(combinePaths(modulePath, "index.ts"));
+                }
             }
-        }
 
-        function createCompletionEntryForModule(name: string, kind: string): CompletionEntry {
-            return {
-                name,
-                kind,
-                kindModifiers: ScriptElementKindModifier.none,
-                sortText: name
-            };
+            function createCompletionEntryForModule(name: string, kind: string, span: TextSpan): ImportCompletionEntry {
+                return { name, kind, sortText: name, span };
+            }
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
@@ -8752,6 +8751,7 @@ namespace ts {
             getEncodedSyntacticClassifications,
             getEncodedSemanticClassifications,
             getCompletionsAtPosition,
+            getImportModuleCompletionsAtPosition,
             getCompletionEntryDetails,
             getSignatureHelpItems,
             getQuickInfoAtPosition,

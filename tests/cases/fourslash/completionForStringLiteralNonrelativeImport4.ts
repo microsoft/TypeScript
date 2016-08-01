@@ -33,20 +33,20 @@ const kinds = ["import_as", "import_equals", "require"];
 for (const kind of kinds) {
     goTo.marker(kind + "0");
 
-    verify.completionListContains("fake-module/");
-    verify.completionListContains("fake-module2");
-    verify.completionListContains("fake-module3/");
-    verify.not.completionListItemsCountIsGreaterThan(3);
+    verify.importModuleCompletionListContains("fake-module/");
+    verify.importModuleCompletionListContains("fake-module2");
+    verify.importModuleCompletionListContains("fake-module3/");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(3);
 
     goTo.marker(kind + "1");
 
-    verify.completionListContains("ambient-module-test");
-    verify.not.completionListItemsCountIsGreaterThan(1);
+    verify.importModuleCompletionListContains("ambient-module-test");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(1);
 
     goTo.marker(kind + "2");
 
-    verify.completionListContains("fake-module/");
-    verify.completionListContains("fake-module2");
-    verify.completionListContains("fake-module3/");
-    verify.not.completionListItemsCountIsGreaterThan(3);
+    verify.importModuleCompletionListContains("fake-module/");
+    verify.importModuleCompletionListContains("fake-module2");
+    verify.importModuleCompletionListContains("fake-module3/");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(3);
 }

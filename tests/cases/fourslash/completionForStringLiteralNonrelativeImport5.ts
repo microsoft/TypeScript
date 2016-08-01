@@ -24,14 +24,14 @@ const kinds = ["import_as", "import_equals", "require"];
 for (const kind of kinds) {
     goTo.marker(kind + "0");
 
-    verify.completionListContains("ambientModule");
-    verify.completionListContains("otherAmbientModule");
-    verify.completionListContains("otherOtherAmbientModule");
-    verify.not.completionListItemsCountIsGreaterThan(3);
+    verify.importModuleCompletionListContains("ambientModule");
+    verify.importModuleCompletionListContains("otherAmbientModule");
+    verify.importModuleCompletionListContains("otherOtherAmbientModule");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(3);
 
     goTo.marker(kind + "1");
 
-    verify.completionListContains("ambientModule");
-    verify.not.completionListItemsCountIsGreaterThan(1);
+    verify.importModuleCompletionListContains("ambientModule");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(1);
 }
 

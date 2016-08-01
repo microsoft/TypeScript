@@ -25,23 +25,23 @@
 //// /*e2*/
 
 goTo.marker("0");
-verify.completionListContains("f1.ts");
-verify.completionListContains("f1.js");
-verify.completionListContains("f1.d.ts");
-verify.completionListContains("f2.tsx");
-verify.completionListContains("f3.js");
-verify.completionListContains("f4.jsx");
-verify.completionListContains("e1.ts");
-verify.completionListContains("e2.js");
-verify.completionListContains("test0.ts");
-verify.completionListContains("test1.ts");
-verify.not.completionListItemsCountIsGreaterThan(10);
+verify.importModuleCompletionListContains("f1.ts");
+verify.importModuleCompletionListContains("f1.js");
+verify.importModuleCompletionListContains("f1.d.ts");
+verify.importModuleCompletionListContains("f2.tsx");
+verify.importModuleCompletionListContains("f3.js");
+verify.importModuleCompletionListContains("f4.jsx");
+verify.importModuleCompletionListContains("e1.ts");
+verify.importModuleCompletionListContains("e2.js");
+verify.importModuleCompletionListContains("test0.ts");
+verify.importModuleCompletionListContains("test1.ts");
+verify.not.importModuleCompletionListItemsCountIsGreaterThan(10);
 
 goTo.marker("1");
-verify.completionListContains("f1.ts");
-verify.completionListContains("f1.js");
-verify.completionListContains("f1.d.ts");
-verify.completionListContains("f2.tsx");
-verify.completionListContains("f3.js");
-verify.completionListContains("f4.jsx");
-verify.not.completionListItemsCountIsGreaterThan(6);
+verify.importModuleCompletionListContains("f1.ts");
+verify.importModuleCompletionListContains("f1.js");
+verify.importModuleCompletionListContains("f1.d.ts");
+verify.importModuleCompletionListContains("f2.tsx");
+verify.importModuleCompletionListContains("f3.js");
+verify.importModuleCompletionListContains("f4.jsx");
+verify.not.importModuleCompletionListItemsCountIsGreaterThan(6);

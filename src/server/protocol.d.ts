@@ -718,6 +718,16 @@ declare namespace ts.server.protocol {
     }
 
     /**
+      * Import Module Completions request; value of command field is
+      * "importModuleCompletions". Given a file location (file, line,
+      * col) return the possible completions for external module
+      * specifiers or paths given that position refers to a module
+      * import declaration, require call, or triple slash reference.
+      */
+    export interface ImportModuleCompletionsRequest extends FileLocationRequest {
+    }
+
+    /**
       * Arguments for completion details request.
       */
     export interface CompletionDetailsRequestArgs extends FileLocationRequestArgs {
@@ -804,6 +814,10 @@ declare namespace ts.server.protocol {
 
     export interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
+    }
+
+      export interface ImportModuleCompletionsResponse extends Response {
+        body?: ImportCompletionEntry[];
     }
 
     export interface CompletionDetailsResponse extends Response {

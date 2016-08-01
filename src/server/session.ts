@@ -103,6 +103,7 @@ namespace ts.server {
         export const Change = "change";
         export const Close = "close";
         export const Completions = "completions";
+        export const ImportModuleCompletions = "importModuleCompletions";
         export const CompletionDetails = "completionEntryDetails";
         export const Configure = "configure";
         export const Definition = "definition";

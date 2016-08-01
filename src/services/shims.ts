@@ -131,6 +131,7 @@ namespace ts {
         getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
 
         getCompletionsAtPosition(fileName: string, position: number): string;
+        getImportModuleCompletionsAtPosition(fileName: string, position: number): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
@@ -866,6 +867,13 @@ namespace ts {
         public getCompletionsAtPosition(fileName: string, position: number) {
             return this.forwardJSONCall(
                 `getCompletionsAtPosition('${fileName}', ${position})`,
+                () => this.languageService.getCompletionsAtPosition(fileName, position)
+            );
+        }
+
+        getImportModuleCompletionsAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `getImportModuleCompletionsAtPosition('${fileName}', ${position})`,
                 () => this.languageService.getCompletionsAtPosition(fileName, position)
             );
         }

@@ -597,6 +597,38 @@ namespace FourSlash {
             }
         }
 
+        public verifyImportModuleCompletionListItemsCountIsGreaterThan(count: number, negative: boolean) {
+            const completions = this.getImportModuleCompletionListAtCaret();
+            const itemsCount = completions.length;
+
+            if (negative) {
+                if (itemsCount > count) {
+                    this.raiseError(`Expected import module completion list items count to not be greater than ${count}, but is actually ${itemsCount}`);
+                }
+            }
+            else {
+                if (itemsCount <= count) {
+                    this.raiseError(`Expected import module completion list items count to be greater than ${count}, but is actually ${itemsCount}`);
+                }
+            }
+        }
+
+        public verifyImportModuleCompletionListIsEmpty(negative: boolean) {
+            const completions = this.getImportModuleCompletionListAtCaret();
+            if ((!completions || completions.length === 0) && negative) {
+                this.raiseError("Completion list is empty at caret at position " + this.activeFile.fileName + " " + this.currentCaretPosition);
+            }
+            else if (completions && completions.length !== 0 && !negative) {
+                let errorMsg = "\n" + "Completion List contains: [" + completions[0].name;
+                for (let i = 1; i < completions.length; i++) {
+                    errorMsg += ", " + completions[i].name;
+                }
+                errorMsg += "]\n";
+
+                this.raiseError("Completion list is not empty at caret at position " + this.activeFile.fileName + " " + this.currentCaretPosition + errorMsg);
+            }
+        }
+
         public verifyCompletionListStartsWithItemsInOrder(items: string[]): void {
             if (items.length === 0) {
                 return;
@@ -734,6 +766,28 @@ namespace FourSlash {
             }
         }
 
+        public verifyImportModuleCompletionListContains(symbol: string) {
+            const completions = this.getImportModuleCompletionListAtCaret();
+            if (completions) {
+                if (!ts.forEach(completions, completion => completion.name === symbol)) {
+                    const itemsString = completions.map(item => stringify({ name: item.name, span: item.span })).join(",\n");
+                    this.raiseError(`Expected "${symbol}" to be in list [${itemsString}]`);
+                }
+            }
+            else {
+                this.raiseError(`No import module completions at position '${this.currentCaretPosition}' when looking for '${symbol}'.`);
+            }
+        }
+
+        public verifyImportModuleCompletionListDoesNotContain(symbol: string) {
+            const completions = this.getImportModuleCompletionListAtCaret();
+            if (completions) {
+                if (ts.forEach(completions, completion => completion.name === symbol)) {
+                    this.raiseError(`Import module completion list did contain ${symbol}`);
+                }
+            }
+        }
+
         public verifyCompletionEntryDetails(entryName: string, expectedText: string, expectedDocumentation?: string, kind?: string) {
             const details = this.getCompletionEntryDetails(entryName);
 
@@ -818,6 +872,10 @@ namespace FourSlash {
 
         private getCompletionListAtCaret() {
             return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+        }
+
+        private getImportModuleCompletionListAtCaret() {
+            return this.languageService.getImportModuleCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         private getCompletionEntryDetails(entryName: string) {
@@ -2883,6 +2941,23 @@ namespace FourSlashInterface {
         // completion list is brought up if necessary
         public completionListItemsCountIsGreaterThan(count: number) {
             this.state.verifyCompletionListItemsCountIsGreaterThan(count, this.negative);
+        }
+
+        public importModuleCompletionListContains(symbol: string): void {
+            if (this.negative) {
+                this.state.verifyImportModuleCompletionListDoesNotContain(symbol);
+            }
+            else {
+                this.state.verifyImportModuleCompletionListContains(symbol);
+            }
+        }
+
+        public importModuleCompletionListItemsCountIsGreaterThan(count: number): void {
+            this.state.verifyImportModuleCompletionListItemsCountIsGreaterThan(count, this.negative);
+        }
+
+        public importModuleCompletionListIsEmpty(): void {
+            this.state.verifyImportModuleCompletionListIsEmpty(this.negative);
         }
 
         public assertHasRanges(ranges: FourSlash.Range[]) {

@@ -42,38 +42,38 @@
 //// /*parentg1*/
 
 goTo.marker("0");
-verify.completionListIsEmpty();
+verify.importModuleCompletionListIsEmpty();
 
 goTo.marker("1");
-verify.completionListContains("f1.ts");
-verify.completionListContains("f1.d.ts");
-verify.completionListContains("f2.tsx");
-verify.completionListContains("e1.ts");
-verify.completionListContains("test0.ts");
-verify.completionListContains("test1.ts");
-verify.completionListContains("test2.ts");
-verify.completionListContains("test3.ts");
-verify.completionListContains("test4.ts");
-verify.completionListContains("folder/");
-verify.completionListContains("parentTest/");
-verify.not.completionListItemsCountIsGreaterThan(11);
+verify.importModuleCompletionListContains("f1.ts");
+verify.importModuleCompletionListContains("f1.d.ts");
+verify.importModuleCompletionListContains("f2.tsx");
+verify.importModuleCompletionListContains("e1.ts");
+verify.importModuleCompletionListContains("test0.ts");
+verify.importModuleCompletionListContains("test1.ts");
+verify.importModuleCompletionListContains("test2.ts");
+verify.importModuleCompletionListContains("test3.ts");
+verify.importModuleCompletionListContains("test4.ts");
+verify.importModuleCompletionListContains("folder/");
+verify.importModuleCompletionListContains("parentTest/");
+verify.not.importModuleCompletionListItemsCountIsGreaterThan(11);
 
 goTo.marker("2");
-verify.completionListContains("f1.ts");
-verify.completionListContains("f1.d.ts");
-verify.completionListContains("f2.tsx");
-verify.completionListContains("folder/");
-verify.not.completionListItemsCountIsGreaterThan(4);
+verify.importModuleCompletionListContains("f1.ts");
+verify.importModuleCompletionListContains("f1.d.ts");
+verify.importModuleCompletionListContains("f2.tsx");
+verify.importModuleCompletionListContains("folder/");
+verify.not.importModuleCompletionListItemsCountIsGreaterThan(4);
 
 goTo.marker("3");
-verify.completionListContains("f1.ts");
-verify.completionListContains("h1.ts");
-verify.not.completionListItemsCountIsGreaterThan(2);
+verify.importModuleCompletionListContains("f1.ts");
+verify.importModuleCompletionListContains("h1.ts");
+verify.not.importModuleCompletionListItemsCountIsGreaterThan(2);
 
 goTo.marker("4");
-verify.completionListContains("h1.ts");
-verify.not.completionListItemsCountIsGreaterThan(1);
+verify.importModuleCompletionListContains("h1.ts");
+verify.not.importModuleCompletionListItemsCountIsGreaterThan(1);
 
 goTo.marker("5");
-verify.completionListContains("g1.ts");
-verify.not.completionListItemsCountIsGreaterThan(1);
+verify.importModuleCompletionListContains("g1.ts");
+verify.not.importModuleCompletionListItemsCountIsGreaterThan(1);

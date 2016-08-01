@@ -26,8 +26,8 @@ const kinds = ["import_as", "import_equals", "require"];
 
 for (const kind of kinds) {
     goTo.marker(kind + "0");
-    verify.completionListIsEmpty();
+    verify.importModuleCompletionListIsEmpty();
 
     goTo.marker(kind + "1");
-    verify.completionListIsEmpty();
+    verify.importModuleCompletionListIsEmpty();
 }

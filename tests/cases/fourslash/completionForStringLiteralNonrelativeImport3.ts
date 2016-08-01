@@ -28,8 +28,8 @@ const kinds = ["import_as", "import_equals", "require"];
 
 for (const kind of kinds) {
     goTo.marker(kind + "0");
-    verify.completionListContains("ts");
-    verify.completionListContains("tsx");
-    verify.completionListContains("dts");
-    verify.not.completionListItemsCountIsGreaterThan(3);
+    verify.importModuleCompletionListContains("ts");
+    verify.importModuleCompletionListContains("tsx");
+    verify.importModuleCompletionListContains("dts");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(3);
 }

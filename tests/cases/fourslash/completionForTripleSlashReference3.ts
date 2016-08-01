@@ -25,17 +25,17 @@
 //// /*e2*/
 
 goTo.marker("0");
-verify.completionListContains("fourslash/");
-verify.not.completionListItemsCountIsGreaterThan(1);
+verify.importModuleCompletionListContains("fourslash/");
+verify.not.importModuleCompletionListItemsCountIsGreaterThan(1);
 
 goTo.marker("1");
-verify.completionListContains("fourslash/");
-verify.not.completionListItemsCountIsGreaterThan(1);
+verify.importModuleCompletionListContains("fourslash/");
+verify.not.importModuleCompletionListItemsCountIsGreaterThan(1);
 
 goTo.marker("2");
-verify.completionListContains("f1.ts");
-verify.completionListContains("f2.tsx");
-verify.completionListContains("e1.ts");
-verify.completionListContains("folder/");
-verify.completionListContains("tests/");
-verify.not.completionListItemsCountIsGreaterThan(5);
+verify.importModuleCompletionListContains("f1.ts");
+verify.importModuleCompletionListContains("f2.tsx");
+verify.importModuleCompletionListContains("e1.ts");
+verify.importModuleCompletionListContains("folder/");
+verify.importModuleCompletionListContains("tests/");
+verify.not.importModuleCompletionListItemsCountIsGreaterThan(5);

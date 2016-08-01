@@ -52,33 +52,33 @@ const kinds = ["import_as", "import_equals", "require"];
 
 for (const kind of kinds) {
     goTo.marker(kind + "0");
-    verify.completionListIsEmpty();
+    verify.importModuleCompletionListIsEmpty();
 
     goTo.marker(kind + "1");
-    verify.completionListContains("f1");
-    verify.completionListContains("f2");
-    verify.completionListContains("e1");
-    verify.completionListContains("test0");
-    verify.completionListContains("folder/");
-    verify.completionListContains("parentTest/");
-    verify.not.completionListItemsCountIsGreaterThan(6);
+    verify.importModuleCompletionListContains("f1");
+    verify.importModuleCompletionListContains("f2");
+    verify.importModuleCompletionListContains("e1");
+    verify.importModuleCompletionListContains("test0");
+    verify.importModuleCompletionListContains("folder/");
+    verify.importModuleCompletionListContains("parentTest/");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(6);
 
     goTo.marker(kind + "2");
-    verify.completionListContains("f1");
-    verify.completionListContains("f2");
-    verify.completionListContains("folder/");
-    verify.not.completionListItemsCountIsGreaterThan(3);
+    verify.importModuleCompletionListContains("f1");
+    verify.importModuleCompletionListContains("f2");
+    verify.importModuleCompletionListContains("folder/");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(3);
 
     goTo.marker(kind + "3");
-    verify.completionListContains("f1");
-    verify.completionListContains("h1");
-    verify.not.completionListItemsCountIsGreaterThan(2);
+    verify.importModuleCompletionListContains("f1");
+    verify.importModuleCompletionListContains("h1");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(2);
 
     goTo.marker(kind + "4");
-    verify.completionListContains("h1");
-    verify.not.completionListItemsCountIsGreaterThan(1);
+    verify.importModuleCompletionListContains("h1");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(1);
 
     goTo.marker(kind + "5");
-    verify.completionListContains("g1");
-    verify.not.completionListItemsCountIsGreaterThan(1);
+    verify.importModuleCompletionListContains("g1");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(1);
 }

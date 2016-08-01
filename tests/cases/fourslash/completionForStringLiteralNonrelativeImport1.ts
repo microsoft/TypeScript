@@ -43,19 +43,19 @@ const kinds = ["import_as", "import_equals", "require"];
 
 for (const kind of kinds) {
     goTo.marker(kind + "0");
-    verify.completionListContains("fake-module");
-    verify.completionListContains("fake-module-dev");
-    verify.not.completionListItemsCountIsGreaterThan(2);
+    verify.importModuleCompletionListContains("fake-module");
+    verify.importModuleCompletionListContains("fake-module-dev");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(2);
 
     goTo.marker(kind + "1");
-    verify.completionListContains("index");
-    verify.completionListContains("ts");
-    verify.completionListContains("dts");
-    verify.completionListContains("tsx");
-    verify.not.completionListItemsCountIsGreaterThan(4);
+    verify.importModuleCompletionListContains("index");
+    verify.importModuleCompletionListContains("ts");
+    verify.importModuleCompletionListContains("dts");
+    verify.importModuleCompletionListContains("tsx");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(4);
 
     goTo.marker(kind + "2");
-    verify.completionListContains("fake-module");
-    verify.completionListContains("fake-module-dev");
-    verify.not.completionListItemsCountIsGreaterThan(2);
+    verify.importModuleCompletionListContains("fake-module");
+    verify.importModuleCompletionListContains("fake-module-dev");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(2);
 }

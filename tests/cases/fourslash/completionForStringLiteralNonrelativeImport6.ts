@@ -52,11 +52,11 @@ const kinds = ["import_as", "import_equals", "require"];
 for (const kind of kinds) {
     goTo.marker(kind + "0");
 
-    verify.completionListContains("module-no-main/");
-    verify.completionListContains("module-no-main-index-d-ts/");
-    verify.completionListContains("module-index-ts");
-    verify.completionListContains("module-index-d-ts-explicit-main");
-    verify.completionListContains("module-index-d-ts-default-main");
-    verify.completionListContains("module-typings");
-    verify.not.completionListItemsCountIsGreaterThan(6);
+    verify.importModuleCompletionListContains("module-no-main/");
+    verify.importModuleCompletionListContains("module-no-main-index-d-ts/");
+    verify.importModuleCompletionListContains("module-index-ts");
+    verify.importModuleCompletionListContains("module-index-d-ts-explicit-main");
+    verify.importModuleCompletionListContains("module-index-d-ts-default-main");
+    verify.importModuleCompletionListContains("module-typings");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(6);
 }

@@ -31,19 +31,19 @@ const kinds = ["import_as", "import_equals", "require"];
 
 for (const kind of kinds) {
     goTo.marker(kind + "0");
-    verify.completionListContains("f1");
-    verify.completionListContains("f2");
-    verify.completionListContains("f3");
-    verify.completionListContains("f4");
-    verify.completionListContains("e1");
-    verify.completionListContains("e2");
-    verify.completionListContains("test0");
-    verify.not.completionListItemsCountIsGreaterThan(7);
+    verify.importModuleCompletionListContains("f1");
+    verify.importModuleCompletionListContains("f2");
+    verify.importModuleCompletionListContains("f3");
+    verify.importModuleCompletionListContains("f4");
+    verify.importModuleCompletionListContains("e1");
+    verify.importModuleCompletionListContains("e2");
+    verify.importModuleCompletionListContains("test0");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(7);
 
     goTo.marker(kind + "1");
-    verify.completionListContains("f1");
-    verify.completionListContains("f2");
-    verify.completionListContains("f3");
-    verify.completionListContains("f4");
-    verify.not.completionListItemsCountIsGreaterThan(4);
+    verify.importModuleCompletionListContains("f1");
+    verify.importModuleCompletionListContains("f2");
+    verify.importModuleCompletionListContains("f3");
+    verify.importModuleCompletionListContains("f4");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(4);
 }

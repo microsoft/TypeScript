@@ -220,6 +220,21 @@ namespace ts.server {
             };
         }
 
+        getImportModuleCompletionsAtPosition(fileName: string, position: number): ImportCompletionEntry[] {
+            const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
+            const args: protocol.CompletionsRequestArgs = {
+                file: fileName,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
+                prefix: undefined
+            };
+
+            const request = this.processRequest<protocol.ImportModuleCompletionsRequest>(CommandNames.ImportModuleCompletions, args);
+            const response = this.processResponse<protocol.ImportModuleCompletionsResponse>(request);
+
+            return response.body;
+        }
+
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
             const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             const args: protocol.CompletionDetailsRequestArgs = {

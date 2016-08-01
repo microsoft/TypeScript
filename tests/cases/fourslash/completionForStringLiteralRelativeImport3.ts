@@ -32,18 +32,18 @@ const kinds = ["import_as", "import_equals", "require"];
 
 for (const kind of kinds) {
     goTo.marker(kind + "0");
-    verify.completionListContains("fourslash/");
-    verify.not.completionListItemsCountIsGreaterThan(1);
+    verify.importModuleCompletionListContains("fourslash/");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(1);
 
     goTo.marker(kind + "1");
-    verify.completionListContains("fourslash/");
-    verify.not.completionListItemsCountIsGreaterThan(1);
+    verify.importModuleCompletionListContains("fourslash/");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(1);
 
     goTo.marker(kind + "2");
-    verify.completionListContains("f1");
-    verify.completionListContains("f2");
-    verify.completionListContains("e1");
-    verify.completionListContains("folder/");
-    verify.completionListContains("tests/");
-    verify.not.completionListItemsCountIsGreaterThan(5);
+    verify.importModuleCompletionListContains("f1");
+    verify.importModuleCompletionListContains("f2");
+    verify.importModuleCompletionListContains("e1");
+    verify.importModuleCompletionListContains("folder/");
+    verify.importModuleCompletionListContains("tests/");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(5);
 }
