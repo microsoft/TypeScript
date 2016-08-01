@@ -143,6 +143,7 @@ namespace ts.server {
         export const CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
         export const NameOrDottedNameSpan = "nameOrDottedNameSpan";
         export const BreakpointStatement = "breakpointStatement";
+        export const CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
     }
 
     namespace Errors {
@@ -500,6 +501,10 @@ namespace ts.server {
                     return { start, end, kind };
                 }
             }
+        }
+
+        private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
+            this.projectService.setCompilerOptionsForInferredProjects(args.options);
         }
 
         private getProjectInfo(args: protocol.ProjectInfoRequestArgs): protocol.ProjectInfo {
@@ -1432,6 +1437,9 @@ namespace ts.server {
             },
             [CommandNames.DocumentHighlightsFull]: (request: protocol.DocumentHighlightsRequest) => {
                 return this.requiredResponse(this.getDocumentHighlights(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.CompilerOptionsForInferredProjects]: (request: protocol.SetCompilerOptionsForInferredProjectsRequest) => {
+                return this.requiredResponse(this.setCompilerOptionsForInferredProjects(request.arguments));
             },
             [CommandNames.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
                 return this.requiredResponse(this.getProjectInfo(request.arguments));

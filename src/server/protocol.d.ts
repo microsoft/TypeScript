@@ -696,6 +696,14 @@ declare namespace ts.server.protocol {
         closedFiles?: string[];
     }
 
+    export interface SetCompilerOptionsForInferredProjectsArgs {
+        options: CompilerOptions;
+    }
+
+    export interface SetCompilerOptionsForInferredProjectsRequest extends Request {
+        arguments: SetCompilerOptionsForInferredProjectsArgs;
+    }
+
     /**
       *  Exit request; value of command field is "exit".  Ask the server process
       *  to exit.

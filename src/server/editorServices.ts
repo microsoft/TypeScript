@@ -158,6 +158,7 @@ namespace ts.server {
          */
         readonly openFiles: ScriptInfo[] = [];
 
+        private compilerOptionsForInferredProjects: CompilerOptions;
         private readonly directoryWatchers: DirectoryWatchers;
         private readonly throttledOperations: ThrottledOperations;
 
@@ -192,6 +193,14 @@ namespace ts.server {
 
         ensureInferredProjectsUpToDate_TestOnly() {
             this.ensureInferredProjectsUpToDate();
+        }
+
+        setCompilerOptionsForInferredProjects(compilerOptions: CompilerOptions): void {
+            this.compilerOptionsForInferredProjects = compilerOptions;
+            for (const proj of this.inferredProjects) {
+                proj.setCompilerOptions(compilerOptions);
+            }
+            this.updateProjectGraphs(this.inferredProjects);
         }
 
         stopWatchingDirectory(directory: string) {
@@ -834,7 +843,7 @@ namespace ts.server {
             const useExistingProject = this.useSingleInferredProject && this.inferredProjects.length;
             const project = useExistingProject
                 ? this.inferredProjects[0]
-                : new InferredProject(this, this.documentRegistry, /*languageServiceEnabled*/ true);
+                : new InferredProject(this, this.documentRegistry, /*languageServiceEnabled*/ true, this.compilerOptionsForInferredProjects);
 
             project.addRoot(root);
 

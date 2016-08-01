@@ -1325,5 +1325,26 @@ namespace ts {
             const actualText2 = snap2.getText(0, snap.getLength());
             assert.equal(actualText2, "", `expected content to be empty string, got "${actualText2}"`);
         });
+
+        it("project settings for inferred projects", () => {
+            const file1 = {
+                path: "/a/b/app.ts",
+                content: `import {x} from "mod"`
+            };
+            const modFile = {
+                path: "/a/mod.ts",
+                content: "export let x: number"
+            };
+            const host = createServerHost([file1, modFile]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+
+            projectService.openClientFile(file1.path);
+            projectService.openClientFile(modFile.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 2 });
+
+            projectService.setCompilerOptionsForInferredProjects({ moduleResolution: ModuleResolutionKind.Classic });
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+        });
     });
 }
