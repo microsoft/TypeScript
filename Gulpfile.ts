@@ -59,7 +59,6 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         browser: process.env.browser || process.env.b || "IE",
         tests: process.env.test || process.env.tests || process.env.t,
         light: process.env.light || false,
-        port: process.env.port || process.env.p || "8888",
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
         files: process.env.f || process.env.file || process.env.files || "",
@@ -710,7 +709,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
             const originalMap = file.sourceMap;
             const prebundledContent = file.contents.toString();
             // Make paths absolute to help sorcery deal with all the terrible paths being thrown around
-            originalMap.sources = originalMap.sources.map(s => path.resolve(s));
+            originalMap.sources = originalMap.sources.map(s => path.resolve("src", s));
             // intoStream (below) makes browserify think the input file is named this, so this is what it puts in the sourcemap
             originalMap.file = "built/local/_stream_0.js";
 
@@ -766,7 +765,7 @@ function writeTestConfigFile(tests: string, light: boolean, taskConfigsFolder?: 
 }
 
 
-gulp.task("runtests-browser", "Runs the tests using the built run.js file like 'gulp runtests'. Syntax is gulp runtests-browser. Additional optional parameters --tests=[regex], --port=, --browser=[chrome|IE]", ["browserify", nodeServerOutFile], (done) => {
+gulp.task("runtests-browser", "Runs the tests using the built run.js file like 'gulp runtests'. Syntax is gulp runtests-browser. Additional optional parameters --tests=[regex], --browser=[chrome|IE]", ["browserify", nodeServerOutFile], (done) => {
     cleanTestDirs((err) => {
         if (err) { console.error(err); done(err); process.exit(1); }
         host = "node";
@@ -781,9 +780,6 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
         }
 
         const args = [nodeServerOutFile];
-        if (cmdLineOptions["port"]) {
-            args.push(cmdLineOptions["port"]);
-        }
         if (cmdLineOptions["browser"]) {
             args.push(cmdLineOptions["browser"]);
         }
@@ -918,36 +914,19 @@ gulp.task("update-sublime", "Updates the sublime plugin's tsserver", ["local", s
     return gulp.src([serverFile, serverFile + ".map"]).pipe(gulp.dest("../TypeScript-Sublime-Plugin/tsserver/"));
 });
 
-
-const tslintRuleDir = "scripts/tslint";
-const tslintRules = [
-    "nextLineRule",
-    "preferConstRule",
-    "booleanTriviaRule",
-    "typeOperatorSpacingRule",
-    "noInOperatorRule",
-    "noIncrementDecrementRule",
-    "objectLiteralSurroundingSpaceRule",
-];
-const tslintRulesFiles = tslintRules.map(function(p) {
-    return path.join(tslintRuleDir, p + ".ts");
+gulp.task("build-rules", "Compiles tslint rules to js", () => {
+    const settings: tsc.Settings = getCompilerSettings({ module: "commonjs" }, /*useBuiltCompiler*/ false);
+    const dest = path.join(builtLocalDirectory, "tslint");
+    return gulp.src("scripts/tslint/**/*.ts")
+        .pipe(newer({
+            dest,
+            ext: ".js"
+        }))
+        .pipe(sourcemaps.init())
+        .pipe(tsc(settings))
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(dest));
 });
-const tslintRulesOutFiles = tslintRules.map(function(p, i) {
-    const pathname = path.join(builtLocalDirectory, "tslint", p + ".js");
-    gulp.task(pathname, false, [], () => {
-        const settings: tsc.Settings = getCompilerSettings({ module: "commonjs" }, /*useBuiltCompiler*/ false);
-        return gulp.src(tslintRulesFiles[i])
-            .pipe(newer(pathname))
-            .pipe(sourcemaps.init())
-            .pipe(tsc(settings))
-            .pipe(sourcemaps.write("."))
-            .pipe(gulp.dest(path.join(builtLocalDirectory, "tslint")));
-    });
-    return pathname;
-});
-
-gulp.task("build-rules", "Compiles tslint rules to js", tslintRulesOutFiles);
-
 
 function getLinterOptions() {
     return {
@@ -977,6 +956,7 @@ const lintTargets = [
     "src/server/**/*.ts",
     "scripts/tslint/**/*.ts",
     "src/services/**/*.ts",
+    "tests/*.ts", "tests/webhost/*.ts" // Note: does *not* descend recursively
 ];
 
 

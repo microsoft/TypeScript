@@ -94,7 +94,7 @@ namespace ts {
          * change range cannot be determined.  However, in that case, incremental parsing will
          * not happen and the entire document will be re - parsed.
          */
-        getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange;
+        getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined;
 
         /** Releases all resources held by this script snapshot */
         dispose?(): void;
@@ -871,7 +871,7 @@ namespace ts {
         resolvedReturnType: Type;
         minArgumentCount: number;
         hasRestParameter: boolean;
-        hasStringLiterals: boolean;
+        hasLiteralTypes: boolean;
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty string will be returned.
@@ -1082,7 +1082,7 @@ namespace ts {
                     // fall through
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement: {
-                        const decl = <VariableDeclaration> node;
+                        const decl = <VariableDeclaration>node;
                         if (isBindingPattern(decl.name)) {
                             forEachChild(decl.name, visit);
                             break;
@@ -1775,6 +1775,8 @@ namespace ts {
 
         /** enum E */
         export const enumElement = "enum";
+        // TODO: GH#9983
+        export const enumMemberElement = "const";
 
         /**
          * Inside module and script only
@@ -2127,7 +2129,7 @@ namespace ts {
     function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
         commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
-            typeof o.type === "object" && !forEachValue(<Map<any>> o.type, v => typeof v !== "number"));
+            typeof o.type === "object" && !forEachValue(<Map<any>>o.type, v => typeof v !== "number"));
 
         options = clone(options);
 
@@ -3034,7 +3036,10 @@ namespace ts {
 
     /* @internal */ export function getNodeKind(node: Node): string {
         switch (node.kind) {
-            case SyntaxKind.ModuleDeclaration: return ScriptElementKind.moduleElement;
+            case SyntaxKind.SourceFile:
+                return isExternalModule(<SourceFile>node) ? ScriptElementKind.moduleElement : ScriptElementKind.scriptElement;
+            case SyntaxKind.ModuleDeclaration:
+                return ScriptElementKind.moduleElement;
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
                 return ScriptElementKind.classElement;
@@ -3042,11 +3047,10 @@ namespace ts {
             case SyntaxKind.TypeAliasDeclaration: return ScriptElementKind.typeElement;
             case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
             case SyntaxKind.VariableDeclaration:
-                return isConst(node)
-                    ? ScriptElementKind.constElement
-                    : isLet(node)
-                        ? ScriptElementKind.letElement
-                        : ScriptElementKind.variableElement;
+                return getKindOfVariableDeclaration(<VariableDeclaration>node);
+            case SyntaxKind.BindingElement:
+                return getKindOfVariableDeclaration(<VariableDeclaration>getRootDeclaration(node));
+            case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
                 return ScriptElementKind.functionElement;
@@ -3063,7 +3067,7 @@ namespace ts {
             case SyntaxKind.CallSignature: return ScriptElementKind.callSignatureElement;
             case SyntaxKind.Constructor: return ScriptElementKind.constructorImplementationElement;
             case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
-            case SyntaxKind.EnumMember: return ScriptElementKind.variableElement;
+            case SyntaxKind.EnumMember: return ScriptElementKind.enumMemberElement;
             case SyntaxKind.Parameter: return (node.flags & NodeFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ImportSpecifier:
@@ -3071,8 +3075,19 @@ namespace ts {
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.NamespaceImport:
                 return ScriptElementKind.alias;
+            case SyntaxKind.JSDocTypedefTag:
+                return ScriptElementKind.typeElement;
+            default:
+                return ScriptElementKind.unknown;
         }
-        return ScriptElementKind.unknown;
+
+        function getKindOfVariableDeclaration(v: VariableDeclaration): string {
+            return isConst(v)
+                ? ScriptElementKind.constElement
+                : isLet(v)
+                    ? ScriptElementKind.letElement
+                    : ScriptElementKind.variableElement;
+        }
     }
 
     class CancellationTokenObject implements CancellationToken {
@@ -3899,7 +3914,6 @@ namespace ts {
 
             function isInStringOrRegularExpressionOrTemplateLiteral(contextToken: Node): boolean {
                 if (contextToken.kind === SyntaxKind.StringLiteral
-                    || contextToken.kind === SyntaxKind.StringLiteralType
                     || contextToken.kind === SyntaxKind.RegularExpressionLiteral
                     || isTemplateLiteralKind(contextToken.kind)) {
                     const start = contextToken.getStart();
@@ -4464,6 +4478,7 @@ namespace ts {
                     kindModifiers: getSymbolModifiers(symbol),
                     sortText: "0",
                 };
+
             }
 
             function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[], location: Node, performCharacterChecks: boolean): Map<string> {
@@ -4492,22 +4507,58 @@ namespace ts {
                     return undefined;
                 }
 
-                const argumentInfo = SignatureHelp.getContainingArgumentInfo(node, position, sourceFile);
-                if (argumentInfo) {
-                    // Get string literal completions from specialized signatures of the target
-                    return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo);
+                if (node.parent.kind === SyntaxKind.PropertyAssignment && node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                    // Get quoted name of properties of the object literal expression
+                    // i.e. interface ConfigFiles {
+                    //          'jspm:dev': string
+                    //      }
+                    //      let files: ConfigFiles = {
+                    //          '/*completion position*/'
+                    //      }
+                    //
+                    //      function foo(c: ConfigFiles) {}
+                    //      foo({
+                    //          '/*completion position*/'
+                    //      });
+                    return getStringLiteralCompletionEntriesFromPropertyAssignment(<ObjectLiteralElement>node.parent);
                 }
                 else if (isElementAccessExpression(node.parent) && node.parent.argumentExpression === node) {
                     // Get all names of properties on the expression
+                    // i.e. interface A {
+                    //      'prop1': string
+                    // }
+                    // let a: A;
+                    // a['/*completion position*/']
                     return getStringLiteralCompletionEntriesFromElementAccess(node.parent);
                 }
                 else {
-                    // Otherwise, get the completions from the contextual type if one exists
+                    const argumentInfo = SignatureHelp.getContainingArgumentInfo(node, position, sourceFile);
+                    if (argumentInfo) {
+                        // Get string literal completions from specialized signatures of the target
+                        // i.e. declare function f(a: 'A');
+                        // f("/*completion position*/")
+                        return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, node);
+                    }
+
+                    // Get completion for string literal from string literal type
+                    // i.e. var x: "hi" | "hello" = "/*completion position*/"
                     return getStringLiteralCompletionEntriesFromContextualType(<StringLiteral>node);
                 }
             }
 
-            function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo) {
+            function getStringLiteralCompletionEntriesFromPropertyAssignment(element: ObjectLiteralElement) {
+                const typeChecker = program.getTypeChecker();
+                const type = typeChecker.getContextualType((<ObjectLiteralExpression>element.parent));
+                const entries: CompletionEntry[] = [];
+                if (type) {
+                    getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, element, /*performCharacterChecks*/false);
+                    if (entries.length) {
+                        return { isMemberCompletion: true, isNewIdentifierLocation: true, entries };
+                    }
+                }
+            }
+
+            function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo, location: Node) {
                 const typeChecker = program.getTypeChecker();
                 const candidates: Signature[] = [];
                 const entries: CompletionEntry[] = [];
@@ -4564,7 +4615,7 @@ namespace ts {
                 else {
                     if (type.flags & TypeFlags.StringLiteral) {
                         result.push({
-                            name: (<StringLiteralType>type).text,
+                            name: (<LiteralType>type).text,
                             kindModifiers: ScriptElementKindModifier.none,
                             kind: ScriptElementKind.variableElement,
                             sortText: "0"
@@ -4865,7 +4916,7 @@ namespace ts {
                 displayParts.push(spacePart());
                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                 displayParts.push(spacePart());
-                addRange(displayParts, typeToDisplayParts(typeChecker, typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration));
+                addRange(displayParts, typeToDisplayParts(typeChecker, typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
             }
             if (symbolFlags & SymbolFlags.Enum) {
                 addNewLineIfDisplayPartsExist();
@@ -5352,7 +5403,7 @@ namespace ts {
                 return undefined;
             }
 
-            if (type.flags & TypeFlags.Union) {
+            if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Enum)) {
                 const result: DefinitionInfo[] = [];
                 forEach((<UnionType>type).types, t => {
                     if (t.symbol) {
@@ -7266,7 +7317,6 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.QualifiedName:
                 case SyntaxKind.StringLiteral:
-                case SyntaxKind.StringLiteralType:
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.NullKeyword:
@@ -7770,7 +7820,7 @@ namespace ts {
                 else if (tokenKind === SyntaxKind.NumericLiteral) {
                     return ClassificationType.numericLiteral;
                 }
-                else if (tokenKind === SyntaxKind.StringLiteral || tokenKind === SyntaxKind.StringLiteralType) {
+                else if (tokenKind === SyntaxKind.StringLiteral) {
                     return token.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue : ClassificationType.stringLiteral;
                 }
                 else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
@@ -8265,11 +8315,11 @@ namespace ts {
             }
         }
 
-        function getStringLiteralTypeForNode(node: StringLiteral | StringLiteralTypeNode, typeChecker: TypeChecker): StringLiteralType {
-            const searchNode = node.parent.kind === SyntaxKind.StringLiteralType ? <StringLiteralTypeNode>node.parent : node;
+        function getStringLiteralTypeForNode(node: StringLiteral | LiteralTypeNode, typeChecker: TypeChecker): LiteralType {
+            const searchNode = node.parent.kind === SyntaxKind.LiteralType ? <LiteralTypeNode>node.parent : node;
             const type = typeChecker.getTypeAtLocation(searchNode);
             if (type && type.flags & TypeFlags.StringLiteral) {
-                return <StringLiteralType>type;
+                return <LiteralType>type;
             }
             return undefined;
         }
@@ -8757,7 +8807,7 @@ namespace ts {
                 addResult(start, end, classFromKind(token));
 
                 if (end >= text.length) {
-                    if (token === SyntaxKind.StringLiteral || token === SyntaxKind.StringLiteralType) {
+                    if (token === SyntaxKind.StringLiteral) {
                         // Check to see if we finished up on a multiline string literal.
                         const tokenText = scanner.getTokenText();
                         if (scanner.isUnterminated()) {
@@ -8907,7 +8957,6 @@ namespace ts {
                 case SyntaxKind.NumericLiteral:
                     return ClassificationType.numericLiteral;
                 case SyntaxKind.StringLiteral:
-                case SyntaxKind.StringLiteralType:
                     return ClassificationType.stringLiteral;
                 case SyntaxKind.RegularExpressionLiteral:
                     return ClassificationType.regularExpressionLiteral;
