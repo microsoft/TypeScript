@@ -1,4 +1,5 @@
 === tests/cases/compiler/narrowingByDiscriminantInLoop.ts ===
+
 // Repro from #9977
 
 type IDLMemberTypes = OperationMemberType | ConstantMemberType;
@@ -27,10 +28,9 @@ interface OperationMemberType {
     type: "operation";
 >type : "operation"
 
-    idlType: IDLTypeDescription | null;
+    idlType: IDLTypeDescription;
 >idlType : IDLTypeDescription
 >IDLTypeDescription : IDLTypeDescription
->null : null
 }
 
 interface ConstantMemberType {
@@ -149,5 +149,113 @@ function foo(memberType: IDLMemberTypes) {
 >memberType : OperationMemberType
 >idlType : IDLTypeDescription
 >origin : string
+    }
+}
+
+// Repro for issue similar to #8383
+
+interface A {
+>A : A
+
+    kind: true;
+>kind : true
+>true : true
+
+    prop: { a: string; };
+>prop : { a: string; }
+>a : string
+}
+
+interface B {
+>B : B
+
+    kind: false;
+>kind : false
+>false : false
+
+    prop: { b: string; }
+>prop : { b: string; }
+>b : string
+}
+
+function f1(x: A | B) {
+>f1 : (x: A | B) => void
+>x : A | B
+>A : A
+>B : B
+
+    while (true) {
+>true : boolean
+
+        x.prop;
+>x.prop : { a: string; } | { b: string; }
+>x : A | B
+>prop : { a: string; } | { b: string; }
+
+        if (x.kind === true) {
+>x.kind === true : boolean
+>x.kind : boolean
+>x : A | B
+>kind : boolean
+>true : true
+
+            x.prop.a;
+>x.prop.a : string
+>x.prop : { a: string; }
+>x : A
+>prop : { a: string; }
+>a : string
+        }
+        if (x.kind === false) {
+>x.kind === false : boolean
+>x.kind : boolean
+>x : A | B
+>kind : boolean
+>false : false
+
+            x.prop.b;
+>x.prop.b : string
+>x.prop : { b: string; }
+>x : B
+>prop : { b: string; }
+>b : string
+        }
+    }
+}
+
+function f2(x: A | B) {
+>f2 : (x: A | B) => void
+>x : A | B
+>A : A
+>B : B
+
+    while (true) {
+>true : boolean
+
+        if (x.kind) {
+>x.kind : boolean
+>x : A | B
+>kind : boolean
+
+            x.prop.a;
+>x.prop.a : string
+>x.prop : { a: string; }
+>x : A
+>prop : { a: string; }
+>a : string
+        }
+        if (!x.kind) {
+>!x.kind : boolean
+>x.kind : boolean
+>x : A | B
+>kind : boolean
+
+            x.prop.b;
+>x.prop.b : string
+>x.prop : { b: string; }
+>x : B
+>prop : { b: string; }
+>b : string
+        }
     }
 }
