@@ -2578,7 +2578,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             operand = (<TypeAssertion | NonNullExpression>operand).expression;
                         }
 
-                        // We have an expression of the form: (<Type>SubExpr)
+                        // We have an expression of the form: (<Type>SubExpr) or (SubExpr as Type)
                         // Emitting this as (SubExpr) is really not desirable. We would like to emit the subexpr as is.
                         // Omitting the parentheses, however, could cause change in the semantics of the generated
                         // code if the casted expression has a lower precedence than the rest of the expression, e.g.:
@@ -2592,6 +2592,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             operand.kind !== SyntaxKind.DeleteExpression &&
                             operand.kind !== SyntaxKind.PostfixUnaryExpression &&
                             operand.kind !== SyntaxKind.NewExpression &&
+                            !(operand.kind === SyntaxKind.BinaryExpression && node.expression.kind === SyntaxKind.AsExpression) &&
                             !(operand.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.NewExpression) &&
                             !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression) &&
                             !(operand.kind === SyntaxKind.NumericLiteral && node.parent.kind === SyntaxKind.PropertyAccessExpression)) {
