@@ -488,6 +488,7 @@ namespace Harness {
             export const directoryName: typeof IO.directoryName = fso.GetParentFolderName;
             export const getDirectories: typeof IO.getDirectories = dir => ts.sys.getDirectories(dir);
             export const directoryExists: typeof IO.directoryExists = fso.FolderExists;
+            //TODO: should implement realPath too
             export const fileExists: typeof IO.fileExists = fso.FileExists;
             export const log: typeof IO.log = global.WScript && global.WScript.StdOut.WriteLine;
             export const readDirectory: typeof IO.readDirectory = (path, extension, exclude, include) => ts.sys.readDirectory(path, extension, exclude, include);
@@ -773,9 +774,11 @@ namespace Harness {
             IO = IOImpl.CScript;
             break;
         case Utils.ExecutionEnvironment.Node:
+            //make sure this implements realpath
             IO = IOImpl.Node;
             break;
         case Utils.ExecutionEnvironment.Browser:
+            //make sure this implements realpath
             IO = IOImpl.Network;
             break;
     }
@@ -937,17 +940,25 @@ namespace Harness {
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
                 fileExists: fileName => {
+                    //Didn't I already implement this in 2 other places! Argh!!!
+                    if (1) throw new Error("Not this one!1");
                     const path = ts.toPath(fileName, currentDirectory, getCanonicalFileName);
                     return fileMap.contains(path) || (realPathMap && realPathMap.contains(path));
                 },
                 readFile: (fileName: string): string => {
+                    //Didn't I already implement this in 2 other places! Argh!!!
+                    if (1) throw new Error("Not this one!2");
                     return fileMap.get(ts.toPath(fileName, currentDirectory, getCanonicalFileName))().getText();
                 },
                 realpath: realPathMap && ((f: string) => {
+                    //Didn't I already implement this in 2 other places! Argh!!!
+                    if (1) throw new Error("Not this one!3");
                     const path = ts.toPath(f, currentDirectory, getCanonicalFileName);
                     return realPathMap.contains(path) ? realPathMap.get(path) : path;
                 }),
                 directoryExists: dir => {
+                    //Didn't I already implement this in 2 other places! Argh!!!
+                    //if (1) throw new Error("Not this one!4");
                     let path = ts.toPath(dir, currentDirectory, getCanonicalFileName);
                     // Strip trailing /, which may exist if the path is a drive root
                     if (path[path.length - 1] === "/") {

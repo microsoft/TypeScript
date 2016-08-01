@@ -116,8 +116,10 @@ namespace ts.server {
                 directoryExists: directoryName => this.host.directoryExists(directoryName)
             };
             if (this.host.realpath) {
-                this.moduleResolutionHost.realpath = path => this.host.realpath(path)
+                this.moduleResolutionHost.realpath = path => this.host.realpath(path);
             }
+            //kill
+            if (!this.host.realpath) { throw new Error("Host does not implement realpath"); }
         }
 
         private resolveNamesWithLocalCache<T extends Timestamped & { failedLookupLocations: string[] }, R>(
@@ -322,6 +324,10 @@ namespace ts.server {
 
         getDirectories(path: string): string[] {
             return this.host.getDirectories(path);
+        }
+
+        realpath(path: string): string {
+            throw new Error("TODO");
         }
 
         /**

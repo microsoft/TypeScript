@@ -122,8 +122,9 @@ namespace Harness.LanguageService {
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo;
     }
 
-    export class LanguageServiceAdapterHost {
+    export abstract class LanguageServiceAdapterHost {
         protected fileNameToScript: ts.Map<ScriptInfo> = {};
+        private symlinks: ts.Map<string> = {};
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
                     protected settings = ts.getDefaultCompilerOptions()) {
@@ -153,6 +154,22 @@ namespace Harness.LanguageService {
             this.fileNameToScript[fileName] = new ScriptInfo(fileName, content, isRootFile);
         }
 
+        public hasSymlink(from: string): boolean {
+            if (1) throw new Error("?");
+            console.log("!");
+            console.log(`Asked for symlink for ${from}. Answer: ${ts.getProperty(this.symlinks, from)}`);
+            return ts.hasProperty(this.symlinks, from);
+        }
+
+        //TODO: do something with this!
+        public getSymlink(from: string): string | undefined {
+            return ts.getProperty(this.symlinks, from);
+        }
+
+        public addSymlink(from: string, to: string): void {
+            this.symlinks[from] = to;
+        }
+
         public editScript(fileName: string, start: number, end: number, newText: string) {
             const script = this.getScriptInfo(fileName);
             if (script !== undefined) {
@@ -161,6 +178,11 @@ namespace Harness.LanguageService {
             }
 
             throw new Error("No script with name '" + fileName + "'");
+        }
+
+        public realpath(from: string): string {
+            const s = this.getSymlink(from);
+            return s === undefined ? from : s;
         }
 
         public openFile(fileName: string, content?: string, scriptKindName?: string): void {
@@ -179,6 +201,7 @@ namespace Harness.LanguageService {
     }
 
     /// Native adapter
+    //should this have realpath?
     class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost {
         getCompilationSettings() { return this.settings; }
         getCancellationToken() { return this.cancellationToken; }
@@ -224,12 +247,27 @@ namespace Harness.LanguageService {
             this.nativeHost = new NativeLanguageServiceHost(cancellationToken, options);
 
             if (preprocessToResolve) {
+                if (1) throw new Error("!!!");
                 const compilerOptions = this.nativeHost.getCompilationSettings();
                 const moduleResolutionHost: ts.ModuleResolutionHost = {
-                    fileExists: fileName => this.getScriptInfo(fileName) !== undefined,
+                    //This is duplicate of methods at the bottom of this class!!!!!!!!!
+                    fileExists: fileName => {
+                        if (1) throw new Error("!");
+                        return this.getScriptInfo(fileName) !== undefined || this.nativeHost.hasSymlink(fileName)
+                    },
                     readFile: fileName => {
+                        const linked_to = this.nativeHost.getSymlink(fileName);
+                        if (linked_to) {
+                            fileName = linked_to;
+                        }
+
                         const scriptInfo = this.getScriptInfo(fileName);
                         return scriptInfo && scriptInfo.content;
+                    },
+                    realpath: fileName => {
+                        const linked_to = this.nativeHost.getSymlink(fileName);
+                        //TODO: might have to add a full path?
+                        return linked_to === undefined ? fileName : linked_to;
                     }
                 };
                 this.getModuleResolutionsForFile = (fileName) => {
@@ -285,6 +323,7 @@ namespace Harness.LanguageService {
         getScriptVersion(fileName: string): string { return this.nativeHost.getScriptVersion(fileName); }
         getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
 
+        //Here we are.
         readDirectory(rootDir: string, extension: string): string {
             throw new Error("NYI");
         }
@@ -294,8 +333,17 @@ namespace Harness.LanguageService {
         readFileNames(path: string): string {
             throw new Error("Not implemented.");
         }
-        fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
+        fileExists(fileName: string) {
+            if (1) throw new Error("!!!");
+            return this.getScriptInfo(fileName) !== undefined || this.nativeHost.hasSymlink(fileName);
+        }
         readFile(fileName: string) {
+            if (1) throw new Error("!!!");
+            const linked_to = this.nativeHost.getSymlink(fileName);
+            if (linked_to) {
+                fileName = linked_to;
+            }
+
             const snapshot = this.nativeHost.getScriptSnapshot(fileName);
             return snapshot && snapshot.getText(0, snapshot.getLength());
         }
@@ -305,6 +353,13 @@ namespace Harness.LanguageService {
         directoryExists(directoryName: string): boolean {
             // for tests pessimistically assume that directory always exists
             return true;
+        }
+
+        realpath(fileName: string): string {
+            if (1) throw new Error("!!!");
+            const linked_to = this.nativeHost.getSymlink(fileName);
+            //TODO: might have to add a full path?
+            return linked_to === undefined ? fileName : linked_to;
         }
     }
 

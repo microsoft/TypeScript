@@ -373,6 +373,14 @@ namespace ts {
         return result;
     }
 
+    export function forEachKeyValue<T, U>(map: Map<T>, callback: (key: string, value: T) => U): U {
+        let result: U;
+        for (const id in map) {
+            if (result = callback(id, map[id])) break;
+        }
+        return result;
+    }
+
     export function lookUp<T>(map: Map<T>, key: string): T {
         return hasProperty(map, key) ? map[key] : undefined;
     }

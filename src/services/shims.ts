@@ -286,6 +286,7 @@ namespace ts {
         }
     }
 
+    //should this have realpath?
     export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
         private files: string[];
         private loggingEnabled = false;
@@ -409,6 +410,10 @@ namespace ts {
 
         public getDefaultLibFileName(options: CompilerOptions): string {
             return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
+        }
+
+        public realpath(): string {
+            throw new Error("TODO");
         }
     }
 

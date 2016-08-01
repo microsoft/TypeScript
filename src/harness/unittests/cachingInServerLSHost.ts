@@ -33,6 +33,8 @@ namespace ts {
                 throw new Error("NYI");
             },
             fileExists: (path: string): boolean => {
+                //Didn't I already implement this in N other places! Argh!!!
+                if (1) throw new Error("Not this one!");
                 return hasProperty(fileMap, path);
             },
             directoryExists: (path: string): boolean => {

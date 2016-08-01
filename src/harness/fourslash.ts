@@ -39,6 +39,9 @@ namespace FourSlash {
 
         files: FourSlashFile[];
 
+        //document
+        symlinks: ts.Map<string>;
+
         // A mapping from marker names to name/position pairs
         markerPositions: { [index: string]: Marker; };
 
@@ -116,10 +119,12 @@ namespace FourSlash {
         emitThisFile: "emitThisFile",  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
         fileName: "Filename",
         resolveReference: "ResolveReference",  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
+        symlink: "Symlink"
     };
 
     // List of allowed metadata names
-    const fileMetadataNames = [metadataOptionNames.fileName, metadataOptionNames.emitThisFile, metadataOptionNames.resolveReference];
+    //TODO: Object.values(metdataOptionNames)
+    const fileMetadataNames = [metadataOptionNames.fileName, metadataOptionNames.emitThisFile, metadataOptionNames.resolveReference, metadataOptionNames.symlink];
 
     function convertGlobalOptionsToCompilerOptions(globalOptions: Harness.TestCaseParser.CompilerSettings): ts.CompilerOptions {
         const settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES5 };
@@ -304,6 +309,11 @@ namespace FourSlash {
                     if (!Harness.isDefaultLibraryFile(fileName)) {
                         this.languageServiceAdapterHost.addScript(fileName, this.inputFiles[fileName], /*isRootFile*/ true);
                     }
+                });
+                //neater
+                ts.forEachKeyValue(testData.symlinks, (from, to) => {
+                    //TODO: need full paths!!!!!!!!!
+                    this.languageServiceAdapterHost.addSymlink(from, to);
                 });
                 this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
                     Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
@@ -2340,11 +2350,19 @@ ${code}
     }
 
     function parseTestData(basePath: string, contents: string, fileName: string): FourSlashData {
-        // Regex for parsing options in the format "@Alpha: Value of any sort"
-        const optionRegex = /^\s*@(\w+): (.*)\s*/;
-
         // List of all the subfiles we've parsed out
         const files: FourSlashFile[] = [];
+        //document
+        const symlinks: ts.Map<string> = {};
+        function addSymlink(from: string, to: string): void {
+            //TODO:NEATER
+            from = basePath + "/" + from;
+            to = basePath + "/" + to;
+            if (ts.hasProperty(symlinks, from)) {
+                throw new Error(`Already have a symlink for ${from}`);
+            }
+            symlinks[from] = to;
+        }
         // Global options
         const globalOptions: { [s: string]: string; } = {};
         // Marker positions
@@ -2392,16 +2410,20 @@ ${code}
                 currentFileContent = currentFileContent + line.substr(4);
             }
             else if (line.substr(0, 2) === "//") {
+                // Regex for parsing options in the format "@Alpha: Value of any sort"
+                const optionRegex = /^\s*@(\w+): (.*)$/; ///^\s*@(\w+): (.*)\s*/
                 // Comment line, check for global/file @options and record them
                 const match = optionRegex.exec(line.substr(2));
                 if (match) {
-                    const fileMetadataNamesIndex = fileMetadataNames.indexOf(match[1]);
+                    const key = match[1];
+                    const value = match[2];
+                    const fileMetadataNamesIndex = fileMetadataNames.indexOf(key);
                     if (fileMetadataNamesIndex === -1) {
                         // Check if the match is already existed in the global options
-                        if (globalOptions[match[1]] !== undefined) {
-                            throw new Error("Global Option : '" + match[1] + "' is already existed");
+                        if (globalOptions[key] !== undefined) {
+                            throw new Error(`Global Option : '${key}' is already existed`);
                         }
-                        globalOptions[match[1]] = match[2];
+                        globalOptions[key] = value;
                     }
                     else {
                         if (fileMetadataNamesIndex === fileMetadataNames.indexOf(metadataOptionNames.fileName)) {
@@ -2416,8 +2438,17 @@ ${code}
                                 resetLocalData();
                             }
 
-                            currentFileName = basePath + "/" + match[2];
-                            currentFileOptions[match[1]] = match[2];
+                            currentFileName = basePath + "/" + value;
+                            currentFileOptions[key] = value;
+                        }
+                        else if (fileMetadataNamesIndex === fileMetadataNames.indexOf(metadataOptionNames.symlink)) {
+                            const symlinkRegex = /^(\S+) -> (\S+)$/;
+                            const symlinkMatch = symlinkRegex.exec(value);
+                            if (!symlinkMatch) {
+                                throw new Error(`Expected ${symlinkRegex}, got ${value}`);
+                            }
+                            const [_, left, right] = symlinkMatch;
+                            addSymlink(left, right);
                         }
                         else {
                             // Add other fileMetadata flag
@@ -2461,6 +2492,7 @@ ${code}
             markers,
             globalOptions,
             files,
+            symlinks,
             ranges
         };
     }
@@ -2738,7 +2770,7 @@ ${code}
             content: output,
             fileOptions: {},
             version: 0,
-            fileName: fileName
+            fileName
         };
     }
 

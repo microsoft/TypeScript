@@ -1142,6 +1142,7 @@ namespace ts {
     // Public interface of the host of a language service instance.
     //
     export interface LanguageServiceHost {
+        //This should contain realPath somewhere... but where's readFile?
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
         getProjectVersion?(): string;
@@ -1163,10 +1164,12 @@ namespace ts {
          * if implementation is omitted then language service will use built-in module resolution logic and get answers to
          * host specific questions using 'getScriptSnapshot'.
          */
+        //LSHost overrides these. So should the shim host.
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
         getDirectories?(directoryName: string): string[];
+        realpath(path: string): string;
     }
 
     //
@@ -2147,6 +2150,7 @@ namespace ts {
             readFile: (fileName): string => "",
             directoryExists: directoryExists => true,
             getDirectories: (path: string) => []
+            //realpath?
         };
 
         const program = createProgram([inputFileName], options, compilerHost);
@@ -3100,6 +3104,7 @@ namespace ts {
                  oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit);
 
             // Now create a new compiler
+            //It's this one!
             const compilerHost: CompilerHost = {
                 getSourceFile: getOrCreateSourceFile,
                 getSourceFileByPath: getOrCreateSourceFileByPath,
@@ -3111,11 +3116,20 @@ namespace ts {
                 writeFile: (fileName, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => {
+                    //actually, if it's in the symlinks, then it must exist...
+                    if (host.realpath) {
+                        fileName = host.realpath(fileName); //Actually, just want the symlink...
+                    }
                     // stub missing host functionality
+                    //The stub isn't complete...
                     Debug.assert(!host.resolveModuleNames || !host.resolveTypeReferenceDirectives);
                     return hostCache.getOrCreateEntry(fileName) !== undefined;
                 },
                 readFile: (fileName): string => {
+                    if (host.realpath) {
+                        fileName = host.realpath(fileName); //Actually, just want the symlink...
+                    }
+
                     // stub missing host functionality
                     const entry = hostCache.getOrCreateEntry(fileName);
                     return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
@@ -3123,10 +3137,15 @@ namespace ts {
                 directoryExists: directoryName => {
                     return directoryProbablyExists(directoryName, host);
                 },
+                //TODO!!! realpath?(path: string): string;
                 getDirectories: path => {
                     return host.getDirectories ? host.getDirectories(path) : [];
                 }
             };
+            if (host.realpath) {
+                compilerHost.realpath = (fileName: string): string => host.realpath(fileName);
+            }
+
             if (host.trace) {
                 compilerHost.trace = message => host.trace(message);
             }
