@@ -969,7 +969,7 @@ namespace ts {
 
 
         function checkAndReportErrorForExtendingInterface(errorLocation: Node): boolean {
-            const expression = climbToEntityNameOfExpressionWithTypeArguments(errorLocation);
+            const expression = getEntityNameForExtendingInterface(errorLocation);
             const isError = !!(expression && resolveEntityName(expression, SymbolFlags.Interface, /*ignoreErrors*/ true));
             if (isError) {
                 error(errorLocation, Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements, getTextOfNode(expression));
@@ -980,11 +980,11 @@ namespace ts {
          * Climbs up parents to an ExpressionWithTypeArguments, and returns its expression,
          * but returns undefined if that expression is not an EntityNameExpression.
          */
-        function climbToEntityNameOfExpressionWithTypeArguments(node: Node): EntityNameExpression | undefined {
+        function getEntityNameForExtendingInterface(node: Node): EntityNameExpression | undefined {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.PropertyAccessExpression:
-                    return node.parent ? climbToEntityNameOfExpressionWithTypeArguments(node.parent) : undefined;
+                    return node.parent ? getEntityNameForExtendingInterface(node.parent) : undefined;
                 case SyntaxKind.ExpressionWithTypeArguments:
                     Debug.assert(isEntityNameExpression((<ExpressionWithTypeArguments>node).expression));
                     return <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression
