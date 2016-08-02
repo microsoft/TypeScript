@@ -6,3 +6,25 @@ node_js:
   - '0.10'
 
 sudo: false
+
+matrix:
+  fast_finish: true
+  include:
+  - os: osx
+    node_js: stable
+    osx_image: xcode7.3
+
+branches:
+  only:
+  - master
+  - transforms
+
+install:
+  - npm uninstall typescript
+  - npm uninstall tslint
+  - npm install
+  - npm update
+
+cache:
+  directories:
+    - node_modules

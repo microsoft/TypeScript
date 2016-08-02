@@ -14,7 +14,7 @@ class A {
 class B {
     constructor(...args: number[]) {}
     @MyMethodDecorator
-    method(...args: string[]) {}
+    method(this: this, ...args: string[]) {}
 }
 
 

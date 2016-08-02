@@ -14,7 +14,7 @@ var serverDirectory = "src/server/";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
-var unittestsDirectory = "tests/cases/unittests/";
+var unittestsDirectory = "src/harness/unittests/";
 var docDirectory = "doc/";
 
 var builtDirectory = "built/";
@@ -34,6 +34,7 @@ if (process.env.path !== undefined) {
 
 var compilerSources = [
     "core.ts",
+    "performance.ts",
     "sys.ts",
     "types.ts",
     "scanner.ts",
@@ -67,6 +68,7 @@ var compilerSources = [
 
 var servicesSources = [
     "core.ts",
+    "performance.ts",
     "sys.ts",
     "types.ts",
     "scanner.ts",
@@ -126,7 +128,6 @@ var servicesSources = [
 }));
 
 var serverCoreSources = [
-    "node.d.ts",
     "editorServices.ts",
     "protocol.d.ts",
     "session.ts",
@@ -305,6 +306,7 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
     * @param {boolean} opts.stripInternal: true if compiler should remove declarations marked as @internal
     * @param {boolean} opts.noMapRoot: true if compiler omit mapRoot option
     * @param {boolean} opts.inlineSourceMap: true if compiler should inline sourceMap
+    * @param {Array} opts.types: array of types to include in compilation
     * @param callback: a function to execute after the compilation process ends
     */
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts, callback) {
@@ -312,10 +314,13 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         if (process.env.USE_TRANSFORMS === "false") {
             useBuiltCompiler = false;
         }
-
-        var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--noImplicitAny --noEmitOnError --types --pretty";
         opts = opts || {};
+        var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
+        var options = "--noImplicitAny --noImplicitThis --noEmitOnError --types " 
+        if (opts.types) {
+            options += opts.types.join(",");
+        }
+        options += " --pretty";
         // Keep comments when specifically requested
         // or when in debug mode.
         if (!(opts.keepComments || useDebugMode)) {
@@ -492,15 +497,6 @@ task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "r
     exec(cmd);
 });
 
-var scriptsTsdJson = path.join(scriptsDirectory, "tsd.json");
-file(scriptsTsdJson);
-
-task("tsd-scripts", [scriptsTsdJson], function () {
-    var cmd = "tsd --config " + scriptsTsdJson + " install";
-    console.log(cmd);
-    exec(cmd);
-}, { async: true });
-
 var importDefinitelyTypedTestsDirectory = path.join(scriptsDirectory, "importDefinitelyTypedTests");
 var importDefinitelyTypedTestsJs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.js");
 var importDefinitelyTypedTestsTs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.ts");
@@ -578,8 +574,7 @@ compileFile(
      });
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
-compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
-
+compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"] });
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 compileFile(
@@ -679,10 +674,10 @@ var run = path.join(builtLocalDirectory, "run.js");
 compileFile(
     /*outFile*/ run,
     /*source*/ harnessSources,
-    /*prereqs*/ [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources),
+    /*prereqs*/ [builtLocalDirectory, tscFile].concat(libraryTargets).concat(servicesSources).concat(harnessSources),
     /*prefixes*/ [],
     /*useBuiltCompiler:*/ true,
-    /*opts*/ { inlineSourceMap: true });
+    /*opts*/ { inlineSourceMap: true, types: ["node", "mocha", "chai"] });
 
 var internalTests = "internal/";
 
@@ -892,11 +887,10 @@ task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function()
     exec(cmd);
 }, {async: true});
 
-desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], port=, browser=[chrome|IE]");
+desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], browser=[chrome|IE]");
 task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFileInBrowserTest], function() {
     cleanTestDirs();
     host = "node";
-    port = process.env.port || process.env.p || '8888';
     browser = process.env.browser || process.env.b || "IE";
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
@@ -909,7 +903,7 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFi
     }
 
     tests = tests ? tests : '';
-    var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + JSON.stringify(tests);
+    var cmd = host + " tests/webTestServer.js " + browser + " " + JSON.stringify(tests);
     console.log(cmd);
     exec(cmd);
 }, {async: true});
@@ -1035,6 +1029,7 @@ var tslintRules = [
     "noInOperatorRule",
     "noIncrementDecrementRule",
     "objectLiteralSurroundingSpaceRule",
+    "noTypeAssertionWhitespaceRule"
 ];
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
@@ -1086,7 +1081,8 @@ var lintTargets = compilerSources
     .concat(serverCoreSources)
     .concat(tslintRulesFiles)
     .concat(servicesSources)
-    .concat(["Gulpfile.ts"]);
+    .concat(["Gulpfile.ts"])
+    .concat([nodeServerInFile, perftscPath, "tests/perfsys.ts", webhostPath]);
 
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
@@ -1156,11 +1152,3 @@ task("lint-server", ["build-rules"], function() {
         lintWatchFile(lintTargets[i]);
     }
 });
-
-function environmentVariableIsEnabled(name) {
-    return /^(y(es)?|t(rue)?|on|enabled?|1|\+)$/.test(process.env[name]);
-}
-
-function environmentVariableIsDisabled(name) {
-    return /^(no?|f(alse)?|off|disabled?|0|-)$/.test(process.env[name]);
-}

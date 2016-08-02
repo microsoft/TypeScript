@@ -62,7 +62,7 @@ function repeatString(string, times) {
   if (times === 1) {
 >times === 1 : boolean
 >times : any
->1 : number
+>1 : 1
 
     return string;
 >string : any
@@ -269,10 +269,10 @@ export class HTMLtoJSX {
 >parentTag === 'textarea' || parentTag === 'style' : boolean
 >parentTag === 'textarea' : boolean
 >parentTag : any
->'textarea' : string
+>'textarea' : "textarea"
 >parentTag === 'style' : boolean
 >parentTag : any
->'style' : string
+>'style' : "style"
 
       // Ignore text content of textareas and styles, as it will have already been moved
       // to a "defaultValue" attribute and "dangerouslySetInnerHTML" attribute respectively.
@@ -316,9 +316,9 @@ export class HTMLtoJSX {
 >'{' + JSON.stringify(whitespace) : string
 >'{' : string
 >JSON.stringify(whitespace) : string
->JSON.stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[], space?: string | number): string; }
+>JSON.stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
 >JSON : JSON
->stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[], space?: string | number): string; }
+>stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
 >whitespace : string
 >'}' : string
 

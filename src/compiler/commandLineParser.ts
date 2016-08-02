@@ -30,7 +30,7 @@ namespace ts {
         {
             name: "extendedDiagnostics",
             type: "boolean",
-            experimental: true,
+            experimental: true
         },
         {
             name: "emitBOM",
@@ -140,12 +140,12 @@ namespace ts {
         {
             name: "noUnusedLocals",
             type: "boolean",
-            description: Diagnostics.Report_Errors_on_Unused_Locals,
+            description: Diagnostics.Report_errors_on_unused_locals,
         },
         {
             name: "noUnusedParameters",
             type: "boolean",
-            description: Diagnostics.Report_Errors_on_Unused_Parameters
+            description: Diagnostics.Report_errors_on_unused_parameters,
         },
         {
             name: "noLib",
@@ -699,9 +699,6 @@ namespace ts {
         return output;
     }
 
-    // Skip over any minified JavaScript files (ending in ".min.js")
-    // Skip over dotted files and folders as well
-    const ignoreFileNamePattern = /(\.min\.js$)|([\\/]\.[\w.])/;
     /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
@@ -1010,10 +1007,6 @@ namespace ts {
                 // <file>.d.ts (or <file>.js if "allowJs" is enabled) in the same
                 // directory when they are compilation outputs.
                 if (hasFileWithHigherPriorityExtension(file, literalFileMap, wildcardFileMap, supportedExtensions, keyMapper)) {
-                    continue;
-                }
-
-                if (ignoreFileNamePattern.test(file)) {
                     continue;
                 }
 

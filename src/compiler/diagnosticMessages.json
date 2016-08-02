@@ -1751,6 +1751,10 @@
         "category": "Error",
         "code": 2534
     },
+    "Enum type '{0}' has members with initializers that are not literals.": {
+        "category": "Error",
+        "code": 2535
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -1938,6 +1942,10 @@
     "Cannot extend an interface '{0}'. Did you mean 'implements'?": {
         "category": "Error",
         "code": 2689
+    },
+    "A class must be declared after its base class.": {
+        "category": "Error",
+        "code": 2690
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2331,6 +2339,10 @@
     "File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '{0}'.": {
         "category": "Error",
         "code": 5065
+    },
+    "Substitutions for pattern '{0}' shouldn't be an empty array.": {
+        "category": "Error",
+        "code": 5066
     },
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2796,11 +2808,11 @@
         "category": "Error",
         "code": 6133
     },
-    "Report Errors on Unused Locals.": {
+    "Report errors on unused locals.": {
         "category": "Message",
         "code": 6134
     },
-    "Report Errors on Unused Parameters.": {
+    "Report errors on unused parameters.": {
         "category": "Message",
         "code": 6135
     },

@@ -1,0 +1,20 @@
+tests/cases/compiler/b.d.ts(2,20): error TS2305: Module '"tests/cases/compiler/a".ns' has no exported member 'IFoo'.
+
+
+==== tests/cases/compiler/a.d.ts (0 errors) ====
+    export = ns;
+    
+    export as namespace ns;
+    
+    declare namespace ns {
+      export var x: number;
+      export interface IFoo { }
+    }
+    
+==== tests/cases/compiler/b.d.ts (1 errors) ====
+    declare namespace ns.something {
+      export var p: ns.IFoo;
+                       ~~~~
+!!! error TS2305: Module '"tests/cases/compiler/a".ns' has no exported member 'IFoo'.
+    }
+    

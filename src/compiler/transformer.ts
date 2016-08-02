@@ -170,7 +170,7 @@ namespace ts {
         const transformers: Transformer[] = [];
 
         transformers.push(transformTypeScript);
-        transformers.push(moduleTransformerMap[moduleKind]);
+        transformers.push(moduleTransformerMap[moduleKind] || moduleTransformerMap[ModuleKind.None]);
 
         if (jsx === JsxEmit.React) {
             transformers.push(transformJsx);

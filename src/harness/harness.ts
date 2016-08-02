@@ -18,12 +18,13 @@
 /// <reference path="..\services\shims.ts" />
 /// <reference path="..\server\session.ts" />
 /// <reference path="..\server\client.ts" />
-/// <reference path="..\server\node.d.ts" />
-/// <reference path="external\mocha.d.ts"/>
-/// <reference path="external\chai.d.ts"/>
 /// <reference path="sourceMapRecorder.ts"/>
 /// <reference path="runnerbase.ts"/>
 /// <reference path="virtualFileSystem.ts" />
+/// <reference types="node" />
+/// <reference types="mocha" />
+/// <reference types="chai" />
+
 
 // Block scoped definitions work poorly for global variables, temporarily enable var
 /* tslint:disable:no-var-keyword */
@@ -32,7 +33,13 @@
 var _chai: typeof chai = require("chai");
 var assert: typeof _chai.assert = _chai.assert;
 declare var __dirname: string; // Node-specific
-var global = <any>Function("return this").call(undefined);
+var global: NodeJS.Global = <any>Function("return this").call(undefined);
+declare namespace NodeJS {
+    export interface Global {
+        WScript: typeof WScript;
+        ActiveXObject: typeof ActiveXObject;
+    }
+}
 /* tslint:enable:no-var-keyword */
 
 namespace Utils {
@@ -57,7 +64,7 @@ namespace Utils {
 
     export let currentExecutionEnvironment = getExecutionEnvironment();
 
-    const Buffer: BufferConstructor = currentExecutionEnvironment !== ExecutionEnvironment.Browser
+    const Buffer: typeof global.Buffer = currentExecutionEnvironment !== ExecutionEnvironment.Browser
         ? require("buffer").Buffer
         : undefined;
 
@@ -127,7 +134,7 @@ namespace Utils {
     export function memoize<T extends Function>(f: T): T {
         const cache: { [idx: string]: any } = {};
 
-        return <any>(function() {
+        return <any>(function(this: any) {
             const key = Array.prototype.join.call(arguments);
             const cachedResult = cache[key];
             if (cachedResult) {
@@ -1277,18 +1284,7 @@ namespace Harness {
         }
 
         export function minimalDiagnosticsToString(diagnostics: ts.Diagnostic[]) {
-            // This is basically copied from tsc.ts's reportError to replicate what tsc does
-            let errorOutput = "";
-            ts.forEach(diagnostics, diagnostic => {
-                if (diagnostic.file) {
-                    const lineAndCharacter = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
-                    errorOutput += diagnostic.file.fileName + "(" + (lineAndCharacter.line + 1) + "," + (lineAndCharacter.character + 1) + "): ";
-                }
-
-                errorOutput += ts.DiagnosticCategory[diagnostic.category].toLowerCase() + " TS" + diagnostic.code + ": " + ts.flattenDiagnosticMessageText(diagnostic.messageText, Harness.IO.newLine()) + Harness.IO.newLine();
-            });
-
-            return errorOutput;
+            return ts.formatDiagnostics(diagnostics, { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => Harness.IO.newLine() });
         }
 
         export function getErrorBaseline(inputFiles: TestFile[], diagnostics: ts.Diagnostic[]) {
@@ -1444,31 +1440,27 @@ namespace Harness {
             writeByteOrderMark: boolean;
         }
 
-        function stringEndsWith(str: string, end: string) {
-            return str.substr(str.length - end.length) === end;
-        }
-
         export function isTS(fileName: string) {
-            return stringEndsWith(fileName, ".ts");
+            return ts.endsWith(fileName, ".ts");
         }
 
         export function isTSX(fileName: string) {
-            return stringEndsWith(fileName, ".tsx");
+            return ts.endsWith(fileName, ".tsx");
         }
 
         export function isDTS(fileName: string) {
-            return stringEndsWith(fileName, ".d.ts");
+            return ts.endsWith(fileName, ".d.ts");
         }
 
         export function isJS(fileName: string) {
-            return stringEndsWith(fileName, ".js");
+            return ts.endsWith(fileName, ".js");
         }
         export function isJSX(fileName: string) {
-            return stringEndsWith(fileName, ".jsx");
+            return ts.endsWith(fileName, ".jsx");
         }
 
         export function isJSMap(fileName: string) {
-            return stringEndsWith(fileName, ".js.map") || stringEndsWith(fileName, ".jsx.map");
+            return ts.endsWith(fileName, ".js.map") || ts.endsWith(fileName, ".jsx.map");
         }
 
         /** Contains the code and errors of a compilation and some helper methods to check its status. */

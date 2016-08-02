@@ -690,7 +690,7 @@ namespace ts {
                     }
                     break scan;
                 default:
-                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
+                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch))) {
                         if (hasPendingCommentRange && isLineBreak(ch)) {
                             pendingHasTrailingNewLine = true;
                         }

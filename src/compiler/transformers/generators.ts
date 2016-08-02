@@ -1877,7 +1877,7 @@ namespace ts {
         function onSubstituteNode(node: Node, isExpression: boolean): Node {
             node = previousOnSubstituteNode(node, isExpression);
             if (isExpression) {
-                return substituteExpression(<Expression> node);
+                return substituteExpression(<Expression>node);
             }
             return node;
         }

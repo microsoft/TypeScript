@@ -261,7 +261,7 @@ namespace ts {
                 case SyntaxKind.IntersectionType:
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.ThisType:
-                case SyntaxKind.StringLiteralType:
+                case SyntaxKind.LiteralType:
                     // TypeScript type nodes are elided.
 
                 case SyntaxKind.IndexSignature:
@@ -1658,7 +1658,13 @@ namespace ts {
 
             const expressions: Expression[] = [];
             if (valueDeclaration) {
-                for (const parameter of valueDeclaration.parameters) {
+                const parameters = valueDeclaration.parameters;
+                const numParameters = parameters.length;
+                for (let i = 0; i < numParameters; i++) {
+                    const parameter = parameters[i];
+                    if (i === 0 && isIdentifier(parameter.name) && parameter.name.text === "this") {
+                        continue;
+                    }
                     if (parameter.dotDotDotToken) {
                         expressions.push(serializeTypeNode(getRestParameterElementType(parameter.type)));
                     }
@@ -1730,8 +1736,25 @@ namespace ts {
                     return createIdentifier("Boolean");
 
                 case SyntaxKind.StringKeyword:
-                case SyntaxKind.StringLiteralType:
                     return createIdentifier("String");
+
+                case SyntaxKind.LiteralType:
+                    switch ((<LiteralTypeNode>node).literal.kind) {
+                        case SyntaxKind.StringLiteral:
+                            return createIdentifier("String");
+
+                        case SyntaxKind.NumericLiteral:
+                            return createIdentifier("Number");
+
+                        case SyntaxKind.TrueKeyword:
+                        case SyntaxKind.FalseKeyword:
+                            return createIdentifier("Boolean");
+
+                        default:
+                            Debug.failBadSyntaxKind((<LiteralTypeNode>node).literal);
+                            break;
+                    }
+                    break;
 
                 case SyntaxKind.NumberKeyword:
                     return createIdentifier("Number");

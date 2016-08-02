@@ -732,29 +732,6 @@ namespace FourSlash {
             }
         }
 
-        public verifyReferencesCountIs(count: number, localFilesOnly = true) {
-            const references = this.getReferencesAtCaret();
-            let referencesCount = 0;
-
-            if (localFilesOnly) {
-                const localFiles = this.testData.files.map<string>(file => file.fileName);
-                // Count only the references in local files. Filter the ones in lib and other files.
-                ts.forEach(references, entry => {
-                    if (localFiles.some((fileName) => fileName === entry.fileName)) {
-                        referencesCount++;
-                    }
-                });
-            }
-            else {
-                referencesCount = references && references.length || 0;
-            }
-
-            if (referencesCount !== count) {
-                const condition = localFilesOnly ? "excluding libs" : "including libs";
-                this.raiseError("Expected references count (" + condition + ") to be " + count + ", but is actually " + referencesCount);
-            }
-        }
-
         public verifyReferencesAre(expectedReferences: Range[]) {
             const actualReferences = this.getReferencesAtCaret() || [];
 
@@ -2318,8 +2295,8 @@ namespace FourSlash {
 
         const diagnostics = ts.getPreEmitDiagnostics(program, sourceFile);
         if (diagnostics.length > 0) {
-            const diagnosticText = diagnostics.map(e => ts.flattenDiagnosticMessageText(e.messageText, Harness.IO.newLine())).join("\r\n");
-            throw new Error(`Error compiling ${fileName}: ${diagnosticText}`);
+            throw new Error(`Error compiling ${fileName}: ` +
+                diagnostics.map(e => ts.flattenDiagnosticMessageText(e.messageText, Harness.IO.newLine())).join("\r\n"));
         }
 
         program.emit(sourceFile);
@@ -2995,10 +2972,6 @@ namespace FourSlashInterface {
 
         public verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void {
             this.state.verifyGetEmitOutputContentsForCurrentFile(expected);
-        }
-
-        public referencesCountIs(count: number) {
-            this.state.verifyReferencesCountIs(count, /*localFilesOnly*/ false);
         }
 
         public referencesAre(ranges: FourSlash.Range[]) {

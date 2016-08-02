@@ -121,7 +121,7 @@ namespace ts {
         }
 
         // We do not yet support types.
-        if ((kind >= SyntaxKind.TypePredicate && kind <= SyntaxKind.StringLiteralType)) {
+        if ((kind >= SyntaxKind.TypePredicate && kind <= SyntaxKind.LiteralType)) {
             return initial;
         }
 
@@ -673,7 +673,7 @@ namespace ts {
         }
 
         // We do not yet support types.
-        if ((kind >= SyntaxKind.TypePredicate && kind <= SyntaxKind.StringLiteralType)) {
+        if ((kind >= SyntaxKind.TypePredicate && kind <= SyntaxKind.LiteralType)) {
             return node;
         }
 

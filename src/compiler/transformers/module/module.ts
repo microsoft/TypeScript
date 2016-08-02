@@ -61,7 +61,8 @@ namespace ts {
                 ({ externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues } = collectExternalModuleInfo(node, resolver));
 
                 // Perform the transformation.
-                const updated = transformModuleDelegates[moduleKind](node);
+                const transformModule = transformModuleDelegates[moduleKind] || transformModuleDelegates[ModuleKind.None];
+                const updated = transformModule(node);
                 aggregateTransformFlags(updated);
 
                 currentSourceFile = undefined;

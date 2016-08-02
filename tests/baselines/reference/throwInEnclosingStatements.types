@@ -22,7 +22,7 @@ switch (y) {
 >y : string
 
     case 'a':
->'a' : string
+>'a' : "a"
 
         throw y;
 >y : string

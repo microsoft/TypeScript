@@ -10,7 +10,7 @@ function a(x: string | number) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number
->"string" : string
+>"string" : "string"
 
         x; // string
 >x : string
@@ -31,7 +31,7 @@ function b(x: string | number) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number
->"string" : string
+>"string" : "string"
 
         if (cond) continue;
 >cond : boolean
@@ -55,7 +55,7 @@ function c(x: string | number) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number
->"string" : string
+>"string" : "string"
 
         if (cond) break;
 >cond : boolean
@@ -69,6 +69,6 @@ function c(x: string | number) {
 >undefined : undefined
     }
     x; // string | number
->x : number | string
+>x : string | number
 }
 

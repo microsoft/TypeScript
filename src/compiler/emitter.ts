@@ -266,7 +266,7 @@ const _super = (function (geti, seti) {
 
             const sourceMappingURL = sourceMap.getSourceMappingURL();
             if (sourceMappingURL) {
-                write(`//# sourceMappingURL=${sourceMappingURL}`);
+                write(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Sometimes tools can sometimes see this line as a source mapping url comment
             }
 
             // Write the source map
@@ -553,8 +553,8 @@ const _super = (function (geti, seti) {
                     return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
                 case SyntaxKind.ThisType:
                     return emitThisType(<ThisTypeNode>node);
-                case SyntaxKind.StringLiteralType:
-                    return emitLiteral(<StringLiteralTypeNode>node);
+                case SyntaxKind.LiteralType:
+                    return emitLiteralType(<LiteralTypeNode>node);
 
                 // Binding patterns
                 case SyntaxKind.ObjectBindingPattern:
@@ -1045,6 +1045,10 @@ const _super = (function (geti, seti) {
 
         function emitThisType(node: ThisTypeNode) {
             write("this");
+        }
+
+        function emitLiteralType(node: LiteralTypeNode) {
+            emitExpression(node.literal);
         }
 
         //

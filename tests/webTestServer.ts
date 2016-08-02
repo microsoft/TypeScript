@@ -1,4 +1,4 @@
-/// <reference path='..\src\harness\external\node.d.ts'/>
+/// <reference types="node" />
 
 import http = require("http");
 import fs = require("fs");
@@ -9,36 +9,35 @@ import os = require("os");
 
 /// Command line processing ///
 
-if (process.argv[2] == '--help') {
-    console.log('Runs a node server on port 8888 by default, looking for tests folder in the current directory\n');
-    console.log('Syntax: node nodeServer.js [port] [typescriptEnlistmentDirectory] [tests] [--browser] [--verbose]\n');
-    console.log('Examples: \n\tnode nodeServer.js 8888 .');
-    console.log('\tnode nodeServer.js 3000 D:/src/typescript/public --verbose IE');
+if (process.argv[2] == "--help") {
+    console.log("Runs a node server on port 8888, looking for tests folder in the current directory\n");
+    console.log("Syntax: node nodeServer.js [typescriptEnlistmentDirectory] [tests] [--browser] [--verbose]\n");
+    console.log("Examples: \n\tnode nodeServer.js .");
+    console.log("\tnode nodeServer.js 3000 D:/src/typescript/public --verbose IE");
 }
 
 function switchToForwardSlashes(path: string) {
-    return path.replace(/\\/g, "/").replace(/\/\//g, '/');
+    return path.replace(/\\/g, "/").replace(/\/\//g, "/");
 }
 
-var defaultPort = 8888;
-var port = process.argv[2] || defaultPort;
-var rootDir = switchToForwardSlashes(__dirname + '/../');
+const port = 8888; // harness.ts and webTestResults.html depend on this exact port number.
 
-var browser: string;
-if (process.argv[3]) {
-    browser = process.argv[3];
-    if (browser !== 'chrome' && browser !== 'IE') {
-        console.log('Invalid command line arguments. Got ' + browser + ' but expected chrome, IE or nothing.');
+let browser: string;
+if (process.argv[2]) {
+    browser = process.argv[2];
+    if (browser !== "chrome" && browser !== "IE") {
+        console.log(`Invalid command line arguments. Got ${browser} but expected chrome, IE or nothing.`);
     }
 }
 
-var grep = process.argv[4];
+const grep = process.argv[3];
 
-var verbose = false;
-if (process.argv[5] == '--verbose') {
+let verbose = false;
+if (process.argv[4] == "--verbose") {
     verbose = true;
-} else if (process.argv[5] && process.argv[5] !== '--verbose') {
-    console.log('Invalid command line arguments. Got ' + process.argv[5] + ' but expected --verbose or nothing.');
+}
+else if (process.argv[4] && process.argv[4] !== "--verbose") {
+    console.log(`Invalid command line arguments. Got ${process.argv[4]} but expected --verbose or nothing.`);
 }
 
 /// Utils ///
@@ -96,47 +95,49 @@ function ensureDirectoriesExist(path: string) {
 }
 
 // Copied from the compiler sources
-function dir(path: string, spec?: string, options?: any) {
+function dir(dirPath: string, spec?: string, options?: any) {
     options = options || <{ recursive?: boolean; }>{};
+    return filesInFolder(dirPath);
 
     function filesInFolder(folder: string): string[] {
-        var folder = switchToForwardSlashes(folder);
-        var paths: string[] = [];
+        folder = switchToForwardSlashes(folder);
+        let paths: string[] = [];
         // Everything after the current directory is relative
-        var baseDirectoryLength = process.cwd().length + 1;
+        const baseDirectoryLength = process.cwd().length + 1;
 
         try {
-            var files = fs.readdirSync(folder);
-            for (var i = 0; i < files.length; i++) {
-                var stat = fs.statSync(folder + "/" + files[i]);
+            const files = fs.readdirSync(folder);
+            for (let i = 0; i < files.length; i++) {
+                const stat = fs.statSync(path.join(folder, files[i]));
                 if (options.recursive && stat.isDirectory()) {
-                    paths = paths.concat(filesInFolder(folder + "/" + files[i]));
-                } else if (stat.isFile() && (!spec || files[i].match(spec))) {
-                    var relativePath = folder.substring(baseDirectoryLength);
-                    paths.push(relativePath + "/" + files[i]);
+                    paths = paths.concat(filesInFolder(path.join(folder, files[i])));
+                }
+                else if (stat.isFile() && (!spec || files[i].match(spec))) {
+                    const relativePath = folder.substring(baseDirectoryLength);
+                    paths.push(path.join(relativePath, files[i]));
                 }
             }
-        } catch (err) {
+        }
+        catch (err) {
             // Skip folders that are inaccessible
         }
         return paths;
     }
-
-    return filesInFolder(path);
 }
 
 // fs.rmdirSync won't delete directories with files in it
-function deleteFolderRecursive(path: string) {
-    if (fs.existsSync(path)) {
-        fs.readdirSync(path).forEach(function (file, index) {
-            var curPath = path + "/" + file;
+function deleteFolderRecursive(dirPath: string) {
+    if (fs.existsSync(dirPath)) {
+        fs.readdirSync(dirPath).forEach((file, index) => {
+            const curPath = path.join(path, file);
             if (fs.statSync(curPath).isDirectory()) { // recurse
                 deleteFolderRecursive(curPath);
-            } else { // delete file
+            }
+            else { // delete file
                 fs.unlinkSync(curPath);
             }
         });
-        fs.rmdirSync(path);
+        fs.rmdirSync(dirPath);
     }
 };
 
@@ -147,10 +148,11 @@ function writeFile(path: string, data: any, opts: { recursive: boolean }) {
 
 /// Request Handling ///
 
-function handleResolutionRequest(filePath: string, res: http.ServerResponse) {    
-    var resolvedPath = path.resolve(filePath);
+function handleResolutionRequest(filePath: string, res: http.ServerResponse) {
+    let resolvedPath = path.resolve(filePath, "");
+    resolvedPath = resolvedPath.substring(resolvedPath.indexOf("tests"));
     resolvedPath = switchToForwardSlashes(resolvedPath);
-    send('success', res, resolvedPath, 'text/javascript');
+    send("success", res, resolvedPath, "text/javascript");
     return;
 }
 
@@ -159,7 +161,7 @@ function send(result: "success", res: http.ServerResponse, contents: string, con
 function send(result: "unknown", res: http.ServerResponse, contents: string, contentType?: string): void;
 function send(result: string, res: http.ServerResponse, contents: string, contentType?: string): void
 function send(result: string, res: http.ServerResponse, contents: string, contentType = "binary"): void {
-    var responseCode = result === "success" ? 200 : result === "fail" ? 500 : result === 'unknown' ? 404 : parseInt(result);
+    const responseCode = result === "success" ? 200 : result === "fail" ? 500 : result === "unknown" ? 404 : parseInt(result);
     res.writeHead(responseCode, { "Content-Type": contentType });
     res.end(contents);
     return;
@@ -167,27 +169,28 @@ function send(result: string, res: http.ServerResponse, contents: string, conten
 
 // Reads the data from a post request and passes it to the given callback
 function processPost(req: http.ServerRequest, res: http.ServerResponse, callback: (data: string) => any): void {
-    var queryData = "";
-    if (typeof callback !== 'function') return null;
+    let queryData = "";
+    if (typeof callback !== "function") return;
 
-    if (req.method == 'POST') {
-        req.on('data', function (data: string) {
+    if (req.method == "POST") {
+        req.on("data", (data: string) => {
             queryData += data;
             if (queryData.length > 1e8) {
                 queryData = "";
-                send("413", res, null);
+                send("413", res, undefined);
                 console.log("ERROR: destroying connection");
                 req.connection.destroy();
             }
         });
 
-        req.on('end', function () {
-            //res.post = url.parse(req.url).query;
+        req.on("end", () => {
+            // res.post = url.parse(req.url).query;
             callback(queryData);
         });
 
-    } else {
-        send("405", res, null);
+    }
+    else {
+        send("405", res, undefined);
     }
 }
 
@@ -204,101 +207,109 @@ enum RequestType {
 }
 
 function getRequestOperation(req: http.ServerRequest, filename: string) {
-    if (req.method === 'GET' && req.url.indexOf('?') === -1) {
-        if (req.url.indexOf('.') !== -1) return RequestType.GetFile;
+    if (req.method === "GET" && req.url.indexOf("?") === -1) {
+        if (req.url.indexOf(".") !== -1) return RequestType.GetFile;
         else return RequestType.GetDir;
     }
     else {
 
-        var queryData: any = url.parse(req.url, true).query;
-        if (req.method === 'GET' && queryData.resolve !== undefined) return RequestType.ResolveFile
+        const queryData: any = url.parse(req.url, /*parseQueryString*/ true).query;
+        if (req.method === "GET" && queryData.resolve !== undefined) return RequestType.ResolveFile;
         // mocha uses ?grep=<regexp> query string as equivalent to the --grep command line option used to filter tests
-        if (req.method === 'GET' && queryData.grep !== undefined) return RequestType.GetFile
-        if (req.method === 'POST' && queryData.action) {
-            var path = req.url.substr(0, req.url.lastIndexOf('?'));
-            var isFile = path.substring(path.lastIndexOf('/')).indexOf('.') !== -1;
+        if (req.method === "GET" && queryData.grep !== undefined) return RequestType.GetFile;
+        if (req.method === "POST" && queryData.action) {
+            const path = req.url.substr(0, req.url.lastIndexOf("?"));
+            const isFile = path.substring(path.lastIndexOf("/")).indexOf(".") !== -1;
             switch (queryData.action.toUpperCase()) {
-                case 'WRITE':
+                case "WRITE":
                     return isFile ? RequestType.WriteFile : RequestType.WriteDir;
-                case 'DELETE':
+                case "DELETE":
                     return isFile ? RequestType.DeleteFile : RequestType.DeleteDir;
-                case 'APPEND':
+                case "APPEND":
                     return isFile ? RequestType.AppendFile : RequestType.Unknown;
             }
         }
-        return RequestType.Unknown
+        return RequestType.Unknown;
     }
 }
 
 function handleRequestOperation(req: http.ServerRequest, res: http.ServerResponse, operation: RequestType, reqPath: string) {
     switch (operation) {
         case RequestType.GetDir:
-            var filesInFolder = dir(reqPath, "", { recursive: true });
-            send('success', res, filesInFolder.join(','));
+            const filesInFolder = dir(reqPath, "", { recursive: true });
+            send("success", res, filesInFolder.join(","));
             break;
         case RequestType.GetFile:
-            fs.readFile(reqPath, function (err, file) {
-                var ext = reqPath.substr(reqPath.lastIndexOf('.'));
-                var contentType = 'binary';
-                if (ext === '.js') contentType = 'text/javascript'
-                else if (ext === '.css') contentType = 'text/javascript'
-                else if (ext === '.html') contentType = 'text/html'
-                err
-                ? send('fail', res, err.message, contentType)
-                : send('success', res, (<any>file), contentType);
+            fs.readFile(reqPath, (err, file) => {
+                const contentType = contentTypeForExtension(path.extname(reqPath));
+                if (err) {
+                    send("fail", res, err.message, contentType);
+                }
+                else {
+                    send("success", res, <any>file, contentType);
+                }
             });
             break;
         case RequestType.ResolveFile:
-            var resolveRequest = req.url.match(/(.*)\?resolve/);
+            const resolveRequest = req.url.match(/(.*)\?resolve/);
             handleResolutionRequest(resolveRequest[1], res);
             break;
         case RequestType.WriteFile:
             processPost(req, res, (data) => {
                 writeFile(reqPath, data, { recursive: true });
             });
-            send('success', res, null);
+            send("success", res, undefined);
             break;
         case RequestType.WriteDir:
             ensureDirectoriesExist(reqPath);
-            send('success', res, null);
+            send("success", res, undefined);
             break;
         case RequestType.DeleteFile:
             if (fs.existsSync(reqPath)) {
                 fs.unlinkSync(reqPath);
             }
-            send('success', res, null);
+            send("success", res, undefined);
             break;
         case RequestType.DeleteDir:
             if (fs.existsSync(reqPath)) {
                 fs.rmdirSync(reqPath);
             }
-            send('success', res, null);
+            send("success", res, undefined);
             break;
         case RequestType.AppendFile:
             processPost(req, res, (data) => {
                 fs.appendFileSync(reqPath, data);
             });
-            send('success', res, null);
+            send("success", res, undefined);
             break;
         case RequestType.Unknown:
         default:
-            send('unknown', res, null);
+            send("unknown", res, undefined);
             break;
+    }
+
+    function contentTypeForExtension(ext: string) {
+        switch (ext) {
+            case ".js": return "text/javascript";
+            case ".css": return "text/css";
+            case ".html": return "text/html";
+            default: return "binary";
+        }
     }
 }
 
-console.log("Static file server running at\n  => http://localhost:" + port + "/\nCTRL + C to shutdown");
+console.log(`Static file server running at\n  => http://localhost:${port}/\nCTRL + C to shutdown`);
 
-http.createServer(function (req: http.ServerRequest, res: http.ServerResponse) {
-    log(req.method + ' ' + req.url);
-    var uri = url.parse(req.url).pathname
-    var reqPath = path.join(process.cwd(), uri);
-    var operation = getRequestOperation(req, reqPath);
+http.createServer((req: http.ServerRequest, res: http.ServerResponse) => {
+    log(`${req.method} ${req.url}`);
+    const uri = url.parse(req.url).pathname;
+    const reqPath = path.join(process.cwd(), uri);
+    const operation = getRequestOperation(req, reqPath);
     handleRequestOperation(req, res, operation, reqPath);
-}).listen(8888);
+}).listen(port);
 
-var browserPath: string;
-if ((browser && browser === 'chrome')) {
+let browserPath: string;
+if (browser === "chrome") {
     let defaultChromePath = "";
     switch (os.platform()) {
         case "win32":
@@ -309,7 +320,7 @@ if ((browser && browser === 'chrome')) {
             defaultChromePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
             break;
         case "linux":
-            defaultChromePath = "/opt/google/chrome/chrome"
+            defaultChromePath = "/opt/google/chrome/chrome";
             break;
         default:
             console.log(`default Chrome location is unknown for platform '${os.platform()}'`);
@@ -317,21 +328,24 @@ if ((browser && browser === 'chrome')) {
     }
     if (fs.existsSync(defaultChromePath)) {
         browserPath = defaultChromePath;
-    } else {
+    }
+    else {
         browserPath = browser;
     }
-} else {
-    var defaultIEPath = 'C:/Program Files/Internet Explorer/iexplore.exe';
+}
+else {
+    const defaultIEPath = "C:/Program Files/Internet Explorer/iexplore.exe";
     if (fs.existsSync(defaultIEPath)) {
         browserPath = defaultIEPath;
-    } else {
+    }
+    else {
         browserPath = browser;
     }
 }
 
-console.log('Using browser: ' + browserPath);
+console.log(`Using browser: ${browserPath}`);
 
-var queryString = grep ? "?grep=" + grep : '';
-child_process.spawn(browserPath, ['http://localhost:' + port + '/tests/webTestResults.html' + queryString], {
-    stdio: 'inherit'
+const queryString = grep ? `?grep=${grep}` : "";
+child_process.spawn(browserPath, [`http://localhost:${port}/tests/webTestResults.html${queryString}`], {
+    stdio: "inherit"
 });

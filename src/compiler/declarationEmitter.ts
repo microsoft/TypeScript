@@ -397,7 +397,7 @@ namespace ts {
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ThisType:
-                case SyntaxKind.StringLiteralType:
+                case SyntaxKind.LiteralType:
                     return writeTextOfNode(currentText, type);
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>type);
