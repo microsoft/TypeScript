@@ -664,7 +664,7 @@ namespace ts {
         // Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
         // the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
         // the given name can be found.
-        function resolveName(location: Node, name: string, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage, nameArg: string | Identifier): Symbol {
+        function resolveName(location: Node | undefined, name: string, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage, nameArg: string | Identifier): Symbol {
             let result: Symbol;
             let lastLocation: Node;
             let propertyWithInvalidInitializer: Node;
@@ -881,7 +881,8 @@ namespace ts {
 
             if (!result) {
                 if (nameNotFoundMessage) {
-                    if (!checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg) &&
+                    if (!errorLocation ||
+                        !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg) &&
                         !checkAndReportErrorForExtendingInterface(errorLocation)) {
                         error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
                     }
@@ -930,7 +931,7 @@ namespace ts {
         }
 
         function checkAndReportErrorForMissingPrefix(errorLocation: Node, name: string, nameArg: string | Identifier): boolean {
-            if (!errorLocation || (errorLocation.kind === SyntaxKind.Identifier && (isTypeReferenceIdentifier(<Identifier>errorLocation)) || isInTypeQuery(errorLocation))) {
+            if ((errorLocation.kind === SyntaxKind.Identifier && (isTypeReferenceIdentifier(<Identifier>errorLocation)) || isInTypeQuery(errorLocation))) {
                 return false;
             }
 
@@ -980,23 +981,15 @@ namespace ts {
          * but returns undefined if that expression is not an EntityNameExpression.
          */
         function climbToEntityNameOfExpressionWithTypeArguments(node: Node): EntityNameExpression | undefined {
-            for (; ; ) {
-                switch (node.kind) {
-                    case SyntaxKind.Identifier:
-                    case SyntaxKind.PropertyAccessExpression:
-                        if (node.parent) {
-                            node = node.parent;
-                        }
-                        else {
-                            return undefined;
-                        }
-                        break;
-                    case SyntaxKind.ExpressionWithTypeArguments:
-                        Debug.assert(isEntityNameExpression((<ExpressionWithTypeArguments>node).expression));
-                        return <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression;
-                    default:
-                        return undefined;
-                }
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.PropertyAccessExpression:
+                    return node.parent ? climbToEntityNameOfExpressionWithTypeArguments(node.parent) : undefined;
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    Debug.assert(isEntityNameExpression((<ExpressionWithTypeArguments>node).expression));
+                    return <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression
+                default:
+                    return undefined;
             }
         }
 

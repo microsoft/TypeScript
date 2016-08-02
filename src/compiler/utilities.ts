@@ -2685,17 +2685,8 @@ namespace ts {
     }
 
     export function isEntityNameExpression(node: Expression): node is EntityNameExpression {
-        for (; ; ) {
-            switch (node.kind) {
-                case SyntaxKind.Identifier:
-                    return true;
-                case SyntaxKind.PropertyAccessExpression:
-                    node = (<PropertyAccessExpression>node).expression;
-                    break;
-                default:
-                    return false;
-            }
-        }
+        return node.kind === SyntaxKind.Identifier ||
+            node.kind === SyntaxKind.PropertyAccessExpression && isEntityNameExpression((<PropertyAccessExpression>node).expression);
     }
 
     export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
