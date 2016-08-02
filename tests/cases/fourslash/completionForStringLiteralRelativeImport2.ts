@@ -37,13 +37,14 @@ for (const kind of kinds) {
     verify.importModuleCompletionListContains("f4");
     verify.importModuleCompletionListContains("e1");
     verify.importModuleCompletionListContains("e2");
-    verify.importModuleCompletionListContains("test0");
-    verify.not.importModuleCompletionListItemsCountIsGreaterThan(7);
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(6);
 
     goTo.marker(kind + "1");
     verify.importModuleCompletionListContains("f1");
     verify.importModuleCompletionListContains("f2");
     verify.importModuleCompletionListContains("f3");
     verify.importModuleCompletionListContains("f4");
-    verify.not.importModuleCompletionListItemsCountIsGreaterThan(4);
+    verify.importModuleCompletionListContains("e1");
+    verify.importModuleCompletionListContains("e2");
+    verify.not.importModuleCompletionListItemsCountIsGreaterThan(6);
 }
