@@ -484,6 +484,11 @@ declare namespace ts.server.protocol {
         [key: string]: string | number | boolean | undefined;
     }
 
+    export const enum ErrorCheckMode {
+        Manual,
+        AutoCheckOpenedFiles
+    }
+
     /**
       * Information found in a configure request.
       */
@@ -504,6 +509,11 @@ declare namespace ts.server.protocol {
          * The format options to use during formatting and other code editing features.
          */
         formatOptions?: FormatOptions;
+
+        /**
+         * Specifies if the host wants the server to decide when to check errors.
+         */
+        errorCheckMode?: ErrorCheckMode;
     }
 
     /**
@@ -991,6 +1001,12 @@ declare namespace ts.server.protocol {
           * errors for the files in the file list
           */
         delay: number;
+
+        /**
+         * Specify if the host wants the errors to be returned as normal responses
+         * or to be returned asynchronously as events
+         */
+        responseRequired?: boolean;
     }
 
     /**

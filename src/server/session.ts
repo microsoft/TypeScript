@@ -237,13 +237,18 @@ namespace ts.server {
             this.response(body, commandName, requestSequence, errorMessage);
         }
 
-        private semanticCheck(file: string, project: Project) {
+        private semanticCheck(file: string, project: Project, sendResultsAsEvents = true) {
             try {
                 const diags = project.compilerService.languageService.getSemanticDiagnostics(file);
 
                 if (diags) {
                     const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                    this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
+                    if (sendResultsAsEvents) {
+                        this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
+                    }
+                    else {
+                        return { file: file, diagnostics: bakedDiags };
+                    }
                 }
             }
             catch (err) {
@@ -251,12 +256,17 @@ namespace ts.server {
             }
         }
 
-        private syntacticCheck(file: string, project: Project) {
+        private syntacticCheck(file: string, project: Project, sendResultsAsEvents = true) {
             try {
                 const diags = project.compilerService.languageService.getSyntacticDiagnostics(file);
                 if (diags) {
                     const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                    this.event({ file: file, diagnostics: bakedDiags }, "syntaxDiag");
+                    if (sendResultsAsEvents) {
+                        this.event({ file: file, diagnostics: bakedDiags }, "syntaxDiag");
+                    }
+                    else {
+                        return { file: file, diagnostics: bakedDiags };
+                    }
                 }
             }
             catch (err) {
@@ -311,6 +321,19 @@ namespace ts.server {
             if ((checkList.length > index) && (matchSeq(seq))) {
                 this.errorTimer = setTimeout(checkOne, ms);
             }
+        }
+
+        private updateErrorCheckSync(checkList: PendingErrorCheck[], requireOpen = true) {
+            const validCheckList = ts.filter(checkList, checkSpec => checkSpec.project.getSourceFileFromName(checkSpec.fileName, requireOpen) !== undefined);
+            return ts.map(validCheckList, checkSpec => {
+                const syntacticCheckResult = this.syntacticCheck(checkSpec.fileName, checkSpec.project, /*sendResultsAsEvents*/ false);
+                const semanticCheckResult = this.semanticCheck(checkSpec.fileName, checkSpec.project, /*sendResultsAsEvents*/ false);
+                return {
+                    file: checkSpec.fileName,
+                    syntaxDiag: syntacticCheckResult ? syntacticCheckResult.diagnostics : [],
+                    semanticDiag: semanticCheckResult ? semanticCheckResult.diagnostics : []
+                };
+            });
         }
 
         private getDefinition(line: number, offset: number, fileName: string): protocol.FileSpan[] {
@@ -842,6 +865,21 @@ namespace ts.server {
             }
         }
 
+        private getDiagnosticsSync(fileNames: string[]) {
+            const checkList = fileNames.reduce((accum: PendingErrorCheck[], fileName: string) => {
+                fileName = ts.normalizePath(fileName);
+                const project = this.projectService.getProjectForFile(fileName);
+                if (project) {
+                    accum.push({ fileName, project });
+                }
+                return accum;
+            }, []);
+
+            if (checkList.length > 0) {
+                return this.updateErrorCheckSync(checkList);
+            }
+        }
+
         private change(line: number, offset: number, endLine: number, endOffset: number, insertString: string, fileName: string) {
             const file = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(file);
@@ -852,8 +890,12 @@ namespace ts.server {
                 if (start >= 0) {
                     compilerService.host.editScript(file, start, end, insertString);
                     this.changeSeq++;
+                    this.updateProjectStructure(this.changeSeq, (n) => n === this.changeSeq);
+
+                    if (this.projectService.errorCheckMode === protocol.ErrorCheckMode.AutoCheckOpenedFiles) {
+                        this.getDiagnostics(/*delay*/ 1000, project.getOpenedFileNames());
+                    }
                 }
-                this.updateProjectStructure(this.changeSeq, (n) => n === this.changeSeq);
             }
         }
 
@@ -867,6 +909,10 @@ namespace ts.server {
                 project.compilerService.host.reloadScript(file, tmpfile, () => {
                     this.output(undefined, CommandNames.Reload, reqSeq);
                 });
+
+                if (this.projectService.errorCheckMode === protocol.ErrorCheckMode.AutoCheckOpenedFiles) {
+                    this.getDiagnostics(/*delay*/ 1000, project.getOpenedFileNames());
+                }
             }
         }
 
@@ -1137,6 +1183,9 @@ namespace ts.server {
             },
             [CommandNames.Geterr]: (request: protocol.Request) => {
                 const geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
+                if (geterrArgs.responseRequired) {
+                    return { response: this.getDiagnosticsSync(geterrArgs.files), responseRequired: true };
+                }
                 return { response: this.getDiagnostics(geterrArgs.delay, geterrArgs.files), responseRequired: false };
             },
             [CommandNames.GeterrForProject]: (request: protocol.Request) => {

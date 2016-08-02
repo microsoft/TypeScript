@@ -461,6 +461,11 @@ namespace ts.server {
             return sourceFiles.map(sourceFile => sourceFile.fileName);
         }
 
+        getOpenedFileNames() {
+            const infos = ts.filter(this.compilerService.host.roots, info => info.isOpen === true);
+            return ts.map(infos, info => info.fileName);
+        }
+
         getSourceFile(info: ScriptInfo) {
             if (this.languageServiceDiabled) {
                 return undefined;
@@ -630,6 +635,7 @@ namespace ts.server {
         // number becomes 0 for a watcher, then we should close it.
         directoryWatchersRefCount: ts.Map<number> = {};
         hostConfiguration: HostConfiguration;
+        errorCheckMode: protocol.ErrorCheckMode = protocol.ErrorCheckMode.Manual;
         timerForDetectingProjectFileListChanges: Map<any> = {};
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
@@ -774,6 +780,10 @@ namespace ts.server {
                 if (args.formatOptions) {
                     mergeFormatOptions(this.hostConfiguration.formatCodeOptions, args.formatOptions);
                     this.log("Format host information updated", "Info");
+                }
+                if (args.errorCheckMode !== undefined) {
+                    this.errorCheckMode = args.errorCheckMode;
+                    this.log(`Error check mode was set to ${args.errorCheckMode}`, "info");
                 }
             }
         }
