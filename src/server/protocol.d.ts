@@ -507,6 +507,7 @@ declare namespace ts.server.protocol {
         projectName: string;
         isInferred: boolean;
         version: number;
+        options: CompilerOptions;
     }
 
     export interface ProjectChanges {

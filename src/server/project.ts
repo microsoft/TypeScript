@@ -294,7 +294,8 @@ namespace ts.server {
             const info = {
                 projectName: this.getProjectName(),
                 version: this.projectStructureVersion,
-                isInferred: this.projectKind === ProjectKind.Inferred
+                isInferred: this.projectKind === ProjectKind.Inferred,
+                options: this.getCompilerOptions()
             };
             // check if requested version is the same that we have reported last time
             if (this.lastReportedFileNames && lastKnownVersion === this.lastReportedVersion) {
