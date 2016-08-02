@@ -1210,18 +1210,7 @@ namespace Harness {
         }
 
         export function minimalDiagnosticsToString(diagnostics: ts.Diagnostic[]) {
-            // This is basically copied from tsc.ts's reportError to replicate what tsc does
-            let errorOutput = "";
-            ts.forEach(diagnostics, diagnostic => {
-                if (diagnostic.file) {
-                    const lineAndCharacter = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
-                    errorOutput += diagnostic.file.fileName + "(" + (lineAndCharacter.line + 1) + "," + (lineAndCharacter.character + 1) + "): ";
-                }
-
-                errorOutput += ts.DiagnosticCategory[diagnostic.category].toLowerCase() + " TS" + diagnostic.code + ": " + ts.flattenDiagnosticMessageText(diagnostic.messageText, Harness.IO.newLine()) + Harness.IO.newLine();
-            });
-
-            return errorOutput;
+            return ts.formatDiagnostics(diagnostics, { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => Harness.IO.newLine() });
         }
 
         export function getErrorBaseline(inputFiles: TestFile[], diagnostics: ts.Diagnostic[]) {

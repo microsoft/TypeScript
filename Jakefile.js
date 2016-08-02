@@ -645,7 +645,7 @@ var run = path.join(builtLocalDirectory, "run.js");
 compileFile(
     /*outFile*/ run,
     /*source*/ harnessSources,
-    /*prereqs*/ [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources),
+    /*prereqs*/ [builtLocalDirectory, tscFile].concat(libraryTargets).concat(servicesSources).concat(harnessSources),
     /*prefixes*/ [],
     /*useBuiltCompiler:*/ true,
     /*opts*/ { inlineSourceMap: true, types: ["node", "mocha", "chai"] });
@@ -847,11 +847,10 @@ task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function()
     exec(cmd);
 }, {async: true});
 
-desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], port=, browser=[chrome|IE]");
+desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], browser=[chrome|IE]");
 task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFileInBrowserTest], function() {
     cleanTestDirs();
     host = "node";
-    port = process.env.port || process.env.p || '8888';
     browser = process.env.browser || process.env.b || "IE";
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
@@ -864,7 +863,7 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFi
     }
 
     tests = tests ? tests : '';
-    var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + JSON.stringify(tests);
+    var cmd = host + " tests/webTestServer.js " + browser + " " + JSON.stringify(tests);
     console.log(cmd);
     exec(cmd);
 }, {async: true});
@@ -990,6 +989,7 @@ var tslintRules = [
     "noInOperatorRule",
     "noIncrementDecrementRule",
     "objectLiteralSurroundingSpaceRule",
+    "noTypeAssertionWhitespaceRule"
 ];
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
@@ -1041,7 +1041,8 @@ var lintTargets = compilerSources
     .concat(serverCoreSources)
     .concat(tslintRulesFiles)
     .concat(servicesSources)
-    .concat(["Gulpfile.ts"]);
+    .concat(["Gulpfile.ts"])
+    .concat([nodeServerInFile, perftscPath, "tests/perfsys.ts", webhostPath]);
 
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");

@@ -2578,7 +2578,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             operand = (<TypeAssertion | NonNullExpression>operand).expression;
                         }
 
-                        // We have an expression of the form: (<Type>SubExpr)
+                        // We have an expression of the form: (<Type>SubExpr) or (SubExpr as Type)
                         // Emitting this as (SubExpr) is really not desirable. We would like to emit the subexpr as is.
                         // Omitting the parentheses, however, could cause change in the semantics of the generated
                         // code if the casted expression has a lower precedence than the rest of the expression, e.g.:
@@ -2592,6 +2592,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             operand.kind !== SyntaxKind.DeleteExpression &&
                             operand.kind !== SyntaxKind.PostfixUnaryExpression &&
                             operand.kind !== SyntaxKind.NewExpression &&
+                            !(operand.kind === SyntaxKind.BinaryExpression && node.expression.kind === SyntaxKind.AsExpression) &&
                             !(operand.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.NewExpression) &&
                             !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression) &&
                             !(operand.kind === SyntaxKind.NumericLiteral && node.parent.kind === SyntaxKind.PropertyAccessExpression)) {
@@ -2667,7 +2668,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     isNameOfExportedDeclarationInNonES6Module(node.operand);
 
                 if (internalExportChanged) {
-                    emitAliasEqual(<Identifier> node.operand);
+                    emitAliasEqual(<Identifier>node.operand);
                 }
 
                 write(tokenToString(node.operator));
@@ -2722,7 +2723,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     }
                 }
                 else if (internalExportChanged) {
-                    emitAliasEqual(<Identifier> node.operand);
+                    emitAliasEqual(<Identifier>node.operand);
                     emit(node.operand);
                     if (node.operator === SyntaxKind.PlusPlusToken) {
                         write(" += 1");
@@ -5526,13 +5527,17 @@ const _super = (function (geti, seti) {
                 // If the class has static properties, and it's a class expression, then we'll need
                 // to specialize the emit a bit.  for a class expression of the form:
                 //
-                //      class C { static a = 1; static b = 2; ... }
+                //      (class C { static a = 1; static b = 2; ... })
                 //
                 // We'll emit:
                 //
-                //      let C_1 = class C{};
-                //      C_1.a = 1;
-                //      C_1.b = 2; // so forth and so on
+                //    ((C_1 = class C {
+                //            // Normal class body
+                //        },
+                //        C_1.a = 1,
+                //        C_1.b = 2,
+                //        C_1));
+                //    var C_1;
                 //
                 // This keeps the expression as an expression, while ensuring that the static parts
                 // of it have been initialized by the time it is used.
@@ -5541,7 +5546,7 @@ const _super = (function (geti, seti) {
                 let generatedName: string;
 
                 if (isClassExpressionWithStaticProperties) {
-                    generatedName = getGeneratedNameForNode(node.name);
+                    generatedName = node.name ? getGeneratedNameForNode(node.name) : makeUniqueName("classExpression");
                     const synthesizedNode = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
                     synthesizedNode.text = generatedName;
                     recordTempDeclaration(synthesizedNode);
@@ -6041,7 +6046,7 @@ const _super = (function (geti, seti) {
                             return;
 
                         case SyntaxKind.StringKeyword:
-                        case SyntaxKind.StringLiteralType:
+                        case SyntaxKind.LiteralType:
                             write("String");
                             return;
 
