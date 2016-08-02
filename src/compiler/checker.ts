@@ -7900,13 +7900,17 @@ namespace ts {
             return TypeFacts.All;
         }
 
-        function getTypeWithFacts(type: Type, include: TypeFacts) {
+        function getTypeWithFacts(type: Type, include: TypeFacts, intersectForTypeParameters = false) {
             if (!(type.flags & TypeFlags.Union)) {
                 return getTypeFacts(type) & include ? type : neverType;
             }
             let firstType: Type;
+            let hasTypeParameter = false;
             let types: Type[];
             for (const t of (type as UnionType).types) {
+                if (t.flags & TypeFlags.TypeParameter) {
+                    hasTypeParameter = true;
+                }
                 if (getTypeFacts(t) & include) {
                     if (!firstType) {
                         firstType = t;
@@ -7919,7 +7923,19 @@ namespace ts {
                     }
                 }
             }
-            return firstType ? types ? getUnionType(types) : firstType : neverType;
+            const narrowed = types ? getUnionType(types) :
+                             firstType ? firstType : neverType;
+            // if there is a type parameter in the narrowed type,
+            // add an intersection with the members of the narrowed type so that the shape of the type is correct
+            if (type.flags & TypeFlags.Union &&
+                narrowed.flags & TypeFlags.Union &&
+                hasTypeParameter &&
+                intersectForTypeParameters) {
+                return getIntersectionType(types.concat([narrowed]));
+            }
+            else {
+                return narrowed;
+            }
         }
 
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
@@ -8183,7 +8199,7 @@ namespace ts {
                 let type = getTypeAtFlowNode(flow.antecedent);
                 if (type !== neverType) {
                     // If we have an antecedent type (meaning we're reachable in some way), we first
-                    // attempt to narrow the antecedent type. If that produces the nothing type, then
+                    // attempt to narrow the antecedent type. If that produces the never type, then
                     // we take the type guard as an indication that control could reach here in a
                     // manner not understood by the control flow analyzer (e.g. a function argument
                     // has an invalid type, or a nested function has possibly made an assignment to a
@@ -8292,10 +8308,10 @@ namespace ts {
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 if (isMatchingReference(reference, expr)) {
-                    return getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy);
+                    return getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy, assumeTrue);
                 }
                 if (isMatchingPropertyAccess(expr)) {
-                    return narrowTypeByDiscriminant(type, <PropertyAccessExpression>expr, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy));
+                    return narrowTypeByDiscriminant(type, <PropertyAccessExpression>expr, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy, assumeTrue));
                 }
                 return type;
             }
@@ -8353,7 +8369,7 @@ namespace ts {
                         value.kind === SyntaxKind.NullKeyword ?
                             assumeTrue ? TypeFacts.EQNull : TypeFacts.NENull :
                             assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
-                    return getTypeWithFacts(type, facts);
+                    return getTypeWithFacts(type, facts, assumeTrue);
                 }
                 if (type.flags & TypeFlags.NotUnionOrUnit) {
                     return type;
@@ -8391,7 +8407,7 @@ namespace ts {
                 const facts = assumeTrue ?
                     getProperty(typeofEQFacts, literal.text) || TypeFacts.TypeofEQHostObject :
                     getProperty(typeofNEFacts, literal.text) || TypeFacts.TypeofNEHostObject;
-                return getTypeWithFacts(type, facts);
+                return getTypeWithFacts(type, facts, assumeTrue);
             }
 
             function narrowTypeBySwitchOnDiscriminant(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
