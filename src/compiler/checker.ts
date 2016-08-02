@@ -12937,6 +12937,14 @@ namespace ts {
             return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
         }
 
+        function getBestChoiceType(type1: Type, type2: Type): Type {
+            const firstAssignableToSecond = isTypeAssignableTo(type1, type2);
+            const secondAssignableToFirst = isTypeAssignableTo(type2, type1);
+            return secondAssignableToFirst && !firstAssignableToSecond ? type1 :
+                firstAssignableToSecond && !secondAssignableToFirst ? type2 :
+                getUnionType([type1, type2], /*subtypeReduction*/ true);
+        }
+
         function checkBinaryExpression(node: BinaryExpression, contextualMapper?: TypeMapper) {
             return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, contextualMapper, node);
         }
@@ -13080,7 +13088,7 @@ namespace ts {
                         leftType;
                 case SyntaxKind.BarBarToken:
                     return getTypeFacts(leftType) & TypeFacts.Falsy ?
-                        getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], /*subtypeReduction*/ true) :
+                        getBestChoiceType(removeDefinitelyFalsyTypes(leftType), rightType) :
                         leftType;
                 case SyntaxKind.EqualsToken:
                     checkAssignmentOperator(rightType);
@@ -13207,7 +13215,7 @@ namespace ts {
             checkExpression(node.condition);
             const type1 = checkExpression(node.whenTrue, contextualMapper);
             const type2 = checkExpression(node.whenFalse, contextualMapper);
-            return getUnionType([type1, type2], /*subtypeReduction*/ true);
+            return getBestChoiceType(type1, type2);
         }
 
         function typeContainsLiteralFromEnum(type: Type, enumType: EnumType) {

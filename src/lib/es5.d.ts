@@ -1112,6 +1112,11 @@ interface Array<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
+    concat(...items: T[][]): T[];
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
     concat(...items: (T | T[])[]): T[];
     /**
       * Adds all the elements of an array separated by the specified separator string.
