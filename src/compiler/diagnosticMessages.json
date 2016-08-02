@@ -2272,6 +2272,10 @@
         "category": "Error",
         "code": 5024
     },
+    "Compiler option '--experimentalDecorators' cannot be combined with a '--target' of ES3.": {
+        "category": "Error",
+        "code": 5025
+    },
     "Could not write file '{0}': {1}": {
         "category": "Error",
         "code": 5033
