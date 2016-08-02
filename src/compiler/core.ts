@@ -93,6 +93,17 @@ namespace ts {
         return undefined;
     }
 
+    /** Works like Array.prototype.find. */
+    export function find<T>(array: T[], predicate: (element: T, index: number) => boolean): T | undefined {
+        for (let i = 0, len = array.length; i < len; i++) {
+            const value = array[i];
+            if (predicate(value, i)) {
+                return value;
+            }
+        }
+        return undefined;
+    }
+
     export function contains<T>(array: T[], value: T): boolean {
         if (array) {
             for (const v of array) {
@@ -1271,8 +1282,12 @@ namespace ts {
         return path;
     }
 
-    export function tryRemoveExtension(path: string, extension: string): string {
-        return fileExtensionIs(path, extension) ? path.substring(0, path.length - extension.length) : undefined;
+    export function tryRemoveExtension(path: string, extension: string): string | undefined {
+        return fileExtensionIs(path, extension) ? removeExtension(path, extension) : undefined;
+    }
+
+    export function removeExtension(path: string, extension: string): string {
+        return path.substring(0, path.length - extension.length);
     }
 
     export function isJsxOrTsxExtension(ext: string): boolean {

@@ -1951,7 +1951,7 @@
         "category": "Error",
         "code": 2690
     },
-    "Module name should not include a '.ts' extension: '{0}'.": {
+    "An import path should not end with a '{0}' extension. Consider importing '{1}' instead.": {
         "category": "Error",
         "code": 2691
     },

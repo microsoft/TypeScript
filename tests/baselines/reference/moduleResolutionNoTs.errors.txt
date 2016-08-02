@@ -1,14 +1,25 @@
-tests/cases/compiler/user.ts(4,15): error TS2690: Module name should not include a '.ts' extension: './m.ts'.
+tests/cases/compiler/user.ts(4,15): error TS2691: An import path should not end with a '.ts' extension. Consider importing './x' instead.
+tests/cases/compiler/user.ts(5,15): error TS2691: An import path should not end with a '.tsx' extension. Consider importing './y' instead.
 
 
-==== tests/cases/compiler/user.ts (1 errors) ====
+==== tests/cases/compiler/user.ts (2 errors) ====
     // '.ts' extension is OK in a reference
-    ///<reference path="./m.ts"/>
+    ///<reference path="./x.ts"/>
     
-    import x from "./m.ts";
+    import x from "./x.ts";
                   ~~~~~~~~
-!!! error TS2690: Module name should not include a '.ts' extension: './m.ts'.
+!!! error TS2691: An import path should not end with a '.ts' extension. Consider importing './x' instead.
+    import y from "./y.tsx";
+                  ~~~~~~~~~
+!!! error TS2691: An import path should not end with a '.tsx' extension. Consider importing './y' instead.
     
-==== tests/cases/compiler/m.ts (0 errors) ====
+    // Making sure the suggested fixes are valid:
+    import x2 from "./x";
+    import y2 from "./y";
+    
+==== tests/cases/compiler/x.ts (0 errors) ====
+    export default 0;
+    
+==== tests/cases/compiler/y.tsx (0 errors) ====
     export default 0;
     

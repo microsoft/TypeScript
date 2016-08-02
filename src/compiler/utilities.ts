@@ -2726,8 +2726,9 @@ namespace ts {
         return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function hasTypeScriptFileExtensionNonDts(fileName: string) {
-        return forEach(supportedTypeScriptExtensionsNonDts, extension => fileExtensionIs(fileName, extension));
+    /** Return ".ts" or ".tsx" if that is the extension. */
+    export function tryExtractTypeScriptExtensionNonDts(fileName: string): string | undefined {
+        return find(supportedTypeScriptExtensionsNonDts, extension => fileExtensionIs(fileName, extension));
     }
 
     /**
