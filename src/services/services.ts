@@ -4518,7 +4518,7 @@ namespace ts {
                 let result: ImportCompletionEntry[];
 
                 // Replace the entire text of the string literal (excluding the quotes)
-                const span: TextSpan = { start: node.getStart() + 1, length: literalValue.length };
+                const span: TextSpan = getDirectoryFragmentTextSpan(literalValue, node.getStart() + 1);
 
                 const isRelativePath = startsWith(literalValue, ".");
                 const scriptDir = getDirectoryPath(node.getSourceFile().path);
@@ -4792,15 +4792,16 @@ namespace ts {
                     const kind = match[2];
                     const toComplete = match[3];
 
-                    const span: TextSpan = { start: range.pos + prefix.length, length: match[0].length - prefix.length };
-
                     const scriptPath = getDirectoryPath(sourceFile.path);
                     if (kind === "path") {
                         // Give completions for a relative path
+                        const span: TextSpan = getDirectoryFragmentTextSpan(toComplete, range.pos + prefix.length);
                         return getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/true, span);
                     }
                     else {
                         // Give completions based on the typings available
+                        // Replace the entire string
+                        const span: TextSpan = { start: range.pos + prefix.length, length: match[0].length - prefix.length };
                         return getCompletionEntriesFromTypings(host, program.getCompilerOptions(), scriptPath, span);
                     }
                 }
@@ -4951,6 +4952,14 @@ namespace ts {
 
             function createCompletionEntryForModule(name: string, kind: string, span: TextSpan): ImportCompletionEntry {
                 return { name, kind, sortText: name, span };
+            }
+
+            // Replace everything after the last directory seperator that appears
+            // FIXME: do we care about the other seperator?
+            function getDirectoryFragmentTextSpan(text: string, textStart: number): TextSpan {
+                const index = text.lastIndexOf(directorySeparator);
+                const offset = index !== -1 ? index + 1 : 0;
+                return { start: textStart + offset, length: text.length - offset }
             }
         }
 
