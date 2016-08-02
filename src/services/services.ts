@@ -8170,7 +8170,7 @@ namespace ts {
             const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
 
             if (node) {
-                if (node.kind === SyntaxKind.Identifier ||
+                if ((node.kind === SyntaxKind.Identifier && (node as Identifier).originalKeywordKind !== SyntaxKind.ThisKeyword) ||
                     node.kind === SyntaxKind.StringLiteral ||
                     isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
                     isThis(node)) {
