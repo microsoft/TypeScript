@@ -1569,6 +1569,7 @@ namespace ts {
             case SyntaxKind.MethodSignature:
             case SyntaxKind.ModuleDeclaration:
             case SyntaxKind.NamespaceImport:
+            case SyntaxKind.NamespaceExportDeclaration:
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.PropertyDeclaration:
