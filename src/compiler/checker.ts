@@ -987,7 +987,7 @@ namespace ts {
                     return node.parent ? getEntityNameForExtendingInterface(node.parent) : undefined;
                 case SyntaxKind.ExpressionWithTypeArguments:
                     Debug.assert(isEntityNameExpression((<ExpressionWithTypeArguments>node).expression));
-                    return <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression
+                    return <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression;
                 default:
                     return undefined;
             }
