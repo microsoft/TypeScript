@@ -1014,10 +1014,6 @@ namespace ts {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
     }
-    export interface SupportedExpressionWithTypeArguments extends ExpressionWithTypeArguments {
-        _supportedExpressionWithTypeArgumentsBrand?: any;
-        expression: EntityNameExpression;
-    }
 
     // @kind(SyntaxKind.NewExpression)
     export interface NewExpression extends CallExpression, PrimaryExpression { }

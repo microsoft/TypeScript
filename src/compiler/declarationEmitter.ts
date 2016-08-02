@@ -452,7 +452,7 @@ namespace ts {
             }
 
             function emitExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
-                if (isSupportedExpressionWithTypeArguments(node)) {
+                if (isEntityNameExpression(node.expression)) {
                     Debug.assert(node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression);
                     emitEntityName(node.expression);
                     if (node.typeArguments) {
@@ -1019,7 +1019,7 @@ namespace ts {
             }
 
             function emitTypeOfTypeReference(node: ExpressionWithTypeArguments) {
-                if (isSupportedExpressionWithTypeArguments(node)) {
+                if (isEntityNameExpression(node.expression)) {
                     emitTypeWithNewGetSymbolAccessibilityDiagnostic(node, getHeritageClauseVisibilityError);
                 }
                 else if (!isImplementsList && node.expression.kind === SyntaxKind.NullKeyword) {

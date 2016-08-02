@@ -1039,8 +1039,8 @@ namespace ts {
                 case SyntaxKind.TypeReference:
                     return (<TypeReferenceNode>node).typeName;
                 case SyntaxKind.ExpressionWithTypeArguments:
-                    Debug.assert(isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node));
-                    return (<SupportedExpressionWithTypeArguments>node).expression;
+                    Debug.assert(isEntityNameExpression((<ExpressionWithTypeArguments>node).expression));
+                    return <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression;
                 case SyntaxKind.Identifier:
                 case SyntaxKind.QualifiedName:
                     return (<EntityName><Node>node);
@@ -2684,10 +2684,6 @@ namespace ts {
             isClassLike(node.parent.parent);
     }
 
-    export function isSupportedExpressionWithTypeArguments(node: ExpressionWithTypeArguments): node is SupportedExpressionWithTypeArguments {
-        return isEntityNameExpression(node.expression);
-    }
-
     export function isEntityNameExpression(node: Expression): node is EntityNameExpression {
         for (; ; ) {
             switch (node.kind) {
@@ -2700,10 +2696,6 @@ namespace ts {
                     return false;
             }
         }
-    }
-
-    export function isPropertyAccessAnEntityNameExpression(node: PropertyAccessExpression): node is PropertyAccessEntityNameExpression {
-        return isEntityNameExpression(node.expression);
     }
 
     export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {

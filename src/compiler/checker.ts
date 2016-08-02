@@ -968,37 +968,34 @@ namespace ts {
 
 
         function checkAndReportErrorForExtendingInterface(errorLocation: Node): boolean {
-            const parentExpression = climbToSupportedExpressionWithTypeArguments(errorLocation);
-            if (!parentExpression) {
-                return false;
-            }
-            const expression = parentExpression.expression;
-
-            if (resolveEntityName(expression, SymbolFlags.Interface, /*ignoreErrors*/ true)) {
+            const expression = climbToEntityNameOfExpressionWithTypeArguments(errorLocation);
+            const isError = !!(expression && resolveEntityName(expression, SymbolFlags.Interface, /*ignoreErrors*/ true));
+            if (isError) {
                 error(errorLocation, Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements, getTextOfNode(expression));
-                return true;
             }
-            return false;
+            return isError;
         }
         /**
-         * Climbs up parents to a SupportedExpressionWIthTypeArguments.
-         * Does *not* just climb to an ExpressionWithTypeArguments; instead, ensures that this really is supported.
+         * Climbs up parents to an ExpressionWithTypeArguments, and returns its expression,
+         * but returns undefined if that expression is not an EntityNameExpression.
          */
-        function climbToSupportedExpressionWithTypeArguments(node: Node): SupportedExpressionWithTypeArguments | undefined {
-            while (node) {
-                switch (node.kind) {
-                    case SyntaxKind.Identifier:
-                    case SyntaxKind.PropertyAccessExpression:
+        function climbToEntityNameOfExpressionWithTypeArguments(node: Node): EntityNameExpression | undefined {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.PropertyAccessExpression:
+                    if (node.parent) {
                         node = node.parent;
-                        break;
-                    case SyntaxKind.ExpressionWithTypeArguments:
-                        Debug.assert(isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node));
-                        return <SupportedExpressionWithTypeArguments>node;
-                    default:
+                    }
+                    else {
                         return undefined;
-                }
+                    }
+                    break;
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    Debug.assert(isEntityNameExpression((<ExpressionWithTypeArguments>node).expression));
+                    return <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression;
+                default:
+                    return undefined;
             }
-            return undefined;
         }
 
 
@@ -3686,7 +3683,7 @@ namespace ts {
                     const baseTypeNodes = getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration);
                     if (baseTypeNodes) {
                         for (const node of baseTypeNodes) {
-                            if (isSupportedExpressionWithTypeArguments(node)) {
+                            if (isEntityNameExpression(node.expression)) {
                                 const baseSymbol = resolveEntityName(node.expression, SymbolFlags.Type, /*ignoreErrors*/ true);
                                 if (!baseSymbol || !(baseSymbol.flags & SymbolFlags.Interface) || getDeclaredTypeOfClassOrInterface(baseSymbol).thisType) {
                                     return false;
@@ -5042,9 +5039,9 @@ namespace ts {
                 case SyntaxKind.ExpressionWithTypeArguments:
                     // We only support expressions that are simple qualified names. For other
                     // expressions this produces undefined.
-                    const expr = <ExpressionWithTypeArguments>node;
-                    if (isSupportedExpressionWithTypeArguments(expr)) {
-                        return expr.expression;
+                    const expr = (<ExpressionWithTypeArguments>node).expression;
+                    if (isEntityNameExpression(expr)) {
+                        return expr;
                     }
 
                 // fall through;
@@ -5101,8 +5098,8 @@ namespace ts {
                     // We only support expressions that are simple qualified names. For other expressions this produces undefined.
                     const typeNameOrExpression: EntityNameOrEntityNameExpression = node.kind === SyntaxKind.TypeReference
                         ? (<TypeReferenceNode>node).typeName
-                        : isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node)
-                            ? (<SupportedExpressionWithTypeArguments>node).expression
+                        : isEntityNameExpression((<ExpressionWithTypeArguments>node).expression)
+                            ? <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression
                             : undefined;
                     symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
                     type = symbol === unknownSymbol ? unknownType :
@@ -16255,7 +16252,7 @@ namespace ts {
             const implementedTypeNodes = getClassImplementsHeritageClauseElements(node);
             if (implementedTypeNodes) {
                 for (const typeRefNode of implementedTypeNodes) {
-                    if (!isSupportedExpressionWithTypeArguments(typeRefNode)) {
+                    if (!isEntityNameExpression(typeRefNode.expression)) {
                         error(typeRefNode.expression, Diagnostics.A_class_can_only_implement_an_identifier_Slashqualified_name_with_optional_type_arguments);
                     }
                     checkTypeReferenceNode(typeRefNode);
@@ -16497,7 +16494,7 @@ namespace ts {
                 checkObjectTypeForDuplicateDeclarations(node);
             }
             forEach(getInterfaceBaseTypeNodes(node), heritageElement => {
-                if (!isSupportedExpressionWithTypeArguments(heritageElement)) {
+                if (!isEntityNameExpression(heritageElement.expression)) {
                     error(heritageElement.expression, Diagnostics.An_interface_can_only_extend_an_identifier_Slashqualified_name_with_optional_type_arguments);
                 }
                 checkTypeReferenceNode(heritageElement);
