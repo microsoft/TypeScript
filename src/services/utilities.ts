@@ -317,6 +317,30 @@ namespace ts {
         }
     }
 
+    export function getTokenAtRange(sourceFile: SourceFile, start: number, end: number): Node {
+        return findTokenAtRange(sourceFile, start, end, sourceFile);
+    }
+
+    function findTokenAtRange(current: Node, start: number, end: number, sourceFile: SourceFile) {
+        let resultNode: Node = undefined;
+        for (let i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
+            const child = current.getChildAt(i);
+            const startPos = child.getStart(sourceFile, true);
+            const endPos = child.getEnd();
+            if (startPos > end) { // means the control is at a token well beyond the range
+                break;
+            }
+            if (startPos === start && endPos === end) {
+                resultNode = child;
+            }
+            if (child.getChildCount(sourceFile) > 0) {
+                const tempResultNode = findTokenAtRange(child, start, end, sourceFile);
+                resultNode = (tempResultNode) ? tempResultNode : resultNode;
+            }
+        }
+        return resultNode;
+    }
+
     /**
       * The token on the left of the position is the token that strictly includes the position
       * or sits to the left of the cursor if it is on a boundary. For example

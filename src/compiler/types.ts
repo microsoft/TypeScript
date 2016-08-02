@@ -2537,6 +2537,8 @@ namespace ts {
         Warning,
         Error,
         Message,
+        CodeFix,
+        CodeRefactor
     }
 
     export enum ModuleResolutionKind {

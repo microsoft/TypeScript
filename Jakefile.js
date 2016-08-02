@@ -96,7 +96,13 @@ var servicesSources = [
     "formatting/rulesMap.ts",
     "formatting/rulesProvider.ts",
     "formatting/smartIndenter.ts",
-    "formatting/tokenRange.ts"
+    "formatting/tokenRange.ts",
+    "codeFixes/changeExtendsToImplementsFix.ts",
+    "codeFixes/codeFixProvider.ts",
+    "codeFixes/interfaceFixes.ts",
+    "codeFixes/references.ts",
+    "codeFixes/superFixes.ts",
+    "codeFixes/unusedIdentifierFixes.ts"
 ].map(function (f) {
     return path.join(servicesDirectory, f);
 }));

@@ -3031,5 +3031,81 @@
     "Unknown typing option '{0}'.": {
         "category": "Error",
         "code": 17010
+    },
+    "Add missing 'super()' call.": {
+        "category": "CodeFix",
+        "code": 90001
+    },
+    "Make 'super()' call the first statement in the constructor.": {
+        "category": "CodeFix",
+        "code": 90002
+    },
+    "Change 'extends' to 'implements'": {
+        "category": "CodeFix",
+        "code": 90003
+    },
+    "Remove unused identifiers": {
+        "category": "CodeFix",
+        "code": 90004
+    },
+    "Implement interface on reference": {
+        "category": "CodeFix",
+        "code": 90005
+    },
+    "Implement interface on class": {
+        "category": "CodeFix",
+        "code": 90006
+    },
+    "Implement inherited abstract class": {
+        "category": "CodeFix",
+        "code": 90007
+    },
+    "Invert If and Else Condition": {
+        "category": "CodeRefactor",
+        "code": 100001
+    },
+    "Extract Interface from Property": {
+        "category": "CodeRefactor",
+        "code": 100002
+    },
+    "Extract Interface from Variable": {
+        "category": "CodeRefactor",
+        "code": 100003
+    },
+    "Extract Interface from Class": {
+        "category": "CodeRefactor",
+        "code": 100004
+    },
+    "Add JSDoc Comments to Method": {
+        "category": "CodeRefactor",
+        "code": 100005
+    },
+    "Add JSDoc Comments to Constructor": {
+        "category": "CodeRefactor",
+        "code": 100006
+    },
+    "Add JSDoc Comments to Function": {
+        "category": "CodeRefactor",
+        "code": 100007
+    },
+    "Add JSDoc Comments to Class": {
+        "category": "CodeRefactor",
+        "code": 100008
+    },
+    "Add JSDoc Comments to Module": {
+        "category": "CodeRefactor",
+        "code": 100009
+    },
+    "Encapsulate Field": {
+        "category": "CodeRefactor",
+        "code": 100010
+    },
+    "Convert Get property to Method": {
+        "category": "CodeRefactor",
+        "code": 100011
+    },
+    "Extract Interface from Parameters": {
+        "category": "CodeRefactor",
+        "code": 100012
     }
 }

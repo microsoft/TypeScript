@@ -592,6 +592,14 @@ namespace ts.server {
             throw new Error("Not Implemented Yet.");
         }
 
+        getCodeRefactors(fileName: string, start: number, end: number): ts.CodeAction[] {
+            throw new Error("Not Implemented Yet.");
+        }
+
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): ts.CodeAction[] {
+            throw new Error("Not Implemented Yet.");
+        }
+
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
             const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             const args: protocol.FileLocationRequestArgs = {
