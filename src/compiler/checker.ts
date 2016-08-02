@@ -980,21 +980,23 @@ namespace ts {
          * but returns undefined if that expression is not an EntityNameExpression.
          */
         function climbToEntityNameOfExpressionWithTypeArguments(node: Node): EntityNameExpression | undefined {
-            switch (node.kind) {
-                case SyntaxKind.Identifier:
-                case SyntaxKind.PropertyAccessExpression:
-                    if (node.parent) {
-                        node = node.parent;
-                    }
-                    else {
+            for (; ; ) {
+                switch (node.kind) {
+                    case SyntaxKind.Identifier:
+                    case SyntaxKind.PropertyAccessExpression:
+                        if (node.parent) {
+                            node = node.parent;
+                        }
+                        else {
+                            return undefined;
+                        }
+                        break;
+                    case SyntaxKind.ExpressionWithTypeArguments:
+                        Debug.assert(isEntityNameExpression((<ExpressionWithTypeArguments>node).expression));
+                        return <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression;
+                    default:
                         return undefined;
-                    }
-                    break;
-                case SyntaxKind.ExpressionWithTypeArguments:
-                    Debug.assert(isEntityNameExpression((<ExpressionWithTypeArguments>node).expression));
-                    return <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression;
-                default:
-                    return undefined;
+                }
             }
         }
 
