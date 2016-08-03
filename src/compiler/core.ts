@@ -1198,8 +1198,7 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedTypeScriptExtensionsNonDts = [".ts", ".tsx"];
-    export const supportedTypeScriptExtensions = supportedTypeScriptExtensionsNonDts.concat([".d.ts"]);
+    export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 

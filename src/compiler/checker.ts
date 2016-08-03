@@ -1366,10 +1366,10 @@ namespace ts {
 
             if (moduleNotFoundError) {
                 // report errors only if it was requested
-                const nonDtsExtension = tryExtractTypeScriptExtensionNonDts(moduleName);
-                if (nonDtsExtension) {
-                    const diag = Diagnostics.An_import_path_should_not_end_with_a_0_extension_Consider_importing_1_instead;
-                    error(moduleReferenceLiteral, diag, nonDtsExtension, removeExtension(moduleName, nonDtsExtension));
+                const tsExtension = tryExtractTypeScriptExtension(moduleName);
+                if (tsExtension) {
+                    const diag = Diagnostics.An_import_path_cannot_end_with_a_0_extension_Consider_importing_1_instead;
+                    error(moduleReferenceLiteral, diag, tsExtension, removeExtension(moduleName, tsExtension));
                 }
                 else {
                     error(moduleReferenceLiteral, moduleNotFoundError, moduleName);

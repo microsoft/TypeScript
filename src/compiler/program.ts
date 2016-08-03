@@ -669,17 +669,7 @@ namespace ts {
      * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
      */
     function loadModuleFromFile(candidate: string, extensions: string[], failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string | undefined {
-        // If the candidate already has an extension load that or quit.
-        if (hasTypeScriptFileExtension(candidate)) {
-            // Don't allow `.ts` to appear at the end
-            if (!fileExtensionIs(candidate, ".d.ts")) {
-                return undefined;
-            }
-            return tryFile(candidate, failedLookupLocation, onlyRecordFailures, state);
-        }
-
-        // Next, try adding an extension.
-        // We don't allow an import of "foo.ts" to be matched by "foo.ts.ts", but we do allow "foo.js" to be matched by "foo.js.ts".
+        // First, try adding an extension. An import of "foo" could be matched by a file "foo.ts", or "foo.js" by "foo.js.ts"
         const resolvedByAddingExtension = tryAddingExtensions(candidate, extensions, failedLookupLocation, onlyRecordFailures, state);
         if (resolvedByAddingExtension) {
             return resolvedByAddingExtension;
@@ -736,7 +726,9 @@ namespace ts {
             }
             const typesFile = tryReadTypesSection(packageJsonPath, candidate, state);
             if (typesFile) {
-                const result = loadModuleFromFile(typesFile, extensions, failedLookupLocation, !directoryProbablyExists(getDirectoryPath(typesFile), state.host), state);
+                const onlyRecordFailures = !directoryProbablyExists(getDirectoryPath(typesFile), state.host);
+                // The package.json "typings" property must specify the file with extension, so just try that exact filename.
+                const result = tryFile(typesFile, failedLookupLocation, onlyRecordFailures, state);
                 if (result) {
                     return result;
                 }
