@@ -61,10 +61,10 @@ namespace ts {
         },
         {
             name: "jsx",
-            type: {
-                "preserve": JsxEmit.Preserve,
-                "react": JsxEmit.React
-            },
+            type: new SMap([
+                ["preserve", JsxEmit.Preserve],
+                ["react", JsxEmit.React]
+            ]),
             paramType: Diagnostics.KIND,
             description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_react,
         },
@@ -91,24 +91,24 @@ namespace ts {
         {
             name: "module",
             shortName: "m",
-            type: {
-                "none": ModuleKind.None,
-                "commonjs": ModuleKind.CommonJS,
-                "amd": ModuleKind.AMD,
-                "system": ModuleKind.System,
-                "umd": ModuleKind.UMD,
-                "es6": ModuleKind.ES6,
-                "es2015": ModuleKind.ES2015,
-            },
+            type: new SMap([
+                ["none", ModuleKind.None],
+                ["commonjs", ModuleKind.CommonJS],
+                ["amd", ModuleKind.AMD],
+                ["system", ModuleKind.System],
+                ["umd", ModuleKind.UMD],
+                ["es6", ModuleKind.ES6],
+                ["es2015", ModuleKind.ES2015],
+            ]),
             description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
             paramType: Diagnostics.KIND,
         },
         {
             name: "newLine",
-            type: {
-                "crlf": NewLineKind.CarriageReturnLineFeed,
-                "lf": NewLineKind.LineFeed
-            },
+            type: new SMap([
+                ["crlf", NewLineKind.CarriageReturnLineFeed],
+                ["lf", NewLineKind.LineFeed]
+            ]),
             description: Diagnostics.Specify_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
             paramType: Diagnostics.NEWLINE,
         },
@@ -250,12 +250,12 @@ namespace ts {
         {
             name: "target",
             shortName: "t",
-            type: {
-                "es3": ScriptTarget.ES3,
-                "es5": ScriptTarget.ES5,
-                "es6": ScriptTarget.ES6,
-                "es2015": ScriptTarget.ES2015,
-            },
+            type: new SMap([
+                ["es3", ScriptTarget.ES3],
+                ["es5", ScriptTarget.ES5],
+                ["es6", ScriptTarget.ES6],
+                ["es2015", ScriptTarget.ES2015],
+            ]),
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
             paramType: Diagnostics.VERSION,
         },
@@ -284,10 +284,10 @@ namespace ts {
         },
         {
             name: "moduleResolution",
-            type: {
-                "node": ModuleResolutionKind.NodeJs,
-                "classic": ModuleResolutionKind.Classic,
-            },
+            type: new SMap([
+                ["node", ModuleResolutionKind.NodeJs],
+                ["classic", ModuleResolutionKind.Classic],
+            ]),
             description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
         },
         {
@@ -392,32 +392,32 @@ namespace ts {
             type: "list",
             element: {
                 name: "lib",
-                type: {
+                type: new SMap([
                     // JavaScript only
-                    "es5": "lib.es5.d.ts",
-                    "es6": "lib.es2015.d.ts",
-                    "es2015": "lib.es2015.d.ts",
-                    "es7": "lib.es2016.d.ts",
-                    "es2016": "lib.es2016.d.ts",
-                    "es2017": "lib.es2017.d.ts",
+                    ["es5", "lib.es5.d.ts"],
+                    ["es6", "lib.es2015.d.ts"],
+                    ["es2015", "lib.es2015.d.ts"],
+                    ["es7", "lib.es2016.d.ts"],
+                    ["es2016", "lib.es2016.d.ts"],
+                    ["es2017", "lib.es2017.d.ts"],
                     // Host only
-                    "dom": "lib.dom.d.ts",
-                    "webworker": "lib.webworker.d.ts",
-                    "scripthost": "lib.scripthost.d.ts",
+                    ["dom", "lib.dom.d.ts"],
+                    ["webworker", "lib.webworker.d.ts"],
+                    ["scripthost", "lib.scripthost.d.ts"],
                     // ES2015 Or ESNext By-feature options
-                    "es2015.core": "lib.es2015.core.d.ts",
-                    "es2015.collection": "lib.es2015.collection.d.ts",
-                    "es2015.generator": "lib.es2015.generator.d.ts",
-                    "es2015.iterable": "lib.es2015.iterable.d.ts",
-                    "es2015.promise": "lib.es2015.promise.d.ts",
-                    "es2015.proxy": "lib.es2015.proxy.d.ts",
-                    "es2015.reflect": "lib.es2015.reflect.d.ts",
-                    "es2015.symbol": "lib.es2015.symbol.d.ts",
-                    "es2015.symbol.wellknown": "lib.es2015.symbol.wellknown.d.ts",
-                    "es2016.array.include": "lib.es2016.array.include.d.ts",
-                    "es2017.object": "lib.es2017.object.d.ts",
-                    "es2017.sharedmemory": "lib.es2017.sharedmemory.d.ts"
-                },
+                    ["es2015.core", "lib.es2015.core.d.ts"],
+                    ["es2015.collection", "lib.es2015.collection.d.ts"],
+                    ["es2015.generator", "lib.es2015.generator.d.ts"],
+                    ["es2015.iterable", "lib.es2015.iterable.d.ts"],
+                    ["es2015.promise", "lib.es2015.promise.d.ts"],
+                    ["es2015.proxy", "lib.es2015.proxy.d.ts"],
+                    ["es2015.reflect", "lib.es2015.reflect.d.ts"],
+                    ["es2015.symbol", "lib.es2015.symbol.d.ts"],
+                    ["es2015.symbol.wellknown", "lib.es2015.symbol.wellknown.d.ts"],
+                    ["es2016.array.include", "lib.es2016.array.include.d.ts"],
+                    ["es2017.object", "lib.es2017.object.d.ts"],
+                    ["es2017.sharedmemory", "lib.es2017.sharedmemory.d.ts"]
+                ]),
             },
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
         },
@@ -458,8 +458,8 @@ namespace ts {
 
     /* @internal */
     export interface OptionNameMap {
-        optionNameMap: Map<CommandLineOption>;
-        shortOptionNames: Map<string>;
+        optionNameMap: SMap<CommandLineOption>;
+        shortOptionNames: SMap<string>;
     }
 
     let optionNameMapCache: OptionNameMap;
@@ -470,12 +470,12 @@ namespace ts {
             return optionNameMapCache;
         }
 
-        const optionNameMap: Map<CommandLineOption> = {};
-        const shortOptionNames: Map<string> = {};
+        const optionNameMap = new SMap<CommandLineOption>();
+        const shortOptionNames = new SMap<string>();
         forEach(optionDeclarations, option => {
-            optionNameMap[option.name.toLowerCase()] = option;
+            optionNameMap.set(option.name.toLowerCase(), option);
             if (option.shortName) {
-                shortOptionNames[option.shortName] = option.name;
+                shortOptionNames.set(option.shortName, option.name);
             }
         });
 
@@ -486,7 +486,7 @@ namespace ts {
     /* @internal */
     export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
         const namesOfType: string[] = [];
-        forEachKey(opt.type, key => {
+        forEachKeyInMap(opt.type, key => {
             namesOfType.push(` '${key}'`);
         });
 
@@ -496,9 +496,9 @@ namespace ts {
     /* @internal */
     export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
         const key = trimString((value || "")).toLowerCase();
-        const map = opt.type;
-        if (hasProperty(map, key)) {
-            return map[key];
+        const mapped = opt.type.get(key);
+        if (mapped !== undefined) {
+            return mapped;
         }
         else {
             errors.push(createCompilerDiagnosticForInvalidCustomType(opt));
@@ -551,13 +551,13 @@ namespace ts {
                     s = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
 
                     // Try to translate short option names to their full equivalents.
-                    if (hasProperty(shortOptionNames, s)) {
-                        s = shortOptionNames[s];
+                    const short = shortOptionNames.get(s);
+                    if (short) {
+                        s = short;
                     }
 
-                    if (hasProperty(optionNameMap, s)) {
-                        const opt = optionNameMap[s];
-
+                    const opt = optionNameMap.get(s);
+                    if (opt) {
                         if (opt.isTSConfigOnly) {
                             errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file, opt.name));
                         }
@@ -808,11 +808,11 @@ namespace ts {
             return;
         }
 
-        const optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
+        const optionNameMap = createMapFromValues(optionDeclarations, opt => opt.name);
 
         for (const id in jsonOptions) {
-            if (hasProperty(optionNameMap, id)) {
-                const opt = optionNameMap[id];
+            const opt = optionNameMap.get(id);
+            if (opt) {
                 defaultOptions[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
             }
             else {
@@ -848,8 +848,9 @@ namespace ts {
 
     function convertJsonOptionOfCustomType(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
         const key = value.toLowerCase();
-        if (hasProperty(opt.type, key)) {
-            return opt.type[key];
+        const mapped = opt.type.get(key);
+        if (mapped) {
+            return mapped;
         }
         else {
             errors.push(createCompilerDiagnosticForInvalidCustomType(opt));
@@ -958,12 +959,12 @@ namespace ts {
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map later when when including
         // wildcard paths.
-        const literalFileMap: Map<string> = {};
+        const literalFileMap = new SMap<string>();
 
         // Wildcard paths (provided via the "includes" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard, and to handle extension priority.
-        const wildcardFileMap: Map<string> = {};
+        const wildcardFileMap = new SMap<string>();
 
         if (include) {
             include = validateSpecs(include, errors, /*allowTrailingRecursion*/ false);
@@ -977,7 +978,7 @@ namespace ts {
         // file map that marks whether it was a regular wildcard match (with a `*` or `?` token),
         // or a recursive directory. This information is used by filesystem watchers to monitor for
         // new entries in these paths.
-        const wildcardDirectories: Map<WatchDirectoryFlags> = getWildcardDirectories(include, exclude, basePath, host.useCaseSensitiveFileNames);
+        const wildcardDirectories = getWildcardDirectories(include, exclude, basePath, host.useCaseSensitiveFileNames);
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
@@ -988,7 +989,7 @@ namespace ts {
         if (fileNames) {
             for (const fileName of fileNames) {
                 const file = combinePaths(basePath, fileName);
-                literalFileMap[keyMapper(file)] = file;
+                literalFileMap.set(keyMapper(file), file);
             }
         }
 
@@ -1011,14 +1012,14 @@ namespace ts {
                 removeWildcardFilesWithLowerPriorityExtension(file, wildcardFileMap, supportedExtensions, keyMapper);
 
                 const key = keyMapper(file);
-                if (!hasProperty(literalFileMap, key) && !hasProperty(wildcardFileMap, key)) {
-                    wildcardFileMap[key] = file;
+                if (!literalFileMap.has(key)) {
+                    setButDontOverride(wildcardFileMap, key, () => file);
                 }
             }
         }
 
-        const literalFiles = reduceProperties(literalFileMap, addFileToOutput, []);
-        const wildcardFiles = reduceProperties(wildcardFileMap, addFileToOutput, []);
+        const literalFiles = valuesArray(literalFileMap);
+        const wildcardFiles = valuesArray(wildcardFileMap);
         wildcardFiles.sort(host.useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive);
         return {
             fileNames: literalFiles.concat(wildcardFiles),
@@ -1049,7 +1050,7 @@ namespace ts {
     /**
      * Gets directories in a set of include patterns that should be watched for changes.
      */
-    function getWildcardDirectories(include: string[], exclude: string[], path: string, useCaseSensitiveFileNames: boolean) {
+    function getWildcardDirectories(include: string[], exclude: string[], path: string, useCaseSensitiveFileNames: boolean): ObjMap<WatchDirectoryFlags> {
         // We watch a directory recursively if it contains a wildcard anywhere in a directory segment
         // of the pattern:
         //
@@ -1063,7 +1064,7 @@ namespace ts {
         //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
         const rawExcludeRegex = getRegularExpressionForWildcard(exclude, path, "exclude");
         const excludeRegex = rawExcludeRegex && new RegExp(rawExcludeRegex, useCaseSensitiveFileNames ? "" : "i");
-        const wildcardDirectories: Map<WatchDirectoryFlags> = {};
+        const wildcardDirectories: ObjMap<WatchDirectoryFlags> = {};
         if (include !== undefined) {
             const recursiveKeys: string[] = [];
             for (const file of include) {
@@ -1087,15 +1088,13 @@ namespace ts {
             }
 
             // Remove any subpaths under an existing recursively watched directory.
-            for (const key in wildcardDirectories) {
-                if (hasProperty(wildcardDirectories, key)) {
-                    for (const recursiveKey of recursiveKeys) {
-                        if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
-                            delete wildcardDirectories[key];
-                        }
+            ts.forEachKey(wildcardDirectories, key => {
+                for (const recursiveKey of recursiveKeys) {
+                    if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
+                        delete wildcardDirectories[key];
                     }
                 }
-            }
+            });
         }
 
         return wildcardDirectories;
@@ -1109,13 +1108,13 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string>, wildcardFiles: Map<string>, extensions: string[], keyMapper: (value: string) => string) {
+    function hasFileWithHigherPriorityExtension(file: string, literalFiles: SMap<string>, wildcardFiles: SMap<string>, extensions: string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority);
         for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
             const higherPriorityExtension = extensions[i];
             const higherPriorityPath = keyMapper(changeExtension(file, higherPriorityExtension));
-            if (hasProperty(literalFiles, higherPriorityPath) || hasProperty(wildcardFiles, higherPriorityPath)) {
+            if (literalFiles.has(higherPriorityPath) || wildcardFiles.has(higherPriorityPath)) {
                 return true;
             }
         }
@@ -1131,26 +1130,16 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string>, extensions: string[], keyMapper: (value: string) => string) {
+    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: SMap<string>, extensions: string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority);
         for (let i = nextExtensionPriority; i < extensions.length; i++) {
             const lowerPriorityExtension = extensions[i];
             const lowerPriorityPath = keyMapper(changeExtension(file, lowerPriorityExtension));
-            delete wildcardFiles[lowerPriorityPath];
+            wildcardFiles.delete(lowerPriorityPath);
         }
     }
 
-    /**
-     * Adds a file to an array of files.
-     *
-     * @param output The output array.
-     * @param file The file path.
-     */
-    function addFileToOutput(output: string[], file: string) {
-        output.push(file);
-        return output;
-    }
 
     /**
      * Gets a case sensitive key.

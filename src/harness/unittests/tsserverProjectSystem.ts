@@ -68,20 +68,10 @@ namespace ts {
         return entry;
     }
 
-    function sizeOfMap(map: Map<any>): number {
-        let n = 0;
-        for (const name in map) {
-            if (hasProperty(map, name)) {
-                n++;
-            }
-        }
-        return n;
-    }
-
-    function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
-        assert.equal(sizeOfMap(map), expectedKeys.length, `${caption}: incorrect size of map`);
+    function checkMapKeys(caption: string, map: SMap<any>, expectedKeys: string[]) {
+        assert.equal(mapSize(map), expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
-            assert.isTrue(hasProperty(map, name), `${caption} is expected to contain ${name}, actual keys: ${getKeys(map)}`);
+            assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${ts.keysArray(map)}`);
         }
     }
 
@@ -126,8 +116,8 @@ namespace ts {
         private getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
         private callbackQueue: TimeOutCallback[] = [];
-        readonly watchedDirectories: Map<{ cb: DirectoryWatcherCallback, recursive: boolean }[]> = {};
-        readonly watchedFiles: Map<FileWatcherCallback[]> = {};
+        readonly watchedDirectories = new SMap<{ cb: DirectoryWatcherCallback, recursive: boolean }[]>();
+        readonly watchedFiles = new SMap<FileWatcherCallback[]>();
 
         constructor(public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[]) {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
@@ -208,8 +198,7 @@ namespace ts {
 
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toPath(directoryName);
-            const callbacks = lookUp(this.watchedDirectories, path) || (this.watchedDirectories[path] = []);
-            callbacks.push({ cb: callback, recursive });
+            const callbacks = multiMapAdd(this.watchedDirectories, path, { cb: callback, recursive });
             return {
                 referenceCount: 0,
                 directoryName,
@@ -221,7 +210,7 @@ namespace ts {
                         }
                     }
                     if (!callbacks.length) {
-                        delete this.watchedDirectories[path];
+                        this.watchedDirectories.delete(path);
                     }
                 }
             };
@@ -229,7 +218,7 @@ namespace ts {
 
         triggerDirectoryWatcherCallback(directoryName: string, fileName: string): void {
             const path = this.toPath(directoryName);
-            const callbacks = lookUp(this.watchedDirectories, path);
+            const callbacks = this.watchedDirectories.get(path);
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback.cb(fileName);
@@ -239,7 +228,7 @@ namespace ts {
 
         triggerFileWatcherCallback(fileName: string, removed?: boolean): void {
             const path = this.toPath(fileName);
-            const callbacks = lookUp(this.watchedFiles, path);
+            const callbacks = this.watchedFiles.get(path);
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback(path, removed);
@@ -249,14 +238,13 @@ namespace ts {
 
         watchFile(fileName: string, callback: FileWatcherCallback) {
             const path = this.toPath(fileName);
-            const callbacks = lookUp(this.watchedFiles, path) || (this.watchedFiles[path] = []);
-            callbacks.push(callback);
+            const callbacks = multiMapAdd(this.watchedFiles, path, callback);
             return {
                 close: () => {
                     const i = callbacks.indexOf(callback);
                     callbacks.splice(i, 1);
                     if (!callbacks.length) {
-                        delete this.watchedFiles[path];
+                        this.watchedFiles.delete(path);
                     }
                 }
             };
@@ -594,7 +582,7 @@ namespace ts {
                 content: `{
                     "compilerOptions": {
                         "target": "es6"
-                    }, 
+                    },
                     "files": [ "main.ts" ]
                 }`
             };
@@ -621,7 +609,7 @@ namespace ts {
                 content: `{
                     "compilerOptions": {
                         "target": "es6"
-                    }, 
+                    },
                     "files": [ "main.ts" ]
                 }`
             };

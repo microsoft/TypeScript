@@ -9,7 +9,7 @@
         "declaration": false,
         "stripInternal": true,
         "types": [
-            "node", "mocha", "chai"
+            "node", "mocha", "chai", "../compiler/types.ts"
         ]
     },
     "files": [

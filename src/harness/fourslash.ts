@@ -95,17 +95,17 @@ namespace FourSlash {
 
     export import IndentStyle = ts.IndentStyle;
 
-    const entityMap: ts.Map<string> = {
-        "&": "&amp;",
-        "\"": "&quot;",
-        "'": "&#39;",
-        "/": "&#47;",
-        "<": "&lt;",
-        ">": "&gt;"
-    };
+    const entityMap = new ts.SMap<string>([
+        ["&", "&amp;"],
+        ["\"", "&quot;"],
+        ["'", "&#39;"],
+        ["/", "&#47;"],
+        ["<", "&lt;"],
+        [">", "&gt;"]
+    ]);
 
     export function escapeXmlAttributeValue(s: string) {
-        return s.replace(/[&<>"'\/]/g, ch => entityMap[ch]);
+        return s.replace(/[&<>"'\/]/g, ch => entityMap.get(ch));
     }
 
     // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
@@ -204,7 +204,7 @@ namespace FourSlash {
 
         public formatCodeOptions: ts.FormatCodeOptions;
 
-        private inputFiles: ts.Map<string> = {};  // Map between inputFile's fileName and its content for easily looking up when resolving references
+        private inputFiles = new ts.SMap<string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
 
         // Add input file which has matched file name with the given reference-file path.
         // This is necessary when resolveReference flag is specified
@@ -219,7 +219,7 @@ namespace FourSlash {
             }
 
             function tryAdd(path: string) {
-                const inputFile = inputFiles[path];
+                const inputFile = inputFiles.get(path);
                 if (inputFile && !Harness.isDefaultLibraryFile(path)) {
                     languageServiceAdapterHost.addScript(path, inputFile, /*isRootFile*/ true);
                     return true;
@@ -259,7 +259,7 @@ namespace FourSlash {
 
             ts.forEach(testData.files, file => {
                 // Create map between fileName and its content for easily looking up when resolveReference flag is specified
-                this.inputFiles[file.fileName] = file.content;
+                this.inputFiles.set(file.fileName, file.content);
                 if (!startResolveFileRef && file.fileOptions[metadataOptionNames.resolveReference] === "true") {
                     startResolveFileRef = file;
                 }
@@ -300,9 +300,9 @@ namespace FourSlash {
             }
             else {
                 // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
-                ts.forEachKey(this.inputFiles, fileName => {
+                this.inputFiles.forEach((inputFile, fileName) => {
                     if (!Harness.isDefaultLibraryFile(fileName)) {
-                        this.languageServiceAdapterHost.addScript(fileName, this.inputFiles[fileName], /*isRootFile*/ true);
+                        this.languageServiceAdapterHost.addScript(fileName, inputFile, /*isRootFile*/ true);
                     }
                 });
                 this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
@@ -593,13 +593,14 @@ namespace FourSlash {
 
         public noItemsWithSameNameButDifferentKind(): void {
             const completions = this.getCompletionListAtCaret();
-            const uniqueItems: ts.Map<string> = {};
+            const uniqueItems = new ts.SMap<string>();
             for (const item of completions.entries) {
-                if (!ts.hasProperty(uniqueItems, item.name)) {
-                    uniqueItems[item.name] = item.kind;
+                const uniqueItem = uniqueItems.get(item.name);
+                if (!uniqueItem) {
+                    uniqueItems.set(item.name, item.kind);
                 }
                 else {
-                    assert.equal(item.kind, uniqueItems[item.name], `Items should have the same kind, got ${item.kind} and ${uniqueItems[item.name]}`);
+                    assert.equal(item.kind, uniqueItem, `Items should have the same kind, got ${item.kind} and ${uniqueItem}`);
                 }
             }
         }
@@ -773,7 +774,7 @@ namespace FourSlash {
         }
 
         public verifyRangesWithSameTextReferenceEachOther() {
-            ts.forEachValue(this.rangesByText(), ranges => this.verifyRangesReferenceEachOther(ranges));
+            this.rangesByText().forEach(ranges => this.verifyRangesReferenceEachOther(ranges));
         }
 
         private verifyReferencesWorker(references: ts.ReferenceEntry[], fileName: string, start: number, end: number, isWriteAccess?: boolean, isDefinition?: boolean) {
@@ -1638,11 +1639,11 @@ namespace FourSlash {
             return this.testData.ranges;
         }
 
-        public rangesByText(): ts.Map<Range[]> {
-            const result: ts.Map<Range[]> = {};
+        public rangesByText(): ts.SMap<Range[]> {
+            const result = new ts.SMap<Range[]>();
             for (const range of this.getRanges()) {
                 const text = this.rangeText(range);
-                (ts.getProperty(result, text) || (result[text] = [])).push(range);
+                ts.multiMapAdd(result, text, range);
             }
             return result;
         }
@@ -1897,17 +1898,17 @@ namespace FourSlash {
 
         public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
 
-            const openBraceMap: ts.Map<ts.CharacterCodes> = {
-                "(": ts.CharacterCodes.openParen,
-                "{": ts.CharacterCodes.openBrace,
-                "[": ts.CharacterCodes.openBracket,
-                "'": ts.CharacterCodes.singleQuote,
-                '"': ts.CharacterCodes.doubleQuote,
-                "`": ts.CharacterCodes.backtick,
-                "<": ts.CharacterCodes.lessThan
-            };
+            const openBraceMap: ts.SMap<ts.CharacterCodes> = new ts.SMap([
+                ["(", ts.CharacterCodes.openParen],
+                ["{", ts.CharacterCodes.openBrace],
+                ["[", ts.CharacterCodes.openBracket],
+                ["'", ts.CharacterCodes.singleQuote],
+                ['"', ts.CharacterCodes.doubleQuote],
+                ["`", ts.CharacterCodes.backtick],
+                ["<", ts.CharacterCodes.lessThan]
+            ]);
 
-            const charCode = openBraceMap[openingBrace];
+            const charCode = openBraceMap.get(openingBrace);
 
             if (!charCode) {
                 this.raiseError(`Invalid openingBrace '${openingBrace}' specified.`);
@@ -2239,8 +2240,7 @@ namespace FourSlash {
         public getMarkerByName(markerName: string) {
             const markerPos = this.testData.markerPositions[markerName];
             if (markerPos === undefined) {
-                const markerNames: string[] = [];
-                for (const m in this.testData.markerPositions) markerNames.push(m);
+                const markerNames = Object.keys(this.testData.markerPositions);
                 throw new Error(`Unknown marker "${markerName}" Available markers: ${markerNames.map(m => "\"" + m + "\"").join(", ")}`);
             }
             else {
@@ -2346,7 +2346,7 @@ ${code}
         // List of all the subfiles we've parsed out
         const files: FourSlashFile[] = [];
         // Global options
-        const globalOptions: { [s: string]: string; } = {};
+        const globalOptions: ts.ObjMap<string> = {};
         // Marker positions
 
         // Split up the input file by line
@@ -2361,7 +2361,7 @@ ${code}
         // Stuff related to the subfile we're parsing
         let currentFileContent: string = undefined;
         let currentFileName = fileName;
-        let currentFileOptions: { [s: string]: string } = {};
+        let currentFileOptions: ts.ObjMap<string> = {};
 
         function resetLocalData() {
             currentFileContent = undefined;
@@ -2473,7 +2473,7 @@ ${code}
         return ts.forEach(files, f => getNonFileNameOptionInObject(f.fileOptions));
     }
 
-    function getNonFileNameOptionInObject(optionObject: { [s: string]: string }): string {
+    function getNonFileNameOptionInObject(optionObject: ts.ObjMap<string>): string {
         for (const option in optionObject) {
             if (option !== metadataOptionNames.fileName) {
                 return option;
@@ -2772,7 +2772,7 @@ namespace FourSlashInterface {
             return this.state.getRanges();
         }
 
-        public rangesByText(): ts.Map<FourSlash.Range[]> {
+        public rangesByText(): ts.SMap<FourSlash.Range[]> {
             return this.state.rangesByText();
         }
 

@@ -122,11 +122,11 @@ namespace ts {
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
-    const categoryFormatMap: Map<string> = {
-        [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
-        [DiagnosticCategory.Error]: redForegroundEscapeSequence,
-        [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
-    };
+    const categoryFormatMap = new NMap<string>([
+        [DiagnosticCategory.Warning, yellowForegroundEscapeSequence],
+        [DiagnosticCategory.Error, redForegroundEscapeSequence],
+        [DiagnosticCategory.Message, blueForegroundEscapeSequence],
+    ]);
 
     function formatAndReset(text: string, formatStyle: string) {
         return formatStyle + text + resetEscapeSequence;
@@ -194,7 +194,7 @@ namespace ts {
             output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
         }
 
-        const categoryColor = categoryFormatMap[diagnostic.category];
+        const categoryColor = categoryFormatMap.get(diagnostic.category);
         const category = DiagnosticCategory[diagnostic.category].toLowerCase();
         output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
         output += sys.newLine + sys.newLine;
@@ -262,7 +262,7 @@ namespace ts {
 
         // This map stores and reuses results of fileExists check that happen inside 'createProgram'
         // This allows to save time in module resolution heavy scenarios when existence of the same file might be checked multiple times.
-        let cachedExistingFiles: Map<boolean>;
+        let cachedExistingFiles: SMap<boolean>;
         let hostFileExists: typeof compilerHost.fileExists;
 
         if (commandLine.options.locale) {
@@ -432,7 +432,7 @@ namespace ts {
             }
 
             // reset the cache of existing files
-            cachedExistingFiles = {};
+            cachedExistingFiles = new SMap();
 
             const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
@@ -445,10 +445,7 @@ namespace ts {
         }
 
         function cachedFileExists(fileName: string): boolean {
-            if (hasProperty(cachedExistingFiles, fileName)) {
-                return cachedExistingFiles[fileName];
-            }
-            return cachedExistingFiles[fileName] = hostFileExists(fileName);
+            return getOrUpdateMap(cachedExistingFiles, fileName, () => hostFileExists(fileName));
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
@@ -676,7 +673,7 @@ namespace ts {
         const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
         const descriptionColumn: string[] = [];
 
-        const optionsDescriptionMap: Map<string[]> = {};  // Map between option.description and list of option.type if it is a kind
+        const optionsDescriptionMap = new SMap<string[]>();  // Map between option.description and list of option.type if it is a kind
 
         for (let i = 0; i < optsList.length; i++) {
             const option = optsList[i];
@@ -704,10 +701,10 @@ namespace ts {
                 description = getDiagnosticText(option.description);
                 const options: string[] = [];
                 const element = (<CommandLineOptionOfListType>option).element;
-                forEachKey(<Map<number | string>>element.type, key => {
+                forEachKeyInMap(<SMap<number | string>>element.type, key => {
                     options.push(`'${key}'`);
                 });
-                optionsDescriptionMap[description] = options;
+                optionsDescriptionMap.set(description, options);
             }
             else {
                 description = getDiagnosticText(option.description);
@@ -729,7 +726,7 @@ namespace ts {
         for (let i = 0; i < usageColumn.length; i++) {
             const usage = usageColumn[i];
             const description = descriptionColumn[i];
-            const kindsList = optionsDescriptionMap[description];
+            const kindsList = optionsDescriptionMap.get(description);
             output += usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine;
 
             if (kindsList) {
@@ -785,44 +782,40 @@ namespace ts {
 
         return;
 
-        function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
-            const result: Map<string | number | boolean> = {};
+        function serializeCompilerOptions(options: CompilerOptions): ObjMap<string | number | boolean> {
+            const result: ObjMap<string | number | boolean> = {};
             const optionsNameMap = getOptionNameMap().optionNameMap;
 
-            for (const name in options) {
-                if (hasProperty(options, name)) {
-                    // tsconfig only options cannot be specified via command line,
-                    // so we can assume that only types that can appear here string | number | boolean
-                    const value = <string | number | boolean>options[name];
-                    switch (name) {
-                        case "init":
-                        case "watch":
-                        case "version":
-                        case "help":
-                        case "project":
-                            break;
-                        default:
-                            let optionDefinition = optionsNameMap[name.toLowerCase()];
-                            if (optionDefinition) {
-                                if (typeof optionDefinition.type === "string") {
-                                    // string, number or boolean
-                                    result[name] = value;
-                                }
-                                else {
-                                    // Enum
-                                    const typeMap = <Map<number>>optionDefinition.type;
-                                    for (const key in typeMap) {
-                                        if (hasProperty(typeMap, key)) {
-                                            if (typeMap[key] === value)
-                                                result[name] = key;
-                                        }
-                                    }
-                                }
+            // tsconfig only options cannot be specified via command line,
+            // so we can assume that only types that can appear here string | number | boolean
+            ts.forEachValueAndKey(<ObjMap<string | number | boolean>>options, (value, name) => {
+                switch (name) {
+                    case "init":
+                    case "watch":
+                    case "version":
+                    case "help":
+                    case "project":
+                        break;
+                    default:
+                        let optionDefinition = optionsNameMap.get(name.toLowerCase());
+                        if (optionDefinition) {
+                            if (typeof optionDefinition.type === "string") {
+                                // string, number or boolean
+                                result[name] = value;
                             }
-                            break;
-                    }
+                            else {
+                                // Enum
+                                const typeMap = <SMap<number>>optionDefinition.type;
+                                typeMap.forEach((enumValue, key) => {
+                                    if (enumValue === value) {
+                                        result[name] = key;
+                                    }
+                                });
+                            }
+                        }
+                        break;
                 }
-            }
+            });
             return result;
         }
     }

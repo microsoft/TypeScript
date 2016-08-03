@@ -11,6 +11,7 @@
         "stripInternal": true
     },
     "files": [
+        "dataStructures.ts",
         "core.ts",
         "performance.ts",
         "sys.ts",

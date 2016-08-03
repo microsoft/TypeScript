@@ -59,7 +59,7 @@ namespace ts {
         let resultHasExternalModuleIndicator: boolean;
         let currentText: string;
         let currentLineMap: number[];
-        let currentIdentifiers: Map<string>;
+        let currentIdentifiers: SMap<string>;
         let isCurrentFileExternalModule: boolean;
         let reportedDeclarationError = false;
         let errorNameNode: DeclarationName;
@@ -75,7 +75,7 @@ namespace ts {
         // and we could be collecting these paths from multiple files into single one with --out option
         let referencesOutput = "";
 
-        let usedTypeDirectiveReferences: Map<string>;
+        let usedTypeDirectiveReferences: ObjMap<string>;
 
         // Emit references corresponding to each file
         const emittedReferencedFiles: SourceFile[] = [];
@@ -537,14 +537,14 @@ namespace ts {
         // do not need to keep track of created temp names.
         function getExportDefaultTempVariableName(): string {
             const baseName = "_default";
-            if (!hasProperty(currentIdentifiers, baseName)) {
+            if (!currentIdentifiers.has(baseName)) {
                 return baseName;
             }
             let count = 0;
             while (true) {
                 count++;
                 const name = baseName + "_" + count;
-                if (!hasProperty(currentIdentifiers, name)) {
+                if (!currentIdentifiers.has(name)) {
                     return name;
                 }
             }

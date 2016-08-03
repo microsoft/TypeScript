@@ -96,16 +96,16 @@ namespace ts {
     }
 
     function createTestCompilerHost(texts: NamedSourceText[], target: ScriptTarget): CompilerHost {
-        const files: Map<SourceFileWithText> = {};
+        const files = new ts.SMap<SourceFileWithText>();
         for (const t of texts) {
             const file = <SourceFileWithText>createSourceFile(t.name, t.text.getFullText(), target);
             file.sourceText = t.text;
-            files[t.name] = file;
+            files.set(t.name, file);
         }
 
         return {
             getSourceFile(fileName): SourceFile {
-                return files[fileName];
+                return files.get(fileName);
             },
             getDefaultLibFileName(): string {
                 return "lib.d.ts";
@@ -128,9 +128,9 @@ namespace ts {
             getNewLine(): string {
                 return sys ? sys.newLine : newLine;
             },
-            fileExists: fileName => hasProperty(files, fileName),
+            fileExists: fileName => files.has(fileName),
             readFile: fileName => {
-                const file = lookUp(files, fileName);
+                const file = files.get(fileName);
                 return file && file.text;
             }
         };
@@ -152,16 +152,6 @@ namespace ts {
         return program;
     }
 
-    function getSizeOfMap(map: Map<any>): number {
-        let size = 0;
-        for (const id in map) {
-            if (hasProperty(map, id)) {
-                size++;
-            }
-        }
-        return size;
-    }
-
     function checkResolvedModule(expected: ResolvedModule, actual: ResolvedModule): void {
         assert.isTrue(actual !== undefined);
         assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
@@ -174,7 +164,7 @@ namespace ts {
         assert.isTrue(expected.primary === actual.primary, `'primary': expected '${expected.primary}' to be equal to '${actual.primary}'`);
     }
 
-    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: Map<T>, getCache: (f: SourceFile) => Map<T>, entryChecker: (expected: T, original: T) => void): void {
+    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: ts.SMap<T>, getCache: (f: SourceFile) => ts.SMap<T>, entryChecker: (expected: T, original: T) => void): void {
         const file = program.getSourceFile(fileName);
         assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
         const cache = getCache(file);
@@ -183,31 +173,27 @@ namespace ts {
         }
         else {
             assert.isTrue(cache !== undefined, `expected ${caption} to be set`);
-            const actualCacheSize = getSizeOfMap(cache);
-            const expectedSize = getSizeOfMap(expectedContent);
+            const actualCacheSize = ts.mapSize(cache);
+            const expectedSize = ts.mapSize(expectedContent);
             assert.isTrue(actualCacheSize === expectedSize, `expected actual size: ${actualCacheSize} to be equal to ${expectedSize}`);
 
-            for (const id in expectedContent) {
-                if (hasProperty(expectedContent, id)) {
-
-                    if (expectedContent[id]) {
-                        const expected = expectedContent[id];
-                        const actual = cache[id];
-                        entryChecker(expected, actual);
-                    }
+            expectedContent.forEach((expected, id) => {
+                if (expected) {
+                    const actual = cache.get(id);
+                    entryChecker(expected, actual);
                 }
                 else {
-                    assert.isTrue(cache[id] === undefined);
+                    assert.isTrue(cache.get(id) === undefined);
                 }
-            }
+            });
         }
     }
 
-    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: Map<ResolvedModule>): void {
+    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: ts.SMap<ResolvedModule>): void {
         checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, checkResolvedModule);
     }
 
-    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: Map<ResolvedTypeReferenceDirective>): void {
+    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: ts.SMap<ResolvedTypeReferenceDirective>): void {
         checkCache("resolved type directives", program, fileName, expectedContent, f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
     }
 
@@ -320,7 +306,7 @@ namespace ts {
             const options: CompilerOptions = { target };
 
             const program_1 = newProgram(files, ["a.ts"], options);
-            checkResolvedModulesCache(program_1, "a.ts", { "b": { resolvedFileName: "b.ts" } });
+            checkResolvedModulesCache(program_1, "a.ts", singletonMap("b", { resolvedFileName: "b.ts" }));
             checkResolvedModulesCache(program_1, "b.ts", undefined);
 
             const program_2 = updateProgram(program_1, ["a.ts"], options, files => {
@@ -329,7 +315,7 @@ namespace ts {
             assert.isTrue(program_1.structureIsReused);
 
             // content of resolution cache should not change
-            checkResolvedModulesCache(program_1, "a.ts", { "b": { resolvedFileName: "b.ts" } });
+            checkResolvedModulesCache(program_1, "a.ts", singletonMap("b", { resolvedFileName: "b.ts" }));
             checkResolvedModulesCache(program_1, "b.ts", undefined);
 
             // imports has changed - program is not reused
@@ -346,7 +332,7 @@ namespace ts {
                 files[0].text = files[0].text.updateImportsAndExports(newImports);
             });
             assert.isTrue(!program_3.structureIsReused);
-            checkResolvedModulesCache(program_4, "a.ts", { "b": { resolvedFileName: "b.ts" }, "c": undefined });
+            checkResolvedModulesCache(program_4, "a.ts", new SMap([["b", { resolvedFileName: "b.ts" }], ["c", undefined]]));
         });
 
         it("resolved type directives cache follows type directives", () => {
@@ -357,7 +343,7 @@ namespace ts {
             const options: CompilerOptions = { target, typeRoots: ["/types"] };
 
             const program_1 = newProgram(files, ["/a.ts"], options);
-            checkResolvedTypeDirectivesCache(program_1, "/a.ts", { "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } });
+            checkResolvedTypeDirectivesCache(program_1, "/a.ts", singletonMap("typedefs", { resolvedFileName: "/types/typedefs/index.d.ts", primary: true }));
             checkResolvedTypeDirectivesCache(program_1, "/types/typedefs/index.d.ts", undefined);
 
             const program_2 = updateProgram(program_1, ["/a.ts"], options, files => {
@@ -366,7 +352,7 @@ namespace ts {
             assert.isTrue(program_1.structureIsReused);
 
             // content of resolution cache should not change
-            checkResolvedTypeDirectivesCache(program_1, "/a.ts", { "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } });
+            checkResolvedTypeDirectivesCache(program_1, "/a.ts", singletonMap("typedefs", { resolvedFileName: "/types/typedefs/index.d.ts", primary: true }));
             checkResolvedTypeDirectivesCache(program_1, "/types/typedefs/index.d.ts", undefined);
 
             // type reference directives has changed - program is not reused
@@ -384,7 +370,7 @@ namespace ts {
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
             assert.isTrue(!program_3.structureIsReused);
-            checkResolvedTypeDirectivesCache(program_1, "/a.ts", { "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } });
+            checkResolvedTypeDirectivesCache(program_1, "/a.ts", singletonMap("typedefs", { resolvedFileName: "/types/typedefs/index.d.ts", primary: true }));
         });
     });
 

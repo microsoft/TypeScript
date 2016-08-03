@@ -87,66 +87,28 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function mapIsEqualTo<T>(map1: Map<T>, map2: Map<T>): boolean {
-        if (!map1 || !map2) {
-            return map1 === map2;
-        }
-        return containsAll(map1, map2) && containsAll(map2, map1);
-    }
-
-    function containsAll<T>(map: Map<T>, other: Map<T>): boolean {
-        for (const key in map) {
-            if (!hasProperty(map, key)) {
-                continue;
-            }
-            if (!hasProperty(other, key) || map[key] !== other[key]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    export function arrayIsEqualTo<T>(array1: T[], array2: T[], equaler?: (a: T, b: T) => boolean): boolean {
-        if (!array1 || !array2) {
-            return array1 === array2;
-        }
-
-        if (array1.length !== array2.length) {
-            return false;
-        }
-
-        for (let i = 0; i < array1.length; i++) {
-            const equals = equaler ? equaler(array1[i], array2[i]) : array1[i] === array2[i];
-            if (!equals) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
-        return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
+        return sourceFile.resolvedModules && sourceFile.resolvedModules.has(moduleNameText);
     }
 
     export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModule {
-        return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
+        return sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText);
     }
 
     export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModule): void {
         if (!sourceFile.resolvedModules) {
-            sourceFile.resolvedModules = {};
+            sourceFile.resolvedModules = new SMap();
         }
 
-        sourceFile.resolvedModules[moduleNameText] = resolvedModule;
+        sourceFile.resolvedModules.set(moduleNameText, resolvedModule);
     }
 
     export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective): void {
         if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
-            sourceFile.resolvedTypeReferenceDirectiveNames = {};
+            sourceFile.resolvedTypeReferenceDirectiveNames = new SMap();
         }
 
-        sourceFile.resolvedTypeReferenceDirectiveNames[typeReferenceDirectiveName] = resolvedTypeReferenceDirective;
+        sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, resolvedTypeReferenceDirective);
     }
 
     /* @internal */
@@ -160,13 +122,13 @@ namespace ts {
     }
 
     /* @internal */
-    export function hasChangesInResolutions<T>(names: string[], newResolutions: T[], oldResolutions: Map<T>, comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
+    export function hasChangesInResolutions<T>(names: string[], newResolutions: T[], oldResolutions: SMap<T>, comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
         if (names.length !== newResolutions.length) {
             return false;
         }
         for (let i = 0; i < names.length; i++) {
             const newResolution = newResolutions[i];
-            const oldResolution = oldResolutions && hasProperty(oldResolutions, names[i]) ? oldResolutions[names[i]] : undefined;
+            const oldResolution = oldResolutions && oldResolutions.get(names[i]);
             const changed =
                 oldResolution
                     ? !newResolution || !comparer(oldResolution, newResolution)
@@ -1966,7 +1928,7 @@ namespace ts {
 
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
-        const fileDiagnostics: Map<Diagnostic[]> = {};
+        const fileDiagnostics = new SMap<Diagnostic[]>();
 
         let diagnosticsModified = false;
         let modificationCount = 0;
@@ -1984,11 +1946,12 @@ namespace ts {
         }
 
         function reattachFileDiagnostics(newFile: SourceFile): void {
-            if (!hasProperty(fileDiagnostics, newFile.fileName)) {
+            const diagnostics = fileDiagnostics.get(newFile.fileName);
+            if (!diagnostics) {
                 return;
             }
 
-            for (const diagnostic of fileDiagnostics[newFile.fileName]) {
+            for (const diagnostic of diagnostics) {
                 diagnostic.file = newFile;
             }
         }
@@ -1996,10 +1959,9 @@ namespace ts {
         function add(diagnostic: Diagnostic): void {
             let diagnostics: Diagnostic[];
             if (diagnostic.file) {
-                diagnostics = fileDiagnostics[diagnostic.file.fileName];
+                diagnostics = fileDiagnostics.get(diagnostic.file.fileName);
                 if (!diagnostics) {
-                    diagnostics = [];
-                    fileDiagnostics[diagnostic.file.fileName] = diagnostics;
+                    diagnostics = setAndReturn(fileDiagnostics, diagnostic.file.fileName, []);
                 }
             }
             else {
@@ -2019,7 +1981,7 @@ namespace ts {
         function getDiagnostics(fileName?: string): Diagnostic[] {
             sortAndDeduplicate();
             if (fileName) {
-                return fileDiagnostics[fileName] || [];
+                return fileDiagnostics.get(fileName) || [];
             }
 
             const allDiagnostics: Diagnostic[] = [];
@@ -2029,11 +1991,9 @@ namespace ts {
 
             forEach(nonFileDiagnostics, pushDiagnostic);
 
-            for (const key in fileDiagnostics) {
-                if (hasProperty(fileDiagnostics, key)) {
-                    forEach(fileDiagnostics[key], pushDiagnostic);
-                }
-            }
+            fileDiagnostics.forEach(diagnostics => {
+                forEach(diagnostics, pushDiagnostic);
+            });
 
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
@@ -2046,11 +2006,7 @@ namespace ts {
             diagnosticsModified = false;
             nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
 
-            for (const key in fileDiagnostics) {
-                if (hasProperty(fileDiagnostics, key)) {
-                    fileDiagnostics[key] = sortAndDeduplicateDiagnostics(fileDiagnostics[key]);
-                }
-            }
+            mutateValues(fileDiagnostics, sortAndDeduplicateDiagnostics);
         }
     }
 
@@ -2060,20 +2016,20 @@ namespace ts {
     // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
     // There is no reason for this other than that JSON.stringify does not handle it either.
     const escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    const escapedCharsMap: Map<string> = {
-        "\0": "\\0",
-        "\t": "\\t",
-        "\v": "\\v",
-        "\f": "\\f",
-        "\b": "\\b",
-        "\r": "\\r",
-        "\n": "\\n",
-        "\\": "\\\\",
-        "\"": "\\\"",
-        "\u2028": "\\u2028", // lineSeparator
-        "\u2029": "\\u2029", // paragraphSeparator
-        "\u0085": "\\u0085"  // nextLine
-    };
+    const escapedCharsMap = new SMap<string>([
+        ["\0", "\\0"],
+        ["\t", "\\t"],
+        ["\v", "\\v"],
+        ["\f", "\\f"],
+        ["\b", "\\b"],
+        ["\r", "\\r"],
+        ["\n", "\\n"],
+        ["\\", "\\\\"],
+        ["\"", "\\\""],
+        ["\u2028", "\\u2028"], // lineSeparator
+        ["\u2029", "\\u2029"], // paragraphSeparator
+        ["\u0085", "\\u0085"]  // nextLine
+    ]);
 
 
     /**
@@ -2087,7 +2043,7 @@ namespace ts {
         return s;
 
         function getReplacement(c: string) {
-            return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
+            return escapedCharsMap.get(c) || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
         }
     }
 

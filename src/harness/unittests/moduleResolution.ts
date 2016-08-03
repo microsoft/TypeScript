@@ -7,14 +7,14 @@ namespace ts {
     }
 
     function createModuleResolutionHost(hasDirectoryExists: boolean, ...files: File[]): ModuleResolutionHost {
-        const map = arrayToMap(files, f => f.name);
+        const map = createMapFromValues(files, f => f.name);
 
         if (hasDirectoryExists) {
-            const directories: Map<string> = {};
+            const directories = new SSet();
             for (const f of files) {
                 let name = getDirectoryPath(f.name);
                 while (true) {
-                    directories[name] = name;
+                    directories.add(name);
                     const baseName = getDirectoryPath(name);
                     if (baseName === name) {
                         break;
@@ -24,20 +24,19 @@ namespace ts {
             }
             return {
                 readFile,
-                directoryExists: path => {
-                    return hasProperty(directories, path);
-                },
+                directoryExists: path => directories.has(path),
                 fileExists: path => {
-                    assert.isTrue(hasProperty(directories, getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
-                    return hasProperty(map, path);
+                    assert.isTrue(directories.has(getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
+                    return map.has(path);
                 }
             };
         }
         else {
-            return { readFile, fileExists: path => hasProperty(map, path), };
+            return { readFile, fileExists: path => map.has(path), };
         }
         function readFile(path: string): string {
-            return hasProperty(map, path) ? map[path].content : undefined;
+            const file = map.get(path);
+            return file ? file.content : undefined;
         }
     }
 
@@ -282,12 +281,13 @@ namespace ts {
     });
 
     describe("Module resolution - relative imports", () => {
-        function test(files: Map<string>, currentDirectory: string, rootFiles: string[], expectedFilesCount: number, relativeNamesToCheck: string[]) {
+        function test(files: ts.SMap<string>, currentDirectory: string, rootFiles: string[], expectedFilesCount: number, relativeNamesToCheck: string[]) {
             const options: CompilerOptions = { module: ModuleKind.CommonJS };
             const host: CompilerHost = {
                 getSourceFile: (fileName: string, languageVersion: ScriptTarget) => {
                     const path = normalizePath(combinePaths(currentDirectory, fileName));
-                    return hasProperty(files, path) ? createSourceFile(fileName, files[path], languageVersion) : undefined;
+                    const file = files.get(path);
+                    return file ? createSourceFile(fileName, file, languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: (fileName, content): void => { throw new Error("NotImplemented"); },
@@ -298,7 +298,7 @@ namespace ts {
                 useCaseSensitiveFileNames: () => false,
                 fileExists: fileName => {
                     const path = normalizePath(combinePaths(currentDirectory, fileName));
-                    return hasProperty(files, path);
+                    return files.has(path);
                 },
                 readFile: (fileName): string => { throw new Error("NotImplemented"); }
             };
@@ -318,51 +318,47 @@ namespace ts {
         }
 
         it("should find all modules", () => {
-            const files: Map<string> = {
-                "/a/b/c/first/shared.ts": `
+            const files = new SMap([
+                ["/a/b/c/first/shared.ts", `
 class A {}
-export = A`,
-                "/a/b/c/first/second/class_a.ts": `
+export = A`],
+                ["/a/b/c/first/second/class_a.ts", `
 import Shared = require('../shared');
 import C = require('../../third/class_c');
 class B {}
-export = B;`,
-                "/a/b/c/third/class_c.ts": `
+export = B;`],
+                ["/a/b/c/third/class_c.ts", `
 import Shared = require('../first/shared');
 class C {}
 export = C;
-                `
-            };
+                `]
+            ]);
             test(files, "/a/b/c/first/second", ["class_a.ts"], 3, ["../../../c/third/class_c.ts"]);
         });
 
         it("should find modules in node_modules", () => {
-            const files: Map<string> = {
-                "/parent/node_modules/mod/index.d.ts": "export var x",
-                "/parent/app/myapp.ts": `import {x} from "mod"`
-            };
+            const files = new SMap([
+                ["/parent/node_modules/mod/index.d.ts", "export var x"],
+                ["/parent/app/myapp.ts", `import {x} from "mod"`]
+            ]);
             test(files, "/parent/app", ["myapp.ts"], 2, []);
         });
 
         it("should find file referenced via absolute and relative names", () => {
-            const files: Map<string> = {
-                "/a/b/c.ts": `/// <reference path="b.ts"/>`,
-                "/a/b/b.ts": "var x"
-            };
+            const files = new SMap([
+                ["/a/b/c.ts", `/// <reference path="b.ts"/>`],
+                ["/a/b/b.ts", "var x"]
+            ]);
             test(files, "/a/b", ["c.ts", "/a/b/b.ts"], 2, []);
         });
     });
 
     describe("Files with different casing", () => {
         const library = createSourceFile("lib.d.ts", "", ScriptTarget.ES5);
-        function test(files: Map<string>, options: CompilerOptions, currentDirectory: string, useCaseSensitiveFileNames: boolean, rootFiles: string[], diagnosticCodes: number[]): void {
+        function test(files: ts.SMap<string>, options: CompilerOptions, currentDirectory: string, useCaseSensitiveFileNames: boolean, rootFiles: string[], diagnosticCodes: number[]): void {
             const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             if (!useCaseSensitiveFileNames) {
-                const f: Map<string> = {};
-                for (const fileName in files) {
-                    f[getCanonicalFileName(fileName)] = files[fileName];
-                }
-                files = f;
+                files = mapKeys(files, getCanonicalFileName);
             }
 
             const host: CompilerHost = {
@@ -371,7 +367,8 @@ export = C;
                         return library;
                     }
                     const path = getCanonicalFileName(normalizePath(combinePaths(currentDirectory, fileName)));
-                    return hasProperty(files, path) ? createSourceFile(fileName, files[path], languageVersion) : undefined;
+                    const file = files.get(path);
+                    return file ? createSourceFile(fileName, file, languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: (fileName, content): void => { throw new Error("NotImplemented"); },
@@ -382,7 +379,7 @@ export = C;
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 fileExists: fileName => {
                     const path = getCanonicalFileName(normalizePath(combinePaths(currentDirectory, fileName)));
-                    return hasProperty(files, path);
+                    return files.has(path);
                 },
                 readFile: (fileName): string => { throw new Error("NotImplemented"); }
             };
@@ -395,77 +392,77 @@ export = C;
         }
 
         it("should succeed when the same file is referenced using absolute and relative names", () => {
-            const files: Map<string> = {
-                "/a/b/c.ts": `/// <reference path="d.ts"/>`,
-                "/a/b/d.ts": "var x"
-            };
+            const files = new SMap([
+                ["/a/b/c.ts", `/// <reference path="d.ts"/>`],
+                ["/a/b/d.ts", "var x"]
+            ]);
             test(files, { module: ts.ModuleKind.AMD },  "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "/a/b/d.ts"], []);
         });
 
         it("should fail when two files used in program differ only in casing (tripleslash references)", () => {
-            const files: Map<string> = {
-                "/a/b/c.ts": `/// <reference path="D.ts"/>`,
-                "/a/b/d.ts": "var x"
-            };
+            const files = new SMap([
+                ["/a/b/c.ts", `/// <reference path="D.ts"/>`],
+                ["/a/b/d.ts", "var x"]
+            ]);
             test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true },  "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when two files used in program differ only in casing (imports)", () => {
-            const files: Map<string> = {
-                "/a/b/c.ts": `import {x} from "D"`,
-                "/a/b/d.ts": "export var x"
-            };
+            const files = new SMap([
+                ["/a/b/c.ts", `import {x} from "D"`],
+                ["/a/b/d.ts", "export var x"]
+            ]);
             test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true },  "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when two files used in program differ only in casing (imports, relative module names)", () => {
-            const files: Map<string> = {
-                "moduleA.ts": `import {x} from "./ModuleB"`,
-                "moduleB.ts": "export var x"
-            };
+            const files = new SMap([
+                ["moduleA.ts", `import {x} from "./ModuleB"`],
+                ["moduleB.ts", "export var x"]
+            ]);
             test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts"], [1149]);
         });
 
         it("should fail when two files exist on disk that differs only in casing", () => {
-            const files: Map<string> = {
-                "/a/b/c.ts": `import {x} from "D"`,
-                "/a/b/D.ts": "export var x",
-                "/a/b/d.ts": "export var y"
-            };
+            const files = new SMap([
+                ["/a/b/c.ts", `import {x} from "D"`],
+                ["/a/b/D.ts", "export var x"],
+                ["/a/b/d.ts", "export var y"]
+            ]);
             test(files, { module: ts.ModuleKind.AMD },  "/a/b", /*useCaseSensitiveFileNames*/ true, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when module name in 'require' calls has inconsistent casing", () => {
-            const files: Map<string> = {
-                "moduleA.ts": `import a = require("./ModuleC")`,
-                "moduleB.ts": `import a = require("./moduleC")`,
-                "moduleC.ts": "export var x"
-            };
+            const files = new SMap([
+                ["moduleA.ts", `import a = require("./ModuleC")`],
+                ["moduleB.ts", `import a = require("./moduleC")`],
+                ["moduleC.ts", "export var x"]
+            ]);
             test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts", "moduleC.ts"], [1149, 1149]);
         });
 
         it("should fail when module names in 'require' calls has inconsistent casing and current directory has uppercase chars", () => {
-            const files: Map<string> = {
-                "/a/B/c/moduleA.ts": `import a = require("./ModuleC")`,
-                "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
-                "/a/B/c/moduleC.ts": "export var x",
-                "/a/B/c/moduleD.ts": `
+            const files = new SMap([
+                ["/a/B/c/moduleA.ts", `import a = require("./ModuleC")`],
+                ["/a/B/c/moduleB.ts", `import a = require("./moduleC")`],
+                ["/a/B/c/moduleC.ts", "export var x"],
+                ["/a/B/c/moduleD.ts", `
 import a = require("./moduleA.ts");
 import b = require("./moduleB.ts");
-                `
-            };
+                `]
+            ]);
             test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], [1149]);
         });
         it("should not fail when module names in 'require' calls has consistent casing and current directory has uppercase chars", () => {
-            const files: Map<string> = {
-                "/a/B/c/moduleA.ts": `import a = require("./moduleC")`,
-                "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
-                "/a/B/c/moduleC.ts": "export var x",
-                "/a/B/c/moduleD.ts": `
+            const files = new SMap([
+                ["/a/B/c/moduleA.ts", `import a = require("./moduleC")`],
+                ["/a/B/c/moduleB.ts", `import a = require("./moduleC")`],
+                ["/a/B/c/moduleC.ts", "export var x"],
+                ["/a/B/c/moduleD.ts", `
 import a = require("./moduleA.ts");
 import b = require("./moduleB.ts");
-                `
-            };
+                `]
+            ]);
             test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], []);
         });
     });
@@ -1021,10 +1018,10 @@ import b = require("./moduleB.ts");
             const files = [f1, f2, f3, f4];
 
             const names = map(files, f => f.name);
-            const sourceFiles = arrayToMap(map(files, f => createSourceFile(f.name, f.content, ScriptTarget.ES6)), f => f.fileName);
+            const sourceFiles = createMapFromArray(files, f => f.name, f => createSourceFile(f.name, f.content, ScriptTarget.ES6));
             const compilerHost: CompilerHost = {
-                fileExists : fileName => hasProperty(sourceFiles, fileName),
-                getSourceFile: fileName => sourceFiles[fileName],
+                fileExists : fileName => sourceFiles.has(fileName),
+                getSourceFile: fileName => sourceFiles.get(fileName),
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile(file, text) {
                     throw new Error("NYI");
@@ -1034,7 +1031,7 @@ import b = require("./moduleB.ts");
                 getCanonicalFileName: f => f.toLowerCase(),
                 getNewLine: () => "\r\n",
                 useCaseSensitiveFileNames: () => false,
-                readFile: fileName => hasProperty(sourceFiles, fileName) ? sourceFiles[fileName].text : undefined
+                readFile: fileName => sourceFiles.has(fileName) ? sourceFiles.get(fileName).text : undefined
             };
             const program1 = createProgram(names, {}, compilerHost);
             const diagnostics1 = program1.getFileProcessingDiagnostics().getDiagnostics();

@@ -10,8 +10,8 @@ namespace ts.performance {
     /** Performance measurements for the compiler. */
     declare const onProfilerEvent: { (markName: string): void; profiler: boolean; };
     let profilerEvent: (markName: string) => void;
-    let counters: Map<number>;
-    let measures: Map<number>;
+    let counters: SMap<number>;
+    let measures: SMap<number>;
 
     /**
      * Emit a performance event if ts-profiler is connected. This is primarily used
@@ -32,7 +32,7 @@ namespace ts.performance {
      */
     export function increment(counterName: string) {
         if (counters) {
-            counters[counterName] = (getProperty(counters, counterName) || 0) + 1;
+            counters.set(counterName, (counters.get(counterName)) || 0 + 1);
         }
     }
 
@@ -42,7 +42,7 @@ namespace ts.performance {
      * @param counterName The name of the counter.
      */
     export function getCount(counterName: string) {
-        return counters && getProperty(counters, counterName) || 0;
+        return counters && counters.get(counterName) || 0;
     }
 
     /**
@@ -60,17 +60,17 @@ namespace ts.performance {
      */
     export function measure(measureName: string, marker: number) {
         if (measures) {
-            measures[measureName] = (getProperty(measures, measureName) || 0) + (timestamp() - marker);
+            measures.set(measureName, (measures.get(measureName) || 0) + (timestamp() - marker));
         }
     }
 
     /**
      * Iterate over each measure, performing some action
-     * 
+     *
      * @param cb The action to perform for each measure
      */
     export function forEachMeasure(cb: (measureName: string, duration: number) => void) {
-        return forEachKey(measures, key => cb(key, measures[key]));
+        measures.forEach((value, key) => cb(key, value));
     }
 
     /**
@@ -79,21 +79,13 @@ namespace ts.performance {
      * @param measureName The name of the measure whose durations should be accumulated.
      */
     export function getDuration(measureName: string) {
-        return measures && getProperty(measures, measureName) || 0;
+        return measures && measures.get(measureName) || 0;
     }
 
     /** Enables (and resets) performance measurements for the compiler. */
     export function enable() {
-        counters = { };
-        measures = {
-            "I/O Read": 0,
-            "I/O Write": 0,
-            "Program": 0,
-            "Parse": 0,
-            "Bind": 0,
-            "Check": 0,
-            "Emit": 0,
-        };
+        counters = new SMap();
+        measures = createMapFromKeys( ["I/O Read", "I/O Write", "Program", "Parse", "Bind", "Check", "Emit"], () => 0);
 
         profilerEvent = typeof onProfilerEvent === "function" && onProfilerEvent.profiler === true
             ? onProfilerEvent
