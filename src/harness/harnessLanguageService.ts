@@ -426,7 +426,7 @@ namespace Harness.LanguageService {
         getCompletionsAtPosition(fileName: string, position: number): ts.CompletionInfo {
             return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position));
         }
-        getImportModuleCompletionsAtPosition(fileName: string, position: number): ts.ImportCompletionEntry[] {
+        getImportModuleCompletionsAtPosition(fileName: string, position: number): ts.ImportCompletionInfo {
             return unwrapJSONCallResult(this.shim.getImportModuleCompletionsAtPosition(fileName, position));
         }
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): ts.CompletionEntryDetails {

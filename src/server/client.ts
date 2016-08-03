@@ -220,7 +220,7 @@ namespace ts.server {
             };
         }
 
-        getImportModuleCompletionsAtPosition(fileName: string, position: number): ImportCompletionEntry[] {
+        getImportModuleCompletionsAtPosition(fileName: string, position: number): ImportCompletionInfo {
             const lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             const args: protocol.CompletionsRequestArgs = {
                 file: fileName,
@@ -232,7 +232,13 @@ namespace ts.server {
             const request = this.processRequest<protocol.ImportModuleCompletionsRequest>(CommandNames.ImportModuleCompletions, args);
             const response = this.processResponse<protocol.ImportModuleCompletionsResponse>(request);
 
-            return response.body;
+            const startPosition = this.lineOffsetToPosition(fileName, response.span.start);
+            const endPosition = this.lineOffsetToPosition(fileName, response.span.end);
+
+            return {
+                span: ts.createTextSpanFromBounds(startPosition, endPosition),
+                entries: response.body
+            };
         }
 
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {

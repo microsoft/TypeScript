@@ -874,7 +874,7 @@ namespace ts {
         getImportModuleCompletionsAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 `getImportModuleCompletionsAtPosition('${fileName}', ${position})`,
-                () => this.languageService.getCompletionsAtPosition(fileName, position)
+                () => this.languageService.getImportModuleCompletionsAtPosition(fileName, position)
             );
         }
 

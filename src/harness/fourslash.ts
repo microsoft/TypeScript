@@ -599,7 +599,7 @@ namespace FourSlash {
 
         public verifyImportModuleCompletionListItemsCountIsGreaterThan(count: number, negative: boolean) {
             const completions = this.getImportModuleCompletionListAtCaret();
-            const itemsCount = completions.length;
+            const itemsCount = completions.entries.length;
 
             if (negative) {
                 if (itemsCount > count) {
@@ -615,13 +615,13 @@ namespace FourSlash {
 
         public verifyImportModuleCompletionListIsEmpty(negative: boolean) {
             const completions = this.getImportModuleCompletionListAtCaret();
-            if ((!completions || completions.length === 0) && negative) {
+            if ((!completions || completions.entries.length === 0) && negative) {
                 this.raiseError("Completion list is empty at caret at position " + this.activeFile.fileName + " " + this.currentCaretPosition);
             }
-            else if (completions && completions.length !== 0 && !negative) {
-                let errorMsg = "\n" + "Completion List contains: [" + completions[0].name;
-                for (let i = 1; i < completions.length; i++) {
-                    errorMsg += ", " + completions[i].name;
+            else if (completions && completions.entries.length !== 0 && !negative) {
+                let errorMsg = "\n" + "Completion List contains: [" + completions.entries[0].name;
+                for (let i = 1; i < completions.entries.length; i++) {
+                    errorMsg += ", " + completions.entries[i].name;
                 }
                 errorMsg += "]\n";
 
@@ -769,9 +769,9 @@ namespace FourSlash {
         public verifyImportModuleCompletionListContains(symbol: string, rangeIndex?: number) {
             const completions = this.getImportModuleCompletionListAtCaret();
             if (completions) {
-                const completion = ts.forEach(completions, completion => completion.name === symbol ? completion : undefined);
+                const completion = ts.forEach(completions.entries, completion => completion.name === symbol ? completion : undefined);
                 if (!completion) {
-                    const itemsString = completions.map(item => stringify({ name: item.name, span: item.span })).join(",\n");
+                    const itemsString = completions.entries.map(item => item.name).join(",\n");
                     this.raiseError(`Expected "${symbol}" to be in list [${itemsString}]`);
                 }
                 else if (rangeIndex !== undefined) {
@@ -779,10 +779,10 @@ namespace FourSlash {
                     if (ranges && ranges.length > rangeIndex) {
                         const range = ranges[rangeIndex];
 
-                        const start = completion.span.start;
-                        const end = start + completion.span.length;
+                        const start = completions.span.start;
+                        const end = start + completions.span.length;
                         if (range.start !== start || range.end !== end) {
-                            this.raiseError(`Expected completion span for '${symbol}', ${stringify(completion.span)}, to cover range ${stringify(range)}`);
+                            this.raiseError(`Expected completion span for '${symbol}', ${stringify(completions.span)}, to cover range ${stringify(range)}`);
                         }
                     }
                     else {
@@ -798,7 +798,7 @@ namespace FourSlash {
         public verifyImportModuleCompletionListDoesNotContain(symbol: string) {
             const completions = this.getImportModuleCompletionListAtCaret();
             if (completions) {
-                if (ts.forEach(completions, completion => completion.name === symbol)) {
+                if (ts.forEach(completions.entries, completion => completion.name === symbol)) {
                     this.raiseError(`Import module completion list did contain ${symbol}`);
                 }
             }

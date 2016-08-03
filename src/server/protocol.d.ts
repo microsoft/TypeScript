@@ -816,7 +816,8 @@ declare namespace ts.server.protocol {
         body?: CompletionEntry[];
     }
 
-      export interface ImportModuleCompletionsResponse extends Response {
+    export interface ImportModuleCompletionsResponse extends Response {
+        span: TextSpan;
         body?: ImportCompletionEntry[];
     }
 
