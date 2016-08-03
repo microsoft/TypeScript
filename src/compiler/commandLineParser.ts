@@ -458,8 +458,8 @@ namespace ts {
 
     /* @internal */
     export interface OptionNameMap {
-        optionNameMap: Map<CommandLineOption>;
-        shortOptionNames: Map<string>;
+        optionNameMap: OldMap<CommandLineOption>;
+        shortOptionNames: OldMap<string>;
     }
 
     let optionNameMapCache: OptionNameMap;
@@ -470,8 +470,8 @@ namespace ts {
             return optionNameMapCache;
         }
 
-        const optionNameMap: Map<CommandLineOption> = {};
-        const shortOptionNames: Map<string> = {};
+        const optionNameMap: OldMap<CommandLineOption> = {};
+        const shortOptionNames: OldMap<string> = {};
         forEach(optionDeclarations, option => {
             optionNameMap[option.name.toLowerCase()] = option;
             if (option.shortName) {
@@ -958,12 +958,12 @@ namespace ts {
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map later when when including
         // wildcard paths.
-        const literalFileMap: Map<string> = {};
+        const literalFileMap: OldMap<string> = {};
 
         // Wildcard paths (provided via the "includes" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard, and to handle extension priority.
-        const wildcardFileMap: Map<string> = {};
+        const wildcardFileMap: OldMap<string> = {};
 
         if (include) {
             include = validateSpecs(include, errors, /*allowTrailingRecursion*/ false);
@@ -977,7 +977,7 @@ namespace ts {
         // file map that marks whether it was a regular wildcard match (with a `*` or `?` token),
         // or a recursive directory. This information is used by filesystem watchers to monitor for
         // new entries in these paths.
-        const wildcardDirectories: Map<WatchDirectoryFlags> = getWildcardDirectories(include, exclude, basePath, host.useCaseSensitiveFileNames);
+        const wildcardDirectories: OldMap<WatchDirectoryFlags> = getWildcardDirectories(include, exclude, basePath, host.useCaseSensitiveFileNames);
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
@@ -1063,7 +1063,7 @@ namespace ts {
         //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
         const rawExcludeRegex = getRegularExpressionForWildcard(exclude, path, "exclude");
         const excludeRegex = rawExcludeRegex && new RegExp(rawExcludeRegex, useCaseSensitiveFileNames ? "" : "i");
-        const wildcardDirectories: Map<WatchDirectoryFlags> = {};
+        const wildcardDirectories: OldMap<WatchDirectoryFlags> = {};
         if (include !== undefined) {
             const recursiveKeys: string[] = [];
             for (const file of include) {
@@ -1109,7 +1109,7 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string>, wildcardFiles: Map<string>, extensions: string[], keyMapper: (value: string) => string) {
+    function hasFileWithHigherPriorityExtension(file: string, literalFiles: OldMap<string>, wildcardFiles: OldMap<string>, extensions: string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority);
         for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
@@ -1131,7 +1131,7 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string>, extensions: string[], keyMapper: (value: string) => string) {
+    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: OldMap<string>, extensions: string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority);
         for (let i = nextExtensionPriority; i < extensions.length; i++) {

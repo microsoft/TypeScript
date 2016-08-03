@@ -65,9 +65,9 @@ namespace ts {
     export interface SourceFile {
         /* @internal */ version: string;
         /* @internal */ scriptSnapshot: IScriptSnapshot;
-        /* @internal */ nameTable: Map<number>;
+        /* @internal */ nameTable: OldMap<number>;
 
-        /* @internal */ getNamedDeclarations(): Map<Declaration[]>;
+        /* @internal */ getNamedDeclarations(): OldMap<Declaration[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
@@ -938,13 +938,13 @@ namespace ts {
         public scriptKind: ScriptKind;
         public languageVersion: ScriptTarget;
         public languageVariant: LanguageVariant;
-        public identifiers: Map<string>;
-        public nameTable: Map<number>;
-        public resolvedModules: Map<ResolvedModule>;
-        public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
+        public identifiers: OldMap<string>;
+        public nameTable: OldMap<number>;
+        public resolvedModules: OldMap<ResolvedModule>;
+        public resolvedTypeReferenceDirectiveNames: OldMap<ResolvedTypeReferenceDirective>;
         public imports: LiteralExpression[];
         public moduleAugmentations: LiteralExpression[];
-        private namedDeclarations: Map<Declaration[]>;
+        private namedDeclarations: OldMap<Declaration[]>;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);
@@ -966,7 +966,7 @@ namespace ts {
             return ts.getPositionOfLineAndCharacter(this, line, character);
         }
 
-        public getNamedDeclarations(): Map<Declaration[]> {
+        public getNamedDeclarations(): OldMap<Declaration[]> {
             if (!this.namedDeclarations) {
                 this.namedDeclarations = this.computeNamedDeclarations();
             }
@@ -974,8 +974,8 @@ namespace ts {
             return this.namedDeclarations;
         }
 
-        private computeNamedDeclarations(): Map<Declaration[]> {
-            const result: Map<Declaration[]> = {};
+        private computeNamedDeclarations(): OldMap<Declaration[]> {
+            const result: OldMap<Declaration[]> = {};
 
             forEachChild(this, visit);
 
@@ -2025,7 +2025,7 @@ namespace ts {
         fileName?: string;
         reportDiagnostics?: boolean;
         moduleName?: string;
-        renamedDependencies?: Map<string>;
+        renamedDependencies?: OldMap<string>;
     }
 
     export interface TranspileOutput {
@@ -2042,7 +2042,7 @@ namespace ts {
     function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
         commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
-            typeof o.type === "object" && !forEachValue(<Map<any>>o.type, v => typeof v !== "number"));
+            typeof o.type === "object" && !forEachValue(<OldMap<any>>o.type, v => typeof v !== "number"));
 
         options = clone(options);
 
@@ -2243,7 +2243,7 @@ namespace ts {
     export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
-        const buckets: Map<FileMap<DocumentRegistryEntry>> = {};
+        const buckets: OldMap<FileMap<DocumentRegistryEntry>> = {};
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
@@ -4102,7 +4102,7 @@ namespace ts {
              *          do not occur at the current position and have not otherwise been typed.
              */
             function filterNamedImportOrExportCompletionItems(exportsOfModule: Symbol[], namedImportsOrExports: ImportOrExportSpecifier[]): Symbol[] {
-                const existingImportsOrExports: Map<boolean> = {};
+                const existingImportsOrExports: OldMap<boolean> = {};
 
                 for (const element of namedImportsOrExports) {
                     // If this is the current item we are editing right now, do not filter it out
@@ -4132,7 +4132,7 @@ namespace ts {
                     return contextualMemberSymbols;
                 }
 
-                const existingMemberNames: Map<boolean> = {};
+                const existingMemberNames: OldMap<boolean> = {};
                 for (const m of existingMembers) {
                     // Ignore omitted expressions for missing members
                     if (m.kind !== SyntaxKind.PropertyAssignment &&
@@ -4175,7 +4175,7 @@ namespace ts {
              *          do not occur at the current position and have not otherwise been typed.
              */
             function filterJsxAttributes(symbols: Symbol[], attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>): Symbol[] {
-                const seenNames: Map<boolean> = {};
+                const seenNames: OldMap<boolean> = {};
                 for (const attr of attributes) {
                     // If this is the current item we are editing right now, do not filter it out
                     if (attr.getStart() <= position && position <= attr.getEnd()) {
@@ -4249,7 +4249,7 @@ namespace ts {
 
             return { isMemberCompletion, isNewIdentifierLocation, entries };
 
-            function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: Map<string>): CompletionEntry[] {
+            function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: OldMap<string>): CompletionEntry[] {
                 const entries: CompletionEntry[] = [];
                 const target = program.getCompilerOptions().target;
 
@@ -4315,9 +4315,9 @@ namespace ts {
 
             }
 
-            function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[], location: Node, performCharacterChecks: boolean): Map<string> {
+            function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[], location: Node, performCharacterChecks: boolean): OldMap<string> {
                 const start = timestamp();
-                const uniqueNames: Map<string> = {};
+                const uniqueNames: OldMap<string> = {};
                 if (symbols) {
                     for (const symbol of symbols) {
                         const entry = createCompletionEntry(symbol, location, performCharacterChecks);
@@ -5311,7 +5311,7 @@ namespace ts {
                         return undefined;
                     }
 
-                    const fileNameToDocumentHighlights: Map<DocumentHighlights> = {};
+                    const fileNameToDocumentHighlights: OldMap<DocumentHighlights> = {};
                     const result: DocumentHighlights[] = [];
                     for (const referencedSymbol of referencedSymbols) {
                         for (const referenceEntry of referencedSymbol.references) {
@@ -6706,7 +6706,7 @@ namespace ts {
 
                     // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ {});
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ new Map());
                     }
                 });
 
@@ -6738,7 +6738,7 @@ namespace ts {
                 // the function will add any found symbol of the property-name, then its sub-routine will call
                 // getPropertySymbolsFromBaseTypes again to walk up any base types to prevent revisiting already
                 // visited symbol, interface "C", the sub-routine will pass the current symbol as previousIterationSymbol.
-                if (hasProperty(previousIterationSymbolsCache, symbol.name)) {
+                if (previousIterationSymbolsCache.has(symbol.name)) {
                     return;
                 }
 
@@ -6765,7 +6765,7 @@ namespace ts {
                             }
 
                             // Visit the typeReference as well to see if it directly or indirectly use that property
-                            previousIterationSymbolsCache[symbol.name] = symbol;
+                            previousIterationSymbolsCache.set(symbol.name, symbol);
                             getPropertySymbolsFromBaseTypes(type.symbol, propertyName, result, previousIterationSymbolsCache);
                         }
                     }
@@ -6827,7 +6827,7 @@ namespace ts {
                     // see if any is in the list
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                         const result: Symbol[] = [];
-                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ {});
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ new Map());
                         return forEach(result, s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     }
 
@@ -8302,7 +8302,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getNameTable(sourceFile: SourceFile): Map<number> {
+    export function getNameTable(sourceFile: SourceFile): OldMap<number> {
         if (!sourceFile.nameTable) {
             initializeNameTable(sourceFile);
         }
@@ -8311,7 +8311,7 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable: Map<number> = {};
+        const nameTable: OldMap<number> = {};
 
         walk(sourceFile);
         sourceFile.nameTable = nameTable;

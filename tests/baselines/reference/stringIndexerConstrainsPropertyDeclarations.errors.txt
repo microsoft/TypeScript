@@ -22,8 +22,8 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(71,5): error TS2411: Property 'foo' of type '() => string' is not assignable to string index type 'string'.
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(73,5): error TS2411: Property '"4.0"' of type 'number' is not assignable to string index type 'string'.
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(74,5): error TS2411: Property 'f' of type 'MyString' is not assignable to string index type 'string'.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(78,5): error TS2322: Type '{ 1.0: string; 2.0: number; a: string; b: number; c: () => void; "d": string; "e": number; "3.0": string; "4.0": number; f: MyString; X: string; foo(): string; }' is not assignable to type '{ [x: string]: string; }'.
-  Property '2.0' is incompatible with index signature.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(78,5): error TS2322: Type '{ a: string; b: number; c: () => void; "d": string; "e": number; 1.0: string; 2.0: number; "3.0": string; "4.0": number; f: MyString; X: string; foo(): string; }' is not assignable to type '{ [x: string]: string; }'.
+  Property 'b' is incompatible with index signature.
     Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(90,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts(93,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -157,8 +157,8 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
     // error
     var b: { [x: string]: string; } = {
         ~
-!!! error TS2322: Type '{ 1.0: string; 2.0: number; a: string; b: number; c: () => void; "d": string; "e": number; "3.0": string; "4.0": number; f: MyString; X: string; foo(): string; }' is not assignable to type '{ [x: string]: string; }'.
-!!! error TS2322:   Property '2.0' is incompatible with index signature.
+!!! error TS2322: Type '{ a: string; b: number; c: () => void; "d": string; "e": number; 1.0: string; 2.0: number; "3.0": string; "4.0": number; f: MyString; X: string; foo(): string; }' is not assignable to type '{ [x: string]: string; }'.
+!!! error TS2322:   Property 'b' is incompatible with index signature.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.
         a: '',
         b: 1, 

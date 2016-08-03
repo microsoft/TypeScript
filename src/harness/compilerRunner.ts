@@ -291,8 +291,8 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
 
-                const fullResults: ts.Map<TypeWriterResult[]> = {};
-                const pullResults: ts.Map<TypeWriterResult[]> = {};
+                const fullResults: ts.OldMap<TypeWriterResult[]> = {};
+                const pullResults: ts.OldMap<TypeWriterResult[]> = {};
 
                 for (const sourceFile of allFiles) {
                     fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
@@ -338,7 +338,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     }
                 }
 
-                function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
+                function generateBaseLine(typeWriterResults: ts.OldMap<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
                     const typeLines: string[] = [];
                     const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
 

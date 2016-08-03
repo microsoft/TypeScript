@@ -122,7 +122,7 @@ namespace ts {
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
-    const categoryFormatMap: Map<string> = {
+    const categoryFormatMap: OldMap<string> = {
         [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
         [DiagnosticCategory.Error]: redForegroundEscapeSequence,
         [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
@@ -262,7 +262,7 @@ namespace ts {
 
         // This map stores and reuses results of fileExists check that happen inside 'createProgram'
         // This allows to save time in module resolution heavy scenarios when existence of the same file might be checked multiple times.
-        let cachedExistingFiles: Map<boolean>;
+        let cachedExistingFiles: OldMap<boolean>;
         let hostFileExists: typeof compilerHost.fileExists;
 
         if (commandLine.options.locale) {
@@ -676,7 +676,7 @@ namespace ts {
         const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
         const descriptionColumn: string[] = [];
 
-        const optionsDescriptionMap: Map<string[]> = {};  // Map between option.description and list of option.type if it is a kind
+        const optionsDescriptionMap: OldMap<string[]> = {};  // Map between option.description and list of option.type if it is a kind
 
         for (let i = 0; i < optsList.length; i++) {
             const option = optsList[i];
@@ -704,7 +704,7 @@ namespace ts {
                 description = getDiagnosticText(option.description);
                 const options: string[] = [];
                 const element = (<CommandLineOptionOfListType>option).element;
-                forEachKey(<Map<number | string>>element.type, key => {
+                forEachKey(<OldMap<number | string>>element.type, key => {
                     options.push(`'${key}'`);
                 });
                 optionsDescriptionMap[description] = options;
@@ -785,8 +785,8 @@ namespace ts {
 
         return;
 
-        function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
-            const result: Map<string | number | boolean> = {};
+        function serializeCompilerOptions(options: CompilerOptions): OldMap<string | number | boolean> {
+            const result: OldMap<string | number | boolean> = {};
             const optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (const name in options) {
@@ -810,7 +810,7 @@ namespace ts {
                                 }
                                 else {
                                     // Enum
-                                    const typeMap = <Map<number>>optionDefinition.type;
+                                    const typeMap = <OldMap<number>>optionDefinition.type;
                                     for (const key in typeMap) {
                                         if (hasProperty(typeMap, key)) {
                                             if (typeMap[key] === value)

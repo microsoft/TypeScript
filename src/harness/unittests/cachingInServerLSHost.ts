@@ -6,8 +6,8 @@ namespace ts {
         content: string;
     }
 
-    function createDefaultServerHost(fileMap: Map<File>): server.ServerHost {
-        const existingDirectories: Map<boolean> = {};
+    function createDefaultServerHost(fileMap: OldMap<File>): server.ServerHost {
+        const existingDirectories: OldMap<boolean> = {};
         forEachValue(fileMap, v => {
             let dir = getDirectoryPath(v.name);
             let previous: string;
@@ -193,7 +193,7 @@ namespace ts {
                 content: `export var y = 1`
             };
 
-            const fileMap: Map<File> = { [root.name]: root };
+            const fileMap: OldMap<File> = { [root.name]: root };
             const serverHost = createDefaultServerHost(fileMap);
             const originalFileExists = serverHost.fileExists;
 

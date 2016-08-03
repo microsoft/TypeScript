@@ -59,7 +59,7 @@ namespace ts {
         let resultHasExternalModuleIndicator: boolean;
         let currentText: string;
         let currentLineMap: number[];
-        let currentIdentifiers: Map<string>;
+        let currentIdentifiers: OldMap<string>;
         let isCurrentFileExternalModule: boolean;
         let reportedDeclarationError = false;
         let errorNameNode: DeclarationName;
@@ -75,7 +75,7 @@ namespace ts {
         // and we could be collecting these paths from multiple files into single one with --out option
         let referencesOutput = "";
 
-        let usedTypeDirectiveReferences: Map<string>;
+        let usedTypeDirectiveReferences: OldMap<string>;
 
         // Emit references corresponding to each file
         const emittedReferencedFiles: SourceFile[] = [];

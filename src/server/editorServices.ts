@@ -100,15 +100,15 @@ namespace ts.server {
         filenameToScript: ts.FileMap<ScriptInfo>;
         roots: ScriptInfo[] = [];
 
-        private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;
-        private resolvedTypeReferenceDirectives: ts.FileMap<Map<TimestampedResolvedTypeReferenceDirective>>;
+        private resolvedModuleNames: ts.FileMap<OldMap<TimestampedResolvedModule>>;
+        private resolvedTypeReferenceDirectives: ts.FileMap<OldMap<TimestampedResolvedTypeReferenceDirective>>;
         private moduleResolutionHost: ts.ModuleResolutionHost;
         private getCanonicalFileName: (fileName: string) => string;
 
         constructor(public host: ServerHost, public project: Project) {
             this.getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
-            this.resolvedModuleNames = createFileMap<Map<TimestampedResolvedModule>>();
-            this.resolvedTypeReferenceDirectives = createFileMap<Map<TimestampedResolvedTypeReferenceDirective>>();
+            this.resolvedModuleNames = createFileMap<OldMap<TimestampedResolvedModule>>();
+            this.resolvedTypeReferenceDirectives = createFileMap<OldMap<TimestampedResolvedTypeReferenceDirective>>();
             this.filenameToScript = createFileMap<ScriptInfo>();
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
@@ -123,14 +123,14 @@ namespace ts.server {
         private resolveNamesWithLocalCache<T extends Timestamped & { failedLookupLocations: string[] }, R>(
             names: string[],
             containingFile: string,
-            cache: ts.FileMap<Map<T>>,
+            cache: ts.FileMap<OldMap<T>>,
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
             getResult: (s: T) => R): R[] {
 
             const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const currentResolutionsInFile = cache.get(path);
 
-            const newResolutions: Map<T> = {};
+            const newResolutions: OldMap<T> = {};
             const resolvedModules: R[] = [];
             const compilerOptions = this.getCompilationSettings();
 
@@ -378,7 +378,7 @@ namespace ts.server {
     export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
-        wildcardDirectories?: ts.Map<ts.WatchDirectoryFlags>;
+        wildcardDirectories?: ts.OldMap<ts.WatchDirectoryFlags>;
         compilerOptions?: ts.CompilerOptions;
     }
 
@@ -387,11 +387,11 @@ namespace ts.server {
         projectFilename: string;
         projectFileWatcher: FileWatcher;
         directoryWatcher: FileWatcher;
-        directoriesWatchedForWildcards: Map<FileWatcher>;
+        directoriesWatchedForWildcards: OldMap<FileWatcher>;
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
         program: ts.Program;
-        filenameToSourceFile: ts.Map<ts.SourceFile> = {};
+        filenameToSourceFile: ts.OldMap<ts.SourceFile> = {};
         updateGraphSeq = 0;
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
@@ -613,7 +613,7 @@ namespace ts.server {
     }
 
     export class ProjectService {
-        filenameToScriptInfo: ts.Map<ScriptInfo> = {};
+        filenameToScriptInfo: ts.OldMap<ScriptInfo> = {};
         // open, non-configured root files
         openFileRoots: ScriptInfo[] = [];
         // projects built from openFileRoots
@@ -625,12 +625,12 @@ namespace ts.server {
         // open files that are roots of a configured project
         openFileRootsConfigured: ScriptInfo[] = [];
         // a path to directory watcher map that detects added tsconfig files
-        directoryWatchersForTsconfig: ts.Map<FileWatcher> = {};
+        directoryWatchersForTsconfig: ts.OldMap<FileWatcher> = {};
         // count of how many projects are using the directory watcher. If the
         // number becomes 0 for a watcher, then we should close it.
-        directoryWatchersRefCount: ts.Map<number> = {};
+        directoryWatchersRefCount: ts.OldMap<number> = {};
         hostConfiguration: HostConfiguration;
-        timerForDetectingProjectFileListChanges: Map<any> = {};
+        timerForDetectingProjectFileListChanges: OldMap<any> = {};
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
@@ -1431,7 +1431,7 @@ namespace ts.server {
                     }
 
                     return watchers;
-                }, <Map<FileWatcher>>{});
+                }, <OldMap<FileWatcher>>{});
 
                 return { success: true, project: project, errors };
             }

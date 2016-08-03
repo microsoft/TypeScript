@@ -20,7 +20,7 @@ namespace ts {
     }
 
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
-        let files: Map<T> = {};
+        let files: OldMap<T> = {};
         return {
             get,
             set,
@@ -311,11 +311,11 @@ namespace ts {
 
     const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-    export function hasProperty<T>(map: Map<T>, key: string): boolean {
+    export function hasProperty<T>(map: OldMap<T>, key: string): boolean {
         return hasOwnProperty.call(map, key);
     }
 
-    export function getKeys<T>(map: Map<T>): string[] {
+    export function getKeys<T>(map: OldMap<T>): string[] {
         const keys: string[] = [];
         for (const key in map) {
             keys.push(key);
@@ -323,11 +323,11 @@ namespace ts {
         return keys;
     }
 
-    export function getProperty<T>(map: Map<T>, key: string): T {
+    export function getProperty<T>(map: OldMap<T>, key: string): T {
         return hasOwnProperty.call(map, key) ? map[key] : undefined;
     }
 
-    export function isEmpty<T>(map: Map<T>) {
+    export function isEmpty<T>(map: OldMap<T>) {
         for (const id in map) {
             if (hasProperty(map, id)) {
                 return false;
@@ -344,7 +344,7 @@ namespace ts {
         return <T>result;
     }
 
-    export function extend<T1 extends Map<{}>, T2 extends Map<{}>>(first: T1 , second: T2): T1 & T2 {
+    export function extend<T1 extends OldMap<{}>, T2 extends OldMap<{}>>(first: T1 , second: T2): T1 & T2 {
         const result: T1 & T2 = <any>{};
         for (const id in first) {
             (result as any)[id] = first[id];
@@ -357,7 +357,7 @@ namespace ts {
         return result;
     }
 
-    export function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U {
+    export function forEachValue<T, U>(map: OldMap<T>, callback: (value: T) => U): U {
         let result: U;
         for (const id in map) {
             if (result = callback(map[id])) break;
@@ -365,7 +365,7 @@ namespace ts {
         return result;
     }
 
-    export function forEachKey<T, U>(map: Map<T>, callback: (key: string) => U): U {
+    export function forEachKey<T, U>(map: OldMap<T>, callback: (key: string) => U): U {
         let result: U;
         for (const id in map) {
             if (result = callback(id)) break;
@@ -373,11 +373,12 @@ namespace ts {
         return result;
     }
 
-    export function lookUp<T>(map: Map<T>, key: string): T {
+    //This is just getProperty...
+    export function lookUp<T>(map: OldMap<T>, key: string): T {
         return hasProperty(map, key) ? map[key] : undefined;
     }
 
-    export function copyMap<T>(source: Map<T>, target: Map<T>): void {
+    export function copyMap<T>(source: OldMap<T>, target: OldMap<T>): void {
         for (const p in source) {
             target[p] = source[p];
         }
@@ -393,8 +394,8 @@ namespace ts {
      * the same key with the given 'makeKey' function, then the element with the higher
      * index in the array will be the one associated with the produced key.
      */
-    export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T> {
-        const result: Map<T> = {};
+    export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): OldMap<T> {
+        const result: OldMap<T> = {};
 
         forEach(array, value => {
             result[makeKey(value)] = value;
@@ -410,7 +411,7 @@ namespace ts {
      * @param callback An aggregation function that is called for each entry in the map
      * @param initial The initial value for the reduction.
      */
-    export function reduceProperties<T, U>(map: Map<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
+    export function reduceProperties<T, U>(map: OldMap<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
         let result = initial;
         if (map) {
             for (const key in map) {
@@ -447,7 +448,7 @@ namespace ts {
         return text.replace(/{(\d+)}/g, (match, index?) => args[+index + baseIndex]);
     }
 
-    export let localizedDiagnosticMessages: Map<string> = undefined;
+    export let localizedDiagnosticMessages: OldMap<string> = undefined;
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key]

@@ -24,7 +24,7 @@ namespace ts {
         Return      = 1 << 3
     }
 
-    const entities: Map<number> = {
+    const entities: OldMap<number> = {
         "quot": 0x0022,
         "amp": 0x0026,
         "apos": 0x0027,
@@ -407,9 +407,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
         function isUniqueLocalName(name: string, container: Node): boolean {
             for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
-                if (node.locals && hasProperty(node.locals, name)) {
+                if (node.locals) {
+                    const symbol = node.locals.get(name);
                     // We conservatively include alias symbols to cover cases where they're emitted as locals
-                    if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
+                    if (symbol && symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
                         return false;
                     }
                 }
@@ -422,15 +423,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
              * set of labels that occurred inside the converted loop
              * used to determine if labeled jump can be emitted as is or it should be dispatched to calling code
              */
-            labels?: Map<string>;
+            labels?: OldMap<string>;
             /*
              * collection of labeled jumps that transfer control outside the converted loop.
              * maps store association 'label -> labelMarker' where
              * - label - value of label as it appear in code
              * - label marker - return value that should be interpreted by calling code as 'jump to <label>'
              */
-            labeledNonLocalBreaks?: Map<string>;
-            labeledNonLocalContinues?: Map<string>;
+            labeledNonLocalBreaks?: OldMap<string>;
+            labeledNonLocalContinues?: OldMap<string>;
 
             /*
              * set of non-labeled jumps that transfer control outside the converted loop
@@ -530,8 +531,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             let currentSourceFile: SourceFile;
             let currentText: string;
             let currentLineMap: number[];
-            let currentFileIdentifiers: Map<string>;
-            let renamedDependencies: Map<string>;
+            let currentFileIdentifiers: OldMap<string>;
+            let renamedDependencies: OldMap<string>;
             let isEs6Module: boolean;
             let isCurrentFileExternalModule: boolean;
 
@@ -544,7 +545,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             let exportFunctionForFile: string;
             let contextObjectForFile: string;
 
-            let generatedNameSet: Map<string>;
+            let generatedNameSet: OldMap<string>;
             let nodeToGeneratedName: string[];
             let computedPropertyNamesToGeneratedNames: string[];
             let decoratedClassAliases: string[];
@@ -560,7 +561,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             let tempVariables: Identifier[];
             let tempParameters: Identifier[];
             let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
-            let exportSpecifiers: Map<ExportSpecifier[]>;
+            let exportSpecifiers: OldMap<ExportSpecifier[]>;
             let exportEquals: ExportAssignment;
             let hasExportStarsToExportValues: boolean;
 
@@ -577,7 +578,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             const setSourceMapWriterEmit = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? changeSourceMapEmit : function (writer: SourceMapWriter) { };
 
-            const moduleEmitDelegates: Map<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
+            const moduleEmitDelegates: OldMap<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
                 [ModuleKind.ES6]: emitES6Module,
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
@@ -585,7 +586,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 [ModuleKind.CommonJS]: emitCommonJSModule,
             };
 
-            const bundleEmitDelegates: Map<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
+            const bundleEmitDelegates: OldMap<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
                 [ModuleKind.ES6]() {},
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
@@ -658,7 +659,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 currentLineMap = getLineStarts(sourceFile);
                 exportFunctionForFile = undefined;
                 contextObjectForFile = undefined;
-                isEs6Module = sourceFile.symbol && sourceFile.symbol.exports && !!sourceFile.symbol.exports["___esModule"];
+                isEs6Module = sourceFile.symbol && sourceFile.symbol.exports && !!sourceFile.symbol.exports.get("___esModule");
                 renamedDependencies = sourceFile.renamedDependencies;
                 currentFileIdentifiers = sourceFile.identifiers;
                 isCurrentFileExternalModule = isExternalModule(sourceFile);
@@ -3252,7 +3253,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     else {
                         // deduplicate and hoist collected variable declarations
                         write("var ");
-                        let seen: Map<string>;
+                        let seen: OldMap<string>;
                         for (const id of convertedLoopState.hoistedLocalVariables) {
                            // Don't initialize seen unless we have at least one element.
                            // Emit a comma to separate for all but the first element.
@@ -3424,7 +3425,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write("}");
                 }
 
-                function emitDispatchEntriesForLabeledJumps(table: Map<string>, isBreak: boolean, loopResultVariable: string, outerLoop: ConvertedLoopState): void {
+                function emitDispatchEntriesForLabeledJumps(table: OldMap<string>, isBreak: boolean, loopResultVariable: string, outerLoop: ConvertedLoopState): void {
                     if (!table) {
                         return;
                     }
@@ -7081,7 +7082,7 @@ const _super = (function (geti, seti) {
                 if (hoistedVars) {
                     writeLine();
                     write("var ");
-                    const seen: Map<string> = {};
+                    const seen: OldMap<string> = {};
                     for (let i = 0; i < hoistedVars.length; i++) {
                         const local = hoistedVars[i];
                         const name = local.kind === SyntaxKind.Identifier
@@ -7447,7 +7448,7 @@ const _super = (function (geti, seti) {
                 writeModuleName(node, emitRelativePathAsModuleName);
                 write("[");
 
-                const groupIndices: Map<number> = {};
+                const groupIndices: OldMap<number> = {};
                 const dependencyGroups: DependencyGroup[] = [];
 
                 for (let i = 0; i < externalImports.length; i++) {

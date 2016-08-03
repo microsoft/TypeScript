@@ -846,7 +846,7 @@ namespace ts {
     }
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
-        const existingDirectories: Map<boolean> = {};
+        const existingDirectories: OldMap<boolean> = {};
 
         function getCanonicalFileName(fileName: string): string {
             // if underlying system can distinguish between two files whose names differs only in cases then file name already in canonical form.
@@ -895,7 +895,7 @@ namespace ts {
             }
         }
 
-        let outputFingerprints: Map<OutputFingerprint>;
+        let outputFingerprints: OldMap<OutputFingerprint>;
 
         function writeFileIfUpdated(fileName: string, data: string, writeByteOrderMark: boolean): void {
             if (!outputFingerprints) {
@@ -1040,7 +1040,7 @@ namespace ts {
             return [];
         }
         const resolutions: T[] = [];
-        const cache: Map<T> = {};
+        const cache: OldMap<T> = {};
         for (const name of names) {
             let result: T;
             if (hasProperty(cache, name)) {
@@ -1094,9 +1094,9 @@ namespace ts {
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
-        let classifiableNames: Map<string>;
+        let classifiableNames: OldMap<string>;
 
-        let resolvedTypeReferenceDirectives: Map<ResolvedTypeReferenceDirective> = {};
+        let resolvedTypeReferenceDirectives: OldMap<ResolvedTypeReferenceDirective> = {};
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
         // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
@@ -1111,10 +1111,10 @@ namespace ts {
 
         // If a module has some of its imports skipped due to being at the depth limit under node_modules, then track
         // this, as it may be imported at a shallower depth later, and then it will need its skipped imports processed.
-        const modulesWithElidedImports: Map<boolean> = {};
+        const modulesWithElidedImports: OldMap<boolean> = {};
 
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
-        const sourceFilesFoundSearchingNodeModules: Map<boolean> = {};
+        const sourceFilesFoundSearchingNodeModules: OldMap<boolean> = {};
 
         const start = performance.mark();
 

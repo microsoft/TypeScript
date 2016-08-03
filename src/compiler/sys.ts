@@ -233,9 +233,9 @@ namespace ts {
             const useNonPollingWatchers = process.env["TSC_NONPOLLING_WATCHER"];
 
             function createWatchedFileSet() {
-                const dirWatchers: Map<DirectoryWatcher> = {};
+                const dirWatchers: OldMap<DirectoryWatcher> = {};
                 // One file can have multiple watchers
-                const fileWatcherCallbacks: Map<FileWatcherCallback[]> = {};
+                const fileWatcherCallbacks: OldMap<FileWatcherCallback[]> = {};
                 return { addFile, removeFile };
 
                 function reduceDirWatcherRefCountForFile(fileName: string) {

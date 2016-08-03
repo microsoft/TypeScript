@@ -87,14 +87,14 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function mapIsEqualTo<T>(map1: Map<T>, map2: Map<T>): boolean {
+    export function mapIsEqualTo<T>(map1: OldMap<T>, map2: OldMap<T>): boolean {
         if (!map1 || !map2) {
             return map1 === map2;
         }
         return containsAll(map1, map2) && containsAll(map2, map1);
     }
 
-    function containsAll<T>(map: Map<T>, other: Map<T>): boolean {
+    function containsAll<T>(map: OldMap<T>, other: OldMap<T>): boolean {
         for (const key in map) {
             if (!hasProperty(map, key)) {
                 continue;
@@ -160,7 +160,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function hasChangesInResolutions<T>(names: string[], newResolutions: T[], oldResolutions: Map<T>, comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
+    export function hasChangesInResolutions<T>(names: string[], newResolutions: T[], oldResolutions: OldMap<T>, comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
         if (names.length !== newResolutions.length) {
             return false;
         }
@@ -1965,7 +1965,7 @@ namespace ts {
 
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
-        const fileDiagnostics: Map<Diagnostic[]> = {};
+        const fileDiagnostics: OldMap<Diagnostic[]> = {};
 
         let diagnosticsModified = false;
         let modificationCount = 0;
@@ -2059,7 +2059,7 @@ namespace ts {
     // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
     // There is no reason for this other than that JSON.stringify does not handle it either.
     const escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    const escapedCharsMap: Map<string> = {
+    const escapedCharsMap: OldMap<string> = {
         "\0": "\\0",
         "\t": "\\t",
         "\v": "\\v",
