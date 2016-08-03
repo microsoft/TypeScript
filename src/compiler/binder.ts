@@ -2156,6 +2156,9 @@ namespace ts {
                 if (isAsyncFunctionLike(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
+                if (node.asteriskToken) {
+                    emitFlags |= NodeFlags.HasGenerators;
+                }
             }
 
             checkStrictModeFunctionName(<FunctionDeclaration>node);
@@ -2173,6 +2176,9 @@ namespace ts {
                 if (isAsyncFunctionLike(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
+                if (node.asteriskToken) {
+                    emitFlags |= NodeFlags.HasGenerators;
+                }
             }
             if (currentFlow) {
                 node.flowNode = currentFlow;
@@ -2186,6 +2192,9 @@ namespace ts {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
                 if (isAsyncFunctionLike(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
+                }
+                if (isFunctionLike(node) && node.asteriskToken) {
+                    emitFlags |= NodeFlags.HasGenerators;
                 }
                 if (nodeIsDecorated(node)) {
                     emitFlags |= NodeFlags.HasDecorators;
@@ -2565,8 +2574,9 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
-        // Currently, we only support generators that were originally async function bodies.
-        if (asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+        // If a MethodDeclaration is generator method, then this node can be transformed to
+        // a down-level generator.
+        if (asteriskToken) {
             transformFlags |= TransformFlags.AssertGenerator;
         }
 
@@ -2636,12 +2646,9 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertES6;
             }
 
-            // If a FunctionDeclaration is generator function and is the body of a
-            // transformed async function, then this node can be transformed to a
-            // down-level generator.
-            // Currently we do not support transforming any other generator fucntions
-            // down level.
-            if (asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+            // If a FunctionDeclaration is generator function, then this node can be transformed to
+            // a down-level generator.
+            if (asteriskToken) {
                 transformFlags |= TransformFlags.AssertGenerator;
             }
         }
@@ -2667,12 +2674,9 @@ namespace ts {
             transformFlags |= TransformFlags.AssertES6;
         }
 
-        // If a FunctionExpression is generator function and is the body of a
-        // transformed async function, then this node can be transformed to a
+        // If a FunctionExpression is generator function then this node can be transformed to a
         // down-level generator.
-        // Currently we do not support transforming any other generator fucntions
-        // down level.
-        if (asteriskToken && node.emitFlags & NodeEmitFlags.AsyncFunctionBody) {
+        if (asteriskToken) {
             transformFlags |= TransformFlags.AssertGenerator;
         }
 

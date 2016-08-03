@@ -154,7 +154,7 @@ namespace ts {
         return name;
     }
 
-    export function createLoopVariable(location?: TextRange): Identifier {
+    export function createLoopVariable(recordTempVariable?: (node: Identifier) => void, location?: TextRange): Identifier {
         const name = <Identifier>createNode(SyntaxKind.Identifier, location);
         name.text = "";
         name.originalKeywordKind = SyntaxKind.Unknown;
@@ -1742,9 +1742,6 @@ namespace ts {
             /*type*/ undefined,
             body
         );
-
-        // Mark this node as originally an async function
-        generatorFunc.emitFlags |= NodeEmitFlags.AsyncFunctionBody;
 
         return createCall(
             createHelperName(externalHelpersModuleName, "__awaiter"),
