@@ -3,11 +3,11 @@ interface Dictionary<T> {
     [x: string]: T;
 }
 
-interface Iterator<T, U> {
+interface IteratorCallback<T, U> {
     (value: T, index: any, list: any): U;
 }
 
-interface Reducer<T, U> {
+interface ReducerCallback<T, U> {
     (accumulator: U, value: T, index: any, list: any): U;
 }
 
@@ -79,42 +79,42 @@ module Underscore {
     }
 
     export interface WrappedArray<T> extends WrappedObject<Array<T>> {
-        each(iterator: Iterator<T, void>, context?: any): void;
-        forEach(iterator: Iterator<T, void>, context?: any): void;
-        map<U>(iterator: Iterator<T, U>, context?: any): U[];
-        collect<U>(iterator: Iterator<T, U>, context?: any): U[];
-        reduce(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        reduce<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        foldl(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        foldl<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        inject(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        inject<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        reduceRight(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        reduceRight<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        foldr(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        foldr<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        find(iterator: Iterator<T, boolean>, context?: any): T;
-        detect(iterator: Iterator<T, boolean>, context?: any): T;
-        filter(iterator: Iterator<T, boolean>, context?: any): T[];
-        select(iterator: Iterator<T, boolean>, context?: any): T[];
+        each(iterator: IteratorCallback<T, void>, context?: any): void;
+        forEach(iterator: IteratorCallback<T, void>, context?: any): void;
+        map<U>(iterator: IteratorCallback<T, U>, context?: any): U[];
+        collect<U>(iterator: IteratorCallback<T, U>, context?: any): U[];
+        reduce(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        reduce<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        foldl(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        foldl<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        inject(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        inject<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        reduceRight(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        reduceRight<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        foldr(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        foldr<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        find(iterator: IteratorCallback<T, boolean>, context?: any): T;
+        detect(iterator: IteratorCallback<T, boolean>, context?: any): T;
+        filter(iterator: IteratorCallback<T, boolean>, context?: any): T[];
+        select(iterator: IteratorCallback<T, boolean>, context?: any): T[];
         where(properties: Object): T[];
         findWhere(properties: Object): T;
-        reject(iterator: Iterator<T, boolean>, context?: any): T[];
-        every(iterator?: Iterator<T, boolean>, context?: any): boolean;
-        all(iterator?: Iterator<T, boolean>, context?: any): boolean;
-        some(iterator?: Iterator<T, boolean>, context?: any): boolean;
-        any(iterator?: Iterator<T, boolean>, context?: any): boolean;
+        reject(iterator: IteratorCallback<T, boolean>, context?: any): T[];
+        every(iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
+        all(iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
+        some(iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
+        any(iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
         contains(value: T): boolean;
         include(value: T): boolean;
         invoke(methodName: string, ...args: any[]): any[];
         pluck(propertyName: string): any[];
-        max(iterator?: Iterator<T, any>, context?: any): T;
-        min(iterator?: Iterator<T, any>, context?: any): T;
-        sortBy(iterator: Iterator<T, any>, context?: any): T[];
+        max(iterator?: IteratorCallback<T, any>, context?: any): T;
+        min(iterator?: IteratorCallback<T, any>, context?: any): T;
+        sortBy(iterator: IteratorCallback<T, any>, context?: any): T[];
         sortBy(propertyName: string): T[];
-        groupBy(iterator?: Iterator<T, any>, context?: any): Dictionary<T[]>;
+        groupBy(iterator?: IteratorCallback<T, any>, context?: any): Dictionary<T[]>;
         groupBy(propertyName: string): Dictionary<T[]>;
-        countBy(iterator?: Iterator<T, any>, context?: any): Dictionary<number>;
+        countBy(iterator?: IteratorCallback<T, any>, context?: any): Dictionary<number>;
         countBy(propertyName: string): Dictionary<number>;
         shuffle(): T[];
         toArray(): T[];
@@ -137,16 +137,16 @@ module Underscore {
         intersection(...arrays: T[][]): T[];
         difference(...others: T[][]): T[];
         uniq(isSorted?: boolean): T[];
-        uniq<U>(isSorted: boolean, iterator: Iterator<T, U>, context?: any): U[];
+        uniq<U>(isSorted: boolean, iterator: IteratorCallback<T, U>, context?: any): U[];
         unique(isSorted?: boolean): T[];
-        unique<U>(isSorted: boolean, iterator: Iterator<T, U>, context?: any): U[];
+        unique<U>(isSorted: boolean, iterator: IteratorCallback<T, U>, context?: any): U[];
         zip(...arrays: any[][]): any[][];
         object(): any;
         object(values: any[]): any;
         indexOf(value: T, isSorted?: boolean): number;
         lastIndexOf(value: T, fromIndex?: number): number;
         sortedIndex(obj: T, propertyName: string): number;
-        sortedIndex(obj: T, iterator?: Iterator<T, any>, context?: any): number;
+        sortedIndex(obj: T, iterator?: IteratorCallback<T, any>, context?: any): number;
         // Methods from Array
         concat(...items: T[]): T[];
         join(separator?: string): string;
@@ -162,42 +162,42 @@ module Underscore {
     }
 
     export interface WrappedDictionary<T> extends WrappedObject<Dictionary<T>> {
-        each(iterator: Iterator<T, void>, context?: any): void;
-        forEach(iterator: Iterator<T, void>, context?: any): void;
-        map<U>(iterator: Iterator<T, U>, context?: any): U[];
-        collect<U>(iterator: Iterator<T, U>, context?: any): U[];
-        reduce(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        reduce<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        foldl(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        foldl<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        inject(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        inject<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        reduceRight(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        reduceRight<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        foldr(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        foldr<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        find(iterator: Iterator<T, boolean>, context?: any): T;
-        detect(iterator: Iterator<T, boolean>, context?: any): T;
-        filter(iterator: Iterator<T, boolean>, context?: any): T[];
-        select(iterator: Iterator<T, boolean>, context?: any): T[];
+        each(iterator: IteratorCallback<T, void>, context?: any): void;
+        forEach(iterator: IteratorCallback<T, void>, context?: any): void;
+        map<U>(iterator: IteratorCallback<T, U>, context?: any): U[];
+        collect<U>(iterator: IteratorCallback<T, U>, context?: any): U[];
+        reduce(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        reduce<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        foldl(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        foldl<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        inject(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        inject<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        reduceRight(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        reduceRight<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        foldr(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        foldr<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        find(iterator: IteratorCallback<T, boolean>, context?: any): T;
+        detect(iterator: IteratorCallback<T, boolean>, context?: any): T;
+        filter(iterator: IteratorCallback<T, boolean>, context?: any): T[];
+        select(iterator: IteratorCallback<T, boolean>, context?: any): T[];
         where(properties: Object): T[];
         findWhere(properties: Object): T;
-        reject(iterator: Iterator<T, boolean>, context?: any): T[];
-        every(iterator?: Iterator<T, boolean>, context?: any): boolean;
-        all(iterator?: Iterator<T, boolean>, context?: any): boolean;
-        some(iterator?: Iterator<T, boolean>, context?: any): boolean;
-        any(iterator?: Iterator<T, boolean>, context?: any): boolean;
+        reject(iterator: IteratorCallback<T, boolean>, context?: any): T[];
+        every(iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
+        all(iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
+        some(iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
+        any(iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
         contains(value: T): boolean;
         include(value: T): boolean;
         invoke(methodName: string, ...args: any[]): any[];
         pluck(propertyName: string): any[];
-        max(iterator?: Iterator<T, any>, context?: any): T;
-        min(iterator?: Iterator<T, any>, context?: any): T;
-        sortBy(iterator: Iterator<T, any>, context?: any): T[];
+        max(iterator?: IteratorCallback<T, any>, context?: any): T;
+        min(iterator?: IteratorCallback<T, any>, context?: any): T;
+        sortBy(iterator: IteratorCallback<T, any>, context?: any): T[];
         sortBy(propertyName: string): T[];
-        groupBy(iterator?: Iterator<T, any>, context?: any): Dictionary<T[]>;
+        groupBy(iterator?: IteratorCallback<T, any>, context?: any): Dictionary<T[]>;
         groupBy(propertyName: string): Dictionary<T[]>;
-        countBy(iterator?: Iterator<T, any>, context?: any): Dictionary<number>;
+        countBy(iterator?: IteratorCallback<T, any>, context?: any): Dictionary<number>;
         countBy(propertyName: string): Dictionary<number>;
         shuffle(): T[];
         toArray(): T[];
@@ -238,43 +238,43 @@ module Underscore {
     }
 
     export interface ChainedArray<T> extends ChainedObject<Array<T>> {
-        each(iterator: Iterator<T, void>, context?: any): ChainedObject<void>;
-        forEach(iterator: Iterator<T, void>, context?: any): ChainedObject<void>;
-        map<U>(iterator: Iterator<T, U>, context?: any): ChainedArray<U>;
-        collect<U>(iterator: Iterator<T, U>, context?: any): ChainedArray<U>;
-        reduce(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
-        reduce<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
-        foldl(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
-        foldl<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
-        inject(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
-        inject<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
-        reduceRight(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
-        reduceRight<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
-        foldr(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
-        foldr<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
-        find(iterator: Iterator<T, boolean>, context?: any): ChainedObject<T>;
-        detect(iterator: Iterator<T, boolean>, context?: any): ChainedObject<T>;
-        filter(iterator: Iterator<T, boolean>, context?: any): ChainedArray<T>;
-        select(iterator: Iterator<T, boolean>, context?: any): ChainedArray<T>;
+        each(iterator: IteratorCallback<T, void>, context?: any): ChainedObject<void>;
+        forEach(iterator: IteratorCallback<T, void>, context?: any): ChainedObject<void>;
+        map<U>(iterator: IteratorCallback<T, U>, context?: any): ChainedArray<U>;
+        collect<U>(iterator: IteratorCallback<T, U>, context?: any): ChainedArray<U>;
+        reduce(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+        reduce<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+        foldl(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+        foldl<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+        inject(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+        inject<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+        reduceRight(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+        reduceRight<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+        foldr(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+        foldr<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+        find(iterator: IteratorCallback<T, boolean>, context?: any): ChainedObject<T>;
+        detect(iterator: IteratorCallback<T, boolean>, context?: any): ChainedObject<T>;
+        filter(iterator: IteratorCallback<T, boolean>, context?: any): ChainedArray<T>;
+        select(iterator: IteratorCallback<T, boolean>, context?: any): ChainedArray<T>;
         where(properties: Object): ChainedArray<T>;
         findWhere(properties: Object): ChainedObject<T>;
-        reject(iterator: Iterator<T, boolean>, context?: any): ChainedArray<T>;
-        every(iterator?: Iterator<T, boolean>, context?: any): ChainedObject<boolean>;
-        all(iterator?: Iterator<T, boolean>, context?: any): ChainedObject<boolean>;
-        some(iterator?: Iterator<T, boolean>, context?: any): ChainedObject<boolean>;
-        any(iterator?: Iterator<T, boolean>, context?: any): ChainedObject<boolean>;
+        reject(iterator: IteratorCallback<T, boolean>, context?: any): ChainedArray<T>;
+        every(iterator?: IteratorCallback<T, boolean>, context?: any): ChainedObject<boolean>;
+        all(iterator?: IteratorCallback<T, boolean>, context?: any): ChainedObject<boolean>;
+        some(iterator?: IteratorCallback<T, boolean>, context?: any): ChainedObject<boolean>;
+        any(iterator?: IteratorCallback<T, boolean>, context?: any): ChainedObject<boolean>;
         contains(value: T): ChainedObject<boolean>;
         include(value: T): ChainedObject<boolean>;
         invoke(methodName: string, ...args: any[]): ChainedArray<any>;
         pluck(propertyName: string): ChainedArray<any>;
-        max(iterator?: Iterator<T, any>, context?: any): ChainedObject<T>;
-        min(iterator?: Iterator<T, any>, context?: any): ChainedObject<T>;
-        sortBy(iterator: Iterator<T, any>, context?: any): ChainedArray<T>;
+        max(iterator?: IteratorCallback<T, any>, context?: any): ChainedObject<T>;
+        min(iterator?: IteratorCallback<T, any>, context?: any): ChainedObject<T>;
+        sortBy(iterator: IteratorCallback<T, any>, context?: any): ChainedArray<T>;
         sortBy(propertyName: string): ChainedArray<T>;
         // Should return ChainedDictionary<T[]>, but expansive recursion not allowed
-        groupBy(iterator?: Iterator<T, any>, context?: any): ChainedDictionary<any[]>;
+        groupBy(iterator?: IteratorCallback<T, any>, context?: any): ChainedDictionary<any[]>;
         groupBy(propertyName: string): ChainedDictionary<any[]>;
-        countBy(iterator?: Iterator<T, any>, context?: any): ChainedDictionary<number>;
+        countBy(iterator?: IteratorCallback<T, any>, context?: any): ChainedDictionary<number>;
         countBy(propertyName: string): ChainedDictionary<number>;
         shuffle(): ChainedArray<T>;
         toArray(): ChainedArray<T>;
@@ -297,16 +297,16 @@ module Underscore {
         intersection(...arrays: T[][]): ChainedArray<T>;
         difference(...others: T[][]): ChainedArray<T>;
         uniq(isSorted?: boolean): ChainedArray<T>;
-        uniq<U>(isSorted: boolean, iterator: Iterator<T, U>, context?: any): ChainedArray<U>;
+        uniq<U>(isSorted: boolean, iterator: IteratorCallback<T, U>, context?: any): ChainedArray<U>;
         unique(isSorted?: boolean): ChainedArray<T>;
-        unique<U>(isSorted: boolean, iterator: Iterator<T, U>, context?: any): ChainedArray<U>;
+        unique<U>(isSorted: boolean, iterator: IteratorCallback<T, U>, context?: any): ChainedArray<U>;
         zip(...arrays: any[][]): ChainedArray<any[]>;
         object(): ChainedObject<any>;
         object(values: any[]): ChainedObject<any>;
         indexOf(value: T, isSorted?: boolean): ChainedObject<number>;
         lastIndexOf(value: T, fromIndex?: number): ChainedObject<number>;
         sortedIndex(obj: T, propertyName: string): ChainedObject<number>;
-        sortedIndex(obj: T, iterator?: Iterator<T, any>, context?: any): ChainedObject<number>;
+        sortedIndex(obj: T, iterator?: IteratorCallback<T, any>, context?: any): ChainedObject<number>;
         // Methods from Array
         concat(...items: T[]): ChainedArray<T>;
         join(separator?: string): ChainedObject<string>;
@@ -329,43 +329,43 @@ module Underscore {
     }
 
     export interface ChainedDictionary<T> extends ChainedObject<Dictionary<T>> {
-        each(iterator: Iterator<T, void>, context?: any): ChainedObject<void>;
-        forEach(iterator: Iterator<T, void>, context?: any): ChainedObject<void>;
-        map<U>(iterator: Iterator<T, U>, context?: any): ChainedArray<U>;
-        collect<U>(iterator: Iterator<T, U>, context?: any): ChainedArray<U>;
-        reduce(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
-        reduce<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
-        foldl(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
-        foldl<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
-        inject(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
-        inject<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
-        reduceRight(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
-        reduceRight<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
-        foldr(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
-        foldr<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
-        find(iterator: Iterator<T, boolean>, context?: any): ChainedObject<T>;
-        detect(iterator: Iterator<T, boolean>, context?: any): ChainedObject<T>;
-        filter(iterator: Iterator<T, boolean>, context?: any): ChainedArray<T>;
-        select(iterator: Iterator<T, boolean>, context?: any): ChainedArray<T>;
+        each(iterator: IteratorCallback<T, void>, context?: any): ChainedObject<void>;
+        forEach(iterator: IteratorCallback<T, void>, context?: any): ChainedObject<void>;
+        map<U>(iterator: IteratorCallback<T, U>, context?: any): ChainedArray<U>;
+        collect<U>(iterator: IteratorCallback<T, U>, context?: any): ChainedArray<U>;
+        reduce(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+        reduce<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+        foldl(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+        foldl<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+        inject(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+        inject<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+        reduceRight(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+        reduceRight<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+        foldr(iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+        foldr<U>(iterator: ReducerCallback<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+        find(iterator: IteratorCallback<T, boolean>, context?: any): ChainedObject<T>;
+        detect(iterator: IteratorCallback<T, boolean>, context?: any): ChainedObject<T>;
+        filter(iterator: IteratorCallback<T, boolean>, context?: any): ChainedArray<T>;
+        select(iterator: IteratorCallback<T, boolean>, context?: any): ChainedArray<T>;
         where(properties: Object): ChainedArray<T>;
         findWhere(properties: Object): ChainedObject<T>;
-        reject(iterator: Iterator<T, boolean>, context?: any): ChainedArray<T>;
-        every(iterator?: Iterator<T, boolean>, context?: any): ChainedObject<boolean>;
-        all(iterator?: Iterator<T, boolean>, context?: any): ChainedObject<boolean>;
-        some(iterator?: Iterator<T, boolean>, context?: any): ChainedObject<boolean>;
-        any(iterator?: Iterator<T, boolean>, context?: any): ChainedObject<boolean>;
+        reject(iterator: IteratorCallback<T, boolean>, context?: any): ChainedArray<T>;
+        every(iterator?: IteratorCallback<T, boolean>, context?: any): ChainedObject<boolean>;
+        all(iterator?: IteratorCallback<T, boolean>, context?: any): ChainedObject<boolean>;
+        some(iterator?: IteratorCallback<T, boolean>, context?: any): ChainedObject<boolean>;
+        any(iterator?: IteratorCallback<T, boolean>, context?: any): ChainedObject<boolean>;
         contains(value: T): ChainedObject<boolean>;
         include(value: T): ChainedObject<boolean>;
         invoke(methodName: string, ...args: any[]): ChainedArray<any>;
         pluck(propertyName: string): ChainedArray<any>;
-        max(iterator?: Iterator<T, any>, context?: any): ChainedObject<T>;
-        min(iterator?: Iterator<T, any>, context?: any): ChainedObject<T>;
-        sortBy(iterator: Iterator<T, any>, context?: any): ChainedArray<T>;
+        max(iterator?: IteratorCallback<T, any>, context?: any): ChainedObject<T>;
+        min(iterator?: IteratorCallback<T, any>, context?: any): ChainedObject<T>;
+        sortBy(iterator: IteratorCallback<T, any>, context?: any): ChainedArray<T>;
         sortBy(propertyName: string): ChainedArray<T>;
         // Should return ChainedDictionary<T[]>, but expansive recursion not allowed
-        groupBy(iterator?: Iterator<T, any>, context?: any): ChainedDictionary<any[]>;
+        groupBy(iterator?: IteratorCallback<T, any>, context?: any): ChainedDictionary<any[]>;
         groupBy(propertyName: string): ChainedDictionary<any[]>;
-        countBy(iterator?: Iterator<T, any>, context?: any): ChainedDictionary<number>;
+        countBy(iterator?: IteratorCallback<T, any>, context?: any): ChainedDictionary<number>;
         countBy(propertyName: string): ChainedDictionary<number>;
         shuffle(): ChainedArray<T>;
         toArray(): ChainedArray<T>;
@@ -396,47 +396,47 @@ module Underscore {
         chain<T>(list: Dictionary<T>): ChainedDictionary<T>;
         chain<T>(obj: T): ChainedObject<T>;
 
-        each<T>(list: T[], iterator: Iterator<T, void>, context?: any): void;
-        each<T>(list: Dictionary<T>, iterator: Iterator<T, void>, context?: any): void;
-        forEach<T>(list: T[], iterator: Iterator<T, void>, context?: any): void;
-        forEach<T>(list: Dictionary<T>, iterator: Iterator<T, void>, context?: any): void;
+        each<T>(list: T[], iterator: IteratorCallback<T, void>, context?: any): void;
+        each<T>(list: Dictionary<T>, iterator: IteratorCallback<T, void>, context?: any): void;
+        forEach<T>(list: T[], iterator: IteratorCallback<T, void>, context?: any): void;
+        forEach<T>(list: Dictionary<T>, iterator: IteratorCallback<T, void>, context?: any): void;
 
-        map<T, U>(list: T[], iterator: Iterator<T, U>, context?: any): U[];
-        map<T, U>(list: Dictionary<T>, iterator: Iterator<T, U>, context?: any): U[];
-        collect<T, U>(list: T[], iterator: Iterator<T, U>, context?: any): U[];
-        collect<T, U>(list: Dictionary<T>, iterator: Iterator<T, U>, context?: any): U[];
+        map<T, U>(list: T[], iterator: IteratorCallback<T, U>, context?: any): U[];
+        map<T, U>(list: Dictionary<T>, iterator: IteratorCallback<T, U>, context?: any): U[];
+        collect<T, U>(list: T[], iterator: IteratorCallback<T, U>, context?: any): U[];
+        collect<T, U>(list: Dictionary<T>, iterator: IteratorCallback<T, U>, context?: any): U[];
 
-        reduce<T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        reduce<T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        reduce<T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        reduce<T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        foldl<T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        foldl<T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        foldl<T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        foldl<T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        inject<T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        inject<T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        inject<T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        inject<T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+        reduce<T>(list: T[], iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        reduce<T, U>(list: T[], iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        reduce<T>(list: Dictionary<T>, iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        reduce<T, U>(list: Dictionary<T>, iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        foldl<T>(list: T[], iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        foldl<T, U>(list: T[], iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        foldl<T>(list: Dictionary<T>, iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        foldl<T, U>(list: Dictionary<T>, iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        inject<T>(list: T[], iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        inject<T, U>(list: T[], iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        inject<T>(list: Dictionary<T>, iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        inject<T, U>(list: Dictionary<T>, iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
 
-        reduceRight<T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        reduceRight<T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        reduceRight<T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        reduceRight<T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        foldr<T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        foldr<T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U;
-        foldr<T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
-        foldr<T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+        reduceRight<T>(list: T[], iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        reduceRight<T, U>(list: T[], iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        reduceRight<T>(list: Dictionary<T>, iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        reduceRight<T, U>(list: Dictionary<T>, iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        foldr<T>(list: T[], iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        foldr<T, U>(list: T[], iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
+        foldr<T>(list: Dictionary<T>, iterator: ReducerCallback<T, T>, initialValue?: T, context?: any): T;
+        foldr<T, U>(list: Dictionary<T>, iterator: ReducerCallback<T, U>, initialValue: U, context?: any): U;
 
-        find<T>(list: T[], iterator: Iterator<T, boolean>, context?: any): T;
-        find<T>(list: Dictionary<T>, iterator: Iterator<T, boolean>, context?: any): T;
-        detect<T>(list: T[], iterator: Iterator<T, boolean>, context?: any): T;
-        detect<T>(list: Dictionary<T>, iterator: Iterator<T, boolean>, context?: any): T;
+        find<T>(list: T[], iterator: IteratorCallback<T, boolean>, context?: any): T;
+        find<T>(list: Dictionary<T>, iterator: IteratorCallback<T, boolean>, context?: any): T;
+        detect<T>(list: T[], iterator: IteratorCallback<T, boolean>, context?: any): T;
+        detect<T>(list: Dictionary<T>, iterator: IteratorCallback<T, boolean>, context?: any): T;
 
-        filter<T>(list: T[], iterator: Iterator<T, boolean>, context?: any): T[];
-        filter<T>(list: Dictionary<T>, iterator: Iterator<T, boolean>, context?: any): T[];
-        select<T>(list: T[], iterator: Iterator<T, boolean>, context?: any): T[];
-        select<T>(list: Dictionary<T>, iterator: Iterator<T, boolean>, context?: any): T[];
+        filter<T>(list: T[], iterator: IteratorCallback<T, boolean>, context?: any): T[];
+        filter<T>(list: Dictionary<T>, iterator: IteratorCallback<T, boolean>, context?: any): T[];
+        select<T>(list: T[], iterator: IteratorCallback<T, boolean>, context?: any): T[];
+        select<T>(list: Dictionary<T>, iterator: IteratorCallback<T, boolean>, context?: any): T[];
 
         where<T>(list: T[], properties: Object): T[];
         where<T>(list: Dictionary<T>, properties: Object): T[];
@@ -444,18 +444,18 @@ module Underscore {
         findWhere<T>(list: T[], properties: Object): T;
         findWhere<T>(list: Dictionary<T>, properties: Object): T;
 
-        reject<T>(list: T[], iterator: Iterator<T, boolean>, context?: any): T[];
-        reject<T>(list: Dictionary<T>, iterator: Iterator<T, boolean>, context?: any): T[];
+        reject<T>(list: T[], iterator: IteratorCallback<T, boolean>, context?: any): T[];
+        reject<T>(list: Dictionary<T>, iterator: IteratorCallback<T, boolean>, context?: any): T[];
 
-        every<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean;
-        every<T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean;
-        all<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean;
-        all<T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean;
+        every<T>(list: T[], iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
+        every<T>(list: Dictionary<T>, iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
+        all<T>(list: T[], iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
+        all<T>(list: Dictionary<T>, iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
 
-        some<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean;
-        some<T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean;
-        any<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean;
-        any<T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean;
+        some<T>(list: T[], iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
+        some<T>(list: Dictionary<T>, iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
+        any<T>(list: T[], iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
+        any<T>(list: Dictionary<T>, iterator?: IteratorCallback<T, boolean>, context?: any): boolean;
 
         contains<T>(list: T[], value: T): boolean;
         contains<T>(list: Dictionary<T>, value: T): boolean;
@@ -468,24 +468,24 @@ module Underscore {
         pluck(list: any[], propertyName: string): any[];
         pluck(list: Dictionary<any>, propertyName: string): any[];
 
-        max<T>(list: T[], iterator?: Iterator<T, any>, context?: any): T;
-        max<T>(list: Dictionary<T>, iterator?: Iterator<T, any>, context?: any): T;
+        max<T>(list: T[], iterator?: IteratorCallback<T, any>, context?: any): T;
+        max<T>(list: Dictionary<T>, iterator?: IteratorCallback<T, any>, context?: any): T;
 
-        min<T>(list: T[], iterator?: Iterator<T, any>, context?: any): T;
-        min<T>(list: Dictionary<T>, iterator?: Iterator<T, any>, context?: any): T;
+        min<T>(list: T[], iterator?: IteratorCallback<T, any>, context?: any): T;
+        min<T>(list: Dictionary<T>, iterator?: IteratorCallback<T, any>, context?: any): T;
 
-        sortBy<T>(list: T[], iterator: Iterator<T, any>, context?: any): T[];
-        sortBy<T>(list: Dictionary<T>, iterator: Iterator<T, any>, context?: any): T[];
+        sortBy<T>(list: T[], iterator: IteratorCallback<T, any>, context?: any): T[];
+        sortBy<T>(list: Dictionary<T>, iterator: IteratorCallback<T, any>, context?: any): T[];
         sortBy<T>(list: T[], propertyName: string): T[];
         sortBy<T>(list: Dictionary<T>, propertyName: string): T[];
 
-        groupBy<T>(list: T[], iterator?: Iterator<T, any>, context?: any): Dictionary<T[]>;
-        groupBy<T>(list: Dictionary<T>, iterator?: Iterator<T, any>, context?: any): Dictionary<T[]>;
+        groupBy<T>(list: T[], iterator?: IteratorCallback<T, any>, context?: any): Dictionary<T[]>;
+        groupBy<T>(list: Dictionary<T>, iterator?: IteratorCallback<T, any>, context?: any): Dictionary<T[]>;
         groupBy<T>(list: T[], propertyName: string): Dictionary<T[]>;
         groupBy<T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>;
 
-        countBy<T>(list: T[], iterator?: Iterator<T, any>, context?: any): Dictionary<number>;
-        countBy<T>(list: Dictionary<T>, iterator?: Iterator<T, any>, context?: any): Dictionary<number>;
+        countBy<T>(list: T[], iterator?: IteratorCallback<T, any>, context?: any): Dictionary<number>;
+        countBy<T>(list: Dictionary<T>, iterator?: IteratorCallback<T, any>, context?: any): Dictionary<number>;
         countBy<T>(list: T[], propertyName: string): Dictionary<number>;
         countBy<T>(list: Dictionary<T>, propertyName: string): Dictionary<number>;
 
@@ -527,9 +527,9 @@ module Underscore {
         difference<T>(list: T[], ...others: T[][]): T[];
 
         uniq<T>(list: T[], isSorted?: boolean): T[];
-        uniq<T, U>(list: T[], isSorted: boolean, iterator: Iterator<T, U>, context?: any): U[];
+        uniq<T, U>(list: T[], isSorted: boolean, iterator: IteratorCallback<T, U>, context?: any): U[];
         unique<T>(list: T[], isSorted?: boolean): T[];
-        unique<T, U>(list: T[], isSorted: boolean, iterator: Iterator<T, U>, context?: any): U[];
+        unique<T, U>(list: T[], isSorted: boolean, iterator: IteratorCallback<T, U>, context?: any): U[];
 
         zip<T0, T1>(a0: T0[], a1: T1[]): Tuple2<T0, T1>[];
         zip<T0, T1, T2>(a0: T0[], a1: T1[], a2: T2[]): Tuple3<T0, T1, T2>[];
@@ -544,7 +544,7 @@ module Underscore {
         lastIndexOf<T>(list: T[], value: T, fromIndex?: number): number;
 
         sortedIndex<T>(list: T[], obj: T, propertyName: string): number;
-        sortedIndex<T>(list: T[], obj: T, iterator?: Iterator<T, any>, context?: any): number;
+        sortedIndex<T>(list: T[], obj: T, iterator?: IteratorCallback<T, any>, context?: any): number;
 
         range(stop: number): number[];
         range(start: number, stop: number, step?: number): number[];
@@ -621,7 +621,7 @@ module Underscore {
 
         identity<T>(value: T): T;
 
-        times<U>(n: number, iterator: Iterator<number, U>, context?: any): U[];
+        times<U>(n: number, iterator: IteratorCallback<number, U>, context?: any): U[];
 
         random(max: number): number;
         random(min: number, max: number): number;
