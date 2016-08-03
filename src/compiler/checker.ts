@@ -8264,7 +8264,7 @@ namespace ts {
                 // junction is always the non-looping control flow path that leads to the top.
                 for (let i = flowLoopStart; i < flowLoopCount; i++) {
                     if (flowLoopNodes[i] === flow && flowLoopKeys[i] === key) {
-                        return createFlowType(getUnionType(flowLoopTypes[i]), true);
+                        return createFlowType(getUnionType(flowLoopTypes[i]), /*incomplete*/ true);
                     }
                 }
                 // Add the flow loop junction and reference to the in-process stack and analyze
