@@ -1187,7 +1187,7 @@ namespace ts {
         }
 
         function resolveSymbol(symbol: Symbol): Symbol {
-            return symbol && symbol.flags & SymbolFlags.Alias && !(symbol.flags & (SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace)) ? resolveAlias(symbol) : symbol;
+            return symbol && symbol.flags & SymbolFlags.Alias && !(symbol.flags & (SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace)) ? resolveAlias(symbol) : symbol;
         }
 
         function resolveAlias(symbol: Symbol): Symbol {
