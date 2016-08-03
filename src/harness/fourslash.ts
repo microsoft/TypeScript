@@ -779,10 +779,10 @@ namespace FourSlash {
                     if (ranges && ranges.length > rangeIndex) {
                         const range = ranges[rangeIndex];
 
-                        const start = completions.span.start;
-                        const end = start + completions.span.length;
+                        const start = completions.textSpan.start;
+                        const end = start + completions.textSpan.length;
                         if (range.start !== start || range.end !== end) {
-                            this.raiseError(`Expected completion span for '${symbol}', ${stringify(completions.span)}, to cover range ${stringify(range)}`);
+                            this.raiseError(`Expected completion span for '${symbol}', ${stringify(completions.textSpan)}, to cover range ${stringify(range)}`);
                         }
                     }
                     else {

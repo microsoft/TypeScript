@@ -1482,7 +1482,7 @@ namespace ts {
     }
 
     export interface ImportCompletionInfo {
-        span: TextSpan;
+        textSpan: TextSpan;
         entries: ImportCompletionEntry[];
     }
 
@@ -4513,7 +4513,7 @@ namespace ts {
                     // Get all known external module names or complete a path to a module
                     return {
                         entries: getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node),
-                        span: getDirectoryFragmentTextSpan((<StringLiteral>node).text, node.getStart() + 1)
+                        textSpan: getDirectoryFragmentTextSpan((<StringLiteral>node).text, node.getStart() + 1)
                     };
                 }
             }
@@ -4793,18 +4793,18 @@ namespace ts {
                     const scriptPath = getDirectoryPath(sourceFile.path);
                     if (kind === "path") {
                         // Give completions for a relative path
-                        const span: TextSpan = getDirectoryFragmentTextSpan(toComplete, range.pos + prefix.length);
+                        const textSpan: TextSpan = getDirectoryFragmentTextSpan(toComplete, range.pos + prefix.length);
                         return {
                             entries: getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(program.getCompilerOptions()), /*includeExtensions*/true, sourceFile.path),
-                            span
+                            textSpan
                         };
                     }
                     else {
                         // Give completions based on the typings available
-                        const span: TextSpan = { start: range.pos + prefix.length, length: match[0].length - prefix.length };
+                        const textSpan: TextSpan = { start: range.pos + prefix.length, length: match[0].length - prefix.length };
                         return {
                             entries: getCompletionEntriesFromTypings(host, program.getCompilerOptions(), scriptPath),
-                            span
+                            textSpan
                         };
                     }
                 }

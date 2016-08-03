@@ -236,7 +236,7 @@ namespace ts.server {
             const endPosition = this.lineOffsetToPosition(fileName, response.span.end);
 
             return {
-                span: ts.createTextSpanFromBounds(startPosition, endPosition),
+                textSpan: ts.createTextSpanFromBounds(startPosition, endPosition),
                 entries: response.body
             };
         }
