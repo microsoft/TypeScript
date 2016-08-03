@@ -298,8 +298,10 @@ namespace ts {
             const name = isDefaultExport && parent ? "default" : getDeclarationName(node);
 
             let symbol: Symbol;
-            if (name !== undefined) {
-
+            if (name === undefined) {
+                symbol = createSymbol(SymbolFlags.None, "__missing");
+            }
+            else {
                 // Check and see if the symbol table already has a symbol with this name.  If not,
                 // create a new symbol with this name and add it to the table.  Note that we don't
                 // give the new symbol any flags *yet*.  This ensures that it will not conflict
@@ -326,33 +328,37 @@ namespace ts {
                     classifiableNames[name] = name;
                 }
 
-                if (symbol.flags & excludes) {
-                    if (node.name) {
-                        node.name.parent = node;
+                else if (symbol.flags & excludes) {
+                    if (symbol.isDiscardable) {
+                        // Javascript constructor-declared symbols can be discarded in favor of
+                        // prototype symbols like methods.
+                        symbol = symbolTable[name] = createSymbol(SymbolFlags.None, name);
                     }
-
-                    // Report errors every position with duplicate declaration
-                    // Report errors on previous encountered declarations
-                    let message = symbol.flags & SymbolFlags.BlockScopedVariable
-                        ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
-                        : Diagnostics.Duplicate_identifier_0;
-
-                    forEach(symbol.declarations, declaration => {
-                        if (declaration.flags & NodeFlags.Default) {
-                            message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                    else {
+                        if (node.name) {
+                            node.name.parent = node;
                         }
-                    });
 
-                    forEach(symbol.declarations, declaration => {
-                        file.bindDiagnostics.push(createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
-                    });
-                    file.bindDiagnostics.push(createDiagnosticForNode(node.name || node, message, getDisplayName(node)));
+                        // Report errors every position with duplicate declaration
+                        // Report errors on previous encountered declarations
+                        let message = symbol.flags & SymbolFlags.BlockScopedVariable
+                            ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
+                            : Diagnostics.Duplicate_identifier_0;
 
-                    symbol = createSymbol(SymbolFlags.None, name);
+                        forEach(symbol.declarations, declaration => {
+                            if (declaration.flags & NodeFlags.Default) {
+                                message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                            }
+                        });
+
+                        forEach(symbol.declarations, declaration => {
+                            file.bindDiagnostics.push(createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
+                        });
+                        file.bindDiagnostics.push(createDiagnosticForNode(node.name || node, message, getDisplayName(node)));
+
+                        symbol = createSymbol(SymbolFlags.None, name);
+                    }
                 }
-            }
-            else {
-                symbol = createSymbol(SymbolFlags.None, "__missing");
             }
 
             addDeclarationToSymbol(symbol, node, includes);
@@ -1967,7 +1973,7 @@ namespace ts {
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression) {
-            // Declare a 'member' in case it turns out the container was an ES5 class or ES6 constructor
+            // Declare a 'member' if the container is an ES5 class or ES6 constructor
             let assignee: Node;
             if (container.kind === SyntaxKind.FunctionDeclaration || container.kind === SyntaxKind.FunctionExpression) {
                 assignee = container;
@@ -1980,7 +1986,9 @@ namespace ts {
             }
             assignee.symbol.members = assignee.symbol.members || {};
             // It's acceptable for multiple 'this' assignments of the same identifier to occur
-            declareSymbol(assignee.symbol.members, assignee.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+            // AND it can be overwritten by subsequent method declarations
+            let symbol = declareSymbol(assignee.symbol.members, assignee.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+            symbol.isDiscardable = true;
         }
 
         function bindPrototypePropertyAssignment(node: BinaryExpression) {
