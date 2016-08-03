@@ -3284,7 +3284,7 @@ namespace ts {
                     const scriptKind = ts.getScriptKind(fileName, host);
                     const compilerOptions = host.getCompilationSettings();
                     let sourceFile: SourceFile;
-                    if (currentFileName !== fileName) {
+                    if (currentFileName !== fileName || (currentCompilerOptions && !mapIsEqualTo(compilerOptions, currentCompilerOptions))) {
                         // Release the current document
                         if (currentFileName) {
                             documentRegistry.releaseDocument(currentFileName, currentCompilerOptions);

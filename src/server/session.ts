@@ -146,11 +146,6 @@ namespace ts.server {
         export const CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
     }
 
-    namespace Errors {
-        export const NoProject = new Error("No Project.");
-        export const ProjectLanguageServiceDisabled = new Error("The project's language service is disabled.");
-    }
-
     export class Session {
         protected projectService: ProjectService;
         private errorTimer: any; /*NodeJS.Timer | number*/

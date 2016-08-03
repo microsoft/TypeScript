@@ -1346,5 +1346,21 @@ namespace ts {
             projectService.setCompilerOptionsForInferredProjects({ moduleResolution: ModuleResolutionKind.Classic });
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
         });
+
+        it("syntax tree cache handles changes in project settings", () => {
+            const file1 = {
+                path: "/a/b/app.ts",
+                content: "{x: 1}"
+            };
+            const host = createServerHost([file1]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ true);
+            projectService.setCompilerOptionsForInferredProjects({ target: ScriptTarget.ES5, allowJs: false });
+            projectService.openClientFile(file1.path);
+            projectService.inferredProjects[0].getLanguageService(/*ensureSynchronized*/ false).getOutliningSpans(file1.path);
+            projectService.setCompilerOptionsForInferredProjects({ target: ScriptTarget.ES5, allowJs: true });
+            projectService.getScriptInfo(file1.path).editContent(0, 0, " ");
+            projectService.inferredProjects[0].getLanguageService(/*ensureSynchronized*/ false).getOutliningSpans(file1.path);
+            projectService.closeClientFile(file1.path);
+        });
     });
 }

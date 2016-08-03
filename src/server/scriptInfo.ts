@@ -81,6 +81,9 @@ namespace ts.server {
         }
 
         getDefaultProject() {
+            if (this.containingProjects.length === 0) {
+                throw Errors.NoProject;
+            }
             Debug.assert(this.containingProjects.length !== 0);
             return this.containingProjects[0];
         }
