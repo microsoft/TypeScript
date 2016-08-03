@@ -1187,7 +1187,7 @@ namespace ts {
         }
 
         function resolveSymbol(symbol: Symbol): Symbol {
-            return symbol && symbol.flags & SymbolFlags.Alias && !(symbol.flags & (SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace)) ? resolveAlias(symbol) : symbol;
+            return symbol && symbol.flags & SymbolFlags.Alias && !(symbol.flags & (SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace)) ? resolveAlias(symbol) : symbol;
         }
 
         function resolveAlias(symbol: Symbol): Symbol {
@@ -7892,7 +7892,7 @@ namespace ts {
             }
             if (flags & TypeFlags.TypeParameter) {
                 const constraint = getConstraintOfTypeParameter(<TypeParameter>type);
-                return constraint ? getTypeFacts(constraint) : TypeFacts.All;
+                return getTypeFacts(constraint || emptyObjectType);
             }
             if (flags & TypeFlags.UnionOrIntersection) {
                 return getTypeFactsOfTypes((<UnionOrIntersectionType>type).types);
@@ -7900,17 +7900,13 @@ namespace ts {
             return TypeFacts.All;
         }
 
-        function getTypeWithFacts(type: Type, include: TypeFacts, intersectForTypeParameters = false) {
+        function getTypeWithFacts(type: Type, include: TypeFacts) {
             if (!(type.flags & TypeFlags.Union)) {
                 return getTypeFacts(type) & include ? type : neverType;
             }
             let firstType: Type;
-            let hasTypeParameter = false;
             let types: Type[];
             for (const t of (type as UnionType).types) {
-                if (t.flags & TypeFlags.TypeParameter) {
-                    hasTypeParameter = true;
-                }
                 if (getTypeFacts(t) & include) {
                     if (!firstType) {
                         firstType = t;
@@ -7923,19 +7919,8 @@ namespace ts {
                     }
                 }
             }
-            const narrowed = types ? getUnionType(types) :
-                             firstType ? firstType : neverType;
-            // if there is a type parameter in the narrowed type,
-            // add an intersection with the members of the narrowed type so that the shape of the type is correct
-            if (type.flags & TypeFlags.Union &&
-                narrowed.flags & TypeFlags.Union &&
-                hasTypeParameter &&
-                intersectForTypeParameters) {
-                return getIntersectionType(types.concat([narrowed]));
-            }
-            else {
-                return narrowed;
-            }
+            return types ? getUnionType(types) :
+                firstType ? firstType : neverType;
         }
 
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
@@ -8308,10 +8293,10 @@ namespace ts {
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 if (isMatchingReference(reference, expr)) {
-                    return getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy, assumeTrue);
+                    return getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy);
                 }
                 if (isMatchingPropertyAccess(expr)) {
-                    return narrowTypeByDiscriminant(type, <PropertyAccessExpression>expr, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy, assumeTrue));
+                    return narrowTypeByDiscriminant(type, <PropertyAccessExpression>expr, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy));
                 }
                 return type;
             }
@@ -8369,7 +8354,7 @@ namespace ts {
                         value.kind === SyntaxKind.NullKeyword ?
                             assumeTrue ? TypeFacts.EQNull : TypeFacts.NENull :
                             assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
-                    return getTypeWithFacts(type, facts, assumeTrue);
+                    return getTypeWithFacts(type, facts);
                 }
                 if (type.flags & TypeFlags.NotUnionOrUnit) {
                     return type;
@@ -8407,7 +8392,7 @@ namespace ts {
                 const facts = assumeTrue ?
                     getProperty(typeofEQFacts, literal.text) || TypeFacts.TypeofEQHostObject :
                     getProperty(typeofNEFacts, literal.text) || TypeFacts.TypeofNEHostObject;
-                return getTypeWithFacts(type, facts, assumeTrue);
+                return getTypeWithFacts(type, facts);
             }
 
             function narrowTypeBySwitchOnDiscriminant(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
