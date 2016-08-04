@@ -1,6 +1,8 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 /// <reference path="core.ts" />
+/// <reference path="extensions.ts" />
+
 
 namespace ts {
     /** The version of the TypeScript compiler release */
@@ -118,39 +120,51 @@ namespace ts {
         skipTsx: boolean;
     }
 
-    function tryReadTypesSection(packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
-        const jsonContent = readJson(packageJsonPath, state.host);
-
-        function tryReadFromField(fieldName: string) {
-            if (hasProperty(jsonContent, fieldName)) {
-                const typesFile = (<any>jsonContent)[fieldName];
-                if (typeof typesFile === "string") {
-                    const typesFilePath = normalizePath(combinePaths(baseDirectory, typesFile));
-                    if (state.traceEnabled) {
-                        trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, fieldName, typesFile, typesFilePath);
-                    }
-                    return typesFilePath;
-                }
-                else {
-                    if (state.traceEnabled) {
-                        trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, fieldName, typeof typesFile);
-                    }
-                }
-            }
+    function getPackageEntry(packageJson: any, key: string, tag: string, state: ModuleResolutionState) {
+        const value = packageJson[key];
+        if (typeof value === tag) {
+            return value;
         }
-
-        const typesFilePath = tryReadFromField("typings") || tryReadFromField("types");
-        if (typesFilePath) {
-            return typesFilePath;
+        if (state.traceEnabled) {
+            trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_1_got_2, key, tag, typeof value);
         }
+        return undefined;
+    }
 
-        // Use the main module for inferring types if no types package specified and the allowJs is set
-        if (state.compilerOptions.allowJs && jsonContent.main && typeof jsonContent.main === "string") {
+    function getPackageEntryAsPath(packageJson: any, packageJsonPath: string, key: string, state: ModuleResolutionState) {
+        const value = getPackageEntry(packageJson, key, "string", state);
+        const path = value ? normalizePath(combinePaths(getDirectoryPath(packageJsonPath), value)) : undefined;
+        if (path && state.traceEnabled) {
+            trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, key, value, path);
+        }
+        return path;
+    }
+
+    function getPackageTypes(packageJsonPath: string, state: ModuleResolutionState) {
+        const { config } = readConfigFile(packageJsonPath, state.host.readFile);
+        if (config) {
+            return getPackageEntryAsPath(config, packageJsonPath, "typings", state)
+                || getPackageEntryAsPath(config, packageJsonPath, "types", state)
+                // Use the main module for inferring types if no types package specified and the allowJs is set
+                || (state.compilerOptions.allowJs && getPackageEntryAsPath(config, packageJsonPath, "main", state));
+        }
+        else {
             if (state.traceEnabled) {
-                trace(state.host, Diagnostics.No_types_specified_in_package_json_but_allowJs_is_set_so_returning_main_value_of_0, jsonContent.main);
+                trace(state.host, Diagnostics.package_json_does_not_have_0_field, "types");
             }
-            const mainFilePath = normalizePath(combinePaths(baseDirectory, jsonContent.main));
-            return mainFilePath;
+        }
+        return undefined;
+    }
+
+    function getPackageMain(packageJsonPath: string, state: ModuleResolutionState) {
+        const { config } = readConfigFile(packageJsonPath, state.host.readFile);
+        if (config) {
+            return getPackageEntryAsPath(config, packageJsonPath, "main", state);
+        }
+        else {
+            if (state.traceEnabled) {
+                trace(state.host, Diagnostics.package_json_does_not_have_0_field, "main");
+            }
         }
         return undefined;
     }
@@ -286,7 +300,7 @@ namespace ts {
         };
     }
 
-    export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+    export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, loadJs?: boolean): ResolvedModuleWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
         if (traceEnabled) {
             trace(host, Diagnostics.Resolving_module_0_from_1, moduleName, containingFile);
@@ -308,7 +322,7 @@ namespace ts {
         let result: ResolvedModuleWithFailedLookupLocations;
         switch (moduleResolution) {
             case ModuleResolutionKind.NodeJs:
-                result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host);
+                result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, loadJs);
                 break;
             case ModuleResolutionKind.Classic:
                 result = classicNameResolver(moduleName, containingFile, compilerOptions, host);
@@ -603,7 +617,7 @@ namespace ts {
         };
     }
 
-    export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+    export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, loadJs?: boolean): ResolvedModuleWithFailedLookupLocations {
         const containingDirectory = getDirectoryPath(containingFile);
         const supportedExtensions = getSupportedExtensions(compilerOptions);
         const traceEnabled = isTraceEnabled(compilerOptions, host);
@@ -619,7 +633,7 @@ namespace ts {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Loading_module_0_from_node_modules_folder, moduleName);
                 }
-                resolvedFileName = loadModuleFromNodeModules(moduleName, containingDirectory, failedLookupLocations, state);
+                resolvedFileName = loadModuleFromNodeModules(moduleName, containingDirectory, failedLookupLocations, state, loadJs);
                 isExternalLibraryImport = resolvedFileName !== undefined;
             }
             else {
@@ -709,23 +723,18 @@ namespace ts {
         }
     }
 
-    function loadNodeModuleFromDirectory(extensions: string[], candidate: string, failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
+    function loadNodeModuleFromDirectory(extensions: string[], candidate: string, failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState, loadJS?: boolean): string {
         const packageJsonPath = pathToPackageJson(candidate);
         const directoryExists = !onlyRecordFailures && directoryProbablyExists(candidate, state.host);
         if (directoryExists && state.host.fileExists(packageJsonPath)) {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.Found_package_json_at_0, packageJsonPath);
             }
-            const typesFile = tryReadTypesSection(packageJsonPath, candidate, state);
+            const typesFile = loadJS ? getPackageMain(packageJsonPath, state) : getPackageTypes(packageJsonPath, state);
             if (typesFile) {
                 const result = loadModuleFromFile(typesFile, extensions, failedLookupLocation, !directoryProbablyExists(getDirectoryPath(typesFile), state.host), state);
                 if (result) {
                     return result;
-                }
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.package_json_does_not_have_types_field);
                 }
             }
         }
@@ -744,30 +753,31 @@ namespace ts {
         return combinePaths(directory, "package.json");
     }
 
-    function loadModuleFromNodeModulesFolder(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState): string {
+    function loadModuleFromNodeModulesFolder(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState, loadJS?: boolean): string {
         const nodeModulesFolder = combinePaths(directory, "node_modules");
         const nodeModulesFolderExists = directoryProbablyExists(nodeModulesFolder, state.host);
         const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
-        const supportedExtensions = getSupportedExtensions(state.compilerOptions);
+
+        const supportedExtensions = getSupportedExtensions(state.compilerOptions, loadJS);
 
         let result = loadModuleFromFile(candidate, supportedExtensions, failedLookupLocations, !nodeModulesFolderExists, state);
         if (result) {
             return result;
         }
-        result = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state);
+        result = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state, loadJS);
         if (result) {
             return result;
         }
     }
 
-    function loadModuleFromNodeModules(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState): string {
+    function loadModuleFromNodeModules(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState, loadJS?: boolean): string {
         directory = normalizeSlashes(directory);
         while (true) {
             const baseName = getBaseFileName(directory);
             if (baseName !== "node_modules") {
                 // Try to load source from the package
-                const packageResult = loadModuleFromNodeModulesFolder(moduleName, directory, failedLookupLocations, state);
-                if (packageResult && hasTypeScriptFileExtension(packageResult)) {
+                const packageResult = loadModuleFromNodeModulesFolder(moduleName, directory, failedLookupLocations, state, loadJS);
+                if (packageResult && (hasTypeScriptFileExtension(packageResult) || loadJS)) {
                     // Always prefer a TypeScript (.ts, .tsx, .d.ts) file shipped with the package
                     return packageResult;
                 }
@@ -945,6 +955,7 @@ namespace ts {
 
         const newLine = getNewLineCharacter(options);
         const realpath = sys.realpath && ((path: string) => sys.realpath(path));
+        const loadExtension = sys.loadExtension && ((name: string) => sys.loadExtension(name));
 
         return {
             getSourceFile,
@@ -960,7 +971,8 @@ namespace ts {
             trace: (s: string) => sys.write(s + newLine),
             directoryExists: directoryName => sys.directoryExists(directoryName),
             getDirectories: (path: string) => sys.getDirectories(path),
-            realpath
+            realpath,
+            loadExtension
         };
     }
 
@@ -995,7 +1007,8 @@ namespace ts {
             }
 
             const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }${ host.getNewLine() }`;
+            const code = typeof diagnostic.code === "string" ? diagnostic.code : `TS${ diagnostic.code }`;
+            output += `${ category } ${ code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }${ host.getNewLine() }`;
         }
         return output;
     }
@@ -1079,7 +1092,7 @@ namespace ts {
         return result;
     }
 
-    export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
+    export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, extensionCache?: ExtensionCache): Program {
         let program: Program;
         let files: SourceFile[] = [];
         let commonSourceDirectory: string;
@@ -1179,6 +1192,8 @@ namespace ts {
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
 
+        extensionCache = extensionCache || createExtensionCache(options, host);
+
         program = {
             getRootFileNames: () => rootNames,
             getSourceFile,
@@ -1201,7 +1216,13 @@ namespace ts {
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
-            getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives
+            getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
+            getCompilerExtensions() {
+                return extensionCache.getCompilerExtensions();
+            },
+            getExtensionLoadingDiagnostics() {
+                return extensionCache.getExtensionLoadingDiagnostics();
+            },
         };
 
         verifyCompilerOptions();
@@ -1746,6 +1767,7 @@ namespace ts {
             const allDiagnostics: Diagnostic[] = [];
             addRange(allDiagnostics, fileProcessingDiagnostics.getGlobalDiagnostics());
             addRange(allDiagnostics, programDiagnostics.getGlobalDiagnostics());
+            allDiagnostics.push(...extensionCache.getExtensionLoadingDiagnostics());
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 

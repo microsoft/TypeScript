@@ -2676,7 +2676,7 @@
         "category": "Message",
         "code": 6099
     },
-    "'package.json' does not have 'types' field.": {
+    "'package.json' does not have '{0}' field.": {
         "category": "Message",
         "code": 6100
     },
@@ -2696,7 +2696,7 @@
         "category": "Message",
         "code": 6104
     },
-    "Expected type of '{0}' field in 'package.json' to be 'string', got '{1}'.": {
+    "Expected type of '{0}' field in 'package.json' to be '{1}', got '{2}'.": {
         "category": "Message",
         "code": 6105
     },
@@ -2824,14 +2824,25 @@
         "category": "Message",
         "code": 6136
     },
-    "No types specified in 'package.json' but 'allowJs' is set, so returning 'main' value of '{0}'": {
+
+    "List of compiler extensions to require.": {
         "category": "Message",
-        "code": 6137
+        "code": 6150
+    },
+    "Extension loading failed with error '{0}'.": {
+        "category": "Error",
+        "code": 6151
     },
     "Property '{0}' is declared but never used.": {
         "category": "Error",
         "code": 6138
     },
+
+    "Extension '{0}' exported member '{1}' has extension kind '{2}', but was type '{3}' when type '{4}' was expected.": {
+        "category": "Error",
+        "code": 6152
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

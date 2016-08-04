@@ -2,6 +2,17 @@
 /// <reference path="performance.ts" />
 
 
+namespace ts {
+    export function startsWith(str: string, prefix: string): boolean {
+        return str.lastIndexOf(prefix, 0) === 0;
+    }
+
+    export function endsWith(str: string, suffix: string): boolean {
+        const expectedPos = str.length - suffix.length;
+        return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
+    }
+}
+
 /* @internal */
 namespace ts {
     /**
@@ -234,6 +245,26 @@ namespace ts {
         if (!array1 || !array1.length) return array2;
 
         return array1.concat(array2);
+    }
+
+    export function flatten<T>(array1: T[][]): T[] {
+        if (!array1 || !array1.length) return <any>array1;
+        return [].concat(...array1);
+    }
+
+    export function groupBy<T>(array: T[], classifier: (item: T) => string): {[index: string]: T[]};
+    export function groupBy<T>(array: T[], classifier: (item: T) => number): {[index: number]: T[]};
+    export function groupBy<T>(array: T[], classifier: (item: T) => (string | number)): {[index: string]: T[], [index: number]: T[]} {
+        if (!array || !array.length) return undefined;
+        const ret: {[index: string]: T[], [index: number]: T[]} = {};
+        for (const elem of array) {
+            const key = classifier(elem);
+            if (!ret[key]) {
+                ret[key] = [];
+            }
+            ret[key].push(elem);
+        }
+        return ret;
     }
 
     export function deduplicate<T>(array: T[], areEqual?: (a: T, b: T) => boolean): T[] {
@@ -1031,17 +1062,6 @@ namespace ts {
         return true;
     }
 
-    /* @internal */
-    export function startsWith(str: string, prefix: string): boolean {
-        return str.lastIndexOf(prefix, 0) === 0;
-    }
-
-    /* @internal */
-    export function endsWith(str: string, suffix: string): boolean {
-        const expectedPos = str.length - suffix.length;
-        return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
-    }
-
     export function fileExtensionIs(path: string, extension: string): boolean {
         return path.length > extension.length && endsWith(path, extension);
     }
@@ -1318,7 +1338,8 @@ namespace ts {
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
-    export function getSupportedExtensions(options?: CompilerOptions): string[] {
+    export function getSupportedExtensions(options?: CompilerOptions, loadJS?: boolean): string[] {
+        if (loadJS) return supportedJavascriptExtensions;
         return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;
     }
 
@@ -1496,4 +1517,49 @@ namespace ts {
             : ((fileName) => fileName.toLowerCase());
     }
 
+    /**
+     * This isn't the strictest deep equal, but it's good enough for us
+     *  - +0 === -0 (though who really wants to consider them different?)
+     *  - arguments and arrays can be equal (both typeof === object, both have enumerable keys)
+     *  - doesn't inspect es6 iterables (not that they're used in this code base)
+     *  - doesn't inspect regex toString value (so only references to the same regex are equal)
+     *  - doesn't inspect date primitive number value (so only references to the same date are equal)
+     */
+    export function deepEqual(a: any, b: any, memo?: [any, any][]): boolean {
+        if (a === b) return true;
+        if (typeof a !== typeof b) return false;
+        // Special case NaN
+        if (typeof a === "number" && isNaN(a) && isNaN(b)) return true;
+        // We can't know if function arguments are deep equal, so we say they're equal if they look alike
+        if (typeof a === "object" || typeof a === "function") {
+            if (memo) {
+                for (let i = 0; i < memo.length; i++) {
+                    if (memo[i][0] === a && memo[i][1] === b) return true;
+                    if (memo[i][0] === b && memo[i][1] === a) return true;
+                }
+            }
+            else {
+                memo = [];
+            }
+
+            const aKeys = ts.getKeys(a);
+            const bKeys = ts.getKeys(b);
+            aKeys.sort();
+            bKeys.sort();
+
+            if (aKeys.length !== bKeys.length) return false;
+
+            for (let i = 0; i < aKeys.length; i++) {
+                if (aKeys[i] !== bKeys[i]) return false;
+            }
+
+            memo.push([a, b]);
+
+            for (const key of aKeys) {
+                if (!deepEqual(a[key], b[key], memo)) return false;
+            }
+            return true;
+        }
+        return false;
+    }
 }

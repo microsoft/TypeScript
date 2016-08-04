@@ -46,8 +46,9 @@ namespace ts.performance {
         if (enabled) {
             const end = endMarkName && marks[endMarkName] || timestamp();
             const start = startMarkName && marks[startMarkName] || profilerStart;
-            measures[measureName] = (measures[measureName] || 0) + (end - start);
+            return measures[measureName] = (measures[measureName] || 0) + (end - start);
         }
+        return 0;
     }
 
     /**

@@ -395,6 +395,10 @@ namespace ts.server {
         }
 
         getCompilerOptionsDiagnostics(): Diagnostic[] {
+            return this.getProgramDiagnostics();
+        }
+
+        getProgramDiagnostics(): Diagnostic[] {
             throw new Error("Not Implemented Yet.");
         }
 

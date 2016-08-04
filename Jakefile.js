@@ -68,6 +68,7 @@ var compilerSources = [
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
+    "extensions.ts",
     "commandLineParser.ts",
     "tsc.ts",
     "diagnosticInformationMap.generated.ts"
@@ -89,6 +90,7 @@ var servicesSources = [
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
+    "extensions.ts",
     "commandLineParser.ts",
     "diagnosticInformationMap.generated.ts"
 ].map(function (f) {
@@ -153,6 +155,7 @@ var harnessCoreSources = [
     "typeWriter.ts",
     "fourslashRunner.ts",
     "projectsRunner.ts",
+    "extensionRunner.ts",
     "loggedIO.ts",
     "rwcRunner.ts",
     "test262Runner.ts",
@@ -550,7 +553,7 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
 
                 // Node package definition file to be distributed without the package. Created by replacing
                 // 'ts' namespace with '"typescript"' as a module.
-                var nodeStandaloneDefinitionsFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
+                var nodeStandaloneDefinitionsFileContents = definitionFileContents.replace(/declare (namespace|module) ts {/g, 'declare module "typescript" {\n    import * as ts from "typescript";');
                 fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
             });
 

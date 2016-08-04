@@ -123,7 +123,7 @@ namespace Harness.LanguageService {
     }
 
     export class LanguageServiceAdapterHost {
-        protected fileNameToScript = ts.createMap<ScriptInfo>();
+        public fileNameToScript = ts.createMap<ScriptInfo>();
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
                     protected settings = ts.getDefaultCompilerOptions()) {
@@ -365,6 +365,9 @@ namespace Harness.LanguageService {
         }
         getCompilerOptionsDiagnostics(): ts.Diagnostic[] {
             return unwrapJSONCallResult(this.shim.getCompilerOptionsDiagnostics());
+        }
+        getProgramDiagnostics(): ts.Diagnostic[] {
+            return unwrapJSONCallResult(this.shim.getProgramDiagnostics());
         }
         getSyntacticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
             return unwrapJSONCallResult(this.shim.getSyntacticClassifications(fileName, span.start, span.length));

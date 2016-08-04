@@ -1167,6 +1167,8 @@ namespace ts {
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
         getDirectories?(directoryName: string): string[];
+
+        loadExtension?(path: string): any;
     }
 
     //
@@ -1179,9 +1181,12 @@ namespace ts {
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
 
-        // TODO: Rename this to getProgramDiagnostics to better indicate that these are any
-        // diagnostics present for the program level, and not just 'options' diagnostics.
+        /**
+         * @deprecated Use getProgramDiagnostics instead.
+         */
         getCompilerOptionsDiagnostics(): Diagnostic[];
+
+        getProgramDiagnostics(): Diagnostic[];
 
         /**
          * @deprecated Use getEncodedSyntacticClassifications instead.
@@ -1826,6 +1831,7 @@ namespace ts {
         version: string;
         scriptSnapshot: IScriptSnapshot;
         scriptKind: ScriptKind;
+        isRoot: boolean;
     }
 
     interface DocumentRegistryEntry {
@@ -1902,7 +1908,7 @@ namespace ts {
             // Initialize the list with the root file names
             const rootFileNames = host.getScriptFileNames();
             for (const fileName of rootFileNames) {
-                this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName));
+                this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName), /*isRoot*/true);
             }
 
             // store the compilation settings
@@ -1913,7 +1919,7 @@ namespace ts {
             return this._compilationSettings;
         }
 
-        private createEntry(fileName: string, path: Path) {
+        private createEntry(fileName: string, path: Path, isRoot: boolean) {
             let entry: HostFileInformation;
             const scriptSnapshot = this.host.getScriptSnapshot(fileName);
             if (scriptSnapshot) {
@@ -1921,7 +1927,8 @@ namespace ts {
                     hostFileName: fileName,
                     version: this.host.getScriptVersion(fileName),
                     scriptSnapshot: scriptSnapshot,
-                    scriptKind: getScriptKind(fileName, this.host)
+                    scriptKind: getScriptKind(fileName, this.host),
+                    isRoot
                 };
             }
 
@@ -1945,14 +1952,14 @@ namespace ts {
         public getOrCreateEntryByPath(fileName: string, path: Path): HostFileInformation {
             return this.contains(path)
                 ? this.getEntry(path)
-                : this.createEntry(fileName, path);
+                : this.createEntry(fileName, path, /*isRoot*/false);
         }
 
         public getRootFileNames(): string[] {
             const fileNames: string[] = [];
 
             this.fileNameToEntry.forEachValue((path, value) => {
-                if (value) {
+                if (value && value.isRoot) {
                     fileNames.push(value.hostFileName);
                 }
             });
@@ -3026,6 +3033,7 @@ namespace ts {
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
+        let extensionCache: ExtensionCache;
         let lastProjectVersion: string;
 
         const useCaseSensitivefileNames = false;
@@ -3116,10 +3124,12 @@ namespace ts {
                 getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => {
                     // stub missing host functionality
+                    Debug.assert(!!hostCache, "LS CompilerHost may not persist beyond the execution of a synchronize call");
                     return hostCache.getOrCreateEntry(fileName) !== undefined;
                 },
                 readFile: (fileName): string => {
                     // stub missing host functionality
+                    Debug.assert(!!hostCache, "LS CompilerHost may not persist beyond the execution of a synchronize call");
                     const entry = hostCache.getOrCreateEntry(fileName);
                     return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
                 },
@@ -3128,6 +3138,9 @@ namespace ts {
                 },
                 getDirectories: path => {
                     return host.getDirectories ? host.getDirectories(path) : [];
+                },
+                loadExtension: path => {
+                    return host.loadExtension ? host.loadExtension(path) : undefined;
                 }
             };
             if (host.trace) {
@@ -3143,8 +3156,13 @@ namespace ts {
                 };
             }
 
+            const changesInCompilationSettingsAffectExtensions = oldSettings && !deepEqual(oldSettings.extensions, newSettings.extensions);
+            if (!extensionCache || changesInCompilationSettingsAffectExtensions) {
+                extensionCache = createExtensionCache(newSettings, compilerHost);
+            }
+
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
-            const newProgram = createProgram(hostCache.getRootFileNames(), newSettings, compilerHost, program);
+            const newProgram = createProgram(hostCache.getRootFileNames(), newSettings, compilerHost, program, extensionCache);
 
             // Release any files we have acquired in the old program but are
             // not part of the new program.
@@ -3305,7 +3323,7 @@ namespace ts {
             return concatenate(semanticDiagnostics, declarationDiagnostics);
         }
 
-        function getCompilerOptionsDiagnostics() {
+        function getProgramDiagnostics() {
             synchronizeHostData();
             return program.getOptionsDiagnostics(cancellationToken).concat(
                    program.getGlobalDiagnostics(cancellationToken));
@@ -8273,7 +8291,8 @@ namespace ts {
             cleanupSemanticCache,
             getSyntacticDiagnostics,
             getSemanticDiagnostics,
-            getCompilerOptionsDiagnostics,
+            getCompilerOptionsDiagnostics: getProgramDiagnostics,
+            getProgramDiagnostics,
             getSyntacticClassifications,
             getSemanticClassifications,
             getEncodedSyntacticClassifications,
