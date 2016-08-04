@@ -1117,6 +1117,7 @@ namespace ts {
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
         const sourceFilesFoundSearchingNodeModules: Map<boolean> = {};
 
+        performance.emit("beforeProgram");
         const start = performance.mark();
 
         host = host || createCompilerHost(options);
@@ -1217,6 +1218,7 @@ namespace ts {
         verifyCompilerOptions();
 
         performance.measure("Program", start);
+        performance.emit("afterProgram");
 
         return program;
 

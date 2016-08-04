@@ -66,7 +66,7 @@ namespace ts.performance {
 
     /**
      * Iterate over each measure, performing some action
-     * 
+     *
      * @param cb The action to perform for each measure
      */
     export function forEachMeasure(cb: (measureName: string, duration: number) => void) {
