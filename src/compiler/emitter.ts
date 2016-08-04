@@ -6841,7 +6841,7 @@ const _super = (function (geti, seti) {
                                 // export { x, y }
                                 for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
                                     const name = (specifier.propertyName || specifier.name).text;
-                                    (exportSpecifiers[name] || (exportSpecifiers[name] = [])).push(specifier);
+                                    getOrUpdateProperty(exportSpecifiers, name, () => []).push(specifier);
                                 }
                             }
                             break;
