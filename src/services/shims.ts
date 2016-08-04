@@ -67,7 +67,7 @@ namespace ts {
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
 
-        readDirectory(path: string, extensions?: string, exclude?: string, include?: string): string;
+        readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
         readFile(path: string, encoding?: string): string;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
@@ -417,12 +417,17 @@ namespace ts {
             return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
         }
 
-        public readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
+        public readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[] {
+            const pattern = getFileMatcherPatterns(path, extensions, exclude, include,
+                this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
             return JSON.parse(this.shimHost.readDirectory(
                 path,
-                extensions ? JSON.stringify(extensions) : undefined,
-                exclude ? JSON.stringify(exclude) : undefined,
-                include ? JSON.stringify(include) : undefined
+                JSON.stringify(extensions),
+                JSON.stringify(pattern.basePaths),
+                pattern.excludePattern,
+                pattern.includeFilePattern,
+                pattern.includeDirectoryPattern,
+                depth
             ));
         }
 

@@ -4594,6 +4594,7 @@ namespace ts {
                     // Enumerate the available files
                     const files = host.readDirectory(baseDirectory, extensions, /*exclude*/undefined, /*include*/["./*"]);
                     forEach(files, filePath => {
+                        filePath = normalizePath(filePath);
                         if (exclude && comparePaths(filePath, exclude, scriptPath, ignoreCase) === Comparison.EqualTo) {
                             return false;
                         }
@@ -4614,7 +4615,7 @@ namespace ts {
                     if (host.getDirectories) {
                         const directories = host.getDirectories(baseDirectory);
                         forEach(directories, d => {
-                            const directoryName = getBaseFileName(removeTrailingDirectorySeparator(d));
+                            const directoryName = getBaseFileName(normalizePath(d));
 
                             result.push({
                                 name: ensureTrailingDirectorySeparator(directoryName),
@@ -4755,6 +4756,7 @@ namespace ts {
                             const nestedFiles = host.readDirectory(visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/undefined, /*include*/["./*"]);
 
                             forEach(nestedFiles, (f) => {
+                                f = normalizePath(f);
                                 const nestedModule = removeFileExtension(getBaseFileName(f));
                                 nonRelativeModules.push(nestedModule);
                             });
@@ -4850,6 +4852,7 @@ namespace ts {
             function getCompletionEntriesFromDirectories(host: LanguageServiceHost, options: CompilerOptions, directory: string, result: ImportCompletionEntry[]) {
                 if (host.getDirectories && directoryProbablyExists(directory, host)) {
                     forEach(host.getDirectories(directory), typeDirectory => {
+                        typeDirectory = normalizePath(typeDirectory);
                         result.push(createCompletionEntryForModule(getBaseFileName(typeDirectory), ScriptElementKind.externalModuleName));
                     });
                 }
