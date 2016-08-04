@@ -70,13 +70,13 @@ function move1(direction: "up" | "down") {
 >direction : "up" | "down"
 
         case "up":
->"up" : string
+>"up" : "up"
 
             return 1;
 >1 : number
 
         case "down":
->"down" : string
+>"down" : "down"
 
             return -1; 
 >-1 : number
@@ -96,14 +96,14 @@ function move2(direction: "up" | "down") {
 >direction === "up" ? 1 :        direction === "down" ? -1 :        error("Should never get here") : number
 >direction === "up" : boolean
 >direction : "up" | "down"
->"up" : string
+>"up" : "up"
 >1 : number
 
         direction === "down" ? -1 :
 >direction === "down" ? -1 :        error("Should never get here") : number
 >direction === "down" : boolean
->direction : "up" | "down"
->"down" : string
+>direction : "down"
+>"down" : "down"
 >-1 : number
 >1 : number
 
@@ -166,7 +166,7 @@ function f1(x: string | number) {
 >typeof x === "boolean" : boolean
 >typeof x : string
 >x : string | number
->"boolean" : string
+>"boolean" : "boolean"
 
         x;  // never
 >x : never
@@ -184,7 +184,7 @@ function f2(x: string | number) {
 >typeof x === "boolean" : boolean
 >typeof x : string
 >x : string | number
->"boolean" : string
+>"boolean" : "boolean"
 
             return x;  // never
 >x : never

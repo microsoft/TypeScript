@@ -513,8 +513,8 @@ interface NumberConstructor {
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
 declare const Number: NumberConstructor;
 
-interface TemplateStringsArray extends Array<string> {
-    readonly raw: string[];
+interface TemplateStringsArray extends ReadonlyArray<string> {
+    readonly raw: ReadonlyArray<string>
 }
 
 interface Math {
@@ -1108,6 +1108,11 @@ interface Array<T> {
       * Removes the last element from an array and returns it.
       */
     pop(): T | undefined;
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
+    concat(...items: T[][]): T[];
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.

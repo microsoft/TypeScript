@@ -12,7 +12,7 @@ function foo1(a: number) {
 >a : number
 
         case 1:
->1 : number
+>1 : 1
 
             use("1");
 >use("1") : any
@@ -21,7 +21,7 @@ function foo1(a: number) {
 
             break;
         case 2:
->2 : number
+>2 : 2
 
             use("2");
 >use("2") : any
@@ -39,7 +39,7 @@ function foo2(a: number) {
 >a : number
 
         case 1:
->1 : number
+>1 : 1
 
             use("1");
 >use("1") : any

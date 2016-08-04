@@ -245,6 +245,8 @@ namespace ts {
                 return;
             }
 
+            const start = performance.mark();
+
             const sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
 
             // Convert the location to be one-based.
@@ -284,6 +286,8 @@ namespace ts {
             }
 
             updateLastEncodedAndRecordedSpans();
+
+            performance.measure("Source Map", start);
         }
 
         function getStartPos(range: TextRange) {
