@@ -122,11 +122,11 @@ namespace ts {
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
-    const categoryFormatMap: OldMap<string> = {
-        [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
-        [DiagnosticCategory.Error]: redForegroundEscapeSequence,
-        [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
-    };
+    const categoryFormatMap = new Map<DiagnosticCategory, string>([
+        [DiagnosticCategory.Warning, yellowForegroundEscapeSequence],
+        [DiagnosticCategory.Error, redForegroundEscapeSequence],
+        [DiagnosticCategory.Message, blueForegroundEscapeSequence],
+    ]);
 
     function formatAndReset(text: string, formatStyle: string) {
         return formatStyle + text + resetEscapeSequence;
@@ -194,7 +194,7 @@ namespace ts {
             output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
         }
 
-        const categoryColor = categoryFormatMap[diagnostic.category];
+        const categoryColor = categoryFormatMap.get(diagnostic.category);
         const category = DiagnosticCategory[diagnostic.category].toLowerCase();
         output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
         output += sys.newLine + sys.newLine;
@@ -262,7 +262,7 @@ namespace ts {
 
         // This map stores and reuses results of fileExists check that happen inside 'createProgram'
         // This allows to save time in module resolution heavy scenarios when existence of the same file might be checked multiple times.
-        let cachedExistingFiles: OldMap<boolean>;
+        let cachedExistingFiles: Map<string, boolean>;
         let hostFileExists: typeof compilerHost.fileExists;
 
         if (commandLine.options.locale) {
@@ -432,7 +432,7 @@ namespace ts {
             }
 
             // reset the cache of existing files
-            cachedExistingFiles = {};
+            cachedExistingFiles = new Map();
 
             const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
@@ -445,10 +445,7 @@ namespace ts {
         }
 
         function cachedFileExists(fileName: string): boolean {
-            if (hasProperty(cachedExistingFiles, fileName)) {
-                return cachedExistingFiles[fileName];
-            }
-            return cachedExistingFiles[fileName] = hostFileExists(fileName);
+            return getOrUpdateMap(cachedExistingFiles, fileName, () => hostFileExists(fileName));
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {

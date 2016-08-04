@@ -846,7 +846,7 @@ namespace ts {
     }
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
-        const existingDirectories: OldMap<boolean> = {};
+        const existingDirectories = new Set<string>();
 
         function getCanonicalFileName(fileName: string): string {
             // if underlying system can distinguish between two files whose names differs only in cases then file name already in canonical form.
@@ -877,11 +877,11 @@ namespace ts {
         }
 
         function directoryExists(directoryPath: string): boolean {
-            if (hasProperty(existingDirectories, directoryPath)) {
+            if (existingDirectories.has(directoryPath)) {
                 return true;
             }
             if (sys.directoryExists(directoryPath)) {
-                existingDirectories[directoryPath] = true;
+                existingDirectories.add(directoryPath);
                 return true;
             }
             return false;
@@ -895,21 +895,20 @@ namespace ts {
             }
         }
 
-        let outputFingerprints: OldMap<OutputFingerprint>;
+        let outputFingerprints: Map<string, OutputFingerprint>;
 
         function writeFileIfUpdated(fileName: string, data: string, writeByteOrderMark: boolean): void {
             if (!outputFingerprints) {
-                outputFingerprints = {};
+                outputFingerprints = new Map();
             }
 
             const hash = sys.createHash(data);
             const mtimeBefore = sys.getModifiedTime(fileName);
 
-            if (mtimeBefore && hasProperty(outputFingerprints, fileName)) {
-                const fingerprint = outputFingerprints[fileName];
-
+            if (mtimeBefore) {
+                const fingerprint = outputFingerprints.get(fileName);
                 // If output has not been changed, and the file has no external modification
-                if (fingerprint.byteOrderMark === writeByteOrderMark &&
+                if (fingerprint && fingerprint.byteOrderMark === writeByteOrderMark &&
                     fingerprint.hash === hash &&
                     fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
                     return;
@@ -920,11 +919,11 @@ namespace ts {
 
             const mtimeAfter = sys.getModifiedTime(fileName);
 
-            outputFingerprints[fileName] = {
+            outputFingerprints.set(fileName, {
                 hash,
                 byteOrderMark: writeByteOrderMark,
                 mtime: mtimeAfter
-            };
+            });
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
@@ -1040,16 +1039,9 @@ namespace ts {
             return [];
         }
         const resolutions: T[] = [];
-        const cache: OldMap<T> = {};
+        const cache = new Map<string, T>();
         for (const name of names) {
-            let result: T;
-            if (hasProperty(cache, name)) {
-                result = cache[name];
-            }
-            else {
-                result = loader(name, containingFile);
-                cache[name] = result;
-            }
+            const result = getOrUpdateMap(cache, name, () => loader(name, containingFile));
             resolutions.push(result);
         }
         return resolutions;
