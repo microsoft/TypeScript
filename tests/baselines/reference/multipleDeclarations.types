@@ -1,5 +1,4 @@
 === tests/cases/conformance/salsa/input.js ===
-
 function C() {
 >C : () => void
 
@@ -25,7 +24,6 @@ C.prototype.m = function() {
 >this : { m: () => void; }
 >nothing : any
 }
-
 class X {
 >X : X
 
@@ -81,4 +79,61 @@ x.mistake;
 >x.mistake : () => void
 >x : X
 >mistake : () => void
+
+class Y {
+>Y : Y
+
+    mistake() {
+>mistake : any
+    }
+    m() {
+>m : any
+    }
+    constructor() {
+        this.m = this.m.bind(this);
+>this.m = this.m.bind(this) : any
+>this.m : any
+>this : this
+>m : any
+>this.m.bind(this) : any
+>this.m.bind : any
+>this.m : any
+>this : this
+>m : any
+>bind : any
+>this : this
+
+        this.mistake = 'even more nonsense';
+>this.mistake = 'even more nonsense' : string
+>this.mistake : any
+>this : this
+>mistake : any
+>'even more nonsense' : string
+    }
+}
+Y.prototype.mistake = true;
+>Y.prototype.mistake = true : boolean
+>Y.prototype.mistake : any
+>Y.prototype : Y
+>Y : typeof Y
+>prototype : Y
+>mistake : any
+>true : boolean
+
+let y = new Y();
+>y : Y
+>new Y() : Y
+>Y : typeof Y
+
+y.m();
+>y.m() : any
+>y.m : any
+>y : Y
+>m : any
+
+y.mistake();
+>y.mistake() : any
+>y.mistake : any
+>y : Y
+>mistake : any
 

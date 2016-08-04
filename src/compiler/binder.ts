@@ -328,7 +328,7 @@ namespace ts {
                     classifiableNames[name] = name;
                 }
 
-                else if (symbol.flags & excludes) {
+                if (symbol.flags & excludes) {
                     if (symbol.isDiscardable) {
                         // Javascript constructor-declared symbols can be discarded in favor of
                         // prototype symbols like methods.
