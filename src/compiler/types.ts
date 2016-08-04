@@ -1705,7 +1705,7 @@ namespace ts {
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
 
-        /* @internal */ identifiers: OldMap<string>;
+        /* @internal */ identifiers: Map<string, string>;
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
         /* @internal */ symbolCount: number;
@@ -2762,7 +2762,7 @@ namespace ts {
         fileNames: string[];
         raw?: any;
         errors: Diagnostic[];
-        wildcardDirectories?: OldMap<WatchDirectoryFlags>;
+        wildcardDirectories?: Map<string, WatchDirectoryFlags>; //This doesn't appear to ever be accessed?
     }
 
     export const enum WatchDirectoryFlags {
@@ -2772,7 +2772,7 @@ namespace ts {
 
     export interface ExpandResult {
         fileNames: string[];
-        wildcardDirectories: OldMap<WatchDirectoryFlags>;
+        wildcardDirectories: Map<string, WatchDirectoryFlags>;
     }
 
     /* @internal */

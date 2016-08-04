@@ -65,7 +65,7 @@ namespace ts {
     export interface SourceFile {
         /* @internal */ version: string;
         /* @internal */ scriptSnapshot: IScriptSnapshot;
-        /* @internal */ nameTable: OldMap<number>;
+        /* @internal */ nameTable: Map<string, number>;
 
         /* @internal */ getNamedDeclarations(): OldMap<Declaration[]>;
 
@@ -938,8 +938,8 @@ namespace ts {
         public scriptKind: ScriptKind;
         public languageVersion: ScriptTarget;
         public languageVariant: LanguageVariant;
-        public identifiers: OldMap<string>;
-        public nameTable: OldMap<number>;
+        public identifiers: Map<string, string>;
+        public nameTable: Map<string, number>;
         public resolvedModules: OldMap<ResolvedModule>;
         public resolvedTypeReferenceDirectiveNames: OldMap<ResolvedTypeReferenceDirective>;
         public imports: LiteralExpression[];
@@ -4254,10 +4254,10 @@ namespace ts {
                 const target = program.getCompilerOptions().target;
 
                 const nameTable = getNameTable(sourceFile);
-                for (const name in nameTable) {
+                nameTable.forEach((pos, name) => {
                     // Skip identifiers produced only from the current location
-                    if (nameTable[name] === position) {
-                        continue;
+                    if (pos === position) {
+                        return;
                     }
 
                     if (!uniqueNames[name]) {
@@ -4273,7 +4273,7 @@ namespace ts {
                             entries.push(entry);
                         }
                     }
-                }
+                });
 
                 return entries;
             }
@@ -6061,7 +6061,7 @@ namespace ts {
 
                     const nameTable = getNameTable(sourceFile);
 
-                    if (lookUp(nameTable, internedName) !== undefined) {
+                    if (nameTable.has(internedName)) {
                         result = result || [];
                         getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
                     }
@@ -8302,7 +8302,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getNameTable(sourceFile: SourceFile): OldMap<number> {
+    export function getNameTable(sourceFile: SourceFile): Map<string, number> {
         if (!sourceFile.nameTable) {
             initializeNameTable(sourceFile);
         }
@@ -8311,7 +8311,7 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable: OldMap<number> = {};
+        const nameTable = new Map<string, number>();
 
         walk(sourceFile);
         sourceFile.nameTable = nameTable;
@@ -8319,7 +8319,7 @@ namespace ts {
         function walk(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    nameTable[(<Identifier>node).text] = nameTable[(<Identifier>node).text] === undefined ? node.pos : -1;
+                    addName((<Identifier>node).text, node.pos);
                     break;
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
@@ -8332,7 +8332,7 @@ namespace ts {
                         isArgumentOfElementAccessExpression(node) ||
                         isLiteralComputedPropertyDeclarationName(node)) {
 
-                        nameTable[(<LiteralExpression>node).text] = nameTable[(<LiteralExpression>node).text] === undefined ? node.pos : -1;
+                        addName((<LiteralExpression>node).text, node.pos);
                     }
                     break;
                 default:
@@ -8343,6 +8343,10 @@ namespace ts {
                         }
                     }
             }
+        }
+
+        function addName(name: string, pos: number) {
+            nameTable.set(name, nameTable.has(name) ? -1 : pos);
         }
     }
 

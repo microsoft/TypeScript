@@ -350,6 +350,7 @@ namespace ts {
     }
 
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
+    //TODO: no longer necessary! :D
     export function escapeIdentifier(identifier: string): string {
         return identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? "_" + identifier : identifier;
     }

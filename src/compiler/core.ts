@@ -20,7 +20,7 @@ namespace ts {
     }
 
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
-        let files: OldMap<T> = {};
+        let files = new Map<string, T>();
         return {
             get,
             set,
@@ -30,32 +30,30 @@ namespace ts {
             clear,
         };
 
+        //this is silly
         function forEachValueInMap(f: (key: Path, value: T) => void) {
-            for (const key in files) {
-                f(<Path>key, files[key]);
-            }
+            files.forEach((value, key) => f(<Path>key, value));
         }
 
         // path should already be well-formed so it does not need to be normalized
         function get(path: Path): T {
-            return files[toKey(path)];
+            return files.get(path);
         }
 
         function set(path: Path, value: T) {
-            files[toKey(path)] = value;
+            files.set(toKey(path), value);
         }
 
         function contains(path: Path) {
-            return hasProperty(files, toKey(path));
+            return files.has(toKey(path));
         }
 
         function remove(path: Path) {
-            const key = toKey(path);
-            delete files[key];
+            files.delete(toKey(path));
         }
 
         function clear() {
-            files = {};
+            files.clear();
         }
 
         function toKey(path: Path): string {
@@ -435,6 +433,17 @@ namespace ts {
             }
         }
 
+        return result;
+    }
+
+    //TODO: rename
+    export function reducePropertiesForMap<K, V, U>(map: Map<K, V>, callback: (aggregate: U, value: V, key: K) => U, initial: U): U {
+        let result = initial;
+        if (map) {
+            map.forEach((value, key) => {
+                result = callback(result, value, key);
+            })
+        }
         return result;
     }
 

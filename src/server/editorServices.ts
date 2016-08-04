@@ -378,7 +378,7 @@ namespace ts.server {
     export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
-        wildcardDirectories?: ts.OldMap<ts.WatchDirectoryFlags>;
+        wildcardDirectories?: Map<string, ts.WatchDirectoryFlags>;
         compilerOptions?: ts.CompilerOptions;
     }
 
@@ -1419,7 +1419,7 @@ namespace ts.server {
                     /*recursive*/ true
                 );
 
-                project.directoriesWatchedForWildcards = reduceProperties(projectOptions.wildcardDirectories, (watchers, flag, directory) => {
+                project.directoriesWatchedForWildcards = reducePropertiesForMap(projectOptions.wildcardDirectories, (watchers, flag, directory) => {
                     if (comparePaths(configDirectoryPath, directory, ".", !this.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
                         const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
                         this.log(`Add ${ recursive ? "recursive " : ""}watcher for: ${directory}`);

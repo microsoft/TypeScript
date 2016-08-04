@@ -531,7 +531,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             let currentSourceFile: SourceFile;
             let currentText: string;
             let currentLineMap: number[];
-            let currentFileIdentifiers: OldMap<string>;
+            let currentFileIdentifiers: Map<string, string>;
             let renamedDependencies: OldMap<string>;
             let isEs6Module: boolean;
             let isCurrentFileExternalModule: boolean;
@@ -670,7 +670,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function isUniqueName(name: string): boolean {
                 return !resolver.hasGlobalName(name) &&
-                    !hasProperty(currentFileIdentifiers, name) &&
+                    !currentFileIdentifiers.has(name) &&
                     !hasProperty(generatedNameSet, name);
             }
 
