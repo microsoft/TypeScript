@@ -354,8 +354,12 @@ namespace ts {
         return keys;
     }
 
-    export function getProperty<T>(map: Map<T>, key: string): T {
-        return hasOwnProperty.call(map, key) ? map[key] : undefined;
+    export function getProperty<T>(map: Map<T>, key: string): T | undefined {
+        return hasProperty(map, key) ? map[key] : undefined;
+    }
+
+    export function getOrUpdateProperty<T>(map: Map<T>, key: string, makeValue: () => T): T {
+        return hasProperty(map, key) ? map[key] : map[key] = makeValue();
     }
 
     export function isEmpty<T>(map: Map<T>) {

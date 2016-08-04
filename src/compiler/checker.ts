@@ -215,7 +215,7 @@ namespace ts {
         const flowLoopKeys: string[] = [];
         const flowLoopTypes: Type[][] = [];
         const visitedFlowNodes: FlowNode[] = [];
-        const visitedFlowTypes: Type[] = [];
+        const visitedFlowTypes: FlowType[] = [];
         const potentialThisCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
 
@@ -1134,6 +1134,10 @@ namespace ts {
                     }
                     else {
                         symbolFromVariable = getPropertyOfVariable(targetSymbol, name.text);
+                    }
+                    // If the export member we're looking for is default, and there is no real default but allowSyntheticDefaultImports is on, return the entire module as the default
+                    if (!symbolFromVariable && allowSyntheticDefaultImports && name.text === "default") {
+                        symbolFromVariable = resolveExternalModuleSymbol(moduleSymbol) || resolveSymbol(moduleSymbol);
                     }
                     // if symbolFromVariable is export - get its final target
                     symbolFromVariable = resolveSymbol(symbolFromVariable);
@@ -8086,6 +8090,18 @@ namespace ts {
                 f(type) ? type : neverType;
         }
 
+        function isIncomplete(flowType: FlowType) {
+            return flowType.flags === 0;
+        }
+
+        function getTypeFromFlowType(flowType: FlowType) {
+            return flowType.flags === 0 ? (<IncompleteType>flowType).type : <Type>flowType;
+        }
+
+        function createFlowType(type: Type, incomplete: boolean): FlowType {
+            return incomplete ? { flags: 0, type } : type;
+        }
+
         function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, includeOuterFunctions: boolean) {
             let key: string;
             if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
@@ -8093,14 +8109,14 @@ namespace ts {
             }
             const initialType = assumeInitialized ? declaredType : includeFalsyTypes(declaredType, TypeFlags.Undefined);
             const visitedFlowStart = visitedFlowCount;
-            const result = getTypeAtFlowNode(reference.flowNode);
+            const result = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
             visitedFlowCount = visitedFlowStart;
             if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(result, TypeFacts.NEUndefinedOrNull) === neverType) {
                 return declaredType;
             }
             return result;
 
-            function getTypeAtFlowNode(flow: FlowNode): Type {
+            function getTypeAtFlowNode(flow: FlowNode): FlowType {
                 while (true) {
                     if (flow.flags & FlowFlags.Shared) {
                         // We cache results of flow type resolution for shared nodes that were previously visited in
@@ -8112,7 +8128,7 @@ namespace ts {
                             }
                         }
                     }
-                    let type: Type;
+                    let type: FlowType;
                     if (flow.flags & FlowFlags.Assignment) {
                         type = getTypeAtFlowAssignment(<FlowAssignment>flow);
                         if (!type) {
@@ -8180,41 +8196,44 @@ namespace ts {
                 return undefined;
             }
 
-            function getTypeAtFlowCondition(flow: FlowCondition) {
-                let type = getTypeAtFlowNode(flow.antecedent);
+            function getTypeAtFlowCondition(flow: FlowCondition): FlowType {
+                const flowType = getTypeAtFlowNode(flow.antecedent);
+                let type = getTypeFromFlowType(flowType);
                 if (type !== neverType) {
                     // If we have an antecedent type (meaning we're reachable in some way), we first
-                    // attempt to narrow the antecedent type. If that produces the nothing type, then
-                    // we take the type guard as an indication that control could reach here in a
-                    // manner not understood by the control flow analyzer (e.g. a function argument
-                    // has an invalid type, or a nested function has possibly made an assignment to a
-                    // captured variable). We proceed by reverting to the declared type and then
+                    // attempt to narrow the antecedent type. If that produces the never type, and if
+                    // the antecedent type is incomplete (i.e. a transient type in a loop), then we
+                    // take the type guard as an indication that control *could* reach here once we
+                    // have the complete type. We proceed by reverting to the declared type and then
                     // narrow that.
                     const assumeTrue = (flow.flags & FlowFlags.TrueCondition) !== 0;
                     type = narrowType(type, flow.expression, assumeTrue);
-                    if (type === neverType) {
+                    if (type === neverType && isIncomplete(flowType)) {
                         type = narrowType(declaredType, flow.expression, assumeTrue);
                     }
                 }
-                return type;
+                return createFlowType(type, isIncomplete(flowType));
             }
 
-            function getTypeAtSwitchClause(flow: FlowSwitchClause) {
-                const type = getTypeAtFlowNode(flow.antecedent);
+            function getTypeAtSwitchClause(flow: FlowSwitchClause): FlowType {
+                const flowType = getTypeAtFlowNode(flow.antecedent);
+                let type = getTypeFromFlowType(flowType);
                 const expr = flow.switchStatement.expression;
                 if (isMatchingReference(reference, expr)) {
-                    return narrowTypeBySwitchOnDiscriminant(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
+                    type = narrowTypeBySwitchOnDiscriminant(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
                 }
-                if (isMatchingPropertyAccess(expr)) {
-                    return narrowTypeByDiscriminant(type, <PropertyAccessExpression>expr, t => narrowTypeBySwitchOnDiscriminant(t, flow.switchStatement, flow.clauseStart, flow.clauseEnd));
+                else if (isMatchingPropertyAccess(expr)) {
+                    type = narrowTypeByDiscriminant(type, <PropertyAccessExpression>expr, t => narrowTypeBySwitchOnDiscriminant(t, flow.switchStatement, flow.clauseStart, flow.clauseEnd));
                 }
-                return type;
+                return createFlowType(type, isIncomplete(flowType));
             }
 
-            function getTypeAtFlowBranchLabel(flow: FlowLabel) {
+            function getTypeAtFlowBranchLabel(flow: FlowLabel): FlowType {
                 const antecedentTypes: Type[] = [];
+                let seenIncomplete = false;
                 for (const antecedent of flow.antecedents) {
-                    const type = getTypeAtFlowNode(antecedent);
+                    const flowType = getTypeAtFlowNode(antecedent);
+                    const type = getTypeFromFlowType(flowType);
                     // If the type at a particular antecedent path is the declared type and the
                     // reference is known to always be assigned (i.e. when declared and initial types
                     // are the same), there is no reason to process more antecedents since the only
@@ -8225,11 +8244,14 @@ namespace ts {
                     if (!contains(antecedentTypes, type)) {
                         antecedentTypes.push(type);
                     }
+                    if (isIncomplete(flowType)) {
+                        seenIncomplete = true;
+                    }
                 }
-                return getUnionType(antecedentTypes);
+                return createFlowType(getUnionType(antecedentTypes), seenIncomplete);
             }
 
-            function getTypeAtFlowLoopLabel(flow: FlowLabel) {
+            function getTypeAtFlowLoopLabel(flow: FlowLabel): FlowType {
                 // If we have previously computed the control flow type for the reference at
                 // this flow loop junction, return the cached type.
                 const id = getFlowNodeId(flow);
@@ -8241,12 +8263,12 @@ namespace ts {
                     return cache[key];
                 }
                 // If this flow loop junction and reference are already being processed, return
-                // the union of the types computed for each branch so far. We should never see
-                // an empty array here because the first antecedent of a loop junction is always
-                // the non-looping control flow path that leads to the top.
+                // the union of the types computed for each branch so far, marked as incomplete.
+                // We should never see an empty array here because the first antecedent of a loop
+                // junction is always the non-looping control flow path that leads to the top.
                 for (let i = flowLoopStart; i < flowLoopCount; i++) {
                     if (flowLoopNodes[i] === flow && flowLoopKeys[i] === key) {
-                        return getUnionType(flowLoopTypes[i]);
+                        return createFlowType(getUnionType(flowLoopTypes[i]), /*incomplete*/ true);
                     }
                 }
                 // Add the flow loop junction and reference to the in-process stack and analyze
@@ -8257,7 +8279,7 @@ namespace ts {
                 flowLoopTypes[flowLoopCount] = antecedentTypes;
                 for (const antecedent of flow.antecedents) {
                     flowLoopCount++;
-                    const type = getTypeAtFlowNode(antecedent);
+                    const type = getTypeFromFlowType(getTypeAtFlowNode(antecedent));
                     flowLoopCount--;
                     // If we see a value appear in the cache it is a sign that control flow  analysis
                     // was restarted and completed by checkExpressionCached. We can simply pick up
@@ -12903,6 +12925,14 @@ namespace ts {
             return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
         }
 
+        function getBestChoiceType(type1: Type, type2: Type): Type {
+            const firstAssignableToSecond = isTypeAssignableTo(type1, type2);
+            const secondAssignableToFirst = isTypeAssignableTo(type2, type1);
+            return secondAssignableToFirst && !firstAssignableToSecond ? type1 :
+                firstAssignableToSecond && !secondAssignableToFirst ? type2 :
+                getUnionType([type1, type2], /*subtypeReduction*/ true);
+        }
+
         function checkBinaryExpression(node: BinaryExpression, contextualMapper?: TypeMapper) {
             return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, contextualMapper, node);
         }
@@ -13046,7 +13076,7 @@ namespace ts {
                         leftType;
                 case SyntaxKind.BarBarToken:
                     return getTypeFacts(leftType) & TypeFacts.Falsy ?
-                        getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], /*subtypeReduction*/ true) :
+                        getBestChoiceType(removeDefinitelyFalsyTypes(leftType), rightType) :
                         leftType;
                 case SyntaxKind.EqualsToken:
                     checkAssignmentOperator(rightType);
@@ -13173,7 +13203,7 @@ namespace ts {
             checkExpression(node.condition);
             const type1 = checkExpression(node.whenTrue, contextualMapper);
             const type2 = checkExpression(node.whenFalse, contextualMapper);
-            return getUnionType([type1, type2], /*subtypeReduction*/ true);
+            return getBestChoiceType(type1, type2);
         }
 
         function typeContainsLiteralFromEnum(type: Type, enumType: EnumType) {
