@@ -59,7 +59,6 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         browser: process.env.browser || process.env.b || "IE",
         tests: process.env.test || process.env.tests || process.env.t,
         light: process.env.light || false,
-        port: process.env.port || process.env.p || "8888",
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
         files: process.env.f || process.env.file || process.env.files || "",
@@ -766,7 +765,7 @@ function writeTestConfigFile(tests: string, light: boolean, taskConfigsFolder?: 
 }
 
 
-gulp.task("runtests-browser", "Runs the tests using the built run.js file like 'gulp runtests'. Syntax is gulp runtests-browser. Additional optional parameters --tests=[regex], --port=, --browser=[chrome|IE]", ["browserify", nodeServerOutFile], (done) => {
+gulp.task("runtests-browser", "Runs the tests using the built run.js file like 'gulp runtests'. Syntax is gulp runtests-browser. Additional optional parameters --tests=[regex], --browser=[chrome|IE]", ["browserify", nodeServerOutFile], (done) => {
     cleanTestDirs((err) => {
         if (err) { console.error(err); done(err); process.exit(1); }
         host = "node";
@@ -781,9 +780,6 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
         }
 
         const args = [nodeServerOutFile];
-        if (cmdLineOptions["port"]) {
-            args.push(cmdLineOptions["port"]);
-        }
         if (cmdLineOptions["browser"]) {
             args.push(cmdLineOptions["browser"]);
         }
@@ -960,6 +956,7 @@ const lintTargets = [
     "src/server/**/*.ts",
     "scripts/tslint/**/*.ts",
     "src/services/**/*.ts",
+    "tests/*.ts", "tests/webhost/*.ts" // Note: does *not* descend recursively
 ];
 
 

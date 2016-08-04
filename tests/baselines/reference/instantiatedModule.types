@@ -175,9 +175,9 @@ var blue: M3.Color = a3.Blue;
 >blue : M3.Color
 >M3 : any
 >Color : M3.Color
->a3.Blue : M3.Color
+>a3.Blue : M3.Color.Blue
 >a3 : typeof M3.Color
->Blue : M3.Color
+>Blue : M3.Color.Blue
 
 var p3: M3.Color;
 >p3 : M3.Color

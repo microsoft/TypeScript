@@ -43,7 +43,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >leftBottom : boolean
 >position !== "rightOrTop" : boolean
 >position : any
->"rightOrTop" : string
+>"rightOrTop" : "rightOrTop"
 >rotation : number
 >o.rotation % 360 : number
 >o.rotation : any
@@ -180,7 +180,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >o.titleGap : any
 >o : any
 >titleGap : any
->0 : number
+>0 : 0
 >0 : number
 >o.titleGap || (ta.title && ta.title.gap) || 15 : any
 >o.titleGap || (ta.title && ta.title.gap) : any
@@ -545,7 +545,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >taTitleOrientation : any
 >taTitleOrientation == "away" : boolean
 >taTitleOrientation : any
->"away" : string
+>"away" : "away"
 >180 : number
 >0 : number
 
@@ -570,7 +570,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >labelAlign : any
 
         case "start":
->"start" : string
+>"start" : "start"
 
             labelAlign = "end";
 >labelAlign = "end" : string
@@ -579,7 +579,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 
             break;
         case "end":
->"end" : string
+>"end" : "end"
 
             labelAlign = "start";
 >labelAlign = "start" : string
@@ -588,7 +588,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 
             break;
         case "middle":
->"middle" : string
+>"middle" : "middle"
 
             labelOffset.y -= size;
 >labelOffset.y -= size : number
