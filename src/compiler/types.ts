@@ -346,7 +346,7 @@ namespace ts {
         JSDocTypedefTag,
         JSDocPropertyTag,
         JSDocTypeLiteral,
-        JSDocStringLiteralType,
+        JSDocLiteralType,
 
         // Synthesized list
         SyntaxList,
@@ -377,9 +377,9 @@ namespace ts {
         LastBinaryOperator = CaretEqualsToken,
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
-        LastJSDocNode = JSDocStringLiteralType,
+        LastJSDocNode = JSDocLiteralType,
         FirstJSDocTagNode = JSDocComment,
-        LastJSDocTagNode = JSDocStringLiteralType
+        LastJSDocTagNode = JSDocLiteralType
     }
 
     export const enum NodeFlags {
@@ -1493,8 +1493,8 @@ namespace ts {
         type: JSDocType;
     }
 
-    export interface JSDocStringLiteralType extends JSDocType {
-        stringLiteral: StringLiteralTypeNode;
+    export interface JSDocLiteralType extends JSDocType {
+        literal: LiteralTypeNode;
     }
 
     export type JSDocTypeReferencingNode = JSDocThisType | JSDocConstructorType | JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;

@@ -417,6 +417,8 @@ namespace ts {
             case SyntaxKind.JSDocPropertyTag:
                 return visitNode(cbNode, (<JSDocPropertyTag>node).typeExpression) ||
                     visitNode(cbNode, (<JSDocPropertyTag>node).name);
+            case SyntaxKind.JSDocLiteralType:
+                    return visitNode(cbNode, (<JSDocLiteralType>node).literal);
         }
     }
 
@@ -5890,7 +5892,10 @@ namespace ts {
                     case SyntaxKind.VoidKeyword:
                         return parseTokenNode<JSDocType>();
                     case SyntaxKind.StringLiteral:
-                        return parseJSDocStringLiteralType();
+                    case SyntaxKind.NumericLiteral:
+                    case SyntaxKind.TrueKeyword:
+                    case SyntaxKind.FalseKeyword:
+                        return parseJSDocLiteralType();
                 }
 
                 return parseJSDocTypeReference();
@@ -6071,9 +6076,9 @@ namespace ts {
                 return finishNode(result);
             }
 
-            function parseJSDocStringLiteralType(): JSDocStringLiteralType {
-                const result = <JSDocStringLiteralType>createNode(SyntaxKind.JSDocStringLiteralType);
-                result.stringLiteral = parseStringLiteralTypeNode();
+            function parseJSDocLiteralType(): JSDocLiteralType {
+                const result = <JSDocLiteralType>createNode(SyntaxKind.JSDocLiteralType);
+                result.literal = parseLiteralTypeNode();
                 return finishNode(result);
             }
 
