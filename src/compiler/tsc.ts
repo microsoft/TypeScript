@@ -802,7 +802,7 @@ namespace ts {
                         case "project":
                             break;
                         default:
-                            let optionDefinition = optionsNameMap[name.toLowerCase()];
+                            let optionDefinition = optionsNameMap.get(name.toLowerCase());
                             if (optionDefinition) {
                                 if (typeof optionDefinition.type === "string") {
                                     // string, number or boolean

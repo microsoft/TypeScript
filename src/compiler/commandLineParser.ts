@@ -458,8 +458,8 @@ namespace ts {
 
     /* @internal */
     export interface OptionNameMap {
-        optionNameMap: OldMap<CommandLineOption>;
-        shortOptionNames: OldMap<string>;
+        optionNameMap: Map<string, CommandLineOption>;
+        shortOptionNames: Map<string, string>;
     }
 
     let optionNameMapCache: OptionNameMap;
@@ -470,12 +470,12 @@ namespace ts {
             return optionNameMapCache;
         }
 
-        const optionNameMap: OldMap<CommandLineOption> = {};
-        const shortOptionNames: OldMap<string> = {};
+        const optionNameMap = new Map<string, CommandLineOption>();
+        const shortOptionNames = new Map<string, string>();
         forEach(optionDeclarations, option => {
-            optionNameMap[option.name.toLowerCase()] = option;
+            optionNameMap.set(option.name.toLowerCase(), option);
             if (option.shortName) {
-                shortOptionNames[option.shortName] = option.name;
+                shortOptionNames.set(option.shortName, option.name);
             }
         });
 
@@ -551,13 +551,13 @@ namespace ts {
                     s = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
 
                     // Try to translate short option names to their full equivalents.
-                    if (hasProperty(shortOptionNames, s)) {
-                        s = shortOptionNames[s];
+                    const short = shortOptionNames.get(s);
+                    if (short) {
+                        s = short;
                     }
 
-                    if (hasProperty(optionNameMap, s)) {
-                        const opt = optionNameMap[s];
-
+                    const opt = optionNameMap.get(s);
+                    if (opt) {
                         if (opt.isTSConfigOnly) {
                             errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file, opt.name));
                         }
@@ -958,12 +958,12 @@ namespace ts {
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map later when when including
         // wildcard paths.
-        const literalFileMap: OldMap<string> = {};
+        const literalFileMap = new Map<string, string>();
 
         // Wildcard paths (provided via the "includes" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard, and to handle extension priority.
-        const wildcardFileMap: OldMap<string> = {};
+        const wildcardFileMap = new Map<string, string>();
 
         if (include) {
             include = validateSpecs(include, errors, /*allowTrailingRecursion*/ false);
@@ -988,7 +988,7 @@ namespace ts {
         if (fileNames) {
             for (const fileName of fileNames) {
                 const file = combinePaths(basePath, fileName);
-                literalFileMap[keyMapper(file)] = file;
+                literalFileMap.set(keyMapper(file), file);
             }
         }
 
@@ -1011,14 +1011,14 @@ namespace ts {
                 removeWildcardFilesWithLowerPriorityExtension(file, wildcardFileMap, supportedExtensions, keyMapper);
 
                 const key = keyMapper(file);
-                if (!hasProperty(literalFileMap, key) && !hasProperty(wildcardFileMap, key)) {
-                    wildcardFileMap[key] = file;
+                if (!literalFileMap.has(key)) {
+                    setIfNotAlreadyPresent(wildcardFileMap, key, () => file);
                 }
             }
         }
 
-        const literalFiles = reduceProperties(literalFileMap, addFileToOutput, []);
-        const wildcardFiles = reduceProperties(wildcardFileMap, addFileToOutput, []);
+        const literalFiles = valuesArray(literalFileMap);
+        const wildcardFiles = valuesArray(wildcardFileMap);
         wildcardFiles.sort(host.useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive);
         return {
             fileNames: literalFiles.concat(wildcardFiles),
@@ -1109,13 +1109,13 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function hasFileWithHigherPriorityExtension(file: string, literalFiles: OldMap<string>, wildcardFiles: OldMap<string>, extensions: string[], keyMapper: (value: string) => string) {
+    function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string, string>, wildcardFiles: Map<string, string>, extensions: string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority);
         for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
             const higherPriorityExtension = extensions[i];
             const higherPriorityPath = keyMapper(changeExtension(file, higherPriorityExtension));
-            if (hasProperty(literalFiles, higherPriorityPath) || hasProperty(wildcardFiles, higherPriorityPath)) {
+            if (literalFiles.has(higherPriorityPath) || wildcardFiles.has(higherPriorityPath)) {
                 return true;
             }
         }
@@ -1131,26 +1131,16 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: OldMap<string>, extensions: string[], keyMapper: (value: string) => string) {
+    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string, string>, extensions: string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority);
         for (let i = nextExtensionPriority; i < extensions.length; i++) {
             const lowerPriorityExtension = extensions[i];
             const lowerPriorityPath = keyMapper(changeExtension(file, lowerPriorityExtension));
-            delete wildcardFiles[lowerPriorityPath];
+            wildcardFiles.delete(lowerPriorityPath);
         }
     }
 
-    /**
-     * Adds a file to an array of files.
-     *
-     * @param output The output array.
-     * @param file The file path.
-     */
-    function addFileToOutput(output: string[], file: string) {
-        output.push(file);
-        return output;
-    }
 
     /**
      * Gets a case sensitive key.

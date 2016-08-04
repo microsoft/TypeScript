@@ -1,6 +1,4 @@
-//TODO: this belongs somewhere else... its own file?
-//taken from es2015.collection.d.ts and es2015.iterable.d.ts and es2015.symbol.d.ts
-
+// Global declarations adapted from es2015.collection.d.ts and es2015.iterable.d.ts and es2015.symbol.d.ts
 interface SymbolConstructor {
     /**
       * A method that returns the default iterator for an object. Called by the semantics of the
@@ -20,12 +18,9 @@ interface Iterator<T> {
 }
 
 interface Map<K, V> {
-    [Symbol.iterator](): Iterator<[K,V]>;
+    entries(): Iterator<[K, V]>;
     keys(): Iterator<K>;
     values(): Iterator<V>;
-}
-
-interface Map<K, V> {
     clear(): void;
     delete(key: K): boolean;
     forEach(callbackfn: (value: V, index: K, map: Map<K, V>) => void, thisArg?: any): void;
@@ -37,106 +32,32 @@ interface Map<K, V> {
 interface MapConstructor {
     new (): Map<any, any>;
     new <K, V>(entries?: [K, V][]): Map<K, V>;
-    //I added this
     new <K, V>(entries: Map<K, V>): Map<K, V>;
     readonly prototype: Map<any, any>;
 }
 declare var Map: MapConstructor;
 
-/*
-interface IteratorResult<T> {
-    done: boolean;
-    value: T;
+interface Set<T> {
+    add(value: T): this;
+    clear(): void;
+    delete(value: T): boolean;
+    forEach(callbackfn: (value: T, index: T, set: Set<T>) => void, thisArg?: any): void;
+    has(value: T): boolean;
+    readonly size: number;
 }
 
-interface Iterator<T> {
-    next(value?: any): IteratorResult<T>;
-    return?(value?: any): IteratorResult<T>;
-    throw?(e?: any): IteratorResult<T>;
-}*/
+interface SetConstructor {
+    new (): Set<any>;
+    new <T>(values?: T[]): Set<T>;
+    readonly prototype: Set<any>;
+}
+declare var Set: SetConstructor;
 
 namespace ts {
-    //TODO: better name...
-    export function forEachInMap<K, V, U>(map: Map<K, V>, callback: (value: V, key: K) => U | undefined): U | undefined {
-        const iter = map[Symbol.iterator]();
-        while (true) {
-            const {done, value: pair} = iter.next();
-            if (done) {
-                return undefined;
-            }
-            const [key, value] = pair;
-            const result = callback(value, key);
-            if (result) {
-                return result;
-            }
-        }
-    }
-
-    //TODO: may be simpler without using this function.
-    export function setIfNotAlreadyPresent<K, V>(map: Map<K, V>, key: K, getValue: () => V): void {
-        if (!map.has(key)) {
-            map.set(key, getValue());
-        }
-    }
-
-    export function someInMap<K, V>(map: Map<K, V>, predicate: (value: V, key: K) => boolean): boolean {
-        //TODO: share code with forEachValueInMap???
-        return !!forEachInMap(map, predicate);
-    }
-
-    //TODO: probably want to get rid of this...
-    export function createMapFromArray<A, K, V>(inputs: A[], getKey: (element: A) => K, getValue: (element: A) => V): Map<K, V> {
-        const result = new Map<K, V>();
-        for (const input of inputs) {
-            result.set(getKey(input), getValue(input));
-        }
-        return result;
-    }
-
-    export function createMapFromKeys<K, V>(keys: K[], getValue: (key: K) => V): Map<K, V> {
-        return createMapFromArray(keys, key => key, getValue);
-    }
-
-    export function createMapFromValues<K, V>(values: V[], getKey: (value: V) => K): Map<K, V> {
-        return createMapFromArray(values, getKey, value => value);
-    }
-
-    //move
-    export function getOrUpdateMap<K, V>(map: Map<K, V>, key: K, getValue: () => V): V {
-        const value = map.get(key);
-        if (value === undefined) {
-            const value = getValue();
-            map.set(key, value);
-            return value;
-        }
-        else {
-            return value;
-        }
-    }
-    export function singletonMap<K, V>(key: K, value: V): Map<K, V> {
-        return new Map([[key, value]]);
-    }
-    export function cloneMap<K, V>(map: Map<K, V>): Map<K, V> {
-        return new Map(map);
-    }
-
-
     //TODO: eventually want to kill all uses of this
     export interface OldMap<T> {
         [index: string]: T;
     }
-
-    //TODO: should probably have a Map.ts file...
-
-
-
-
-
-
-
-
-
-
 
     // branded string type used to store absolute, normalized and canonicalized paths
     // arbitrary file name can be converted to Path via toPath function
@@ -1799,7 +1720,7 @@ namespace ts {
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
-        /* @internal */ classifiableNames?: OldMap<string>;
+        /* @internal */ classifiableNames?: Set<string>; //is this ever used?
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
@@ -1883,7 +1804,7 @@ namespace ts {
         // language service).
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
 
-        /* @internal */ getClassifiableNames(): OldMap<string>;
+        /* @internal */ getClassifiableNames(): Set<string>;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
@@ -2443,7 +2364,7 @@ namespace ts {
 
     // Enum types (TypeFlags.Enum)
     export interface EnumType extends Type {
-        memberTypes: OldMap<EnumLiteralType>;
+        memberTypes: Map<number, EnumLiteralType>;
     }
 
     // Enum types (TypeFlags.EnumLiteral)

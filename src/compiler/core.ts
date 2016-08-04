@@ -378,11 +378,25 @@ namespace ts {
         return hasProperty(map, key) ? map[key] : undefined;
     }
 
-    export function copyMap<T>(source: OldMap<T>, target: OldMap<T>): void {
+    export function copyOldMap<T>(source: OldMap<T>, target: OldMap<T>): void {
         for (const p in source) {
             target[p] = source[p];
         }
     }
+
+    //rename
+    export function copyNewMap<K, V>(source: Map<K, V>, target: Map<K, V>): void {
+        //This is probably duplicate code
+        source.forEach((value, key) => {
+            target.set(key, value);
+        });
+    }
+
+    //move
+    export function copySet<T>(source: Set<T>, target: Set<T>): void {
+        source.forEach(element => target.add(element));
+    }
+
 
     /**
      * Creates a map from the elements of an array.
@@ -422,6 +436,85 @@ namespace ts {
         }
 
         return result;
+    }
+
+
+
+    //TODO: better name...
+    export function forEachInMap<K, V, U>(map: Map<K, V>, callback: (value: V, key: K) => U | undefined): U | undefined {
+        const iter = map.entries();
+        while (true) {
+            const {done, value: pair} = iter.next();
+            if (done) {
+                return undefined;
+            }
+            const [key, value] = pair;
+            const result = callback(value, key);
+            if (result) {
+                return result;
+            }
+        }
+    }
+
+    export function valuesArray<K, V>(map: Map<K, V>): V[] {
+        //return Array.from(map.values());
+        const values: V[] = [];
+        map.forEach(value => values.push(value));
+        return values;
+    }
+
+    //TODO:USE!
+    export function setAndReturn<K, V>(map: Map<K, V>, key: K, value: V): V {
+        map.set(key, value);
+        return value;
+    }
+
+    //TODO: may be simpler without using this function.
+    export function setIfNotAlreadyPresent<K, V>(map: Map<K, V>, key: K, getValue: () => V): void {
+        if (!map.has(key)) {
+            map.set(key, getValue());
+        }
+    }
+
+    export function someInMap<K, V>(map: Map<K, V>, predicate: (value: V, key: K) => boolean): boolean {
+        //TODO: share code with forEachValueInMap???
+        return !!forEachInMap(map, predicate);
+    }
+
+    //TODO: probably want to get rid of this...
+    export function createMapFromArray<A, K, V>(inputs: A[], getKey: (element: A) => K, getValue: (element: A) => V): Map<K, V> {
+        const result = new Map<K, V>();
+        for (const input of inputs) {
+            result.set(getKey(input), getValue(input));
+        }
+        return result;
+    }
+
+    export function createMapFromKeys<K, V>(keys: K[], getValue: (key: K) => V): Map<K, V> {
+        return createMapFromArray(keys, key => key, getValue);
+    }
+
+    export function createMapFromValues<K, V>(values: V[], getKey: (value: V) => K): Map<K, V> {
+        return createMapFromArray(values, getKey, value => value);
+    }
+
+    //move
+    export function getOrUpdateMap<K, V>(map: Map<K, V>, key: K, getValue: () => V): V {
+        const value = map.get(key);
+        if (value === undefined) {
+            const value = getValue();
+            map.set(key, value);
+            return value;
+        }
+        else {
+            return value;
+        }
+    }
+    export function singletonMap<K, V>(key: K, value: V): Map<K, V> {
+        return new Map([[key, value]]);
+    }
+    export function cloneMap<K, V>(map: Map<K, V>): Map<K, V> {
+        return new Map(map);
     }
 
     /**

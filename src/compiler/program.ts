@@ -1094,7 +1094,7 @@ namespace ts {
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
-        let classifiableNames: OldMap<string>;
+        let classifiableNames: Set<string>;
 
         let resolvedTypeReferenceDirectives: OldMap<ResolvedTypeReferenceDirective> = {};
         let fileProcessingDiagnostics = createDiagnosticCollection();
@@ -1242,10 +1242,10 @@ namespace ts {
             if (!classifiableNames) {
                 // Initialize a checker so that all our files are bound.
                 getTypeChecker();
-                classifiableNames = {};
+                classifiableNames = new Set();
 
                 for (const sourceFile of files) {
-                    copyMap(sourceFile.classifiableNames, classifiableNames);
+                    copySet(sourceFile.classifiableNames, classifiableNames);
                 }
             }
 

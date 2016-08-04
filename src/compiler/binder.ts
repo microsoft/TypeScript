@@ -125,7 +125,7 @@ namespace ts {
 
         let symbolCount = 0;
         let Symbol: { new (flags: SymbolFlags, name: string): Symbol };
-        let classifiableNames: OldMap<string>;
+        let classifiableNames: Set<string>;
 
         const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
         const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
@@ -135,7 +135,7 @@ namespace ts {
             options = opts;
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = !!file.externalModuleIndicator;
-            classifiableNames = {};
+            classifiableNames = new Set();
             symbolCount = 0;
 
             Symbol = objectAllocator.getSymbolConstructor();
@@ -321,7 +321,7 @@ namespace ts {
                 symbol = getOrUpdateMap(symbolTable, name, () => createSymbol(SymbolFlags.None, name));
 
                 if (name && (includes & SymbolFlags.Classifiable)) {
-                    classifiableNames[name] = name;
+                    classifiableNames.add(name);
                 }
 
                 if (symbol.flags & excludes) {
@@ -1407,7 +1407,7 @@ namespace ts {
             }
 
             if (inStrictMode) {
-                const seen: OldMap<ElementKind> = {};
+                const seen = new Map<string, ElementKind>();
 
                 for (const prop of node.properties) {
                     if (prop.name.kind !== SyntaxKind.Identifier) {
@@ -1428,9 +1428,9 @@ namespace ts {
                         ? ElementKind.Property
                         : ElementKind.Accessor;
 
-                    const existingKind = seen[identifier.text];
+                    const existingKind = seen.get(identifier.text);
                     if (!existingKind) {
-                        seen[identifier.text] = currentKind;
+                        seen.set(identifier.text, currentKind);
                         continue;
                     }
 
@@ -2033,7 +2033,7 @@ namespace ts {
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
                 // Add name of class expression into the map for semantic classifier
                 if (node.name) {
-                    classifiableNames[node.name.text] = node.name.text;
+                    classifiableNames.add(node.name.text);
                 }
             }
 
