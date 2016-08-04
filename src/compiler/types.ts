@@ -2540,7 +2540,7 @@ namespace ts {
         length: number;
         messageText: string | DiagnosticMessageChain;
         category: DiagnosticCategory;
-        code: number;
+        code: number | string;
     }
 
     export enum DiagnosticCategory {
@@ -2633,6 +2633,7 @@ namespace ts {
         typeRoots?: string[];
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
+        extensions?: string[] | Map<any>;
 
         [option: string]: CompilerOptionsValue | undefined;
     }
@@ -2966,6 +2967,14 @@ namespace ts {
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+
+        /**
+         * Delegates the loading of compiler extensions to the compiler host.
+         * The function should return the result of executing the code of an extension
+         * - its exported members. These members will be searched for objects who have been decorated with
+         * specific flags.
+         */
+        loadExtension?(extension: string): any;
     }
 
     export interface TextSpan {

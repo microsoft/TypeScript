@@ -1150,7 +1150,7 @@ namespace ts.server {
                     info.setFormatOptions(this.getFormatCodeOptions());
                     this.filenameToScriptInfo[fileName] = info;
                     if (!info.isOpen) {
-                        info.fileWatcher = this.host.watchFile(fileName, _ => { this.watchedFileChanged(fileName); });
+                        info.fileWatcher = this.host.watchFile && this.host.watchFile(fileName, _ => { this.watchedFileChanged(fileName); });
                     }
                 }
             }

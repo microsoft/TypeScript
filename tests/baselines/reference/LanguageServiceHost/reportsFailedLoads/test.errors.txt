@@ -1,0 +1,8 @@
+error TS6151: Extension loading failed with error 'Error: Host could not locate extension 'test-semantic-lint'.'.
+error TS6151: Extension loading failed with error 'Error: Host could not locate extension 'test-syntactic-lint'.'.
+
+
+!!! error TS6151: Extension loading failed with error 'Error: Host could not locate extension 'test-semantic-lint'.'.
+!!! error TS6151: Extension loading failed with error 'Error: Host could not locate extension 'test-syntactic-lint'.'.
+==== /hello.ts (0 errors) ====
+    console.log("Hello, world!");/*EOL*/
