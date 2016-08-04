@@ -2910,6 +2910,7 @@ namespace ts {
         directoryExists?(directoryName: string): boolean;
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
+        getDirectories?(path: string): string[];
     }
 
     export interface ResolvedModule {
