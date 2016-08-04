@@ -244,15 +244,6 @@ namespace ts.server {
             }
         }
 
-        private findContainingConfiguredProject(info: ScriptInfo): ConfiguredProject {
-            for (const proj of this.configuredProjects) {
-                if (proj.containsScriptInfo(info)) {
-                    return proj;
-                }
-            }
-            return undefined;
-        }
-
         private findContainingExternalProject(fileName: NormalizedPath): ExternalProject {
             for (const proj of this.externalProjects) {
                 if (proj.containsFile(fileName)) {
@@ -424,11 +415,19 @@ namespace ts.server {
                 }
                 return;
             }
-            const configuredProject = this.findContainingConfiguredProject(info);
-            if (configuredProject) {
+
+            let foundConfiguredProject = false;
+            for (const p of info.containingProjects) {
                 // file is the part of configured project
+                if (p.projectKind === ProjectKind.Configured) {
+                    foundConfiguredProject = true;
+                    if (addToListOfOpenFiles) {
+                        ((<ConfiguredProject>p)).addOpenRef();
+                    }
+                }
+            }
+            if (foundConfiguredProject) {
                 if (addToListOfOpenFiles) {
-                    configuredProject.addOpenRef();
                     this.openFiles.push(info);
                 }
                 return;

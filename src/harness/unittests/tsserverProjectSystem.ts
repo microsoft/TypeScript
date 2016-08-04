@@ -1362,5 +1362,50 @@ namespace ts {
             projectService.inferredProjects[0].getLanguageService(/*ensureSynchronized*/ false).getOutliningSpans(file1.path);
             projectService.closeClientFile(file1.path);
         });
+
+        it("File in multiple projects at opened and closed correctly", () => {
+            const file1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1;"
+            };
+            const file2 = {
+                path: "/a/c/f.ts",
+                content: `/// <reference path="../b/app.ts"/>`
+            };
+            const tsconfig1 = {
+                path: "/a/c/tsconfig.json",
+                content: "{}"
+            };
+            const tsconfig2 = {
+                path: "/a/b/tsconfig.json",
+                content: "{}"
+            };
+            const host = createServerHost([file1, file2, tsconfig1, tsconfig2]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+
+            projectService.openClientFile(file2.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const project1 = projectService.configuredProjects[0];
+            assert.equal(project1.openRefCount, 1, "Open ref count in project1 - 1");
+            assert.equal(project1.getScriptInfo(file2.path).containingProjects.length, 1, "containing projects count");
+
+            projectService.openClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 2 });
+            assert.equal(project1.openRefCount, 2, "Open ref count in project1 - 2");
+
+            const project2 = projectService.configuredProjects[1];
+            assert.equal(project2.openRefCount, 1, "Open ref count in project2 - 2");
+
+            assert.equal(project1.getScriptInfo(file1.path).containingProjects.length, 2, `${file1.path} containing projects count`);
+            assert.equal(project1.getScriptInfo(file2.path).containingProjects.length, 1, `${file2.path} containing projects count`);
+
+            projectService.closeClientFile(file2.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 2 });
+            assert.equal(project1.openRefCount, 1, "Open ref count in project1 - 3");
+            assert.equal(project2.openRefCount, 1, "Open ref count in project2 - 3");
+
+            projectService.closeClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 0 });
+        });
     });
 }
