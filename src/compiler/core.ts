@@ -487,54 +487,6 @@ namespace ts {
 
     const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-    /**
-     * Creates an Map<T> for string-based lookups.
-     *
-     * @param slow Creates a slow Map instead of a fast Map. See toSlowMap for more information.
-     */
-    export function createMap<T>(slow?: boolean, template?: Map<T>): Map<T> {
-        let map: Map<T> = Object.create ? Object.create(null) : { };
-        if (slow) {
-            map = toSlowMap(map);
-        }
-        if (template) {
-            for (const key in template) {
-                if (hasProperty(template, key)) {
-                    map[key] = template[key];
-                }
-            }
-        }
-        return map;
-    }
-
-    /**
-     * This is a v8 optimization also used by dart. It uses a heuristic that forces v8 to treat
-     * an object as a hash map rather than causing hidden class transitions.
-     *
-     * Slow maps are better for frequent insertions of new properties into a map as they reduce
-     * polymorphisim, but are worse for frequent read operations.
-     */
-    export function toSlowMap<T>(map: Map<T>) {
-        (<any>map).__SLOW__ = 1;
-        delete (<any>map).__SLOW__;
-        return map;
-    }
-
-    /**
-     * This is a v8 optimization also used by dart. It uses a heuristic that forces v8 to allocate
-     * a hidden class for an object if it does not already have one.
-     *
-     * Fast maps are better for smaller maps or frequent read operations, but are worse for frequent
-     * insertions of new properties as that causes numerous hidden class transitions and increases
-     * polymorphism.
-     */
-    export function toFastMap<T>(map: Map<T>) {
-        function __() {}
-        __.prototype = map;
-        new (<any>__)();
-        return map;
-    }
-
     export function hasProperty<T>(map: Map<T>, key: string): boolean {
         return hasOwnProperty.call(map, key);
     }
