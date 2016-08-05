@@ -420,6 +420,7 @@ namespace ts {
      * the same key with the given 'makeKey' function, then the element with the higher
      * index in the array will be the one associated with the produced key.
      */
+    //kill?
     export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): OldMap<T> {
         const result: OldMap<T> = {};
 
@@ -429,6 +430,15 @@ namespace ts {
 
         return result;
     }
+
+    //move?
+    //export function arrayToSet<T, U>(array: T[], mapper: (value: T) => U): Set<U> {
+    //    const result = new Set<U>();
+    //    for (const value of array) {
+    //        result.add(mapper(value));
+    //    }
+    //    return result;
+    //}
 
     /**
      * Reduce the properties of a map.

@@ -6,13 +6,13 @@ namespace ts {
         content: string;
     }
 
-    function createDefaultServerHost(fileMap: OldMap<File>): server.ServerHost {
-        const existingDirectories: OldMap<boolean> = {};
-        forEachValue(fileMap, v => {
+    function createDefaultServerHost(fileMap: Map<string, File>): server.ServerHost {
+        const existingDirectories = new Set<string>();
+        fileMap.forEach(v => {
             let dir = getDirectoryPath(v.name);
             let previous: string;
             do {
-                existingDirectories[dir] = true;
+                existingDirectories.add(dir);
                 previous = dir;
                 dir = getDirectoryPath(dir);
             } while (dir !== previous);
@@ -24,7 +24,8 @@ namespace ts {
             write: (s: string) => {
             },
             readFile: (path: string, encoding?: string): string => {
-                return hasProperty(fileMap, path) && fileMap[path].content;
+                const file = fileMap.get(path);
+                return file && file.content;
             },
             writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => {
                 throw new Error("NYI");
@@ -33,10 +34,10 @@ namespace ts {
                 throw new Error("NYI");
             },
             fileExists: (path: string): boolean => {
-                return hasProperty(fileMap, path);
+                return fileMap.has(path);
             },
             directoryExists: (path: string): boolean => {
-                return hasProperty(existingDirectories, path);
+                return existingDirectories.has(path);
             },
             createDirectory: (path: string) => {
             },
@@ -101,7 +102,7 @@ namespace ts {
                 content: `foo()`
             };
 
-            const serverHost = createDefaultServerHost({ [root.name]: root, [imported.name]: imported });
+            const serverHost = createDefaultServerHost(new Map([[root.name, root], [imported.name, imported]]));
             const { project, rootScriptInfo } = createProject(root.name, serverHost);
 
             // ensure that imported file was found
@@ -193,7 +194,7 @@ namespace ts {
                 content: `export var y = 1`
             };
 
-            const fileMap: OldMap<File> = { [root.name]: root };
+            const fileMap = singletonMap(root.name, root);
             const serverHost = createDefaultServerHost(fileMap);
             const originalFileExists = serverHost.fileExists;
 
@@ -217,7 +218,7 @@ namespace ts {
             assert.isTrue(typeof diags[0].messageText === "string" && ((<string>diags[0].messageText).indexOf("Cannot find module") === 0), "should be 'cannot find module' message");
 
             // assert that import will success once file appear on disk
-            fileMap[imported.name] = imported;
+            fileMap.set(imported.name, imported);
             fileExistsCalledForBar = false;
             rootScriptInfo.editContent(0, content.length, `import {y} from "bar"`);
 

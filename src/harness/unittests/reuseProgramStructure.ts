@@ -96,16 +96,16 @@ namespace ts {
     }
 
     function createTestCompilerHost(texts: NamedSourceText[], target: ScriptTarget): CompilerHost {
-        const files: OldMap<SourceFileWithText> = {};
+        const files = new Map<string, SourceFileWithText>();
         for (const t of texts) {
             const file = <SourceFileWithText>createSourceFile(t.name, t.text.getFullText(), target);
             file.sourceText = t.text;
-            files[t.name] = file;
+            files.set(t.name, file);
         }
 
         return {
             getSourceFile(fileName): SourceFile {
-                return files[fileName];
+                return files.get(fileName);
             },
             getDefaultLibFileName(): string {
                 return "lib.d.ts";
@@ -128,9 +128,9 @@ namespace ts {
             getNewLine(): string {
                 return sys ? sys.newLine : newLine;
             },
-            fileExists: fileName => hasProperty(files, fileName),
+            fileExists: fileName => files.has(fileName),
             readFile: fileName => {
-                const file = lookUp(files, fileName);
+                const file = files.get(fileName);
                 return file && file.text;
             }
         };
