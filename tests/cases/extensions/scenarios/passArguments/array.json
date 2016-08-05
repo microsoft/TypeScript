@@ -1,0 +1,11 @@
+{
+    "inputFiles": [
+        "foo-interface.ts"
+    ],
+    "availableExtensions": ["test-extension-arguments"],
+    "compilerOptions": {
+        "extensions": {
+            "test-extension-arguments": ["a", "b"]
+        }
+    }
+}

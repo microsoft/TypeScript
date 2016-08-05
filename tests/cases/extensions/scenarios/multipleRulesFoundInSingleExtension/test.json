@@ -1,0 +1,9 @@
+{
+    "inputFiles": [
+        "foo-bar-const-interface.ts"
+    ],
+    "availableExtensions": ["test-multi-extension"],
+    "compilerOptions": {
+        "extensions": ["test-multi-extension"]
+    }
+}

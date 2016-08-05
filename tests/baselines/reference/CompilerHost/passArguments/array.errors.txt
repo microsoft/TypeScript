@@ -1,0 +1,10 @@
+/foo-interface.ts(1,16): warning test-extension-arguments: Identifier a is forbidden.
+/foo-interface.ts(1,19): warning test-extension-arguments: Identifier b is forbidden.
+
+
+==== /foo-interface.ts (2 errors) ====
+    interface Foo {a; b;}
+                   ~
+!!! warning test-extension-arguments: Identifier a is forbidden.
+                      ~
+!!! warning test-extension-arguments: Identifier b is forbidden.

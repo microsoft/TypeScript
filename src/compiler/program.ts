@@ -1517,7 +1517,261 @@ namespace ts {
             }
         }
 
+        function performLintPassOnFile(sourceFile: SourceFile, kind: ExtensionKind.SyntacticLint | ExtensionKind.SemanticLint): Diagnostic[] | undefined {
+            const lints = extensionCache.getCompilerExtensions()[kind];
+            if (!lints || !lints.length) {
+                return;
+            }
+            type UniqueLint = {name: string, walker: LintWalker, accepted: boolean, errored: boolean};
+            const initializedLints: UniqueLint[] = [];
+            const diagnostics: Diagnostic[] = [];
+            let activeLint: UniqueLint;
+            let parent: Node | undefined = undefined;
+            const profilingEnabled = options.extendedDiagnostics;
+            for (const {name, args, ctor} of lints) {
+                let walker: LintWalker;
+                if (kind === ExtensionKind.SemanticLint) {
+                    const checker = getTypeChecker();
+                    startExtensionProfile(profilingEnabled, name, "construct");
+                    try {
+                        walker = new (ctor as SemanticLintProviderStatic)({ ts, checker, args, host, program });
+                    }
+                    catch (e) {
+                        diagnostics.push(createExtensionDiagnostic(name, `Lint construction failed: ${(e as Error).message}`, sourceFile, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
+                    }
+                    completeExtensionProfile(profilingEnabled, name, "construct");
+                }
+                else if (kind === ExtensionKind.SyntacticLint) {
+                    startExtensionProfile(profilingEnabled, name, "construct");
+                    try {
+                        walker = new (ctor as SyntacticLintProviderStatic)({ ts, args, host, program });
+                    }
+                    catch (e) {
+                        diagnostics.push(createExtensionDiagnostic(name, `Lint construction failed: ${(e as Error).message}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
+                    }
+                    completeExtensionProfile(profilingEnabled, name, "construct");
+                }
+                if (walker) initializedLints.push({ name, walker, accepted: true, errored: false });
+            }
+
+            function visitNode(node: Node) {
+                let oneAccepted = false;
+                const needsReset: Map<boolean> = {};
+
+                // Ensure parent pointer is set
+                node.parent = parent;
+
+                // For each lint, except those which have errored or have not accepted a parental node, call its rule
+                for (let i = 0; i < initializedLints.length; i++) {
+                    activeLint = initializedLints[i];
+                    if (activeLint.errored || !activeLint.accepted) {
+                        continue;
+                    }
+
+                    startExtensionProfile(profilingEnabled, activeLint.name, "visit");
+                    try {
+                        activeLint.accepted = !activeLint.walker.visit(node, error);
+                    }
+                    catch (e) {
+                        activeLint.errored = true;
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName("!!!"), `visit failed with error: ${e}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
+                    }
+                    completeExtensionProfile(profilingEnabled, activeLint.name, "visit");
+
+                    if (activeLint.accepted) {
+                        oneAccepted = true;
+                    }
+                    else {
+                        needsReset[i] = true;
+                    }
+                }
+
+                // Save the parent, then recur into the child nodes
+                const oldParent = parent;
+                parent = node;
+                if (oneAccepted) {
+                    forEachChild(node, visitNode);
+                }
+                parent = oldParent;
+
+                // All this node's children have been processed, for each lint
+                //  - If it set accepted to false during this node (needsReset), set it back to true
+                //  - If it has an afterVisit method, call it
+                for (let i = 0; i < initializedLints.length; i++) {
+                    activeLint = initializedLints[i];
+                    if (activeLint.errored) {
+                        continue;
+                    }
+                    if (!needsReset[i]) {
+                        activeLint.accepted = true;
+                        needsReset[i] = false;
+                    }
+                    if (!activeLint.walker.afterVisit) {
+                        continue;
+                    }
+                    startExtensionProfile(profilingEnabled, activeLint.name, "afterVisit");
+                    try {
+                        activeLint.walker.afterVisit(node, error);
+                    }
+                    catch (e) {
+                        activeLint.errored = true;
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName("!!!"), `afterVisit failed with error: ${e}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
+                    }
+                    completeExtensionProfile(profilingEnabled, activeLint.name, "afterVisit");
+                }
+            }
+
+            function errorQualifiedName(shortname?: string) {
+                if (!shortname) return activeLint.name;
+                return `${activeLint.name}(${shortname})`;
+            }
+
+            function ensure(param: any, paramName: string, istype: string) {
+                if (typeof param !== istype) {
+                    Debug.fail(`${paramName} must be a ${istype}.`);
+                }
+            }
+
+            const errorOverloads: ((...args: any[]) => void)[] = [() => {
+                Debug.fail("You must at least provide an error message to the error function.");
+            },
+            (err: string) => {
+                diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), err));
+            },
+            (errShortnameOrLevel: string | DiagnosticCategory, spanOrErr: Node | string | number) => {
+                if (typeof errShortnameOrLevel === "string") {
+                    if (typeof spanOrErr === "string") {
+                        // error(shortname: string, err: string): void;
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName(errShortnameOrLevel), spanOrErr));
+                    }
+                    else if (typeof spanOrErr === "object") {
+                        // error(err: string, node: Node): void;
+                        diagnostics.push(createExtensionDiagnosticForNode(spanOrErr, errorQualifiedName(), errShortnameOrLevel));
+                    }
+                    else {
+                        Debug.fail("When two arguments are passed to error and the first argument is either the error message or error shortname, the second argument must either be an error message string or the node the error is on.");
+                    }
+                }
+                else if (typeof errShortnameOrLevel === "number") {
+                    ensure(spanOrErr, "Error message", "string");
+
+                    // error(level: DiagnosticCategory, err: string): void;
+                    diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), spanOrErr as string, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, errShortnameOrLevel));
+                }
+                else {
+                    Debug.fail("When two arguments are passed to error, the first argument must be either the error message, the error shortname, or the DiagnosticCategory of the error.");
+                }
+            },
+            (errShortnameOrLevel: string | DiagnosticCategory, startErrOrShortname: number | string | Node, lengthSpanOrErr: number | Node | string) => {
+                if (typeof errShortnameOrLevel === "number") {
+                    ensure(startErrOrShortname, "Error message or error shortcode", "string");
+
+                    if (typeof lengthSpanOrErr === "string") {
+                        // error(level: DiagnosticCategory, shortname: string, err: string): void;
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName(startErrOrShortname as string), lengthSpanOrErr, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, errShortnameOrLevel));
+                    }
+                    else if (typeof lengthSpanOrErr === "object") {
+                        // error(level: DiagnosticCategory, err: string, node: Node): void;
+                        diagnostics.push(createExtensionDiagnosticForNode(lengthSpanOrErr, errorQualifiedName(), startErrOrShortname as string, errShortnameOrLevel));
+                    }
+                    else {
+                        Debug.fail("When three arguments are passed to error and the first is a diagnostic category, the third argument must either be an error message or the node errored on.");
+                    }
+                }
+                else if (typeof errShortnameOrLevel === "string") {
+                    if (typeof startErrOrShortname === "number") {
+                        ensure(lengthSpanOrErr, "Error span length", "number");
+
+                        // error(err: string, start: number, length: number): void;
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), errShortnameOrLevel, sourceFile, startErrOrShortname, lengthSpanOrErr as number));
+                    }
+                    else if (typeof startErrOrShortname === "string") {
+                        ensure(lengthSpanOrErr, "Error node", "object");
+
+                        // error(shortname: string, err: string, span: Node): void;
+                        diagnostics.push(createExtensionDiagnosticForNode(lengthSpanOrErr as Node, errorQualifiedName(errShortnameOrLevel), startErrOrShortname));
+                    }
+                    else {
+                        Debug.fail("When three arguments are passed to error and the first is an error shortcode or message, the second must be either an error message or a span start number, respectively.");
+                    }
+                }
+                else {
+                    Debug.fail("When three arguments are passed to error, the first argument must be either a diagnostic category, a error shortname, or an error message.");
+                }
+            },
+            (levelOrShortname: DiagnosticCategory | string, errOrShortname: string | number | Node, startOrErr: string | number | Node, lengthOrSpan: number | Node) => {
+                ensure(errOrShortname, "Error message or error shortcode", "string");
+
+                if (typeof levelOrShortname === "number") {
+                    if (typeof startOrErr === "string") {
+                        ensure(lengthOrSpan, "Error node", "object");
+
+                        // error(level: DiagnosticCategory, shortname: string, err: string, span: Node): void;
+                        diagnostics.push(createExtensionDiagnosticForNode(lengthOrSpan as Node, errorQualifiedName(errOrShortname as string), startOrErr, levelOrShortname));
+                    }
+                    else if (typeof startOrErr === "number") {
+                        ensure(lengthOrSpan, "Error span length", "number");
+
+                        // error(level: DiagnosticCategory, err: string, start: number, length: number): void;
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), errOrShortname as string, sourceFile, startOrErr, lengthOrSpan as number, levelOrShortname));
+                    }
+                    else {
+                        Debug.fail("When four arguments are passed to error and the first is a DiagnosticCategory, the third argument must be the error message.");
+                        return;
+                    }
+                }
+                else if (typeof levelOrShortname === "string") {
+                    ensure(startOrErr, "Error span start", "number");
+                    ensure(lengthOrSpan, "Error span length", "number");
+
+                    // error(shortname: string, err: string, start: number, length: number): void;
+                    diagnostics.push(createExtensionDiagnostic(errorQualifiedName(levelOrShortname), errOrShortname as string, sourceFile, startOrErr as number, lengthOrSpan as number));
+                }
+                else {
+                    Debug.fail("When four arguments are passed to error, the first argument must be either a DiagnosticCategory or a error shortname string.");
+                }
+            },
+            (level: DiagnosticCategory, shortname: string, err: string, start: number, length: number) => {
+                ensure(level, "Diagnostic level", "number");
+                ensure(shortname, "Error shortcode", "string");
+                ensure(err, "Error message", "string");
+                ensure(start, "Error span start", "number");
+                ensure(length, "Error span length", "number");
+
+                diagnostics.push(createExtensionDiagnostic(errorQualifiedName(shortname), err, sourceFile, start, length, level));
+            }];
+
+            function tooManyArguments(length: number, found: number) {
+                return () => Debug.fail(`Too many arguments provided to error (Expected up to ${length}, but found ${found}).`);
+            }
+
+            function error(err: string): void;
+            function error(err: string, node: Node): void;
+            function error(err: string, start: number, length: number): void;
+            function error(shortname: string, err: string): void;
+            function error(shortname: string, err: string, span: Node): void;
+            function error(shortname: string, err: string, start: number, length: number): void;
+            function error(level: DiagnosticCategory, err: string): void;
+            function error(level: DiagnosticCategory, err: string, node: Node): void;
+            function error(level: DiagnosticCategory, err: string, start: number, length: number): void;
+            function error(level: DiagnosticCategory, shortname: string, err: string): void;
+            function error(level: DiagnosticCategory, shortname: string, err: string, span: Node): void;
+            function error(level: DiagnosticCategory, shortname: string, err: string, start: number, length: number): void;
+            function error(): void {
+                (errorOverloads[arguments.length] || tooManyArguments(errorOverloads.length - 1, arguments.length)).apply(/*thisArg*/undefined, arguments);
+            }
+
+            visitNode(sourceFile);
+            return diagnostics;
+        }
+
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+            if (!sourceFile.isDeclarationFile) {
+                const lintDiagnostics = performLintPassOnFile(sourceFile, ExtensionKind.SyntacticLint);
+                if (lintDiagnostics && lintDiagnostics.length) {
+                    return sourceFile.parseDiagnostics.concat(lintDiagnostics);
+                }
+            }
             return sourceFile.parseDiagnostics;
         }
 
@@ -1558,8 +1812,9 @@ namespace ts {
                     typeChecker.getDiagnostics(sourceFile, cancellationToken);
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
+                const lintDiagnostics = (!sourceFile.isDeclarationFile) ? (performLintPassOnFile(sourceFile, ExtensionKind.SemanticLint) || []) : [];
 
-                return bindDiagnostics.concat(checkDiagnostics).concat(fileProcessingDiagnosticsInFile).concat(programDiagnosticsInFile);
+                return bindDiagnostics.concat(checkDiagnostics).concat(fileProcessingDiagnosticsInFile).concat(programDiagnosticsInFile).concat(lintDiagnostics);
             });
         }
 
