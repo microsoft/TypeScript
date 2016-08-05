@@ -2828,6 +2828,10 @@
         "category": "Message",
         "code": 6137
     },
+    "Do not truncate verbose types.": {
+        "category": "Message",
+        "code": 6138
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
