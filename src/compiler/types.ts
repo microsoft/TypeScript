@@ -60,6 +60,7 @@ namespace ts {
     }
     //This is an OldMap<T> that I've verified should stay that way.
     export interface ObjMap<T> {
+        //__objMapBrand: any;
         [index: string]: T;
     }
 

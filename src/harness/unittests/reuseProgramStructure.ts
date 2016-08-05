@@ -152,16 +152,6 @@ namespace ts {
         return program;
     }
 
-    function getSizeOfMap(map: OldMap<any>): number {
-        let size = 0;
-        for (const id in map) {
-            if (hasProperty(map, id)) {
-                size++;
-            }
-        }
-        return size;
-    }
-
     function checkResolvedModule(expected: ResolvedModule, actual: ResolvedModule): void {
         assert.isTrue(actual !== undefined);
         assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
@@ -183,8 +173,8 @@ namespace ts {
         }
         else {
             assert.isTrue(cache !== undefined, `expected ${caption} to be set`);
-            const actualCacheSize = getSizeOfMap(cache);
-            const expectedSize = getSizeOfMap(expectedContent);
+            const actualCacheSize = cache.size;
+            const expectedSize = expectedContent.size;
             assert.isTrue(actualCacheSize === expectedSize, `expected actual size: ${actualCacheSize} to be equal to ${expectedSize}`);
 
             for (const id in expectedContent) {

@@ -291,12 +291,12 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
 
-                const fullResults: ts.OldMap<TypeWriterResult[]> = {};
-                const pullResults: ts.OldMap<TypeWriterResult[]> = {};
+                const fullResults = new Map<string, TypeWriterResult[]>();
+                const pullResults = new Map<string, TypeWriterResult[]>();
 
                 for (const sourceFile of allFiles) {
-                    fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
-                    pullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
+                    fullResults.set(sourceFile.unitName, fullWalker.getTypeAndSymbols(sourceFile.unitName));
+                    pullResults.set(sourceFile.unitName, fullWalker.getTypeAndSymbols(sourceFile.unitName));
                 }
 
                 // Produce baselines.  The first gives the types for all expressions.
@@ -338,13 +338,13 @@ class CompilerBaselineRunner extends RunnerBase {
                     }
                 }
 
-                function generateBaseLine(typeWriterResults: ts.OldMap<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
+                function generateBaseLine(typeWriterResults: Map<string, TypeWriterResult[]>, isSymbolBaseline: boolean): string {
                     const typeLines: string[] = [];
                     const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
 
                     allFiles.forEach(file => {
                         const codeLines = file.content.split("\n");
-                        typeWriterResults[file.unitName].forEach(result => {
+                        typeWriterResults.get(file.unitName).forEach(result => {
                             if (isSymbolBaseline && !result.symbol) {
                                 return;
                             }

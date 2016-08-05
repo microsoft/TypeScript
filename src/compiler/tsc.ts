@@ -88,7 +88,7 @@ namespace ts {
             return false;
         }
         try {
-            ts.localizedDiagnosticMessages = mapOfObjMap<string>(JSON.parse(fileContents));
+            ts.localizedDiagnosticMessages = JSON.parse(fileContents);
         }
         catch (e) {
             errors.push(createCompilerDiagnostic(Diagnostics.Corrupted_locale_file_0, filePath));

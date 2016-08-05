@@ -362,15 +362,16 @@ namespace ts.server {
         class InProcClient {
             private server: InProcSession;
             private seq = 0;
-            private callbacks: ts.OldMap<(resp: protocol.Response) => void> = {};
-            private eventHandlers: ts.OldMap<(args: any) => void> = {};
+            private callbacks = new Map<number, (resp: protocol.Response) => void>();
+            private eventHandlers = new Map<string, (args: any) => void>();
 
             handle(msg: protocol.Message): void {
                 if (msg.type === "response") {
                     const response = <protocol.Response>msg;
-                    if (this.callbacks[response.request_seq]) {
-                        this.callbacks[response.request_seq](response);
-                        delete this.callbacks[response.request_seq];
+                    const callback = this.callbacks.get(response.request_seq);
+                    if (callback) {
+                        callback(response);
+                        this.callbacks.delete(response.request_seq);
                     }
                 }
                 else if (msg.type === "event") {
@@ -380,13 +381,14 @@ namespace ts.server {
             }
 
             emit(name: string, args: any): void {
-                if (this.eventHandlers[name]) {
-                    this.eventHandlers[name](args);
+                const handler = this.eventHandlers.get(name);
+                if (handler) {
+                    handler(args);
                 }
             }
 
             on(name: string, handler: (args: any) => void): void {
-                this.eventHandlers[name] = handler;
+                this.eventHandlers.set(name, handler);
             }
 
             connect(session: InProcSession): void {
@@ -404,7 +406,7 @@ namespace ts.server {
                     command,
                     arguments: args
                 });
-                this.callbacks[this.seq] = callback;
+                this.callbacks.set(this.seq, callback);
             }
         };
 
