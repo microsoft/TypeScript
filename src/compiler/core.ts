@@ -309,11 +309,11 @@ namespace ts {
 
     const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-    export function hasProperty<T>(map: OldMap<T>, key: string): boolean {
+    export function hasProperty<T>(map: ObjMap<T>, key: string): boolean {
         return hasOwnProperty.call(map, key);
     }
 
-    export function getKeys<T>(map: OldMap<T>): string[] {
+    export function getKeys<T>(map: ObjMap<T>): string[] {
         const keys: string[] = [];
         for (const key in map) {
             keys.push(key);
@@ -321,11 +321,11 @@ namespace ts {
         return keys;
     }
 
-    export function getProperty<T>(map: OldMap<T>, key: string): T {
+    export function getProperty<T>(map: ObjMap<T>, key: string): T {
         return hasOwnProperty.call(map, key) ? map[key] : undefined;
     }
 
-    export function isEmpty<T>(map: OldMap<T>) {
+    export function isEmpty<T>(map: ObjMap<T>) {
         for (const id in map) {
             if (hasProperty(map, id)) {
                 return false;
@@ -342,7 +342,7 @@ namespace ts {
         return <T>result;
     }
 
-    export function extend<T1 extends OldMap<{}>, T2 extends OldMap<{}>>(first: T1 , second: T2): T1 & T2 {
+    export function extend<T1 extends ObjMap<{}>, T2 extends ObjMap<{}>>(first: T1 , second: T2): T1 & T2 {
         const result: T1 & T2 = <any>{};
         for (const id in first) {
             (result as any)[id] = first[id];
@@ -355,7 +355,7 @@ namespace ts {
         return result;
     }
 
-    export function forEachValue<T, U>(map: OldMap<T>, callback: (value: T) => U): U {
+    export function forEachValue<T, U>(map: ObjMap<T>, callback: (value: T) => U): U {
         let result: U;
         for (const id in map) {
             if (result = callback(map[id])) break;
@@ -363,7 +363,7 @@ namespace ts {
         return result;
     }
 
-    export function forEachKey<T, U>(map: OldMap<T>, callback: (key: string) => U): U {
+    export function forEachKey<T, U>(map: ObjMap<T>, callback: (key: string) => U): U {
         let result: U;
         for (const id in map) {
             if (result = callback(id)) break;
@@ -376,14 +376,8 @@ namespace ts {
     }
 
     //This is just getProperty...
-    export function lookUp<T>(map: OldMap<T>, key: string): T {
+    export function lookUp<T>(map: ObjMap<T>, key: string): T {
         return hasProperty(map, key) ? map[key] : undefined;
-    }
-
-    export function copyOldMap<T>(source: OldMap<T>, target: OldMap<T>): void {
-        for (const p in source) {
-            target[p] = source[p];
-        }
     }
 
     //rename
@@ -399,7 +393,7 @@ namespace ts {
         source.forEach(element => target.add(element));
     }
 
-    export function mapOfObjMap<V>(objMap: OldMap<V>): Map<string, V> {
+    export function mapOfObjMap<V>(objMap: ObjMap<V>): Map<string, V> {
         const result = new Map<string, V>();
         for (const key in objMap) {
             if (hasProperty(objMap, key)) {
@@ -421,8 +415,8 @@ namespace ts {
      * index in the array will be the one associated with the produced key.
      */
     //kill?
-    export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): OldMap<T> {
-        const result: OldMap<T> = {};
+    export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): ObjMap<T> {
+        const result: ObjMap<T> = {};
 
         forEach(array, value => {
             result[makeKey(value)] = value;
@@ -447,7 +441,8 @@ namespace ts {
      * @param callback An aggregation function that is called for each entry in the map
      * @param initial The initial value for the reduction.
      */
-    export function reduceProperties<T, U>(map: OldMap<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
+    //kill?
+    export function reduceProperties<T, U>(map: ObjMap<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
         let result = initial;
         if (map) {
             for (const key in map) {
@@ -514,9 +509,29 @@ namespace ts {
         }
     }
 
+    //rename
+    export function setSetSet<T>(set: Set<T>, value: T, shouldBeInSet: boolean): void {
+        if (shouldBeInSet) {
+            set.add(value);
+        }
+        else {
+            set.delete(value);
+        }
+    }
+
     export function someInMap<K, V>(map: Map<K, V>, predicate: (value: V, key: K) => boolean): boolean {
         //TODO: share code with forEachValueInMap???
         return !!forEachInMap(map, predicate);
+    }
+
+    export function multiMapAdd<K, V>(map: Map<K, V[]>, key: K, value: V): void {
+        const values = map.get(key);
+        if (values) {
+            values.push(value);
+        }
+        else {
+            map.set(key, [value]);
+        }
     }
 
     //TODO: probably want to get rid of this...
@@ -534,6 +549,12 @@ namespace ts {
 
     export function createMapFromValues<K, V>(values: V[], getKey: (value: V) => K): Map<K, V> {
         return createMapFromArray(values, getKey, value => value);
+    }
+
+    export function mapValues<K, V>(map: Map<K, V>, getNewValue: (value: V) => V): void {
+        map.forEach((value, key) => {
+            map.set(key, getNewValue(value));
+        })
     }
 
     //move
@@ -579,7 +600,7 @@ namespace ts {
         return text.replace(/{(\d+)}/g, (match, index?) => args[+index + baseIndex]);
     }
 
-    export let localizedDiagnosticMessages: OldMap<string> = undefined;
+    export let localizedDiagnosticMessages: ObjMap<string> = undefined;
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key]

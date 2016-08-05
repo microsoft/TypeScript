@@ -55,131 +55,131 @@ namespace ts {
         tryScan<T>(callback: () => T): T;
     }
 
-    const textToToken: OldMap<SyntaxKind> = {
-        "abstract": SyntaxKind.AbstractKeyword,
-        "any": SyntaxKind.AnyKeyword,
-        "as": SyntaxKind.AsKeyword,
-        "boolean": SyntaxKind.BooleanKeyword,
-        "break": SyntaxKind.BreakKeyword,
-        "case": SyntaxKind.CaseKeyword,
-        "catch": SyntaxKind.CatchKeyword,
-        "class": SyntaxKind.ClassKeyword,
-        "continue": SyntaxKind.ContinueKeyword,
-        "const": SyntaxKind.ConstKeyword,
-        "constructor": SyntaxKind.ConstructorKeyword,
-        "debugger": SyntaxKind.DebuggerKeyword,
-        "declare": SyntaxKind.DeclareKeyword,
-        "default": SyntaxKind.DefaultKeyword,
-        "delete": SyntaxKind.DeleteKeyword,
-        "do": SyntaxKind.DoKeyword,
-        "else": SyntaxKind.ElseKeyword,
-        "enum": SyntaxKind.EnumKeyword,
-        "export": SyntaxKind.ExportKeyword,
-        "extends": SyntaxKind.ExtendsKeyword,
-        "false": SyntaxKind.FalseKeyword,
-        "finally": SyntaxKind.FinallyKeyword,
-        "for": SyntaxKind.ForKeyword,
-        "from": SyntaxKind.FromKeyword,
-        "function": SyntaxKind.FunctionKeyword,
-        "get": SyntaxKind.GetKeyword,
-        "if": SyntaxKind.IfKeyword,
-        "implements": SyntaxKind.ImplementsKeyword,
-        "import": SyntaxKind.ImportKeyword,
-        "in": SyntaxKind.InKeyword,
-        "instanceof": SyntaxKind.InstanceOfKeyword,
-        "interface": SyntaxKind.InterfaceKeyword,
-        "is": SyntaxKind.IsKeyword,
-        "let": SyntaxKind.LetKeyword,
-        "module": SyntaxKind.ModuleKeyword,
-        "namespace": SyntaxKind.NamespaceKeyword,
-        "never": SyntaxKind.NeverKeyword,
-        "new": SyntaxKind.NewKeyword,
-        "null": SyntaxKind.NullKeyword,
-        "number": SyntaxKind.NumberKeyword,
-        "package": SyntaxKind.PackageKeyword,
-        "private": SyntaxKind.PrivateKeyword,
-        "protected": SyntaxKind.ProtectedKeyword,
-        "public": SyntaxKind.PublicKeyword,
-        "readonly": SyntaxKind.ReadonlyKeyword,
-        "require": SyntaxKind.RequireKeyword,
-        "global": SyntaxKind.GlobalKeyword,
-        "return": SyntaxKind.ReturnKeyword,
-        "set": SyntaxKind.SetKeyword,
-        "static": SyntaxKind.StaticKeyword,
-        "string": SyntaxKind.StringKeyword,
-        "super": SyntaxKind.SuperKeyword,
-        "switch": SyntaxKind.SwitchKeyword,
-        "symbol": SyntaxKind.SymbolKeyword,
-        "this": SyntaxKind.ThisKeyword,
-        "throw": SyntaxKind.ThrowKeyword,
-        "true": SyntaxKind.TrueKeyword,
-        "try": SyntaxKind.TryKeyword,
-        "type": SyntaxKind.TypeKeyword,
-        "typeof": SyntaxKind.TypeOfKeyword,
-        "undefined": SyntaxKind.UndefinedKeyword,
-        "var": SyntaxKind.VarKeyword,
-        "void": SyntaxKind.VoidKeyword,
-        "while": SyntaxKind.WhileKeyword,
-        "with": SyntaxKind.WithKeyword,
-        "yield": SyntaxKind.YieldKeyword,
-        "async": SyntaxKind.AsyncKeyword,
-        "await": SyntaxKind.AwaitKeyword,
-        "of": SyntaxKind.OfKeyword,
-        "{": SyntaxKind.OpenBraceToken,
-        "}": SyntaxKind.CloseBraceToken,
-        "(": SyntaxKind.OpenParenToken,
-        ")": SyntaxKind.CloseParenToken,
-        "[": SyntaxKind.OpenBracketToken,
-        "]": SyntaxKind.CloseBracketToken,
-        ".": SyntaxKind.DotToken,
-        "...": SyntaxKind.DotDotDotToken,
-        ";": SyntaxKind.SemicolonToken,
-        ",": SyntaxKind.CommaToken,
-        "<": SyntaxKind.LessThanToken,
-        ">": SyntaxKind.GreaterThanToken,
-        "<=": SyntaxKind.LessThanEqualsToken,
-        ">=": SyntaxKind.GreaterThanEqualsToken,
-        "==": SyntaxKind.EqualsEqualsToken,
-        "!=": SyntaxKind.ExclamationEqualsToken,
-        "===": SyntaxKind.EqualsEqualsEqualsToken,
-        "!==": SyntaxKind.ExclamationEqualsEqualsToken,
-        "=>": SyntaxKind.EqualsGreaterThanToken,
-        "+": SyntaxKind.PlusToken,
-        "-": SyntaxKind.MinusToken,
-        "**": SyntaxKind.AsteriskAsteriskToken,
-        "*": SyntaxKind.AsteriskToken,
-        "/": SyntaxKind.SlashToken,
-        "%": SyntaxKind.PercentToken,
-        "++": SyntaxKind.PlusPlusToken,
-        "--": SyntaxKind.MinusMinusToken,
-        "<<": SyntaxKind.LessThanLessThanToken,
-        "</": SyntaxKind.LessThanSlashToken,
-        ">>": SyntaxKind.GreaterThanGreaterThanToken,
-        ">>>": SyntaxKind.GreaterThanGreaterThanGreaterThanToken,
-        "&": SyntaxKind.AmpersandToken,
-        "|": SyntaxKind.BarToken,
-        "^": SyntaxKind.CaretToken,
-        "!": SyntaxKind.ExclamationToken,
-        "~": SyntaxKind.TildeToken,
-        "&&": SyntaxKind.AmpersandAmpersandToken,
-        "||": SyntaxKind.BarBarToken,
-        "?": SyntaxKind.QuestionToken,
-        ":": SyntaxKind.ColonToken,
-        "=": SyntaxKind.EqualsToken,
-        "+=": SyntaxKind.PlusEqualsToken,
-        "-=": SyntaxKind.MinusEqualsToken,
-        "*=": SyntaxKind.AsteriskEqualsToken,
-        "**=": SyntaxKind.AsteriskAsteriskEqualsToken,
-        "/=": SyntaxKind.SlashEqualsToken,
-        "%=": SyntaxKind.PercentEqualsToken,
-        "<<=": SyntaxKind.LessThanLessThanEqualsToken,
-        ">>=": SyntaxKind.GreaterThanGreaterThanEqualsToken,
-        ">>>=": SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken,
-        "&=": SyntaxKind.AmpersandEqualsToken,
-        "|=": SyntaxKind.BarEqualsToken,
-        "^=": SyntaxKind.CaretEqualsToken,
-        "@": SyntaxKind.AtToken,
-    };
+    const textToToken = new Map<string, SyntaxKind>([
+        ["abstract", SyntaxKind.AbstractKeyword],
+        ["any", SyntaxKind.AnyKeyword],
+        ["as", SyntaxKind.AsKeyword],
+        ["boolean", SyntaxKind.BooleanKeyword],
+        ["break", SyntaxKind.BreakKeyword],
+        ["case", SyntaxKind.CaseKeyword],
+        ["catch", SyntaxKind.CatchKeyword],
+        ["class", SyntaxKind.ClassKeyword],
+        ["continue", SyntaxKind.ContinueKeyword],
+        ["const", SyntaxKind.ConstKeyword],
+        ["constructor", SyntaxKind.ConstructorKeyword],
+        ["debugger", SyntaxKind.DebuggerKeyword],
+        ["declare", SyntaxKind.DeclareKeyword],
+        ["default", SyntaxKind.DefaultKeyword],
+        ["delete", SyntaxKind.DeleteKeyword],
+        ["do", SyntaxKind.DoKeyword],
+        ["else", SyntaxKind.ElseKeyword],
+        ["enum", SyntaxKind.EnumKeyword],
+        ["export", SyntaxKind.ExportKeyword],
+        ["extends", SyntaxKind.ExtendsKeyword],
+        ["false", SyntaxKind.FalseKeyword],
+        ["finally", SyntaxKind.FinallyKeyword],
+        ["for", SyntaxKind.ForKeyword],
+        ["from", SyntaxKind.FromKeyword],
+        ["function", SyntaxKind.FunctionKeyword],
+        ["get", SyntaxKind.GetKeyword],
+        ["if", SyntaxKind.IfKeyword],
+        ["implements", SyntaxKind.ImplementsKeyword],
+        ["import", SyntaxKind.ImportKeyword],
+        ["in", SyntaxKind.InKeyword],
+        ["instanceof", SyntaxKind.InstanceOfKeyword],
+        ["interface", SyntaxKind.InterfaceKeyword],
+        ["is", SyntaxKind.IsKeyword],
+        ["let", SyntaxKind.LetKeyword],
+        ["module", SyntaxKind.ModuleKeyword],
+        ["namespace", SyntaxKind.NamespaceKeyword],
+        ["never", SyntaxKind.NeverKeyword],
+        ["new", SyntaxKind.NewKeyword],
+        ["null", SyntaxKind.NullKeyword],
+        ["number", SyntaxKind.NumberKeyword],
+        ["package", SyntaxKind.PackageKeyword],
+        ["private", SyntaxKind.PrivateKeyword],
+        ["protected", SyntaxKind.ProtectedKeyword],
+        ["public", SyntaxKind.PublicKeyword],
+        ["readonly", SyntaxKind.ReadonlyKeyword],
+        ["require", SyntaxKind.RequireKeyword],
+        ["global", SyntaxKind.GlobalKeyword],
+        ["return", SyntaxKind.ReturnKeyword],
+        ["set", SyntaxKind.SetKeyword],
+        ["static", SyntaxKind.StaticKeyword],
+        ["string", SyntaxKind.StringKeyword],
+        ["super", SyntaxKind.SuperKeyword],
+        ["switch", SyntaxKind.SwitchKeyword],
+        ["symbol", SyntaxKind.SymbolKeyword],
+        ["this", SyntaxKind.ThisKeyword],
+        ["throw", SyntaxKind.ThrowKeyword],
+        ["true", SyntaxKind.TrueKeyword],
+        ["try", SyntaxKind.TryKeyword],
+        ["type", SyntaxKind.TypeKeyword],
+        ["typeof", SyntaxKind.TypeOfKeyword],
+        ["undefined", SyntaxKind.UndefinedKeyword],
+        ["var", SyntaxKind.VarKeyword],
+        ["void", SyntaxKind.VoidKeyword],
+        ["while", SyntaxKind.WhileKeyword],
+        ["with", SyntaxKind.WithKeyword],
+        ["yield", SyntaxKind.YieldKeyword],
+        ["async", SyntaxKind.AsyncKeyword],
+        ["await", SyntaxKind.AwaitKeyword],
+        ["of", SyntaxKind.OfKeyword],
+        ["{", SyntaxKind.OpenBraceToken],
+        ["}", SyntaxKind.CloseBraceToken],
+        ["(", SyntaxKind.OpenParenToken],
+        [")", SyntaxKind.CloseParenToken],
+        ["[", SyntaxKind.OpenBracketToken],
+        ["]", SyntaxKind.CloseBracketToken],
+        [".", SyntaxKind.DotToken],
+        ["...", SyntaxKind.DotDotDotToken],
+        [";", SyntaxKind.SemicolonToken],
+        [",", SyntaxKind.CommaToken],
+        ["<", SyntaxKind.LessThanToken],
+        [">", SyntaxKind.GreaterThanToken],
+        ["<=", SyntaxKind.LessThanEqualsToken],
+        [">=", SyntaxKind.GreaterThanEqualsToken],
+        ["==", SyntaxKind.EqualsEqualsToken],
+        ["!=", SyntaxKind.ExclamationEqualsToken],
+        ["===", SyntaxKind.EqualsEqualsEqualsToken],
+        ["!==", SyntaxKind.ExclamationEqualsEqualsToken],
+        ["=>", SyntaxKind.EqualsGreaterThanToken],
+        ["+", SyntaxKind.PlusToken],
+        ["-", SyntaxKind.MinusToken],
+        ["**", SyntaxKind.AsteriskAsteriskToken],
+        ["*", SyntaxKind.AsteriskToken],
+        ["/", SyntaxKind.SlashToken],
+        ["%", SyntaxKind.PercentToken],
+        ["++", SyntaxKind.PlusPlusToken],
+        ["--", SyntaxKind.MinusMinusToken],
+        ["<<", SyntaxKind.LessThanLessThanToken],
+        ["</", SyntaxKind.LessThanSlashToken],
+        [">>", SyntaxKind.GreaterThanGreaterThanToken],
+        [">>>", SyntaxKind.GreaterThanGreaterThanGreaterThanToken],
+        ["&", SyntaxKind.AmpersandToken],
+        ["|", SyntaxKind.BarToken],
+        ["^", SyntaxKind.CaretToken],
+        ["!", SyntaxKind.ExclamationToken],
+        ["~", SyntaxKind.TildeToken],
+        ["&&", SyntaxKind.AmpersandAmpersandToken],
+        ["||", SyntaxKind.BarBarToken],
+        ["?", SyntaxKind.QuestionToken],
+        [":", SyntaxKind.ColonToken],
+        ["=", SyntaxKind.EqualsToken],
+        ["+=", SyntaxKind.PlusEqualsToken],
+        ["-=", SyntaxKind.MinusEqualsToken],
+        ["*=", SyntaxKind.AsteriskEqualsToken],
+        ["**=", SyntaxKind.AsteriskAsteriskEqualsToken],
+        ["/=", SyntaxKind.SlashEqualsToken],
+        ["%=", SyntaxKind.PercentEqualsToken],
+        ["<<=", SyntaxKind.LessThanLessThanEqualsToken],
+        [">>=", SyntaxKind.GreaterThanGreaterThanEqualsToken],
+        [">>>=", SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken],
+        ["&=", SyntaxKind.AmpersandEqualsToken],
+        ["|=", SyntaxKind.BarEqualsToken],
+        ["^=", SyntaxKind.CaretEqualsToken],
+        ["@", SyntaxKind.AtToken],
+    ]);
 
     /*
         As per ECMAScript Language Specification 3th Edition, Section 7.6: Identifiers
@@ -271,13 +271,11 @@ namespace ts {
             lookupInUnicodeMap(code, unicodeES3IdentifierPart);
     }
 
-    function makeReverseMap(source: OldMap<number>): string[] {
+    function makeReverseMap(source: Map<string, number>): string[] {
         const result: string[] = [];
-        for (const name in source) {
-            if (source.hasOwnProperty(name)) {
-                result[source[name]] = name;
-            }
-        }
+        source.forEach((number, name) => {
+            result[number] = name;
+        });
         return result;
     }
 
@@ -288,8 +286,8 @@ namespace ts {
     }
 
     /* @internal */
-    export function stringToToken(s: string): SyntaxKind {
-        return textToToken[s];
+    export function stringToToken(s: string): SyntaxKind | undefined {
+        return textToToken.get(s);
     }
 
     /* @internal */
@@ -362,8 +360,6 @@ namespace ts {
     export function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter {
         return computeLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
     }
-
-    const hasOwnProperty = Object.prototype.hasOwnProperty;
 
     export function isWhiteSpace(ch: number): boolean {
         return isWhiteSpaceSingleLine(ch) || isLineBreak(ch);
@@ -1128,8 +1124,11 @@ namespace ts {
             const len = tokenValue.length;
             if (len >= 2 && len <= 11) {
                 const ch = tokenValue.charCodeAt(0);
-                if (ch >= CharacterCodes.a && ch <= CharacterCodes.z && hasOwnProperty.call(textToToken, tokenValue)) {
-                    return token = textToToken[tokenValue];
+                if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
+                    const tkn = textToToken.get(tokenValue);
+                    if (tkn) {
+                        return token = tkn;
+                    }
                 }
             }
             return token = SyntaxKind.Identifier;

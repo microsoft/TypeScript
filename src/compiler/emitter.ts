@@ -24,7 +24,7 @@ namespace ts {
         Return      = 1 << 3
     }
 
-    const entities: OldMap<number> = {
+    const entities: ObjMap<number> = {
         "quot": 0x0022,
         "amp": 0x0026,
         "apos": 0x0027,
@@ -423,15 +423,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
              * set of labels that occurred inside the converted loop
              * used to determine if labeled jump can be emitted as is or it should be dispatched to calling code
              */
-            labels?: OldMap<string>;
+            labels?: ObjMap<string>;
             /*
              * collection of labeled jumps that transfer control outside the converted loop.
              * maps store association 'label -> labelMarker' where
              * - label - value of label as it appear in code
              * - label marker - return value that should be interpreted by calling code as 'jump to <label>'
              */
-            labeledNonLocalBreaks?: OldMap<string>;
-            labeledNonLocalContinues?: OldMap<string>;
+            labeledNonLocalBreaks?: ObjMap<string>;
+            labeledNonLocalContinues?: ObjMap<string>;
 
             /*
              * set of non-labeled jumps that transfer control outside the converted loop
@@ -545,7 +545,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             let exportFunctionForFile: string;
             let contextObjectForFile: string;
 
-            let generatedNameSet: OldMap<string>;
+            let generatedNameSet: ObjMap<string>;
             let nodeToGeneratedName: string[];
             let computedPropertyNamesToGeneratedNames: string[];
             let decoratedClassAliases: string[];
@@ -561,7 +561,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             let tempVariables: Identifier[];
             let tempParameters: Identifier[];
             let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
-            let exportSpecifiers: OldMap<ExportSpecifier[]>;
+            let exportSpecifiers: ObjMap<ExportSpecifier[]>;
             let exportEquals: ExportAssignment;
             let hasExportStarsToExportValues: boolean;
 
@@ -578,7 +578,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             const setSourceMapWriterEmit = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? changeSourceMapEmit : function (writer: SourceMapWriter) { };
 
-            const moduleEmitDelegates: OldMap<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
+            const moduleEmitDelegates: ObjMap<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
                 [ModuleKind.ES6]: emitES6Module,
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
@@ -586,7 +586,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 [ModuleKind.CommonJS]: emitCommonJSModule,
             };
 
-            const bundleEmitDelegates: OldMap<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
+            const bundleEmitDelegates: ObjMap<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
                 [ModuleKind.ES6]() {},
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
@@ -3253,7 +3253,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     else {
                         // deduplicate and hoist collected variable declarations
                         write("var ");
-                        let seen: OldMap<string>;
+                        let seen: ObjMap<string>;
                         for (const id of convertedLoopState.hoistedLocalVariables) {
                            // Don't initialize seen unless we have at least one element.
                            // Emit a comma to separate for all but the first element.
@@ -3425,7 +3425,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write("}");
                 }
 
-                function emitDispatchEntriesForLabeledJumps(table: OldMap<string>, isBreak: boolean, loopResultVariable: string, outerLoop: ConvertedLoopState): void {
+                function emitDispatchEntriesForLabeledJumps(table: ObjMap<string>, isBreak: boolean, loopResultVariable: string, outerLoop: ConvertedLoopState): void {
                     if (!table) {
                         return;
                     }
@@ -7080,7 +7080,7 @@ const _super = (function (geti, seti) {
                 if (hoistedVars) {
                     writeLine();
                     write("var ");
-                    const seen: OldMap<string> = {};
+                    const seen: ObjMap<string> = {};
                     for (let i = 0; i < hoistedVars.length; i++) {
                         const local = hoistedVars[i];
                         const name = local.kind === SyntaxKind.Identifier
@@ -7446,7 +7446,7 @@ const _super = (function (geti, seti) {
                 writeModuleName(node, emitRelativePathAsModuleName);
                 write("[");
 
-                const groupIndices: OldMap<number> = {};
+                const groupIndices: ObjMap<number> = {};
                 const dependencyGroups: DependencyGroup[] = [];
 
                 for (let i = 0; i < externalImports.length; i++) {

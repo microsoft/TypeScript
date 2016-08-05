@@ -67,7 +67,7 @@ namespace ts {
         /* @internal */ scriptSnapshot: IScriptSnapshot;
         /* @internal */ nameTable: Map<string, number>;
 
-        /* @internal */ getNamedDeclarations(): OldMap<Declaration[]>;
+        /* @internal */ getNamedDeclarations(): Map<string, Declaration[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
@@ -944,7 +944,7 @@ namespace ts {
         public resolvedTypeReferenceDirectiveNames: Map<string, ResolvedTypeReferenceDirective>;
         public imports: LiteralExpression[];
         public moduleAugmentations: LiteralExpression[];
-        private namedDeclarations: OldMap<Declaration[]>;
+        private namedDeclarations: Map<string, Declaration[]>;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);
@@ -966,7 +966,8 @@ namespace ts {
             return ts.getPositionOfLineAndCharacter(this, line, character);
         }
 
-        public getNamedDeclarations(): OldMap<Declaration[]> {
+        //This is internal on parent, should be internal here!
+        public getNamedDeclarations(): Map<string, Declaration[]> {
             if (!this.namedDeclarations) {
                 this.namedDeclarations = this.computeNamedDeclarations();
             }
@@ -974,8 +975,8 @@ namespace ts {
             return this.namedDeclarations;
         }
 
-        private computeNamedDeclarations(): OldMap<Declaration[]> {
-            const result: OldMap<Declaration[]> = {};
+        private computeNamedDeclarations(): Map<string, Declaration[]> {
+            const result = new Map<string, Declaration[]>();
 
             forEachChild(this, visit);
 
@@ -990,7 +991,7 @@ namespace ts {
             }
 
             function getDeclarations(name: string) {
-                return getProperty(result, name) || (result[name] = []);
+                return getOrUpdateMap(result, name, () => []);
             }
 
             function getDeclarationName(declaration: Declaration) {

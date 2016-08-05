@@ -1103,10 +1103,10 @@ namespace ts {
 
         // If a module has some of its imports skipped due to being at the depth limit under node_modules, then track
         // this, as it may be imported at a shallower depth later, and then it will need its skipped imports processed.
-        const modulesWithElidedImports: OldMap<boolean> = {};
+        const modulesWithElidedImports = new Set<string>();
 
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
-        const sourceFilesFoundSearchingNodeModules: OldMap<boolean> = {};
+        const sourceFilesFoundSearchingNodeModules = new Set<string>();
 
         const start = performance.mark();
 
@@ -1387,7 +1387,7 @@ namespace ts {
                 getSourceFile: program.getSourceFile,
                 getSourceFileByPath: program.getSourceFileByPath,
                 getSourceFiles: program.getSourceFiles,
-                isSourceFileFromExternalLibrary: (file: SourceFile) => !!lookUp(sourceFilesFoundSearchingNodeModules, file.path),
+                isSourceFileFromExternalLibrary: (file: SourceFile) => sourceFilesFoundSearchingNodeModules.has(file.path),
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
@@ -1924,20 +1924,20 @@ namespace ts {
 
                 // If the file was previously found via a node_modules search, but is now being processed as a root file,
                 // then everything it sucks in may also be marked incorrectly, and needs to be checked again.
-                if (file && lookUp(sourceFilesFoundSearchingNodeModules, file.path) && currentNodeModulesDepth == 0) {
-                    sourceFilesFoundSearchingNodeModules[file.path] = false;
+                if (file && sourceFilesFoundSearchingNodeModules.has(file.path) && currentNodeModulesDepth == 0) {
+                    sourceFilesFoundSearchingNodeModules.delete(file.path);
                     if (!options.noResolve) {
                         processReferencedFiles(file, getDirectoryPath(fileName), isDefaultLib);
                         processTypeReferenceDirectives(file);
                     }
 
-                    modulesWithElidedImports[file.path] = false;
+                    modulesWithElidedImports.delete(file.path);
                     processImportedModules(file, getDirectoryPath(fileName));
                 }
                 // See if we need to reprocess the imports due to prior skipped imports
-                else if (file && lookUp(modulesWithElidedImports, file.path)) {
+                else if (file && modulesWithElidedImports.has(file.path)) {
                     if (currentNodeModulesDepth < maxNodeModulesJsDepth) {
-                        modulesWithElidedImports[file.path] = false;
+                        modulesWithElidedImports.delete(file.path);
                         processImportedModules(file, getDirectoryPath(fileName));
                     }
                 }
@@ -1958,7 +1958,7 @@ namespace ts {
 
             filesByName.set(path, file);
             if (file) {
-                sourceFilesFoundSearchingNodeModules[path] = (currentNodeModulesDepth > 0);
+                setSetSet(sourceFilesFoundSearchingNodeModules, path, currentNodeModulesDepth > 0);
                 file.path = path;
 
                 if (host.useCaseSensitiveFileNames()) {
@@ -2099,7 +2099,7 @@ namespace ts {
                     const shouldAddFile = resolution && !options.noResolve && i < file.imports.length && !elideImport;
 
                     if (elideImport) {
-                        modulesWithElidedImports[file.path] = true;
+                        modulesWithElidedImports.add(file.path);
                     }
                     else if (shouldAddFile) {
                         findSourceFile(resolution.resolvedFileName,

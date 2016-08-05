@@ -88,7 +88,7 @@ namespace ts {
             return false;
         }
         try {
-            ts.localizedDiagnosticMessages = JSON.parse(fileContents);
+            ts.localizedDiagnosticMessages = mapOfObjMap<string>(JSON.parse(fileContents));
         }
         catch (e) {
             errors.push(createCompilerDiagnostic(Diagnostics.Corrupted_locale_file_0, filePath));
@@ -673,7 +673,7 @@ namespace ts {
         const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
         const descriptionColumn: string[] = [];
 
-        const optionsDescriptionMap: OldMap<string[]> = {};  // Map between option.description and list of option.type if it is a kind
+        const optionsDescriptionMap = new Map<string, string[]>();  // Map between option.description and list of option.type if it is a kind
 
         for (let i = 0; i < optsList.length; i++) {
             const option = optsList[i];
@@ -704,7 +704,7 @@ namespace ts {
                 forEachKeyInMap(<Map<string, number | string>>element.type, key => {
                     options.push(`'${key}'`);
                 });
-                optionsDescriptionMap[description] = options;
+                optionsDescriptionMap.set(description, options);
             }
             else {
                 description = getDiagnosticText(option.description);
@@ -726,7 +726,7 @@ namespace ts {
         for (let i = 0; i < usageColumn.length; i++) {
             const usage = usageColumn[i];
             const description = descriptionColumn[i];
-            const kindsList = optionsDescriptionMap[description];
+            const kindsList = optionsDescriptionMap.get(description);
             output += usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine;
 
             if (kindsList) {
@@ -782,8 +782,8 @@ namespace ts {
 
         return;
 
-        function serializeCompilerOptions(options: CompilerOptions): OldMap<string | number | boolean> {
-            const result: OldMap<string | number | boolean> = {};
+        function serializeCompilerOptions(options: CompilerOptions): ObjMap<string | number | boolean> {
+            const result: ObjMap<string | number | boolean> = {};
             const optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (const name in options) {

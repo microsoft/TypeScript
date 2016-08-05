@@ -14,39 +14,36 @@ namespace ts.NavigateTo {
             cancellationToken.throwIfCancellationRequested();
 
             const nameToDeclarations = sourceFile.getNamedDeclarations();
-            for (const name in nameToDeclarations) {
-                const declarations = getProperty(nameToDeclarations, name);
-                if (declarations) {
-                    // First do a quick check to see if the name of the declaration matches the
-                    // last portion of the (possibly) dotted name they're searching for.
-                    let matches = patternMatcher.getMatchesForLastSegmentOfPattern(name);
+            nameToDeclarations.forEach((declarations, name) => {
+                // First do a quick check to see if the name of the declaration matches the
+                // last portion of the (possibly) dotted name they're searching for.
+                let matches = patternMatcher.getMatchesForLastSegmentOfPattern(name);
 
-                    if (!matches) {
-                        continue;
-                    }
+                if (!matches) {
+                    return;
+                }
 
-                    for (const declaration of declarations) {
-                        // It was a match!  If the pattern has dots in it, then also see if the
-                        // declaration container matches as well.
-                        if (patternMatcher.patternContainsDots) {
-                            const containers = getContainers(declaration);
-                            if (!containers) {
-                                return undefined;
-                            }
-
-                            matches = patternMatcher.getMatches(containers, name);
-
-                            if (!matches) {
-                                continue;
-                            }
+                for (const declaration of declarations) {
+                    // It was a match!  If the pattern has dots in it, then also see if the
+                    // declaration container matches as well.
+                    if (patternMatcher.patternContainsDots) {
+                        const containers = getContainers(declaration);
+                        if (!containers) {
+                            return undefined;
                         }
 
-                        const fileName = sourceFile.fileName;
-                        const matchKind = bestMatchKind(matches);
-                        rawItems.push({ name, fileName, matchKind, isCaseSensitive: allMatchesAreCaseSensitive(matches), declaration });
+                        matches = patternMatcher.getMatches(containers, name);
+
+                        if (!matches) {
+                            continue;
+                        }
                     }
+
+                    const fileName = sourceFile.fileName;
+                    const matchKind = bestMatchKind(matches);
+                    rawItems.push({ name, fileName, matchKind, isCaseSensitive: allMatchesAreCaseSensitive(matches), declaration });
                 }
-            }
+            });
         });
 
         // Remove imports when the imported declaration is already in the list and has the same name.

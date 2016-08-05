@@ -87,14 +87,16 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function mapIsEqualTo<T>(map1: OldMap<T>, map2: OldMap<T>): boolean {
+    //kill?
+    export function mapIsEqualTo<T>(map1: ObjMap<T>, map2: ObjMap<T>): boolean {
         if (!map1 || !map2) {
             return map1 === map2;
         }
         return containsAll(map1, map2) && containsAll(map2, map1);
     }
 
-    function containsAll<T>(map: OldMap<T>, other: OldMap<T>): boolean {
+    //kill?
+    function containsAll<T>(map: ObjMap<T>, other: ObjMap<T>): boolean {
         for (const key in map) {
             if (!hasProperty(map, key)) {
                 continue;
@@ -1966,7 +1968,7 @@ namespace ts {
 
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
-        const fileDiagnostics: OldMap<Diagnostic[]> = {};
+        const fileDiagnostics = new Map<string, Diagnostic[]>();
 
         let diagnosticsModified = false;
         let modificationCount = 0;
@@ -1984,11 +1986,12 @@ namespace ts {
         }
 
         function reattachFileDiagnostics(newFile: SourceFile): void {
-            if (!hasProperty(fileDiagnostics, newFile.fileName)) {
+            const diagnostics = fileDiagnostics.get(newFile.fileName);
+            if (!diagnostics) {
                 return;
             }
 
-            for (const diagnostic of fileDiagnostics[newFile.fileName]) {
+            for (const diagnostic of diagnostics) {
                 diagnostic.file = newFile;
             }
         }
@@ -1996,10 +1999,9 @@ namespace ts {
         function add(diagnostic: Diagnostic): void {
             let diagnostics: Diagnostic[];
             if (diagnostic.file) {
-                diagnostics = fileDiagnostics[diagnostic.file.fileName];
+                diagnostics = fileDiagnostics.get(diagnostic.file.fileName);
                 if (!diagnostics) {
-                    diagnostics = [];
-                    fileDiagnostics[diagnostic.file.fileName] = diagnostics;
+                    diagnostics = setAndReturn(fileDiagnostics, diagnostic.file.fileName, []);
                 }
             }
             else {
@@ -2019,7 +2021,7 @@ namespace ts {
         function getDiagnostics(fileName?: string): Diagnostic[] {
             sortAndDeduplicate();
             if (fileName) {
-                return fileDiagnostics[fileName] || [];
+                return fileDiagnostics.get(fileName) || [];
             }
 
             const allDiagnostics: Diagnostic[] = [];
@@ -2029,11 +2031,9 @@ namespace ts {
 
             forEach(nonFileDiagnostics, pushDiagnostic);
 
-            for (const key in fileDiagnostics) {
-                if (hasProperty(fileDiagnostics, key)) {
-                    forEach(fileDiagnostics[key], pushDiagnostic);
-                }
-            }
+            fileDiagnostics.forEach(diagnostics => {
+                forEach(diagnostics, pushDiagnostic);
+            });
 
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
@@ -2046,11 +2046,7 @@ namespace ts {
             diagnosticsModified = false;
             nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
 
-            for (const key in fileDiagnostics) {
-                if (hasProperty(fileDiagnostics, key)) {
-                    fileDiagnostics[key] = sortAndDeduplicateDiagnostics(fileDiagnostics[key]);
-                }
-            }
+            mapValues(fileDiagnostics, sortAndDeduplicateDiagnostics);
         }
     }
 
@@ -2060,20 +2056,20 @@ namespace ts {
     // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
     // There is no reason for this other than that JSON.stringify does not handle it either.
     const escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    const escapedCharsMap: OldMap<string> = {
-        "\0": "\\0",
-        "\t": "\\t",
-        "\v": "\\v",
-        "\f": "\\f",
-        "\b": "\\b",
-        "\r": "\\r",
-        "\n": "\\n",
-        "\\": "\\\\",
-        "\"": "\\\"",
-        "\u2028": "\\u2028", // lineSeparator
-        "\u2029": "\\u2029", // paragraphSeparator
-        "\u0085": "\\u0085"  // nextLine
-    };
+    const escapedCharsMap = new Map<string, string>([
+        ["\0", "\\0"],
+        ["\t", "\\t"],
+        ["\v", "\\v"],
+        ["\f", "\\f"],
+        ["\b", "\\b"],
+        ["\r", "\\r"],
+        ["\n", "\\n"],
+        ["\\", "\\\\"],
+        ["\"", "\\\""],
+        ["\u2028", "\\u2028"], // lineSeparator
+        ["\u2029", "\\u2029"], // paragraphSeparator
+        ["\u0085", "\\u0085"]  // nextLine
+    ]);
 
 
     /**
@@ -2087,7 +2083,7 @@ namespace ts {
         return s;
 
         function getReplacement(c: string) {
-            return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
+            return escapedCharsMap.get(c) || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
         }
     }
 

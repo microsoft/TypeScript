@@ -2607,7 +2607,7 @@ namespace ts {
     }
 
     export type RootPaths = string[];
-    export type PathSubstitutions = OldMap<string[]>;
+    export type PathSubstitutions = ObjMap<string[]>;
     export type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
 
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | TsConfigOnlyOptions;
