@@ -11,6 +11,7 @@
 /// <reference path='jsTyping.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
+/// <reference path='codefixes\references.ts' />
 
 namespace ts {
     /** The version of the language service API */
@@ -1237,6 +1238,8 @@ namespace ts {
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeAction[];
+
         getEmitOutput(fileName: string): EmitOutput;
 
         getProgram(): Program;
@@ -1281,6 +1284,18 @@ namespace ts {
     export class TextChange {
         span: TextSpan;
         newText: string;
+    }
+
+    export interface FileTextChanges {
+        fileName: string;
+        textChanges: TextChange[];
+    }
+
+    export interface CodeAction {
+        /** Description of the code action to display in the UI of the editor */
+        description: string;
+        /** Text changes to apply to each file as part of the code action */
+        changes: FileTextChanges[];
     }
 
     export interface TextInsertion {
@@ -1886,9 +1901,13 @@ namespace ts {
         };
     }
 
-    // Cache host information about script should be refreshed
+    export function getSupportedCodeFixes() {
+        return codeFix.CodeFixProvider.getSupportedErrorCodes();
+    }
+
+    // Cache host information about script Should be refreshed
     // at each language service public entry point, since we don't know when
-    // set of scripts handled by the host changes.
+    // the set of scripts handled by the host changes.
     class HostCache {
         private fileNameToEntry: FileMap<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
@@ -3022,6 +3041,7 @@ namespace ts {
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
+        const codeFixProvider: codeFix.CodeFixProvider = new codeFix.CodeFixProvider();
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
         let lastProjectVersion: string;
@@ -7832,6 +7852,30 @@ namespace ts {
             return [];
         }
 
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): CodeAction[] {
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            const checker = program.getTypeChecker();
+            let allFixes: CodeAction[] = [];
+
+            forEach(errorCodes, error => {
+                const context = {
+                    errorCode: error,
+                    sourceFile: sourceFile,
+                    span: { start, length: end - start },
+                    checker: checker,
+                    newLineCharacter: getNewLineOrDefaultFromHost(host)
+                };
+
+                const fixes = codeFixProvider.getFixes(context);
+                if (fixes) {
+                    allFixes = allFixes.concat(fixes);
+                }
+            });
+
+            return allFixes;
+        }
+
         /**
          * Checks if position points to a valid position to add JSDoc comments, and if so,
          * returns the appropriate template. Otherwise returns an empty string.
@@ -8302,6 +8346,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
+            getCodeFixesAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,
             getProgram
