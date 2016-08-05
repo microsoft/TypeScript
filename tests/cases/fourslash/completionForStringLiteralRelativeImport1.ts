@@ -51,8 +51,8 @@ for (const kind of kinds) {
     verify.importModuleCompletionListContains("f1");
     verify.importModuleCompletionListContains("f2");
     verify.importModuleCompletionListContains("e1");
-    verify.importModuleCompletionListContains("folder/");
-    verify.importModuleCompletionListContains("parentTest/");
+    verify.importModuleCompletionListContains("folder");
+    verify.importModuleCompletionListContains("parentTest");
     verify.not.importModuleCompletionListItemsCountIsGreaterThan(5);
 
     goTo.marker(kind + "2");
@@ -63,6 +63,6 @@ for (const kind of kinds) {
     goTo.marker(kind + "3");
     verify.importModuleCompletionListContains("f4");
     verify.importModuleCompletionListContains("g1");
-    verify.importModuleCompletionListContains("sub/");
+    verify.importModuleCompletionListContains("sub");
     verify.not.importModuleCompletionListItemsCountIsGreaterThan(3);
 }

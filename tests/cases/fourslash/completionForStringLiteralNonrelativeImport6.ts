@@ -52,8 +52,8 @@ const kinds = ["import_as", "import_equals", "require"];
 for (const kind of kinds) {
     goTo.marker(kind + "0");
 
-    verify.importModuleCompletionListContains("module-no-main/");
-    verify.importModuleCompletionListContains("module-no-main-index-d-ts/");
+    verify.importModuleCompletionListContains("module-no-main");
+    verify.importModuleCompletionListContains("module-no-main-index-d-ts");
     verify.importModuleCompletionListContains("module-index-ts");
     verify.importModuleCompletionListContains("module-index-d-ts-explicit-main");
     verify.importModuleCompletionListContains("module-index-d-ts-default-main");

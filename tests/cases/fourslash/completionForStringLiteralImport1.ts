@@ -28,4 +28,4 @@ goTo.marker("2");
 verify.importModuleCompletionListContains("some-module", 2);
 
 goTo.marker("3");
-verify.importModuleCompletionListContains("fourslash/", 3);
+verify.importModuleCompletionListContains("fourslash", 3);

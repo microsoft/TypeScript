@@ -34,16 +34,16 @@ for (let i = 0; i < 5; i++) {
     verify.importModuleCompletionListContains("f1.d.ts");
     verify.importModuleCompletionListContains("f2.tsx");
     verify.importModuleCompletionListContains("e1.ts");
-    verify.importModuleCompletionListContains("parentTest/");
+    verify.importModuleCompletionListContains("parentTest");
     verify.not.importModuleCompletionListItemsCountIsGreaterThan(5);
 }
 
 goTo.marker("5");
 verify.importModuleCompletionListContains("g1.ts");
-verify.importModuleCompletionListContains("sub/");
+verify.importModuleCompletionListContains("sub");
 verify.not.importModuleCompletionListItemsCountIsGreaterThan(2);
 
 goTo.marker("6");
 verify.importModuleCompletionListContains("g1.ts");
-verify.importModuleCompletionListContains("sub/");
+verify.importModuleCompletionListContains("sub");
 verify.not.importModuleCompletionListItemsCountIsGreaterThan(2);

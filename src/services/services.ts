@@ -1865,7 +1865,6 @@ namespace ts {
     interface VisibleModuleInfo {
         moduleName: string;
         moduleDir: string;
-        canBeImported: boolean;
     }
 
     export interface DisplayPartsSymbolWriter extends SymbolWriter {
@@ -4605,7 +4604,7 @@ namespace ts {
                         if (!duplicate) {
                             result.push({
                                 name: fileName,
-                                kind: ScriptElementKind.directory,
+                                kind: ScriptElementKind.scriptElement,
                                 sortText: fileName
                             });
                         }
@@ -4618,7 +4617,7 @@ namespace ts {
                             const directoryName = getBaseFileName(normalizePath(d));
 
                             result.push({
-                                name: ensureTrailingDirectorySeparator(directoryName),
+                                name: directoryName,
                                 kind: ScriptElementKind.directory,
                                 sortText: directoryName
                             });
@@ -4750,7 +4749,7 @@ namespace ts {
                 if (!options.moduleResolution || options.moduleResolution === ModuleResolutionKind.NodeJs) {
                     forEach(enumerateNodeModulesVisibleToScript(host, scriptPath), visibleModule => {
                         if (!isNestedModule) {
-                            nonRelativeModules.push(visibleModule.canBeImported ? visibleModule.moduleName : ensureTrailingDirectorySeparator(visibleModule.moduleName));
+                            nonRelativeModules.push(visibleModule.moduleName);
                         }
                         else {
                             const nestedFiles = host.readDirectory(visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/undefined, /*include*/["./*"]);
@@ -4904,8 +4903,7 @@ namespace ts {
                         const moduleDir = combinePaths(nodeModulesDir, moduleName);
                         result.push({
                             moduleName,
-                            moduleDir,
-                            canBeImported: moduleCanBeImported(moduleDir)
+                            moduleDir
                         });
                     });
                 });
@@ -4929,31 +4927,6 @@ namespace ts {
                             result.push(dep);
                         }
                     }
-                }
-
-                /*
-                * A module can be imported by name alone if one of the following is true:
-                *     It defines the "typings" property in its package.json
-                *     The module has a "main" export and an index.d.ts file
-                *     The module has an index.ts
-                */
-                function moduleCanBeImported(modulePath: string): boolean {
-                    const packagePath = combinePaths(modulePath, "package.json");
-
-                    let hasMainExport = false;
-                    if (host.fileExists(packagePath)) {
-                        const package = tryReadingPackageJson(packagePath);
-                        if (package) {
-                            if (package.typings) {
-                                return true;
-                            }
-                            hasMainExport = !!package.main;
-                        }
-                    }
-
-                    hasMainExport = hasMainExport || host.fileExists(combinePaths(modulePath, "index.js"));
-
-                    return (hasMainExport && host.fileExists(combinePaths(modulePath, "index.d.ts"))) || host.fileExists(combinePaths(modulePath, "index.ts"));
                 }
             }
 

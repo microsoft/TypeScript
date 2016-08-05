@@ -43,7 +43,7 @@ for (const kind of kinds) {
     verify.importModuleCompletionListContains("module0");
     verify.importModuleCompletionListContains("module1");
     verify.importModuleCompletionListContains("module2");
-    verify.importModuleCompletionListContains("more/");
+    verify.importModuleCompletionListContains("more");
 
     // Should not contain itself
     verify.not.importModuleCompletionListItemsCountIsGreaterThan(4);
