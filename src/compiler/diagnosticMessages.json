@@ -3033,31 +3033,31 @@
         "code": 17010
     },
     "Add missing 'super()' call.": {
-        "category": "CodeFix",
+        "category": "Message",
         "code": 90001
     },
     "Make 'super()' call the first statement in the constructor.": {
-        "category": "CodeFix",
+        "category": "Message",
         "code": 90002
     },
     "Change 'extends' to 'implements'": {
-        "category": "CodeFix",
+        "category": "Message",
         "code": 90003
     },
     "Remove unused identifiers": {
-        "category": "CodeFix",
+        "category": "Message",
         "code": 90004
     },
     "Implement interface on reference": {
-        "category": "CodeFix",
+        "category": "Message",
         "code": 90005
     },
     "Implement interface on class": {
-        "category": "CodeFix",
+        "category": "Message",
         "code": 90006
     },
     "Implement inherited abstract class": {
-        "category": "CodeFix",
+        "category": "Message",
         "code": 90007
     }
 }

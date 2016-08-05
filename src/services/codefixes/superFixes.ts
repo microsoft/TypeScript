@@ -1,13 +1,12 @@
 ﻿/* @internal */
-namespace ts.codeFix {
+namespace ts.codefix {
     function getOpenBraceEnd(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
         // First token is the open curly, this is where we want to put the 'super' call.
         return constructor.body.getFirstToken(sourceFile).getEnd();
     }
 
     registerCodeFix({
-        name: "AddMissingSuperCallFix",
-        errorCodes: ["TS2377"],
+        errorCodes: [`TS${Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call.code}`],
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
             const token = getTokenAtPosition(sourceFile, context.span.start);
@@ -22,8 +21,7 @@ namespace ts.codeFix {
     });
 
     registerCodeFix({
-        name: "MakeSuperCallTheFirstStatementInTheConstructor",
-        errorCodes: ["TS17009"],
+        errorCodes: [`TS${Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class.code}`],
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
 

@@ -1,4 +1,4 @@
-/// <reference path="types.ts"/>
+﻿/// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
 
 
@@ -115,15 +115,6 @@ namespace ts {
         return -1;
     }
 
-    export function firstOrUndefined<T>(array: T[], predicate: (x: T) => boolean): T {
-        for (let i = 0, len = array.length; i < len; i++) {
-            if (predicate(array[i])) {
-                return array[i];
-            }
-        }
-        return undefined;
-    }
-
     export function indexOfAnyCharCode(text: string, charCodes: number[], start?: number): number {
         for (let i = start || 0, len = text.length; i < len; i++) {
             if (contains(charCodes, text.charCodeAt(i))) {
@@ -227,6 +218,19 @@ namespace ts {
             pos++;
         }
         return true;
+    }
+
+    /**
+     * Returns the first element that matches the predicate, or undefined if none
+     * could be found.
+     */
+    export function find<T>(array: T[], predicate: (item: T) => boolean): T {
+        for (let i = 0, len = array.length; i < len; i++) {
+            if (predicate(array[i])) {
+                return array[i];
+            }
+        }
+        return undefined;
     }
 
     /**

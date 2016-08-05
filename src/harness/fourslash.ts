@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -1879,11 +1879,11 @@ namespace FourSlash {
                 this.raiseError("Errors expected.");
             }
 
-            if (diagnostics.length > 1 && !errorCode) {
+            if (diagnostics.length > 1 && errorCode !== undefined) {
                 this.raiseError("When there's more than one error, you must specify the errror to fix.");
             }
 
-            const diagnostic = !errorCode ? diagnostics[0] : ts.firstOrUndefined(diagnostics, d => d.code == errorCode);
+            const diagnostic = !errorCode ? diagnostics[0] : ts.find(diagnostics, d => d.code == errorCode);
 
             const actual = this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [`TS${diagnostic.code}`]);
 

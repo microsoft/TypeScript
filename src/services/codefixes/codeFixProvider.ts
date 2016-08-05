@@ -1,7 +1,6 @@
-/* @internal */
+﻿/* @internal */
 namespace ts {
     export interface CodeFix {
-        name: string;
         errorCodes: string[];
         getCodeActions(context: CodeFixContext): CodeAction[];
     }
@@ -14,7 +13,7 @@ namespace ts {
         newLineCharacter: string;
     }
 
-    export namespace codeFix {
+    export namespace codefix {
         const codeFixes: Map<CodeFix[]> = {};
 
         export function registerCodeFix(action: CodeFix) {
@@ -36,8 +35,6 @@ namespace ts {
             public getFixes(context: CodeFixContext): CodeAction[] {
                 const fixes = codeFixes[context.errorCode];
                 let allActions: CodeAction[] = [];
-
-                Debug.assert(fixes && fixes.length > 0, "No fixes found for error: '${errorCode}'.");
 
                 forEach(fixes, f => {
                     const actions = f.getCodeActions(context);

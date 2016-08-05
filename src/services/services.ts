@@ -1902,7 +1902,7 @@ namespace ts {
     }
 
     export function getSupportedCodeFixes() {
-        return codeFix.CodeFixProvider.getSupportedErrorCodes();
+        return codefix.CodeFixProvider.getSupportedErrorCodes();
     }
 
     // Cache host information about script Should be refreshed
@@ -3041,7 +3041,7 @@ namespace ts {
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
-        const codeFixProvider: codeFix.CodeFixProvider = new codeFix.CodeFixProvider();
+        const codeFixProvider: codefix.CodeFixProvider = new codefix.CodeFixProvider();
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
         let lastProjectVersion: string;
