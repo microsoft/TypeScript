@@ -3,6 +3,7 @@
 // @typeRoots: /types
 // @traceResolution: true
 // @types: lib
+// @currentDirectory: /
 
 // @filename: /types/lib/index.d.ts
 

@@ -1066,19 +1066,15 @@ namespace ts {
         return resolutions;
     }
 
-    function getInferredTypesRoot(options: CompilerOptions, rootFiles: string[], host: CompilerHost) {
-        return computeCommonSourceDirectoryOfFilenames(rootFiles, host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
-    }
-
     /**
-      * Given a set of options and a set of root files, returns the set of type directive names
+      * Given a set of options, returns the set of type directive names
       *   that should be included for this program automatically.
       * This list could either come from the config file,
       *   or from enumerating the types root + initial secondary types lookup location.
       * More type directives might appear in the program later as a result of loading actual source files;
       *   this list is only the set of defaults that are implicitly included.
       */
-    export function getAutomaticTypeDirectiveNames(options: CompilerOptions, rootFiles: string[], host: CompilerHost): string[] {
+    export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: ModuleResolutionHost): string[] {
         // Use explicit type list from tsconfig.json
         if (options.types) {
             return options.types;
@@ -1091,7 +1087,10 @@ namespace ts {
             if (typeRoots) {
                 for (const root of typeRoots) {
                     if (host.directoryExists(root)) {
-                        result = result.concat(host.getDirectories(root));
+                        for (const typeDirectivePath of host.getDirectories(root)) {
+                            // Return just the type directive names
+                            result = result.concat(getBaseFileName(normalizePath(typeDirectivePath)));
+                        }
                     }
                 }
             }
@@ -1166,11 +1165,11 @@ namespace ts {
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
-            const typeReferences: string[] = getAutomaticTypeDirectiveNames(options, rootNames, host);
+            const typeReferences: string[] = getAutomaticTypeDirectiveNames(options, host);
 
             if (typeReferences) {
-                const inferredRoot = getInferredTypesRoot(options, rootNames, host);
-                const containingFilename = combinePaths(inferredRoot, "__inferred type names__.ts");
+                // This containingFilename needs to match with the one used in managed-side
+                const containingFilename = combinePaths(host.getCurrentDirectory(), "__inferred type names__.ts");
                 const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, containingFilename);
                 for (let i = 0; i < typeReferences.length; i++) {
                     processTypeReferenceDirective(typeReferences[i], resolutions[i]);

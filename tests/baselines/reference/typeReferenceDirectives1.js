@@ -2,7 +2,6 @@
 
 //// [index.d.ts]
 
-
 interface $ { x }
 
 //// [app.ts]
