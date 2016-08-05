@@ -3521,12 +3521,7 @@ namespace ts {
                         // export { x, y }
                         for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
                             const name = (specifier.propertyName || specifier.name).text;
-                            if (!exportSpecifiers[name]) {
-                                exportSpecifiers[name] = [specifier];
-                            }
-                            else {
-                                exportSpecifiers[name].push(specifier);
-                            }
+                            getOrUpdateProperty(exportSpecifiers, name, () => []).push(specifier);
                         }
                     }
                     break;
@@ -3965,6 +3960,7 @@ namespace ts {
             || kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.MethodSignature
             || kind === SyntaxKind.ModuleDeclaration
+            || kind === SyntaxKind.NamespaceExportDeclaration
             || kind === SyntaxKind.NamespaceImport
             || kind === SyntaxKind.Parameter
             || kind === SyntaxKind.PropertyAssignment
