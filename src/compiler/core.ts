@@ -325,6 +325,7 @@ namespace ts {
         return hasOwnProperty.call(map, key) ? map[key] : undefined;
     }
 
+    //todo: kill
     export function isEmpty<T>(map: ObjMap<T>) {
         for (const id in map) {
             if (hasProperty(map, id)) {
@@ -489,6 +490,13 @@ namespace ts {
         return forEachInMap(map, callback);
     }
 
+    export function keysArray<K, V>(map: Map<K, V>): K[] {
+        //return Array.from(map.keys());
+        const keys: K[] = [];
+        forEachKeyInMap(map, key => keys.push(key));
+        return keys;
+    }
+
     export function valuesArray<K, V>(map: Map<K, V>): V[] {
         //return Array.from(map.values());
         const values: V[] = [];
@@ -520,17 +528,32 @@ namespace ts {
     }
 
     export function someInMap<K, V>(map: Map<K, V>, predicate: (value: V, key: K) => boolean): boolean {
-        //TODO: share code with forEachValueInMap???
         return !!forEachInMap(map, predicate);
     }
 
-    export function multiMapAdd<K, V>(map: Map<K, V[]>, key: K, value: V): void {
+    export function allInMap<K, V>(map: Map<K, V>, predicate: (value: V, key: K) => boolean): boolean {
+        return !someInMap(map, (value, key) => !predicate(value, key));
+    }
+
+    export function filterMapMap<K, V, U>(map: Map<K, V>, f: (value: V, key: K) => U | undefined): U[] {
+        const result: U[] = [];
+        map.forEach((value, key) => {
+            const entry = f(value, key);
+            if (entry !== undefined) {
+                result.push(entry);
+            }
+        });
+        return result;
+    }
+
+    export function multiMapAdd<K, V>(map: Map<K, V[]>, key: K, value: V): V[] {
         const values = map.get(key);
         if (values) {
             values.push(value);
+            return values;
         }
         else {
-            map.set(key, [value]);
+            return setAndReturn(map, key, [value]);
         }
     }
 

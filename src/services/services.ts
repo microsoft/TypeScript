@@ -2027,7 +2027,7 @@ namespace ts {
         reportDiagnostics?: boolean;
         moduleName?: string;
         //this isn't internal, can't change to map?
-        renamedDependencies?: OldMap<string>;
+        renamedDependencies?: ObjMap<string>;
     }
 
     export interface TranspileOutput {
@@ -2044,7 +2044,7 @@ namespace ts {
     function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
         commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
-            typeof o.type === "object" && !forEachValue(<OldMap<any>>o.type, v => typeof v !== "number"));
+            typeof o.type === "object" && allInMap(o.type, v => typeof v === "number"));
 
         options = clone(options);
 
@@ -2245,7 +2245,7 @@ namespace ts {
     export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
-        const buckets: OldMap<FileMap<DocumentRegistryEntry>> = {};
+        const buckets = new Map<string, FileMap<DocumentRegistryEntry>>();
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
@@ -2253,16 +2253,17 @@ namespace ts {
         }
 
         function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
-            let bucket = lookUp(buckets, key);
-            if (!bucket && createIfMissing) {
-                buckets[key] = bucket = createFileMap<DocumentRegistryEntry>();
-            }
-            return bucket;
+            return createIfMissing
+                ? getOrUpdateMap<string, FileMap<DocumentRegistryEntry>>(buckets, key, createFileMap)
+                : buckets.get(key);
         }
 
         function reportStats() {
-            const bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === "_").map(name => {
-                const entries = lookUp(buckets, name);
+            //todo: filterMapMap helper
+            const bucketInfoArray = filterMapMap(buckets, (entries, name) => {
+                if (!(name && name.charAt(0) === "_")) {
+                    return;
+                }
                 const sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
                 entries.forEachValue((key, entry) => {
                     sourceFiles.push({
@@ -4104,7 +4105,7 @@ namespace ts {
              *          do not occur at the current position and have not otherwise been typed.
              */
             function filterNamedImportOrExportCompletionItems(exportsOfModule: Symbol[], namedImportsOrExports: ImportOrExportSpecifier[]): Symbol[] {
-                const existingImportsOrExports: OldMap<boolean> = {};
+                const existingImportsOrExports = new Set<string>();
 
                 for (const element of namedImportsOrExports) {
                     // If this is the current item we are editing right now, do not filter it out
@@ -4113,14 +4114,14 @@ namespace ts {
                     }
 
                     const name = element.propertyName || element.name;
-                    existingImportsOrExports[name.text] = true;
+                    existingImportsOrExports.add(name.text);
                 }
 
-                if (isEmpty(existingImportsOrExports)) {
+                if (!existingImportsOrExports.size) {
                     return filter(exportsOfModule, e => e.name !== "default");
                 }
 
-                return filter(exportsOfModule, e => e.name !== "default" && !lookUp(existingImportsOrExports, e.name));
+                return filter(exportsOfModule, e => e.name !== "default" && !existingImportsOrExports.has(e.name));
             }
 
             /**
@@ -4134,7 +4135,7 @@ namespace ts {
                     return contextualMemberSymbols;
                 }
 
-                const existingMemberNames: OldMap<boolean> = {};
+                const existingMemberNames = new Set<string>();
                 for (const m of existingMembers) {
                     // Ignore omitted expressions for missing members
                     if (m.kind !== SyntaxKind.PropertyAssignment &&
@@ -4164,10 +4165,10 @@ namespace ts {
                         existingName = (<Identifier>m.name).text;
                     }
 
-                    existingMemberNames[existingName] = true;
+                    existingMemberNames.add(existingName);
                 }
 
-                return filter(contextualMemberSymbols, m => !lookUp(existingMemberNames, m.name));
+                return filter(contextualMemberSymbols, m => !existingMemberNames.has(m.name));
             }
 
             /**
@@ -4177,7 +4178,7 @@ namespace ts {
              *          do not occur at the current position and have not otherwise been typed.
              */
             function filterJsxAttributes(symbols: Symbol[], attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>): Symbol[] {
-                const seenNames: OldMap<boolean> = {};
+                const seenNames = new Set<string>();
                 for (const attr of attributes) {
                     // If this is the current item we are editing right now, do not filter it out
                     if (attr.getStart() <= position && position <= attr.getEnd()) {
@@ -4185,11 +4186,11 @@ namespace ts {
                     }
 
                     if (attr.kind === SyntaxKind.JsxAttribute) {
-                        seenNames[(<JsxAttribute>attr).name.text] = true;
+                        seenNames.add((<JsxAttribute>attr).name.text);
                     }
                 }
 
-                return filter(symbols, a => !lookUp(seenNames, a.name));
+                return filter(symbols, a => !seenNames.has(a.name));
             }
         }
 
@@ -4251,7 +4252,7 @@ namespace ts {
 
             return { isMemberCompletion, isNewIdentifierLocation, entries };
 
-            function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: OldMap<string>): CompletionEntry[] {
+            function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: Set<string>): CompletionEntry[] {
                 const entries: CompletionEntry[] = [];
                 const target = program.getCompilerOptions().target;
 
@@ -4262,8 +4263,8 @@ namespace ts {
                         return;
                     }
 
-                    if (!uniqueNames[name]) {
-                        uniqueNames[name] = name;
+                    if (!uniqueNames.has(name)) {
+                        uniqueNames.add(name);
                         const displayName = getCompletionEntryDisplayName(unescapeIdentifier(name), target, /*performCharacterChecks*/ true);
                         if (displayName) {
                             const entry = {
@@ -4317,17 +4318,17 @@ namespace ts {
 
             }
 
-            function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[], location: Node, performCharacterChecks: boolean): OldMap<string> {
+            function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[], location: Node, performCharacterChecks: boolean): Set<string> {
                 const start = timestamp();
-                const uniqueNames: OldMap<string> = {};
+                const uniqueNames = new Set<string>();
                 if (symbols) {
                     for (const symbol of symbols) {
                         const entry = createCompletionEntry(symbol, location, performCharacterChecks);
                         if (entry) {
                             const id = escapeIdentifier(entry.name);
-                            if (!lookUp(uniqueNames, id)) {
+                            if (!uniqueNames.has(id)) {
                                 entries.push(entry);
-                                uniqueNames[id] = id;
+                                uniqueNames.add(id);
                             }
                         }
                     }
@@ -5313,16 +5314,16 @@ namespace ts {
                         return undefined;
                     }
 
-                    const fileNameToDocumentHighlights: OldMap<DocumentHighlights> = {};
+                    const fileNameToDocumentHighlights = new Map<string, DocumentHighlights>();
                     const result: DocumentHighlights[] = [];
                     for (const referencedSymbol of referencedSymbols) {
                         for (const referenceEntry of referencedSymbol.references) {
                             const fileName = referenceEntry.fileName;
-                            let documentHighlights = getProperty(fileNameToDocumentHighlights, fileName);
+                            let documentHighlights = fileNameToDocumentHighlights.get(fileName);
                             if (!documentHighlights) {
                                 documentHighlights = { fileName, highlightSpans: [] };
 
-                                fileNameToDocumentHighlights[fileName] = documentHighlights;
+                                fileNameToDocumentHighlights.set(fileName, documentHighlights);
                                 result.push(documentHighlights);
                             }
 
