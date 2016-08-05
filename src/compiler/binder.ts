@@ -1987,7 +1987,7 @@ namespace ts {
             assignee.symbol.members = assignee.symbol.members || {};
             // It's acceptable for multiple 'this' assignments of the same identifier to occur
             // AND it can be overwritten by subsequent method declarations
-            let symbol = declareSymbol(assignee.symbol.members, assignee.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+            const symbol = declareSymbol(assignee.symbol.members, assignee.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
             symbol.isDiscardable = true;
         }
 
