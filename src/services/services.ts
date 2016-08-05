@@ -1179,7 +1179,9 @@ namespace ts {
         cleanupSemanticCache(): void;
 
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
+        getSyntacticLintDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
+        getSemanticLintDiagnostics(fileName: string): Diagnostic[];
 
         /**
          * @deprecated Use getProgramDiagnostics instead.
@@ -3300,6 +3302,12 @@ namespace ts {
             return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken);
         }
 
+        function getSyntacticLintDiagnostics(fileName: string) {
+            synchronizeHostData();
+
+            return program.getSyntacticLintDiagnostics(getValidSourceFile(fileName), cancellationToken);
+        }
+
         /**
          * getSemanticDiagnostics return array of Diagnostics. If '-d' is not enabled, only report semantic errors
          * If '-d' enabled, report both semantic and emitter errors
@@ -3320,6 +3328,12 @@ namespace ts {
             // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
             const declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
             return concatenate(semanticDiagnostics, declarationDiagnostics);
+        }
+
+        function getSemanticLintDiagnostics(fileName: string) {
+            synchronizeHostData();
+
+            return program.getSemanticLintDiagnostics(getValidSourceFile(fileName), cancellationToken);
         }
 
         function getProgramDiagnostics() {
@@ -8282,7 +8296,9 @@ namespace ts {
             dispose,
             cleanupSemanticCache,
             getSyntacticDiagnostics,
+            getSyntacticLintDiagnostics,
             getSemanticDiagnostics,
+            getSemanticLintDiagnostics,
             getCompilerOptionsDiagnostics: getProgramDiagnostics,
             getProgramDiagnostics,
             getSyntacticClassifications,

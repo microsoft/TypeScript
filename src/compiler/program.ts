@@ -1191,9 +1191,11 @@ namespace ts {
             getSourceFiles: () => files,
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
+            getSyntacticLintDiagnostics,
             getOptionsDiagnostics,
             getGlobalDiagnostics,
             getSemanticDiagnostics,
+            getSemanticLintDiagnostics,
             getDeclarationDiagnostics,
             getTypeChecker,
             getClassifiableNames,
@@ -1502,8 +1504,16 @@ namespace ts {
             return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
         }
 
+        function getSyntacticLintDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+            return getDiagnosticsHelper(sourceFile, getSyntacticLintDiagnosticsForFile, cancellationToken);
+        }
+
         function getSemanticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
+        }
+
+        function getSemanticLintDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+            return getDiagnosticsHelper(sourceFile, getSemanticLintDiagnosticsForFile, cancellationToken);
         }
 
         function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
@@ -1517,7 +1527,7 @@ namespace ts {
             }
         }
 
-        function performLintPassOnFile(sourceFile: SourceFile, kind: ExtensionKind.SyntacticLint | ExtensionKind.SemanticLint): Diagnostic[] | undefined {
+        function performLintPassOnFile(sourceFile: SourceFile, token: CancellationToken, kind: ExtensionKind.SyntacticLint | ExtensionKind.SemanticLint): Diagnostic[] | undefined {
             const lints = extensionCache.getCompilerExtensions()[kind];
             if (!lints || !lints.length) {
                 return;
@@ -1534,9 +1544,12 @@ namespace ts {
                     const checker = getTypeChecker();
                     startExtensionProfile(profilingEnabled, name, "construct");
                     try {
-                        walker = new (ctor as SemanticLintProviderStatic)({ ts, checker, args, host, program });
+                        walker = new (ctor as SemanticLintProviderStatic)({ ts, args, host, program, token, checker });
                     }
                     catch (e) {
+                        if (e instanceof OperationCanceledException) {
+                            throw e;
+                        }
                         diagnostics.push(createExtensionDiagnostic(name, `Lint construction failed: ${(e as Error).message}`, sourceFile, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
                     }
                     completeExtensionProfile(profilingEnabled, name, "construct");
@@ -1544,9 +1557,12 @@ namespace ts {
                 else if (kind === ExtensionKind.SyntacticLint) {
                     startExtensionProfile(profilingEnabled, name, "construct");
                     try {
-                        walker = new (ctor as SyntacticLintProviderStatic)({ ts, args, host, program });
+                        walker = new (ctor as SyntacticLintProviderStatic)({ ts, args, host, program, token });
                     }
                     catch (e) {
+                        if (e instanceof OperationCanceledException) {
+                            throw e;
+                        }
                         diagnostics.push(createExtensionDiagnostic(name, `Lint construction failed: ${(e as Error).message}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
                     }
                     completeExtensionProfile(profilingEnabled, name, "construct");
@@ -1573,6 +1589,9 @@ namespace ts {
                         activeLint.accepted = !activeLint.walker.visit(node, error);
                     }
                     catch (e) {
+                        if (e instanceof OperationCanceledException) {
+                            throw e;
+                        }
                         activeLint.errored = true;
                         diagnostics.push(createExtensionDiagnostic(errorQualifiedName("!!!"), `visit failed with error: ${e}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
                     }
@@ -1614,6 +1633,9 @@ namespace ts {
                         activeLint.walker.afterVisit(node, error);
                     }
                     catch (e) {
+                        if (e instanceof OperationCanceledException) {
+                            throw e;
+                        }
                         activeLint.errored = true;
                         diagnostics.push(createExtensionDiagnostic(errorQualifiedName("!!!"), `afterVisit failed with error: ${e}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
                     }
@@ -1766,13 +1788,17 @@ namespace ts {
         }
 
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+            return sourceFile.parseDiagnostics;
+        }
+
+        function getSyntacticLintDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
             if (!sourceFile.isDeclarationFile) {
-                const lintDiagnostics = performLintPassOnFile(sourceFile, ExtensionKind.SyntacticLint);
+                const lintDiagnostics = performLintPassOnFile(sourceFile, cancellationToken, ExtensionKind.SyntacticLint);
                 if (lintDiagnostics && lintDiagnostics.length) {
-                    return sourceFile.parseDiagnostics.concat(lintDiagnostics);
+                    return lintDiagnostics;
                 }
             }
-            return sourceFile.parseDiagnostics;
+            return [];
         }
 
         function runWithCancellationToken<T>(func: () => T): T {
@@ -1812,9 +1838,14 @@ namespace ts {
                     typeChecker.getDiagnostics(sourceFile, cancellationToken);
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
-                const lintDiagnostics = (!sourceFile.isDeclarationFile) ? (performLintPassOnFile(sourceFile, ExtensionKind.SemanticLint) || []) : [];
 
-                return bindDiagnostics.concat(checkDiagnostics).concat(fileProcessingDiagnosticsInFile).concat(programDiagnosticsInFile).concat(lintDiagnostics);
+                return bindDiagnostics.concat(checkDiagnostics).concat(fileProcessingDiagnosticsInFile).concat(programDiagnosticsInFile);
+            });
+        }
+
+        function getSemanticLintDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+            return runWithCancellationToken(() => {
+                return (!sourceFile.isDeclarationFile) ? (performLintPassOnFile(sourceFile, cancellationToken, ExtensionKind.SemanticLint) || []) : [];
             });
         }
 

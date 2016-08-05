@@ -605,7 +605,7 @@ namespace ts {
             let diagnostics: Diagnostic[];
 
             // First get and report any syntactic errors.
-            diagnostics = program.getSyntacticDiagnostics();
+            diagnostics = program.getSyntacticDiagnostics().concat(program.getSyntacticLintDiagnostics());
 
             // Count warnings/messages and ignore them for determining continued error reporting
             const nonErrorCount = countWhere(diagnostics, d => d.category !== DiagnosticCategory.Error);
@@ -618,7 +618,7 @@ namespace ts {
                 const nonErrorCount = countWhere(diagnostics, d => d.category !== DiagnosticCategory.Error);
 
                 if (diagnostics.length === nonErrorCount) {
-                    diagnostics = diagnostics.concat(program.getSemanticDiagnostics());
+                    diagnostics = diagnostics.concat(program.getSemanticDiagnostics()).concat(program.getSemanticLintDiagnostics());
                 }
             }
 

@@ -127,7 +127,9 @@ namespace ts {
         cleanupSemanticCache(): void;
 
         getSyntacticDiagnostics(fileName: string): string;
+        getSyntacticLintDiagnostics(fileName: string): string;
         getSemanticDiagnostics(fileName: string): string;
+        getSemanticLintDiagnostics(fileName: string): string;
         getCompilerOptionsDiagnostics(): string;
         getProgramDiagnostics(): string;
 
@@ -673,22 +675,29 @@ namespace ts {
             );
         }
 
-        public getSyntacticDiagnostics(fileName: string): string {
+        private getSpecificDiagnostics(fileName: string, methodName: "getSemanticDiagnostics" | "getSemanticLintDiagnostics" | "getSyntacticDiagnostics" | "getSyntacticLintDiagnostics") {
             return this.forwardJSONCall(
-                `getSyntacticDiagnostics('${fileName}')`,
+                `${methodName}('${fileName}')`,
                 () => {
-                    const diagnostics = this.languageService.getSyntacticDiagnostics(fileName);
+                    const diagnostics = (this.languageService as any as ts.Map<(fileName: string) => Diagnostic[]>)[methodName](fileName);
                     return this.realizeDiagnostics(diagnostics);
                 });
         }
 
+        public getSyntacticDiagnostics(fileName: string): string {
+            return this.getSpecificDiagnostics(fileName, "getSyntacticDiagnostics");
+        }
+
+        public getSyntacticLintDiagnostics(fileName: string): string {
+            return this.getSpecificDiagnostics(fileName, "getSyntacticLintDiagnostics");
+        }
+
         public getSemanticDiagnostics(fileName: string): string {
-            return this.forwardJSONCall(
-                `getSemanticDiagnostics('${fileName}')`,
-                () => {
-                    const diagnostics = this.languageService.getSemanticDiagnostics(fileName);
-                    return this.realizeDiagnostics(diagnostics);
-                });
+            return this.getSpecificDiagnostics(fileName, "getSemanticDiagnostics");
+        }
+
+        public getSemanticLintDiagnostics(fileName: string): string {
+            return this.getSpecificDiagnostics(fileName, "getSemanticLintDiagnostics");
         }
 
         public getCompilerOptionsDiagnostics(): string {

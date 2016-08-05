@@ -101,12 +101,12 @@ namespace ts {
 
     export interface SyntacticLintProviderStatic extends BaseProviderStatic {
         readonly ["extension-kind"]: ExtensionKind.SyntacticLint;
-        new (state: {ts: typeof ts, args: any, host: CompilerHost, program: Program}): LintWalker;
+        new (state: {ts: typeof ts, args: any, host: CompilerHost, program: Program, token: CancellationToken}): LintWalker;
     }
 
     export interface SemanticLintProviderStatic extends BaseProviderStatic {
         readonly ["extension-kind"]: ExtensionKind.SemanticLint;
-        new (state: {ts: typeof ts, args: any, host: CompilerHost, program: Program, checker: TypeChecker}): LintWalker;
+        new (state: {ts: typeof ts, args: any, host: CompilerHost, program: Program, token: CancellationToken, checker: TypeChecker}): LintWalker;
     }
 
     export namespace ExtensionKind {

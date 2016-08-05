@@ -390,7 +390,15 @@ namespace ts.server {
             throw new Error("Not Implemented Yet.");
         }
 
+        getSyntacticLintDiagnostics(fileName: string): Diagnostic[] {
+            throw new Error("Not Implemented Yet.");
+        }
+
         getSemanticDiagnostics(fileName: string): Diagnostic[] {
+            throw new Error("Not Implemented Yet.");
+        }
+
+        getSemanticLintDiagnostics(fileName: string): Diagnostic[] {
             throw new Error("Not Implemented Yet.");
         }
 
