@@ -1,10 +1,50 @@
 namespace ts {
 
-    export namespace ExtensionKind {
+    export interface BaseProviderStatic {
+        readonly ["extension-kind"]: ExtensionKind;
     }
-    export type ExtensionKind = string;
+
+    export interface CodegenProviderStatic extends BaseProviderStatic {
+        readonly ["extension-kind"]: "codegen";
+        new (context: {
+            ts: typeof ts,
+            args: any,
+            getCommonSourceDirectory: () => string,
+            getCurrentDirectory: () => string,
+            /**
+             * NOTE: These compiler options have not yet been verified, so may produce diagnostic messages
+             */
+            getCompilerOptions: () => CompilerOptions,
+            /**
+             * addSourceFile causes the file to be added to the program,
+             * resulting in processRootFile to be called on the provided SourceFile
+             */
+            addSourceFile: (file: SourceFile) => void
+        }): CodegenProvider
+    }
+
+    export interface CodegenProvider {
+        /**
+         * Called each time a file is added to the filesByName set in a program
+         *  - should trigger when a generated file is added, this way your
+         *    generated code can cause code to generate
+         */
+        sourceFileFound?(file: SourceFile): void;
+        /**
+         * Called when all processing is complete and the program is about to be returned,
+         * giving you the opportunity to finalize your emitted set of generated files
+         */
+        processingComplete?(program: Program): void; 
+    }
+
+    export namespace ExtensionKind {
+        export type Codegen = "codegen";
+        export const Codegen: "codegen" = "codegen";
+    }
+    export type ExtensionKind = ExtensionKind.Codegen;
 
     export interface ExtensionCollectionMap {
+        "codegen"?: CodegenExtension[];
         [index: string]: Extension[] | undefined;
     }
 
@@ -21,7 +61,12 @@ namespace ts {
         length?: number;
     }
 
-    export type Extension = ExtensionBase;
+    export interface CodegenExtension extends ExtensionBase {
+        kind: ExtensionKind.Codegen;
+        ctor: CodegenProviderStatic;
+    }
+
+    export type Extension = CodegenExtension;
 
     export interface ExtensionCache {
         getCompilerExtensions(): ExtensionCollectionMap;
@@ -87,6 +132,21 @@ namespace ts {
         if (!enabled) return;
         const longTask = createTaskName(qualifiedName, task);
         completeProfile(/*enabled*/true, longTask);
+    }
+
+    function verifyType(thing: any, type: string, diagnostics: Diagnostic[], extName: string, extMember: string, extKind: ExtensionKind) {
+        if (typeof thing !== type) {
+            diagnostics.push(createCompilerDiagnostic(
+                Diagnostics.Extension_0_exported_member_1_has_extension_kind_2_but_was_type_3_when_type_4_was_expected,
+                extName,
+                extMember,
+                extKind,
+                typeof thing,
+                type
+            ));
+            return false;
+        }
+        return true;
     }
 
     export function createExtensionCache(options: CompilerOptions, host: ExtensionHost, resolvedExtensionNames?: Map<string>): ExtensionCache {
@@ -173,6 +233,12 @@ namespace ts {
                         kind: annotatedKind as ExtensionKind,
                     };
                     switch (ext.kind) {
+                        case ExtensionKind.Codegen: {
+                            const verified = verifyType(potentialExtension, "function", diagnostics, res.name, key, annotatedKind);
+                            if (!verified) return aggregate;
+                            (ext as CodegenExtension).ctor = potentialExtension as CodegenProviderStatic;
+                            break;
+                        }
                         default:
                             // Include a default case which just puts the extension unchecked onto the base extension
                             // This can allow language service extensions to query for custom extension kinds

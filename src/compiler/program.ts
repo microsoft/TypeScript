@@ -1145,7 +1145,18 @@ namespace ts {
         // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase()) : undefined;
 
-        if (!tryReuseStructureFromOldProgram()) {
+        let codegenExtensions: CodegenProvider;
+
+        const useNewStructure = !tryReuseStructureFromOldProgram();
+        if (useNewStructure) {
+            codegenExtensions = filter(map(extensionCache.getCompilerExtensions()[ExtensionKind.Codegen], ext => {
+                try {
+                    return new ext.ctor({ts, args: ext.args, getCommonSourceDirectory, getCurrentDirectory, getCompilerOptions, addSourceFile});
+                }
+                catch (e) {
+                    programDiagnostics.add(createExtensionDiagnostic(name, `CodegenProvider construction failed: ${(e as Error).message}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
+                }
+            }), ext => ext !== undefined);
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
@@ -1219,7 +1230,35 @@ namespace ts {
 
         performance.measure("Program", start);
 
+        if (useNewStructure) {
+            ts.forEach(codegenExtensions, ext => {
+                if (!ext.processingComplete) return;
+                try {
+                    ext.processingComplete(program);
+                }
+                catch (e) {
+                    programDiagnostics.add(createExtensionDiagnostic(ext.name, `Codegen Extension errored on processingComplete with error: ${(e as Error).message}`));
+                }
+            });
+        }
+
         return program;
+
+        function getCompilerOptions() {
+            return options;
+        }
+
+        function getCurrentDirectory() {
+            return host.getCurrentDirectory();
+        }
+
+        function addSourceFile(file: SourceFile) {
+            Debug.assert(!filesByName.contains(file.path), `File ${file.path} already exists inside the program!`);
+            file.path = toPath(file.fileName, currentDirectory, getCanonicalFileName);
+            sourceFilesFoundSearchingNodeModules[file.path] = (currentNodeModulesDepth > 0);
+            filesByName.set(file.path, file);
+            processFileForDependencies(file);
+        }
 
         function getCommonSourceDirectory() {
             if (typeof commonSourceDirectory === "undefined") {
@@ -1971,38 +2010,53 @@ namespace ts {
             if (file) {
                 sourceFilesFoundSearchingNodeModules[path] = (currentNodeModulesDepth > 0);
                 file.path = path;
-
-                if (host.useCaseSensitiveFileNames()) {
-                    // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
-                    const existingFile = filesByNameIgnoreCase.get(path);
-                    if (existingFile) {
-                        reportFileNamesDifferOnlyInCasingError(fileName, existingFile.fileName, refFile, refPos, refEnd);
-                    }
-                    else {
-                        filesByNameIgnoreCase.set(path, file);
-                    }
-                }
-
-                skipDefaultLib = skipDefaultLib || file.hasNoDefaultLib;
-
-                const basePath = getDirectoryPath(fileName);
-                if (!options.noResolve) {
-                    processReferencedFiles(file, basePath, isDefaultLib);
-                    processTypeReferenceDirectives(file);
-                }
-
-                // always process imported modules to record module name resolutions
-                processImportedModules(file, basePath);
-
-                if (isDefaultLib) {
-                    files.unshift(file);
-                }
-                else {
-                    files.push(file);
-                }
+                processFileForDependencies(file, isDefaultLib, refFile, refPos, refEnd);
             }
 
             return file;
+        }
+
+        function processFileForDependencies(file: SourceFile, isDefaultLib?: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
+            const path = file.path;
+            const fileName = file.fileName;
+            if (host.useCaseSensitiveFileNames()) {
+                // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
+                const existingFile = filesByNameIgnoreCase.get(path);
+                if (existingFile) {
+                    reportFileNamesDifferOnlyInCasingError(fileName, existingFile.fileName, refFile, refPos, refEnd);
+                }
+                else {
+                    filesByNameIgnoreCase.set(path, file);
+                }
+            }
+
+            skipDefaultLib = skipDefaultLib || file.hasNoDefaultLib;
+
+            ts.forEach(codegenExtensions, ext => {
+                if (!ext.sourceFileFound) return;
+                try {
+                    ext.sourceFileFound(file);
+                }
+                catch (e) {
+                    programDiagnostics.add(createExtensionDiagnostic(ext.name, `Codegen extension errored on sourceFileFound with error: ${(e as Error).message}`));
+                }
+            });
+
+            const basePath = getDirectoryPath(fileName);
+            if (!options.noResolve) {
+                processReferencedFiles(file, basePath, isDefaultLib);
+                processTypeReferenceDirectives(file);
+            }
+
+            // always process imported modules to record module name resolutions
+            processImportedModules(file, basePath);
+
+            if (isDefaultLib) {
+                files.unshift(file);
+            }
+            else {
+                files.push(file);
+            }
         }
 
         function processReferencedFiles(file: SourceFile, basePath: string, isDefaultLib: boolean) {
