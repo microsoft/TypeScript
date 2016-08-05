@@ -61,10 +61,10 @@ namespace ts {
         },
         {
             name: "jsx",
-            type: {
-                "preserve": JsxEmit.Preserve,
-                "react": JsxEmit.React
-            },
+            type: new Map([
+                ["preserve", JsxEmit.Preserve],
+                ["react", JsxEmit.React]
+            ]),
             paramType: Diagnostics.KIND,
             description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_react,
         },
@@ -91,24 +91,24 @@ namespace ts {
         {
             name: "module",
             shortName: "m",
-            type: {
-                "none": ModuleKind.None,
-                "commonjs": ModuleKind.CommonJS,
-                "amd": ModuleKind.AMD,
-                "system": ModuleKind.System,
-                "umd": ModuleKind.UMD,
-                "es6": ModuleKind.ES6,
-                "es2015": ModuleKind.ES2015,
-            },
+            type: new Map([
+                ["none", ModuleKind.None],
+                ["commonjs", ModuleKind.CommonJS],
+                ["amd", ModuleKind.AMD],
+                ["system", ModuleKind.System],
+                ["umd", ModuleKind.UMD],
+                ["es6", ModuleKind.ES6],
+                ["es2015", ModuleKind.ES2015],
+            ]),
             description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
             paramType: Diagnostics.KIND,
         },
         {
             name: "newLine",
-            type: {
-                "crlf": NewLineKind.CarriageReturnLineFeed,
-                "lf": NewLineKind.LineFeed
-            },
+            type: new Map([
+                ["crlf", NewLineKind.CarriageReturnLineFeed],
+                ["lf", NewLineKind.LineFeed]
+            ]),
             description: Diagnostics.Specify_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
             paramType: Diagnostics.NEWLINE,
         },
@@ -250,12 +250,12 @@ namespace ts {
         {
             name: "target",
             shortName: "t",
-            type: {
-                "es3": ScriptTarget.ES3,
-                "es5": ScriptTarget.ES5,
-                "es6": ScriptTarget.ES6,
-                "es2015": ScriptTarget.ES2015,
-            },
+            type: new Map([
+                ["es3", ScriptTarget.ES3],
+                ["es5", ScriptTarget.ES5],
+                ["es6", ScriptTarget.ES6],
+                ["es2015", ScriptTarget.ES2015],
+            ]),
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
             paramType: Diagnostics.VERSION,
         },
@@ -284,10 +284,10 @@ namespace ts {
         },
         {
             name: "moduleResolution",
-            type: {
-                "node": ModuleResolutionKind.NodeJs,
-                "classic": ModuleResolutionKind.Classic,
-            },
+            type: new Map([
+                ["node", ModuleResolutionKind.NodeJs],
+                ["classic", ModuleResolutionKind.Classic],
+            ]),
             description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
         },
         {
@@ -392,32 +392,32 @@ namespace ts {
             type: "list",
             element: {
                 name: "lib",
-                type: {
+                type: new Map([
                     // JavaScript only
-                    "es5": "lib.es5.d.ts",
-                    "es6": "lib.es2015.d.ts",
-                    "es2015": "lib.es2015.d.ts",
-                    "es7": "lib.es2016.d.ts",
-                    "es2016": "lib.es2016.d.ts",
-                    "es2017": "lib.es2017.d.ts",
+                    ["es5", "lib.es5.d.ts"],
+                    ["es6", "lib.es2015.d.ts"],
+                    ["es2015", "lib.es2015.d.ts"],
+                    ["es7", "lib.es2016.d.ts"],
+                    ["es2016", "lib.es2016.d.ts"],
+                    ["es2017", "lib.es2017.d.ts"],
                     // Host only
-                    "dom": "lib.dom.d.ts",
-                    "webworker": "lib.webworker.d.ts",
-                    "scripthost": "lib.scripthost.d.ts",
+                    ["dom", "lib.dom.d.ts"],
+                    ["webworker", "lib.webworker.d.ts"],
+                    ["scripthost", "lib.scripthost.d.ts"],
                     // ES2015 Or ESNext By-feature options
-                    "es2015.core": "lib.es2015.core.d.ts",
-                    "es2015.collection": "lib.es2015.collection.d.ts",
-                    "es2015.generator": "lib.es2015.generator.d.ts",
-                    "es2015.iterable": "lib.es2015.iterable.d.ts",
-                    "es2015.promise": "lib.es2015.promise.d.ts",
-                    "es2015.proxy": "lib.es2015.proxy.d.ts",
-                    "es2015.reflect": "lib.es2015.reflect.d.ts",
-                    "es2015.symbol": "lib.es2015.symbol.d.ts",
-                    "es2015.symbol.wellknown": "lib.es2015.symbol.wellknown.d.ts",
-                    "es2016.array.include": "lib.es2016.array.include.d.ts",
-                    "es2017.object": "lib.es2017.object.d.ts",
-                    "es2017.sharedmemory": "lib.es2017.sharedmemory.d.ts"
-                },
+                    ["es2015.core", "lib.es2015.core.d.ts"],
+                    ["es2015.collection", "lib.es2015.collection.d.ts"],
+                    ["es2015.generator", "lib.es2015.generator.d.ts"],
+                    ["es2015.iterable", "lib.es2015.iterable.d.ts"],
+                    ["es2015.promise", "lib.es2015.promise.d.ts"],
+                    ["es2015.proxy", "lib.es2015.proxy.d.ts"],
+                    ["es2015.reflect", "lib.es2015.reflect.d.ts"],
+                    ["es2015.symbol", "lib.es2015.symbol.d.ts"],
+                    ["es2015.symbol.wellknown", "lib.es2015.symbol.wellknown.d.ts"],
+                    ["es2016.array.include", "lib.es2016.array.include.d.ts"],
+                    ["es2017.object", "lib.es2017.object.d.ts"],
+                    ["es2017.sharedmemory", "lib.es2017.sharedmemory.d.ts"]
+                ]),
             },
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
         },
@@ -486,7 +486,7 @@ namespace ts {
     /* @internal */
     export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
         const namesOfType: string[] = [];
-        forEachKey(opt.type, key => {
+        forEachKeyInMap(opt.type, key => {
             namesOfType.push(` '${key}'`);
         });
 
@@ -496,9 +496,9 @@ namespace ts {
     /* @internal */
     export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
         const key = trimString((value || "")).toLowerCase();
-        const map = opt.type;
-        if (hasProperty(map, key)) {
-            return map[key];
+        const mapped = opt.type.get(key);
+        if (mapped !== undefined) {
+            return mapped;
         }
         else {
             errors.push(createCompilerDiagnosticForInvalidCustomType(opt));
@@ -848,8 +848,10 @@ namespace ts {
 
     function convertJsonOptionOfCustomType(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
         const key = value.toLowerCase();
-        if (hasProperty(opt.type, key)) {
-            return opt.type[key];
+        //duplicate code?
+        const mapped = opt.type.get(key);
+        if (mapped) {
+            return mapped;
         }
         else {
             errors.push(createCompilerDiagnosticForInvalidCustomType(opt));

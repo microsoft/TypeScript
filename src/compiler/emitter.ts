@@ -532,7 +532,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             let currentText: string;
             let currentLineMap: number[];
             let currentFileIdentifiers: Map<string, string>;
-            let renamedDependencies: OldMap<string>;
+            let renamedDependencies: Map<string, string>;
             let isEs6Module: boolean;
             let isCurrentFileExternalModule: boolean;
 
@@ -6462,10 +6462,8 @@ const _super = (function (geti, seti) {
              * Here we check if alternative name was provided for a given moduleName and return it if possible.
              */
             function tryRenameExternalModule(moduleName: LiteralExpression): string {
-                if (renamedDependencies && hasProperty(renamedDependencies, moduleName.text)) {
-                    return `"${renamedDependencies[moduleName.text]}"`;
-                }
-                return undefined;
+                const rename = renamedDependencies && renamedDependencies.get(moduleName.text);
+                return rename ? `"${rename}"` : undefined;
             }
 
             function emitRequire(moduleName: Expression) {

@@ -701,7 +701,7 @@ namespace ts {
                 description = getDiagnosticText(option.description);
                 const options: string[] = [];
                 const element = (<CommandLineOptionOfListType>option).element;
-                forEachKey(<OldMap<number | string>>element.type, key => {
+                forEachKeyInMap(<Map<string, number | string>>element.type, key => {
                     options.push(`'${key}'`);
                 });
                 optionsDescriptionMap[description] = options;
@@ -807,13 +807,12 @@ namespace ts {
                                 }
                                 else {
                                     // Enum
-                                    const typeMap = <OldMap<number>>optionDefinition.type;
-                                    for (const key in typeMap) {
-                                        if (hasProperty(typeMap, key)) {
-                                            if (typeMap[key] === value)
-                                                result[name] = key;
+                                    const typeMap = <Map<string, number>>optionDefinition.type;
+                                    typeMap.forEach((enumValue, key) => {
+                                        if (enumValue === value) {
+                                            result[name] = key;
                                         }
-                                    }
+                                    });
                                 }
                             }
                             break;

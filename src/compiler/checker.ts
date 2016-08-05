@@ -132,7 +132,7 @@ namespace ts {
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        emptyGenericType.instantiations = {};
+        emptyGenericType.instantiations = new Map();
 
         const anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         // The anyFunctionType contains the anyFunctionType by definition. The flag is further propagated
@@ -3711,8 +3711,7 @@ namespace ts {
                     type.typeParameters = concatenate(outerTypeParameters, localTypeParameters);
                     type.outerTypeParameters = outerTypeParameters;
                     type.localTypeParameters = localTypeParameters;
-                    (<GenericType>type).instantiations = {};
-                    (<GenericType>type).instantiations[getTypeListId(type.typeParameters)] = <GenericType>type;
+                    (<GenericType>type).instantiations = singletonMap(getTypeListId(type.typeParameters), <GenericType>type);
                     (<GenericType>type).target = <GenericType>type;
                     (<GenericType>type).typeArguments = type.typeParameters;
                     type.thisType = <TypeParameter>createType(TypeFlags.TypeParameter | TypeFlags.ThisType);
@@ -3753,8 +3752,7 @@ namespace ts {
                     if (typeParameters) {
                         // Initialize the instantiation cache for generic type aliases. The declared type corresponds to
                         // an instantiation of the type alias with the type parameters supplied as type arguments.
-                        links.instantiations = {};
-                        links.instantiations[getTypeListId(links.typeParameters)] = type;
+                        links.instantiations = singletonMap(getTypeListId(links.typeParameters), type);
                     }
                 }
                 else {
@@ -4956,11 +4954,11 @@ namespace ts {
 
         function createTypeReference(target: GenericType, typeArguments: Type[]): TypeReference {
             const id = getTypeListId(typeArguments);
-            let type = target.instantiations[id];
+            let type = target.instantiations.get(id);
             if (!type) {
                 const propagatedFlags = typeArguments ? getPropagatingFlagsOfTypes(typeArguments, /*excludeKinds*/ 0) : 0;
                 const flags = TypeFlags.Reference | propagatedFlags;
-                type = target.instantiations[id] = <TypeReference>createObjectType(flags, target.symbol);
+                type = setAndReturn(target.instantiations, id, <TypeReference>createObjectType(flags, target.symbol));
                 type.target = target;
                 type.typeArguments = typeArguments;
             }
@@ -5002,7 +5000,7 @@ namespace ts {
                 }
                 const typeArguments = map(node.typeArguments, getTypeFromTypeNode);
                 const id = getTypeListId(typeArguments);
-                return links.instantiations[id] || (links.instantiations[id] = instantiateType(type, createTypeMapper(typeParameters, typeArguments)));
+                return getOrUpdateMap(links.instantiations, id, () => instantiateType(type, createTypeMapper(typeParameters, typeArguments)));
             }
             if (node.typeArguments) {
                 error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
@@ -18369,17 +18367,12 @@ namespace ts {
             if (resolvedTypeReferenceDirectives) {
                 // populate reverse mapping: file path -> type reference directive that was resolved to this file
                 fileToDirective = createFileMap<string>();
-                for (const key in resolvedTypeReferenceDirectives) {
-                    if (!hasProperty(resolvedTypeReferenceDirectives, key)) {
-                        continue;
+                resolvedTypeReferenceDirectives.forEach((resolvedDirective, key) => {
+                    if (resolvedDirective) {
+                        const file = host.getSourceFile(resolvedDirective.resolvedFileName);
+                        fileToDirective.set(file.path, key);
                     }
-                    const resolvedDirective = resolvedTypeReferenceDirectives[key];
-                    if (!resolvedDirective) {
-                        continue;
-                    }
-                    const file = host.getSourceFile(resolvedDirective.resolvedFileName);
-                    fileToDirective.set(file.path, key);
-                }
+                });
             }
             return {
                 getReferencedExportContainer,

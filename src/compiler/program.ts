@@ -1088,7 +1088,7 @@ namespace ts {
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Set<string>;
 
-        let resolvedTypeReferenceDirectives: OldMap<ResolvedTypeReferenceDirective> = {};
+        let resolvedTypeReferenceDirectives = new Map<string, ResolvedTypeReferenceDirective>();
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
         // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
@@ -2018,7 +2018,7 @@ namespace ts {
             refFile?: SourceFile, refPos?: number, refEnd?: number): void {
 
             // If we already found this library as a primary reference - nothing to do
-            const previousResolution = resolvedTypeReferenceDirectives[typeReferenceDirective];
+            const previousResolution = resolvedTypeReferenceDirectives.get(typeReferenceDirective);
             if (previousResolution && previousResolution.primary) {
                 return;
             }
@@ -2055,7 +2055,7 @@ namespace ts {
             }
 
             if (saveResolution) {
-                resolvedTypeReferenceDirectives[typeReferenceDirective] = resolvedTypeReferenceDirective;
+                resolvedTypeReferenceDirectives.set(typeReferenceDirective, resolvedTypeReferenceDirective);
             }
         }
 
@@ -2075,7 +2075,7 @@ namespace ts {
         function processImportedModules(file: SourceFile, basePath: string) {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
-                file.resolvedModules = {};
+                file.resolvedModules = new Map();
                 const moduleNames = map(concatenate(file.imports, file.moduleAugmentations), getTextOfLiteral);
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
                 for (let i = 0; i < moduleNames.length; i++) {

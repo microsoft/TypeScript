@@ -126,27 +126,27 @@ namespace ts {
     }
 
     export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
-        return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
+        return sourceFile.resolvedModules && sourceFile.resolvedModules.has(moduleNameText);
     }
 
     export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModule {
-        return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
+        return sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText);
     }
 
     export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModule): void {
         if (!sourceFile.resolvedModules) {
-            sourceFile.resolvedModules = {};
+            sourceFile.resolvedModules = new Map();
         }
 
-        sourceFile.resolvedModules[moduleNameText] = resolvedModule;
+        sourceFile.resolvedModules.set(moduleNameText, resolvedModule);
     }
 
     export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective): void {
         if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
-            sourceFile.resolvedTypeReferenceDirectiveNames = {};
+            sourceFile.resolvedTypeReferenceDirectiveNames = new Map();
         }
 
-        sourceFile.resolvedTypeReferenceDirectiveNames[typeReferenceDirectiveName] = resolvedTypeReferenceDirective;
+        sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, resolvedTypeReferenceDirective);
     }
 
     /* @internal */
@@ -160,13 +160,13 @@ namespace ts {
     }
 
     /* @internal */
-    export function hasChangesInResolutions<T>(names: string[], newResolutions: T[], oldResolutions: OldMap<T>, comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
+    export function hasChangesInResolutions<T>(names: string[], newResolutions: T[], oldResolutions: Map<string, T>, comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
         if (names.length !== newResolutions.length) {
             return false;
         }
         for (let i = 0; i < names.length; i++) {
             const newResolution = newResolutions[i];
-            const oldResolution = oldResolutions && hasProperty(oldResolutions, names[i]) ? oldResolutions[names[i]] : undefined;
+            const oldResolution = oldResolutions && oldResolutions.get(names[i]);
             const changed =
                 oldResolution
                     ? !newResolution || !comparer(oldResolution, newResolution)

@@ -58,6 +58,10 @@ namespace ts {
     export interface OldMap<T> {
         [index: string]: T;
     }
+    //This is an OldMap<T> that I've verified should stay that way.
+    export interface ObjMap<T> {
+        [index: string]: T;
+    }
 
     // branded string type used to store absolute, normalized and canonicalized paths
     // arbitrary file name can be converted to Path via toPath function
@@ -1685,7 +1689,7 @@ namespace ts {
 
         // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
         /* @internal */
-        renamedDependencies?: OldMap<string>;
+        renamedDependencies?: Map<string, string>;
 
         /**
          * lib.d.ts should have a reference comment like
@@ -1724,8 +1728,8 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules: OldMap<ResolvedModule>;
-        /* @internal */ resolvedTypeReferenceDirectiveNames: OldMap<ResolvedTypeReferenceDirective>;
+        /* @internal */ resolvedModules: Map<string, ResolvedModule>;
+        /* @internal */ resolvedTypeReferenceDirectiveNames: Map<string, ResolvedTypeReferenceDirective>;
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
@@ -1812,7 +1816,7 @@ namespace ts {
         /* @internal */ getTypeCount(): number;
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
-        /* @internal */ getResolvedTypeReferenceDirectives(): OldMap<ResolvedTypeReferenceDirective>;
+        /* @internal */ getResolvedTypeReferenceDirectives(): Map<string, ResolvedTypeReferenceDirective>;
         // For testing purposes only.
         /* @internal */ structureIsReused?: boolean;
     }
@@ -1873,7 +1877,7 @@ namespace ts {
 
         getSourceFiles(): SourceFile[];
         getSourceFile(fileName: string): SourceFile;
-        getResolvedTypeReferenceDirectives(): OldMap<ResolvedTypeReferenceDirective>;
+        getResolvedTypeReferenceDirectives(): Map<string, ResolvedTypeReferenceDirective>;
     }
 
     export interface TypeChecker {
@@ -2201,7 +2205,7 @@ namespace ts {
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
         typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
         inferredClassType?: Type;           // Type of an inferred ES5 class
-        instantiations?: OldMap<Type>;         // Instantiations of generic type alias (undefined if non-generic)
+        instantiations?: Map<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
         containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
@@ -2411,7 +2415,7 @@ namespace ts {
     // Generic class and interface types
     export interface GenericType extends InterfaceType, TypeReference {
         /* @internal */
-        instantiations: OldMap<TypeReference>;   // Generic instantiation cache
+        instantiations: Map<string, TypeReference>;   // Generic instantiation cache
     }
 
     export interface TupleType extends ObjectType {
@@ -2521,6 +2525,7 @@ namespace ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
+        //If these use IDs, they should be maps and not arrays!
         mappedTypes?: Type[];       // Types mapped by this mapper
         targetTypes?: Type[];       // Types substituted for mapped types
         instantiations?: Type[];    // Cache of instantiations created using this type mapper.
@@ -2695,7 +2700,7 @@ namespace ts {
         fileNames: string[];                            // The file names that belong to the same project.
         projectRootPath: string;                        // The path to the project root directory
         safeListPath: string;                           // The path used to retrieve the safe list
-        packageNameToTypingLocation: OldMap<string>;       // The map of package names to their cached typing locations
+        packageNameToTypingLocation: ObjMap<string>;       // The map of package names to their cached typing locations
         typingOptions: TypingOptions;                   // Used to customize the typing inference process
         compilerOptions: CompilerOptions;               // Used as a source for typing inference
     }
@@ -2778,7 +2783,7 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionBase {
         name: string;
-        type: "string" | "number" | "boolean" | "object" | "list" | OldMap<number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
+        type: "string" | "number" | "boolean" | "object" | "list" | Map<string, number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
@@ -2794,7 +2799,7 @@ namespace ts {
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
-        type: OldMap<number | string>;             // an object literal mapping named values to actual values
+        type: Map<string, number | string>;             // an object literal mapping named values to actual values
     }
 
     /* @internal */

@@ -371,6 +371,10 @@ namespace ts {
         return result;
     }
 
+    export function forEachKeyInMap<K, V>(map: Map<K, V>, callback: (key: K) => void): void {
+        map.forEach((_, key) => callback(key));
+    }
+
     //This is just getProperty...
     export function lookUp<T>(map: OldMap<T>, key: string): T {
         return hasProperty(map, key) ? map[key] : undefined;
@@ -393,6 +397,16 @@ namespace ts {
     //move
     export function copySet<T>(source: Set<T>, target: Set<T>): void {
         source.forEach(element => target.add(element));
+    }
+
+    export function mapOfObjMap<V>(objMap: OldMap<V>): Map<string, V> {
+        const result = new Map<string, V>();
+        for (const key in objMap) {
+            if (hasProperty(objMap, key)) {
+                result.set(key, objMap[key]);
+            }
+        }
+        return result;
     }
 
 
@@ -463,6 +477,11 @@ namespace ts {
                 return result;
             }
         }
+    }
+
+    //silly
+    export function forEachValueInMap<K, V, U>(map: Map<K, V>, callback: (value: V) => U | undefined): U | undefined {
+        return forEachInMap(map, callback);
     }
 
     export function valuesArray<K, V>(map: Map<K, V>): V[] {

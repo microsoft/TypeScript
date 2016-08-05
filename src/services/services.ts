@@ -940,8 +940,8 @@ namespace ts {
         public languageVariant: LanguageVariant;
         public identifiers: Map<string, string>;
         public nameTable: Map<string, number>;
-        public resolvedModules: OldMap<ResolvedModule>;
-        public resolvedTypeReferenceDirectiveNames: OldMap<ResolvedTypeReferenceDirective>;
+        public resolvedModules: Map<string, ResolvedModule>; //TODO: this was a *public* OldMap<ResolvedModule>... but in types.ts SourceFile it's internal!
+        public resolvedTypeReferenceDirectiveNames: Map<string, ResolvedTypeReferenceDirective>;
         public imports: LiteralExpression[];
         public moduleAugmentations: LiteralExpression[];
         private namedDeclarations: OldMap<Declaration[]>;
@@ -2025,6 +2025,7 @@ namespace ts {
         fileName?: string;
         reportDiagnostics?: boolean;
         moduleName?: string;
+        //this isn't internal, can't change to map?
         renamedDependencies?: OldMap<string>;
     }
 
@@ -2058,7 +2059,7 @@ namespace ts {
                 options[opt.name] = parseCustomTypeOption(opt, value, diagnostics);
             }
             else {
-                if (!forEachValue(opt.type, v => v === value)) {
+                if (!forEachValueInMap(opt.type, v => v === value)) {
                     // Supplied value isn't a valid enum value.
                     diagnostics.push(createCompilerDiagnosticForInvalidCustomType(opt));
                 }
@@ -2117,7 +2118,7 @@ namespace ts {
             sourceFile.moduleName = transpileOptions.moduleName;
         }
 
-        sourceFile.renamedDependencies = transpileOptions.renamedDependencies;
+        sourceFile.renamedDependencies = mapOfObjMap(transpileOptions.renamedDependencies);
 
         const newLine = getNewLineCharacter(options);
 
@@ -5144,7 +5145,7 @@ namespace ts {
             // Type reference directives
             const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
             if (typeReferenceDirective) {
-                const referenceFile = lookUp(program.getResolvedTypeReferenceDirectives(), typeReferenceDirective.fileName);
+                const referenceFile = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
                 if (referenceFile && referenceFile.resolvedFileName) {
                     return [getDefinitionInfoForFileReference(typeReferenceDirective.fileName, referenceFile.resolvedFileName)];
                 }

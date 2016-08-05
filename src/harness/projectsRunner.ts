@@ -264,8 +264,9 @@ class ProjectRunner extends RunnerBase {
                         let value = <any>testCase[name];
                         if (typeof optType !== "string") {
                             const key = value.toLowerCase();
-                            if (ts.hasProperty(optType, key)) {
-                                value = optType[key];
+                            const mappedValue = optType.get(key);
+                            if (mappedValue) {
+                                value = mappedValue;
                             }
                         }
                         compilerOptions[option.name] = value;
