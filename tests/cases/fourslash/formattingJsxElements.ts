@@ -70,7 +70,7 @@
 ////<div>,   {integer}</div>;/*commaInJsxElement2*/
 ////<span>)</span>;/*closingParenInJsxElement*/
 ////<span>)   </span>;/*closingParenInJsxElement2*/
-////<Router routes={                3    } />;/*jsxExpressionSpaces*/
+////<Router        routes      =        { 3 }   /      >;/*jsxExpressionSpaces*/
 ////<Router routes={                (3)    } />;/*jsxExpressionSpaces2*/
 
 format.document();
@@ -85,7 +85,7 @@ goTo.marker("indent1");
 verify.indentationIs(12);
 
 goTo.marker("1");
-verify.currentLineContentIs('            class1= {');
+verify.currentLineContentIs('            class1={');
 goTo.marker("2");
 verify.currentLineContentIs('            }>');
 
@@ -95,7 +95,7 @@ goTo.marker("indent2");
 verify.indentationIs(12);
 
 goTo.marker("3");
-verify.currentLineContentIs('            class2= {');
+verify.currentLineContentIs('            class2={');
 goTo.marker("4");
 verify.currentLineContentIs('            }>');
 
@@ -105,9 +105,9 @@ goTo.marker("indent3");
 verify.indentationIs(12);
 
 goTo.marker("5");
-verify.currentLineContentIs('            class3= {');
+verify.currentLineContentIs('            class3={');
 goTo.marker("6");
-verify.currentLineContentIs('            }/>');
+verify.currentLineContentIs('            } />');
 
 
 goTo.marker("attrAutoformat");

@@ -1,6 +1,6 @@
 //// [taggedTemplateStringsWithTypedTagsES6.ts]
 interface I {
-    (stringParts: string[], ...rest: number[]): I;
+    (stringParts: TemplateStringsArray, ...rest: number[]): I;
     g: I;
     h: I;
     member: I;

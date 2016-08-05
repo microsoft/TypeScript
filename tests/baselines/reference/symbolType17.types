@@ -14,7 +14,7 @@ if (typeof x === "symbol") {
 >typeof x === "symbol" : boolean
 >typeof x : string
 >x : symbol | Foo
->"symbol" : string
+>"symbol" : "symbol"
 
     x;
 >x : symbol

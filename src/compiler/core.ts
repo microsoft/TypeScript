@@ -1,4 +1,6 @@
 /// <reference path="types.ts"/>
+/// <reference path="performance.ts" />
+
 
 /* @internal */
 namespace ts {
@@ -91,10 +93,10 @@ namespace ts {
         return undefined;
     }
 
-    export function contains<T>(array: T[], value: T, areEqual?: (a: T, b: T) => boolean): boolean {
+    export function contains<T>(array: T[], value: T): boolean {
         if (array) {
             for (const v of array) {
-                if (areEqual ? areEqual(v, value) : v === value) {
+                if (v === value) {
                     return true;
                 }
             }
@@ -189,10 +191,13 @@ namespace ts {
         let result: T[];
         if (array) {
             result = [];
-            for (const item of array) {
-                if (!contains(result, item, areEqual)) {
-                    result.push(item);
+            loop: for (const item of array) {
+                for (const res of result) {
+                    if (areEqual ? areEqual(res, item) : res === item) {
+                        continue loop;
+                    }
                 }
+                result.push(item);
             }
         }
         return result;
@@ -327,8 +332,12 @@ namespace ts {
         return keys;
     }
 
-    export function getProperty<T>(map: Map<T>, key: string): T {
-        return hasOwnProperty.call(map, key) ? map[key] : undefined;
+    export function getProperty<T>(map: Map<T>, key: string): T | undefined {
+        return hasProperty(map, key) ? map[key] : undefined;
+    }
+
+    export function getOrUpdateProperty<T>(map: Map<T>, key: string, makeValue: () => T): T {
+        return hasProperty(map, key) ? map[key] : map[key] = makeValue();
     }
 
     export function isEmpty<T>(map: Map<T>) {
@@ -908,10 +917,19 @@ namespace ts {
         return true;
     }
 
+    /* @internal */
+    export function startsWith(str: string, prefix: string): boolean {
+        return str.lastIndexOf(prefix, 0) === 0;
+    }
+
+    /* @internal */
+    export function endsWith(str: string, suffix: string): boolean {
+        const expectedPos = str.length - suffix.length;
+        return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
+    }
+
     export function fileExtensionIs(path: string, extension: string): boolean {
-        const pathLen = path.length;
-        const extLen = extension.length;
-        return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
+        return path.length > extension.length && endsWith(path, extension);
     }
 
     export function fileExtensionIsAny(path: string, extensions: string[]): boolean {
@@ -924,17 +942,34 @@ namespace ts {
         return false;
     }
 
-
     // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
     // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
     // proof.
     const reservedCharacterPattern = /[^\w\s\/]/g;
     const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
 
+    /**
+     * Matches any single directory segment unless it is the last segment and a .min.js file
+     * Breakdown:
+     *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
+     *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
+     */
+    const singleAsteriskRegexFragmentFiles = "([^./]|(\\.(?!min\\.js$))?)*";
+    const singleAsteriskRegexFragmentOther = "[^/]*";
+
     export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude") {
         if (specs === undefined || specs.length === 0) {
             return undefined;
         }
+
+        const replaceWildcardCharacter =  usage === "files" ? replaceWildCardCharacterFiles : replaceWildCardCharacterOther;
+        const singleAsteriskRegexFragment = usage === "files" ? singleAsteriskRegexFragmentFiles : singleAsteriskRegexFragmentOther;
+
+        /**
+         * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
+         * files or directories, does not match subdirectories that start with a . character
+         */
+        const doubleAsteriskRegexFragment = usage === "exclude" ? "(/.+?)?" : "(/[^/.][^/]*)*?";
 
         let pattern = "";
         let hasWrittenSubpattern = false;
@@ -956,13 +991,13 @@ namespace ts {
             components[0] = removeTrailingDirectorySeparator(components[0]);
 
             let optionalCount = 0;
-            for (const component of components) {
+            for (let component of components) {
                 if (component === "**") {
                     if (hasRecursiveDirectoryWildcard) {
                         continue spec;
                     }
 
-                    subpattern += "(/.+?)?";
+                    subpattern += doubleAsteriskRegexFragment;
                     hasRecursiveDirectoryWildcard = true;
                     hasWrittenComponent = true;
                 }
@@ -974,6 +1009,20 @@ namespace ts {
 
                     if (hasWrittenComponent) {
                         subpattern += directorySeparator;
+                    }
+
+                    if (usage !== "exclude") {
+                        // The * and ? wildcards should not match directories or files that start with . if they
+                        // appear first in a component. Dotted directories and files can be included explicitly
+                        // like so: **/.*/.*
+                        if (component.charCodeAt(0) === CharacterCodes.asterisk) {
+                            subpattern += "([^./]" + singleAsteriskRegexFragment + ")?";
+                            component = component.substr(1);
+                        }
+                        else if (component.charCodeAt(0) === CharacterCodes.question) {
+                            subpattern += "[^./]";
+                            component = component.substr(1);
+                        }
                     }
 
                     subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
@@ -1001,8 +1050,16 @@ namespace ts {
         return "^(" + pattern + (usage === "exclude" ? ")($|/)" : ")$");
     }
 
-    function replaceWildcardCharacter(match: string) {
-        return match === "*" ? "[^/]*" : match === "?" ? "[^/]" : "\\" + match;
+    function replaceWildCardCharacterFiles(match: string) {
+        return replaceWildcardCharacter(match, singleAsteriskRegexFragmentFiles);
+    }
+
+    function replaceWildCardCharacterOther(match: string) {
+        return replaceWildcardCharacter(match, singleAsteriskRegexFragmentOther);
+    }
+
+    function replaceWildcardCharacter(match: string, singleAsteriskRegexFragment: string) {
+        return match === "*" ? singleAsteriskRegexFragment : match === "?" ? "[^/]" : "\\" + match;
     }
 
     export interface FileSystemEntries {
@@ -1240,26 +1297,28 @@ namespace ts {
 
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
+        getTokenConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Token;
+        getIdentifierConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Token;
         getSourceFileConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => SourceFile;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
     }
 
-    function Symbol(flags: SymbolFlags, name: string) {
+    function Symbol(this: Symbol, flags: SymbolFlags, name: string) {
         this.flags = flags;
         this.name = name;
         this.declarations = undefined;
     }
 
-    function Type(checker: TypeChecker, flags: TypeFlags) {
+    function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
     }
 
     function Signature(checker: TypeChecker) {
     }
 
-    function Node(kind: SyntaxKind, pos: number, end: number) {
+    function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
         this.kind = kind;
         this.pos = pos;
         this.end = end;
@@ -1269,6 +1328,8 @@ namespace ts {
 
     export let objectAllocator: ObjectAllocator = {
         getNodeConstructor: () => <any>Node,
+        getTokenConstructor: () => <any>Node,
+        getIdentifierConstructor: () => <any>Node,
         getSourceFileConstructor: () => <any>Node,
         getSymbolConstructor: () => <any>Symbol,
         getTypeConstructor: () => <any>Type,

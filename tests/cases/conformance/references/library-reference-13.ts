@@ -1,5 +1,6 @@
 // @noImplicitReferences: true
 // @traceResolution: true
+// @currentDirectory: /
 
 // load type declarations from types section of tsconfig
 

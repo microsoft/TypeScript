@@ -89,7 +89,7 @@ let numberA2: number, nameA2: string, skillA2: string, nameMA: string;
 
 let numberA3: number, robotAInfo: (number | string)[], multiRobotAInfo: (string | [string, string])[];
 >numberA3 : number
->robotAInfo : (number | string)[]
+>robotAInfo : (string | number)[]
 >multiRobotAInfo : (string | [string, string])[]
 
 for ([, nameA = "noName"] of robots) {
@@ -489,13 +489,13 @@ for ([nameMA = "noName", [
 }
 
 for ([numberA3 = -1, ...robotAInfo] of robots) {
->[numberA3 = -1, ...robotAInfo] : (number | string)[]
+>[numberA3 = -1, ...robotAInfo] : (string | number)[]
 >numberA3 = -1 : number
 >numberA3 : number
 >-1 : number
 >1 : number
->...robotAInfo : number | string
->robotAInfo : (number | string)[]
+>...robotAInfo : string | number
+>robotAInfo : (string | number)[]
 >robots : [number, string, string][]
 
     console.log(numberA3);
@@ -506,13 +506,13 @@ for ([numberA3 = -1, ...robotAInfo] of robots) {
 >numberA3 : number
 }
 for ([numberA3 = -1, ...robotAInfo] of getRobots()) {
->[numberA3 = -1, ...robotAInfo] : (number | string)[]
+>[numberA3 = -1, ...robotAInfo] : (string | number)[]
 >numberA3 = -1 : number
 >numberA3 : number
 >-1 : number
 >1 : number
->...robotAInfo : number | string
->robotAInfo : (number | string)[]
+>...robotAInfo : string | number
+>robotAInfo : (string | number)[]
 >getRobots() : [number, string, string][]
 >getRobots : () => [number, string, string][]
 
@@ -524,13 +524,13 @@ for ([numberA3 = -1, ...robotAInfo] of getRobots()) {
 >numberA3 : number
 }
 for ([numberA3 = -1, ...robotAInfo] of [robotA, robotB]) {
->[numberA3 = -1, ...robotAInfo] : (number | string)[]
+>[numberA3 = -1, ...robotAInfo] : (string | number)[]
 >numberA3 = -1 : number
 >numberA3 : number
 >-1 : number
 >1 : number
->...robotAInfo : number | string
->robotAInfo : (number | string)[]
+>...robotAInfo : string | number
+>robotAInfo : (string | number)[]
 >[robotA, robotB] : [number, string, string][]
 >robotA : [number, string, string]
 >robotB : [number, string, string]

@@ -119,18 +119,18 @@
 
 ((...mixed) => mixed.every(n => !!n))(5,'oops','oh no');
 >((...mixed) => mixed.every(n => !!n))(5,'oops','oh no') : boolean
->((...mixed) => mixed.every(n => !!n)) : (...mixed: (number | string)[]) => boolean
->(...mixed) => mixed.every(n => !!n) : (...mixed: (number | string)[]) => boolean
->mixed : (number | string)[]
+>((...mixed) => mixed.every(n => !!n)) : (...mixed: (string | number)[]) => boolean
+>(...mixed) => mixed.every(n => !!n) : (...mixed: (string | number)[]) => boolean
+>mixed : (string | number)[]
 >mixed.every(n => !!n) : boolean
->mixed.every : (callbackfn: (value: number | string, index: number, array: (number | string)[]) => boolean, thisArg?: any) => boolean
->mixed : (number | string)[]
->every : (callbackfn: (value: number | string, index: number, array: (number | string)[]) => boolean, thisArg?: any) => boolean
->n => !!n : (n: number | string) => boolean
->n : number | string
+>mixed.every : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => boolean, thisArg?: any) => boolean
+>mixed : (string | number)[]
+>every : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => boolean, thisArg?: any) => boolean
+>n => !!n : (n: string | number) => boolean
+>n : string | number
 >!!n : boolean
 >!n : boolean
->n : number | string
+>n : string | number
 >5 : number
 >'oops' : string
 >'oh no' : string
