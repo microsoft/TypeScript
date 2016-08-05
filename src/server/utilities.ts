@@ -29,6 +29,11 @@ namespace ts.server {
         export type Types = Err | Info | Perf;
     }
 
+    export namespace Errors {
+        export const NoProject = new Error("No Project.");
+        export const ProjectLanguageServiceDisabled = new Error("The project's language service is disabled.");
+    }
+
     export function getDefaultFormatCodeSettings(host: ServerHost): FormatCodeSettings {
         return {
             indentSize: 4,

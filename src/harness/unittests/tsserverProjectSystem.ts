@@ -30,6 +30,14 @@ namespace ts {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
     }
 
+    function toExternalFile(fileName: string): server.protocol.ExternalFile {
+        return { fileName };
+    }
+
+    function toExternalFiles(fileNames: string[]) {
+        return map(fileNames, toExternalFile);
+    }
+
     interface TestServerHostCreationParameters {
         useCaseSensitiveFileNames?: boolean;
         executingFilePath?: string;
@@ -814,7 +822,7 @@ namespace ts {
             const host = createServerHost([file1, file2]);
             const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
             projectService.openExternalProject({
-                rootFiles: [file1.path, file2.path],
+                rootFiles: toExternalFiles([file1.path, file2.path]),
                 options: {},
                 projectFileName: externalProjectName
             });
@@ -872,7 +880,7 @@ namespace ts {
             const host = createServerHost([file1, file2, file3, config1, config2]);
             const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useOneInferredProject*/ false);
             projectService.openExternalProject({
-                rootFiles: [config1.path, config2.path, file3.path],
+                rootFiles: toExternalFiles([config1.path, config2.path, file3.path]),
                 options: {},
                 projectFileName: externalProjectName
             });
@@ -914,7 +922,7 @@ namespace ts {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
             projectService.openExternalProject({
-                rootFiles: [configFile.path],
+                rootFiles: toExternalFiles([configFile.path]),
                 options: {},
                 projectFileName: externalProjectName
             });
@@ -945,7 +953,7 @@ namespace ts {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
 
             projectService.openExternalProject({
-                rootFiles: [configFile.path],
+                rootFiles: toExternalFiles([configFile.path]),
                 options: {},
                 projectFileName: externalProjectName
             });
@@ -1212,11 +1220,11 @@ namespace ts {
             const host = createServerHost([file1, file2]);
             const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
 
-            projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: [file1.path] });
+            projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path]) });
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectActualFiles(projectService.externalProjects[0], [file1.path]);
 
-            projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: [file1.path, file2.path] });
+            projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, file2.path]) });
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectRootFiles(projectService.externalProjects[0], [file1.path, file2.path]);
         });
@@ -1238,12 +1246,12 @@ namespace ts {
             const host = createServerHost([file1, file2, file3]);
             const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
 
-            projectService.openExternalProject({ projectFileName: "project", options: { moduleResolution: ModuleResolutionKind.NodeJs }, rootFiles: [file1.path, file2.path] });
+            projectService.openExternalProject({ projectFileName: "project", options: { moduleResolution: ModuleResolutionKind.NodeJs }, rootFiles: toExternalFiles([file1.path, file2.path]) });
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectRootFiles(projectService.externalProjects[0], [file1.path, file2.path]);
             checkProjectActualFiles(projectService.externalProjects[0], [file1.path, file2.path]);
 
-            projectService.openExternalProject({ projectFileName: "project", options: { moduleResolution: ModuleResolutionKind.Classic }, rootFiles: [file1.path, file2.path] });
+            projectService.openExternalProject({ projectFileName: "project", options: { moduleResolution: ModuleResolutionKind.Classic }, rootFiles: toExternalFiles([file1.path, file2.path]) });
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectRootFiles(projectService.externalProjects[0], [file1.path, file2.path]);
             checkProjectActualFiles(projectService.externalProjects[0], [file1.path, file2.path, file3.path]);
@@ -1308,6 +1316,122 @@ namespace ts {
 
             projectService.ensureInferredProjectsUpToDate_TestOnly();
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
+        });
+
+        it("files with mixed content are handled correctly", () => {
+            const file1 = {
+                path: "/a/b/f1.html",
+                content: `<html><script language="javascript">var x = 1;</></html>`
+            };
+            const host = createServerHost([file1]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+            const projectFileName = "projectFileName";
+            projectService.openExternalProject({ projectFileName, options: {}, rootFiles: [{ fileName: file1.path, scriptKind: ScriptKind.JS, hasMixedContent: true }] });
+
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+            checkWatchedFiles(host, []);
+
+            const project = projectService.externalProjects[0];
+
+            const scriptInfo = project.getScriptInfo(file1.path);
+            const snap = scriptInfo.snap();
+            const actualText = snap.getText(0, snap.getLength());
+            assert.equal(actualText, "", `expected content to be empty string, got "${actualText}"`);
+
+            projectService.openClientFile(file1.path, `var x = 1;`);
+            project.updateGraph();
+
+            const quickInfo = project.getLanguageService().getQuickInfoAtPosition(file1.path, 4);
+            assert.equal(quickInfo.kind, ScriptElementKind.variableElement);
+
+            projectService.closeClientFile(file1.path);
+
+            const scriptInfo2 = project.getScriptInfo(file1.path);
+            const snap2 = scriptInfo2.snap();
+            const actualText2 = snap2.getText(0, snap.getLength());
+            assert.equal(actualText2, "", `expected content to be empty string, got "${actualText2}"`);
+        });
+
+        it("project settings for inferred projects", () => {
+            const file1 = {
+                path: "/a/b/app.ts",
+                content: `import {x} from "mod"`
+            };
+            const modFile = {
+                path: "/a/mod.ts",
+                content: "export let x: number"
+            };
+            const host = createServerHost([file1, modFile]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+
+            projectService.openClientFile(file1.path);
+            projectService.openClientFile(modFile.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 2 });
+
+            projectService.setCompilerOptionsForInferredProjects({ moduleResolution: ModuleResolutionKind.Classic });
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+        });
+
+        it("syntax tree cache handles changes in project settings", () => {
+            const file1 = {
+                path: "/a/b/app.ts",
+                content: "{x: 1}"
+            };
+            const host = createServerHost([file1]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ true);
+            projectService.setCompilerOptionsForInferredProjects({ target: ScriptTarget.ES5, allowJs: false });
+            projectService.openClientFile(file1.path);
+            projectService.inferredProjects[0].getLanguageService(/*ensureSynchronized*/ false).getOutliningSpans(file1.path);
+            projectService.setCompilerOptionsForInferredProjects({ target: ScriptTarget.ES5, allowJs: true });
+            projectService.getScriptInfo(file1.path).editContent(0, 0, " ");
+            projectService.inferredProjects[0].getLanguageService(/*ensureSynchronized*/ false).getOutliningSpans(file1.path);
+            projectService.closeClientFile(file1.path);
+        });
+
+        it("File in multiple projects at opened and closed correctly", () => {
+            const file1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1;"
+            };
+            const file2 = {
+                path: "/a/c/f.ts",
+                content: `/// <reference path="../b/app.ts"/>`
+            };
+            const tsconfig1 = {
+                path: "/a/c/tsconfig.json",
+                content: "{}"
+            };
+            const tsconfig2 = {
+                path: "/a/b/tsconfig.json",
+                content: "{}"
+            };
+            const host = createServerHost([file1, file2, tsconfig1, tsconfig2]);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ false);
+
+            projectService.openClientFile(file2.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const project1 = projectService.configuredProjects[0];
+            assert.equal(project1.openRefCount, 1, "Open ref count in project1 - 1");
+            assert.equal(project1.getScriptInfo(file2.path).containingProjects.length, 1, "containing projects count");
+
+            projectService.openClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 2 });
+            assert.equal(project1.openRefCount, 2, "Open ref count in project1 - 2");
+
+            const project2 = projectService.configuredProjects[1];
+            assert.equal(project2.openRefCount, 1, "Open ref count in project2 - 2");
+
+            assert.equal(project1.getScriptInfo(file1.path).containingProjects.length, 2, `${file1.path} containing projects count`);
+            assert.equal(project1.getScriptInfo(file2.path).containingProjects.length, 1, `${file2.path} containing projects count`);
+
+            projectService.closeClientFile(file2.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 2 });
+            assert.equal(project1.openRefCount, 1, "Open ref count in project1 - 3");
+            assert.equal(project2.openRefCount, 1, "Open ref count in project2 - 3");
+
+            projectService.closeClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 0 });
         });
     });
 

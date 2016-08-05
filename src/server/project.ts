@@ -294,6 +294,9 @@ namespace ts.server {
 
         setCompilerOptions(compilerOptions: CompilerOptions) {
             if (compilerOptions) {
+                if (this.projectKind === ProjectKind.Inferred) {
+                    compilerOptions.allowJs = true;
+                }
                 compilerOptions.allowNonTsExtensions = true;
                 this.compilerOptions = compilerOptions;
                 this.lsHost.setCompilationSettings(compilerOptions);
@@ -318,7 +321,8 @@ namespace ts.server {
             const info = {
                 projectName: this.getProjectName(),
                 version: this.projectStructureVersion,
-                isInferred: this.projectKind === ProjectKind.Inferred
+                isInferred: this.projectKind === ProjectKind.Inferred,
+                options: this.getCompilerOptions()
             };
             // check if requested version is the same that we have reported last time
             if (this.lastReportedFileNames && lastKnownVersion === this.lastReportedVersion) {
@@ -442,13 +446,13 @@ namespace ts.server {
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
-        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, languageServiceEnabled: boolean) {
+        constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, languageServiceEnabled: boolean, compilerOptions: CompilerOptions) {
             super(ProjectKind.Inferred,
                 projectService,
                 documentRegistry,
                 /*files*/ undefined,
                 languageServiceEnabled,
-                /*compilerOptions*/ undefined);
+                compilerOptions);
 
             this.inferredProjectName = makeInferredProjectName(InferredProject.NextId);
             InferredProject.NextId++;
