@@ -1,0 +1,9 @@
+{
+    "inputFiles": [
+        "hello.ts"
+    ],
+    "availableExtensions": [],
+    "compilerOptions": {
+        "extensions": ["test-syntactic-lint", "test-semantic-lint"]
+    }
+}

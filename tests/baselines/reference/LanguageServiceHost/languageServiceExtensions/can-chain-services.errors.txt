@@ -1,0 +1,16 @@
+message program-diagnostics-mutated: Program diagnostics mutated!
+message semantic-diagnostics-mutated: Semantic diagnostics mutated!
+message syntactic-diagnostics-mutated: Syntactic diagnostics mutated!
+/hello-error.ts(1,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+/hello-error.ts(1,31): error TS1109: Expression expected.
+
+
+!!! message program-diagnostics-mutated: Program diagnostics mutated!
+!!! message semantic-diagnostics-mutated: Semantic diagnostics mutated!
+!!! message syntactic-diagnostics-mutated: Syntactic diagnostics mutated!
+==== /hello-error.ts (2 errors) ====
+    console.log("Hello, error!") -
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                                  
+!!! error TS1109: Expression expected.

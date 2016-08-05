@@ -1,0 +1,9 @@
+{
+    "inputFiles": [
+        "foo-bar-math.ts"
+    ],
+    "availableExtensions": ["test-multierrors"],
+    "compilerOptions": {
+        "extensions": ["test-multierrors"]
+    }
+}

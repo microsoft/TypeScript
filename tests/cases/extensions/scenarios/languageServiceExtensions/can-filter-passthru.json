@@ -1,0 +1,9 @@
+{
+    "inputFiles": [
+        "hello-error.ts"
+    ],
+    "availableExtensions": ["test-service-passthru"],
+    "compilerOptions": {
+        "extensions": ["test-service-passthru"]
+    }
+}

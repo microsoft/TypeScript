@@ -1,6 +1,8 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 /// <reference path="core.ts" />
+/// <reference path="extensions.ts" />
+
 
 namespace ts {
     /** The version of the TypeScript compiler release */
@@ -118,57 +120,51 @@ namespace ts {
         skipTsx: boolean;
     }
 
-    function tryReadTypesSection(packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
-        let jsonContent: { typings?: string, types?: string, main?: string };
-        try {
-            const jsonText = state.host.readFile(packageJsonPath);
-            jsonContent = jsonText ? <{ typings?: string, types?: string, main?: string }>JSON.parse(jsonText) : {};
+    function getPackageEntry(packageJson: any, key: string, tag: string, state: ModuleResolutionState) {
+        const value = packageJson[key];
+        if (typeof value === tag) {
+            return value;
         }
-        catch (e) {
-            // gracefully handle if readFile fails or returns not JSON
-            jsonContent = {};
+        if (state.traceEnabled) {
+            trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_1_got_2, key, tag, typeof value);
         }
+        return undefined;
+    }
 
-        let typesFile: string;
-        let fieldName: string;
-        // first try to read content of 'typings' section (backward compatibility)
-        if (jsonContent.typings) {
-            if (typeof jsonContent.typings === "string") {
-                fieldName = "typings";
-                typesFile = jsonContent.typings;
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, "typings", typeof jsonContent.typings);
-                }
-            }
+    function getPackageEntryAsPath(packageJson: any, packageJsonPath: string, key: string, state: ModuleResolutionState) {
+        const value = getPackageEntry(packageJson, key, "string", state);
+        const path = value ? normalizePath(combinePaths(getDirectoryPath(packageJsonPath), value)) : undefined;
+        if (path && state.traceEnabled) {
+            trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, key, value, path);
         }
-        // then read 'types'
-        if (!typesFile && jsonContent.types) {
-            if (typeof jsonContent.types === "string") {
-                fieldName = "types";
-                typesFile = jsonContent.types;
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, "types", typeof jsonContent.types);
-                }
-            }
+        return path;
+    }
+
+    function getPackageTypes(packageJsonPath: string, state: ModuleResolutionState) {
+        const { config } = readConfigFile(packageJsonPath, state.host.readFile);
+        if (config) {
+            return getPackageEntryAsPath(config, packageJsonPath, "typings", state)
+                || getPackageEntryAsPath(config, packageJsonPath, "types", state)
+                // Use the main module for inferring types if no types package specified and the allowJs is set
+                || (state.compilerOptions.allowJs && getPackageEntryAsPath(config, packageJsonPath, "main", state));
         }
-        if (typesFile) {
-            const typesFilePath = normalizePath(combinePaths(baseDirectory, typesFile));
+        else {
             if (state.traceEnabled) {
-                trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, fieldName, typesFile, typesFilePath);
+                trace(state.host, Diagnostics.package_json_does_not_have_0_field, "types");
             }
-            return typesFilePath;
         }
-        // Use the main module for inferring types if no types package specified and the allowJs is set
-        if (state.compilerOptions.allowJs && jsonContent.main && typeof jsonContent.main === "string") {
+        return undefined;
+    }
+
+    function getPackageMain(packageJsonPath: string, state: ModuleResolutionState) {
+        const { config } = readConfigFile(packageJsonPath, state.host.readFile);
+        if (config) {
+            return getPackageEntryAsPath(config, packageJsonPath, "main", state);
+        }
+        else {
             if (state.traceEnabled) {
-                trace(state.host, Diagnostics.No_types_specified_in_package_json_but_allowJs_is_set_so_returning_main_value_of_0, jsonContent.main);
+                trace(state.host, Diagnostics.package_json_does_not_have_0_field, "main");
             }
-            const mainFilePath = normalizePath(combinePaths(baseDirectory, jsonContent.main));
-            return mainFilePath;
         }
         return undefined;
     }
@@ -293,7 +289,7 @@ namespace ts {
         };
     }
 
-    export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+    export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, loadJs?: boolean): ResolvedModuleWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
         if (traceEnabled) {
             trace(host, Diagnostics.Resolving_module_0_from_1, moduleName, containingFile);
@@ -315,7 +311,7 @@ namespace ts {
         let result: ResolvedModuleWithFailedLookupLocations;
         switch (moduleResolution) {
             case ModuleResolutionKind.NodeJs:
-                result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host);
+                result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, loadJs);
                 break;
             case ModuleResolutionKind.Classic:
                 result = classicNameResolver(moduleName, containingFile, compilerOptions, host);
@@ -610,7 +606,7 @@ namespace ts {
         };
     }
 
-    export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+    export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, loadJs?: boolean): ResolvedModuleWithFailedLookupLocations {
         const containingDirectory = getDirectoryPath(containingFile);
         const supportedExtensions = getSupportedExtensions(compilerOptions);
         const traceEnabled = isTraceEnabled(compilerOptions, host);
@@ -626,7 +622,7 @@ namespace ts {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Loading_module_0_from_node_modules_folder, moduleName);
                 }
-                resolvedFileName = loadModuleFromNodeModules(moduleName, containingDirectory, failedLookupLocations, state);
+                resolvedFileName = loadModuleFromNodeModules(moduleName, containingDirectory, failedLookupLocations, state, loadJs);
                 isExternalLibraryImport = resolvedFileName !== undefined;
             }
             else {
@@ -716,23 +712,18 @@ namespace ts {
         }
     }
 
-    function loadNodeModuleFromDirectory(extensions: string[], candidate: string, failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
+    function loadNodeModuleFromDirectory(extensions: string[], candidate: string, failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState, loadJS?: boolean): string {
         const packageJsonPath = combinePaths(candidate, "package.json");
         const directoryExists = !onlyRecordFailures && directoryProbablyExists(candidate, state.host);
         if (directoryExists && state.host.fileExists(packageJsonPath)) {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.Found_package_json_at_0, packageJsonPath);
             }
-            const typesFile = tryReadTypesSection(packageJsonPath, candidate, state);
+            const typesFile = loadJS ? getPackageMain(packageJsonPath, state) : getPackageTypes(packageJsonPath, state);
             if (typesFile) {
                 const result = loadModuleFromFile(typesFile, extensions, failedLookupLocation, !directoryProbablyExists(getDirectoryPath(typesFile), state.host), state);
                 if (result) {
                     return result;
-                }
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.package_json_does_not_have_types_field);
                 }
             }
         }
@@ -747,30 +738,31 @@ namespace ts {
         return loadModuleFromFile(combinePaths(candidate, "index"), extensions, failedLookupLocation, !directoryExists, state);
     }
 
-    function loadModuleFromNodeModulesFolder(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState): string {
+    function loadModuleFromNodeModulesFolder(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState, loadJS?: boolean): string {
         const nodeModulesFolder = combinePaths(directory, "node_modules");
         const nodeModulesFolderExists = directoryProbablyExists(nodeModulesFolder, state.host);
         const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
-        const supportedExtensions = getSupportedExtensions(state.compilerOptions);
+
+        const supportedExtensions = getSupportedExtensions(state.compilerOptions, loadJS);
 
         let result = loadModuleFromFile(candidate, supportedExtensions, failedLookupLocations, !nodeModulesFolderExists, state);
         if (result) {
             return result;
         }
-        result = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state);
+        result = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state, loadJS);
         if (result) {
             return result;
         }
     }
 
-    function loadModuleFromNodeModules(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState): string {
+    function loadModuleFromNodeModules(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState, loadJS?: boolean): string {
         directory = normalizeSlashes(directory);
         while (true) {
             const baseName = getBaseFileName(directory);
             if (baseName !== "node_modules") {
                 // Try to load source from the package
-                const packageResult = loadModuleFromNodeModulesFolder(moduleName, directory, failedLookupLocations, state);
-                if (packageResult && hasTypeScriptFileExtension(packageResult)) {
+                const packageResult = loadModuleFromNodeModulesFolder(moduleName, directory, failedLookupLocations, state, loadJS);
+                if (packageResult && (hasTypeScriptFileExtension(packageResult) || loadJS)) {
                     // Always prefer a TypeScript (.ts, .tsx, .d.ts) file shipped with the package
                     return packageResult;
                 }
@@ -954,6 +946,7 @@ namespace ts {
 
         const newLine = getNewLineCharacter(options);
         const realpath = sys.realpath && ((path: string) => sys.realpath(path));
+        const loadExtension = sys.loadExtension && ((name: string) => sys.loadExtension(name));
 
         return {
             getSourceFile,
@@ -969,7 +962,8 @@ namespace ts {
             trace: (s: string) => sys.write(s + newLine),
             directoryExists: directoryName => sys.directoryExists(directoryName),
             getDirectories: (path: string) => sys.getDirectories(path),
-            realpath
+            realpath,
+            loadExtension
         };
     }
 
@@ -1004,7 +998,8 @@ namespace ts {
             }
 
             const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }${ host.getNewLine() }`;
+            const code = typeof diagnostic.code === "string" ? diagnostic.code : `TS${ diagnostic.code }`;
+            output += `${ category } ${ code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine()) }${ host.getNewLine() }`;
         }
         return output;
     }
@@ -1087,7 +1082,7 @@ namespace ts {
         return result;
     }
 
-    export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
+    export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, extensionCache?: ExtensionCache): Program {
         let program: Program;
         let files: SourceFile[] = [];
         let commonSourceDirectory: string;
@@ -1187,6 +1182,8 @@ namespace ts {
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
 
+        extensionCache = extensionCache || createExtensionCache(options, host);
+
         program = {
             getRootFileNames: () => rootNames,
             getSourceFile,
@@ -1209,7 +1206,13 @@ namespace ts {
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
-            getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives
+            getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
+            getCompilerExtensions() {
+                return extensionCache.getCompilerExtensions();
+            },
+            getExtensionLoadingDiagnostics() {
+                return extensionCache.getExtensionLoadingDiagnostics();
+            },
         };
 
         verifyCompilerOptions();
@@ -1514,7 +1517,264 @@ namespace ts {
             }
         }
 
+        /**
+         * ExtensionKind.SyntacticLint or ExtensionKind.SemanticLint only
+         */
+        function performLintPassOnFile(sourceFile: SourceFile, kind: ExtensionKind): Diagnostic[] | undefined {
+            const lints = extensionCache.getCompilerExtensions()[kind];
+            if (!lints || !lints.length) {
+                return;
+            }
+            type UniqueLint = {name: string, walker: LintWalker, accepted: boolean, errored: boolean};
+            const initializedLints: UniqueLint[] = [];
+            const diagnostics: Diagnostic[] = [];
+            let activeLint: UniqueLint;
+            let parent: Node | undefined = undefined;
+            const profilingEnabled = options.extendedDiagnostics;
+            for (const {name, args, ctor} of lints) {
+                let walker: LintWalker;
+                if (kind === ExtensionKind.SemanticLint) {
+                    const checker = getTypeChecker();
+                    startExtensionProfile(profilingEnabled, name, "construct");
+                    try {
+                        walker = new (ctor as SemanticLintProviderStatic)({ ts, checker, args, host, program });
+                    }
+                    catch (e) {
+                        diagnostics.push(createExtensionDiagnostic(name, `Lint construction failed: ${(e as Error).message}`, sourceFile, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
+                    }
+                    completeExtensionProfile(profilingEnabled, name, "construct");
+                }
+                else if (kind === ExtensionKind.SyntacticLint) {
+                    startExtensionProfile(profilingEnabled, name, "construct");
+                    try {
+                        walker = new (ctor as SyntacticLintProviderStatic)({ ts, args, host, program });
+                    }
+                    catch (e) {
+                        diagnostics.push(createExtensionDiagnostic(name, `Lint construction failed: ${(e as Error).message}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
+                    }
+                    completeExtensionProfile(profilingEnabled, name, "construct");
+                }
+                if (walker) initializedLints.push({ name, walker, accepted: true, errored: false });
+            }
+
+            function visitNode(node: Node) {
+                let oneAccepted = false;
+                const needsReset: Map<boolean> = {};
+
+                // Ensure parent pointer is set
+                node.parent = parent;
+
+                // For each lint, except those which have errored or have not accepted a parental node, call its rule
+                for (let i = 0; i < initializedLints.length; i++) {
+                    activeLint = initializedLints[i];
+                    if (activeLint.errored || !activeLint.accepted) {
+                        continue;
+                    }
+
+                    startExtensionProfile(profilingEnabled, activeLint.name, "visit");
+                    try {
+                        activeLint.accepted = !activeLint.walker.visit(node, error);
+                    }
+                    catch (e) {
+                        activeLint.errored = true;
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName("!!!"), `visit failed with error: ${e}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
+                    }
+                    completeExtensionProfile(profilingEnabled, activeLint.name, "visit");
+
+                    if (activeLint.accepted) {
+                        oneAccepted = true;
+                    }
+                    else {
+                        needsReset[i] = true;
+                    }
+                }
+
+                // Save the parent, then recur into the child nodes
+                const oldParent = parent;
+                parent = node;
+                if (oneAccepted) {
+                    forEachChild(node, visitNode);
+                }
+                parent = oldParent;
+
+                // All this node's children have been processed, for each lint
+                //  - If it set accepted to false during this node (needsReset), set it back to true
+                //  - If it has an afterVisit method, call it
+                for (let i = 0; i < initializedLints.length; i++) {
+                    activeLint = initializedLints[i];
+                    if (activeLint.errored) {
+                        continue;
+                    }
+                    if (!needsReset[i]) {
+                        activeLint.accepted = true;
+                        needsReset[i] = false;
+                    }
+                    if (!activeLint.walker.afterVisit) {
+                        continue;
+                    }
+                    startExtensionProfile(profilingEnabled, activeLint.name, "afterVisit");
+                    try {
+                        activeLint.walker.afterVisit(node, error);
+                    }
+                    catch (e) {
+                        activeLint.errored = true;
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName("!!!"), `afterVisit failed with error: ${e}`, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, DiagnosticCategory.Error));
+                    }
+                    completeExtensionProfile(profilingEnabled, activeLint.name, "afterVisit");
+                }
+            }
+
+            function errorQualifiedName(shortname?: string) {
+                if (!shortname) return activeLint.name;
+                return `${activeLint.name}(${shortname})`;
+            }
+
+            function ensure(param: any, paramName: string, istype: string) {
+                if (typeof param !== istype) {
+                    Debug.fail(`${paramName} must be a ${istype}.`);
+                }
+            }
+
+            const errorOverloads: ((...args: any[]) => void)[] = [() => {
+                Debug.fail("You must at least provide an error message to the error function.");
+            },
+            (err: string) => {
+                diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), err));
+            },
+            (errShortnameOrLevel: string | DiagnosticCategory, spanOrErr: Node | string | number) => {
+                if (typeof errShortnameOrLevel === "string") {
+                    if (typeof spanOrErr === "string") {
+                        // error(shortname: string, err: string): void;
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName(errShortnameOrLevel), spanOrErr));
+                    }
+                    else if (typeof spanOrErr === "object") {
+                        // error(err: string, node: Node): void;
+                        diagnostics.push(createExtensionDiagnosticForNode(spanOrErr, errorQualifiedName(), errShortnameOrLevel));
+                    }
+                    else {
+                        Debug.fail("When two arguments are passed to error and the first argument is either the error message or error shortname, the second argument must either be an error message string or the node the error is on.");
+                    }
+                }
+                else if (typeof errShortnameOrLevel === "number") {
+                    ensure(spanOrErr, "Error message", "string");
+
+                    // error(level: DiagnosticCategory, err: string): void;
+                    diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), spanOrErr as string, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, errShortnameOrLevel));
+                }
+                else {
+                    Debug.fail("When two arguments are passed to error, the first argument must be either the error message, the error shortname, or the DiagnosticCategory of the error.");
+                }
+            },
+            (errShortnameOrLevel: string | DiagnosticCategory, startErrOrShortname: number | string | Node, lengthSpanOrErr: number | Node | string) => {
+                if (typeof errShortnameOrLevel === "number") {
+                    ensure(startErrOrShortname, "Error message or error shortcode", "string");
+
+                    if (typeof lengthSpanOrErr === "string") {
+                        // error(level: DiagnosticCategory, shortname: string, err: string): void;
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName(startErrOrShortname as string), lengthSpanOrErr, /*sourceFile*/undefined, /*start*/undefined, /*length*/undefined, errShortnameOrLevel));
+                    }
+                    else if (typeof lengthSpanOrErr === "object") {
+                        // error(level: DiagnosticCategory, err: string, node: Node): void;
+                        diagnostics.push(createExtensionDiagnosticForNode(lengthSpanOrErr, errorQualifiedName(), startErrOrShortname as string, errShortnameOrLevel));
+                    }
+                    else {
+                        Debug.fail("When three arguments are passed to error and the first is a diagnostic category, the third argument must either be an error message or the node errored on.");
+                    }
+                }
+                else if (typeof errShortnameOrLevel === "string") {
+                    if (typeof startErrOrShortname === "number") {
+                        ensure(lengthSpanOrErr, "Error span length", "number");
+
+                        // error(err: string, start: number, length: number): void;
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), errShortnameOrLevel, sourceFile, startErrOrShortname, lengthSpanOrErr as number));
+                    }
+                    else if (typeof startErrOrShortname === "string") {
+                        ensure(lengthSpanOrErr, "Error node", "object");
+
+                        // error(shortname: string, err: string, span: Node): void;
+                        diagnostics.push(createExtensionDiagnosticForNode(lengthSpanOrErr as Node, errorQualifiedName(errShortnameOrLevel), startErrOrShortname));
+                    }
+                    else {
+                        Debug.fail("When three arguments are passed to error and the first is an error shortcode or message, the second must be either an error message or a span start number, respectively.");
+                    }
+                }
+                else {
+                    Debug.fail("When three arguments are passed to error, the first argument must be either a diagnostic category, a error shortname, or an error message.");
+                }
+            },
+            (levelOrShortname: DiagnosticCategory | string, errOrShortname: string | number | Node, startOrErr: string | number | Node, lengthOrSpan: number | Node) => {
+                ensure(errOrShortname, "Error message or error shortcode", "string");
+
+                if (typeof levelOrShortname === "number") {
+                    if (typeof startOrErr === "string") {
+                        ensure(lengthOrSpan, "Error node", "object");
+
+                        // error(level: DiagnosticCategory, shortname: string, err: string, span: Node): void;
+                        diagnostics.push(createExtensionDiagnosticForNode(lengthOrSpan as Node, errorQualifiedName(errOrShortname as string), startOrErr, levelOrShortname));
+                    }
+                    else if (typeof startOrErr === "number") {
+                        ensure(lengthOrSpan, "Error span length", "number");
+
+                        // error(level: DiagnosticCategory, err: string, start: number, length: number): void;
+                        diagnostics.push(createExtensionDiagnostic(errorQualifiedName(), errOrShortname as string, sourceFile, startOrErr, lengthOrSpan as number, levelOrShortname));
+                    }
+                    else {
+                        Debug.fail("When four arguments are passed to error and the first is a DiagnosticCategory, the third argument must be the error message.");
+                        return;
+                    }
+                }
+                else if (typeof levelOrShortname === "string") {
+                    ensure(startOrErr, "Error span start", "number");
+                    ensure(lengthOrSpan, "Error span length", "number");
+
+                    // error(shortname: string, err: string, start: number, length: number): void;
+                    diagnostics.push(createExtensionDiagnostic(errorQualifiedName(levelOrShortname), errOrShortname as string, sourceFile, startOrErr as number, lengthOrSpan as number));
+                }
+                else {
+                    Debug.fail("When four arguments are passed to error, the first argument must be either a DiagnosticCategory or a error shortname string.");
+                }
+            },
+            (level: DiagnosticCategory, shortname: string, err: string, start: number, length: number) => {
+                ensure(level, "Diagnostic level", "number");
+                ensure(shortname, "Error shortcode", "string");
+                ensure(err, "Error message", "string");
+                ensure(start, "Error span start", "number");
+                ensure(length, "Error span length", "number");
+
+                diagnostics.push(createExtensionDiagnostic(errorQualifiedName(shortname), err, sourceFile, start, length, level));
+            }];
+
+            function tooManyArguments(length: number, found: number) {
+                return () => Debug.fail(`Too many arguments provided to error (Expected up to ${length}, but found ${found}).`);
+            }
+
+            function error(err: string): void;
+            function error(err: string, node: Node): void;
+            function error(err: string, start: number, length: number): void;
+            function error(shortname: string, err: string): void;
+            function error(shortname: string, err: string, span: Node): void;
+            function error(shortname: string, err: string, start: number, length: number): void;
+            function error(level: DiagnosticCategory, err: string): void;
+            function error(level: DiagnosticCategory, err: string, node: Node): void;
+            function error(level: DiagnosticCategory, err: string, start: number, length: number): void;
+            function error(level: DiagnosticCategory, shortname: string, err: string): void;
+            function error(level: DiagnosticCategory, shortname: string, err: string, span: Node): void;
+            function error(level: DiagnosticCategory, shortname: string, err: string, start: number, length: number): void;
+            function error(): void {
+                (errorOverloads[arguments.length] || tooManyArguments(errorOverloads.length - 1, arguments.length)).apply(/*thisArg*/undefined, arguments);
+            }
+
+            visitNode(sourceFile);
+            return diagnostics;
+        }
+
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+            if (!sourceFile.isDeclarationFile) {
+                const lintDiagnostics = performLintPassOnFile(sourceFile, ExtensionKind.SyntacticLint);
+                if (lintDiagnostics && lintDiagnostics.length) {
+                    return sourceFile.parseDiagnostics.concat(lintDiagnostics);
+                }
+            }
             return sourceFile.parseDiagnostics;
         }
 
@@ -1555,8 +1815,9 @@ namespace ts {
                     typeChecker.getDiagnostics(sourceFile, cancellationToken);
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
+                const lintDiagnostics = (!sourceFile.isDeclarationFile) ? (performLintPassOnFile(sourceFile, ExtensionKind.SemanticLint) || []) : [];
 
-                return bindDiagnostics.concat(checkDiagnostics).concat(fileProcessingDiagnosticsInFile).concat(programDiagnosticsInFile);
+                return bindDiagnostics.concat(checkDiagnostics).concat(fileProcessingDiagnosticsInFile).concat(programDiagnosticsInFile).concat(lintDiagnostics);
             });
         }
 
@@ -1753,6 +2014,7 @@ namespace ts {
             const allDiagnostics: Diagnostic[] = [];
             addRange(allDiagnostics, fileProcessingDiagnostics.getGlobalDiagnostics());
             addRange(allDiagnostics, programDiagnostics.getGlobalDiagnostics());
+            allDiagnostics.push(...extensionCache.getExtensionLoadingDiagnostics());
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 

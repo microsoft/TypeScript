@@ -1,0 +1,653 @@
+/atotc.ts(1,1): error TS2304: Cannot find name 'It'.
+/atotc.ts(1,4): error TS1005: ';' expected.
+/atotc.ts(1,4): error TS2304: Cannot find name 'was'.
+/atotc.ts(1,8): error TS1005: ';' expected.
+/atotc.ts(1,8): error TS2304: Cannot find name 'the'.
+/atotc.ts(1,12): error TS1005: ';' expected.
+/atotc.ts(1,12): error TS2304: Cannot find name 'best'.
+/atotc.ts(1,17): error TS1005: ';' expected.
+/atotc.ts(1,17): error TS2304: Cannot find name 'of'.
+/atotc.ts(1,20): error TS1005: ';' expected.
+/atotc.ts(1,20): error TS2304: Cannot find name 'times'.
+/atotc.ts(1,27): error TS2304: Cannot find name 'it'.
+/atotc.ts(1,30): error TS1005: ';' expected.
+/atotc.ts(1,30): error TS2304: Cannot find name 'was'.
+/atotc.ts(1,34): error TS1005: ';' expected.
+/atotc.ts(1,34): error TS2304: Cannot find name 'the'.
+/atotc.ts(1,38): error TS1005: ';' expected.
+/atotc.ts(1,38): error TS2304: Cannot find name 'worst'.
+/atotc.ts(1,44): error TS1005: ';' expected.
+/atotc.ts(1,44): error TS2304: Cannot find name 'of'.
+/atotc.ts(1,47): error TS1005: ';' expected.
+/atotc.ts(1,47): error TS2304: Cannot find name 'times'.
+/atotc.ts(2,1): error TS2304: Cannot find name 'it'.
+/atotc.ts(2,4): error TS1005: ';' expected.
+/atotc.ts(2,4): error TS2304: Cannot find name 'was'.
+/atotc.ts(2,8): error TS1005: ';' expected.
+/atotc.ts(2,8): error TS2304: Cannot find name 'the'.
+/atotc.ts(2,12): error TS1005: ';' expected.
+/atotc.ts(2,12): error TS2304: Cannot find name 'age'.
+/atotc.ts(2,16): error TS1005: ';' expected.
+/atotc.ts(2,16): error TS2304: Cannot find name 'of'.
+/atotc.ts(2,19): error TS1005: ';' expected.
+/atotc.ts(2,19): error TS2304: Cannot find name 'wisdom'.
+/atotc.ts(2,27): error TS2304: Cannot find name 'it'.
+/atotc.ts(2,30): error TS1005: ';' expected.
+/atotc.ts(2,30): error TS2304: Cannot find name 'was'.
+/atotc.ts(2,34): error TS1005: ';' expected.
+/atotc.ts(2,34): error TS2304: Cannot find name 'the'.
+/atotc.ts(2,38): error TS1005: ';' expected.
+/atotc.ts(2,38): error TS2304: Cannot find name 'age'.
+/atotc.ts(2,42): error TS1005: ';' expected.
+/atotc.ts(2,42): error TS2304: Cannot find name 'of'.
+/atotc.ts(2,45): error TS1005: ';' expected.
+/atotc.ts(2,45): error TS2304: Cannot find name 'foolishness'.
+/atotc.ts(3,1): error TS2304: Cannot find name 'it'.
+/atotc.ts(3,4): error TS1005: ';' expected.
+/atotc.ts(3,4): error TS2304: Cannot find name 'was'.
+/atotc.ts(3,8): error TS1005: ';' expected.
+/atotc.ts(3,8): error TS2304: Cannot find name 'the'.
+/atotc.ts(3,12): error TS1005: ';' expected.
+/atotc.ts(3,12): error TS2304: Cannot find name 'epoch'.
+/atotc.ts(3,18): error TS1005: ';' expected.
+/atotc.ts(3,18): error TS2304: Cannot find name 'of'.
+/atotc.ts(3,21): error TS1005: ';' expected.
+/atotc.ts(3,21): error TS2304: Cannot find name 'belief'.
+/atotc.ts(3,29): error TS2304: Cannot find name 'it'.
+/atotc.ts(3,32): error TS1005: ';' expected.
+/atotc.ts(3,32): error TS2304: Cannot find name 'was'.
+/atotc.ts(3,36): error TS1005: ';' expected.
+/atotc.ts(3,36): error TS2304: Cannot find name 'the'.
+/atotc.ts(3,40): error TS1005: ';' expected.
+/atotc.ts(3,40): error TS2304: Cannot find name 'epoch'.
+/atotc.ts(3,46): error TS1005: ';' expected.
+/atotc.ts(3,46): error TS2304: Cannot find name 'of'.
+/atotc.ts(3,49): error TS1005: ';' expected.
+/atotc.ts(3,49): error TS2304: Cannot find name 'incredulity'.
+/atotc.ts(4,1): error TS2304: Cannot find name 'it'.
+/atotc.ts(4,4): error TS1005: ';' expected.
+/atotc.ts(4,4): error TS2304: Cannot find name 'was'.
+/atotc.ts(4,8): error TS1005: ';' expected.
+/atotc.ts(4,8): error TS2304: Cannot find name 'the'.
+/atotc.ts(4,12): error TS1005: ';' expected.
+/atotc.ts(4,12): error TS2304: Cannot find name 'season'.
+/atotc.ts(4,19): error TS1005: ';' expected.
+/atotc.ts(4,19): error TS2304: Cannot find name 'of'.
+/atotc.ts(4,22): error TS1005: ';' expected.
+/atotc.ts(4,22): error TS2304: Cannot find name 'Light'.
+/atotc.ts(4,29): error TS2304: Cannot find name 'it'.
+/atotc.ts(4,32): error TS1005: ';' expected.
+/atotc.ts(4,32): error TS2304: Cannot find name 'was'.
+/atotc.ts(4,36): error TS1005: ';' expected.
+/atotc.ts(4,36): error TS2304: Cannot find name 'the'.
+/atotc.ts(4,40): error TS1005: ';' expected.
+/atotc.ts(4,40): error TS2304: Cannot find name 'season'.
+/atotc.ts(4,47): error TS1005: ';' expected.
+/atotc.ts(4,47): error TS2304: Cannot find name 'of'.
+/atotc.ts(4,50): error TS1005: ';' expected.
+/atotc.ts(4,50): error TS2304: Cannot find name 'Darkness'.
+/atotc.ts(5,1): error TS2304: Cannot find name 'it'.
+/atotc.ts(5,4): error TS1005: ';' expected.
+/atotc.ts(5,4): error TS2304: Cannot find name 'was'.
+/atotc.ts(5,8): error TS1005: ';' expected.
+/atotc.ts(5,8): error TS2304: Cannot find name 'the'.
+/atotc.ts(5,12): error TS1005: ';' expected.
+/atotc.ts(5,12): error TS2304: Cannot find name 'spring'.
+/atotc.ts(5,19): error TS1005: ';' expected.
+/atotc.ts(5,19): error TS2304: Cannot find name 'of'.
+/atotc.ts(5,22): error TS1005: ';' expected.
+/atotc.ts(5,22): error TS2304: Cannot find name 'hope'.
+/atotc.ts(5,28): error TS2304: Cannot find name 'it'.
+/atotc.ts(5,31): error TS1005: ';' expected.
+/atotc.ts(5,31): error TS2304: Cannot find name 'was'.
+/atotc.ts(5,35): error TS1005: ';' expected.
+/atotc.ts(5,35): error TS2304: Cannot find name 'the'.
+/atotc.ts(5,39): error TS1005: ';' expected.
+/atotc.ts(5,39): error TS2304: Cannot find name 'winter'.
+/atotc.ts(5,46): error TS1005: ';' expected.
+/atotc.ts(5,46): error TS2304: Cannot find name 'of'.
+/atotc.ts(5,49): error TS1005: ';' expected.
+/atotc.ts(5,49): error TS2304: Cannot find name 'despair'.
+/atotc.ts(6,1): error TS2304: Cannot find name 'we'.
+/atotc.ts(6,4): error TS1005: ';' expected.
+/atotc.ts(6,4): error TS2304: Cannot find name 'had'.
+/atotc.ts(6,8): error TS1005: ';' expected.
+/atotc.ts(6,8): error TS2304: Cannot find name 'everything'.
+/atotc.ts(6,19): error TS1005: ';' expected.
+/atotc.ts(6,19): error TS2304: Cannot find name 'before'.
+/atotc.ts(6,26): error TS1005: ';' expected.
+/atotc.ts(6,26): error TS2304: Cannot find name 'us'.
+/atotc.ts(6,30): error TS2304: Cannot find name 'we'.
+/atotc.ts(6,33): error TS1005: ';' expected.
+/atotc.ts(6,33): error TS2304: Cannot find name 'had'.
+/atotc.ts(6,37): error TS1005: ';' expected.
+/atotc.ts(6,37): error TS2304: Cannot find name 'nothing'.
+/atotc.ts(6,45): error TS1005: ';' expected.
+/atotc.ts(6,45): error TS2304: Cannot find name 'before'.
+/atotc.ts(6,52): error TS1005: ';' expected.
+/atotc.ts(6,52): error TS2304: Cannot find name 'us'.
+/atotc.ts(7,1): error TS2304: Cannot find name 'we'.
+/atotc.ts(7,4): error TS1005: ';' expected.
+/atotc.ts(7,4): error TS2304: Cannot find name 'were'.
+/atotc.ts(7,9): error TS1005: ';' expected.
+/atotc.ts(7,9): error TS2304: Cannot find name 'all'.
+/atotc.ts(7,13): error TS1005: ';' expected.
+/atotc.ts(7,13): error TS2304: Cannot find name 'going'.
+/atotc.ts(7,19): error TS1005: ';' expected.
+/atotc.ts(7,19): error TS2304: Cannot find name 'direct'.
+/atotc.ts(7,26): error TS1005: ';' expected.
+/atotc.ts(7,26): error TS2304: Cannot find name 'to'.
+/atotc.ts(7,29): error TS1005: ';' expected.
+/atotc.ts(7,29): error TS2304: Cannot find name 'Heaven'.
+/atotc.ts(7,37): error TS2304: Cannot find name 'we'.
+/atotc.ts(7,40): error TS1005: ';' expected.
+/atotc.ts(7,40): error TS2304: Cannot find name 'were'.
+/atotc.ts(7,45): error TS1005: ';' expected.
+/atotc.ts(7,45): error TS2304: Cannot find name 'all'.
+/atotc.ts(7,49): error TS1005: ';' expected.
+/atotc.ts(7,49): error TS2304: Cannot find name 'going'.
+/atotc.ts(7,55): error TS1005: ';' expected.
+/atotc.ts(7,55): error TS2304: Cannot find name 'direct'.
+/atotc.ts(8,1): error TS2304: Cannot find name 'the'.
+/atotc.ts(8,5): error TS1005: ';' expected.
+/atotc.ts(8,5): error TS2304: Cannot find name 'other'.
+/atotc.ts(8,11): error TS1005: ';' expected.
+/atotc.ts(8,11): error TS2304: Cannot find name 'way'.
+/atotc.ts(8,19): error TS2304: Cannot find name 'short'.
+/atotc.ts(8,26): error TS2304: Cannot find name 'the'.
+/atotc.ts(8,30): error TS1005: ';' expected.
+/atotc.ts(8,30): error TS2304: Cannot find name 'period'.
+/atotc.ts(8,37): error TS1005: ';' expected.
+/atotc.ts(8,37): error TS2304: Cannot find name 'was'.
+/atotc.ts(8,41): error TS1005: ';' expected.
+/atotc.ts(8,41): error TS2304: Cannot find name 'so'.
+/atotc.ts(8,44): error TS1005: ';' expected.
+/atotc.ts(8,44): error TS2304: Cannot find name 'far'.
+/atotc.ts(8,48): error TS1005: ';' expected.
+/atotc.ts(8,48): error TS2304: Cannot find name 'like'.
+/atotc.ts(8,53): error TS1005: ';' expected.
+/atotc.ts(8,53): error TS2304: Cannot find name 'the'.
+/atotc.ts(8,57): error TS1005: ';' expected.
+/atotc.ts(8,57): error TS2304: Cannot find name 'present'.
+/atotc.ts(9,1): error TS2304: Cannot find name 'period'.
+/atotc.ts(9,9): error TS2304: Cannot find name 'that'.
+/atotc.ts(9,14): error TS1005: ';' expected.
+/atotc.ts(9,14): error TS2304: Cannot find name 'some'.
+/atotc.ts(9,19): error TS1005: ';' expected.
+/atotc.ts(9,19): error TS2304: Cannot find name 'of'.
+/atotc.ts(9,22): error TS1005: ';' expected.
+/atotc.ts(9,22): error TS2304: Cannot find name 'its'.
+/atotc.ts(9,26): error TS1005: ';' expected.
+/atotc.ts(9,26): error TS2304: Cannot find name 'noisiest'.
+/atotc.ts(9,35): error TS1005: ';' expected.
+/atotc.ts(9,35): error TS2304: Cannot find name 'authorities'.
+/atotc.ts(9,47): error TS1005: ';' expected.
+/atotc.ts(9,47): error TS2304: Cannot find name 'insisted'.
+/atotc.ts(9,56): error TS1005: ';' expected.
+/atotc.ts(9,56): error TS2304: Cannot find name 'on'.
+/atotc.ts(9,59): error TS1005: ';' expected.
+/atotc.ts(9,59): error TS2304: Cannot find name 'its'.
+/atotc.ts(10,1): error TS2304: Cannot find name 'being'.
+/atotc.ts(10,7): error TS1005: ';' expected.
+/atotc.ts(10,7): error TS2304: Cannot find name 'received'.
+/atotc.ts(10,17): error TS1109: Expression expected.
+/atotc.ts(10,21): error TS1005: '(' expected.
+/atotc.ts(10,21): error TS2304: Cannot find name 'good'.
+/atotc.ts(10,26): error TS1005: ';' expected.
+/atotc.ts(10,26): error TS2304: Cannot find name 'or'.
+/atotc.ts(10,29): error TS1005: ';' expected.
+/atotc.ts(10,33): error TS1005: '(' expected.
+/atotc.ts(10,33): error TS2304: Cannot find name 'evil'.
+/atotc.ts(10,33): error TS2406: Invalid left-hand side in 'for...in' statement.
+/atotc.ts(10,39): error TS1109: Expression expected.
+/atotc.ts(10,42): error TS2304: Cannot find name 'the'.
+/atotc.ts(10,46): error TS1005: ')' expected.
+/atotc.ts(10,46): error TS2304: Cannot find name 'superlative'.
+/atotc.ts(10,58): error TS1005: ';' expected.
+/atotc.ts(10,58): error TS2304: Cannot find name 'degree'.
+/atotc.ts(11,1): error TS2304: Cannot find name 'of'.
+/atotc.ts(11,4): error TS1005: ';' expected.
+/atotc.ts(11,4): error TS2304: Cannot find name 'comparison'.
+/atotc.ts(11,15): error TS1005: ';' expected.
+/atotc.ts(11,15): error TS2304: Cannot find name 'only'.
+/atotc.ts(11,20): error TS1003: Identifier expected.
+
+
+==== /atotc.ts (213 errors) ====
+    It was the best of times, it was the worst of times,
+    ~~
+!!! error TS2304: Cannot find name 'It'.
+       ~~~
+!!! error TS1005: ';' expected.
+       ~~~
+!!! error TS2304: Cannot find name 'was'.
+           ~~~
+!!! error TS1005: ';' expected.
+           ~~~
+!!! error TS2304: Cannot find name 'the'.
+               ~~~~
+!!! error TS1005: ';' expected.
+               ~~~~
+!!! error TS2304: Cannot find name 'best'.
+                    ~~
+!!! error TS1005: ';' expected.
+                    ~~
+!!! error TS2304: Cannot find name 'of'.
+                       ~~~~~
+!!! error TS1005: ';' expected.
+                       ~~~~~
+!!! error TS2304: Cannot find name 'times'.
+                              ~~
+!!! error TS2304: Cannot find name 'it'.
+                                 ~~~
+!!! error TS1005: ';' expected.
+                                 ~~~
+!!! error TS2304: Cannot find name 'was'.
+                                     ~~~
+!!! error TS1005: ';' expected.
+                                     ~~~
+!!! error TS2304: Cannot find name 'the'.
+                                         ~~~~~
+!!! error TS1005: ';' expected.
+                                         ~~~~~
+!!! error TS2304: Cannot find name 'worst'.
+                                               ~~
+!!! error TS1005: ';' expected.
+                                               ~~
+!!! error TS2304: Cannot find name 'of'.
+                                                  ~~~~~
+!!! error TS1005: ';' expected.
+                                                  ~~~~~
+!!! error TS2304: Cannot find name 'times'.
+    it was the age of wisdom, it was the age of foolishness,
+    ~~
+!!! error TS2304: Cannot find name 'it'.
+       ~~~
+!!! error TS1005: ';' expected.
+       ~~~
+!!! error TS2304: Cannot find name 'was'.
+           ~~~
+!!! error TS1005: ';' expected.
+           ~~~
+!!! error TS2304: Cannot find name 'the'.
+               ~~~
+!!! error TS1005: ';' expected.
+               ~~~
+!!! error TS2304: Cannot find name 'age'.
+                   ~~
+!!! error TS1005: ';' expected.
+                   ~~
+!!! error TS2304: Cannot find name 'of'.
+                      ~~~~~~
+!!! error TS1005: ';' expected.
+                      ~~~~~~
+!!! error TS2304: Cannot find name 'wisdom'.
+                              ~~
+!!! error TS2304: Cannot find name 'it'.
+                                 ~~~
+!!! error TS1005: ';' expected.
+                                 ~~~
+!!! error TS2304: Cannot find name 'was'.
+                                     ~~~
+!!! error TS1005: ';' expected.
+                                     ~~~
+!!! error TS2304: Cannot find name 'the'.
+                                         ~~~
+!!! error TS1005: ';' expected.
+                                         ~~~
+!!! error TS2304: Cannot find name 'age'.
+                                             ~~
+!!! error TS1005: ';' expected.
+                                             ~~
+!!! error TS2304: Cannot find name 'of'.
+                                                ~~~~~~~~~~~
+!!! error TS1005: ';' expected.
+                                                ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'foolishness'.
+    it was the epoch of belief, it was the epoch of incredulity,
+    ~~
+!!! error TS2304: Cannot find name 'it'.
+       ~~~
+!!! error TS1005: ';' expected.
+       ~~~
+!!! error TS2304: Cannot find name 'was'.
+           ~~~
+!!! error TS1005: ';' expected.
+           ~~~
+!!! error TS2304: Cannot find name 'the'.
+               ~~~~~
+!!! error TS1005: ';' expected.
+               ~~~~~
+!!! error TS2304: Cannot find name 'epoch'.
+                     ~~
+!!! error TS1005: ';' expected.
+                     ~~
+!!! error TS2304: Cannot find name 'of'.
+                        ~~~~~~
+!!! error TS1005: ';' expected.
+                        ~~~~~~
+!!! error TS2304: Cannot find name 'belief'.
+                                ~~
+!!! error TS2304: Cannot find name 'it'.
+                                   ~~~
+!!! error TS1005: ';' expected.
+                                   ~~~
+!!! error TS2304: Cannot find name 'was'.
+                                       ~~~
+!!! error TS1005: ';' expected.
+                                       ~~~
+!!! error TS2304: Cannot find name 'the'.
+                                           ~~~~~
+!!! error TS1005: ';' expected.
+                                           ~~~~~
+!!! error TS2304: Cannot find name 'epoch'.
+                                                 ~~
+!!! error TS1005: ';' expected.
+                                                 ~~
+!!! error TS2304: Cannot find name 'of'.
+                                                    ~~~~~~~~~~~
+!!! error TS1005: ';' expected.
+                                                    ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'incredulity'.
+    it was the season of Light, it was the season of Darkness,
+    ~~
+!!! error TS2304: Cannot find name 'it'.
+       ~~~
+!!! error TS1005: ';' expected.
+       ~~~
+!!! error TS2304: Cannot find name 'was'.
+           ~~~
+!!! error TS1005: ';' expected.
+           ~~~
+!!! error TS2304: Cannot find name 'the'.
+               ~~~~~~
+!!! error TS1005: ';' expected.
+               ~~~~~~
+!!! error TS2304: Cannot find name 'season'.
+                      ~~
+!!! error TS1005: ';' expected.
+                      ~~
+!!! error TS2304: Cannot find name 'of'.
+                         ~~~~~
+!!! error TS1005: ';' expected.
+                         ~~~~~
+!!! error TS2304: Cannot find name 'Light'.
+                                ~~
+!!! error TS2304: Cannot find name 'it'.
+                                   ~~~
+!!! error TS1005: ';' expected.
+                                   ~~~
+!!! error TS2304: Cannot find name 'was'.
+                                       ~~~
+!!! error TS1005: ';' expected.
+                                       ~~~
+!!! error TS2304: Cannot find name 'the'.
+                                           ~~~~~~
+!!! error TS1005: ';' expected.
+                                           ~~~~~~
+!!! error TS2304: Cannot find name 'season'.
+                                                  ~~
+!!! error TS1005: ';' expected.
+                                                  ~~
+!!! error TS2304: Cannot find name 'of'.
+                                                     ~~~~~~~~
+!!! error TS1005: ';' expected.
+                                                     ~~~~~~~~
+!!! error TS2304: Cannot find name 'Darkness'.
+    it was the spring of hope, it was the winter of despair,
+    ~~
+!!! error TS2304: Cannot find name 'it'.
+       ~~~
+!!! error TS1005: ';' expected.
+       ~~~
+!!! error TS2304: Cannot find name 'was'.
+           ~~~
+!!! error TS1005: ';' expected.
+           ~~~
+!!! error TS2304: Cannot find name 'the'.
+               ~~~~~~
+!!! error TS1005: ';' expected.
+               ~~~~~~
+!!! error TS2304: Cannot find name 'spring'.
+                      ~~
+!!! error TS1005: ';' expected.
+                      ~~
+!!! error TS2304: Cannot find name 'of'.
+                         ~~~~
+!!! error TS1005: ';' expected.
+                         ~~~~
+!!! error TS2304: Cannot find name 'hope'.
+                               ~~
+!!! error TS2304: Cannot find name 'it'.
+                                  ~~~
+!!! error TS1005: ';' expected.
+                                  ~~~
+!!! error TS2304: Cannot find name 'was'.
+                                      ~~~
+!!! error TS1005: ';' expected.
+                                      ~~~
+!!! error TS2304: Cannot find name 'the'.
+                                          ~~~~~~
+!!! error TS1005: ';' expected.
+                                          ~~~~~~
+!!! error TS2304: Cannot find name 'winter'.
+                                                 ~~
+!!! error TS1005: ';' expected.
+                                                 ~~
+!!! error TS2304: Cannot find name 'of'.
+                                                    ~~~~~~~
+!!! error TS1005: ';' expected.
+                                                    ~~~~~~~
+!!! error TS2304: Cannot find name 'despair'.
+    we had everything before us, we had nothing before us,
+    ~~
+!!! error TS2304: Cannot find name 'we'.
+       ~~~
+!!! error TS1005: ';' expected.
+       ~~~
+!!! error TS2304: Cannot find name 'had'.
+           ~~~~~~~~~~
+!!! error TS1005: ';' expected.
+           ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'everything'.
+                      ~~~~~~
+!!! error TS1005: ';' expected.
+                      ~~~~~~
+!!! error TS2304: Cannot find name 'before'.
+                             ~~
+!!! error TS1005: ';' expected.
+                             ~~
+!!! error TS2304: Cannot find name 'us'.
+                                 ~~
+!!! error TS2304: Cannot find name 'we'.
+                                    ~~~
+!!! error TS1005: ';' expected.
+                                    ~~~
+!!! error TS2304: Cannot find name 'had'.
+                                        ~~~~~~~
+!!! error TS1005: ';' expected.
+                                        ~~~~~~~
+!!! error TS2304: Cannot find name 'nothing'.
+                                                ~~~~~~
+!!! error TS1005: ';' expected.
+                                                ~~~~~~
+!!! error TS2304: Cannot find name 'before'.
+                                                       ~~
+!!! error TS1005: ';' expected.
+                                                       ~~
+!!! error TS2304: Cannot find name 'us'.
+    we were all going direct to Heaven, we were all going direct
+    ~~
+!!! error TS2304: Cannot find name 'we'.
+       ~~~~
+!!! error TS1005: ';' expected.
+       ~~~~
+!!! error TS2304: Cannot find name 'were'.
+            ~~~
+!!! error TS1005: ';' expected.
+            ~~~
+!!! error TS2304: Cannot find name 'all'.
+                ~~~~~
+!!! error TS1005: ';' expected.
+                ~~~~~
+!!! error TS2304: Cannot find name 'going'.
+                      ~~~~~~
+!!! error TS1005: ';' expected.
+                      ~~~~~~
+!!! error TS2304: Cannot find name 'direct'.
+                             ~~
+!!! error TS1005: ';' expected.
+                             ~~
+!!! error TS2304: Cannot find name 'to'.
+                                ~~~~~~
+!!! error TS1005: ';' expected.
+                                ~~~~~~
+!!! error TS2304: Cannot find name 'Heaven'.
+                                        ~~
+!!! error TS2304: Cannot find name 'we'.
+                                           ~~~~
+!!! error TS1005: ';' expected.
+                                           ~~~~
+!!! error TS2304: Cannot find name 'were'.
+                                                ~~~
+!!! error TS1005: ';' expected.
+                                                ~~~
+!!! error TS2304: Cannot find name 'all'.
+                                                    ~~~~~
+!!! error TS1005: ';' expected.
+                                                    ~~~~~
+!!! error TS2304: Cannot find name 'going'.
+                                                          ~~~~~~
+!!! error TS1005: ';' expected.
+                                                          ~~~~~~
+!!! error TS2304: Cannot find name 'direct'.
+    the other way--in short, the period was so far like the present
+    ~~~
+!!! error TS2304: Cannot find name 'the'.
+        ~~~~~
+!!! error TS1005: ';' expected.
+        ~~~~~
+!!! error TS2304: Cannot find name 'other'.
+              ~~~
+!!! error TS1005: ';' expected.
+              ~~~
+!!! error TS2304: Cannot find name 'way'.
+                      ~~~~~
+!!! error TS2304: Cannot find name 'short'.
+                             ~~~
+!!! error TS2304: Cannot find name 'the'.
+                                 ~~~~~~
+!!! error TS1005: ';' expected.
+                                 ~~~~~~
+!!! error TS2304: Cannot find name 'period'.
+                                        ~~~
+!!! error TS1005: ';' expected.
+                                        ~~~
+!!! error TS2304: Cannot find name 'was'.
+                                            ~~
+!!! error TS1005: ';' expected.
+                                            ~~
+!!! error TS2304: Cannot find name 'so'.
+                                               ~~~
+!!! error TS1005: ';' expected.
+                                               ~~~
+!!! error TS2304: Cannot find name 'far'.
+                                                   ~~~~
+!!! error TS1005: ';' expected.
+                                                   ~~~~
+!!! error TS2304: Cannot find name 'like'.
+                                                        ~~~
+!!! error TS1005: ';' expected.
+                                                        ~~~
+!!! error TS2304: Cannot find name 'the'.
+                                                            ~~~~~~~
+!!! error TS1005: ';' expected.
+                                                            ~~~~~~~
+!!! error TS2304: Cannot find name 'present'.
+    period, that some of its noisiest authorities insisted on its
+    ~~~~~~
+!!! error TS2304: Cannot find name 'period'.
+            ~~~~
+!!! error TS2304: Cannot find name 'that'.
+                 ~~~~
+!!! error TS1005: ';' expected.
+                 ~~~~
+!!! error TS2304: Cannot find name 'some'.
+                      ~~
+!!! error TS1005: ';' expected.
+                      ~~
+!!! error TS2304: Cannot find name 'of'.
+                         ~~~
+!!! error TS1005: ';' expected.
+                         ~~~
+!!! error TS2304: Cannot find name 'its'.
+                             ~~~~~~~~
+!!! error TS1005: ';' expected.
+                             ~~~~~~~~
+!!! error TS2304: Cannot find name 'noisiest'.
+                                      ~~~~~~~~~~~
+!!! error TS1005: ';' expected.
+                                      ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'authorities'.
+                                                  ~~~~~~~~
+!!! error TS1005: ';' expected.
+                                                  ~~~~~~~~
+!!! error TS2304: Cannot find name 'insisted'.
+                                                           ~~
+!!! error TS1005: ';' expected.
+                                                           ~~
+!!! error TS2304: Cannot find name 'on'.
+                                                              ~~~
+!!! error TS1005: ';' expected.
+                                                              ~~~
+!!! error TS2304: Cannot find name 'its'.
+    being received, for good or for evil, in the superlative degree
+    ~~~~~
+!!! error TS2304: Cannot find name 'being'.
+          ~~~~~~~~
+!!! error TS1005: ';' expected.
+          ~~~~~~~~
+!!! error TS2304: Cannot find name 'received'.
+                    ~~~
+!!! error TS1109: Expression expected.
+                        ~~~~
+!!! error TS1005: '(' expected.
+                        ~~~~
+!!! error TS2304: Cannot find name 'good'.
+                             ~~
+!!! error TS1005: ';' expected.
+                             ~~
+!!! error TS2304: Cannot find name 'or'.
+                                ~~~
+!!! error TS1005: ';' expected.
+                                    ~~~~
+!!! error TS1005: '(' expected.
+                                    ~~~~
+!!! error TS2304: Cannot find name 'evil'.
+                                    ~~~~~
+!!! error TS2406: Invalid left-hand side in 'for...in' statement.
+                                          ~~
+!!! error TS1109: Expression expected.
+                                             ~~~
+!!! error TS2304: Cannot find name 'the'.
+                                                 ~~~~~~~~~~~
+!!! error TS1005: ')' expected.
+                                                 ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'superlative'.
+                                                             ~~~~~~
+!!! error TS1005: ';' expected.
+                                                             ~~~~~~
+!!! error TS2304: Cannot find name 'degree'.
+    of comparison only.
+    ~~
+!!! error TS2304: Cannot find name 'of'.
+       ~~~~~~~~~~
+!!! error TS1005: ';' expected.
+       ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'comparison'.
+                  ~~~~
+!!! error TS1005: ';' expected.
+                  ~~~~
+!!! error TS2304: Cannot find name 'only'.
+                       
+!!! error TS1003: Identifier expected.

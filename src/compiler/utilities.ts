@@ -456,6 +456,24 @@ namespace ts {
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2);
     }
 
+    export function createExtensionDiagnosticForNode(node: Node, extension: string, message: string, category?: DiagnosticCategory): Diagnostic {
+        const sourceFile = getSourceFileOfNode(node);
+        const span = getErrorSpanForNode(sourceFile, node);
+        return createExtensionDiagnostic(extension, message, sourceFile, span.start, span.length, category);
+    }
+
+    export function createExtensionDiagnostic(extension: string, message: string, file?: SourceFile, start?: number, length?: number, category?: DiagnosticCategory): Diagnostic {
+        Debug.assert(file ? typeof start === "number" && typeof length === "number" : true, "File, start, and length must all be specified or unspecified.");
+        return {
+            file: file,
+            messageText: message,
+            code: extension,
+            start: start,
+            length: length,
+            category: typeof category !== "undefined" ? category : DiagnosticCategory.Warning
+        };
+    }
+
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);

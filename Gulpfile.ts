@@ -411,7 +411,7 @@ gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], () => {
         completedDts.pipe(clone())
             .pipe(insert.transform((content, file) => {
                 file.path = nodeStandaloneDefinitionsFile;
-                return content.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
+                return content.replace(/declare (namespace|module) ts {/g, 'declare module "typescript" {\n    import * as ts from "typescript";');
             }))
     ]).pipe(gulp.dest(builtLocalDirectory));
 });

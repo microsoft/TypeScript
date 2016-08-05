@@ -1,0 +1,10 @@
+{
+    "inputFiles": [
+        "atotc.ts"
+    ],
+    "availableExtensions": ["test-service-overrides"],
+    "compilerOptions": {
+        "extensions": ["test-service-overrides"]
+    },
+    "fourslashTest": "verify-overridden-diagnostics.ts"
+}

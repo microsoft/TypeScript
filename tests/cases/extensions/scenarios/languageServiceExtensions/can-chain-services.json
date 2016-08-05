@@ -1,0 +1,9 @@
+{
+    "inputFiles": [
+        "hello-error.ts"
+    ],
+    "availableExtensions": ["test-service-chain"],
+    "compilerOptions": {
+        "extensions": ["test-service-chain"]
+    }
+}

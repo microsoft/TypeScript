@@ -599,6 +599,19 @@ namespace ts {
             performance.disable();
         }
 
+        const perfTotals: Map<number> = {};
+        for (const key of getKeys(perfTraces)) {
+            const value = perfTraces[key];
+            if (!value) continue;
+            if (typeof perfTotals[value.globalBucket] !== "number") {
+                perfTotals[value.globalBucket] = 0;
+            }
+            perfTotals[value.globalBucket] += value.length;
+        }
+        forEachKey(perfTotals, (key) => {
+            reportTimeStatistic(`'${key}' time`, perfTotals[key]);
+        });
+
         return { program, exitStatus };
 
         function compileProgram(): ExitStatus {
@@ -607,13 +620,18 @@ namespace ts {
             // First get and report any syntactic errors.
             diagnostics = program.getSyntacticDiagnostics();
 
+            // Count warnings and ignore them for determining continued error reporting
+            const warningsCount = countWhere(diagnostics, d => d.category === DiagnosticCategory.Warning);
+
             // If we didn't have any syntactic errors, then also try getting the global and
             // semantic errors.
-            if (diagnostics.length === 0) {
-                diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
+            if (diagnostics.length === warningsCount) {
+                diagnostics = diagnostics.concat(program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics()));
 
-                if (diagnostics.length === 0) {
-                    diagnostics = program.getSemanticDiagnostics();
+                const warningsCount = countWhere(diagnostics, d => d.category === DiagnosticCategory.Warning);
+
+                if (diagnostics.length === warningsCount) {
+                    diagnostics = diagnostics.concat(program.getSemanticDiagnostics());
                 }
             }
 

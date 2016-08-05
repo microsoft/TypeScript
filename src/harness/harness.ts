@@ -1209,6 +1209,11 @@ namespace Harness {
             return normalized;
         }
 
+        function getDiagnosticCodeString(code: string | number) {
+            if (typeof code === "number") return `TS${code}`;
+            return code;
+        }
+
         export function minimalDiagnosticsToString(diagnostics: ts.Diagnostic[]) {
             return ts.formatDiagnostics(diagnostics, { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => Harness.IO.newLine() });
         }
@@ -1226,7 +1231,7 @@ namespace Harness {
                     .split("\n")
                     .map(s => s.length > 0 && s.charAt(s.length - 1) === "\r" ? s.substr(0, s.length - 1) : s)
                     .filter(s => s.length > 0)
-                    .map(s => "!!! " + ts.DiagnosticCategory[error.category].toLowerCase() + " TS" + error.code + ": " + s);
+                    .map(s => "!!! " + ts.DiagnosticCategory[error.category].toLowerCase() + " " + getDiagnosticCodeString(error.code) + ": " + s);
                 errLines.forEach(e => outputLines.push(e));
 
                 // do not count errors from lib.d.ts here, they are computed separately as numLibraryDiagnostics

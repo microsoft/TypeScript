@@ -25,6 +25,7 @@
         "../compiler/declarationEmitter.ts",
         "../compiler/emitter.ts",
         "../compiler/program.ts",
+        "../compiler/extensions.ts",
         "../compiler/commandLineParser.ts",
         "../compiler/diagnosticInformationMap.generated.ts",
         "breakpoints.ts",

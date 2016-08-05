@@ -129,6 +129,7 @@ namespace ts {
         getSyntacticDiagnostics(fileName: string): string;
         getSemanticDiagnostics(fileName: string): string;
         getCompilerOptionsDiagnostics(): string;
+        getProgramDiagnostics(): string;
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
         getSemanticClassifications(fileName: string, start: number, length: number): string;
@@ -562,11 +563,11 @@ namespace ts {
         }
     }
 
-    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; code: number; }[] {
+    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; code: number | string; }[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
 
-    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; code: number; } {
+    function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): { message: string; start: number; length: number; category: string; code: number | string; } {
         return {
             message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
             start: diagnostic.start,
@@ -695,6 +696,15 @@ namespace ts {
                 "getCompilerOptionsDiagnostics()",
                 () => {
                     const diagnostics = this.languageService.getCompilerOptionsDiagnostics();
+                    return this.realizeDiagnostics(diagnostics);
+                });
+        }
+
+        public getProgramDiagnostics(): string {
+            return this.forwardJSONCall(
+                "getProgramDiagnostics()",
+                () => {
+                    const diagnostics = this.languageService.getProgramDiagnostics();
                     return this.realizeDiagnostics(diagnostics);
                 });
         }
