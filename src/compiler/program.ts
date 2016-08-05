@@ -1521,7 +1521,7 @@ namespace ts {
          * ExtensionKind.SyntacticLint or ExtensionKind.SemanticLint only
          */
         function performLintPassOnFile(sourceFile: SourceFile, kind: ExtensionKind): Diagnostic[] | undefined {
-            const lints = extensionCache.getCompilerExtensions()[kind];
+            const lints = extensionCache.getCompilerExtensions()[kind] as (SemanticLintExtension | SyntacticLintExtension)[];
             if (!lints || !lints.length) {
                 return;
             }
