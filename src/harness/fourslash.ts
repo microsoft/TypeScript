@@ -384,7 +384,7 @@ namespace FourSlash {
 
             if (exists !== negative) {
                 this.printErrorLog(negative, this.getAllDiagnostics());
-                throw new Error("Failure between markers: " + startMarkerName + ", " + endMarkerName);
+                throw new Error(`Failure between markers: '${startMarkerName}', '${endMarkerName}'`);
             }
         }
 
@@ -637,7 +637,6 @@ namespace FourSlash {
                 this.raiseError("Completion list is not empty at caret at position " + this.activeFile.fileName + " " + this.currentCaretPosition + errorMsg);
             }
         }
-
 
         public verifyCompletionListAllowsNewIdentifier(negative: boolean) {
             const completions = this.getCompletionListAtCaret();
@@ -1479,7 +1478,7 @@ namespace FourSlash {
             if (isFormattingEdit) {
                 const newContent = this.getFileContent(fileName);
 
-                if (newContent.replace(/\s/g, "") !== oldContent.replace(/\s/g, "")) {
+                if (this.removeWhitespace(newContent) !== this.removeWhitespace(oldContent)) {
                     this.raiseError("Formatting operation destroyed non-whitespace content");
                 }
             }
@@ -1543,6 +1542,10 @@ namespace FourSlash {
                     return position;
                 }
             }
+        }
+
+        private removeWhitespace(text: string): string {
+            return text.replace(/\s/g, "");
         }
 
         public goToBOF() {
@@ -1859,6 +1862,44 @@ namespace FourSlash {
                 if (expectedSpan.start !== actualCommentSpan.start || expectedSpan.end !== ts.textSpanEnd(actualCommentSpan)) {
                     this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.start},${expectedSpan.end}),  actual: (${actualCommentSpan.start},${ts.textSpanEnd(actualCommentSpan)})`);
                 }
+            }
+        }
+
+        public verifyCodeFixAtPosition(expectedText: string, errorCode?: number) {
+
+            const ranges = this.getRanges();
+            if (ranges.length == 0) {
+                this.raiseError("At least one range should be specified in the testfile.");
+            }
+
+            const fileName = this.activeFile.fileName;
+            const diagnostics = this.getDiagnostics(fileName);
+
+            if (diagnostics.length === 0) {
+                this.raiseError("Errors expected.");
+            }
+
+            if (diagnostics.length > 1 && !errorCode) {
+                this.raiseError("When there's more than one error, you must specify the errror to fix.");
+            }
+
+            const diagnostic = !errorCode ? diagnostics[0] : ts.firstOrUndefined(diagnostics, d => d.code == errorCode);
+
+            const actual = this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [`TS${diagnostic.code}`]);
+
+            if (!actual || actual.length == 0) {
+                this.raiseError("No codefixes returned.");
+            }
+
+            if (actual.length > 1) {
+                this.raiseError("More than 1 codefix returned.");
+            }
+
+            this.applyEdits(actual[0].changes[0].fileName, actual[0].changes[0].textChanges, /*isFormattingEdit*/ false);
+            const actualText = this.rangeText(ranges[0]);
+
+            if (this.removeWhitespace(actualText) !== this.removeWhitespace(expectedText)) {
+                this.raiseError(`Actual text doesn't match expected text. Actual: '${actualText}' Expected: '${expectedText}'`);
             }
         }
 
@@ -3064,6 +3105,10 @@ namespace FourSlashInterface {
 
         public noDocCommentTemplate() {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
+        }
+
+        public codeFixAtPosition(expectedText: string, errorCode?: number): void {
+            this.state.verifyCodeFixAtPosition(expectedText, errorCode);
         }
 
         public navigationBar(json: any) {
