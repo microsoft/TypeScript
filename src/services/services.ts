@@ -4728,30 +4728,33 @@ namespace ts {
 
             function enumeratePotentialNonRelativeModules(fragment: string, scriptPath: string, options: CompilerOptions): string[] {
                 // Check If this is a nested module
-                const isNestedModule = fragment.indexOf(directorySeparator) !== -1 ;
+                const isNestedModule = fragment.indexOf(directorySeparator) !== -1;
+                const moduleNameFragment = isNestedModule ? fragment.substr(0, fragment.lastIndexOf(directorySeparator)) : undefined;
 
                 // Get modules that the type checker picked up
                 const ambientModules = ts.map(program.getTypeChecker().getAmbientModules(), sym => stripQuotes(sym.name));
                 let nonRelativeModules = ts.filter(ambientModules, moduleName => startsWith(moduleName, fragment));
 
                 // Nested modules of the form "module-name/sub" need to be adjusted to only return the string
-                // after the last '/' that appears in the fragment because editors insert the completion
-                // only after that character
-                nonRelativeModules = ts.map(nonRelativeModules, moduleName => {
-                    if (moduleName.indexOf(directorySeparator) !== -1) {
-                        if (isNestedModule) {
-                            return moduleName.substr(fragment.lastIndexOf(directorySeparator) + 1);
+                // after the last '/' that appears in the fragment because that's where the replacement span
+                // starts
+                if (isNestedModule) {
+                    const moduleNameWithSeperator = ensureTrailingDirectorySeparator(moduleNameFragment);
+                    nonRelativeModules = ts.map(nonRelativeModules, moduleName => {
+                        if (startsWith(fragment, moduleNameWithSeperator)) {
+                            return moduleName.substr(moduleNameWithSeperator.length);
                         }
-                    }
-                    return moduleName;
-                });
+                        return moduleName;
+                    });
+                }
+
 
                 if (!options.moduleResolution || options.moduleResolution === ModuleResolutionKind.NodeJs) {
                     forEach(enumerateNodeModulesVisibleToScript(host, scriptPath), visibleModule => {
                         if (!isNestedModule) {
                             nonRelativeModules.push(visibleModule.moduleName);
                         }
-                        else {
+                        else if (startsWith(visibleModule.moduleName, moduleNameFragment)) {
                             const nestedFiles = host.readDirectory(visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/undefined, /*include*/["./*"]);
 
                             forEach(nestedFiles, (f) => {
