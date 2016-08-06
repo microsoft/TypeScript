@@ -1891,7 +1891,7 @@ namespace ts {
         };
     }
 
-    // Cache host information about scrip Should be refreshed
+    // Cache host information about script should be refreshed
     // at each language service public entry point, since we don't know when
     // set of scripts handled by the host changes.
     class HostCache {
@@ -4835,7 +4835,14 @@ namespace ts {
             }
             if (symbolFlags & SymbolFlags.Alias) {
                 addNewLineIfDisplayPartsExist();
-                displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
+                if (symbol.declarations[0].kind === SyntaxKind.NamespaceExportDeclaration) {
+                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                    displayParts.push(spacePart());
+                    displayParts.push(keywordPart(SyntaxKind.NamespaceKeyword));
+                }
+                else {
+                    displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
+                }
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
                 ts.forEach(symbol.declarations, declaration => {
