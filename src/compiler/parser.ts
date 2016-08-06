@@ -424,10 +424,11 @@ namespace ts {
     }
 
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
+        performance.emit("beforeParse");
         const start = performance.mark();
         const result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind);
-
         performance.measure("Parse", start);
+        performance.emit("afterParse");
         return result;
     }
 

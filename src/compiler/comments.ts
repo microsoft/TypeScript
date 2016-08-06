@@ -12,10 +12,13 @@ namespace ts {
 
     export function createCommentWriter(host: EmitHost, writer: EmitTextWriter, sourceMap: SourceMapWriter): CommentWriter {
         const compilerOptions = host.getCompilerOptions();
-        const extendedDiagnostics = compilerOptions.extendedDiagnostics;
+        const extendedDiagnostics = compilerOptions.diagnostics && compilerOptions.extendedDiagnostics;
+        const tryEnterPerformanceBoundary = extendedDiagnostics ? enterPerformanceBoundary : ignorePerformanceBoundary;
+        const tryExitPerformanceBoundary = extendedDiagnostics ? exitPerformanceBoundary : ignorePerformanceBoundary;
         const newLine = host.getNewLine();
         const { emitPos } = sourceMap;
 
+        let performanceBoundaryMarker = 0;
         let containerPos = -1;
         let containerEnd = -1;
         let declarationListContainerEnd = -1;
@@ -41,6 +44,7 @@ namespace ts {
             }
 
             if (node) {
+                tryEnterPerformanceBoundary();
                 const { pos, end } = node.commentRange || node;
                 const emitFlags = node.emitFlags;
                 if ((pos < 0 && end < 0) || (pos === end)) {
@@ -49,15 +53,10 @@ namespace ts {
                         disableCommentsAndEmit(node, emitCallback);
                     }
                     else {
-                        emitCallback(node);
+                        emitOutsidePerformanceBoundary(node, emitCallback);
                     }
                 }
                 else {
-                    let commentStart: number;
-                    if (extendedDiagnostics) {
-                        commentStart = performance.mark();
-                    }
-
                     const isEmittedNode = node.kind !== SyntaxKind.NotEmittedStatement;
                     const skipLeadingComments = pos < 0 || (emitFlags & NodeEmitFlags.NoLeadingComments) !== 0;
                     const skipTrailingComments = end < 0 || (emitFlags & NodeEmitFlags.NoTrailingComments) !== 0;
@@ -87,19 +86,11 @@ namespace ts {
                         }
                     }
 
-                    if (extendedDiagnostics) {
-                        performance.measure("commentTime", commentStart);
-                    }
-
                     if (emitFlags & NodeEmitFlags.NoNestedComments) {
                         disableCommentsAndEmit(node, emitCallback);
                     }
                     else {
-                        emitCallback(node);
-                    }
-
-                    if (extendedDiagnostics) {
-                        commentStart = performance.mark();
+                        emitOutsidePerformanceBoundary(node, emitCallback);
                     }
 
                     // Restore previous container state.
@@ -112,19 +103,14 @@ namespace ts {
                     if (!skipTrailingComments && isEmittedNode) {
                         emitTrailingComments(end);
                     }
-
-                    if (extendedDiagnostics) {
-                        performance.measure("commentTime", commentStart);
-                    }
                 }
+
+                tryExitPerformanceBoundary();
             }
         }
 
         function emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void) {
-            let commentStart: number;
-            if (extendedDiagnostics) {
-                commentStart = performance.mark();
-            }
+            tryEnterPerformanceBoundary();
 
             const { pos, end } = detachedRange;
             const emitFlags = node.emitFlags;
@@ -135,28 +121,18 @@ namespace ts {
                 emitDetachedCommentsAndUpdateCommentsInfo(detachedRange);
             }
 
-            if (extendedDiagnostics) {
-                performance.measure("commentTime", commentStart);
-            }
-
             if (emitFlags & NodeEmitFlags.NoNestedComments) {
                 disableCommentsAndEmit(node, emitCallback);
             }
             else {
-                emitCallback(node);
-            }
-
-            if (extendedDiagnostics) {
-                commentStart = performance.mark();
+                emitOutsidePerformanceBoundary(node, emitCallback);
             }
 
             if (!skipTrailingComments) {
                 emitLeadingComments(detachedRange.end, /*isEmittedNode*/ true);
             }
 
-            if (extendedDiagnostics) {
-                performance.measure("commentTime", commentStart);
-            }
+            tryExitPerformanceBoundary();
         }
 
         function emitLeadingComments(pos: number, isEmittedNode: boolean) {
@@ -227,16 +203,9 @@ namespace ts {
                 return;
             }
 
-            let commentStart: number;
-            if (extendedDiagnostics) {
-                commentStart = performance.mark();
-            }
-
+            tryEnterPerformanceBoundary();
             forEachTrailingCommentToEmit(pos, emitTrailingCommentOfPosition);
-
-            if (extendedDiagnostics) {
-                performance.measure("commentTime", commentStart);
-            }
+            tryExitPerformanceBoundary();
         }
 
         function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean) {
@@ -287,13 +256,13 @@ namespace ts {
             detachedCommentsInfo = undefined;
         }
 
-        function disableCommentsAndEmit(node: Node, emitCallback: (node: Node) => void): void {
+        function disableCommentsAndEmit(node: Node, emitCallback: (node: Node) => void) {
             if (disabled) {
-                emitCallback(node);
+                emitOutsidePerformanceBoundary(node, emitCallback);
             }
             else {
                 disabled = true;
-                emitCallback(node);
+                emitOutsidePerformanceBoundary(node, emitCallback);
                 disabled = false;
             }
         }
@@ -351,5 +320,24 @@ namespace ts {
             }
             return false;
         }
-    }
+
+        function ignorePerformanceBoundary() {
+        }
+
+        function enterPerformanceBoundary() {
+            performance.emit("beforeComment");
+            performanceBoundaryMarker = performance.mark();
+        }
+
+        function exitPerformanceBoundary() {
+            performance.measure("Comment", performanceBoundaryMarker);
+            performance.emit("afterComment");
+        }
+
+        function emitOutsidePerformanceBoundary(node: Node, emitCallback: (node: Node) => void) {
+            tryExitPerformanceBoundary();
+            emitCallback(node);
+            tryEnterPerformanceBoundary();
+        }
+   }
 }

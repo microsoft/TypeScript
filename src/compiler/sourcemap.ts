@@ -173,10 +173,6 @@ namespace ts {
     export function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
         const compilerOptions = host.getCompilerOptions();
         if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
-            if (compilerOptions.extendedDiagnostics) {
-                return createSourceMapWriterWithExtendedDiagnostics(host, writer);
-            }
-
             return createSourceMapWriterWorker(host, writer);
         }
         else {
@@ -219,6 +215,11 @@ namespace ts {
 
     function createSourceMapWriterWorker(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
         const compilerOptions = host.getCompilerOptions();
+        const extendedDiagnostics = compilerOptions.diagnostics && compilerOptions.extendedDiagnostics;
+        const tryEnterPerformanceBoundary = extendedDiagnostics ? enterPerformanceBoundary : ignorePerformanceBoundary;
+        const tryExitPerformanceBoundary = extendedDiagnostics ? exitPerformanceBoundary : ignorePerformanceBoundary;
+
+        let performanceBoundaryMarker = 0;
         let currentSourceFile: SourceFile;
         let currentSourceText: string;
         let sourceMapDir: string; // The directory in which sourcemap will be
@@ -248,7 +249,11 @@ namespace ts {
             reset,
             getSourceMapData: () => sourceMapData,
             setSourceFile,
-            emitPos,
+            emitPos: pos => {
+                tryEnterPerformanceBoundary();
+                emitPos(pos);
+                tryExitPerformanceBoundary();
+            },
             emitStart,
             emitEnd,
             emitTokenStart,
@@ -268,6 +273,7 @@ namespace ts {
          * @param isBundledEmit A value indicating whether the generated output file is a bundle.
          */
         function initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
+            tryEnterPerformanceBoundary();
             if (sourceMapData) {
                 reset();
             }
@@ -331,12 +337,14 @@ namespace ts {
             else {
                 sourceMapDir = getDirectoryPath(normalizePath(filePath));
             }
+            tryExitPerformanceBoundary();
         }
 
         /**
          * Reset the SourceMapWriter to an empty state.
          */
         function reset() {
+            tryEnterPerformanceBoundary();
             currentSourceFile = undefined;
             sourceMapDir = undefined;
             sourceMapSourceIndex = undefined;
@@ -345,6 +353,7 @@ namespace ts {
             lastEncodedNameIndex = undefined;
             sourceMapData = undefined;
             disableDepth = 0;
+            tryExitPerformanceBoundary();
         }
 
         /**
@@ -462,8 +471,6 @@ namespace ts {
                 return;
             }
 
-            const start = performance.mark();
-
             const sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
 
             // Convert the location to be one-based.
@@ -503,8 +510,6 @@ namespace ts {
             }
 
             updateLastEncodedAndRecordedSpans();
-
-            performance.measure("Source Map", start);
         }
 
         function getStartPosPastDecorators(range: TextRange) {
@@ -540,6 +545,7 @@ namespace ts {
          */
         function emitStart(range: TextRange, contextNode: Node, ignoreNodeCallback: (node: Node) => boolean, ignoreChildrenCallback: (node: Node) => boolean, getTextRangeCallback: (node: Node) => TextRange): void;
         function emitStart(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange) {
+            tryEnterPerformanceBoundary();
             if (contextNode) {
                 if (!ignoreNodeCallback(contextNode)) {
                     range = getTextRangeCallback(contextNode) || range;
@@ -553,6 +559,7 @@ namespace ts {
             else {
                 emitPos(getStartPosPastDecorators(range));
             }
+            tryExitPerformanceBoundary();
         }
 
         /**
@@ -581,6 +588,7 @@ namespace ts {
          */
         function emitEnd(range: TextRange, contextNode: Node, ignoreNodeCallback: (node: Node) => boolean, ignoreChildrenCallback: (node: Node) => boolean, getTextRangeCallback: (node: Node) => TextRange): void;
         function emitEnd(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange) {
+            tryEnterPerformanceBoundary();
             if (contextNode) {
                 if (ignoreChildrenCallback(contextNode)) {
                     enable();
@@ -596,6 +604,7 @@ namespace ts {
             }
 
             stopOverridingSpan = false;
+            tryExitPerformanceBoundary();
         }
 
         /**
@@ -628,9 +637,12 @@ namespace ts {
          */
         function emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode: Node, ignoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback: (node: Node, token: SyntaxKind) => TextRange): number;
         function emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
+            tryEnterPerformanceBoundary();
             if (contextNode) {
                 if (ignoreTokenCallback(contextNode, token)) {
-                    return skipTrivia(currentSourceText, tokenStartPos);
+                    tokenStartPos = skipTrivia(currentSourceText, tokenStartPos);
+                    tryExitPerformanceBoundary();
+                    return tokenStartPos;
                 }
 
                 const range = getTokenTextRangeCallback(contextNode, token);
@@ -641,6 +653,7 @@ namespace ts {
 
             tokenStartPos = skipTrivia(currentSourceText, tokenStartPos);
             emitPos(tokenStartPos);
+            tryExitPerformanceBoundary();
             return tokenStartPos;
         }
 
@@ -672,8 +685,10 @@ namespace ts {
          */
         function emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode: Node, ignoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback: (node: Node, token: SyntaxKind) => TextRange): number;
         function emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
+            tryEnterPerformanceBoundary();
             if (contextNode) {
                 if (ignoreTokenCallback(contextNode, token)) {
+                    tryExitPerformanceBoundary();
                     return tokenEndPos;
                 }
 
@@ -684,14 +699,17 @@ namespace ts {
             }
 
             emitPos(tokenEndPos);
+            tryExitPerformanceBoundary();
             return tokenEndPos;
         }
 
 
         // @deprecated
         function changeEmitSourcePos() {
+            tryEnterPerformanceBoundary();
             Debug.assert(!modifyLastSourcePos);
             modifyLastSourcePos = true;
+            tryExitPerformanceBoundary();
         }
 
         /**
@@ -700,6 +718,7 @@ namespace ts {
          * @param sourceFile The source file.
          */
         function setSourceFile(sourceFile: SourceFile) {
+            tryEnterPerformanceBoundary();
             currentSourceFile = sourceFile;
             currentSourceText = currentSourceFile.text;
 
@@ -726,15 +745,17 @@ namespace ts {
                     sourceMapData.sourceMapSourcesContent.push(currentSourceFile.text);
                 }
             }
+            tryExitPerformanceBoundary();
         }
 
         /**
          * Gets the text for the source map.
          */
         function getText() {
+            tryEnterPerformanceBoundary();
             encodeLastRecordedSourceMapSpan();
 
-            return stringify({
+            const text = stringify({
                 version: 3,
                 file: sourceMapData.sourceMapFile,
                 sourceRoot: sourceMapData.sourceMapSourceRoot,
@@ -743,76 +764,39 @@ namespace ts {
                 mappings: sourceMapData.sourceMapMappings,
                 sourcesContent: sourceMapData.sourceMapSourcesContent,
             });
+
+            tryExitPerformanceBoundary();
+            return text;
         }
 
         /**
          * Gets the SourceMappingURL for the source map.
          */
         function getSourceMappingURL() {
+            tryEnterPerformanceBoundary();
+
             if (compilerOptions.inlineSourceMap) {
                 // Encode the sourceMap into the sourceMap url
                 const base64SourceMapText = convertToBase64(getText());
-                return sourceMapData.jsSourceMappingURL = `data:application/json;base64,${base64SourceMapText}`;
+                sourceMapData.jsSourceMappingURL = `data:application/json;base64,${base64SourceMapText}`;
             }
-            else {
-                return sourceMapData.jsSourceMappingURL;
-            }
-        }
-    }
 
-    function createSourceMapWriterWithExtendedDiagnostics(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
-        const {
-            initialize,
-            reset,
-            getSourceMapData,
-            setSourceFile,
-            emitPos,
-            emitStart,
-            emitEnd,
-            emitTokenStart,
-            emitTokenEnd,
-            changeEmitSourcePos,
-            stopOverridingSpan,
-            getText,
-            getSourceMappingURL,
-        } = createSourceMapWriterWorker(host, writer);
-        return {
-            initialize,
-            reset,
-            getSourceMapData,
-            setSourceFile,
-            emitPos(pos: number): void {
-                const sourcemapStart = performance.mark();
-                emitPos(pos);
-                performance.measure("sourceMapTime", sourcemapStart);
-            },
-            emitStart(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void {
-                const sourcemapStart = performance.mark();
-                emitStart(range, contextNode, ignoreNodeCallback, ignoreChildrenCallback, getTextRangeCallback);
-                performance.measure("sourceMapTime", sourcemapStart);
-            },
-            emitEnd(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void {
-                const sourcemapStart = performance.mark();
-                emitEnd(range, contextNode, ignoreNodeCallback, ignoreChildrenCallback, getTextRangeCallback);
-                performance.measure("sourceMapTime", sourcemapStart);
-            },
-            emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
-                const sourcemapStart = performance.mark();
-                tokenStartPos = emitTokenStart(token, tokenStartPos, contextNode, ignoreTokenCallback, getTokenTextRangeCallback);
-                performance.measure("sourceMapTime", sourcemapStart);
-                return tokenStartPos;
-            },
-            emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
-                const sourcemapStart = performance.mark();
-                tokenEndPos = emitTokenEnd(token, tokenEndPos, contextNode, ignoreTokenCallback, getTokenTextRangeCallback);
-                performance.measure("sourceMapTime", sourcemapStart);
-                return tokenEndPos;
-            },
-            changeEmitSourcePos,
-            stopOverridingSpan,
-            getText,
-            getSourceMappingURL,
-        };
+            tryExitPerformanceBoundary();
+            return sourceMapData.jsSourceMappingURL;
+        }
+
+        function ignorePerformanceBoundary() {
+        }
+
+        function enterPerformanceBoundary() {
+            performance.emit("beforeSourceMap");
+            performanceBoundaryMarker = performance.mark();
+        }
+
+        function exitPerformanceBoundary() {
+            performance.measure("Source Map", performanceBoundaryMarker);
+            performance.emit("afterSourceMap");
+        }
     }
 
     const base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
