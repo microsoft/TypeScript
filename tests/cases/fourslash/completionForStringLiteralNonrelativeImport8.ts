@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// Should give completions for modules referenced via baseUrl and paths compiler options with wildcards
+
 // @Filename: tsconfig.json
 //// {
 ////     "compilerOptions": {

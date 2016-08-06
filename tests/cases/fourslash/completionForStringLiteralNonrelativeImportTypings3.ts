@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// Should give completions for typings discovered in all visible @types directories
+
 // @Filename: subdirectory/test0.ts
 //// /// <reference types="m/*types_ref0*/" />
 //// import * as foo1 from "m/*import_as0*/

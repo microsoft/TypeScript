@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// Should not give duplicate entries for similarly named files with different extensions
+
 // @Filename: tests/test0.ts
 //// import * as foo1 from "fake-module//*import_as0*/
 //// import foo2 = require("fake-module//*import_equals0*/

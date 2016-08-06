@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// Should give completions for all node modules visible to the script
+
 // @Filename: dir1/dir2/dir3/dir4/test0.ts
 //// import * as foo1 from "f/*import_as0*/
 //// import foo4 = require("f/*import_equals0*/

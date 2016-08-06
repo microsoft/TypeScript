@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// Should give completions for node modules and files within those modules with ts file extensions
+
 // @Filename: tests/test0.ts
 //// import * as foo1 from "f/*import_as0*/
 //// import * as foo2 from "fake-module//*import_as1*/

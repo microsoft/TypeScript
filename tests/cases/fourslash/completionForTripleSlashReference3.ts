@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// Should give completions for absolute paths
+
 // @Filename: tests/test0.ts
 //// /// <reference path="c:/tests/cases/f/*0*/
 

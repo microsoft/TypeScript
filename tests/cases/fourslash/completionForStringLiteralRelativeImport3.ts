@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// Should give completions for absolute paths
+
 // @Filename: tests/test0.ts
 //// import * as foo1 from "c:/tests/cases/f/*import_as0*/
 //// import * as foo2 from "c:/tests/cases/fourslash/*import_as1*/

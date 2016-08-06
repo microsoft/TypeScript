@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// Should define spans for replacement that appear after the last directory seperator in triple slash references
+
 // @typeRoots: my_typings
 
 // @Filename: test.ts

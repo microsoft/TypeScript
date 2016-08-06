@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// Should not give node module completions if classic module resolution is enabled
+
 // @moduleResolution: classic
 
 // @Filename: dir1/dir2/dir3/dir4/test0.ts

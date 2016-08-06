@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// Should respect the types compiler option when giving completions
+
 // @typeRoots: my_typings,my_other_typings
 // @types: module-x,module-z
 

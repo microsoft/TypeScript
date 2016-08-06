@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// Should give completions for directories that are merged via the rootDirs compiler option
+
 // @rootDirs: sub/src1,src2
 
 // @Filename: src2/test0.ts

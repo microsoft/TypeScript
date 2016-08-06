@@ -1,4 +1,7 @@
 /// <reference path='fourslash.ts' />
+
+// Should give completions for ts and js files when allowJs is true
+
 // @allowJs: true
 
 // @Filename: test0.ts

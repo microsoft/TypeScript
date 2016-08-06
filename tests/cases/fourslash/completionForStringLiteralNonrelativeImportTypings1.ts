@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// Should give completions for typings discovered via the typeRoots compiler option
+
 // @typeRoots: my_typings,my_other_typings
 
 

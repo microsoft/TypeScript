@@ -1,4 +1,7 @@
 /// <reference path='fourslash.ts' />
+
+// Should give completions for js files in node modules when allowJs is set to true
+
 // @allowJs: true
 
 // @Filename: tests/test0.ts

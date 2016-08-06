@@ -1,4 +1,7 @@
 /// <reference path='fourslash.ts' />
+
+// Should give completions for files that are discovered via the baseUrl compiler option
+
 // @baseUrl: tests/cases/fourslash/modules
 
 // @Filename: tests/test0.ts

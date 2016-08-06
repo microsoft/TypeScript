@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// Should give completions for ambiently declared modules
+
 // @Filename: test0.ts
 //// /// <reference path="./ambientModules.d.ts" />
 //// /// <reference path="./ambientModules2.d.ts" />

@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// Should define spans for replacement that appear after the last directory seperator in import statements
+
 // @typeRoots: my_typings
 
 // @Filename: test.ts
