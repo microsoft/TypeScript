@@ -1,4 +1,4 @@
-
+﻿
 namespace ts {
     export interface Map<T> {
         [index: string]: T;
@@ -2167,6 +2167,7 @@ namespace ts {
         isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
+        typeWithoutOptionality?: Type;      // Type without optionality stored if variable Declaration is binding pattern
     }
 
     /* @internal */

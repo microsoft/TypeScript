@@ -1,0 +1,33 @@
+=== tests/cases/compiler/strictNullChecksAndDestrcturingDeclaration3.ts ===
+
+// Repro from #10078
+
+declare class A {
+>A : Symbol(A, Decl(strictNullChecksAndDestrcturingDeclaration3.ts, 0, 0))
+
+    f({x}?: {
+>f : Symbol(A.f, Decl(strictNullChecksAndDestrcturingDeclaration3.ts, 3, 17))
+>x : Symbol(x, Decl(strictNullChecksAndDestrcturingDeclaration3.ts, 4, 7))
+
+        x?: boolean;
+>x : Symbol(x, Decl(strictNullChecksAndDestrcturingDeclaration3.ts, 4, 13))
+
+    }): void;
+}
+declare class B extends A {
+>B : Symbol(B, Decl(strictNullChecksAndDestrcturingDeclaration3.ts, 7, 1))
+>A : Symbol(A, Decl(strictNullChecksAndDestrcturingDeclaration3.ts, 0, 0))
+
+    f({x, y}?: {
+>f : Symbol(B.f, Decl(strictNullChecksAndDestrcturingDeclaration3.ts, 8, 27))
+>x : Symbol(x, Decl(strictNullChecksAndDestrcturingDeclaration3.ts, 9, 7))
+>y : Symbol(y, Decl(strictNullChecksAndDestrcturingDeclaration3.ts, 9, 9))
+
+        x?: boolean;
+>x : Symbol(x, Decl(strictNullChecksAndDestrcturingDeclaration3.ts, 9, 16))
+
+        y?: boolean;
+>y : Symbol(y, Decl(strictNullChecksAndDestrcturingDeclaration3.ts, 10, 20))
+
+    }): void;
+}

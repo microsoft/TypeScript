@@ -1,4 +1,4 @@
-/// <reference path="binder.ts"/>
+﻿/// <reference path="binder.ts"/>
 
 /* @internal */
 namespace ts {
@@ -22,6 +22,11 @@ namespace ts {
         }
 
         return symbol.id;
+    }
+
+    interface VariableLikeDeclarationType {
+        type: Type;
+        typeWithoutOptionality?: Type;
     }
 
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
@@ -2880,11 +2885,23 @@ namespace ts {
             return type && (type.flags & TypeFlags.Never) !== 0;
         }
 
+        function getTypeWithoutOptionalityOfVariableLikeDeclarartion(node: VariableLikeDeclaration): Type {
+            const symbol = getSymbolOfNode(node);
+            const symbolLinks = symbol && getSymbolLinks(symbol);
+            // Only if the optionality is important(currently if node is binding pattern), it is cached
+            // in othercases type itself is the type needed
+            return symbolLinks && (symbolLinks.typeWithoutOptionality || symbolLinks.type);
+        }
+
         // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
         // assigned by contextual typing.
         function getTypeForBindingElementParent(node: VariableLikeDeclaration) {
-            const symbol = getSymbolOfNode(node);
-            return symbol && getSymbolLinks(symbol).type || getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ false);
+            let type = getTypeWithoutOptionalityOfVariableLikeDeclarartion(node);
+            if (!type) {
+                const variableDeclarationType = getTypeForVariableLikeDeclaration(node);
+                type = variableDeclarationType.typeWithoutOptionality || variableDeclarationType.type;
+            }
+            return type;
         }
 
         function getTextOfPropertyName(name: PropertyName): string {
@@ -3019,25 +3036,33 @@ namespace ts {
             return undefined;
         }
 
-        function addOptionality(type: Type, optional: boolean): Type {
-            return strictNullChecks && optional ? includeFalsyTypes(type, TypeFlags.Undefined) : type;
+        function addOptionality(type: Type, declaration: VariableLikeDeclaration): VariableLikeDeclarationType {
+            let typeWithoutOptionality: Type;
+            if (strictNullChecks && declaration.questionToken) {
+                // Store the type without including optionality only if it could be used later
+                if (isBindingPattern(declaration.name)) {
+                    typeWithoutOptionality = type;
+                }
+                type = includeFalsyTypes(type, TypeFlags.Undefined);
+            }
+            return { type, typeWithoutOptionality };
         }
 
         // Return the inferred type for a variable, parameter, or property declaration
-        function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, includeOptionality: boolean): Type {
+        function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): VariableLikeDeclarationType {
             if (declaration.flags & NodeFlags.JavaScriptFile) {
                 // If this is a variable in a JavaScript file, then use the JSDoc type (if it has
                 // one as its type), otherwise fallback to the below standard TS codepaths to
                 // try to figure it out.
                 const type = getTypeForVariableLikeDeclarationFromJSDocComment(declaration);
                 if (type && type !== unknownType) {
-                    return type;
+                    return { type };
                 }
             }
 
             // A variable declared in a for..in statement is always of type string
             if (declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
-                return stringType;
+                return { type: stringType };
             }
 
             if (declaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
@@ -3045,16 +3070,16 @@ namespace ts {
                 // missing properties/signatures required to get its iteratedType (like
                 // [Symbol.iterator] or next). This may be because we accessed properties from anyType,
                 // or it may have led to an error inside getElementTypeOfIterable.
-                return checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression) || anyType;
+                return { type: checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression) || anyType };
             }
 
             if (isBindingPattern(declaration.parent)) {
-                return getTypeForBindingElement(<BindingElement>declaration);
+                return { type: getTypeForBindingElement(<BindingElement>declaration) };
             }
 
             // Use type from type annotation if one is present
             if (declaration.type) {
-                return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ declaration.questionToken && includeOptionality);
+                return addOptionality(getTypeFromTypeNode(declaration.type), declaration);
             }
 
             if (declaration.kind === SyntaxKind.Parameter) {
@@ -3068,9 +3093,9 @@ namespace ts {
                         if (thisParameter && declaration === thisParameter) {
                             // Use the type from the *getter*
                             Debug.assert(!thisParameter.type);
-                            return getTypeOfSymbol(getterSignature.thisParameter);
+                            return { type: getTypeOfSymbol(getterSignature.thisParameter) };
                         }
-                        return getReturnTypeOfSignature(getterSignature);
+                        return { type: getReturnTypeOfSignature(getterSignature) };
                     }
                 }
                 // Use contextual parameter type if one is available
@@ -3078,27 +3103,27 @@ namespace ts {
                     ? getContextuallyTypedThisType(func)
                     : getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                 if (type) {
-                    return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
+                    return addOptionality(type, declaration);
                 }
             }
 
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
-                return addOptionality(checkExpressionCached(declaration.initializer), /*optional*/ declaration.questionToken && includeOptionality);
+                return addOptionality(checkExpressionCached(declaration.initializer), declaration);
             }
 
             // If it is a short-hand property assignment, use the type of the identifier
             if (declaration.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                return checkIdentifier(<Identifier>declaration.name);
+                return { type: checkIdentifier(<Identifier>declaration.name) };
             }
 
             // If the declaration specifies a binding pattern, use the type implied by the binding pattern
             if (isBindingPattern(declaration.name)) {
-                return getTypeFromBindingPattern(<BindingPattern>declaration.name, /*includePatternInType*/ false);
+                return { type: getTypeFromBindingPattern(<BindingPattern>declaration.name, /*includePatternInType*/ false) };
             }
 
             // No type specified and nothing can be inferred
-            return undefined;
+            return { type: undefined };
         }
 
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
@@ -3186,23 +3211,26 @@ namespace ts {
         // Here, the array literal [1, "one"] is contextually typed by the type [any, string], which is the implied type of the
         // binding pattern [x, s = ""]. Because the contextual type is a tuple type, the resulting type of [1, "one"] is the
         // tuple type [number, string]. Thus, the type inferred for 'x' is number and the type inferred for 's' is string.
-        function getWidenedTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, reportErrors?: boolean): Type {
-            let type = getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true);
-            if (type) {
+        function getWidenedTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, reportErrors?: boolean): VariableLikeDeclarationType {
+            const variableLikeDeclarationType = getTypeForVariableLikeDeclaration(declaration);
+            if (variableLikeDeclarationType.type) {
                 if (reportErrors) {
-                    reportErrorsFromWidening(declaration, type);
+                    reportErrorsFromWidening(declaration, variableLikeDeclarationType.type);
                 }
                 // During a normal type check we'll never get to here with a property assignment (the check of the containing
                 // object literal uses a different path). We exclude widening only so that language services and type verification
                 // tools see the actual type.
                 if (declaration.kind === SyntaxKind.PropertyAssignment) {
-                    return type;
+                    return variableLikeDeclarationType;
                 }
-                return getWidenedType(type);
+                return {
+                    type: getWidenedType(variableLikeDeclarationType.type),
+                    typeWithoutOptionality: variableLikeDeclarationType.typeWithoutOptionality
+                };
             }
 
             // Rest parameters default to type any[], other parameters default to type any
-            type = declaration.dotDotDotToken ? anyArrayType : anyType;
+            const type = declaration.dotDotDotToken ? anyArrayType : anyType;
 
             // Report implicit any errors unless this is a private property within an ambient declaration
             if (reportErrors && compilerOptions.noImplicitAny) {
@@ -3210,7 +3238,7 @@ namespace ts {
                     reportImplicitAnyError(declaration, type);
                 }
             }
-            return type;
+            return { type };
         }
 
         function declarationBelongsToPrivateAmbientMember(declaration: VariableLikeDeclaration) {
@@ -3243,7 +3271,7 @@ namespace ts {
                     return unknownType;
                 }
 
-                let type: Type;
+                let type: Type, variableDeclartionType: VariableLikeDeclarationType;
                 // Handle certain special assignment kinds, which happen to union across multiple declarations:
                 // * module.exports = expr
                 // * exports.p = expr
@@ -3258,7 +3286,8 @@ namespace ts {
                     type = getUnionType(declaredTypes, /*subtypeReduction*/ true);
                 }
                 else {
-                    type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
+                    variableDeclartionType = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
+                    type = variableDeclartionType.type;
                 }
 
                 if (!popTypeResolution()) {
@@ -3278,6 +3307,9 @@ namespace ts {
                     }
                 }
                 links.type = type;
+                if (variableDeclartionType && variableDeclartionType.typeWithoutOptionality && type === variableDeclartionType.type) {
+                    links.typeWithoutOptionality = variableDeclartionType.typeWithoutOptionality;
+                }
             }
             return links.type;
         }
@@ -15455,7 +15487,7 @@ namespace ts {
             if (isBindingPattern(node.name)) {
                 // Don't validate for-in initializer as it is already an error
                 if (node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
+                    checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableLikeDeclaration(node).type, node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
                 }
                 return;
@@ -15473,7 +15505,7 @@ namespace ts {
             else {
                 // Node is a secondary declaration, check that type is identical to primary declaration and check that
                 // initializer is consistent with type associated with the node
-                const declarationType = getWidenedTypeForVariableLikeDeclaration(node);
+                const declarationType = getWidenedTypeForVariableLikeDeclaration(node).type;
                 if (type !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(type, declarationType)) {
                     error(node.name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, declarationNameToString(node.name), typeToString(type), typeToString(declarationType));
                 }
@@ -18039,7 +18071,7 @@ namespace ts {
             }
 
             if (isBindingPattern(node)) {
-                return getTypeForVariableLikeDeclaration(<VariableLikeDeclaration>node.parent, /*includeOptionality*/ true);
+                return getTypeForVariableLikeDeclaration(<VariableLikeDeclaration>node.parent).type;
             }
 
             if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
