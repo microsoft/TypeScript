@@ -69,6 +69,7 @@
         "mkdirp": "latest",
         "mocha": "latest",
         "mocha-fivemat-progress-reporter": "latest",
+        "q": "latest",
         "run-sequence": "latest",
         "sorcery": "latest",
         "through2": "latest",

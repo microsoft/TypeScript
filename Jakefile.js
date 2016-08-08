@@ -1,3 +1,4 @@
+"use strict";
 // This file contains the build logic for the public repo
 
 var fs = require("fs");
@@ -898,16 +899,16 @@ task("tests-debug", ["setDebugMode", "tests"]);
 // Makes the test results the new baseline
 desc("Makes the most recent test results the new baseline, overwriting the old baseline");
 task("baseline-accept", function(hardOrSoft) {
-    if (!hardOrSoft || hardOrSoft === "hard") {
-        jake.rmRf(refBaseline);
-        fs.renameSync(localBaseline, refBaseline);
-    }
-    else if (hardOrSoft === "soft") {
-        var files = jake.readdirR(localBaseline);
-        for (var i in files) {
+    var files = jake.readdirR(localBaseline);
+    var deleteEnding = '.delete';
+    for (var i in files) {
+        if (files[i].substr(files[i].length - deleteEnding.length) === deleteEnding) {
+            var filename = path.basename(files[i]);
+            filename = filename.substr(0, filename.length - deleteEnding.length);
+            fs.unlink(path.join(refBaseline, filename));
+        } else {
             jake.cpR(files[i], refBaseline);
         }
-        jake.rmRf(path.join(refBaseline, "local"));
     }
 });
 
