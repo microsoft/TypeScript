@@ -79,6 +79,25 @@ function foo(x: A | undefined) {
     x;  // A
 }
 
+// X is neither assignable to Y nor a subtype of Y
+// Y is assignable to X, but not a subtype of X
+
+interface X {
+    x?: string;
+}
+
+class Y {
+    y: string;
+}
+
+function goo(x: X) {
+    x;
+    if (x instanceof Y) {
+        x.y;
+    }
+    x;
+}
+
 //// [controlFlowInstanceof.js]
 // Repros from #10167
 function f1(s) {
@@ -153,4 +172,13 @@ function foo(x) {
         x; // A
     }
     x; // A
+}
+class Y {
+}
+function goo(x) {
+    x;
+    if (x instanceof Y) {
+        x.y;
+    }
+    x;
 }

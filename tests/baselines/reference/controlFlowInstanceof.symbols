@@ -192,3 +192,41 @@ function foo(x: A | undefined) {
     x;  // A
 >x : Symbol(x, Decl(controlFlowInstanceof.ts, 50, 13))
 }
+
+// X is neither assignable to Y nor a subtype of Y
+// Y is assignable to X, but not a subtype of X
+
+interface X {
+>X : Symbol(X, Decl(controlFlowInstanceof.ts, 78, 1))
+
+    x?: string;
+>x : Symbol(X.x, Decl(controlFlowInstanceof.ts, 83, 13))
+}
+
+class Y {
+>Y : Symbol(Y, Decl(controlFlowInstanceof.ts, 85, 1))
+
+    y: string;
+>y : Symbol(Y.y, Decl(controlFlowInstanceof.ts, 87, 9))
+}
+
+function goo(x: X) {
+>goo : Symbol(goo, Decl(controlFlowInstanceof.ts, 89, 1))
+>x : Symbol(x, Decl(controlFlowInstanceof.ts, 91, 13))
+>X : Symbol(X, Decl(controlFlowInstanceof.ts, 78, 1))
+
+    x;
+>x : Symbol(x, Decl(controlFlowInstanceof.ts, 91, 13))
+
+    if (x instanceof Y) {
+>x : Symbol(x, Decl(controlFlowInstanceof.ts, 91, 13))
+>Y : Symbol(Y, Decl(controlFlowInstanceof.ts, 85, 1))
+
+        x.y;
+>x.y : Symbol(Y.y, Decl(controlFlowInstanceof.ts, 87, 9))
+>x : Symbol(x, Decl(controlFlowInstanceof.ts, 91, 13))
+>y : Symbol(Y.y, Decl(controlFlowInstanceof.ts, 87, 9))
+    }
+    x;
+>x : Symbol(x, Decl(controlFlowInstanceof.ts, 91, 13))
+}

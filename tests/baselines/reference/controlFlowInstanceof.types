@@ -215,3 +215,42 @@ function foo(x: A | undefined) {
     x;  // A
 >x : A
 }
+
+// X is neither assignable to Y nor a subtype of Y
+// Y is assignable to X, but not a subtype of X
+
+interface X {
+>X : X
+
+    x?: string;
+>x : string
+}
+
+class Y {
+>Y : Y
+
+    y: string;
+>y : string
+}
+
+function goo(x: X) {
+>goo : (x: X) => void
+>x : X
+>X : X
+
+    x;
+>x : X
+
+    if (x instanceof Y) {
+>x instanceof Y : boolean
+>x : X
+>Y : typeof Y
+
+        x.y;
+>x.y : string
+>x : Y
+>y : string
+    }
+    x;
+>x : X
+}
