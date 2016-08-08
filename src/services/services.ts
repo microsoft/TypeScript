@@ -2119,7 +2119,7 @@ namespace ts {
             sourceFile.moduleName = transpileOptions.moduleName;
         }
 
-        sourceFile.renamedDependencies = mapOfObjMap(transpileOptions.renamedDependencies);
+        sourceFile.renamedDependencies = smapOfObjMap(transpileOptions.renamedDependencies);
 
         const newLine = getNewLineCharacter(options);
 

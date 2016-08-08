@@ -808,11 +808,11 @@ namespace ts {
             return;
         }
 
-        const optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
+        const optionNameMap = createMapFromValues(optionDeclarations, opt => opt.name);
 
         for (const id in jsonOptions) { //ts.forEach...
-            if (hasProperty(optionNameMap, id)) {
-                const opt = optionNameMap[id];
+            const opt = optionNameMap.get(id);
+            if (opt) {
                 defaultOptions[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
             }
             else {
@@ -1014,7 +1014,7 @@ namespace ts {
 
                 const key = keyMapper(file);
                 if (!literalFileMap.has(key)) {
-                    setIfNotAlreadyPresent(wildcardFileMap, key, () => file);
+                    setButDontOverride(wildcardFileMap, key, () => file);
                 }
             }
         }

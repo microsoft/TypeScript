@@ -447,7 +447,7 @@ namespace ts {
         }
 
         function cloneSymbolTable(symbolTable: SymbolTable): SymbolTable {
-            return cloneMap(symbolTable);
+            return new SMap(symbolTable);
         }
 
         function mergeSymbolTable(target: SymbolTable, source: SymbolTable) {
@@ -3971,7 +3971,7 @@ namespace ts {
 
         function addInheritedMembers(symbols: SymbolTable, baseSymbols: Symbol[]) {
             for (const s of baseSymbols) {
-                setIfNotAlreadyPresent(symbols, s.name, () => s);
+                setButDontOverride(symbols, s.name, () => s);
             }
         }
 
@@ -6583,7 +6583,7 @@ namespace ts {
                     const maybeCache = maybeStack[depth];
                     // If result is definitely true, copy assumptions to global cache, else copy to next level up
                     const destinationCache = (result === Ternary.True || depth === 0) ? relation : maybeStack[depth - 1];
-                    copyNewMap(maybeCache, destinationCache);
+                    copyMap(maybeCache, destinationCache);
                 }
                 else {
                     // A false result goes straight into global cache (when something is false under assumptions it
@@ -17582,7 +17582,7 @@ namespace ts {
                     // We will copy all symbol regardless of its reserved name because
                     // symbolsToArray will check whether the key is a reserved name and
                     // it will not copy symbol with reserved name to the array
-                    setIfNotAlreadyPresent(symbols, symbol.name, () => symbol);
+                    setButDontOverride(symbols, symbol.name, () => symbol);
                 }
             }
 
@@ -17998,7 +17998,7 @@ namespace ts {
             const propsByName = createSymbolTable(getPropertiesOfType(type));
             if (getSignaturesOfType(type, SignatureKind.Call).length || getSignaturesOfType(type, SignatureKind.Construct).length) {
                 for (const p of getPropertiesOfType(globalFunctionType)) {
-                    setIfNotAlreadyPresent(propsByName, p.name, () => p);
+                    setButDontOverride(propsByName, p.name, () => p);
                 }
             }
             return getNamedMembers(propsByName);

@@ -1,23 +1,31 @@
-//TODO: document this file
-//and review everything in it.
-
 // Map
 namespace ts {
     export interface MapCommon<K, V> {
+        /** Removes all entries. */
         clear(): void;
+        /** Removes the entry with the given key. */
         delete(key: K): void;
+        /** Gets the value associated with a key. */
         get(key: K): V | undefined;
+        /** Whether any entry in the map has the given key. */
         has(key: K): boolean;
+        /** Associate a value with a key. */
         set(key: K, value: V): void;
     }
 
     /** String-keyed Map. */
     export interface SMap<V> extends MapCommon<string, V> {
+        /**
+         * Iterate over all entries in the map
+         * For halting iteration, see `findInMap`.
+         */
         forEach(fn: (value: V, key: string) => void): void;
     }
     export interface SMapConstructor {
         new(): SMap<any>;
+        /** Map whose entries are the given [key, value] pairs. */
         new<V>(entries?: [string, V][]): SMap<V>;
+        /** Clone another map. */
         new<V>(otherMap: SMap<V>): SMap<V>;
     }
 
@@ -58,19 +66,17 @@ namespace ts {
         constructor(otherMap: SMap<V>);
         constructor(argument?: any) {
             super();
-
             this.data = {};
-            if (argument === undefined) {
-                return;
-            }
 
-            if (argument instanceof ShimSMap) {
-                this.data = clone(argument.data);
-            }
-            else {
-                Debug.assert(argument instanceof Array);
-                for (const [key, value] of argument) {
-                    this.set(key, value);
+            if (argument !== undefined) {
+                if (argument instanceof ShimSMap) {
+                    this.data = clone(argument.data);
+                }
+                else {
+                    Debug.assert(argument instanceof Array);
+                    for (const [key, value] of argument) {
+                        this.set(key, value);
+                    }
                 }
             }
         }
@@ -136,8 +142,7 @@ namespace ts {
         }
     }
 
-    //TODO: better name...
-    const findInMapDone = {};
+    /** Iterate through a map, returning the first truthy value returned by `fn`, or undefined. */
     export function findInMap<V, U>(map: SMap<V>, fn: (value: V, key: string) => U | undefined): U | undefined {
         if (map instanceof Map) {
             // Using an iterator and testing for `done` performs better than using forEach() and throwing an exception.
@@ -153,53 +158,22 @@ namespace ts {
                     return result;
                 }
             }
-
-            //kill, old:
-            /*let result: U | undefined;
-            try {
-                //TODO: perf
-                map.forEach((value, key) => {
-                    result = fn(value, key);
-                    if (result) {
-                        throw findInMapDone;
-                    }
-                });
-            } catch (error) {
-                if (error === findInMapDone) {
-                    return result;
-                }
-                else {
-                    throw error;
-                }
-            }*/
         }
         else {
-            (<ShimSMap<V>>map).find(fn);
+            return (<ShimSMap<V>>map).find(fn);
         }
     }
 
-    //rename
+    /** Iterate over every key. */
     export function forEachKeyInMap<V>(map: SMap<V>, callback: (key: string) => void): void {
         map.forEach((_, key) => callback(key));
     }
 
-    //rename
-    export function copyNewMap<V>(source: SMap<V>, target: SMap<V>): void {
-        //This is probably duplicate code
+    /** Copy all entries from `source` to `target`, overwriting any already existing. */
+    export function copyMap<V>(source: SMap<V>, target: SMap<V>): void {
         source.forEach((value, key) => {
             target.set(key, value);
         });
-    }
-
-    //rename, or kill?
-    export function reducePropertiesForMap<V, U>(map: SMap<V>, callback: (aggregate: U, value: V, key: string) => U, initial: U): U {
-        let result = initial;
-        if (map) {
-            map.forEach((value, key) => {
-                result = callback(result, value, key);
-            })
-        }
-        return result;
     }
 
     /** Array of all keys in a map. */
@@ -216,33 +190,47 @@ namespace ts {
         return values;
     }
 
-    //TODO:USE!
+    /** Set `map.get(key) === value`, and return `value`. */
     export function setAndReturn<K, V>(map: MapCommon<K, V>, key: K, value: V): V {
         map.set(key, value);
         return value;
     }
 
-    //TODO: may be simpler without using this function.
-    export function setIfNotAlreadyPresent<K, V>(map: MapCommon<K, V>, key: K, getValue: () => V): void {
+    /** Like `getOrUpdateMap` but does not return a value. */
+    export function setButDontOverride<K, V>(map: MapCommon<K, V>, key: K, getValue: () => V): void {
         if (!map.has(key)) {
             map.set(key, getValue());
         }
     }
 
-    //kill?
+    /** Sets `map.get(key) === getValue()` unless `map.get(key)` was already defined. */
+    export function getOrUpdateMap<K, V>(map: MapCommon<K, V>, key: K, getValue: () => V): V {
+        const value = map.get(key);
+        if (value === undefined) {
+            const value = getValue();
+            map.set(key, value);
+            return value;
+        }
+        else {
+            return value;
+        }
+    }
+
+    /** True iff the predicate is true for some entry in the map. */
     export function someInMap<V>(map: SMap<V>, predicate: (value: V, key: string) => boolean): boolean {
         return !!findInMap(map, predicate);
     }
 
+    /** True iff the predicate is true for every entry in the map. */
     export function allInMap<V>(map: SMap<V>, predicate: (value: V, key: string) => boolean): boolean {
-        return !findInMap(map, predicate);
+        return !findInMap(map, (value, key) => !predicate(value, key));
     }
 
-    //kill?
-    export function mapAndFilterMap<V, U>(map: SMap<V>, f: (value: V, key: string) => U | undefined): U[] {
+    /** Array of every *defined* result of `mapAndFilter(value, key)`, called on each entry in the map. */
+    export function mapAndFilterMap<V, U>(map: SMap<V>, mapAndFilter: (value: V, key: string) => U | undefined): U[] {
         const result: U[] = [];
         map.forEach((value, key) => {
-            const entry = f(value, key);
+            const entry = mapAndFilter(value, key);
             if (entry !== undefined) {
                 result.push(entry);
             }
@@ -265,7 +253,7 @@ namespace ts {
         }
     }
 
-    //TODO: probably want to get rid of this...
+    /** Creates a map with the given keys and values for each entry in `inputs`. */
     export function createMapFromArray<A, K, V>(inputs: A[], getKey: (element: A) => string, getValue: (element: A) => V): SMap<V> {
         const result = new SMap<V>();
         for (const input of inputs) {
@@ -274,52 +262,42 @@ namespace ts {
         return result;
     }
 
+    /** Map whose keys are `keys` and whose values are the results of `getValue`. */
     export function createMapFromKeys<V>(keys: string[], getValue: (key: string) => V): SMap<V> {
         return createMapFromArray(keys, key => key, getValue);
     }
 
     /**
-     * Creates a map with the given values and keys from `getKey`.
+     * Map whose values are `values` and whose keys are the results of `getKey`.
      * `getKey` must not return the same key twice.
      */
     export function createMapFromValues<V>(values: V[], getKey: (value: V) => string): SMap<V> {
         return createMapFromArray(values, getKey, value => value);
     }
 
+    /** Modifies every value in the map by replacing it with the result of `getNewValue`. */
     export function mapValues<V>(map: SMap<V>, getNewValue: (value: V) => V): void {
         map.forEach((value, key) => {
             map.set(key, getNewValue(value));
-        })
+        });
     }
 
-    //move
-    export function getOrUpdateMap<K, V>(map: MapCommon<K, V>, key: K, getValue: () => V): V {
-        const value = map.get(key);
-        if (value === undefined) {
-            const value = getValue();
-            map.set(key, value);
-            return value;
-        }
-        else {
-            return value;
-        }
-    }
-
+    /** Map of a single entry. */
     export function singletonMap<V>(key: string, value: V): SMap<V> {
         return new SMap([[key, value]]);
-    }
-
-    export function cloneMap<V>(map: SMap<V>): SMap<V> {
-        return new SMap(map);
     }
 }
 
 // Set
 namespace ts {
     export interface SSet {
+        /** Add a value if it's not already present. */
         add(value: string): void;
+        /** Remove a value. */
         delete(value: string): void;
+        /** Run `fn` on every value in the set. */
         forEach(fn: (value: string) => void): void;
+        /** Whether the value is in the set. */
         has(value: string): boolean;
     }
     export interface SSetConstructor {
@@ -372,6 +350,7 @@ namespace ts {
         }
     }
 
+    /** Add every value in `source` to `target`. */
     export function copySet<T>(source: SSet, target: SSet): void {
         source.forEach(element => target.add(element));
     }
@@ -394,34 +373,12 @@ namespace ts {
     }
 
     /**
-     * Creates a map from the elements of an array.
-     *
-     * @param array the array of input elements.
-     * @param makeKey a function that produces a key for a given element.
-     *
-     * This function makes no effort to avoid collisions; if any two elements produce
-     * the same key with the given 'makeKey' function, then the element with the higher
-     * index in the array will be the one associated with the produced key.
-     */
-    //rename, kill?
-    export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): ObjMap<T> {
-        const result: ObjMap<T> = {};
-
-        forEach(array, value => {
-            result[makeKey(value)] = value;
-        });
-
-        return result;
-    }
-
-    /**
      * Reduce the properties of a map.
      *
      * @param map The map to reduce
      * @param callback An aggregation function that is called for each entry in the map
      * @param initial The initial value for the reduction.
      */
-    //kill?
     export function reduceProperties<T, U>(map: ObjMap<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
         let result = initial;
         if (map) {
@@ -435,8 +392,8 @@ namespace ts {
         return result;
     }
 
-    //kill?
-    export function mapOfObjMap<V>(objMap: ObjMap<V>): SMap<V> {
+    /** Convert an ObjMap to an SMap. */
+    export function smapOfObjMap<V>(objMap: ObjMap<V>): SMap<V> {
         const result = new SMap<V>();
         for (const key in objMap) { //ts.forEach...
             if (hasProperty(objMap, key)) {
@@ -446,7 +403,6 @@ namespace ts {
         return result;
     }
 
-    //kill?
     export function forEachKey<T, U>(map: ObjMap<T>, callback: (key: string) => U): U {
         let result: U;
         for (const id in map) { //ts.forEach...
@@ -465,12 +421,10 @@ namespace ts {
 
     const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-    //kill?
     export function hasProperty<T>(map: ObjMap<T>, key: string): boolean {
         return hasOwnProperty.call(map, key);
     }
 
-    //kill?
     export function getKeys<T>(map: ObjMap<T>): string[] {
         const keys: string[] = [];
         for (const key in map) { //ts.forEach...
@@ -479,12 +433,10 @@ namespace ts {
         return keys;
     }
 
-    //kill?
     export function getProperty<T>(map: ObjMap<T>, key: string): T {
         return hasProperty(map, key) ? map[key] : undefined;
     }
 
-    //todo: kill
     export function isEmpty<T>(map: ObjMap<T>) {
         for (const id in map) { //ts.forEach...
             if (hasProperty(map, id)) {

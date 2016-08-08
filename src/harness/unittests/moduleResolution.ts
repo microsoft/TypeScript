@@ -1023,10 +1023,10 @@ import b = require("./moduleB.ts");
             const files = [f1, f2, f3, f4];
 
             const names = map(files, f => f.name);
-            const sourceFiles = arrayToMap(map(files, f => createSourceFile(f.name, f.content, ScriptTarget.ES6)), f => f.fileName);
+            const sourceFiles = createMapFromArray(files, f => f.name, f => createSourceFile(f.name, f.content, ScriptTarget.ES6));
             const compilerHost: CompilerHost = {
-                fileExists : fileName => hasProperty(sourceFiles, fileName),
-                getSourceFile: fileName => sourceFiles[fileName],
+                fileExists : fileName => sourceFiles.has(fileName),
+                getSourceFile: fileName => sourceFiles.get(fileName),
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile(file, text) {
                     throw new Error("NYI");
@@ -1036,7 +1036,7 @@ import b = require("./moduleB.ts");
                 getCanonicalFileName: f => f.toLowerCase(),
                 getNewLine: () => "\r\n",
                 useCaseSensitiveFileNames: () => false,
-                readFile: fileName => hasProperty(sourceFiles, fileName) ? sourceFiles[fileName].text : undefined
+                readFile: fileName => sourceFiles.has(fileName) ? sourceFiles.get(fileName).text : undefined
             };
             const program1 = createProgram(names, {}, compilerHost);
             const diagnostics1 = program1.getFileProcessingDiagnostics().getDiagnostics();
