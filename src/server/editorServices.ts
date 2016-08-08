@@ -1124,7 +1124,7 @@ namespace ts.server {
 
         getScriptInfo(filename: string) {
             filename = ts.normalizePath(filename);
-            return ts.lookUp(this.filenameToScriptInfo, filename);
+            return ts.getProperty(this.filenameToScriptInfo, filename);
         }
 
         /**
@@ -1133,7 +1133,7 @@ namespace ts.server {
          */
         openFile(fileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
             fileName = ts.normalizePath(fileName);
-            let info = ts.lookUp(this.filenameToScriptInfo, fileName);
+            let info = ts.getProperty(this.filenameToScriptInfo, fileName);
             if (!info) {
                 let content: string;
                 if (this.host.fileExists(fileName)) {
@@ -1246,7 +1246,7 @@ namespace ts.server {
          * @param filename is absolute pathname
          */
         closeClientFile(filename: string) {
-            const info = ts.lookUp(this.filenameToScriptInfo, filename);
+            const info = ts.getProperty(this.filenameToScriptInfo, filename);
             if (info) {
                 this.closeOpenFile(info);
                 info.isOpen = false;
@@ -1255,14 +1255,14 @@ namespace ts.server {
         }
 
         getProjectForFile(filename: string) {
-            const scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
+            const scriptInfo = ts.getProperty(this.filenameToScriptInfo, filename);
             if (scriptInfo) {
                 return scriptInfo.defaultProject;
             }
         }
 
         printProjectsForFile(filename: string) {
-            const scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
+            const scriptInfo = ts.getProperty(this.filenameToScriptInfo, filename);
             if (scriptInfo) {
                 this.psLogger.startGroup();
                 this.psLogger.info("Projects for " + filename);

@@ -1958,7 +1958,7 @@ namespace ts {
 
             filesByName.set(path, file);
             if (file) {
-                setSetSet(sourceFilesFoundSearchingNodeModules, path, currentNodeModulesDepth > 0);
+                addOrDelete(sourceFilesFoundSearchingNodeModules, path, currentNodeModulesDepth > 0);
                 file.path = path;
 
                 if (host.useCaseSensitiveFileNames()) {

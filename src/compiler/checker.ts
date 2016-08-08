@@ -1664,7 +1664,7 @@ namespace ts {
                 }
 
                 // Check if symbol is any of the alias
-                return forEachInMap(symbols, symbolFromSymbolTable => {
+                return findInMap(symbols, symbolFromSymbolTable => {
                     if (symbolFromSymbolTable.flags & SymbolFlags.Alias
                         && symbolFromSymbolTable.name !== "export="
                         && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier)) {

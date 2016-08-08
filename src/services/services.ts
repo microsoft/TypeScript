@@ -2060,7 +2060,7 @@ namespace ts {
                 options[opt.name] = parseCustomTypeOption(opt, value, diagnostics);
             }
             else {
-                if (!forEachValueInMap(opt.type, v => v === value)) {
+                if (!someInMap(opt.type, v => v === value)) {
                     // Supplied value isn't a valid enum value.
                     diagnostics.push(createCompilerDiagnosticForInvalidCustomType(opt));
                 }
@@ -2259,8 +2259,7 @@ namespace ts {
         }
 
         function reportStats() {
-            //todo: filterMapMap helper
-            const bucketInfoArray = filterMapMap(buckets, (entries, name) => {
+            const bucketInfoArray = mapAndFilterMap(buckets, (entries, name) => {
                 if (!(name && name.charAt(0) === "_")) {
                     return;
                 }

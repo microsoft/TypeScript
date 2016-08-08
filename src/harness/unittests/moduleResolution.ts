@@ -7,7 +7,7 @@ namespace ts {
     }
 
     function createModuleResolutionHost(hasDirectoryExists: boolean, ...files: File[]): ModuleResolutionHost {
-        const map = createMapFromValues(files, f => f.name); //arrayToNewMap
+        const map = createMapFromValues(files, f => f.name);
 
         if (hasDirectoryExists) {
             const directories = new SSet();
