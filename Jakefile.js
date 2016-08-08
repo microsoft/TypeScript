@@ -551,7 +551,7 @@ var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibr
 compileFile(
     tsserverLibraryFile,
     languageServiceLibrarySources,
-    [builtLocalDirectory, copyright].concat(languageServiceLibrarySources),
+    [builtLocalDirectory, copyright, builtLocalCompiler].concat(languageServiceLibrarySources).concat(libraryTargets),
     /*prefixes*/ [copyright],
     /*useBuiltCompiler*/ true,
     { noOutFile: false, generateDeclarations: true });
@@ -562,7 +562,7 @@ task("lssl", [tsserverLibraryFile, tsserverLibraryDefinitionFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON]);
+task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON, "lssl"]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -617,7 +617,7 @@ task("generate-spec", [specMd]);
 
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
-task("LKG", ["clean", "release", "local", "lssl"].concat(libraryTargets), function() {
+task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
     var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
@@ -847,11 +847,10 @@ task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function()
     exec(cmd);
 }, {async: true});
 
-desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], port=, browser=[chrome|IE]");
+desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], browser=[chrome|IE]");
 task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFileInBrowserTest], function() {
     cleanTestDirs();
     host = "node";
-    port = process.env.port || process.env.p || '8888';
     browser = process.env.browser || process.env.b || "IE";
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
@@ -864,7 +863,7 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFi
     }
 
     tests = tests ? tests : '';
-    var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + JSON.stringify(tests);
+    var cmd = host + " tests/webTestServer.js " + browser + " " + JSON.stringify(tests);
     console.log(cmd);
     exec(cmd);
 }, {async: true});
@@ -1042,7 +1041,8 @@ var lintTargets = compilerSources
     .concat(serverCoreSources)
     .concat(tslintRulesFiles)
     .concat(servicesSources)
-    .concat(["Gulpfile.ts"]);
+    .concat(["Gulpfile.ts"])
+    .concat([nodeServerInFile, perftscPath, "tests/perfsys.ts", webhostPath]);
 
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
