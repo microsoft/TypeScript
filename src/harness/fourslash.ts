@@ -2263,7 +2263,11 @@ namespace FourSlash {
         // Parse out the files and their metadata
         const testData = parseTestData(basePath, content, fileName);
         const state = new TestState(basePath, testType, testData);
-        runCode(ts.transpile(content), state);
+        const output = ts.transpileModule(content, { reportDiagnostics: true });
+        if (output.diagnostics.length > 0) {
+            throw new Error(`Syntax error in ${basePath}: ${output.diagnostics[0].messageText}`);
+        }
+        runCode(output.outputText, state);
     }
 
     function runCode(code: string, state: TestState): void {
