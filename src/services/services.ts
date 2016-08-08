@@ -2053,7 +2053,7 @@ namespace ts {
                 continue;
             }
 
-            const value = options[opt.name];
+            const value = options[opt.name]; //todo: use getProperty...
             // Value should be a key of opt.type
             if (typeof value === "string") {
                 // If value is not a string, this will fail

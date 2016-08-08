@@ -153,6 +153,7 @@ namespace ts {
                     return result;
                 }
             }
+
             //kill, old:
             /*let result: U | undefined;
             try {
