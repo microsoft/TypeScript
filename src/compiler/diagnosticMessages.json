@@ -3095,5 +3095,9 @@
     "Extract Interface from Parameters": {
         "category": "CodeRefactor",
         "code": 100012
+    },
+    "Inline Temp": {
+        "category": "CodeRefactor",
+        "code": 100013
     }
 }

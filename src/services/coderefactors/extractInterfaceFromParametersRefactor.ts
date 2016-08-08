@@ -10,7 +10,6 @@ namespace ts.codeRefactor {
                     return getExtractInterfaceFromParameterRefactorChanges(child, context);
                 }
             }
-            Debug.fail("No refactor found.");
         }
     });    
 
@@ -52,7 +51,6 @@ namespace ts.codeRefactor {
                 changes: fileTextChanges
             }];
         }
-        Debug.fail("No refactor found.");
     }
 
     function processCallingLocations(token: Node, fileTextChanges: FileTextChanges[], parameterNames: string[], context: CodeFixContext) {

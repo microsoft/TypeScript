@@ -592,7 +592,7 @@ namespace ts.server {
             throw new Error("Not Implemented Yet.");
         }
 
-        getCodeRefactors(fileName: string, start: number, end: number): ts.CodeAction[] {
+        getCodeRefactors(fileName: string, start: number, end: number, serviceInstance: LanguageService): ts.CodeAction[] {
             throw new Error("Not Implemented Yet.");
         }
 

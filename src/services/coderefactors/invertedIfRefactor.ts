@@ -50,7 +50,6 @@ namespace ts.codeRefactor {
                     }]
                 }];
             }
-            Debug.fail("No refactor found.");
         }
     });
 }

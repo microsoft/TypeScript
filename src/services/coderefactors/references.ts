@@ -5,3 +5,4 @@
 ///<reference path='addJSDocRefactor.ts' />
 ///<reference path='enacpsulateFieldAndGetterSetterRefactor.ts' />
 ///<reference path='extractInterfaceFromParametersRefactor.ts' />
+///<reference path='inlineTempRefactor.ts' />

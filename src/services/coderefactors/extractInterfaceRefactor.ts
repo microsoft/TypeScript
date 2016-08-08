@@ -45,8 +45,6 @@ namespace ts.codeRefactor {
                     }]
                 }];
             }
-                        
-            Debug.fail("No refactor found.");
         }
     });
 
@@ -95,8 +93,6 @@ namespace ts.codeRefactor {
                     }]
                 }];
             }
-            
-            Debug.fail("No refactor found.");
         }
     });
 

@@ -97,8 +97,6 @@ namespace ts.codeRefactor {
                     changes: fileTextChanges
                 }];
             }
-
-            Debug.fail("No refactor found.");
         }
     });
 
@@ -160,7 +158,7 @@ namespace ts.codeRefactor {
         return null;
     }
 
-    function isNodeOnLeft(node: Node, binaryExpression: BinaryExpression): boolean {        
+    export function isNodeOnLeft(node: Node, binaryExpression: BinaryExpression): boolean {        
         let posToCompare: number = -1;
         for (let i = 0, n = binaryExpression.getChildCount(); i < n; i++) {
             const child = binaryExpression.getChildAt(i);
@@ -206,6 +204,18 @@ namespace ts.codeRefactor {
         if (!fileTextChangesEntry) {
             fileTextChangesEntry = {
                 fileName: reference.fileName,
+                textChanges: []
+            };
+            fileTextChanges.push(fileTextChangesEntry);
+        }
+        return fileTextChangesEntry;
+    }
+
+    export function getOrCreateFileTextChangesEntryFileName(fileName: string, fileTextChanges: FileTextChanges[]): FileTextChanges {
+        let fileTextChangesEntry = findEntry(fileName, fileTextChanges);
+        if (!fileTextChangesEntry) {
+            fileTextChangesEntry = {
+                fileName: fileName,
                 textChanges: []
             };
             fileTextChanges.push(fileTextChangesEntry);
