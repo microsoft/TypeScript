@@ -8569,8 +8569,12 @@ namespace ts {
             }
 
             function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean) {
+                // In the false branch we keep types that aren't subtypes of the candidate type and we keep structurally
+                // identical types except for the current type itself. The latter rule means that given two structurally
+                // identical classes A and B and a variable x of type A, in the false branch of an 'x instanceof B' type
+                // guard x keeps type A and is not narrowed to type never.
                 if (!assumeTrue) {
-                    return filterType(type, t => !isTypeSubtypeOf(t, candidate));
+                    return filterType(type, t => !isTypeSubtypeOf(t, candidate) || isTypeIdenticalTo(t, candidate) && t !== candidate);
                 }
                 // If the current type is a union type, remove all constituents that aren't assignable to
                 // the candidate type. If one or more constituents remain, return a union of those.
