@@ -1,4 +1,3 @@
-"use strict";
 // This file contains the build logic for the public repo
 
 var fs = require("fs");
