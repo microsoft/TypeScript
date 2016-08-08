@@ -8538,9 +8538,10 @@ namespace ts {
                     }
                 }
                 // If the candidate type is a subtype of the target type, narrow to the candidate type.
-                // Otherwise, narrow to whichever of the target type or the candidate type that is assignable
-                // to the other. Otherwise, the types are completely unrelated, so narrow to an intersection
-                // of the two types.
+                // Otherwise, if the target type is assignable to the candidate type, keep the target type.
+                // Otherwise, if the candidate type is assignable to the target type, narrow to the candidate
+                // type. Otherwise, the types are completely unrelated, so narrow to an intersection of the
+                // two types.
                 const targetType = type.flags & TypeFlags.TypeParameter ? getApparentType(type) : type;
                 return isTypeSubtypeOf(candidate, targetType) ? candidate :
                     isTypeAssignableTo(type, candidate) ? type :
