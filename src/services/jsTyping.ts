@@ -92,7 +92,7 @@ namespace ts.JsTyping {
         getTypingNamesFromSourceFileNames(fileNames);
 
         // Add the cached typing locations for inferred typings that are already installed
-        for (const name in packageNameToTypingLocation) {
+        for (const name in packageNameToTypingLocation) { //ts.forEach...
             if (inferredTypings.has(name) && !inferredTypings.get(name)) {
                 inferredTypings.set(name, packageNameToTypingLocation[name]);
             }
@@ -105,7 +105,7 @@ namespace ts.JsTyping {
 
         const newTypingNames: string[] = [];
         const cachedTypingPaths: string[] = [];
-        for (const typing in inferredTypings) {
+        for (const typing in inferredTypings) { //ts.forEach...
             const inferredTyping = inferredTypings.get(typing);
             if (inferredTyping !== undefined) {
                 cachedTypingPaths.push(inferredTyping);

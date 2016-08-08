@@ -97,7 +97,7 @@ namespace ts {
 
     //kill?
     function containsAll<T>(map: ObjMap<T>, other: ObjMap<T>): boolean {
-        for (const key in map) {
+        for (const key in map) { //ts.forEach...
             if (!hasProperty(map, key)) {
                 continue;
             }
@@ -1910,7 +1910,7 @@ namespace ts {
             ? <T>createNode(node.kind, location.pos, location.end)
             : <T>createSynthesizedNode(node.kind);
 
-        for (const key in node) {
+        for (const key in node) { //ts.forEach...
             if (clone.hasOwnProperty(key) || !node.hasOwnProperty(key)) {
                 continue;
             }

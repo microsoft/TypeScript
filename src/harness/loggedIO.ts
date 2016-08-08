@@ -88,11 +88,12 @@ namespace Playback {
         reset(): void;
     }
 
+    //There's already a memoize in harness.ts! But this one is better...
     function memoize<T>(func: (s: string) => T): Memoized<T> {
-        let lookup: { [s: string]: T } = {};
+        let lookup = new Map<string, T>();
         const run: Memoized<T> = <Memoized<T>>((s: string) => {
-            if (lookup.hasOwnProperty(s)) return lookup[s];
-            return lookup[s] = func(s);
+            if (lookup.has(s)) return lookup.get(s); //TODO: want to just use getOrUpdateMap, but worry about undefined...
+            return ts.setAndReturn(lookup, s, func(s));
         });
         run.reset = () => {
             lookup = undefined;
@@ -128,7 +129,7 @@ namespace Playback {
     function initWrapper(wrapper: PlaybackSystem, underlying: ts.System): void;
     function initWrapper(wrapper: PlaybackIO, underlying: Harness.IO): void;
     function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: ts.System | Harness.IO): void {
-        ts.forEach(Object.keys(underlying), prop => {
+        ts.forEach(Object.keys(underlying), prop => { //ts.forEachKey
             (<any>wrapper)[prop] = (<any>underlying)[prop];
         });
 

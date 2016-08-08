@@ -54,11 +54,6 @@ interface SetConstructor {
 declare var Set: SetConstructor;
 
 namespace ts {
-    //TODO: eventually want to kill all uses of this
-    export interface OldMap<T> {
-        [index: string]: T;
-    }
-    //This is an OldMap<T> that I've verified should stay that way.
     export interface ObjMap<T> {
         //__objMapBrand: any;
         [index: string]: T;
@@ -2768,7 +2763,7 @@ namespace ts {
         fileNames: string[];
         raw?: any;
         errors: Diagnostic[];
-        wildcardDirectories?: Map<string, WatchDirectoryFlags>; //This doesn't appear to ever be accessed?
+        wildcardDirectories?: ObjMap<WatchDirectoryFlags>; //public, can't change
     }
 
     export const enum WatchDirectoryFlags {
@@ -2778,7 +2773,7 @@ namespace ts {
 
     export interface ExpandResult {
         fileNames: string[];
-        wildcardDirectories: Map<string, WatchDirectoryFlags>;
+        wildcardDirectories: ObjMap<WatchDirectoryFlags>; //public, can't change
     }
 
     /* @internal */

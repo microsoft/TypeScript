@@ -254,7 +254,7 @@ class ProjectRunner extends RunnerBase {
                 };
                 // Set the values specified using json
                 const optionNameMap = ts.createMapFromValues(ts.optionDeclarations, option => option.name);
-                for (const name in testCase) {
+                for (const name in testCase) { //ts.forEach...
                     if (name !== "mapRoot" && name !== "sourceRoot") {
                         const option = optionNameMap.get(name);
                         if (!option) {

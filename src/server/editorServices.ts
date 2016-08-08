@@ -19,7 +19,7 @@ namespace ts.server {
 
     function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
         const hasOwnProperty = Object.prototype.hasOwnProperty;
-        Object.keys(formatOptions).forEach((key) => {
+        Object.keys(formatOptions).forEach((key) => { //ts.forEachKey
             const codeKey = key.charAt(0).toUpperCase() + key.substring(1);
             if (hasOwnProperty.call(formatCodeOptions, codeKey)) {
                 formatCodeOptions[codeKey] = formatOptions[key];
@@ -100,15 +100,15 @@ namespace ts.server {
         filenameToScript: ts.FileMap<ScriptInfo>;
         roots: ScriptInfo[] = [];
 
-        private resolvedModuleNames: ts.FileMap<OldMap<TimestampedResolvedModule>>;
-        private resolvedTypeReferenceDirectives: ts.FileMap<OldMap<TimestampedResolvedTypeReferenceDirective>>;
+        private resolvedModuleNames: ts.FileMap<Map<string, TimestampedResolvedModule>>;
+        private resolvedTypeReferenceDirectives: ts.FileMap<Map<string, TimestampedResolvedTypeReferenceDirective>>;
         private moduleResolutionHost: ts.ModuleResolutionHost;
         private getCanonicalFileName: (fileName: string) => string;
 
         constructor(public host: ServerHost, public project: Project) {
             this.getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
-            this.resolvedModuleNames = createFileMap<OldMap<TimestampedResolvedModule>>();
-            this.resolvedTypeReferenceDirectives = createFileMap<OldMap<TimestampedResolvedTypeReferenceDirective>>();
+            this.resolvedModuleNames = createFileMap<Map<string, TimestampedResolvedModule>>();
+            this.resolvedTypeReferenceDirectives = createFileMap<Map<string, TimestampedResolvedTypeReferenceDirective>>();
             this.filenameToScript = createFileMap<ScriptInfo>();
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
@@ -123,22 +123,22 @@ namespace ts.server {
         private resolveNamesWithLocalCache<T extends Timestamped & { failedLookupLocations: string[] }, R>(
             names: string[],
             containingFile: string,
-            cache: ts.FileMap<OldMap<T>>,
+            cache: ts.FileMap<Map<string, T>>,
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
             getResult: (s: T) => R): R[] {
 
             const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const currentResolutionsInFile = cache.get(path);
 
-            const newResolutions: OldMap<T> = {};
+            const newResolutions = new Map<string, T>();
             const resolvedModules: R[] = [];
             const compilerOptions = this.getCompilationSettings();
 
             for (const name of names) {
                 // check if this is a duplicate entry in the list
-                let resolution = lookUp(newResolutions, name);
+                let resolution = newResolutions.get(name);
                 if (!resolution) {
-                    const existingResolution = currentResolutionsInFile && ts.lookUp(currentResolutionsInFile, name);
+                    const existingResolution = currentResolutionsInFile && currentResolutionsInFile.get(name);
                     if (moduleResolutionIsValid(existingResolution)) {
                         // ok, it is safe to use existing name resolution results
                         resolution = existingResolution;
@@ -146,7 +146,7 @@ namespace ts.server {
                     else {
                         resolution = loader(name, containingFile, compilerOptions, this.moduleResolutionHost);
                         resolution.lastCheckTime = Date.now();
-                        newResolutions[name] = resolution;
+                        newResolutions.set(name, resolution);
                     }
                 }
 
@@ -378,7 +378,7 @@ namespace ts.server {
     export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
-        wildcardDirectories?: Map<string, ts.WatchDirectoryFlags>;
+        wildcardDirectories?: ObjMap<ts.WatchDirectoryFlags>; //public, can't change!
         compilerOptions?: ts.CompilerOptions;
     }
 
@@ -387,11 +387,11 @@ namespace ts.server {
         projectFilename: string;
         projectFileWatcher: FileWatcher;
         directoryWatcher: FileWatcher;
-        directoriesWatchedForWildcards: OldMap<FileWatcher>;
+        directoriesWatchedForWildcards: ObjMap<FileWatcher>; //public, can't change
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
         program: ts.Program;
-        filenameToSourceFile: ts.OldMap<ts.SourceFile> = {};
+        filenameToSourceFile: ts.ObjMap<ts.SourceFile> = {}; //public, can't change
         updateGraphSeq = 0;
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
@@ -613,7 +613,7 @@ namespace ts.server {
     }
 
     export class ProjectService {
-        filenameToScriptInfo: ts.OldMap<ScriptInfo> = {};
+        filenameToScriptInfo: ts.ObjMap<ScriptInfo> = {}; //public, can't change
         // open, non-configured root files
         openFileRoots: ScriptInfo[] = [];
         // projects built from openFileRoots
@@ -625,12 +625,12 @@ namespace ts.server {
         // open files that are roots of a configured project
         openFileRootsConfigured: ScriptInfo[] = [];
         // a path to directory watcher map that detects added tsconfig files
-        directoryWatchersForTsconfig: ts.OldMap<FileWatcher> = {};
+        directoryWatchersForTsconfig: ts.ObjMap<FileWatcher> = {}; //public, can't change
         // count of how many projects are using the directory watcher. If the
         // number becomes 0 for a watcher, then we should close it.
-        directoryWatchersRefCount: ts.OldMap<number> = {};
+        directoryWatchersRefCount: ts.ObjMap<number> = {}; //public, can't change
         hostConfiguration: HostConfiguration;
-        timerForDetectingProjectFileListChanges: OldMap<any> = {};
+        timerForDetectingProjectFileListChanges: ObjMap<any> = {}; //public, can't change
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
@@ -1419,7 +1419,7 @@ namespace ts.server {
                     /*recursive*/ true
                 );
 
-                project.directoriesWatchedForWildcards = reducePropertiesForMap(projectOptions.wildcardDirectories, (watchers, flag, directory) => {
+                project.directoriesWatchedForWildcards = reduceProperties(projectOptions.wildcardDirectories, (watchers, flag, directory) => {
                     if (comparePaths(configDirectoryPath, directory, ".", !this.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
                         const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
                         this.log(`Add ${ recursive ? "recursive " : ""}watcher for: ${directory}`);
@@ -1431,7 +1431,7 @@ namespace ts.server {
                     }
 
                     return watchers;
-                }, <OldMap<FileWatcher>>{});
+                }, <ObjMap<FileWatcher>>{});
 
                 return { success: true, project: project, errors };
             }

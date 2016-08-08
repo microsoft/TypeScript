@@ -156,7 +156,7 @@ namespace ts {
         });
 
         if (usedTypeDirectiveReferences) {
-            for (const directive in usedTypeDirectiveReferences) {
+            for (const directive in usedTypeDirectiveReferences) { //ts.forEach...
                 if (hasProperty(usedTypeDirectiveReferences, directive)) {
                     referencesOutput += `/// <reference types="${directive}" />${newLine}`;
                 }

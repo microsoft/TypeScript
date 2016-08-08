@@ -131,17 +131,17 @@ namespace Utils {
         return content;
     }
 
-    export function memoize<T extends Function>(f: T): T {
-        const cache: { [idx: string]: any } = {};
+    export function memoize<T extends Function>(f: T): T { //TODO: type better!
+        const cache = new Map<string, T>();
 
         return <any>(function(this: any) {
             const key = Array.prototype.join.call(arguments);
-            const cachedResult = cache[key];
+            const cachedResult = cache.get(key);
             if (cachedResult) {
                 return cachedResult;
             }
             else {
-                return cache[key] = f.apply(this, arguments);
+                return ts.setAndReturn(cache, key, f.apply(this, arguments));
             }
         });
     }
@@ -186,7 +186,7 @@ namespace Utils {
             const childNodesAndArrays: any[] = [];
             ts.forEachChild(node, child => { childNodesAndArrays.push(child); }, array => { childNodesAndArrays.push(array); });
 
-            for (const childName in node) {
+            for (const childName in node) { //ts.forEach...
                 if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator" ||
                     // for now ignore jsdoc comments
                     childName === "jsDocComment") {
@@ -235,7 +235,7 @@ namespace Utils {
                 k === (<any>ts).SyntaxKind.LastJSDocNode ||
                 k === (<any>ts).SyntaxKind.FirstJSDocTagNode ||
                 k === (<any>ts).SyntaxKind.LastJSDocTagNode) {
-                for (const kindName in (<any>ts).SyntaxKind) {
+                for (const kindName in (<any>ts).SyntaxKind) { //ts.forEach...
                     if ((<any>ts).SyntaxKind[kindName] === k) {
                         return kindName;
                     }
@@ -408,7 +408,7 @@ namespace Utils {
     }
 
     function findChildName(parent: any, child: any) {
-        for (const name in parent) {
+        for (const name in parent) { //ts.forEach...
             if (parent.hasOwnProperty(name) && parent[name] === child) {
                 return name;
             }
@@ -750,7 +750,7 @@ namespace Harness {
 
             export function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]) {
                 const fs = new Utils.VirtualFileSystem(path, useCaseSensitiveFileNames());
-                for (const file in listFiles(path)) {
+                for (const file in listFiles(path)) { //!!! should be for (const file of ...)! Fix in master!
                     fs.addFile(file);
                 }
                 return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), path => {
@@ -1009,7 +1009,7 @@ namespace Harness {
         }
 
         export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
-            for (const name in settings) {
+            for (const name in settings) { //ts.forEach...
                 if (settings.hasOwnProperty(name)) {
                     const value = settings[name];
                     if (value === undefined) {
@@ -1424,7 +1424,7 @@ namespace Harness {
 
     export namespace TestCaseParser {
         /** all the necessary information to set the right compiler settings */
-        export interface CompilerSettings {
+        export interface CompilerSettings { //Map?
             [name: string]: string;
         }
 
@@ -1596,14 +1596,14 @@ namespace Harness {
             }
         }
 
-        const fileCache: { [idx: string]: boolean } = {};
+        const fileCache = new Set<string>();
         function generateActual(actualFileName: string, generateContent: () => string): string {
             // For now this is written using TypeScript, because sys is not available when running old test cases.
             // But we need to move to sys once we have
             // Creates the directory including its parent if not already present
             function createDirectoryStructure(dirName: string) {
-                if (fileCache[dirName] || IO.directoryExists(dirName)) {
-                    fileCache[dirName] = true;
+                if (fileCache.has(dirName) || IO.directoryExists(dirName)) {
+                    fileCache.add(dirName); //todo: this function always adds dirName to the cache...
                     return;
                 }
 
@@ -1612,7 +1612,7 @@ namespace Harness {
                     createDirectoryStructure(parentDirectory);
                 }
                 IO.createDirectory(dirName);
-                fileCache[dirName] = true;
+                fileCache.add(dirName);
             }
 
             // Create folders if needed

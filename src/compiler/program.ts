@@ -2184,7 +2184,7 @@ namespace ts {
             }
 
             if (options.paths) {
-                for (const key in options.paths) {
+                for (const key in options.paths) { //ts.forEach...
                     if (!hasProperty(options.paths, key)) {
                         continue;
                     }

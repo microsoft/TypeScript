@@ -786,7 +786,7 @@ namespace ts {
             const result: ObjMap<string | number | boolean> = {};
             const optionsNameMap = getOptionNameMap().optionNameMap;
 
-            for (const name in options) {
+            for (const name in options) { //ts.forEach...
                 if (hasProperty(options, name)) {
                     // tsconfig only options cannot be specified via command line,
                     // so we can assume that only types that can appear here string | number | boolean

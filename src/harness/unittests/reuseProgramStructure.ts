@@ -177,16 +177,15 @@ namespace ts {
             const expectedSize = expectedContent.size;
             assert.isTrue(actualCacheSize === expectedSize, `expected actual size: ${actualCacheSize} to be equal to ${expectedSize}`);
 
-            for (const id in expectedContent) {
-                const expected = expectedContent.get(id);
+            expectedContent.forEach((expected, id) => {
                 if (expected) {
                     const actual = cache.get(id);
                     entryChecker(expected, actual);
                 }
                 else {
-                    assert.isTrue(!cache.has(id)); //TODO: was: cache[id] === undefined
+                    assert.isTrue(cache.get(id) === undefined); //TODO: was: cache[id] === undefined. Why are we putting undefined into the cache?
                 }
-            }
+            });
         }
     }
 

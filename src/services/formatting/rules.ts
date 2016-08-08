@@ -5,7 +5,7 @@ namespace ts.formatting {
     export class Rules {
         public getRuleName(rule: Rule) {
             const o: ts.ObjMap<any> = <any>this;
-            for (const name in o) {
+            for (const name in o) { //ts.forEach...
                 if (o[name] === rule) {
                     return name;
                 }

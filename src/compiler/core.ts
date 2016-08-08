@@ -309,25 +309,28 @@ namespace ts {
 
     const hasOwnProperty = Object.prototype.hasOwnProperty;
 
+    //kill?
     export function hasProperty<T>(map: ObjMap<T>, key: string): boolean {
         return hasOwnProperty.call(map, key);
     }
 
+    //kill?
     export function getKeys<T>(map: ObjMap<T>): string[] {
         const keys: string[] = [];
-        for (const key in map) {
+        for (const key in map) { //ts.forEach...
             keys.push(key);
         }
         return keys;
     }
 
+    //kill?
     export function getProperty<T>(map: ObjMap<T>, key: string): T {
         return hasOwnProperty.call(map, key) ? map[key] : undefined;
     }
 
     //todo: kill
     export function isEmpty<T>(map: ObjMap<T>) {
-        for (const id in map) {
+        for (const id in map) { //ts.forEach...
             if (hasProperty(map, id)) {
                 return false;
             }
@@ -337,7 +340,7 @@ namespace ts {
 
     export function clone<T>(object: T): T {
         const result: any = {};
-        for (const id in object) {
+        for (const id in object) { //ts.forEach...
             result[id] = (<any>object)[id];
         }
         return <T>result;
@@ -345,10 +348,10 @@ namespace ts {
 
     export function extend<T1 extends ObjMap<{}>, T2 extends ObjMap<{}>>(first: T1 , second: T2): T1 & T2 {
         const result: T1 & T2 = <any>{};
-        for (const id in first) {
+        for (const id in first) { //ts.forEach...
             (result as any)[id] = first[id];
         }
-        for (const id in second) {
+        for (const id in second) { //ts.forEach...
             if (!hasProperty(result, id)) {
                 (result as any)[id] = second[id];
             }
@@ -358,25 +361,27 @@ namespace ts {
 
     export function forEachValue<T, U>(map: ObjMap<T>, callback: (value: T) => U): U {
         let result: U;
-        for (const id in map) {
+        for (const id in map) { //ts.forEach...
             if (result = callback(map[id])) break;
         }
         return result;
     }
 
+    //kill?
     export function forEachKey<T, U>(map: ObjMap<T>, callback: (key: string) => U): U {
         let result: U;
-        for (const id in map) {
+        for (const id in map) { //ts.forEach...
             if (result = callback(id)) break;
         }
         return result;
     }
 
+    //kill?
     export function forEachKeyInMap<K, V>(map: Map<K, V>, callback: (key: K) => void): void {
         map.forEach((_, key) => callback(key));
     }
 
-    //This is just getProperty...
+    //This is just getProperty... so KILL!
     export function lookUp<T>(map: ObjMap<T>, key: string): T {
         return hasProperty(map, key) ? map[key] : undefined;
     }
@@ -394,9 +399,10 @@ namespace ts {
         source.forEach(element => target.add(element));
     }
 
+    //kill?
     export function mapOfObjMap<V>(objMap: ObjMap<V>): Map<string, V> {
         const result = new Map<string, V>();
-        for (const key in objMap) {
+        for (const key in objMap) { //ts.forEach...
             if (hasProperty(objMap, key)) {
                 result.set(key, objMap[key]);
             }
@@ -446,7 +452,7 @@ namespace ts {
     export function reduceProperties<T, U>(map: ObjMap<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
         let result = initial;
         if (map) {
-            for (const key in map) {
+            for (const key in map) { //ts.forEach...
                 if (hasProperty(map, key)) {
                     result = callback(result, map[key], String(key));
                 }

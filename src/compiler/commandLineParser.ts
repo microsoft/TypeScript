@@ -810,7 +810,7 @@ namespace ts {
 
         const optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
 
-        for (const id in jsonOptions) {
+        for (const id in jsonOptions) { //ts.forEach...
             if (hasProperty(optionNameMap, id)) {
                 const opt = optionNameMap[id];
                 defaultOptions[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
@@ -1051,7 +1051,7 @@ namespace ts {
     /**
      * Gets directories in a set of include patterns that should be watched for changes.
      */
-    function getWildcardDirectories(include: string[], exclude: string[], path: string, useCaseSensitiveFileNames: boolean): Map<string, WatchDirectoryFlags> {
+    function getWildcardDirectories(include: string[], exclude: string[], path: string, useCaseSensitiveFileNames: boolean): ObjMap<WatchDirectoryFlags> {
         // We watch a directory recursively if it contains a wildcard anywhere in a directory segment
         // of the pattern:
         //
@@ -1065,7 +1065,7 @@ namespace ts {
         //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
         const rawExcludeRegex = getRegularExpressionForWildcard(exclude, path, "exclude");
         const excludeRegex = rawExcludeRegex && new RegExp(rawExcludeRegex, useCaseSensitiveFileNames ? "" : "i");
-        const wildcardDirectories = new Map<string, WatchDirectoryFlags>();
+        const wildcardDirectories: ObjMap<WatchDirectoryFlags> = {};
         if (include !== undefined) {
             const recursiveKeys: string[] = [];
             for (const file of include) {
@@ -1078,9 +1078,9 @@ namespace ts {
                 if (match) {
                     const key = useCaseSensitiveFileNames ? match[0] : match[0].toLowerCase();
                     const flags = watchRecursivePattern.test(name) ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None;
-                    const existingFlags = wildcardDirectories.get(key);
+                    const existingFlags = getProperty(wildcardDirectories, key);
                     if (existingFlags === undefined || existingFlags < flags) {
-                        wildcardDirectories.set(key, flags);
+                        wildcardDirectories[key] = flags;
                         if (flags === WatchDirectoryFlags.Recursive) {
                             recursiveKeys.push(key);
                         }
@@ -1089,10 +1089,10 @@ namespace ts {
             }
 
             // Remove any subpaths under an existing recursively watched directory.
-            wildcardDirectories.forEach((_, key) => {
+            ts.forEachKey(wildcardDirectories, key => {
                 for (const recursiveKey of recursiveKeys) {
                     if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
-                        wildcardDirectories.delete(key);
+                        delete wildcardDirectories[key];
                     }
                 }
             });

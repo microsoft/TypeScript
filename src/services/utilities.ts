@@ -660,7 +660,7 @@ namespace ts {
     }
 
     export function compareDataObjects(dst: any, src: any): boolean {
-        for (const e in dst) {
+        for (const e in dst) { //ts.forEach...
             if (typeof dst[e] === "object") {
                 if (!compareDataObjects(dst[e], src[e])) {
                     return false;

@@ -340,7 +340,9 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 function generateBaseLine(typeWriterResults: Map<string, TypeWriterResult[]>, isSymbolBaseline: boolean): string {
                     const typeLines: string[] = [];
-                    const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
+                    //maps fileName -> (lineNum -> string[])
+                    //TODO: Should probably be just string[][] instead of Map<number, string[]
+                    const typeMap = new Map<string, Map<number, string[]>>();  //: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
 
                     allFiles.forEach(file => {
                         const codeLines = file.content.split("\n");
@@ -351,24 +353,17 @@ class CompilerBaselineRunner extends RunnerBase {
 
                             const typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
                             const formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
-                            if (!typeMap[file.unitName]) {
-                                typeMap[file.unitName] = {};
-                            }
-
-                            let typeInfo = [formattedLine];
-                            const existingTypeInfo = typeMap[file.unitName][result.line];
-                            if (existingTypeInfo) {
-                                typeInfo = existingTypeInfo.concat(typeInfo);
-                            }
-                            typeMap[file.unitName][result.line] = typeInfo;
+                            const linesMap = ts.getOrUpdateMap(typeMap, file.unitName, () => new Map<number, string[]>());
+                            ts.multiMapAdd(linesMap, result.line, formattedLine);
                         });
 
                         typeLines.push("=== " + file.unitName + " ===\r\n");
                         for (let i = 0; i < codeLines.length; i++) {
                             const currentCodeLine = codeLines[i];
                             typeLines.push(currentCodeLine + "\r\n");
-                            if (typeMap[file.unitName]) {
-                                const typeInfo = typeMap[file.unitName][i];
+                            const typeInfos = typeMap.get(file.unitName);
+                            if (typeInfos) {
+                                const typeInfo = typeInfos.get(i);
                                 if (typeInfo) {
                                     typeInfo.forEach(ty => {
                                         typeLines.push(">" + ty + "\r\n");

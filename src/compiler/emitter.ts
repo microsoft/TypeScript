@@ -3430,7 +3430,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         return;
                     }
 
-                    for (const labelText in table) {
+                    for (const labelText in table) { //ts.forEach...
                         const labelMarker = table[labelText];
                         writeLine();
                         write(`case "${labelMarker}": `);
@@ -6972,7 +6972,7 @@ const _super = (function (geti, seti) {
                 }
 
                 if (exportSpecifiers) {
-                    for (const n in exportSpecifiers) {
+                    for (const n in exportSpecifiers) { //ts.forEach...
                         for (const specifier of exportSpecifiers[n]) {
                             // write name of export specified, i.e. 'export {x}'
                             writeExportedName(specifier.name);
