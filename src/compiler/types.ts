@@ -1662,7 +1662,7 @@ namespace ts {
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
-        /* @internal */ classifiableNames?: SSet; //is this ever used?
+        /* @internal */ classifiableNames?: SSet;
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
@@ -2157,10 +2157,6 @@ namespace ts {
     /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks { }
 
-
-    //export interface SymbolTable {
-    //    [index: string]: Symbol;
-    //}
     export type SymbolTable = SMap<Symbol>;
 
     /** Represents a "prefix*suffix" pattern. */
@@ -2463,7 +2459,6 @@ namespace ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
-        //If these use IDs, they should be maps and not arrays!
         mappedTypes?: Type[];       // Types mapped by this mapper
         targetTypes?: Type[];       // Types substituted for mapped types
         instantiations?: Type[];    // Cache of instantiations created using this type mapper.

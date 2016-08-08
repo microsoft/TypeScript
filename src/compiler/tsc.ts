@@ -786,39 +786,36 @@ namespace ts {
             const result: ObjMap<string | number | boolean> = {};
             const optionsNameMap = getOptionNameMap().optionNameMap;
 
-            for (const name in options) { //ts.forEach...
-                if (hasProperty(options, name)) {
-                    // tsconfig only options cannot be specified via command line,
-                    // so we can assume that only types that can appear here string | number | boolean
-                    const value = <string | number | boolean>options[name];
-                    switch (name) {
-                        case "init":
-                        case "watch":
-                        case "version":
-                        case "help":
-                        case "project":
-                            break;
-                        default:
-                            let optionDefinition = optionsNameMap.get(name.toLowerCase());
-                            if (optionDefinition) {
-                                if (typeof optionDefinition.type === "string") {
-                                    // string, number or boolean
-                                    result[name] = value;
-                                }
-                                else {
-                                    // Enum
-                                    const typeMap = <SMap<number>>optionDefinition.type;
-                                    typeMap.forEach((enumValue, key) => {
-                                        if (enumValue === value) {
-                                            result[name] = key;
-                                        }
-                                    });
-                                }
+            // tsconfig only options cannot be specified via command line,
+            // so we can assume that only types that can appear here string | number | boolean
+            ts.forEachValueAndKey(<ObjMap<string | number | boolean>>options, (value, name) => {
+                switch (name) {
+                    case "init":
+                    case "watch":
+                    case "version":
+                    case "help":
+                    case "project":
+                        break;
+                    default:
+                        let optionDefinition = optionsNameMap.get(name.toLowerCase());
+                        if (optionDefinition) {
+                            if (typeof optionDefinition.type === "string") {
+                                // string, number or boolean
+                                result[name] = value;
                             }
-                            break;
-                    }
+                            else {
+                                // Enum
+                                const typeMap = <SMap<number>>optionDefinition.type;
+                                typeMap.forEach((enumValue, key) => {
+                                    if (enumValue === value) {
+                                        result[name] = key;
+                                    }
+                                });
+                            }
+                        }
+                        break;
                 }
-            }
+            });
             return result;
         }
     }

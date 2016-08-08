@@ -129,8 +129,8 @@ namespace Playback {
     function initWrapper(wrapper: PlaybackSystem, underlying: ts.System): void;
     function initWrapper(wrapper: PlaybackIO, underlying: Harness.IO): void;
     function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: ts.System | Harness.IO): void {
-        ts.forEach(Object.keys(underlying), prop => { //ts.forEachKey
-            (<any>wrapper)[prop] = (<any>underlying)[prop];
+        ts.forEachValueAndKey(<ts.ObjMap<any>>underlying, (value, prop) => { //TODO: copyMap
+            (<any>wrapper)[prop] = value;
         });
 
         wrapper.startReplayFromString = logString => {

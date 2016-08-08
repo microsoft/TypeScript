@@ -20,7 +20,7 @@ namespace ts {
     }
 
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
-        let files = new SMap<T>();
+        const files = new SMap<T>();
         return {
             get,
             set,
@@ -30,7 +30,6 @@ namespace ts {
             clear,
         };
 
-        //this is silly
         function forEachValueInMap(f: (key: Path, value: T) => void) {
             files.forEach((value, key) => f(<Path>key, value));
         }
@@ -81,27 +80,6 @@ namespace ts {
             }
         }
         return -1;
-    }
-
-    export function clone<T>(object: T): T {
-        const result: any = {};
-        for (const id in object) { //ts.forEach...
-            result[id] = (<any>object)[id];
-        }
-        return <T>result;
-    }
-
-    export function extend<T1 extends ObjMap<{}>, T2 extends ObjMap<{}>>(first: T1 , second: T2): T1 & T2 {
-        const result: T1 & T2 = <any>{};
-        for (const id in first) { //ts.forEach...
-            (result as any)[id] = first[id];
-        }
-        for (const id in second) { //ts.forEach...
-            if (!hasProperty(result, id)) {
-                (result as any)[id] = second[id];
-            }
-        }
-        return result;
     }
 
     export function memoize<T>(callback: () => T): () => T {

@@ -1265,7 +1265,7 @@ namespace ts {
                 (oldOptions.maxNodeModuleJsDepth !== options.maxNodeModuleJsDepth) ||
                 !arrayIsEqualTo(oldOptions.typeRoots, oldOptions.typeRoots) ||
                 !arrayIsEqualTo(oldOptions.rootDirs, options.rootDirs) ||
-                !mapIsEqualTo(oldOptions.paths, options.paths)) {
+                !objMapIsEqualTo(oldOptions.paths, options.paths)) {
                 return false;
             }
 
@@ -2184,18 +2184,15 @@ namespace ts {
             }
 
             if (options.paths) {
-                for (const key in options.paths) { //ts.forEach...
-                    if (!hasProperty(options.paths, key)) {
-                        continue;
-                    }
+                ts.forEachValueAndKey(options.paths, (value, key) => {
                     if (!hasZeroOrOneAsteriskCharacter(key)) {
                         programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, key));
                     }
-                    if (isArray(options.paths[key])) {
-                        if (options.paths[key].length === 0) {
+                    if (isArray(value)) {
+                        if (value.length === 0) {
                             programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substitutions_for_pattern_0_shouldn_t_be_an_empty_array, key));
                         }
-                        for (const subst of options.paths[key]) {
+                        for (const subst of value) {
                             const typeOfSubst = typeof subst;
                             if (typeOfSubst === "string") {
                                 if (!hasZeroOrOneAsteriskCharacter(subst)) {
@@ -2210,7 +2207,7 @@ namespace ts {
                     else {
                         programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substitutions_for_pattern_0_should_be_an_array, key));
                     }
-                }
+                });
             }
 
             if (!options.sourceMap && !options.inlineSourceMap) {

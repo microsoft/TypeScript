@@ -940,7 +940,7 @@ namespace ts {
         public languageVariant: LanguageVariant;
         public identifiers: ts.SMap<string>;
         public nameTable: ts.SMap<number>;
-        public resolvedModules: ts.SMap<ResolvedModule>; //TODO: this was a *public* OldMap<ResolvedModule>... but in types.ts SourceFile it's internal!
+        public resolvedModules: ts.SMap<ResolvedModule>;
         public resolvedTypeReferenceDirectiveNames: ts.SMap<ResolvedTypeReferenceDirective>;
         public imports: LiteralExpression[];
         public moduleAugmentations: LiteralExpression[];
@@ -966,7 +966,6 @@ namespace ts {
             return ts.getPositionOfLineAndCharacter(this, line, character);
         }
 
-        //This is internal on parent, should be internal here!
         public getNamedDeclarations(): ts.SMap<Declaration[]> {
             if (!this.namedDeclarations) {
                 this.namedDeclarations = this.computeNamedDeclarations();
@@ -2026,7 +2025,6 @@ namespace ts {
         fileName?: string;
         reportDiagnostics?: boolean;
         moduleName?: string;
-        //this isn't internal, can't change to map?
         renamedDependencies?: ObjMap<string>;
     }
 
@@ -2053,7 +2051,7 @@ namespace ts {
                 continue;
             }
 
-            const value = options[opt.name]; //todo: use getProperty...
+            const value = options[opt.name];
             // Value should be a key of opt.type
             if (typeof value === "string") {
                 // If value is not a string, this will fail
@@ -3101,7 +3099,7 @@ namespace ts {
                  oldSettings.allowJs !== newSettings.allowJs ||
                  oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit ||
                  oldSettings.baseUrl !== newSettings.baseUrl ||
-                 !mapIsEqualTo(oldSettings.paths, newSettings.paths));
+                 !objMapIsEqualTo(oldSettings.paths, newSettings.paths));
 
             // Now create a new compiler
             const compilerHost: CompilerHost = {

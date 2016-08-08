@@ -87,46 +87,6 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    //kill?
-    export function mapIsEqualTo<T>(map1: ObjMap<T>, map2: ObjMap<T>): boolean {
-        if (!map1 || !map2) {
-            return map1 === map2;
-        }
-        return containsAll(map1, map2) && containsAll(map2, map1);
-    }
-
-    //kill?
-    function containsAll<T>(map: ObjMap<T>, other: ObjMap<T>): boolean {
-        for (const key in map) { //ts.forEach...
-            if (!hasProperty(map, key)) {
-                continue;
-            }
-            if (!hasProperty(other, key) || map[key] !== other[key]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    export function arrayIsEqualTo<T>(array1: T[], array2: T[], equaler?: (a: T, b: T) => boolean): boolean {
-        if (!array1 || !array2) {
-            return array1 === array2;
-        }
-
-        if (array1.length !== array2.length) {
-            return false;
-        }
-
-        for (let i = 0; i < array1.length; i++) {
-            const equals = equaler ? equaler(array1[i], array2[i]) : array1[i] === array2[i];
-            if (!equals) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
         return sourceFile.resolvedModules && sourceFile.resolvedModules.has(moduleNameText);
     }

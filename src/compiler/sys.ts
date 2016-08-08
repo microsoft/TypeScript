@@ -286,7 +286,6 @@ namespace ts {
                 function removeFileWatcherCallback(filePath: string, callback: FileWatcherCallback) {
                     const callbacks = fileWatcherCallbacks.get(filePath);
                     if (callbacks) {
-                        //TODO: why copy?
                         const newCallbacks = copyListRemovingItem(callback, callbacks);
                         if (newCallbacks.length === 0) {
                             fileWatcherCallbacks.delete(filePath);

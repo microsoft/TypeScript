@@ -37,7 +37,7 @@ namespace ts {
     }
 
     abstract class ShimMapCommon<K extends any, V> implements MapCommon<K, V> {
-        protected data: any; //ObjMap<V> | V[]
+        protected data: any; // ObjMap<V> | V[]
 
         abstract clear(): void;
 
@@ -133,7 +133,7 @@ namespace ts {
     export function mapSize<V>(map: SMap<V>): number {
         if (map instanceof Map) {
             // For native maps, this is available as a property.
-            return (<any> map).size;
+            return (<any>map).size;
         }
         else {
             let size = 0;
@@ -382,7 +382,7 @@ namespace ts {
     export function reduceProperties<T, U>(map: ObjMap<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
         let result = initial;
         if (map) {
-            for (const key in map) { //ts.forEach...
+            for (const key in map) {
                 if (hasProperty(map, key)) {
                     result = callback(result, map[key], String(key));
                 }
@@ -395,7 +395,7 @@ namespace ts {
     /** Convert an ObjMap to an SMap. */
     export function smapOfObjMap<V>(objMap: ObjMap<V>): SMap<V> {
         const result = new SMap<V>();
-        for (const key in objMap) { //ts.forEach...
+        for (const key in objMap) {
             if (hasProperty(objMap, key)) {
                 result.set(key, objMap[key]);
             }
@@ -403,9 +403,17 @@ namespace ts {
         return result;
     }
 
+    export function forEachValueAndKey<T>(map: ObjMap<T>, callback: (value: T, key: string) => void): void {
+        for (const id in map) {
+            if (hasProperty(map, id)) {
+                callback(map[id], id);
+            }
+        }
+    }
+
     export function forEachKey<T, U>(map: ObjMap<T>, callback: (key: string) => U): U {
         let result: U;
-        for (const id in map) { //ts.forEach...
+        for (const id in map) {
             if (result = callback(id)) break;
         }
         return result;
@@ -413,7 +421,7 @@ namespace ts {
 
     export function forEachValue<T, U>(map: ObjMap<T>, callback: (value: T) => U): U {
         let result: U;
-        for (const id in map) { //ts.forEach...
+        for (const id in map) {
             if (result = callback(map[id])) break;
         }
         return result;
@@ -427,7 +435,7 @@ namespace ts {
 
     export function getKeys<T>(map: ObjMap<T>): string[] {
         const keys: string[] = [];
-        for (const key in map) { //ts.forEach...
+        for (const key in map) {
             keys.push(key);
         }
         return keys;
@@ -438,8 +446,48 @@ namespace ts {
     }
 
     export function isEmpty<T>(map: ObjMap<T>) {
-        for (const id in map) { //ts.forEach...
+        for (const id in map) {
             if (hasProperty(map, id)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    export function clone<T>(object: T): T {
+        const result: any = {};
+        for (const id in object) {
+            result[id] = (<any>object)[id];
+        }
+        return <T>result;
+    }
+
+    export function extend<T1 extends ObjMap<{}>, T2 extends ObjMap<{}>>(first: T1 , second: T2): T1 & T2 {
+        const result: T1 & T2 = <any>{};
+        for (const id in first) {
+            (result as any)[id] = first[id];
+        }
+        for (const id in second) {
+            if (!hasProperty(result, id)) {
+                (result as any)[id] = second[id];
+            }
+        }
+        return result;
+    }
+
+    export function objMapIsEqualTo<T>(map1: ObjMap<T>, map2: ObjMap<T>): boolean {
+        if (!map1 || !map2) {
+            return map1 === map2;
+        }
+        return containsAll(map1, map2) && containsAll(map2, map1);
+    }
+
+    function containsAll<T>(map: ObjMap<T>, other: ObjMap<T>): boolean {
+        for (const key in map) { //ts.forEach...
+            if (!hasProperty(map, key)) {
+                continue;
+            }
+            if (!hasProperty(other, key) || map[key] !== other[key]) {
                 return false;
             }
         }
@@ -678,5 +726,24 @@ namespace ts {
             }
         }
         return initial;
+    }
+
+    export function arrayIsEqualTo<T>(array1: T[], array2: T[], equaler?: (a: T, b: T) => boolean): boolean {
+        if (!array1 || !array2) {
+            return array1 === array2;
+        }
+
+        if (array1.length !== array2.length) {
+            return false;
+        }
+
+        for (let i = 0; i < array1.length; i++) {
+            const equals = equaler ? equaler(array1[i], array2[i]) : array1[i] === array2[i];
+            if (!equals) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -210,7 +210,7 @@ namespace ts {
         const mergedSymbols: Symbol[] = [];
         const symbolLinks: SymbolLinks[] = [];
         const nodeLinks: NodeLinks[] = [];
-        const flowLoopCaches: SMap<Type>[] = []; //TODO: should this be Map<number, Map<number, Type>>
+        const flowLoopCaches: SMap<Type>[] = [];
         const flowLoopNodes: FlowNode[] = [];
         const flowLoopKeys: string[] = [];
         const flowLoopTypes: Type[][] = [];
@@ -4428,15 +4428,7 @@ namespace ts {
 
         function getPropertyOfUnionOrIntersectionType(type: UnionOrIntersectionType, name: string): Symbol {
             const properties = type.resolvedProperties || (type.resolvedProperties = new SMap());
-            const alreadyExistingProperty = properties.get(name); //rename
-            if (alreadyExistingProperty) {
-                return alreadyExistingProperty;
-            }
-            const property = createUnionOrIntersectionProperty(type, name);
-            if (property) {
-                properties.set(name, property);
-            }
-            return property;
+            return getOrUpdateMap(properties, name, () => createUnionOrIntersectionProperty(type, name));
         }
 
         // Return the symbol for the property with the given name in the given type. Creates synthetic union properties when
@@ -4546,13 +4538,11 @@ namespace ts {
         }
 
         function symbolsToArray(symbols: SymbolTable): Symbol[] {
-            const result: Symbol[] = [];
-            symbols.forEach((symbol, id) => {
+            return mapAndFilterMap(symbols, (symbol, id) => {
                 if (!isReservedMemberName(id)) {
-                    result.push(symbol);
+                    return symbol;
                 }
-            })
-            return result;
+            });
         }
 
         function isJSDocOptionalParameter(node: ParameterDeclaration) {
@@ -5208,9 +5198,7 @@ namespace ts {
         }
 
         function createTupleType(elementTypes: Type[]) {
-            //TODO: keys don't *have* to be strings any more.
-            const id = getTypeListId(elementTypes);
-            return getOrUpdateMap(tupleTypes, id, () => createNewTupleType(elementTypes));
+            return getOrUpdateMap(tupleTypes, getTypeListId(elementTypes), () => createNewTupleType(elementTypes));
         }
 
         function createNewTupleType(elementTypes: Type[]) {
@@ -6181,7 +6169,7 @@ namespace ts {
             let errorInfo: DiagnosticMessageChain;
             let sourceStack: ObjectType[];
             let targetStack: ObjectType[];
-            let maybeStack: SMap<RelationComparisonResult>[]; //Is this a Relation[]?
+            let maybeStack: Relation[];
             let expandingFlags: number;
             let depth = 0;
             let overflow = false;
@@ -13661,7 +13649,6 @@ namespace ts {
         }
 
         function checkClassForDuplicateDeclarations(node: ClassLikeDeclaration) {
-            //TODO: use an enum, stupid
             const getter = 1, setter = 2, property = getter | setter;
 
             const instanceNames = new SMap<number>();

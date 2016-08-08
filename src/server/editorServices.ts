@@ -18,10 +18,9 @@ namespace ts.server {
     const lineCollectionCapacity = 4;
 
     function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
-        const hasOwnProperty = Object.prototype.hasOwnProperty;
-        Object.keys(formatOptions).forEach((key) => { //ts.forEachKey
+        forEachKey(formatOptions, key => {
             const codeKey = key.charAt(0).toUpperCase() + key.substring(1);
-            if (hasOwnProperty.call(formatCodeOptions, codeKey)) {
+            if (hasProperty(formatCodeOptions, codeKey)) {
                 formatCodeOptions[codeKey] = formatOptions[key];
             }
         });
@@ -378,7 +377,7 @@ namespace ts.server {
     export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
-        wildcardDirectories?: ObjMap<ts.WatchDirectoryFlags>; //public, can't change!
+        wildcardDirectories?: ObjMap<ts.WatchDirectoryFlags>;
         compilerOptions?: ts.CompilerOptions;
     }
 
@@ -387,11 +386,11 @@ namespace ts.server {
         projectFilename: string;
         projectFileWatcher: FileWatcher;
         directoryWatcher: FileWatcher;
-        directoriesWatchedForWildcards: ObjMap<FileWatcher>; //public, can't change
+        directoriesWatchedForWildcards: ObjMap<FileWatcher>;
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
         program: ts.Program;
-        filenameToSourceFile: ts.ObjMap<ts.SourceFile> = {}; //public, can't change
+        filenameToSourceFile: ts.ObjMap<ts.SourceFile> = {};
         updateGraphSeq = 0;
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
@@ -613,7 +612,7 @@ namespace ts.server {
     }
 
     export class ProjectService {
-        filenameToScriptInfo: ts.ObjMap<ScriptInfo> = {}; //public, can't change
+        filenameToScriptInfo: ts.ObjMap<ScriptInfo> = {};
         // open, non-configured root files
         openFileRoots: ScriptInfo[] = [];
         // projects built from openFileRoots
@@ -625,12 +624,12 @@ namespace ts.server {
         // open files that are roots of a configured project
         openFileRootsConfigured: ScriptInfo[] = [];
         // a path to directory watcher map that detects added tsconfig files
-        directoryWatchersForTsconfig: ts.ObjMap<FileWatcher> = {}; //public, can't change
+        directoryWatchersForTsconfig: ts.ObjMap<FileWatcher> = {};
         // count of how many projects are using the directory watcher. If the
         // number becomes 0 for a watcher, then we should close it.
-        directoryWatchersRefCount: ts.ObjMap<number> = {}; //public, can't change
+        directoryWatchersRefCount: ts.ObjMap<number> = {};
         hostConfiguration: HostConfiguration;
-        timerForDetectingProjectFileListChanges: ObjMap<any> = {}; //public, can't change
+        timerForDetectingProjectFileListChanges: ObjMap<any> = {};
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
