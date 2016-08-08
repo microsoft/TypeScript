@@ -291,8 +291,8 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
 
-                const fullResults = new Map<string, TypeWriterResult[]>();
-                const pullResults = new Map<string, TypeWriterResult[]>();
+                const fullResults = new ts.SMap<TypeWriterResult[]>();
+                const pullResults = new ts.SMap<TypeWriterResult[]>();
 
                 for (const sourceFile of allFiles) {
                     fullResults.set(sourceFile.unitName, fullWalker.getTypeAndSymbols(sourceFile.unitName));
@@ -338,11 +338,11 @@ class CompilerBaselineRunner extends RunnerBase {
                     }
                 }
 
-                function generateBaseLine(typeWriterResults: Map<string, TypeWriterResult[]>, isSymbolBaseline: boolean): string {
+                function generateBaseLine(typeWriterResults: ts.SMap<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
                     const typeLines: string[] = [];
                     //maps fileName -> (lineNum -> string[])
                     //TODO: Should probably be just string[][] instead of Map<number, string[]
-                    const typeMap = new Map<string, Map<number, string[]>>();  //: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
+                    const typeMap = new ts.SMap<ts.NMap<string[]>>();  //: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
 
                     allFiles.forEach(file => {
                         const codeLines = file.content.split("\n");
@@ -353,7 +353,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
                             const typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
                             const formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
-                            const linesMap = ts.getOrUpdateMap(typeMap, file.unitName, () => new Map<number, string[]>());
+                            const linesMap = ts.getOrUpdateMap(typeMap, file.unitName, () => new ts.NMap<string[]>());
                             ts.multiMapAdd(linesMap, result.line, formattedLine);
                         });
 

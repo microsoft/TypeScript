@@ -61,7 +61,7 @@ namespace ts {
         },
         {
             name: "jsx",
-            type: new Map([
+            type: new SMap([
                 ["preserve", JsxEmit.Preserve],
                 ["react", JsxEmit.React]
             ]),
@@ -91,7 +91,7 @@ namespace ts {
         {
             name: "module",
             shortName: "m",
-            type: new Map([
+            type: new SMap([
                 ["none", ModuleKind.None],
                 ["commonjs", ModuleKind.CommonJS],
                 ["amd", ModuleKind.AMD],
@@ -105,7 +105,7 @@ namespace ts {
         },
         {
             name: "newLine",
-            type: new Map([
+            type: new SMap([
                 ["crlf", NewLineKind.CarriageReturnLineFeed],
                 ["lf", NewLineKind.LineFeed]
             ]),
@@ -250,7 +250,7 @@ namespace ts {
         {
             name: "target",
             shortName: "t",
-            type: new Map([
+            type: new SMap([
                 ["es3", ScriptTarget.ES3],
                 ["es5", ScriptTarget.ES5],
                 ["es6", ScriptTarget.ES6],
@@ -284,7 +284,7 @@ namespace ts {
         },
         {
             name: "moduleResolution",
-            type: new Map([
+            type: new SMap([
                 ["node", ModuleResolutionKind.NodeJs],
                 ["classic", ModuleResolutionKind.Classic],
             ]),
@@ -392,7 +392,7 @@ namespace ts {
             type: "list",
             element: {
                 name: "lib",
-                type: new Map([
+                type: new SMap([
                     // JavaScript only
                     ["es5", "lib.es5.d.ts"],
                     ["es6", "lib.es2015.d.ts"],
@@ -458,8 +458,8 @@ namespace ts {
 
     /* @internal */
     export interface OptionNameMap {
-        optionNameMap: Map<string, CommandLineOption>;
-        shortOptionNames: Map<string, string>;
+        optionNameMap: SMap<CommandLineOption>;
+        shortOptionNames: SMap<string>;
     }
 
     let optionNameMapCache: OptionNameMap;
@@ -470,8 +470,8 @@ namespace ts {
             return optionNameMapCache;
         }
 
-        const optionNameMap = new Map<string, CommandLineOption>();
-        const shortOptionNames = new Map<string, string>();
+        const optionNameMap = new SMap<CommandLineOption>();
+        const shortOptionNames = new SMap<string>();
         forEach(optionDeclarations, option => {
             optionNameMap.set(option.name.toLowerCase(), option);
             if (option.shortName) {
@@ -960,12 +960,12 @@ namespace ts {
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map later when when including
         // wildcard paths.
-        const literalFileMap = new Map<string, string>();
+        const literalFileMap = new SMap<string>();
 
         // Wildcard paths (provided via the "includes" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard, and to handle extension priority.
-        const wildcardFileMap = new Map<string, string>();
+        const wildcardFileMap = new SMap<string>();
 
         if (include) {
             include = validateSpecs(include, errors, /*allowTrailingRecursion*/ false);
@@ -1109,7 +1109,7 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string, string>, wildcardFiles: Map<string, string>, extensions: string[], keyMapper: (value: string) => string) {
+    function hasFileWithHigherPriorityExtension(file: string, literalFiles: SMap<string>, wildcardFiles: SMap<string>, extensions: string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority);
         for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
@@ -1131,7 +1131,7 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string, string>, extensions: string[], keyMapper: (value: string) => string) {
+    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: SMap<string>, extensions: string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority);
         for (let i = nextExtensionPriority; i < extensions.length; i++) {

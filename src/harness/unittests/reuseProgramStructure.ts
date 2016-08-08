@@ -96,7 +96,7 @@ namespace ts {
     }
 
     function createTestCompilerHost(texts: NamedSourceText[], target: ScriptTarget): CompilerHost {
-        const files = new Map<string, SourceFileWithText>();
+        const files = new ts.SMap<SourceFileWithText>();
         for (const t of texts) {
             const file = <SourceFileWithText>createSourceFile(t.name, t.text.getFullText(), target);
             file.sourceText = t.text;
@@ -164,7 +164,7 @@ namespace ts {
         assert.isTrue(expected.primary === actual.primary, `'primary': expected '${expected.primary}' to be equal to '${actual.primary}'`);
     }
 
-    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: Map<string, T>, getCache: (f: SourceFile) => Map<string, T>, entryChecker: (expected: T, original: T) => void): void {
+    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: ts.SMap<T>, getCache: (f: SourceFile) => ts.SMap<T>, entryChecker: (expected: T, original: T) => void): void {
         const file = program.getSourceFile(fileName);
         assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
         const cache = getCache(file);
@@ -173,8 +173,8 @@ namespace ts {
         }
         else {
             assert.isTrue(cache !== undefined, `expected ${caption} to be set`);
-            const actualCacheSize = cache.size;
-            const expectedSize = expectedContent.size;
+            const actualCacheSize = ts.mapSize(cache);
+            const expectedSize = ts.mapSize(expectedContent);
             assert.isTrue(actualCacheSize === expectedSize, `expected actual size: ${actualCacheSize} to be equal to ${expectedSize}`);
 
             expectedContent.forEach((expected, id) => {
@@ -189,11 +189,11 @@ namespace ts {
         }
     }
 
-    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: Map<string, ResolvedModule>): void {
+    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: ts.SMap<ResolvedModule>): void {
         checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, checkResolvedModule);
     }
 
-    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: Map<string, ResolvedTypeReferenceDirective>): void {
+    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: ts.SMap<ResolvedTypeReferenceDirective>): void {
         checkCache("resolved type directives", program, fileName, expectedContent, f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
     }
 
@@ -332,7 +332,7 @@ namespace ts {
                 files[0].text = files[0].text.updateImportsAndExports(newImports);
             });
             assert.isTrue(!program_3.structureIsReused);
-            checkResolvedModulesCache(program_4, "a.ts", new Map([["b", { resolvedFileName: "b.ts" }], ["c", undefined]]));
+            checkResolvedModulesCache(program_4, "a.ts", new SMap([["b", { resolvedFileName: "b.ts" }], ["c", undefined]]));
         });
 
         it("resolved type directives cache follows type directives", () => {

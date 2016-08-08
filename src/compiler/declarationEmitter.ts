@@ -59,7 +59,7 @@ namespace ts {
         let resultHasExternalModuleIndicator: boolean;
         let currentText: string;
         let currentLineMap: number[];
-        let currentIdentifiers: Map<string, string>;
+        let currentIdentifiers: SMap<string>;
         let isCurrentFileExternalModule: boolean;
         let reportedDeclarationError = false;
         let errorNameNode: DeclarationName;

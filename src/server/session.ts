@@ -1061,7 +1061,7 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
-        private handlers = new Map<string, (request: protocol.Request) => { response?: any, responseRequired?: boolean }>([
+        private handlers = new ts.SMap<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>([
             [CommandNames.Exit, () => {
                 this.exit();
                 return { responseRequired: false };

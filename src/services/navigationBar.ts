@@ -234,7 +234,7 @@ namespace ts.NavigationBar {
 
     /** Merge declarations of the same kind. */
     function mergeChildren(children: NavigationBarNode[]): void {
-        const nameToItems = new Map<string, NavigationBarNode | NavigationBarNode[]>();
+        const nameToItems = new ts.SMap<NavigationBarNode | NavigationBarNode[]>();
         filterMutate(children, child => {
             const decl = <Declaration>child.node;
             const name = decl.name && nodeText(decl.name);

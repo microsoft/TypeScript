@@ -55,7 +55,7 @@ namespace ts {
         tryScan<T>(callback: () => T): T;
     }
 
-    const textToToken = new Map<string, SyntaxKind>([
+    const textToToken = new SMap<SyntaxKind>([
         ["abstract", SyntaxKind.AbstractKeyword],
         ["any", SyntaxKind.AnyKeyword],
         ["as", SyntaxKind.AsKeyword],
@@ -271,7 +271,7 @@ namespace ts {
             lookupInUnicodeMap(code, unicodeES3IdentifierPart);
     }
 
-    function makeReverseMap(source: Map<string, number>): string[] {
+    function makeReverseMap(source: SMap<number>): string[] {
         const result: string[] = [];
         source.forEach((number, name) => {
             result[number] = name;

@@ -90,7 +90,7 @@ namespace Playback {
 
     //There's already a memoize in harness.ts! But this one is better...
     function memoize<T>(func: (s: string) => T): Memoized<T> {
-        let lookup = new Map<string, T>();
+        let lookup = new ts.SMap<T>();
         const run: Memoized<T> = <Memoized<T>>((s: string) => {
             if (lookup.has(s)) return lookup.get(s); //TODO: want to just use getOrUpdateMap, but worry about undefined...
             return ts.setAndReturn(lookup, s, func(s));

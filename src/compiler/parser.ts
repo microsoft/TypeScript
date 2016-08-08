@@ -485,7 +485,7 @@ namespace ts {
         let currentToken: SyntaxKind;
         let sourceText: string;
         let nodeCount: number;
-        let identifiers: Map<string, string>;
+        let identifiers: SMap<string>;
         let identifierCount: number;
 
         let parsingContext: ParsingContext;
@@ -595,7 +595,7 @@ namespace ts {
 
             parseDiagnostics = [];
             parsingContext = 0;
-            identifiers = new Map();
+            identifiers = new SMap();
             identifierCount = 0;
             nodeCount = 0;
 

@@ -95,7 +95,7 @@ namespace FourSlash {
 
     export import IndentStyle = ts.IndentStyle;
 
-    const entityMap = new Map<string, string>([
+    const entityMap = new ts.SMap<string>([
         ["&", "&amp;"],
         ["\"", "&quot;"],
         ["'", "&#39;"],
@@ -204,7 +204,7 @@ namespace FourSlash {
 
         public formatCodeOptions: ts.FormatCodeOptions;
 
-        private inputFiles = new Map<string, string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
+        private inputFiles = new ts.SMap<string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
 
         // Add input file which has matched file name with the given reference-file path.
         // This is necessary when resolveReference flag is specified
@@ -593,7 +593,7 @@ namespace FourSlash {
 
         public noItemsWithSameNameButDifferentKind(): void {
             const completions = this.getCompletionListAtCaret();
-            const uniqueItems = new Map<string, string>();
+            const uniqueItems = new ts.SMap<string>();
             for (const item of completions.entries) {
                 const uniqueItem = uniqueItems.get(item.name);
                 if (!uniqueItem) {
@@ -1639,8 +1639,8 @@ namespace FourSlash {
             return this.testData.ranges;
         }
 
-        public rangesByText(): Map<string, Range[]> {
-            const result = new Map<string, Range[]>();
+        public rangesByText(): ts.SMap<Range[]> {
+            const result = new ts.SMap<Range[]>();
             for (const range of this.getRanges()) {
                 const text = this.rangeText(range);
                 ts.multiMapAdd(result, text, range);
@@ -1898,7 +1898,7 @@ namespace FourSlash {
 
         public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
 
-            const openBraceMap: Map<string, ts.CharacterCodes> = new Map([
+            const openBraceMap: ts.SMap<ts.CharacterCodes> = new ts.SMap([
                 ["(", ts.CharacterCodes.openParen],
                 ["{", ts.CharacterCodes.openBrace],
                 ["[", ts.CharacterCodes.openBracket],
@@ -2773,7 +2773,7 @@ namespace FourSlashInterface {
             return this.state.getRanges();
         }
 
-        public rangesByText(): Map<string, FourSlash.Range[]> {
+        public rangesByText(): ts.SMap<FourSlash.Range[]> {
             return this.state.rangesByText();
         }
 

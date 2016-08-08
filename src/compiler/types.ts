@@ -1,42 +1,5 @@
-// Global declarations adapted from es2015.collection.d.ts and es2015.iterable.d.ts and es2015.symbol.d.ts
-interface SymbolConstructor {
-    /**
-      * A method that returns the default iterator for an object. Called by the semantics of the
-      * for-of statement.
-      */
-    readonly iterator: symbol;
-}
-declare var Symbol: SymbolConstructor;
 
-interface IteratorResult<T> {
-    done: boolean;
-    value: T;
-}
-
-interface Iterator<T> {
-    next(): IteratorResult<T>;
-}
-
-interface Map<K, V> {
-    entries(): Iterator<[K, V]>;
-    keys(): Iterator<K>;
-    values(): Iterator<V>;
-    clear(): void;
-    delete(key: K): boolean;
-    forEach(callbackfn: (value: V, index: K, map: Map<K, V>) => void, thisArg?: any): void;
-    get(key: K): V | undefined;
-    has(key: K): boolean;
-    set(key: K, value?: V): this;
-    readonly size: number;
-}
-interface MapConstructor {
-    new (): Map<any, any>;
-    new <K, V>(entries?: [K, V][]): Map<K, V>;
-    new <K, V>(entries: Map<K, V>): Map<K, V>;
-    readonly prototype: Map<any, any>;
-}
-declare var Map: MapConstructor;
-
+//you too...
 interface Set<T> {
     add(value: T): this;
     clear(): void;
@@ -53,11 +16,201 @@ interface SetConstructor {
 }
 declare var Set: SetConstructor;
 
+
+
 namespace ts {
+    export interface Iterator<T> {
+        next(): { done: boolean; value: T | undefined }
+    }
+
+    export interface AnyMap<K, V> {
+        //TODO: entries, keys, values
+        clear(): void;
+        delete(key: K): void;
+        get(key: K): V | undefined;
+        has(key: K): boolean;
+        set(key: K, value: V): void;
+        //readonly size: number;
+    }
+
+    export interface SMap<V> extends AnyMap<string, V> {
+        entries(): Iterator<[string, V]>;
+        forEach(fn: (value: V, key: string) => void): void;
+    }
+    export interface SMapConstructor {
+        new(): SMap<any>;
+        new<V>(): SMap<V>;
+        new<V>(entries: [string, V][]): SMap<V>;
+        new<V>(otherMap: SMap<V>): SMap<V>;
+    }
+
+    export interface NMap<V> extends AnyMap<number, V> {}
+    export interface NMapConstructor {
+        new(): NMap<any>;
+        new<V>(): NMap<V>;
+        new<V>(entries: [number, V][]): NMap<V>;
+    }
+
+    declare const Map: (SMapConstructor & NMapConstructor) | undefined;
+    export const SMap: SMapConstructor =
+        Map ? Map : ShimSMap;
+    export const NMap: NMapConstructor =
+        Map ? Map : ShimNMap;
+
+    //TODO: this could be done better...
+    export function mapSize<V>(m: SMap<V>): number {
+        if (m instanceof Map) {
+            // For native maps, this is available as a property.
+            return (<any> m).size;
+        }
+        else {
+            let size = 0;
+            m.forEach(() => size++);
+            return size;
+        }
+    }
+
+    const hasOwnProperty = Object.prototype.hasOwnProperty;
+    //TODO: TEST!
+    class ShimSMap<V> implements SMap<V> {
+        private data: ObjMap<V>;
+        //TODO: most people don't need this...
+        //size: number;
+
+        constructor();
+        constructor(entries: [string, V][]);
+        constructor(otherMap: SMap<V>);
+        constructor(argument?: any) {
+            this.data = {};
+            if (argument === undefined) {
+                return;
+            }
+
+            if (argument instanceof SMap) {
+                this.data = clone(argument.data);
+            }
+            else {
+                Debug.assert(argument instanceof Array);
+                for (const [key, value] of argument) {
+                    this.set(key, value);
+                }
+            }
+        }
+
+        entries(): Iterator<[string, V]> {
+            //TODO: perf...
+            const data = this.data;
+            const keys = Object.keys(data);
+            let i = 0;
+            return {
+                next() {
+                    if (i < keys.length) {
+                        const key = keys[i];
+                        return { done: false, value: [key, data[key]] };
+                    }
+                    else {
+                        return { done: true, value: undefined }
+                    }
+                }
+            }
+        }
+
+        clear() {
+            this.data = {};
+        }
+
+        delete(key: string) {
+            delete this.data[key];
+        }
+
+        forEach(fn: (value: V, index: string) => void) {
+            for (const key in this.data) {
+                if (this.has(key)) {
+                    fn(this.data[key], key);
+                }
+            }
+        }
+
+        get(key: string) {
+            return this.has(key) ? this.data[key] : undefined;
+        }
+
+        has(key: string) {
+            return hasOwnProperty.call(this.data, key);
+        }
+
+        set(key: string, value: V) {
+            this.data[key] = value;
+        }
+
+        //get size() {
+        //    let size = 0;
+        //    this.forEach(() => size++);
+        //    return size;
+        //}
+    }
+
+    class ShimNMap<V> implements NMap<V> {
+        private data: V[];
+
+        constructor(entries?: [number, V][]) {
+            this.data = [];
+            if (entries) {
+                for (const [key, value] of entries) {
+                    this.set(key, value);
+                }
+            }
+        }
+
+        clear() {
+            this.data = [];
+        }
+
+        delete(key: number) {
+            delete this.data[key];
+        }
+
+        get(key: number) {
+            return this.has(key) ? this.data[key] : undefined;
+        }
+
+        has(key: number) {
+            return hasOwnProperty.call(this.data, key);
+        }
+
+        set(key: number, value: V) {
+            this.data[key] = value;
+        }
+    }
+
+
+    /*export const SMap = Map;
+    export type SMap<T> = Map<string, T>;*/
+
     export interface ObjMap<T> {
         //__objMapBrand: any;
         [index: string]: T;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // branded string type used to store absolute, normalized and canonicalized paths
     // arbitrary file name can be converted to Path via toPath function
@@ -1685,7 +1838,7 @@ namespace ts {
 
         // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
         /* @internal */
-        renamedDependencies?: Map<string, string>;
+        renamedDependencies?: SMap<string>;
 
         /**
          * lib.d.ts should have a reference comment like
@@ -1705,7 +1858,7 @@ namespace ts {
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
 
-        /* @internal */ identifiers: Map<string, string>;
+        /* @internal */ identifiers: SMap<string>; //TODO: more performant implementation? This maps strings to theirselves.
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
         /* @internal */ symbolCount: number;
@@ -1724,8 +1877,8 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules: Map<string, ResolvedModule>;
-        /* @internal */ resolvedTypeReferenceDirectiveNames: Map<string, ResolvedTypeReferenceDirective>;
+        /* @internal */ resolvedModules: SMap<ResolvedModule>;
+        /* @internal */ resolvedTypeReferenceDirectiveNames: SMap<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
@@ -1812,7 +1965,7 @@ namespace ts {
         /* @internal */ getTypeCount(): number;
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
-        /* @internal */ getResolvedTypeReferenceDirectives(): Map<string, ResolvedTypeReferenceDirective>;
+        /* @internal */ getResolvedTypeReferenceDirectives(): SMap<ResolvedTypeReferenceDirective>;
         // For testing purposes only.
         /* @internal */ structureIsReused?: boolean;
     }
@@ -1873,7 +2026,7 @@ namespace ts {
 
         getSourceFiles(): SourceFile[];
         getSourceFile(fileName: string): SourceFile;
-        getResolvedTypeReferenceDirectives(): Map<string, ResolvedTypeReferenceDirective>;
+        getResolvedTypeReferenceDirectives(): SMap<ResolvedTypeReferenceDirective>;
     }
 
     export interface TypeChecker {
@@ -2201,7 +2354,7 @@ namespace ts {
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
         typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
         inferredClassType?: Type;           // Type of an inferred ES5 class
-        instantiations?: Map<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
+        instantiations?: SMap<Type>; // Instantiations of generic type alias (undefined if non-generic)
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
         containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
@@ -2219,7 +2372,7 @@ namespace ts {
     //export interface SymbolTable {
     //    [index: string]: Symbol;
     //}
-    export type SymbolTable = Map<string, Symbol>;
+    export type SymbolTable = SMap<Symbol>;
 
     /** Represents a "prefix*suffix" pattern. */
     /* @internal */
@@ -2364,7 +2517,7 @@ namespace ts {
 
     // Enum types (TypeFlags.Enum)
     export interface EnumType extends Type {
-        memberTypes: Map<number, EnumLiteralType>;
+        memberTypes: NMap<EnumLiteralType>;
     }
 
     // Enum types (TypeFlags.EnumLiteral)
@@ -2411,7 +2564,7 @@ namespace ts {
     // Generic class and interface types
     export interface GenericType extends InterfaceType, TypeReference {
         /* @internal */
-        instantiations: Map<string, TypeReference>;   // Generic instantiation cache
+        instantiations: SMap<TypeReference>;   // Generic instantiation cache
     }
 
     export interface TupleType extends ObjectType {
@@ -2779,7 +2932,7 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionBase {
         name: string;
-        type: "string" | "number" | "boolean" | "object" | "list" | Map<string, number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
+        type: "string" | "number" | "boolean" | "object" | "list" | SMap<number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
@@ -2795,7 +2948,7 @@ namespace ts {
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
-        type: Map<string, number | string>;             // an object literal mapping named values to actual values
+        type: SMap<number | string>;             // an object literal mapping named values to actual values
     }
 
     /* @internal */

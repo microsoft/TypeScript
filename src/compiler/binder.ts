@@ -183,11 +183,11 @@ namespace ts {
             symbol.declarations.push(node);
 
             if (symbolFlags & SymbolFlags.HasExports && !symbol.exports) {
-                symbol.exports = new Map();
+                symbol.exports = new SMap();
             }
 
             if (symbolFlags & SymbolFlags.HasMembers && !symbol.members) {
-                symbol.members = new Map();
+                symbol.members = new SMap();
             }
 
             if (symbolFlags & SymbolFlags.Value) {
@@ -432,7 +432,7 @@ namespace ts {
             if (containerFlags & ContainerFlags.IsContainer) {
                 container = blockScopeContainer = node;
                 if (containerFlags & ContainerFlags.HasLocals) {
-                    container.locals = new Map();
+                    container.locals = new SMap();
                 }
                 addToContainerChain(container);
             }
@@ -1407,7 +1407,7 @@ namespace ts {
             }
 
             if (inStrictMode) {
-                const seen = new Map<string, ElementKind>();
+                const seen = new SMap<ElementKind>();
 
                 for (const prop of node.properties) {
                     if (prop.name.kind !== SyntaxKind.Identifier) {
@@ -1463,7 +1463,7 @@ namespace ts {
                 // fall through.
                 default:
                     if (!blockScopeContainer.locals) {
-                        blockScopeContainer.locals = new Map();
+                        blockScopeContainer.locals = new SMap();
                         addToContainerChain(blockScopeContainer);
                     }
                     declareSymbol(blockScopeContainer.locals, undefined, node, symbolFlags, symbolExcludes);
@@ -1923,7 +1923,7 @@ namespace ts {
                 }
             }
 
-            file.symbol.globalExports = file.symbol.globalExports || new Map();
+            file.symbol.globalExports = file.symbol.globalExports || new SMap();
             declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
         }
 
@@ -1976,7 +1976,7 @@ namespace ts {
             else {
                 return;
             }
-            assignee.symbol.members = assignee.symbol.members || new Map();
+            assignee.symbol.members = assignee.symbol.members || new SMap();
             // It's acceptable for multiple 'this' assignments of the same identifier to occur
             declareSymbol(assignee.symbol.members, assignee.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
         }
@@ -2001,7 +2001,7 @@ namespace ts {
             }
 
             // Set up the members collection if it doesn't exist already
-            funcSymbol.members = funcSymbol.members || new Map();
+            funcSymbol.members = funcSymbol.members || new SMap();
 
             // Declare the method/property
             declareSymbol(funcSymbol.members, funcSymbol, leftSideOfAssignment, SymbolFlags.Property, SymbolFlags.PropertyExcludes);

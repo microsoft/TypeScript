@@ -132,7 +132,7 @@ namespace Utils {
     }
 
     export function memoize<T extends Function>(f: T): T { //TODO: type better!
-        const cache = new Map<string, T>();
+        const cache = new ts.SMap<T>();
 
         return <any>(function(this: any) {
             const key = Array.prototype.join.call(arguments);
@@ -848,7 +848,7 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
-        const libFileNameSourceFileMap = ts.singletonMap<string, ts.SourceFile>(
+        const libFileNameSourceFileMap = ts.singletonMap<ts.SourceFile>(
             defaultLibFileName,
             createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest));
 
@@ -999,7 +999,7 @@ namespace Harness {
             { name: "symlink", type: "string" }
         ];
 
-        let optionsIndex: Map<string, ts.CommandLineOption>;
+        let optionsIndex: ts.SMap<ts.CommandLineOption>;
         function getCommandLineOption(name: string): ts.CommandLineOption {
             if (!optionsIndex) {
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);

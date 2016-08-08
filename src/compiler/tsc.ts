@@ -122,7 +122,7 @@ namespace ts {
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
-    const categoryFormatMap = new Map<DiagnosticCategory, string>([
+    const categoryFormatMap = new NMap<string>([
         [DiagnosticCategory.Warning, yellowForegroundEscapeSequence],
         [DiagnosticCategory.Error, redForegroundEscapeSequence],
         [DiagnosticCategory.Message, blueForegroundEscapeSequence],
@@ -262,7 +262,7 @@ namespace ts {
 
         // This map stores and reuses results of fileExists check that happen inside 'createProgram'
         // This allows to save time in module resolution heavy scenarios when existence of the same file might be checked multiple times.
-        let cachedExistingFiles: Map<string, boolean>;
+        let cachedExistingFiles: SMap<boolean>;
         let hostFileExists: typeof compilerHost.fileExists;
 
         if (commandLine.options.locale) {
@@ -432,7 +432,7 @@ namespace ts {
             }
 
             // reset the cache of existing files
-            cachedExistingFiles = new Map();
+            cachedExistingFiles = new SMap();
 
             const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
@@ -673,7 +673,7 @@ namespace ts {
         const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
         const descriptionColumn: string[] = [];
 
-        const optionsDescriptionMap = new Map<string, string[]>();  // Map between option.description and list of option.type if it is a kind
+        const optionsDescriptionMap = new SMap<string[]>();  // Map between option.description and list of option.type if it is a kind
 
         for (let i = 0; i < optsList.length; i++) {
             const option = optsList[i];
@@ -701,7 +701,7 @@ namespace ts {
                 description = getDiagnosticText(option.description);
                 const options: string[] = [];
                 const element = (<CommandLineOptionOfListType>option).element;
-                forEachKeyInMap(<Map<string, number | string>>element.type, key => {
+                forEachKeyInMap(<SMap<number | string>>element.type, key => {
                     options.push(`'${key}'`);
                 });
                 optionsDescriptionMap.set(description, options);
@@ -807,7 +807,7 @@ namespace ts {
                                 }
                                 else {
                                     // Enum
-                                    const typeMap = <Map<string, number>>optionDefinition.type;
+                                    const typeMap = <SMap<number>>optionDefinition.type;
                                     typeMap.forEach((enumValue, key) => {
                                         if (enumValue === value) {
                                             result[name] = key;

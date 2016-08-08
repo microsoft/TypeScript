@@ -100,15 +100,15 @@ namespace ts.server {
         filenameToScript: ts.FileMap<ScriptInfo>;
         roots: ScriptInfo[] = [];
 
-        private resolvedModuleNames: ts.FileMap<Map<string, TimestampedResolvedModule>>;
-        private resolvedTypeReferenceDirectives: ts.FileMap<Map<string, TimestampedResolvedTypeReferenceDirective>>;
+        private resolvedModuleNames: ts.FileMap<ts.SMap<TimestampedResolvedModule>>;
+        private resolvedTypeReferenceDirectives: ts.FileMap<ts.SMap<TimestampedResolvedTypeReferenceDirective>>;
         private moduleResolutionHost: ts.ModuleResolutionHost;
         private getCanonicalFileName: (fileName: string) => string;
 
         constructor(public host: ServerHost, public project: Project) {
             this.getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
-            this.resolvedModuleNames = createFileMap<Map<string, TimestampedResolvedModule>>();
-            this.resolvedTypeReferenceDirectives = createFileMap<Map<string, TimestampedResolvedTypeReferenceDirective>>();
+            this.resolvedModuleNames = createFileMap<ts.SMap<TimestampedResolvedModule>>();
+            this.resolvedTypeReferenceDirectives = createFileMap<ts.SMap<TimestampedResolvedTypeReferenceDirective>>();
             this.filenameToScript = createFileMap<ScriptInfo>();
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
@@ -123,14 +123,14 @@ namespace ts.server {
         private resolveNamesWithLocalCache<T extends Timestamped & { failedLookupLocations: string[] }, R>(
             names: string[],
             containingFile: string,
-            cache: ts.FileMap<Map<string, T>>,
+            cache: ts.FileMap<ts.SMap<T>>,
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
             getResult: (s: T) => R): R[] {
 
             const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const currentResolutionsInFile = cache.get(path);
 
-            const newResolutions = new Map<string, T>();
+            const newResolutions = new ts.SMap<T>();
             const resolvedModules: R[] = [];
             const compilerOptions = this.getCompilationSettings();
 

@@ -531,8 +531,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             let currentSourceFile: SourceFile;
             let currentText: string;
             let currentLineMap: number[];
-            let currentFileIdentifiers: Map<string, string>;
-            let renamedDependencies: Map<string, string>;
+            let currentFileIdentifiers: SMap<string>;
+            let renamedDependencies: SMap<string>;
             let isEs6Module: boolean;
             let isCurrentFileExternalModule: boolean;
 

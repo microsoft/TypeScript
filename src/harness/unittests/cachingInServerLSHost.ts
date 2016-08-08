@@ -6,7 +6,7 @@ namespace ts {
         content: string;
     }
 
-    function createDefaultServerHost(fileMap: Map<string, File>): server.ServerHost {
+    function createDefaultServerHost(fileMap: ts.SMap<File>): server.ServerHost {
         const existingDirectories = new Set<string>();
         fileMap.forEach(v => {
             let dir = getDirectoryPath(v.name);
@@ -102,7 +102,7 @@ namespace ts {
                 content: `foo()`
             };
 
-            const serverHost = createDefaultServerHost(new Map([[root.name, root], [imported.name, imported]]));
+            const serverHost = createDefaultServerHost(new SMap([[root.name, root], [imported.name, imported]]));
             const { project, rootScriptInfo } = createProject(root.name, serverHost);
 
             // ensure that imported file was found

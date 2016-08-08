@@ -68,8 +68,8 @@ namespace ts {
         return entry;
     }
 
-    function checkMapKeys(caption: string, map: Map<string, any>, expectedKeys: string[]) {
-        assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map`);
+    function checkMapKeys(caption: string, map: SMap<any>, expectedKeys: string[]) {
+        assert.equal(mapSize(map), expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
             assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${ts.keysArray(map)}`);
         }
@@ -116,8 +116,8 @@ namespace ts {
         private getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
         private callbackQueue: TimeOutCallback[] = [];
-        readonly watchedDirectories = new Map<string, { cb: DirectoryWatcherCallback, recursive: boolean }[]>();
-        readonly watchedFiles = new Map<string, FileWatcherCallback[]>();
+        readonly watchedDirectories = new SMap<{ cb: DirectoryWatcherCallback, recursive: boolean }[]>();
+        readonly watchedFiles = new SMap<FileWatcherCallback[]>();
 
         constructor(public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[]) {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
