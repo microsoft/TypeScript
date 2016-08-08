@@ -2063,9 +2063,6 @@ namespace ts {
         sourceMapText?: string;
     }
 
-    // Matches the beginning of a triple slash directive
-    const tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</;
-
     /**
      * Matches a triple slash reference directive with an incomplete string literal for its path. Used
      * to determine if the caret is currently within the string literal and capture the literal fragment
@@ -2937,15 +2934,6 @@ namespace ts {
                 }
                 return false;
             });
-        }
-    }
-
-    function isInReferenceComment(sourceFile: SourceFile, position: number): boolean {
-        return isInCommentHelper(sourceFile, position, isReferenceComment);
-
-        function isReferenceComment(c: CommentRange): boolean {
-            const commentText = sourceFile.text.substring(c.pos, c.end);
-            return tripleSlashDirectivePrefixRegex.test(commentText);
         }
     }
 
@@ -6913,15 +6901,6 @@ namespace ts {
                     }
 
                     return result[index];
-                }
-
-                function isInNonReferenceComment(sourceFile: SourceFile, position: number): boolean {
-                    return isInCommentHelper(sourceFile, position, isNonReferenceComment);
-
-                    function isNonReferenceComment(c: CommentRange): boolean {
-                        const commentText = sourceFile.text.substring(c.pos, c.end);
-                        return !tripleSlashDirectivePrefixRegex.test(commentText);
-                    }
                 }
             }
 
