@@ -4416,9 +4416,18 @@ namespace ts {
             }
             const propTypes: Type[] = [];
             const declarations: Declaration[] = [];
+            let commonType: Type = undefined;
+            let hasCommonType = true;
             for (const prop of props) {
                 if (prop.declarations) {
                     addRange(declarations, prop.declarations);
+                }
+                const type = getTypeOfSymbol(prop);
+                if (!commonType) {
+                    commonType = type;
+                }
+                else if (type !== commonType) {
+                    hasCommonType = false;
                 }
                 propTypes.push(getTypeOfSymbol(prop));
             }
@@ -4429,6 +4438,7 @@ namespace ts {
                 commonFlags,
                 name);
             result.containingType = containingType;
+            result.hasCommonType = hasCommonType;
             result.declarations = declarations;
             result.isReadonly = isReadonly;
             result.type = containingType.flags & TypeFlags.Union ? getUnionType(propTypes) : getIntersectionType(propTypes);
@@ -7798,8 +7808,39 @@ namespace ts {
             return false;
         }
 
-        function rootContainsMatchingReference(source: Node, target: Node) {
-            return target.kind === SyntaxKind.PropertyAccessExpression && containsMatchingReference(source, (<PropertyAccessExpression>target).expression);
+        // Return true if target is a property access xxx.yyy, source is a property access xxx.zzz, the declared
+        // type of xxx is a union type, and yyy is a property that is possibly a discriminant. We consider a property
+        // a possible discriminant if its type differs in the constituents of containing union type, and if every
+        // choice is a unit type or a union of unit types.
+        function containsMatchingReferenceDiscriminant(source: Node, target: Node) {
+            return target.kind === SyntaxKind.PropertyAccessExpression &&
+                containsMatchingReference(source, (<PropertyAccessExpression>target).expression) &&
+                isDiscriminantProperty(getDeclaredTypeOfReference((<PropertyAccessExpression>target).expression), (<PropertyAccessExpression>target).name.text);
+        }
+
+        function getDeclaredTypeOfReference(expr: Node): Type {
+            if (expr.kind === SyntaxKind.Identifier) {
+                return getTypeOfSymbol(getResolvedSymbol(<Identifier>expr));
+            }
+            if (expr.kind === SyntaxKind.PropertyAccessExpression) {
+                const type = getDeclaredTypeOfReference((<PropertyAccessExpression>expr).expression);
+                return type && getTypeOfPropertyOfType(type, (<PropertyAccessExpression>expr).name.text);
+            }
+            return undefined;
+        }
+
+        function isDiscriminantProperty(type: Type, name: string) {
+            if (type && type.flags & TypeFlags.Union) {
+                const prop = getPropertyOfType(type, name);
+                if (prop && prop.flags & SymbolFlags.SyntheticProperty) {
+                    if ((<TransientSymbol>prop).isDiscriminantProperty === undefined) {
+                        (<TransientSymbol>prop).isDiscriminantProperty = !(<TransientSymbol>prop).hasCommonType &&
+                            isUnitUnionType(getTypeOfSymbol(prop));
+                    }
+                    return (<TransientSymbol>prop).isDiscriminantProperty;
+                }
+            }
+            return false;
         }
 
         function isOrContainsMatchingReference(source: Node, target: Node) {
@@ -8090,6 +8131,25 @@ namespace ts {
             return source.flags & TypeFlags.Union ? !forEach((<UnionType>source).types, t => !contains(types, t)) : contains(types, source);
         }
 
+        function isTypeSubsetOf(source: Type, target: Type) {
+            return source === target || target.flags & TypeFlags.Union && isTypeSubsetOfUnion(source, <UnionType>target);
+        }
+
+        function isTypeSubsetOfUnion(source: Type, target: UnionType) {
+            if (source.flags & TypeFlags.Union) {
+                for (const t of (<UnionType>source).types) {
+                    if (!containsType(target.types, t)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            if (source.flags & TypeFlags.EnumLiteral && target.flags & TypeFlags.Enum && (<EnumLiteralType>source).baseType === target) {
+                return true;
+            }
+            return containsType(target.types, source);
+        }
+
         function filterType(type: Type, f: (t: Type) => boolean): Type {
             return type.flags & TypeFlags.Union ?
                 getUnionType(filter((<UnionType>type).types, f)) :
@@ -8228,7 +8288,7 @@ namespace ts {
                 if (isMatchingReference(reference, expr)) {
                     type = narrowTypeBySwitchOnDiscriminant(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
                 }
-                else if (isMatchingPropertyAccess(expr)) {
+                else if (isMatchingReferenceDiscriminant(expr)) {
                     type = narrowTypeByDiscriminant(type, <PropertyAccessExpression>expr, t => narrowTypeBySwitchOnDiscriminant(t, flow.switchStatement, flow.clauseStart, flow.clauseEnd));
                 }
                 return createFlowType(type, isIncomplete(flowType));
@@ -8236,6 +8296,7 @@ namespace ts {
 
             function getTypeAtFlowBranchLabel(flow: FlowLabel): FlowType {
                 const antecedentTypes: Type[] = [];
+                let subtypeReduction = false;
                 let seenIncomplete = false;
                 for (const antecedent of flow.antecedents) {
                     const flowType = getTypeAtFlowNode(antecedent);
@@ -8250,11 +8311,17 @@ namespace ts {
                     if (!contains(antecedentTypes, type)) {
                         antecedentTypes.push(type);
                     }
+                    // If an antecedent type is not a subset of the declared type, we need to perform
+                    // subtype reduction. This happens when a "foreign" type is injected into the control
+                    // flow using the instanceof operator or a user defined type predicate.
+                    if (!isTypeSubsetOf(type, declaredType)) {
+                        subtypeReduction = true;
+                    }
                     if (isIncomplete(flowType)) {
                         seenIncomplete = true;
                     }
                 }
-                return createFlowType(getUnionType(antecedentTypes), seenIncomplete);
+                return createFlowType(getUnionType(antecedentTypes, subtypeReduction), seenIncomplete);
             }
 
             function getTypeAtFlowLoopLabel(flow: FlowLabel): FlowType {
@@ -8280,6 +8347,7 @@ namespace ts {
                 // Add the flow loop junction and reference to the in-process stack and analyze
                 // each antecedent code path.
                 const antecedentTypes: Type[] = [];
+                let subtypeReduction = false;
                 flowLoopNodes[flowLoopCount] = flow;
                 flowLoopKeys[flowLoopCount] = key;
                 flowLoopTypes[flowLoopCount] = antecedentTypes;
@@ -8296,6 +8364,12 @@ namespace ts {
                     if (!contains(antecedentTypes, type)) {
                         antecedentTypes.push(type);
                     }
+                    // If an antecedent type is not a subset of the declared type, we need to perform
+                    // subtype reduction. This happens when a "foreign" type is injected into the control
+                    // flow using the instanceof operator or a user defined type predicate.
+                    if (!isTypeSubsetOf(type, declaredType)) {
+                        subtypeReduction = true;
+                    }
                     // If the type at a particular antecedent path is the declared type there is no
                     // reason to process more antecedents since the only possible outcome is subtypes
                     // that will be removed in the final union type anyway.
@@ -8303,13 +8377,14 @@ namespace ts {
                         break;
                     }
                 }
-                return cache[key] = getUnionType(antecedentTypes);
+                return cache[key] = getUnionType(antecedentTypes, subtypeReduction);
             }
 
-            function isMatchingPropertyAccess(expr: Expression) {
+            function isMatchingReferenceDiscriminant(expr: Expression) {
                 return expr.kind === SyntaxKind.PropertyAccessExpression &&
+                    declaredType.flags & TypeFlags.Union &&
                     isMatchingReference(reference, (<PropertyAccessExpression>expr).expression) &&
-                    (declaredType.flags & TypeFlags.Union) !== 0;
+                    isDiscriminantProperty(declaredType, (<PropertyAccessExpression>expr).name.text);
             }
 
             function narrowTypeByDiscriminant(type: Type, propAccess: PropertyAccessExpression, narrowType: (t: Type) => Type): Type {
@@ -8323,10 +8398,10 @@ namespace ts {
                 if (isMatchingReference(reference, expr)) {
                     return getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy);
                 }
-                if (isMatchingPropertyAccess(expr)) {
+                if (isMatchingReferenceDiscriminant(expr)) {
                     return narrowTypeByDiscriminant(type, <PropertyAccessExpression>expr, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy));
                 }
-                if (rootContainsMatchingReference(reference, expr)) {
+                if (containsMatchingReferenceDiscriminant(reference, expr)) {
                     return declaredType;
                 }
                 return type;
@@ -8355,13 +8430,13 @@ namespace ts {
                         if (isMatchingReference(reference, right)) {
                             return narrowTypeByEquality(type, operator, left, assumeTrue);
                         }
-                        if (isMatchingPropertyAccess(left)) {
+                        if (isMatchingReferenceDiscriminant(left)) {
                             return narrowTypeByDiscriminant(type, <PropertyAccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
                         }
-                        if (isMatchingPropertyAccess(right)) {
+                        if (isMatchingReferenceDiscriminant(right)) {
                             return narrowTypeByDiscriminant(type, <PropertyAccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
                         }
-                        if (rootContainsMatchingReference(reference, left) || rootContainsMatchingReference(reference, right)) {
+                        if (containsMatchingReferenceDiscriminant(reference, left) || containsMatchingReferenceDiscriminant(reference, right)) {
                             return declaredType;
                         }
                         break;
@@ -8500,9 +8575,7 @@ namespace ts {
 
             function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean) {
                 if (!assumeTrue) {
-                    return type.flags & TypeFlags.Union ?
-                        getUnionType(filter((<UnionType>type).types, t => !isTypeSubtypeOf(t, candidate))) :
-                        type;
+                    return filterType(type, t => !isTypeSubtypeOf(t, candidate));
                 }
                 // If the current type is a union type, remove all constituents that aren't assignable to
                 // the candidate type. If one or more constituents remain, return a union of those.
@@ -8512,13 +8585,16 @@ namespace ts {
                         return getUnionType(assignableConstituents);
                     }
                 }
-                // If the candidate type is assignable to the target type, narrow to the candidate type.
-                // Otherwise, if the current type is assignable to the candidate, keep the current type.
-                // Otherwise, the types are completely unrelated, so narrow to the empty type.
+                // If the candidate type is a subtype of the target type, narrow to the candidate type.
+                // Otherwise, if the target type is assignable to the candidate type, keep the target type.
+                // Otherwise, if the candidate type is assignable to the target type, narrow to the candidate
+                // type. Otherwise, the types are completely unrelated, so narrow to an intersection of the
+                // two types.
                 const targetType = type.flags & TypeFlags.TypeParameter ? getApparentType(type) : type;
-                return isTypeAssignableTo(candidate, targetType) ? candidate :
+                return isTypeSubtypeOf(candidate, targetType) ? candidate :
                     isTypeAssignableTo(type, candidate) ? type :
-                        getIntersectionType([type, candidate]);
+                    isTypeAssignableTo(candidate, targetType) ? candidate :
+                    getIntersectionType([type, candidate]);
             }
 
             function narrowTypeByTypePredicate(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
