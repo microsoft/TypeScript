@@ -313,6 +313,11 @@ namespace ts {
                 // declaration we have for this symbol, and then create a new symbol for this
                 // declaration.
                 //
+                // Note that when properties declared in Javascript constructors
+                // (marked by isReplaceableByMethod) conflict with another symbol, the property loses.
+                // Always. This allows the common Javascript pattern of overwriting a prototype method
+                // with an bound instance method of the same type: `this.method = this.method.bind(this)`
+                //
                 // If we created a new symbol, either because we didn't have a symbol with this name
                 // in the symbol table, or we conflicted with an existing symbol, then just add this
                 // node as the sole declaration of the new symbol.
@@ -329,7 +334,7 @@ namespace ts {
                 }
 
                 if (symbol.flags & excludes) {
-                    if (symbol.isDiscardable) {
+                    if (symbol.isReplaceableByMethod) {
                         // Javascript constructor-declared symbols can be discarded in favor of
                         // prototype symbols like methods.
                         symbol = symbolTable[name] = createSymbol(SymbolFlags.None, name);
@@ -1988,7 +1993,7 @@ namespace ts {
             // It's acceptable for multiple 'this' assignments of the same identifier to occur
             // AND it can be overwritten by subsequent method declarations
             const symbol = declareSymbol(assignee.symbol.members, assignee.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
-            symbol.isDiscardable = true;
+            symbol.isReplaceableByMethod = true;
         }
 
         function bindPrototypePropertyAssignment(node: BinaryExpression) {
