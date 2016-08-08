@@ -114,10 +114,10 @@ namespace ts {
         return cache;
 
         function resolveExtensionNames(): Map<string> {
-            const currentDirectory = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
+            const basePath = options.configFilePath || combinePaths(host.getCurrentDirectory ? host.getCurrentDirectory() : "", "tsconfig.json");
             const extMap: Map<string> = {};
             forEach(extensionNames, name => {
-                const resolved = resolveModuleName(name, combinePaths(currentDirectory, "tsconfig.json"), options, host, /*loadJs*/true).resolvedModule;
+                const resolved = resolveModuleName(name, basePath, options, host, /*loadJs*/true).resolvedModule;
                 if (resolved) {
                     extMap[name] = resolved.resolvedFileName;
                 }
