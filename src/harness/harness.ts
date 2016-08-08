@@ -1596,7 +1596,7 @@ namespace Harness {
             }
         }
 
-        const fileCache = new Set<string>();
+        const fileCache = new ts.SSet();
         function generateActual(actualFileName: string, generateContent: () => string): string {
             // For now this is written using TypeScript, because sys is not available when running old test cases.
             // But we need to move to sys once we have

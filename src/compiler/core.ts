@@ -395,7 +395,7 @@ namespace ts {
     }
 
     //move
-    export function copySet<T>(source: Set<T>, target: Set<T>): void {
+    export function copySet<T>(source: SSet, target: SSet): void {
         source.forEach(element => target.add(element));
     }
 
@@ -473,24 +473,6 @@ namespace ts {
         return result;
     }
 
-
-
-    //TODO: better name...
-    export function forEachInMap<V, U>(map: SMap<V>, callback: (value: V, key: string) => U | undefined): U | undefined {
-        const iter = map.entries();
-        while (true) {
-            const {done, value: pair} = iter.next();
-            if (done) {
-                return undefined;
-            }
-            const [key, value] = pair;
-            const result = callback(value, key);
-            if (result) {
-                return result;
-            }
-        }
-    }
-
     //kill?
     export function forEachValueInMap<V, U>(map: SMap<V>, callback: (value: V) => U | undefined): U | undefined {
         return forEachInMap(map, callback);
@@ -526,7 +508,7 @@ namespace ts {
     }
 
     //rename
-    export function setSetSet<T>(set: Set<T>, value: T, shouldBeInSet: boolean): void {
+    export function setSetSet(set: SSet, value: string, shouldBeInSet: boolean): void {
         if (shouldBeInSet) {
             set.add(value);
         }

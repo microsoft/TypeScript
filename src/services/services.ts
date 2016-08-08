@@ -4105,7 +4105,7 @@ namespace ts {
              *          do not occur at the current position and have not otherwise been typed.
              */
             function filterNamedImportOrExportCompletionItems(exportsOfModule: Symbol[], namedImportsOrExports: ImportOrExportSpecifier[]): Symbol[] {
-                const existingImportsOrExports = new Set<string>();
+                const existingImportsOrExports = new SSet();
 
                 for (const element of namedImportsOrExports) {
                     // If this is the current item we are editing right now, do not filter it out
@@ -4117,7 +4117,7 @@ namespace ts {
                     existingImportsOrExports.add(name.text);
                 }
 
-                if (!existingImportsOrExports.size) {
+                if (setIsEmpty(existingImportsOrExports)) {
                     return filter(exportsOfModule, e => e.name !== "default");
                 }
 
@@ -4135,7 +4135,7 @@ namespace ts {
                     return contextualMemberSymbols;
                 }
 
-                const existingMemberNames = new Set<string>();
+                const existingMemberNames = new SSet();
                 for (const m of existingMembers) {
                     // Ignore omitted expressions for missing members
                     if (m.kind !== SyntaxKind.PropertyAssignment &&
@@ -4178,7 +4178,7 @@ namespace ts {
              *          do not occur at the current position and have not otherwise been typed.
              */
             function filterJsxAttributes(symbols: Symbol[], attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>): Symbol[] {
-                const seenNames = new Set<string>();
+                const seenNames = new SSet();
                 for (const attr of attributes) {
                     // If this is the current item we are editing right now, do not filter it out
                     if (attr.getStart() <= position && position <= attr.getEnd()) {
@@ -4252,7 +4252,7 @@ namespace ts {
 
             return { isMemberCompletion, isNewIdentifierLocation, entries };
 
-            function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: Set<string>): CompletionEntry[] {
+            function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: SSet): CompletionEntry[] {
                 const entries: CompletionEntry[] = [];
                 const target = program.getCompilerOptions().target;
 
@@ -4318,9 +4318,9 @@ namespace ts {
 
             }
 
-            function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[], location: Node, performCharacterChecks: boolean): Set<string> {
+            function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[], location: Node, performCharacterChecks: boolean): SSet {
                 const start = timestamp();
-                const uniqueNames = new Set<string>();
+                const uniqueNames = new SSet();
                 if (symbols) {
                     for (const symbol of symbols) {
                         const entry = createCompletionEntry(symbol, location, performCharacterChecks);

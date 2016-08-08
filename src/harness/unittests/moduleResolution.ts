@@ -10,7 +10,7 @@ namespace ts {
         const map = createMapFromValues(files, f => f.name); //arrayToNewMap
 
         if (hasDirectoryExists) {
-            const directories = new Set<string>();
+            const directories = new SSet();
             for (const f of files) {
                 let name = getDirectoryPath(f.name);
                 while (true) {

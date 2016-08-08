@@ -1,30 +1,7 @@
-
-//you too...
-interface Set<T> {
-    add(value: T): this;
-    clear(): void;
-    delete(value: T): boolean;
-    forEach(callbackfn: (value: T, index: T, set: Set<T>) => void, thisArg?: any): void;
-    has(value: T): boolean;
-    readonly size: number;
-}
-
-interface SetConstructor {
-    new (): Set<any>;
-    new <T>(values?: T[]): Set<T>;
-    readonly prototype: Set<any>;
-}
-declare var Set: SetConstructor;
-
-
-
 namespace ts {
-    export interface Iterator<T> {
-        next(): { done: boolean; value: T | undefined }
-    }
-
+    //TODO: maybe just have SMap and NMap...
     export interface AnyMap<K, V> {
-        //TODO: entries, keys, values
+        //TODO: make sure these are all used...
         clear(): void;
         delete(key: K): void;
         get(key: K): V | undefined;
@@ -34,10 +11,10 @@ namespace ts {
     }
 
     export interface SMap<V> extends AnyMap<string, V> {
-        entries(): Iterator<[string, V]>;
         forEach(fn: (value: V, key: string) => void): void;
     }
     export interface SMapConstructor {
+        //TODO: make sure these are all used...
         new(): SMap<any>;
         new<V>(): SMap<V>;
         new<V>(entries: [string, V][]): SMap<V>;
@@ -51,11 +28,56 @@ namespace ts {
         new<V>(entries: [number, V][]): NMap<V>;
     }
 
-    declare const Map: (SMapConstructor & NMapConstructor) | undefined;
-    export const SMap: SMapConstructor =
-        Map ? Map : ShimSMap;
-    export const NMap: NMapConstructor =
-        Map ? Map : ShimNMap;
+    export interface SSet {
+        //TODO: make sure these are all used...
+        add(value: string): void;
+        clear(): void;
+        delete(value: string): void;
+        forEach(fn: (value: string) => void): void;
+        has(value: string): boolean;
+        //readonly size: number
+    }
+    export interface SSetConstructor {
+        //TODO: make sure these are all used...
+        new(values?: string[]): SSet;
+    }
+
+    class ShimSSet implements SSet {
+        data: ObjMap<boolean>;
+
+        constructor(values?: string[]) {
+            this.data = {};
+        }
+
+        add(value: string) {
+            this.data[value] = true;
+        }
+
+        clear() {
+            this.data = {};
+        }
+
+        delete(value: string) {
+            delete this.data[value];
+        }
+
+        forEach(fn: (value: string) => void) {
+            forEachKey(this.data, fn);
+        }
+
+        has(value: string) {
+            return hasOwnProperty.call(this.data, value);
+        }
+
+        isEmpty(): boolean {
+            for (const key in this.data) {
+                if (this.has(key)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
 
     //TODO: this could be done better...
     export function mapSize<V>(m: SMap<V>): number {
@@ -67,6 +89,43 @@ namespace ts {
             let size = 0;
             m.forEach(() => size++);
             return size;
+        }
+    }
+
+    //move
+    export function setIsEmpty(set: SSet): boolean {
+        if (set instanceof Set) {
+            return !(<any>set).size;
+        }
+        else {
+            (<ShimSSet>set).isEmpty();
+        }
+    }
+
+    //move
+    //TODO: better name...
+    export function forEachInMap<V, U>(map: SMap<V>, callback: (value: V, key: string) => U | undefined): U | undefined {
+        if (map instanceof Map) {
+            let result: U | undefined;
+            try {
+                //TODO: perf
+                map.forEach((value, key) => {
+                    result = callback(value, key);
+                    if (result) {
+                        throw new Error("forEachInMap DONE");
+                    }
+                });
+            } catch (error) {
+                if (error.message !== "forEachInMap DONE") {
+                    return result;
+                }
+                else {
+                    throw error;
+                }
+            }
+        }
+        else {
+            (<ShimSMap<V>>map).forEachInMap(callback);
         }
     }
 
@@ -97,24 +156,6 @@ namespace ts {
             }
         }
 
-        entries(): Iterator<[string, V]> {
-            //TODO: perf...
-            const data = this.data;
-            const keys = Object.keys(data);
-            let i = 0;
-            return {
-                next() {
-                    if (i < keys.length) {
-                        const key = keys[i];
-                        return { done: false, value: [key, data[key]] };
-                    }
-                    else {
-                        return { done: true, value: undefined }
-                    }
-                }
-            }
-        }
-
         clear() {
             this.data = {};
         }
@@ -127,6 +168,17 @@ namespace ts {
             for (const key in this.data) {
                 if (this.has(key)) {
                     fn(this.data[key], key);
+                }
+            }
+        }
+
+        forEachInMap<U>(callback: (value: V, key: string) => U | undefined): U | undefined {
+            for (const key in this.data) {
+                if (this.has(key)) {
+                    const result = callback(this.data[key], key);
+                    if (result) {
+                        return result;
+                    }
                 }
             }
         }
@@ -192,6 +244,15 @@ namespace ts {
         [index: string]: T;
     }
 
+
+    declare const Map: (SMapConstructor & NMapConstructor) | undefined;
+    //export const SMap: SMapConstructor = Map ? Map : ShimSMap;
+    //export const NMap: NMapConstructor = Map ? Map : ShimNMap;
+    declare const Set: SSetConstructor | undefined;
+    ///export const SSet: SSetConstructor = Set ? Set : ShimSSet;
+    export const SMap: SMapConstructor = ShimSMap;
+    export const NMap: NMapConstructor = ShimNMap;
+    export const SSet: SSetConstructor = ShimSSet;
 
 
 
@@ -1873,7 +1934,7 @@ namespace ts {
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
-        /* @internal */ classifiableNames?: Set<string>; //is this ever used?
+        /* @internal */ classifiableNames?: SSet; //is this ever used?
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
@@ -1957,7 +2018,7 @@ namespace ts {
         // language service).
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
 
-        /* @internal */ getClassifiableNames(): Set<string>;
+        /* @internal */ getClassifiableNames(): SSet;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;

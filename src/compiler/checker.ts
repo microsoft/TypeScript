@@ -7417,7 +7417,7 @@ namespace ts {
             let targetStack: Type[];
             let depth = 0;
             let inferiority = 0;
-            const visited = new Set<string>();
+            const visited = new SSet();
             inferFromTypes(source, target);
 
             function isInProcess(source: Type, target: Type) {
@@ -9988,7 +9988,7 @@ namespace ts {
             }
         }
 
-        function checkJsxAttribute(node: JsxAttribute, elementAttributesType: Type, nameTable: Set<string>) {
+        function checkJsxAttribute(node: JsxAttribute, elementAttributesType: Type, nameTable: SSet) {
             let correspondingPropType: Type = undefined;
 
             // Look up the corresponding property for this attribute
@@ -10032,7 +10032,7 @@ namespace ts {
             return exprType;
         }
 
-        function checkJsxSpreadAttribute(node: JsxSpreadAttribute, elementAttributesType: Type, nameTable: Set<string>) {
+        function checkJsxSpreadAttribute(node: JsxSpreadAttribute, elementAttributesType: Type, nameTable: SSet) {
             const type = checkExpression(node.expression);
             const props = getPropertiesOfType(type);
             for (const prop of props) {
@@ -10359,7 +10359,7 @@ namespace ts {
             const targetAttributesType = getJsxElementAttributesType(node);
 
             //KLUDGE: give `nameTable` properties from Object. This makes tsxAttributeResolution5 work.
-            const nameTable = new Set<string>(["constructor", "toString", "toLocaleString", "valueOf", "hasOwnProperty", "isPrototypeOf", "propertyIsEnumerable"]);
+            const nameTable = new SSet(["constructor", "toString", "toLocaleString", "valueOf", "hasOwnProperty", "isPrototypeOf", "propertyIsEnumerable"]);
 
             // Process this array in right-to-left order so we know which
             // attributes (mostly from spreads) are being overwritten and
@@ -13714,7 +13714,7 @@ namespace ts {
         }
 
         function checkObjectTypeForDuplicateDeclarations(node: TypeLiteralNode | InterfaceDeclaration) {
-            const names = new Set<string>();
+            const names = new SSet();
             for (const member of node.members) {
                 if (member.kind == SyntaxKind.PropertySignature) {
                     let memberName: string;
@@ -19240,7 +19240,7 @@ namespace ts {
         }
 
         function checkGrammarJsxElement(node: JsxOpeningLikeElement) {
-            const seen = new Set<string>();
+            const seen = new SSet();
             for (const attr of node.attributes) {
                 if (attr.kind === SyntaxKind.JsxSpreadAttribute) {
                     continue;

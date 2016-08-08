@@ -125,7 +125,7 @@ namespace ts {
 
         let symbolCount = 0;
         let Symbol: { new (flags: SymbolFlags, name: string): Symbol };
-        let classifiableNames: Set<string>;
+        let classifiableNames: SSet;
 
         const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
         const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
@@ -135,7 +135,7 @@ namespace ts {
             options = opts;
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = !!file.externalModuleIndicator;
-            classifiableNames = new Set();
+            classifiableNames = new SSet();
             symbolCount = 0;
 
             Symbol = objectAllocator.getSymbolConstructor();
