@@ -1426,22 +1426,20 @@ namespace FourSlash {
                 return;
             }
 
-            if (1 + 1 === 2) {
-                const incrementalSourceFile = this.languageService.getNonBoundSourceFile(this.activeFile.fileName);
-                Utils.assertInvariants(incrementalSourceFile, /*parent:*/ undefined);
+            const incrementalSourceFile = this.languageService.getNonBoundSourceFile(this.activeFile.fileName);
+            Utils.assertInvariants(incrementalSourceFile, /*parent:*/ undefined);
 
-                const incrementalSyntaxDiagnostics = incrementalSourceFile.parseDiagnostics;
+            const incrementalSyntaxDiagnostics = incrementalSourceFile.parseDiagnostics;
 
-                // Check syntactic structure
-                const content = this.getFileContent(this.activeFile.fileName);
+            // Check syntactic structure
+            const content = this.getFileContent(this.activeFile.fileName);
 
-                const referenceSourceFile = ts.createLanguageServiceSourceFile(
-                    this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*setNodeParents:*/ false);
-                const referenceSyntaxDiagnostics = referenceSourceFile.parseDiagnostics;
+            const referenceSourceFile = ts.createLanguageServiceSourceFile(
+                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*setNodeParents:*/ false);
+            const referenceSyntaxDiagnostics = referenceSourceFile.parseDiagnostics;
 
-                Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);
-                Utils.assertStructuralEquals(incrementalSourceFile, referenceSourceFile);
-            }
+            Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);
+            Utils.assertStructuralEquals(incrementalSourceFile, referenceSourceFile);
         }
 
         private fixCaretPosition() {
