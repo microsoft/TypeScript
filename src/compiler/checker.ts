@@ -7901,7 +7901,7 @@ namespace ts {
             }
             if (flags & TypeFlags.TypeParameter) {
                 const constraint = getConstraintOfTypeParameter(<TypeParameter>type);
-                return constraint ? getTypeFacts(constraint) : TypeFacts.All;
+                return getTypeFacts(constraint || emptyObjectType);
             }
             if (flags & TypeFlags.UnionOrIntersection) {
                 return getTypeFactsOfTypes((<UnionOrIntersectionType>type).types);
@@ -7928,7 +7928,8 @@ namespace ts {
                     }
                 }
             }
-            return firstType ? types ? getUnionType(types) : firstType : neverType;
+            return types ? getUnionType(types) :
+                firstType ? firstType : neverType;
         }
 
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
