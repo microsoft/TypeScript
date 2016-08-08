@@ -1,4 +1,4 @@
-/// <reference path="..\services\services.ts" />
+﻿/// <reference path="..\services\services.ts" />
 
 namespace ts.server {
     export enum LogLevel {
@@ -198,13 +198,6 @@ namespace ts.server {
 
     export function makeInferredProjectName(counter: number) {
         return `/dev/null/inferredProject${counter}*`;
-    }
-
-    export function removeQuotes(value: string): string {
-        if (value.length > 0 && (value[0] === "\"" || value[0] === "'")) {
-            return value.substr(1, value.length - 2);
-        }
-        return value;
     }
 
     export class ThrottledOperations {

@@ -1,4 +1,4 @@
-/// <reference path="..\harness.ts" />
+﻿/// <reference path="..\harness.ts" />
 
 namespace ts {
     function notImplemented(): any {
@@ -362,18 +362,13 @@ namespace ts {
 
         setImmediate(callback: TimeOutCallback, time: number, ...args: any[]) {
             return this.immediateCallbacks.register(callback, args);
-        };
+        }
 
         clearImmediate(timeoutId: any): void {
             this.immediateCallbacks.unregister(timeoutId);
-        };
+        }
 
-
-        readonly readFile = (s: string) => (<File>this.fs.get(this.toPath(s))).content;
-        readonly resolvePath = (s: string) => s;
-        readonly getExecutingFilePath = () => this.executingFilePath;
-        readonly getCurrentDirectory = () => this.currentDirectory;
-        readonly writeFile = (fileName: string, content: string) => {
+        writeFile(fileName: string, content: string) {
             const path = this.toPath(fileName);
             const newEntry: File = {
                 content,
@@ -382,6 +377,11 @@ namespace ts {
             };
             this.fs.set(path, newEntry);
         };
+
+        readonly readFile = (s: string) => (<File>this.fs.get(this.toPath(s))).content;
+        readonly resolvePath = (s: string) => s;
+        readonly getExecutingFilePath = () => this.executingFilePath;
+        readonly getCurrentDirectory = () => this.currentDirectory;
         readonly writeCompressedData = () => notImplemented();
         readonly write = (s: string) => notImplemented();
         readonly createDirectory = (s: string) => notImplemented();

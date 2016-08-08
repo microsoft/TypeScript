@@ -1,4 +1,4 @@
-/// <reference path="..\compiler\commandLineParser.ts" />
+﻿/// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
 /// <reference path="protocol.d.ts" />
 /// <reference path="editorServices.ts" />
@@ -93,7 +93,6 @@ namespace ts.server {
         export const Completions = "completions";
         export const CompletionsFull = "completions-full";
         export const CompletionDetails = "completionEntryDetails";
-        export const IsCompileOnSaveEnabledForProject = "isCompileOnSaveEnabledForProject";
         export const CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
         export const CompileOnSaveEmitFile = "compileOnSaveEmitFile";
         export const Configure = "configure";
@@ -955,15 +954,6 @@ namespace ts.server {
             }, []);
         }
 
-        private isCompileOnSaveEnabledForProject(args: protocol.ProjectRequestArgs): boolean {
-            const { projectFileName } = args;
-            const project = this.projectService.findProject(projectFileName);
-            if (project.projectKind === ProjectKind.Configured || project.projectKind === ProjectKind.External) {
-                return (<ConfiguredProject | ExternalProject>project).compileOnSaveEnabled;
-            }
-            return false;
-        }
-
         private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs) {
             const info = this.projectService.getScriptInfo(args.file);
             let result: string[] = [];
@@ -973,12 +963,12 @@ namespace ts.server {
             return result;
         }
 
-        private EmitFile(args: protocol.CompileOnSaveEmitFileRequestArgs) {
+        private emitFile(args: protocol.CompileOnSaveEmitFileRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
             if (!project) {
                 throw Errors.NoProject;
             }
-            return project.builder.emitFile(file, this.host.writeFile, !!args.forced);
+            return project.builder.emitFile(file, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark), !!args.forced);
         }
 
         private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems {
@@ -1382,14 +1372,11 @@ namespace ts.server {
             [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
                 return this.requiredResponse(this.getCompletionEntryDetails(request.arguments));
             },
-            [CommandNames.IsCompileOnSaveEnabledForProject]: (request: protocol.IsCompileOnSaveEnabledForProjectRequest) => {
-                return this.requiredResponse(this.isCompileOnSaveEnabledForProject(request.arguments));
-            },
             [CommandNames.CompileOnSaveAffectedFileList]: (request: protocol.CompileOnSaveAffectedFileListRequest) => {
                 return this.requiredResponse(this.getCompileOnSaveAffectedFileList(request.arguments));
             },
             [CommandNames.CompileOnSaveEmitFile]: (request: protocol.CompileOnSaveEmitFileRequest) => {
-                return this.requiredResponse(this.EmitFile(request.arguments));
+                return this.requiredResponse(this.emitFile(request.arguments));
             },
             [CommandNames.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true));

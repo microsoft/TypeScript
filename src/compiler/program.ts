@@ -1415,15 +1415,15 @@ namespace ts {
             return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
         }
 
-        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitDeclarationsOnly?: boolean): EmitResult {
-            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitDeclarationsOnly));
+        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean): EmitResult {
+            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles));
         }
 
         function isEmitBlocked(emitFileName: string): boolean {
             return hasEmitBlockingDiagnostics.contains(toPath(emitFileName, currentDirectory, getCanonicalFileName));
         }
 
-        function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken, emitDeclarationsOnly?: boolean): EmitResult {
+        function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken, emitOnlyDtsFiles?: boolean): EmitResult {
             let declarationDiagnostics: Diagnostic[] = [];
 
             if (options.noEmit) {
@@ -1469,7 +1469,7 @@ namespace ts {
                 emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile,
-                emitDeclarationsOnly);
+                emitOnlyDtsFiles);
 
             performance.measure("Emit", start);
             return emitResult;

@@ -1,4 +1,4 @@
-/// <reference path="..\services\services.ts" />
+﻿/// <reference path="..\services\services.ts" />
 /// <reference path="utilities.ts"/>
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="lsHost.ts"/>
@@ -78,7 +78,7 @@ namespace ts.server {
             this.markAsDirty();
         }
 
-    getLanguageService(ensureSynchronized = true): LanguageService  {
+        getLanguageService(ensureSynchronized = true): LanguageService  {
             if (ensureSynchronized) {
                 this.updateGraph();
             }
@@ -185,6 +185,14 @@ namespace ts.server {
             }
             const sourceFiles = this.program.getSourceFiles();
             return sourceFiles.map(sourceFile => asNormalizedPath(sourceFile.fileName));
+        }
+
+        getFileNamesWithoutDefaultLib() {
+            if (!this.languageServiceEnabled) {
+                return this.getRootFiles();
+            }
+            const defaultLibrary = getDefaultLibFilePath(this.compilerOptions);
+            return filter(this.getFileNames(), file => file !== defaultLibrary);
         }
 
         containsScriptInfo(info: ScriptInfo): boolean {
@@ -361,68 +369,45 @@ namespace ts.server {
             }
         }
 
-        getReferencedFiles(filename: string): string[] {
+        getReferencedFiles(fileName: string): string[] {
             if (!this.languageServiceEnabled) {
                 return [];
             }
 
-            const sourceFile = this.program.getSourceFile(filename);
-            const modules = sourceFile.resolvedModules;
-            const result: string[] = [];
-            if (modules) {
-                // We need to use a set here since the code can contain the same import twice,
-                // but that will only be one dependency.
-                const referencedModules: Map<boolean> = {};
-                let checker: TypeChecker = undefined;
-                for (const key of Object.keys(modules)) {
-                    const module = modules[key];
-                    // We have a module references, but the module couldn't be resolved during parsing time
-                    // For example for something like import * as fs from 'fs'; These imports are resolved
-                    // while resolving symbols so use the type checker for find the resolve module.
-                    if (!module || !module.resolvedFileName) {
-                        let symbol: Symbol = undefined;
-                        for (const statement of sourceFile.statements) {
-                            if (statement.kind === SyntaxKind.ImportDeclaration) {
-                                const importDeclaration = <ImportDeclaration>statement;
-                                const name = importDeclaration.moduleSpecifier.getText();
-                                if (removeQuotes(name) === key) {
-                                    if (!checker) {
-                                        checker = this.program.getTypeChecker();
-                                    }
-                                    symbol = checker.getSymbolAtLocation(importDeclaration.moduleSpecifier);
-                                    break;
-                                }
-                            }
-                            else if (statement.kind === SyntaxKind.ImportEqualsDeclaration) {
-                                const moduleReference = (<ImportEqualsDeclaration>statement).moduleReference;
-                                if (moduleReference.kind === SyntaxKind.ExternalModuleReference) {
-                                    const external = <ExternalModuleReference>moduleReference;
-                                    if (external.expression && removeQuotes(external.expression.getText()) === key) {
-                                        if (!checker) {
-                                            checker = this.program.getTypeChecker();
-                                        }
-                                        symbol = checker.getSymbolAtLocation(external.expression);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        if (symbol && symbol.declarations[0]) {
-                            const sourceFile = symbol.declarations[0].getSourceFile();
-                            if (sourceFile) {
-                                referencedModules[sourceFile.fileName] = true;
-                            }
+            const sourceFile = this.program.getSourceFile(fileName);
+            // We need to use a set here since the code can contain the same import twice,
+            // but that will only be one dependency.
+            const referencedFiles: Map<boolean> = {};
+            if (sourceFile.imports) {
+                const checker: TypeChecker = this.program.getTypeChecker();
+                for (const importName of sourceFile.imports) {
+                    const symbol = checker.getSymbolAtLocation(importName);
+                    if (symbol && symbol.declarations && symbol.declarations[0]) {
+                        const declarationSourceFile = symbol.declarations[0].getSourceFile();
+                        if (declarationSourceFile) {
+                            referencedFiles[declarationSourceFile.fileName] = true;
                         }
                     }
-                    else {
-                        referencedModules[module.resolvedFileName] = true;
-                    }
-                }
-                for (const key of getKeys(referencedModules)) {
-                    result.push(key);
                 }
             }
-            return result;
+
+            // Handle triple slash references
+            if (sourceFile.referencedFiles) {
+                for (const referencedFile of sourceFile.referencedFiles) {
+                    referencedFiles[referencedFile.fileName] = true;
+                }
+            }
+
+            // Handle type reference directives
+            if (sourceFile.resolvedTypeReferenceDirectiveNames) {
+                for (const typeName in sourceFile.resolvedTypeReferenceDirectiveNames) {
+                    const fileName = sourceFile.resolvedTypeReferenceDirectiveNames[typeName].resolvedFileName;
+                    referencedFiles[fileName] = true;
+                }
+            }
+
+            const currentDirectory = getDirectoryPath(fileName);
+            return map(getKeys(referencedFiles), file => getNormalizedAbsolutePath(file, currentDirectory));
         }
 
         // remove a root file from project

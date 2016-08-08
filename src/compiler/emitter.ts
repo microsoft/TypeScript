@@ -1,4 +1,4 @@
-/// <reference path="checker.ts"/>
+﻿/// <reference path="checker.ts"/>
 /// <reference path="sourcemap.ts" />
 /// <reference path="declarationEmitter.ts"/>
 
@@ -336,7 +336,7 @@ namespace ts {
     }
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitDeclarationsOnly?: boolean): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult {
         // emit output for the __extends helper function
         const extendsHelper = `
 var __extends = (this && this.__extends) || function (d, b) {
@@ -396,7 +396,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         const newLine = host.getNewLine();
 
         const emitJavaScript = createFileEmitter();
-        forEachExpectedEmitFile(host, emitFile, targetSourceFile, emitDeclarationsOnly);
+        forEachExpectedEmitFile(host, emitFile, targetSourceFile, emitOnlyDtsFiles);
 
         return {
             emitSkipped,
@@ -8360,7 +8360,7 @@ const _super = (function (geti, seti) {
 
         function emitFile({ jsFilePath, sourceMapFilePath, declarationFilePath }: EmitFileNames,
             sourceFiles: SourceFile[], isBundledEmit: boolean) {
-            if (!emitDeclarationsOnly) {
+            if (!emitOnlyDtsFiles) {
                 // Make sure not to write js File and source map file if any of them cannot be written
                 if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit) {
                     emitJavaScript(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
@@ -8375,7 +8375,7 @@ const _super = (function (geti, seti) {
             }
 
             if (!emitSkipped && emittedFilesList) {
-                if (!emitDeclarationsOnly) {
+                if (!emitOnlyDtsFiles) {
                     emittedFilesList.push(jsFilePath);
                     if (sourceMapFilePath) {
                         emittedFilesList.push(sourceMapFilePath);

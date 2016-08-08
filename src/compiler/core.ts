@@ -1,4 +1,4 @@
-/// <reference path="types.ts"/>
+﻿/// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
 
 
@@ -87,17 +87,6 @@ namespace ts {
                 const result = callback(array[i], i);
                 if (result) {
                     return result;
-                }
-            }
-        }
-        return undefined;
-    }
-
-    export function findFirst<T>(array: T[], predicate: (item: T) => boolean): T {
-        if (array && array.length > 0) {
-            for (const item of array) {
-                if (predicate(item)) {
-                    return item;
                 }
             }
         }
