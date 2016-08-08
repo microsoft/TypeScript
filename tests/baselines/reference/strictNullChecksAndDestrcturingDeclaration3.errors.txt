@@ -1,0 +1,23 @@
+tests/cases/compiler/strictNullChecksAndDestrcturingDeclaration3.ts(10,8): error TS2459: Type '{ x?: boolean | undefined; y?: boolean | undefined; } | undefined' has no property 'x' and no string index signature.
+tests/cases/compiler/strictNullChecksAndDestrcturingDeclaration3.ts(10,11): error TS2459: Type '{ x?: boolean | undefined; y?: boolean | undefined; } | undefined' has no property 'y' and no string index signature.
+
+
+==== tests/cases/compiler/strictNullChecksAndDestrcturingDeclaration3.ts (2 errors) ====
+    
+    // Repro from #10078
+    
+    declare class A {
+        f({x}?: {
+            x?: boolean;
+        }): void;
+    }
+    declare class B extends A {
+        f({x, y}?: {
+           ~
+!!! error TS2459: Type '{ x?: boolean | undefined; y?: boolean | undefined; } | undefined' has no property 'x' and no string index signature.
+              ~
+!!! error TS2459: Type '{ x?: boolean | undefined; y?: boolean | undefined; } | undefined' has no property 'y' and no string index signature.
+            x?: boolean;
+            y?: boolean;
+        }): void;
+    }

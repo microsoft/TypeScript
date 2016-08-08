@@ -1,0 +1,25 @@
+=== tests/cases/compiler/strictNullChecksAndDestrcturingDeclaration.ts ===
+
+// Repro from #10078
+
+class A {
+>A : A
+
+    f({x}: { x?: boolean } = {}) { };
+>f : ({x}?: { x?: boolean | undefined; }) => void
+>x : boolean | undefined
+>x : boolean | undefined
+>{} : {}
+}
+class B extends A {
+>B : B
+>A : A
+
+    f({x, y}: { x?: boolean, y?: boolean } = {}) { };
+>f : ({x, y}?: { x?: boolean | undefined; y?: boolean | undefined; }) => void
+>x : boolean | undefined
+>y : boolean | undefined
+>x : boolean | undefined
+>y : boolean | undefined
+>{} : {}
+}
