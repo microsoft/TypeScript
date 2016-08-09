@@ -3,25 +3,28 @@
 // Should handle calls made on super
 
 //// interface Foo {
-////     hell/*declaration*/o (): void;
+////     hello (): void;
+//// }
+////
+//// class SubBar extends Bar {
+////     hello() {}
 //// }
 ////
 //// class Bar extends SuperBar {
 ////     hello() {}
-//// }
 ////
-//// class SuperBar extends SuperSuperBar {
 ////     whatever() {
 ////         super.he/*function_call*/llo();
 ////     }
 //// }
 ////
-//// class SuperSuperBar implements Foo {
+//// class SuperBar extends MegaBar {
 ////     [|hello() {}|]
+//// }
+////
+//// class MegaBar implements Foo {
+////     hello() {}
 //// }
 
 goTo.marker("function_call");
-verify.allRangesAppearInImplementationList();
-
-goTo.marker("declaration");
 verify.allRangesAppearInImplementationList();

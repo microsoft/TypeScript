@@ -103,7 +103,8 @@ namespace ts {
 
             getJsxElementAttributesType,
             getJsxIntrinsicTagNames,
-            isOptionalParameter
+            isOptionalParameter,
+            isTypeSubtypeOf
         };
 
         const unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");

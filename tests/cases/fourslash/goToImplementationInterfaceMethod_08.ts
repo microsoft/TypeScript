@@ -3,7 +3,7 @@
 // Should handle calls made on this
 
 //// interface Foo {
-////     he/*declaration*/llo (): void;
+////     hello (): void;
 //// }
 ////
 //// class SuperBar implements Foo {
@@ -15,12 +15,9 @@
 //// }
 ////
 //// class SubBar extends Bar {
-////    [|hello() {}|]
+////    hello() {}
 //// }
 
 
 goTo.marker("function_call");
-verify.allRangesAppearInImplementationList();
-
-goTo.marker("declaration");
 verify.allRangesAppearInImplementationList();

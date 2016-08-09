@@ -3,7 +3,7 @@
 // Should not return super implementations when method is implemented in class
 
 //// interface Foo {
-////     hel/*declaration*/lo (): void;
+////     hello (): void;
 //// }
 ////
 //// class Bar extends SuperBar {
@@ -22,7 +22,4 @@
 //// new Bar()["hello"]();
 
 goTo.marker("function_call");
-verify.allRangesAppearInImplementationList();
-
-goTo.marker("declaration");
 verify.allRangesAppearInImplementationList();

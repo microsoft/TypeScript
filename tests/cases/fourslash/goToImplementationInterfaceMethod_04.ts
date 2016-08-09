@@ -3,7 +3,7 @@
 // Should return implementation in class and all sub-classes of target
 
 //// interface Foo {
-////     hel/*declaration*/lo (): void;
+////     hello (): void;
 //// }
 ////
 //// class Bar extends SuperBar {
@@ -23,7 +23,4 @@
 //// }
 
 goTo.marker("function_call");
-verify.allRangesAppearInImplementationList();
-
-goTo.marker("declaration");
 verify.allRangesAppearInImplementationList();
