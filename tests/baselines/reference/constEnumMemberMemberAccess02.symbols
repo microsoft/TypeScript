@@ -1,0 +1,15 @@
+=== tests/cases/conformance/constEnums/constEnumMemberMemberAccess02.ts ===
+
+const enum Foo {
+>Foo : Symbol(Foo, Decl(constEnumMemberMemberAccess02.ts, 0, 0))
+
+    A
+>A : Symbol(Foo.A, Decl(constEnumMemberMemberAccess02.ts, 1, 16))
+}
+
+Foo.A["toString"]();
+>Foo.A : Symbol(Foo.A, Decl(constEnumMemberMemberAccess02.ts, 1, 16))
+>Foo : Symbol(Foo, Decl(constEnumMemberMemberAccess02.ts, 0, 0))
+>A : Symbol(Foo.A, Decl(constEnumMemberMemberAccess02.ts, 1, 16))
+>"toString" : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+
