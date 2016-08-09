@@ -4000,6 +4000,10 @@ namespace ts {
                 return createTypeReference((<TypeReference>type).target,
                     concatenate((<TypeReference>type).typeArguments, [thisArgument || (<TypeReference>type).target.thisType]));
             }
+            if (type.flags & TypeFlags.Tuple) {
+                resolveTupleTypeMembers(type as TupleType, thisArgument);
+                return type;
+            }
             return type;
         }
 
@@ -4100,10 +4104,10 @@ namespace ts {
             return members;
         }
 
-        function resolveTupleTypeMembers(type: TupleType) {
+        function resolveTupleTypeMembers(type: TupleType, thisArgument?: Type) {
             const arrayElementType = getUnionType(type.elementTypes);
             // Make the tuple type itself the 'this' type by including an extra type argument
-            const arrayType = resolveStructuredTypeMembers(createTypeFromGenericGlobalType(globalArrayType, [arrayElementType, type]));
+            const arrayType = resolveStructuredTypeMembers(createTypeFromGenericGlobalType(globalArrayType, [arrayElementType, thisArgument || type]));
             const members = createTupleTypeMemberSymbols(type.elementTypes);
             addInheritedMembers(members, arrayType.properties);
             setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexInfo, arrayType.numberIndexInfo);
