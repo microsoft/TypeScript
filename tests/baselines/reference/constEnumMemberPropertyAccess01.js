@@ -6,4 +6,4 @@ const enum Foo {
 Foo.A.toString();
 
 //// [constEnumMemberPropertyAccess01.js]
-0 /* A */..toString();
+0 /* A */.toString();
