@@ -4941,24 +4941,27 @@ namespace ts {
         }
 
         function getTypeListId(types: Type[]) {
+            let result = "";
             if (types) {
-                switch (types.length) {
-                    case 1:
-                        return "" + types[0].id;
-                    case 2:
-                        return types[0].id + "," + types[1].id;
-                    default:
-                        let result = "";
-                        for (let i = 0; i < types.length; i++) {
-                            if (i > 0) {
-                                result += ",";
-                            }
-                            result += types[i].id;
-                        }
-                        return result;
+                const length = types.length;
+                let i = 0;
+                while (i < length) {
+                    const startId = types[i].id;
+                    let count = 1;
+                    while (i + count < length && types[i + count].id === startId + count) {
+                        count++;
+                    }
+                    if (result.length) {
+                        result += ",";
+                    }
+                    result += startId;
+                    if (count > 1) {
+                        result += ":" + count;
+                    }
+                    i += count;
                 }
             }
-            return "";
+            return result;
         }
 
         // This function is used to propagate certain flags when creating new object type references and union types.
