@@ -1,10 +1,28 @@
 namespace ts {
 
-    export namespace ExtensionKind {
+    export interface BaseProviderStatic {
+        readonly ["extension-kind"]: ExtensionKind;
+        new (state: {ts: typeof ts, args: any}): any;
     }
-    export type ExtensionKind = string;
+
+    export interface LanguageServiceHost {} // The members for these interfaces are provided in the services layer
+    export interface LanguageService {}
+    export interface LanguageServiceProvider {}
+    export interface DocumentRegistry {}
+
+    export interface LanguageServiceProviderStatic extends BaseProviderStatic {
+        readonly ["extension-kind"]: ExtensionKind.LanguageService;
+        new (state: { ts: typeof ts, args: any, host: LanguageServiceHost, service: LanguageService, registry: DocumentRegistry }): LanguageServiceProvider;
+    }
+
+    export namespace ExtensionKind {
+        export const LanguageService: "language-service" = "language-service";
+        export type LanguageService = "language-service";
+    }
+    export type ExtensionKind = ExtensionKind.LanguageService;
 
     export interface ExtensionCollectionMap {
+        "language-service"?: LanguageServiceExtension[];
         [index: string]: Extension[] | undefined;
     }
 
@@ -21,7 +39,12 @@ namespace ts {
         length?: number;
     }
 
-    export type Extension = ExtensionBase;
+    export interface LanguageServiceExtension extends ExtensionBase {
+        kind: ExtensionKind.LanguageService;
+        ctor: LanguageServiceProviderStatic;
+    }
+
+    export type Extension = LanguageServiceExtension;
 
     export interface ExtensionCache {
         getCompilerExtensions(): ExtensionCollectionMap;
@@ -185,6 +208,20 @@ namespace ts {
                         kind: annotatedKind as ExtensionKind,
                     };
                     switch (ext.kind) {
+                        case ExtensionKind.LanguageService:
+                            if (typeof potentialExtension !== "function") {
+                                diagnostics.push(createCompilerDiagnostic(
+                                    Diagnostics.Extension_0_exported_member_1_has_extension_kind_2_but_was_type_3_when_type_4_was_expected,
+                                    res.name,
+                                    key,
+                                    (ts as any).ExtensionKind[annotatedKind],
+                                    typeof potentialExtension,
+                                    "function"
+                                ));
+                                return;
+                            }
+                            (ext as LanguageServiceExtension).ctor = potentialExtension as LanguageServiceProviderStatic;
+                            break;
                         default:
                             // Include a default case which just puts the extension unchecked onto the base extension
                             // This can allow language service extensions to query for custom extension kinds
