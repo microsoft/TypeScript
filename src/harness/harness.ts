@@ -750,7 +750,7 @@ namespace Harness {
 
             export function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]) {
                 const fs = new Utils.VirtualFileSystem(path, useCaseSensitiveFileNames());
-                for (const file in listFiles(path)) {
+                for (const file of listFiles(path)) {
                     fs.addFile(file);
                 }
                 return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), path => {
