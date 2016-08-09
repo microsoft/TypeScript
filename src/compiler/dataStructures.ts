@@ -275,6 +275,15 @@ namespace ts {
         return createMapFromArray(values, getKey, value => value);
     }
 
+    export function createMapFromKeysAndValues<V>(keys: string[], values: V[]): SMap<V> {
+        Debug.assert(keys.length === values.length);
+        const result = new SMap<V>();
+        for (let i = 0; i < keys.length; i++) {
+            result.set(keys[i], values[i]);
+        }
+        return result;
+    }
+
     export function mapKeys<V>(map: SMap<V>, getNewKey: (key: string) => string): SMap<V> {
         const result = new SMap<V>();
         map.forEach((value, key) => {
@@ -453,7 +462,7 @@ namespace ts {
         return hasProperty(map, key) ? map[key] : undefined;
     }
 
-    export function getOrUpdateProperty<T>(map: Map<T>, key: string, makeValue: () => T): T {
+    export function getOrUpdateProperty<T>(map: ObjMap<T>, key: string, makeValue: () => T): T {
         return hasProperty(map, key) ? map[key] : map[key] = makeValue();
     }
 

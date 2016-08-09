@@ -3,13 +3,13 @@ import * as path from "path";
 import * as child_process from "child_process";
 
 
-interface Map<T> {
+interface ObjMap<T> {
     [key: string]: T;
 }
 
 declare var process: {
     argv: string[];
-    env: Map<string>;
+    env: ObjMap<string>;
     exit(exitCode?: number): void;
 }
 
@@ -52,7 +52,7 @@ function importDefinitelyTypedTest(tscPath: string, rwcTestPath: string, testCas
         cmd += " @" + responseFile;
     }
 
-    let testDirectoryName = testCaseName + "_" + Math.floor((Math.random() * 10000) + 1); 
+    let testDirectoryName = testCaseName + "_" + Math.floor((Math.random() * 10000) + 1);
     let testDirectoryPath = path.join(process.env["temp"], testDirectoryName);
     if (fs.existsSync(testDirectoryPath)) {
         throw new Error("Could not create test directory");
