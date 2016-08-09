@@ -5919,6 +5919,13 @@ namespace ts {
             return isTypeRelatedTo(source, target, assignableRelation);
         }
 
+        // A type S is considered to be an instance of a type T if S and T are the same type or if S is a
+        // subtype of T but not structurally identical to T. This specifically means that two distinct but
+        // structurally identical types (such as two classes) are not considered instances of each other.
+        function isTypeInstanceOf(source: Type, target: Type): boolean {
+            return source === target || isTypeSubtypeOf(source, target) && !isTypeIdenticalTo(source, target);
+        }
+
         /**
          * This is *not* a bi-directional relationship.
          * If one needs to check both directions for comparability, use a second call to this function or 'checkTypeComparableTo'.
@@ -8569,17 +8576,13 @@ namespace ts {
             }
 
             function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean) {
-                // In the false branch we keep types that aren't subtypes of the candidate type and we keep structurally
-                // identical types except for the current type itself. The latter rule means that given two structurally
-                // identical classes A and B and a variable x of type A, in the false branch of an 'x instanceof B' type
-                // guard x keeps type A and is not narrowed to type never.
                 if (!assumeTrue) {
-                    return filterType(type, t => !isTypeSubtypeOf(t, candidate) || isTypeIdenticalTo(t, candidate) && t !== candidate);
+                    return filterType(type, t => !isTypeInstanceOf(t, candidate));
                 }
-                // If the current type is a union type, remove all constituents that aren't assignable to
+                // If the current type is a union type, remove all constituents that couldn't be instances of
                 // the candidate type. If one or more constituents remain, return a union of those.
                 if (type.flags & TypeFlags.Union) {
-                    const assignableConstituents = filter((<UnionType>type).types, t => isTypeAssignableTo(t, candidate));
+                    const assignableConstituents = filter((<UnionType>type).types, t => isTypeInstanceOf(t, candidate));
                     if (assignableConstituents.length) {
                         return getUnionType(assignableConstituents);
                     }
