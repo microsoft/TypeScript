@@ -122,7 +122,7 @@ namespace ts {
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
-    const categoryFormatMap = new NMap<string>([
+    const categoryFormatMap = new NumberMap<string>([
         [DiagnosticCategory.Warning, yellowForegroundEscapeSequence],
         [DiagnosticCategory.Error, redForegroundEscapeSequence],
         [DiagnosticCategory.Message, blueForegroundEscapeSequence],
@@ -262,7 +262,7 @@ namespace ts {
 
         // This map stores and reuses results of fileExists check that happen inside 'createProgram'
         // This allows to save time in module resolution heavy scenarios when existence of the same file might be checked multiple times.
-        let cachedExistingFiles: SMap<boolean>;
+        let cachedExistingFiles: StringMap<boolean>;
         let hostFileExists: typeof compilerHost.fileExists;
 
         if (commandLine.options.locale) {
@@ -432,7 +432,7 @@ namespace ts {
             }
 
             // reset the cache of existing files
-            cachedExistingFiles = new SMap();
+            cachedExistingFiles = new StringMap();
 
             const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
@@ -445,7 +445,7 @@ namespace ts {
         }
 
         function cachedFileExists(fileName: string): boolean {
-            return getOrUpdateMap(cachedExistingFiles, fileName, () => hostFileExists(fileName));
+            return getOrUpdate(cachedExistingFiles, fileName, () => hostFileExists(fileName));
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
@@ -673,7 +673,7 @@ namespace ts {
         const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
         const descriptionColumn: string[] = [];
 
-        const optionsDescriptionMap = new SMap<string[]>();  // Map between option.description and list of option.type if it is a kind
+        const optionsDescriptionMap = new StringMap<string[]>();  // Map between option.description and list of option.type if it is a kind
 
         for (let i = 0; i < optsList.length; i++) {
             const option = optsList[i];
@@ -701,7 +701,7 @@ namespace ts {
                 description = getDiagnosticText(option.description);
                 const options: string[] = [];
                 const element = (<CommandLineOptionOfListType>option).element;
-                forEachKeyInMap(<SMap<number | string>>element.type, key => {
+                forEachKeyInStringMap(<StringMap<number | string>>element.type, key => {
                     options.push(`'${key}'`);
                 });
                 optionsDescriptionMap.set(description, options);
@@ -782,13 +782,13 @@ namespace ts {
 
         return;
 
-        function serializeCompilerOptions(options: CompilerOptions): ObjMap<string | number | boolean> {
-            const result: ObjMap<string | number | boolean> = {};
+        function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
+            const result: Map<string | number | boolean> = {};
             const optionsNameMap = getOptionNameMap().optionNameMap;
 
             // tsconfig only options cannot be specified via command line,
             // so we can assume that only types that can appear here string | number | boolean
-            ts.forEachValueAndKey(<ObjMap<string | number | boolean>>options, (value, name) => {
+            ts.forEachValueAndKey(<Map<string | number | boolean>>options, (value, name) => {
                 switch (name) {
                     case "init":
                     case "watch":
@@ -805,7 +805,7 @@ namespace ts {
                             }
                             else {
                                 // Enum
-                                const typeMap = <SMap<number>>optionDefinition.type;
+                                const typeMap = <StringMap<number>>optionDefinition.type;
                                 typeMap.forEach((enumValue, key) => {
                                     if (enumValue === value) {
                                         result[name] = key;

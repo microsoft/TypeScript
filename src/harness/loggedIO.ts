@@ -89,7 +89,7 @@ namespace Playback {
     }
 
     function memoize<T>(func: (s: string) => T): Memoized<T> {
-        let lookup = new ts.SMap<T>();
+        let lookup = new ts.StringMap<T>();
         const run: Memoized<T> = <Memoized<T>>((s: string) => {
             if (lookup.has(s)) return lookup.get(s);
             return ts.setAndReturn(lookup, s, func(s));
@@ -128,7 +128,7 @@ namespace Playback {
     function initWrapper(wrapper: PlaybackSystem, underlying: ts.System): void;
     function initWrapper(wrapper: PlaybackIO, underlying: Harness.IO): void;
     function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: ts.System | Harness.IO): void {
-        ts.copyObjMap(<ts.ObjMap<any>>underlying, wrapper);
+        ts.copyMap(<ts.Map<any>>underlying, wrapper);
 
         wrapper.startReplayFromString = logString => {
             wrapper.startReplayFromData(JSON.parse(logString));

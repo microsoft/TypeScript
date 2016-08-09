@@ -132,7 +132,7 @@ namespace Utils {
     }
 
     export function memoize<T extends Function>(f: T): T {
-        const cache = new ts.SMap<T>();
+        const cache = new ts.StringMap<T>();
 
         return <any>(function(this: any) {
             const key = Array.prototype.join.call(arguments);
@@ -857,7 +857,7 @@ namespace Harness {
                 return undefined;
             }
 
-            return ts.getOrUpdateMap(libFileNameSourceFileMap, fileName, () => createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest));
+            return ts.getOrUpdate(libFileNameSourceFileMap, fileName, () => createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest));
         }
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {
@@ -999,11 +999,11 @@ namespace Harness {
             { name: "symlink", type: "string" }
         ];
 
-        let optionsIndex: ts.SMap<ts.CommandLineOption>;
+        let optionsIndex: ts.StringMap<ts.CommandLineOption>;
         function getCommandLineOption(name: string): ts.CommandLineOption {
             if (!optionsIndex) {
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
-                optionsIndex = ts.createMapFromValues(optionDeclarations, option => option.name.toLowerCase());
+                optionsIndex = ts.createStringMapFromValues(optionDeclarations, option => option.name.toLowerCase());
             }
             return optionsIndex.get(name.toLowerCase());
         }

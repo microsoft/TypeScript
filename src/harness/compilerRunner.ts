@@ -291,8 +291,8 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
 
-                const fullResults = new ts.SMap<TypeWriterResult[]>();
-                const pullResults = new ts.SMap<TypeWriterResult[]>();
+                const fullResults = new ts.StringMap<TypeWriterResult[]>();
+                const pullResults = new ts.StringMap<TypeWriterResult[]>();
 
                 for (const sourceFile of allFiles) {
                     fullResults.set(sourceFile.unitName, fullWalker.getTypeAndSymbols(sourceFile.unitName));
@@ -338,10 +338,10 @@ class CompilerBaselineRunner extends RunnerBase {
                     }
                 }
 
-                function generateBaseLine(typeWriterResults: ts.SMap<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
+                function generateBaseLine(typeWriterResults: ts.StringMap<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
                     const typeLines: string[] = [];
                     // Maps fileName to a (lineNumber -> string[]) map.
-                    const typeMap = new ts.SMap<ts.NMap<string[]>>();
+                    const typeMap = new ts.StringMap<ts.NumberMap<string[]>>();
 
                     allFiles.forEach(file => {
                         const codeLines = file.content.split("\n");
@@ -352,7 +352,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
                             const typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
                             const formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
-                            const linesMap = ts.getOrUpdateMap(typeMap, file.unitName, () => new ts.NMap<string[]>());
+                            const linesMap = ts.getOrUpdate(typeMap, file.unitName, () => new ts.NumberMap<string[]>());
                             ts.multiMapAdd(linesMap, result.line, formattedLine);
                         });
 

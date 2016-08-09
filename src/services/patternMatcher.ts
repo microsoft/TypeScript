@@ -113,7 +113,7 @@ namespace ts {
         // we see the name of a module that is used everywhere, or the name of an overload).  As
         // such, we cache the information we compute about the candidate for the life of this
         // pattern matcher so we don't have to compute it multiple times.
-        const stringToWordSpans = new ts.SMap<TextSpan[]>();
+        const stringToWordSpans = new ts.StringMap<TextSpan[]>();
 
         pattern = pattern.trim();
 
@@ -188,7 +188,7 @@ namespace ts {
         }
 
         function getWordSpans(word: string): TextSpan[] {
-            return getOrUpdateMap(stringToWordSpans, word, () => breakIntoWordSpans(word));
+            return getOrUpdate(stringToWordSpans, word, () => breakIntoWordSpans(word));
         }
 
         function matchTextChunk(candidate: string, chunk: TextChunk, punctuationStripped: boolean): PatternMatch {

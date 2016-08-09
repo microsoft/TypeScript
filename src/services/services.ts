@@ -65,9 +65,9 @@ namespace ts {
     export interface SourceFile {
         /* @internal */ version: string;
         /* @internal */ scriptSnapshot: IScriptSnapshot;
-        /* @internal */ nameTable: ts.SMap<number>;
+        /* @internal */ nameTable: ts.StringMap<number>;
 
-        /* @internal */ getNamedDeclarations(): ts.SMap<Declaration[]>;
+        /* @internal */ getNamedDeclarations(): ts.StringMap<Declaration[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
@@ -938,13 +938,13 @@ namespace ts {
         public scriptKind: ScriptKind;
         public languageVersion: ScriptTarget;
         public languageVariant: LanguageVariant;
-        public identifiers: ts.SMap<string>;
-        public nameTable: ts.SMap<number>;
-        public resolvedModules: ts.SMap<ResolvedModule>;
-        public resolvedTypeReferenceDirectiveNames: ts.SMap<ResolvedTypeReferenceDirective>;
+        public identifiers: ts.StringMap<string>;
+        public nameTable: ts.StringMap<number>;
+        public resolvedModules: ts.StringMap<ResolvedModule>;
+        public resolvedTypeReferenceDirectiveNames: ts.StringMap<ResolvedTypeReferenceDirective>;
         public imports: LiteralExpression[];
         public moduleAugmentations: LiteralExpression[];
-        private namedDeclarations: ts.SMap<Declaration[]>;
+        private namedDeclarations: ts.StringMap<Declaration[]>;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);
@@ -966,7 +966,7 @@ namespace ts {
             return ts.getPositionOfLineAndCharacter(this, line, character);
         }
 
-        public getNamedDeclarations(): ts.SMap<Declaration[]> {
+        public getNamedDeclarations(): ts.StringMap<Declaration[]> {
             if (!this.namedDeclarations) {
                 this.namedDeclarations = this.computeNamedDeclarations();
             }
@@ -974,8 +974,8 @@ namespace ts {
             return this.namedDeclarations;
         }
 
-        private computeNamedDeclarations(): ts.SMap<Declaration[]> {
-            const result = new ts.SMap<Declaration[]>();
+        private computeNamedDeclarations(): ts.StringMap<Declaration[]> {
+            const result = new ts.StringMap<Declaration[]>();
 
             forEachChild(this, visit);
 
@@ -990,7 +990,7 @@ namespace ts {
             }
 
             function getDeclarations(name: string) {
-                return getOrUpdateMap(result, name, () => []);
+                return getOrUpdate(result, name, () => []);
             }
 
             function getDeclarationName(declaration: Declaration) {
@@ -2025,7 +2025,7 @@ namespace ts {
         fileName?: string;
         reportDiagnostics?: boolean;
         moduleName?: string;
-        renamedDependencies?: ObjMap<string>;
+        renamedDependencies?: Map<string>;
     }
 
     export interface TranspileOutput {
@@ -2042,7 +2042,7 @@ namespace ts {
     function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
         commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
-            typeof o.type === "object" && allInMap(o.type, v => typeof v === "number"));
+            typeof o.type === "object" && allInStringMap(o.type, v => typeof v === "number"));
 
         options = clone(options);
 
@@ -2058,7 +2058,7 @@ namespace ts {
                 options[opt.name] = parseCustomTypeOption(opt, value, diagnostics);
             }
             else {
-                if (!someInMap(opt.type, v => v === value)) {
+                if (!someInStringMap(opt.type, v => v === value)) {
                     // Supplied value isn't a valid enum value.
                     diagnostics.push(createCompilerDiagnosticForInvalidCustomType(opt));
                 }
@@ -2117,7 +2117,7 @@ namespace ts {
             sourceFile.moduleName = transpileOptions.moduleName;
         }
 
-        sourceFile.renamedDependencies = smapOfObjMap(transpileOptions.renamedDependencies);
+        sourceFile.renamedDependencies = stringMapOfMap(transpileOptions.renamedDependencies);
 
         const newLine = getNewLineCharacter(options);
 
@@ -2243,7 +2243,7 @@ namespace ts {
     export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
-        const buckets = new ts.SMap<FileMap<DocumentRegistryEntry>>();
+        const buckets = new ts.StringMap<FileMap<DocumentRegistryEntry>>();
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
@@ -2252,12 +2252,12 @@ namespace ts {
 
         function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
             return createIfMissing
-                ? getOrUpdateMap<string, FileMap<DocumentRegistryEntry>>(buckets, key, createFileMap)
+                ? getOrUpdate<string, FileMap<DocumentRegistryEntry>>(buckets, key, createFileMap)
                 : buckets.get(key);
         }
 
         function reportStats() {
-            const bucketInfoArray = mapAndFilterMap(buckets, (entries, name) => {
+            const bucketInfoArray = mapAndFilterStringMap(buckets, (entries, name) => {
                 if (!(name && name.charAt(0) === "_")) {
                     return;
                 }
@@ -3099,7 +3099,7 @@ namespace ts {
                  oldSettings.allowJs !== newSettings.allowJs ||
                  oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit ||
                  oldSettings.baseUrl !== newSettings.baseUrl ||
-                 !objMapIsEqualTo(oldSettings.paths, newSettings.paths));
+                 !mapIsEqualTo(oldSettings.paths, newSettings.paths));
 
             // Now create a new compiler
             const compilerHost: CompilerHost = {
@@ -4262,7 +4262,7 @@ namespace ts {
 
                     if (!uniqueNames.has(name)) {
                         uniqueNames.add(name);
-                        const displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks*/ true);
+                        const displayName = getCompletionEntryDisplayName(unescapeIdentifier(name), target, /*performCharacterChecks*/ true);
                         if (displayName) {
                             const entry = {
                                 name: displayName,
@@ -4322,7 +4322,7 @@ namespace ts {
                     for (const symbol of symbols) {
                         const entry = createCompletionEntry(symbol, location, performCharacterChecks);
                         if (entry) {
-                            const id = entry.name;
+                            const id = escapeIdentifier(entry.name);
                             if (!uniqueNames.has(id)) {
                                 entries.push(entry);
                                 uniqueNames.add(id);
@@ -5318,7 +5318,7 @@ namespace ts {
                         return undefined;
                     }
 
-                    const fileNameToDocumentHighlights = new SMap<DocumentHighlights>();
+                    const fileNameToDocumentHighlights = new StringMap<DocumentHighlights>();
                     const result: DocumentHighlights[] = [];
                     for (const referencedSymbol of referencedSymbols) {
                         for (const referenceEntry of referencedSymbol.references) {
@@ -6713,7 +6713,7 @@ namespace ts {
 
                     // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ new SMap());
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ new StringMap());
                     }
                 });
 
@@ -6834,7 +6834,7 @@ namespace ts {
                     // see if any is in the list
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                         const result: Symbol[] = [];
-                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ new SMap());
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ new StringMap());
                         return forEach(result, s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     }
 
@@ -8309,7 +8309,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getNameTable(sourceFile: SourceFile): SMap<number> {
+    export function getNameTable(sourceFile: SourceFile): StringMap<number> {
         if (!sourceFile.nameTable) {
             initializeNameTable(sourceFile);
         }
@@ -8318,7 +8318,7 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable = new SMap<number>();
+        const nameTable = new StringMap<number>();
 
         walk(sourceFile);
         sourceFile.nameTable = nameTable;

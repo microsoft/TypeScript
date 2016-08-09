@@ -3,13 +3,13 @@ import * as path from "path";
 import * as child_process from "child_process";
 
 
-interface ObjMap<T> {
+interface Map<T> {
     [key: string]: T;
 }
 
 declare var process: {
     argv: string[];
-    env: ObjMap<string>;
+    env: Map<string>;
     exit(exitCode?: number): void;
 }
 

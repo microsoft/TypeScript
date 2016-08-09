@@ -362,8 +362,8 @@ namespace ts.server {
         class InProcClient {
             private server: InProcSession;
             private seq = 0;
-            private callbacks = new NMap<(resp: protocol.Response) => void>();
-            private eventHandlers = new SMap<(args: any) => void>();
+            private callbacks = new NumberMap<(resp: protocol.Response) => void>();
+            private eventHandlers = new StringMap<(args: any) => void>();
 
             handle(msg: protocol.Message): void {
                 if (msg.type === "response") {

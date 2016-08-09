@@ -20,7 +20,7 @@ namespace ts {
     }
 
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
-        const files = new SMap<T>();
+        const files = new StringMap<T>();
         return {
             get,
             set,
@@ -99,7 +99,7 @@ namespace ts {
         return text.replace(/{(\d+)}/g, (match, index?) => args[+index + baseIndex]);
     }
 
-    export let localizedDiagnosticMessages: ObjMap<string> = undefined;
+    export let localizedDiagnosticMessages: Map<string> = undefined;
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key]

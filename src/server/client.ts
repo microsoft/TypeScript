@@ -21,7 +21,7 @@ namespace ts.server {
 
     export class SessionClient implements LanguageService {
         private sequence: number = 0;
-        private lineMaps = new ts.SMap<number[]>();
+        private lineMaps = new ts.StringMap<number[]>();
         private messages: string[] = [];
         private lastRenameEntry: RenameEntry;
 
@@ -37,7 +37,7 @@ namespace ts.server {
         }
 
         private getLineMap(fileName: string): number[] {
-            return ts.getOrUpdateMap(this.lineMaps, fileName, () => {
+            return ts.getOrUpdate(this.lineMaps, fileName, () => {
                 const scriptSnapshot = this.host.getScriptSnapshot(fileName);
                 return ts.computeLineStarts(scriptSnapshot.getText(0, scriptSnapshot.getLength()));
             });

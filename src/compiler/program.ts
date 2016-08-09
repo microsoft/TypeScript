@@ -895,11 +895,11 @@ namespace ts {
             }
         }
 
-        let outputFingerprints: SMap<OutputFingerprint>;
+        let outputFingerprints: StringMap<OutputFingerprint>;
 
         function writeFileIfUpdated(fileName: string, data: string, writeByteOrderMark: boolean): void {
             if (!outputFingerprints) {
-                outputFingerprints = new SMap();
+                outputFingerprints = new StringMap();
             }
 
             const hash = sys.createHash(data);
@@ -1039,9 +1039,9 @@ namespace ts {
             return [];
         }
         const resolutions: T[] = [];
-        const cache = new SMap<T>();
+        const cache = new StringMap<T>();
         for (const name of names) {
-            const result = getOrUpdateMap(cache, name, () => loader(name, containingFile));
+            const result = getOrUpdate(cache, name, () => loader(name, containingFile));
             resolutions.push(result);
         }
         return resolutions;
@@ -1087,7 +1087,7 @@ namespace ts {
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: SSet;
 
-        let resolvedTypeReferenceDirectives = new SMap<ResolvedTypeReferenceDirective>();
+        let resolvedTypeReferenceDirectives = new StringMap<ResolvedTypeReferenceDirective>();
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
         // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
@@ -1264,7 +1264,7 @@ namespace ts {
                 (oldOptions.maxNodeModuleJsDepth !== options.maxNodeModuleJsDepth) ||
                 !arrayIsEqualTo(oldOptions.typeRoots, oldOptions.typeRoots) ||
                 !arrayIsEqualTo(oldOptions.rootDirs, options.rootDirs) ||
-                !objMapIsEqualTo(oldOptions.paths, options.paths)) {
+                !mapIsEqualTo(oldOptions.paths, options.paths)) {
                 return false;
             }
 
@@ -2074,7 +2074,7 @@ namespace ts {
         function processImportedModules(file: SourceFile, basePath: string) {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
-                file.resolvedModules = new SMap();
+                file.resolvedModules = new StringMap();
                 const moduleNames = map(concatenate(file.imports, file.moduleAugmentations), getTextOfLiteral);
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
                 for (let i = 0; i < moduleNames.length; i++) {

@@ -10,8 +10,8 @@ namespace ts.performance {
     /** Performance measurements for the compiler. */
     declare const onProfilerEvent: { (markName: string): void; profiler: boolean; };
     let profilerEvent: (markName: string) => void;
-    let counters: SMap<number>;
-    let measures: SMap<number>;
+    let counters: StringMap<number>;
+    let measures: StringMap<number>;
 
     /**
      * Emit a performance event if ts-profiler is connected. This is primarily used
@@ -84,8 +84,8 @@ namespace ts.performance {
 
     /** Enables (and resets) performance measurements for the compiler. */
     export function enable() {
-        counters = new SMap();
-        measures = createMapFromKeys( ["I/O Read", "I/O Write", "Program", "Parse", "Bind", "Check", "Emit"], () => 0);
+        counters = new StringMap();
+        measures = createStringMapFromKeys( ["I/O Read", "I/O Write", "Program", "Parse", "Bind", "Check", "Emit"], () => 0);
 
         profilerEvent = typeof onProfilerEvent === "function" && onProfilerEvent.profiler === true
             ? onProfilerEvent

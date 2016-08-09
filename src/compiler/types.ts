@@ -1637,7 +1637,7 @@ namespace ts {
 
         // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
         /* @internal */
-        renamedDependencies?: SMap<string>;
+        renamedDependencies?: StringMap<string>;
 
         /**
          * lib.d.ts should have a reference comment like
@@ -1657,7 +1657,7 @@ namespace ts {
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
 
-        /* @internal */ identifiers: SMap<string>;
+        /* @internal */ identifiers: StringMap<string>;
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
         /* @internal */ symbolCount: number;
@@ -1676,8 +1676,8 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules: SMap<ResolvedModule>;
-        /* @internal */ resolvedTypeReferenceDirectiveNames: SMap<ResolvedTypeReferenceDirective>;
+        /* @internal */ resolvedModules: StringMap<ResolvedModule>;
+        /* @internal */ resolvedTypeReferenceDirectiveNames: StringMap<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
@@ -1764,7 +1764,7 @@ namespace ts {
         /* @internal */ getTypeCount(): number;
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
-        /* @internal */ getResolvedTypeReferenceDirectives(): SMap<ResolvedTypeReferenceDirective>;
+        /* @internal */ getResolvedTypeReferenceDirectives(): StringMap<ResolvedTypeReferenceDirective>;
         // For testing purposes only.
         /* @internal */ structureIsReused?: boolean;
     }
@@ -1825,7 +1825,7 @@ namespace ts {
 
         getSourceFiles(): SourceFile[];
         getSourceFile(fileName: string): SourceFile;
-        getResolvedTypeReferenceDirectives(): SMap<ResolvedTypeReferenceDirective>;
+        getResolvedTypeReferenceDirectives(): StringMap<ResolvedTypeReferenceDirective>;
     }
 
     export interface TypeChecker {
@@ -2153,7 +2153,7 @@ namespace ts {
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
         typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
         inferredClassType?: Type;           // Type of an inferred ES5 class
-        instantiations?: SMap<Type>; // Instantiations of generic type alias (undefined if non-generic)
+        instantiations?: StringMap<Type>; // Instantiations of generic type alias (undefined if non-generic)
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
         containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
@@ -2169,7 +2169,7 @@ namespace ts {
     /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks { }
 
-    export type SymbolTable = SMap<Symbol>;
+    export type SymbolTable = StringMap<Symbol>;
 
     /** Represents a "prefix*suffix" pattern. */
     /* @internal */
@@ -2314,7 +2314,7 @@ namespace ts {
 
     // Enum types (TypeFlags.Enum)
     export interface EnumType extends Type {
-        memberTypes: NMap<EnumLiteralType>;
+        memberTypes: NumberMap<EnumLiteralType>;
     }
 
     // Enum types (TypeFlags.EnumLiteral)
@@ -2361,7 +2361,7 @@ namespace ts {
     // Generic class and interface types
     export interface GenericType extends InterfaceType, TypeReference {
         /* @internal */
-        instantiations: SMap<TypeReference>;   // Generic instantiation cache
+        instantiations: StringMap<TypeReference>;   // Generic instantiation cache
     }
 
     export interface TupleType extends ObjectType {
@@ -2552,7 +2552,7 @@ namespace ts {
     }
 
     export type RootPaths = string[];
-    export type PathSubstitutions = ObjMap<string[]>;
+    export type PathSubstitutions = Map<string[]>;
     export type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
 
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | TsConfigOnlyOptions;
@@ -2645,7 +2645,7 @@ namespace ts {
         fileNames: string[];                            // The file names that belong to the same project.
         projectRootPath: string;                        // The path to the project root directory
         safeListPath: string;                           // The path used to retrieve the safe list
-        packageNameToTypingLocation: ObjMap<string>;       // The map of package names to their cached typing locations
+        packageNameToTypingLocation: Map<string>;       // The map of package names to their cached typing locations
         typingOptions: TypingOptions;                   // Used to customize the typing inference process
         compilerOptions: CompilerOptions;               // Used as a source for typing inference
     }
@@ -2712,7 +2712,7 @@ namespace ts {
         fileNames: string[];
         raw?: any;
         errors: Diagnostic[];
-        wildcardDirectories?: ObjMap<WatchDirectoryFlags>;
+        wildcardDirectories?: Map<WatchDirectoryFlags>;
     }
 
     export const enum WatchDirectoryFlags {
@@ -2722,13 +2722,13 @@ namespace ts {
 
     export interface ExpandResult {
         fileNames: string[];
-        wildcardDirectories: ObjMap<WatchDirectoryFlags>;
+        wildcardDirectories: Map<WatchDirectoryFlags>;
     }
 
     /* @internal */
     export interface CommandLineOptionBase {
         name: string;
-        type: "string" | "number" | "boolean" | "object" | "list" | SMap<number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
+        type: "string" | "number" | "boolean" | "object" | "list" | StringMap<number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
@@ -2744,7 +2744,7 @@ namespace ts {
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
-        type: SMap<number | string>;             // an object literal mapping named values to actual values
+        type: StringMap<number | string>;             // an object literal mapping named values to actual values
     }
 
     /* @internal */

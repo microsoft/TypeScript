@@ -95,7 +95,7 @@ namespace FourSlash {
 
     export import IndentStyle = ts.IndentStyle;
 
-    const entityMap = new ts.SMap<string>([
+    const entityMap = new ts.StringMap<string>([
         ["&", "&amp;"],
         ["\"", "&quot;"],
         ["'", "&#39;"],
@@ -204,7 +204,7 @@ namespace FourSlash {
 
         public formatCodeOptions: ts.FormatCodeOptions;
 
-        private inputFiles = new ts.SMap<string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
+        private inputFiles = new ts.StringMap<string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
 
         // Add input file which has matched file name with the given reference-file path.
         // This is necessary when resolveReference flag is specified
@@ -593,7 +593,7 @@ namespace FourSlash {
 
         public noItemsWithSameNameButDifferentKind(): void {
             const completions = this.getCompletionListAtCaret();
-            const uniqueItems = new ts.SMap<string>();
+            const uniqueItems = new ts.StringMap<string>();
             for (const item of completions.entries) {
                 const uniqueItem = uniqueItems.get(item.name);
                 if (!uniqueItem) {
@@ -1639,8 +1639,8 @@ namespace FourSlash {
             return this.testData.ranges;
         }
 
-        public rangesByText(): ts.SMap<Range[]> {
-            const result = new ts.SMap<Range[]>();
+        public rangesByText(): ts.StringMap<Range[]> {
+            const result = new ts.StringMap<Range[]>();
             for (const range of this.getRanges()) {
                 const text = this.rangeText(range);
                 ts.multiMapAdd(result, text, range);
@@ -1898,7 +1898,7 @@ namespace FourSlash {
 
         public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
 
-            const openBraceMap: ts.SMap<ts.CharacterCodes> = new ts.SMap([
+            const openBraceMap: ts.StringMap<ts.CharacterCodes> = new ts.StringMap([
                 ["(", ts.CharacterCodes.openParen],
                 ["{", ts.CharacterCodes.openBrace],
                 ["[", ts.CharacterCodes.openBracket],
@@ -2346,7 +2346,7 @@ ${code}
         // List of all the subfiles we've parsed out
         const files: FourSlashFile[] = [];
         // Global options
-        const globalOptions: ts.ObjMap<string> = {};
+        const globalOptions: ts.Map<string> = {};
         // Marker positions
 
         // Split up the input file by line
@@ -2361,7 +2361,7 @@ ${code}
         // Stuff related to the subfile we're parsing
         let currentFileContent: string = undefined;
         let currentFileName = fileName;
-        let currentFileOptions: ts.ObjMap<string> = {};
+        let currentFileOptions: ts.Map<string> = {};
 
         function resetLocalData() {
             currentFileContent = undefined;
@@ -2473,7 +2473,7 @@ ${code}
         return ts.forEach(files, f => getNonFileNameOptionInObject(f.fileOptions));
     }
 
-    function getNonFileNameOptionInObject(optionObject: ts.ObjMap<string>): string {
+    function getNonFileNameOptionInObject(optionObject: ts.Map<string>): string {
         for (const option in optionObject) {
             if (option !== metadataOptionNames.fileName) {
                 return option;
@@ -2772,7 +2772,7 @@ namespace FourSlashInterface {
             return this.state.getRanges();
         }
 
-        public rangesByText(): ts.SMap<FourSlash.Range[]> {
+        public rangesByText(): ts.StringMap<FourSlash.Range[]> {
             return this.state.rangesByText();
         }
 
