@@ -340,9 +340,8 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 function generateBaseLine(typeWriterResults: ts.SMap<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
                     const typeLines: string[] = [];
-                    //maps fileName -> (lineNum -> string[])
-                    //TODO: Should probably be just string[][] instead of Map<number, string[]
-                    const typeMap = new ts.SMap<ts.NMap<string[]>>();  //: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
+                    // Maps fileName to a (lineNumber -> string[]) map.
+                    const typeMap = new ts.SMap<ts.NMap<string[]>>();
 
                     allFiles.forEach(file => {
                         const codeLines = file.content.split("\n");

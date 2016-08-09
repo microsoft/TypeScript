@@ -810,7 +810,7 @@ namespace ts {
 
         const optionNameMap = createMapFromValues(optionDeclarations, opt => opt.name);
 
-        for (const id in jsonOptions) { //ts.forEach...
+        for (const id in jsonOptions) {
             const opt = optionNameMap.get(id);
             if (opt) {
                 defaultOptions[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
@@ -848,7 +848,6 @@ namespace ts {
 
     function convertJsonOptionOfCustomType(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
         const key = value.toLowerCase();
-        //duplicate code?
         const mapped = opt.type.get(key);
         if (mapped) {
             return mapped;

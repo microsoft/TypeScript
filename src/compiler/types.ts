@@ -1647,7 +1647,7 @@ namespace ts {
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
 
-        /* @internal */ identifiers: SMap<string>; //TODO: more performant implementation? This maps strings to theirselves.
+        /* @internal */ identifiers: SMap<string>;
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
         /* @internal */ symbolCount: number;
@@ -2700,7 +2700,7 @@ namespace ts {
         fileNames: string[];
         raw?: any;
         errors: Diagnostic[];
-        wildcardDirectories?: ObjMap<WatchDirectoryFlags>; //public, can't change
+        wildcardDirectories?: ObjMap<WatchDirectoryFlags>;
     }
 
     export const enum WatchDirectoryFlags {
@@ -2710,7 +2710,7 @@ namespace ts {
 
     export interface ExpandResult {
         fileNames: string[];
-        wildcardDirectories: ObjMap<WatchDirectoryFlags>; //public, can't change
+        wildcardDirectories: ObjMap<WatchDirectoryFlags>;
     }
 
     /* @internal */

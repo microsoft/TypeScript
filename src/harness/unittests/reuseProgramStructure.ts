@@ -183,7 +183,7 @@ namespace ts {
                     entryChecker(expected, actual);
                 }
                 else {
-                    assert.isTrue(cache.get(id) === undefined); //TODO: was: cache[id] === undefined. Why are we putting undefined into the cache?
+                    assert.isTrue(cache.get(id) === undefined);
                 }
             });
         }

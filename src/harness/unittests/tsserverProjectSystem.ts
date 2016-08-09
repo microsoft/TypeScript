@@ -203,7 +203,6 @@ namespace ts {
                 referenceCount: 0,
                 directoryName,
                 close: () => {
-                    //TODO: remove-from-array helper
                     for (let i = 0; i < callbacks.length; i++) {
                         if (callbacks[i].cb === callback) {
                             callbacks.splice(i, 1);

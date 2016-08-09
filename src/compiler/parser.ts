@@ -1083,7 +1083,6 @@ namespace ts {
         }
 
         function internIdentifier(text: string): string {
-            text = escapeIdentifier(text);
             return getOrUpdateMap(identifiers, text, () => text);
         }
 

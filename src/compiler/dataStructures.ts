@@ -137,7 +137,7 @@ namespace ts {
         }
         else {
             let size = 0;
-            map.forEach(() => size++);
+            map.forEach(() => { size++; });
             return size;
         }
     }
@@ -146,11 +146,11 @@ namespace ts {
     export function findInMap<V, U>(map: SMap<V>, fn: (value: V, key: string) => U | undefined): U | undefined {
         if (map instanceof Map) {
             // Using an iterator and testing for `done` performs better than using forEach() and throwing an exception.
-            let iter: { next(): { value: [string, V], done: boolean } } = (<any>map).entries();
-            for (;;) {
-                const { value: pair, done } = iter.next();
+            const iterator: { next(): { value: [string, V], done: boolean } } = (<any>map).entries();
+            while (true) {
+                const { value: pair, done } = iterator.next();
                 if (done) {
-                    return;
+                    return undefined;
                 }
                 const [key, value] = pair;
                 const result = fn(value, key);
@@ -275,8 +275,16 @@ namespace ts {
         return createMapFromArray(values, getKey, value => value);
     }
 
+    export function mapKeys<V>(map: SMap<V>, getNewKey: (key: string) => string): SMap<V> {
+        const result = new SMap<V>();
+        map.forEach((value, key) => {
+            result.set(getNewKey(key), value);
+        });
+        return result;
+    }
+
     /** Modifies every value in the map by replacing it with the result of `getNewValue`. */
-    export function mapValues<V>(map: SMap<V>, getNewValue: (value: V) => V): void {
+    export function mutateValues<V>(map: SMap<V>, getNewValue: (value: V) => V): void {
         map.forEach((value, key) => {
             map.set(key, getNewValue(value));
         });
@@ -483,7 +491,7 @@ namespace ts {
     }
 
     function containsAll<T>(map: ObjMap<T>, other: ObjMap<T>): boolean {
-        for (const key in map) { //ts.forEach...
+        for (const key in map) {
             if (!hasProperty(map, key)) {
                 continue;
             }
@@ -492,6 +500,13 @@ namespace ts {
             }
         }
         return true;
+    }
+
+    /** Copy all entries from `source` to `target`, overwriting any already existing. */
+    export function copyObjMap<V>(source: ObjMap<V>, target: ObjMap<V>): void {
+        forEachValueAndKey(source, (value, key) => {
+            target[key] = value;
+        });
     }
 }
 

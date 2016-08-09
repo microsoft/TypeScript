@@ -40,7 +40,7 @@ namespace FourSlash {
         files: FourSlashFile[];
 
         // A mapping from marker names to name/position pairs
-        markerPositions: { [index: string]: Marker; }; //TODO: Map? but this looks public.
+        markerPositions: { [index: string]: Marker; };
 
         markers: Marker[];
 
@@ -67,7 +67,7 @@ namespace FourSlash {
     }
 
     interface MarkerMap {
-        [index: string]: Marker; //TODO: Map?
+        [index: string]: Marker;
     }
 
     export interface Range {
@@ -2240,8 +2240,7 @@ namespace FourSlash {
         public getMarkerByName(markerName: string) {
             const markerPos = this.testData.markerPositions[markerName];
             if (markerPos === undefined) {
-                const markerNames: string[] = [];
-                for (const m in this.testData.markerPositions) markerNames.push(m); //ts.forEach...
+                const markerNames = Object.keys(this.testData.markerPositions);
                 throw new Error(`Unknown marker "${markerName}" Available markers: ${markerNames.map(m => "\"" + m + "\"").join(", ")}`);
             }
             else {
@@ -2347,7 +2346,7 @@ ${code}
         // List of all the subfiles we've parsed out
         const files: FourSlashFile[] = [];
         // Global options
-        const globalOptions: { [s: string]: string; } = {}; //ObjMap
+        const globalOptions: ts.ObjMap<string> = {};
         // Marker positions
 
         // Split up the input file by line
@@ -2362,7 +2361,7 @@ ${code}
         // Stuff related to the subfile we're parsing
         let currentFileContent: string = undefined;
         let currentFileName = fileName;
-        let currentFileOptions: { [s: string]: string } = {}; //ObjMap
+        let currentFileOptions: ts.ObjMap<string> = {};
 
         function resetLocalData() {
             currentFileContent = undefined;
@@ -2475,7 +2474,7 @@ ${code}
     }
 
     function getNonFileNameOptionInObject(optionObject: ts.ObjMap<string>): string {
-        for (const option in optionObject) { //ts.forEach...
+        for (const option in optionObject) {
             if (option !== metadataOptionNames.fileName) {
                 return option;
             }

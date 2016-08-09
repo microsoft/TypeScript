@@ -358,12 +358,7 @@ export = C;
         function test(files: ts.SMap<string>, options: CompilerOptions, currentDirectory: string, useCaseSensitiveFileNames: boolean, rootFiles: string[], diagnosticCodes: number[]): void {
             const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             if (!useCaseSensitiveFileNames) {
-                //TODO: use a helper mapKeys
-                const f = new ts.SMap<string>();
-                files.forEach((file, fileName) => {
-                    f.set(getCanonicalFileName(fileName), file);
-                });
-                files = f;
+                files = mapKeys(files, getCanonicalFileName);
             }
 
             const host: CompilerHost = {

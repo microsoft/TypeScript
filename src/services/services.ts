@@ -4262,7 +4262,7 @@ namespace ts {
 
                     if (!uniqueNames.has(name)) {
                         uniqueNames.add(name);
-                        const displayName = getCompletionEntryDisplayName(unescapeIdentifier(name), target, /*performCharacterChecks*/ true);
+                        const displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks*/ true);
                         if (displayName) {
                             const entry = {
                                 name: displayName,
@@ -4322,7 +4322,7 @@ namespace ts {
                     for (const symbol of symbols) {
                         const entry = createCompletionEntry(symbol, location, performCharacterChecks);
                         if (entry) {
-                            const id = escapeIdentifier(entry.name);
+                            const id = entry.name;
                             if (!uniqueNames.has(id)) {
                                 entries.push(entry);
                                 uniqueNames.add(id);

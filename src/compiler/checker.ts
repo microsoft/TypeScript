@@ -7721,7 +7721,6 @@ namespace ts {
         // separated by dots). The key consists of the id of the symbol referenced by the
         // leftmost identifier followed by zero or more property names separated by dots.
         // The result is undefined if the reference isn't a dotted name.
-        //TODO: we support arbitrary keys now...
         function getFlowCacheKey(node: Node): string {
             if (node.kind === SyntaxKind.Identifier) {
                 const symbol = getResolvedSymbol(<Identifier>node);
@@ -8217,7 +8216,6 @@ namespace ts {
             function getTypeAtFlowLoopLabel(flow: FlowLabel) {
                 // If we have previously computed the control flow type for the reference at
                 // this flow loop junction, return the cached type.
-                //TODO: don't need `getFlowNodeId` any more, just use the FlowNode directly!
                 const id = getFlowNodeId(flow);
                 const cache = flowLoopCaches[id] || (flowLoopCaches[id] = new SMap());
                 if (!key) {
@@ -10346,8 +10344,7 @@ namespace ts {
 
             const targetAttributesType = getJsxElementAttributesType(node);
 
-            //KLUDGE: give `nameTable` properties from Object. This makes tsxAttributeResolution5 work.
-            const nameTable = new SSet(["constructor", "toString", "toLocaleString", "valueOf", "hasOwnProperty", "isPrototypeOf", "propertyIsEnumerable"]);
+            const nameTable = new SSet();
 
             // Process this array in right-to-left order so we know which
             // attributes (mostly from spreads) are being overwritten and
