@@ -1542,8 +1542,8 @@ namespace ts {
                 memo = [];
             }
 
-            const aKeys = ts.getKeys(a);
-            const bKeys = ts.getKeys(b);
+            const aKeys = Object.keys(a);
+            const bKeys = Object.keys(b);
             aKeys.sort();
             bKeys.sort();
 

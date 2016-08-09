@@ -99,6 +99,7 @@ namespace ts.server {
         compilationSettings: ts.CompilerOptions;
         filenameToScript: ts.FileMap<ScriptInfo>;
         roots: ScriptInfo[] = [];
+        loadExtension?: (path: string) => any;
 
         private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;
         private resolvedTypeReferenceDirectives: ts.FileMap<Map<TimestampedResolvedTypeReferenceDirective>>;
@@ -118,14 +119,18 @@ namespace ts.server {
             if (this.host.realpath) {
                 this.moduleResolutionHost.realpath = path => this.host.realpath(path);
             }
+            if (this.host.loadExtension) {
+                this.loadExtension = name => this.host.loadExtension(name);
+            }
         }
 
         private resolveNamesWithLocalCache<T extends Timestamped & { failedLookupLocations: string[] }, R>(
             names: string[],
             containingFile: string,
             cache: ts.FileMap<Map<T>>,
-            loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
-            getResult: (s: T) => R): R[] {
+            loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost, loadJs?: boolean) => T,
+            getResult: (s: T) => R,
+            loadJs: boolean): R[] {
 
             const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const currentResolutionsInFile = cache.get(path);
@@ -144,7 +149,7 @@ namespace ts.server {
                         resolution = existingResolution;
                     }
                     else {
-                        resolution = loader(name, containingFile, compilerOptions, this.moduleResolutionHost);
+                        resolution = loader(name, containingFile, compilerOptions, this.moduleResolutionHost, loadJs);
                         resolution.lastCheckTime = Date.now();
                         newResolutions[name] = resolution;
                     }
@@ -177,11 +182,11 @@ namespace ts.server {
         }
 
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
-            return this.resolveNamesWithLocalCache(typeDirectiveNames, containingFile, this.resolvedTypeReferenceDirectives, resolveTypeReferenceDirective, m => m.resolvedTypeReferenceDirective);
+            return this.resolveNamesWithLocalCache(typeDirectiveNames, containingFile, this.resolvedTypeReferenceDirectives, resolveTypeReferenceDirective, m => m.resolvedTypeReferenceDirective, /*loadJs*/false);
         }
 
-        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
-            return this.resolveNamesWithLocalCache(moduleNames, containingFile, this.resolvedModuleNames, resolveModuleName, m => m.resolvedModule);
+        resolveModuleNames(moduleNames: string[], containingFile: string, loadJs?: boolean): ResolvedModule[] {
+            return this.resolveNamesWithLocalCache(moduleNames, containingFile, this.resolvedModuleNames, resolveModuleName, m => m.resolvedModule, loadJs);
         }
 
         getDefaultLibFileName() {

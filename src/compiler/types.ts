@@ -2652,7 +2652,7 @@ namespace ts {
         typeRoots?: string[];
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
-        extensions?: string[] | Map<any>;
+        extensions?: string[] | MapLike<any>;
 
         [option: string]: CompilerOptionsValue | undefined;
     }
@@ -2981,7 +2981,7 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, loadJs?: boolean): ResolvedModule[];
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */

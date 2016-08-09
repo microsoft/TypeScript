@@ -67,7 +67,7 @@ namespace ts {
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
 
-        getModuleResolutionsForFile?(fileName: string): string;
+        getModuleResolutionsForFile?(fileName: string, loadJs?: boolean): string;
         getTypeReferenceDirectiveResolutionsForFile?(fileName: string): string;
         directoryExists(directoryName: string): boolean;
     }
@@ -303,7 +303,7 @@ namespace ts {
         private loggingEnabled = false;
         private tracingEnabled = false;
 
-        public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModule[];
+        public resolveModuleNames: (moduleName: string[], containingFile: string, loadJs?: boolean) => ResolvedModule[];
         public resolveTypeReferenceDirectives: (typeDirectiveNames: string[], containingFile: string) => ResolvedTypeReferenceDirective[];
         public directoryExists: (directoryName: string) => boolean;
 
@@ -311,8 +311,8 @@ namespace ts {
             // if shimHost is a COM object then property check will become method call with no arguments.
             // 'in' does not have this effect.
             if ("getModuleResolutionsForFile" in this.shimHost) {
-                this.resolveModuleNames = (moduleNames: string[], containingFile: string) => {
-                    const resolutionsInFile = <MapLike<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
+                this.resolveModuleNames = (moduleNames: string[], containingFile: string, loadJs?: boolean) => {
+                    const resolutionsInFile = <MapLike<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile, loadJs));
                     return map(moduleNames, name => {
                         const result = getProperty(resolutionsInFile, name);
                         return result ? { resolvedFileName: result } : undefined;

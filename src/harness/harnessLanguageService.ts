@@ -216,7 +216,7 @@ namespace Harness.LanguageService {
     class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceShimHost, ts.CoreServicesShimHost {
         private nativeHost: NativeLanguageServiceHost;
 
-        public getModuleResolutionsForFile: (fileName: string) => string;
+        public getModuleResolutionsForFile: (fileName: string, loadJs?: boolean) => string;
         public getTypeReferenceDirectiveResolutionsForFile: (fileName: string) => string;
 
         constructor(preprocessToResolve: boolean, cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
@@ -232,12 +232,12 @@ namespace Harness.LanguageService {
                         return scriptInfo && scriptInfo.content;
                     }
                 };
-                this.getModuleResolutionsForFile = (fileName) => {
+                this.getModuleResolutionsForFile = (fileName, loadJs) => {
                     const scriptInfo = this.getScriptInfo(fileName);
                     const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ true);
                     const imports = ts.createMap<string>();
                     for (const module of preprocessInfo.importedFiles) {
-                        const resolutionInfo = ts.resolveModuleName(module.fileName, fileName, compilerOptions, moduleResolutionHost);
+                        const resolutionInfo = ts.resolveModuleName(module.fileName, fileName, compilerOptions, moduleResolutionHost, loadJs);
                         if (resolutionInfo.resolvedModule) {
                             imports[module.fileName] = resolutionInfo.resolvedModule.resolvedFileName;
                         }

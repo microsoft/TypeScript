@@ -10,15 +10,11 @@ namespace ts {
 
     export interface ExtensionBase {
         name: string;
-        args: any;
+        args: {};
         kind: ExtensionKind;
-    }
-
-    export interface ProfileData {
-        globalBucket: string;
-        task: string;
-        start: number;
-        length?: number;
+        // Include a default case which just puts the extension unchecked onto the base extension
+        // This can allow language service extensions to query for custom extension kinds
+        extension: {};
     }
 
     export type Extension = ExtensionBase;
@@ -30,6 +26,7 @@ namespace ts {
 
     export interface ExtensionHost extends ModuleResolutionHost {
         loadExtension?(name: string): any;
+        resolveModuleNames?(moduleNames: string[], containingFile: string, loadJs?: boolean): ResolvedModule[];
     }
 
     export interface Program {
@@ -49,8 +46,6 @@ namespace ts {
         getCompilerExtensions(): ExtensionCollectionMap;
     }
 
-    export const perfTraces: Map<ProfileData> = {};
-
     function getExtensionRootName(qualifiedName: string) {
         return qualifiedName.substring(0, qualifiedName.indexOf("[")) || qualifiedName;
     }
@@ -59,41 +54,33 @@ namespace ts {
         return `${task}|${qualifiedName}`;
     }
 
-    export function startProfile(enabled: boolean, key: string, bucket?: string) {
+    function startProfile(enabled: boolean, key: string) {
         if (!enabled) return;
-        performance.emit(`start|${key}`);
-        perfTraces[key] = {
-            task: key,
-            start: performance.mark(),
-            length: undefined,
-            globalBucket: bucket
-        };
+        performance.mark(`start|${key}`);
     }
 
-    export function completeProfile(enabled: boolean, key: string) {
+    function completeProfile(enabled: boolean, key: string, bucket: string) {
         if (!enabled) return;
-        Debug.assert(!!perfTraces[key], "Completed profile did not have a corresponding start.");
-        perfTraces[key].length = performance.measure(perfTraces[key].globalBucket, perfTraces[key].start);
-        performance.emit(`end|${key}`);
+        performance.measure(bucket, `start|${key}`);
     }
 
     export function startExtensionProfile(enabled: boolean, qualifiedName: string, task: string) {
         if (!enabled) return;
         const longTask = createTaskName(qualifiedName, task);
-        startProfile(/*enabled*/true, longTask, getExtensionRootName(qualifiedName));
+        startProfile(/*enabled*/true, longTask);
     }
 
     export function completeExtensionProfile(enabled: boolean, qualifiedName: string, task: string) {
         if (!enabled) return;
         const longTask = createTaskName(qualifiedName, task);
-        completeProfile(/*enabled*/true, longTask);
+        completeProfile(/*enabled*/true, longTask, getExtensionRootName(qualifiedName));
     }
 
     export function createExtensionCache(options: CompilerOptions, host: ExtensionHost, resolvedExtensionNames?: Map<string>): ExtensionCache {
 
         const diagnostics: Diagnostic[] = [];
         const extOptions = options.extensions;
-        const extensionNames = (extOptions instanceof Array) ? extOptions : getKeys(extOptions);
+        const extensionNames = (extOptions instanceof Array) ? extOptions : extOptions ? Object.keys(extOptions) : [];
         // Eagerly evaluate extension paths, but lazily execute their contents
         resolvedExtensionNames = resolvedExtensionNames || resolveExtensionNames();
         let extensions: ExtensionCollectionMap;
@@ -113,11 +100,22 @@ namespace ts {
         };
         return cache;
 
+        // Defer to the host's `resolveModuleName` method if it has it, otherwise use it as a ModuleResolutionHost.
+        function resolveModuleName(name: string, fromLocation: string) {
+            if (host.resolveModuleNames) {
+                const results = host.resolveModuleNames([name], fromLocation, /*loadJs*/true);
+                return results && results[0];
+            }
+            else {
+                return ts.resolveModuleName(name, fromLocation, options, host, /*loadJs*/true).resolvedModule;
+            }
+        }
+
         function resolveExtensionNames(): Map<string> {
             const basePath = options.configFilePath || combinePaths(host.getCurrentDirectory ? host.getCurrentDirectory() : "", "tsconfig.json");
-            const extMap: Map<string> = {};
+            const extMap = createMap<string>();
             forEach(extensionNames, name => {
-                const resolved = resolveModuleName(name, basePath, options, host, /*loadJs*/true).resolvedModule;
+                const resolved = resolveModuleName(name, basePath);
                 if (resolved) {
                     extMap[name] = resolved.resolvedFileName;
                 }
@@ -136,9 +134,9 @@ namespace ts {
                 }
                 if (resolved && host.loadExtension) {
                     try {
-                        startProfile(profilingEnabled, name, name);
+                        startProfile(profilingEnabled, name);
                         result = host.loadExtension(resolved);
-                        completeProfile(profilingEnabled, name);
+                        completeProfile(profilingEnabled, name, name);
                     }
                     catch (e) {
                         error = e;
@@ -158,7 +156,7 @@ namespace ts {
                     return [];
                 }
                 const aggregate: Extension[] = [];
-                forEachKey(res.result, key => {
+                forEach(Object.keys(res.result), key => {
                     const potentialExtension = res.result[key];
                     if (!potentialExtension) {
                         return; // Avoid errors on explicitly exported null/undefined (why would someone do that, though?)
@@ -169,17 +167,11 @@ namespace ts {
                     }
                     const ext: ExtensionBase = {
                         name: key !== "default" ? `${res.name}[${key}]` : res.name,
-                        args: extensionNames === extOptions ? undefined : (extOptions as Map<any>)[res.name],
+                        args: extensionNames === extOptions ? undefined : (extOptions as MapLike<any>)[res.name],
                         kind: annotatedKind as ExtensionKind,
+                        extension: potentialExtension
                     };
-                    switch (ext.kind) {
-                        default:
-                            // Include a default case which just puts the extension unchecked onto the base extension
-                            // This can allow language service extensions to query for custom extension kinds
-                            (ext as any).__extension = potentialExtension;
-                            break;
-                    }
-                    aggregate.push(ext as Extension);
+                    aggregate.push(ext);
                 });
                 return aggregate;
             });

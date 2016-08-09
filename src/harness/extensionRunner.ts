@@ -17,10 +17,10 @@ class ExtensionRunner extends RunnerBase {
     private extensionPath = ts.combinePaths(this.basePath, "available");
     private sourcePath = ts.combinePaths(this.basePath, "source");
     private fourslashPath = ts.combinePaths(this.basePath, "fourslash");
-    private extensionAPI: ts.Map<string> = {};
-    private extensions: ts.Map<ts.Map<string>> = {};
-    private virtualLib: ts.Map<string> = {};
-    private virtualFs: ts.Map<string> = {};
+    private extensionAPI = ts.createMap<string>();
+    private extensions = ts.createMap<ts.Map<string>>();
+    private virtualLib = ts.createMap<string>();
+    private virtualFs = ts.createMap<string>();
 
     prettyPrintDiagnostic(diagnostic: ts.Diagnostic): string {
         const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
@@ -41,12 +41,12 @@ class ExtensionRunner extends RunnerBase {
         ts.Debug.assert(set !== this.virtualFs, "You cannot try to load the fs into itself.");
 
         // Load a fileset at the given location, but exclude the 'lib' kind files from the added set (they'll be reloaded at the top level before compilation)
-        ts.forEachKey(set, key => ts.forEachKey(this.virtualLib, path => key === path) ? void 0 : void (this.virtualFs[this.getCanonicalFileName(`${prefix}/${key}`)] = set[key]));
+        ts.forEach(Object.keys(set), key => ts.forEach(Object.keys(this.virtualLib), path => key === path) ? void 0 : void (this.virtualFs[this.getCanonicalFileName(`${prefix}/${key}`)] = set[key]));
     }
 
     loadSetIntoFs(set: ts.Map<string>) {
         ts.Debug.assert(set !== this.virtualFs, "You cannot try to load the fs into itself.");
-        ts.forEachKey(set, key => void (this.virtualFs[this.getCanonicalFileName(key)] = set[key]));
+        ts.forEach(Object.keys(set), key => void (this.virtualFs[this.getCanonicalFileName(key)] = set[key]));
     }
 
     private traces: string[] = [];
@@ -62,7 +62,7 @@ class ExtensionRunner extends RunnerBase {
         },
         directoryExists: (path) => {
             const fullPath = this.mockHost.getCanonicalFileName(path);
-            return ts.forEach(ts.getKeys(this.virtualFs), key => ts.startsWith(key, fullPath));
+            return ts.forEach(Object.keys(this.virtualFs), key => ts.startsWith(key, fullPath));
         },
         getCurrentDirectory(): string { return "/"; },
         getSourceFile: (path, languageVersion, onError): ts.SourceFile => {
@@ -76,7 +76,7 @@ class ExtensionRunner extends RunnerBase {
         getCanonicalFileName: this.getCanonicalFileName,
         getDirectories: (path) => {
             path = this.mockHost.getCanonicalFileName(path);
-            return ts.filter(ts.map(ts.filter(ts.getKeys(this.virtualFs),
+            return ts.filter(ts.map(ts.filter(Object.keys(this.virtualFs),
                 fullpath => ts.startsWith(fullpath, path) && fullpath.substr(path.length, 1) === "/"),
                     fullpath => fullpath.substr(path.length + 1).indexOf("/") >= 0 ? fullpath.substr(0, 1 + path.length + fullpath.substr(path.length + 1).indexOf("/")) : fullpath),
                         fullpath => fullpath.lastIndexOf(".") === -1);
@@ -118,7 +118,7 @@ class ExtensionRunner extends RunnerBase {
         };
         host.getScriptInfo = (fileName: string) => {
             fileName = this.getCanonicalFileName(fileName);
-            return ts.lookUp(host.fileNameToScript, fileName);
+            return host.fileNameToScript[fileName];
         };
         host.getDirectories = (s: string) => this.mockHost.getDirectories(s);
         host.addScript = (fileName: string, content: string, isRootFile: boolean): void => {
@@ -149,7 +149,7 @@ class ExtensionRunner extends RunnerBase {
 
     languageServiceCompile(typescriptFiles: string[], options: ts.CompilerOptions): Harness.Compiler.CompilerResult {
         const self = this;
-        const host = this.makeMockLSHost(ts.getKeys(this.virtualFs), options);
+        const host = this.makeMockLSHost(Object.keys(this.virtualFs), options);
         const service = ts.createLanguageService(host);
         const fileResults: Harness.Compiler.GeneratedFile[] = [];
 
@@ -199,7 +199,7 @@ class ExtensionRunner extends RunnerBase {
         this.loadSetIntoFs(fileset);
 
         // Consider all TS files in the passed fileset as the root files, but not any under a node_modules folder
-        const typescriptFiles = ts.filter(ts.getKeys(fileset), name => ts.endsWith(name, ".ts") && !(name.indexOf("node_modules") >= 0));
+        const typescriptFiles = ts.filter(Object.keys(fileset), name => ts.endsWith(name, ".ts") && !(name.indexOf("node_modules") >= 0));
         return compileFunc(typescriptFiles, options);
     }
 
@@ -212,22 +212,24 @@ class ExtensionRunner extends RunnerBase {
             }
             throw new Error("Compiling test harness extension API code resulted in errors.");
         }
-        ts.copyMap(this.virtualFs, out);
-        this.virtualFs = {};
+        for (const key in this.virtualFs) {
+            out[key] = this.virtualFs[key];
+        }
+        this.virtualFs = ts.createMap<string>();
         return results;
     }
 
     private loadExtensions() {
-        this.extensionAPI = {
+        this.extensionAPI = ts.createMap({
             "package.json": Harness.IO.readFile(ts.combinePaths(this.extensionPath, "extension-api/package.json")),
             "index.ts": Harness.IO.readFile(ts.combinePaths(this.extensionPath, "extension-api/index.ts")),
-        };
+        });
         this.buildMap((str, opts) => this.programCompile(str, opts), this.extensionAPI, this.extensionAPI, { module: ts.ModuleKind.CommonJS, declaration: true }, /*shouldError*/true);
 
         ts.forEach(Harness.IO.getDirectories(this.extensionPath), path => {
             if (path === "extension-api" || path === "typescript") return; // Since these are dependencies of every actual test extension, we handle them specially
             const packageDir = ts.combinePaths(this.extensionPath, path);
-            const extensionFileset: ts.Map<string> = {};
+            const extensionFileset = ts.createMap<string>();
             const extensionFiles = this.enumerateFiles(packageDir, /*regex*/ undefined, { recursive: true });
             ts.forEach(extensionFiles, name => {
                 const shortName = name.substring(packageDir.length + 1);
@@ -244,10 +246,10 @@ class ExtensionRunner extends RunnerBase {
         super();
         const {content: libContent} = Harness.getDefaultLibraryFile(Harness.IO);
         const tsLibContents = Harness.IO.readFile("built/local/typescript.d.ts");
-        this.virtualLib = {
+        this.virtualLib = ts.createMap({
             "/lib/lib.d.ts": libContent,
             "/node_modules/typescript/index.d.ts": tsLibContents
-        };
+        });
         this.loadExtensions();
     }
 
@@ -304,7 +306,7 @@ class ExtensionRunner extends RunnerBase {
                 shortCasePath = caseName.substring(this.scenarioPath.length + 1).replace(/\.json$/, "");
                 testConfigText = Harness.IO.readFile(caseName);
                 testConfig = JSON.parse(testConfigText);
-                inputSources = {};
+                inputSources = ts.createMap<string>();
                 inputTestFiles = [];
                 ts.forEach(testConfig.inputFiles, name => {
                     inputSources[name] = Harness.IO.readFile(ts.combinePaths(this.sourcePath, name));
@@ -329,9 +331,11 @@ class ExtensionRunner extends RunnerBase {
                     let result: Harness.Compiler.CompilerResult;
                     before(() => {
                         this.traces = []; // Clear out any traces from tests which made traces, but didn't specify traceResolution
-                        this.virtualFs = {}; // In case a fourslash test was run last (which doesn't clear FS on end like buildMap does), clear the FS
-                        sources = {};
-                        ts.copyMap(inputSources, sources);
+                        this.virtualFs = ts.createMap<string>(); // In case a fourslash test was run last (which doesn't clear FS on end like buildMap does), clear the FS
+                        sources = ts.createMap<string>();
+                        for (const key in inputSources) {
+                            sources[key] = inputSources[key];
+                        }
                         ts.forEach(testConfig.availableExtensions, ext => this.loadSetIntoFsAt(this.extensions[ext], `/node_modules/${ext}`));
                         result = this.buildMap(compileCb, sources, sources, testConfig.compilerOptions, /*shouldError*/false);
                     });
@@ -465,7 +469,7 @@ class ExtensionRunner extends RunnerBase {
 
             it("passes fourslash verification", () => {
                 if (testConfig.fourslashTest) {
-                    this.virtualFs = {};
+                    this.virtualFs = ts.createMap<string>();
                     const testFile = `${this.fourslashPath}/${testConfig.fourslashTest}`;
                     let testFileContents = Harness.IO.readFile(testFile);
                     testFileContents = testFileContents.replace(`/// <reference path="../../fourslash/fourslash.ts" />`, "");
@@ -482,7 +486,7 @@ class ExtensionRunner extends RunnerBase {
                     this.loadSetIntoFs(this.virtualLib);
                     ts.forEach(testConfig.availableExtensions, ext => this.loadSetIntoFsAt(this.extensions[ext], `/node_modules/${ext}`));
 
-                    const adapterFactory = (token: ts.HostCancellationToken) => this.makeLSMockAdapter(ts.getKeys(this.virtualFs), testConfig.compilerOptions, token);
+                    const adapterFactory = (token: ts.HostCancellationToken) => this.makeLSMockAdapter(Object.keys(this.virtualFs), testConfig.compilerOptions, token);
 
                     FourSlash.runFourSlashTestContent(shortCasePath, adapterFactory, finishedTestContent, testFile);
                 }

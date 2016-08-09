@@ -1163,7 +1163,7 @@ namespace ts {
          * if implementation is omitted then language service will use built-in module resolution logic and get answers to
          * host specific questions using 'getScriptSnapshot'.
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, loadJs?: boolean): ResolvedModule[];
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
         getDirectories?(directoryName: string): string[];
@@ -3138,17 +3138,17 @@ namespace ts {
                 },
                 getDirectories: path => {
                     return host.getDirectories ? host.getDirectories(path) : [];
-                },
-                loadExtension: path => {
-                    return host.loadExtension ? host.loadExtension(path) : undefined;
                 }
             };
             if (host.trace) {
                 compilerHost.trace = message => host.trace(message);
             }
 
+            if (host.loadExtension) {
+                compilerHost.loadExtension = name => host.loadExtension(name);
+            }
             if (host.resolveModuleNames) {
-                compilerHost.resolveModuleNames = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile);
+                compilerHost.resolveModuleNames = (moduleNames, containingFile, loadJs) => host.resolveModuleNames(moduleNames, containingFile, loadJs);
             }
             if (host.resolveTypeReferenceDirectives) {
                 compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile) => {

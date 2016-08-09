@@ -2824,6 +2824,10 @@
         "category": "Message",
         "code": 6136
     },
+    "Property '{0}' is declared but never used.": {
+        "category": "Error",
+        "code": 6138
+    },
 
     "List of compiler extensions to require.": {
         "category": "Message",
@@ -2833,11 +2837,6 @@
         "category": "Error",
         "code": 6151
     },
-    "Property '{0}' is declared but never used.": {
-        "category": "Error",
-        "code": 6138
-    },
-
     "Extension '{0}' exported member '{1}' has extension kind '{2}', but was type '{3}' when type '{4}' was expected.": {
         "category": "Error",
         "code": 6152
