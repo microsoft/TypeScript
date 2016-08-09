@@ -1538,8 +1538,8 @@ namespace ts {
 
         function createType(flags: TypeFlags): Type {
             const result = new Type(checker, flags);
-            result.id = typeCount;
             typeCount++;
+            result.id = typeCount;
             return result;
         }
 
@@ -5235,11 +5235,7 @@ namespace ts {
         }
 
         function createTupleType(elementTypes: Type[], thisType?: Type) {
-            let id = getTypeListId(elementTypes);
-            if (thisType) {
-                id += ',' + thisType.id;
-            }
-
+            const id = getTypeListId(elementTypes) + ',' + (thisType ? thisType.id : 0);
             return tupleTypes[id] || (tupleTypes[id] = createNewTupleType(elementTypes, thisType));
         }
 
