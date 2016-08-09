@@ -337,8 +337,18 @@ namespace ts {
                         ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
                         : Diagnostics.Duplicate_identifier_0;
 
+                    // If the current node has NodeFlags.Default (e.g. if the node is class declaration or function declaration)
+                    // and there is already another default export (i.e. symbol.declarations is not empty), we need to report such error
+                    if (isDefaultExport && symbol.declarations) {
+                        message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                    }
+
                     forEach(symbol.declarations, declaration => {
-                        if (declaration.flags & NodeFlags.Default) {
+                        // Error on multiple export default in the following case:
+                        // 1. multiple export default of class declaration or function declaration by checking NodeFlags.Default
+                        // 2. multiple export default of export assignment. This one doesn't have NodeFlags.Default on (as export default doesn't considered as modifiers)
+                        if ((declaration.flags & NodeFlags.Default) ||
+                            (declaration.kind === SyntaxKind.ExportAssignment && !(<ExportAssignment>node).isExportEquals)) {
                             message = Diagnostics.A_module_cannot_have_multiple_default_exports;
                         }
                     });
@@ -1898,7 +1908,9 @@ namespace ts {
             }
             else {
                 // An export default clause with an expression exports a value
-                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
+                // We want to exclude both class and function here,  this is necessary to issue an error when there are both
+                // default export-assignment and default export function and class declaration.
+                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Property, SymbolFlags.Class | SymbolFlags.Function | SymbolFlags.Property);
             }
         }
 
