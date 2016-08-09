@@ -4107,6 +4107,7 @@ namespace ts {
         function resolveTupleTypeMembers(type: TupleType, thisArgument?: Type) {
             const arrayElementType = getUnionType(type.elementTypes);
             // Make the tuple type itself the 'this' type by including an extra type argument
+            // (Unless it's provided in the case that the tuple is a type parameter constraint)
             const arrayType = resolveStructuredTypeMembers(createTypeFromGenericGlobalType(globalArrayType, [arrayElementType, thisArgument || type]));
             const members = createTupleTypeMemberSymbols(type.elementTypes);
             addInheritedMembers(members, arrayType.properties);
