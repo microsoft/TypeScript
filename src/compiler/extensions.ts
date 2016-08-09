@@ -30,6 +30,7 @@ namespace ts {
 
     export interface ExtensionHost extends ModuleResolutionHost {
         loadExtension?(name: string): any;
+        resolveModuleNames?(moduleNames: string[], containingFile: string, loadJs?: boolean): ResolvedModule[];
     }
 
     export interface Program {
@@ -113,11 +114,22 @@ namespace ts {
         };
         return cache;
 
+        // Defer to the host's `resolveModuleName` method if it has it, otherwise use it as a ModuleResolutionHost.
+        function resolveModuleName(name: string, fromLocation: string) {
+            if (host.resolveModuleNames) {
+                const results = host.resolveModuleNames([name], fromLocation, /*loadJs*/true);
+                return results && results[0];
+            }
+            else {
+                return ts.resolveModuleName(name, fromLocation, options, host, /*loadJs*/true).resolvedModule;
+            }
+        }
+
         function resolveExtensionNames(): Map<string> {
             const basePath = options.configFilePath || combinePaths(host.getCurrentDirectory ? host.getCurrentDirectory() : "", "tsconfig.json");
             const extMap: Map<string> = {};
             forEach(extensionNames, name => {
-                const resolved = resolveModuleName(name, basePath, options, host, /*loadJs*/true).resolvedModule;
+                const resolved = resolveModuleName(name, basePath);
                 if (resolved) {
                     extMap[name] = resolved.resolvedFileName;
                 }
