@@ -153,10 +153,12 @@ class ExtensionRunner extends RunnerBase {
         const service = ts.createLanguageService(host);
         const fileResults: Harness.Compiler.GeneratedFile[] = [];
 
-        const diagnostics = ts.concatenate(ts.concatenate(
+        const diagnostics = ts.concatenate(ts.concatenate(ts.concatenate(ts.concatenate(
             service.getProgramDiagnostics(),
             ts.flatten(ts.map(typescriptFiles, fileName => service.getSyntacticDiagnostics(this.getCanonicalFileName(fileName))))),
-            ts.flatten(ts.map(typescriptFiles, fileName => service.getSemanticDiagnostics(this.getCanonicalFileName(fileName)))));
+            ts.flatten(ts.map(typescriptFiles, fileName => service.getSyntacticLintDiagnostics(this.getCanonicalFileName(fileName))))),
+            ts.flatten(ts.map(typescriptFiles, fileName => service.getSemanticDiagnostics(this.getCanonicalFileName(fileName))))),
+            ts.flatten(ts.map(typescriptFiles, fileName => service.getSemanticLintDiagnostics(this.getCanonicalFileName(fileName)))));
 
         const emitResult = service.getProgram().emit(/*targetSourceFile*/undefined, writeFile);
 
@@ -178,7 +180,7 @@ class ExtensionRunner extends RunnerBase {
         const self = this;
         const program = ts.createProgram(typescriptFiles, options, this.mockHost);
         const fileResults: Harness.Compiler.GeneratedFile[] = [];
-        const diagnostics = ts.getPreEmitDiagnostics(program);
+        const diagnostics = ts.concatenate(ts.getPreEmitDiagnostics(program), ts.concatenate(program.getSyntacticLintDiagnostics(), program.getSemanticLintDiagnostics()));
         const emitResult = program.emit(/*targetSourceFile*/undefined, writeFile);
 
         const allDiagnostics = ts.sortAndDeduplicateDiagnostics(ts.concatenate(diagnostics, emitResult.diagnostics));

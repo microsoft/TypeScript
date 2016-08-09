@@ -112,7 +112,9 @@ namespace ts.server {
         export const Geterr = "geterr";
         export const GeterrForProject = "geterrForProject";
         export const SemanticDiagnosticsSync = "semanticDiagnosticsSync";
+        export const SemanticLintDiagnosticsSync = "semanticLintDiagnosticsSync";
         export const SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
+        export const SyntacticLintDiagnosticsSync = "syntacticLintDiagnosticsSync";
         export const NavBar = "navbar";
         export const Navto = "navto";
         export const Occurrences = "occurrences";
@@ -404,8 +406,16 @@ namespace ts.server {
             return this.getDiagnosticsWorker(args, (project, file) => project.compilerService.languageService.getSyntacticDiagnostics(file));
         }
 
+        private getSyntacticLintDiagnosticsSync(args: protocol.FileRequestArgs): protocol.Diagnostic[] {
+            return this.getDiagnosticsWorker(args, (project, file) => project.compilerService.languageService.getSyntacticLintDiagnostics(file));
+        }
+
         private getSemanticDiagnosticsSync(args: protocol.FileRequestArgs): protocol.Diagnostic[] {
             return this.getDiagnosticsWorker(args, (project, file) => project.compilerService.languageService.getSemanticDiagnostics(file));
+        }
+
+        private getSemanticLintDiagnosticsSync(args: protocol.FileRequestArgs): protocol.Diagnostic[] {
+            return this.getDiagnosticsWorker(args, (project, file) => project.compilerService.languageService.getSemanticLintDiagnostics(file));
         }
 
         private getDocumentHighlights(line: number, offset: number, fileName: string, filesToSearch: string[]): protocol.DocumentHighlightsItem[] {
@@ -1132,8 +1142,14 @@ namespace ts.server {
             [CommandNames.SemanticDiagnosticsSync]: (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getSemanticDiagnosticsSync(request.arguments));
             },
+            [CommandNames.SemanticLintDiagnosticsSync]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getSemanticLintDiagnosticsSync(request.arguments));
+            },
             [CommandNames.SyntacticDiagnosticsSync]: (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getSyntacticDiagnosticsSync(request.arguments));
+            },
+            [CommandNames.SyntacticLintDiagnosticsSync]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getSyntacticLintDiagnosticsSync(request.arguments));
             },
             [CommandNames.Geterr]: (request: protocol.Request) => {
                 const geterrArgs = <protocol.GeterrRequestArgs>request.arguments;

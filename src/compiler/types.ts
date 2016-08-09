@@ -1746,6 +1746,8 @@ namespace ts {
         getGlobalDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
         getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
+        getSyntacticLintDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
+        getSemanticLintDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
 
         /**

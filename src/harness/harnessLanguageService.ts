@@ -360,8 +360,14 @@ namespace Harness.LanguageService {
         getSyntacticDiagnostics(fileName: string): ts.Diagnostic[] {
             return unwrapJSONCallResult(this.shim.getSyntacticDiagnostics(fileName));
         }
+        getSyntacticLintDiagnostics(fileName: string): ts.Diagnostic[] {
+            return unwrapJSONCallResult(this.shim.getSyntacticLintDiagnostics(fileName));
+        }
         getSemanticDiagnostics(fileName: string): ts.Diagnostic[] {
             return unwrapJSONCallResult(this.shim.getSemanticDiagnostics(fileName));
+        }
+        getSemanticLintDiagnostics(fileName: string): ts.Diagnostic[] {
+            return unwrapJSONCallResult(this.shim.getSemanticLintDiagnostics(fileName));
         }
         getCompilerOptionsDiagnostics(): ts.Diagnostic[] {
             return unwrapJSONCallResult(this.shim.getCompilerOptionsDiagnostics());

@@ -1,0 +1,114 @@
+warning test-errors: Not allowed.
+warning test-errors[Throws2](THROWS2): Not allowed.
+error test-errors[Throws7]: Not allowed.
+error test-errors[Throws8](THROWS8): Not allowed.
+error test-errors[ThrowsOnAfterVisit](!!!): afterVisit failed with error: Error: Throws on afterVisit
+error test-errors[ThrowsOnConstruct]: Lint construction failed: Throws on construct
+error test-errors[ThrowsOnVisit](!!!): visit failed with error: Error: Throws on visit
+/hello.ts(1,1): error test-errors[Throws11]: Not allowed.
+/hello.ts(1,1): warning test-errors[Throws3](THROWS3): Not allowed.
+/hello.ts(1,1): warning test-errors[Throws5]: Not allowed.
+/hello.ts(1,1): error test-errors[Throws9](THROWS9): Not allowed.
+/hello.ts(1,1): error test-errors[Throws10](THROWS10): Not allowed.
+/hello.ts(1,1): error test-errors[Throws12]: Not allowed.
+/hello.ts(1,1): warning test-errors[Throws4](THROWS4): Not allowed.
+/hello.ts(1,1): warning test-errors[Throws6]: Not allowed.
+/hello.ts(1,1): error test-errors[Throws11]: Not allowed.
+/hello.ts(1,1): warning test-errors[Throws3](THROWS3): Not allowed.
+/hello.ts(1,1): warning test-errors[Throws5]: Not allowed.
+/hello.ts(1,1): error test-errors[Throws9](THROWS9): Not allowed.
+/hello.ts(1,1): error test-errors[Throws11]: Not allowed.
+/hello.ts(1,1): warning test-errors[Throws3](THROWS3): Not allowed.
+/hello.ts(1,1): warning test-errors[Throws5]: Not allowed.
+/hello.ts(1,1): error test-errors[Throws9](THROWS9): Not allowed.
+/hello.ts(1,1): error test-errors[Throws11]: Not allowed.
+/hello.ts(1,1): warning test-errors[Throws3](THROWS3): Not allowed.
+/hello.ts(1,1): warning test-errors[Throws5]: Not allowed.
+/hello.ts(1,1): error test-errors[Throws9](THROWS9): Not allowed.
+/hello.ts(1,9): error test-errors[Throws11]: Not allowed.
+/hello.ts(1,9): warning test-errors[Throws3](THROWS3): Not allowed.
+/hello.ts(1,9): warning test-errors[Throws5]: Not allowed.
+/hello.ts(1,9): error test-errors[Throws9](THROWS9): Not allowed.
+/hello.ts(1,13): error test-errors[Throws11]: Not allowed.
+/hello.ts(1,13): warning test-errors[Throws3](THROWS3): Not allowed.
+/hello.ts(1,13): warning test-errors[Throws5]: Not allowed.
+/hello.ts(1,13): error test-errors[Throws9](THROWS9): Not allowed.
+/hello.ts(1,37): error test-errors[Throws11]: Not allowed.
+/hello.ts(1,37): warning test-errors[Throws3](THROWS3): Not allowed.
+/hello.ts(1,37): warning test-errors[Throws5]: Not allowed.
+/hello.ts(1,37): error test-errors[Throws9](THROWS9): Not allowed.
+
+
+!!! warning test-errors: Not allowed.
+!!! warning test-errors[Throws2](THROWS2): Not allowed.
+!!! error test-errors[Throws7]: Not allowed.
+!!! error test-errors[Throws8](THROWS8): Not allowed.
+!!! error test-errors[ThrowsOnAfterVisit](!!!): afterVisit failed with error: Error: Throws on afterVisit
+!!! error test-errors[ThrowsOnConstruct]: Lint construction failed: Throws on construct
+!!! error test-errors[ThrowsOnVisit](!!!): visit failed with error: Error: Throws on visit
+==== /hello.ts (32 errors) ====
+    console.log("Hello, world!");/*EOL*/
+    ~~~~~~~
+!!! error test-errors[Throws11]: Not allowed.
+    ~~~~~~~
+!!! warning test-errors[Throws3](THROWS3): Not allowed.
+    ~~~~~~~
+!!! warning test-errors[Throws5]: Not allowed.
+    ~~~~~~~
+!!! error test-errors[Throws9](THROWS9): Not allowed.
+    ~~~~~~~~~~
+!!! error test-errors[Throws10](THROWS10): Not allowed.
+    ~~~~~~~~~~
+!!! error test-errors[Throws12]: Not allowed.
+    ~~~~~~~~~~
+!!! warning test-errors[Throws4](THROWS4): Not allowed.
+    ~~~~~~~~~~
+!!! warning test-errors[Throws6]: Not allowed.
+    ~~~~~~~~~~~
+!!! error test-errors[Throws11]: Not allowed.
+    ~~~~~~~~~~~
+!!! warning test-errors[Throws3](THROWS3): Not allowed.
+    ~~~~~~~~~~~
+!!! warning test-errors[Throws5]: Not allowed.
+    ~~~~~~~~~~~
+!!! error test-errors[Throws9](THROWS9): Not allowed.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error test-errors[Throws11]: Not allowed.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning test-errors[Throws3](THROWS3): Not allowed.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning test-errors[Throws5]: Not allowed.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error test-errors[Throws9](THROWS9): Not allowed.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error test-errors[Throws11]: Not allowed.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning test-errors[Throws3](THROWS3): Not allowed.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning test-errors[Throws5]: Not allowed.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error test-errors[Throws9](THROWS9): Not allowed.
+            ~~~
+!!! error test-errors[Throws11]: Not allowed.
+            ~~~
+!!! warning test-errors[Throws3](THROWS3): Not allowed.
+            ~~~
+!!! warning test-errors[Throws5]: Not allowed.
+            ~~~
+!!! error test-errors[Throws9](THROWS9): Not allowed.
+                ~~~~~~~~~~~~~~~
+!!! error test-errors[Throws11]: Not allowed.
+                ~~~~~~~~~~~~~~~
+!!! warning test-errors[Throws3](THROWS3): Not allowed.
+                ~~~~~~~~~~~~~~~
+!!! warning test-errors[Throws5]: Not allowed.
+                ~~~~~~~~~~~~~~~
+!!! error test-errors[Throws9](THROWS9): Not allowed.
+                                        
+!!! error test-errors[Throws11]: Not allowed.
+                                        
+!!! warning test-errors[Throws3](THROWS3): Not allowed.
+                                        
+!!! warning test-errors[Throws5]: Not allowed.
+                                        
+!!! error test-errors[Throws9](THROWS9): Not allowed.

@@ -1,10 +1,125 @@
 namespace ts {
+    export type LintErrorMethod = {
+        /**
+         * @param {string} err The error message to report
+         */
+        (err: string): void;
+        /**
+         * @param {string} err The error message to report
+         * @param {Node} span The node on which to position the error
+         */
+        (err: string, span: Node): void;
+        /**
+         * @param {string} err The error message to report
+         * @param {number} start The start position of the error span
+         * @param {number} length The length of the error span
+         */
+        (err: string, start: number, length: number): void;
+        /**
+         * @param {string} shortname A short code uniquely identifying the error within the lint
+         * @param {string} err The error message to report
+         */
+        (shortname: string, err: string): void;
+        /**
+         * @param {string} shortname A short code uniquely identifying the error within the lint
+         * @param {string} err The error message to report
+         * @param {Node} span The node on which to position the error
+         */
+        (shortname: string, err: string, span: Node): void;
+        /**
+         * @param {string} shortname A short code uniquely identifying the error within the lint
+         * @param {string} err The error message to report
+         * @param {number} start The start position of the error span
+         * @param {number} length The length of the error span
+         */
+        (shortname: string, err: string, start: number, length: number): void;
+        /**
+         * @param {DiagnosticCategory} level The error level to report this error as (Message, Warning, or Error)
+         * @param {string} err The error message to report
+         */
+        (level: DiagnosticCategory, err: string): void;
+        /**
+         * @param {DiagnosticCategory} level The error level to report this error as (Message, Warning, or Error)
+         * @param {string} err The error message to report
+         * @param {Node} span The node on which to position the error
+         */
+        (level: DiagnosticCategory, err: string, span: Node): void;
+        /**
+         * @param {DiagnosticCategory} level The error level to report this error as (Message, Warning, or Error)
+         * @param {string} err The error message to report
+         * @param {number} start The start position of the error span
+         * @param {number} length The length of the error span
+         */
+        (level: DiagnosticCategory, err: string, start: number, length: number): void;
+        /**
+         * @param {DiagnosticCategory} level The error level to report this error as (Message, Warning, or Error)
+         * @param {string} shortname A short code uniquely identifying the error within the lint
+         * @param {string} err The error message to report
+         */
+        (level: DiagnosticCategory, shortname: string, err: string): void;
+        /**
+         * @param {DiagnosticCategory} level The error level to report this error as (Message, Warning, or Error)
+         * @param {string} shortname A short code uniquely identifying the error within the lint
+         * @param {string} err The error message to report
+         * @param {Node} span The node on which to position the error
+         */
+        (level: DiagnosticCategory, shortname: string, err: string, span: Node): void;
+        /**
+         * @param {DiagnosticCategory} level The error level to report this error as (Message, Warning, or Error)
+         * @param {string} shortname A short code uniquely identifying the error within the lint
+         * @param {string} err The error message to report
+         * @param {number} start The start position of the error span
+         * @param {number} length The length of the error span
+         */
+        (level: DiagnosticCategory, shortname: string, err: string, start: number, length: number): void;
+    };
+
+    /*
+    * Walkers call stop to halt recursion into the node's children
+    * Walkers call error to add errors to the output.
+    */
+    export interface LintWalker {
+        /**
+         * Called as the walker enters the node.
+         * @param {Node} node The current node being visited (starts at every SourceFile and recurs into their children)
+         * @param {LintErrorMethod} error A callback to add errors to the output
+         * @returns boolean true if this lint no longer needs to recur into the active node
+         */
+        visit(node: Node, error: LintErrorMethod): boolean | void;
+        /**
+         * Called as the visitor walks out of a node and back to its parent.
+         * @param {Node} node The current node which has just finished being visited
+         * @param {LintErrorMethod} error A callback to add errors to the output
+         */
+        afterVisit?(node: Node, error: LintErrorMethod): void;
+    }
+
+    export interface BaseProviderStatic {
+        readonly ["extension-kind"]: ExtensionKind;
+        new (state: {ts: typeof ts, args: any}): any;
+    }
+
+    export interface SyntacticLintProviderStatic extends BaseProviderStatic {
+        readonly ["extension-kind"]: ExtensionKind.SyntacticLint;
+        new (state: {ts: typeof ts, args: any, host: CompilerHost, program: Program, token: CancellationToken}): LintWalker;
+    }
+
+    export interface SemanticLintProviderStatic extends BaseProviderStatic {
+        readonly ["extension-kind"]: ExtensionKind.SemanticLint;
+        new (state: {ts: typeof ts, args: any, host: CompilerHost, program: Program, token: CancellationToken, checker: TypeChecker}): LintWalker;
+    }
 
     export namespace ExtensionKind {
+        export const SemanticLint: "semantic-lint" = "semantic-lint";
+        export type SemanticLint = "semantic-lint";
+        export const SyntacticLint: "syntactic-lint" = "syntactic-lint";
+        export type SyntacticLint = "syntactic-lint";
     }
-    export type ExtensionKind = string;
+    export type ExtensionKind = ExtensionKind.SemanticLint | ExtensionKind.SyntacticLint;
 
     export interface ExtensionCollectionMap {
+        "semantic-lint"?: SemanticLintExtension[];
+        "syntactic-lint"?: SyntacticLintExtension[];
         [index: string]: Extension[] | undefined;
     }
 
@@ -21,7 +136,17 @@ namespace ts {
         length?: number;
     }
 
-    export type Extension = ExtensionBase;
+    export interface SyntacticLintExtension extends ExtensionBase {
+        kind: ExtensionKind.SyntacticLint;
+        ctor: SyntacticLintProviderStatic;
+    }
+
+    export interface SemanticLintExtension extends ExtensionBase {
+        kind: ExtensionKind.SemanticLint;
+        ctor: SemanticLintProviderStatic;
+    }
+
+    export type Extension = SyntacticLintExtension | SemanticLintExtension;
 
     export interface ExtensionCache {
         getCompilerExtensions(): ExtensionCollectionMap;
@@ -185,6 +310,21 @@ namespace ts {
                         kind: annotatedKind as ExtensionKind,
                     };
                     switch (ext.kind) {
+                        case ExtensionKind.SemanticLint:
+                        case ExtensionKind.SyntacticLint:
+                            if (typeof potentialExtension !== "function") {
+                                diagnostics.push(createCompilerDiagnostic(
+                                    Diagnostics.Extension_0_exported_member_1_has_extension_kind_2_but_was_type_3_when_type_4_was_expected,
+                                    res.name,
+                                    key,
+                                    (ts as any).ExtensionKind[annotatedKind],
+                                    typeof potentialExtension,
+                                    "function"
+                                ));
+                                return;
+                            }
+                            (ext as (SemanticLintExtension | SyntacticLintExtension)).ctor = potentialExtension as (SemanticLintProviderStatic | SyntacticLintProviderStatic);
+                            break;
                         default:
                             // Include a default case which just puts the extension unchecked onto the base extension
                             // This can allow language service extensions to query for custom extension kinds
