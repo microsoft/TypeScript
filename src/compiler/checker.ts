@@ -342,7 +342,7 @@ namespace ts {
             ResolvedReturnType
         }
 
-        const builtinGlobals: SymbolTable = singletonMap(undefinedSymbol.name, undefinedSymbol);
+        const builtinGlobals: SymbolTable = createStringMap(undefinedSymbol.name, undefinedSymbol);
 
         initializeTypeChecker();
 
@@ -2423,7 +2423,8 @@ namespace ts {
                     }
                     writeIndexSignature(resolved.stringIndexInfo, SyntaxKind.StringKeyword);
                     writeIndexSignature(resolved.numberIndexInfo, SyntaxKind.NumberKeyword);
-                    for (const p of resolved.properties) {
+                    const sortedProperties = sortInV8ObjectInsertionOrder(resolved.properties, p => p.name);
+                    for (const p of sortedProperties) {
                         const t = getTypeOfSymbol(p);
                         if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
                             const signatures = getSignaturesOfType(t, SignatureKind.Call);
@@ -3711,7 +3712,7 @@ namespace ts {
                     type.typeParameters = concatenate(outerTypeParameters, localTypeParameters);
                     type.outerTypeParameters = outerTypeParameters;
                     type.localTypeParameters = localTypeParameters;
-                    (<GenericType>type).instantiations = singletonMap(getTypeListId(type.typeParameters), <GenericType>type);
+                    (<GenericType>type).instantiations = createStringMap(getTypeListId(type.typeParameters), <GenericType>type);
                     (<GenericType>type).target = <GenericType>type;
                     (<GenericType>type).typeArguments = type.typeParameters;
                     type.thisType = <TypeParameter>createType(TypeFlags.TypeParameter | TypeFlags.ThisType);
@@ -3752,7 +3753,7 @@ namespace ts {
                     if (typeParameters) {
                         // Initialize the instantiation cache for generic type aliases. The declared type corresponds to
                         // an instantiation of the type alias with the type parameters supplied as type arguments.
-                        links.instantiations = singletonMap(getTypeListId(links.typeParameters), type);
+                        links.instantiations = createStringMap(getTypeListId(links.typeParameters), type);
                     }
                 }
                 else {
@@ -6563,7 +6564,7 @@ namespace ts {
                 }
                 sourceStack[depth] = source;
                 targetStack[depth] = target;
-                maybeStack[depth] = singletonMap(id, RelationComparisonResult.Succeeded);
+                maybeStack[depth] = createStringMap(id, RelationComparisonResult.Succeeded);
                 depth++;
                 const saveExpandingFlags = expandingFlags;
                 if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack, depth)) expandingFlags |= 1;
@@ -6787,14 +6788,25 @@ namespace ts {
                 return result;
             }
 
-            function eachPropertyRelatedTo(source: Type, target: Type, kind: IndexKind, reportErrors: boolean): Ternary {
+            function eachPropertyRelatedTo(source: Type, target: Type, kind: IndexKind, reportErrors: boolean, redoingInV8ObjectInsertionOrder?: boolean): Ternary {
                 let result = Ternary.True;
-                for (const prop of getPropertiesOfObjectType(source)) {
+                let properties = getPropertiesOfObjectType(source);
+                if (redoingInV8ObjectInsertionOrder) {
+                    properties = sortInV8ObjectInsertionOrder(properties, prop => prop.name);
+                }
+                for (const prop of properties) {
                     if (kind === IndexKind.String || isNumericLiteralName(prop.name)) {
-                        const related = isRelatedTo(getTypeOfSymbol(prop), target, reportErrors);
+                        const related = isRelatedTo(getTypeOfSymbol(prop), target, reportErrors && redoingInV8ObjectInsertionOrder);
                         if (!related) {
                             if (reportErrors) {
-                                reportError(Diagnostics.Property_0_is_incompatible_with_index_signature, symbolToString(prop));
+                                // For consistency, if we report errors we make sure to report the first error in V8's object insertion order.
+                                if (!redoingInV8ObjectInsertionOrder) {
+                                    const related = eachPropertyRelatedTo(source, target, kind, reportErrors, /*redoingInV8ObjectInsertionOrder*/ true);
+                                    Debug.assert(related === Ternary.False);
+                                }
+                                else {
+                                    reportError(Diagnostics.Property_0_is_incompatible_with_index_signature, symbolToString(prop));
+                                }
                             }
                             return Ternary.False;
                         }

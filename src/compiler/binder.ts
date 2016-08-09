@@ -1397,7 +1397,7 @@ namespace ts {
 
             const typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
-            typeLiteralSymbol.members = singletonMap(symbol.name, symbol);
+            typeLiteralSymbol.members = createStringMap(symbol.name, symbol);
         }
 
         function bindObjectLiteralExpression(node: ObjectLiteralExpression) {
@@ -2049,12 +2049,12 @@ namespace ts {
             // module might have an exported variable called 'prototype'.  We can't allow that as
             // that would clash with the built-in 'prototype' for the class.
             const prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype");
-            const alreadyExistingPrototypeSymbol = symbol.exports.get(prototypeSymbol.name);
-            if (alreadyExistingPrototypeSymbol) {
+            const existingPrototypeSymbol = symbol.exports.get(prototypeSymbol.name);
+            if (existingPrototypeSymbol) {
                 if (node.name) {
                     node.name.parent = node;
                 }
-                file.bindDiagnostics.push(createDiagnosticForNode(alreadyExistingPrototypeSymbol.declarations[0],
+                file.bindDiagnostics.push(createDiagnosticForNode(existingPrototypeSymbol.declarations[0],
                     Diagnostics.Duplicate_identifier_0, prototypeSymbol.name));
             }
             symbol.exports.set(prototypeSymbol.name, prototypeSymbol);

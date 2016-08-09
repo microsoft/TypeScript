@@ -4114,7 +4114,7 @@ namespace ts {
                     existingImportsOrExports.add(name.text);
                 }
 
-                if (setIsEmpty(existingImportsOrExports)) {
+                if (isSetEmpty(existingImportsOrExports)) {
                     return filter(exportsOfModule, e => e.name !== "default");
                 }
 

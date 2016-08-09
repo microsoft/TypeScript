@@ -306,7 +306,7 @@ namespace ts {
             const options: CompilerOptions = { target };
 
             const program_1 = newProgram(files, ["a.ts"], options);
-            checkResolvedModulesCache(program_1, "a.ts", singletonMap("b", { resolvedFileName: "b.ts" }));
+            checkResolvedModulesCache(program_1, "a.ts", createStringMap("b", { resolvedFileName: "b.ts" }));
             checkResolvedModulesCache(program_1, "b.ts", undefined);
 
             const program_2 = updateProgram(program_1, ["a.ts"], options, files => {
@@ -315,7 +315,7 @@ namespace ts {
             assert.isTrue(program_1.structureIsReused);
 
             // content of resolution cache should not change
-            checkResolvedModulesCache(program_1, "a.ts", singletonMap("b", { resolvedFileName: "b.ts" }));
+            checkResolvedModulesCache(program_1, "a.ts", createStringMap("b", { resolvedFileName: "b.ts" }));
             checkResolvedModulesCache(program_1, "b.ts", undefined);
 
             // imports has changed - program is not reused
@@ -343,7 +343,7 @@ namespace ts {
             const options: CompilerOptions = { target, typeRoots: ["/types"] };
 
             const program_1 = newProgram(files, ["/a.ts"], options);
-            checkResolvedTypeDirectivesCache(program_1, "/a.ts", singletonMap("typedefs", { resolvedFileName: "/types/typedefs/index.d.ts", primary: true }));
+            checkResolvedTypeDirectivesCache(program_1, "/a.ts", createStringMap("typedefs", { resolvedFileName: "/types/typedefs/index.d.ts", primary: true }));
             checkResolvedTypeDirectivesCache(program_1, "/types/typedefs/index.d.ts", undefined);
 
             const program_2 = updateProgram(program_1, ["/a.ts"], options, files => {
@@ -352,7 +352,7 @@ namespace ts {
             assert.isTrue(program_1.structureIsReused);
 
             // content of resolution cache should not change
-            checkResolvedTypeDirectivesCache(program_1, "/a.ts", singletonMap("typedefs", { resolvedFileName: "/types/typedefs/index.d.ts", primary: true }));
+            checkResolvedTypeDirectivesCache(program_1, "/a.ts", createStringMap("typedefs", { resolvedFileName: "/types/typedefs/index.d.ts", primary: true }));
             checkResolvedTypeDirectivesCache(program_1, "/types/typedefs/index.d.ts", undefined);
 
             // type reference directives has changed - program is not reused
@@ -370,7 +370,7 @@ namespace ts {
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
             assert.isTrue(!program_3.structureIsReused);
-            checkResolvedTypeDirectivesCache(program_1, "/a.ts", singletonMap("typedefs", { resolvedFileName: "/types/typedefs/index.d.ts", primary: true }));
+            checkResolvedTypeDirectivesCache(program_1, "/a.ts", createStringMap("typedefs", { resolvedFileName: "/types/typedefs/index.d.ts", primary: true }));
         });
     });
 

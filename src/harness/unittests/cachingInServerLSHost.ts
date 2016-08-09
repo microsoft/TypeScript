@@ -194,7 +194,7 @@ namespace ts {
                 content: `export var y = 1`
             };
 
-            const fileMap = singletonMap(root.name, root);
+            const fileMap = createStringMap(root.name, root);
             const serverHost = createDefaultServerHost(fileMap);
             const originalFileExists = serverHost.fileExists;
 

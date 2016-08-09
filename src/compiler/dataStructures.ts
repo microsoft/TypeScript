@@ -165,6 +165,29 @@ namespace ts {
         }
     }
 
+    /**
+     * When using an Object to shim a String Map, the iteration order of the keys is implementation-dependent.
+     * V8 moves natural-number-like keys to the front, then sorts, so we emulate that behavior here.
+     * (See https://bugs.chromium.org/p/v8/issues/detail?id=164)
+     * Other runtimes always use insertion order.
+     * If we have values taken from a Map or an Object fully respecting insertion order, this will convert it to the V8 order.
+     * If we have values taken from a V8 Object, this should effectively do nothing.
+     */
+    export function sortInV8ObjectInsertionOrder<T>(values: T[], toKey: (t: T) => string): T[] {
+        const naturals: T[] = [];
+        const everythingElse: T[] = [];
+        for (const value of values) {
+            // "0" looks like a natural but "08" doesn't.
+            const looksLikeNatural = /^(0|([1-9]\d*))$/.test(toKey(value));
+            (looksLikeNatural ? naturals : everythingElse).push(value);
+        }
+        function toInt(value: T): number {
+            return parseInt(toKey(value), 10);
+        }
+        naturals.sort((a, b) => toInt(a) - toInt(b));
+        return naturals.concat(everythingElse);
+    }
+
     /** Iterate over every key. */
     export function forEachKeyInStringMap<V>(map: StringMap<V>, callback: (key: string) => void): void {
         map.forEach((_, key) => callback(key));
@@ -217,12 +240,12 @@ namespace ts {
         }
     }
 
-    /** True iff the predicate is true for some entry in the map. */
+    /** True if the predicate is true for some entry in the map. */
     export function someInStringMap<V>(map: StringMap<V>, predicate: (value: V, key: string) => boolean): boolean {
         return !!findInStringMap(map, predicate);
     }
 
-    /** True iff the predicate is true for every entry in the map. */
+    /** True if the predicate is true for every entry in the map. */
     export function allInStringMap<V>(map: StringMap<V>, predicate: (value: V, key: string) => boolean): boolean {
         return !findInStringMap(map, (value, key) => !predicate(value, key));
     }
@@ -255,7 +278,7 @@ namespace ts {
     }
 
     /** Creates a map with the given keys and values for each entry in `inputs`. */
-    export function createStringMapFromArray<A, K, V>(inputs: A[], getKey: (element: A) => string, getValue: (element: A) => V): StringMap<V> {
+    export function createStringMapFromArray<A, V>(inputs: A[], getKey: (element: A) => string, getValue: (element: A) => V): StringMap<V> {
         const result = new StringMap<V>();
         for (const input of inputs) {
             result.set(getKey(input), getValue(input));
@@ -300,8 +323,8 @@ namespace ts {
         });
     }
 
-    /** Map of a single entry. */
-    export function singletonMap<V>(key: string, value: V): StringMap<V> {
+    /** StringMap of a single entry. */
+    export function createStringMap<V>(key: string, value: V): StringMap<V> {
         return new StringMap([[key, value]]);
     }
 }
@@ -359,7 +382,7 @@ namespace ts {
     export const SSet: SSetConstructor = Set ? Set : ShimSSet;
 
     /** False iff there are any values in the set. */
-    export function setIsEmpty(set: SSet): boolean {
+    export function isSetEmpty(set: SSet): boolean {
         if (set instanceof Set) {
             return !(<any>set).size;
         }
