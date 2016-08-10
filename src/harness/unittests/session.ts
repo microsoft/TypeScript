@@ -362,8 +362,8 @@ namespace ts.server {
         class InProcClient {
             private server: InProcSession;
             private seq = 0;
-            private callbacks: ts.Map<(resp: protocol.Response) => void> = {};
-            private eventHandlers: ts.Map<(args: any) => void> = {};
+            private callbacks: ts.MapLike<(resp: protocol.Response) => void> = {};
+            private eventHandlers: ts.MapLike<(args: any) => void> = {};
 
             handle(msg: protocol.Message): void {
                 if (msg.type === "response") {
