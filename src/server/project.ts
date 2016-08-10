@@ -78,6 +78,13 @@ namespace ts.server {
             this.markAsDirty();
         }
 
+        isCompileOnSaveEnabled(): boolean {
+            if (this.compilerOptions) {
+                return this.compilerOptions.compileOnSave;
+            }
+            return false;
+        }
+
         getLanguageService(ensureSynchronized = true): LanguageService  {
             if (ensureSynchronized) {
                 this.updateGraph();
@@ -92,7 +99,6 @@ namespace ts.server {
             this.updateGraph();
             return this.builder.getFilesAffectedBy(triggerFileName);
         }
-
 
         getProjectVersion() {
             return this.projectStateVersion.toString();
@@ -191,8 +197,8 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return this.getRootFiles();
             }
-            const defaultLibrary = getDefaultLibFilePath(this.compilerOptions);
-            return filter(this.getFileNames(), file => file !== defaultLibrary);
+            const defaultLibraryFileName = getDefaultLibFileName(this.compilerOptions);
+            return filter(this.getFileNames(), file => getBaseFileName(file) !== defaultLibraryFileName);
         }
 
         containsScriptInfo(info: ScriptInfo): boolean {

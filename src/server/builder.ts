@@ -21,7 +21,6 @@ namespace ts.server {
     export class BuilderFileInfo {
 
         private lastCheckedShapeSignature: string;
-        private lastEmittedFileVersion: string;
 
         constructor(
             public readonly scriptInfo: ScriptInfo,
@@ -56,13 +55,6 @@ namespace ts.server {
             return this.project.getSourceFile(this.scriptInfo.fileName);
         }
 
-        /**
-         * Thie method should only be called upon emitting
-         */
-        public updateLastEmittedContentSignature() {
-            this.lastEmittedFileVersion = this.scriptInfo.getLatestVersion();
-        }
-
         public checkIfShapeSignatureChanged() {
             const sourceFile = this.getSourceFile();
             if (!sourceFile) {
@@ -75,18 +67,13 @@ namespace ts.server {
             }
             else {
                 const emitOutput = this.project.getLanguageService(/*ensureSynchronized*/ true).getEmitOutput(this.scriptInfo.fileName, /*emitOnlyDtsFiles*/ true);
-                if (emitOutput.outputFiles) {
+                if (emitOutput.outputFiles && emitOutput.outputFiles.length > 0) {
                     this.lastCheckedShapeSignature = this.computeHash(emitOutput.outputFiles[0].text);
                 }
             }
             return !lastSignature || this.lastCheckedShapeSignature !== lastSignature;
         }
-
-        public isContentSignatureChangedSinceLastEmit(): boolean {
-            return !this.lastEmittedFileVersion || this.scriptInfo.getLatestVersion() !== this.lastEmittedFileVersion;
-        }
     }
-
 
     export interface Builder {
         readonly project: Project;
@@ -145,14 +132,12 @@ namespace ts.server {
 
         emitFile(fileName: string, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void, forced?: boolean): boolean {
             const fileInfo = this.getFileInfo(fileName);
-            const shouldEmit = fileInfo && (forced || fileInfo.isContentSignatureChangedSinceLastEmit());
-            if (!shouldEmit) {
+            if (!fileInfo) {
                 return false;
             }
 
             const { emitSkipped, outputFiles } = this.project.getFileEmitOutput(fileInfo.scriptInfo);
             if (!emitSkipped) {
-                fileInfo.updateLastEmittedContentSignature();
                 for (const outputFile of outputFiles) {
                     writeFile(outputFile.name, outputFile.text, outputFile.writeByteOrderMark);
                 }
@@ -178,15 +163,20 @@ namespace ts.server {
             const info = this.getOrCreateFileInfo(fileName);
             let result: string[];
             if (info.checkIfShapeSignatureChanged()) {
-                result = this.project.getFileNamesWithoutDefaultLib();
+                const options = this.project.getCompilerOptions();
+                if (options && (options.out || options.outFile)) {
+                    result = [fileName];
+                }
+                else {
+                    result = this.project.getFileNamesWithoutDefaultLib();
+                }
             }
             else {
-                result = info.isContentSignatureChangedSinceLastEmit() ? [fileName] : [];
+                result = [fileName];
             }
             return result;
         }
     }
-
 
     class ModuleBuilderFileInfo extends BuilderFileInfo {
         references: ModuleBuilderFileInfo[] = [];
@@ -396,15 +386,19 @@ namespace ts.server {
                     result = this.project.getFileNamesWithoutDefaultLib();
                 }
                 else {
-                    result = fileInfo.getReferencedByFileNames();
-                    // Needs to count the trigger file itself because it for sure has changed.
-                    result.push(fileName);
+                    const options = this.project.getCompilerOptions();
+                    if (options && (options.isolatedModules || options.out || options.outFile)) {
+                        result = [fileName];
+                    }
+                    else {
+                        result = fileInfo.getReferencedByFileNames();
+                        // Needs to count the trigger file itself because it for sure has changed.
+                        result.push(fileName);
+                    }
                 }
                 return result;
             }
-            // If it goes here, we know the shape of the file wasn't changed. So we only need to check if the
-            // file content changed or not.
-            return fileInfo.isContentSignatureChangedSinceLastEmit() ? [fileName] : [];
+            return [fileName];
         }
     }
 
