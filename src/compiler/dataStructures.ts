@@ -331,7 +331,7 @@ namespace ts {
 
 // Set
 namespace ts {
-    export interface SSet {
+    export interface StringSet {
         /** Add a value if it's not already present. */
         add(value: string): void;
         /** Remove a value. */
@@ -341,11 +341,11 @@ namespace ts {
         /** Whether the value is in the set. */
         has(value: string): boolean;
     }
-    export interface SSetConstructor {
-        new(values?: string[]): SSet;
+    export interface StringSetConstructor {
+        new(values?: string[]): StringSet;
     }
 
-    class ShimSSet implements SSet {
+    class ShimStringSet implements StringSet {
         data: Map<boolean>;
 
         constructor(values?: string[]) {
@@ -378,12 +378,12 @@ namespace ts {
         }
     }
 
-    declare const Set: SSetConstructor | undefined;
-    export const SSet: SSetConstructor = typeof Set === "undefined" ? ShimSSet : Set;
+    declare const Set: StringSetConstructor | undefined;
+    export const StringSet: StringSetConstructor = typeof Set === "undefined" ? ShimStringSet : Set;
 
     /** False iff there are any values in the set. */
-    export function isSetEmpty(set: SSet): boolean {
-        if (set instanceof ShimSSet) {
+    export function isSetEmpty(set: StringSet): boolean {
+        if (set instanceof ShimStringSet) {
             return set.isEmpty();
         }
         else {
@@ -393,12 +393,12 @@ namespace ts {
     }
 
     /** Add every value in `source` to `target`. */
-    export function copySet<T>(source: SSet, target: SSet): void {
+    export function copySet<T>(source: StringSet, target: StringSet): void {
         source.forEach(element => target.add(element));
     }
 
     /** If `shouldBeInSet`, put `value` into the set; otherwise, remove it. */
-    export function addOrDelete(set: SSet, value: string, shouldBeInSet: boolean): void {
+    export function addOrDelete(set: StringSet, value: string, shouldBeInSet: boolean): void {
         if (shouldBeInSet) {
             set.add(value);
         }

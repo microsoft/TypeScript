@@ -10,7 +10,7 @@ namespace ts {
         const map = createStringMapFromValues(files, f => f.name);
 
         if (hasDirectoryExists) {
-            const directories = new SSet();
+            const directories = new StringSet();
             for (const f of files) {
                 let name = getDirectoryPath(f.name);
                 while (true) {

@@ -7439,7 +7439,7 @@ namespace ts {
             let targetStack: Type[];
             let depth = 0;
             let inferiority = 0;
-            const visited = new SSet();
+            const visited = new StringSet();
             inferFromTypes(source, target);
 
             function isInProcess(source: Type, target: Type) {
@@ -10093,7 +10093,7 @@ namespace ts {
             }
         }
 
-        function checkJsxAttribute(node: JsxAttribute, elementAttributesType: Type, nameTable: SSet) {
+        function checkJsxAttribute(node: JsxAttribute, elementAttributesType: Type, nameTable: StringSet) {
             let correspondingPropType: Type = undefined;
 
             // Look up the corresponding property for this attribute
@@ -10137,7 +10137,7 @@ namespace ts {
             return exprType;
         }
 
-        function checkJsxSpreadAttribute(node: JsxSpreadAttribute, elementAttributesType: Type, nameTable: SSet) {
+        function checkJsxSpreadAttribute(node: JsxSpreadAttribute, elementAttributesType: Type, nameTable: StringSet) {
             const type = checkExpression(node.expression);
             const props = getPropertiesOfType(type);
             for (const prop of props) {
@@ -10463,7 +10463,7 @@ namespace ts {
 
             const targetAttributesType = getJsxElementAttributesType(node);
 
-            const nameTable = new SSet();
+            const nameTable = new StringSet();
 
             // Process this array in right-to-left order so we know which
             // attributes (mostly from spreads) are being overwritten and
@@ -13820,7 +13820,7 @@ namespace ts {
         }
 
         function checkObjectTypeForDuplicateDeclarations(node: TypeLiteralNode | InterfaceDeclaration) {
-            const names = new SSet();
+            const names = new StringSet();
             for (const member of node.members) {
                 if (member.kind == SyntaxKind.PropertySignature) {
                     let memberName: string;
@@ -19346,7 +19346,7 @@ namespace ts {
         }
 
         function checkGrammarJsxElement(node: JsxOpeningLikeElement) {
-            const seen = new SSet();
+            const seen = new StringSet();
             for (const attr of node.attributes) {
                 if (attr.kind === SyntaxKind.JsxSpreadAttribute) {
                     continue;

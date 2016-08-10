@@ -846,7 +846,7 @@ namespace ts {
     }
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
-        const existingDirectories = new SSet();
+        const existingDirectories = new StringSet();
 
         function getCanonicalFileName(fileName: string): string {
             // if underlying system can distinguish between two files whose names differs only in cases then file name already in canonical form.
@@ -1085,7 +1085,7 @@ namespace ts {
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
-        let classifiableNames: SSet;
+        let classifiableNames: StringSet;
 
         let resolvedTypeReferenceDirectives = new StringMap<ResolvedTypeReferenceDirective>();
         let fileProcessingDiagnostics = createDiagnosticCollection();
@@ -1102,10 +1102,10 @@ namespace ts {
 
         // If a module has some of its imports skipped due to being at the depth limit under node_modules, then track
         // this, as it may be imported at a shallower depth later, and then it will need its skipped imports processed.
-        const modulesWithElidedImports = new SSet();
+        const modulesWithElidedImports = new StringSet();
 
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
-        const sourceFilesFoundSearchingNodeModules = new SSet();
+        const sourceFilesFoundSearchingNodeModules = new StringSet();
 
         const start = performance.mark();
 
@@ -1233,7 +1233,7 @@ namespace ts {
             if (!classifiableNames) {
                 // Initialize a checker so that all our files are bound.
                 getTypeChecker();
-                classifiableNames = new SSet();
+                classifiableNames = new StringSet();
 
                 for (const sourceFile of files) {
                     copySet(sourceFile.classifiableNames, classifiableNames);

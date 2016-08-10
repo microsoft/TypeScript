@@ -1672,7 +1672,7 @@ namespace ts {
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
-        /* @internal */ classifiableNames?: SSet;
+        /* @internal */ classifiableNames?: StringSet;
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
@@ -1756,7 +1756,7 @@ namespace ts {
         // language service).
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
 
-        /* @internal */ getClassifiableNames(): SSet;
+        /* @internal */ getClassifiableNames(): StringSet;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
