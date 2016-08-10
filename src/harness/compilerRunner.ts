@@ -117,6 +117,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     tsConfigOptions.configFilePath = ts.combinePaths(rootDir, tsConfigOptions.configFilePath);
                 }
 
+                tsConfigOptions = tsConfigOptions || {};
                 tsConfigOptions.extendedDiagnostics = true;
                 tsConfigOptions.diagnostics = true;
                 ts.performance.enable();
