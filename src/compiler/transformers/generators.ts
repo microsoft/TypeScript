@@ -1912,7 +1912,7 @@ namespace ts {
         function cacheExpression(node: Expression): Identifier {
             let temp: Identifier;
             if (isGeneratedIdentifier(node)) {
-                return node;
+                return <Identifier>node;
             }
 
             temp = createTempVariable(hoistVariableDeclaration);

@@ -1815,7 +1815,9 @@ namespace ts {
                     );
                 }
                 else {
-                    assignment.end = initializer.end;
+                    // Currently there is not way to check that assignment is binary expression of destructing assignment
+                    // so we have to cast never type to binaryExpression
+                    (<BinaryExpression>assignment).end = initializer.end;
                     statements.push(createStatement(assignment, /*location*/ moveRangeEnd(initializer, -1)));
                 }
             }

@@ -2609,7 +2609,7 @@ const _super = (function (geti, seti) {
 
         function getTextOfNode(node: Node, includeTrivia?: boolean): string {
             if (isGeneratedIdentifier(node)) {
-                return getGeneratedIdentifier(node);
+                return getGeneratedIdentifier(<Identifier>node);
             }
             else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent)) {
                 return unescapeIdentifier(node.text);
