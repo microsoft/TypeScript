@@ -119,11 +119,56 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 tsConfigOptions.extendedDiagnostics = true;
                 tsConfigOptions.diagnostics = true;
+                ts.performance.enable();
                 const output = Harness.Compiler.compileFiles(
                     toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ harnessSettings["currentDirectory"]);
+                const memoryUsed = ts.sys.getMemoryUsage ? ts.sys.getMemoryUsage() : -1;
+                reportCountStatistic("Files", output.result.program.getSourceFiles().length);
+                reportCountStatistic("Lines", countLines(output.result.program));
+                reportCountStatistic("Nodes", output.result.program.getNodeCount());
+                reportCountStatistic("Identifiers", output.result.program.getIdentifierCount());
+                reportCountStatistic("Symbols", output.result.program.getSymbolCount());
+                reportCountStatistic("Types", output.result.program.getTypeCount());
+                ts.performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
+                ts.performance.disable();
 
                 options = output.options;
                 result = output.result;
+
+                function countLines(program: ts.Program): number {
+                    let count = 0;
+                    ts.forEach(program.getSourceFiles(), file => {
+                        count += ts.getLineStarts(file).length;
+                    });
+                    return count;
+                }
+
+                function reportStatisticalValue(name: string, value: string) {
+                    ts.sys.write(padRight(name + ":", 12) + padLeft(value.toString(), 10) + ts.sys.newLine);
+                }
+
+                function reportCountStatistic(name: string, count: number) {
+                    reportStatisticalValue(name, "" + count);
+                }
+
+                function reportTimeStatistic(name: string, time: number) {
+                    reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
+                }
+
+                function padLeft(s: string, length: number) {
+                    while (s.length < length) {
+                        s = " " + s;
+                    }
+                    return s;
+                }
+
+                function padRight(s: string, length: number) {
+                    while (s.length < length) {
+                        s = s + " ";
+                    }
+
+                    return s;
+                }
             });
 
             after(() => {
