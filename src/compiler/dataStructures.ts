@@ -127,25 +127,28 @@ namespace ts {
 
     // This is the globally available native Map class. It's unrelated to the ts.Map type.
     declare const Map: (StringMapConstructor & NumberMapConstructor) | undefined;
-    export const StringMap: StringMapConstructor = Map ? Map : ShimStringMap;
-    export const NumberMap: NumberMapConstructor = Map ? Map : ShimNumberMap;
+    export const StringMap: StringMapConstructor = typeof Map === "undefined" ? ShimStringMap : Map;
+    export const NumberMap: NumberMapConstructor = typeof Map === "undefined" ? ShimNumberMap : Map;
 
     /** Number of (key, value) pairs in a map. */
     export function stringMapSize<V>(map: StringMap<V>): number {
-        if (map instanceof Map) {
-            // For native maps, this is available as a property.
-            return (<any>map).size;
-        }
-        else {
+        if (map instanceof ShimStringMap) {
             let size = 0;
             map.forEach(() => { size++; });
             return size;
+        }
+        else {
+            // For native maps, this is available as a property.
+            return (<any>map).size;
         }
     }
 
     /** Iterate through a map, returning the first truthy value returned by `fn`, or undefined. */
     export function findInStringMap<V, U>(map: StringMap<V>, fn: (value: V, key: string) => U | undefined): U | undefined {
-        if (map instanceof Map) {
+        if (map instanceof ShimStringMap) {
+            return map.find(fn);
+        }
+        else {
             // Using an iterator and testing for `done` performs better than using forEach() and throwing an exception.
             const iterator: { next(): { value: [string, V], done: boolean } } = (<any>map).entries();
             while (true) {
@@ -159,9 +162,6 @@ namespace ts {
                     return result;
                 }
             }
-        }
-        else {
-            return (<ShimStringMap<V>>map).find(fn);
         }
     }
 
@@ -379,15 +379,16 @@ namespace ts {
     }
 
     declare const Set: SSetConstructor | undefined;
-    export const SSet: SSetConstructor = Set ? Set : ShimSSet;
+    export const SSet: SSetConstructor = typeof Set === "undefined" ? ShimSSet : Set;
 
     /** False iff there are any values in the set. */
     export function isSetEmpty(set: SSet): boolean {
-        if (set instanceof Set) {
-            return !(<any>set).size;
+        if (set instanceof ShimSSet) {
+            return set.isEmpty();
         }
         else {
-            (<ShimSSet>set).isEmpty();
+            // For native sets, this is available as a property.
+            return !(<any>set).size;
         }
     }
 
