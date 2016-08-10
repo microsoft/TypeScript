@@ -123,6 +123,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 ts.performance.enable();
                 const output = Harness.Compiler.compileFiles(
                     toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ harnessSettings["currentDirectory"]);
+                ts.sys.write(justName + ts.sys.newLine);
                 const memoryUsed = ts.sys.getMemoryUsage ? ts.sys.getMemoryUsage() : -1;
                 reportCountStatistic("Files", output.result.program.getSourceFiles().length);
                 reportCountStatistic("Lines", countLines(output.result.program));
@@ -130,6 +131,9 @@ class CompilerBaselineRunner extends RunnerBase {
                 reportCountStatistic("Identifiers", output.result.program.getIdentifierCount());
                 reportCountStatistic("Symbols", output.result.program.getSymbolCount());
                 reportCountStatistic("Types", output.result.program.getTypeCount());
+                if (memoryUsed >= 0) {
+                    reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
+                }
                 ts.performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
                 ts.performance.disable();
 
