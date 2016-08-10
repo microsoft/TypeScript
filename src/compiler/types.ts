@@ -585,7 +585,7 @@ namespace ts {
     // @kind(SyntaxKind.ConstructSignature)
     export interface ConstructSignatureDeclaration extends SignatureDeclaration, TypeElement { }
 
-    export type BindingName = Identifier | BindingPattern; 
+    export type BindingName = Identifier | BindingPattern;
 
     // @kind(SyntaxKind.VariableDeclaration)
     export interface VariableDeclaration extends Declaration {
