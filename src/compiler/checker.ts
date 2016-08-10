@@ -5235,7 +5235,7 @@ namespace ts {
         }
 
         function createTupleType(elementTypes: Type[], thisType?: Type) {
-            const id = getTypeListId(elementTypes) + ',' + (thisType ? thisType.id : 0);
+            const id = getTypeListId(elementTypes) + "," + (thisType ? thisType.id : 0);
             return tupleTypes[id] || (tupleTypes[id] = createNewTupleType(elementTypes, thisType));
         }
 
