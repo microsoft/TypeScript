@@ -117,6 +117,8 @@ class CompilerBaselineRunner extends RunnerBase {
                     tsConfigOptions.configFilePath = ts.combinePaths(rootDir, tsConfigOptions.configFilePath);
                 }
 
+                tsConfigOptions.extendedDiagnostics = true;
+                tsConfigOptions.diagnostics = true;
                 const output = Harness.Compiler.compileFiles(
                     toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ harnessSettings["currentDirectory"]);
 

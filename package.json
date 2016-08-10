@@ -78,7 +78,7 @@
     },
     "scripts": {
         "pretest": "jake tests",
-        "test": "jake runtests-parallel",
+        "test": "jake runtests",
         "build": "npm run build:compiler && npm run build:tests",
         "build:compiler": "jake local",
         "build:tests": "jake tests",
