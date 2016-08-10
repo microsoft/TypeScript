@@ -12,13 +12,14 @@ env:
 
 matrix:
   fast_finish: true
+  exclude:
+  - node_js: '0.10'
+  - node_js: '4'
   include:
   - os: osx
     node_js: stable
     osx_image: xcode7.3
     env: workerCount=2
-  allow_failures:
-  - os: osx
 
 branches:
   only:
