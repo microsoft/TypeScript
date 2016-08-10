@@ -17,6 +17,8 @@ matrix:
     node_js: stable
     osx_image: xcode7.3
     env: workerCount=2
+  allow_failures:
+  - os: osx
 
 branches:
   only:
