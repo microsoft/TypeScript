@@ -7837,14 +7837,17 @@ namespace ts {
         }
 
         function isDiscriminantProperty(type: Type, name: string) {
-            if (type && type.flags & TypeFlags.Union) {
-                const prop = getPropertyOfType(type, name);
-                if (prop && prop.flags & SymbolFlags.SyntheticProperty) {
-                    if ((<TransientSymbol>prop).isDiscriminantProperty === undefined) {
-                        (<TransientSymbol>prop).isDiscriminantProperty = !(<TransientSymbol>prop).hasCommonType &&
-                            isUnitUnionType(getTypeOfSymbol(prop));
+            if (type) {
+                const nonNullType = getNonNullableType(type);
+                if (nonNullType.flags & TypeFlags.Union) {
+                    const prop = getPropertyOfType(nonNullType, name);
+                    if (prop && prop.flags & SymbolFlags.SyntheticProperty) {
+                        if ((<TransientSymbol>prop).isDiscriminantProperty === undefined) {
+                            (<TransientSymbol>prop).isDiscriminantProperty = !(<TransientSymbol>prop).hasCommonType &&
+                                isUnitUnionType(getTypeOfSymbol(prop));
+                        }
+                        return (<TransientSymbol>prop).isDiscriminantProperty;
                     }
-                    return (<TransientSymbol>prop).isDiscriminantProperty;
                 }
             }
             return false;
