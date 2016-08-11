@@ -115,6 +115,9 @@ namespace ts.server {
                 readFile: fileName => this.host.readFile(fileName),
                 directoryExists: directoryName => this.host.directoryExists(directoryName)
             };
+            if (this.host.realpath) {
+                this.moduleResolutionHost.realpath = path => this.host.realpath(path);
+            }
         }
 
         private resolveNamesWithLocalCache<T extends Timestamped & { failedLookupLocations: string[] }, R>(

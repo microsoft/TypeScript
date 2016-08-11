@@ -210,7 +210,7 @@ namespace ts {
         IntersectionType,
         ParenthesizedType,
         ThisType,
-        StringLiteralType,
+        LiteralType,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -361,7 +361,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = StringLiteralType,
+        LastTypeNode = LiteralType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -794,8 +794,9 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.StringLiteralType)
-    export interface StringLiteralTypeNode extends LiteralLikeNode, TypeNode {
+    export interface LiteralTypeNode extends TypeNode {
         _stringLiteralTypeBrand: any;
+        literal: Expression;
     }
 
     // @kind(SyntaxKind.StringLiteral)
@@ -981,13 +982,19 @@ namespace ts {
         multiLine?: boolean;
     }
 
+    export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
+    export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
+
     // @kind(SyntaxKind.PropertyAccessExpression)
     export interface PropertyAccessExpression extends MemberExpression, Declaration {
         expression: LeftHandSideExpression;
         name: Identifier;
     }
-
-    export type IdentifierOrPropertyAccess = Identifier | PropertyAccessExpression;
+    /** Brand for a PropertyAccessExpression which, like a QualifiedName, consists of a sequence of identifiers separated by dots. */
+    export interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
+        _propertyAccessExpressionLikeQualifiedNameBrand?: any;
+        expression: EntityNameExpression;
+    }
 
     // @kind(SyntaxKind.ElementAccessExpression)
     export interface ElementAccessExpression extends MemberExpression {
@@ -1606,6 +1613,16 @@ namespace ts {
         antecedent: FlowNode;
     }
 
+    export type FlowType = Type | IncompleteType;
+
+    // Incomplete types occur during control flow analysis of loops. An IncompleteType
+    // is distinguished from a regular type by a flags value of zero. Incomplete type
+    // objects are internal to the getFlowTypeOfRefecence function and never escape it.
+    export interface IncompleteType {
+        flags: TypeFlags;  // No flags set
+        type: Type;        // The type marked incomplete
+    }
+
     export interface AmdDependency {
         path: string;
         name: string;
@@ -1917,6 +1934,7 @@ namespace ts {
         InElementType                   = 0x00000040,  // Writing an array or union element type
         UseFullyQualifiedType           = 0x00000080,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         InFirstTypeArgument             = 0x00000100,  // Writing first type argument of the instantiated type
+        InTypeAlias                     = 0x00000200,  // Writing type in type alias declaration
     }
 
     export const enum SymbolFormatFlags {
@@ -2020,7 +2038,7 @@ namespace ts {
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessibilityResult;
-        isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
+        isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
@@ -2029,7 +2047,7 @@ namespace ts {
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
         getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile;
-        getTypeReferenceDirectivesForEntityName(name: EntityName | PropertyAccessExpression): string[];
+        getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[];
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
     }
 
@@ -2070,8 +2088,8 @@ namespace ts {
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
         Value = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
-        Type = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias,
-        Namespace = ValueModule | NamespaceModule,
+        Type = Class | Interface | Enum | EnumMember | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias,
+        Namespace = ValueModule | NamespaceModule | Enum,
         Module = ValueModule | NamespaceModule,
         Accessor = GetAccessor | SetAccessor,
 
@@ -2085,7 +2103,7 @@ namespace ts {
 
         ParameterExcludes = Value,
         PropertyExcludes = None,
-        EnumMemberExcludes = Value,
+        EnumMemberExcludes = Value | Type,
         FunctionExcludes = Value & ~(Function | ValueModule),
         ClassExcludes = (Value | Type) & ~(ValueModule | Interface), // class-interface mergability done in checker.ts
         InterfaceExcludes = Type & ~(Interface | Class),
@@ -2149,6 +2167,8 @@ namespace ts {
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
         containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
+        hasCommonType?: boolean;            // True if constituents of synthetic property all have same type
+        isDiscriminantProperty?: boolean;   // True if discriminant synthetic property
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
         isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
@@ -2216,57 +2236,65 @@ namespace ts {
     }
 
     export const enum TypeFlags {
-        Any                     = 0x00000001,
-        String                  = 0x00000002,
-        Number                  = 0x00000004,
-        Boolean                 = 0x00000008,
-        Void                    = 0x00000010,
-        Undefined               = 0x00000020,
-        Null                    = 0x00000040,
-        Enum                    = 0x00000080,  // Enum type
-        StringLiteral           = 0x00000100,  // String literal type
-        TypeParameter           = 0x00000200,  // Type parameter
-        Class                   = 0x00000400,  // Class
-        Interface               = 0x00000800,  // Interface
-        Reference               = 0x00001000,  // Generic type reference
-        Tuple                   = 0x00002000,  // Tuple
-        Union                   = 0x00004000,  // Union (T | U)
-        Intersection            = 0x00008000,  // Intersection (T & U)
-        Anonymous               = 0x00010000,  // Anonymous
-        Instantiated            = 0x00020000,  // Instantiated anonymous type
+        Any                     = 1 << 0,
+        String                  = 1 << 1,
+        Number                  = 1 << 2,
+        Boolean                 = 1 << 3,
+        Enum                    = 1 << 4,
+        StringLiteral           = 1 << 5,
+        NumberLiteral           = 1 << 6,
+        BooleanLiteral          = 1 << 7,
+        EnumLiteral             = 1 << 8,
+        ESSymbol                = 1 << 9,   // Type of symbol primitive introduced in ES6
+        Void                    = 1 << 10,
+        Undefined               = 1 << 11,
+        Null                    = 1 << 12,
+        Never                   = 1 << 13,  // Never type
+        TypeParameter           = 1 << 14,  // Type parameter
+        Class                   = 1 << 15,  // Class
+        Interface               = 1 << 16,  // Interface
+        Reference               = 1 << 17,  // Generic type reference
+        Tuple                   = 1 << 18,  // Tuple
+        Union                   = 1 << 19,  // Union (T | U)
+        Intersection            = 1 << 20,  // Intersection (T & U)
+        Anonymous               = 1 << 21,  // Anonymous
+        Instantiated            = 1 << 22,  // Instantiated anonymous type
         /* @internal */
-        FromSignature           = 0x00040000,  // Created for signature assignment check
-        ObjectLiteral           = 0x00080000,  // Originates in an object literal
+        ObjectLiteral           = 1 << 23,  // Originates in an object literal
         /* @internal */
-        FreshObjectLiteral      = 0x00100000,  // Fresh object literal type
+        FreshObjectLiteral      = 1 << 24,  // Fresh object literal type
         /* @internal */
-        ContainsWideningType    = 0x00200000,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 25,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 0x00400000,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 26,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
-        ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
-        ThisType                = 0x02000000,  // This type
-        ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
-        Never                   = 0x08000000,  // Never type
+        ContainsAnyFunctionType = 1 << 27,  // Type is or contains object literal type
+        ThisType                = 1 << 28,  // This type
+        ObjectLiteralPatternWithComputedProperties = 1 << 29,  // Object literal type implied by binding pattern has computed properties
 
         /* @internal */
         Nullable = Undefined | Null,
+        Literal = StringLiteral | NumberLiteral | BooleanLiteral | EnumLiteral,
         /* @internal */
-        Falsy = Void | Undefined | Null,       // TODO: Add false, 0, and ""
+        DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
+        PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
         /* @internal */
-        Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null | Never,
+        Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
-        Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
+        Primitive = String | Number | Boolean | Enum | ESSymbol | Void | Undefined | Null | Literal,
         StringLike = String | StringLiteral,
-        NumberLike = Number | Enum,
+        NumberLike = Number | NumberLiteral | Enum | EnumLiteral,
+        BooleanLike = Boolean | BooleanLiteral,
+        EnumLike = Enum | EnumLiteral,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
+        StructuredOrTypeParameter = StructuredType | TypeParameter,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | StringLike | NumberLike | Boolean | ESSymbol,
+        Narrowable = Any | StructuredType | TypeParameter | StringLike | NumberLike | BooleanLike | ESSymbol,
+        NotUnionOrUnit = Any | String | Number | ESSymbol | ObjectType,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
@@ -2281,6 +2309,8 @@ namespace ts {
         /* @internal */ id: number;      // Unique ID
         symbol?: Symbol;                 // Symbol associated with type (if any)
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
+        aliasSymbol?: Symbol;            // Alias associated with type
+        aliasTypeArguments?: Type[];     // Alias type arguments (if any)
     }
 
     /* @internal */
@@ -2290,8 +2320,18 @@ namespace ts {
     }
 
     // String literal types (TypeFlags.StringLiteral)
-    export interface StringLiteralType extends Type {
+    export interface LiteralType extends Type {
         text: string;  // Text of string literal
+    }
+
+    // Enum types (TypeFlags.Enum)
+    export interface EnumType extends Type {
+        memberTypes: Map<EnumLiteralType>;
+    }
+
+    // Enum types (TypeFlags.EnumLiteral)
+    export interface EnumLiteralType extends LiteralType {
+        baseType: EnumType & UnionType;
     }
 
     // Object types (TypeFlags.ObjectType)
@@ -2338,14 +2378,15 @@ namespace ts {
 
     export interface TupleType extends ObjectType {
         elementTypes: Type[];  // Element types
+        thisType?: Type;       // This-type of tuple (only needed for tuples that are constraints of type parameters)
     }
 
     export interface UnionOrIntersectionType extends Type {
         types: Type[];                    // Constituent types
         /* @internal */
-        reducedType: Type;                // Reduced union type (all subtypes removed)
-        /* @internal */
         resolvedProperties: SymbolTable;  // Cache of resolved properties
+        /* @internal */
+        couldContainTypeParameters: boolean;
     }
 
     export interface UnionType extends UnionOrIntersectionType { }
@@ -2414,7 +2455,7 @@ namespace ts {
         /* @internal */
         hasRestParameter: boolean;          // True if last parameter is rest parameter
         /* @internal */
-        hasStringLiterals: boolean;         // True if specialized
+        hasLiteralTypes: boolean;           // True if specialized
         /* @internal */
         target?: Signature;                 // Instantiation target
         /* @internal */
@@ -2444,6 +2485,7 @@ namespace ts {
     export interface TypeMapper {
         (t: TypeParameter): Type;
         mappedTypes?: Type[];       // Types mapped by this mapper
+        targetTypes?: Type[];       // Types substituted for mapped types
         instantiations?: Type[];    // Cache of instantiations created using this type mapper.
         context?: InferenceContext; // The inference context this mapper was created from.
                                     // Only inference mappers have this set (in createInferenceMapper).
@@ -2878,6 +2920,7 @@ namespace ts {
         directoryExists?(directoryName: string): boolean;
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
+        getDirectories?(path: string): string[];
     }
 
     export interface ResolvedModule {

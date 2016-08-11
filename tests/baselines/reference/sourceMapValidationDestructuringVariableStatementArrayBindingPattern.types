@@ -59,7 +59,7 @@ let [numberC, nameC, skillC] = [3, "edging", "Trimming edges"];
 
 let [numberA3, ...robotAInfo] = robotA;
 >numberA3 : number
->robotAInfo : (number | string)[]
+>robotAInfo : (string | number)[]
 >robotA : [number, string, string]
 
 if (nameA == nameA2) {

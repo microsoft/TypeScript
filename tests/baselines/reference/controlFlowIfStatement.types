@@ -20,7 +20,7 @@ if (x /* RegExp */, (x = true)) {
 >true : boolean
 
     x; // boolean
->x : boolean
+>x : true
 
     x = "";
 >x = "" : string
@@ -89,5 +89,52 @@ function b() {
     }
     x; // string
 >x : string
+}
+function c<T>(data: string | T): T {
+>c : <T>(data: string | T) => T
+>T : T
+>data : string | T
+>T : T
+>T : T
+
+    if (typeof data === 'string') {
+>typeof data === 'string' : boolean
+>typeof data : string
+>data : string | T
+>'string' : "string"
+
+        return JSON.parse(data);
+>JSON.parse(data) : any
+>JSON.parse : (text: string, reviver?: (key: any, value: any) => any) => any
+>JSON : JSON
+>parse : (text: string, reviver?: (key: any, value: any) => any) => any
+>data : string
+    }
+    else {
+        return data;
+>data : T
+    }
+}
+function d<T extends string>(data: string | T): never {
+>d : <T extends string>(data: string | T) => never
+>T : T
+>data : string | T
+>T : T
+
+    if (typeof data === 'string') {
+>typeof data === 'string' : boolean
+>typeof data : string
+>data : string | T
+>'string' : "string"
+
+        throw new Error('will always happen');
+>new Error('will always happen') : Error
+>Error : ErrorConstructor
+>'will always happen' : string
+    }
+    else {
+        return data;
+>data : never
+    }
 }
 

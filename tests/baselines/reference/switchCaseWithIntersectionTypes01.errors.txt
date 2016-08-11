@@ -1,7 +1,6 @@
 tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithIntersectionTypes01.ts(19,10): error TS2678: Type 'number & boolean' is not comparable to type 'string & number'.
   Type 'number & boolean' is not comparable to type 'string'.
 tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithIntersectionTypes01.ts(23,10): error TS2678: Type 'boolean' is not comparable to type 'string & number'.
-  Type 'boolean' is not comparable to type 'string'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithIntersectionTypes01.ts (2 errors) ====
@@ -33,6 +32,5 @@ tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithInterse
         case bool:
              ~~~~
 !!! error TS2678: Type 'boolean' is not comparable to type 'string & number'.
-!!! error TS2678:   Type 'boolean' is not comparable to type 'string'.
             break;
     }

@@ -618,16 +618,8 @@ namespace ts {
             return false;
         }
 
-        function isNarrowingNullCheckOperands(expr1: Expression, expr2: Expression) {
-            return (expr1.kind === SyntaxKind.NullKeyword || expr1.kind === SyntaxKind.Identifier && (<Identifier>expr1).text === "undefined") && isNarrowableOperand(expr2);
-        }
-
         function isNarrowingTypeofOperands(expr1: Expression, expr2: Expression) {
             return expr1.kind === SyntaxKind.TypeOfExpression && isNarrowableOperand((<TypeOfExpression>expr1).expression) && expr2.kind === SyntaxKind.StringLiteral;
-        }
-
-        function isNarrowingDiscriminant(expr: Expression) {
-            return expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
         }
 
         function isNarrowingBinaryExpression(expr: BinaryExpression) {
@@ -638,9 +630,8 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    return isNarrowingNullCheckOperands(expr.right, expr.left) || isNarrowingNullCheckOperands(expr.left, expr.right) ||
-                        isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right) ||
-                        isNarrowingDiscriminant(expr.left) || isNarrowingDiscriminant(expr.right);
+                    return isNarrowableOperand(expr.left) || isNarrowableOperand(expr.right) ||
+                        isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right);
                 case SyntaxKind.InstanceOfKeyword:
                     return isNarrowableOperand(expr.left);
                 case SyntaxKind.CommaToken:
@@ -662,11 +653,6 @@ namespace ts {
                     }
             }
             return isNarrowableReference(expr);
-        }
-
-        function isNarrowingSwitchStatement(switchStatement: SwitchStatement) {
-            const expr = switchStatement.expression;
-            return expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
         }
 
         function createBranchLabel(): FlowLabel {
@@ -718,7 +704,7 @@ namespace ts {
         }
 
         function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
-            if (!isNarrowingSwitchStatement(switchStatement)) {
+            if (!isNarrowingExpression(switchStatement.expression)) {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
@@ -1901,18 +1887,17 @@ namespace ts {
         }
 
         function bindExportAssignment(node: ExportAssignment | BinaryExpression) {
-            const boundExpression = node.kind === SyntaxKind.ExportAssignment ? (<ExportAssignment>node).expression : (<BinaryExpression>node).right;
             if (!container.symbol || !container.symbol.exports) {
                 // Export assignment in some sort of block construct
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
             }
-            else if (boundExpression.kind === SyntaxKind.Identifier && node.kind === SyntaxKind.ExportAssignment) {
-                // An export default clause with an identifier exports all meanings of that identifier
-                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
-            }
             else {
-                // An export default clause with an expression exports a value
-                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
+                const flags = node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node)
+                    // An export default clause with an EntityNameExpression exports all meanings of that identifier
+                    ? SymbolFlags.Alias
+                    // An export default clause with any other expression exports a value
+                    : SymbolFlags.Property;
+                declareSymbol(container.symbol.exports, container.symbol, node, flags, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
             }
         }
 
@@ -1983,7 +1968,7 @@ namespace ts {
         function bindThisPropertyAssignment(node: BinaryExpression) {
             // Declare a 'member' in case it turns out the container was an ES5 class or ES6 constructor
             let assignee: Node;
-            if (container.kind === SyntaxKind.FunctionDeclaration || container.kind === SyntaxKind.FunctionDeclaration) {
+            if (container.kind === SyntaxKind.FunctionDeclaration || container.kind === SyntaxKind.FunctionExpression) {
                 assignee = container;
             }
             else if (container.kind === SyntaxKind.Constructor) {

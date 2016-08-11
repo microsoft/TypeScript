@@ -106,7 +106,7 @@ namespace ts.server {
         describe("onMessage", () => {
             it("should not throw when commands are executed with invalid arguments", () => {
                 let i = 0;
-                for (name in CommandNames) {
+                for (const name in CommandNames) {
                     if (!Object.prototype.hasOwnProperty.call(CommandNames, name)) {
                         continue;
                     }

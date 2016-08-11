@@ -81,7 +81,7 @@ namespace ts {
      * returns a truthy value, then returns that value.
      * If no such value is found, the callback is applied to each element of array and undefined is returned.
      */
-    export function forEach<T, U>(array: T[], callback: (element: T, index: number) => U): U {
+    export function forEach<T, U>(array: T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
         if (array) {
             for (let i = 0, len = array.length; i < len; i++) {
                 const result = callback(array[i], i);
@@ -112,10 +112,21 @@ namespace ts {
         return undefined;
     }
 
-    export function contains<T>(array: T[], value: T, areEqual?: (a: T, b: T) => boolean): boolean {
+    /** Like `forEach`, but assumes existence of array and fails if no truthy value is found. */
+    export function find<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U {
+        for (let i = 0, len = array.length; i < len; i++) {
+            const result = callback(array[i], i);
+            if (result) {
+                return result;
+            }
+        }
+        Debug.fail();
+    }
+
+    export function contains<T>(array: T[], value: T): boolean {
         if (array) {
             for (const v of array) {
-                if (areEqual ? areEqual(v, value) : v === value) {
+                if (v === value) {
                     return true;
                 }
             }
@@ -217,10 +228,13 @@ namespace ts {
         let result: T[];
         if (array) {
             result = [];
-            for (const item of array) {
-                if (!contains(result, item, areEqual)) {
-                    result.push(item);
+            loop: for (const item of array) {
+                for (const res of result) {
+                    if (areEqual ? areEqual(res, item) : res === item) {
+                        continue loop;
+                    }
                 }
+                result.push(item);
             }
         }
         return result;
@@ -355,8 +369,12 @@ namespace ts {
         return keys;
     }
 
-    export function getProperty<T>(map: Map<T>, key: string): T {
-        return hasOwnProperty.call(map, key) ? map[key] : undefined;
+    export function getProperty<T>(map: Map<T>, key: string): T | undefined {
+        return hasProperty(map, key) ? map[key] : undefined;
+    }
+
+    export function getOrUpdateProperty<T>(map: Map<T>, key: string, makeValue: () => T): T {
+        return hasProperty(map, key) ? map[key] : map[key] = makeValue();
     }
 
     export function isEmpty<T>(map: Map<T>) {

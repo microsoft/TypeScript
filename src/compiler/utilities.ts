@@ -1027,14 +1027,14 @@ namespace ts {
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
     }
 
-
-    export function getEntityNameFromTypeNode(node: TypeNode): EntityName | Expression {
+    export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.TypeReference:
                     return (<TypeReferenceNode>node).typeName;
                 case SyntaxKind.ExpressionWithTypeArguments:
-                    return (<ExpressionWithTypeArguments>node).expression;
+                    Debug.assert(isEntityNameExpression((<ExpressionWithTypeArguments>node).expression));
+                    return <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression;
                 case SyntaxKind.Identifier:
                 case SyntaxKind.QualifiedName:
                     return (<EntityName><Node>node);
@@ -1555,7 +1555,7 @@ namespace ts {
                 continue;
             }
             return parent.kind === SyntaxKind.BinaryExpression &&
-                (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken &&
+                isAssignmentOperator((<BinaryExpression>parent).operatorToken.kind) &&
                 (<BinaryExpression>parent).left === node ||
                 (parent.kind === SyntaxKind.ForInStatement || parent.kind === SyntaxKind.ForOfStatement) &&
                 (<ForInStatement | ForOfStatement>parent).initializer === node;
@@ -1601,6 +1601,7 @@ namespace ts {
             case SyntaxKind.MethodSignature:
             case SyntaxKind.ModuleDeclaration:
             case SyntaxKind.NamespaceImport:
+            case SyntaxKind.NamespaceExportDeclaration:
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.PropertyDeclaration:
@@ -1725,8 +1726,8 @@ namespace ts {
     // import * as <symbol> from ...
     // import { x as <symbol> } from ...
     // export { x as <symbol> } from ...
-    // export = ...
-    // export default ...
+    // export = <EntityNameExpression>
+    // export default <EntityNameExpression>
     export function isAliasSymbolDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.ImportEqualsDeclaration ||
             node.kind === SyntaxKind.NamespaceExportDeclaration ||
@@ -1734,7 +1735,11 @@ namespace ts {
             node.kind === SyntaxKind.NamespaceImport ||
             node.kind === SyntaxKind.ImportSpecifier ||
             node.kind === SyntaxKind.ExportSpecifier ||
-            node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier;
+            node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node);
+    }
+
+    export function exportAssignmentIsAlias(node: ExportAssignment): boolean {
+        return isEntityNameExpression(node.expression);
     }
 
     export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration | InterfaceDeclaration) {
@@ -2712,22 +2717,9 @@ namespace ts {
             isClassLike(node.parent.parent);
     }
 
-    // Returns false if this heritage clause element's expression contains something unsupported
-    // (i.e. not a name or dotted name).
-    export function isSupportedExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
-        return isSupportedExpressionWithTypeArgumentsRest(node.expression);
-    }
-
-    function isSupportedExpressionWithTypeArgumentsRest(node: Expression): boolean {
-        if (node.kind === SyntaxKind.Identifier) {
-            return true;
-        }
-        else if (isPropertyAccessExpression(node)) {
-            return isSupportedExpressionWithTypeArgumentsRest(node.expression);
-        }
-        else {
-            return false;
-        }
+    export function isEntityNameExpression(node: Expression): node is EntityNameExpression {
+        return node.kind === SyntaxKind.Identifier ||
+            node.kind === SyntaxKind.PropertyAccessExpression && isEntityNameExpression((<PropertyAccessExpression>node).expression);
     }
 
     export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
