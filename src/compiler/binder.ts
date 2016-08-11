@@ -1900,20 +1900,20 @@ namespace ts {
         }
 
         function bindExportAssignment(node: ExportAssignment | BinaryExpression) {
-            const boundExpression = node.kind === SyntaxKind.ExportAssignment ? (<ExportAssignment>node).expression : (<BinaryExpression>node).right;
             if (!container.symbol || !container.symbol.exports) {
                 // Export assignment in some sort of block construct
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
-            }
-            else if (boundExpression.kind === SyntaxKind.Identifier && node.kind === SyntaxKind.ExportAssignment) {
-                // An export default clause with an identifier exports all meanings of that identifier
-                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
             }
             else {
                 // An export default clause with an expression exports a value
                 // We want to exclude both class and function here,  this is necessary to issue an error when there are both
                 // default export-assignment and default export function and class declaration.
-                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Property, SymbolFlags.Class | SymbolFlags.Function | SymbolFlags.Property);
+                const flags = node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node)
+                    // An export default clause with an EntityNameExpression exports all meanings of that identifier
+                    ? SymbolFlags.Alias
+                    // An export default clause with any other expression exports a value
+                    : SymbolFlags.Property;
+                declareSymbol(container.symbol.exports, container.symbol, node, flags, SymbolFlags.Property | SymbolFlags.AliasExcludes | SymbolFlags.Class | SymbolFlags.Function); //SymbolFlags.Class | SymbolFlags.Function | SymbolFlags.Property);
             }
         }
 
