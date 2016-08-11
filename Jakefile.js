@@ -728,6 +728,10 @@ function runConsoleTests(defaultReporter, runInParallel) {
         fs.unlinkSync(testConfigFile);
     }
     var workerCount, taskConfigsFolder;
+    var notReallyParallel = process.env.workerCount && (+process.env.workerCount === 1);
+    if (notReallyParallel) {
+        runInParallel = false;
+    }
     if (runInParallel) {
         // generate name to store task configuration files
         var prefix = os.tmpdir() + "/ts-tests";
