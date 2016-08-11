@@ -6,11 +6,6 @@ namespace ts.server {
         writeMessage(message: string): void;
     }
 
-    interface CompletionEntry extends CompletionInfo {
-        fileName: string;
-        position: number;
-    }
-
     interface RenameEntry extends RenameInfo {
         fileName: string;
         position: number;

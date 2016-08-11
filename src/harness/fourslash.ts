@@ -47,19 +47,6 @@ namespace FourSlash {
         ranges: Range[];
     }
 
-    interface MemberListData {
-        result: {
-            maybeInaccurate: boolean;
-            isMemberCompletion: boolean;
-            entries: {
-                name: string;
-                type: string;
-                kind: string;
-                kindModifiers: string;
-            }[];
-        };
-    }
-
     export interface Marker {
         fileName: string;
         position: number;

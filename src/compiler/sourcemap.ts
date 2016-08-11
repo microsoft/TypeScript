@@ -29,14 +29,19 @@ namespace ts {
         if (nullSourceMapWriter === undefined) {
             nullSourceMapWriter = {
                 getSourceMapData(): SourceMapData { return undefined; },
-                setSourceFile(sourceFile: SourceFile): void { },
-                emitStart(range: TextRange): void { },
-                emitEnd(range: TextRange, stopOverridingSpan?: boolean): void { },
-                emitPos(pos: number): void { },
+                setSourceFile(): void { },
+                //setSourceFile(sourceFile: SourceFile): void { },
+                //emitStart(range: TextRange): void { },
+                emitStart(): void { },
+                emitEnd(): void { },
+                //emitEnd(range: TextRange, stopOverridingSpan?: boolean): void { },
+                emitPos(): void { },
+                //emitPos(pos: number): void { },
                 changeEmitSourcePos(): void { },
                 getText(): string { return undefined; },
                 getSourceMappingURL(): string { return undefined; },
-                initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void { },
+                initialize(): void { },
+                //initialize(_filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void { },
                 reset(): void { },
             };
         }

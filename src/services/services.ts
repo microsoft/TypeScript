@@ -2906,13 +2906,6 @@ namespace ts {
         All = Value | Type | Namespace
     }
 
-    const enum BreakContinueSearchType {
-        None = 0x0,
-        Unlabeled = 0x1,
-        Labeled = 0x2,
-        All = Unlabeled | Labeled
-    }
-
     // A cache of completion entries for keywords, these do not change between sessions
     const keywordCompletions: CompletionEntry[] = [];
     for (let i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
