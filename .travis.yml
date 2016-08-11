@@ -34,3 +34,6 @@ install:
 cache:
   directories:
     - node_modules
+
+git:
+  depth: 1
