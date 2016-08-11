@@ -1,0 +1,18 @@
+======== Resolving module 'm1' from 'realisticNpmTypes/index.ts'. ========
+Explicitly specified module resolution kind: 'NodeJs'.
+Loading module 'm1' from 'node_modules' folder.
+File 'realisticNpmTypes/node_modules/m1.ts' does not exist.
+File 'realisticNpmTypes/node_modules/m1.tsx' does not exist.
+File 'realisticNpmTypes/node_modules/m1.d.ts' does not exist.
+File 'realisticNpmTypes/node_modules/m1/package.json' does not exist.
+File 'realisticNpmTypes/node_modules/m1/index.ts' does not exist.
+File 'realisticNpmTypes/node_modules/m1/index.tsx' does not exist.
+File 'realisticNpmTypes/node_modules/m1/index.d.ts' does not exist.
+File 'realisticNpmTypes/node_modules/@types/m1.ts' does not exist.
+File 'realisticNpmTypes/node_modules/@types/m1.tsx' does not exist.
+File 'realisticNpmTypes/node_modules/@types/m1.d.ts' does not exist.
+File 'realisticNpmTypes/node_modules/@types/m1/package.json' does not exist.
+File 'realisticNpmTypes/node_modules/@types/m1/index.ts' does not exist.
+File 'realisticNpmTypes/node_modules/@types/m1/index.tsx' does not exist.
+File 'realisticNpmTypes/node_modules/@types/m1/index.d.ts' exist - use it as a name resolution result.
+======== Module name 'm1' was successfully resolved to 'realisticNpmTypes/node_modules/@types/m1/index.d.ts'. ========

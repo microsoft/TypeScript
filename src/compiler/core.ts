@@ -1193,10 +1193,56 @@ namespace ts {
      */
     export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
     export const supportedJavascriptExtensions = [".js", ".jsx"];
-    const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
+
+    /* @internal */
+    export const extensionMap = {
+        [PrioritizedExtensionCollection.TS]: ".ts",
+        [PrioritizedExtensionCollection.TSX]: ".tsx",
+        [PrioritizedExtensionCollection.DTS]: ".d.ts",
+        [PrioritizedExtensionCollection.JS]: ".js",
+        [PrioritizedExtensionCollection.JSX]: ".jsx",
+    };
+
+    /* @internal */
+    export const reverseExtensionMap: { [index: string]: PrioritizedExtensionCollection } = {
+        ".ts": PrioritizedExtensionCollection.TS,
+        ".tsx": PrioritizedExtensionCollection.TSX,
+        ".d.ts": PrioritizedExtensionCollection.DTS,
+        ".js": PrioritizedExtensionCollection.JS,
+        ".jsx": PrioritizedExtensionCollection.JSX,
+    };
+
+    /* @internal */
+    const extensionPowerset: { [index: number]: string[] } = {
+        [PrioritizedExtensionCollection.None]: []
+    };
+
+    function createPowerset(base: PrioritizedExtensionCollection, powerset: { [index: number]: string[] }): void {
+        const newBases: number[] = [];
+        for (const key in extensionMap) {
+            const newKey = base | parseInt(key);
+            if (!powerset[newKey]) {
+                newBases.push(newKey);
+                powerset[newKey] = concatenate(powerset[base], [extensionMap[key]]);
+            }
+        }
+        for (const newBase of newBases) {
+            createPowerset(newBase, powerset);
+        }
+    }
+
+    createPowerset(PrioritizedExtensionCollection.None, extensionPowerset);
+
+    export function getExtensionsForCollection(goal: PrioritizedExtensionCollection): string[] {
+        return extensionPowerset[goal];
+    }
+
+    export function getExtensionCollectionForCompilerOptions(options?: CompilerOptions) {
+        return (options && options.allowJs) ? PrioritizedExtensionCollection.Any : PrioritizedExtensionCollection.TypeScript;
+    }
 
     export function getSupportedExtensions(options?: CompilerOptions): string[] {
-        return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;
+        return getExtensionsForCollection(getExtensionCollectionForCompilerOptions(options));
     }
 
     export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions) {
@@ -1210,56 +1256,43 @@ namespace ts {
         return false;
     }
 
-    /**
-     * Extension boundaries by priority. Lower numbers indicate higher priorities, and are
-     * aligned to the offset of the highest priority extension in the
-     * allSupportedExtensions array.
-     */
-    export const enum ExtensionPriority {
-        TypeScriptFiles = 0,
-        DeclarationAndJavaScriptFiles = 2,
-        Limit = 5,
-
-        Highest = TypeScriptFiles,
-        Lowest = DeclarationAndJavaScriptFiles,
-    }
-
-    export function getExtensionPriority(path: string, supportedExtensions: string[]): ExtensionPriority {
-        for (let i = supportedExtensions.length - 1; i >= 0; i--) {
-            if (fileExtensionIs(path, supportedExtensions[i])) {
-                return adjustExtensionPriority(<ExtensionPriority>i);
+    export function getExtensionPriority(path: string, supportedExtensions: PrioritizedExtensionCollection): PrioritizedExtensionCollection {
+        const extensions = getExtensionsForCollection(supportedExtensions);
+        for (let i = extensions.length - 1; i >= 0; i--) {
+            if (fileExtensionIs(path, extensions[i])) {
+                return adjustExtensionPriority(reverseExtensionMap[extensions[i]]);
             }
         }
 
         // If its not in the list of supported extensions, this is likely a
         // TypeScript file with a non-ts extension
-        return ExtensionPriority.Highest;
+        return PrioritizedExtensionCollection.HighestPriority;
     }
 
     /**
      * Adjusts an extension priority to be the highest priority within the same range.
      */
-    export function adjustExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
-        if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
-            return ExtensionPriority.TypeScriptFiles;
+    export function adjustExtensionPriority(prioritizedExtension: PrioritizedExtensionCollection): PrioritizedExtensionCollection {
+        if (prioritizedExtension < PrioritizedExtensionCollection.SecondPriority) {
+            return PrioritizedExtensionCollection.FirstPriority;
         }
-        else if (extensionPriority < ExtensionPriority.Limit) {
-            return ExtensionPriority.DeclarationAndJavaScriptFiles;
+        else if (prioritizedExtension < PrioritizedExtensionCollection.LowestPriority) {
+            return PrioritizedExtensionCollection.SecondPriority;
         }
         else {
-            return ExtensionPriority.Limit;
+            return PrioritizedExtensionCollection.LowestPriority;
         }
     }
 
     /**
      * Gets the next lowest extension priority for a given priority.
      */
-    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
-        if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
-            return ExtensionPriority.DeclarationAndJavaScriptFiles;
+    export function getNextLowestExtensionPriority(prioritizedExtension: PrioritizedExtensionCollection): PrioritizedExtensionCollection {
+        if (prioritizedExtension < PrioritizedExtensionCollection.SecondPriority) {
+            return PrioritizedExtensionCollection.SecondPriority;
         }
         else {
-            return ExtensionPriority.Limit;
+            return PrioritizedExtensionCollection.LowestPriority;
         }
     }
 

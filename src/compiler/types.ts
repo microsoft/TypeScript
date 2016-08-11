@@ -3006,4 +3006,25 @@ namespace ts {
     export interface SyntaxList extends Node {
         _children: Node[];
     }
+
+    /* @internal */
+    export const enum PrioritizedExtensionCollection {
+        None    =      0,
+        TS      = 1 << 0,
+        TSX     = 1 << 1,
+        DTS     = 1 << 2,
+        JS      = 1 << 3,
+        JSX     = 1 << 4,
+        Unknown = 1 << 5,
+
+        JSXLike = JSX | TSX,
+        TypeScript = TS | TSX | DTS,
+        JavaScript = JS | JSX,
+        Any = TypeScript | JavaScript,
+
+        FirstPriority = TS,
+        SecondPriority = DTS,
+        HighestPriority = FirstPriority,
+        LowestPriority = Unknown,
+    }
 }

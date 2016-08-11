@@ -981,7 +981,8 @@ namespace ts {
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
-        const supportedExtensions = getSupportedExtensions(options);
+        const resolvedExtensions = getExtensionCollectionForCompilerOptions(options);
+        const supportedExtensions = getExtensionsForCollection(resolvedExtensions);
 
         // Literal files are always included verbatim. An "include" or "exclude" specification cannot
         // remove a literal file.
@@ -1000,7 +1001,7 @@ namespace ts {
                 // This handles cases where we may encounter both <file>.ts and
                 // <file>.d.ts (or <file>.js if "allowJs" is enabled) in the same
                 // directory when they are compilation outputs.
-                if (hasFileWithHigherPriorityExtension(file, literalFileMap, wildcardFileMap, supportedExtensions, keyMapper)) {
+                if (hasFileWithHigherPriorityExtension(file, literalFileMap, wildcardFileMap, resolvedExtensions, keyMapper)) {
                     continue;
                 }
 
@@ -1008,7 +1009,7 @@ namespace ts {
                 // extension due to the user-defined order of entries in the
                 // "include" array. If there is a lower priority extension in the
                 // same directory, we should remove it.
-                removeWildcardFilesWithLowerPriorityExtension(file, wildcardFileMap, supportedExtensions, keyMapper);
+                removeWildcardFilesWithLowerPriorityExtension(file, wildcardFileMap, resolvedExtensions, keyMapper);
 
                 const key = keyMapper(file);
                 if (!hasProperty(literalFileMap, key) && !hasProperty(wildcardFileMap, key)) {
@@ -1109,11 +1110,11 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string>, wildcardFiles: Map<string>, extensions: string[], keyMapper: (value: string) => string) {
+    function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string>, wildcardFiles: Map<string>, extensions: PrioritizedExtensionCollection, keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority);
-        for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
-            const higherPriorityExtension = extensions[i];
+        for (let i = PrioritizedExtensionCollection.HighestPriority; i < adjustedExtensionPriority; i <<= 1) {
+            const higherPriorityExtension = extensionMap[i];
             const higherPriorityPath = keyMapper(changeExtension(file, higherPriorityExtension));
             if (hasProperty(literalFiles, higherPriorityPath) || hasProperty(wildcardFiles, higherPriorityPath)) {
                 return true;
@@ -1131,11 +1132,11 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string>, extensions: string[], keyMapper: (value: string) => string) {
+    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string>, extensions: PrioritizedExtensionCollection, keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority);
-        for (let i = nextExtensionPriority; i < extensions.length; i++) {
-            const lowerPriorityExtension = extensions[i];
+        for (let i = nextExtensionPriority; i < PrioritizedExtensionCollection.LowestPriority; i <<= 1) {
+            const lowerPriorityExtension = extensionMap[i];
             const lowerPriorityPath = keyMapper(changeExtension(file, lowerPriorityExtension));
             delete wildcardFiles[lowerPriorityPath];
         }

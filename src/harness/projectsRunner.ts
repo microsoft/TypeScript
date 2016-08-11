@@ -29,6 +29,7 @@ interface CompileProjectFilesResult {
     compilerOptions?: ts.CompilerOptions;
     errors: ts.Diagnostic[];
     sourceMapData?: ts.SourceMapData[];
+    traces?: string[];
 }
 
 interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
@@ -130,6 +131,7 @@ class ProjectRunner extends RunnerBase {
             writeFile: (fileName: string, data: string, writeByteOrderMark: boolean) => void,
             compilerOptions: ts.CompilerOptions): CompileProjectFilesResult {
 
+            const traces: string[] = [];
             const program = ts.createProgram(getInputFiles(), compilerOptions, createCompilerHost());
             let errors = ts.getPreEmitDiagnostics(program);
 
@@ -152,7 +154,8 @@ class ProjectRunner extends RunnerBase {
                 moduleKind,
                 program,
                 errors,
-                sourceMapData
+                sourceMapData,
+                traces
             };
 
             function getSourceFileText(fileName: string): string {
@@ -175,6 +178,10 @@ class ProjectRunner extends RunnerBase {
                 return sourceFile;
             }
 
+            function trace(s: string) {
+                traces.push(s);
+            }
+
             function createCompilerHost(): ts.CompilerHost {
                 return {
                     getSourceFile,
@@ -186,7 +193,8 @@ class ProjectRunner extends RunnerBase {
                     getNewLine: () => Harness.IO.newLine(),
                     fileExists: fileName => fileName === Harness.Compiler.defaultLibFileName ||  getSourceFileText(fileName) !== undefined,
                     readFile: fileName => Harness.IO.readFile(fileName),
-                    getDirectories: path => Harness.IO.getDirectories(path)
+                    getDirectories: path => Harness.IO.getDirectories(path),
+                    trace,
                 };
             }
         }
@@ -242,6 +250,7 @@ class ProjectRunner extends RunnerBase {
                 sourceMapData: projectCompilerResult.sourceMapData,
                 outputFiles,
                 errors: projectCompilerResult.errors,
+                traces: projectCompilerResult.traces
             };
 
             function createCompilerOptions() {
@@ -500,6 +509,14 @@ class ProjectRunner extends RunnerBase {
                             if (errs.length) {
                                 throw Error(errs.join("\n     "));
                             }
+                        }
+                    });
+
+                    it("Trace of result (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
+                        if (testCase.traceResolution) {
+                            Harness.Baseline.runBaseline("Baseline of traces (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".trace.txt", () => {
+                                return ts.map((compilerResult.traces || []), (s) => s.replace(/\'([^']*?(\/|\\)tests(\/|\\)cases(\/|\\)projects(\/|\\))/, "'")).join("\n");
+                            });
                         }
                     });
 
