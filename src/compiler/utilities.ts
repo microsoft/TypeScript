@@ -1393,6 +1393,7 @@ namespace ts {
 
     export function getJSDocComments(node: Node, checkParentVariableStatement: boolean): JSDocComment[] {
         // TODO: Get rid of getJsDocComments and friends (note the lowercase 's' in Js)
+        // TODO: A lot of this work should be cached, maybe. I guess it's only used in services right now...
         let result: JSDocComment[] = undefined;
         // prepend documentation from parent sources
         if (checkParentVariableStatement) {
@@ -1431,15 +1432,23 @@ namespace ts {
 
             // Pull parameter comments from declaring function as well
             if (node.kind === SyntaxKind.Parameter) {
-                const func = node.parent as FunctionLikeDeclaration;
-                const comments = getJSDocComments(func, checkParentVariableStatement);
-                const parameters = concatMap(comments, comment => filter(comment.tags, tag => tag.kind === SyntaxKind.JSDocParameterTag));
-                // TODO: Use name instead of index
-                const i = indexOf(func.parameters, node);
-                if (parameters && i < parameters.length) {
-                    Debug.assert(i > -1);
-                    Debug.assert(!!parameters[i]);
-                    result = append(result, [parameters[i]]);
+                const param = node as ParameterDeclaration;
+                if (param.name.kind === SyntaxKind.Identifier) {
+                    const name = (param.name as Identifier).text;
+                    const func = node.parent as FunctionLikeDeclaration;
+                    const comments = getJSDocComments(func, checkParentVariableStatement);
+                    const paramTag = forEach(comments, c =>
+                                             forEach(c.tags,
+                                                     tag => tag.kind === SyntaxKind.JSDocParameterTag && (tag as JSDocParameterTag).parameterName.text === name ?
+                                                         tag as JSDocParameterTag :
+                                                         undefined));
+                    if (paramTag) {
+                        result = append(result, [paramTag]);
+                    }
+                }
+                else {
+                    // TODO: it's a destructured parameter, so it should look up an "object type" series of multiple lines
+                    // But multi-line object types aren't supported yet either
                 }
             }
         }

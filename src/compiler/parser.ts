@@ -6465,6 +6465,7 @@ namespace ts {
                     result.preParameterName = preName;
                     result.typeExpression = typeExpression;
                     result.postParameterName = postName;
+                    result.parameterName = postName || preName;
                     result.isBracketed = isBracketed;
                     return finishNode(result);
                 }

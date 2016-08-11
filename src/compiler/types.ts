@@ -1554,9 +1554,13 @@ namespace ts {
 
     // @kind(SyntaxKind.JSDocParameterTag)
     export interface JSDocParameterTag extends JSDocTag {
+        /** the parameter name, if provided *before* the type (TypeScript-style) */
         preParameterName?: Identifier;
         typeExpression?: JSDocTypeExpression;
+        /** the parameter name, if provided *after* the type (JSDoc-standard) */
         postParameterName?: Identifier;
+        /** the parameter name, regardless of the location it was provided */
+        parameterName: Identifier;
         isBracketed: boolean;
     }
 
