@@ -7924,6 +7924,14 @@ namespace ts {
             return result;
         }
 
+        function isFunctionObjectType(type: ObjectType): boolean {
+            // We do a quick check for a "bind" property before performing the more expensive subtype
+            // check. This gives us a quicker out in the common case where an object type is not a function.
+            const resolved = resolveStructuredTypeMembers(type);
+            return !!(resolved.callSignatures.length || resolved.constructSignatures.length ||
+                hasProperty(resolved.members, "bind") && isTypeSubtypeOf(type, globalFunctionType));
+        }
+
         function getTypeFacts(type: Type): TypeFacts {
             const flags = type.flags;
             if (flags & TypeFlags.String) {
@@ -7952,8 +7960,7 @@ namespace ts {
                     type === falseType ? TypeFacts.FalseFacts : TypeFacts.TrueFacts;
             }
             if (flags & TypeFlags.ObjectType) {
-                const resolved = resolveStructuredTypeMembers(type);
-                return resolved.callSignatures.length || resolved.constructSignatures.length || isTypeSubtypeOf(type, globalFunctionType) ?
+                return isFunctionObjectType(<ObjectType>type) ?
                     strictNullChecks ? TypeFacts.FunctionStrictFacts : TypeFacts.FunctionFacts :
                     strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
             }
@@ -7980,23 +7987,23 @@ namespace ts {
             if (!(type.flags & TypeFlags.Union)) {
                 return getTypeFacts(type) & include ? type : neverType;
             }
-            let firstType: Type;
-            let types: Type[];
-            for (const t of (type as UnionType).types) {
-                if (getTypeFacts(t) & include) {
-                    if (!firstType) {
-                        firstType = t;
-                    }
-                    else {
-                        if (!types) {
-                            types = [firstType];
-                        }
-                        types.push(t);
-                    }
-                }
+            const types = (<UnionType>type).types;
+            const length = types.length;
+            let i = 0;
+            while (i < length && getTypeFacts(types[i]) & include) i++;
+            if (i === length) {
+                return type;
             }
-            return types ? getUnionType(types) :
-                firstType ? firstType : neverType;
+            const filtered = types.slice(0, i);
+            i++;
+            while (i < length) {
+                const t = types[i];
+                if (getTypeFacts(t) & include) {
+                    filtered.push(t);
+                }
+                i++;
+            }
+            return getUnionType(filtered);
         }
 
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
@@ -8175,14 +8182,14 @@ namespace ts {
             if (!(type.flags & TypeFlags.Union)) {
                 return f(type) ? type : neverType;
             }
-            let types = (<UnionType>type).types;
-            let length = types.length;
+            const types = (<UnionType>type).types;
+            const length = types.length;
             let i = 0;
             while (i < length && f(types[i])) i++;
             if (i === length) {
                 return type;
             }
-            let filtered = types.slice(0, i);
+            const filtered = types.slice(0, i);
             i++;
             while (i < length) {
                 const t = types[i];
