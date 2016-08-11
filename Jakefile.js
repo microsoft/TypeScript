@@ -759,7 +759,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     if(!runInParallel) {
         tests = tests ? ' -g "' + tests + '"' : '';
-        var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + bail + ' -t ' + testTimeout + ' ' + run;
+        var cmd = "mocha -gc" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + bail + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
 
         var savedNodeEnv = process.env.NODE_ENV;
