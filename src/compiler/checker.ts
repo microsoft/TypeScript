@@ -8172,9 +8172,26 @@ namespace ts {
         }
 
         function filterType(type: Type, f: (t: Type) => boolean): Type {
-            return type.flags & TypeFlags.Union ?
-                getUnionType(filter((<UnionType>type).types, f)) :
-                f(type) ? type : neverType;
+            if (!(type.flags & TypeFlags.Union)) {
+                return f(type) ? type : neverType;
+            }
+            let types = (<UnionType>type).types;
+            let length = types.length;
+            let i = 0;
+            while (i < length && f(types[i])) i++;
+            if (i === length) {
+                return type;
+            }
+            let filtered = types.slice(0, i);
+            i++;
+            while (i < length) {
+                const t = types[i];
+                if (f(t)) {
+                    filtered.push(t);
+                }
+                i++;
+            }
+            return getUnionType(filtered);
         }
 
         function isIncomplete(flowType: FlowType) {
