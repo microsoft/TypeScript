@@ -6383,7 +6383,6 @@ namespace ts {
 
                 function tryParseTypeExpression(): JSDocTypeExpression {
                     // TODO: @ should stop parsing immediately because it's the start of a new tag
-                    // TODO: Newline should stop type parsing (AND not consume tokens?). I don't like newlines.
                     if (token !== SyntaxKind.OpenBraceToken) {
                         return undefined;
                     }
