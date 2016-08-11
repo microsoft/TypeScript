@@ -778,6 +778,19 @@ namespace ts {
 
         return;
 
+        function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string | number> | undefined {
+            if (optionDefinition.type === "string" || optionDefinition.type === "number" || optionDefinition.type === "boolean") {
+                // this is of a type CommandLineOptionOfPrimitiveType
+                return undefined;
+            }
+            else if (optionDefinition.type === "list") {
+                return getCustomTypeMapOfCommandLineOption((<CommandLineOptionOfListType>optionDefinition).element);
+            }
+            else {
+                return (<CommandLineOptionOfCustomType>optionDefinition).type
+            }
+        }
+
         function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
             const result: Map<string | number | boolean> = {};
             const optionsNameMap = getOptionNameMap().optionNameMap;
@@ -786,7 +799,6 @@ namespace ts {
                 if (hasProperty(options, name)) {
                     // tsconfig only options cannot be specified via command line,
                     // so we can assume that only types that can appear here string | number | boolean
-                    const value = <string | number | boolean>options[name];
                     switch (name) {
                         case "init":
                         case "watch":
@@ -795,20 +807,26 @@ namespace ts {
                         case "project":
                             break;
                         default:
+                            const value = options[name];
                             let optionDefinition = optionsNameMap[name.toLowerCase()];
                             if (optionDefinition) {
-                                if (typeof optionDefinition.type === "string") {
-                                    // string, number or boolean
-                                    result[name] = value;
+                                const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
+                                if (!customTypeMap) {
+                                    // optionDefinition.type is "string" | "number" | "boolean" then use the value as-is
+                                    result[name] = <string | number | boolean> value;
                                 }
                                 else {
-                                    // Enum
-                                    const typeMap = <Map<number>>optionDefinition.type;
-                                    for (const key in typeMap) {
-                                        if (hasProperty(typeMap, key)) {
-                                            if (typeMap[key] === value)
-                                                result[name] = key;
+                                    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+                                        // There is a typeMap associated with this command-line option so use it  to map value back to its name
+                                        for (const key in customTypeMap) {
+                                            if (hasProperty(customTypeMap, key)) {
+                                                if (customTypeMap[key] === value)
+                                                    result[name] = key;
+                                            }
                                         }
+                                    }
+                                    else {
+                                        // The value is of type list
                                     }
                                 }
                             }
