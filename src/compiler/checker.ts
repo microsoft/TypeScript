@@ -7852,7 +7852,7 @@ namespace ts {
             if (type && type.flags & TypeFlags.Union) {
                 let prop = getPropertyOfType(type, name);
                 if (!prop) {
-                    // The type may be a union that includes nullable or primtive types. If filtering
+                    // The type may be a union that includes nullable or primitive types. If filtering
                     // those out produces a different type, get the property from that type instead.
                     // Effectively, we're checking if this *could* be a discriminant property once nullable
                     // and primitive types are removed by other type guards.
@@ -7915,10 +7915,10 @@ namespace ts {
         // For example, when a variable of type number | string | boolean is assigned a value of type number | boolean,
         // we remove type string.
         function getAssignmentReducedType(declaredType: UnionType, assignedType: Type) {
-            if (declaredType !== assignedType && declaredType.flags & TypeFlags.Union) {
-                const reducedTypes = filter(declaredType.types, t => typeMaybeAssignableTo(assignedType, t));
-                if (reducedTypes.length) {
-                    return reducedTypes.length === 1 ? reducedTypes[0] : getUnionType(reducedTypes);
+            if (declaredType !== assignedType) {
+                const reducedType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
+                if (reducedType !== neverType) {
+                    return reducedType;
                 }
             }
             return declaredType;
@@ -7992,26 +7992,7 @@ namespace ts {
         }
 
         function getTypeWithFacts(type: Type, include: TypeFacts) {
-            if (!(type.flags & TypeFlags.Union)) {
-                return getTypeFacts(type) & include ? type : neverType;
-            }
-            const types = (<UnionType>type).types;
-            const length = types.length;
-            let i = 0;
-            while (i < length && getTypeFacts(types[i]) & include) i++;
-            if (i === length) {
-                return type;
-            }
-            const filtered = types.slice(0, i);
-            i++;
-            while (i < length) {
-                const t = types[i];
-                if (getTypeFacts(t) & include) {
-                    filtered.push(t);
-                }
-                i++;
-            }
-            return getUnionType(filtered);
+            return filterType(type, t => (getTypeFacts(t) & include) !== 0);
         }
 
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
@@ -8191,22 +8172,8 @@ namespace ts {
                 return f(type) ? type : neverType;
             }
             const types = (<UnionType>type).types;
-            const length = types.length;
-            let i = 0;
-            while (i < length && f(types[i])) i++;
-            if (i === length) {
-                return type;
-            }
-            const filtered = types.slice(0, i);
-            i++;
-            while (i < length) {
-                const t = types[i];
-                if (f(t)) {
-                    filtered.push(t);
-                }
-                i++;
-            }
-            return getUnionType(filtered);
+            const filtered = filter(types, f);
+            return filtered === types ? type : getUnionType(filtered);
         }
 
         function isIncomplete(flowType: FlowType) {
@@ -8544,7 +8511,7 @@ namespace ts {
                 }
                 if (assumeTrue && !(type.flags & TypeFlags.Union)) {
                     // We narrow a non-union type to an exact primitive type if the non-union type
-                    // is a supertype of that primtive type. For example, type 'any' can be narrowed
+                    // is a supertype of that primitive type. For example, type 'any' can be narrowed
                     // to one of the primitive types.
                     const targetType = getProperty(typeofTypesByName, literal.text);
                     if (targetType && isTypeSubtypeOf(targetType, type)) {
@@ -8633,9 +8600,9 @@ namespace ts {
                 // If the current type is a union type, remove all constituents that couldn't be instances of
                 // the candidate type. If one or more constituents remain, return a union of those.
                 if (type.flags & TypeFlags.Union) {
-                    const assignableConstituents = filter((<UnionType>type).types, t => isTypeInstanceOf(t, candidate));
-                    if (assignableConstituents.length) {
-                        return getUnionType(assignableConstituents);
+                    const assignableType = filterType(type, t => isTypeInstanceOf(t, candidate));
+                    if (assignableType !== neverType) {
+                        return assignableType;
                     }
                 }
                 // If the candidate type is a subtype of the target type, narrow to the candidate type.
