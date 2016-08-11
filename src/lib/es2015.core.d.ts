@@ -226,7 +226,7 @@ interface NumberConstructor {
     /**
       * The value of the largest integer n such that n and n + 1 are both exactly representable as
       * a Number value.
-      * The value of Number.MIN_SAFE_INTEGER is 9007199254740991 2^53 − 1.
+      * The value of Number.MAX_SAFE_INTEGER is 9007199254740991 2^53 − 1.
       */
     readonly MAX_SAFE_INTEGER: number;
 
@@ -341,6 +341,30 @@ interface ObjectConstructor {
       *  property.
       */
     defineProperty(o: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): any;
+}
+
+interface ReadonlyArray<T> {
+  /**
+    * Returns the value of the first element in the array where predicate is true, and undefined
+    * otherwise.
+    * @param predicate find calls predicate once for each element of the array, in ascending
+    * order, until it finds one where predicate returns true. If such an element is found, find
+    * immediately returns that element value. Otherwise, find returns undefined.
+    * @param thisArg If provided, it will be used as the this value for each invocation of
+    * predicate. If it is not provided, undefined is used instead.
+    */
+  find(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg?: any): T | undefined;
+
+  /**
+    * Returns the index of the first element in the array where predicate is true, and undefined
+    * otherwise.
+    * @param predicate find calls predicate once for each element of the array, in ascending
+    * order, until it finds one where predicate returns true. If such an element is found, 
+    * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
+    * @param thisArg If provided, it will be used as the this value for each invocation of
+    * predicate. If it is not provided, undefined is used instead.
+    */
+  findIndex(predicate: (value: T) => boolean, thisArg?: any): number;
 }
 
 interface RegExp {

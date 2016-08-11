@@ -193,10 +193,10 @@ function f1() {
 >x : undefined
 
         x;  // string | number (guard as assertion)
->x : string | number
+>x : never
     }
     x;  // string | number | undefined
->x : string | number | undefined
+>x : undefined
 }
 
 function f2() {
@@ -216,10 +216,10 @@ function f2() {
 >"string" : "string"
 
         x;  // string (guard as assertion)
->x : string
+>x : never
     }
     x;  // string | undefined
->x : string | undefined
+>x : undefined
 }
 
 function f3() {
@@ -239,7 +239,7 @@ function f3() {
         return;
     }
     x;  // string | number (guard as assertion)
->x : string | number
+>x : never
 }
 
 function f4() {
@@ -281,7 +281,7 @@ function f5(x: string | number) {
 >"number" : "number"
 
         x;  // number (guard as assertion)
->x : number
+>x : never
     }
     else {
         x;  // string | number

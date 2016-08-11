@@ -1,0 +1,14 @@
+tests/cases/compiler/genericClassInheritsConstructorFromNonGenericClass.ts(1,17): error TS2690: A class must be declared after its base class.
+tests/cases/compiler/genericClassInheritsConstructorFromNonGenericClass.ts(2,20): error TS2690: A class must be declared after its base class.
+
+
+==== tests/cases/compiler/genericClassInheritsConstructorFromNonGenericClass.ts (2 errors) ====
+    class A extends B<string> { }
+                    ~~~~~~~~~
+!!! error TS2690: A class must be declared after its base class.
+    class B<U> extends C { }
+                       ~
+!!! error TS2690: A class must be declared after its base class.
+    class C {
+        constructor(p: string) { }
+    }
