@@ -35,6 +35,7 @@ import merge2 = require("merge2");
 import intoStream = require("into-stream");
 import * as os from "os";
 import Linter = require("tslint");
+import fold = require("travis-fold");
 const gulp = helpMaker(originalGulp);
 const mochaParallel = require("./scripts/mocha-parallel.js");
 const {runTestsInParallel} = mochaParallel;
@@ -964,6 +965,7 @@ gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: 
     const fileMatcher = RegExp(cmdLineOptions["files"]);
     const lintOptions = getLinterOptions();
     let failed = 0;
+    if (fold.isTravis()) console.log(fold.start("lint"));
     return gulp.src(lintTargets)
         .pipe(insert.transform((contents, file) => {
             if (!fileMatcher.test(file.path)) return contents;
@@ -975,6 +977,7 @@ gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: 
             return contents; // TODO (weswig): Automatically apply fixes? :3
         }))
         .on("end", () => {
+            if (fold.isTravis()) console.log(fold.end("lint"));
             if (failed > 0) {
                 console.error("Linter errors.");
                 process.exit(1);
