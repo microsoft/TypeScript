@@ -2371,6 +2371,7 @@ namespace ts {
 
     export interface TupleType extends ObjectType {
         elementTypes: Type[];  // Element types
+        thisType?: Type;       // This-type of tuple (only needed for tuples that are constraints of type parameters)
     }
 
     export interface UnionOrIntersectionType extends Type {

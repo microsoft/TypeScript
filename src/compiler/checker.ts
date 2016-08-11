@@ -1538,8 +1538,8 @@ namespace ts {
 
         function createType(flags: TypeFlags): Type {
             const result = new Type(checker, flags);
-            result.id = typeCount;
             typeCount++;
+            result.id = typeCount;
             return result;
         }
 
@@ -4000,6 +4000,9 @@ namespace ts {
                 return createTypeReference((<TypeReference>type).target,
                     concatenate((<TypeReference>type).typeArguments, [thisArgument || (<TypeReference>type).target.thisType]));
             }
+            if (type.flags & TypeFlags.Tuple) {
+                return createTupleType((type as TupleType).elementTypes, thisArgument);
+            }
             return type;
         }
 
@@ -4103,7 +4106,8 @@ namespace ts {
         function resolveTupleTypeMembers(type: TupleType) {
             const arrayElementType = getUnionType(type.elementTypes);
             // Make the tuple type itself the 'this' type by including an extra type argument
-            const arrayType = resolveStructuredTypeMembers(createTypeFromGenericGlobalType(globalArrayType, [arrayElementType, type]));
+            // (Unless it's provided in the case that the tuple is a type parameter constraint)
+            const arrayType = resolveStructuredTypeMembers(createTypeFromGenericGlobalType(globalArrayType, [arrayElementType, type.thisType || type]));
             const members = createTupleTypeMemberSymbols(type.elementTypes);
             addInheritedMembers(members, arrayType.properties);
             setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexInfo, arrayType.numberIndexInfo);
@@ -5230,15 +5234,16 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function createTupleType(elementTypes: Type[]) {
-            const id = getTypeListId(elementTypes);
-            return tupleTypes[id] || (tupleTypes[id] = createNewTupleType(elementTypes));
+        function createTupleType(elementTypes: Type[], thisType?: Type) {
+            const id = getTypeListId(elementTypes) + "," + (thisType ? thisType.id : 0);
+            return tupleTypes[id] || (tupleTypes[id] = createNewTupleType(elementTypes, thisType));
         }
 
-        function createNewTupleType(elementTypes: Type[]) {
+        function createNewTupleType(elementTypes: Type[], thisType?: Type) {
             const propagatedFlags = getPropagatingFlagsOfTypes(elementTypes, /*excludeKinds*/ 0);
             const type = <TupleType>createObjectType(TypeFlags.Tuple | propagatedFlags);
             type.elementTypes = elementTypes;
+            type.thisType = thisType;
             return type;
         }
 
