@@ -7858,7 +7858,7 @@ namespace ts {
                     // and primitive types are removed by other type guards.
                     const filteredType = getTypeWithFacts(type, TypeFacts.Discriminatable);
                     if (filteredType !== type && filteredType.flags & TypeFlags.Union) {
-                        prop = getPropertyOfType(type, name);
+                        prop = getPropertyOfType(filteredType, name);
                     }
                 }
                 if (prop && prop.flags & SymbolFlags.SyntheticProperty) {
