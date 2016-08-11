@@ -52,7 +52,7 @@ function importDefinitelyTypedTest(tscPath: string, rwcTestPath: string, testCas
         cmd += " @" + responseFile;
     }
 
-    let testDirectoryName = testCaseName + "_" + Math.floor((Math.random() * 10000) + 1); 
+    let testDirectoryName = testCaseName + "_" + Math.floor((Math.random() * 10000) + 1);
     let testDirectoryPath = path.join(process.env["temp"], testDirectoryName);
     if (fs.existsSync(testDirectoryPath)) {
         throw new Error("Could not create test directory");

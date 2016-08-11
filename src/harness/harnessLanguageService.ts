@@ -123,7 +123,7 @@ namespace Harness.LanguageService {
     }
 
     export class LanguageServiceAdapterHost {
-        protected fileNameToScript: ts.Map<ScriptInfo> = {};
+        protected fileNameToScript = new ts.StringMap<ScriptInfo>();
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
                     protected settings = ts.getDefaultCompilerOptions()) {
@@ -135,7 +135,7 @@ namespace Harness.LanguageService {
 
         public getFilenames(): string[] {
             const fileNames: string[] = [];
-            ts.forEachValue(this.fileNameToScript, (scriptInfo) => {
+            this.fileNameToScript.forEach(scriptInfo => {
                 if (scriptInfo.isRootFile) {
                     // only include root files here
                     // usually it means that we won't include lib.d.ts in the list of root files so it won't mess the computation of compilation root dir.
@@ -146,11 +146,11 @@ namespace Harness.LanguageService {
         }
 
         public getScriptInfo(fileName: string): ScriptInfo {
-            return ts.lookUp(this.fileNameToScript, fileName);
+            return this.fileNameToScript.get(fileName);
         }
 
         public addScript(fileName: string, content: string, isRootFile: boolean): void {
-            this.fileNameToScript[fileName] = new ScriptInfo(fileName, content, isRootFile);
+            this.fileNameToScript.set(fileName, new ScriptInfo(fileName, content, isRootFile));
         }
 
         public editScript(fileName: string, start: number, end: number, newText: string) {
@@ -171,7 +171,7 @@ namespace Harness.LanguageService {
           * @param col 0 based index
           */
         public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
-            const script: ScriptInfo = this.fileNameToScript[fileName];
+            const script: ScriptInfo = this.fileNameToScript.get(fileName);
             assert.isOk(script);
 
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);

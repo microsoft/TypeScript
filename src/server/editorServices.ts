@@ -18,10 +18,9 @@ namespace ts.server {
     const lineCollectionCapacity = 4;
 
     function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
-        const hasOwnProperty = Object.prototype.hasOwnProperty;
-        Object.keys(formatOptions).forEach((key) => {
+        forEachKey(formatOptions, key => {
             const codeKey = key.charAt(0).toUpperCase() + key.substring(1);
-            if (hasOwnProperty.call(formatCodeOptions, codeKey)) {
+            if (hasProperty(formatCodeOptions, codeKey)) {
                 formatCodeOptions[codeKey] = formatOptions[key];
             }
         });
@@ -100,15 +99,15 @@ namespace ts.server {
         filenameToScript: ts.FileMap<ScriptInfo>;
         roots: ScriptInfo[] = [];
 
-        private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;
-        private resolvedTypeReferenceDirectives: ts.FileMap<Map<TimestampedResolvedTypeReferenceDirective>>;
+        private resolvedModuleNames: ts.FileMap<ts.StringMap<TimestampedResolvedModule>>;
+        private resolvedTypeReferenceDirectives: ts.FileMap<ts.StringMap<TimestampedResolvedTypeReferenceDirective>>;
         private moduleResolutionHost: ts.ModuleResolutionHost;
         private getCanonicalFileName: (fileName: string) => string;
 
         constructor(public host: ServerHost, public project: Project) {
             this.getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
-            this.resolvedModuleNames = createFileMap<Map<TimestampedResolvedModule>>();
-            this.resolvedTypeReferenceDirectives = createFileMap<Map<TimestampedResolvedTypeReferenceDirective>>();
+            this.resolvedModuleNames = createFileMap<ts.StringMap<TimestampedResolvedModule>>();
+            this.resolvedTypeReferenceDirectives = createFileMap<ts.StringMap<TimestampedResolvedTypeReferenceDirective>>();
             this.filenameToScript = createFileMap<ScriptInfo>();
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
@@ -123,22 +122,22 @@ namespace ts.server {
         private resolveNamesWithLocalCache<T extends Timestamped & { failedLookupLocations: string[] }, R>(
             names: string[],
             containingFile: string,
-            cache: ts.FileMap<Map<T>>,
+            cache: ts.FileMap<ts.StringMap<T>>,
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
             getResult: (s: T) => R): R[] {
 
             const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const currentResolutionsInFile = cache.get(path);
 
-            const newResolutions: Map<T> = {};
+            const newResolutions = new ts.StringMap<T>();
             const resolvedModules: R[] = [];
             const compilerOptions = this.getCompilationSettings();
 
             for (const name of names) {
                 // check if this is a duplicate entry in the list
-                let resolution = lookUp(newResolutions, name);
+                let resolution = newResolutions.get(name);
                 if (!resolution) {
-                    const existingResolution = currentResolutionsInFile && ts.lookUp(currentResolutionsInFile, name);
+                    const existingResolution = currentResolutionsInFile && currentResolutionsInFile.get(name);
                     if (moduleResolutionIsValid(existingResolution)) {
                         // ok, it is safe to use existing name resolution results
                         resolution = existingResolution;
@@ -146,7 +145,7 @@ namespace ts.server {
                     else {
                         resolution = loader(name, containingFile, compilerOptions, this.moduleResolutionHost);
                         resolution.lastCheckTime = Date.now();
-                        newResolutions[name] = resolution;
+                        newResolutions.set(name, resolution);
                     }
                 }
 
@@ -378,7 +377,7 @@ namespace ts.server {
     export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
-        wildcardDirectories?: ts.Map<ts.WatchDirectoryFlags>;
+        wildcardDirectories?: Map<ts.WatchDirectoryFlags>;
         compilerOptions?: ts.CompilerOptions;
     }
 
@@ -1124,7 +1123,7 @@ namespace ts.server {
 
         getScriptInfo(filename: string) {
             filename = ts.normalizePath(filename);
-            return ts.lookUp(this.filenameToScriptInfo, filename);
+            return ts.getProperty(this.filenameToScriptInfo, filename);
         }
 
         /**
@@ -1133,7 +1132,7 @@ namespace ts.server {
          */
         openFile(fileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
             fileName = ts.normalizePath(fileName);
-            let info = ts.lookUp(this.filenameToScriptInfo, fileName);
+            let info = ts.getProperty(this.filenameToScriptInfo, fileName);
             if (!info) {
                 let content: string;
                 if (this.host.fileExists(fileName)) {
@@ -1246,7 +1245,7 @@ namespace ts.server {
          * @param filename is absolute pathname
          */
         closeClientFile(filename: string) {
-            const info = ts.lookUp(this.filenameToScriptInfo, filename);
+            const info = ts.getProperty(this.filenameToScriptInfo, filename);
             if (info) {
                 this.closeOpenFile(info);
                 info.isOpen = false;
@@ -1255,14 +1254,14 @@ namespace ts.server {
         }
 
         getProjectForFile(filename: string) {
-            const scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
+            const scriptInfo = ts.getProperty(this.filenameToScriptInfo, filename);
             if (scriptInfo) {
                 return scriptInfo.defaultProject;
             }
         }
 
         printProjectsForFile(filename: string) {
-            const scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
+            const scriptInfo = ts.getProperty(this.filenameToScriptInfo, filename);
             if (scriptInfo) {
                 this.psLogger.startGroup();
                 this.psLogger.info("Projects for " + filename);

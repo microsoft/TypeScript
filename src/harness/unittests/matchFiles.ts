@@ -418,9 +418,7 @@ namespace ts {
                         "c:/dev/b.ts",
                         "c:/dev/c.d.ts"
                     ],
-                    wildcardDirectories: {
-                        "c:/dev": ts.WatchDirectoryFlags.None
-                    },
+                   wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.None },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -441,9 +439,7 @@ namespace ts {
                         "c:/dev/b.ts",
                         "c:/dev/c.d.ts"
                     ],
-                    wildcardDirectories: {
-                        "c:/dev": ts.WatchDirectoryFlags.None
-                    },
+                   wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.None },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -463,9 +459,7 @@ namespace ts {
                         "c:/dev/x/a.ts",
                         "c:/dev/x/b.ts"
                     ],
-                    wildcardDirectories: {
-                        "c:/dev/x": ts.WatchDirectoryFlags.None
-                    },
+                    wildcardDirectories: { "c:/dev/x": ts.WatchDirectoryFlags.None },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -487,9 +481,7 @@ namespace ts {
                         "c:/dev/x/y/a.ts",
                         "c:/dev/z/a.ts"
                     ],
-                    wildcardDirectories: {
-                        "c:/dev": ts.WatchDirectoryFlags.Recursive
-                    },
+                    wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.Recursive },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -534,9 +526,7 @@ namespace ts {
                     fileNames: [
                         "/dev/A.ts"
                     ],
-                    wildcardDirectories: {
-                        "/dev": ts.WatchDirectoryFlags.Recursive
-                    },
+                    wildcardDirectories: { "/dev": ts.WatchDirectoryFlags.Recursive },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseSensitiveHost, caseSensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -553,9 +543,7 @@ namespace ts {
                     options: {},
                     errors: [],
                     fileNames: [],
-                    wildcardDirectories: {
-                        "c:/dev": ts.WatchDirectoryFlags.Recursive
-                    },
+                    wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.Recursive },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -580,9 +568,7 @@ namespace ts {
                     fileNames: [
                         "c:/dev/a.ts"
                     ],
-                    wildcardDirectories: {
-                        "c:/dev": ts.WatchDirectoryFlags.Recursive
-                    },
+                    wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.Recursive },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -607,9 +593,7 @@ namespace ts {
                         "c:/dev/b.ts",
                         "c:/dev/c.d.ts"
                     ],
-                    wildcardDirectories: {
-                        "c:/dev": ts.WatchDirectoryFlags.Recursive
-                    }
+                    wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.Recursive }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -628,9 +612,7 @@ namespace ts {
                     fileNames: [
                         "c:/dev/a.ts"
                     ],
-                    wildcardDirectories: {
-                        "c:/dev": ts.WatchDirectoryFlags.Recursive
-                    },
+                    wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.Recursive },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -654,9 +636,7 @@ namespace ts {
                         "c:/dev/jspm_packages/a.ts",
                         "c:/dev/node_modules/a.ts"
                     ],
-                    wildcardDirectories: {
-                        "c:/dev": ts.WatchDirectoryFlags.Recursive
-                    },
+                    wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.Recursive },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -679,9 +659,7 @@ namespace ts {
                         "c:/dev/jspm_packages/a.ts",
                         "c:/dev/node_modules/a.ts"
                     ],
-                    wildcardDirectories: {
-                        "c:/dev": ts.WatchDirectoryFlags.Recursive
-                    },
+                    wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.Recursive },
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -703,9 +681,7 @@ namespace ts {
                     },
                     errors: [],
                     fileNames: [],
-                    wildcardDirectories: {
-                        "c:/dev/js": ts.WatchDirectoryFlags.None
-                    }
+                    wildcardDirectories: { "c:/dev/js": ts.WatchDirectoryFlags.None }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -730,9 +706,7 @@ namespace ts {
                         "c:/dev/js/a.js",
                         "c:/dev/js/b.js"
                     ],
-                    wildcardDirectories: {
-                        "c:/dev/js": ts.WatchDirectoryFlags.None
-                    }
+                    wildcardDirectories: { "c:/dev/js": ts.WatchDirectoryFlags.None }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -757,9 +731,7 @@ namespace ts {
                         "c:/dev/js/ab.min.js",
                         "c:/dev/js/d.min.js"
                     ],
-                    wildcardDirectories: {
-                        "c:/dev/js": ts.WatchDirectoryFlags.None
-                    }
+                    wildcardDirectories: { "c:/dev/js": ts.WatchDirectoryFlags.None }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -808,9 +780,7 @@ namespace ts {
                     fileNames: [
                         "c:/ext/ext.ts"
                     ],
-                    wildcardDirectories: {
-                        "c:/ext": ts.WatchDirectoryFlags.None
-                    }
+                    wildcardDirectories: { "c:/ext": ts.WatchDirectoryFlags.None }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -874,9 +844,7 @@ namespace ts {
                     fileNames: [
                         "c:/ext/ext.ts",
                     ],
-                    wildcardDirectories: {
-                        "c:/ext": ts.WatchDirectoryFlags.Recursive
-                    }
+                    wildcardDirectories: { "c:/ext": ts.WatchDirectoryFlags.Recursive }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -899,9 +867,7 @@ namespace ts {
                         "c:/dev/b.tsx",
                         "c:/dev/c.tsx",
                     ],
-                    wildcardDirectories: {
-                        "c:/dev": ts.WatchDirectoryFlags.Recursive
-                    }
+                    wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.Recursive }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -926,9 +892,7 @@ namespace ts {
                         "c:/dev/b.tsx",
                         "c:/dev/c.tsx",
                     ],
-                    wildcardDirectories: {
-                        "c:/dev": ts.WatchDirectoryFlags.Recursive
-                    }
+                    wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.Recursive }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -953,9 +917,7 @@ namespace ts {
                         "c:/dev/d.js",
                         "c:/dev/e.jsx",
                     ],
-                    wildcardDirectories: {
-                        "c:/dev": ts.WatchDirectoryFlags.Recursive
-                    }
+                    wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.Recursive }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -982,9 +944,7 @@ namespace ts {
                         "c:/dev/d.js",
                         "c:/dev/e.jsx",
                     ],
-                    wildcardDirectories: {
-                        "c:/dev": ts.WatchDirectoryFlags.Recursive
-                    }
+                    wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.Recursive }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -1011,9 +971,7 @@ namespace ts {
                     fileNames: [
                         "c:/dev/js/d.min.js"
                     ],
-                    wildcardDirectories: {
-                        "c:/dev/js": ts.WatchDirectoryFlags.None
-                    }
+                    wildcardDirectories: { "c:/dev/js": ts.WatchDirectoryFlags.None }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -1101,9 +1059,7 @@ namespace ts {
                             "c:/dev/x/y/a.ts",
                             "c:/dev/z/a.ts"
                         ],
-                        wildcardDirectories: {
-                            "c:/dev": ts.WatchDirectoryFlags.Recursive
-                        }
+                        wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.Recursive }
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                     assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -1173,9 +1129,7 @@ namespace ts {
                             "c:/dev/x/y/a.ts",
                             "c:/dev/z/a.ts"
                         ],
-                        wildcardDirectories: {
-                            "c:/dev": ts.WatchDirectoryFlags.Recursive
-                        }
+                        wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.Recursive }
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                     assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -1203,9 +1157,7 @@ namespace ts {
                             "c:/dev/x/y/a.ts",
                             "c:/dev/z/a.ts"
                         ],
-                        wildcardDirectories: {
-                            "c:/dev": ts.WatchDirectoryFlags.Recursive
-                        }
+                        wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.Recursive }
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                     assert.deepEqual(actual.fileNames, expected.fileNames);
@@ -1276,9 +1228,7 @@ namespace ts {
                             "c:/dev/w/.u/e.ts",
                             "c:/dev/x/.y/a.ts"
                         ],
-                        wildcardDirectories: {
-                            "c:/dev": ts.WatchDirectoryFlags.Recursive
-                        }
+                        wildcardDirectories: { "c:/dev": ts.WatchDirectoryFlags.Recursive }
                     };
                     const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveDottedFoldersHost, caseInsensitiveBasePath);
                     assert.deepEqual(actual.fileNames, expected.fileNames);

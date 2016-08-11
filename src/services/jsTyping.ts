@@ -47,7 +47,7 @@ namespace ts.JsTyping {
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         // A typing name to typing file path mapping
-        const inferredTypings: Map<string> = {};
+        const inferredTypings = new StringMap<string>();
 
         if (!typingOptions || !typingOptions.enableAutoDiscovery) {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
@@ -93,26 +93,26 @@ namespace ts.JsTyping {
 
         // Add the cached typing locations for inferred typings that are already installed
         for (const name in packageNameToTypingLocation) {
-            if (hasProperty(inferredTypings, name) && !inferredTypings[name]) {
-                inferredTypings[name] = packageNameToTypingLocation[name];
+            if (inferredTypings.has(name) && !inferredTypings.get(name)) {
+                inferredTypings.set(name, packageNameToTypingLocation[name]);
             }
         }
 
         // Remove typings that the user has added to the exclude list
         for (const excludeTypingName of exclude) {
-            delete inferredTypings[excludeTypingName];
+            inferredTypings.delete(excludeTypingName);
         }
 
         const newTypingNames: string[] = [];
         const cachedTypingPaths: string[] = [];
-        for (const typing in inferredTypings) {
-            if (inferredTypings[typing] !== undefined) {
-                cachedTypingPaths.push(inferredTypings[typing]);
+        inferredTypings.forEach((inferredTypingPath, typingName) => {
+            if (inferredTypingPath !== undefined) {
+                cachedTypingPaths.push(inferredTypingPath);
             }
             else {
-                newTypingNames.push(typing);
+                newTypingNames.push(typingName);
             }
-        }
+        });
         return { cachedTypingPaths, newTypingNames, filesToWatch };
 
         /**
@@ -124,8 +124,8 @@ namespace ts.JsTyping {
             }
 
             for (const typing of typingNames) {
-                if (!hasProperty(inferredTypings, typing)) {
-                    inferredTypings[typing] = undefined;
+                if (!inferredTypings.has(typing)) {
+                    inferredTypings.set(typing, undefined);
                 }
             }
         }
@@ -214,7 +214,7 @@ namespace ts.JsTyping {
                 }
                 if (packageJson.typings) {
                     const absolutePath = getNormalizedAbsolutePath(packageJson.typings, getDirectoryPath(normalizedFileName));
-                    inferredTypings[packageJson.name] = absolutePath;
+                    inferredTypings.set(packageJson.name, absolutePath);
                 }
                 else {
                     typingNames.push(packageJson.name);

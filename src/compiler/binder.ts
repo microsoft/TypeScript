@@ -125,7 +125,7 @@ namespace ts {
 
         let symbolCount = 0;
         let Symbol: { new (flags: SymbolFlags, name: string): Symbol };
-        let classifiableNames: Map<string>;
+        let classifiableNames: StringSet;
 
         const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
         const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
@@ -135,7 +135,7 @@ namespace ts {
             options = opts;
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = !!file.externalModuleIndicator;
-            classifiableNames = {};
+            classifiableNames = new StringSet();
             symbolCount = 0;
 
             Symbol = objectAllocator.getSymbolConstructor();
@@ -183,11 +183,11 @@ namespace ts {
             symbol.declarations.push(node);
 
             if (symbolFlags & SymbolFlags.HasExports && !symbol.exports) {
-                symbol.exports = {};
+                symbol.exports = new StringMap();
             }
 
             if (symbolFlags & SymbolFlags.HasMembers && !symbol.members) {
-                symbol.members = {};
+                symbol.members = new StringMap();
             }
 
             if (symbolFlags & SymbolFlags.Value) {
@@ -318,12 +318,10 @@ namespace ts {
                 // Otherwise, we'll be merging into a compatible existing symbol (for example when
                 // you have multiple 'vars' with the same name in the same container).  In this case
                 // just add this node into the declarations list of the symbol.
-                symbol = hasProperty(symbolTable, name)
-                    ? symbolTable[name]
-                    : (symbolTable[name] = createSymbol(SymbolFlags.None, name));
+                symbol = getOrUpdate(symbolTable, name, () => createSymbol(SymbolFlags.None, name));
 
                 if (name && (includes & SymbolFlags.Classifiable)) {
-                    classifiableNames[name] = name;
+                    classifiableNames.add(name);
                 }
 
                 if (symbol.flags & excludes) {
@@ -434,7 +432,7 @@ namespace ts {
             if (containerFlags & ContainerFlags.IsContainer) {
                 container = blockScopeContainer = node;
                 if (containerFlags & ContainerFlags.HasLocals) {
-                    container.locals = {};
+                    container.locals = new StringMap();
                 }
                 addToContainerChain(container);
             }
@@ -1399,7 +1397,7 @@ namespace ts {
 
             const typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
-            typeLiteralSymbol.members = { [symbol.name]: symbol };
+            typeLiteralSymbol.members = createStringMap(symbol.name, symbol);
         }
 
         function bindObjectLiteralExpression(node: ObjectLiteralExpression) {
@@ -1409,7 +1407,7 @@ namespace ts {
             }
 
             if (inStrictMode) {
-                const seen: Map<ElementKind> = {};
+                const seen = new StringMap<ElementKind>();
 
                 for (const prop of node.properties) {
                     if (prop.name.kind !== SyntaxKind.Identifier) {
@@ -1430,9 +1428,9 @@ namespace ts {
                         ? ElementKind.Property
                         : ElementKind.Accessor;
 
-                    const existingKind = seen[identifier.text];
+                    const existingKind = seen.get(identifier.text);
                     if (!existingKind) {
-                        seen[identifier.text] = currentKind;
+                        seen.set(identifier.text, currentKind);
                         continue;
                     }
 
@@ -1465,7 +1463,7 @@ namespace ts {
                 // fall through.
                 default:
                     if (!blockScopeContainer.locals) {
-                        blockScopeContainer.locals = {};
+                        blockScopeContainer.locals = new StringMap();
                         addToContainerChain(blockScopeContainer);
                     }
                     declareSymbol(blockScopeContainer.locals, undefined, node, symbolFlags, symbolExcludes);
@@ -1925,7 +1923,7 @@ namespace ts {
                 }
             }
 
-            file.symbol.globalExports = file.symbol.globalExports || {};
+            file.symbol.globalExports = file.symbol.globalExports || new StringMap();
             declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
         }
 
@@ -1978,7 +1976,7 @@ namespace ts {
             else {
                 return;
             }
-            assignee.symbol.members = assignee.symbol.members || {};
+            assignee.symbol.members = assignee.symbol.members || new StringMap();
             // It's acceptable for multiple 'this' assignments of the same identifier to occur
             declareSymbol(assignee.symbol.members, assignee.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
         }
@@ -1997,15 +1995,13 @@ namespace ts {
             constructorFunction.parent = classPrototype;
             classPrototype.parent = leftSideOfAssignment;
 
-            const funcSymbol = container.locals[constructorFunction.text];
+            const funcSymbol = container.locals.get(constructorFunction.text);
             if (!funcSymbol || !(funcSymbol.flags & SymbolFlags.Function || isDeclarationOfFunctionExpression(funcSymbol))) {
                 return;
             }
 
             // Set up the members collection if it doesn't exist already
-            if (!funcSymbol.members) {
-                funcSymbol.members = {};
-            }
+            funcSymbol.members = funcSymbol.members || new StringMap();
 
             // Declare the method/property
             declareSymbol(funcSymbol.members, funcSymbol, leftSideOfAssignment, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
@@ -2037,7 +2033,7 @@ namespace ts {
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
                 // Add name of class expression into the map for semantic classifier
                 if (node.name) {
-                    classifiableNames[node.name.text] = node.name.text;
+                    classifiableNames.add(node.name.text);
                 }
             }
 
@@ -2053,14 +2049,15 @@ namespace ts {
             // module might have an exported variable called 'prototype'.  We can't allow that as
             // that would clash with the built-in 'prototype' for the class.
             const prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype");
-            if (hasProperty(symbol.exports, prototypeSymbol.name)) {
+            const existingPrototypeSymbol = symbol.exports.get(prototypeSymbol.name);
+            if (existingPrototypeSymbol) {
                 if (node.name) {
                     node.name.parent = node;
                 }
-                file.bindDiagnostics.push(createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0],
+                file.bindDiagnostics.push(createDiagnosticForNode(existingPrototypeSymbol.declarations[0],
                     Diagnostics.Duplicate_identifier_0, prototypeSymbol.name));
             }
-            symbol.exports[prototypeSymbol.name] = prototypeSymbol;
+            symbol.exports.set(prototypeSymbol.name, prototypeSymbol);
             prototypeSymbol.parent = symbol;
         }
 

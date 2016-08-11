@@ -132,16 +132,16 @@ namespace Utils {
     }
 
     export function memoize<T extends Function>(f: T): T {
-        const cache: { [idx: string]: any } = {};
+        const cache = new ts.StringMap<T>();
 
         return <any>(function(this: any) {
             const key = Array.prototype.join.call(arguments);
-            const cachedResult = cache[key];
+            const cachedResult = cache.get(key);
             if (cachedResult) {
                 return cachedResult;
             }
             else {
-                return cache[key] = f.apply(this, arguments);
+                return ts.setAndReturn(cache, key, f.apply(this, arguments));
             }
         });
     }
@@ -848,19 +848,16 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
-        const libFileNameSourceFileMap: ts.Map<ts.SourceFile> = {
-            [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
-        };
+        const libFileNameSourceFileMap = ts.createStringMap(
+            defaultLibFileName,
+            createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest));
 
         export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile {
             if (!isDefaultLibraryFile(fileName)) {
                 return undefined;
             }
 
-            if (!libFileNameSourceFileMap[fileName]) {
-                libFileNameSourceFileMap[fileName] = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest);
-            }
-            return libFileNameSourceFileMap[fileName];
+            return ts.getOrUpdate(libFileNameSourceFileMap, fileName, () => createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest));
         }
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {
@@ -1002,16 +999,13 @@ namespace Harness {
             { name: "symlink", type: "string" }
         ];
 
-        let optionsIndex: ts.Map<ts.CommandLineOption>;
+        let optionsIndex: ts.StringMap<ts.CommandLineOption>;
         function getCommandLineOption(name: string): ts.CommandLineOption {
             if (!optionsIndex) {
-                optionsIndex = {};
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
-                for (const option of optionDeclarations) {
-                    optionsIndex[option.name.toLowerCase()] = option;
-                }
+                optionsIndex = ts.createStringMapFromValues(optionDeclarations, option => option.name.toLowerCase());
             }
-            return ts.lookUp(optionsIndex, name.toLowerCase());
+            return optionsIndex.get(name.toLowerCase());
         }
 
         export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
@@ -1602,14 +1596,14 @@ namespace Harness {
             }
         }
 
-        const fileCache: { [idx: string]: boolean } = {};
+        const fileCache = new ts.StringSet();
         function generateActual(actualFileName: string, generateContent: () => string): string {
             // For now this is written using TypeScript, because sys is not available when running old test cases.
             // But we need to move to sys once we have
             // Creates the directory including its parent if not already present
             function createDirectoryStructure(dirName: string) {
-                if (fileCache[dirName] || IO.directoryExists(dirName)) {
-                    fileCache[dirName] = true;
+                if (fileCache.has(dirName) || IO.directoryExists(dirName)) {
+                    fileCache.add(dirName);
                     return;
                 }
 
@@ -1618,7 +1612,7 @@ namespace Harness {
                     createDirectoryStructure(parentDirectory);
                 }
                 IO.createDirectory(dirName);
-                fileCache[dirName] = true;
+                fileCache.add(dirName);
             }
 
             // Create folders if needed

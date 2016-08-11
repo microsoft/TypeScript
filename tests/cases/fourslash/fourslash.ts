@@ -43,6 +43,10 @@
 // TODO: figure out a better solution to the API exposure problem.
 
 declare module ts {
+    interface StringMap<V> {
+        forEach(fn: (value: V, key: string) => void);
+    }
+
     interface SymbolDisplayPart {
         text: string;
         kind: string;
@@ -101,7 +105,7 @@ declare namespace FourSlashInterface {
         markers(): Marker[];
         marker(name?: string): Marker;
         ranges(): Range[];
-        rangesByText(): { [text: string]: Range[] };
+        rangesByText(): ts.StringMap<Range[]>;
         markerByName(s: string): Marker;
     }
     class goTo {

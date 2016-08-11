@@ -407,9 +407,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
         function isUniqueLocalName(name: string, container: Node): boolean {
             for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
-                if (node.locals && hasProperty(node.locals, name)) {
+                if (node.locals) {
+                    const symbol = node.locals.get(name);
                     // We conservatively include alias symbols to cover cases where they're emitted as locals
-                    if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
+                    if (symbol && symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
                         return false;
                     }
                 }
@@ -530,8 +531,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             let currentSourceFile: SourceFile;
             let currentText: string;
             let currentLineMap: number[];
-            let currentFileIdentifiers: Map<string>;
-            let renamedDependencies: Map<string>;
+            let currentFileIdentifiers: StringMap<string>;
+            let renamedDependencies: StringMap<string>;
             let isEs6Module: boolean;
             let isCurrentFileExternalModule: boolean;
 
@@ -658,7 +659,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 currentLineMap = getLineStarts(sourceFile);
                 exportFunctionForFile = undefined;
                 contextObjectForFile = undefined;
-                isEs6Module = sourceFile.symbol && sourceFile.symbol.exports && !!sourceFile.symbol.exports["___esModule"];
+                isEs6Module = sourceFile.symbol && sourceFile.symbol.exports && !!sourceFile.symbol.exports.get("___esModule");
                 renamedDependencies = sourceFile.renamedDependencies;
                 currentFileIdentifiers = sourceFile.identifiers;
                 isCurrentFileExternalModule = isExternalModule(sourceFile);
@@ -669,7 +670,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function isUniqueName(name: string): boolean {
                 return !resolver.hasGlobalName(name) &&
-                    !hasProperty(currentFileIdentifiers, name) &&
+                    !currentFileIdentifiers.has(name) &&
                     !hasProperty(generatedNameSet, name);
             }
 
@@ -6461,10 +6462,8 @@ const _super = (function (geti, seti) {
              * Here we check if alternative name was provided for a given moduleName and return it if possible.
              */
             function tryRenameExternalModule(moduleName: LiteralExpression): string {
-                if (renamedDependencies && hasProperty(renamedDependencies, moduleName.text)) {
-                    return `"${renamedDependencies[moduleName.text]}"`;
-                }
-                return undefined;
+                const rename = renamedDependencies && renamedDependencies.get(moduleName.text);
+                return rename ? `"${rename}"` : undefined;
             }
 
             function emitRequire(moduleName: Expression) {

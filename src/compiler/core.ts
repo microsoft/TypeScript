@@ -20,7 +20,7 @@ namespace ts {
     }
 
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
-        let files: Map<T> = {};
+        const files = new StringMap<T>();
         return {
             get,
             set,
@@ -31,31 +31,28 @@ namespace ts {
         };
 
         function forEachValueInMap(f: (key: Path, value: T) => void) {
-            for (const key in files) {
-                f(<Path>key, files[key]);
-            }
+            files.forEach((value, key) => f(<Path>key, value));
         }
 
         // path should already be well-formed so it does not need to be normalized
         function get(path: Path): T {
-            return files[toKey(path)];
+            return files.get(path);
         }
 
         function set(path: Path, value: T) {
-            files[toKey(path)] = value;
+            files.set(toKey(path), value);
         }
 
         function contains(path: Path) {
-            return hasProperty(files, toKey(path));
+            return files.has(toKey(path));
         }
 
         function remove(path: Path) {
-            const key = toKey(path);
-            delete files[key];
+            files.delete(toKey(path));
         }
 
         function clear() {
-            files = {};
+            files.clear();
         }
 
         function toKey(path: Path): string {
@@ -76,45 +73,6 @@ namespace ts {
         GreaterThan = 1
     }
 
-    /**
-     * Iterates through 'array' by index and performs the callback on each element of array until the callback
-     * returns a truthy value, then returns that value.
-     * If no such value is found, the callback is applied to each element of array and undefined is returned.
-     */
-    export function forEach<T, U>(array: T[], callback: (element: T, index: number) => U): U {
-        if (array) {
-            for (let i = 0, len = array.length; i < len; i++) {
-                const result = callback(array[i], i);
-                if (result) {
-                    return result;
-                }
-            }
-        }
-        return undefined;
-    }
-
-    export function contains<T>(array: T[], value: T): boolean {
-        if (array) {
-            for (const v of array) {
-                if (v === value) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    export function indexOf<T>(array: T[], value: T): number {
-        if (array) {
-            for (let i = 0, len = array.length; i < len; i++) {
-                if (array[i] === value) {
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }
-
     export function indexOfAnyCharCode(text: string, charCodes: number[], start?: number): number {
         for (let i = start || 0, len = text.length; i < len; i++) {
             if (contains(charCodes, text.charCodeAt(i))) {
@@ -122,316 +80,6 @@ namespace ts {
             }
         }
         return -1;
-    }
-
-    export function countWhere<T>(array: T[], predicate: (x: T) => boolean): number {
-        let count = 0;
-        if (array) {
-            for (const v of array) {
-                if (predicate(v)) {
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-
-    export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
-        let result: T[];
-        if (array) {
-            result = [];
-            for (const item of array) {
-                if (f(item)) {
-                    result.push(item);
-                }
-            }
-        }
-        return result;
-    }
-
-    export function filterMutate<T>(array: T[], f: (x: T) => boolean): void {
-        let outIndex = 0;
-        for (const item of array) {
-            if (f(item)) {
-                array[outIndex] = item;
-                outIndex++;
-            }
-        }
-        array.length = outIndex;
-    }
-
-    export function map<T, U>(array: T[], f: (x: T) => U): U[] {
-        let result: U[];
-        if (array) {
-            result = [];
-            for (const v of array) {
-                result.push(f(v));
-            }
-        }
-        return result;
-    }
-
-    export function concatenate<T>(array1: T[], array2: T[]): T[] {
-        if (!array2 || !array2.length) return array1;
-        if (!array1 || !array1.length) return array2;
-
-        return array1.concat(array2);
-    }
-
-    export function deduplicate<T>(array: T[], areEqual?: (a: T, b: T) => boolean): T[] {
-        let result: T[];
-        if (array) {
-            result = [];
-            loop: for (const item of array) {
-                for (const res of result) {
-                    if (areEqual ? areEqual(res, item) : res === item) {
-                        continue loop;
-                    }
-                }
-                result.push(item);
-            }
-        }
-        return result;
-    }
-
-    export function sum(array: any[], prop: string): number {
-        let result = 0;
-        for (const v of array) {
-            result += v[prop];
-        }
-        return result;
-    }
-
-    export function addRange<T>(to: T[], from: T[]): void {
-        if (to && from) {
-            for (const v of from) {
-                to.push(v);
-            }
-        }
-    }
-
-    export function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number) {
-        while (pos < end) {
-            if (array1[pos] !== array2[pos]) {
-                return false;
-            }
-            pos++;
-        }
-        return true;
-    }
-
-    /**
-     * Returns the last element of an array if non-empty, undefined otherwise.
-     */
-    export function lastOrUndefined<T>(array: T[]): T {
-        if (array.length === 0) {
-            return undefined;
-        }
-
-        return array[array.length - 1];
-    }
-
-    /**
-     * Performs a binary search, finding the index at which 'value' occurs in 'array'.
-     * If no such index is found, returns the 2's-complement of first index at which
-     * number[index] exceeds number.
-     * @param array A sorted array whose first element must be no larger than number
-     * @param number The value to be searched for in the array.
-     */
-    export function binarySearch(array: number[], value: number): number {
-        let low = 0;
-        let high = array.length - 1;
-
-        while (low <= high) {
-            const middle = low + ((high - low) >> 1);
-            const midValue = array[middle];
-
-            if (midValue === value) {
-                return middle;
-            }
-            else if (midValue > value) {
-                high = middle - 1;
-            }
-            else {
-                low = middle + 1;
-            }
-        }
-
-        return ~low;
-    }
-
-    export function reduceLeft<T>(array: T[], f: (a: T, x: T) => T): T;
-    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
-    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
-        if (array) {
-            const count = array.length;
-            if (count > 0) {
-                let pos = 0;
-                let result: T | U;
-                if (arguments.length <= 2) {
-                    result = array[pos];
-                    pos++;
-                }
-                else {
-                    result = initial;
-                }
-                while (pos < count) {
-                    result = f(<U>result, array[pos]);
-                    pos++;
-                }
-                return <U>result;
-            }
-        }
-        return initial;
-    }
-
-    export function reduceRight<T>(array: T[], f: (a: T, x: T) => T): T;
-    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
-    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
-        if (array) {
-            let pos = array.length - 1;
-            if (pos >= 0) {
-                let result: T | U;
-                if (arguments.length <= 2) {
-                    result = array[pos];
-                    pos--;
-                }
-                else {
-                    result = initial;
-                }
-                while (pos >= 0) {
-                    result = f(<U>result, array[pos]);
-                    pos--;
-                }
-                return <U>result;
-            }
-        }
-        return initial;
-    }
-
-    const hasOwnProperty = Object.prototype.hasOwnProperty;
-
-    export function hasProperty<T>(map: Map<T>, key: string): boolean {
-        return hasOwnProperty.call(map, key);
-    }
-
-    export function getKeys<T>(map: Map<T>): string[] {
-        const keys: string[] = [];
-        for (const key in map) {
-            keys.push(key);
-        }
-        return keys;
-    }
-
-    export function getProperty<T>(map: Map<T>, key: string): T | undefined {
-        return hasProperty(map, key) ? map[key] : undefined;
-    }
-
-    export function getOrUpdateProperty<T>(map: Map<T>, key: string, makeValue: () => T): T {
-        return hasProperty(map, key) ? map[key] : map[key] = makeValue();
-    }
-
-    export function isEmpty<T>(map: Map<T>) {
-        for (const id in map) {
-            if (hasProperty(map, id)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    export function clone<T>(object: T): T {
-        const result: any = {};
-        for (const id in object) {
-            result[id] = (<any>object)[id];
-        }
-        return <T>result;
-    }
-
-    export function extend<T1 extends Map<{}>, T2 extends Map<{}>>(first: T1 , second: T2): T1 & T2 {
-        const result: T1 & T2 = <any>{};
-        for (const id in first) {
-            (result as any)[id] = first[id];
-        }
-        for (const id in second) {
-            if (!hasProperty(result, id)) {
-                (result as any)[id] = second[id];
-            }
-        }
-        return result;
-    }
-
-    export function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U {
-        let result: U;
-        for (const id in map) {
-            if (result = callback(map[id])) break;
-        }
-        return result;
-    }
-
-    export function forEachKey<T, U>(map: Map<T>, callback: (key: string) => U): U {
-        let result: U;
-        for (const id in map) {
-            if (result = callback(id)) break;
-        }
-        return result;
-    }
-
-    export function lookUp<T>(map: Map<T>, key: string): T {
-        return hasProperty(map, key) ? map[key] : undefined;
-    }
-
-    export function copyMap<T>(source: Map<T>, target: Map<T>): void {
-        for (const p in source) {
-            target[p] = source[p];
-        }
-    }
-
-    /**
-     * Creates a map from the elements of an array.
-     *
-     * @param array the array of input elements.
-     * @param makeKey a function that produces a key for a given element.
-     *
-     * This function makes no effort to avoid collisions; if any two elements produce
-     * the same key with the given 'makeKey' function, then the element with the higher
-     * index in the array will be the one associated with the produced key.
-     */
-    export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T> {
-        const result: Map<T> = {};
-
-        forEach(array, value => {
-            result[makeKey(value)] = value;
-        });
-
-        return result;
-    }
-
-    /**
-     * Reduce the properties of a map.
-     *
-     * @param map The map to reduce
-     * @param callback An aggregation function that is called for each entry in the map
-     * @param initial The initial value for the reduction.
-     */
-    export function reduceProperties<T, U>(map: Map<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
-        let result = initial;
-        if (map) {
-            for (const key in map) {
-                if (hasProperty(map, key)) {
-                    result = callback(result, map[key], String(key));
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Tests whether a value is an array.
-     */
-    export function isArray(value: any): value is any[] {
-        return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
     export function memoize<T>(callback: () => T): () => T {

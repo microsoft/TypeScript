@@ -1061,28 +1061,28 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
-        private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
-            [CommandNames.Exit]: () => {
+        private handlers = new ts.StringMap<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>([
+            [CommandNames.Exit, () => {
                 this.exit();
                 return { responseRequired: false };
-            },
-            [CommandNames.Definition]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Definition, (request: protocol.Request) => {
                 const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
                 return { response: this.getDefinition(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true };
-            },
-            [CommandNames.TypeDefinition]: (request: protocol.Request) => {
+            }],
+            [CommandNames.TypeDefinition, (request: protocol.Request) => {
                 const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
                 return { response: this.getTypeDefinition(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true };
-            },
-            [CommandNames.References]: (request: protocol.Request) => {
+            }],
+            [CommandNames.References, (request: protocol.Request) => {
                 const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
                 return { response: this.getReferences(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true };
-            },
-            [CommandNames.Rename]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Rename, (request: protocol.Request) => {
                 const renameArgs = <protocol.RenameRequestArgs>request.arguments;
                 return { response: this.getRenameLocations(renameArgs.line, renameArgs.offset, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings), responseRequired: true };
-            },
-            [CommandNames.Open]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Open, (request: protocol.Request) => {
                 const openArgs = <protocol.OpenRequestArgs>request.arguments;
                 let scriptKind: ScriptKind;
                 switch (openArgs.scriptKindName) {
@@ -1101,113 +1101,113 @@ namespace ts.server {
                 }
                 this.openClientFile(openArgs.file, openArgs.fileContent, scriptKind);
                 return { responseRequired: false };
-            },
-            [CommandNames.Quickinfo]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Quickinfo, (request: protocol.Request) => {
                 const quickinfoArgs = <protocol.FileLocationRequestArgs>request.arguments;
                 return { response: this.getQuickInfo(quickinfoArgs.line, quickinfoArgs.offset, quickinfoArgs.file), responseRequired: true };
-            },
-            [CommandNames.Format]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Format, (request: protocol.Request) => {
                 const formatArgs = <protocol.FormatRequestArgs>request.arguments;
                 return { response: this.getFormattingEditsForRange(formatArgs.line, formatArgs.offset, formatArgs.endLine, formatArgs.endOffset, formatArgs.file), responseRequired: true };
-            },
-            [CommandNames.Formatonkey]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Formatonkey, (request: protocol.Request) => {
                 const formatOnKeyArgs = <protocol.FormatOnKeyRequestArgs>request.arguments;
                 return { response: this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.offset, formatOnKeyArgs.key, formatOnKeyArgs.file), responseRequired: true };
-            },
-            [CommandNames.Completions]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Completions, (request: protocol.Request) => {
                 const completionsArgs = <protocol.CompletionsRequestArgs>request.arguments;
                 return { response: this.getCompletions(completionsArgs.line, completionsArgs.offset, completionsArgs.prefix, completionsArgs.file), responseRequired: true };
-            },
-            [CommandNames.CompletionDetails]: (request: protocol.Request) => {
+            }],
+            [CommandNames.CompletionDetails, (request: protocol.Request) => {
                 const completionDetailsArgs = <protocol.CompletionDetailsRequestArgs>request.arguments;
                 return {
                     response: this.getCompletionEntryDetails(completionDetailsArgs.line, completionDetailsArgs.offset,
                         completionDetailsArgs.entryNames, completionDetailsArgs.file), responseRequired: true
                 };
-            },
-            [CommandNames.SignatureHelp]: (request: protocol.Request) => {
+            }],
+            [CommandNames.SignatureHelp, (request: protocol.Request) => {
                 const signatureHelpArgs = <protocol.SignatureHelpRequestArgs>request.arguments;
                 return { response: this.getSignatureHelpItems(signatureHelpArgs.line, signatureHelpArgs.offset, signatureHelpArgs.file), responseRequired: true };
-            },
-            [CommandNames.SemanticDiagnosticsSync]: (request: protocol.FileRequest) => {
+            }],
+            [CommandNames.SemanticDiagnosticsSync, (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getSemanticDiagnosticsSync(request.arguments));
-            },
-            [CommandNames.SyntacticDiagnosticsSync]: (request: protocol.FileRequest) => {
+            }],
+            [CommandNames.SyntacticDiagnosticsSync, (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getSyntacticDiagnosticsSync(request.arguments));
-            },
-            [CommandNames.Geterr]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Geterr, (request: protocol.Request) => {
                 const geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
                 return { response: this.getDiagnostics(geterrArgs.delay, geterrArgs.files), responseRequired: false };
-            },
-            [CommandNames.GeterrForProject]: (request: protocol.Request) => {
+            }],
+            [CommandNames.GeterrForProject, (request: protocol.Request) => {
                 const { file, delay } = <protocol.GeterrForProjectRequestArgs>request.arguments;
                 return { response: this.getDiagnosticsForProject(delay, file), responseRequired: false };
-            },
-            [CommandNames.Change]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Change, (request: protocol.Request) => {
                 const changeArgs = <protocol.ChangeRequestArgs>request.arguments;
                 this.change(changeArgs.line, changeArgs.offset, changeArgs.endLine, changeArgs.endOffset,
                     changeArgs.insertString, changeArgs.file);
                 return { responseRequired: false };
-            },
-            [CommandNames.Configure]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Configure, (request: protocol.Request) => {
                 const configureArgs = <protocol.ConfigureRequestArguments>request.arguments;
                 this.projectService.setHostConfiguration(configureArgs);
                 this.output(undefined, CommandNames.Configure, request.seq);
                 return { responseRequired: false };
-            },
-            [CommandNames.Reload]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Reload, (request: protocol.Request) => {
                 const reloadArgs = <protocol.ReloadRequestArgs>request.arguments;
                 this.reload(reloadArgs.file, reloadArgs.tmpfile, request.seq);
                 return { response: { reloadFinished: true }, responseRequired: true };
-            },
-            [CommandNames.Saveto]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Saveto, (request: protocol.Request) => {
                 const savetoArgs = <protocol.SavetoRequestArgs>request.arguments;
                 this.saveToTmp(savetoArgs.file, savetoArgs.tmpfile);
                 return { responseRequired: false };
-            },
-            [CommandNames.Close]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Close, (request: protocol.Request) => {
                 const closeArgs = <protocol.FileRequestArgs>request.arguments;
                 this.closeClientFile(closeArgs.file);
                 return { responseRequired: false };
-            },
-            [CommandNames.Navto]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Navto, (request: protocol.Request) => {
                 const navtoArgs = <protocol.NavtoRequestArgs>request.arguments;
                 return { response: this.getNavigateToItems(navtoArgs.searchValue, navtoArgs.file, navtoArgs.maxResultCount), responseRequired: true };
-            },
-            [CommandNames.Brace]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Brace, (request: protocol.Request) => {
                 const braceArguments = <protocol.FileLocationRequestArgs>request.arguments;
                 return { response: this.getBraceMatching(braceArguments.line, braceArguments.offset, braceArguments.file), responseRequired: true };
-            },
-            [CommandNames.NavBar]: (request: protocol.Request) => {
+            }],
+            [CommandNames.NavBar, (request: protocol.Request) => {
                 const navBarArgs = <protocol.FileRequestArgs>request.arguments;
                 return { response: this.getNavigationBarItems(navBarArgs.file), responseRequired: true };
-            },
-            [CommandNames.Occurrences]: (request: protocol.Request) => {
+            }],
+            [CommandNames.Occurrences, (request: protocol.Request) => {
                 const { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
                 return { response: this.getOccurrences(line, offset, fileName), responseRequired: true };
-            },
-            [CommandNames.DocumentHighlights]: (request: protocol.Request) => {
+            }],
+            [CommandNames.DocumentHighlights, (request: protocol.Request) => {
                 const { line, offset, file: fileName, filesToSearch } = <protocol.DocumentHighlightsRequestArgs>request.arguments;
                 return { response: this.getDocumentHighlights(line, offset, fileName, filesToSearch), responseRequired: true };
-            },
-            [CommandNames.ProjectInfo]: (request: protocol.Request) => {
+            }],
+            [CommandNames.ProjectInfo, (request: protocol.Request) => {
                 const { file, needFileNameList } = <protocol.ProjectInfoRequestArgs>request.arguments;
                 return { response: this.getProjectInfo(file, needFileNameList), responseRequired: true };
-            },
-            [CommandNames.ReloadProjects]: (request: protocol.ReloadProjectsRequest) => {
+            }],
+            [CommandNames.ReloadProjects, (request: protocol.ReloadProjectsRequest) => {
                 this.reloadProjects();
                 return { responseRequired: false };
-            }
-        };
+            }]
+        ]);
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => { response?: any, responseRequired: boolean }) {
-            if (this.handlers[command]) {
+            if (this.handlers.has(command)) {
                 throw new Error(`Protocol handler already exists for command "${command}"`);
             }
-            this.handlers[command] = handler;
+            this.handlers.set(command, handler);
         }
 
         public executeCommand(request: protocol.Request): { response?: any, responseRequired?: boolean } {
-            const handler = this.handlers[request.command];
+            const handler = this.handlers.get(request.command);
             if (handler) {
                 return handler(request);
             }

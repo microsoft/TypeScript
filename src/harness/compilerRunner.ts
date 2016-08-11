@@ -291,12 +291,12 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
 
-                const fullResults: ts.Map<TypeWriterResult[]> = {};
-                const pullResults: ts.Map<TypeWriterResult[]> = {};
+                const fullResults = new ts.StringMap<TypeWriterResult[]>();
+                const pullResults = new ts.StringMap<TypeWriterResult[]>();
 
                 for (const sourceFile of allFiles) {
-                    fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
-                    pullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
+                    fullResults.set(sourceFile.unitName, fullWalker.getTypeAndSymbols(sourceFile.unitName));
+                    pullResults.set(sourceFile.unitName, fullWalker.getTypeAndSymbols(sourceFile.unitName));
                 }
 
                 // Produce baselines.  The first gives the types for all expressions.
@@ -338,37 +338,31 @@ class CompilerBaselineRunner extends RunnerBase {
                     }
                 }
 
-                function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
+                function generateBaseLine(typeWriterResults: ts.StringMap<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
                     const typeLines: string[] = [];
-                    const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
+                    // Maps fileName to a (lineNumber -> string[]) map.
+                    const typeMap = new ts.StringMap<ts.NumberMap<string[]>>();
 
                     allFiles.forEach(file => {
                         const codeLines = file.content.split("\n");
-                        typeWriterResults[file.unitName].forEach(result => {
+                        typeWriterResults.get(file.unitName).forEach(result => {
                             if (isSymbolBaseline && !result.symbol) {
                                 return;
                             }
 
                             const typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
                             const formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
-                            if (!typeMap[file.unitName]) {
-                                typeMap[file.unitName] = {};
-                            }
-
-                            let typeInfo = [formattedLine];
-                            const existingTypeInfo = typeMap[file.unitName][result.line];
-                            if (existingTypeInfo) {
-                                typeInfo = existingTypeInfo.concat(typeInfo);
-                            }
-                            typeMap[file.unitName][result.line] = typeInfo;
+                            const linesMap = ts.getOrUpdate(typeMap, file.unitName, () => new ts.NumberMap<string[]>());
+                            ts.multiMapAdd(linesMap, result.line, formattedLine);
                         });
 
                         typeLines.push("=== " + file.unitName + " ===\r\n");
                         for (let i = 0; i < codeLines.length; i++) {
                             const currentCodeLine = codeLines[i];
                             typeLines.push(currentCodeLine + "\r\n");
-                            if (typeMap[file.unitName]) {
-                                const typeInfo = typeMap[file.unitName][i];
+                            const typeInfos = typeMap.get(file.unitName);
+                            if (typeInfos) {
+                                const typeInfo = typeInfos.get(i);
                                 if (typeInfo) {
                                     typeInfo.forEach(ty => {
                                         typeLines.push(">" + ty + "\r\n");

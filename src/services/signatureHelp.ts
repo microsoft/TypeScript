@@ -237,18 +237,16 @@ namespace ts.SignatureHelp {
         const typeChecker = program.getTypeChecker();
         for (const sourceFile of program.getSourceFiles()) {
             const nameToDeclarations = sourceFile.getNamedDeclarations();
-            const declarations = getProperty(nameToDeclarations, name.text);
+            const declarations = nameToDeclarations.get(name.text);
 
-            if (declarations) {
-                for (const declaration of declarations) {
-                    const symbol = declaration.symbol;
-                    if (symbol) {
-                        const type = typeChecker.getTypeOfSymbolAtLocation(symbol, declaration);
-                        if (type) {
-                            const callSignatures = type.getCallSignatures();
-                            if (callSignatures && callSignatures.length) {
-                                return createSignatureHelpItems(callSignatures, callSignatures[0], argumentInfo, typeChecker);
-                            }
+            for (const declaration of declarations) {
+                const symbol = declaration.symbol;
+                if (symbol) {
+                    const type = typeChecker.getTypeOfSymbolAtLocation(symbol, declaration);
+                    if (type) {
+                        const callSignatures = type.getCallSignatures();
+                        if (callSignatures && callSignatures.length) {
+                            return createSignatureHelpItems(callSignatures, callSignatures[0], argumentInfo, typeChecker);
                         }
                     }
                 }

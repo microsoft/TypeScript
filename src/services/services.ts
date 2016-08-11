@@ -65,9 +65,9 @@ namespace ts {
     export interface SourceFile {
         /* @internal */ version: string;
         /* @internal */ scriptSnapshot: IScriptSnapshot;
-        /* @internal */ nameTable: Map<number>;
+        /* @internal */ nameTable: ts.StringMap<number>;
 
-        /* @internal */ getNamedDeclarations(): Map<Declaration[]>;
+        /* @internal */ getNamedDeclarations(): ts.StringMap<Declaration[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
@@ -938,13 +938,13 @@ namespace ts {
         public scriptKind: ScriptKind;
         public languageVersion: ScriptTarget;
         public languageVariant: LanguageVariant;
-        public identifiers: Map<string>;
-        public nameTable: Map<number>;
-        public resolvedModules: Map<ResolvedModule>;
-        public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
+        public identifiers: ts.StringMap<string>;
+        public nameTable: ts.StringMap<number>;
+        public resolvedModules: ts.StringMap<ResolvedModule>;
+        public resolvedTypeReferenceDirectiveNames: ts.StringMap<ResolvedTypeReferenceDirective>;
         public imports: LiteralExpression[];
         public moduleAugmentations: LiteralExpression[];
-        private namedDeclarations: Map<Declaration[]>;
+        private namedDeclarations: ts.StringMap<Declaration[]>;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);
@@ -966,7 +966,7 @@ namespace ts {
             return ts.getPositionOfLineAndCharacter(this, line, character);
         }
 
-        public getNamedDeclarations(): Map<Declaration[]> {
+        public getNamedDeclarations(): ts.StringMap<Declaration[]> {
             if (!this.namedDeclarations) {
                 this.namedDeclarations = this.computeNamedDeclarations();
             }
@@ -974,8 +974,8 @@ namespace ts {
             return this.namedDeclarations;
         }
 
-        private computeNamedDeclarations(): Map<Declaration[]> {
-            const result: Map<Declaration[]> = {};
+        private computeNamedDeclarations(): ts.StringMap<Declaration[]> {
+            const result = new ts.StringMap<Declaration[]>();
 
             forEachChild(this, visit);
 
@@ -990,7 +990,7 @@ namespace ts {
             }
 
             function getDeclarations(name: string) {
-                return getProperty(result, name) || (result[name] = []);
+                return getOrUpdate(result, name, () => []);
             }
 
             function getDeclarationName(declaration: Declaration) {
@@ -2042,7 +2042,7 @@ namespace ts {
     function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
         commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
-            typeof o.type === "object" && !forEachValue(<Map<any>>o.type, v => typeof v !== "number"));
+            typeof o.type === "object" && allInStringMap(o.type, v => typeof v === "number"));
 
         options = clone(options);
 
@@ -2058,7 +2058,7 @@ namespace ts {
                 options[opt.name] = parseCustomTypeOption(opt, value, diagnostics);
             }
             else {
-                if (!forEachValue(opt.type, v => v === value)) {
+                if (!someInStringMap(opt.type, v => v === value)) {
                     // Supplied value isn't a valid enum value.
                     diagnostics.push(createCompilerDiagnosticForInvalidCustomType(opt));
                 }
@@ -2117,7 +2117,7 @@ namespace ts {
             sourceFile.moduleName = transpileOptions.moduleName;
         }
 
-        sourceFile.renamedDependencies = transpileOptions.renamedDependencies;
+        sourceFile.renamedDependencies = stringMapOfMap(transpileOptions.renamedDependencies);
 
         const newLine = getNewLineCharacter(options);
 
@@ -2243,7 +2243,7 @@ namespace ts {
     export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
-        const buckets: Map<FileMap<DocumentRegistryEntry>> = {};
+        const buckets = new ts.StringMap<FileMap<DocumentRegistryEntry>>();
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
@@ -2251,16 +2251,16 @@ namespace ts {
         }
 
         function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
-            let bucket = lookUp(buckets, key);
-            if (!bucket && createIfMissing) {
-                buckets[key] = bucket = createFileMap<DocumentRegistryEntry>();
-            }
-            return bucket;
+            return createIfMissing
+                ? getOrUpdate<string, FileMap<DocumentRegistryEntry>>(buckets, key, createFileMap)
+                : buckets.get(key);
         }
 
         function reportStats() {
-            const bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === "_").map(name => {
-                const entries = lookUp(buckets, name);
+            const bucketInfoArray = mapAndFilterStringMap(buckets, (entries, name) => {
+                if (!(name && name.charAt(0) === "_")) {
+                    return;
+                }
                 const sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
                 entries.forEachValue((key, entry) => {
                     sourceFiles.push({
@@ -4102,7 +4102,7 @@ namespace ts {
              *          do not occur at the current position and have not otherwise been typed.
              */
             function filterNamedImportOrExportCompletionItems(exportsOfModule: Symbol[], namedImportsOrExports: ImportOrExportSpecifier[]): Symbol[] {
-                const existingImportsOrExports: Map<boolean> = {};
+                const existingImportsOrExports = new StringSet();
 
                 for (const element of namedImportsOrExports) {
                     // If this is the current item we are editing right now, do not filter it out
@@ -4111,14 +4111,14 @@ namespace ts {
                     }
 
                     const name = element.propertyName || element.name;
-                    existingImportsOrExports[name.text] = true;
+                    existingImportsOrExports.add(name.text);
                 }
 
-                if (isEmpty(existingImportsOrExports)) {
+                if (isSetEmpty(existingImportsOrExports)) {
                     return filter(exportsOfModule, e => e.name !== "default");
                 }
 
-                return filter(exportsOfModule, e => e.name !== "default" && !lookUp(existingImportsOrExports, e.name));
+                return filter(exportsOfModule, e => e.name !== "default" && !existingImportsOrExports.has(e.name));
             }
 
             /**
@@ -4132,7 +4132,7 @@ namespace ts {
                     return contextualMemberSymbols;
                 }
 
-                const existingMemberNames: Map<boolean> = {};
+                const existingMemberNames = new StringSet();
                 for (const m of existingMembers) {
                     // Ignore omitted expressions for missing members
                     if (m.kind !== SyntaxKind.PropertyAssignment &&
@@ -4162,10 +4162,10 @@ namespace ts {
                         existingName = (<Identifier>m.name).text;
                     }
 
-                    existingMemberNames[existingName] = true;
+                    existingMemberNames.add(existingName);
                 }
 
-                return filter(contextualMemberSymbols, m => !lookUp(existingMemberNames, m.name));
+                return filter(contextualMemberSymbols, m => !existingMemberNames.has(m.name));
             }
 
             /**
@@ -4175,7 +4175,7 @@ namespace ts {
              *          do not occur at the current position and have not otherwise been typed.
              */
             function filterJsxAttributes(symbols: Symbol[], attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>): Symbol[] {
-                const seenNames: Map<boolean> = {};
+                const seenNames = new StringSet();
                 for (const attr of attributes) {
                     // If this is the current item we are editing right now, do not filter it out
                     if (attr.getStart() <= position && position <= attr.getEnd()) {
@@ -4183,11 +4183,11 @@ namespace ts {
                     }
 
                     if (attr.kind === SyntaxKind.JsxAttribute) {
-                        seenNames[(<JsxAttribute>attr).name.text] = true;
+                        seenNames.add((<JsxAttribute>attr).name.text);
                     }
                 }
 
-                return filter(symbols, a => !lookUp(seenNames, a.name));
+                return filter(symbols, a => !seenNames.has(a.name));
             }
         }
 
@@ -4249,19 +4249,19 @@ namespace ts {
 
             return { isMemberCompletion, isNewIdentifierLocation, entries };
 
-            function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: Map<string>): CompletionEntry[] {
+            function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: StringSet): CompletionEntry[] {
                 const entries: CompletionEntry[] = [];
                 const target = program.getCompilerOptions().target;
 
                 const nameTable = getNameTable(sourceFile);
-                for (const name in nameTable) {
+                nameTable.forEach((pos, name) => {
                     // Skip identifiers produced only from the current location
-                    if (nameTable[name] === position) {
-                        continue;
+                    if (pos === position) {
+                        return;
                     }
 
-                    if (!uniqueNames[name]) {
-                        uniqueNames[name] = name;
+                    if (!uniqueNames.has(name)) {
+                        uniqueNames.add(name);
                         const displayName = getCompletionEntryDisplayName(unescapeIdentifier(name), target, /*performCharacterChecks*/ true);
                         if (displayName) {
                             const entry = {
@@ -4273,7 +4273,7 @@ namespace ts {
                             entries.push(entry);
                         }
                     }
-                }
+                });
 
                 return entries;
             }
@@ -4315,17 +4315,17 @@ namespace ts {
 
             }
 
-            function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[], location: Node, performCharacterChecks: boolean): Map<string> {
+            function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[], location: Node, performCharacterChecks: boolean): StringSet {
                 const start = timestamp();
-                const uniqueNames: Map<string> = {};
+                const uniqueNames = new StringSet();
                 if (symbols) {
                     for (const symbol of symbols) {
                         const entry = createCompletionEntry(symbol, location, performCharacterChecks);
                         if (entry) {
                             const id = escapeIdentifier(entry.name);
-                            if (!lookUp(uniqueNames, id)) {
+                            if (!uniqueNames.has(id)) {
                                 entries.push(entry);
-                                uniqueNames[id] = id;
+                                uniqueNames.add(id);
                             }
                         }
                     }
@@ -5151,7 +5151,7 @@ namespace ts {
             // Type reference directives
             const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
             if (typeReferenceDirective) {
-                const referenceFile = lookUp(program.getResolvedTypeReferenceDirectives(), typeReferenceDirective.fileName);
+                const referenceFile = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
                 if (referenceFile && referenceFile.resolvedFileName) {
                     return [getDefinitionInfoForFileReference(typeReferenceDirective.fileName, referenceFile.resolvedFileName)];
                 }
@@ -5318,16 +5318,16 @@ namespace ts {
                         return undefined;
                     }
 
-                    const fileNameToDocumentHighlights: Map<DocumentHighlights> = {};
+                    const fileNameToDocumentHighlights = new StringMap<DocumentHighlights>();
                     const result: DocumentHighlights[] = [];
                     for (const referencedSymbol of referencedSymbols) {
                         for (const referenceEntry of referencedSymbol.references) {
                             const fileName = referenceEntry.fileName;
-                            let documentHighlights = getProperty(fileNameToDocumentHighlights, fileName);
+                            let documentHighlights = fileNameToDocumentHighlights.get(fileName);
                             if (!documentHighlights) {
                                 documentHighlights = { fileName, highlightSpans: [] };
 
-                                fileNameToDocumentHighlights[fileName] = documentHighlights;
+                                fileNameToDocumentHighlights.set(fileName, documentHighlights);
                                 result.push(documentHighlights);
                             }
 
@@ -6068,7 +6068,7 @@ namespace ts {
 
                     const nameTable = getNameTable(sourceFile);
 
-                    if (lookUp(nameTable, internedName) !== undefined) {
+                    if (nameTable.has(internedName)) {
                         result = result || [];
                         getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
                     }
@@ -6713,7 +6713,7 @@ namespace ts {
 
                     // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ {});
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ new StringMap());
                     }
                 });
 
@@ -6745,7 +6745,7 @@ namespace ts {
                 // the function will add any found symbol of the property-name, then its sub-routine will call
                 // getPropertySymbolsFromBaseTypes again to walk up any base types to prevent revisiting already
                 // visited symbol, interface "C", the sub-routine will pass the current symbol as previousIterationSymbol.
-                if (hasProperty(previousIterationSymbolsCache, symbol.name)) {
+                if (previousIterationSymbolsCache.has(symbol.name)) {
                     return;
                 }
 
@@ -6772,7 +6772,7 @@ namespace ts {
                             }
 
                             // Visit the typeReference as well to see if it directly or indirectly use that property
-                            previousIterationSymbolsCache[symbol.name] = symbol;
+                            previousIterationSymbolsCache.set(symbol.name, symbol);
                             getPropertySymbolsFromBaseTypes(type.symbol, propertyName, result, previousIterationSymbolsCache);
                         }
                     }
@@ -6834,7 +6834,7 @@ namespace ts {
                     // see if any is in the list
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                         const result: Symbol[] = [];
-                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ {});
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ new StringMap());
                         return forEach(result, s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     }
 
@@ -7314,7 +7314,7 @@ namespace ts {
                         // Only bother calling into the typechecker if this is an identifier that
                         // could possibly resolve to a type name.  This makes classification run
                         // in a third of the time it would normally take.
-                        if (classifiableNames[identifier.text]) {
+                        if (classifiableNames.has(identifier.text)) {
                             const symbol = typeChecker.getSymbolAtLocation(node);
                             if (symbol) {
                                 const type = classifySymbol(symbol, getMeaningFromLocation(node));
@@ -8309,7 +8309,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getNameTable(sourceFile: SourceFile): Map<number> {
+    export function getNameTable(sourceFile: SourceFile): StringMap<number> {
         if (!sourceFile.nameTable) {
             initializeNameTable(sourceFile);
         }
@@ -8318,7 +8318,7 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable: Map<number> = {};
+        const nameTable = new StringMap<number>();
 
         walk(sourceFile);
         sourceFile.nameTable = nameTable;
@@ -8326,7 +8326,7 @@ namespace ts {
         function walk(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    nameTable[(<Identifier>node).text] = nameTable[(<Identifier>node).text] === undefined ? node.pos : -1;
+                    addName((<Identifier>node).text, node.pos);
                     break;
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
@@ -8339,7 +8339,7 @@ namespace ts {
                         isArgumentOfElementAccessExpression(node) ||
                         isLiteralComputedPropertyDeclarationName(node)) {
 
-                        nameTable[(<LiteralExpression>node).text] = nameTable[(<LiteralExpression>node).text] === undefined ? node.pos : -1;
+                        addName((<LiteralExpression>node).text, node.pos);
                     }
                     break;
                 default:
@@ -8350,6 +8350,10 @@ namespace ts {
                         }
                     }
             }
+        }
+
+        function addName(name: string, pos: number) {
+            nameTable.set(name, nameTable.has(name) ? -1 : pos);
         }
     }
 
