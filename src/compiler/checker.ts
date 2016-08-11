@@ -245,7 +245,8 @@ namespace ts {
             NEUndefinedOrNull = 1 << 19,  // x != undefined / x != null
             Truthy = 1 << 20,             // x
             Falsy = 1 << 21,              // !x
-            All = (1 << 22) - 1,
+            Discriminatable = 1 << 22,    // May have discriminant property
+            All = (1 << 23) - 1,
             // The following members encode facts about particular kinds of types for use in the getTypeFacts function.
             // The presence of a particular fact means that the given test is true for some (and possibly all) values
             // of that kind of type.
@@ -275,9 +276,9 @@ namespace ts {
             TrueFacts = BaseBooleanFacts | Truthy,
             SymbolStrictFacts = TypeofEQSymbol | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull | Truthy,
             SymbolFacts = SymbolStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
-            ObjectStrictFacts = TypeofEQObject | TypeofEQHostObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | NEUndefined | NENull | NEUndefinedOrNull | Truthy,
+            ObjectStrictFacts = TypeofEQObject | TypeofEQHostObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | NEUndefined | NENull | NEUndefinedOrNull | Truthy | Discriminatable,
             ObjectFacts = ObjectStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
-            FunctionStrictFacts = TypeofEQFunction | TypeofEQHostObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | NEUndefined | NENull | NEUndefinedOrNull | Truthy,
+            FunctionStrictFacts = TypeofEQFunction | TypeofEQHostObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | NEUndefined | NENull | NEUndefinedOrNull | Truthy | Discriminatable,
             FunctionFacts = FunctionStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
             UndefinedFacts = TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | EQUndefined | EQUndefinedOrNull | NENull | Falsy,
             NullFacts = TypeofEQObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | TypeofNEHostObject | EQNull | EQUndefinedOrNull | NEUndefined | Falsy,
@@ -7848,17 +7849,24 @@ namespace ts {
         }
 
         function isDiscriminantProperty(type: Type, name: string) {
-            if (type) {
-                const nonNullType = getNonNullableType(type);
-                if (nonNullType.flags & TypeFlags.Union) {
-                    const prop = getPropertyOfType(nonNullType, name);
-                    if (prop && prop.flags & SymbolFlags.SyntheticProperty) {
-                        if ((<TransientSymbol>prop).isDiscriminantProperty === undefined) {
-                            (<TransientSymbol>prop).isDiscriminantProperty = !(<TransientSymbol>prop).hasCommonType &&
-                                isUnitUnionType(getTypeOfSymbol(prop));
-                        }
-                        return (<TransientSymbol>prop).isDiscriminantProperty;
+            if (type && type.flags & TypeFlags.Union) {
+                let prop = getPropertyOfType(type, name);
+                if (!prop) {
+                    // The type may be a union that includes nullable or primtive types. If filtering
+                    // those out produces a different type, get the property from that type instead.
+                    // Effectively, we're checking if this *could* be a discriminant property once nullable
+                    // and primitive types are removed by other type guards.
+                    const filteredType = getTypeWithFacts(type, TypeFacts.Discriminatable);
+                    if (filteredType !== type && filteredType.flags & TypeFlags.Union) {
+                        prop = getPropertyOfType(type, name);
                     }
+                }
+                if (prop && prop.flags & SymbolFlags.SyntheticProperty) {
+                    if ((<TransientSymbol>prop).isDiscriminantProperty === undefined) {
+                        (<TransientSymbol>prop).isDiscriminantProperty = !(<TransientSymbol>prop).hasCommonType &&
+                            isUnitUnionType(getTypeOfSymbol(prop));
+                    }
+                    return (<TransientSymbol>prop).isDiscriminantProperty;
                 }
             }
             return false;
