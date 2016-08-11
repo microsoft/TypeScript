@@ -120,6 +120,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 tsConfigOptions = tsConfigOptions || {};
                 tsConfigOptions.extendedDiagnostics = true;
                 tsConfigOptions.diagnostics = true;
+                tsConfigOptions.types = [];
                 global.gc();
                 ts.performance.enable();
                 const output = Harness.Compiler.compileFiles(
