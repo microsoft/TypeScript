@@ -1063,44 +1063,38 @@ var lintTargets = compilerSources
     .concat(["Gulpfile.ts"])
     .concat([nodeServerInFile, perftscPath, "tests/perfsys.ts", webhostPath]);
 
-function min(collection, predicate) {
-    var minimum;
-    var selected;
-    for (var key in collection) {
-        var value = predicate(collection[key]);
-        if (typeof minimum === "undefined" || value <= minimum) {
-            minimum = value;
-            selected = collection[key];
-        }
+function sendNextFile(files, child, callback, failures) {
+    var file = files.pop();
+    if (file) {
+        console.log("Linting '" + file + "'.");
+        child.send({kind: "file", name: file});
     }
-    return selected;
+    else {
+        child.send({kind: "close"});
+        callback(failures);
+    }
 }
 
-function spawnLintWorker(bucket, callback) {
+function spawnLintWorker(files, callback) {
     var child = child_process.fork("./scripts/parallel-lint");
     var failures = 0;
     child.on("message", function(data) {
         switch (data.kind) {
-            case "start":
-                console.log("Linting '" + data.name + "'.");
-                break;
             case "result":
                 if (data.failures > 0) {
                     failures += data.failures;
                     console.log(data.output);
                 }
+                sendNextFile(files, child, callback, failures);
                 break;
             case "error":
                 console.error(data.error);
                 failures++;
-                break;
-            case "complete":
-                child.unref();
-                callback(failures);
+                sendNextFile(files, child, callback, failures);
                 break;
         }
     });
-    child.send({kind: "config", data: bucket.elements});
+    sendNextFile(files, child, callback, failures);
 }
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
@@ -1118,24 +1112,13 @@ task("lint", ["build-rules"], function() {
     }
 
     var workerCount = (process.env.workerCount && +process.env.workerCount) || os.cpus().length;
-    var buckets = new Array(workerCount);
-    for (var i = 0; i < workerCount; i++) {
-        buckets[i] = {totalSize: 0, elements: []};
-    }
 
     var names = Object.keys(done).sort(function(namea, nameb) {
-        return done[namea] < done[nameb];
+        return done[namea] - done[nameb];
     });
-    for (var i in names) {
-        var name = names[i];
-        var bucket = min(buckets, function(b) { return b.totalSize; });
-        bucket.totalSize += done[name];
-        bucket.elements.push(name);
-    }
 
-    console.log(buckets);
-    for (var i in buckets) {
-        spawnLintWorker(buckets[i], finished);
+    for (var i = 0; i < workerCount; i++) {
+        spawnLintWorker(names, finished);
     }
 
     var completed = 0;

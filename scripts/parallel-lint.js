@@ -20,7 +20,6 @@ function lintFileAsync(options, path, cb) {
         if (err) {
             return cb(err);
         }
-        process.send({kind: "start", name: path});
         var result = lintFileContents(options, path, contents);
         cb(undefined, result);
     });
@@ -28,23 +27,19 @@ function lintFileAsync(options, path, cb) {
 
 process.on("message", function(data) {
     switch (data.kind) {
-        case "config":
-        var files = data.data;
-        var done = 0;
+        case "file":
+        var target = data.name;
         var lintOptions = getLinterOptions();
-        files.forEach(function(target) {
-            lintFileAsync(lintOptions, target, function(err, result) {
-                if (err) {
-                    process.send({kind: "error", error: err.toString()});
-                    done++;
-                    return;
-                }
-                process.send({kind: "result", failures: result.failureCount, output: result.output});
-                done++;
-                if (done === files.length) {
-                    process.send({kind: "complete"});
-                }
-            });
+        lintFileAsync(lintOptions, target, function(err, result) {
+            if (err) {
+                process.send({kind: "error", error: err.toString()});
+                return;
+            }
+            process.send({kind: "result", failures: result.failureCount, output: result.output});
         });
+        break;
+        case "close":
+        process.exit(0);
+        break;
     }
 });

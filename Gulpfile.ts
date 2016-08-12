@@ -34,7 +34,6 @@ import through2 = require("through2");
 import merge2 = require("merge2");
 import intoStream = require("into-stream");
 import * as os from "os";
-import Linter = require("tslint");
 import fold = require("travis-fold");
 const gulp = helpMaker(originalGulp);
 const mochaParallel = require("./scripts/mocha-parallel.js");
@@ -929,26 +928,6 @@ gulp.task("build-rules", "Compiles tslint rules to js", () => {
         .pipe(gulp.dest(dest));
 });
 
-function getLinterOptions() {
-    return {
-        configuration: require("./tslint.json"),
-        formatter: "prose",
-        formattersDirectory: undefined,
-        rulesDirectory: "built/local/tslint"
-    };
-}
-
-function lintFileContents(options, path, contents) {
-    const ll = new Linter(path, contents, options);
-    console.log("Linting '" + path + "'.");
-    return ll.lint();
-}
-
-function lintFile(options, path) {
-    const contents = fs.readFileSync(path, "utf8");
-    return lintFileContents(options, path, contents);
-}
-
 const lintTargets = [
     "Gulpfile.ts",
     "src/compiler/**/*.ts",
@@ -960,29 +939,72 @@ const lintTargets = [
     "tests/*.ts", "tests/webhost/*.ts" // Note: does *not* descend recursively
 ];
 
+function sendNextFile(files, child, callback, failures) {
+    const file = files.pop();
+    if (file) {
+        console.log(`Linting '${file.path}'.`);
+        child.send({ kind: "file", name: file.path });
+    }
+    else {
+        child.send({ kind: "close" });
+        callback(failures);
+    }
+}
+
+function spawnLintWorker(files, callback) {
+    const child = cp.fork("./scripts/parallel-lint");
+    let failures = 0;
+    child.on("message", function(data) {
+        switch (data.kind) {
+            case "result":
+                if (data.failures > 0) {
+                    failures += data.failures;
+                    console.log(data.output);
+                }
+                sendNextFile(files, child, callback, failures);
+                break;
+            case "error":
+                console.error(data.error);
+                failures++;
+                sendNextFile(files, child, callback, failures);
+                break;
+        }
+    });
+    sendNextFile(files, child, callback, failures);
+}
 
 gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules"], () => {
     const fileMatcher = RegExp(cmdLineOptions["files"]);
-    const lintOptions = getLinterOptions();
-    let failed = 0;
     if (fold.isTravis()) console.log(fold.start("lint"));
+
+    const files = [];
     return gulp.src(lintTargets)
-        .pipe(insert.transform((contents, file) => {
-            if (!fileMatcher.test(file.path)) return contents;
-            const result = lintFile(lintOptions, file.path);
-            if (result.failureCount > 0) {
-                console.log(result.output);
-                failed += result.failureCount;
+        .pipe(through2.obj((chunk, enc, cb) => {
+            files.push(chunk);
+            cb();
+        }, (cb) => {
+            files.sort((filea, fileb) => filea.contents.length - fileb.contents.length).filter(file =>  fileMatcher.test(file.path));
+            const workerCount = (process.env.workerCount && +process.env.workerCount) || os.cpus().length;
+            for (let i = 0; i < workerCount; i++) {
+                spawnLintWorker(files, finished);
             }
-            return contents; // TODO (weswig): Automatically apply fixes? :3
-        }))
-        .on("end", () => {
-            if (fold.isTravis()) console.log(fold.end("lint"));
-            if (failed > 0) {
-                console.error("Linter errors.");
-                process.exit(1);
+
+            let completed = 0;
+            let failures = 0;
+            function finished(fails) {
+                completed++;
+                failures += fails;
+                if (completed === workerCount) {
+                    if (fold.isTravis()) console.log(fold.end("lint"));
+                    if (failures > 0) {
+                        throw new Error(`Linter errors: ${failures}`);
+                    }
+                    else {
+                        cb();
+                    }
+                }
             }
-        });
+        }));
 });
 
 
