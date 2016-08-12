@@ -754,13 +754,13 @@ namespace ts {
                                     if (optionDefinition.type === "list") {
                                         const convertedValue: string[] = [];
                                         for (const element of value as (string | number)[]) {
-                                            convertedValue.push(getKeyOfCompilerOptionValue(element, customTypeMap));
+                                            convertedValue.push(getNameOfCompilerOptionValue(element, customTypeMap));
                                         }
                                         result[name] = convertedValue;
                                     }
                                     else {
                                         // There is a typeMap associated with this command-line option so use it to map value back to its name
-                                        result[name] = getKeyOfCompilerOptionValue(value, customTypeMap);
+                                        result[name] = getNameOfCompilerOptionValue(value, customTypeMap);
                                     }
                                 }
                             }
