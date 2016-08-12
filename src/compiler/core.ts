@@ -1196,6 +1196,14 @@ namespace ts {
         return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;
     }
 
+    export function hasJavaScriptFileExtension(fileName: string) {
+        return forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
+    }
+
+    export function hasTypeScriptFileExtension(fileName: string) {
+        return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
+    }
+
     export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions) {
         if (!fileName) { return false; }
 

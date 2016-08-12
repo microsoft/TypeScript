@@ -1,5 +1,4 @@
 /// <reference path="../../services/JsTyping.ts"/>
-/// <reference path="../../services/shims.ts"/>
 /// <reference path="../types.d.ts"/>
 
 namespace ts.server.typingsInstaller {

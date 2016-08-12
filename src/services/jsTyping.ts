@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0.
 // See LICENSE.txt in the project root for complete license information.
 
-/// <reference path='services.ts' />
+/// <reference path='../compiler/types.ts' />
+/// <reference path='../compiler/core.ts' />
+/// <reference path='../compiler/commandLineParser.ts' />
 
 /* @internal */
 namespace ts.JsTyping {
@@ -54,7 +56,10 @@ namespace ts.JsTyping {
         }
 
         // Only infer typings for .js and .jsx files
-        fileNames = filter(map(fileNames, normalizePath), f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JS, ScriptKind.JSX));
+        fileNames = filter(map(fileNames, normalizePath), f => {
+            const kind = ensureScriptKind(f, getScriptKindFromFileName(f));
+            return kind === ScriptKind.JS || kind === ScriptKind.JSX;
+        });
 
         if (!safeList) {
             const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
@@ -170,7 +175,7 @@ namespace ts.JsTyping {
                 mergeTypings(filter(cleanedTypingNames, f => hasProperty(safeList, f)));
             }
 
-            const hasJsxFile = forEach(fileNames, f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JSX));
+            const hasJsxFile = forEach(fileNames, f => ensureScriptKind(f, getScriptKindFromFileName(f)) === ScriptKind.JSX);
             if (hasJsxFile) {
                 mergeTypings(["react"]);
             }
