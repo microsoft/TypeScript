@@ -147,17 +147,29 @@ namespace ts {
         return count;
     }
 
+    /**
+     * Filters an array by a predicate function. Returns the same array instance if the predicate is
+     * true for all elements, otherwise returns a new array instance containing the filtered subset.
+     */
     export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
-        let result: T[];
         if (array) {
-            result = [];
-            for (const item of array) {
-                if (f(item)) {
-                    result.push(item);
+            const len = array.length;
+            let i = 0;
+            while (i < len && f(array[i])) i++;
+            if (i < len) {
+                const result = array.slice(0, i);
+                i++;
+                while (i < len) {
+                    const item = array[i];
+                    if (f(item)) {
+                        result.push(item);
+                    }
+                    i++;
                 }
+                return result;
             }
         }
-        return result;
+        return array;
     }
 
     export function filterMutate<T>(array: T[], f: (x: T) => boolean): void {
