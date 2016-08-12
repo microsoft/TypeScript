@@ -6329,6 +6329,8 @@ namespace ts {
                                     comments.push(scanner.getTokenText());
                                     break;
                                 case SyntaxKind.AtToken:
+                                    done = true;
+                                    break;
                                 case SyntaxKind.AsteriskToken:
                                 default:
                                     comments.push(scanner.getTokenText());

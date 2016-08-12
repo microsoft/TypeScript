@@ -310,9 +310,9 @@ verify.quickInfoIs("(parameter) b: number", "");
 
 goTo.marker('21');
 verify.currentSignatureHelpDocCommentIs("This is multiplication function");
-verify.currentParameterHelpArgumentDocCommentIs("@param d @anotherTag");
+verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('21aq');
-verify.quickInfoIs("(parameter) c: number", "@param d @anotherTag");
+verify.quickInfoIs("(parameter) c: number", "");
 
 goTo.marker('22');
 verify.currentSignatureHelpDocCommentIs("This is multiplication function");
@@ -347,7 +347,7 @@ goTo.marker('26aq');
 verify.quickInfoIs("(parameter) b: string", "");
 
 goTo.marker('27');
-verify.completionListContains("multiply", "function multiply(a: number, b: number, c?: number, d?: any, e?: any): void", "This is multiplication function\n@anotherTag\n@anotherTag");
+verify.completionListContains("multiply", "function multiply(a: number, b: number, c?: number, d?: any, e?: any): void", "This is multiplication function");
 verify.completionListContains("f1", "function f1(a: number): any (+1 overload)", "fn f1 with number");
 
 goTo.marker('28');
