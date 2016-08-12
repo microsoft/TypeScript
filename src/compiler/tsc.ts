@@ -749,7 +749,7 @@ namespace ts {
         }
     }
 
-    function writeConfigFile(options: CompilerOptions, fileNames: string[]) {
+    function writeConfigFile(options: CompilerOptions, fileNames: string[]): void {
         const currentDirectory = sys.getCurrentDirectory();
         const file = normalizePath(combinePaths(currentDirectory, "tsconfig.json"));
         if (sys.fileExists(file)) {
@@ -759,8 +759,6 @@ namespace ts {
             sys.writeFile(file, JSON.stringify(generateTSConfig(options, fileNames), undefined, 4));
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file), /* host */ undefined);
         }
-
-        return;
     }
 }
 
