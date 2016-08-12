@@ -5352,12 +5352,12 @@ namespace ts {
             }
         }
 
-        // We deduplicate the constituent types based on object identity. If the subtypeReduction flag is
-        // specified we also reduce the constituent type set to only include types that aren't subtypes of
-        // other types. Subtype reduction is expensive for large union types and is possible only when union
+        // We sort and deduplicate the constituent types based on object identity. If the subtypeReduction
+        // flag is specified we also reduce the constituent type set to only include types that aren't subtypes
+        // of other types. Subtype reduction is expensive for large union types and is possible only when union
         // types are known not to circularly reference themselves (as is the case with union types created by
         // expression constructs such as array literals and the || and ?: operators). Named types can
-        // circularly reference themselves and therefore cannot be deduplicated during their declaration.
+        // circularly reference themselves and therefore cannot be subtype reduced during their declaration.
         // For example, "type Item = string | (() => Item" is a named type that circularly references itself.
         function getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             if (types.length === 0) {
@@ -5379,15 +5379,23 @@ namespace ts {
                     typeSet.containsUndefined ? typeSet.containsNonWideningType ? undefinedType : undefinedWideningType :
                         neverType;
             }
-            else if (typeSet.length === 1) {
-                return typeSet[0];
+            return getUnionTypeFromSortedList(typeSet, aliasSymbol, aliasTypeArguments);
+        }
+
+        // This function assumes the constituent type list is sorted and deduplicated.
+        function getUnionTypeFromSortedList(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+            if (types.length === 0) {
+                return neverType;
             }
-            const id = getTypeListId(typeSet);
+            if (types.length === 1) {
+                return types[0];
+            }
+            const id = getTypeListId(types);
             let type = unionTypes[id];
             if (!type) {
-                const propagatedFlags = getPropagatingFlagsOfTypes(typeSet, /*excludeKinds*/ TypeFlags.Nullable);
+                const propagatedFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
                 type = unionTypes[id] = <UnionType>createObjectType(TypeFlags.Union | propagatedFlags);
-                type.types = typeSet;
+                type.types = types;
                 type.aliasSymbol = aliasSymbol;
                 type.aliasTypeArguments = aliasTypeArguments;
             }
@@ -8168,12 +8176,12 @@ namespace ts {
         }
 
         function filterType(type: Type, f: (t: Type) => boolean): Type {
-            if (!(type.flags & TypeFlags.Union)) {
-                return f(type) ? type : neverType;
+            if (type.flags & TypeFlags.Union) {
+                const types = (<UnionType>type).types;
+                const filtered = filter(types, f);
+                return filtered === types ? type : getUnionTypeFromSortedList(filtered);
             }
-            const types = (<UnionType>type).types;
-            const filtered = filter(types, f);
-            return filtered === types ? type : getUnionType(filtered);
+            return f(type) ? type : neverType;
         }
 
         function isIncomplete(flowType: FlowType) {
