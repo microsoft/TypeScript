@@ -194,11 +194,11 @@ namespace ts {
     }
 
     function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: MapLike<ResolvedModule>): void {
-        checkCache("resolved modules", program, fileName, Map.create(expectedContent), f => f.resolvedModules, checkResolvedModule);
+        checkCache("resolved modules", program, fileName, expectedContent && Map.create(expectedContent), f => f.resolvedModules, checkResolvedModule);
     }
 
     function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: MapLike<ResolvedTypeReferenceDirective>): void {
-        checkCache("resolved type directives", program, fileName, Map.create(expectedContent), f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
+        checkCache("resolved type directives", program, fileName, expectedContent && Map.create(expectedContent), f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
     }
 
     describe("Reuse program structure", () => {
