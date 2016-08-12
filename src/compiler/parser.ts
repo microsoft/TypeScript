@@ -378,7 +378,7 @@ namespace ts {
             case SyntaxKind.JSDocNullableType:
                 return visitNode(cbNode, (<JSDocNullableType>node).type);
             case SyntaxKind.JSDocRecordType:
-                return visitNodes(cbNodes, (<JSDocRecordType>node).members);
+                return visitNode(cbNode, (<JSDocRecordType>node).literal);
             case SyntaxKind.JSDocTypeReference:
                 return visitNode(cbNode, (<JSDocTypeReference>node).name) ||
                     visitNodes(cbNodes, (<JSDocTypeReference>node).typeArguments);
@@ -5993,23 +5993,10 @@ namespace ts {
             }
 
             function parseJSDocRecordType(): JSDocRecordType {
+                // TODO: As we start to use the real type parser more, it will need to understand JSDoc syntax at some point.
                 const result = <JSDocRecordType>createNode(SyntaxKind.JSDocRecordType);
+                result.literal = parseTypeLiteral();
                 nextToken();
-                result.members = parseDelimitedList(ParsingContext.JSDocRecordMembers, parseJSDocRecordMember);
-                checkForTrailingComma(result.members);
-                parseExpected(SyntaxKind.CloseBraceToken);
-                return finishNode(result);
-            }
-
-            function parseJSDocRecordMember(): JSDocRecordMember {
-                const result = <JSDocRecordMember>createNode(SyntaxKind.JSDocRecordMember);
-                result.name = parseSimplePropertyName();
-
-                if (token() === SyntaxKind.ColonToken) {
-                    nextToken();
-                    result.type = parseJSDocType();
-                }
-
                 return finishNode(result);
             }
 
@@ -6256,7 +6243,6 @@ namespace ts {
                 }
 
                 function createJSDocComment(): JSDocComment {
-                    // TODO: Previously we bailed if tags wasn't defined, but now that we also care about comment, it should be OK to continue... right?
                     const result = <JSDocComment>createNode(SyntaxKind.JSDocComment, start);
                     result.tags = tags;
                     result.comment = comments.length ? comments.join("") : undefined;
@@ -6275,7 +6261,7 @@ namespace ts {
                     }
                 }
 
-                function parseTag(): void {
+                function parseTag() {
                     Debug.assert(token() === SyntaxKind.AtToken);
                     const atToken = createNode(SyntaxKind.AtToken, scanner.getTokenPos());
                     atToken.end = scanner.getTextPos();
@@ -6314,6 +6300,14 @@ namespace ts {
                         tag = parseUnknownTag(atToken, tagName);
                     }
 
+                    if (!tag) {
+                        // a badly malformed tag should not be added to the list of tags
+                        return;
+                    }
+                    addTag(tag, parseTagComments());
+                }
+
+                function parseTagComments() {
                     const comments: string[] = [];
                     let savingComments = true;
                     let seenAsterisk = true;
@@ -6388,7 +6382,7 @@ namespace ts {
                     }
 
                     popLastNewline(comments);
-                    addTag(tag, comments);
+                    return comments;
                 }
 
                 function parseUnknownTag(atToken: Node, tagName: Identifier) {
@@ -6399,17 +6393,15 @@ namespace ts {
                 }
 
                 function addTag(tag: JSDocTag, comments: string[]): void {
-                    if (tag) {
-                        tag.comment = comments.join("");
+                    tag.comment = comments.join("");
 
-                        if (!tags) {
-                            tags = <NodeArray<JSDocTag>>[];
-                            tags.pos = tag.pos;
-                        }
-
-                        tags.push(tag);
-                        tags.end = tag.end;
+                    if (!tags) {
+                        tags = <NodeArray<JSDocTag>>[];
+                        tags.pos = tag.pos;
                     }
+
+                    tags.push(tag);
+                    tags.end = tag.end;
                 }
 
                 function tryParseTypeExpression(): JSDocTypeExpression {

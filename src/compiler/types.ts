@@ -1463,7 +1463,7 @@ namespace ts {
 
     // @kind(SyntaxKind.JSDocRecordType)
     export interface JSDocRecordType extends JSDocType, TypeLiteralNode {
-        members: NodeArray<JSDocRecordMember>;
+        literal: TypeLiteralNode;
     }
 
     // @kind(SyntaxKind.JSDocTypeReference)
