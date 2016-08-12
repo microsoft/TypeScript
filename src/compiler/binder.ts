@@ -89,9 +89,10 @@ namespace ts {
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
-        const start = performance.mark();
+        performance.mark("bindStart");
         binder(file, options);
-        performance.measure("Bind", start);
+        performance.mark("bindEnd");
+        performance.measure("Bind", "bindStart", "bindEnd");
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
