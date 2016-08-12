@@ -848,7 +848,7 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
-        const libFileNameSourceFileMap: ts.Map<ts.SourceFile> = {
+        const libFileNameSourceFileMap: ts.MapLike<ts.SourceFile> = {
             [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
         };
 
@@ -1005,13 +1005,13 @@ namespace Harness {
         let optionsIndex: ts.Map<ts.CommandLineOption>;
         function getCommandLineOption(name: string): ts.CommandLineOption {
             if (!optionsIndex) {
-                optionsIndex = {};
+                optionsIndex = ts.Map.create<ts.CommandLineOption>();
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
                 for (const option of optionDeclarations) {
                     optionsIndex[option.name.toLowerCase()] = option;
                 }
             }
-            return ts.lookUp(optionsIndex, name.toLowerCase());
+            return ts.Map.get(optionsIndex, name.toLowerCase());
         }
 
         export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
@@ -1069,7 +1069,7 @@ namespace Harness {
             compilerOptions: ts.CompilerOptions,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
             currentDirectory: string): CompilationOutput {
-            const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.clone(compilerOptions) : { noResolve: false };
+            const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.MapLike.clone(compilerOptions) : { noResolve: false };
             options.target = options.target || ts.ScriptTarget.ES3;
             options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
             options.noErrorTruncation = true;

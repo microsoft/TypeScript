@@ -595,7 +595,7 @@ namespace ts {
 
             parseDiagnostics = [];
             parsingContext = 0;
-            identifiers = {};
+            identifiers = Map.create<string>();
             identifierCount = 0;
             nodeCount = 0;
 
@@ -1084,7 +1084,7 @@ namespace ts {
 
         function internIdentifier(text: string): string {
             text = escapeIdentifier(text);
-            return hasProperty(identifiers, text) ? identifiers[text] : (identifiers[text] = text);
+            return Map.has(identifiers, text) ? identifiers[text] : (identifiers[text] = text);
         }
 
         // An identifier that starts with two underscores has an extra underscore character prepended to it to avoid issues

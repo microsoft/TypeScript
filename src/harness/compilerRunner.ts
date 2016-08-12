@@ -82,7 +82,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 if (testCaseContent.tsConfig) {
                     assert.equal(testCaseContent.tsConfig.fileNames.length, 0, `list of files in tsconfig is not currently supported`);
 
-                    tsConfigOptions = ts.clone(testCaseContent.tsConfig.options);
+                    tsConfigOptions = ts.MapLike.clone(testCaseContent.tsConfig.options);
                 }
                 else {
                     const baseUrl = harnessSettings["baseUrl"];
@@ -291,8 +291,8 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
 
-                const fullResults: ts.Map<TypeWriterResult[]> = {};
-                const pullResults: ts.Map<TypeWriterResult[]> = {};
+                const fullResults: ts.MapLike<TypeWriterResult[]> = {};
+                const pullResults: ts.MapLike<TypeWriterResult[]> = {};
 
                 for (const sourceFile of allFiles) {
                     fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
@@ -338,7 +338,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     }
                 }
 
-                function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
+                function generateBaseLine(typeWriterResults: ts.MapLike<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
                     const typeLines: string[] = [];
                     const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
 

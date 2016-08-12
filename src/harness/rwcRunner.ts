@@ -82,7 +82,7 @@ namespace RWC {
                         };
                         const configParseResult = ts.parseJsonConfigFileContent(parsedTsconfigFileContents.config, configParseHost, ts.getDirectoryPath(tsconfigFile.path));
                         fileNames = configParseResult.fileNames;
-                        opts.options = ts.extend(opts.options, configParseResult.options);
+                        opts.options = ts.MapLike.extend(opts.options, configParseResult.options);
                     }
 
                     // Load the files

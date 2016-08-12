@@ -15,11 +15,11 @@ namespace ts.JsTyping {
 
     interface PackageJson {
         _requiredBy?: string[];
-        dependencies?: Map<string>;
-        devDependencies?: Map<string>;
+        dependencies?: MapLike<string>;
+        devDependencies?: MapLike<string>;
         name?: string;
-        optionalDependencies?: Map<string>;
-        peerDependencies?: Map<string>;
+        optionalDependencies?: MapLike<string>;
+        peerDependencies?: MapLike<string>;
         typings?: string;
     };
 
@@ -47,7 +47,7 @@ namespace ts.JsTyping {
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         // A typing name to typing file path mapping
-        const inferredTypings: Map<string> = {};
+        const inferredTypings = Map.create<string>();
 
         if (!typingOptions || !typingOptions.enableAutoDiscovery) {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
@@ -58,12 +58,7 @@ namespace ts.JsTyping {
 
         if (!safeList) {
             const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
-            if (result.config) {
-                safeList = result.config;
-            }
-            else {
-                safeList = {};
-            };
+            safeList = Map.create<string>(result.config);
         }
 
         const filesToWatch: string[] = [];
@@ -92,8 +87,8 @@ namespace ts.JsTyping {
         getTypingNamesFromSourceFileNames(fileNames);
 
         // Add the cached typing locations for inferred typings that are already installed
-        for (const name in packageNameToTypingLocation) {
-            if (hasProperty(inferredTypings, name) && !inferredTypings[name]) {
+        for (const name in packageNameToTypingLocation) if (Map.guard(packageNameToTypingLocation, name)) {
+            if (!inferredTypings[name]) {
                 inferredTypings[name] = packageNameToTypingLocation[name];
             }
         }
@@ -105,7 +100,7 @@ namespace ts.JsTyping {
 
         const newTypingNames: string[] = [];
         const cachedTypingPaths: string[] = [];
-        for (const typing in inferredTypings) {
+        for (const typing in inferredTypings) if (Map.guard(inferredTypings, typing)) {
             if (inferredTypings[typing] !== undefined) {
                 cachedTypingPaths.push(inferredTypings[typing]);
             }
@@ -124,7 +119,7 @@ namespace ts.JsTyping {
             }
 
             for (const typing of typingNames) {
-                if (!hasProperty(inferredTypings, typing)) {
+                if (!Map.has(inferredTypings, typing)) {
                     inferredTypings[typing] = undefined;
                 }
             }
@@ -139,16 +134,16 @@ namespace ts.JsTyping {
                 const jsonConfig: PackageJson = result.config;
                 filesToWatch.push(jsonPath);
                 if (jsonConfig.dependencies) {
-                    mergeTypings(getKeys(jsonConfig.dependencies));
+                    mergeTypings(MapLike.keys(jsonConfig.dependencies));
                 }
                 if (jsonConfig.devDependencies) {
-                    mergeTypings(getKeys(jsonConfig.devDependencies));
+                    mergeTypings(MapLike.keys(jsonConfig.devDependencies));
                 }
                 if (jsonConfig.optionalDependencies) {
-                    mergeTypings(getKeys(jsonConfig.optionalDependencies));
+                    mergeTypings(MapLike.keys(jsonConfig.optionalDependencies));
                 }
                 if (jsonConfig.peerDependencies) {
-                    mergeTypings(getKeys(jsonConfig.peerDependencies));
+                    mergeTypings(MapLike.keys(jsonConfig.peerDependencies));
                 }
             }
         }
@@ -167,7 +162,7 @@ namespace ts.JsTyping {
                 mergeTypings(cleanedTypingNames);
             }
             else {
-                mergeTypings(filter(cleanedTypingNames, f => hasProperty(safeList, f)));
+                mergeTypings(filter(cleanedTypingNames, f => Map.has(safeList, f)));
             }
 
             const hasJsxFile = forEach(fileNames, f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JSX));

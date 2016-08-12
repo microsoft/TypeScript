@@ -1,7 +1,16 @@
 
 namespace ts {
-    export interface Map<T> {
+    export interface MapLike<T> {
         [index: string]: T;
+    }
+
+    export interface Map<T> {
+        ["<Map<T>>"]: never;
+        [index: string]: T;
+    }
+
+    export interface ReadonlyMap<T> extends Map<T> {
+        readonly [index: string]: T;
     }
 
     // branded string type used to store absolute, normalized and canonicalized paths
@@ -2178,8 +2187,7 @@ namespace ts {
     /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks { }
 
-    export interface SymbolTable {
-        [index: string]: Symbol;
+    export interface SymbolTable extends Map<Symbol> {
     }
 
     /** Represents a "prefix*suffix" pattern. */
@@ -2564,7 +2572,7 @@ namespace ts {
     }
 
     export type RootPaths = string[];
-    export type PathSubstitutions = Map<string[]>;
+    export type PathSubstitutions = MapLike<string[]>;
     export type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
 
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | TsConfigOnlyOptions;
@@ -2740,7 +2748,7 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionBase {
         name: string;
-        type: "string" | "number" | "boolean" | "object" | "list" | Map<number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
+        type: "string" | "number" | "boolean" | "object" | "list" | MapLike<number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
@@ -2756,7 +2764,7 @@ namespace ts {
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
-        type: Map<number | string>;             // an object literal mapping named values to actual values
+        type: MapLike<number | string>;             // an object literal mapping named values to actual values
     }
 
     /* @internal */

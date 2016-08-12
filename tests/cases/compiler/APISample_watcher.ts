@@ -4,7 +4,7 @@
 // @strictNullChecks:true
 
 /*
- * Note: This test is a public API sample. The sample sources can be found 
+ * Note: This test is a public API sample. The sample sources can be found
          at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
@@ -23,7 +23,7 @@ declare var path: any;
 import * as ts from "typescript";
 
 function watch(rootFileNames: string[], options: ts.CompilerOptions) {
-    const files: ts.Map<{ version: number }> = {};
+    const files: ts.MapLike<{ version: number }> = {};
 
     // initialize the list of files
     rootFileNames.forEach(fileName => {

@@ -1061,7 +1061,7 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
-        private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
+        private handlers = Map.create<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>({
             [CommandNames.Exit]: () => {
                 this.exit();
                 return { responseRequired: false };
@@ -1198,16 +1198,16 @@ namespace ts.server {
                 this.reloadProjects();
                 return { responseRequired: false };
             }
-        };
+        });
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => { response?: any, responseRequired: boolean }) {
-            if (this.handlers[command]) {
+            if (Map.get(this.handlers, command)) {
                 throw new Error(`Protocol handler already exists for command "${command}"`);
             }
             this.handlers[command] = handler;
         }
 
         public executeCommand(request: protocol.Request): { response?: any, responseRequired?: boolean } {
-            const handler = this.handlers[request.command];
+            const handler = Map.get(this.handlers, request.command);
             if (handler) {
                 return handler(request);
             }

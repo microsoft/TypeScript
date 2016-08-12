@@ -20,7 +20,7 @@ namespace ts {
     }
 
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
-        let files: Map<T> = {};
+        let files = Map.create<T>();
         return {
             get,
             set,
@@ -31,7 +31,7 @@ namespace ts {
         };
 
         function forEachValueInMap(f: (key: Path, value: T) => void) {
-            for (const key in files) {
+            for (const key in files) if (Map.guard(files, key)) {
                 f(<Path>key, files[key]);
             }
         }
@@ -46,7 +46,7 @@ namespace ts {
         }
 
         function contains(path: Path) {
-            return hasProperty(files, toKey(path));
+            return Map.has(files, toKey(path));
         }
 
         function remove(path: Path) {
@@ -55,7 +55,7 @@ namespace ts {
         }
 
         function clear() {
-            files = {};
+            files = Map.create<T>();
         }
 
         function toKey(path: Path): string {
@@ -322,120 +322,531 @@ namespace ts {
 
     const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-    export function hasProperty<T>(map: Map<T>, key: string): boolean {
-        return hasOwnProperty.call(map, key);
-    }
-
-    export function getKeys<T>(map: Map<T>): string[] {
-        const keys: string[] = [];
-        for (const key in map) {
-            keys.push(key);
-        }
-        return keys;
-    }
-
-    export function getProperty<T>(map: Map<T>, key: string): T | undefined {
-        return hasProperty(map, key) ? map[key] : undefined;
-    }
-
-    export function getOrUpdateProperty<T>(map: Map<T>, key: string, makeValue: () => T): T {
-        return hasProperty(map, key) ? map[key] : map[key] = makeValue();
-    }
-
-    export function isEmpty<T>(map: Map<T>) {
-        for (const id in map) {
-            if (hasProperty(map, id)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    export function clone<T>(object: T): T {
-        const result: any = {};
-        for (const id in object) {
-            result[id] = (<any>object)[id];
-        }
-        return <T>result;
-    }
-
-    export function extend<T1 extends Map<{}>, T2 extends Map<{}>>(first: T1 , second: T2): T1 & T2 {
-        const result: T1 & T2 = <any>{};
-        for (const id in first) {
-            (result as any)[id] = first[id];
-        }
-        for (const id in second) {
-            if (!hasProperty(result, id)) {
-                (result as any)[id] = second[id];
-            }
-        }
-        return result;
-    }
-
-    export function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U {
-        let result: U;
-        for (const id in map) {
-            if (result = callback(map[id])) break;
-        }
-        return result;
-    }
-
-    export function forEachKey<T, U>(map: Map<T>, callback: (key: string) => U): U {
-        let result: U;
-        for (const id in map) {
-            if (result = callback(id)) break;
-        }
-        return result;
-    }
-
-    export function lookUp<T>(map: Map<T>, key: string): T {
-        return hasProperty(map, key) ? map[key] : undefined;
-    }
-
-    export function copyMap<T>(source: Map<T>, target: Map<T>): void {
-        for (const p in source) {
-            target[p] = source[p];
-        }
-    }
-
     /**
-     * Creates a map from the elements of an array.
-     *
-     * @param array the array of input elements.
-     * @param makeKey a function that produces a key for a given element.
-     *
-     * This function makes no effort to avoid collisions; if any two elements produce
-     * the same key with the given 'makeKey' function, then the element with the higher
-     * index in the array will be the one associated with the produced key.
+     * Utilitiy functions for MapLike<T> objects.
      */
-    export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T> {
-        const result: Map<T> = {};
-
-        forEach(array, value => {
-            result[makeKey(value)] = value;
-        });
-
-        return result;
-    }
-
-    /**
-     * Reduce the properties of a map.
-     *
-     * @param map The map to reduce
-     * @param callback An aggregation function that is called for each entry in the map
-     * @param initial The initial value for the reduction.
-     */
-    export function reduceProperties<T, U>(map: Map<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
-        let result = initial;
-        if (map) {
-            for (const key in map) {
-                if (hasProperty(map, key)) {
-                    result = callback(result, map[key], String(key));
+    export namespace MapLike {
+        /**
+         * Tests whether the provided key is present in the map-like.
+         *
+         * @param map A map-like.
+         * @param key A key in the map-like.
+         */
+        export function has<T>(map: MapLike<T>, key: string | number) {
+            return hasOwnProperty.call(map, key);
+        }
+        /**
+         * Gets the value of the entry in the map-like with the provided key.
+         *
+         * @param map A map-like.
+         * @param key A key in the map-like.
+         */
+        export function get<T>(map: MapLike<T>, key: string | number) {
+            return hasOwnProperty.call(map, key) ? map[key] : undefined;
+        }
+        /**
+         * Guards own-properties during for..in enumeration of a map-like.
+         *
+         * @param map A map-like.
+         * @param key A key in the map-like.
+         */
+        export function guard<T>(map: MapLike<T>, key: string | number) {
+            return hasOwnProperty.call(map, key);
+        }
+        /**
+         * Creates an array for each key in a map.
+         *
+         * @param map A map.
+         */
+        export function keys<T>(map: MapLike<T>) {
+            const keys: string[] = [];
+            for (const key in map) if (guard(map, key)) {
+                keys.push(key);
+            }
+            return keys;
+        }
+        /**
+         * Calculates the number of entries in a map.
+         *
+         * @param map A map.
+         */
+        export function size<T>(map: MapLike<T>) {
+            let count = 0;
+            for (const key in map) if (guard(map, key)) {
+                count++;
+            }
+            return count;
+        }
+        /**
+         * Creates a shallow clone of a map.
+         *
+         * @param map A map.
+         */
+        export function clone<T extends MapLike<{}>>(map: T) {
+            const clone = <T>{};
+            for (const key in map) if (guard(map, key)) {
+                clone[key] = map[key];
+            }
+            return clone;
+        }
+        /**
+         * Invokes a callback for each element in the map-like.
+         *
+         * @param map A map-like.
+         * @param callback A callback to execute for each entry.
+         */
+        export function forEach<T, U>(map: MapLike<T>, callback: (value: T, key: string) => U) {
+            for (const key in map) if (guard(map, key)) {
+                const result = callback(map[key], key);
+                if (result) {
+                    return result;
                 }
             }
         }
+        /**
+         * Reduce the properties of a map.
+         *
+         * @param map The map to reduce
+         * @param callback An aggregation function that is called for each entry in the map
+         * @param initial The initial value for the reduction.
+         */
+        export function reduce<T, U>(map: MapLike<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U) {
+            let result = initial;
+            for (const key in map) if (guard(map, key)) {
+                result = callback(result, map[key], key);
+            }
+            return result;
+        }
+        /**
+         * Creates a new object by merging the properties of two objects.
+         */
+        export function extend<T1 extends MapLike<{}>, T2 extends MapLike<{}>>(first: T1, second: T2): T1 & T2 {
+            const result: T1 & T2 = <any>{};
+            for (const id in first) if (guard(first, id)) {
+                (result as any)[id] = first[id];
+            }
+            for (const id in second) if (guard(second, id)) {
+                if (!has(result, id)) {
+                    (result as any)[id] = second[id];
+                }
+            }
+            return result;
+        }
+        /**
+         * Test for shallow equality of two map-likes.
+         *
+         * @param left A map-like.
+         * @param right A map-like.
+         */
+        export function equals<T>(left: MapLike<T>, right: MapLike<T>) {
+            if (left === right) return true;
+            if (!left || !right) return false;
+            for (const key in left) if (guard(left, key)) {
+                if (!has(right, key)) return false;
+                if (get(left, key) !== get(right, key)) return false;
+            }
+            for (const key in right) if (guard(right, key)) {
+                if (!has(left, key)) return false;
+            }
+            return true;
+        }
+    }
 
-        return result;
+    /**
+     * Utility functions for Map<T> objects.
+     */
+    export namespace Map {
+        const createCore = Object.create
+            ? <T>() => <Map<T>>Object.create(null) // tslint:disable-line:no-null-keyword
+            : <T>() => <Map<T>>{};
+        const freezeCore = Object.create
+            ? <T>(map: Map<T>) => <ReadonlyMap<T>>Object.freeze(map)
+            : <T>(map: Map<T>) => <ReadonlyMap<T>>map;
+        const hasCore = Object.create
+            ? <T>(map: Map<T>, key: string | number) => key in map // tslint:disable-line:no-in-operator
+            : MapLike.has;
+        const getCore = Object.create
+            ? <T>(map: Map<T>, key: string | number) => map[key]
+            : MapLike.get;
+        const guardCore = Object.create
+            ? <T>(map: Map<T>, key: string | number) => true
+            : MapLike.guard;
+        class ObjectModeHelper {}
+        /**
+         * Creates a map.
+         *
+         * This map will be created in "dictionary" mode.
+         *
+         * @param template An optional map-like used to populate the map.
+         */
+        export function create<T>(template?: MapLike<T>) {
+            return assign(setDictionaryMode(createCore<T>()), template);
+        }
+        /**
+         * Creates a read-only map.
+         *
+         * This map will be created in "fast" mode and ideally is frozen.
+         *
+         * @param template An optional map-like used to populate the map.
+         */
+        export function createReadOnly<T>(template?: MapLike<T>) {
+            return freezeCore(setObjectMode(create<T>(template)));
+        }
+        /**
+         * Creates a map from an array.
+         *
+         * @param array An array.
+         * @param keySelector A callback used to generate keys for elements in the array.
+         */
+        export function from<T>(array: T[], keySelector: (value: T) => string): Map<T>;
+        /**
+         * Creates a map from an array.
+         *
+         * @param array An array.
+         * @param keySelector A callback used to generate keys for elements in the array.
+         * @param elementSelector A callback used to generate values for elements in the array.
+         */
+        export function from<T, U>(array: T[], keySelector: (value: T) => string | number, elementSelector: (value: T) => U): Map<U>;
+        export function from<T, U>(array: T[], keySelector: (value: T) => string | number, elementSelector?: (value: T) => U): Map<U> {
+            const map = create<T | U>();
+            for (const value of array) {
+                map[keySelector(value)] = elementSelector ? elementSelector(value) : value;
+            }
+            return <Map<U>>map;
+        }
+        /**
+         * Tests whether the provided key is present in the map.
+         *
+         * @param map A map.
+         * @param key A key in the map.
+         */
+        export function has<T>(map: Map<T>, key: string | number) {
+            return hasCore(map, key);
+        }
+        /**
+         * Gets the value of the entry in the map with the provided key.
+         *
+         * @param map A map.
+         * @param key A key in the map.
+         */
+        export function get<T>(map: Map<T>, key: string | number) {
+            return getCore(map, key);
+        }
+        /**
+         * Gets the value of the entry in the map with the provided key, or sets a new entry.
+         *
+         * @param map A map.
+         * @param key A key in the map.
+         * @param value A value to add to the map for a missing entry.
+         */
+        export function getOrAdd<T>(map: Map<T>, key: string | number, value: T) {
+            return hasCore(map, key) ? map[key] : (map[key] = value);
+        }
+        /**
+         * Gets the value of the entry in the map with the provided key, or creates a new entry.
+         *
+         * @param map A map.
+         * @param key A key in the map.
+         * @param factory A callback used to create a new entry.
+         */
+        export function getOrCreate<T>(map: Map<T>, key: string | number, factory: (key: string) => T) {
+            return hasCore(map, key) ? map[key] : (map[key] = factory(String(key)));
+        }
+        /**
+         * Gets the value of the entry in the map with the provided key, or returns a default value.
+         *
+         * @param map A map.
+         * @param key A key in the map.
+         * @param defaultValue A default value to return when the key is not present.
+         */
+        export function getOrDefault<T>(map: Map<T>, key: string | number, defaultValue: T) {
+            return hasCore(map, key) ? map[key] : defaultValue;
+        }
+        /**
+         * Guards own-properties during for..in enumeration of a map.
+         *
+         * @param map A map.
+         * @param key A key in the map.
+         */
+        export function guard<T>(map: Map<T>, key: string | number) {
+            return guardCore(map, key);
+        }
+        /**
+         * Creates an array for each key in a map.
+         *
+         * @param map A map.
+         */
+        export function keys<T>(map: Map<T>) {
+            const keys: string[] = [];
+            for (const key in map) if (guard(map, key)) {
+                keys.push(key);
+            }
+            return keys;
+        }
+        /**
+         * Creates an array for each value in a map.
+         *
+         * @param map A map.
+         */
+        export function values<T>(map: Map<T>) {
+            const values: T[] = [];
+            for (const key in map) if (guard(map, key)) {
+                values.push(map[key]);
+            }
+            return values;
+        }
+        /**
+         * Calculates the number of entries in a map.
+         *
+         * @param map A map.
+         */
+        export function size<T>(map: Map<T>) {
+            let count = 0;
+            for (const key in map) if (guard(map, key)) {
+                count++;
+            }
+            return count;
+        }
+        /**
+         * Tests whether a map contains any entries.
+         *
+         * @param map A map.
+         */
+        export function isEmpty<T>(map: Map<T>) {
+            for (const key in map) if (guard(map, key)) {
+                return false;
+            }
+            return true;
+        }
+        /**
+         * Assigns entries in a target map for each own entry in a source map-like.
+         *
+         * @param target The target map.
+         * @param source The source map-like.
+         */
+        export function assign<T>(target: Map<T>, source: MapLike<T>) {
+            for (const key in source) if (MapLike.guard(source, key)) {
+                target[key] = source[key];
+            }
+            return target;
+        }
+        /**
+         * Creates a shallow clone of a map.
+         *
+         * @param map A map.
+         */
+        export function clone<T extends Map<{}>>(map: T) {
+            return <T>assign(<T>create<{}>(), map);
+        }
+        /**
+         * Creates a shallow, read-only clone of a map.
+         *
+         * @param map A map.
+         */
+        export function cloneReadOnly<T>(map: Map<T>) {
+            return freezeCore(setObjectMode(clone(map)));
+        }
+        /**
+         * Invokes a callback for each element in the map.
+         *
+         * @param map A map.
+         * @param callback A callback to execute for each entry.
+         */
+        export function forEach<T, U>(map: Map<T>, callback: (value: T, key: string) => U) {
+            for (const key in map) if (guard(map, key)) {
+                const result = callback(map[key], key);
+                if (result) {
+                    return result;
+                }
+            }
+        }
+        /**
+         * Creates a copy of a map whose values have been mapped to another value.
+         *
+         * @param map A map.
+         * @param predicate A callback to execute for each entry.
+         */
+        export function map<T, U>(map: Map<T>, selector: (value: T, key: string) => U) {
+            const result = create<U>();
+            for (const key in map) if (guard(map, key)) {
+                const value = map[key];
+                result[key] = selector(value, key);
+            }
+            return result;
+        }
+        /**
+         * Creates a copy of a map whose entries have been mapped to another entry.
+         *
+         * @param map A map.
+         * @param predicate A callback to execute for each entry.
+         */
+        export function mapPairs<T, U>(map: Map<T>, selector: (value: T, key: string) => [string | number, U]) {
+            const result = create<U>();
+            for (const key in map) if (guard(map, key)) {
+                const value = map[key];
+                const pair = selector(value, key);
+                result[pair[0]] = pair[1];
+            }
+            return result;
+        }
+        /**
+         * Creates a copy of a map with only the properties that match the supplied predicate.
+         *
+         * @param map A map.
+         * @param predicate A callback to execute for each entry.
+         */
+        export function filter<T>(map: Map<T>, predicate: (value: T, key: string) => boolean) {
+            const result = create<T>();
+            for (const key in map) if (guard(map, key)) {
+                const value = map[key];
+                if (predicate(value, key)) result[key] = value;
+            }
+            return result;
+        }
+        /**
+         * Finds the value in the map for the entry that matches the supplied predicate.
+         *
+         * @param map A map.
+         * @param predicate A callback to execute for each entry.
+         */
+        export function find<T>(map: Map<T>, predicate: (value: T, key: string) => boolean) {
+            for (const key in map) if (guard(map, key)) {
+                const value = map[key];
+                if (predicate(value, key)) return value;
+            }
+        }
+        /**
+         * Finds the key in the map for the entry that matches the supplied predicate.
+         *
+         * @param map A map.
+         * @param predicate A callback to execute for each entry.
+         */
+        export function findKey<T>(map: Map<T>, predicate: (value: T, key: string) => boolean) {
+            for (const key in map) if (guard(map, key)) {
+                const value = map[key];
+                if (predicate(value, key)) return key;
+            }
+        }
+        /**
+         * Finds the key in the map for the entry that matches the supplied predicate.
+         *
+         * @param map A map.
+         * @param predicate A callback to execute for each entry.
+         */
+        export function findPair<T>(map: Map<T>, predicate: (value: T, key: string) => boolean) {
+            for (const key in map) if (guard(map, key)) {
+                const value = map[key];
+                if (predicate(value, key)) return <[string, T]>[key, value];
+            }
+        }
+        /**
+         * Gets the key for a value in the map.
+         *
+         * @param map A map.
+         * @param value A value.
+         */
+        export function keyFor<T>(map: Map<T>, value: T) {
+            for (const key in map) if (guard(map, key)) {
+                if (value === map[key]) return key;
+            }
+        }
+        /**
+         * Tests whether the provided value is present in the map.
+         *
+         * @param map A map.
+         * @param value A value.
+         */
+        export function includes<T>(map: Map<T>, value: T) {
+            for (const key in map) if (guard(map, key)) {
+                if (value === map[key]) return true;
+            }
+        }
+        /**
+         * Tests whether at least one entry in a map matches the supplied predicate.
+         *
+         * @param map A map.
+         * @param predicate A callback to execute for each entry.
+         */
+        export function some<T>(map: Map<T>, predicate?: (value: T, key: string) => boolean): boolean {
+            for (const key in map) if (guard(map, key)) {
+                if (!predicate || predicate(map[key], key)) return true;
+            }
+            return false;
+        }
+        /**
+         * Tests whether every entry in a map matches the supplied predicate.
+         *
+         * @param map A map.
+         * @param predicate A callback to execute for each entry.
+         */
+        export function every<T>(map: Map<T>, predicate: (value: T, key: string) => boolean): boolean {
+            for (const key in map) if (guard(map, key)) {
+                if (!predicate(map[key], key)) return false;
+            }
+            return true;
+        }
+        /**
+         * Reduce the properties of a map.
+         *
+         * @param map The map to reduce
+         * @param callback An aggregation function that is called for each entry in the map
+         * @param initial The initial value for the reduction.
+         */
+        export function reduce<T, U>(map: Map<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U) {
+            let result = initial;
+            for (const key in map) if (guard(map, key)) {
+                result = callback(result, map[key], key);
+            }
+            return result;
+        }
+        /**
+         * Test for shallow equality of two maps.
+         *
+         * @param left A map.
+         * @param right A map.
+         */
+        export function equals<T>(left: Map<T>, right: Map<T>) {
+            if (left === right) return true;
+            if (!left || !right) return false;
+            for (const key in left) if (guard(left, key)) {
+                if (!has(right, key)) return false;
+                if (get(left, key) !== get(right, key)) return false;
+            }
+            for (const key in right) if (guard(right, key)) {
+                if (!has(left, key)) return false;
+            }
+            return true;
+        }
+        function setDictionaryMode<T>(map: Map<T>) {
+            (<any>map).__DICTIONARY_MODE__ = 1;
+            delete (<any>map).__DICTIONARY_MODE__;
+            return map;
+        }
+        function setObjectMode<T>(map: Map<T>) {
+            const savedPrototype = ObjectModeHelper.prototype;
+            ObjectModeHelper.prototype = map;
+            use(new ObjectModeHelper());
+            ObjectModeHelper.prototype = savedPrototype;
+            return map;
+        }
+        function use(value: any) {
+            // conditional return avoids unreachable code detection.
+            if (!0) return;
+            // direct eval prevents inlining on v8.
+            eval(undefined);
+        }
+    }
+
+    const cloneCore = Object.create
+        ? <T>(object: T) => Object.create(Object.getPrototypeOf(object))
+        : <T>(object: T) => <T>{};
+
+    export function clone<T>(object: T): T {
+        const result: any = cloneCore(object);
+        for (const id in object) if (hasOwnProperty.call(object, id)) {
+            result[id] = (<any>object)[id];
+        }
+        return <T>result;
     }
 
     /**
@@ -462,12 +873,12 @@ namespace ts {
         return text.replace(/{(\d+)}/g, (match, index?) => args[+index + baseIndex]);
     }
 
-    export let localizedDiagnosticMessages: Map<string> = undefined;
+    export let localizedDiagnosticMessages: MapLike<string> = undefined;
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
-        return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key]
-            ? localizedDiagnosticMessages[message.key]
-            : message.message;
+        return localizedDiagnosticMessages
+            && MapLike.get(localizedDiagnosticMessages, message.key)
+            || message.message;
     }
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;

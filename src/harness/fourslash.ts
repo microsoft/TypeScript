@@ -95,17 +95,17 @@ namespace FourSlash {
 
     export import IndentStyle = ts.IndentStyle;
 
-    const entityMap: ts.Map<string> = {
+    const entityMap = ts.Map.createReadOnly<string>({
         "&": "&amp;",
         "\"": "&quot;",
         "'": "&#39;",
         "/": "&#47;",
         "<": "&lt;",
         ">": "&gt;"
-    };
+    });
 
     export function escapeXmlAttributeValue(s: string) {
-        return s.replace(/[&<>"'\/]/g, ch => entityMap[ch]);
+        return s.replace(/[&<>"'\/]/g, ch => ts.Map.get(entityMap, ch));
     }
 
     // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
@@ -204,7 +204,7 @@ namespace FourSlash {
 
         public formatCodeOptions: ts.FormatCodeOptions;
 
-        private inputFiles: ts.Map<string> = {};  // Map between inputFile's fileName and its content for easily looking up when resolving references
+        private inputFiles: ts.MapLike<string> = {};  // Map between inputFile's fileName and its content for easily looking up when resolving references
 
         // Add input file which has matched file name with the given reference-file path.
         // This is necessary when resolveReference flag is specified
@@ -300,7 +300,7 @@ namespace FourSlash {
             }
             else {
                 // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
-                ts.forEachKey(this.inputFiles, fileName => {
+                ts.MapLike.forEach(this.inputFiles, (_, fileName) => {
                     if (!Harness.isDefaultLibraryFile(fileName)) {
                         this.languageServiceAdapterHost.addScript(fileName, this.inputFiles[fileName], /*isRootFile*/ true);
                     }
@@ -593,9 +593,9 @@ namespace FourSlash {
 
         public noItemsWithSameNameButDifferentKind(): void {
             const completions = this.getCompletionListAtCaret();
-            const uniqueItems: ts.Map<string> = {};
+            const uniqueItems = ts.Map.create<string>();
             for (const item of completions.entries) {
-                if (!ts.hasProperty(uniqueItems, item.name)) {
+                if (!ts.Map.has(uniqueItems, item.name)) {
                     uniqueItems[item.name] = item.kind;
                 }
                 else {
@@ -773,7 +773,7 @@ namespace FourSlash {
         }
 
         public verifyRangesWithSameTextReferenceEachOther() {
-            ts.forEachValue(this.rangesByText(), ranges => this.verifyRangesReferenceEachOther(ranges));
+            ts.MapLike.forEach(this.rangesByText(), ranges => this.verifyRangesReferenceEachOther(ranges));
         }
 
         private verifyReferencesWorker(references: ts.ReferenceEntry[], fileName: string, start: number, end: number, isWriteAccess?: boolean, isDefinition?: boolean) {
@@ -1487,7 +1487,7 @@ namespace FourSlash {
         }
 
         public copyFormatOptions(): ts.FormatCodeOptions {
-            return ts.clone(this.formatCodeOptions);
+            return ts.MapLike.clone(this.formatCodeOptions);
         }
 
         public setFormatOptions(formatCodeOptions: ts.FormatCodeOptions): ts.FormatCodeOptions {
@@ -1638,11 +1638,11 @@ namespace FourSlash {
             return this.testData.ranges;
         }
 
-        public rangesByText(): ts.Map<Range[]> {
-            const result: ts.Map<Range[]> = {};
+        public rangesByText(): ts.MapLike<Range[]> {
+            const result: ts.MapLike<Range[]> = {};
             for (const range of this.getRanges()) {
                 const text = this.rangeText(range);
-                (ts.getProperty(result, text) || (result[text] = [])).push(range);
+                (ts.MapLike.get(result, text) || (result[text] = [])).push(range);
             }
             return result;
         }
@@ -1663,7 +1663,7 @@ namespace FourSlash {
 
         private getIndentation(fileName: string, position: number, indentStyle: ts.IndentStyle, baseIndentSize: number): number {
 
-            const formatOptions = ts.clone(this.formatCodeOptions);
+            const formatOptions = ts.MapLike.clone(this.formatCodeOptions);
             formatOptions.IndentStyle = indentStyle;
             formatOptions.BaseIndentSize = baseIndentSize;
 
@@ -1897,7 +1897,7 @@ namespace FourSlash {
 
         public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
 
-            const openBraceMap: ts.Map<ts.CharacterCodes> = {
+            const openBraceMap: ts.MapLike<ts.CharacterCodes> = {
                 "(": ts.CharacterCodes.openParen,
                 "{": ts.CharacterCodes.openBrace,
                 "[": ts.CharacterCodes.openBracket,
@@ -2474,7 +2474,7 @@ ${code}
     }
 
     function getNonFileNameOptionInObject(optionObject: { [s: string]: string }): string {
-        for (const option in optionObject) {
+        for (const option in optionObject) if (ts.MapLike.guard(optionObject, option)) {
             if (option !== metadataOptionNames.fileName) {
                 return option;
             }
@@ -2772,7 +2772,7 @@ namespace FourSlashInterface {
             return this.state.getRanges();
         }
 
-        public rangesByText(): ts.Map<FourSlash.Range[]> {
+        public rangesByText(): ts.MapLike<FourSlash.Range[]> {
             return this.state.rangesByText();
         }
 

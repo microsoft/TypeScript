@@ -32,7 +32,7 @@ namespace ts.performance {
      */
     export function increment(counterName: string) {
         if (counters) {
-            counters[counterName] = (getProperty(counters, counterName) || 0) + 1;
+            counters[counterName] = (Map.get(counters, counterName) || 0) + 1;
         }
     }
 
@@ -42,7 +42,7 @@ namespace ts.performance {
      * @param counterName The name of the counter.
      */
     export function getCount(counterName: string) {
-        return counters && getProperty(counters, counterName) || 0;
+        return counters && Map.get(counters, counterName) || 0;
     }
 
     /**
@@ -60,17 +60,19 @@ namespace ts.performance {
      */
     export function measure(measureName: string, marker: number) {
         if (measures) {
-            measures[measureName] = (getProperty(measures, measureName) || 0) + (timestamp() - marker);
+            measures[measureName] = (Map.get(measures, measureName) || 0) + (timestamp() - marker);
         }
     }
 
     /**
      * Iterate over each measure, performing some action
-     * 
+     *
      * @param cb The action to perform for each measure
      */
     export function forEachMeasure(cb: (measureName: string, duration: number) => void) {
-        return forEachKey(measures, key => cb(key, measures[key]));
+        for (const key in measures) if (Map.guard(measures, key)) {
+            cb(key, measures[key]);
+        }
     }
 
     /**
@@ -79,21 +81,13 @@ namespace ts.performance {
      * @param measureName The name of the measure whose durations should be accumulated.
      */
     export function getDuration(measureName: string) {
-        return measures && getProperty(measures, measureName) || 0;
+        return measures && Map.get(measures, measureName) || 0;
     }
 
     /** Enables (and resets) performance measurements for the compiler. */
     export function enable() {
-        counters = { };
-        measures = {
-            "I/O Read": 0,
-            "I/O Write": 0,
-            "Program": 0,
-            "Parse": 0,
-            "Bind": 0,
-            "Check": 0,
-            "Emit": 0,
-        };
+        counters = Map.create<number>();
+        measures = Map.create<number>();
 
         profilerEvent = typeof onProfilerEvent === "function" && onProfilerEvent.profiler === true
             ? onProfilerEvent

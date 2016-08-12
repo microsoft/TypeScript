@@ -122,11 +122,11 @@ namespace ts {
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
-    const categoryFormatMap: Map<string> = {
+    const categoryFormatMap = Map.createReadOnly<string>({
         [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
         [DiagnosticCategory.Error]: redForegroundEscapeSequence,
         [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
-    };
+    });
 
     function formatAndReset(text: string, formatStyle: string) {
         return formatStyle + text + resetEscapeSequence;
@@ -432,7 +432,7 @@ namespace ts {
             }
 
             // reset the cache of existing files
-            cachedExistingFiles = {};
+            cachedExistingFiles = Map.create<boolean>();
 
             const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
@@ -445,7 +445,7 @@ namespace ts {
         }
 
         function cachedFileExists(fileName: string): boolean {
-            if (hasProperty(cachedExistingFiles, fileName)) {
+            if (Map.has(cachedExistingFiles, fileName)) {
                 return cachedExistingFiles[fileName];
             }
             return cachedExistingFiles[fileName] = hostFileExists(fileName);
@@ -676,7 +676,7 @@ namespace ts {
         const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
         const descriptionColumn: string[] = [];
 
-        const optionsDescriptionMap: Map<string[]> = {};  // Map between option.description and list of option.type if it is a kind
+        const optionsDescriptionMap = Map.create<string[]>();  // Map between option.description and list of option.type if it is a kind
 
         for (let i = 0; i < optsList.length; i++) {
             const option = optsList[i];
@@ -704,9 +704,10 @@ namespace ts {
                 description = getDiagnosticText(option.description);
                 const options: string[] = [];
                 const element = (<CommandLineOptionOfListType>option).element;
-                forEachKey(<Map<number | string>>element.type, key => {
+                const typeMap = <MapLike<number | string>>element.type;
+                for (const key in typeMap) if (MapLike.guard(typeMap, key)) {
                     options.push(`'${key}'`);
-                });
+                }
                 optionsDescriptionMap[description] = options;
             }
             else {
@@ -763,7 +764,7 @@ namespace ts {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file), /* host */ undefined);
         }
         else {
-            const compilerOptions = extend(options, defaultInitCompilerOptions);
+            const compilerOptions = MapLike.extend(options, defaultInitCompilerOptions);
             const configurations: any = {
                 compilerOptions: serializeCompilerOptions(compilerOptions)
             };
@@ -786,41 +787,37 @@ namespace ts {
         return;
 
         function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
-            const result: Map<string | number | boolean> = {};
+            const result = Map.create<string | number | boolean>();
             const optionsNameMap = getOptionNameMap().optionNameMap;
 
-            for (const name in options) {
-                if (hasProperty(options, name)) {
-                    // tsconfig only options cannot be specified via command line,
-                    // so we can assume that only types that can appear here string | number | boolean
-                    const value = <string | number | boolean>options[name];
-                    switch (name) {
-                        case "init":
-                        case "watch":
-                        case "version":
-                        case "help":
-                        case "project":
-                            break;
-                        default:
-                            let optionDefinition = optionsNameMap[name.toLowerCase()];
-                            if (optionDefinition) {
-                                if (typeof optionDefinition.type === "string") {
-                                    // string, number or boolean
-                                    result[name] = value;
-                                }
-                                else {
-                                    // Enum
-                                    const typeMap = <Map<number>>optionDefinition.type;
-                                    for (const key in typeMap) {
-                                        if (hasProperty(typeMap, key)) {
-                                            if (typeMap[key] === value)
-                                                result[name] = key;
-                                        }
-                                    }
+            for (const name in options) if (MapLike.guard(options, name)) {
+                // tsconfig only options cannot be specified via command line,
+                // so we can assume that only types that can appear here string | number | boolean
+                const value = <string | number | boolean>options[name];
+                switch (name) {
+                    case "init":
+                    case "watch":
+                    case "version":
+                    case "help":
+                    case "project":
+                        break;
+                    default:
+                        let optionDefinition = optionsNameMap[name.toLowerCase()];
+                        if (optionDefinition) {
+                            if (typeof optionDefinition.type === "string") {
+                                // string, number or boolean
+                                result[name] = value;
+                            }
+                            else {
+                                // Enum
+                                const typeMap = <MapLike<number>>optionDefinition.type;
+                                for (const key in typeMap) if (MapLike.guard(typeMap, key)) {
+                                    if (typeMap[key] === value)
+                                        result[name] = key;
                                 }
                             }
-                            break;
-                    }
+                        }
+                        break;
                 }
             }
             return result;

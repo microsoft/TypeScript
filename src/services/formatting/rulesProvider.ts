@@ -31,7 +31,7 @@ namespace ts.formatting {
 
                 this.activeRules = activeRules;
                 this.rulesMap = rulesMap;
-                this.options = ts.clone(options);
+                this.options = ts.MapLike.clone(options);
             }
         }
 
