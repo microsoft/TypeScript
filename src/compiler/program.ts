@@ -119,49 +119,31 @@ namespace ts {
     }
 
     function tryReadTypesSection(packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
-        let jsonContent: { typings?: string, types?: string, main?: string };
-        try {
-            const jsonText = state.host.readFile(packageJsonPath);
-            jsonContent = jsonText ? <{ typings?: string, types?: string, main?: string }>JSON.parse(jsonText) : {};
-        }
-        catch (e) {
-            // gracefully handle if readFile fails or returns not JSON
-            jsonContent = {};
+        const jsonContent = readJson(packageJsonPath, state.host);
+
+        function tryReadFromField(fieldName: string) {
+            if (hasProperty(jsonContent, fieldName)) {
+                const typesFile = (<any>jsonContent)[fieldName];
+                if (typeof typesFile === "string") {
+                    const typesFilePath = normalizePath(combinePaths(baseDirectory, typesFile));
+                    if (state.traceEnabled) {
+                        trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, fieldName, typesFile, typesFilePath);
+                    }
+                    return typesFilePath;
+                }
+                else {
+                    if (state.traceEnabled) {
+                        trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, fieldName, typeof typesFile);
+                    }
+                }
+            }
         }
 
-        let typesFile: string;
-        let fieldName: string;
-        // first try to read content of 'typings' section (backward compatibility)
-        if (jsonContent.typings) {
-            if (typeof jsonContent.typings === "string") {
-                fieldName = "typings";
-                typesFile = jsonContent.typings;
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, "typings", typeof jsonContent.typings);
-                }
-            }
-        }
-        // then read 'types'
-        if (!typesFile && jsonContent.types) {
-            if (typeof jsonContent.types === "string") {
-                fieldName = "types";
-                typesFile = jsonContent.types;
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, "types", typeof jsonContent.types);
-                }
-            }
-        }
-        if (typesFile) {
-            const typesFilePath = normalizePath(combinePaths(baseDirectory, typesFile));
-            if (state.traceEnabled) {
-                trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, fieldName, typesFile, typesFilePath);
-            }
+        const typesFilePath = tryReadFromField("typings") || tryReadFromField("types");
+        if (typesFilePath) {
             return typesFilePath;
         }
+
         // Use the main module for inferring types if no types package specified and the allowJs is set
         if (state.compilerOptions.allowJs && jsonContent.main && typeof jsonContent.main === "string") {
             if (state.traceEnabled) {
@@ -171,6 +153,17 @@ namespace ts {
             return mainFilePath;
         }
         return undefined;
+    }
+
+    function readJson(path: string, host: ModuleResolutionHost): { typings?: string, types?: string, main?: string } {
+        try {
+            const jsonText = host.readFile(path);
+            return jsonText ? JSON.parse(jsonText) : {};
+        }
+        catch (e) {
+            // gracefully handle if readFile fails or returns not JSON
+            return {};
+        }
     }
 
     const typeReferenceExtensions = [".d.ts"];
@@ -717,7 +710,7 @@ namespace ts {
     }
 
     function loadNodeModuleFromDirectory(extensions: string[], candidate: string, failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
-        const packageJsonPath = combinePaths(candidate, "package.json");
+        const packageJsonPath = pathToPackageJson(candidate);
         const directoryExists = !onlyRecordFailures && directoryProbablyExists(candidate, state.host);
         if (directoryExists && state.host.fileExists(packageJsonPath)) {
             if (state.traceEnabled) {
@@ -745,6 +738,10 @@ namespace ts {
         }
 
         return loadModuleFromFile(combinePaths(candidate, "index"), extensions, failedLookupLocation, !directoryExists, state);
+    }
+
+    function pathToPackageJson(directory: string): string {
+        return combinePaths(directory, "package.json");
     }
 
     function loadModuleFromNodeModulesFolder(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState): string {
@@ -1070,15 +1067,21 @@ namespace ts {
         }
 
         // Walk the primary type lookup locations
-        let result: string[] = [];
+        const result: string[] = [];
         if (host.directoryExists && host.getDirectories) {
             const typeRoots = getEffectiveTypeRoots(options, host);
             if (typeRoots) {
                 for (const root of typeRoots) {
                     if (host.directoryExists(root)) {
                         for (const typeDirectivePath of host.getDirectories(root)) {
-                            // Return just the type directive names
-                            result = result.concat(getBaseFileName(normalizePath(typeDirectivePath)));
+                            const normalized = normalizePath(typeDirectivePath);
+                            const packageJsonPath = pathToPackageJson(combinePaths(root, normalized));
+                            // tslint:disable-next-line:no-null-keyword
+                            const isNotNeededPackage = host.fileExists(packageJsonPath) && readJson(packageJsonPath, host).typings === null;
+                            if (!isNotNeededPackage) {
+                                // Return just the type directive names
+                                result.push(getBaseFileName(normalized));
+                            }
                         }
                     }
                 }
