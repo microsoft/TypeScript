@@ -531,8 +531,6 @@ const localRwcBaseline = path.join(internalTests, "baselines/rwc/local");
 const refRwcBaseline = path.join(internalTests, "baselines/rwc/reference");
 
 const localTest262Baseline = path.join(internalTests, "baselines/test262/local");
-const refTest262Baseline = path.join(internalTests, "baselines/test262/reference");
-
 
 gulp.task("tests", "Builds the test infrastructure using the built compiler", [run]);
 gulp.task("tests-debug", "Builds the test sources and automation in debug mode", () => {
@@ -811,8 +809,6 @@ gulp.task("diff-rwc", "Diffs the RWC baselines using the diff tool specified by 
     exec(getDiffTool(), [refRwcBaseline, localRwcBaseline], done, done);
 });
 
-
-const deleteEnding = '.delete';
 gulp.task("baseline-accept", "Makes the most recent test results the new baseline, overwriting the old baseline", () => {
     return baselineAccept("");
 });
@@ -827,13 +823,12 @@ function baselineCopy(subfolder = "") {
 }
 
 function baselineDelete(subfolder = "") {
-    return gulp.src(['tests/baselines/local/**/*.delete'])
+    return gulp.src(["tests/baselines/local/**/*.delete"])
         .pipe(insert.transform((content, fileObj) => {
-            const target = path.join(refBaseline, fileObj.relative.substr(0, fileObj.relative.length - '.delete'.length));
-            console.log(target);
+            const target = path.join(refBaseline, fileObj.relative.substr(0, fileObj.relative.length - ".delete".length));
             del.sync(target);
             del.sync(fileObj.path);
-            return '';
+            return "";
         }));
 }
 

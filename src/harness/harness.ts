@@ -1667,7 +1667,7 @@ namespace Harness {
             const encoded_actual = Utils.encodeString(actual);
             if (expected !== encoded_actual) {
                 if (actual === NoContent) {
-                    IO.writeFile(relativeFileName + '.delete', '');
+                    IO.writeFile(relativeFileName + ".delete", "");
                 }
                 else {
                     IO.writeFile(relativeFileName, actual);
