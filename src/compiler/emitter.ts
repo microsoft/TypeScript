@@ -1141,11 +1141,10 @@ const _super = (function (geti, seti) {
                 indentBeforeDot = needsIndentation(node, node.expression, dotToken);
                 indentAfterDot = needsIndentation(node, dotToken, node.name);
             }
-            const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
 
             emitExpression(node.expression);
             increaseIndentIf(indentBeforeDot);
-            write(shouldEmitDotDot ? ".." : ".");
+            write(needsDotDotForPropertyAccess(node.expression, /*dotHasPrecedingTrivia*/ indentBeforeDot) ? ".." : ".");
             increaseIndentIf(indentAfterDot);
             emit(node.name);
             decreaseIndentIf(indentBeforeDot, indentAfterDot);
@@ -1153,18 +1152,26 @@ const _super = (function (geti, seti) {
 
         // 1..toString is a valid property access, emit a dot after the literal
         // Also emit a dot if expression is a integer const enum value - it will appear in generated code as numeric literal
-        function needsDotDotForPropertyAccess(expression: Expression) {
+        // Note that if the caller intends to emit trivia that precedes the dot, a double dot is not required.
+        function needsDotDotForPropertyAccess(expression: Expression, dotHasPrecedingTrivia: boolean) {
+            if (dotHasPrecedingTrivia) {
+                return false;
+            }
             if (expression.kind === SyntaxKind.NumericLiteral) {
                 // check if numeric literal was originally written with a dot
+                // if it was, then it will be emitted with a trailing dot elsewhere if necessary.
                 const text = getLiteralTextOfNode(<LiteralExpression>expression);
                 return text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
             }
-            else {
+            // Const enums usually get a comment following their value, so there is no need to add a trailing period.
+            // However, if 'removeComments' is used, then a dot may be required after the const enum's value.
+            if (compilerOptions.removeComments) {
                 // check if constant enum value is integer
                 const constantValue = tryGetConstEnumValue(expression);
                 // isFinite handles cases when constantValue is undefined
                 return isFinite(constantValue) && Math.floor(constantValue) === constantValue;
             }
+            return false;
         }
 
         function emitElementAccessExpression(node: ElementAccessExpression) {

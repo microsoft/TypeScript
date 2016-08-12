@@ -1,0 +1,17 @@
+=== tests/cases/conformance/constEnums/constEnumMemberMemberAccess02.ts ===
+
+const enum Foo {
+>Foo : Foo
+
+    A
+>A : Foo
+}
+
+Foo.A["toString"]();
+>Foo.A["toString"]() : string
+>Foo.A["toString"] : (radix?: number) => string
+>Foo.A : Foo
+>Foo : typeof Foo
+>A : Foo
+>"toString" : string
+
