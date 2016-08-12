@@ -2395,13 +2395,14 @@ ${code}
                 // Comment line, check for global/file @options and record them
                 const match = optionRegex.exec(line.substr(2));
                 if (match) {
-                    const fileMetadataNamesIndex = fileMetadataNames.indexOf(match[1]);
+                    const [key, value] = match.slice(1);
+                    const fileMetadataNamesIndex = fileMetadataNames.indexOf(key);
                     if (fileMetadataNamesIndex === -1) {
                         // Check if the match is already existed in the global options
-                        if (globalOptions[match[1]] !== undefined) {
-                            throw new Error("Global Option : '" + match[1] + "' is already existed");
+                        if (globalOptions[key] !== undefined) {
+                            throw new Error(`Global option '${key}' already exists`);
                         }
-                        globalOptions[match[1]] = match[2];
+                        globalOptions[key] = value;
                     }
                     else {
                         if (fileMetadataNamesIndex === fileMetadataNames.indexOf(metadataOptionNames.fileName)) {
@@ -2416,12 +2417,12 @@ ${code}
                                 resetLocalData();
                             }
 
-                            currentFileName = basePath + "/" + match[2];
-                            currentFileOptions[match[1]] = match[2];
+                            currentFileName = basePath + "/" + value;
+                            currentFileOptions[key] = value;
                         }
                         else {
                             // Add other fileMetadata flag
-                            currentFileOptions[match[1]] = match[2];
+                            currentFileOptions[key] = value;
                         }
                     }
                 }
@@ -2509,7 +2510,7 @@ ${code}
         }
 
         const marker: Marker = {
-            fileName: fileName,
+            fileName,
             position: location.position,
             data: markerValue
         };
@@ -2526,7 +2527,7 @@ ${code}
 
     function recordMarker(fileName: string, location: LocationInformation, name: string, markerMap: MarkerMap, markers: Marker[]): Marker {
         const marker: Marker = {
-            fileName: fileName,
+            fileName,
             position: location.position
         };
 

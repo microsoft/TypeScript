@@ -986,13 +986,19 @@ namespace ts {
         multiLine?: boolean;
     }
 
+    export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
+    export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
+
     // @kind(SyntaxKind.PropertyAccessExpression)
     export interface PropertyAccessExpression extends MemberExpression, Declaration {
         expression: LeftHandSideExpression;
         name: Identifier;
     }
-
-    export type IdentifierOrPropertyAccess = Identifier | PropertyAccessExpression;
+    /** Brand for a PropertyAccessExpression which, like a QualifiedName, consists of a sequence of identifiers separated by dots. */
+    export interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
+        _propertyAccessExpressionLikeQualifiedNameBrand?: any;
+        expression: EntityNameExpression;
+    }
 
     // @kind(SyntaxKind.ElementAccessExpression)
     export interface ElementAccessExpression extends MemberExpression {
@@ -2035,7 +2041,7 @@ namespace ts {
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessibilityResult;
-        isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
+        isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
@@ -2044,7 +2050,7 @@ namespace ts {
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
         getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile;
-        getTypeReferenceDirectivesForEntityName(name: EntityName | PropertyAccessExpression): string[];
+        getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[];
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
     }
 
@@ -2373,6 +2379,7 @@ namespace ts {
 
     export interface TupleType extends ObjectType {
         elementTypes: Type[];  // Element types
+        thisType?: Type;       // This-type of tuple (only needed for tuples that are constraints of type parameters)
     }
 
     export interface UnionOrIntersectionType extends Type {

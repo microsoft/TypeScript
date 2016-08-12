@@ -5,6 +5,7 @@ var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
 var Linter = require("tslint");
+var fold = require("travis-fold");
 var runTestsInParallel = require("./scripts/mocha-parallel").runTestsInParallel;
 
 // Variables
@@ -560,9 +561,19 @@ compileFile(
 desc("Builds language service server library");
 task("lssl", [tsserverLibraryFile, tsserverLibraryDefinitionFile]);
 
+desc("Emit the start of the build fold");
+task("build-fold-start", [] , function() {
+    if (fold.isTravis()) console.log(fold.start("build"));
+});
+
+desc("Emit the end of the build fold");
+task("build-fold-end", [] , function() {
+    if (fold.isTravis()) console.log(fold.end("build"));
+});
+
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON, "lssl"]);
+task("local", ["build-fold-start", "generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON, "lssl", "build-fold-end"]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -998,10 +1009,20 @@ var tslintRulesOutFiles = tslintRules.map(function(p) {
     return path.join(builtLocalDirectory, "tslint", p + ".js");
 });
 desc("Compiles tslint rules to js");
-task("build-rules", tslintRulesOutFiles);
+task("build-rules", ["build-rules-start"].concat(tslintRulesOutFiles).concat(["build-rules-end"]));
 tslintRulesFiles.forEach(function(ruleFile, i) {
     compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false,
     { noOutFile: true, generateDeclarations: false, outDir: path.join(builtLocalDirectory, "tslint")});
+});
+
+desc("Emit the start of the build-rules fold");
+task("build-rules-start", [] , function() {
+    if (fold.isTravis()) console.log(fold.start("build-rules"));
+});
+
+desc("Emit the end of the build-rules fold");
+task("build-rules-end", [] , function() {
+    if (fold.isTravis()) console.log(fold.end("build-rules"));
 });
 
 function getLinterOptions() {
@@ -1047,6 +1068,7 @@ var lintTargets = compilerSources
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
 task("lint", ["build-rules"], function() {
+    if (fold.isTravis()) console.log(fold.start("lint"));
     var lintOptions = getLinterOptions();
     var failed = 0;
     var fileMatcher = RegExp(process.env.f || process.env.file || process.env.files || "");
@@ -1062,6 +1084,7 @@ task("lint", ["build-rules"], function() {
             done[target] = true;
         }
     }
+    if (fold.isTravis()) console.log(fold.end("lint"));
     if (failed > 0) {
         fail('Linter errors.', failed);
     }

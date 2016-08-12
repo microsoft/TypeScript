@@ -97,7 +97,7 @@ namespace ts {
      * returns a truthy value, then returns that value.
      * If no such value is found, the callback is applied to each element of array and undefined is returned.
      */
-    export function forEach<T, U>(array: T[], callback: (element: T, index: number) => U): U {
+    export function forEach<T, U>(array: T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
         if (array) {
             for (let i = 0, len = array.length; i < len; i++) {
                 const result = callback(array[i], i);
@@ -107,6 +107,17 @@ namespace ts {
             }
         }
         return undefined;
+    }
+
+    /** Like `forEach`, but assumes existence of array and fails if no truthy value is found. */
+    export function find<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U {
+        for (let i = 0, len = array.length; i < len; i++) {
+            const result = callback(array[i], i);
+            if (result) {
+                return result;
+            }
+        }
+        Debug.fail();
     }
 
     export function contains<T>(array: T[], value: T): boolean {
@@ -152,17 +163,29 @@ namespace ts {
         return count;
     }
 
+    /**
+     * Filters an array by a predicate function. Returns the same array instance if the predicate is
+     * true for all elements, otherwise returns a new array instance containing the filtered subset.
+     */
     export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
-        let result: T[];
         if (array) {
-            result = [];
-            for (const item of array) {
-                if (f(item)) {
-                    result.push(item);
+            const len = array.length;
+            let i = 0;
+            while (i < len && f(array[i])) i++;
+            if (i < len) {
+                const result = array.slice(0, i);
+                i++;
+                while (i < len) {
+                    const item = array[i];
+                    if (f(item)) {
+                        result.push(item);
+                    }
+                    i++;
                 }
+                return result;
             }
         }
-        return result;
+        return array;
     }
 
     export function filterMutate<T>(array: T[], f: (x: T) => boolean): void {
