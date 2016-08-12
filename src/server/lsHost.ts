@@ -101,7 +101,7 @@ namespace ts.server {
         }
 
         getScriptFileNames() {
-            return this.project.getRootFiles();
+            return this.project.getRootFilesLSHost();
         }
 
         getScriptKind(fileName: string) {

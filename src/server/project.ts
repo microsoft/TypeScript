@@ -2,6 +2,7 @@
 /// <reference path="utilities.ts"/>
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="lsHost.ts"/>
+/// <reference path="typingsCache.ts"/>
 
 namespace ts.server {
 
@@ -25,7 +26,6 @@ namespace ts.server {
         private program: ts.Program;
 
         private languageService: LanguageService;
-
         /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
          */
@@ -46,6 +46,8 @@ namespace ts.server {
          * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
          */
         private projectStateVersion = 0;
+
+        private typingFiles: string[];
 
         constructor(
             readonly projectKind: ProjectKind,
@@ -74,7 +76,7 @@ namespace ts.server {
             this.markAsDirty();
         }
 
-        getLanguageService(ensureSynchronized = true): LanguageService  {
+        getLanguageService(ensureSynchronized = true): LanguageService {
             if (ensureSynchronized) {
                 this.updateGraph();
             }
@@ -134,6 +136,21 @@ namespace ts.server {
 
         getRootFiles() {
             return this.rootFiles && this.rootFiles.map(info => info.fileName);
+        }
+
+        getRootFilesLSHost() {
+            const result: string[] = [];
+            if (this.rootFiles) {
+                for (const f of this.rootFiles) {
+                    result.push(f.fileName);
+                }
+                if (this.typingFiles) {
+                    for (const f of this.typingFiles) {
+                        result.push(f);
+                    }
+                }
+            }
+            return result;
         }
 
         getRootScriptInfos() {
@@ -209,16 +226,35 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return true;
             }
+            const hasChanges = this.updateGraphWorker();
+            if (hasChanges) {
+                if (this.setTypings(this.projectService.typingsCache.getTypingsForProject(this))) {
+                    this.updateGraphWorker();
+                }
+                this.projectStructureVersion++;
+            }
+            return hasChanges;
+        }
 
+        setTypings(typings: string[]): boolean {
+            if (typings === this.typingFiles) {
+                return false;
+            }
+            this.typingFiles = typings;
+            this.markAsDirty();
+            return true;
+        }
+
+        private updateGraphWorker() {
             const oldProgram = this.program;
             this.program = this.languageService.getProgram();
 
-            const oldProjectStructureVersion = this.projectStructureVersion;
+            let hasChanges = false;
             // bump up the version if
             // - oldProgram is not set - this is a first time updateGraph is called
             // - newProgram is different from the old program and structure of the old program was not reused.
             if (!oldProgram || (this.program !== oldProgram && !oldProgram.structureIsReused)) {
-                this.projectStructureVersion++;
+                hasChanges = true;
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
                         if (this.program.getSourceFileByPath(f.path)) {
@@ -232,8 +268,7 @@ namespace ts.server {
                     }
                 }
             }
-
-            return oldProjectStructureVersion === this.projectStructureVersion;
+            return hasChanges;
         }
 
         getScriptInfoLSHost(fileName: string) {
@@ -392,9 +427,14 @@ namespace ts.server {
             documentRegistry: ts.DocumentRegistry,
             hasExplicitListOfFiles: boolean,
             compilerOptions: CompilerOptions,
+            private typingOptions: TypingOptions,
             private wildcardDirectories: Map<WatchDirectoryFlags>,
             languageServiceEnabled: boolean) {
             super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions);
+        }
+
+        getTypingOptions() {
+            return this.typingOptions;
         }
 
         getProjectName() {

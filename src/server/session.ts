@@ -147,6 +147,7 @@ namespace ts.server {
     }
 
     export class Session {
+        private readonly gcTimer: GcTimer;
         protected projectService: ProjectService;
         private errorTimer: any; /*NodeJS.Timer | number*/
         private immediateId: any;
@@ -165,6 +166,7 @@ namespace ts.server {
                 new ProjectService(host, logger, cancellationToken, useSingleInferredProject, (eventName, project, fileName) => {
                     this.handleEvent(eventName, project, fileName);
                 });
+            this.gcTimer = new GcTimer(host, /*delay*/ 15000, logger);
         }
 
         private handleEvent(eventName: string, project: Project, fileName: NormalizedPath) {
@@ -1464,6 +1466,7 @@ namespace ts.server {
         }
 
         public onMessage(message: string) {
+            this.gcTimer.scheduleCollect();
             let start: number[];
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 start = this.hrtime();

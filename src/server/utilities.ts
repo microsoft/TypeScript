@@ -8,6 +8,28 @@ namespace ts.server {
         verbose
     }
 
+    export interface InstallTypingsRequest {
+        readonly projectName: string;
+        readonly fileNames: string[];
+        readonly projectRootPath: ts.Path;
+        readonly safeListPath: ts.Path;
+        readonly packageNameToTypingLocation: ts.Map<string>;
+        readonly typingOptions: ts.TypingOptions;
+        readonly compilerOptions: ts.CompilerOptions;
+        readonly cachePath: string;
+    }
+
+    export interface InstallTypingsResponse {
+        readonly projectName: string;
+        readonly typingOptions: ts.TypingOptions;
+        readonly compilerOptions: ts.CompilerOptions;
+        readonly typings: string[];
+    }
+
+    export interface InstallTypingHost extends JsTyping.TypingResolutionHost {
+        writeFile(path: string, content: string): void;
+    }
+
     export interface Logger {
         close(): void;
         hasLevel(level: LogLevel): boolean;
@@ -188,6 +210,7 @@ namespace ts.server {
         files?: string[];
         wildcardDirectories?: Map<WatchDirectoryFlags>;
         compilerOptions?: CompilerOptions;
+        typingOptions?: TypingOptions;
     }
 
     export function isInferredProjectName(name: string) {
@@ -216,6 +239,37 @@ namespace ts.server {
         private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
             delete self.pendingTimeouts[operationId];
             cb();
+        }
+    }
+
+    export class GcTimer {
+        private timerId: any;
+        private gc: () => void;
+        constructor(private readonly host: ServerHost, private readonly delay: number, private readonly logger: Logger) {
+            if (typeof global !== "undefined" && global.gc) {
+                this.gc = () => global.gc();
+            }
+        }
+
+        public scheduleCollect() {
+            if (!this.gc || this.timerId != undefined) {
+                // no global.gc or collection was already scheduled - skip this request
+                return;
+            }
+            this.timerId = this.host.setTimeout(GcTimer.run, this.delay, this);
+        }
+
+        private static run(self: GcTimer) {
+            self.timerId = undefined;
+
+            const log = self.logger.hasLevel(LogLevel.requestTime);
+            const before = log && self.host.getMemoryUsage();
+
+            self.gc();
+            if (log) {
+                const after = self.host.getMemoryUsage();
+                self.logger.perftrc(`GC::before ${before}, after ${after}`);
+            }
         }
     }
 }

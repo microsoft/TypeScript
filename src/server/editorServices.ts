@@ -6,6 +6,7 @@
 /// <reference path="scriptVersionCache.ts"/>
 /// <reference path="lsHost.ts"/>
 /// <reference path="project.ts"/>
+/// <reference path="typingsCache.ts"/>
 
 namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
@@ -130,6 +131,9 @@ namespace ts.server {
     }
 
     export class ProjectService {
+
+        public readonly typingsCache: TypingsCache;
+
         private readonly documentRegistry: DocumentRegistry;
 
         /**
@@ -654,6 +658,7 @@ namespace ts.server {
                 compilerOptions: parsedCommandLine.options,
                 configHasFilesProperty: configObj.config["files"] !== undefined,
                 wildcardDirectories: parsedCommandLine.wildcardDirectories,
+                typingOptions: parsedCommandLine.typingOptions
             };
             return { success: true, projectOptions };
         }
@@ -697,6 +702,7 @@ namespace ts.server {
                 this.documentRegistry,
                 projectOptions.configHasFilesProperty,
                 projectOptions.compilerOptions,
+                projectOptions.typingOptions,
                 projectOptions.wildcardDirectories,
                 /*languageServiceEnabled*/ !sizeLimitExceeded);
 
