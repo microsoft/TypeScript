@@ -5,6 +5,10 @@ namespace ts.server {
         enqueueInstallTypingsRequest(p: Project): void;
     }
 
+    export const nullTypingsInstaller: ITypingsInstaller = {
+        enqueueInstallTypingsRequest: () => {}
+    };
+
     class TypingsCacheEntry {
         readonly typingOptions: TypingOptions;
         readonly compilerOptions: CompilerOptions;
@@ -19,8 +23,8 @@ namespace ts.server {
             return (<ConfiguredProject>proj).getTypingOptions();
         }
 
-        const enableAutoDiscovery = 
-            proj.projectKind === ProjectKind.Inferred && 
+        const enableAutoDiscovery =
+            proj.projectKind === ProjectKind.Inferred &&
             proj.getCompilerOptions().allowJs &&
             proj.getFileNames().every(f => fileExtensionIsAny(f, jsOrDts));
 
@@ -35,7 +39,9 @@ namespace ts.server {
         if ((arr1 || emptyArray).length === 0 && (arr2 || emptyArray).length === 0) {
             return true;
         }
+/* tslint:disable:no-null-keyword */
         const set: Map<boolean> = Object.create(null);
+/* tslint:enable:no-null-keyword */
         let unique = 0;
 
         for (const v of arr1) {
@@ -59,7 +65,7 @@ namespace ts.server {
     function typingOptionsChanged(opt1: TypingOptions, opt2: TypingOptions): boolean {
         return opt1.enableAutoDiscovery !== opt2.enableAutoDiscovery ||
             !setIsEqualTo(opt1.include, opt2.include) ||
-            !setIsEqualTo(opt1.exclude, opt2.exclude); 
+            !setIsEqualTo(opt1.exclude, opt2.exclude);
     }
 
     function compilerOptionsChanged(opt1: CompilerOptions, opt2: CompilerOptions): boolean {
@@ -76,7 +82,7 @@ namespace ts.server {
         getTypingsForProject(project: Project): Path[] {
             const typingOptions = getTypingOptionsForProjects(project);
 
-            if(!typingOptions.enableAutoDiscovery) {
+            if (!typingOptions.enableAutoDiscovery) {
                 return emptyArray;
             }
 
@@ -84,7 +90,7 @@ namespace ts.server {
             if (!entry || typingOptionsChanged(typingOptions, entry.typingOptions) || compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions)) {
                 this.installer.enqueueInstallTypingsRequest(project);
             }
-            return entry? entry.typings : emptyArray;
+            return entry ? entry.typings : emptyArray;
         }
 
         deleteTypingsForProject(project: Project) {

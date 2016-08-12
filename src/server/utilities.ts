@@ -1,4 +1,5 @@
 /// <reference path="..\services\services.ts" />
+/// <reference path="types.d.ts" />
 
 namespace ts.server {
     export enum LogLevel {
@@ -6,28 +7,6 @@ namespace ts.server {
         normal,
         requestTime,
         verbose
-    }
-
-    export interface InstallTypingsRequest {
-        readonly projectName: string;
-        readonly fileNames: string[];
-        readonly projectRootPath: ts.Path;
-        readonly safeListPath: ts.Path;
-        readonly packageNameToTypingLocation: ts.Map<string>;
-        readonly typingOptions: ts.TypingOptions;
-        readonly compilerOptions: ts.CompilerOptions;
-        readonly cachePath: string;
-    }
-
-    export interface InstallTypingsResponse {
-        readonly projectName: string;
-        readonly typingOptions: ts.TypingOptions;
-        readonly compilerOptions: ts.CompilerOptions;
-        readonly typings: string[];
-    }
-
-    export interface InstallTypingHost extends JsTyping.TypingResolutionHost {
-        writeFile(path: string, content: string): void;
     }
 
     export interface Logger {
@@ -145,7 +124,6 @@ namespace ts.server {
         };
     }
     function throwLanguageServiceIsDisabledError() {
-        ;
         throw new Error("LanguageService is disabled");
     }
 

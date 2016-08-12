@@ -233,7 +233,7 @@ namespace ts.server {
                 }
                 this.projectStructureVersion++;
             }
-            return hasChanges;
+            return !hasChanges;
         }
 
         setTypings(typings: string[]): boolean {

@@ -692,6 +692,7 @@ namespace Harness.LanguageService {
             const server = new ts.server.Session(serverHost,
                 { isCancellationRequested: () => false },
                 /*useOneInferredProject*/ false,
+		/*typingsInstaller*/ undefined,
                 Utils.byteLength,
                 Utils.maxUncompressedMessageSize,
                 Utils.compress,

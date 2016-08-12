@@ -1,4 +1,5 @@
 /// <reference path="typingsInstaller.ts"/>
+/// <reference types="node" />
 
 namespace ts.server.typingsInstaller {
     export class NodeTypingsInstaller extends TypingsInstaller {

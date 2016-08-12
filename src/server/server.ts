@@ -153,7 +153,8 @@ namespace ts.server {
 
     class IOSession extends Session {
         constructor(host: ServerHost, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean, logger: ts.server.Logger) {
-            super(host, cancellationToken, useSingleInferredProject, Buffer.byteLength, maxUncompressedMessageSize, compress, process.hrtime, logger);
+            // TODO: fixme
+            super(host, cancellationToken, useSingleInferredProject, undefined, Buffer.byteLength, maxUncompressedMessageSize, compress, process.hrtime, logger);
         }
 
         exit() {

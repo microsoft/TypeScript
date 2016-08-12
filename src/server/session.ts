@@ -8,24 +8,10 @@ namespace ts.server {
         stack?: string;
     }
 
-    export interface CompressedData {
-        length: number;
-        compressionKind: string;
-        data: any;
-    }
-
     function hrTimeToMilliseconds(time: number[]): number {
         const seconds = time[0];
         const nanoseconds = time[1];
         return ((1e9 * seconds) + nanoseconds) / 1000000.0;
-    }
-
-    export interface ServerHost extends System {
-        setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
-        clearTimeout(timeoutId: any): void;
-        setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;
-        clearImmediate(timeoutId: any): void;
-        writeCompressedData(prefix: string, data: CompressedData, suffix: string): void;
     }
 
     interface FileStart {
@@ -157,13 +143,14 @@ namespace ts.server {
             private host: ServerHost,
             cancellationToken: HostCancellationToken,
             useSingleInferredProject: boolean,
+            typingsInstaller: ITypingsInstaller,
             private byteLength: (buf: string, encoding?: string) => number,
             private maxUncompressedMessageSize: number,
             private compress: (s: string) => CompressedData,
             private hrtime: (start?: number[]) => number[],
             protected logger: Logger) {
             this.projectService =
-                new ProjectService(host, logger, cancellationToken, useSingleInferredProject, (eventName, project, fileName) => {
+                new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, (eventName, project, fileName) => {
                     this.handleEvent(eventName, project, fileName);
                 });
             this.gcTimer = new GcTimer(host, /*delay*/ 15000, logger);

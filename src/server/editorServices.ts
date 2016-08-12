@@ -176,11 +176,13 @@ namespace ts.server {
             public readonly logger: Logger,
             public readonly cancellationToken: HostCancellationToken,
             private readonly useSingleInferredProject: boolean,
+            private typingsInstaller: ITypingsInstaller,
             private readonly eventHandler?: ProjectServiceEventHandler) {
 
             this.toCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
             this.directoryWatchers = new DirectoryWatchers(this);
             this.throttledOperations = new ThrottledOperations(host);
+            this.typingsCache = new TypingsCache(typingsInstaller || nullTypingsInstaller);
             // ts.disableIncrementalParsing = true;
 
             this.hostConfiguration = {

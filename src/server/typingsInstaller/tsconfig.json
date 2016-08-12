@@ -14,7 +14,7 @@
     },
     "files": [
         "../../services/services.ts",
-        "../utilities.ts",
+        "../types.d.ts",
         "typingsInstaller.ts",
         "nodeTypingsInstaller.ts"
     ]

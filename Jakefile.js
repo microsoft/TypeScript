@@ -11,6 +11,7 @@ var runTestsInParallel = require("./scripts/mocha-parallel").runTestsInParallel;
 var compilerDirectory = "src/compiler/";
 var servicesDirectory = "src/services/";
 var serverDirectory = "src/server/";
+var typingsInstallerDirectory = "src/server/typingsInstaller";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
@@ -102,6 +103,7 @@ var servicesSources = [
 }));
 
 var serverCoreSources = [
+    "types.d.ts",
     "utilities.ts",
     "scriptVersionCache.ts",
     "scriptInfo.ts",
@@ -119,6 +121,14 @@ var cancellationTokenSources = [
     "cancellationToken.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
+});
+
+var typingsInstallerSources = [
+    "../types.d.ts",
+    "typingsInstaller.ts",
+    "nodeTypingsInstaller.ts"
+].map(function (f) {
+    return path.join(typingsInstallerDirectory, f);
 });
 
 var serverSources = serverCoreSources.concat(servicesSources);
@@ -571,8 +581,12 @@ compileFile(
 var cancellationTokenFile = path.join(builtLocalDirectory, "cancellationToken.js");
 compileFile(cancellationTokenFile, cancellationTokenSources, [builtLocalDirectory].concat(cancellationTokenSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { outDir: builtLocalDirectory, noOutFile: true });
 
+var typingsInstallerFile = path.join(builtLocalDirectory, "typingsInstaller.js");
+compileFile(typingsInstallerFile, typingsInstallerSources, [builtLocalDirectory].concat(typingsInstallerSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { outDir: builtLocalDirectory, noOutFile: false });
+
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
-compileFile(serverFile, serverSources,[builtLocalDirectory, copyright, cancellationTokenFile].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"] });
+compileFile(serverFile, serverSources,[builtLocalDirectory, copyright, cancellationTokenFile, typingsInstallerFile].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"] });
+
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 compileFile(
