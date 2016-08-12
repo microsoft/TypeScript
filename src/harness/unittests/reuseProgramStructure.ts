@@ -96,7 +96,7 @@ namespace ts {
     }
 
     function createTestCompilerHost(texts: NamedSourceText[], target: ScriptTarget): CompilerHost {
-        const files: Map<SourceFileWithText> = {};
+        const files = Map.create<SourceFileWithText>();
         for (const t of texts) {
             const file = <SourceFileWithText>createSourceFile(t.name, t.text.getFullText(), target);
             file.sourceText = t.text;
@@ -128,9 +128,9 @@ namespace ts {
             getNewLine(): string {
                 return sys ? sys.newLine : newLine;
             },
-            fileExists: fileName => hasProperty(files, fileName),
+            fileExists: fileName => Map.has(files, fileName),
             readFile: fileName => {
-                const file = lookUp(files, fileName);
+                const file = Map.get(files, fileName);
                 return file && file.text;
             }
         };
@@ -150,16 +150,6 @@ namespace ts {
         const program = <ProgramWithSourceTexts>createProgram(rootNames, options, host, oldProgram);
         program.sourceTexts = texts;
         return program;
-    }
-
-    function getSizeOfMap(map: Map<any>): number {
-        let size = 0;
-        for (const id in map) {
-            if (hasProperty(map, id)) {
-                size++;
-            }
-        }
-        return size;
     }
 
     function checkResolvedModule(expected: ResolvedModule, actual: ResolvedModule): void {
@@ -183,12 +173,12 @@ namespace ts {
         }
         else {
             assert.isTrue(cache !== undefined, `expected ${caption} to be set`);
-            const actualCacheSize = getSizeOfMap(cache);
-            const expectedSize = getSizeOfMap(expectedContent);
+            const actualCacheSize = Map.size(cache);
+            const expectedSize = Map.size(expectedContent);
             assert.isTrue(actualCacheSize === expectedSize, `expected actual size: ${actualCacheSize} to be equal to ${expectedSize}`);
 
             for (const id in expectedContent) {
-                if (hasProperty(expectedContent, id)) {
+                if (Map.guard(expectedContent, id)) {
 
                     if (expectedContent[id]) {
                         const expected = expectedContent[id];
@@ -203,12 +193,12 @@ namespace ts {
         }
     }
 
-    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: Map<ResolvedModule>): void {
-        checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, checkResolvedModule);
+    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: MapLike<ResolvedModule>): void {
+        checkCache("resolved modules", program, fileName, expectedContent && Map.create(expectedContent), f => f.resolvedModules, checkResolvedModule);
     }
 
-    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: Map<ResolvedTypeReferenceDirective>): void {
-        checkCache("resolved type directives", program, fileName, expectedContent, f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
+    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: MapLike<ResolvedTypeReferenceDirective>): void {
+        checkCache("resolved type directives", program, fileName, expectedContent && Map.create(expectedContent), f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
     }
 
     describe("Reuse program structure", () => {

@@ -470,8 +470,8 @@ namespace ts {
             return optionNameMapCache;
         }
 
-        const optionNameMap: Map<CommandLineOption> = {};
-        const shortOptionNames: Map<string> = {};
+        const optionNameMap = Map.create<CommandLineOption>();
+        const shortOptionNames = Map.create<string>();
         forEach(optionDeclarations, option => {
             optionNameMap[option.name.toLowerCase()] = option;
             if (option.shortName) {
@@ -486,10 +486,9 @@ namespace ts {
     /* @internal */
     export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
         const namesOfType: string[] = [];
-        forEachKey(opt.type, key => {
+        for (const key in opt.type) if (MapLike.guard(opt.type, key)) {
             namesOfType.push(` '${key}'`);
-        });
-
+        }
         return createCompilerDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, namesOfType);
     }
 
@@ -497,7 +496,7 @@ namespace ts {
     export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
         const key = trimString((value || "")).toLowerCase();
         const map = opt.type;
-        if (hasProperty(map, key)) {
+        if (MapLike.has(map, key)) {
             return map[key];
         }
         else {
@@ -551,11 +550,11 @@ namespace ts {
                     s = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
 
                     // Try to translate short option names to their full equivalents.
-                    if (hasProperty(shortOptionNames, s)) {
+                    if (Map.has(shortOptionNames, s)) {
                         s = shortOptionNames[s];
                     }
 
-                    if (hasProperty(optionNameMap, s)) {
+                    if (Map.has(optionNameMap, s)) {
                         const opt = optionNameMap[s];
 
                         if (opt.isTSConfigOnly) {
@@ -703,7 +702,7 @@ namespace ts {
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string): ParsedCommandLine {
         const errors: Diagnostic[] = [];
         const compilerOptions: CompilerOptions = convertCompilerOptionsFromJsonWorker(json["compilerOptions"], basePath, errors, configFileName);
-        const options = extend(existingOptions, compilerOptions);
+        const options = MapLike.extend(existingOptions, compilerOptions);
         const typingOptions: TypingOptions = convertTypingOptionsFromJsonWorker(json["typingOptions"], basePath, errors, configFileName);
 
         options.configFilePath = configFileName;
@@ -721,7 +720,7 @@ namespace ts {
 
         function getFileNames(errors: Diagnostic[]): ExpandResult {
             let fileNames: string[];
-            if (hasProperty(json, "files")) {
+            if (MapLike.has(json, "files")) {
                 if (isArray(json["files"])) {
                     fileNames = <string[]>json["files"];
                 }
@@ -731,7 +730,7 @@ namespace ts {
             }
 
             let includeSpecs: string[];
-            if (hasProperty(json, "include")) {
+            if (MapLike.has(json, "include")) {
                 if (isArray(json["include"])) {
                     includeSpecs = <string[]>json["include"];
                 }
@@ -741,7 +740,7 @@ namespace ts {
             }
 
             let excludeSpecs: string[];
-            if (hasProperty(json, "exclude")) {
+            if (MapLike.has(json, "exclude")) {
                 if (isArray(json["exclude"])) {
                     excludeSpecs = <string[]>json["exclude"];
                 }
@@ -749,7 +748,7 @@ namespace ts {
                     errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "exclude", "Array"));
                 }
             }
-            else if (hasProperty(json, "excludes")) {
+            else if (MapLike.has(json, "excludes")) {
                 errors.push(createCompilerDiagnostic(Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
             }
             else {
@@ -808,10 +807,10 @@ namespace ts {
             return;
         }
 
-        const optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
+        const optionNameMap = Map.from(optionDeclarations, opt => opt.name);
 
-        for (const id in jsonOptions) {
-            if (hasProperty(optionNameMap, id)) {
+        for (const id in jsonOptions) if (MapLike.guard(jsonOptions, id)) {
+            if (Map.has(optionNameMap, id)) {
                 const opt = optionNameMap[id];
                 defaultOptions[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
             }
@@ -848,7 +847,7 @@ namespace ts {
 
     function convertJsonOptionOfCustomType(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
         const key = value.toLowerCase();
-        if (hasProperty(opt.type, key)) {
+        if (MapLike.has(opt.type, key)) {
             return opt.type[key];
         }
         else {
@@ -958,12 +957,12 @@ namespace ts {
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map later when when including
         // wildcard paths.
-        const literalFileMap: Map<string> = {};
+        const literalFileMap = Map.create<string>();
 
         // Wildcard paths (provided via the "includes" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard, and to handle extension priority.
-        const wildcardFileMap: Map<string> = {};
+        const wildcardFileMap = Map.create<string>();
 
         if (include) {
             include = validateSpecs(include, errors, /*allowTrailingRecursion*/ false);
@@ -977,7 +976,7 @@ namespace ts {
         // file map that marks whether it was a regular wildcard match (with a `*` or `?` token),
         // or a recursive directory. This information is used by filesystem watchers to monitor for
         // new entries in these paths.
-        const wildcardDirectories: Map<WatchDirectoryFlags> = getWildcardDirectories(include, exclude, basePath, host.useCaseSensitiveFileNames);
+        const wildcardDirectories = getWildcardDirectories(include, exclude, basePath, host.useCaseSensitiveFileNames);
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
@@ -1011,14 +1010,14 @@ namespace ts {
                 removeWildcardFilesWithLowerPriorityExtension(file, wildcardFileMap, supportedExtensions, keyMapper);
 
                 const key = keyMapper(file);
-                if (!hasProperty(literalFileMap, key) && !hasProperty(wildcardFileMap, key)) {
+                if (!Map.has(literalFileMap, key) && !Map.has(wildcardFileMap, key)) {
                     wildcardFileMap[key] = file;
                 }
             }
         }
 
-        const literalFiles = reduceProperties(literalFileMap, addFileToOutput, []);
-        const wildcardFiles = reduceProperties(wildcardFileMap, addFileToOutput, []);
+        const literalFiles = Map.reduce(literalFileMap, addFileToOutput, []);
+        const wildcardFiles = Map.reduce(wildcardFileMap, addFileToOutput, []);
         wildcardFiles.sort(host.useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive);
         return {
             fileNames: literalFiles.concat(wildcardFiles),
@@ -1063,7 +1062,7 @@ namespace ts {
         //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
         const rawExcludeRegex = getRegularExpressionForWildcard(exclude, path, "exclude");
         const excludeRegex = rawExcludeRegex && new RegExp(rawExcludeRegex, useCaseSensitiveFileNames ? "" : "i");
-        const wildcardDirectories: Map<WatchDirectoryFlags> = {};
+        const wildcardDirectories = Map.create<WatchDirectoryFlags>();
         if (include !== undefined) {
             const recursiveKeys: string[] = [];
             for (const file of include) {
@@ -1076,7 +1075,7 @@ namespace ts {
                 if (match) {
                     const key = useCaseSensitiveFileNames ? match[0] : match[0].toLowerCase();
                     const flags = watchRecursivePattern.test(name) ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None;
-                    const existingFlags = getProperty(wildcardDirectories, key);
+                    const existingFlags = Map.get(wildcardDirectories, key);
                     if (existingFlags === undefined || existingFlags < flags) {
                         wildcardDirectories[key] = flags;
                         if (flags === WatchDirectoryFlags.Recursive) {
@@ -1087,12 +1086,10 @@ namespace ts {
             }
 
             // Remove any subpaths under an existing recursively watched directory.
-            for (const key in wildcardDirectories) {
-                if (hasProperty(wildcardDirectories, key)) {
-                    for (const recursiveKey of recursiveKeys) {
-                        if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
-                            delete wildcardDirectories[key];
-                        }
+            for (const key in wildcardDirectories) if (Map.guard(wildcardDirectories, key)) {
+                for (const recursiveKey of recursiveKeys) {
+                    if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
+                        delete wildcardDirectories[key];
                     }
                 }
             }
@@ -1115,7 +1112,7 @@ namespace ts {
         for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
             const higherPriorityExtension = extensions[i];
             const higherPriorityPath = keyMapper(changeExtension(file, higherPriorityExtension));
-            if (hasProperty(literalFiles, higherPriorityPath) || hasProperty(wildcardFiles, higherPriorityPath)) {
+            if (Map.has(literalFiles, higherPriorityPath) || Map.has(wildcardFiles, higherPriorityPath)) {
                 return true;
             }
         }

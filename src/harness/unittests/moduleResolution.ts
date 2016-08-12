@@ -7,10 +7,10 @@ namespace ts {
     }
 
     function createModuleResolutionHost(hasDirectoryExists: boolean, ...files: File[]): ModuleResolutionHost {
-        const map = arrayToMap(files, f => f.name);
+        const map = Map.from(files, f => f.name);
 
         if (hasDirectoryExists) {
-            const directories: Map<string> = {};
+            const directories = Map.create<string>();
             for (const f of files) {
                 let name = getDirectoryPath(f.name);
                 while (true) {
@@ -25,19 +25,19 @@ namespace ts {
             return {
                 readFile,
                 directoryExists: path => {
-                    return hasProperty(directories, path);
+                    return Map.has(directories, path);
                 },
                 fileExists: path => {
-                    assert.isTrue(hasProperty(directories, getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
-                    return hasProperty(map, path);
+                    assert.isTrue(Map.has(directories, getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
+                    return Map.has(map, path);
                 }
             };
         }
         else {
-            return { readFile, fileExists: path => hasProperty(map, path), };
+            return { readFile, fileExists: path => Map.has(map, path), };
         }
         function readFile(path: string): string {
-            return hasProperty(map, path) ? map[path].content : undefined;
+            return Map.has(map, path) ? map[path].content : undefined;
         }
     }
 
@@ -282,12 +282,12 @@ namespace ts {
     });
 
     describe("Module resolution - relative imports", () => {
-        function test(files: Map<string>, currentDirectory: string, rootFiles: string[], expectedFilesCount: number, relativeNamesToCheck: string[]) {
+        function test(files: MapLike<string>, currentDirectory: string, rootFiles: string[], expectedFilesCount: number, relativeNamesToCheck: string[]) {
             const options: CompilerOptions = { module: ModuleKind.CommonJS };
             const host: CompilerHost = {
                 getSourceFile: (fileName: string, languageVersion: ScriptTarget) => {
                     const path = normalizePath(combinePaths(currentDirectory, fileName));
-                    return hasProperty(files, path) ? createSourceFile(fileName, files[path], languageVersion) : undefined;
+                    return MapLike.has(files, path) ? createSourceFile(fileName, files[path], languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: (fileName, content): void => { throw new Error("NotImplemented"); },
@@ -298,7 +298,7 @@ namespace ts {
                 useCaseSensitiveFileNames: () => false,
                 fileExists: fileName => {
                     const path = normalizePath(combinePaths(currentDirectory, fileName));
-                    return hasProperty(files, path);
+                    return MapLike.has(files, path);
                 },
                 readFile: (fileName): string => { throw new Error("NotImplemented"); }
             };
@@ -318,7 +318,7 @@ namespace ts {
         }
 
         it("should find all modules", () => {
-            const files: Map<string> = {
+            const files: MapLike<string> = {
                 "/a/b/c/first/shared.ts": `
 class A {}
 export = A`,
@@ -337,7 +337,7 @@ export = C;
         });
 
         it("should find modules in node_modules", () => {
-            const files: Map<string> = {
+            const files: MapLike<string> = {
                 "/parent/node_modules/mod/index.d.ts": "export var x",
                 "/parent/app/myapp.ts": `import {x} from "mod"`
             };
@@ -345,7 +345,7 @@ export = C;
         });
 
         it("should find file referenced via absolute and relative names", () => {
-            const files: Map<string> = {
+            const files: MapLike<string> = {
                 "/a/b/c.ts": `/// <reference path="b.ts"/>`,
                 "/a/b/b.ts": "var x"
             };
@@ -355,11 +355,11 @@ export = C;
 
     describe("Files with different casing", () => {
         const library = createSourceFile("lib.d.ts", "", ScriptTarget.ES5);
-        function test(files: Map<string>, options: CompilerOptions, currentDirectory: string, useCaseSensitiveFileNames: boolean, rootFiles: string[], diagnosticCodes: number[]): void {
+        function test(files: MapLike<string>, options: CompilerOptions, currentDirectory: string, useCaseSensitiveFileNames: boolean, rootFiles: string[], diagnosticCodes: number[]): void {
             const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             if (!useCaseSensitiveFileNames) {
-                const f: Map<string> = {};
-                for (const fileName in files) {
+                const f: MapLike<string> = {};
+                for (const fileName in files) if (MapLike.guard(files, fileName)) {
                     f[getCanonicalFileName(fileName)] = files[fileName];
                 }
                 files = f;
@@ -371,7 +371,7 @@ export = C;
                         return library;
                     }
                     const path = getCanonicalFileName(normalizePath(combinePaths(currentDirectory, fileName)));
-                    return hasProperty(files, path) ? createSourceFile(fileName, files[path], languageVersion) : undefined;
+                    return MapLike.has(files, path) ? createSourceFile(fileName, files[path], languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: (fileName, content): void => { throw new Error("NotImplemented"); },
@@ -382,7 +382,7 @@ export = C;
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 fileExists: fileName => {
                     const path = getCanonicalFileName(normalizePath(combinePaths(currentDirectory, fileName)));
-                    return hasProperty(files, path);
+                    return MapLike.has(files, path);
                 },
                 readFile: (fileName): string => { throw new Error("NotImplemented"); }
             };
@@ -395,7 +395,7 @@ export = C;
         }
 
         it("should succeed when the same file is referenced using absolute and relative names", () => {
-            const files: Map<string> = {
+            const files: MapLike<string> = {
                 "/a/b/c.ts": `/// <reference path="d.ts"/>`,
                 "/a/b/d.ts": "var x"
             };
@@ -403,7 +403,7 @@ export = C;
         });
 
         it("should fail when two files used in program differ only in casing (tripleslash references)", () => {
-            const files: Map<string> = {
+            const files: MapLike<string> = {
                 "/a/b/c.ts": `/// <reference path="D.ts"/>`,
                 "/a/b/d.ts": "var x"
             };
@@ -411,7 +411,7 @@ export = C;
         });
 
         it("should fail when two files used in program differ only in casing (imports)", () => {
-            const files: Map<string> = {
+            const files: MapLike<string> = {
                 "/a/b/c.ts": `import {x} from "D"`,
                 "/a/b/d.ts": "export var x"
             };
@@ -419,7 +419,7 @@ export = C;
         });
 
         it("should fail when two files used in program differ only in casing (imports, relative module names)", () => {
-            const files: Map<string> = {
+            const files: MapLike<string> = {
                 "moduleA.ts": `import {x} from "./ModuleB"`,
                 "moduleB.ts": "export var x"
             };
@@ -427,7 +427,7 @@ export = C;
         });
 
         it("should fail when two files exist on disk that differs only in casing", () => {
-            const files: Map<string> = {
+            const files: MapLike<string> = {
                 "/a/b/c.ts": `import {x} from "D"`,
                 "/a/b/D.ts": "export var x",
                 "/a/b/d.ts": "export var y"
@@ -436,7 +436,7 @@ export = C;
         });
 
         it("should fail when module name in 'require' calls has inconsistent casing", () => {
-            const files: Map<string> = {
+            const files: MapLike<string> = {
                 "moduleA.ts": `import a = require("./ModuleC")`,
                 "moduleB.ts": `import a = require("./moduleC")`,
                 "moduleC.ts": "export var x"
@@ -445,7 +445,7 @@ export = C;
         });
 
         it("should fail when module names in 'require' calls has inconsistent casing and current directory has uppercase chars", () => {
-            const files: Map<string> = {
+            const files: MapLike<string> = {
                 "/a/B/c/moduleA.ts": `import a = require("./ModuleC")`,
                 "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
                 "/a/B/c/moduleC.ts": "export var x",
@@ -457,7 +457,7 @@ import b = require("./moduleB.ts");
             test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], [1149]);
         });
         it("should not fail when module names in 'require' calls has consistent casing and current directory has uppercase chars", () => {
-            const files: Map<string> = {
+            const files: MapLike<string> = {
                 "/a/B/c/moduleA.ts": `import a = require("./moduleC")`,
                 "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
                 "/a/B/c/moduleC.ts": "export var x",
@@ -1021,9 +1021,9 @@ import b = require("./moduleB.ts");
             const files = [f1, f2, f3, f4];
 
             const names = map(files, f => f.name);
-            const sourceFiles = arrayToMap(map(files, f => createSourceFile(f.name, f.content, ScriptTarget.ES6)), f => f.fileName);
+            const sourceFiles = Map.from(map(files, f => createSourceFile(f.name, f.content, ScriptTarget.ES6)), f => f.fileName);
             const compilerHost: CompilerHost = {
-                fileExists : fileName => hasProperty(sourceFiles, fileName),
+                fileExists : fileName => Map.has(sourceFiles, fileName),
                 getSourceFile: fileName => sourceFiles[fileName],
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile(file, text) {
@@ -1034,7 +1034,7 @@ import b = require("./moduleB.ts");
                 getCanonicalFileName: f => f.toLowerCase(),
                 getNewLine: () => "\r\n",
                 useCaseSensitiveFileNames: () => false,
-                readFile: fileName => hasProperty(sourceFiles, fileName) ? sourceFiles[fileName].text : undefined
+                readFile: fileName => Map.has(sourceFiles, fileName) ? sourceFiles[fileName].text : undefined
             };
             const program1 = createProgram(names, {}, compilerHost);
             const diagnostics1 = program1.getFileProcessingDiagnostics().getDiagnostics();

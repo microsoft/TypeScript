@@ -362,14 +362,15 @@ namespace ts.server {
         class InProcClient {
             private server: InProcSession;
             private seq = 0;
-            private callbacks: ts.Map<(resp: protocol.Response) => void> = {};
-            private eventHandlers: ts.Map<(args: any) => void> = {};
+            private callbacks = Map.create<(resp: protocol.Response) => void>();
+            private eventHandlers = Map.create<(args: any) => void>();
 
             handle(msg: protocol.Message): void {
                 if (msg.type === "response") {
                     const response = <protocol.Response>msg;
-                    if (this.callbacks[response.request_seq]) {
-                        this.callbacks[response.request_seq](response);
+                    const callback = Map.get(this.callbacks, response.request_seq);
+                    if (callback) {
+                        callback(response);
                         delete this.callbacks[response.request_seq];
                     }
                 }
@@ -380,8 +381,9 @@ namespace ts.server {
             }
 
             emit(name: string, args: any): void {
-                if (this.eventHandlers[name]) {
-                    this.eventHandlers[name](args);
+                const handler = Map.get(this.eventHandlers, name);
+                if (handler) {
+                    handler(args);
                 }
             }
 

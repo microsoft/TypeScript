@@ -6,9 +6,9 @@ namespace ts {
         content: string;
     }
 
-    function createDefaultServerHost(fileMap: Map<File>): server.ServerHost {
-        const existingDirectories: Map<boolean> = {};
-        forEachValue(fileMap, v => {
+    function createDefaultServerHost(fileMap: MapLike<File>): server.ServerHost {
+        const existingDirectories: MapLike<boolean> = {};
+        MapLike.forEach(fileMap, v => {
             let dir = getDirectoryPath(v.name);
             let previous: string;
             do {
@@ -24,7 +24,7 @@ namespace ts {
             write: (s: string) => {
             },
             readFile: (path: string, encoding?: string): string => {
-                return hasProperty(fileMap, path) && fileMap[path].content;
+                return MapLike.has(fileMap, path) && fileMap[path].content;
             },
             writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => {
                 throw new Error("NYI");
@@ -33,10 +33,10 @@ namespace ts {
                 throw new Error("NYI");
             },
             fileExists: (path: string): boolean => {
-                return hasProperty(fileMap, path);
+                return MapLike.has(fileMap, path);
             },
             directoryExists: (path: string): boolean => {
-                return hasProperty(existingDirectories, path);
+                return MapLike.has(existingDirectories, path);
             },
             createDirectory: (path: string) => {
             },
@@ -173,7 +173,7 @@ namespace ts {
                 fileExistsCalled = false;
 
                 const opts = ts.clone(project.projectOptions);
-                opts.compilerOptions = ts.clone(opts.compilerOptions);
+                opts.compilerOptions = ts.MapLike.clone(opts.compilerOptions);
                 opts.compilerOptions.target = ts.ScriptTarget.ES5;
                 project.setProjectOptions(opts);
 
@@ -193,7 +193,7 @@ namespace ts {
                 content: `export var y = 1`
             };
 
-            const fileMap: Map<File> = { [root.name]: root };
+            const fileMap: MapLike<File> = { [root.name]: root };
             const serverHost = createDefaultServerHost(fileMap);
             const originalFileExists = serverHost.fileExists;
 

@@ -14,8 +14,8 @@ namespace ts.NavigateTo {
             cancellationToken.throwIfCancellationRequested();
 
             const nameToDeclarations = sourceFile.getNamedDeclarations();
-            for (const name in nameToDeclarations) {
-                const declarations = getProperty(nameToDeclarations, name);
+            for (const name in nameToDeclarations) if (Map.guard(nameToDeclarations, name)) {
+                const declarations = Map.get(nameToDeclarations, name);
                 if (declarations) {
                     // First do a quick check to see if the name of the declaration matches the
                     // last portion of the (possibly) dotted name they're searching for.
