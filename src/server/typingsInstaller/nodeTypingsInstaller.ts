@@ -3,9 +3,11 @@
 namespace ts.server.typingsInstaller {
     export class NodeTypingsInstaller extends TypingsInstaller {
         private execSync: { (command: string, options: { stdio: "ignore" }): any };
+        private exec: { (command: string, options: {}, callback?: (error: Error, stdout: string, stderr: string) => void): any };
         constructor() {
             super();
             this.execSync = require("child_process").execSync;
+            this.exec = require("child_process").exec;
         }
 
         init() {
@@ -35,12 +37,30 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        protected getTypingResolutionHost() {
+        protected getInstallTypingHost() {
             return sys;
         }
 
         protected sendResponse(response: InstallTypingsResponse) {
             process.send(response);
+        }
+
+        protected runTsd(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
+            this.exec(`tsd install ${typingsToInstall.join(" ")} -ros`, {}, (err, stdout, stderr) => {
+                const i = stdout.indexOf("running install");
+                if (i < 0) {
+                    return;
+                }
+                const installedTypings: string[] = [];
+
+                const expr = /^\s*-\s*(\S+)\s*$/gm;
+                expr.lastIndex = i;
+                let match: RegExpExecArray;
+                while (match = expr.exec(stdout)) {
+                    installedTypings.push(match[1]);
+                }
+                postInstallAction(installedTypings);
+            })
         }
     }
 

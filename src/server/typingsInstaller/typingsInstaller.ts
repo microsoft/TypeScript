@@ -1,8 +1,6 @@
 /// <reference path="../../services/services.ts"/>
 /// <reference path="../utilities.ts"/>
 
-
-
 namespace ts.server.typingsInstaller {
     
     const DefaultTsdSettings = JSON.stringify({
@@ -40,18 +38,30 @@ namespace ts.server.typingsInstaller {
 
             // respond with whatever cached typings we have now
             this.sendResponse(this.createResponse(req, discoverTypingsResult.cachedTypingPaths));
+            // start watching files
             this.watchFiles(discoverTypingsResult.filesToWatch);
-            this.installTypings(req, discoverTypingsResult.newTypingNames);
+            // install typings and 
+            this.installTypings(req, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames);
         }
 
-        private installTypings(req: InstallTypingsRequest, typingsToInstall: string[]) {
+        private installTypings(req: InstallTypingsRequest, currentlyCachedTypings: string[], typingsToInstall: string[]) {
+            typingsToInstall = filter(typingsToInstall, x => !hasProperty(this.missingTypings, x));
+            if (typingsToInstall.length === 0) {
+                return;
+            }
+
             // TODO: install typings and send response when they are ready
-            const existingTypings = typingsToInstall.fi
             const host = this.getInstallTypingHost();
             const tsdPath = combinePaths(req.cachePath, "tsd.json");
             if (!host.fileExists(tsdPath)) {
                 host.writeFile(tsdPath, DefaultTsdSettings);
             }
+
+            this.runTsd(tsdPath, typingsToInstall, installedTypings => {
+                // TODO: record new missing package names
+                // TODO: watch project directory
+                this.sendResponse(this.createResponse(req, currentlyCachedTypings.concat(installedTypings)));
+            });
         }
 
         private watchFiles(files: string[]) {
@@ -71,5 +81,6 @@ namespace ts.server.typingsInstaller {
         protected abstract installPackage(packageName: string): boolean;
         protected abstract getInstallTypingHost(): InstallTypingHost;
         protected abstract sendResponse(response: InstallTypingsResponse): void;
+        protected abstract runTsd(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void;
     }
 }
