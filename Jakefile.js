@@ -4,7 +4,6 @@ var fs = require("fs");
 var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
-var Linter = require("tslint");
 var fold = require("travis-fold");
 var runTestsInParallel = require("./scripts/mocha-parallel").runTestsInParallel;
 
@@ -1054,36 +1053,6 @@ task("build-rules-end", [] , function() {
     if (fold.isTravis()) console.log(fold.end("build-rules"));
 });
 
-function getLinterOptions() {
-    return {
-        configuration: require("./tslint.json"),
-        formatter: "prose",
-        formattersDirectory: undefined,
-        rulesDirectory: "built/local/tslint"
-    };
-}
-
-function lintFileContents(options, path, contents) {
-    var ll = new Linter(path, contents, options);
-    console.log("Linting '" + path + "'.");
-    return ll.lint();
-}
-
-function lintFile(options, path) {
-    var contents = fs.readFileSync(path, "utf8");
-    return lintFileContents(options, path, contents);
-}
-
-function lintFileAsync(options, path, cb) {
-    fs.readFile(path, "utf8", function(err, contents) {
-        if (err) {
-            return cb(err);
-        }
-        var result = lintFileContents(options, path, contents);
-        cb(undefined, result);
-    });
-}
-
 var lintTargets = compilerSources
     .concat(harnessSources)
     // Other harness sources
@@ -1094,75 +1063,95 @@ var lintTargets = compilerSources
     .concat(["Gulpfile.ts"])
     .concat([nodeServerInFile, perftscPath, "tests/perfsys.ts", webhostPath]);
 
+function min(collection, predicate) {
+    var minimum;
+    var selected;
+    for (var key in collection) {
+        var value = predicate(collection[key]);
+        if (typeof minimum === "undefined" || value <= minimum) {
+            minimum = value;
+            selected = collection[key];
+        }
+    }
+    return selected;
+}
+
+function spawnLintWorker(bucket, callback) {
+    var child = child_process.fork("./scripts/parallel-lint");
+    var failures = 0;
+    child.on("message", function(data) {
+        switch (data.kind) {
+            case "start":
+                console.log("Linting '" + data.name + "'.");
+                break;
+            case "result":
+                if (data.failures > 0) {
+                    failures += data.failures;
+                    console.log(data.output);
+                }
+                break;
+            case "error":
+                console.error(data.error);
+                failures++;
+                break;
+            case "complete":
+                child.unref();
+                callback(failures);
+                break;
+        }
+    });
+    child.send({kind: "config", data: bucket.elements});
+}
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
 task("lint", ["build-rules"], function() {
     if (fold.isTravis()) console.log(fold.start("lint"));
     var startTime = mark();
-    var lintOptions = getLinterOptions();
     var failed = 0;
     var fileMatcher = RegExp(process.env.f || process.env.file || process.env.files || "");
     var done = {};
     for (var i in lintTargets) {
         var target = lintTargets[i];
         if (!done[target] && fileMatcher.test(target)) {
-            var result = lintFile(lintOptions, target);
-            if (result.failureCount > 0) {
-                console.log(result.output);
-                failed += result.failureCount;
-            }
-            done[target] = true;
+            done[target] = fs.statSync(target).size;
         }
     }
-    measure(startTime);
-    if (fold.isTravis()) console.log(fold.end("lint"));
-    if (failed > 0) {
-        fail('Linter errors.', failed);
+
+    var workerCount = (process.env.workerCount && +process.env.workerCount) || os.cpus().length;
+    var buckets = new Array(workerCount);
+    for (var i = 0; i < workerCount; i++) {
+        buckets[i] = {totalSize: 0, elements: []};
     }
-});
 
-/**
- * This is required because file watches on Windows get fires _twice_
- * when a file changes on some node/windows version configuations
- * (node v4 and win 10, for example). By not running a lint for a file
- * which already has a pending lint, we avoid duplicating our work.
- * (And avoid printing duplicate results!)
- */
-var lintSemaphores = {};
-
-function lintWatchFile(filename) {
-    fs.watch(filename, {persistent: true}, function(event) {
-        if (event !== "change") {
-            return;
-        }
-
-        if (!lintSemaphores[filename]) {
-            lintSemaphores[filename] = true;
-            lintFileAsync(getLinterOptions(), filename, function(err, result) {
-                delete lintSemaphores[filename];
-                if (err) {
-                    console.log(err);
-                    return;
-                }
-                if (result.failureCount > 0) {
-                    console.log("***Lint failure***");
-                    for (var i = 0; i < result.failures.length; i++) {
-                        var failure = result.failures[i];
-                        var start = failure.startPosition.lineAndCharacter;
-                        var end = failure.endPosition.lineAndCharacter;
-                        console.log("warning " + filename + " (" + (start.line + 1) + "," + (start.character + 1) + "," + (end.line + 1) + "," + (end.character + 1) + "): " + failure.failure);
-                    }
-                    console.log("*** Total " + result.failureCount + " failures.");
-                }
-            });
-        }
+    var names = Object.keys(done).sort(function(namea, nameb) {
+        return done[namea] < done[nameb];
     });
-}
-
-desc("Watches files for changes to rerun a lint pass");
-task("lint-server", ["build-rules"], function() {
-    console.log("Watching ./src for changes to linted files");
-    for (var i = 0; i < lintTargets.length; i++) {
-        lintWatchFile(lintTargets[i]);
+    for (var i in names) {
+        var name = names[i];
+        var bucket = min(buckets, function(b) { return b.totalSize; });
+        bucket.totalSize += done[name];
+        bucket.elements.push(name);
     }
-});
+
+    console.log(buckets);
+    for (var i in buckets) {
+        spawnLintWorker(buckets[i], finished);
+    }
+
+    var completed = 0;
+    var failures = 0;
+    function finished(fails) {
+        completed++;
+        failures += fails;
+        if (completed === workerCount) {
+            measure(startTime);
+            if (fold.isTravis()) console.log(fold.end("lint"));
+            if (failures > 0) {
+                fail('Linter errors.', failed);
+            }
+            else {
+                complete();
+            }
+        }
+    }
+}, {async: true});
