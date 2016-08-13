@@ -978,12 +978,12 @@ gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: 
     if (fold.isTravis()) console.log(fold.start("lint"));
 
     const files = [];
-    return gulp.src(lintTargets)
+    return gulp.src(lintTargets, { read: false })
         .pipe(through2.obj((chunk, enc, cb) => {
             files.push(chunk);
             cb();
         }, (cb) => {
-            files.sort((filea, fileb) => filea.contents.length - fileb.contents.length).filter(file =>  fileMatcher.test(file.path));
+            files.sort((filea, fileb) => filea.stat.size - fileb.stat.size).filter(file =>  fileMatcher.test(file.path));
             const workerCount = (process.env.workerCount && +process.env.workerCount) || os.cpus().length;
             for (let i = 0; i < workerCount; i++) {
                 spawnLintWorker(files, finished);
