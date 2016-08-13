@@ -1061,7 +1061,7 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
-        private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
+        private handlers: MapLike<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
             [CommandNames.Exit]: () => {
                 this.exit();
                 return { responseRequired: false };

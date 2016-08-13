@@ -24,7 +24,7 @@ namespace ts {
         Return      = 1 << 3
     }
 
-    const entities: Map<number> = {
+    const entities: MapLike<number> = {
         "quot": 0x0022,
         "amp": 0x0026,
         "apos": 0x0027,
@@ -489,13 +489,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         function setLabeledJump(state: ConvertedLoopState, isBreak: boolean, labelText: string, labelMarker: string): void {
             if (isBreak) {
                 if (!state.labeledNonLocalBreaks) {
-                    state.labeledNonLocalBreaks = {};
+                    state.labeledNonLocalBreaks = createMap<string>();
                 }
                 state.labeledNonLocalBreaks[labelText] = labelMarker;
             }
             else {
                 if (!state.labeledNonLocalContinues) {
-                    state.labeledNonLocalContinues = {};
+                    state.labeledNonLocalContinues = createMap<string>();
                 }
                 state.labeledNonLocalContinues[labelText] = labelMarker;
             }
@@ -531,7 +531,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             let currentText: string;
             let currentLineMap: number[];
             let currentFileIdentifiers: Map<string>;
-            let renamedDependencies: Map<string>;
+            let renamedDependencies: MapLike<string>;
             let isEs6Module: boolean;
             let isCurrentFileExternalModule: boolean;
 
@@ -577,7 +577,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             const setSourceMapWriterEmit = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? changeSourceMapEmit : function (writer: SourceMapWriter) { };
 
-            const moduleEmitDelegates: Map<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
+            const moduleEmitDelegates: MapLike<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
                 [ModuleKind.ES6]: emitES6Module,
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
@@ -585,7 +585,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 [ModuleKind.CommonJS]: emitCommonJSModule,
             };
 
-            const bundleEmitDelegates: Map<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
+            const bundleEmitDelegates: MapLike<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
                 [ModuleKind.ES6]() {},
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
@@ -597,7 +597,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function doEmit(jsFilePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
                 sourceMap.initialize(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
-                generatedNameSet = {};
+                generatedNameSet = createMap<string>();
                 nodeToGeneratedName = [];
                 decoratedClassAliases = [];
                 isOwnFileEmit = !isBundledEmit;
@@ -3257,7 +3257,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                            // Don't initialize seen unless we have at least one element.
                            // Emit a comma to separate for all but the first element.
                            if (!seen) {
-                               seen = {};
+                               seen = createMap<string>();
                            }
                            else {
                                write(", ");
@@ -3856,7 +3856,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 if (convertedLoopState) {
                     if (!convertedLoopState.labels) {
-                        convertedLoopState.labels = {};
+                        convertedLoopState.labels = createMap<string>();
                     }
                     convertedLoopState.labels[node.label.text] = node.label.text;
                 }
@@ -6803,7 +6803,7 @@ const _super = (function (geti, seti) {
 
             function collectExternalModuleInfo(sourceFile: SourceFile) {
                 externalImports = [];
-                exportSpecifiers = {};
+                exportSpecifiers = createMap<ExportSpecifier[]>();
                 exportEquals = undefined;
                 hasExportStarsToExportValues = false;
                 for (const node of sourceFile.statements) {
@@ -7081,7 +7081,7 @@ const _super = (function (geti, seti) {
                 if (hoistedVars) {
                     writeLine();
                     write("var ");
-                    const seen: Map<string> = {};
+                    const seen = createMap<string>();
                     for (let i = 0; i < hoistedVars.length; i++) {
                         const local = hoistedVars[i];
                         const name = local.kind === SyntaxKind.Identifier
@@ -7447,7 +7447,7 @@ const _super = (function (geti, seti) {
                 writeModuleName(node, emitRelativePathAsModuleName);
                 write("[");
 
-                const groupIndices: Map<number> = {};
+                const groupIndices = createMap<number>();
                 const dependencyGroups: DependencyGroup[] = [];
 
                 for (let i = 0; i < externalImports.length; i++) {

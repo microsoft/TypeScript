@@ -47,7 +47,7 @@ namespace ts.JsTyping {
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         // A typing name to typing file path mapping
-        const inferredTypings: Map<string> = {};
+        const inferredTypings = createMap<string>();
 
         if (!typingOptions || !typingOptions.enableAutoDiscovery) {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
@@ -62,7 +62,7 @@ namespace ts.JsTyping {
                 safeList = result.config;
             }
             else {
-                safeList = {};
+                safeList = createMap<string>();
             };
         }
 

@@ -96,7 +96,7 @@ namespace ts {
     }
 
     function createTestCompilerHost(texts: NamedSourceText[], target: ScriptTarget): CompilerHost {
-        const files: Map<SourceFileWithText> = {};
+        const files: MapLike<SourceFileWithText> = {};
         for (const t of texts) {
             const file = <SourceFileWithText>createSourceFile(t.name, t.text.getFullText(), target);
             file.sourceText = t.text;
@@ -152,7 +152,7 @@ namespace ts {
         return program;
     }
 
-    function getSizeOfMap(map: Map<any>): number {
+    function getSizeOfMap(map: MapLike<any>): number {
         let size = 0;
         for (const id in map) {
             if (hasProperty(map, id)) {
@@ -174,7 +174,7 @@ namespace ts {
         assert.isTrue(expected.primary === actual.primary, `'primary': expected '${expected.primary}' to be equal to '${actual.primary}'`);
     }
 
-    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: Map<T>, getCache: (f: SourceFile) => Map<T>, entryChecker: (expected: T, original: T) => void): void {
+    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: MapLike<T>, getCache: (f: SourceFile) => MapLike<T>, entryChecker: (expected: T, original: T) => void): void {
         const file = program.getSourceFile(fileName);
         assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
         const cache = getCache(file);
@@ -203,11 +203,11 @@ namespace ts {
         }
     }
 
-    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: Map<ResolvedModule>): void {
+    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: MapLike<ResolvedModule>): void {
         checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, checkResolvedModule);
     }
 
-    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: Map<ResolvedTypeReferenceDirective>): void {
+    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: MapLike<ResolvedTypeReferenceDirective>): void {
         checkCache("resolved type directives", program, fileName, expectedContent, f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
     }
 
