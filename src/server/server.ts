@@ -77,7 +77,7 @@ namespace ts.server {
     });
 
     function compress(s: string): CompressedData {
-        const data = zlib.gzipSync(new Buffer(s,  "utf8"));
+        const data = zlib.gzipSync(new Buffer(s, "utf8"));
         return { data, length: data.length, compressionKind: "gzip" };
     }
 
@@ -167,7 +167,7 @@ namespace ts.server {
         constructor(private readonly logger: server.Logger) {
             switch (process.platform) {
                 case "win32":
-                    this.cachePath =  normalizeSlashes(combinePaths(process.env.LOCALAPPDATA || process.env.APPDATA, "Microsoft/TypeScript"));
+                    this.cachePath = normalizeSlashes(combinePaths(process.env.LOCALAPPDATA || process.env.APPDATA, "Microsoft/TypeScript"));
                     break;
                 case "darwin":
                 case "linux":
@@ -177,6 +177,7 @@ namespace ts.server {
         }
 
         bind(session: Session) {
+            this.session = session;
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 this.logger.info("Binding...")
             }
@@ -202,15 +203,11 @@ namespace ts.server {
             this.installer.send(request);
         }
 
-        C = 1;
         private handleMessage(response: InstallTypingsResponse) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response: ${JSON.stringify(response)}`)
             }
-            require("fs").appendFileSync("E:\\sources\\git\\tss.txt", this.C + " !!!::" + JSON.stringify(response) + "\r\n");
-            this.C++;
             this.session.onTypingsInstalled(response);
-            require("fs").appendFileSync("E:\\sources\\git\\tss.txt", this.C + " !!!::" + "done" + "\r\n");
         }
     }
 
@@ -293,7 +290,7 @@ namespace ts.server {
             }
             traceToConsole = logEnv.traceToConsole;
         }
-        return new Logger(fileName, traceToConsole,  detailLevel);
+        return new Logger(fileName, traceToConsole, detailLevel);
     }
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable
@@ -448,7 +445,7 @@ namespace ts.server {
 
     const useSingleInferredProject = sys.args.some(arg => arg === "--useSingleInferredProject");
     const ioSession = new IOSession(sys, cancellationToken, useSingleInferredProject, logger);
-    process.on("uncaughtException", function(err: Error) {
+    process.on("uncaughtException", function (err: Error) {
         ioSession.logError(err, "unknown");
     });
     // Start listening

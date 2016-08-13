@@ -42,12 +42,7 @@ namespace ts.server.typingsInstaller {
             return sys;
         }
 
-        C = 1;
-
         protected sendResponse(response: InstallTypingsResponse) {
-            (<any>response).___id = [this.C];
-            this.C++;
-            log("sendResponse::" + JSON.stringify(response));
             process.send(response);
         }
 

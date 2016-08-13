@@ -1459,6 +1459,7 @@ namespace ts.server {
             }
             this.projectService.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.typings);
             project.updateGraph();
+            
         }
 
         public onMessage(message: string) {

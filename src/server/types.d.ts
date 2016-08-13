@@ -33,5 +33,6 @@ declare namespace ts.server {
 
     export interface InstallTypingHost extends JsTyping.TypingResolutionHost {
         writeFile(path: string, content: string): void;
+        createDirectory(path: string): void;
     }
 }
