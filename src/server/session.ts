@@ -131,8 +131,8 @@ namespace ts.server {
     }
 
     namespace Errors {
-        export const NoProject = new Error("No Project.");
-        export const ProjectLanguageServiceDisabled = new Error("The project's language service is disabled.");
+        export const NoProject = () => new Error("No Project.");
+        export const ProjectLanguageServiceDisabled = () => new Error("The project's language service is disabled.");
     }
 
     export interface ServerHost extends ts.System {
@@ -317,7 +317,7 @@ namespace ts.server {
             const file = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(file);
             if (!project || project.languageServiceDiabled) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const compilerService = project.compilerService;
@@ -339,7 +339,7 @@ namespace ts.server {
             const file = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(file);
             if (!project || project.languageServiceDiabled) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const compilerService = project.compilerService;
@@ -362,7 +362,7 @@ namespace ts.server {
             const project = this.projectService.getProjectForFile(fileName);
 
             if (!project || project.languageServiceDiabled) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const { compilerService } = project;
@@ -391,10 +391,10 @@ namespace ts.server {
             const file = normalizePath(args.file);
             const project = this.projectService.getProjectForFile(file);
             if (!project) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
             if (project.languageServiceDiabled) {
-                throw Errors.ProjectLanguageServiceDisabled;
+                throw Errors.ProjectLanguageServiceDisabled();
             }
             const diagnostics = selector(project, file);
             return ts.map(diagnostics, originalDiagnostic => formatDiag(file, project, originalDiagnostic));
@@ -413,7 +413,7 @@ namespace ts.server {
             const project = this.projectService.getProjectForFile(fileName);
 
             if (!project || project.languageServiceDiabled) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const { compilerService } = project;
@@ -448,7 +448,7 @@ namespace ts.server {
             fileName = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(fileName);
             if (!project) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const projectInfo: protocol.ProjectInfo = {
@@ -468,7 +468,7 @@ namespace ts.server {
             const projects = this.projectService.findReferencingProjects(info);
             const projectsWithLanguageServiceEnabeld = ts.filter(projects, p => !p.languageServiceDiabled);
             if (projectsWithLanguageServiceEnabeld.length === 0) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const defaultProject = projectsWithLanguageServiceEnabeld[0];
@@ -551,7 +551,7 @@ namespace ts.server {
             const projects = this.projectService.findReferencingProjects(info);
             const projectsWithLanguageServiceEnabeld = ts.filter(projects, p => !p.languageServiceDiabled);
             if (projectsWithLanguageServiceEnabeld.length === 0) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const defaultProject = projectsWithLanguageServiceEnabeld[0];
@@ -626,7 +626,7 @@ namespace ts.server {
             const file = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(file);
             if (!project || project.languageServiceDiabled) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const compilerService = project.compilerService;
@@ -652,7 +652,7 @@ namespace ts.server {
             const file = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(file);
             if (!project || project.languageServiceDiabled) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const compilerService = project.compilerService;
@@ -680,7 +680,7 @@ namespace ts.server {
 
             const project = this.projectService.getProjectForFile(file);
             if (!project || project.languageServiceDiabled) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const compilerService = project.compilerService;
@@ -759,7 +759,7 @@ namespace ts.server {
             const file = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(file);
             if (!project || project.languageServiceDiabled) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const compilerService = project.compilerService;
@@ -783,7 +783,7 @@ namespace ts.server {
             const file = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(file);
             if (!project || project.languageServiceDiabled) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const compilerService = project.compilerService;
@@ -802,7 +802,7 @@ namespace ts.server {
             const file = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(file);
             if (!project || project.languageServiceDiabled) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const compilerService = project.compilerService;
@@ -912,7 +912,7 @@ namespace ts.server {
             const file = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(file);
             if (!project || project.languageServiceDiabled) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const compilerService = project.compilerService;
@@ -930,7 +930,7 @@ namespace ts.server {
             const projects = this.projectService.findReferencingProjects(info);
             const projectsWithLanguageServiceEnabeld = ts.filter(projects, p => !p.languageServiceDiabled);
             if (projectsWithLanguageServiceEnabeld.length === 0) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const allNavToItems = combineProjectOutput(
@@ -987,7 +987,7 @@ namespace ts.server {
 
             const project = this.projectService.getProjectForFile(file);
             if (!project || project.languageServiceDiabled) {
-                throw Errors.NoProject;
+                throw Errors.NoProject();
             }
 
             const compilerService = project.compilerService;
