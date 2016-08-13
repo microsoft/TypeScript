@@ -4,7 +4,7 @@
 namespace ts.server.typingsInstaller {
     export class NodeTypingsInstaller extends TypingsInstaller {
         private execSync: { (command: string, options: { stdio: "ignore" }): any };
-        private exec: { (command: string, options: {}, callback?: (error: Error, stdout: string, stderr: string) => void): any };
+        private exec: { (command: string, options: { cwd: string }, callback?: (error: Error, stdout: string, stderr: string) => void): any };
         constructor() {
             super();
             this.execSync = require("child_process").execSync;
@@ -13,14 +13,14 @@ namespace ts.server.typingsInstaller {
 
         init() {
             super.init();
-            process.on("install", (req: InstallTypingsRequest) => {
+            process.on("message", (req: InstallTypingsRequest) => {
                 this.install(req);
             })
         }
 
         protected isPackageInstalled(packageName: string) {
             try {
-                this.execSync(`npm list --global --depth=1 ${name}`, { stdio: "ignore" });
+                this.execSync(`npm list --global --depth=1 ${packageName}`, { stdio: "ignore" });
                 return true;
             }
             catch (e) {
@@ -30,7 +30,7 @@ namespace ts.server.typingsInstaller {
 
         protected installPackage(packageName: string) {
             try {
-                this.execSync(`npm install --global ${name}`, { stdio: "ignore" });
+                this.execSync(`npm install --global ${packageName}`, { stdio: "ignore" });
                 return true;
             }
             catch (e) {
@@ -42,12 +42,17 @@ namespace ts.server.typingsInstaller {
             return sys;
         }
 
+        C = 1;
+
         protected sendResponse(response: InstallTypingsResponse) {
+            (<any>response).___id = [this.C];
+            this.C++;
+            log("sendResponse::" + JSON.stringify(response));
             process.send(response);
         }
 
         protected runTsd(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
-            this.exec(`tsd install ${typingsToInstall.join(" ")} -ros`, {}, (err, stdout, stderr) => {
+            this.exec(`tsd install ${typingsToInstall.join(" ")} -ros`, { cwd: cachePath  }, (err, stdout, stderr) => {
                 const i = stdout.indexOf("running install");
                 if (i < 0) {
                     return;

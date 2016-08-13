@@ -2,7 +2,7 @@
 
 namespace ts.server {
     export interface ITypingsInstaller {
-        enqueueInstallTypingsRequest(p: Project): void;
+        enqueueInstallTypingsRequest(p: Project, typingOptions: TypingOptions): void;
     }
 
     export const nullTypingsInstaller: ITypingsInstaller = {
@@ -12,7 +12,7 @@ namespace ts.server {
     class TypingsCacheEntry {
         readonly typingOptions: TypingOptions;
         readonly compilerOptions: CompilerOptions;
-        readonly typings: Path[];
+        readonly typings: string[];
     }
 
     const emptyArray: any[] = [];
@@ -88,9 +88,17 @@ namespace ts.server {
 
             const entry = this.perProjectCache[project.getProjectName()];
             if (!entry || typingOptionsChanged(typingOptions, entry.typingOptions) || compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions)) {
-                this.installer.enqueueInstallTypingsRequest(project);
+                this.installer.enqueueInstallTypingsRequest(project, typingOptions);
             }
             return entry ? entry.typings : emptyArray;
+        }
+
+        updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typingOptions: TypingOptions, newTypings: string[]) {
+            this.perProjectCache[projectName] = {
+                compilerOptions,
+                typingOptions,
+                typings: newTypings
+            };
         }
 
         deleteTypingsForProject(project: Project) {

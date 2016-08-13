@@ -2,7 +2,9 @@
 /// <reference path="../types.d.ts"/>
 
 namespace ts.server.typingsInstaller {
-    
+    export function log(s: string) {
+        require("fs").appendFileSync("E:\\sources\\git\\installer.txt", s + "\r\n");
+    }
     const DefaultTsdSettings = JSON.stringify({
         version: "v4",
         repo: "DefinitelyTyped/DefinitelyTyped",
@@ -20,6 +22,7 @@ namespace ts.server.typingsInstaller {
             if (!this.isTsdInstalled) {
                 this.isTsdInstalled = this.installPackage("tsd");
             }
+            log(`start ${this.isTsdInstalled}`);
         }
 
         install(req: InstallTypingsRequest) {
@@ -27,6 +30,7 @@ namespace ts.server.typingsInstaller {
                 return;
             }
 
+            log(`install ${JSON.stringify(req)}`);
             const discoverTypingsResult = JsTyping.discoverTypings(
                 this.getInstallTypingHost(),
                 req.fileNames,
@@ -36,6 +40,7 @@ namespace ts.server.typingsInstaller {
                 req.typingOptions,
                 req.compilerOptions);
 
+            log(`install ${JSON.stringify(discoverTypingsResult)}`);
             // respond with whatever cached typings we have now
             this.sendResponse(this.createResponse(req, discoverTypingsResult.cachedTypingPaths));
             // start watching files
@@ -46,6 +51,7 @@ namespace ts.server.typingsInstaller {
 
         private installTypings(req: InstallTypingsRequest, currentlyCachedTypings: string[], typingsToInstall: string[]) {
             typingsToInstall = filter(typingsToInstall, x => !hasProperty(this.missingTypings, x));
+            log(`install ${JSON.stringify(typingsToInstall)}`);
             if (typingsToInstall.length === 0) {
                 return;
             }
@@ -57,9 +63,11 @@ namespace ts.server.typingsInstaller {
                 host.writeFile(tsdPath, DefaultTsdSettings);
             }
 
-            this.runTsd(tsdPath, typingsToInstall, installedTypings => {
+            this.runTsd(req.cachePath, typingsToInstall, installedTypings => {
                 // TODO: record new missing package names
                 // TODO: watch project directory
+                installedTypings = installedTypings.map(x => getNormalizedAbsolutePath(x, req.cachePath));
+                log(`include ${JSON.stringify(installedTypings)}`);
                 this.sendResponse(this.createResponse(req, currentlyCachedTypings.concat(installedTypings)));
             });
         }

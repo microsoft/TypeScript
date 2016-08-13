@@ -9,6 +9,14 @@ namespace ts.server {
         gzipSync(buf: Buffer): Buffer
     } = require("zlib");
 
+    interface NodeChildProcess {
+        send(message: any, sendHandle?: any): void;
+    }
+
+    const childProcess: {
+        fork(modulePath: string): NodeChildProcess;
+    } = require("child_process");
+
     interface ReadLineOptions {
         input: NodeJS.ReadableStream;
         output?: NodeJS.WritableStream;
@@ -151,10 +159,65 @@ namespace ts.server {
         }
     }
 
+    class NodeTypingsInstaller implements ITypingsInstaller {
+        private installer: NodeChildProcess;
+        private session: Session;
+        private cachePath: string;
+
+        constructor(private readonly logger: server.Logger) {
+            switch (process.platform) {
+                case "win32":
+                    this.cachePath =  normalizeSlashes(combinePaths(process.env.LOCALAPPDATA || process.env.APPDATA, "Microsoft/TypeScript"));
+                    break;
+                case "darwin":
+                case "linux":
+                    // TODO:
+                    break;
+            }
+        }
+
+        bind(session: Session) {
+            if (this.logger.hasLevel(LogLevel.requestTime)) {
+                this.logger.info("Binding...")
+            }
+
+            this.installer = childProcess.fork(combinePaths(__dirname, "typingsInstaller.js"));
+            (<any>this.installer).on("message", (m: any) => this.handleMessage(m));
+        }
+
+        enqueueInstallTypingsRequest(project: Project, typingOptions: TypingOptions): void {
+            const request: InstallTypingsRequest = {
+                projectName: project.getProjectName(),
+                fileNames: project.getFileNames(),
+                compilerOptions: project.getCompilerOptions(),
+                typingOptions,
+                projectRootPath: <Path>(project.projectKind === ProjectKind.Inferred ? "" : getDirectoryPath(project.getProjectName())), // TODO: fixme
+                safeListPath: <Path>(combinePaths(process.cwd(), "typingSafeList.json")), // TODO: fixme
+                packageNameToTypingLocation: {}, // TODO: fixme
+                cachePath: this.cachePath
+            };
+            if (this.logger.hasLevel(LogLevel.verbose)) {
+                this.logger.info(`Sending request: ${JSON.stringify(request)}`);
+            }
+            this.installer.send(request);
+        }
+
+        C = 1;
+        private handleMessage(response: InstallTypingsResponse) {
+            if (this.logger.hasLevel(LogLevel.verbose)) {
+                this.logger.info(`Received response: ${JSON.stringify(response)}`)
+            }
+            require("fs").appendFileSync("E:\\sources\\git\\tss.txt", this.C + " !!!::" + JSON.stringify(response) + "\r\n");
+            this.C++;
+            this.session.onTypingsInstalled(response);
+            require("fs").appendFileSync("E:\\sources\\git\\tss.txt", this.C + " !!!::" + "done" + "\r\n");
+        }
+    }
+
     class IOSession extends Session {
-        constructor(host: ServerHost, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean, logger: ts.server.Logger) {
-            // TODO: fixme
-            super(host, cancellationToken, useSingleInferredProject, undefined, Buffer.byteLength, maxUncompressedMessageSize, compress, process.hrtime, logger);
+        constructor(host: ServerHost, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean, logger: server.Logger) {
+            super(host, cancellationToken, useSingleInferredProject, new NodeTypingsInstaller(logger), Buffer.byteLength, maxUncompressedMessageSize, compress, process.hrtime, logger);
+            (<NodeTypingsInstaller>this.typingsInstaller).bind(this);
         }
 
         exit() {

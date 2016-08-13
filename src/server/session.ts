@@ -143,7 +143,7 @@ namespace ts.server {
             private host: ServerHost,
             cancellationToken: HostCancellationToken,
             useSingleInferredProject: boolean,
-            typingsInstaller: ITypingsInstaller,
+            protected readonly typingsInstaller: ITypingsInstaller,
             private byteLength: (buf: string, encoding?: string) => number,
             private maxUncompressedMessageSize: number,
             private compress: (s: string) => CompressedData,
@@ -1450,6 +1450,15 @@ namespace ts.server {
                 this.output(undefined, CommandNames.Unknown, /*canCompressResponse*/ false, request.seq, `Unrecognized JSON command: ${request.command}`);
                 return { responseRequired: false };
             }
+        }
+
+        public onTypingsInstalled(response: InstallTypingsResponse) {
+            const project = this.projectService.findProject(response.projectName);
+            if (!project) {
+                return;
+            }
+            this.projectService.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.typings);
+            project.updateGraph();
         }
 
         public onMessage(message: string) {
