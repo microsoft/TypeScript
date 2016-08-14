@@ -31,6 +31,7 @@ namespace ts {
         protected projectService: server.ProjectService;
         constructor(private readonly host: server.ServerHost) {
             super();
+            this.init();
         }
 
         abstract cachePath: string;
@@ -259,6 +260,8 @@ namespace ts {
 
         readonly watchedDirectories: MapLike<{ cb: DirectoryWatcherCallback, recursive: boolean }[]> = {};
         readonly watchedFiles: MapLike<FileWatcherCallback[]> = {};
+        
+        private filesOrFolders: FileOrFolder[];
 
         constructor(public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[]) {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
@@ -268,6 +271,7 @@ namespace ts {
         }
 
         reloadFS(filesOrFolders: FileOrFolder[]) {
+            this.filesOrFolders = filesOrFolders;
             this.fs = createFileMap<FSEntry>();
             for (const fileOrFolder of filesOrFolders) {
                 const path = this.toPath(fileOrFolder.path);
@@ -419,15 +423,36 @@ namespace ts {
             this.immediateCallbacks.unregister(timeoutId);
         };
 
+        createDirectory(directoryName: string): void {
+            this.createFileOrFolder({ path: directoryName });
+        }
 
+        writeFile(path: string, content: string): void {
+            this.createFileOrFolder({ path, content, fileSize: content.length })
+        }
+        
+        createFileOrFolder(f: FileOrFolder, createParentDirectory = false): void {
+            const base = getDirectoryPath(f.path);
+            if (base !== f.path && !this.directoryExists(base)) {
+                if (createParentDirectory) {
+                    // TODO: avoid reloading FS on every creation
+                    this.createFileOrFolder({ path: base }, createParentDirectory);
+                }
+                else {
+                    throw new Error(`directory ${base} does not exist`);
+                }
+            }
+            const filesOrFolders = this.filesOrFolders.slice(0);
+            filesOrFolders.push(f);
+            this.reloadFS(filesOrFolders);
+        }
+        
         readonly readFile = (s: string) => (<File>this.fs.get(this.toPath(s))).content;
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;
-        readonly writeFile = (path: string, content: string) => notImplemented();
         readonly writeCompressedData = () => notImplemented();
         readonly write = (s: string) => notImplemented();
-        readonly createDirectory = (s: string) => notImplemented();
         readonly exit = () => notImplemented();
     }
 
@@ -1496,7 +1521,7 @@ namespace ts {
             class TypingInstaller extends TestTypingsInstaller {
                 cachePath = "/a/data/";
                 constructor(host: server.ServerHost) { 
-                    super(host)
+                    super(host);
                 }
             };
             const installer = new TypingInstaller(host);
@@ -1507,9 +1532,11 @@ namespace ts {
             const p = projectService.configuredProjects[0];
             checkProjectActualFiles(p, [ file1.path ]);
 
+            assert(host.fileExists(combinePaths(installer.cachePath, "tsd.json")));
+
             installer.runPostInstallActions(t => {
                 assert.deepEqual(t, ["jquery"]);
-                host.reloadFS([file1, tsconfig, packageJson, jquery]);
+                host.createFileOrFolder(jquery, /*createParentDirectory*/ true);
                 return ["jquery/jquery.d.ts"];
             });
             checkNumberOfProjects(projectService, { configuredProjects: 1 })

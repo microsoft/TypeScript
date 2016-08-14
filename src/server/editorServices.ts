@@ -212,6 +212,7 @@ namespace ts.server {
                 return;
             }
             this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.typings);
+            project.setTypings(response.typings);
             project.updateGraph();
         }
 
