@@ -1,4 +1,5 @@
 /// <reference path="..\harness.ts" />
+/// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
 namespace ts {
     function notImplemented(): any {
@@ -25,6 +26,57 @@ namespace ts {
         path: "/a/lib/lib.d.ts",
         content: libFileContent
     };
+
+    abstract class TestTypingsInstaller extends server.typingsInstaller.TypingsInstaller implements server.ITypingsInstaller {
+        protected projectService: server.ProjectService;
+        constructor(private readonly host: server.ServerHost) {
+            super();
+        }
+
+        abstract cachePath: string;
+        safeFileList = <Path>"";
+        packageNameToTypingLocation: Map<string> = {};
+
+        postInstallActions: (( map: (t: string[]) => string[]) => void)[] = [];
+
+        runPostInstallActions(map: (t: string[]) => string[]) {
+            for (const f of this.postInstallActions) {
+                f(map);
+            }
+            this.postInstallActions = [];
+        }
+
+        attach(projectService: server.ProjectService) {
+            this.projectService = projectService;
+        }
+
+        getInstallTypingHost() {
+            return this.host;
+        }
+
+        installPackage(packageName: string) {
+            return true;
+        }
+
+        isPackageInstalled(packageName: string) {
+            return true;
+        }
+
+        runTsd(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void) {
+            this.postInstallActions.push(map => {
+                postInstallAction(map(typingsToInstall));
+            })
+        }
+
+        sendResponse(response: server.InstallTypingsResponse) {
+            this.projectService.updateTypingsForProject(response);
+        }
+
+        enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions) {
+            const request = server.createInstallTypingsRequest(project, typingOptions, this.safeFileList, this.packageNameToTypingLocation, this.cachePath);
+            this.install(request)
+        }
+    }
 
     function getExecutingFilePathFromLibFile(libFilePath: string): string {
         return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
@@ -1406,6 +1458,63 @@ namespace ts {
 
             projectService.closeClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 0 });
+        });
+    });
+
+    describe("typings installer", () => {
+        it("configured projects (tsd installed) 1", () => {
+            const file1 = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const tsconfig = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        allowJs: true
+                    },
+                    typingOptions: {
+                        enableAutoDiscovery: true
+                    }
+                })
+            };
+            const packageJson = {
+                path: "/a/b/package.json",
+                content: JSON.stringify({
+                    name: "test",
+                    dependencies: {
+                        jquery: "^3.1.0"
+                    }
+                })
+            };
+
+            const jquery = {
+                path: "/a/data/jquery/jquery.d.ts",
+                content: "declare const $: { x: number }"
+            };
+
+            const host = createServerHost([file1, tsconfig, packageJson]);
+            class TypingInstaller extends TestTypingsInstaller {
+                cachePath = "/a/data/";
+                constructor(host: server.ServerHost) { 
+                    super(host)
+                }
+            };
+            const installer = new TypingInstaller(host);
+            const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ true, installer);
+            projectService.openClientFile(file1.path);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 })
+            const p = projectService.configuredProjects[0];
+            checkProjectActualFiles(p, [ file1.path ]);
+
+            installer.runPostInstallActions(t => {
+                assert.deepEqual(t, ["jquery"]);
+                host.reloadFS([file1, tsconfig, packageJson, jquery]);
+                return ["jquery/jquery.d.ts"];
+            });
+            checkNumberOfProjects(projectService, { configuredProjects: 1 })
+            checkProjectActualFiles(p, [ file1.path, jquery.path ]);
         });
     });
 }

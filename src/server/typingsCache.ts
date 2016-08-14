@@ -3,10 +3,12 @@
 namespace ts.server {
     export interface ITypingsInstaller {
         enqueueInstallTypingsRequest(p: Project, typingOptions: TypingOptions): void;
+        attach(projectService: ProjectService): void;
     }
 
     export const nullTypingsInstaller: ITypingsInstaller = {
-        enqueueInstallTypingsRequest: () => {}
+        enqueueInstallTypingsRequest: () => {},
+        attach: (projectService: ProjectService) => {}
     };
 
     class TypingsCacheEntry {

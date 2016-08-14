@@ -1452,16 +1452,6 @@ namespace ts.server {
             }
         }
 
-        public onTypingsInstalled(response: InstallTypingsResponse) {
-            const project = this.projectService.findProject(response.projectName);
-            if (!project) {
-                return;
-            }
-            this.projectService.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.typings);
-            project.updateGraph();
-            
-        }
-
         public onMessage(message: string) {
             this.gcTimer.scheduleCollect();
             let start: number[];

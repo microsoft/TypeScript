@@ -182,7 +182,12 @@ namespace ts.server {
             this.toCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
             this.directoryWatchers = new DirectoryWatchers(this);
             this.throttledOperations = new ThrottledOperations(host);
-            this.typingsCache = new TypingsCache(typingsInstaller || nullTypingsInstaller);
+
+            const installer = typingsInstaller || nullTypingsInstaller;
+            installer.attach(this);
+
+            this.typingsCache = new TypingsCache(installer);
+
             // ts.disableIncrementalParsing = true;
 
             this.hostConfiguration = {
@@ -199,6 +204,15 @@ namespace ts.server {
 
         ensureInferredProjectsUpToDate_TestOnly() {
             this.ensureInferredProjectsUpToDate();
+        }
+
+        updateTypingsForProject(response: InstallTypingsResponse): void {
+            const project = this.findProject(response.projectName);
+            if (!project) {
+                return;
+            }
+            this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.typings);
+            project.updateGraph();
         }
 
         setCompilerOptionsForInferredProjects(compilerOptions: CompilerOptions): void {

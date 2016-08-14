@@ -30,6 +30,19 @@ namespace ts.server {
         export type Types = Err | Info | Perf;
     }
 
+    export function createInstallTypingsRequest(project: Project, typingOptions: TypingOptions, safeListPath: Path, packageNameToTypingLocation: Map<string>, cachePath: string): InstallTypingsRequest {
+        return {
+            projectName: project.getProjectName(),
+            fileNames: project.getFileNames(),
+            compilerOptions: project.getCompilerOptions(),
+            typingOptions,
+            projectRootPath: <Path>(project.projectKind === ProjectKind.Inferred ? "" : getDirectoryPath(project.getProjectName())), // TODO: fixme
+            safeListPath,
+            packageNameToTypingLocation,
+            cachePath
+        };
+    }
+
     export namespace Errors {
         export const NoProject = new Error("No Project.");
         export const ProjectLanguageServiceDisabled = new Error("The project's language service is disabled.");

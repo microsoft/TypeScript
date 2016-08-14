@@ -161,7 +161,7 @@ namespace ts.server {
 
     class NodeTypingsInstaller implements ITypingsInstaller {
         private installer: NodeChildProcess;
-        private session: Session;
+        private projectService: ProjectService;
         private cachePath: string;
 
         constructor(private readonly logger: server.Logger) {
@@ -176,8 +176,8 @@ namespace ts.server {
             }
         }
 
-        bind(session: Session) {
-            this.session = session;
+        attach(projectService: ProjectService) {
+            this.projectService = projectService;
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 this.logger.info("Binding...")
             }
@@ -187,16 +187,13 @@ namespace ts.server {
         }
 
         enqueueInstallTypingsRequest(project: Project, typingOptions: TypingOptions): void {
-            const request: InstallTypingsRequest = {
-                projectName: project.getProjectName(),
-                fileNames: project.getFileNames(),
-                compilerOptions: project.getCompilerOptions(),
+            const request = createInstallTypingsRequest(
+                project, 
                 typingOptions,
-                projectRootPath: <Path>(project.projectKind === ProjectKind.Inferred ? "" : getDirectoryPath(project.getProjectName())), // TODO: fixme
-                safeListPath: <Path>(combinePaths(process.cwd(), "typingSafeList.json")), // TODO: fixme
-                packageNameToTypingLocation: {}, // TODO: fixme
-                cachePath: this.cachePath
-            };
+                /*safeListPath*/ <Path>(combinePaths(process.cwd(), "typingSafeList.json")), // TODO: fixme
+                /*packageNameToTypingLocation*/ {}, // TODO: fixme
+                this.cachePath
+            );
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Sending request: ${JSON.stringify(request)}`);
             }
@@ -207,14 +204,13 @@ namespace ts.server {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response: ${JSON.stringify(response)}`)
             }
-            this.session.onTypingsInstalled(response);
+            this.projectService.updateTypingsForProject(response);
         }
     }
 
     class IOSession extends Session {
         constructor(host: ServerHost, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean, logger: server.Logger) {
             super(host, cancellationToken, useSingleInferredProject, new NodeTypingsInstaller(logger), Buffer.byteLength, maxUncompressedMessageSize, compress, process.hrtime, logger);
-            (<NodeTypingsInstaller>this.typingsInstaller).bind(this);
         }
 
         exit() {
