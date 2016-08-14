@@ -1466,7 +1466,7 @@ namespace ts {
 
                 file1Consumer1 = {
                     path: "/a/b/file1Consumer1.ts",
-                    content: `import {Foo} from "./moduleFile1"; let y = Foo();`
+                    content: `import {Foo} from "./moduleFile1"; export var y = 10;`
                 };
 
                 file1Consumer2 = {
@@ -1751,6 +1751,30 @@ namespace ts {
                 });
                 session.executeCommand(file1ChangeShapeRequest);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [moduleFile1]);
+            });
+
+            it("should return cascaded affected file list", () => {
+                const file1Consumer1Consumer1: FileOrFolder = {
+                    path: "/a/b/file1Consumer1Consumer1.ts",
+                    content: `import {y} from "./file1Consumer1";`
+                };
+                host = createServerHost([moduleFile1, file1Consumer1, file1Consumer1Consumer1, globalFile3, configFile, libFile]);
+                session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, Utils.byteLength, Utils.maxUncompressedMessageSize, Utils.compress, process.hrtime, nullLogger);
+
+                openFilesForSession([moduleFile1, file1Consumer1], session);
+                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [moduleFile1, file1Consumer1, file1Consumer1Consumer1]);
+
+                const changeFile1Consumer1ShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(server.CommandNames.Change, {
+                    file: file1Consumer1.path,
+                    line: 2,
+                    offset: 1,
+                    endLine: 2,
+                    endOffset: 1,
+                    insertString: `export var T: number;`
+                });
+                session.executeCommand(changeModuleFile1ShapeRequest1);
+                session.executeCommand(changeFile1Consumer1ShapeRequest);
+                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [moduleFile1, file1Consumer1, file1Consumer1Consumer1]);
             });
         });
     });

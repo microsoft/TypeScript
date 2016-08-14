@@ -346,9 +346,26 @@ namespace ts.server {
                         result = [fileName];
                     }
                     else {
-                        result = fileInfo.getReferencedByFileNames();
-                        // Needs to count the trigger file itself because it for sure has changed.
-                        result.push(fileName);
+                        // Now we need to if each file in the referencedBy list has a shape change as well.
+                        // Because if so, its own referencedBy files need to be saved as well to make the
+                        // emitting result consistent with files on disk.
+
+                        // Use slice to clone the array to avoid manipulating in place
+                        const queue = fileInfo.referencedBy.slice(0);
+                        const fileNameSet: Map<boolean> = {};
+                        fileNameSet[fileName] = true;
+                        while (queue.length > 0) {
+                            const processingFileInfo = queue.pop();
+                            if (processingFileInfo.updateShapeSignature() && processingFileInfo.referencedBy.length > 0) {
+                                for (const potentialFileInfo of processingFileInfo.referencedBy) {
+                                    if (!fileNameSet[potentialFileInfo.scriptInfo.fileName]) {
+                                        queue.push(potentialFileInfo);
+                                    }
+                                }
+                            }
+                            fileNameSet[processingFileInfo.scriptInfo.fileName] = true;
+                        }
+                        result = getKeys(fileNameSet);
                     }
                 }
                 return result;
