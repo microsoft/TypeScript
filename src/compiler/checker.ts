@@ -879,7 +879,8 @@ namespace ts {
                 if (nameNotFoundMessage) {
                     if (!errorLocation ||
                         !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg) &&
-                        !checkAndReportErrorForExtendingInterface(errorLocation)) {
+                        !checkAndReportErrorForExtendingInterface(errorLocation) &&
+                        !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning, nameNotFoundMessage, nameArg)) {
                         error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
                     }
                 }
@@ -989,6 +990,22 @@ namespace ts {
             }
         }
 
+        function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: string, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage, nameArg: string | Identifier): boolean {
+            const strictlyValueMeanings = SymbolFlags.Value & ~SymbolFlags.Type;
+            const strictlyTypeMeanings = SymbolFlags.Type & ~SymbolFlags.Value;
+
+            if (!(meaning & strictlyValueMeanings)) {
+                return false;
+            }
+
+            const nameAsType = resolveName(errorLocation, name, strictlyTypeMeanings, nameNotFoundMessage, nameArg);
+            if (nameAsType) {
+                error(errorLocation, Diagnostics.Cannot_find_name_0_A_type_exists_with_this_name_but_no_value, name);
+                return true;
+            }
+
+            return false;
+        }
 
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
             Debug.assert((result.flags & SymbolFlags.BlockScopedVariable) !== 0);
