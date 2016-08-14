@@ -1,3 +1,7 @@
+/// <reference path="../compiler/types.ts"/>
+/// <reference path="../compiler/sys.ts"/>
+/// <reference path="../services/jsTyping.ts"/>
+
 declare namespace ts.server {
     export interface InstallTypingsRequest {
         readonly projectName: string;
