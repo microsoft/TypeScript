@@ -121,11 +121,11 @@ namespace ts.server {
 
         abstract getProjectName(): string;
 
-        getSourceFile(filename: string) {
+        getSourceFile(path: Path) {
             if (!this.program) {
                 return undefined;
             }
-            return this.program.getSourceFile(filename);
+            return this.program.getSourceFileByPath(path);
         }
 
         close() {
@@ -166,11 +166,15 @@ namespace ts.server {
             return this.rootFiles;
         }
 
-        getFileEmitOutput(info: ScriptInfo) {
+        getScriptInfos() {
+            return map(this.program.getSourceFiles(), sourceFile => this.getScriptInfoLSHost(sourceFile.path));
+        }
+
+        getFileEmitOutput(info: ScriptInfo, emitOnlyDtsFiles = false) {
             if (!this.languageServiceEnabled) {
                 return undefined;
             }
-            return this.languageService.getEmitOutput(info.fileName);
+            return this.getLanguageService().getEmitOutput(info.fileName, emitOnlyDtsFiles);
         }
 
         getFileNames() {
@@ -375,14 +379,18 @@ namespace ts.server {
             }
         }
 
-        getReferencedFiles(fileName: string): string[] {
+        getReferencedFiles(path: Path): Path[] {
             if (!this.languageServiceEnabled) {
                 return [];
             }
 
-            const sourceFile = this.program.getSourceFile(fileName);
+            const sourceFile = this.getSourceFile(path);
+            if (!sourceFile) {
+                return [];
+            }
             // We need to use a set here since the code can contain the same import twice,
             // but that will only be one dependency.
+            // To avoid invernal conversion, the key of the referencedFiles map must be of type Path
             const referencedFiles: Map<boolean> = {};
             if (sourceFile.imports) {
                 const checker: TypeChecker = this.program.getTypeChecker();
@@ -391,16 +399,19 @@ namespace ts.server {
                     if (symbol && symbol.declarations && symbol.declarations[0]) {
                         const declarationSourceFile = symbol.declarations[0].getSourceFile();
                         if (declarationSourceFile) {
-                            referencedFiles[declarationSourceFile.fileName] = true;
+                            referencedFiles[declarationSourceFile.path] = true;
                         }
                     }
                 }
             }
 
+            const currentDirectory = getDirectoryPath(path);
+            const getCanonicalFileName = createGetCanonicalFileName(this.projectService.host.useCaseSensitiveFileNames);
             // Handle triple slash references
             if (sourceFile.referencedFiles) {
                 for (const referencedFile of sourceFile.referencedFiles) {
-                    referencedFiles[referencedFile.fileName] = true;
+                    const referencedPath = toPath(referencedFile.fileName, currentDirectory, getCanonicalFileName)
+                    referencedFiles[referencedPath] = true;
                 }
             }
 
@@ -408,12 +419,12 @@ namespace ts.server {
             if (sourceFile.resolvedTypeReferenceDirectiveNames) {
                 for (const typeName in sourceFile.resolvedTypeReferenceDirectiveNames) {
                     const fileName = sourceFile.resolvedTypeReferenceDirectiveNames[typeName].resolvedFileName;
-                    referencedFiles[fileName] = true;
+                    const typeFilePath = toPath(fileName, currentDirectory, getCanonicalFileName);
+                    referencedFiles[typeFilePath] = true;
                 }
             }
 
-            const currentDirectory = getDirectoryPath(fileName);
-            return map(getKeys(referencedFiles), file => getNormalizedAbsolutePath(file, currentDirectory));
+            return map(getKeys(referencedFiles), key => <Path>key);
         }
 
         // remove a root file from project

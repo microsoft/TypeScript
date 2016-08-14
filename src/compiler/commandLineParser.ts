@@ -713,7 +713,7 @@ namespace ts {
         options.configFilePath = configFileName;
 
         const { fileNames, wildcardDirectories } = getFileNames(errors);
-        const compileOnSave = <boolean>convertCompileOnSaveOptionFromJson(json, basePath, errors);
+        const compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
 
         return {
             options,
@@ -777,11 +777,15 @@ namespace ts {
         }
     }
 
-    export function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]) {
+    export function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]): boolean {
         if (!hasProperty(jsonOption, "compileOnSave")) {
             return false;
         }
-        return convertJsonOption({ name: "compileOnSave", type: "boolean" }, jsonOption["compileOnSave"], basePath, errors);
+        const result = convertJsonOption({ name: "compileOnSave", type: "boolean" }, jsonOption["compileOnSave"], basePath, errors);
+        if (typeof result == "boolean") {
+            return result;
+        }
+        return false;
     }
 
     export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): { options: CompilerOptions, errors: Diagnostic[] } {

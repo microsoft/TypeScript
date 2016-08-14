@@ -970,7 +970,8 @@ namespace ts.server {
             if (!project) {
                 throw Errors.NoProject;
             }
-            return project.builder.emitFile(file, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark), !!args.forced);
+            const filePath = toPath(file, getDirectoryPath(file), file => this.getCanonicalFileName(file));
+            return project.builder.emitFile(filePath, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
         }
 
         private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems {

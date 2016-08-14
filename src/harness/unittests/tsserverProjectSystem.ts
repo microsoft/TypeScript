@@ -1460,27 +1460,27 @@ namespace ts {
 
             beforeEach(() => {
                 moduleFile1 = {
-                    path: "/a/b/file1.ts",
+                    path: "/a/b/moduleFile1.ts",
                     content: "export function Foo() { };"
                 };
 
                 file1Consumer1 = {
-                    path: "/a/b/file2.ts",
-                    content: `import {Foo} from "./file1"; let y = Foo();`
+                    path: "/a/b/file1Consumer1.ts",
+                    content: `import {Foo} from "./moduleFile1"; let y = Foo();`
                 };
 
                 file1Consumer2 = {
-                    path: "/a/b/file3.ts",
-                    content: `import {Foo} from "./file1"; let z = 10;`
+                    path: "/a/b/file1Consumer2.ts",
+                    content: `import {Foo} from "./moduleFile1"; let z = 10;`
                 };
 
                 moduleFile2 = {
-                    path: "/a/b/file4.ts",
+                    path: "/a/b/moduleFile2.ts",
                     content: `export var Foo4 = 10;`
                 };
 
                 globalFile3 = {
-                    path: "/a/b/file5.ts",
+                    path: "/a/b/globalFile3.ts",
                     content: `interface GlobalFoo { age: number }`
                 };
 
@@ -1576,7 +1576,7 @@ namespace ts {
                     offset: 1,
                     endLine: 1,
                     endOffset: 1,
-                    insertString: `import {Foo} from "./file1";`
+                    insertString: `import {Foo} from "./moduleFile1";`
                 });
                 session.executeCommand(addFile2ImportRequest);
 
@@ -1624,7 +1624,7 @@ namespace ts {
 
                 const file1Consumer3: FileOrFolder = {
                     path: "/a/b/file1Consumer3.ts",
-                    content: `import {Foo} from "./file1"; let y = Foo();`
+                    content: `import {Foo} from "./moduleFile1"; let y = Foo();`
                 };
                 host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3, globalFile3, configFile, libFile]);
                 host.triggerDirectoryWatcherCallback(ts.getDirectoryPath(file1Consumer3.path), file1Consumer3.path);
@@ -1635,13 +1635,13 @@ namespace ts {
 
             it("should detect changes in non-root files", () => {
                 moduleFile1 = {
-                    path: "/a/b/file1.ts",
+                    path: "/a/b/moduleFile1.ts",
                     content: "export function Foo() { };"
                 };
 
                 file1Consumer1 = {
-                    path: "/a/b/file2.ts",
-                    content: `import {Foo} from "./file1"; let y = Foo();`
+                    path: "/a/b/file1Consumer1.ts",
+                    content: `import {Foo} from "./moduleFile1"; let y = Foo();`
                 };
 
                 configFile = {

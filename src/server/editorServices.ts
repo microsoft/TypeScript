@@ -166,7 +166,7 @@ namespace ts.server {
 
         private changedFiles: ScriptInfo[];
 
-        private toCanonicalFileName: (f: string) => string;
+        toCanonicalFileName: (f: string) => string;
 
         constructor(public readonly host: ServerHost,
             public readonly logger: Logger,

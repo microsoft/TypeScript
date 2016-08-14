@@ -27,6 +27,7 @@ namespace ts {
             contains,
             remove,
             forEachValue: forEachValueInMap,
+            getKeys,
             clear,
         };
 
@@ -34,6 +35,14 @@ namespace ts {
             for (const key in files) {
                 f(<Path>key, files[key]);
             }
+        }
+
+        function getKeys() {
+            const keys: Path[] = [];
+            for (const key in files) {
+                keys.push(<Path>key);
+            }
+            return keys;
         }
 
         // path should already be well-formed so it does not need to be normalized
