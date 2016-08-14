@@ -1,4 +1,5 @@
 /// <reference path="binder.ts"/>
+/// <reference path="symbolWalker.ts" />
 
 /* @internal */
 namespace ts {
@@ -100,6 +101,7 @@ namespace ts {
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
+            getSymbolWalker: createGetSymbolWalker(getRestTypeOfSignature, getReturnTypeOfSignature, getBaseTypes, resolveStructuredTypeMembers, getTypeOfSymbol, getResolvedSymbol, getIndexTypeOfStructuredType),
 
             getJsxElementAttributesType,
             getJsxIntrinsicTagNames,
