@@ -428,7 +428,7 @@ namespace ts.server {
             hasExplicitListOfFiles: boolean,
             compilerOptions: CompilerOptions,
             private typingOptions: TypingOptions,
-            private wildcardDirectories: Map<WatchDirectoryFlags>,
+            private wildcardDirectories: MapLike<WatchDirectoryFlags>,
             languageServiceEnabled: boolean) {
             super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions);
         }

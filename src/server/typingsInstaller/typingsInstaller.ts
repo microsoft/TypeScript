@@ -12,7 +12,7 @@ namespace ts.server.typingsInstaller {
     export abstract class TypingsInstaller {
         
         private isTsdInstalled: boolean;
-        private missingTypings: Map<string> = {};
+        private missingTypings: Map<string> = createMap<string>();
 
         init() {
             this.isTsdInstalled = this.isPackageInstalled("tsd");

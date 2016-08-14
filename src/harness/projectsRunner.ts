@@ -253,7 +253,7 @@ class ProjectRunner extends RunnerBase {
                     moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future
                 };
                 // Set the values specified using json
-                const optionNameMap: ts.Map<ts.CommandLineOption> = {};
+                const optionNameMap: ts.MapLike<ts.CommandLineOption> = {};
                 ts.forEach(ts.optionDeclarations, option => {
                     optionNameMap[option.name] = option;
                 });

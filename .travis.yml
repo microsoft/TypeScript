@@ -7,19 +7,33 @@ node_js:
 
 sudo: false
 
-os:
-  - linux
-  - osx
+env:
+  - workerCount=3
 
 matrix:
   fast_finish: true
-  exclude:
+  include:
   - os: osx
-    node_js: '4'
+    node_js: stable
+    osx_image: xcode7.3
+    env: workerCount=2
+  allow_failures:
   - os: osx
-    node_js: '0.10'
 
 branches:
   only:
   - master
   - transforms
+
+install:
+  - npm uninstall typescript
+  - npm uninstall tslint
+  - npm install
+  - npm update
+
+cache:
+  directories:
+    - node_modules
+
+git:
+  depth: 1

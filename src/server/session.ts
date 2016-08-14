@@ -331,11 +331,9 @@ namespace ts.server {
             this.cleanProjects("inferred projects", this.projectService.inferredProjects);
             this.cleanProjects("configured projects", this.projectService.configuredProjects);
             this.cleanProjects("external projects", this.projectService.externalProjects);
-            if (typeof global !== "undefined" && global.gc) {
-                this.logger.info(`global.gc()`);
-                global.gc();
-                global.gc();
-                global.gc();
+            if (this.host.gc) {
+                this.logger.info(`host.gc()`);
+                this.host.gc();
             }
         }
 
@@ -1215,7 +1213,7 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
-        private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
+        private handlers: MapLike<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
                 this.projectService.openExternalProject(request.arguments);
                 // TODO: report errors

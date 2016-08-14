@@ -30,8 +30,8 @@
     },
     "devDependencies": {
         "@types/browserify": "latest",
-        "@types/convert-source-map": "latest",
         "@types/chai": "latest",
+        "@types/convert-source-map": "latest",
         "@types/del": "latest",
         "@types/glob": "latest",
         "@types/gulp": "latest",
@@ -72,13 +72,14 @@
         "run-sequence": "latest",
         "sorcery": "latest",
         "through2": "latest",
+        "travis-fold": "latest",
         "ts-node": "latest",
         "tslint": "next",
         "typescript": "next"
     },
     "scripts": {
         "pretest": "jake tests",
-        "test": "jake runtests",
+        "test": "jake runtests-parallel",
         "build": "npm run build:compiler && npm run build:tests",
         "build:compiler": "jake local",
         "build:tests": "jake tests",

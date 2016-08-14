@@ -76,7 +76,7 @@ namespace ts.server {
     }
 
     export class TypingsCache {
-        private readonly perProjectCache: Map<TypingsCacheEntry> = {};
+        private readonly perProjectCache: Map<TypingsCacheEntry> = createMap<TypingsCacheEntry>();
 
         constructor(private readonly installer: ITypingsInstaller) {
         }

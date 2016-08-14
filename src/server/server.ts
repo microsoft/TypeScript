@@ -191,7 +191,7 @@ namespace ts.server {
                 project, 
                 typingOptions,
                 /*safeListPath*/ <Path>(combinePaths(process.cwd(), "typingSafeList.json")), // TODO: fixme
-                /*packageNameToTypingLocation*/ {}, // TODO: fixme
+                /*packageNameToTypingLocation*/ createMap<string>(), // TODO: fixme
                 this.cachePath
             );
             if (this.logger.hasLevel(LogLevel.verbose)) {
@@ -427,6 +427,9 @@ namespace ts.server {
     sys.setImmediate = setImmediate;
     sys.clearImmediate = clearImmediate;
     sys.writeCompressedData = writeCompressedData;
+    if (typeof global !== "undefined" && global.gc) {
+        sys.gc = () => global.gc();
+    }
 
     let cancellationToken: HostCancellationToken;
     try {

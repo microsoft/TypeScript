@@ -23,7 +23,7 @@ declare var path: any;
 import * as ts from "typescript";
 
 function watch(rootFileNames: string[], options: ts.CompilerOptions) {
-    const files: ts.Map<{ version: number }> = {};
+    const files: ts.MapLike<{ version: number }> = {};
 
     // initialize the list of files
     rootFileNames.forEach(fileName => {

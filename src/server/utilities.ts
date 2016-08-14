@@ -69,7 +69,7 @@ namespace ts.server {
         };
     }
 
-    export function mergeMaps(target: Map<any>, source: Map<any>): void {
+    export function mergeMaps(target: MapLike<any>, source: MapLike <any>): void {
         for (const key in source) {
             if (hasProperty(source, key)) {
                 target[key] = source[key];
@@ -199,7 +199,7 @@ namespace ts.server {
          * these fields can be present in the project file
          **/
         files?: string[];
-        wildcardDirectories?: Map<WatchDirectoryFlags>;
+        wildcardDirectories?: MapLike<WatchDirectoryFlags>;
         compilerOptions?: CompilerOptions;
         typingOptions?: TypingOptions;
     }
@@ -214,7 +214,7 @@ namespace ts.server {
     }
 
     export class ThrottledOperations {
-        private pendingTimeouts: Map<any> = {};
+        private pendingTimeouts: Map<any> = createMap<any>();
         constructor(private readonly host: ServerHost) {
         }
 
@@ -235,15 +235,11 @@ namespace ts.server {
 
     export class GcTimer {
         private timerId: any;
-        private gc: () => void;
         constructor(private readonly host: ServerHost, private readonly delay: number, private readonly logger: Logger) {
-            if (typeof global !== "undefined" && global.gc) {
-                this.gc = () => global.gc();
-            }
         }
 
         public scheduleCollect() {
-            if (!this.gc || this.timerId != undefined) {
+            if (!this.host.gc || this.timerId != undefined) {
                 // no global.gc or collection was already scheduled - skip this request
                 return;
             }
@@ -256,7 +252,7 @@ namespace ts.server {
             const log = self.logger.hasLevel(LogLevel.requestTime);
             const before = log && self.host.getMemoryUsage();
 
-            self.gc();
+            self.host.gc();
             if (log) {
                 const after = self.host.getMemoryUsage();
                 self.logger.perftrc(`GC::before ${before}, after ${after}`);

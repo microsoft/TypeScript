@@ -110,7 +110,7 @@ namespace ts.server {
         describe("onMessage", () => {
             it("should not throw when commands are executed with invalid arguments", () => {
                 let i = 0;
-                for (name in CommandNames) {
+                for (const name in CommandNames) {
                     if (!Object.prototype.hasOwnProperty.call(CommandNames, name)) {
                         continue;
                     }
@@ -366,8 +366,8 @@ namespace ts.server {
         class InProcClient {
             private server: InProcSession;
             private seq = 0;
-            private callbacks: ts.Map<(resp: protocol.Response) => void> = {};
-            private eventHandlers: ts.Map<(args: any) => void> = {};
+            private callbacks: ts.MapLike<(resp: protocol.Response) => void> = {};
+            private eventHandlers: ts.MapLike<(args: any) => void> = {};
 
             handle(msg: protocol.Message): void {
                 if (msg.type === "response") {

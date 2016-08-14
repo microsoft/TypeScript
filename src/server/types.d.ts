@@ -26,6 +26,7 @@ declare namespace ts.server {
         setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;
         clearImmediate(timeoutId: any): void;
         writeCompressedData(prefix: string, data: CompressedData, suffix: string): void;
+        gc?(): void;
     }
 
     export interface InstallTypingsResponse {

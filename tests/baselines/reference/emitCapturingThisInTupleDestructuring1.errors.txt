@@ -1,0 +1,13 @@
+tests/cases/compiler/emitCapturingThisInTupleDestructuring1.ts(3,17): error TS2493: Tuple type '[any]' with length '1' cannot be assigned to tuple with length '3'.
+tests/cases/compiler/emitCapturingThisInTupleDestructuring1.ts(3,29): error TS2493: Tuple type '[any]' with length '1' cannot be assigned to tuple with length '3'.
+
+
+==== tests/cases/compiler/emitCapturingThisInTupleDestructuring1.ts (2 errors) ====
+    declare function wrapper(x: any);
+    wrapper((array: [any]) => {
+        [this.test, this.test1, this.test2] = array;  // even though there is a compiler error, we should still emit lexical capture for "this"
+                    ~~~~~~~~~~
+!!! error TS2493: Tuple type '[any]' with length '1' cannot be assigned to tuple with length '3'.
+                                ~~~~~~~~~~
+!!! error TS2493: Tuple type '[any]' with length '1' cannot be assigned to tuple with length '3'.
+    });

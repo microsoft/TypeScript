@@ -35,6 +35,22 @@ function b() {
     }
     x; // string
 }
+function c<T>(data: string | T): T {
+    if (typeof data === 'string') {
+        return JSON.parse(data);
+    }
+    else {
+        return data;
+    }
+}
+function d<T extends string>(data: string | T): never {
+    if (typeof data === 'string') {
+        throw new Error('will always happen');
+    }
+    else {
+        return data;
+    }
+}
 
 
 //// [controlFlowIfStatement.js]
@@ -71,4 +87,20 @@ function b() {
         x = "";
     }
     x; // string
+}
+function c(data) {
+    if (typeof data === 'string') {
+        return JSON.parse(data);
+    }
+    else {
+        return data;
+    }
+}
+function d(data) {
+    if (typeof data === 'string') {
+        throw new Error('will always happen');
+    }
+    else {
+        return data;
+    }
 }

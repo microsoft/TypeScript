@@ -42,7 +42,7 @@ namespace ts.server {
         project?: ConfiguredProject;
     }
 
-    interface OpenConfiguredProjectResult {
+    export interface OpenConfiguredProjectResult {
         configFileName?: string;
         configFileErrors?: Diagnostic[];
     }
@@ -91,12 +91,12 @@ namespace ts.server {
         /**
          * a path to directory watcher map that detects added tsconfig files
          **/
-        private readonly directoryWatchersForTsconfig: Map<FileWatcher> = {};
+        private readonly directoryWatchersForTsconfig: Map<FileWatcher> = createMap<FileWatcher>();
         /**
          * count of how many projects are using the directory watcher.
          * If the number becomes 0 for a watcher, then we should close it.
          **/
-        private readonly directoryWatchersRefCount: Map<number> = {};
+        private readonly directoryWatchersRefCount: Map<number> = createMap<number>();
 
         constructor(private readonly projectService: ProjectService) {
         }
@@ -143,7 +143,7 @@ namespace ts.server {
         /**
          * maps external project file name to list of config files that were the part of this project
          */
-        private readonly externalProjectToConfiguredProjectMap: Map<NormalizedPath[]> = {};
+        private readonly externalProjectToConfiguredProjectMap: Map<NormalizedPath[]> = createMap<NormalizedPath[]>();
 
         /**
          * external projects (configuration and list of root files is not controlled by tsserver)
