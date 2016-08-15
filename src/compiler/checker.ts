@@ -13794,19 +13794,19 @@ namespace ts {
         }
 
         function checkClassForDuplicateDeclarations(node: ClassLikeDeclaration) {
-            const enum Meaning {
+            const enum Accessor {
                 Getter = 1,
                 Setter = 2,
                 Property = Getter | Setter
             }
 
-            const instanceNames = createMap<Meaning>();
-            const staticNames = createMap<Meaning>();
+            const instanceNames = createMap<Accessor>();
+            const staticNames = createMap<Accessor>();
             for (const member of node.members) {
                 if (member.kind === SyntaxKind.Constructor) {
                     for (const param of (member as ConstructorDeclaration).parameters) {
                         if (isParameterPropertyDeclaration(param)) {
-                            addName(instanceNames, param.name, (param.name as Identifier).text, Meaning.Property);
+                            addName(instanceNames, param.name, (param.name as Identifier).text, Accessor.Property);
                         }
                     }
                 }
@@ -13818,22 +13818,22 @@ namespace ts {
                     if (memberName) {
                         switch (member.kind) {
                             case SyntaxKind.GetAccessor:
-                                addName(names, member.name, memberName, Meaning.Getter);
+                                addName(names, member.name, memberName, Accessor.Getter);
                                 break;
 
                             case SyntaxKind.SetAccessor:
-                                addName(names, member.name, memberName, Meaning.Setter);
+                                addName(names, member.name, memberName, Accessor.Setter);
                                 break;
 
                             case SyntaxKind.PropertyDeclaration:
-                                addName(names, member.name, memberName, Meaning.Property);
+                                addName(names, member.name, memberName, Accessor.Property);
                                 break;
                         }
                     }
                 }
             }
 
-            function addName(names: Map<Meaning>, location: Node, name: string, meaning: Meaning) {
+            function addName(names: Map<Accessor>, location: Node, name: string, meaning: Accessor) {
                 const prev = names[name];
                 if (prev) {
                     if (prev & meaning) {
