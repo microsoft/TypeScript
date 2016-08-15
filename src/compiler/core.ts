@@ -110,7 +110,7 @@ namespace ts {
     }
 
     /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
-    export function tryFind<T>(array: T[], predicate: (element: T, index: number) => boolean): T | undefined {
+    export function find<T>(array: T[], predicate: (element: T, index: number) => boolean): T | undefined {
         for (let i = 0, len = array.length; i < len; i++) {
             const value = array[i];
             if (predicate(value, i)) {
@@ -120,8 +120,11 @@ namespace ts {
         return undefined;
     }
 
-    /** Like `forEach`, but assumes existence of array and fails if no truthy value is found. */
-    export function find<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U {
+    /**
+     * Returns the first truthy result of `callback`, or else fails.
+     * This is like `forEach`, but never returns undefined.
+     */
+    export function findMap<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U {
         for (let i = 0, len = array.length; i < len; i++) {
             const result = callback(array[i], i);
             if (result) {

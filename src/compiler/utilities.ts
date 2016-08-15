@@ -2715,7 +2715,7 @@ namespace ts {
 
     /** Return ".ts" or ".tsx" if that is the extension. */
     export function tryExtractTypeScriptExtension(fileName: string): string | undefined {
-        return tryFind(supportedTypescriptExtensionsWithDtsFirst, extension => fileExtensionIs(fileName, extension));
+        return find(supportedTypescriptExtensionsWithDtsFirst, extension => fileExtensionIs(fileName, extension));
     }
     // Must have '.d.ts' first because if '.ts' goes first, that will be detected as the extension instead of '.d.ts'.
     const supportedTypescriptExtensionsWithDtsFirst = supportedTypeScriptExtensions.slice().reverse();
