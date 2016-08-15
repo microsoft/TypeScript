@@ -17542,11 +17542,10 @@ namespace ts {
         }
 
         function checkSourceFile(node: SourceFile) {
-            const start = performance.mark();
-
+            performance.mark("beforeCheck");
             checkSourceFileWorker(node);
-
-            performance.measure("Check", start);
+            performance.mark("afterCheck");
+            performance.measure("Check", "beforeCheck", "afterCheck");
         }
 
         // Fully type check a source file and collect the relevant diagnostics.
