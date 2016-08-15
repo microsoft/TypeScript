@@ -1,13 +1,13 @@
 === tests/cases/compiler/v1/index.d.ts ===
 export as namespace Alpha;
->Alpha : any
+>Alpha : typeof Alpha
 
 export var x: string;
 >x : string
 
 === tests/cases/compiler/v2/index.d.ts ===
 export as namespace Alpha;
->Alpha : any
+>Alpha : typeof 
 
 export var y: number;
 >y : number
