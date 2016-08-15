@@ -2828,6 +2828,10 @@
         "category": "Message",
         "code": 6137
     },
+    "Property '{0}' is declared but never used.": {
+        "category": "Error",
+        "code": 6138
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
