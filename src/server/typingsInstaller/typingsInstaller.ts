@@ -60,7 +60,8 @@ namespace ts.server.typingsInstaller {
             this.runTsd(req.cachePath, typingsToInstall, installedTypings => {
                 // TODO: record new missing package names
                 // TODO: watch project directory
-                installedTypings = installedTypings.map(x => getNormalizedAbsolutePath(x, req.cachePath));
+                const typingDirectory = combinePaths(req.cachePath, "typings");
+                installedTypings = installedTypings.map(x => combinePaths(typingDirectory, x));
                 this.sendResponse(this.createResponse(req, currentlyCachedTypings.concat(installedTypings)));
             });
         }

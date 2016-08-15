@@ -179,11 +179,11 @@ namespace ts.server {
                     basePath = os.homedir();
                     break;
                 case "darwin":
-                    basePath = combinePaths(os.homedir(), "/Library/Application Support/")
+                    basePath = combinePaths(os.homedir(), "Library/Application Support/")
                     break;
             }
             if (basePath) {
-                this.cachePath = combinePaths(normalizeSlashes(basePath), "/Microsoft/TypeScript");
+                this.cachePath = combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript");
             }
         }
 
