@@ -1513,7 +1513,7 @@ namespace ts {
             };
 
             const jquery = {
-                path: "/a/data/jquery/jquery.d.ts",
+                path: "/a/data/typings/jquery/jquery.d.ts",
                 content: "declare const $: { x: number }"
             };
 
