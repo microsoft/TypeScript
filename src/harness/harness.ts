@@ -848,7 +848,7 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
-        const libFileNameSourceFileMap: ts.Map<ts.SourceFile> = {
+        const libFileNameSourceFileMap: ts.MapLike<ts.SourceFile> = {
             [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
         };
 
@@ -1002,7 +1002,7 @@ namespace Harness {
             { name: "symlink", type: "string" }
         ];
 
-        let optionsIndex: ts.Map<ts.CommandLineOption>;
+        let optionsIndex: ts.MapLike<ts.CommandLineOption>;
         function getCommandLineOption(name: string): ts.CommandLineOption {
             if (!optionsIndex) {
                 optionsIndex = {};

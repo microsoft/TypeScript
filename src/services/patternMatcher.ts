@@ -113,7 +113,7 @@ namespace ts {
         // we see the name of a module that is used everywhere, or the name of an overload).  As
         // such, we cache the information we compute about the candidate for the life of this
         // pattern matcher so we don't have to compute it multiple times.
-        const stringToWordSpans: Map<TextSpan[]> = {};
+        const stringToWordSpans = createMap<TextSpan[]>();
 
         pattern = pattern.trim();
 

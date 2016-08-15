@@ -52,7 +52,7 @@ class CompilerBaselineRunner extends RunnerBase {
     private makeUnitName(name: string, root: string) {
         const path = ts.toPath(name, root, (fileName) => Harness.Compiler.getCanonicalFileName(fileName));
         const pathStart = ts.toPath(Harness.IO.getCurrentDirectory(), "", (fileName) => Harness.Compiler.getCanonicalFileName(fileName));
-        return path.replace(pathStart, "/");
+        return pathStart ? path.replace(pathStart, "/") : path;
     };
 
     public checkTestCodeOutput(fileName: string) {
@@ -291,8 +291,8 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
 
-                const fullResults: ts.Map<TypeWriterResult[]> = {};
-                const pullResults: ts.Map<TypeWriterResult[]> = {};
+                const fullResults: ts.MapLike<TypeWriterResult[]> = {};
+                const pullResults: ts.MapLike<TypeWriterResult[]> = {};
 
                 for (const sourceFile of allFiles) {
                     fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
@@ -338,7 +338,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     }
                 }
 
-                function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
+                function generateBaseLine(typeWriterResults: ts.MapLike<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
                     const typeLines: string[] = [];
                     const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
 

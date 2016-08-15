@@ -269,7 +269,7 @@ namespace ts {
             }
 
             if (!usedTypeDirectiveReferences) {
-                usedTypeDirectiveReferences = {};
+                usedTypeDirectiveReferences = createMap<string>();
             }
             for (const directive of typeReferenceDirectives) {
                 if (!hasProperty(usedTypeDirectiveReferences, directive)) {
