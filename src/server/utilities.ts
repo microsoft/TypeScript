@@ -1,4 +1,3 @@
-/// <reference path="..\services\services.ts" />
 /// <reference path="types.d.ts" />
 
 namespace ts.server {
@@ -30,15 +29,13 @@ namespace ts.server {
         export type Types = Err | Info | Perf;
     }
 
-    export function createInstallTypingsRequest(project: Project, typingOptions: TypingOptions, safeListPath: Path, packageNameToTypingLocation: Map<string>, cachePath: string): InstallTypingsRequest {
+    export function createInstallTypingsRequest(project: Project, typingOptions: TypingOptions, cachePath?: string): InstallTypingsRequest {
         return {
             projectName: project.getProjectName(),
             fileNames: project.getFileNames(),
             compilerOptions: project.getCompilerOptions(),
             typingOptions,
             projectRootPath: <Path>(project.projectKind === ProjectKind.Inferred ? "" : getDirectoryPath(project.getProjectName())), // TODO: fixme
-            safeListPath,
-            packageNameToTypingLocation,
             cachePath
         };
     }

@@ -2,13 +2,39 @@
 /// <reference types="node" />
 
 namespace ts.server.typingsInstaller {
+
+    const os: {
+        homedir(): string
+    } = require("os");
+
+    function getGlobalCacheLocation() {
+        let basePath: string;
+        switch (process.platform) {
+            case "win32":
+                basePath = process.env.LOCALAPPDATA || process.env.APPDATA || os.homedir();
+                break;
+            case "linux":
+                basePath = os.homedir();
+                break;
+            case "darwin":
+                basePath = combinePaths(os.homedir(), "Library/Application Support/")
+                break;
+        }
+
+        Debug.assert(basePath !== undefined);
+        return combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript");
+    }
+
     export class NodeTypingsInstaller extends TypingsInstaller {
         private execSync: { (command: string, options: { stdio: "ignore" }): any };
         private exec: { (command: string, options: { cwd: string }, callback?: (error: Error, stdout: string, stderr: string) => void): any };
+        readonly installTypingHost: InstallTypingHost = sys;
+
         constructor() {
-            super();
-            this.execSync = require("child_process").execSync;
-            this.exec = require("child_process").exec;
+            super(getGlobalCacheLocation(), toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)));
+            const { exec, execSync } = require("child_process"); 
+            this.execSync = execSync;
+            this.exec = exec;
         }
 
         init() {
@@ -36,10 +62,6 @@ namespace ts.server.typingsInstaller {
             catch (e) {
                 return false;
             }
-        }
-
-        protected getInstallTypingHost() {
-            return sys;
         }
 
         protected sendResponse(response: InstallTypingsResponse) {

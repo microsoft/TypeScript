@@ -18,10 +18,6 @@ namespace ts.server {
         fork(modulePath: string): NodeChildProcess;
     } = require("child_process");
 
-    const os: {
-        homedir(): string
-    } = require("os");
-
     interface ReadLineOptions {
         input: NodeJS.ReadableStream;
         output?: NodeJS.WritableStream;
@@ -167,24 +163,8 @@ namespace ts.server {
     class NodeTypingsInstaller implements ITypingsInstaller {
         private installer: NodeChildProcess;
         private projectService: ProjectService;
-        private cachePath: string;
 
         constructor(private readonly logger: server.Logger) {
-            let basePath: string;
-            switch (process.platform) {
-                case "win32":
-                    basePath = process.env.LOCALAPPDATA || process.env.APPDATA || os.homedir();
-                    break;
-                case "linux":
-                    basePath = os.homedir();
-                    break;
-                case "darwin":
-                    basePath = combinePaths(os.homedir(), "Library/Application Support/")
-                    break;
-            }
-            if (basePath) {
-                this.cachePath = combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript");
-            }
         }
 
         attach(projectService: ProjectService) {
@@ -198,13 +178,7 @@ namespace ts.server {
         }
 
         enqueueInstallTypingsRequest(project: Project, typingOptions: TypingOptions): void {
-            const request = createInstallTypingsRequest(
-                project,
-                typingOptions,
-                /*safeListPath*/ <Path>(combinePaths(process.cwd(), "typingSafeList.json")), // TODO: fixme
-                /*packageNameToTypingLocation*/ createMap<string>(), // TODO: fixme
-                this.cachePath
-            );
+            const request = createInstallTypingsRequest(project, typingOptions);
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Sending request: ${JSON.stringify(request)}`);
             }

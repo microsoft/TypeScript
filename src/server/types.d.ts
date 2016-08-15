@@ -7,11 +7,9 @@ declare namespace ts.server {
         readonly projectName: string;
         readonly fileNames: string[];
         readonly projectRootPath: ts.Path;
-        readonly safeListPath: ts.Path;
-        readonly packageNameToTypingLocation: ts.Map<string>;
         readonly typingOptions: ts.TypingOptions;
         readonly compilerOptions: ts.CompilerOptions;
-        readonly cachePath: string;
+        readonly cachePath?: string;
     }
 
     export interface CompressedData {

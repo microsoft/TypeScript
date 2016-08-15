@@ -29,15 +29,12 @@ namespace ts {
 
     abstract class TestTypingsInstaller extends server.typingsInstaller.TypingsInstaller implements server.ITypingsInstaller {
         protected projectService: server.ProjectService;
-        constructor(private readonly host: server.ServerHost) {
-            super();
+        constructor(readonly cachePath: string, readonly installTypingHost: server.ServerHost) {
+            super(cachePath, <Path>"");
             this.init();
         }
 
-        abstract cachePath: string;
         safeFileList = <Path>"";
-        packageNameToTypingLocation: Map<string> = createMap<string>();
-
         postInstallActions: (( map: (t: string[]) => string[]) => void)[] = [];
 
         runPostInstallActions(map: (t: string[]) => string[]) {
@@ -52,7 +49,7 @@ namespace ts {
         }
 
         getInstallTypingHost() {
-            return this.host;
+            return this.installTypingHost;
         }
 
         installPackage(packageName: string) {
@@ -74,7 +71,7 @@ namespace ts {
         }
 
         enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions) {
-            const request = server.createInstallTypingsRequest(project, typingOptions, this.safeFileList, this.packageNameToTypingLocation, this.cachePath);
+            const request = server.createInstallTypingsRequest(project, typingOptions, this.cachePath);
             this.install(request);
         }
     }
@@ -1519,9 +1516,8 @@ namespace ts {
 
             const host = createServerHost([file1, tsconfig, packageJson]);
             class TypingInstaller extends TestTypingsInstaller {
-                cachePath = "/a/data/";
                 constructor(host: server.ServerHost) {
-                    super(host);
+                    super("/a/data/", host);
                 }
             };
             const installer = new TypingInstaller(host);
