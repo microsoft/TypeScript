@@ -20,4 +20,4 @@ const p: string = Alpha.x;
 "use strict";
 //// [global.js]
 // Should be OK, first in wins
-var p = exports.Alpha.x;
+var p = Alpha.x;
