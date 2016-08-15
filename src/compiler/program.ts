@@ -857,10 +857,10 @@ namespace ts {
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             let text: string;
             try {
-                performance.mark("ioReadStart");
+                performance.mark("beforeIORead");
                 text = sys.readFile(fileName, options.charset);
-                performance.mark("ioReadEnd");
-                performance.measure("I/O Read", "ioReadStart", "ioReadEnd");
+                performance.mark("afterIORead");
+                performance.measure("I/O Read", "beforeIORead", "afterIORead");
             }
             catch (e) {
                 if (onError) {
@@ -927,7 +927,7 @@ namespace ts {
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
-                performance.mark("ioWriteStart");
+                performance.mark("beforeIOWrite");
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
                 if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
@@ -937,8 +937,8 @@ namespace ts {
                     sys.writeFile(fileName, data, writeByteOrderMark);
                 }
 
-                performance.mark("ioWriteEnd");
-                performance.measure("I/O Write", "ioWriteStart", "ioWriteEnd");
+                performance.mark("afterIOWrite");
+                performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
             }
             catch (e) {
                 if (onError) {
@@ -1120,7 +1120,7 @@ namespace ts {
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
         const sourceFilesFoundSearchingNodeModules = createMap<boolean>();
 
-        performance.mark("programStart");
+        performance.mark("beforeProgram");
 
         host = host || createCompilerHost(options);
 
@@ -1218,8 +1218,8 @@ namespace ts {
         };
 
         verifyCompilerOptions();
-        performance.mark("programEnd");
-        performance.measure("Program", "programStart", "programEnd");
+        performance.mark("afterProgram");
+        performance.measure("Program", "beforeProgram", "afterProgram");
 
         return program;
 
@@ -1462,15 +1462,15 @@ namespace ts {
             // checked is to not pass the file to getEmitResolver.
             const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile);
 
-            performance.mark("emitStart");
+            performance.mark("beforeEmit");
 
             const emitResult = emitFiles(
                 emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile);
 
-            performance.mark("emitEnd");
-            performance.measure("Emit", "emitStart", "emitEnd");
+            performance.mark("afterEmit");
+            performance.measure("Emit", "beforeEmit", "afterEmit");
             return emitResult;
         }
 

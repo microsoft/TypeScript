@@ -242,7 +242,7 @@ namespace ts {
             }
 
             if (extendedDiagnostics) {
-                performance.mark("sourcemapStart");
+                performance.mark("beforeSourcemap");
             }
 
             const sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
@@ -286,8 +286,8 @@ namespace ts {
             updateLastEncodedAndRecordedSpans();
 
             if (extendedDiagnostics) {
-                performance.mark("sourcemapEnd");
-                performance.measure("Source Map", "sourcemapStart", "sourcemapEnd");
+                performance.mark("afterSourcemap");
+                performance.measure("Source Map", "beforeSourcemap", "afterSourcemap");
             }
         }
 
