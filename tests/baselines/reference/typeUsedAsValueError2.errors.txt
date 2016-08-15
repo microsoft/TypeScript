@@ -1,0 +1,28 @@
+tests/cases/compiler/world.ts(4,1): error TS2691: Cannot find name 'HelloInterface'. A type exists with this name, but no value.
+tests/cases/compiler/world.ts(5,1): error TS2304: Cannot find name 'HelloNamespace'.
+
+
+==== tests/cases/compiler/world.ts (2 errors) ====
+    import HelloInterface = require("helloInterface");
+    import HelloNamespace = require("helloNamespace");
+    
+    HelloInterface.world;
+    ~~~~~~~~~~~~~~
+!!! error TS2691: Cannot find name 'HelloInterface'. A type exists with this name, but no value.
+    HelloNamespace.world;
+    ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'HelloNamespace'.
+==== tests/cases/compiler/helloInterface.ts (0 errors) ====
+    interface HelloInterface {
+        world: any;
+    }
+    
+    export = HelloInterface;
+    
+==== tests/cases/compiler/helloNamespace.ts (0 errors) ====
+    namespace HelloNamespace {
+        export type world = any;
+    }
+    
+    export = HelloNamespace;
+    

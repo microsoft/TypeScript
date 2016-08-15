@@ -999,12 +999,19 @@ namespace ts {
             }
 
             const nameAsType = resolveName(errorLocation, name, strictlyTypeMeanings, nameNotFoundMessage, nameArg);
-            if (nameAsType) {
-                error(errorLocation, Diagnostics.Cannot_find_name_0_A_type_exists_with_this_name_but_no_value, name);
-                return true;
+            if (!nameAsType) {
+                return false;
             }
 
-            return false;
+            if (nameAsType.flags & SymbolFlags.Alias) {
+                const resolvedSymbol = resolveAlias(nameAsType);
+                if (resolvedSymbol.flags & SymbolFlags.NamespaceModule) {
+                    return false;
+                }
+            }
+
+            error(errorLocation, Diagnostics.Cannot_find_name_0_A_type_exists_with_this_name_but_no_value, name);
+            return true;
         }
 
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
