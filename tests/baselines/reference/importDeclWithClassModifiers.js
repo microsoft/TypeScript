@@ -12,5 +12,8 @@ var b: a;
 //// [importDeclWithClassModifiers.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.a = x.c;
+    exports.b = x.c;
+    exports.c = x.c;
     var b;
 });

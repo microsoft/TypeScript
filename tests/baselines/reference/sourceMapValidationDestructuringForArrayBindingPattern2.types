@@ -69,7 +69,7 @@ let numberA2: number, nameA2: string, skillA2: string, nameMA: string;
 
 let numberA3: number, robotAInfo: (number | string)[], multiRobotAInfo: (string | [string, string])[];
 >numberA3 : number
->robotAInfo : (number | string)[]
+>robotAInfo : (string | number)[]
 >multiRobotAInfo : (string | [string, string])[]
 
 let i: number;
@@ -531,10 +531,10 @@ for ([nameMA, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edgi
 for ([numberA3, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 >[numberA3, ...robotAInfo] = robotA, i = 0 : number
 >[numberA3, ...robotAInfo] = robotA : [number, string, string]
->[numberA3, ...robotAInfo] : (number | string)[]
+>[numberA3, ...robotAInfo] : (string | number)[]
 >numberA3 : number
->...robotAInfo : number | string
->robotAInfo : (number | string)[]
+>...robotAInfo : string | number
+>robotAInfo : (string | number)[]
 >robotA : [number, string, string]
 >i = 0 : number
 >i : number
@@ -555,10 +555,10 @@ for ([numberA3, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 for ([numberA3, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >[numberA3, ...robotAInfo] = getRobot(), i = 0 : number
 >[numberA3, ...robotAInfo] = getRobot() : [number, string, string]
->[numberA3, ...robotAInfo] : (number | string)[]
+>[numberA3, ...robotAInfo] : (string | number)[]
 >numberA3 : number
->...robotAInfo : number | string
->robotAInfo : (number | string)[]
+>...robotAInfo : string | number
+>robotAInfo : (string | number)[]
 >getRobot() : [number, string, string]
 >getRobot : () => [number, string, string]
 >i = 0 : number
@@ -580,10 +580,10 @@ for ([numberA3, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 for ([numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >[numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0 : number
 >[numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"] : [number, string, string]
->[numberA3, ...robotAInfo] : (number | string)[]
+>[numberA3, ...robotAInfo] : (string | number)[]
 >numberA3 : number
->...robotAInfo : number | string
->robotAInfo : (number | string)[]
+>...robotAInfo : string | number
+>robotAInfo : (string | number)[]
 ><Robot>[2, "trimmer", "trimming"] : [number, string, string]
 >Robot : [number, string, string]
 >[2, "trimmer", "trimming"] : [number, string, string]

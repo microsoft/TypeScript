@@ -37,6 +37,8 @@ var P;
     {
         var v;
         function foo() { }
+        var ambient_2 = require("ambient");
+        P.b = ambient_2.baz;
         P["default"] = v;
         var C = (function () {
             function C() {

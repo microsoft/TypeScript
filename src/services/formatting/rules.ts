@@ -4,8 +4,8 @@
 namespace ts.formatting {
     export class Rules {
         public getRuleName(rule: Rule) {
-            let o: ts.Map<any> = <any>this;
-            for (let name in o) {
+            const o: ts.Map<any> = <any>this;
+            for (const name in o) {
                 if (o[name] === rule) {
                     return name;
                 }
@@ -166,7 +166,7 @@ namespace ts.formatting {
         public NoSpaceAfterKeywordInControl: Rule;
 
         // Open Brace braces after function
-        //TypeScript: Function can have return types, which can be made of tons of different token kinds
+        // TypeScript: Function can have return types, which can be made of tons of different token kinds
         public FunctionOpenBraceLeftTokenRange: Shared.TokenRange;
         public SpaceBeforeOpenBraceInFunction: Rule;
         public NewLineBeforeOpenBraceInFunction: Rule;
@@ -225,6 +225,19 @@ namespace ts.formatting {
         public NoSpaceBeforeTemplateMiddleAndTail: Rule;
         public SpaceBeforeTemplateMiddleAndTail: Rule;
 
+        // No space after { and before } in JSX expression
+        public NoSpaceAfterOpenBraceInJsxExpression: Rule;
+        public SpaceAfterOpenBraceInJsxExpression: Rule;
+        public NoSpaceBeforeCloseBraceInJsxExpression: Rule;
+        public SpaceBeforeCloseBraceInJsxExpression: Rule;
+
+        // JSX opening elements
+        public SpaceBeforeJsxAttribute: Rule;
+        public SpaceBeforeSlashInJsxOpeningElement: Rule;
+        public NoSpaceBeforeGreaterThanTokenInJsxOpeningElement: Rule;
+        public NoSpaceBeforeEqualInJsxAttribute: Rule;
+        public NoSpaceAfterEqualInJsxAttribute: Rule;
+
         constructor() {
             ///
             /// Common Rules
@@ -264,7 +277,7 @@ namespace ts.formatting {
             this.SpaceBeforeOpenBraceInFunction = new Rule(RuleDescriptor.create2(this.FunctionOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext, Rules.IsBeforeBlockContext, Rules.IsNotFormatOnEnter, Rules.IsSameLineTokenOrBeforeMultilineBlockContext), RuleAction.Space), RuleFlags.CanDeleteNewLines);
 
             // Place a space before open brace in a TypeScript declaration that has braces as children (class, module, enum, etc)
-            this.TypeScriptOpenBraceLeftTokenRange = Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.ClassKeyword]);
+            this.TypeScriptOpenBraceLeftTokenRange = Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.ClassKeyword, SyntaxKind.ExportKeyword, SyntaxKind.ImportKeyword]);
             this.SpaceBeforeOpenBraceInTypeScriptDeclWithBlock = new Rule(RuleDescriptor.create2(this.TypeScriptOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsTypeScriptDeclWithBlockContext, Rules.IsNotFormatOnEnter, Rules.IsSameLineTokenOrBeforeMultilineBlockContext), RuleAction.Space), RuleFlags.CanDeleteNewLines);
 
             // Place a space before open brace in a control flow construct
@@ -313,10 +326,10 @@ namespace ts.formatting {
             this.SpaceAfterVoidOperator = new Rule(RuleDescriptor.create3(SyntaxKind.VoidKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsVoidOpContext), RuleAction.Space));
 
             this.NoSpaceBetweenReturnAndSemicolon = new Rule(RuleDescriptor.create1(SyntaxKind.ReturnKeyword, SyntaxKind.SemicolonToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
-            
+
             // Add a space between statements. All keywords except (do,else,case) has open/close parens after them.
             // So, we have a rule to add a space for [),Any], [do,Any], [else,Any], and [case,Any]
-            this.SpaceBetweenStatements = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.CloseParenToken, SyntaxKind.DoKeyword, SyntaxKind.ElseKeyword, SyntaxKind.CaseKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsNotForContext), RuleAction.Space));
+            this.SpaceBetweenStatements = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.CloseParenToken, SyntaxKind.DoKeyword, SyntaxKind.ElseKeyword, SyntaxKind.CaseKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsNonJsxElementContext, Rules.IsNotForContext), RuleAction.Space));
 
             // This low-pri rule takes care of "try {" and "finally {" in case the rule SpaceBeforeOpenBraceInControl didn't execute on FormatOnEnter.
             this.SpaceAfterTryFinally = new Rule(RuleDescriptor.create2(Shared.TokenRange.FromTokens([SyntaxKind.TryKeyword, SyntaxKind.FinallyKeyword]), SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
@@ -338,8 +351,8 @@ namespace ts.formatting {
             this.NoSpaceAfterModuleImport = new Rule(RuleDescriptor.create2(Shared.TokenRange.FromTokens([SyntaxKind.ModuleKeyword, SyntaxKind.RequireKeyword]), SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
 
             // Add a space around certain TypeScript keywords
-            this.SpaceAfterCertainTypeScriptKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.AbstractKeyword, SyntaxKind.ClassKeyword, SyntaxKind.DeclareKeyword, SyntaxKind.DefaultKeyword, SyntaxKind.EnumKeyword, SyntaxKind.ExportKeyword, SyntaxKind.ExtendsKeyword, SyntaxKind.GetKeyword, SyntaxKind.ImplementsKeyword, SyntaxKind.ImportKeyword, SyntaxKind.InterfaceKeyword, SyntaxKind.ModuleKeyword, SyntaxKind.NamespaceKeyword, SyntaxKind.PrivateKeyword, SyntaxKind.PublicKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.SetKeyword, SyntaxKind.StaticKeyword, SyntaxKind.TypeKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
-            this.SpaceBeforeCertainTypeScriptKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.ExtendsKeyword, SyntaxKind.ImplementsKeyword])), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
+            this.SpaceAfterCertainTypeScriptKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.AbstractKeyword, SyntaxKind.ClassKeyword, SyntaxKind.DeclareKeyword, SyntaxKind.DefaultKeyword, SyntaxKind.EnumKeyword, SyntaxKind.ExportKeyword, SyntaxKind.ExtendsKeyword, SyntaxKind.GetKeyword, SyntaxKind.ImplementsKeyword, SyntaxKind.ImportKeyword, SyntaxKind.InterfaceKeyword, SyntaxKind.ModuleKeyword, SyntaxKind.NamespaceKeyword, SyntaxKind.PrivateKeyword, SyntaxKind.PublicKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.SetKeyword, SyntaxKind.StaticKeyword, SyntaxKind.TypeKeyword, SyntaxKind.FromKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
+            this.SpaceBeforeCertainTypeScriptKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.ExtendsKeyword, SyntaxKind.ImplementsKeyword, SyntaxKind.FromKeyword])), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
 
             // Treat string literals in module names as identifiers, and add a space between the literal and the opening Brace braces, e.g.: module "m2" {
             this.SpaceAfterModuleName = new Rule(RuleDescriptor.create1(SyntaxKind.StringLiteral, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsModuleDeclContext), RuleAction.Space));
@@ -380,6 +393,13 @@ namespace ts.formatting {
             // template string
             this.NoSpaceBetweenTagAndTemplateString = new Rule(RuleDescriptor.create3(SyntaxKind.Identifier, Shared.TokenRange.FromTokens([SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead])), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
 
+            // jsx opening element
+            this.SpaceBeforeJsxAttribute = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.Identifier), RuleOperation.create2(new RuleOperationContext(Rules.IsNextTokenParentJsxAttribute, Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
+            this.SpaceBeforeSlashInJsxOpeningElement = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.SlashToken), RuleOperation.create2(new RuleOperationContext(Rules.IsJsxSelfClosingElementContext, Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceBeforeGreaterThanTokenInJsxOpeningElement = new Rule(RuleDescriptor.create1(SyntaxKind.SlashToken, SyntaxKind.GreaterThanToken), RuleOperation.create2(new RuleOperationContext(Rules.IsJsxSelfClosingElementContext, Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
+            this.NoSpaceBeforeEqualInJsxAttribute = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.EqualsToken), RuleOperation.create2(new RuleOperationContext(Rules.IsJsxAttributeContext, Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
+            this.NoSpaceAfterEqualInJsxAttribute = new Rule(RuleDescriptor.create3(SyntaxKind.EqualsToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsJsxAttributeContext, Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
+
             // These rules are higher in priority than user-configurable rules.
             this.HighPriorityCommonRules = [
                 this.IgnoreBeforeComment, this.IgnoreAfterLineComment,
@@ -407,6 +427,8 @@ namespace ts.formatting {
                 this.SpaceAfterVoidOperator,
                 this.SpaceBetweenAsyncAndOpenParen, this.SpaceBetweenAsyncAndFunctionKeyword,
                 this.NoSpaceBetweenTagAndTemplateString,
+                this.SpaceBeforeJsxAttribute, this.SpaceBeforeSlashInJsxOpeningElement, this.NoSpaceBeforeGreaterThanTokenInJsxOpeningElement,
+                this.NoSpaceBeforeEqualInJsxAttribute, this.NoSpaceAfterEqualInJsxAttribute,
 
                 // TypeScript-specific rules
                 this.NoSpaceAfterConstructor, this.NoSpaceAfterModuleImport,
@@ -444,8 +466,8 @@ namespace ts.formatting {
             ///
 
             // Insert space after comma delimiter
-            this.SpaceAfterComma = new Rule(RuleDescriptor.create3(SyntaxKind.CommaToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsNextTokenNotCloseBracket), RuleAction.Space));
-            this.NoSpaceAfterComma = new Rule(RuleDescriptor.create3(SyntaxKind.CommaToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
+            this.SpaceAfterComma = new Rule(RuleDescriptor.create3(SyntaxKind.CommaToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsNonJsxElementContext, Rules.IsNextTokenNotCloseBracket), RuleAction.Space));
+            this.NoSpaceAfterComma = new Rule(RuleDescriptor.create3(SyntaxKind.CommaToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsNonJsxElementContext), RuleAction.Delete));
 
             // Insert space before and after binary operators
             this.SpaceBeforeBinaryOperator = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.BinaryOperators), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsBinaryOpContext), RuleAction.Space));
@@ -458,7 +480,7 @@ namespace ts.formatting {
             this.NoSpaceAfterKeywordInControl = new Rule(RuleDescriptor.create2(Shared.TokenRange.Keywords, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsControlDeclContext), RuleAction.Delete));
 
             // Open Brace braces after function
-            //TypeScript: Function can have return types, which can be made of tons of different token kinds
+            // TypeScript: Function can have return types, which can be made of tons of different token kinds
             this.NewLineBeforeOpenBraceInFunction = new Rule(RuleDescriptor.create2(this.FunctionOpenBraceLeftTokenRange, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext, Rules.IsBeforeMultilineBlockContext), RuleAction.NewLine), RuleFlags.CanDeleteNewLines);
 
             // Open Brace braces after TypeScript module/class/interface
@@ -491,6 +513,12 @@ namespace ts.formatting {
             this.NoSpaceBeforeTemplateMiddleAndTail = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.TemplateMiddle, SyntaxKind.TemplateTail])), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
             this.SpaceBeforeTemplateMiddleAndTail = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.TemplateMiddle, SyntaxKind.TemplateTail])), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
 
+            // No space after { and before } in JSX expression
+            this.NoSpaceAfterOpenBraceInJsxExpression = new Rule(RuleDescriptor.create3(SyntaxKind.OpenBraceToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsJsxExpressionContext), RuleAction.Delete));
+            this.SpaceAfterOpenBraceInJsxExpression = new Rule(RuleDescriptor.create3(SyntaxKind.OpenBraceToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsJsxExpressionContext), RuleAction.Space));
+            this.NoSpaceBeforeCloseBraceInJsxExpression = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsJsxExpressionContext), RuleAction.Delete));
+            this.SpaceBeforeCloseBraceInJsxExpression = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsJsxExpressionContext), RuleAction.Space));
+
             // Insert space after function keyword for anonymous functions
             this.SpaceAfterAnonymousFunctionKeyword = new Rule(RuleDescriptor.create1(SyntaxKind.FunctionKeyword, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext), RuleAction.Space));
             this.NoSpaceAfterAnonymousFunctionKeyword = new Rule(RuleDescriptor.create1(SyntaxKind.FunctionKeyword, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext), RuleAction.Delete));
@@ -514,6 +542,8 @@ namespace ts.formatting {
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
                 case SyntaxKind.AsExpression:
+                case SyntaxKind.ExportSpecifier:
+                case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.TypePredicate:
                 case SyntaxKind.UnionType:
                 case SyntaxKind.IntersectionType:
@@ -554,17 +584,17 @@ namespace ts.formatting {
         static IsSameLineTokenOrBeforeMultilineBlockContext(context: FormattingContext): boolean {
             //// This check is mainly used inside SpaceBeforeOpenBraceInControl and SpaceBeforeOpenBraceInFunction.
             ////
-            //// Ex: 
+            //// Ex:
             //// if (1)     { ....
             ////      * ) and { are on the same line so apply the rule. Here we don't care whether it's same or multi block context
             ////
-            //// Ex: 
+            //// Ex:
             //// if (1)
             //// { ... }
             ////      * ) and { are on different lines. We only need to format if the block is multiline context. So in this case we don't format.
             ////
             //// Ex:
-            //// if (1) 
+            //// if (1)
             //// { ...
             //// }
             ////      * ) and { are on different lines. We only need to format if the block is multiline context. So in this case we format.
@@ -616,17 +646,17 @@ namespace ts.formatting {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                //case SyntaxKind.MemberFunctionDeclaration:
+                // case SyntaxKind.MemberFunctionDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                ///case SyntaxKind.MethodSignature:
+                // case SyntaxKind.MethodSignature:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.ArrowFunction:
-                //case SyntaxKind.ConstructorDeclaration:
-                //case SyntaxKind.SimpleArrowFunctionExpression:
-                //case SyntaxKind.ParenthesizedArrowFunctionExpression:
+                // case SyntaxKind.ConstructorDeclaration:
+                // case SyntaxKind.SimpleArrowFunctionExpression:
+                // case SyntaxKind.ParenthesizedArrowFunctionExpression:
                 case SyntaxKind.InterfaceDeclaration: // This one is not truly a function, but for formatting purposes, it acts just like one
                     return true;
             }
@@ -650,6 +680,10 @@ namespace ts.formatting {
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ExportDeclaration:
+                case SyntaxKind.NamedExports:
+                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.NamedImports:
                     return true;
             }
 
@@ -723,8 +757,28 @@ namespace ts.formatting {
             return context.TokensAreOnSameLine() && context.contextNode.kind !== SyntaxKind.JsxText;
         }
 
+        static IsNonJsxElementContext(context: FormattingContext): boolean {
+            return context.contextNode.kind !== SyntaxKind.JsxElement;
+        }
+
+        static IsJsxExpressionContext(context: FormattingContext): boolean {
+            return context.contextNode.kind === SyntaxKind.JsxExpression;
+        }
+
+        static IsNextTokenParentJsxAttribute(context: FormattingContext): boolean {
+            return context.nextTokenParent.kind === SyntaxKind.JsxAttribute;
+        }
+
+        static IsJsxAttributeContext(context: FormattingContext): boolean {
+            return context.contextNode.kind === SyntaxKind.JsxAttribute;
+        }
+
+        static IsJsxSelfClosingElementContext(context: FormattingContext): boolean {
+            return context.contextNode.kind === SyntaxKind.JsxSelfClosingElement;
+        }
+
         static IsNotBeforeBlockInFunctionDeclarationContext(context: FormattingContext): boolean {
-            return !Rules.IsFunctionDeclContext(context) && !Rules.IsBeforeBlockContext(context)
+            return !Rules.IsFunctionDeclContext(context) && !Rules.IsBeforeBlockContext(context);
         }
 
         static IsEndOfDecoratorContextOnSameLine(context: FormattingContext): boolean {
@@ -755,7 +809,7 @@ namespace ts.formatting {
         }
 
         static IsObjectTypeContext(context: FormattingContext): boolean {
-            return context.contextNode.kind === SyntaxKind.TypeLiteral;// && context.contextNode.parent.kind !== SyntaxKind.InterfaceDeclaration;
+            return context.contextNode.kind === SyntaxKind.TypeLiteral; // && context.contextNode.parent.kind !== SyntaxKind.InterfaceDeclaration;
         }
 
         static IsTypeArgumentOrParameterOrAssertion(token: TextRangeWithKind, parent: Node): boolean {

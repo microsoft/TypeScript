@@ -1,0 +1,8 @@
+=== tests/cases/compiler/exportToString.ts ===
+const toString = 0;
+>toString : number
+>0 : number
+
+export { toString };
+>toString : number
+

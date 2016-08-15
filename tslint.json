@@ -7,6 +7,7 @@
         "indent": [true,
             "spaces"
         ],
+        "linebreak-style": [true, "CRLF"],
         "one-line": [true,
             "check-open-brace",
             "check-whitespace"
@@ -38,12 +39,14 @@
         "no-internal-module": true,
         "no-trailing-whitespace": true,
         "no-inferrable-types": true,
-        "no-null": true,
+        "no-null-keyword": true,
         "no-unused-variable": true,
         "boolean-trivia": true,
         "type-operator-spacing": true,
         "prefer-const": true,
         "no-in-operator": true,
-        "no-increment-decrement": true
+        "no-increment-decrement": true,
+        "object-literal-surrounding-space": true,
+        "no-type-assertion-whitespace": true
   }
 }

@@ -14,7 +14,6 @@ tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTyp
   Types of property '0' are incompatible.
     Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(26,14): error TS2322: Type '"baz"' is not assignable to type '"foo" | "bar"'.
-  Type '"baz"' is not assignable to type '"bar"'.
 
 
 ==== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts (7 errors) ====
@@ -67,5 +66,4 @@ tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTyp
     function h({ prop = "baz" }: StringUnion) {}
                  ~~~~
 !!! error TS2322: Type '"baz"' is not assignable to type '"foo" | "bar"'.
-!!! error TS2322:   Type '"baz"' is not assignable to type '"bar"'.
     

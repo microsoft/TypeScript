@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty37.ts ===
+interface I {
+>I : I
+
+    [Symbol.isConcatSpreadable]: string;
+>Symbol.isConcatSpreadable : symbol
+>Symbol : SymbolConstructor
+>isConcatSpreadable : symbol
+
+    [Symbol.isConcatSpreadable]: string;
+>Symbol.isConcatSpreadable : symbol
+>Symbol : SymbolConstructor
+>isConcatSpreadable : symbol
+}

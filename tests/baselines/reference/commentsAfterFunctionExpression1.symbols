@@ -1,0 +1,17 @@
+=== tests/cases/compiler/commentsAfterFunctionExpression1.ts ===
+var v = {
+>v : Symbol(v, Decl(commentsAfterFunctionExpression1.ts, 0, 3))
+
+    f: a => 0 /*t1*/,
+>f : Symbol(f, Decl(commentsAfterFunctionExpression1.ts, 0, 9))
+>a : Symbol(a, Decl(commentsAfterFunctionExpression1.ts, 1, 6))
+
+    g: (a => 0) /*t2*/,
+>g : Symbol(g, Decl(commentsAfterFunctionExpression1.ts, 1, 21))
+>a : Symbol(a, Decl(commentsAfterFunctionExpression1.ts, 2, 8))
+
+    h: (a => 0 /*t3*/)
+>h : Symbol(h, Decl(commentsAfterFunctionExpression1.ts, 2, 23))
+>a : Symbol(a, Decl(commentsAfterFunctionExpression1.ts, 3, 8))
+}
+
