@@ -284,7 +284,7 @@ namespace ts {
             NullFacts = TypeofEQObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | TypeofNEHostObject | EQNull | EQUndefinedOrNull | NEUndefined | Falsy,
         }
 
-        const typeofEQFacts: MapLike<TypeFacts> = {
+        const typeofEQFacts = createMap({
             "string": TypeFacts.TypeofEQString,
             "number": TypeFacts.TypeofEQNumber,
             "boolean": TypeFacts.TypeofEQBoolean,
@@ -292,9 +292,9 @@ namespace ts {
             "undefined": TypeFacts.EQUndefined,
             "object": TypeFacts.TypeofEQObject,
             "function": TypeFacts.TypeofEQFunction
-        };
+        });
 
-        const typeofNEFacts: MapLike<TypeFacts> = {
+        const typeofNEFacts = createMap({
             "string": TypeFacts.TypeofNEString,
             "number": TypeFacts.TypeofNENumber,
             "boolean": TypeFacts.TypeofNEBoolean,
@@ -302,15 +302,15 @@ namespace ts {
             "undefined": TypeFacts.NEUndefined,
             "object": TypeFacts.TypeofNEObject,
             "function": TypeFacts.TypeofNEFunction
-        };
+        });
 
-        const typeofTypesByName: MapLike<Type> = {
+        const typeofTypesByName = createMap<Type>({
             "string": stringType,
             "number": numberType,
             "boolean": booleanType,
             "symbol": esSymbolType,
             "undefined": undefinedType
-        };
+        });
 
         let jsxElementType: ObjectType;
         /** Things we lazy load from the JSX namespace */
@@ -8467,11 +8467,11 @@ namespace ts {
                         return type;
                     }
                     const doubleEquals = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken;
-                    const facts = doubleEquals ?
-                        assumeTrue ? TypeFacts.EQUndefinedOrNull : TypeFacts.NEUndefinedOrNull :
-                        value.kind === SyntaxKind.NullKeyword ?
-                            assumeTrue ? TypeFacts.EQNull : TypeFacts.NENull :
-                            assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
+                    const facts = doubleEquals
+                        ? assumeTrue ? TypeFacts.EQUndefinedOrNull : TypeFacts.NEUndefinedOrNull
+                        : value.kind === SyntaxKind.NullKeyword
+                            ? assumeTrue ? TypeFacts.EQNull : TypeFacts.NENull
+                            : assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
                     return getTypeWithFacts(type, facts);
                 }
                 if (type.flags & TypeFlags.NotUnionOrUnit) {
@@ -8502,14 +8502,14 @@ namespace ts {
                     // We narrow a non-union type to an exact primitive type if the non-union type
                     // is a supertype of that primitive type. For example, type 'any' can be narrowed
                     // to one of the primitive types.
-                    const targetType = getProperty(typeofTypesByName, literal.text);
+                    const targetType = typeofTypesByName[literal.text];
                     if (targetType && isTypeSubtypeOf(targetType, type)) {
                         return targetType;
                     }
                 }
-                const facts = assumeTrue ?
-                    getProperty(typeofEQFacts, literal.text) || TypeFacts.TypeofEQHostObject :
-                    getProperty(typeofNEFacts, literal.text) || TypeFacts.TypeofNEHostObject;
+                const facts = assumeTrue
+                    ? typeofEQFacts[literal.text] || TypeFacts.TypeofEQHostObject
+                    : typeofNEFacts[literal.text] || TypeFacts.TypeofNEHostObject;
                 return getTypeWithFacts(type, facts);
             }
 

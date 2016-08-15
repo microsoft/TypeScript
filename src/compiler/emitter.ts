@@ -24,7 +24,7 @@ namespace ts {
         Return      = 1 << 3
     }
 
-    const entities: MapLike<number> = {
+    const entities = createMap({
         "quot": 0x0022,
         "amp": 0x0026,
         "apos": 0x0027,
@@ -278,7 +278,7 @@ namespace ts {
         "clubs": 0x2663,
         "hearts": 0x2665,
         "diams": 0x2666
-    };
+    });
 
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
@@ -531,7 +531,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             let currentText: string;
             let currentLineMap: number[];
             let currentFileIdentifiers: Map<string>;
-            let renamedDependencies: MapLike<string>;
+            let renamedDependencies: Map<string>;
             let isEs6Module: boolean;
             let isCurrentFileExternalModule: boolean;
 
@@ -577,21 +577,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             const setSourceMapWriterEmit = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? changeSourceMapEmit : function (writer: SourceMapWriter) { };
 
-            const moduleEmitDelegates: MapLike<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
+            const moduleEmitDelegates = createMap<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void>({
                 [ModuleKind.ES6]: emitES6Module,
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
                 [ModuleKind.UMD]: emitUMDModule,
                 [ModuleKind.CommonJS]: emitCommonJSModule,
-            };
+            });
 
-            const bundleEmitDelegates: MapLike<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
+            const bundleEmitDelegates = createMap<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void>({
                 [ModuleKind.ES6]() {},
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
                 [ModuleKind.UMD]() {},
                 [ModuleKind.CommonJS]() {},
-            };
+            });
 
             return doEmit;
 
@@ -6461,7 +6461,7 @@ const _super = (function (geti, seti) {
              * Here we check if alternative name was provided for a given moduleName and return it if possible.
              */
             function tryRenameExternalModule(moduleName: LiteralExpression): string {
-                if (renamedDependencies && hasProperty(renamedDependencies, moduleName.text)) {
+                if (renamedDependencies && moduleName.text in renamedDependencies) {
                     return `"${renamedDependencies[moduleName.text]}"`;
                 }
                 return undefined;

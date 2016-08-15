@@ -95,14 +95,14 @@ namespace FourSlash {
 
     export import IndentStyle = ts.IndentStyle;
 
-    const entityMap: ts.MapLike<string> = {
+    const entityMap = ts.createMap({
         "&": "&amp;",
         "\"": "&quot;",
         "'": "&#39;",
         "/": "&#47;",
         "<": "&lt;",
         ">": "&gt;"
-    };
+    });
 
     export function escapeXmlAttributeValue(s: string) {
         return s.replace(/[&<>"'\/]/g, ch => entityMap[ch]);
@@ -593,9 +593,9 @@ namespace FourSlash {
 
         public noItemsWithSameNameButDifferentKind(): void {
             const completions = this.getCompletionListAtCaret();
-            const uniqueItems: ts.MapLike<string> = {};
+            const uniqueItems = ts.createMap<string>();
             for (const item of completions.entries) {
-                if (!ts.hasProperty(uniqueItems, item.name)) {
+                if (!(item.name in uniqueItems)) {
                     uniqueItems[item.name] = item.kind;
                 }
                 else {
@@ -1638,11 +1638,12 @@ namespace FourSlash {
             return this.testData.ranges;
         }
 
-        public rangesByText(): ts.MapLike<Range[]> {
-            const result: ts.MapLike<Range[]> = {};
+        public rangesByText(): ts.Map<Range[]> {
+            const result = ts.createMap<Range[]>();
             for (const range of this.getRanges()) {
                 const text = this.rangeText(range);
-                (ts.getProperty(result, text) || (result[text] = [])).push(range);
+                const ranges = result[text] || (result[text] = []);
+                ranges.push(range);
             }
             return result;
         }
@@ -1897,7 +1898,7 @@ namespace FourSlash {
 
         public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
 
-            const openBraceMap: ts.MapLike<ts.CharacterCodes> = {
+            const openBraceMap = ts.createMap<ts.CharacterCodes>({
                 "(": ts.CharacterCodes.openParen,
                 "{": ts.CharacterCodes.openBrace,
                 "[": ts.CharacterCodes.openBracket,
@@ -1905,7 +1906,7 @@ namespace FourSlash {
                 '"': ts.CharacterCodes.doubleQuote,
                 "`": ts.CharacterCodes.backtick,
                 "<": ts.CharacterCodes.lessThan
-            };
+            });
 
             const charCode = openBraceMap[openingBrace];
 
@@ -2773,7 +2774,7 @@ namespace FourSlashInterface {
             return this.state.getRanges();
         }
 
-        public rangesByText(): ts.MapLike<FourSlash.Range[]> {
+        public rangesByText(): ts.Map<FourSlash.Range[]> {
             return this.state.rangesByText();
         }
 

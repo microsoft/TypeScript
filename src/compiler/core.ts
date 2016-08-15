@@ -190,6 +190,21 @@ namespace ts {
         return array;
     }
 
+    export function removeWhere<T>(array: T[], f: (x: T) => boolean): boolean {
+        let outIndex = 0;
+        for (const item of array) {
+            if (!f(item)) {
+                array[outIndex] = item;
+                outIndex++;
+            }
+        }
+        if (outIndex !== array.length) {
+            array.length = outIndex;
+            return true;
+        }
+        return false;
+    }
+
     export function filterMutate<T>(array: T[], f: (x: T) => boolean): void {
         let outIndex = 0;
         for (const item of array) {
@@ -381,6 +396,9 @@ namespace ts {
     /**
      * Gets the owned, enumerable property keys of a map-like.
      *
+     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
+     *       Object.keys instead as it offers better performance.
+     *
      * @param map A map-like.
      */
     export function getOwnKeys<T>(map: MapLike<T>): string[] {
@@ -421,6 +439,36 @@ namespace ts {
         let result: U;
         for (const key in map) if (hasOwnProperty.call(map, key)) {
             if (result = callback(map[key], key)) break;
+        }
+        return result;
+    }
+
+    /**
+     * Maps key-value pairs of a map into a new map.
+     *
+     * NOTE: The key-value pair passed to the callback is *not* safe to cache between invocations
+     *       of the callback.
+     *
+     * @param map A map.
+     * @param callback A callback that maps a key-value pair into a new key-value pair.
+     */
+    export function mapPairs<T, U>(map: Map<T>, callback: (entry: [string, T]) => [string, U]): Map<U> {
+        let result: Map<U>;
+        if (map) {
+            result = createMap<U>();
+            let inPair: [string, T];
+            for (const key in map) {
+                if (inPair) {
+                    inPair[0] = key;
+                    inPair[1] = map[key];
+                }
+                else {
+                    inPair = [key, map[key]];
+                }
+
+                const outPair = callback(inPair);
+                result[outPair[0]] = outPair[1];
+            }
         }
         return result;
     }
@@ -505,7 +553,29 @@ namespace ts {
     }
 
     /**
+     * Counts the properties of a map.
+     *
+     * NOTE: This is intended for use with Map<T> objects. For MapLike<T> objects, use
+     *       countOwnProperties instead as it offers better runtime safety.
+     *
+     * @param map A map whose properties should be counted.
+     * @param predicate An optional callback used to limit which properties should be counted.
+     */
+    export function countProperties<T>(map: Map<T>, predicate?: (value: T, key: string) => boolean) {
+        let count = 0;
+        for (const key in map) {
+            if (!predicate || predicate(map[key], key)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
      * Counts the owned properties of a map-like.
+     *
+     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
+     *       countProperties instead as it offers better performance.
      *
      * @param map A map-like whose properties should be counted.
      * @param predicate An optional callback used to limit which properties should be counted.
@@ -521,16 +591,42 @@ namespace ts {
     }
 
     /**
-     * Performs a shallow equality comparison of the contents of two map-likes.
+     * Performs a shallow equality comparison of the contents of two maps.
+     *
+     * NOTE: This is intended for use with Map<T> objects. For MapLike<T> objects, use
+     *       equalOwnProperties instead as it offers better runtime safety.
      *
      * @param left A map whose properties should be compared.
      * @param right A map whose properties should be compared.
      */
-    export function equalOwnProperties<T>(left: MapLike<T>, right: MapLike<T>) {
+    export function equalProperties<T>(left: Map<T>, right: Map<T>, equalityComparer?: (left: T, right: T) => boolean) {
+        if (left === right) return true;
+        if (!left || !right) return false;
+        for (const key in left) {
+            if (!(key in right)) return false;
+            if (equalityComparer ? !equalityComparer(left[key], right[key]) : left[key] !== right[key]) return false;
+        }
+        for (const key in right) {
+            if (!(key in left)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Performs a shallow equality comparison of the contents of two map-likes.
+     *
+     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
+     *       equalProperties instead as it offers better performance.
+     *
+     * @param left A map-like whose properties should be compared.
+     * @param right A map-like whose properties should be compared.
+     */
+    export function equalOwnProperties<T>(left: MapLike<T>, right: MapLike<T>, equalityComparer?: (left: T, right: T) => boolean) {
         if (left === right) return true;
         if (!left || !right) return false;
         for (const key in left) if (hasOwnProperty.call(left, key)) {
-            if (!hasOwnProperty.call(right, key) === undefined || left[key] !== right[key]) return false;
+            if (!hasOwnProperty.call(right, key) === undefined) return false;
+            if (equalityComparer ? !equalityComparer(left[key], right[key]) : left[key] !== right[key]) return false;
         }
         for (const key in right) if (hasOwnProperty.call(right, key)) {
             if (!hasOwnProperty.call(left, key)) return false;
@@ -577,10 +673,12 @@ namespace ts {
     export function extend<T1 extends MapLike<{}>, T2 extends MapLike<{}>>(first: T1 , second: T2): T1 & T2 {
         const result: T1 & T2 = <any>{};
         for (const id in first) {
-            (result as any)[id] = first[id];
+            if (hasOwnProperty.call(first, id)) {
+                (result as any)[id] = first[id];
+            }
         }
         for (const id in second) {
-            if (!hasProperty(result, id)) {
+            if (hasOwnProperty.call(second, id) && !hasOwnProperty.call(result, id)) {
                 (result as any)[id] = second[id];
             }
         }

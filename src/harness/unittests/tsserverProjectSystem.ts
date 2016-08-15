@@ -68,10 +68,10 @@ namespace ts {
         return entry;
     }
 
-    function checkMapKeys(caption: string, map: MapLike<any>, expectedKeys: string[]) {
-        assert.equal(countOwnProperties(map), expectedKeys.length, `${caption}: incorrect size of map`);
+    function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
+        assert.equal(countProperties(map), expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
-            assert.isTrue(hasProperty(map, name), `${caption} is expected to contain ${name}, actual keys: ${getOwnKeys(map)}`);
+            assert.isTrue(name in map, `${caption} is expected to contain ${name}, actual keys: ${Object.keys(map)}`);
         }
     }
 
@@ -116,8 +116,8 @@ namespace ts {
         private getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
         private callbackQueue: TimeOutCallback[] = [];
-        readonly watchedDirectories: MapLike<{ cb: DirectoryWatcherCallback, recursive: boolean }[]> = {};
-        readonly watchedFiles: MapLike<FileWatcherCallback[]> = {};
+        readonly watchedDirectories = createMap<{ cb: DirectoryWatcherCallback, recursive: boolean }[]>();
+        readonly watchedFiles = createMap<FileWatcherCallback[]>();
 
         constructor(public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[]) {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
@@ -198,7 +198,7 @@ namespace ts {
 
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toPath(directoryName);
-            const callbacks = getProperty(this.watchedDirectories, path) || (this.watchedDirectories[path] = []);
+            const callbacks = this.watchedDirectories[path] || (this.watchedDirectories[path] = []);
             callbacks.push({ cb: callback, recursive });
             return {
                 referenceCount: 0,
@@ -219,7 +219,7 @@ namespace ts {
 
         triggerDirectoryWatcherCallback(directoryName: string, fileName: string): void {
             const path = this.toPath(directoryName);
-            const callbacks = getProperty(this.watchedDirectories, path);
+            const callbacks = this.watchedDirectories[path];
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback.cb(fileName);
@@ -229,7 +229,7 @@ namespace ts {
 
         triggerFileWatcherCallback(fileName: string, removed?: boolean): void {
             const path = this.toPath(fileName);
-            const callbacks = getProperty(this.watchedFiles, path);
+            const callbacks = this.watchedFiles[path];
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback(path, removed);
@@ -239,7 +239,7 @@ namespace ts {
 
         watchFile(fileName: string, callback: FileWatcherCallback) {
             const path = this.toPath(fileName);
-            const callbacks = getProperty(this.watchedFiles, path) || (this.watchedFiles[path] = []);
+            const callbacks = this.watchedFiles[path] || (this.watchedFiles[path] = []);
             callbacks.push(callback);
             return {
                 close: () => {

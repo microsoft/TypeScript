@@ -1061,7 +1061,7 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
-        private handlers: MapLike<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
+        private handlers = createMap<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>({
             [CommandNames.Exit]: () => {
                 this.exit();
                 return { responseRequired: false };
@@ -1198,9 +1198,10 @@ namespace ts.server {
                 this.reloadProjects();
                 return { responseRequired: false };
             }
-        };
+        });
+
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => { response?: any, responseRequired: boolean }) {
-            if (this.handlers[command]) {
+            if (command in this.handlers) {
                 throw new Error(`Protocol handler already exists for command "${command}"`);
             }
             this.handlers[command] = handler;

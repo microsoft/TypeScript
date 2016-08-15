@@ -61,10 +61,10 @@ namespace ts {
         },
         {
             name: "jsx",
-            type: {
+            type: createMap({
                 "preserve": JsxEmit.Preserve,
                 "react": JsxEmit.React
-            },
+            }),
             paramType: Diagnostics.KIND,
             description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_react,
         },
@@ -91,7 +91,7 @@ namespace ts {
         {
             name: "module",
             shortName: "m",
-            type: {
+            type: createMap({
                 "none": ModuleKind.None,
                 "commonjs": ModuleKind.CommonJS,
                 "amd": ModuleKind.AMD,
@@ -99,16 +99,16 @@ namespace ts {
                 "umd": ModuleKind.UMD,
                 "es6": ModuleKind.ES6,
                 "es2015": ModuleKind.ES2015,
-            },
+            }),
             description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
             paramType: Diagnostics.KIND,
         },
         {
             name: "newLine",
-            type: {
+            type: createMap({
                 "crlf": NewLineKind.CarriageReturnLineFeed,
                 "lf": NewLineKind.LineFeed
-            },
+            }),
             description: Diagnostics.Specify_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
             paramType: Diagnostics.NEWLINE,
         },
@@ -250,12 +250,12 @@ namespace ts {
         {
             name: "target",
             shortName: "t",
-            type: {
+            type: createMap({
                 "es3": ScriptTarget.ES3,
                 "es5": ScriptTarget.ES5,
                 "es6": ScriptTarget.ES6,
                 "es2015": ScriptTarget.ES2015,
-            },
+            }),
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
             paramType: Diagnostics.VERSION,
         },
@@ -284,10 +284,10 @@ namespace ts {
         },
         {
             name: "moduleResolution",
-            type: {
+            type: createMap({
                 "node": ModuleResolutionKind.NodeJs,
                 "classic": ModuleResolutionKind.Classic,
-            },
+            }),
             description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
         },
         {
@@ -392,7 +392,7 @@ namespace ts {
             type: "list",
             element: {
                 name: "lib",
-                type: {
+                type: createMap({
                     // JavaScript only
                     "es5": "lib.es5.d.ts",
                     "es6": "lib.es2015.d.ts",
@@ -417,7 +417,7 @@ namespace ts {
                     "es2016.array.include": "lib.es2016.array.include.d.ts",
                     "es2017.object": "lib.es2017.object.d.ts",
                     "es2017.sharedmemory": "lib.es2017.sharedmemory.d.ts"
-                },
+                }),
             },
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
         },
@@ -487,9 +487,7 @@ namespace ts {
     export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
         const namesOfType: string[] = [];
         for (const key in opt.type) {
-            if (hasProperty(opt.type, key)) {
-                namesOfType.push(` '${key}'`);
-            }
+            namesOfType.push(` '${key}'`);
         }
         return createCompilerDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, namesOfType);
     }
@@ -498,7 +496,7 @@ namespace ts {
     export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
         const key = trimString((value || "")).toLowerCase();
         const map = opt.type;
-        if (hasProperty(map, key)) {
+        if (key in map) {
             return map[key];
         }
         else {
@@ -849,7 +847,7 @@ namespace ts {
 
     function convertJsonOptionOfCustomType(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
         const key = value.toLowerCase();
-        if (hasProperty(opt.type, key)) {
+        if (key in opt.type) {
             return opt.type[key];
         }
         else {

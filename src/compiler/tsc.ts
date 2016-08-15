@@ -122,11 +122,11 @@ namespace ts {
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
-    const categoryFormatMap: MapLike<string> = {
+    const categoryFormatMap = createMap<string>({
         [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
         [DiagnosticCategory.Error]: redForegroundEscapeSequence,
         [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
-    };
+    });
 
     function formatAndReset(text: string, formatStyle: string) {
         return formatStyle + text + resetEscapeSequence;
@@ -703,11 +703,9 @@ namespace ts {
                 description = getDiagnosticText(option.description);
                 const options: string[] = [];
                 const element = (<CommandLineOptionOfListType>option).element;
-                const typeMap = <MapLike<number | string>>element.type;
+                const typeMap = <Map<number | string>>element.type;
                 for (const key in typeMap) {
-                    if (hasProperty(typeMap, key)) {
-                        options.push(`'${key}'`);
-                    }
+                    options.push(`'${key}'`);
                 }
                 optionsDescriptionMap[description] = options;
             }
@@ -814,9 +812,8 @@ namespace ts {
                                     // Enum
                                     const typeMap = <Map<number>>optionDefinition.type;
                                     for (const key in typeMap) {
-                                        if (hasProperty(typeMap, key)) {
-                                            if (typeMap[key] === value)
-                                                result[name] = key;
+                                        if (typeMap[key] === value) {
+                                            result[name] = key;
                                         }
                                     }
                                 }

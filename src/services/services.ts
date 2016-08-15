@@ -2042,7 +2042,7 @@ namespace ts {
     function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
         commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
-            typeof o.type === "object" && !forEachOwnProperty(<MapLike<any>>o.type, v => typeof v !== "number"));
+            typeof o.type === "object" && !forEachProperty(o.type, v => typeof v !== "number"));
 
         options = clone(options);
 
@@ -2117,7 +2117,9 @@ namespace ts {
             sourceFile.moduleName = transpileOptions.moduleName;
         }
 
-        sourceFile.renamedDependencies = transpileOptions.renamedDependencies;
+        if (transpileOptions.renamedDependencies) {
+            sourceFile.renamedDependencies = createMap(transpileOptions.renamedDependencies);
+        }
 
         const newLine = getNewLineCharacter(options);
 
@@ -6745,7 +6747,7 @@ namespace ts {
                 // the function will add any found symbol of the property-name, then its sub-routine will call
                 // getPropertySymbolsFromBaseTypes again to walk up any base types to prevent revisiting already
                 // visited symbol, interface "C", the sub-routine will pass the current symbol as previousIterationSymbol.
-                if (hasProperty(previousIterationSymbolsCache, symbol.name)) {
+                if (symbol.name in previousIterationSymbolsCache) {
                     return;
                 }
 
