@@ -8548,10 +8548,6 @@ namespace ts {
                     }
                     return type;
                 }
-                // We never narrow type any in an instanceof guard
-                if (isTypeAny(type)) {
-                    return type;
-                }
 
                 // Check that right operand is a function type with a prototype property
                 const rightType = checkExpression(expr.right);
@@ -8567,6 +8563,11 @@ namespace ts {
                     if (!isTypeAny(prototypePropertyType)) {
                         targetType = prototypePropertyType;
                     }
+                }
+
+                // Don't narrow from 'any' if the target type is exactly 'Object' or 'Function'
+                if (isTypeAny(type) && (targetType === globalObjectType || targetType === globalFunctionType)) {
+                    return type;
                 }
 
                 if (!targetType) {
@@ -8615,7 +8616,7 @@ namespace ts {
             }
 
             function narrowTypeByTypePredicate(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
-                if (type.flags & TypeFlags.Any || !hasMatchingArgument(callExpression, reference)) {
+                if (!hasMatchingArgument(callExpression, reference)) {
                     return type;
                 }
                 const signature = getResolvedSignature(callExpression);
@@ -8623,6 +8624,12 @@ namespace ts {
                 if (!predicate) {
                     return type;
                 }
+
+                // Don't narrow from 'any' if the predicate type is exactly 'Object' or 'Function'
+                if (isTypeAny(type) && (predicate.type === globalObjectType || predicate.type === globalFunctionType)) {
+                    return type;
+                }
+
                 if (isIdentifierTypePredicate(predicate)) {
                     const predicateArgument = callExpression.arguments[predicate.parameterIndex];
                     if (predicateArgument) {
