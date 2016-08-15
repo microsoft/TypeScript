@@ -1,6 +1,6 @@
 tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(5,12): error TS2503: Cannot find namespace 'V'.
 tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(11,12): error TS2503: Cannot find namespace 'C'.
-tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(23,12): error TS2691: Cannot find name 'I'. A type exists with this name, but no value.
+tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(23,12): error TS2503: Cannot find namespace 'I'.
 
 
 ==== tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts (3 errors) ====
@@ -32,5 +32,5 @@ tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIde
     
     import i = I;
                ~
-!!! error TS2691: Cannot find name 'I'. A type exists with this name, but no value.
+!!! error TS2503: Cannot find namespace 'I'.
     

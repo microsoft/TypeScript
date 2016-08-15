@@ -994,7 +994,7 @@ namespace ts {
             const strictlyValueMeanings = SymbolFlags.Value & ~SymbolFlags.Type;
             const strictlyTypeMeanings = SymbolFlags.Type & ~SymbolFlags.Value;
 
-            if (!(meaning & strictlyValueMeanings)) {
+            if (!(meaning & strictlyValueMeanings) || meaning & SymbolFlags.NamespaceModule) {
                 return false;
             }
 
