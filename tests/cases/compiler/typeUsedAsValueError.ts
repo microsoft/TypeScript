@@ -2,20 +2,22 @@ interface Interface {
 
 }
 
-class Class {
+class SomeClass {
 
 }
 
-type typeAliasForClass = Class;
-type typeAliasForNumber = number;
-type objectType = { x: number };
+type TypeAliasForSomeClass = SomeClass;
+type someType = { x: number };
 
-function func(a: number) {
+function acceptsSomeType(a: someType) {
 
 }
 
 let one = Interface;
-let two = typeAliasForClass;
-let three = typeAliasForNumber;
-let four = objectType;
-func(typeAliasForNumber);
+let two = InterfaceNotFound;
+let three = TypeAliasForSomeClass;
+let four = new TypeAliasForSomeClass();
+let five = new TypeAliasForSomeClassNotFound();
+let six = someType;
+acceptsSomeType(someType);
+acceptsSomeType(someTypeNotFound);
