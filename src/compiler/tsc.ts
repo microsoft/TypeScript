@@ -763,23 +763,7 @@ namespace ts {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file), /* host */ undefined);
         }
         else {
-            const compilerOptions = extend(options, defaultInitCompilerOptions);
-            const configurations: any = {
-                compilerOptions: serializeCompilerOptions(compilerOptions)
-            };
-
-            if (fileNames && fileNames.length) {
-                // only set the files property if we have at least one file
-                configurations.files = fileNames;
-            }
-            else {
-                configurations.exclude = ["node_modules"];
-                if (compilerOptions.outDir) {
-                    configurations.exclude.push(compilerOptions.outDir);
-                }
-            }
-
-            sys.writeFile(file, JSON.stringify(configurations, undefined, 4));
+            sys.writeFile(file, JSON.stringify(generateTSConfig(options, fileNames), undefined, 4));
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file), /* host */ undefined);
         }
 
