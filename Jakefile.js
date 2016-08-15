@@ -795,7 +795,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     if(!runInParallel) {
         var startTime = mark();
         tests = tests ? ' -g "' + tests + '"' : '';
-        var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + bail + ' -t ' + testTimeout + ' ' + run;
+        var cmd = "mocha -gc" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + bail + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
 
         var savedNodeEnv = process.env.NODE_ENV;
