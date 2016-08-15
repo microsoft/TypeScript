@@ -842,14 +842,6 @@ namespace ts {
             : { resolvedModule: undefined, failedLookupLocations };
     }
 
-    /* @internal */
-    export const defaultInitCompilerOptions: CompilerOptions = {
-        module: ModuleKind.CommonJS,
-        target: ScriptTarget.ES5,
-        noImplicitAny: false,
-        sourceMap: false,
-    };
-
     interface OutputFingerprint {
         hash: string;
         byteOrderMark: boolean;

@@ -157,7 +157,8 @@ var harnessSources = harnessCoreSources.concat([
     "convertCompilerOptionsFromJson.ts",
     "convertTypingOptionsFromJson.ts",
     "tsserverProjectSystem.ts",
-    "matchFiles.ts"
+    "matchFiles.ts",
+    "initializeTSConfig.ts",
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
