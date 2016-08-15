@@ -11,11 +11,16 @@ namespace ts.server {
 
     interface NodeChildProcess {
         send(message: any, sendHandle?: any): void;
+        on(message: "message", f: (m: any) => void): void;
     }
 
     const childProcess: {
         fork(modulePath: string): NodeChildProcess;
     } = require("child_process");
+
+    const os: {
+        homedir(): string
+    } = require("os");
 
     interface ReadLineOptions {
         input: NodeJS.ReadableStream;
@@ -165,14 +170,20 @@ namespace ts.server {
         private cachePath: string;
 
         constructor(private readonly logger: server.Logger) {
+            let basePath: string;
             switch (process.platform) {
                 case "win32":
-                    this.cachePath = normalizeSlashes(combinePaths(process.env.LOCALAPPDATA || process.env.APPDATA, "Microsoft/TypeScript"));
+                    basePath = process.env.LOCALAPPDATA || process.env.APPDATA || os.homedir();
+                    break;
+                case "linux":
+                    basePath = os.homedir();
                     break;
                 case "darwin":
-                case "linux":
-                    // TODO:
+                    basePath = combinePaths(os.homedir(), "/Library/Application Support/")
                     break;
+            }
+            if (basePath) {
+                this.cachePath = combinePaths(normalizeSlashes(basePath), "/Microsoft/TypeScript");
             }
         }
 
@@ -183,7 +194,7 @@ namespace ts.server {
             }
 
             this.installer = childProcess.fork(combinePaths(__dirname, "typingsInstaller.js"));
-            (<any>this.installer).on("message", (m: any) => this.handleMessage(m));
+            this.installer.on("message", m => this.handleMessage(m));
         }
 
         enqueueInstallTypingsRequest(project: Project, typingOptions: TypingOptions): void {
