@@ -198,8 +198,7 @@ namespace ts {
 
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toPath(directoryName);
-            const callbacks = this.watchedDirectories[path] || (this.watchedDirectories[path] = []);
-            callbacks.push({ cb: callback, recursive });
+            const callbacks = multiMapAdd(this.watchedDirectories, path, { cb: callback, recursive });
             return {
                 referenceCount: 0,
                 directoryName,
@@ -239,8 +238,7 @@ namespace ts {
 
         watchFile(fileName: string, callback: FileWatcherCallback) {
             const path = this.toPath(fileName);
-            const callbacks = this.watchedFiles[path] || (this.watchedFiles[path] = []);
-            callbacks.push(callback);
+            const callbacks = multiMapAdd(this.watchedFiles, path, callback);
             return {
                 close: () => {
                     const i = callbacks.indexOf(callback);

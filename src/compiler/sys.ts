@@ -267,7 +267,7 @@ namespace ts {
                 }
 
                 function addFileWatcherCallback(filePath: string, callback: FileWatcherCallback): void {
-                    (fileWatcherCallbacks[filePath] || (fileWatcherCallbacks[filePath] = [])).push(callback);
+                    multiMapAdd(fileWatcherCallbacks, filePath, callback);
                 }
 
                 function addFile(fileName: string, callback: FileWatcherCallback): WatchedFile {
