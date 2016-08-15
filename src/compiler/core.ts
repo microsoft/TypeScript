@@ -1394,14 +1394,18 @@ namespace ts {
         }
     }
 
-    export function copyListRemovingItem<T>(item: T, list: T[]) {
-        const copiedList: T[] = [];
-        for (const e of list) {
-            if (e !== item) {
-                copiedList.push(e);
+    export function removeItem<T>(item: T, array: T[]): void {
+        for (let i = 0; i < array.length; i++) {
+            if (array[i] === item) {
+                // Move everything over to the left.
+                // This seems to be faster than either `array.splice(i, 1)` or `array.copyWithin(i, i+ 1)`.
+                for (; i < array.length - 1; i++) {
+                    array[i] = array[i + 1];
+                }
+                array.pop();
+                break;
             }
         }
-        return copiedList;
     }
 
     export function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string {
