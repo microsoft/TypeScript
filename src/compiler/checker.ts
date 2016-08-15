@@ -13794,15 +13794,19 @@ namespace ts {
         }
 
         function checkClassForDuplicateDeclarations(node: ClassLikeDeclaration) {
-            const getter = 1, setter = 2, property = getter | setter;
+            const enum Meaning {
+                Getter = 1,
+                Setter = 2,
+                Property = Getter | Setter
+            }
 
-            const instanceNames = createMap<number>();
-            const staticNames = createMap<number>();
+            const instanceNames = createMap<Meaning>();
+            const staticNames = createMap<Meaning>();
             for (const member of node.members) {
                 if (member.kind === SyntaxKind.Constructor) {
                     for (const param of (member as ConstructorDeclaration).parameters) {
                         if (isParameterPropertyDeclaration(param)) {
-                            addName(instanceNames, param.name, (param.name as Identifier).text, property);
+                            addName(instanceNames, param.name, (param.name as Identifier).text, Meaning.Property);
                         }
                     }
                 }
@@ -13814,22 +13818,22 @@ namespace ts {
                     if (memberName) {
                         switch (member.kind) {
                             case SyntaxKind.GetAccessor:
-                                addName(names, member.name, memberName, getter);
+                                addName(names, member.name, memberName, Meaning.Getter);
                                 break;
 
                             case SyntaxKind.SetAccessor:
-                                addName(names, member.name, memberName, setter);
+                                addName(names, member.name, memberName, Meaning.Setter);
                                 break;
 
                             case SyntaxKind.PropertyDeclaration:
-                                addName(names, member.name, memberName, property);
+                                addName(names, member.name, memberName, Meaning.Property);
                                 break;
                         }
                     }
                 }
             }
 
-            function addName(names: Map<number>, location: Node, name: string, meaning: number) {
+            function addName(names: Map<Meaning>, location: Node, name: string, meaning: Meaning) {
                 const prev = names[name];
                 if (prev) {
                     if (prev & meaning) {
