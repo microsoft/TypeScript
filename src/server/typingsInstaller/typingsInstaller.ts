@@ -13,6 +13,16 @@ namespace ts.server.typingsInstaller {
         installed: MapLike<any>;
     }
 
+    export interface Log {
+        isEnabled(): boolean;
+        writeLine(text: string): void;
+    }
+    
+    const nullLog: Log = {
+        isEnabled: () => false,
+        writeLine: () => {}
+    }
+
     function tsdTypingToFileName(cachePath: string, tsdTypingFile: string) {
         return combinePaths(cachePath, `typings/${tsdTypingFile}`);
     }
@@ -32,24 +42,47 @@ namespace ts.server.typingsInstaller {
 
         abstract readonly installTypingHost: InstallTypingHost;
 
-        constructor(readonly globalCachePath: string, readonly safeListPath: Path) {
+        constructor(readonly globalCachePath: string, readonly safeListPath: Path, protected readonly log = nullLog) {
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}'`);
+            }
         }
 
         init() {
             this.isTsdInstalled = this.isPackageInstalled("tsd");
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`isTsdInstalled: ${this.isTsdInstalled}`);
+            }
+
             if (!this.isTsdInstalled) {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`tsd is not installed, installing tsd...`);
+                }
                 this.isTsdInstalled = this.installPackage("tsd");
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`isTsdInstalled: ${this.isTsdInstalled}`);
+                }
             }
             this.processCacheLocation(this.globalCachePath);
         }
 
         install(req: InstallTypingsRequest) {
             if (!this.isTsdInstalled) {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`tsd is not installed, ignoring request...`);
+                }
                 return;
+            }
+            
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Got install request ${JSON.stringify(req)}`);
             }
 
             // load existing typing information from the cache 
             if (req.cachePath) {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`Request specifies cache path '${req.cachePath}', loading cached information...`);
+                }
                 this.processCacheLocation(req.cachePath);
             }
 
@@ -61,6 +94,10 @@ namespace ts.server.typingsInstaller {
                 this.packageNameToTypingLocation,
                 req.typingOptions,
                 req.compilerOptions);
+                
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Finished typings discovery: ${JSON.stringify(discoverTypingsResult)}`);
+            }
 
             // respond with whatever cached typings we have now
             this.sendResponse(this.createResponse(req, discoverTypingsResult.cachedTypingPaths));
@@ -68,17 +105,29 @@ namespace ts.server.typingsInstaller {
             // start watching files
             this.watchFiles(discoverTypingsResult.filesToWatch);
 
-            // install typings and 
-            this.installTypings(req, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames);
+            // install typings
+            this.installTypings(req, req.cachePath || this.globalCachePath, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames);
         }
 
         private processCacheLocation(cacheLocation: string) {
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Processing cache location '${cacheLocation}'`);
+            }
             if (this.knownCachesSet[cacheLocation]) {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`Cache location was already processed...`)
+                }
                 return;
             }
             const tsdJson = combinePaths(cacheLocation, "tsd.json");
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Trying to find '${tsdJson}'...`);
+            }
             if (this.installTypingHost.fileExists(tsdJson)) {
                 const tsdConfig = <TsdConfig>JSON.parse(this.installTypingHost.readFile(tsdJson));
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`Loaded content of '${tsdJson}': ${JSON.stringify(tsdConfig)}`);
+                }
                 if (tsdConfig.installed) {
                     for (const key in tsdConfig.installed) {
                         // key is <package name>/<typing file>
@@ -92,30 +141,53 @@ namespace ts.server.typingsInstaller {
                             continue;
                         }
                         if (existingTypingFile) {
-                            // TODO: log warning
+                            if (this.log.isEnabled()) {
+                                this.log.writeLine(`New typing for package ${packageName} from '${typingFile}' conflicts with existing typing file '${existingTypingFile}'`);
+                            }
+                        }
+                        if (this.log.isEnabled()) {
+                            this.log.writeLine(`Adding entry into typings cache: '${packageName}' => '${typingFile}'`);
                         }
                         this.packageNameToTypingLocation[packageName] = typingFile;
                     }
                 }
             }
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Finished processing cache location '${cacheLocation}'`);
+            }
             this.knownCachesSet[cacheLocation] = true;
         }
 
-        private installTypings(req: InstallTypingsRequest, currentlyCachedTypings: string[], typingsToInstall: string[]) {
+        private installTypings(req: InstallTypingsRequest, cachePath: string, currentlyCachedTypings: string[], typingsToInstall: string[]) {
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Installing typings ${JSON.stringify(typingsToInstall)}`);
+            }
             typingsToInstall = filter(typingsToInstall, x => !this.missingTypingsSet[x]);
             if (typingsToInstall.length === 0) {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`All typings are known to be missing - no need to go any further`);
+                }
                 return;
             }
 
             // TODO: install typings and send response when they are ready
-            const tsdPath = combinePaths(req.cachePath, "tsd.json");
+            const tsdPath = combinePaths(cachePath, "tsd.json");
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Tsd config file: ${tsdPath}`);
+            }
             if (!this.installTypingHost.fileExists(tsdPath)) {
-                this.ensureDirectoryExists(req.cachePath, this.installTypingHost);
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`Tsd config file '${tsdPath}' is missing, creating new one...`);
+                }
+                this.ensureDirectoryExists(cachePath, this.installTypingHost);
                 this.installTypingHost.writeFile(tsdPath, DefaultTsdSettings);
             }
 
-            this.runTsd(req.cachePath, typingsToInstall, installedTypings => {
+            this.runTsd(cachePath, typingsToInstall, installedTypings => {
                 // TODO: watch project directory
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`Requested to install typings ${JSON.stringify(typingsToInstall)}, installed typings ${JSON.stringify(installedTypings)}`);
+                }
                 const installedPackages: Map<true> = createMap<true>();
                 const installedTypingFiles: string[] = [];
                 for (const t of installedTypings) {
@@ -124,10 +196,16 @@ namespace ts.server.typingsInstaller {
                         continue;
                     }
                     installedPackages[packageName] = true;
-                    installedTypingFiles.push(tsdTypingToFileName(req.cachePath, t));
+                    installedTypingFiles.push(tsdTypingToFileName(cachePath, t));
+                }
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`Installed typing files ${JSON.stringify(installedTypingFiles)}`);
                 }
                 for (const toInstall of typingsToInstall) {
                     if (!installedPackages[toInstall]) {
+                        if (this.log.isEnabled()) {
+                            this.log.writeLine(`New missing typing package '${toInstall}'`);
+                        }
                         this.missingTypingsSet[toInstall] = true;
                     }
                 }
