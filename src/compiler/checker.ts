@@ -3248,6 +3248,13 @@ namespace ts {
                 // * className.prototype.method = expr
                 if (declaration.kind === SyntaxKind.BinaryExpression ||
                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
+                    // Use JS Doc type if present on parent expression statement
+                    if (declaration.flags & NodeFlags.JavaScriptFile) {
+                        const typeTag = getJSDocTypeTag(declaration.parent);
+                        if (typeTag && typeTag.typeExpression) {
+                            return links.type = getTypeFromTypeNode(typeTag.typeExpression.type);
+                        }
+                    }
                     const declaredTypes = map(symbol.declarations,
                         decl => decl.kind === SyntaxKind.BinaryExpression ?
                             checkExpressionCached((<BinaryExpression>decl).right) :
@@ -9456,6 +9463,11 @@ namespace ts {
             const binaryExpression = <BinaryExpression>node.parent;
             const operator = binaryExpression.operatorToken.kind;
             if (operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment) {
+                // Don't do this for special property assignments to avoid circularity
+                if (getSpecialPropertyAssignmentKind(binaryExpression) !== SpecialPropertyAssignmentKind.None) {
+                    return undefined;
+                }
+
                 // In an assignment expression, the right operand is contextually typed by the type of the left operand.
                 if (node === binaryExpression.right) {
                     return checkExpression(binaryExpression.left);

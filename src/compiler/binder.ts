@@ -1972,7 +1972,18 @@ namespace ts {
                 assignee = container;
             }
             else if (container.kind === SyntaxKind.Constructor) {
-                assignee = container.parent;
+                if (isInJavaScriptFile(node)) {
+                    // this.foo assignment in a JavaScript class
+                    // Bind this property to the containing class
+                    const saveContainer = container;
+                    container = container.parent;
+                    bindPropertyOrMethodOrAccessor(node, SymbolFlags.Property, SymbolFlags.None);
+                    container = saveContainer;
+                    return;
+                }
+                else {
+                    assignee = container.parent;
+                }
             }
             else {
                 return;
