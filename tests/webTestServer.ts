@@ -117,19 +117,21 @@ function handleResolutionRequest(filePath: string, res: http.ServerResponse) {
     let resolvedPath = path.resolve(filePath, "");
     resolvedPath = resolvedPath.substring(resolvedPath.indexOf("tests"));
     resolvedPath = switchToForwardSlashes(resolvedPath);
-    send("success", res, resolvedPath);
-    return;
+    send(ResponseCode.Success, res, resolvedPath);
 }
 
-function send(result: "fail", res: http.ServerResponse, contents: string, contentType?: string): void;
-function send(result: "success", res: http.ServerResponse, contents: string, contentType?: string): void;
-function send(result: "unknown", res: http.ServerResponse, contents: string, contentType?: string): void;
-function send(result: string, res: http.ServerResponse, contents: string, contentType?: string): void
-function send(result: string, res: http.ServerResponse, contents: string, contentType = "binary"): void {
-    const responseCode = result === "success" ? 200 : result === "fail" ? 500 : result === "unknown" ? 404 : parseInt(result);
+const enum ResponseCode {
+    Success = 200,
+    BadRequest = 400,
+    NotFound = 404,
+    MethodNotAllowed = 405,
+    PayloadTooLarge = 413,
+    Fail = 500
+}
+
+function send(responseCode: number, res: http.ServerResponse, contents: string, contentType = "binary"): void {
     res.writeHead(responseCode, { "Content-Type": contentType });
     res.end(contents);
-    return;
 }
 
 // Reads the data from a post request and passes it to the given callback
@@ -142,7 +144,7 @@ function processPost(req: http.ServerRequest, res: http.ServerResponse, callback
             queryData += data;
             if (queryData.length > 1e8) {
                 queryData = "";
-                send("413", res, undefined);
+                send(ResponseCode.PayloadTooLarge, res, undefined);
                 console.log("ERROR: destroying connection");
                 req.connection.destroy();
             }
@@ -155,7 +157,7 @@ function processPost(req: http.ServerRequest, res: http.ServerResponse, callback
 
     }
     else {
-        send("405", res, undefined);
+        send(ResponseCode.MethodNotAllowed, res, undefined);
     }
 }
 
@@ -201,16 +203,16 @@ function handleRequestOperation(req: http.ServerRequest, res: http.ServerRespons
     switch (operation) {
         case RequestType.GetDir:
             const filesInFolder = dir(reqPath, "", { recursive: true });
-            send("success", res, filesInFolder.join(","));
+            send(ResponseCode.Success, res, filesInFolder.join(","));
             break;
         case RequestType.GetFile:
             fs.readFile(reqPath, (err, file) => {
                 const contentType = contentTypeForExtension(path.extname(reqPath));
                 if (err) {
-                    send("fail", res, err.message, contentType);
+                    send(ResponseCode.NotFound, res, err.message, contentType);
                 }
                 else {
-                    send("success", res, <any>file, contentType);
+                    send(ResponseCode.Success, res, <any>file, contentType);
                 }
             });
             break;
@@ -222,33 +224,33 @@ function handleRequestOperation(req: http.ServerRequest, res: http.ServerRespons
             processPost(req, res, (data) => {
                 writeFile(reqPath, data, { recursive: true });
             });
-            send("success", res, undefined);
+            send(ResponseCode.Success, res, undefined);
             break;
         case RequestType.WriteDir:
             fs.mkdirSync(reqPath);
-            send("success", res, undefined);
+            send(ResponseCode.Success, res, undefined);
             break;
         case RequestType.DeleteFile:
             if (fs.existsSync(reqPath)) {
                 fs.unlinkSync(reqPath);
             }
-            send("success", res, undefined);
+            send(ResponseCode.Success, res, undefined);
             break;
         case RequestType.DeleteDir:
             if (fs.existsSync(reqPath)) {
                 fs.rmdirSync(reqPath);
             }
-            send("success", res, undefined);
+            send(ResponseCode.Success, res, undefined);
             break;
         case RequestType.AppendFile:
             processPost(req, res, (data) => {
                 fs.appendFileSync(reqPath, data);
             });
-            send("success", res, undefined);
+            send(ResponseCode.Success, res, undefined);
             break;
         case RequestType.Unknown:
         default:
-            send("unknown", res, undefined);
+            send(ResponseCode.BadRequest, res, undefined);
             break;
     }
 
