@@ -531,7 +531,7 @@ namespace ts {
 
         function getNodeLinks(node: Node): NodeLinks {
             const nodeId = getNodeId(node);
-            return nodeLinks[nodeId] || (nodeLinks[nodeId] = {});
+            return nodeLinks[nodeId] || (nodeLinks[nodeId] = { flags: 0 });
         }
 
         function isGlobalSourceFile(node: Node) {
@@ -8185,7 +8185,7 @@ namespace ts {
             return incomplete ? { flags: 0, type } : type;
         }
 
-        function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, includeOuterFunctions: boolean) {
+        function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, flowContainer: Node) {
             let key: string;
             if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
@@ -8237,7 +8237,7 @@ namespace ts {
                     else if (flow.flags & FlowFlags.Start) {
                         // Check if we should continue with the control flow of the containing function.
                         const container = (<FlowStart>flow).container;
-                        if (container && includeOuterFunctions) {
+                        if (container && container !== flowContainer && reference.kind !== SyntaxKind.PropertyAccessExpression) {
                             flow = container.flowNode;
                             continue;
                         }
@@ -8708,21 +8708,52 @@ namespace ts {
         function getControlFlowContainer(node: Node): Node {
             while (true) {
                 node = node.parent;
-                if (isFunctionLike(node) || node.kind === SyntaxKind.ModuleBlock || node.kind === SyntaxKind.SourceFile || node.kind === SyntaxKind.PropertyDeclaration) {
+                if (isFunctionLike(node) && !getImmediatelyInvokedFunctionExpression(node) ||
+                    node.kind === SyntaxKind.ModuleBlock ||
+                    node.kind === SyntaxKind.SourceFile ||
+                    node.kind === SyntaxKind.PropertyDeclaration) {
                     return node;
                 }
             }
         }
 
-        function isDeclarationIncludedInFlow(reference: Node, declaration: Declaration, includeOuterFunctions: boolean) {
-            const declarationContainer = getControlFlowContainer(declaration);
-            let container = getControlFlowContainer(reference);
-            while (container !== declarationContainer &&
-                (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.ArrowFunction) &&
-                (includeOuterFunctions || getImmediatelyInvokedFunctionExpression(<FunctionExpression>container))) {
-                container = getControlFlowContainer(container);
+        // Check if a parameter is assigned anywhere within its declaring function.
+        function isParameterAssigned(symbol: Symbol) {
+            const func = <FunctionLikeDeclaration>getRootDeclaration(symbol.valueDeclaration).parent;
+            const links = getNodeLinks(func);
+            if (!(links.flags & NodeCheckFlags.AssignmentsMarked)) {
+                links.flags |= NodeCheckFlags.AssignmentsMarked;
+                if (!hasParentWithAssignmentsMarked(func)) {
+                    markParameterAssignments(func);
+                }
             }
-            return container === declarationContainer;
+            return symbol.isAssigned || false;
+        }
+
+        function hasParentWithAssignmentsMarked(node: Node) {
+            while (true) {
+                node = node.parent;
+                if (!node) {
+                    return false;
+                }
+                if (isFunctionLike(node) && getNodeLinks(node).flags & NodeCheckFlags.AssignmentsMarked) {
+                    return true;
+                }
+            }
+        }
+
+        function markParameterAssignments(node: Node) {
+            if (node.kind === SyntaxKind.Identifier) {
+                if (isAssignmentTarget(node)) {
+                    const symbol = getResolvedSymbol(<Identifier>node);
+                    if (symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration).kind === SyntaxKind.Parameter) {
+                        symbol.isAssigned = true;
+                    }
+                }
+            }
+            else {
+                forEachChild(node, markParameterAssignments);
+            }
         }
 
         function checkIdentifier(node: Identifier): Type {
@@ -8777,15 +8808,22 @@ namespace ts {
             checkNestedBlockScopedBinding(node, symbol);
 
             const type = getTypeOfSymbol(localOrExportSymbol);
-            if (!(localOrExportSymbol.flags & SymbolFlags.Variable) || isAssignmentTarget(node)) {
+            const declaration = localOrExportSymbol.valueDeclaration;
+            if (!(localOrExportSymbol.flags & SymbolFlags.Variable) || isAssignmentTarget(node) || !declaration) {
                 return type;
             }
-            const declaration = localOrExportSymbol.valueDeclaration;
-            const includeOuterFunctions = isReadonlySymbol(localOrExportSymbol);
-            const assumeInitialized = !strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || !declaration ||
-                getRootDeclaration(declaration).kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
-                !isDeclarationIncludedInFlow(node, declaration, includeOuterFunctions);
-            const flowType = getFlowTypeOfReference(node, type, assumeInitialized, includeOuterFunctions);
+
+            const isParameter = getRootDeclaration(declaration).kind === SyntaxKind.Parameter;
+            const declarationContainer = getControlFlowContainer(declaration);
+            let flowContainer = getControlFlowContainer(node);
+            while (flowContainer !== declarationContainer &&
+                (flowContainer.kind === SyntaxKind.FunctionExpression || flowContainer.kind === SyntaxKind.ArrowFunction) &&
+                (isReadonlySymbol(localOrExportSymbol) || isParameter && !isParameterAssigned(localOrExportSymbol))) {
+                flowContainer = getControlFlowContainer(flowContainer);
+            }
+            const assumeInitialized = !strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || isParameter ||
+                flowContainer !== declarationContainer || isInAmbientContext(declaration);
+            const flowType = getFlowTypeOfReference(node, type, assumeInitialized, flowContainer);
             if (!assumeInitialized && !(getFalsyFlags(type) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
                 error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
                 // Return the declared type to reduce follow-on errors
@@ -9038,7 +9076,7 @@ namespace ts {
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
                 const type = container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
-                return getFlowTypeOfReference(node, type, /*assumeInitialized*/ true, /*includeOuterFunctions*/ true);
+                return getFlowTypeOfReference(node, type, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
             }
 
             if (isInJavaScriptFile(node)) {
@@ -10699,7 +10737,7 @@ namespace ts {
                 !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
                 return propType;
             }
-            return getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*includeOuterFunctions*/ false);
+            return getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean {
