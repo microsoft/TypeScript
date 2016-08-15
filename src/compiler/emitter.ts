@@ -407,7 +407,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
         function isUniqueLocalName(name: string, container: Node): boolean {
             for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
-                if (node.locals && hasProperty(node.locals, name)) {
+                if (node.locals && name in node.locals) {
                     // We conservatively include alias symbols to cover cases where they're emitted as locals
                     if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
                         return false;
@@ -669,8 +669,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function isUniqueName(name: string): boolean {
                 return !resolver.hasGlobalName(name) &&
-                    !hasProperty(currentFileIdentifiers, name) &&
-                    !hasProperty(generatedNameSet, name);
+                    !(name in currentFileIdentifiers) &&
+                    !(name in generatedNameSet);
             }
 
             // Return the next available name in the pattern _a ... _z, _0, _1, ...
@@ -2646,7 +2646,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     return false;
                 }
 
-                return !exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, (<Identifier>node).text);
+                return !exportEquals && exportSpecifiers && (<Identifier>node).text in exportSpecifiers;
             }
 
             function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
@@ -3263,7 +3263,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                                write(", ");
                            }
 
-                           if (!hasProperty(seen, id.text)) {
+                           if (!(id.text in seen)) {
                                emit(id);
                                seen[id.text] = id.text;
                            }
@@ -3970,7 +3970,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     return;
                 }
 
-                if (!exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
+                if (!exportEquals && exportSpecifiers && name.text in exportSpecifiers) {
                     for (const specifier of exportSpecifiers[name.text]) {
                         writeLine();
                         emitStart(specifier.name);
@@ -6842,7 +6842,7 @@ const _super = (function (geti, seti) {
                                 // export { x, y }
                                 for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
                                     const name = (specifier.propertyName || specifier.name).text;
-                                    getOrUpdateProperty(exportSpecifiers, name, () => []).push(specifier);
+                                    (exportSpecifiers[name] || (exportSpecifiers[name] = [])).push(specifier);
                                 }
                             }
                             break;
@@ -6941,7 +6941,7 @@ const _super = (function (geti, seti) {
                 }
 
                 // local names set should only be added if we have anything exported
-                if (!exportedDeclarations && isEmpty(exportSpecifiers)) {
+                if (!exportedDeclarations && !someProperties(exportSpecifiers)) {
                     // no exported declarations (export var ...) or export specifiers (export {x})
                     // check if we have any non star export declarations.
                     let hasExportDeclarationWithExportClause = false;
@@ -7091,7 +7091,7 @@ const _super = (function (geti, seti) {
                         if (name) {
                             // do not emit duplicate entries (in case of declaration merging) in the list of hoisted variables
                             const text = unescapeIdentifier(name.text);
-                            if (hasProperty(seen, text)) {
+                            if (text in seen) {
                                 continue;
                             }
                             else {
@@ -7460,7 +7460,7 @@ const _super = (function (geti, seti) {
                     // for deduplication purposes in key remove leading and trailing quotes so 'a' and "a" will be considered the same
                     const key = text.substr(1, text.length - 2);
 
-                    if (hasProperty(groupIndices, key)) {
+                    if (key in groupIndices) {
                         // deduplicate/group entries in dependency list by the dependency name
                         const groupIndex = groupIndices[key];
                         dependencyGroups[groupIndex].push(externalImports[i]);

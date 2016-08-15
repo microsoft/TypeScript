@@ -130,7 +130,7 @@ namespace ts {
             },
             fileExists: fileName => hasProperty(files, fileName),
             readFile: fileName => {
-                const file = lookUp(files, fileName);
+                const file = getProperty(files, fileName);
                 return file && file.text;
             }
         };
@@ -150,16 +150,6 @@ namespace ts {
         const program = <ProgramWithSourceTexts>createProgram(rootNames, options, host, oldProgram);
         program.sourceTexts = texts;
         return program;
-    }
-
-    function getSizeOfMap(map: MapLike<any>): number {
-        let size = 0;
-        for (const id in map) {
-            if (hasProperty(map, id)) {
-                size++;
-            }
-        }
-        return size;
     }
 
     function checkResolvedModule(expected: ResolvedModule, actual: ResolvedModule): void {
@@ -183,8 +173,8 @@ namespace ts {
         }
         else {
             assert.isTrue(cache !== undefined, `expected ${caption} to be set`);
-            const actualCacheSize = getSizeOfMap(cache);
-            const expectedSize = getSizeOfMap(expectedContent);
+            const actualCacheSize = countOwnProperties(cache);
+            const expectedSize = countOwnProperties(expectedContent);
             assert.isTrue(actualCacheSize === expectedSize, `expected actual size: ${actualCacheSize} to be equal to ${expectedSize}`);
 
             for (const id in expectedContent) {

@@ -139,16 +139,16 @@ namespace ts.JsTyping {
                 const jsonConfig: PackageJson = result.config;
                 filesToWatch.push(jsonPath);
                 if (jsonConfig.dependencies) {
-                    mergeTypings(getKeys(jsonConfig.dependencies));
+                    mergeTypings(getOwnKeys(jsonConfig.dependencies));
                 }
                 if (jsonConfig.devDependencies) {
-                    mergeTypings(getKeys(jsonConfig.devDependencies));
+                    mergeTypings(getOwnKeys(jsonConfig.devDependencies));
                 }
                 if (jsonConfig.optionalDependencies) {
-                    mergeTypings(getKeys(jsonConfig.optionalDependencies));
+                    mergeTypings(getOwnKeys(jsonConfig.optionalDependencies));
                 }
                 if (jsonConfig.peerDependencies) {
-                    mergeTypings(getKeys(jsonConfig.peerDependencies));
+                    mergeTypings(getOwnKeys(jsonConfig.peerDependencies));
                 }
             }
         }

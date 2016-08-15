@@ -445,10 +445,9 @@ namespace ts {
         }
 
         function cachedFileExists(fileName: string): boolean {
-            if (hasProperty(cachedExistingFiles, fileName)) {
-                return cachedExistingFiles[fileName];
-            }
-            return cachedExistingFiles[fileName] = hostFileExists(fileName);
+            return fileName in cachedExistingFiles
+                ? cachedExistingFiles[fileName]
+                : cachedExistingFiles[fileName] = hostFileExists(fileName);
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
@@ -704,9 +703,12 @@ namespace ts {
                 description = getDiagnosticText(option.description);
                 const options: string[] = [];
                 const element = (<CommandLineOptionOfListType>option).element;
-                forEachKey(<Map<number | string>>element.type, key => {
-                    options.push(`'${key}'`);
-                });
+                const typeMap = <MapLike<number | string>>element.type;
+                for (const key in typeMap) {
+                    if (hasProperty(typeMap, key)) {
+                        options.push(`'${key}'`);
+                    }
+                }
                 optionsDescriptionMap[description] = options;
             }
             else {

@@ -403,8 +403,8 @@ namespace ts {
             result.parent = symbol.parent;
             if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
             if (symbol.constEnumOnlyModule) result.constEnumOnlyModule = true;
-            if (symbol.members) result.members = cloneSymbolTable(symbol.members);
-            if (symbol.exports) result.exports = cloneSymbolTable(symbol.exports);
+            if (symbol.members) result.members = cloneMap(symbol.members);
+            if (symbol.exports) result.exports = cloneMap(symbol.exports);
             recordMergedSymbol(result, symbol);
             return result;
         }
@@ -445,14 +445,6 @@ namespace ts {
                     error(node.name ? node.name : node, message, symbolToString(source));
                 });
             }
-        }
-
-        function cloneSymbolTable(symbolTable: SymbolTable): SymbolTable {
-            const result = createMap<Symbol>();
-            for (const id in symbolTable) {
-                result[id] = symbolTable[id];
-            }
-            return result;
         }
 
         function mergeSymbolTable(target: SymbolTable, source: SymbolTable) {
@@ -1450,7 +1442,7 @@ namespace ts {
                     return;
                 }
                 visitedSymbols.push(symbol);
-                const symbols = cloneSymbolTable(symbol.exports);
+                const symbols = cloneMap(symbol.exports);
                 // All export * declarations are collected in an __export symbol by the binder
                 const exportStars = symbol.exports["__export"];
                 if (exportStars) {
@@ -1655,12 +1647,12 @@ namespace ts {
                 }
 
                 // If symbol is directly available by its name in the symbol table
-                if (isAccessible(lookUp(symbols, symbol.name))) {
+                if (isAccessible(symbols[symbol.name])) {
                     return [symbol];
                 }
 
                 // Check if symbol is any of the alias
-                return forEachValue(symbols, symbolFromSymbolTable => {
+                return forEachProperty(symbols, symbolFromSymbolTable => {
                     if (symbolFromSymbolTable.flags & SymbolFlags.Alias
                         && symbolFromSymbolTable.name !== "export="
                         && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier)) {
@@ -6622,7 +6614,7 @@ namespace ts {
                     const maybeCache = maybeStack[depth];
                     // If result is definitely true, copy assumptions to global cache, else copy to next level up
                     const destinationCache = (result === Ternary.True || depth === 0) ? relation : maybeStack[depth - 1];
-                    copyMap(maybeCache, destinationCache);
+                    copyProperties(maybeCache, destinationCache);
                 }
                 else {
                     // A false result goes straight into global cache (when something is false under assumptions it
@@ -7934,7 +7926,7 @@ namespace ts {
             // check. This gives us a quicker out in the common case where an object type is not a function.
             const resolved = resolveStructuredTypeMembers(type);
             return !!(resolved.callSignatures.length || resolved.constructSignatures.length ||
-                hasProperty(resolved.members, "bind") && isTypeSubtypeOf(type, globalFunctionType));
+                resolved.members["bind"] && isTypeSubtypeOf(type, globalFunctionType));
         }
 
         function getTypeFacts(type: Type): TypeFacts {
@@ -18192,7 +18184,7 @@ namespace ts {
                 // otherwise - check if at least one export is value
                 symbolLinks.exportsSomeValue = hasExportAssignment
                     ? !!(moduleSymbol.flags & SymbolFlags.Value)
-                    : forEachValue(getExportsOfModule(moduleSymbol), isValue);
+                    : forEachProperty(getExportsOfModule(moduleSymbol), isValue);
             }
 
             return symbolLinks.exportsSomeValue;

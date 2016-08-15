@@ -8,7 +8,7 @@ namespace ts {
 
     function createDefaultServerHost(fileMap: MapLike<File>): server.ServerHost {
         const existingDirectories: MapLike<boolean> = {};
-        forEachValue(fileMap, v => {
+        forEachOwnProperty(fileMap, v => {
             let dir = getDirectoryPath(v.name);
             let previous: string;
             do {

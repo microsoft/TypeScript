@@ -486,10 +486,11 @@ namespace ts {
     /* @internal */
     export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
         const namesOfType: string[] = [];
-        forEachKey(opt.type, key => {
-            namesOfType.push(` '${key}'`);
-        });
-
+        for (const key in opt.type) {
+            if (hasProperty(opt.type, key)) {
+                namesOfType.push(` '${key}'`);
+            }
+        }
         return createCompilerDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, namesOfType);
     }
 
@@ -551,11 +552,11 @@ namespace ts {
                     s = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
 
                     // Try to translate short option names to their full equivalents.
-                    if (hasProperty(shortOptionNames, s)) {
+                    if (s in shortOptionNames) {
                         s = shortOptionNames[s];
                     }
 
-                    if (hasProperty(optionNameMap, s)) {
+                    if (s in optionNameMap) {
                         const opt = optionNameMap[s];
 
                         if (opt.isTSConfigOnly) {
@@ -811,7 +812,7 @@ namespace ts {
         const optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
 
         for (const id in jsonOptions) {
-            if (hasProperty(optionNameMap, id)) {
+            if (id in optionNameMap) {
                 const opt = optionNameMap[id];
                 defaultOptions[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
             }
@@ -1011,14 +1012,14 @@ namespace ts {
                 removeWildcardFilesWithLowerPriorityExtension(file, wildcardFileMap, supportedExtensions, keyMapper);
 
                 const key = keyMapper(file);
-                if (!hasProperty(literalFileMap, key) && !hasProperty(wildcardFileMap, key)) {
+                if (!(key in literalFileMap) && !(key in wildcardFileMap)) {
                     wildcardFileMap[key] = file;
                 }
             }
         }
 
-        const literalFiles = reduceProperties(literalFileMap, addFileToOutput, []);
-        const wildcardFiles = reduceProperties(wildcardFileMap, addFileToOutput, []);
+        const literalFiles = reduceOwnProperties(literalFileMap, addFileToOutput, []);
+        const wildcardFiles = reduceOwnProperties(wildcardFileMap, addFileToOutput, []);
         wildcardFiles.sort(host.useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive);
         return {
             fileNames: literalFiles.concat(wildcardFiles),
@@ -1076,7 +1077,7 @@ namespace ts {
                 if (match) {
                     const key = useCaseSensitiveFileNames ? match[0] : match[0].toLowerCase();
                     const flags = watchRecursivePattern.test(name) ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None;
-                    const existingFlags = getProperty(wildcardDirectories, key);
+                    const existingFlags = wildcardDirectories[key];
                     if (existingFlags === undefined || existingFlags < flags) {
                         wildcardDirectories[key] = flags;
                         if (flags === WatchDirectoryFlags.Recursive) {
@@ -1088,11 +1089,9 @@ namespace ts {
 
             // Remove any subpaths under an existing recursively watched directory.
             for (const key in wildcardDirectories) {
-                if (hasProperty(wildcardDirectories, key)) {
-                    for (const recursiveKey of recursiveKeys) {
-                        if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
-                            delete wildcardDirectories[key];
-                        }
+                for (const recursiveKey of recursiveKeys) {
+                    if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
+                        delete wildcardDirectories[key];
                     }
                 }
             }
@@ -1115,7 +1114,7 @@ namespace ts {
         for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
             const higherPriorityExtension = extensions[i];
             const higherPriorityPath = keyMapper(changeExtension(file, higherPriorityExtension));
-            if (hasProperty(literalFiles, higherPriorityPath) || hasProperty(wildcardFiles, higherPriorityPath)) {
+            if (higherPriorityPath in literalFiles || higherPriorityPath in wildcardFiles) {
                 return true;
             }
         }
