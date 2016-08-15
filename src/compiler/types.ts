@@ -2758,7 +2758,7 @@ namespace ts {
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
-        type: MapLike<number | string>;             // an object literal mapping named values to actual values
+        type: MapLike<number | string>;  // an object literal mapping named values to actual values
     }
 
     /* @internal */

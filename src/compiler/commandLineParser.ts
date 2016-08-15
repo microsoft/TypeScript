@@ -700,7 +700,7 @@ namespace ts {
 
         return configurations;
 
-        function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string | number> | undefined {
+        function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): MapLike<string | number> | undefined {
             if (optionDefinition.type === "string" || optionDefinition.type === "number" || optionDefinition.type === "boolean") {
                 // this is of a type CommandLineOptionOfPrimitiveType
                 return undefined;
@@ -713,20 +713,18 @@ namespace ts {
             }
         }
 
-        function getKeyOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: Map<string | number>): string | undefined {
-            // There is a typeMap associated with this command-line option so use it  to map value back to its name
-            for (const key in customTypeMap) {
-                if (hasProperty(customTypeMap, key)) {
-                    if (customTypeMap[key] === value) {
-                        return key;
-                    }
+        function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: MapLike<string | number>): string | undefined {
+            // There is a typeMap associated with this command-line option so use it to map value back to its name
+            const name = forEachKey(customTypeMap, (key) => {
+                if (getProperty(customTypeMap, key) === value) {
+                    return key;
                 }
-            }
-            return undefined;
+            });
+            return name ? name : undefined;
         }
 
         function serializeCompilerOptions(options: CompilerOptions): Map<CompilerOptionsValue> {
-            const result: Map<CompilerOptionsValue> = {};
+            const result = createMap<CompilerOptionsValue>();
             const optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (const name in options) {
