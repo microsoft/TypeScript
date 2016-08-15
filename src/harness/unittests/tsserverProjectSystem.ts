@@ -68,7 +68,7 @@ namespace ts {
         return entry;
     }
 
-    function sizeOfMap(map: Map<any>): number {
+    function sizeOfMap(map: MapLike<any>): number {
         let n = 0;
         for (const name in map) {
             if (hasProperty(map, name)) {
@@ -78,7 +78,7 @@ namespace ts {
         return n;
     }
 
-    function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
+    function checkMapKeys(caption: string, map: MapLike<any>, expectedKeys: string[]) {
         assert.equal(sizeOfMap(map), expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
             assert.isTrue(hasProperty(map, name), `${caption} is expected to contain ${name}, actual keys: ${getKeys(map)}`);
@@ -126,8 +126,8 @@ namespace ts {
         private getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
         private callbackQueue: TimeOutCallback[] = [];
-        readonly watchedDirectories: Map<{ cb: DirectoryWatcherCallback, recursive: boolean }[]> = {};
-        readonly watchedFiles: Map<FileWatcherCallback[]> = {};
+        readonly watchedDirectories: MapLike<{ cb: DirectoryWatcherCallback, recursive: boolean }[]> = {};
+        readonly watchedFiles: MapLike<FileWatcherCallback[]> = {};
 
         constructor(public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[]) {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);

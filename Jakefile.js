@@ -5,6 +5,7 @@ var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
 var Linter = require("tslint");
+var fold = require("travis-fold");
 var runTestsInParallel = require("./scripts/mocha-parallel").runTestsInParallel;
 
 // Variables
@@ -30,6 +31,28 @@ if (process.env.path !== undefined) {
    process.env.path = nodeModulesPathPrefix + process.env.path;
 } else if (process.env.PATH !== undefined) {
    process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
+}
+
+function toNs(diff) {
+    return diff[0] * 1e9 + diff[1];
+}
+
+function mark() {
+    if (!fold.isTravis()) return;
+    var stamp = process.hrtime();
+    var id = Math.floor(Math.random() * 0xFFFFFFFF).toString(16);
+    console.log("travis_time:start:" + id + "\r");
+    return {
+        stamp: stamp,
+        id: id
+    };
+}
+
+function measure(marker) {
+    if (!fold.isTravis()) return;
+    var diff = process.hrtime(marker.stamp);
+    var total = [marker.stamp[0] + diff[0], marker.stamp[1] + diff[1]];
+    console.log("travis_time:end:" + marker.id + ":start=" + toNs(marker.stamp) + ",finish=" + toNs(total) + ",duration=" + toNs(diff) + "\r");
 }
 
 var compilerSources = [
@@ -285,6 +308,7 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
     */
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts, callback) {
     file(outFile, prereqs, function() {
+        var startCompileTime = mark();
         opts = opts || {};
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
         var options = "--noImplicitAny --noImplicitThis --noEmitOnError --types " 
@@ -361,11 +385,13 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
                 callback();
             }
 
+            measure(startCompileTime);
             complete();
         });
         ex.addListener("error", function() {
             fs.unlinkSync(outFile);
             fail("Compilation of " + outFile + " unsuccessful");
+            measure(startCompileTime);
         });
         ex.run();
     }, {async: true});
@@ -551,7 +577,7 @@ var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibr
 compileFile(
     tsserverLibraryFile,
     languageServiceLibrarySources,
-    [builtLocalDirectory, copyright].concat(languageServiceLibrarySources),
+    [builtLocalDirectory, copyright, builtLocalCompiler].concat(languageServiceLibrarySources).concat(libraryTargets),
     /*prefixes*/ [copyright],
     /*useBuiltCompiler*/ true,
     { noOutFile: false, generateDeclarations: true });
@@ -560,9 +586,19 @@ compileFile(
 desc("Builds language service server library");
 task("lssl", [tsserverLibraryFile, tsserverLibraryDefinitionFile]);
 
+desc("Emit the start of the build fold");
+task("build-fold-start", [] , function() {
+    if (fold.isTravis()) console.log(fold.start("build"));
+});
+
+desc("Emit the end of the build fold");
+task("build-fold-end", [] , function() {
+    if (fold.isTravis()) console.log(fold.end("build"));
+});
+
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON]);
+task("local", ["build-fold-start", "generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON, "lssl", "build-fold-end"]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -617,7 +653,7 @@ task("generate-spec", [specMd]);
 
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
-task("LKG", ["clean", "release", "local", "lssl"].concat(libraryTargets), function() {
+task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
     var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
@@ -758,6 +794,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     if(!runInParallel) {
+        var startTime = mark();
         tests = tests ? ' -g "' + tests + '"' : '';
         var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + bail + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
@@ -766,10 +803,12 @@ function runConsoleTests(defaultReporter, runInParallel) {
         process.env.NODE_ENV = "development";
         exec(cmd, function () {
             process.env.NODE_ENV = savedNodeEnv;
+            measure(startTime);
             runLinter();
             finish();
         }, function(e, status) {
             process.env.NODE_ENV = savedNodeEnv;
+            measure(startTime);
             finish(status);
         });
 
@@ -777,9 +816,10 @@ function runConsoleTests(defaultReporter, runInParallel) {
     else {
         var savedNodeEnv = process.env.NODE_ENV;
         process.env.NODE_ENV = "development";
+        var startTime = mark();
         runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function (err) {
             process.env.NODE_ENV = savedNodeEnv;
-
+            measure(startTime);
             // last worker clean everything and runs linter in case if there were no errors
             deleteTemporaryProjectOutput();
             jake.rmRf(taskConfigsFolder);
@@ -998,10 +1038,20 @@ var tslintRulesOutFiles = tslintRules.map(function(p) {
     return path.join(builtLocalDirectory, "tslint", p + ".js");
 });
 desc("Compiles tslint rules to js");
-task("build-rules", tslintRulesOutFiles);
+task("build-rules", ["build-rules-start"].concat(tslintRulesOutFiles).concat(["build-rules-end"]));
 tslintRulesFiles.forEach(function(ruleFile, i) {
     compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false,
     { noOutFile: true, generateDeclarations: false, outDir: path.join(builtLocalDirectory, "tslint")});
+});
+
+desc("Emit the start of the build-rules fold");
+task("build-rules-start", [] , function() {
+    if (fold.isTravis()) console.log(fold.start("build-rules"));
+});
+
+desc("Emit the end of the build-rules fold");
+task("build-rules-end", [] , function() {
+    if (fold.isTravis()) console.log(fold.end("build-rules"));
 });
 
 function getLinterOptions() {
@@ -1047,6 +1097,8 @@ var lintTargets = compilerSources
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
 task("lint", ["build-rules"], function() {
+    if (fold.isTravis()) console.log(fold.start("lint"));
+    var startTime = mark();
     var lintOptions = getLinterOptions();
     var failed = 0;
     var fileMatcher = RegExp(process.env.f || process.env.file || process.env.files || "");
@@ -1062,6 +1114,8 @@ task("lint", ["build-rules"], function() {
             done[target] = true;
         }
     }
+    measure(startTime);
+    if (fold.isTravis()) console.log(fold.end("lint"));
     if (failed > 0) {
         fail('Linter errors.', failed);
     }

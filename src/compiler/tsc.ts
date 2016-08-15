@@ -122,7 +122,7 @@ namespace ts {
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
-    const categoryFormatMap: Map<string> = {
+    const categoryFormatMap: MapLike<string> = {
         [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
         [DiagnosticCategory.Error]: redForegroundEscapeSequence,
         [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
@@ -432,7 +432,7 @@ namespace ts {
             }
 
             // reset the cache of existing files
-            cachedExistingFiles = {};
+            cachedExistingFiles = createMap<boolean>();
 
             const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
@@ -676,7 +676,7 @@ namespace ts {
         const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
         const descriptionColumn: string[] = [];
 
-        const optionsDescriptionMap: Map<string[]> = {};  // Map between option.description and list of option.type if it is a kind
+        const optionsDescriptionMap = createMap<string[]>();  // Map between option.description and list of option.type if it is a kind
 
         for (let i = 0; i < optsList.length; i++) {
             const option = optsList[i];
@@ -786,7 +786,7 @@ namespace ts {
         return;
 
         function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
-            const result: Map<string | number | boolean> = {};
+            const result = createMap<string | number | boolean>();
             const optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (const name in options) {

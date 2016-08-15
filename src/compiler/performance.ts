@@ -10,8 +10,8 @@ namespace ts.performance {
     /** Performance measurements for the compiler. */
     declare const onProfilerEvent: { (markName: string): void; profiler: boolean; };
     let profilerEvent: (markName: string) => void;
-    let counters: Map<number>;
-    let measures: Map<number>;
+    let counters: MapLike<number>;
+    let measures: MapLike<number>;
 
     /**
      * Emit a performance event if ts-profiler is connected. This is primarily used
