@@ -939,7 +939,7 @@ const lintTargets = [
     "tests/*.ts", "tests/webhost/*.ts" // Note: does *not* descend recursively
 ];
 
-function sendNextFile(files, child, callback, failures) {
+function sendNextFile(files: {path: string}[], child: cp.ChildProcess, callback: (failures: number) => void, failures: number) {
     const file = files.pop();
     if (file) {
         console.log(`Linting '${file.path}'.`);
@@ -951,7 +951,7 @@ function sendNextFile(files, child, callback, failures) {
     }
 }
 
-function spawnLintWorker(files, callback) {
+function spawnLintWorker(files: {path: string}[], callback: (failures: number) => void) {
     const child = cp.fork("./scripts/parallel-lint");
     let failures = 0;
     child.on("message", function(data) {
@@ -977,13 +977,13 @@ gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: 
     const fileMatcher = RegExp(cmdLineOptions["files"]);
     if (fold.isTravis()) console.log(fold.start("lint"));
 
-    const files = [];
+    const files: {stat: fs.Stats, path: string}[] = [];
     return gulp.src(lintTargets, { read: false })
         .pipe(through2.obj((chunk, enc, cb) => {
             files.push(chunk);
             cb();
         }, (cb) => {
-            files.sort((filea, fileb) => filea.stat.size - fileb.stat.size).filter(file =>  fileMatcher.test(file.path));
+            files.filter(file =>  fileMatcher.test(file.path)).sort((filea, fileb) => filea.stat.size - fileb.stat.size);
             const workerCount = (process.env.workerCount && +process.env.workerCount) || os.cpus().length;
             for (let i = 0; i < workerCount; i++) {
                 spawnLintWorker(files, finished);

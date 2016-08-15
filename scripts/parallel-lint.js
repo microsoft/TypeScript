@@ -16,7 +16,7 @@ function lintFileContents(options, path, contents) {
 }
 
 function lintFileAsync(options, path, cb) {
-    fs.readFile(path, "utf8", function(err, contents) {
+    fs.readFile(path, "utf8", function (err, contents) {
         if (err) {
             return cb(err);
         }
@@ -25,21 +25,21 @@ function lintFileAsync(options, path, cb) {
     });
 }
 
-process.on("message", function(data) {
+process.on("message", function (data) {
     switch (data.kind) {
         case "file":
-        var target = data.name;
-        var lintOptions = getLinterOptions();
-        lintFileAsync(lintOptions, target, function(err, result) {
-            if (err) {
-                process.send({kind: "error", error: err.toString()});
-                return;
-            }
-            process.send({kind: "result", failures: result.failureCount, output: result.output});
-        });
-        break;
+            var target = data.name;
+            var lintOptions = getLinterOptions();
+            lintFileAsync(lintOptions, target, function (err, result) {
+                if (err) {
+                    process.send({ kind: "error", error: err.toString() });
+                    return;
+                }
+                process.send({ kind: "result", failures: result.failureCount, output: result.output });
+            });
+            break;
         case "close":
-        process.exit(0);
-        break;
+            process.exit(0);
+            break;
     }
 });
