@@ -34,7 +34,7 @@ import through2 = require("through2");
 import merge2 = require("merge2");
 import intoStream = require("into-stream");
 import * as os from "os";
-import Linter = require("tslint");
+import fold = require("travis-fold");
 const gulp = helpMaker(originalGulp);
 const mochaParallel = require("./scripts/mocha-parallel.js");
 const {runTestsInParallel} = mochaParallel;
@@ -59,7 +59,6 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         browser: process.env.browser || process.env.b || "IE",
         tests: process.env.test || process.env.tests || process.env.t,
         light: process.env.light || false,
-        port: process.env.port || process.env.p || "8888",
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
         files: process.env.f || process.env.file || process.env.files || "",
@@ -450,7 +449,7 @@ gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
 });
 
 gulp.task("lssl", "Builds language service server library", [tsserverLibraryFile]);
-gulp.task("local", "Builds the full compiler and services", [builtLocalCompiler, servicesFile, serverFile, builtGeneratedDiagnosticMessagesJSON]);
+gulp.task("local", "Builds the full compiler and services", [builtLocalCompiler, servicesFile, serverFile, builtGeneratedDiagnosticMessagesJSON, tsserverLibraryFile]);
 gulp.task("tsc", "Builds only the compiler", [builtLocalCompiler]);
 
 
@@ -504,7 +503,7 @@ gulp.task("VerifyLKG", false, [], () => {
     return gulp.src(expectedFiles).pipe(gulp.dest(LKGDirectory));
 });
 
-gulp.task("LKGInternal", false, ["lib", "local", "lssl"]);
+gulp.task("LKGInternal", false, ["lib", "local"]);
 
 gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUseDebugMode"], () => {
     return runSequence("LKGInternal", "VerifyLKG");
@@ -766,7 +765,7 @@ function writeTestConfigFile(tests: string, light: boolean, taskConfigsFolder?: 
 }
 
 
-gulp.task("runtests-browser", "Runs the tests using the built run.js file like 'gulp runtests'. Syntax is gulp runtests-browser. Additional optional parameters --tests=[regex], --port=, --browser=[chrome|IE]", ["browserify", nodeServerOutFile], (done) => {
+gulp.task("runtests-browser", "Runs the tests using the built run.js file like 'gulp runtests'. Syntax is gulp runtests-browser. Additional optional parameters --tests=[regex], --browser=[chrome|IE]", ["browserify", nodeServerOutFile], (done) => {
     cleanTestDirs((err) => {
         if (err) { console.error(err); done(err); process.exit(1); }
         host = "node";
@@ -781,9 +780,6 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
         }
 
         const args = [nodeServerOutFile];
-        if (cmdLineOptions["port"]) {
-            args.push(cmdLineOptions["port"]);
-        }
         if (cmdLineOptions["browser"]) {
             args.push(cmdLineOptions["browser"]);
         }
@@ -932,26 +928,6 @@ gulp.task("build-rules", "Compiles tslint rules to js", () => {
         .pipe(gulp.dest(dest));
 });
 
-function getLinterOptions() {
-    return {
-        configuration: require("./tslint.json"),
-        formatter: "prose",
-        formattersDirectory: undefined,
-        rulesDirectory: "built/local/tslint"
-    };
-}
-
-function lintFileContents(options, path, contents) {
-    const ll = new Linter(path, contents, options);
-    console.log("Linting '" + path + "'.");
-    return ll.lint();
-}
-
-function lintFile(options, path) {
-    const contents = fs.readFileSync(path, "utf8");
-    return lintFileContents(options, path, contents);
-}
-
 const lintTargets = [
     "Gulpfile.ts",
     "src/compiler/**/*.ts",
@@ -960,29 +936,75 @@ const lintTargets = [
     "src/server/**/*.ts",
     "scripts/tslint/**/*.ts",
     "src/services/**/*.ts",
+    "tests/*.ts", "tests/webhost/*.ts" // Note: does *not* descend recursively
 ];
 
+function sendNextFile(files: {path: string}[], child: cp.ChildProcess, callback: (failures: number) => void, failures: number) {
+    const file = files.pop();
+    if (file) {
+        console.log(`Linting '${file.path}'.`);
+        child.send({ kind: "file", name: file.path });
+    }
+    else {
+        child.send({ kind: "close" });
+        callback(failures);
+    }
+}
+
+function spawnLintWorker(files: {path: string}[], callback: (failures: number) => void) {
+    const child = cp.fork("./scripts/parallel-lint");
+    let failures = 0;
+    child.on("message", function(data) {
+        switch (data.kind) {
+            case "result":
+                if (data.failures > 0) {
+                    failures += data.failures;
+                    console.log(data.output);
+                }
+                sendNextFile(files, child, callback, failures);
+                break;
+            case "error":
+                console.error(data.error);
+                failures++;
+                sendNextFile(files, child, callback, failures);
+                break;
+        }
+    });
+    sendNextFile(files, child, callback, failures);
+}
 
 gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules"], () => {
     const fileMatcher = RegExp(cmdLineOptions["files"]);
-    const lintOptions = getLinterOptions();
-    let failed = 0;
-    return gulp.src(lintTargets)
-        .pipe(insert.transform((contents, file) => {
-            if (!fileMatcher.test(file.path)) return contents;
-            const result = lintFile(lintOptions, file.path);
-            if (result.failureCount > 0) {
-                console.log(result.output);
-                failed += result.failureCount;
+    if (fold.isTravis()) console.log(fold.start("lint"));
+
+    let files: {stat: fs.Stats, path: string}[] = [];
+    return gulp.src(lintTargets, { read: false })
+        .pipe(through2.obj((chunk, enc, cb) => {
+            files.push(chunk);
+            cb();
+        }, (cb) => {
+            files = files.filter(file =>  fileMatcher.test(file.path)).sort((filea, fileb) => filea.stat.size - fileb.stat.size);
+            const workerCount = (process.env.workerCount && +process.env.workerCount) || os.cpus().length;
+            for (let i = 0; i < workerCount; i++) {
+                spawnLintWorker(files, finished);
             }
-            return contents; // TODO (weswig): Automatically apply fixes? :3
-        }))
-        .on("end", () => {
-            if (failed > 0) {
-                console.error("Linter errors.");
-                process.exit(1);
+
+            let completed = 0;
+            let failures = 0;
+            function finished(fails) {
+                completed++;
+                failures += fails;
+                if (completed === workerCount) {
+                    if (fold.isTravis()) console.log(fold.end("lint"));
+                    if (failures > 0) {
+                        throw new Error(`Linter errors: ${failures}`);
+                    }
+                    else {
+                        cb();
+                    }
+                }
             }
-        });
+        }));
 });
 
 

@@ -55,7 +55,7 @@ namespace ts {
         tryScan<T>(callback: () => T): T;
     }
 
-    const textToToken: Map<SyntaxKind> = {
+    const textToToken: MapLike<SyntaxKind> = {
         "abstract": SyntaxKind.AbstractKeyword,
         "any": SyntaxKind.AnyKeyword,
         "as": SyntaxKind.AsKeyword,
@@ -271,7 +271,7 @@ namespace ts {
             lookupInUnicodeMap(code, unicodeES3IdentifierPart);
     }
 
-    function makeReverseMap(source: Map<number>): string[] {
+    function makeReverseMap(source: MapLike<number>): string[] {
         const result: string[] = [];
         for (const name in source) {
             if (source.hasOwnProperty(name)) {

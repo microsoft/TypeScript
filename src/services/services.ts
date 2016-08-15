@@ -975,7 +975,7 @@ namespace ts {
         }
 
         private computeNamedDeclarations(): Map<Declaration[]> {
-            const result: Map<Declaration[]> = {};
+            const result = createMap<Declaration[]>();
 
             forEachChild(this, visit);
 
@@ -1712,6 +1712,8 @@ namespace ts {
 
         /** enum E */
         export const enumElement = "enum";
+        // TODO: GH#9983
+        export const enumMemberElement = "const";
 
         /**
          * Inside module and script only
@@ -1915,7 +1917,7 @@ namespace ts {
         };
     }
 
-    // Cache host information about scrip Should be refreshed
+    // Cache host information about script should be refreshed
     // at each language service public entry point, since we don't know when
     // set of scripts handled by the host changes.
     class HostCache {
@@ -2054,7 +2056,7 @@ namespace ts {
         fileName?: string;
         reportDiagnostics?: boolean;
         moduleName?: string;
-        renamedDependencies?: Map<string>;
+        renamedDependencies?: MapLike<string>;
     }
 
     export interface TranspileOutput {
@@ -2278,7 +2280,7 @@ namespace ts {
     export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
-        const buckets: Map<FileMap<DocumentRegistryEntry>> = {};
+        const buckets = createMap<FileMap<DocumentRegistryEntry>>();
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
@@ -2988,7 +2990,10 @@ namespace ts {
 
     /* @internal */ export function getNodeKind(node: Node): string {
         switch (node.kind) {
-            case SyntaxKind.ModuleDeclaration: return ScriptElementKind.moduleElement;
+            case SyntaxKind.SourceFile:
+                return isExternalModule(<SourceFile>node) ? ScriptElementKind.moduleElement : ScriptElementKind.scriptElement;
+            case SyntaxKind.ModuleDeclaration:
+                return ScriptElementKind.moduleElement;
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
                 return ScriptElementKind.classElement;
@@ -2996,11 +3001,10 @@ namespace ts {
             case SyntaxKind.TypeAliasDeclaration: return ScriptElementKind.typeElement;
             case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
             case SyntaxKind.VariableDeclaration:
-                return isConst(node)
-                    ? ScriptElementKind.constElement
-                    : isLet(node)
-                        ? ScriptElementKind.letElement
-                        : ScriptElementKind.variableElement;
+                return getKindOfVariableDeclaration(<VariableDeclaration>node);
+            case SyntaxKind.BindingElement:
+                return getKindOfVariableDeclaration(<VariableDeclaration>getRootDeclaration(node));
+            case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
                 return ScriptElementKind.functionElement;
@@ -3017,7 +3021,7 @@ namespace ts {
             case SyntaxKind.CallSignature: return ScriptElementKind.callSignatureElement;
             case SyntaxKind.Constructor: return ScriptElementKind.constructorImplementationElement;
             case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
-            case SyntaxKind.EnumMember: return ScriptElementKind.variableElement;
+            case SyntaxKind.EnumMember: return ScriptElementKind.enumMemberElement;
             case SyntaxKind.Parameter: return (node.flags & NodeFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ImportSpecifier:
@@ -3025,8 +3029,19 @@ namespace ts {
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.NamespaceImport:
                 return ScriptElementKind.alias;
+            case SyntaxKind.JSDocTypedefTag:
+                return ScriptElementKind.typeElement;
+            default:
+                return ScriptElementKind.unknown;
         }
-        return ScriptElementKind.unknown;
+
+        function getKindOfVariableDeclaration(v: VariableDeclaration): string {
+            return isConst(v)
+                ? ScriptElementKind.constElement
+                : isLet(v)
+                    ? ScriptElementKind.letElement
+                    : ScriptElementKind.variableElement;
+        }
     }
 
     class CancellationTokenObject implements CancellationToken {
@@ -3116,14 +3131,16 @@ namespace ts {
 
             const oldSettings = program && program.getCompilerOptions();
             const newSettings = hostCache.compilationSettings();
-            const changesInCompilationSettingsAffectSyntax = oldSettings &&
+            const shouldCreateNewSourceFiles = oldSettings &&
                 (oldSettings.target !== newSettings.target ||
                  oldSettings.module !== newSettings.module ||
                  oldSettings.moduleResolution !== newSettings.moduleResolution ||
                  oldSettings.noResolve !== newSettings.noResolve ||
                  oldSettings.jsx !== newSettings.jsx ||
                  oldSettings.allowJs !== newSettings.allowJs ||
-                 oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit);
+                 oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit ||
+                 oldSettings.baseUrl !== newSettings.baseUrl ||
+                 !mapIsEqualTo(oldSettings.paths, newSettings.paths));
 
             // Now create a new compiler
             const compilerHost: CompilerHost = {
@@ -3175,7 +3192,7 @@ namespace ts {
                 const oldSourceFiles = program.getSourceFiles();
                 const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldSettings);
                 for (const oldSourceFile of oldSourceFiles) {
-                    if (!newProgram.getSourceFile(oldSourceFile.fileName) || changesInCompilationSettingsAffectSyntax) {
+                    if (!newProgram.getSourceFile(oldSourceFile.fileName) || shouldCreateNewSourceFiles) {
                         documentRegistry.releaseDocumentWithKey(oldSourceFile.path, oldSettingsKey);
                     }
                 }
@@ -3209,7 +3226,7 @@ namespace ts {
                 // Check if the language version has changed since we last created a program; if they are the same,
                 // it is safe to reuse the sourceFiles; if not, then the shape of the AST can change, and the oldSourceFile
                 // can not be reused. we have to dump all syntax trees and create new ones.
-                if (!changesInCompilationSettingsAffectSyntax) {
+                if (!shouldCreateNewSourceFiles) {
                     // Check if the old program had this file already
                     const oldSourceFile = program && program.getSourceFileByPath(path);
                     if (oldSourceFile) {
@@ -4126,7 +4143,7 @@ namespace ts {
              *          do not occur at the current position and have not otherwise been typed.
              */
             function filterNamedImportOrExportCompletionItems(exportsOfModule: Symbol[], namedImportsOrExports: ImportOrExportSpecifier[]): Symbol[] {
-                const existingImportsOrExports: Map<boolean> = {};
+                const existingImportsOrExports = createMap<boolean>();
 
                 for (const element of namedImportsOrExports) {
                     // If this is the current item we are editing right now, do not filter it out
@@ -4156,7 +4173,7 @@ namespace ts {
                     return contextualMemberSymbols;
                 }
 
-                const existingMemberNames: Map<boolean> = {};
+                const existingMemberNames = createMap<boolean>();
                 for (const m of existingMembers) {
                     // Ignore omitted expressions for missing members
                     if (m.kind !== SyntaxKind.PropertyAssignment &&
@@ -4199,7 +4216,7 @@ namespace ts {
              *          do not occur at the current position and have not otherwise been typed.
              */
             function filterJsxAttributes(symbols: Symbol[], attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>): Symbol[] {
-                const seenNames: Map<boolean> = {};
+                const seenNames = createMap<boolean>();
                 for (const attr of attributes) {
                     // If this is the current item we are editing right now, do not filter it out
                     if (attr.getStart() <= position && position <= attr.getEnd()) {
@@ -4341,7 +4358,7 @@ namespace ts {
 
             function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[], location: Node, performCharacterChecks: boolean): Map<string> {
                 const start = timestamp();
-                const uniqueNames: Map<string> = {};
+                const uniqueNames = createMap<string>();
                 if (symbols) {
                     for (const symbol of symbols) {
                         const entry = createCompletionEntry(symbol, location, performCharacterChecks);
@@ -5319,7 +5336,14 @@ namespace ts {
             }
             if (symbolFlags & SymbolFlags.Alias) {
                 addNewLineIfDisplayPartsExist();
-                displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
+                if (symbol.declarations[0].kind === SyntaxKind.NamespaceExportDeclaration) {
+                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                    displayParts.push(spacePart());
+                    displayParts.push(keywordPart(SyntaxKind.NamespaceKeyword));
+                }
+                else {
+                    displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
+                }
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
                 ts.forEach(symbol.declarations, declaration => {
@@ -5800,7 +5824,7 @@ namespace ts {
                         return undefined;
                     }
 
-                    const fileNameToDocumentHighlights: Map<DocumentHighlights> = {};
+                    const fileNameToDocumentHighlights = createMap<DocumentHighlights>();
                     const result: DocumentHighlights[] = [];
                     for (const referencedSymbol of referencedSymbols) {
                         for (const referenceEntry of referencedSymbol.references) {
@@ -7185,7 +7209,7 @@ namespace ts {
 
                     // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ {});
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ createMap<Symbol>());
                     }
                 });
 
@@ -7306,7 +7330,7 @@ namespace ts {
                     // see if any is in the list
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                         const result: Symbol[] = [];
-                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ {});
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ createMap<Symbol>());
                         return forEach(result, s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     }
 
@@ -8791,7 +8815,7 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable: Map<number> = {};
+        const nameTable = createMap<number>();
 
         walk(sourceFile);
         sourceFile.nameTable = nameTable;

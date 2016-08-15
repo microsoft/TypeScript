@@ -1,7 +1,11 @@
-
 namespace ts {
-    export interface Map<T> {
+
+    export interface MapLike<T> {
         [index: string]: T;
+    }
+
+    export interface Map<T> extends MapLike<T> {
+        __mapBrand: any;
     }
 
     // branded string type used to store absolute, normalized and canonicalized paths
@@ -982,13 +986,19 @@ namespace ts {
         multiLine?: boolean;
     }
 
+    export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
+    export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
+
     // @kind(SyntaxKind.PropertyAccessExpression)
     export interface PropertyAccessExpression extends MemberExpression, Declaration {
         expression: LeftHandSideExpression;
         name: Identifier;
     }
-
-    export type IdentifierOrPropertyAccess = Identifier | PropertyAccessExpression;
+    /** Brand for a PropertyAccessExpression which, like a QualifiedName, consists of a sequence of identifiers separated by dots. */
+    export interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
+        _propertyAccessExpressionLikeQualifiedNameBrand?: any;
+        expression: EntityNameExpression;
+    }
 
     // @kind(SyntaxKind.ElementAccessExpression)
     export interface ElementAccessExpression extends MemberExpression {
@@ -1606,6 +1616,16 @@ namespace ts {
         antecedent: FlowNode;
     }
 
+    export type FlowType = Type | IncompleteType;
+
+    // Incomplete types occur during control flow analysis of loops. An IncompleteType
+    // is distinguished from a regular type by a flags value of zero. Incomplete type
+    // objects are internal to the getFlowTypeOfRefecence function and never escape it.
+    export interface IncompleteType {
+        flags: TypeFlags;  // No flags set
+        type: Type;        // The type marked incomplete
+    }
+
     export interface AmdDependency {
         path: string;
         name: string;
@@ -1630,7 +1650,7 @@ namespace ts {
 
         // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
         /* @internal */
-        renamedDependencies?: Map<string>;
+        renamedDependencies?: MapLike<string>;
 
         /**
          * lib.d.ts should have a reference comment like
@@ -2022,7 +2042,7 @@ namespace ts {
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessibilityResult;
-        isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
+        isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
@@ -2031,7 +2051,7 @@ namespace ts {
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
         getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile;
-        getTypeReferenceDirectivesForEntityName(name: EntityName | PropertyAccessExpression): string[];
+        getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[];
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
     }
 
@@ -2151,6 +2171,8 @@ namespace ts {
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
         containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
+        hasCommonType?: boolean;            // True if constituents of synthetic property all have same type
+        isDiscriminantProperty?: boolean;   // True if discriminant synthetic property
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
         isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
@@ -2161,9 +2183,7 @@ namespace ts {
     /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks { }
 
-    export interface SymbolTable {
-        [index: string]: Symbol;
-    }
+    export type SymbolTable = Map<Symbol>;
 
     /** Represents a "prefix*suffix" pattern. */
     /* @internal */
@@ -2360,6 +2380,7 @@ namespace ts {
 
     export interface TupleType extends ObjectType {
         elementTypes: Type[];  // Element types
+        thisType?: Type;       // This-type of tuple (only needed for tuples that are constraints of type parameters)
     }
 
     export interface UnionOrIntersectionType extends Type {
@@ -2546,7 +2567,7 @@ namespace ts {
     }
 
     export type RootPaths = string[];
-    export type PathSubstitutions = Map<string[]>;
+    export type PathSubstitutions = MapLike<string[]>;
     export type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
 
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | TsConfigOnlyOptions;
@@ -2706,7 +2727,7 @@ namespace ts {
         fileNames: string[];
         raw?: any;
         errors: Diagnostic[];
-        wildcardDirectories?: Map<WatchDirectoryFlags>;
+        wildcardDirectories?: MapLike<WatchDirectoryFlags>;
     }
 
     export const enum WatchDirectoryFlags {
@@ -2716,13 +2737,13 @@ namespace ts {
 
     export interface ExpandResult {
         fileNames: string[];
-        wildcardDirectories: Map<WatchDirectoryFlags>;
+        wildcardDirectories: MapLike<WatchDirectoryFlags>;
     }
 
     /* @internal */
     export interface CommandLineOptionBase {
         name: string;
-        type: "string" | "number" | "boolean" | "object" | "list" | Map<number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
+        type: "string" | "number" | "boolean" | "object" | "list" | MapLike<number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
@@ -2738,7 +2759,7 @@ namespace ts {
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
-        type: Map<number | string>;             // an object literal mapping named values to actual values
+        type: MapLike<number | string>;             // an object literal mapping named values to actual values
     }
 
     /* @internal */
@@ -2901,6 +2922,7 @@ namespace ts {
         directoryExists?(directoryName: string): boolean;
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
+        getDirectories?(path: string): string[];
     }
 
     export interface ResolvedModule {
