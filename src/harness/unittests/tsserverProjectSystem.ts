@@ -214,12 +214,7 @@ namespace ts {
                 referenceCount: 0,
                 directoryName,
                 close: () => {
-                    for (let i = 0; i < callbacks.length; i++) {
-                        if (callbacks[i].cb === callback) {
-                            callbacks.splice(i, 1);
-                            break;
-                        }
-                    }
+                    removeFirstItemWhere(callbacks, cb => cb.cb === callback);
                     if (!callbacks.length) {
                         delete this.watchedDirectories[path];
                     }
@@ -253,8 +248,7 @@ namespace ts {
             callbacks.push(callback);
             return {
                 close: () => {
-                    const i = callbacks.indexOf(callback);
-                    callbacks.splice(i, 1);
+                    removeItem(callback, callbacks);
                     if (!callbacks.length) {
                         delete this.watchedFiles[path];
                     }
@@ -269,7 +263,7 @@ namespace ts {
         };
         readonly clearTimeout = (timeoutId: any): void => {
             if (typeof timeoutId === "number") {
-                this.callbackQueue.splice(timeoutId, 1);
+                removeItemAt(this.callbackQueue, timeoutId);
             }
         };
 
@@ -594,7 +588,7 @@ namespace ts {
                 content: `{
                     "compilerOptions": {
                         "target": "es6"
-                    }, 
+                    },
                     "files": [ "main.ts" ]
                 }`
             };
@@ -621,7 +615,7 @@ namespace ts {
                 content: `{
                     "compilerOptions": {
                         "target": "es6"
-                    }, 
+                    },
                     "files": [ "main.ts" ]
                 }`
             };
