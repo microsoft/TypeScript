@@ -21,7 +21,7 @@ namespace ts.server {
 
     export class SessionClient implements LanguageService {
         private sequence: number = 0;
-        private lineMaps: ts.Map<number[]> = {};
+        private lineMaps: ts.Map<number[]> = ts.createMap<number[]>();
         private messages: string[] = [];
         private lastRenameEntry: RenameEntry;
 

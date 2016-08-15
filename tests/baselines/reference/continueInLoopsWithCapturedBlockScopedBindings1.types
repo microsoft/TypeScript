@@ -11,7 +11,7 @@ function foo() {
         if (i === 0) {
 >i === 0 : boolean
 >i : number
->0 : number
+>0 : 0
 
             continue;
         }

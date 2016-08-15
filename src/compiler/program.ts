@@ -3,13 +3,8 @@
 /// <reference path="core.ts" />
 
 namespace ts {
-    /* @internal */ export let programTime = 0;
-    /* @internal */ export let emitTime = 0;
-    /* @internal */ export let ioReadTime = 0;
-    /* @internal */ export let ioWriteTime = 0;
-
     /** The version of the TypeScript compiler release */
-    export const version = "2.0.0";
+    export const version = "2.1.0";
 
     const emptyArray: any[] = [];
 
@@ -112,13 +107,7 @@ namespace ts {
     }
 
     function moduleHasNonRelativeName(moduleName: string): boolean {
-        if (isRootedDiskPath(moduleName)) {
-            return false;
-        }
-
-        const i = moduleName.lastIndexOf("./", 1);
-        const startsWithDotSlashOrDotDotSlash = i === 0 || (i === 1 && moduleName.charCodeAt(0) === CharacterCodes.dot);
-        return !startsWithDotSlashOrDotDotSlash;
+        return !(isRootedDiskPath(moduleName) || isExternalModuleNameRelative(moduleName));
     }
 
     interface ModuleResolutionState {
@@ -130,49 +119,31 @@ namespace ts {
     }
 
     function tryReadTypesSection(packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
-        let jsonContent: { typings?: string, types?: string, main?: string };
-        try {
-            const jsonText = state.host.readFile(packageJsonPath);
-            jsonContent = jsonText ? <{ typings?: string, types?: string, main?: string }>JSON.parse(jsonText) : {};
-        }
-        catch (e) {
-            // gracefully handle if readFile fails or returns not JSON
-            jsonContent = {};
+        const jsonContent = readJson(packageJsonPath, state.host);
+
+        function tryReadFromField(fieldName: string) {
+            if (hasProperty(jsonContent, fieldName)) {
+                const typesFile = (<any>jsonContent)[fieldName];
+                if (typeof typesFile === "string") {
+                    const typesFilePath = normalizePath(combinePaths(baseDirectory, typesFile));
+                    if (state.traceEnabled) {
+                        trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, fieldName, typesFile, typesFilePath);
+                    }
+                    return typesFilePath;
+                }
+                else {
+                    if (state.traceEnabled) {
+                        trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, fieldName, typeof typesFile);
+                    }
+                }
+            }
         }
 
-        let typesFile: string;
-        let fieldName: string;
-        // first try to read content of 'typings' section (backward compatibility)
-        if (jsonContent.typings) {
-            if (typeof jsonContent.typings === "string") {
-                fieldName = "typings";
-                typesFile = jsonContent.typings;
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, "typings", typeof jsonContent.typings);
-                }
-            }
-        }
-        // then read 'types'
-        if (!typesFile && jsonContent.types) {
-            if (typeof jsonContent.types === "string") {
-                fieldName = "types";
-                typesFile = jsonContent.types;
-            }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_string_got_1, "types", typeof jsonContent.types);
-                }
-            }
-        }
-        if (typesFile) {
-            const typesFilePath = normalizePath(combinePaths(baseDirectory, typesFile));
-            if (state.traceEnabled) {
-                trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, fieldName, typesFile, typesFilePath);
-            }
+        const typesFilePath = tryReadFromField("typings") || tryReadFromField("types");
+        if (typesFilePath) {
             return typesFilePath;
         }
+
         // Use the main module for inferring types if no types package specified and the allowJs is set
         if (state.compilerOptions.allowJs && jsonContent.main && typeof jsonContent.main === "string") {
             if (state.traceEnabled) {
@@ -182,6 +153,17 @@ namespace ts {
             return mainFilePath;
         }
         return undefined;
+    }
+
+    function readJson(path: string, host: ModuleResolutionHost): { typings?: string, types?: string, main?: string } {
+        try {
+            const jsonText = host.readFile(path);
+            return jsonText ? JSON.parse(jsonText) : {};
+        }
+        catch (e) {
+            // gracefully handle if readFile fails or returns not JSON
+            return {};
+        }
     }
 
     const typeReferenceExtensions = [".d.ts"];
@@ -728,7 +710,7 @@ namespace ts {
     }
 
     function loadNodeModuleFromDirectory(extensions: string[], candidate: string, failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
-        const packageJsonPath = combinePaths(candidate, "package.json");
+        const packageJsonPath = pathToPackageJson(candidate);
         const directoryExists = !onlyRecordFailures && directoryProbablyExists(candidate, state.host);
         if (directoryExists && state.host.fileExists(packageJsonPath)) {
             if (state.traceEnabled) {
@@ -756,6 +738,10 @@ namespace ts {
         }
 
         return loadModuleFromFile(combinePaths(candidate, "index"), extensions, failedLookupLocation, !directoryExists, state);
+    }
+
+    function pathToPackageJson(directory: string): string {
+        return combinePaths(directory, "package.json");
     }
 
     function loadModuleFromNodeModulesFolder(moduleName: string, directory: string, failedLookupLocations: string[], state: ModuleResolutionState): string {
@@ -857,7 +843,7 @@ namespace ts {
     }
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
-        const existingDirectories: Map<boolean> = {};
+        const existingDirectories = createMap<boolean>();
 
         function getCanonicalFileName(fileName: string): string {
             // if underlying system can distinguish between two files whose names differs only in cases then file name already in canonical form.
@@ -871,9 +857,10 @@ namespace ts {
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             let text: string;
             try {
-                const start = new Date().getTime();
+                performance.mark("beforeIORead");
                 text = sys.readFile(fileName, options.charset);
-                ioReadTime += new Date().getTime() - start;
+                performance.mark("afterIORead");
+                performance.measure("I/O Read", "beforeIORead", "afterIORead");
             }
             catch (e) {
                 if (onError) {
@@ -910,7 +897,7 @@ namespace ts {
 
         function writeFileIfUpdated(fileName: string, data: string, writeByteOrderMark: boolean): void {
             if (!outputFingerprints) {
-                outputFingerprints = {};
+                outputFingerprints = createMap<OutputFingerprint>();
             }
 
             const hash = sys.createHash(data);
@@ -940,7 +927,7 @@ namespace ts {
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
-                const start = new Date().getTime();
+                performance.mark("beforeIOWrite");
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
                 if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
@@ -950,7 +937,8 @@ namespace ts {
                     sys.writeFile(fileName, data, writeByteOrderMark);
                 }
 
-                ioWriteTime += new Date().getTime() - start;
+                performance.mark("afterIOWrite");
+                performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
             }
             catch (e) {
                 if (onError) {
@@ -1051,7 +1039,7 @@ namespace ts {
             return [];
         }
         const resolutions: T[] = [];
-        const cache: Map<T> = {};
+        const cache = createMap<T>();
         for (const name of names) {
             let result: T;
             if (hasProperty(cache, name)) {
@@ -1081,15 +1069,21 @@ namespace ts {
         }
 
         // Walk the primary type lookup locations
-        let result: string[] = [];
+        const result: string[] = [];
         if (host.directoryExists && host.getDirectories) {
             const typeRoots = getEffectiveTypeRoots(options, host);
             if (typeRoots) {
                 for (const root of typeRoots) {
                     if (host.directoryExists(root)) {
                         for (const typeDirectivePath of host.getDirectories(root)) {
-                            // Return just the type directive names
-                            result = result.concat(getBaseFileName(normalizePath(typeDirectivePath)));
+                            const normalized = normalizePath(typeDirectivePath);
+                            const packageJsonPath = pathToPackageJson(combinePaths(root, normalized));
+                            // tslint:disable-next-line:no-null-keyword
+                            const isNotNeededPackage = host.fileExists(packageJsonPath) && readJson(packageJsonPath, host).typings === null;
+                            if (!isNotNeededPackage) {
+                                // Return just the type directive names
+                                result.push(getBaseFileName(normalized));
+                            }
                         }
                     }
                 }
@@ -1106,7 +1100,7 @@ namespace ts {
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Map<string>;
 
-        let resolvedTypeReferenceDirectives: Map<ResolvedTypeReferenceDirective> = {};
+        let resolvedTypeReferenceDirectives = createMap<ResolvedTypeReferenceDirective>();
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
         // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
@@ -1121,12 +1115,12 @@ namespace ts {
 
         // If a module has some of its imports skipped due to being at the depth limit under node_modules, then track
         // this, as it may be imported at a shallower depth later, and then it will need its skipped imports processed.
-        const modulesWithElidedImports: Map<boolean> = {};
+        const modulesWithElidedImports = createMap<boolean>();
 
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
-        const sourceFilesFoundSearchingNodeModules: Map<boolean> = {};
+        const sourceFilesFoundSearchingNodeModules = createMap<boolean>();
 
-        const start = new Date().getTime();
+        performance.mark("beforeProgram");
 
         host = host || createCompilerHost(options);
 
@@ -1224,8 +1218,8 @@ namespace ts {
         };
 
         verifyCompilerOptions();
-
-        programTime += new Date().getTime() - start;
+        performance.mark("afterProgram");
+        performance.measure("Program", "beforeProgram", "afterProgram");
 
         return program;
 
@@ -1252,7 +1246,7 @@ namespace ts {
             if (!classifiableNames) {
                 // Initialize a checker so that all our files are bound.
                 getTypeChecker();
-                classifiableNames = {};
+                classifiableNames = createMap<string>();
 
                 for (const sourceFile of files) {
                     copyMap(sourceFile.classifiableNames, classifiableNames);
@@ -1421,7 +1415,7 @@ namespace ts {
         }
 
         function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult {
-            return runWithCancellationToken(() => emitWorker(this, sourceFile, writeFileCallback, cancellationToken));
+            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken));
         }
 
         function isEmitBlocked(emitFileName: string): boolean {
@@ -1468,14 +1462,15 @@ namespace ts {
             // checked is to not pass the file to getEmitResolver.
             const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile);
 
-            const start = new Date().getTime();
+            performance.mark("beforeEmit");
 
             const emitResult = emitFiles(
                 emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile);
 
-            emitTime += new Date().getTime() - start;
+            performance.mark("afterEmit");
+            performance.measure("Emit", "beforeEmit", "afterEmit");
             return emitResult;
         }
 
@@ -2093,7 +2088,7 @@ namespace ts {
         function processImportedModules(file: SourceFile, basePath: string) {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
-                file.resolvedModules = {};
+                file.resolvedModules = createMap<ResolvedModule>();
                 const moduleNames = map(concatenate(file.imports, file.moduleAugmentations), getTextOfLiteral);
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
                 for (let i = 0; i < moduleNames.length; i++) {
@@ -2210,6 +2205,9 @@ namespace ts {
                         programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, key));
                     }
                     if (isArray(options.paths[key])) {
+                        if (options.paths[key].length === 0) {
+                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substitutions_for_pattern_0_shouldn_t_be_an_empty_array, key));
+                        }
                         for (const subst of options.paths[key]) {
                             const typeOfSubst = typeof subst;
                             if (typeOfSubst === "string") {

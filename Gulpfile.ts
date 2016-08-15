@@ -1,6 +1,4 @@
 /// <reference path="scripts/types/ambient.d.ts" />
-/// <reference types="q" />
-
 import * as cp from "child_process";
 import * as path from "path";
 import * as fs from "fs";
@@ -13,8 +11,11 @@ import newer = require("gulp-newer");
 import tsc = require("gulp-typescript");
 declare module "gulp-typescript" {
     interface Settings {
-        stripInternal?: boolean;
+        pretty?: boolean;
         newLine?: string;
+        noImplicitThis?: boolean;
+        stripInternal?: boolean;
+        types?: string[];
     }
     interface CompileStream extends NodeJS.ReadWriteStream {} // Either gulp or gulp-typescript has some odd typings which don't reflect reality, making this required
 }
@@ -22,8 +23,7 @@ import * as insert from "gulp-insert";
 import * as sourcemaps from "gulp-sourcemaps";
 import Q = require("q");
 declare global {
-    // This is silly. We include Q because orchestrator (a part of gulp) depends on it, but its not included.
-    // `del` further depends on `Promise` (and is also not included), so we just, patch the global scope's Promise to Q's
+    // `del` further depends on `Promise` (and is also not included), so we just, patch the global scope's Promise to Q's (which we already include in our deps because gulp depends on it)
     type Promise<T> = Q.Promise<T>;
 }
 import del = require("del");
@@ -34,7 +34,7 @@ import through2 = require("through2");
 import merge2 = require("merge2");
 import intoStream = require("into-stream");
 import * as os from "os";
-import Linter = require("tslint");
+import fold = require("travis-fold");
 const gulp = helpMaker(originalGulp);
 const mochaParallel = require("./scripts/mocha-parallel.js");
 const {runTestsInParallel} = mochaParallel;
@@ -59,7 +59,6 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         browser: process.env.browser || process.env.b || "IE",
         tests: process.env.test || process.env.tests || process.env.t,
         light: process.env.light || false,
-        port: process.env.port || process.env.p || "8888",
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
         files: process.env.f || process.env.file || process.env.files || "",
@@ -85,12 +84,9 @@ let host = cmdLineOptions["host"];
 
 // Constants
 const compilerDirectory = "src/compiler/";
-const servicesDirectory = "src/services/";
-const serverDirectory = "src/server/";
 const harnessDirectory = "src/harness/";
 const libraryDirectory = "src/lib/";
 const scriptsDirectory = "scripts/";
-const unittestsDirectory = "tests/cases/unittests/";
 const docDirectory = "doc/";
 
 const builtDirectory = "built/";
@@ -106,69 +102,6 @@ const builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
 const nodeModulesPathPrefix = path.resolve("./node_modules/.bin/");
 const isWin = /^win/.test(process.platform);
 const mocha = path.join(nodeModulesPathPrefix, "mocha") + (isWin ? ".cmd" : "");
-
-const compilerSources = require("./src/compiler/tsconfig.json").files.map((file) => path.join(compilerDirectory, file));
-
-const servicesSources = require("./src/services/tsconfig.json").files.map((file) => path.join(servicesDirectory, file));
-
-const serverCoreSources = require("./src/server/tsconfig.json").files.map((file) => path.join(serverDirectory, file));
-
-const languageServiceLibrarySources = [
-    "editorServices.ts",
-    "protocol.d.ts",
-    "session.ts"
-].map(function (f) {
-    return path.join(serverDirectory, f);
-}).concat(servicesSources);
-
-const harnessCoreSources = [
-    "harness.ts",
-    "sourceMapRecorder.ts",
-    "harnessLanguageService.ts",
-    "fourslash.ts",
-    "runnerbase.ts",
-    "compilerRunner.ts",
-    "typeWriter.ts",
-    "fourslashRunner.ts",
-    "projectsRunner.ts",
-    "loggedIO.ts",
-    "rwcRunner.ts",
-    "test262Runner.ts",
-    "runner.ts"
-].map(function (f) {
-    return path.join(harnessDirectory, f);
-});
-
-const harnessSources = harnessCoreSources.concat([
-    "incrementalParser.ts",
-    "jsDocParsing.ts",
-    "services/colorization.ts",
-    "services/documentRegistry.ts",
-    "services/preProcessFile.ts",
-    "services/patternMatcher.ts",
-    "session.ts",
-    "versionCache.ts",
-    "convertToBase64.ts",
-    "transpile.ts",
-    "reuseProgramStructure.ts",
-    "cachingInServerLSHost.ts",
-    "moduleResolution.ts",
-    "tsconfigParsing.ts",
-    "commandLineParsing.ts",
-    "convertCompilerOptionsFromJson.ts",
-    "convertTypingOptionsFromJson.ts",
-    "tsserverProjectSystem.ts",
-    "matchFiles.ts",
-].map(function (f) {
-    return path.join(unittestsDirectory, f);
-})).concat([
-    "protocol.d.ts",
-    "session.ts",
-    "client.ts",
-    "editorServices.ts"
-].map(function (f) {
-    return path.join(serverDirectory, f);
-}));
 
 const es2015LibrarySources = [
     "es2015.core.d.ts",
@@ -309,6 +242,11 @@ function needsUpdate(source: string | string[], dest: string | string[]): boolea
 
 function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): tsc.Settings {
     const copy: tsc.Settings = {};
+    copy.noEmitOnError = true;
+    copy.noImplicitAny = true;
+    copy.noImplicitThis = true;
+    copy.pretty = true;
+    copy.types = [];
     for (const key in base) {
         copy[key] = base[key];
     }
@@ -495,26 +433,23 @@ const tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js")
 const tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 
 gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
-    const settings: tsc.Settings = getCompilerSettings({
-        declaration: true,
-        outFile: tsserverLibraryFile
-    }, /*useBuiltCompiler*/ true);
-    const {js, dts}: {js: NodeJS.ReadableStream, dts: NodeJS.ReadableStream} = gulp.src(languageServiceLibrarySources)
+    const serverLibraryProject = tsc.createProject("src/server/tsconfig.library.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
+    const {js, dts}: {js: NodeJS.ReadableStream, dts: NodeJS.ReadableStream} = serverLibraryProject.src()
         .pipe(sourcemaps.init())
         .pipe(newer(tsserverLibraryFile))
-        .pipe(tsc(settings));
+        .pipe(tsc(serverLibraryProject));
 
     return merge2([
         js.pipe(prependCopyright())
           .pipe(sourcemaps.write("."))
-          .pipe(gulp.dest(".")),
+          .pipe(gulp.dest(builtLocalDirectory)),
         dts.pipe(prependCopyright())
-        .pipe(gulp.dest("."))
+        .pipe(gulp.dest(builtLocalDirectory))
     ]);
 });
 
 gulp.task("lssl", "Builds language service server library", [tsserverLibraryFile]);
-gulp.task("local", "Builds the full compiler and services", [builtLocalCompiler, servicesFile, serverFile, builtGeneratedDiagnosticMessagesJSON]);
+gulp.task("local", "Builds the full compiler and services", [builtLocalCompiler, servicesFile, serverFile, builtGeneratedDiagnosticMessagesJSON, tsserverLibraryFile]);
 gulp.task("tsc", "Builds only the compiler", [builtLocalCompiler]);
 
 
@@ -568,7 +503,7 @@ gulp.task("VerifyLKG", false, [], () => {
     return gulp.src(expectedFiles).pipe(gulp.dest(LKGDirectory));
 });
 
-gulp.task("LKGInternal", false, ["lib", "local", "lssl"]);
+gulp.task("LKGInternal", false, ["lib", "local"]);
 
 gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUseDebugMode"], () => {
     return runSequence("LKGInternal", "VerifyLKG");
@@ -578,15 +513,13 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUse
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
 gulp.task(run, false, [servicesFile], () => {
-    const settings: tsc.Settings = getCompilerSettings({
-        outFile: run
-    }, /*useBuiltCompiler*/ true);
-    return gulp.src(harnessSources)
+    const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/true));
+    return testProject.src()
         .pipe(newer(run))
         .pipe(sourcemaps.init())
-        .pipe(tsc(settings))
+        .pipe(tsc(testProject))
         .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "../../" }))
-        .pipe(gulp.dest("."));
+        .pipe(gulp.dest(builtLocalDirectory));
 });
 
 const internalTests = "internal/";
@@ -760,23 +693,50 @@ gulp.task(nodeServerOutFile, false, [servicesFile], () => {
         .pipe(gulp.dest(path.dirname(nodeServerOutFile)));
 });
 
+import convertMap = require("convert-source-map");
+import sorcery = require("sorcery");
+declare module "convert-source-map" {
+    export function fromSource(source: string, largeSource?: boolean): SourceMapConverter;
+}
+
 gulp.task("browserify", "Runs browserify on run.js to produce a file suitable for running tests in the browser", [servicesFile], (done) => {
-    const settings: tsc.Settings = getCompilerSettings({
-        outFile: "built/local/bundle.js"
-    }, /*useBuiltCompiler*/ true);
-    return gulp.src(harnessSources)
+    const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({ outFile: "built/local/bundle.js" }, /*useBuiltCompiler*/ true));
+    return testProject.src()
         .pipe(newer("built/local/bundle.js"))
         .pipe(sourcemaps.init())
-        .pipe(tsc(settings))
+        .pipe(tsc(testProject))
         .pipe(through2.obj((file, enc, next) => {
-            browserify(intoStream(file.contents))
+            const originalMap = file.sourceMap;
+            const prebundledContent = file.contents.toString();
+            // Make paths absolute to help sorcery deal with all the terrible paths being thrown around
+            originalMap.sources = originalMap.sources.map(s => path.resolve("src", s));
+            // intoStream (below) makes browserify think the input file is named this, so this is what it puts in the sourcemap
+            originalMap.file = "built/local/_stream_0.js";
+
+            browserify(intoStream(file.contents), { debug: true })
                 .bundle((err, res) => {
                     // assumes file.contents is a Buffer
-                    file.contents = res;
+                    const maps = JSON.parse(convertMap.fromSource(res.toString(), /*largeSource*/true).toJSON());
+                    delete maps.sourceRoot;
+                    maps.sources = maps.sources.map(s => path.resolve(s === "_stream_0.js" ? "built/local/_stream_0.js" : s));
+                    // Strip browserify's inline comments away (could probably just let sorcery do this, but then we couldn't fix the paths)
+                    file.contents = new Buffer(convertMap.removeComments(res.toString()));
+                    const chain = sorcery.loadSync("built/local/bundle.js", {
+                        content: {
+                            "built/local/_stream_0.js": prebundledContent,
+                            "built/local/bundle.js": file.contents.toString()
+                        },
+                        sourcemaps: {
+                            "built/local/_stream_0.js": originalMap,
+                            "built/local/bundle.js": maps,
+                        }
+                    });
+                    const finalMap = chain.apply();
+                    file.sourceMap = finalMap;
                     next(undefined, file);
                 });
         }))
-        .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "../../" }))
+        .pipe(sourcemaps.write(".", { includeContent: false }))
         .pipe(gulp.dest("."));
 });
 
@@ -805,7 +765,7 @@ function writeTestConfigFile(tests: string, light: boolean, taskConfigsFolder?: 
 }
 
 
-gulp.task("runtests-browser", "Runs the tests using the built run.js file like 'gulp runtests'. Syntax is gulp runtests-browser. Additional optional parameters --tests=[regex], --port=, --browser=[chrome|IE]", ["browserify", nodeServerOutFile], (done) => {
+gulp.task("runtests-browser", "Runs the tests using the built run.js file like 'gulp runtests'. Syntax is gulp runtests-browser. Additional optional parameters --tests=[regex], --browser=[chrome|IE]", ["browserify", nodeServerOutFile], (done) => {
     cleanTestDirs((err) => {
         if (err) { console.error(err); done(err); process.exit(1); }
         host = "node";
@@ -820,9 +780,6 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
         }
 
         const args = [nodeServerOutFile];
-        if (cmdLineOptions["port"]) {
-            args.push(cmdLineOptions["port"]);
-        }
         if (cmdLineOptions["browser"]) {
             args.push(cmdLineOptions["browser"]);
         }
@@ -957,87 +914,97 @@ gulp.task("update-sublime", "Updates the sublime plugin's tsserver", ["local", s
     return gulp.src([serverFile, serverFile + ".map"]).pipe(gulp.dest("../TypeScript-Sublime-Plugin/tsserver/"));
 });
 
+gulp.task("build-rules", "Compiles tslint rules to js", () => {
+    const settings: tsc.Settings = getCompilerSettings({ module: "commonjs" }, /*useBuiltCompiler*/ false);
+    const dest = path.join(builtLocalDirectory, "tslint");
+    return gulp.src("scripts/tslint/**/*.ts")
+        .pipe(newer({
+            dest,
+            ext: ".js"
+        }))
+        .pipe(sourcemaps.init())
+        .pipe(tsc(settings))
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(dest));
+});
 
-const tslintRuleDir = "scripts/tslint";
-const tslintRules = [
-    "nextLineRule",
-    "preferConstRule",
-    "booleanTriviaRule",
-    "typeOperatorSpacingRule",
-    "noInOperatorRule",
-    "noIncrementDecrementRule",
-    "objectLiteralSurroundingSpaceRule",
+const lintTargets = [
+    "Gulpfile.ts",
+    "src/compiler/**/*.ts",
+    "src/harness/**/*.ts",
+    "!src/harness/unittests/services/formatting/**/*.ts",
+    "src/server/**/*.ts",
+    "scripts/tslint/**/*.ts",
+    "src/services/**/*.ts",
+    "tests/*.ts", "tests/webhost/*.ts" // Note: does *not* descend recursively
 ];
-const tslintRulesFiles = tslintRules.map(function(p) {
-    return path.join(tslintRuleDir, p + ".ts");
-});
-const tslintRulesOutFiles = tslintRules.map(function(p, i) {
-    const pathname = path.join(builtLocalDirectory, "tslint", p + ".js");
-    gulp.task(pathname, false, [], () => {
-        const settings: tsc.Settings = getCompilerSettings({ module: "commonjs" }, /*useBuiltCompiler*/ false);
-        return gulp.src(tslintRulesFiles[i])
-            .pipe(newer(pathname))
-            .pipe(sourcemaps.init())
-            .pipe(tsc(settings))
-            .pipe(sourcemaps.write("."))
-            .pipe(gulp.dest(path.join(builtLocalDirectory, "tslint")));
+
+function sendNextFile(files: {path: string}[], child: cp.ChildProcess, callback: (failures: number) => void, failures: number) {
+    const file = files.pop();
+    if (file) {
+        console.log(`Linting '${file.path}'.`);
+        child.send({ kind: "file", name: file.path });
+    }
+    else {
+        child.send({ kind: "close" });
+        callback(failures);
+    }
+}
+
+function spawnLintWorker(files: {path: string}[], callback: (failures: number) => void) {
+    const child = cp.fork("./scripts/parallel-lint");
+    let failures = 0;
+    child.on("message", function(data) {
+        switch (data.kind) {
+            case "result":
+                if (data.failures > 0) {
+                    failures += data.failures;
+                    console.log(data.output);
+                }
+                sendNextFile(files, child, callback, failures);
+                break;
+            case "error":
+                console.error(data.error);
+                failures++;
+                sendNextFile(files, child, callback, failures);
+                break;
+        }
     });
-    return pathname;
-});
-
-gulp.task("build-rules", "Compiles tslint rules to js", tslintRulesOutFiles);
-
-
-function getLinterOptions() {
-    return {
-        configuration: require("./tslint.json"),
-        formatter: "prose",
-        formattersDirectory: undefined,
-        rulesDirectory: "built/local/tslint"
-    };
+    sendNextFile(files, child, callback, failures);
 }
-
-function lintFileContents(options, path, contents) {
-    const ll = new Linter(path, contents, options);
-    console.log("Linting '" + path + "'.");
-    return ll.lint();
-}
-
-function lintFile(options, path) {
-    const contents = fs.readFileSync(path, "utf8");
-    return lintFileContents(options, path, contents);
-}
-
-const lintTargets = ["Gulpfile.ts"]
-    .concat(compilerSources)
-    .concat(harnessSources)
-    // Other harness sources
-    .concat(["instrumenter.ts"].map(function(f) { return path.join(harnessDirectory, f); }))
-    .concat(serverCoreSources)
-    .concat(tslintRulesFiles)
-    .concat(servicesSources);
-
 
 gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules"], () => {
-    const lintOptions = getLinterOptions();
-    let failed = 0;
     const fileMatcher = RegExp(cmdLineOptions["files"]);
-    const done = {};
-    for (const i in lintTargets) {
-        const target = lintTargets[i];
-        if (!done[target] && fileMatcher.test(target)) {
-            const result = lintFile(lintOptions, target);
-            if (result.failureCount > 0) {
-                console.log(result.output);
-                failed += result.failureCount;
+    if (fold.isTravis()) console.log(fold.start("lint"));
+
+    let files: {stat: fs.Stats, path: string}[] = [];
+    return gulp.src(lintTargets, { read: false })
+        .pipe(through2.obj((chunk, enc, cb) => {
+            files.push(chunk);
+            cb();
+        }, (cb) => {
+            files = files.filter(file =>  fileMatcher.test(file.path)).sort((filea, fileb) => filea.stat.size - fileb.stat.size);
+            const workerCount = (process.env.workerCount && +process.env.workerCount) || os.cpus().length;
+            for (let i = 0; i < workerCount; i++) {
+                spawnLintWorker(files, finished);
             }
-            done[target] = true;
-        }
-    }
-    if (failed > 0) {
-        console.error("Linter errors.");
-        process.exit(1);
-    }
+
+            let completed = 0;
+            let failures = 0;
+            function finished(fails) {
+                completed++;
+                failures += fails;
+                if (completed === workerCount) {
+                    if (fold.isTravis()) console.log(fold.end("lint"));
+                    if (failures > 0) {
+                        throw new Error(`Linter errors: ${failures}`);
+                    }
+                    else {
+                        cb();
+                    }
+                }
+            }
+        }));
 });
 
 

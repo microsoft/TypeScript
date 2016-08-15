@@ -1,4 +1,6 @@
 /// <reference path="types.ts"/>
+/// <reference path="performance.ts" />
+
 
 /* @internal */
 namespace ts {
@@ -17,8 +19,24 @@ namespace ts {
         True = -1
     }
 
+    const createObject = Object.create;
+
+    export function createMap<T>(): Map<T> {
+        /* tslint:disable:no-null-keyword */
+        const map: Map<T> = createObject(null);
+        /* tslint:enable:no-null-keyword */
+
+        // Using 'delete' on an object causes V8 to put the object in dictionary mode.
+        // This disables creation of hidden classes, which are expensive when an object is
+        // constantly changing shape.
+        map["__"] = undefined;
+        delete map["__"];
+
+        return map;
+    }
+
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
-        let files: Map<T> = {};
+        let files = createMap<T>();
         return {
             get,
             set,
@@ -53,7 +71,7 @@ namespace ts {
         }
 
         function clear() {
-            files = {};
+            files = createMap<T>();
         }
 
         function toKey(path: Path): string {
@@ -79,7 +97,7 @@ namespace ts {
      * returns a truthy value, then returns that value.
      * If no such value is found, the callback is applied to each element of array and undefined is returned.
      */
-    export function forEach<T, U>(array: T[], callback: (element: T, index: number) => U): U {
+    export function forEach<T, U>(array: T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
         if (array) {
             for (let i = 0, len = array.length; i < len; i++) {
                 const result = callback(array[i], i);
@@ -91,10 +109,21 @@ namespace ts {
         return undefined;
     }
 
-    export function contains<T>(array: T[], value: T, areEqual?: (a: T, b: T) => boolean): boolean {
+    /** Like `forEach`, but assumes existence of array and fails if no truthy value is found. */
+    export function find<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U {
+        for (let i = 0, len = array.length; i < len; i++) {
+            const result = callback(array[i], i);
+            if (result) {
+                return result;
+            }
+        }
+        Debug.fail();
+    }
+
+    export function contains<T>(array: T[], value: T): boolean {
         if (array) {
             for (const v of array) {
-                if (areEqual ? areEqual(v, value) : v === value) {
+                if (v === value) {
                     return true;
                 }
             }
@@ -134,17 +163,29 @@ namespace ts {
         return count;
     }
 
+    /**
+     * Filters an array by a predicate function. Returns the same array instance if the predicate is
+     * true for all elements, otherwise returns a new array instance containing the filtered subset.
+     */
     export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
-        let result: T[];
         if (array) {
-            result = [];
-            for (const item of array) {
-                if (f(item)) {
-                    result.push(item);
+            const len = array.length;
+            let i = 0;
+            while (i < len && f(array[i])) i++;
+            if (i < len) {
+                const result = array.slice(0, i);
+                i++;
+                while (i < len) {
+                    const item = array[i];
+                    if (f(item)) {
+                        result.push(item);
+                    }
+                    i++;
                 }
+                return result;
             }
         }
-        return result;
+        return array;
     }
 
     export function filterMutate<T>(array: T[], f: (x: T) => boolean): void {
@@ -180,10 +221,13 @@ namespace ts {
         let result: T[];
         if (array) {
             result = [];
-            for (const item of array) {
-                if (!contains(result, item, areEqual)) {
-                    result.push(item);
+            loop: for (const item of array) {
+                for (const res of result) {
+                    if (areEqual ? areEqual(res, item) : res === item) {
+                        continue loop;
+                    }
                 }
+                result.push(item);
             }
         }
         return result;
@@ -306,11 +350,11 @@ namespace ts {
 
     const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-    export function hasProperty<T>(map: Map<T>, key: string): boolean {
+    export function hasProperty<T>(map: MapLike<T>, key: string): boolean {
         return hasOwnProperty.call(map, key);
     }
 
-    export function getKeys<T>(map: Map<T>): string[] {
+    export function getKeys<T>(map: MapLike<T>): string[] {
         const keys: string[] = [];
         for (const key in map) {
             keys.push(key);
@@ -318,15 +362,15 @@ namespace ts {
         return keys;
     }
 
-    export function getProperty<T>(map: Map<T>, key: string): T {
+    export function getProperty<T>(map: MapLike<T>, key: string): T | undefined {
         return hasProperty(map, key) ? map[key] : undefined;
     }
 
-    export function getOrUpdateProperty<T>(map: Map<T>, key: string, makeValue: () => T): T {
+    export function getOrUpdateProperty<T>(map: MapLike<T>, key: string, makeValue: () => T): T {
         return hasProperty(map, key) ? map[key] : map[key] = makeValue();
     }
 
-    export function isEmpty<T>(map: Map<T>) {
+    export function isEmpty<T>(map: MapLike<T>) {
         for (const id in map) {
             if (hasProperty(map, id)) {
                 return false;
@@ -343,7 +387,7 @@ namespace ts {
         return <T>result;
     }
 
-    export function extend<T1 extends Map<{}>, T2 extends Map<{}>>(first: T1 , second: T2): T1 & T2 {
+    export function extend<T1 extends MapLike<{}>, T2 extends MapLike<{}>>(first: T1 , second: T2): T1 & T2 {
         const result: T1 & T2 = <any>{};
         for (const id in first) {
             (result as any)[id] = first[id];
@@ -356,7 +400,7 @@ namespace ts {
         return result;
     }
 
-    export function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U {
+    export function forEachValue<T, U>(map: MapLike<T>, callback: (value: T) => U): U {
         let result: U;
         for (const id in map) {
             if (result = callback(map[id])) break;
@@ -364,7 +408,7 @@ namespace ts {
         return result;
     }
 
-    export function forEachKey<T, U>(map: Map<T>, callback: (key: string) => U): U {
+    export function forEachKey<T, U>(map: MapLike<T>, callback: (key: string) => U): U {
         let result: U;
         for (const id in map) {
             if (result = callback(id)) break;
@@ -372,11 +416,11 @@ namespace ts {
         return result;
     }
 
-    export function lookUp<T>(map: Map<T>, key: string): T {
+    export function lookUp<T>(map: MapLike<T>, key: string): T {
         return hasProperty(map, key) ? map[key] : undefined;
     }
 
-    export function copyMap<T>(source: Map<T>, target: Map<T>): void {
+    export function copyMap<T>(source: MapLike<T>, target: MapLike<T>): void {
         for (const p in source) {
             target[p] = source[p];
         }
@@ -393,7 +437,7 @@ namespace ts {
      * index in the array will be the one associated with the produced key.
      */
     export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T> {
-        const result: Map<T> = {};
+        const result = createMap<T>();
 
         forEach(array, value => {
             result[makeKey(value)] = value;
@@ -409,7 +453,7 @@ namespace ts {
      * @param callback An aggregation function that is called for each entry in the map
      * @param initial The initial value for the reduction.
      */
-    export function reduceProperties<T, U>(map: Map<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
+    export function reduceProperties<T, U>(map: MapLike<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
         let result = initial;
         if (map) {
             for (const key in map) {
@@ -449,9 +493,7 @@ namespace ts {
     export let localizedDiagnosticMessages: Map<string> = undefined;
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
-        return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key]
-            ? localizedDiagnosticMessages[message.key]
-            : message.message;
+        return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
     }
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
@@ -903,10 +945,19 @@ namespace ts {
         return true;
     }
 
+    /* @internal */
+    export function startsWith(str: string, prefix: string): boolean {
+        return str.lastIndexOf(prefix, 0) === 0;
+    }
+
+    /* @internal */
+    export function endsWith(str: string, suffix: string): boolean {
+        const expectedPos = str.length - suffix.length;
+        return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
+    }
+
     export function fileExtensionIs(path: string, extension: string): boolean {
-        const pathLen = path.length;
-        const extLen = extension.length;
-        return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
+        return path.length > extension.length && endsWith(path, extension);
     }
 
     export function fileExtensionIsAny(path: string, extensions: string[]): boolean {
@@ -918,7 +969,6 @@ namespace ts {
 
         return false;
     }
-
 
     // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
     // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
@@ -1275,26 +1325,28 @@ namespace ts {
 
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
+        getTokenConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Token;
+        getIdentifierConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Token;
         getSourceFileConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => SourceFile;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
     }
 
-    function Symbol(flags: SymbolFlags, name: string) {
+    function Symbol(this: Symbol, flags: SymbolFlags, name: string) {
         this.flags = flags;
         this.name = name;
         this.declarations = undefined;
     }
 
-    function Type(checker: TypeChecker, flags: TypeFlags) {
+    function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
     }
 
     function Signature(checker: TypeChecker) {
     }
 
-    function Node(kind: SyntaxKind, pos: number, end: number) {
+    function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
         this.kind = kind;
         this.pos = pos;
         this.end = end;
@@ -1304,6 +1356,8 @@ namespace ts {
 
     export let objectAllocator: ObjectAllocator = {
         getNodeConstructor: () => <any>Node,
+        getTokenConstructor: () => <any>Node,
+        getIdentifierConstructor: () => <any>Node,
         getSourceFileConstructor: () => <any>Node,
         getSymbolConstructor: () => <any>Symbol,
         getTypeConstructor: () => <any>Type,

@@ -122,7 +122,7 @@ namespace ts {
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
-    const categoryFormatMap: Map<string> = {
+    const categoryFormatMap: MapLike<string> = {
         [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
         [DiagnosticCategory.Error]: redForegroundEscapeSequence,
         [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
@@ -432,7 +432,7 @@ namespace ts {
             }
 
             // reset the cache of existing files
-            cachedExistingFiles = {};
+            cachedExistingFiles = createMap<boolean>();
 
             const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
@@ -550,12 +550,8 @@ namespace ts {
     }
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
-        ioReadTime = 0;
-        ioWriteTime = 0;
-        programTime = 0;
-        bindTime = 0;
-        checkTime = 0;
-        emitTime = 0;
+        const hasDiagnostics = compilerOptions.diagnostics || compilerOptions.extendedDiagnostics;
+        if (hasDiagnostics) performance.enable();
 
         const program = createProgram(fileNames, compilerOptions, compilerHost);
         const exitStatus = compileProgram();
@@ -566,7 +562,7 @@ namespace ts {
             });
         }
 
-        if (compilerOptions.diagnostics) {
+        if (hasDiagnostics) {
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
@@ -579,17 +575,28 @@ namespace ts {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
 
-            // Individual component times.
-            // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
-            // I/O read time and processing time for triple-slash references and module imports, and the reported
-            // emit time includes I/O write time. We preserve this behavior so we can accurately compare times.
-            reportTimeStatistic("I/O read", ioReadTime);
-            reportTimeStatistic("I/O write", ioWriteTime);
-            reportTimeStatistic("Parse time", programTime);
-            reportTimeStatistic("Bind time", bindTime);
-            reportTimeStatistic("Check time", checkTime);
-            reportTimeStatistic("Emit time", emitTime);
+            const programTime = performance.getDuration("Program");
+            const bindTime = performance.getDuration("Bind");
+            const checkTime = performance.getDuration("Check");
+            const emitTime = performance.getDuration("Emit");
+            if (compilerOptions.extendedDiagnostics) {
+                performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
+            }
+            else {
+                // Individual component times.
+                // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
+                // I/O read time and processing time for triple-slash references and module imports, and the reported
+                // emit time includes I/O write time. We preserve this behavior so we can accurately compare times.
+                reportTimeStatistic("I/O read", performance.getDuration("I/O Read"));
+                reportTimeStatistic("I/O write", performance.getDuration("I/O Write"));
+                reportTimeStatistic("Parse time", programTime);
+                reportTimeStatistic("Bind time", bindTime);
+                reportTimeStatistic("Check time", checkTime);
+                reportTimeStatistic("Emit time", emitTime);
+            }
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+
+            performance.disable();
         }
 
         return { program, exitStatus };
@@ -653,7 +660,7 @@ namespace ts {
         // Build up the list of examples.
         const padding = makePadding(marginLength);
         output += getDiagnosticText(Diagnostics.Examples_Colon_0, makePadding(marginLength - examplesLength) + "tsc hello.ts") + sys.newLine;
-        output += padding + "tsc --out file.js file.ts" + sys.newLine;
+        output += padding + "tsc --outFile file.js file.ts" + sys.newLine;
         output += padding + "tsc @args.txt" + sys.newLine;
         output += sys.newLine;
 
@@ -669,7 +676,7 @@ namespace ts {
         const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
         const descriptionColumn: string[] = [];
 
-        const optionsDescriptionMap: Map<string[]> = {};  // Map between option.description and list of option.type if it is a kind
+        const optionsDescriptionMap = createMap<string[]>();  // Map between option.description and list of option.type if it is a kind
 
         for (let i = 0; i < optsList.length; i++) {
             const option = optsList[i];
@@ -779,7 +786,7 @@ namespace ts {
         return;
 
         function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
-            const result: Map<string | number | boolean> = {};
+            const result = createMap<string | number | boolean>();
             const optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (const name in options) {
