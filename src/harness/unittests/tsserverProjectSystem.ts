@@ -66,7 +66,7 @@ namespace ts {
         runTsd(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void) {
             this.postInstallActions.push(map => {
                 postInstallAction(map(typingsToInstall));
-            })
+            });
         }
 
         sendResponse(response: server.InstallTypingsResponse) {
@@ -75,7 +75,7 @@ namespace ts {
 
         enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions) {
             const request = server.createInstallTypingsRequest(project, typingOptions, this.safeFileList, this.packageNameToTypingLocation, this.cachePath);
-            this.install(request)
+            this.install(request);
         }
     }
 
@@ -260,7 +260,7 @@ namespace ts {
 
         readonly watchedDirectories: MapLike<{ cb: DirectoryWatcherCallback, recursive: boolean }[]> = {};
         readonly watchedFiles: MapLike<FileWatcherCallback[]> = {};
-        
+
         private filesOrFolders: FileOrFolder[];
 
         constructor(public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[]) {
@@ -428,9 +428,9 @@ namespace ts {
         }
 
         writeFile(path: string, content: string): void {
-            this.createFileOrFolder({ path, content, fileSize: content.length })
+            this.createFileOrFolder({ path, content, fileSize: content.length });
         }
-        
+
         createFileOrFolder(f: FileOrFolder, createParentDirectory = false): void {
             const base = getDirectoryPath(f.path);
             if (base !== f.path && !this.directoryExists(base)) {
@@ -446,7 +446,7 @@ namespace ts {
             filesOrFolders.push(f);
             this.reloadFS(filesOrFolders);
         }
-        
+
         readonly readFile = (s: string) => (<File>this.fs.get(this.toPath(s))).content;
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
@@ -1520,7 +1520,7 @@ namespace ts {
             const host = createServerHost([file1, tsconfig, packageJson]);
             class TypingInstaller extends TestTypingsInstaller {
                 cachePath = "/a/data/";
-                constructor(host: server.ServerHost) { 
+                constructor(host: server.ServerHost) {
                     super(host);
                 }
             };
@@ -1528,7 +1528,7 @@ namespace ts {
             const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ true, installer);
             projectService.openClientFile(file1.path);
 
-            checkNumberOfProjects(projectService, { configuredProjects: 1 })
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
             checkProjectActualFiles(p, [ file1.path ]);
 
@@ -1539,7 +1539,7 @@ namespace ts {
                 host.createFileOrFolder(jquery, /*createParentDirectory*/ true);
                 return ["jquery/jquery.d.ts"];
             });
-            checkNumberOfProjects(projectService, { configuredProjects: 1 })
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(p, [ file1.path, jquery.path ]);
         });
     });

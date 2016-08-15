@@ -179,7 +179,7 @@ namespace ts.server {
         attach(projectService: ProjectService) {
             this.projectService = projectService;
             if (this.logger.hasLevel(LogLevel.requestTime)) {
-                this.logger.info("Binding...")
+                this.logger.info("Binding...");
             }
 
             this.installer = childProcess.fork(combinePaths(__dirname, "typingsInstaller.js"));
@@ -188,7 +188,7 @@ namespace ts.server {
 
         enqueueInstallTypingsRequest(project: Project, typingOptions: TypingOptions): void {
             const request = createInstallTypingsRequest(
-                project, 
+                project,
                 typingOptions,
                 /*safeListPath*/ <Path>(combinePaths(process.cwd(), "typingSafeList.json")), // TODO: fixme
                 /*packageNameToTypingLocation*/ createMap<string>(), // TODO: fixme
@@ -202,7 +202,7 @@ namespace ts.server {
 
         private handleMessage(response: InstallTypingsResponse) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
-                this.logger.info(`Received response: ${JSON.stringify(response)}`)
+                this.logger.info(`Received response: ${JSON.stringify(response)}`);
             }
             this.projectService.updateTypingsForProject(response);
         }
