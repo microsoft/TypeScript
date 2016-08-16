@@ -10842,10 +10842,11 @@ namespace ts {
             }
 
             // Check for compatible indexer types.
-            if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
+            const allowedNullableFlags = strictNullChecks ? 0 : TypeFlags.Nullable;
+            if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol | allowedNullableFlags)) {
 
                 // Try to use a number indexer.
-                if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike) || isForInVariableForNumericPropertyNames(node.argumentExpression)) {
+                if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike | allowedNullableFlags) || isForInVariableForNumericPropertyNames(node.argumentExpression)) {
                     const numberIndexInfo = getIndexInfoOfType(objectType, IndexKind.Number);
                     if (numberIndexInfo) {
                         getNodeLinks(node).resolvedIndexInfo = numberIndexInfo;
