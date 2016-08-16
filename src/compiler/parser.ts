@@ -123,6 +123,8 @@ namespace ts {
                     visitNode(cbNode, (<TypePredicateNode>node).type);
             case SyntaxKind.TypeQuery:
                 return visitNode(cbNode, (<TypeQueryNode>node).exprName);
+            case SyntaxKind.KeysQuery:
+                return visitNode(cbNode, (<KeysQueryNode>node).type);
             case SyntaxKind.TypeLiteral:
                 return visitNodes(cbNodes, (<TypeLiteralNode>node).members);
             case SyntaxKind.ArrayType:
@@ -2018,6 +2020,13 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parseKeysQuery(): KeysQueryNode {
+            const node = <KeysQueryNode>createNode(SyntaxKind.KeysQuery);
+            parseExpected(SyntaxKind.KeysOfKeyword);
+            node.type = parseType();
+            return finishNode(node);
+        }
+
         function parseTypeParameter(): TypeParameterDeclaration {
             const node = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
             node.name = parseIdentifier();
@@ -2420,6 +2429,21 @@ namespace ts {
             return nextToken() === SyntaxKind.NumericLiteral;
         }
 
+        function nextTokenIsKeysQueryTypeTerminator() {
+            const next = nextToken();
+            switch (next) {
+                case SyntaxKind.DotToken:
+                case SyntaxKind.CommaToken:
+                case SyntaxKind.SemicolonToken:
+                case SyntaxKind.OpenBraceToken:
+                case SyntaxKind.CloseBraceToken:
+                case SyntaxKind.CloseParenToken:
+                case SyntaxKind.EqualsGreaterThanToken:
+                return true;
+            }
+            return false;
+        }
+
         function parseNonArrayType(): TypeNode {
             switch (token()) {
                 case SyntaxKind.AnyKeyword:
@@ -2453,6 +2477,8 @@ namespace ts {
                 }
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeQuery();
+                case SyntaxKind.KeysOfKeyword:
+                    return lookAhead(nextTokenIsKeysQueryTypeTerminator) ? parseTypeReference() : parseKeysQuery();
                 case SyntaxKind.OpenBraceToken:
                     return parseTypeLiteral();
                 case SyntaxKind.OpenBracketToken:
