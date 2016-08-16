@@ -458,6 +458,9 @@ namespace Harness {
     // harness always uses one kind of new line
     const harnessNewLine = "\r\n";
 
+    // Roote for file paths that are stored in a virtual file system
+    export const virtualFileSystemRoot = "/";
+
     namespace IOImpl {
         declare class Enumerator {
             public atEnd(): boolean;

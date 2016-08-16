@@ -19892,7 +19892,7 @@ namespace ts {
         function getAmbientModules(): Symbol[] {
             const result: Symbol[] = [];
             for (const sym in globals) {
-                if (globals.hasOwnProperty(sym) && ambientModuleSymbolRegex.test(sym)) {
+                if (hasProperty(globals, sym) && ambientModuleSymbolRegex.test(sym)) {
                     result.push(globals[sym]);
                 }
             }

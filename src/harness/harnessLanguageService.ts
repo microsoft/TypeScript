@@ -123,7 +123,7 @@ namespace Harness.LanguageService {
     }
 
     export class LanguageServiceAdapterHost {
-        protected virtualFileSystem: Utils.VirtualFileSystem<ScriptInfo> = new Utils.VirtualFileSystem<ScriptInfo>(/*root*/"c:", /*useCaseSensitiveFilenames*/false);
+        protected virtualFileSystem: Utils.VirtualFileSystem<ScriptInfo> = new Utils.VirtualFileSystem<ScriptInfo>(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
                     protected settings = ts.getDefaultCompilerOptions()) {
@@ -191,7 +191,7 @@ namespace Harness.LanguageService {
             }
             return [];
         }
-        getCurrentDirectory(): string { return ""; }
+        getCurrentDirectory(): string { return virtualFileSystemRoot }
         getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
         getScriptFileNames(): string[] { return this.getFilenames(); }
         getScriptSnapshot(fileName: string): ts.IScriptSnapshot {
@@ -211,7 +211,7 @@ namespace Harness.LanguageService {
         readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
             return ts.matchFiles(path, extensions, exclude, include,
             /*useCaseSensitiveFileNames*/false,
-            /*currentDirectory*/"/",
+            this.getCurrentDirectory(),
             (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
         }
         readFile(path: string, encoding?: string): string {
@@ -220,19 +220,7 @@ namespace Harness.LanguageService {
         }
         resolvePath(path: string): string {
             if (!ts.isRootedDiskPath(path)) {
-                // An "absolute" path for fourslash is one that is contained within the tests directory
-                const components = ts.getNormalizedPathComponents(path, this.getCurrentDirectory());
-                if (components.length) {
-                    // If this is still a relative path after normalization (i.e. currentDirectory is relative), the root will be the empty string
-                    if (!components[0]) {
-                        components.splice(0, 1);
-                        if (components[0] !== "tests") {
-                            // If not contained within test, assume its relative to the directory containing the test files
-                            return ts.normalizePath(ts.combinePaths("tests/cases/fourslash", components.join(ts.directorySeparator)));
-                        }
-                    }
-                    return ts.normalizePath(components.join(ts.directorySeparator));
-                }
+                path = ts.combinePaths(this.getCurrentDirectory(), path);
             }
             return ts.normalizePath(path);
         }

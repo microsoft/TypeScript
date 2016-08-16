@@ -3154,9 +3154,7 @@ namespace ts {
                 writeFile: (fileName, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => {
-                    // stub missing host functionality
-                    Debug.assert(!host.resolveModuleNames || !host.resolveTypeReferenceDirectives);
-                    return hostCache.getOrCreateEntry(fileName) !== undefined;
+                    return host.fileExists(fileName);
                 },
                 readFile: (fileName): string => {
                     // stub missing host functionality

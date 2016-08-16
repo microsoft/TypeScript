@@ -111,6 +111,7 @@ namespace Utils {
         getFileSystemEntries() { return this.root.getFileSystemEntries(); }
 
         addDirectory(path: string) {
+            path = this.normalizePathRoot(path);
             const components = ts.getNormalizedPathComponents(path, this.currentDirectory);
             let directory: VirtualDirectory<T> = this.root;
             for (const component of components) {
@@ -124,7 +125,7 @@ namespace Utils {
         }
 
         addFile(path: string, content?: T) {
-            const absolutePath = ts.getNormalizedAbsolutePath(path, this.currentDirectory);
+            const absolutePath = this.normalizePathRoot(ts.getNormalizedAbsolutePath(path, this.currentDirectory));
             const fileName = ts.getBaseFileName(path);
             const directoryPath = ts.getDirectoryPath(absolutePath);
             const directory = this.addDirectory(directoryPath);
@@ -141,6 +142,7 @@ namespace Utils {
         }
 
         traversePath(path: string) {
+            path = this.normalizePathRoot(path);
             let directory: VirtualDirectory<T> = this.root;
             for (const component of ts.getNormalizedPathComponents(path, this.currentDirectory)) {
                 const entry = directory.getFileSystemEntry(component);
@@ -192,7 +194,13 @@ namespace Utils {
             }
         }
 
+        normalizePathRoot(path: string) {
+            const components = ts.getNormalizedPathComponents(path, this.currentDirectory);
 
+            // Toss the root component
+            components[0] = "";
+            return components.join(ts.directorySeparator);
+        }
     }
 
     export class MockParseConfigHost extends VirtualFileSystem<string> implements ts.ParseConfigHost {

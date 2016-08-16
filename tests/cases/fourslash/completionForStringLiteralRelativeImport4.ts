@@ -2,7 +2,7 @@
 
 // Should give completions for directories that are merged via the rootDirs compiler option
 
-// @rootDirs: sub/src1,src2
+// @rootDirs: tests/cases/fourslash/sub/src1,tests/cases/fourslash/src2
 
 // @Filename: src2/test0.ts
 //// import * as foo1 from "./mo/*import_as0*/
