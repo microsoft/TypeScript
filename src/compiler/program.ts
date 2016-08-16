@@ -1078,8 +1078,15 @@ namespace ts {
                         for (const typeDirectivePath of host.getDirectories(root)) {
                             const normalized = normalizePath(typeDirectivePath);
                             const packageJsonPath = pathToPackageJson(combinePaths(root, normalized));
+                            let packageJsonExists = false;
+                            try {
+                                packageJsonExists = host.fileExists(packageJsonPath);
+                            }
+                            catch (e) {
+                                // See GH#10366
+                            }
                             // tslint:disable-next-line:no-null-keyword
-                            const isNotNeededPackage = host.fileExists(packageJsonPath) && readJson(packageJsonPath, host).typings === null;
+                            const isNotNeededPackage = packageJsonExists && readJson(packageJsonPath, host).typings === null;
                             if (!isNotNeededPackage) {
                                 // Return just the type directive names
                                 result.push(getBaseFileName(normalized));
