@@ -29,14 +29,15 @@ namespace ts.server {
         export type Types = Err | Info | Perf;
     }
 
-    export function createInstallTypingsRequest(project: Project, typingOptions: TypingOptions, cachePath?: string): InstallTypingsRequest {
+    export function createInstallTypingsRequest(project: Project, typingOptions: TypingOptions, cachePath?: string): DiscoverTypings {
         return {
             projectName: project.getProjectName(),
             fileNames: project.getFileNames(),
             compilerOptions: project.getCompilerOptions(),
             typingOptions,
             projectRootPath: <Path>(project.projectKind === ProjectKind.Inferred ? "" : getDirectoryPath(project.getProjectName())), // TODO: fixme
-            cachePath
+            cachePath,
+            kind: "discover"
         };
     }
 

@@ -4,11 +4,13 @@ namespace ts.server {
     export interface ITypingsInstaller {
         enqueueInstallTypingsRequest(p: Project, typingOptions: TypingOptions): void;
         attach(projectService: ProjectService): void;
+        onProjectClosed(p: Project): void;
     }
 
     export const nullTypingsInstaller: ITypingsInstaller = {
         enqueueInstallTypingsRequest: () => {},
-        attach: (projectService: ProjectService) => {}
+        attach: (projectService: ProjectService) => {},
+        onProjectClosed: (p: Project) => {}
     };
 
     class TypingsCacheEntry {
@@ -95,6 +97,14 @@ namespace ts.server {
             return entry ? entry.typings : emptyArray;
         }
 
+        invalidateCachedTypingsForProject(project: Project) {
+            const typingOptions = getTypingOptionsForProjects(project);
+            if (!typingOptions.enableAutoDiscovery) {
+                return;
+            }
+            this.installer.enqueueInstallTypingsRequest(project, typingOptions);
+        }
+
         updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typingOptions: TypingOptions, newTypings: string[]) {
             this.perProjectCache[projectName] = {
                 compilerOptions,
@@ -103,8 +113,9 @@ namespace ts.server {
             };
         }
 
-        deleteTypingsForProject(project: Project) {
+        onProjectClosed(project: Project) {
             delete this.perProjectCache[project.getProjectName()];
+            this.installer.onProjectClosed(project);
         }
     }
 }

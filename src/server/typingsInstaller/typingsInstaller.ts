@@ -40,6 +40,8 @@ namespace ts.server.typingsInstaller {
         private missingTypingsSet: Map<true> = createMap<true>();
         private knownCachesSet: Map<true> = createMap<true>();
 
+        private projectWatchers: Map<FileWatcher[]> = createMap<FileWatcher[]>();
+
         abstract readonly installTypingHost: InstallTypingHost;
 
         constructor(readonly globalCachePath: string, readonly safeListPath: Path, protected readonly log = nullLog) {
@@ -66,7 +68,36 @@ namespace ts.server.typingsInstaller {
             this.processCacheLocation(this.globalCachePath);
         }
 
-        install(req: InstallTypingsRequest) {
+        closeProject(req: CloseProject) {
+            this.closeWatchers(req.projectName);
+        }
+
+        private closeWatchers(projectName: string): boolean {
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Closing file watchers for project '${projectName}'`);
+            }
+            const watchers = this.projectWatchers[projectName];
+            if (!watchers) {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`No watchers are registered for project '${projectName}'`);
+                }
+                
+                return false;
+            }
+            for (const w of watchers) {
+                w.close();
+            }
+
+            delete this.projectWatchers[projectName]
+
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Closing file watchers for project '${projectName}' - done.`);
+            }
+
+            return true;
+        }
+
+        install(req: DiscoverTypings) {
             if (!this.isTsdInstalled) {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`tsd is not installed, ignoring request...`);
@@ -100,10 +131,10 @@ namespace ts.server.typingsInstaller {
             }
 
             // respond with whatever cached typings we have now
-            this.sendResponse(this.createResponse(req, discoverTypingsResult.cachedTypingPaths));
+            this.sendResponse(this.createSetTypings(req, discoverTypingsResult.cachedTypingPaths));
 
             // start watching files
-            this.watchFiles(discoverTypingsResult.filesToWatch);
+            this.watchFiles(req.projectRootPath, discoverTypingsResult.filesToWatch);
 
             // install typings
             this.installTypings(req, req.cachePath || this.globalCachePath, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames);
@@ -158,7 +189,7 @@ namespace ts.server.typingsInstaller {
             this.knownCachesSet[cacheLocation] = true;
         }
 
-        private installTypings(req: InstallTypingsRequest, cachePath: string, currentlyCachedTypings: string[], typingsToInstall: string[]) {
+        private installTypings(req: DiscoverTypings, cachePath: string, currentlyCachedTypings: string[], typingsToInstall: string[]) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Installing typings ${JSON.stringify(typingsToInstall)}`);
             }
@@ -210,7 +241,7 @@ namespace ts.server.typingsInstaller {
                     }
                 }
 
-                this.sendResponse(this.createResponse(req, currentlyCachedTypings.concat(installedTypingFiles)));
+                this.sendResponse(this.createSetTypings(req, currentlyCachedTypings.concat(installedTypingFiles)));
             });
         }
 
@@ -224,22 +255,38 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        private watchFiles(files: string[]) {
-            // TODO: start watching files
+        private watchFiles(projectRootPath: string, files: string[]) {
+            if (!files.length) {
+                return;
+            }
+            const watchers: FileWatcher[] = [];
+            for (const file of files) {
+                const w = this.installTypingHost.watchFile(file, f => {
+                    if (this.log.isEnabled()) {
+                        this.log.writeLine(`FS notification for '${f}', sending 'clean' message for project '${projectRootPath}'`);
+                    }
+                    if (!this.closeWatchers(projectRootPath)) {
+                        return;
+                    }
+                    this.sendResponse(<InvalidateCachedTypings>{ projectName: projectRootPath, kind: "invalidate" })
+                });
+                watchers.push(w);
+            }
         }
 
-        private createResponse(request: InstallTypingsRequest, typings: string[]) {
+        private createSetTypings(request: DiscoverTypings, typings: string[]): SetTypings {
             return {
                 projectName: request.projectName,
                 typingOptions: request.typingOptions,
                 compilerOptions: request.compilerOptions,
-                typings
+                typings,
+                kind: "set"
             };
         }
 
         protected abstract isPackageInstalled(packageName: string): boolean;
         protected abstract installPackage(packageName: string): boolean;
-        protected abstract sendResponse(response: InstallTypingsResponse): void;
+        protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings): void;
         protected abstract runTsd(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void;
     }
 }

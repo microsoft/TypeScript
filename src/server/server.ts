@@ -177,6 +177,10 @@ namespace ts.server {
             this.installer.on("message", m => this.handleMessage(m));
         }
 
+        onProjectClosed(p: Project): void {
+            this.installer.send({ projectName: p.getProjectName(), kind: "closeProject" });
+        }
+
         enqueueInstallTypingsRequest(project: Project, typingOptions: TypingOptions): void {
             const request = createInstallTypingsRequest(project, typingOptions);
             if (this.logger.hasLevel(LogLevel.verbose)) {
@@ -185,7 +189,7 @@ namespace ts.server {
             this.installer.send(request);
         }
 
-        private handleMessage(response: InstallTypingsResponse) {
+        private handleMessage(response: SetTypings | InvalidateCachedTypings) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response: ${JSON.stringify(response)}`);
             }

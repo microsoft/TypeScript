@@ -206,14 +206,21 @@ namespace ts.server {
             this.ensureInferredProjectsUpToDate();
         }
 
-        updateTypingsForProject(response: InstallTypingsResponse): void {
+        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings): void {
             const project = this.findProject(response.projectName);
             if (!project) {
                 return;
             }
-            this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.typings);
-            project.setTypings(response.typings);
-            project.updateGraph();
+            switch (response.kind) {
+                case "set":
+                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.typings);
+                    project.setTypings(response.typings);
+                    project.updateGraph();
+                    break;
+                case "invalidate":
+                    this.typingsCache.invalidateCachedTypingsForProject(project);
+                    break;
+            }
         }
 
         setCompilerOptionsForInferredProjects(compilerOptions: CompilerOptions): void {

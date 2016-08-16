@@ -71,8 +71,14 @@ namespace ts.server.typingsInstaller {
                     this.log.writeLine(`Error when getting npm bin path: ${e}. Set bin path to ""`);
                 }
             }
-            process.on("message", (req: InstallTypingsRequest) => {
-                this.install(req);
+            process.on("message", (req: DiscoverTypings | CloseProject) => {
+                switch (req.kind) {
+                    case "discover":
+                        this.install(req);
+                        break;
+                    case "closeProject":
+                        this.closeProject(req);
+                }
             })
         }
 
@@ -96,7 +102,7 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        protected sendResponse(response: InstallTypingsResponse) {
+        protected sendResponse(response: SetTypings | InvalidateCachedTypings) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Sending response: ${JSON.stringify(response)}`)
             }

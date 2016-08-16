@@ -27,7 +27,7 @@ namespace ts {
         content: libFileContent
     };
 
-    abstract class TestTypingsInstaller extends server.typingsInstaller.TypingsInstaller implements server.ITypingsInstaller {
+    class TestTypingsInstaller extends server.typingsInstaller.TypingsInstaller implements server.ITypingsInstaller {
         protected projectService: server.ProjectService;
         constructor(readonly cachePath: string, readonly installTypingHost: server.ServerHost) {
             super(cachePath, <Path>"");
@@ -42,6 +42,10 @@ namespace ts {
                 f(map);
             }
             this.postInstallActions = [];
+        }
+
+        onProjectClosed(p: server.Project) {
+
         }
 
         attach(projectService: server.ProjectService) {
@@ -66,7 +70,7 @@ namespace ts {
             });
         }
 
-        sendResponse(response: server.InstallTypingsResponse) {
+        sendResponse(response: server.SetTypings | server.InvalidateCachedTypings) {
             this.projectService.updateTypingsForProject(response);
         }
 
@@ -1515,12 +1519,7 @@ namespace ts {
             };
 
             const host = createServerHost([file1, tsconfig, packageJson]);
-            class TypingInstaller extends TestTypingsInstaller {
-                constructor(host: server.ServerHost) {
-                    super("/a/data/", host);
-                }
-            };
-            const installer = new TypingInstaller(host);
+            const installer = new TestTypingsInstaller("/a/data/", host);
             const projectService = new server.ProjectService(host, nullLogger, nullCancellationToken, /*useSingleInferredProject*/ true, installer);
             projectService.openClientFile(file1.path);
 

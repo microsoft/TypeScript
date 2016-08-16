@@ -3,15 +3,6 @@
 /// <reference path="../services/jsTyping.ts"/>
 
 declare namespace ts.server {
-    export interface InstallTypingsRequest {
-        readonly projectName: string;
-        readonly fileNames: string[];
-        readonly projectRootPath: ts.Path;
-        readonly typingOptions: ts.TypingOptions;
-        readonly compilerOptions: ts.CompilerOptions;
-        readonly cachePath?: string;
-    }
-
     export interface CompressedData {
         length: number;
         compressionKind: string;
@@ -27,15 +18,43 @@ declare namespace ts.server {
         gc?(): void;
     }
 
-    export interface InstallTypingsResponse {
+    export interface TypingInstallerRequest {
         readonly projectName: string;
+        readonly kind: "discover" | "closeProject";
+    }
+
+    export interface DiscoverTypings extends TypingInstallerRequest {
+        readonly fileNames: string[];
+        readonly projectRootPath: ts.Path;
+        readonly typingOptions: ts.TypingOptions;
+        readonly compilerOptions: ts.CompilerOptions;
+        readonly cachePath?: string;
+        readonly kind: "discover";
+    }
+
+    export interface CloseProject extends TypingInstallerRequest {
+        readonly kind: "closeProject";
+    }
+
+    export interface TypingInstallerResponse {
+        readonly projectName: string;
+        readonly kind: "set" | "invalidate";
+    }
+
+    export interface SetTypings extends TypingInstallerResponse {
         readonly typingOptions: ts.TypingOptions;
         readonly compilerOptions: ts.CompilerOptions;
         readonly typings: string[];
+        readonly kind: "set";
+    }
+
+    export interface InvalidateCachedTypings extends TypingInstallerResponse {
+        readonly kind: "invalidate";
     }
 
     export interface InstallTypingHost extends JsTyping.TypingResolutionHost {
         writeFile(path: string, content: string): void;
         createDirectory(path: string): void;
+        watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
     }
 }
