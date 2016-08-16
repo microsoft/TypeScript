@@ -8467,11 +8467,11 @@ namespace ts {
                         return type;
                     }
                     const doubleEquals = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken;
-                    const facts = doubleEquals
-                        ? assumeTrue ? TypeFacts.EQUndefinedOrNull : TypeFacts.NEUndefinedOrNull
-                        : value.kind === SyntaxKind.NullKeyword
-                            ? assumeTrue ? TypeFacts.EQNull : TypeFacts.NENull
-                            : assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
+                    const facts = doubleEquals ?
+                        assumeTrue ? TypeFacts.EQUndefinedOrNull : TypeFacts.NEUndefinedOrNull :
+                        value.kind === SyntaxKind.NullKeyword ?
+                            assumeTrue ? TypeFacts.EQNull : TypeFacts.NENull :
+                            assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
                     return getTypeWithFacts(type, facts);
                 }
                 if (type.flags & TypeFlags.NotUnionOrUnit) {
@@ -8507,9 +8507,9 @@ namespace ts {
                         return targetType;
                     }
                 }
-                const facts = assumeTrue
-                    ? typeofEQFacts[literal.text] || TypeFacts.TypeofEQHostObject
-                    : typeofNEFacts[literal.text] || TypeFacts.TypeofNEHostObject;
+                const facts = assumeTrue ?
+                    typeofEQFacts[literal.text] || TypeFacts.TypeofEQHostObject :
+                    typeofNEFacts[literal.text] || TypeFacts.TypeofNEHostObject;
                 return getTypeWithFacts(type, facts);
             }
 
