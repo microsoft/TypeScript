@@ -68,9 +68,9 @@ export async function runSampleWorks<A, B, C, D, E>(
 >T : Symbol(T, Decl(declarationEmitPromise.ts, 8, 16))
 
         f.apply(this, result);
->f.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>f.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 >f : Symbol(f, Decl(declarationEmitPromise.ts, 8, 19))
->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 >result : Symbol(result, Decl(declarationEmitPromise.ts, 7, 7))
 
     let rfunc: typeof func & {} = func as any; // <- This is the only difference
@@ -140,9 +140,9 @@ export async function runSampleBreaks<A, B, C, D, E>(
 >T : Symbol(T, Decl(declarationEmitPromise.ts, 17, 16))
 
         f.apply(this, result);
->f.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>f.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 >f : Symbol(f, Decl(declarationEmitPromise.ts, 17, 19))
->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 >result : Symbol(result, Decl(declarationEmitPromise.ts, 16, 7))
 
     let rfunc: typeof func = func as any; // <- This is the only difference

@@ -124,9 +124,9 @@ var flat = _.reduceRight(list, (a, b) => a.concat(b), []);
 >a : number[]
 >b : number[]
 >a.concat(b) : number[]
->a.concat : (...items: (number | number[])[]) => number[]
+>a.concat : { (...items: number[][]): number[]; (...items: (number | number[])[]): number[]; }
 >a : number[]
->concat : (...items: (number | number[])[]) => number[]
+>concat : { (...items: number[][]): number[]; (...items: (number | number[])[]): number[]; }
 >b : number[]
 >[] : undefined[]
 
@@ -149,7 +149,7 @@ var even = _.find([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >num % 2 : number
 >num : number
 >2 : number
->0 : number
+>0 : 0
 
 var evens = _.filter([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >evens : number[]
@@ -170,7 +170,7 @@ var evens = _.filter([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >num % 2 : number
 >num : number
 >2 : number
->0 : number
+>0 : 0
 
 var listOfPlays = [{ title: "Cymbeline", author: "Shakespeare", year: 1611 }, { title: "The Tempest", author: "Shakespeare", year: 1611 }, { title: "Other", author: "Not Shakespeare", year: 2012 }];
 >listOfPlays : { title: string; author: string; year: number; }[]
@@ -228,14 +228,14 @@ var odds = _.reject([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >num % 2 : number
 >num : number
 >2 : number
->0 : number
+>0 : 0
 
 _.all([true, 1, null, 'yes'], _.identity);
 >_.all([true, 1, null, 'yes'], _.identity) : boolean
 >_.all : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >all : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
->[true, 1, null, 'yes'] : (boolean | number | string)[]
+>[true, 1, null, 'yes'] : (string | number | boolean)[]
 >true : boolean
 >1 : number
 >null : null
@@ -249,7 +249,7 @@ _.any([null, 0, 'yes', false]);
 >_.any : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >any : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
->[null, 0, 'yes', false] : (number | string | boolean)[]
+>[null, 0, 'yes', false] : (string | number | boolean)[]
 >null : null
 >0 : number
 >'yes' : string
@@ -425,7 +425,7 @@ _.countBy([1, 2, 3, 4, 5], (num) => num % 2 == 0 ? 'even' : 'odd');
 >num % 2 : number
 >num : number
 >2 : number
->0 : number
+>0 : 0
 >'even' : string
 >'odd' : string
 
@@ -508,11 +508,11 @@ _.rest([5, 4, 3, 2, 1]);
 >1 : number
 
 _.compact([0, 1, false, 2, '', 3]);
->_.compact([0, 1, false, 2, '', 3]) : (number | boolean | string)[]
+>_.compact([0, 1, false, 2, '', 3]) : (string | number | boolean)[]
 >_.compact : <T>(list: T[]) => T[]
 >_ : Underscore.Static
 >compact : <T>(list: T[]) => T[]
->[0, 1, false, 2, '', 3] : (number | boolean | string)[]
+>[0, 1, false, 2, '', 3] : (string | number | boolean)[]
 >0 : number
 >1 : number
 >false : boolean
@@ -1249,7 +1249,7 @@ _.chain([1, 2, 3, 200])
 >num % 2 : number
 >num : number
 >2 : number
->0 : number
+>0 : 0
 
     .tap(<any>alert)
 >tap : (interceptor: (object: number[]) => void) => Underscore.ChainedArray<number>

@@ -7,6 +7,7 @@
         "indent": [true,
             "spaces"
         ],
+        "linebreak-style": [true, "CRLF"],
         "one-line": [true,
             "check-open-brace",
             "check-whitespace"
@@ -44,6 +45,8 @@
         "type-operator-spacing": true,
         "prefer-const": true,
         "no-in-operator": true,
-        "no-increment-decrement": true
+        "no-increment-decrement": true,
+        "object-literal-surrounding-space": true,
+        "no-type-assertion-whitespace": true
   }
 }

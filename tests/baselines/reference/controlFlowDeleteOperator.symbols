@@ -1,0 +1,70 @@
+=== tests/cases/conformance/controlFlow/controlFlowDeleteOperator.ts ===
+
+function f() {
+>f : Symbol(f, Decl(controlFlowDeleteOperator.ts, 0, 0))
+
+    let x: { a?: number | string, b: number | string } = { b: 1 };
+>x : Symbol(x, Decl(controlFlowDeleteOperator.ts, 2, 7))
+>a : Symbol(a, Decl(controlFlowDeleteOperator.ts, 2, 12))
+>b : Symbol(b, Decl(controlFlowDeleteOperator.ts, 2, 33))
+>b : Symbol(b, Decl(controlFlowDeleteOperator.ts, 2, 58))
+
+    x.a;
+>x.a : Symbol(a, Decl(controlFlowDeleteOperator.ts, 2, 12))
+>x : Symbol(x, Decl(controlFlowDeleteOperator.ts, 2, 7))
+>a : Symbol(a, Decl(controlFlowDeleteOperator.ts, 2, 12))
+
+    x.b;
+>x.b : Symbol(b, Decl(controlFlowDeleteOperator.ts, 2, 33))
+>x : Symbol(x, Decl(controlFlowDeleteOperator.ts, 2, 7))
+>b : Symbol(b, Decl(controlFlowDeleteOperator.ts, 2, 33))
+
+    x.a = 1;
+>x.a : Symbol(a, Decl(controlFlowDeleteOperator.ts, 2, 12))
+>x : Symbol(x, Decl(controlFlowDeleteOperator.ts, 2, 7))
+>a : Symbol(a, Decl(controlFlowDeleteOperator.ts, 2, 12))
+
+    x.b = 1;
+>x.b : Symbol(b, Decl(controlFlowDeleteOperator.ts, 2, 33))
+>x : Symbol(x, Decl(controlFlowDeleteOperator.ts, 2, 7))
+>b : Symbol(b, Decl(controlFlowDeleteOperator.ts, 2, 33))
+
+    x.a;
+>x.a : Symbol(a, Decl(controlFlowDeleteOperator.ts, 2, 12))
+>x : Symbol(x, Decl(controlFlowDeleteOperator.ts, 2, 7))
+>a : Symbol(a, Decl(controlFlowDeleteOperator.ts, 2, 12))
+
+    x.b;
+>x.b : Symbol(b, Decl(controlFlowDeleteOperator.ts, 2, 33))
+>x : Symbol(x, Decl(controlFlowDeleteOperator.ts, 2, 7))
+>b : Symbol(b, Decl(controlFlowDeleteOperator.ts, 2, 33))
+
+    delete x.a;
+>x.a : Symbol(a, Decl(controlFlowDeleteOperator.ts, 2, 12))
+>x : Symbol(x, Decl(controlFlowDeleteOperator.ts, 2, 7))
+>a : Symbol(a, Decl(controlFlowDeleteOperator.ts, 2, 12))
+
+    delete x.b;
+>x.b : Symbol(b, Decl(controlFlowDeleteOperator.ts, 2, 33))
+>x : Symbol(x, Decl(controlFlowDeleteOperator.ts, 2, 7))
+>b : Symbol(b, Decl(controlFlowDeleteOperator.ts, 2, 33))
+
+    x.a;
+>x.a : Symbol(a, Decl(controlFlowDeleteOperator.ts, 2, 12))
+>x : Symbol(x, Decl(controlFlowDeleteOperator.ts, 2, 7))
+>a : Symbol(a, Decl(controlFlowDeleteOperator.ts, 2, 12))
+
+    x.b;
+>x.b : Symbol(b, Decl(controlFlowDeleteOperator.ts, 2, 33))
+>x : Symbol(x, Decl(controlFlowDeleteOperator.ts, 2, 7))
+>b : Symbol(b, Decl(controlFlowDeleteOperator.ts, 2, 33))
+
+    x;
+>x : Symbol(x, Decl(controlFlowDeleteOperator.ts, 2, 7))
+
+    delete x;  // No effect
+>x : Symbol(x, Decl(controlFlowDeleteOperator.ts, 2, 7))
+
+    x;
+>x : Symbol(x, Decl(controlFlowDeleteOperator.ts, 2, 7))
+}

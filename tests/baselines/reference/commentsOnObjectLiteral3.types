@@ -24,9 +24,9 @@ var v = {
 >a : any
 
   return this.prop;
->this.prop : number
->this : { prop: number; func: () => void; func1(): void; a: any; }
->prop : number
+>this.prop : any
+>this : any
+>prop : any
 
  } /*trailing 1*/,
  //setter
@@ -36,9 +36,9 @@ var v = {
 
   this.prop = value;
 >this.prop = value : any
->this.prop : number
->this : { prop: number; func: () => void; func1(): void; a: any; }
->prop : number
+>this.prop : any
+>this : any
+>prop : any
 >value : any
 
  } // trailing 2

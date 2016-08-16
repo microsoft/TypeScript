@@ -8,13 +8,19 @@
 
 declare var process: any;
 declare var console: any;
-declare var fs: any;
+declare var fs: {
+    existsSync(path: string): boolean;
+    readdirSync(path: string): string[];
+    readFileSync(filename: string, encoding?: string): string;
+    writeFileSync(filename: string, data: any, options?: { encoding?: string; mode?: number; flag?: string; }): void;
+    watchFile(filename: string, options: { persistent?: boolean; interval?: number; }, listener: (curr: { mtime: Date }, prev: { mtime: Date }) => void): void;
+};
 declare var path: any;
 
 import * as ts from "typescript";
 
 function watch(rootFileNames: string[], options: ts.CompilerOptions) {
-    const files: ts.Map<{ version: number }> = {};
+    const files: ts.MapLike<{ version: number }> = {};
 
     // initialize the list of files
     rootFileNames.forEach(fileName => {

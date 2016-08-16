@@ -9,7 +9,7 @@ function fn(x) {
 }
 
 <T>(x: T) => { throw x; }
-><T>(x: T) => { throw x; } : <T>(x: T) => void
+><T>(x: T) => { throw x; } : <T>(x: T) => never
 >T : T
 >x : T
 >T : T
@@ -22,7 +22,7 @@ switch (y) {
 >y : string
 
     case 'a':
->'a' : string
+>'a' : "a"
 
         throw y;
 >y : string
@@ -104,7 +104,7 @@ var aa = {
 >biz : () => void
 
         throw this;
->this : { id: number; biz(): void; }
+>this : any
     }
 }
 

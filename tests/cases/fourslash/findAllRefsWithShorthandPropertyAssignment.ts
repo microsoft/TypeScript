@@ -1,19 +1,14 @@
 /// <reference path='fourslash.ts'/>
 
-//// var /*1*/name = "Foo";
+//// var [|name|] = "Foo";
 ////
-//// var obj = { /*2*/name };
-//// var obj1 = { /*3*/name:name };
-//// obj./*4*/name;
+//// var obj = { [|name|] };
+//// var obj1 = { [|name|]:[|name|] };
+//// obj.[|name|];
 
-goTo.marker('1');
-verify.referencesCountIs(3);
-
-goTo.marker('2');
-verify.referencesCountIs(4);
-
-goTo.marker('3');
-verify.referencesCountIs(1);
-
-goTo.marker('4');
-verify.referencesCountIs(2);
+const [r0, r1, r2, r3, r4] = test.ranges();
+verify.referencesOf(r0, [r0, r1, r3]);
+verify.referencesOf(r1, [r0, r1, r3, r4]);
+verify.referencesOf(r2, [r2]);
+verify.referencesOf(r3, [r0, r1, r3]);
+verify.referencesOf(r4, [r1, r4]);

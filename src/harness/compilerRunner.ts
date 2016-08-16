@@ -1,6 +1,7 @@
 /// <reference path="harness.ts" />
 /// <reference path="runnerbase.ts" />
 /// <reference path="typeWriter.ts" />
+// In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
 /* tslint:disable:no-null-keyword */
 
 const enum CompilerTestType {
@@ -11,7 +12,7 @@ const enum CompilerTestType {
 
 class CompilerBaselineRunner extends RunnerBase {
     private basePath = "tests/cases";
-    private testSuiteName: string;
+    private testSuiteName: TestRunnerKind;
     private errors: boolean;
     private emit: boolean;
     private decl: boolean;
@@ -40,8 +41,18 @@ class CompilerBaselineRunner extends RunnerBase {
         this.basePath += "/" + this.testSuiteName;
     }
 
+    public kind() {
+        return this.testSuiteName;
+    }
+
+    public enumerateTestFiles() {
+        return this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true });
+    }
+
     private makeUnitName(name: string, root: string) {
-        return ts.isRootedDiskPath(name) ? name : ts.combinePaths(root, name);
+        const path = ts.toPath(name, root, (fileName) => Harness.Compiler.getCanonicalFileName(fileName));
+        const pathStart = ts.toPath(Harness.IO.getCurrentDirectory(), "", (fileName) => Harness.Compiler.getCanonicalFileName(fileName));
+        return pathStart ? path.replace(pathStart, "/") : path;
     };
 
     public checkTestCodeOutput(fileName: string) {
@@ -89,16 +100,16 @@ class CompilerBaselineRunner extends RunnerBase {
                 otherFiles = [];
 
                 if (testCaseContent.settings["noImplicitReferences"] || /require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
-                    toBeCompiled.push({ unitName: this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content });
+                    toBeCompiled.push({ unitName: this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content, fileOptions: lastUnit.fileOptions });
                     units.forEach(unit => {
                         if (unit.name !== lastUnit.name) {
-                            otherFiles.push({ unitName: this.makeUnitName(unit.name, rootDir), content: unit.content });
+                            otherFiles.push({ unitName: this.makeUnitName(unit.name, rootDir), content: unit.content, fileOptions: unit.fileOptions });
                         }
                     });
                 }
                 else {
                     toBeCompiled = units.map(unit => {
-                        return { unitName: this.makeUnitName(unit.name, rootDir), content: unit.content };
+                        return { unitName: this.makeUnitName(unit.name, rootDir), content: unit.content, fileOptions: unit.fileOptions };
                     });
                 }
 
@@ -107,7 +118,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
 
                 const output = Harness.Compiler.compileFiles(
-                    toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ undefined);
+                    toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ harnessSettings["currentDirectory"]);
 
                 options = output.options;
                 result = output.result;
@@ -145,7 +156,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
             it (`Correct module resolution tracing for ${fileName}`, () => {
                 if (options.traceResolution) {
-                    Harness.Baseline.runBaseline("Correct sourcemap content for " + fileName, justName.replace(/\.tsx?$/, ".trace.json"), () => {
+                    Harness.Baseline.runBaseline("Correct module resolution tracing for " + fileName, justName.replace(/\.tsx?$/, ".trace.json"), () => {
                         return JSON.stringify(result.traceResults || [], undefined, 4);
                     });
                 }
@@ -280,8 +291,8 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
 
-                const fullResults: ts.Map<TypeWriterResult[]> = {};
-                const pullResults: ts.Map<TypeWriterResult[]> = {};
+                const fullResults: ts.MapLike<TypeWriterResult[]> = {};
+                const pullResults: ts.MapLike<TypeWriterResult[]> = {};
 
                 for (const sourceFile of allFiles) {
                     fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
@@ -327,7 +338,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     }
                 }
 
-                function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
+                function generateBaseLine(typeWriterResults: ts.MapLike<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
                     const typeLines: string[] = [];
                     const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
 
@@ -390,7 +401,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
             // this will set up a series of describe/it blocks to run between the setup and cleanup phases
             if (this.tests.length === 0) {
-                const testFiles = this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true });
+                const testFiles = this.enumerateTestFiles();
                 testFiles.forEach(fn => {
                     fn = fn.replace(/\\/g, "/");
                     this.checkTestCodeOutput(fn);

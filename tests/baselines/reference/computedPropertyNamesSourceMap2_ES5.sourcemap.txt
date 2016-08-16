@@ -56,12 +56,66 @@ sourceFile:computedPropertyNamesSourceMap2_ES5.ts
 >>>    },
 1 >^^^^
 2 >    ^
-3 >     ^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-  >    
+  >	
 2 >    }
-1 >Emitted(4, 5) Source(4, 5) + SourceIndex(0)
-2 >Emitted(4, 6) Source(4, 6) + SourceIndex(0)
+1 >Emitted(4, 5) Source(4, 2) + SourceIndex(0)
+2 >Emitted(4, 6) Source(4, 3) + SourceIndex(0)
+---
+>>>    Object.defineProperty(_a, "goodbye", {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                              ^^^^^^^^^
+1->,
+  >    
+2 >    get [
+3 >                              "goodbye"]
+1->Emitted(5, 5) Source(5, 5) + SourceIndex(0)
+2 >Emitted(5, 31) Source(5, 10) + SourceIndex(0)
+3 >Emitted(5, 40) Source(5, 20) + SourceIndex(0)
+---
+>>>        get: function () {
+1 >^^^^^^^^^^^^^
+2 >             ^^^^^^^^^->
+1 >
+1 >Emitted(6, 14) Source(5, 5) + SourceIndex(0)
+---
+>>>            return 0;
+1->^^^^^^^^^^^^
+2 >            ^^^^^^
+3 >                  ^
+4 >                   ^
+5 >                    ^
+1->get ["goodbye"]() {
+  >		
+2 >            return
+3 >                   
+4 >                   0
+5 >                    ;
+1->Emitted(7, 13) Source(6, 3) + SourceIndex(0)
+2 >Emitted(7, 19) Source(6, 9) + SourceIndex(0)
+3 >Emitted(7, 20) Source(6, 10) + SourceIndex(0)
+4 >Emitted(7, 21) Source(6, 11) + SourceIndex(0)
+5 >Emitted(7, 22) Source(6, 12) + SourceIndex(0)
+---
+>>>        },
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^^^^^^^^^->
+1 >
+  >	
+2 >        }
+1 >Emitted(8, 9) Source(7, 2) + SourceIndex(0)
+2 >Emitted(8, 10) Source(7, 3) + SourceIndex(0)
+---
+>>>        enumerable: true,
+>>>        configurable: true
+>>>    }),
+1->^^^^^^
+2 >      ^->
+1->
+1->Emitted(11, 7) Source(7, 3) + SourceIndex(0)
 ---
 >>>    _a
 >>>);
@@ -71,8 +125,8 @@ sourceFile:computedPropertyNamesSourceMap2_ES5.ts
 1->
   >}
 2 > 
-1->Emitted(6, 2) Source(5, 2) + SourceIndex(0)
-2 >Emitted(6, 3) Source(5, 2) + SourceIndex(0)
+1->Emitted(13, 2) Source(8, 2) + SourceIndex(0)
+2 >Emitted(13, 3) Source(8, 2) + SourceIndex(0)
 ---
 >>>var _a;
 >>>//# sourceMappingURL=computedPropertyNamesSourceMap2_ES5.js.map

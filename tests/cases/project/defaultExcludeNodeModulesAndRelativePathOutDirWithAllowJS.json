@@ -1,0 +1,5 @@
+{
+  "scenario": "Verify default exclude property with relative path for 'outDir' in project option",
+  "projectRoot": "tests/cases/projects/projectOption/DefaultExcludeNodeModulesAndRelativePathOutDirWithAllowJS",
+  "baselineCheck": true
+}
