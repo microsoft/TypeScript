@@ -69,7 +69,6 @@ namespace ts {
 
         readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
         readFile(path: string, encoding?: string): string;
-        resolvePath(path: string): string;
         fileExists(path: string): boolean;
 
         getModuleResolutionsForFile?(fileName: string): string;
@@ -444,10 +443,6 @@ namespace ts {
 
         public readFile(path: string, encoding?: string): string {
             return this.shimHost.readFile(path, encoding);
-        }
-
-        public resolvePath(path: string): string {
-            return this.shimHost.resolvePath(path);
         }
 
         public fileExists(path: string): boolean {

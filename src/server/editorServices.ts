@@ -306,11 +306,6 @@ namespace ts.server {
             throw new Error("No script with name '" + filename + "'");
         }
 
-        resolvePath(path: string): string {
-            const result = this.host.resolvePath(path);
-            return result;
-        }
-
         fileExists(path: string): boolean {
             const result = this.host.fileExists(path);
             return result;

@@ -1159,7 +1159,6 @@ namespace ts {
         useCaseSensitiveFileNames?(): boolean;
 
         readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
-        resolvePath(path: string): string;
         readFile(path: string, encoding?: string): string;
         fileExists(path: string): boolean;
 
@@ -4589,7 +4588,7 @@ namespace ts {
                 }
 
                 const absolutePath = normalizeAndPreserveTrailingSlash(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment));
-                const baseDirectory = host.resolvePath(getDirectoryPath(absolutePath));
+                const baseDirectory = getDirectoryPath(absolutePath);
                 const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
 
                 if (directoryProbablyExists(baseDirectory, host)) {
@@ -4827,7 +4826,14 @@ namespace ts {
                     });
                 }
                 else if (host.getDirectories && options.typeRoots) {
-                    const absoluteRoots = map(options.typeRoots, rootDirectory => getAbsoluteProjectPath(rootDirectory, host, options.project));
+                    const absoluteRoots = map(options.typeRoots, rootDirectory => {
+                        if (isRootedDiskPath(rootDirectory)) {
+                            return normalizePath(rootDirectory);
+                        }
+
+                        const basePath = options.project || host.getCurrentDirectory();
+                        return normalizePath(combinePaths(basePath, rootDirectory));
+                    });
                     forEach(absoluteRoots, absoluteRoot => getCompletionEntriesFromDirectories(host, options, absoluteRoot, result));
                 }
 
@@ -4840,18 +4846,6 @@ namespace ts {
                 }
 
                 return result;
-            }
-
-            function getAbsoluteProjectPath(path: string, host: LanguageServiceHost, projectDir?: string) {
-                if (isRootedDiskPath(path)) {
-                    return normalizePath(path);
-                }
-
-                if (projectDir) {
-                    return normalizePath(combinePaths(projectDir, path));
-                }
-
-                return normalizePath(host.resolvePath(path));
             }
 
             function getCompletionEntriesFromDirectories(host: LanguageServiceHost, options: CompilerOptions, directory: string, result: ImportCompletionEntry[]) {

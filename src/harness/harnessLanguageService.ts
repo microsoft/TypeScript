@@ -218,12 +218,6 @@ namespace Harness.LanguageService {
             const snapshot = this.getScriptSnapshot(path);
             return snapshot.getText(0, snapshot.getLength());
         }
-        resolvePath(path: string): string {
-            if (!ts.isRootedDiskPath(path)) {
-                path = ts.combinePaths(this.getCurrentDirectory(), path);
-            }
-            return ts.normalizePath(path);
-        }
 
 
         log(s: string): void { }
@@ -328,9 +322,6 @@ namespace Harness.LanguageService {
         readFile(fileName: string) {
             const snapshot = this.nativeHost.getScriptSnapshot(fileName);
             return snapshot && snapshot.getText(0, snapshot.getLength());
-        }
-        resolvePath(path: string): string {
-            return this.nativeHost.resolvePath(path);
         }
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
