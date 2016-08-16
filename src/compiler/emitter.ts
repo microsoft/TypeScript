@@ -5311,18 +5311,7 @@ const _super = (function (geti, seti) {
                         emitSignatureParameters(ctor);
                     }
                     else {
-                        // Based on EcmaScript6 section 14.5.14: Runtime Semantics: ClassDefinitionEvaluation.
-                        // If constructor is empty, then,
-                        //      If ClassHeritageopt is present, then
-                        //          Let constructor be the result of parsing the String "constructor(... args){ super (...args);}" using the syntactic grammar with the goal symbol MethodDefinition.
-                        //      Else,
-                        //          Let constructor be the result of parsing the String "constructor( ){ }" using the syntactic grammar with the goal symbol MethodDefinition
-                        if (baseTypeElement) {
-                            write("(...args)");
-                        }
-                        else {
-                            write("()");
-                        }
+                        write("()");
                     }
                 }
 
@@ -5360,7 +5349,7 @@ const _super = (function (geti, seti) {
                             write("_super.apply(this, arguments);");
                         }
                         else {
-                            write("super(...args);");
+                            write("super(...arguments);");
                         }
                         emitEnd(baseTypeElement);
                     }
