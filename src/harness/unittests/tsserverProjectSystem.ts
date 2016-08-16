@@ -1487,9 +1487,7 @@ namespace ts {
                 configFile = {
                     path: "/a/b/tsconfig.json",
                     content: `{
-                        "compilerOptions": {
-                            "compileOnSave": true
-                        }
+                        "compileOnSave": true
                     }`
                 };
 
@@ -1647,9 +1645,7 @@ namespace ts {
                 configFile = {
                     path: "/a/b/tsconfig.json",
                     content: `{
-                        "compilerOptions": {
-                            "compileOnSave": true
-                        },
+                        "compileOnSave": true,
                         "files": ["${file1Consumer1.path}"]
                     }`
                 };
@@ -1702,8 +1698,8 @@ namespace ts {
                 configFile = {
                     path: "/a/b/tsconfig.json",
                     content: `{
+                        "compileOnSave": true,
                         "compilerOptions": {
-                            "compileOnSave": true,
                             "isolatedModules": true
                         }
                     }`
@@ -1729,9 +1725,9 @@ namespace ts {
                 configFile = {
                     path: "/a/b/tsconfig.json",
                     content: `{
+                        "compileOnSave": true,
                         "compilerOptions": {
                             "module": "system",
-                            "compileOnSave": true,
                             "outFile": "/a/b/out.js"
                         }
                     }`

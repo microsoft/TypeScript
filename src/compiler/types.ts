@@ -2560,7 +2560,6 @@ namespace ts {
         allowUnusedLabels?: boolean;
         baseUrl?: string;
         charset?: string;
-        compileOnSave?: boolean;
         /* @internal */ configFilePath?: string;
         declaration?: boolean;
         declarationDir?: string;

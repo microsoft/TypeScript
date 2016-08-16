@@ -958,7 +958,7 @@ namespace ts.server {
             const info = this.projectService.getScriptInfo(args.file);
             let result: string[] = [];
             for (const project of info.containingProjects) {
-                if (project.isCompileOnSaveEnabled()) {
+                if (project.compileOnSaveEnabled) {
                     result = concatenate(result, project.getCompileOnSaveAffectedFileList(info.fileName));
                 }
             }

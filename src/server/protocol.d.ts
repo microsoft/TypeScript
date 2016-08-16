@@ -503,7 +503,15 @@ declare namespace ts.server.protocol {
     export interface ExternalProject {
         projectFileName: string;
         rootFiles: ExternalFile[];
-        options: CompilerOptions;
+        options: ExternalProjectCompilerOptions;
+    }
+
+    /**
+     * For external projects, some of the project settings are sent together with
+     * compiler settings.
+     */
+    export interface ExternalProjectCompilerOptions extends CompilerOptions {
+        compileOnSave?: boolean;
     }
 
     export interface ProjectVersionInfo {

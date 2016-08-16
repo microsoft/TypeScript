@@ -55,7 +55,8 @@ namespace ts.server {
             private documentRegistry: ts.DocumentRegistry,
             hasExplicitListOfFiles: boolean,
             public languageServiceEnabled: boolean,
-            private compilerOptions: CompilerOptions) {
+            private compilerOptions: CompilerOptions,
+            public compileOnSaveEnabled: boolean) {
 
             if (!this.compilerOptions) {
                 this.compilerOptions = ts.getDefaultCompilerOptions();
@@ -76,13 +77,6 @@ namespace ts.server {
 
             this.builder = createBuilder(this);
             this.markAsDirty();
-        }
-
-        isCompileOnSaveEnabled(): boolean {
-            if (this.compilerOptions) {
-                return this.compilerOptions.compileOnSave;
-            }
-            return false;
         }
 
         getLanguageService(ensureSynchronized = true): LanguageService  {
@@ -410,7 +404,7 @@ namespace ts.server {
             // Handle triple slash references
             if (sourceFile.referencedFiles) {
                 for (const referencedFile of sourceFile.referencedFiles) {
-                    const referencedPath = toPath(referencedFile.fileName, currentDirectory, getCanonicalFileName)
+                    const referencedPath = toPath(referencedFile.fileName, currentDirectory, getCanonicalFileName);
                     referencedFiles[referencedPath] = true;
                 }
             }
@@ -454,7 +448,8 @@ namespace ts.server {
                 documentRegistry,
                 /*files*/ undefined,
                 languageServiceEnabled,
-                compilerOptions);
+                compilerOptions,
+                /*compileOnSaveEnabled*/ false);
 
             this.inferredProjectName = makeInferredProjectName(InferredProject.NextId);
             InferredProject.NextId++;
@@ -488,15 +483,7 @@ namespace ts.server {
             private wildcardDirectories: Map<WatchDirectoryFlags>,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled = false) {
-            super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions);
-        }
-
-        enableCompileOnSave() {
-            this.compileOnSaveEnabled = true;
-        }
-
-        disableCompileOnSave() {
-            this.compileOnSaveEnabled = false;
+            super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
         }
 
         getProjectName() {
@@ -572,16 +559,8 @@ namespace ts.server {
             documentRegistry: ts.DocumentRegistry,
             compilerOptions: CompilerOptions,
             languageServiceEnabled: boolean,
-            public compileOnSaveEnabled = false) {
-            super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions);
-        }
-
-        enableCompileOnSave() {
-            this.compileOnSaveEnabled = true;
-        }
-
-        disableCompileOnSave() {
-            this.compileOnSaveEnabled = false;
+            public compileOnSaveEnabled = true) {
+            super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
         }
 
         getProjectName() {
