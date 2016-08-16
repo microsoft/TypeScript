@@ -134,7 +134,7 @@ namespace ts.server.typingsInstaller {
             this.sendResponse(this.createSetTypings(req, discoverTypingsResult.cachedTypingPaths));
 
             // start watching files
-            this.watchFiles(req.projectRootPath, discoverTypingsResult.filesToWatch);
+            this.watchFiles(req.projectName, discoverTypingsResult.filesToWatch);
 
             // install typings
             this.installTypings(req, req.cachePath || this.globalCachePath, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames);
@@ -255,7 +255,7 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        private watchFiles(projectRootPath: string, files: string[]) {
+        private watchFiles(projectName: string, files: string[]) {
             if (!files.length) {
                 return;
             }
@@ -263,12 +263,10 @@ namespace ts.server.typingsInstaller {
             for (const file of files) {
                 const w = this.installTypingHost.watchFile(file, f => {
                     if (this.log.isEnabled()) {
-                        this.log.writeLine(`FS notification for '${f}', sending 'clean' message for project '${projectRootPath}'`);
+                        this.log.writeLine(`FS notification for '${f}', sending 'clean' message for project '${projectName}'`);
                     }
-                    if (!this.closeWatchers(projectRootPath)) {
-                        return;
-                    }
-                    this.sendResponse(<InvalidateCachedTypings>{ projectName: projectRootPath, kind: "invalidate" })
+                    this.closeWatchers(projectName);
+                    this.sendResponse(<InvalidateCachedTypings>{ projectName: projectName, kind: "invalidate" })
                 });
                 watchers.push(w);
             }
