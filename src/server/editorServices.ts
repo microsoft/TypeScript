@@ -1419,7 +1419,7 @@ namespace ts.server {
                     /*recursive*/ true
                 );
 
-                project.directoriesWatchedForWildcards = reduceOwnProperties(projectOptions.wildcardDirectories, (watchers, flag, directory) => {
+                project.directoriesWatchedForWildcards = reduceProperties(createMap(projectOptions.wildcardDirectories), (watchers, flag, directory) => {
                     if (comparePaths(configDirectoryPath, directory, ".", !this.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
                         const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
                         this.log(`Add ${ recursive ? "recursive " : ""}watcher for: ${directory}`);

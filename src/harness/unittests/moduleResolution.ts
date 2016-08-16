@@ -358,7 +358,7 @@ export = C;
         function test(files: Map<string>, options: CompilerOptions, currentDirectory: string, useCaseSensitiveFileNames: boolean, rootFiles: string[], diagnosticCodes: number[]): void {
             const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             if (!useCaseSensitiveFileNames) {
-                files = mapPairs(files, ([fileName, file]) => [getCanonicalFileName(fileName), file]);
+                files = reduceProperties(files, (files, file, fileName) => (files[getCanonicalFileName(fileName)] = file, files), createMap<string>());
             }
 
             const host: CompilerHost = {

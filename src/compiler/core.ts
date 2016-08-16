@@ -30,8 +30,10 @@ namespace ts {
         map["__"] = undefined;
         delete map["__"];
 
-        if (template) {
-            copyOwnProperties(template, map);
+        // Copies keys/values from template. Note that for..in will not throw if
+        // template is undefined, and instead will just exit the loop.
+        for (const key in template) if (hasOwnProperty.call(template, key)) {
+            map[key] = template[key];
         }
 
         return map;
@@ -412,9 +414,6 @@ namespace ts {
     /**
      * Enumerates the properties of a Map<T>, invoking a callback and returning the first truthy result.
      *
-     * NOTE: This is intended for use with Map<T> objects. For MapLike<T> objects, use
-     *       forEachOwnProperties instead as it offers better runtime safety.
-     *
      * @param map A map for which properties should be enumerated.
      * @param callback A callback to invoke for each property.
      */
@@ -422,53 +421,6 @@ namespace ts {
         let result: U;
         for (const key in map) {
             if (result = callback(map[key], key)) break;
-        }
-        return result;
-    }
-
-    /**
-     * Enumerates the owned properties of a MapLike<T>, invoking a callback and returning the first truthy result.
-     *
-     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
-     *       forEachProperty instead as it offers better performance.
-     *
-     * @param map A map for which properties should be enumerated.
-     * @param callback A callback to invoke for each property.
-     */
-    export function forEachOwnProperty<T, U>(map: MapLike<T>, callback: (value: T, key: string) => U): U {
-        let result: U;
-        for (const key in map) if (hasOwnProperty.call(map, key)) {
-            if (result = callback(map[key], key)) break;
-        }
-        return result;
-    }
-
-    /**
-     * Maps key-value pairs of a map into a new map.
-     *
-     * NOTE: The key-value pair passed to the callback is *not* safe to cache between invocations
-     *       of the callback.
-     *
-     * @param map A map.
-     * @param callback A callback that maps a key-value pair into a new key-value pair.
-     */
-    export function mapPairs<T, U>(map: Map<T>, callback: (entry: [string, T]) => [string, U]): Map<U> {
-        let result: Map<U>;
-        if (map) {
-            result = createMap<U>();
-            let inPair: [string, T];
-            for (const key in map) {
-                if (inPair) {
-                    inPair[0] = key;
-                    inPair[1] = map[key];
-                }
-                else {
-                    inPair = [key, map[key]];
-                }
-
-                const outPair = callback(inPair);
-                result[outPair[0]] = outPair[1];
-            }
         }
         return result;
     }
@@ -489,29 +441,11 @@ namespace ts {
     /**
      * Performs a shallow copy of the properties from a source Map<T> to a target MapLike<T>
      *
-     * NOTE: This is intended for use with Map<T> objects. For MapLike<T> objects, use
-     *       copyOwnProperties instead as it offers better runtime safety.
-     *
      * @param source A map from which properties should be copied.
      * @param target A map to which properties should be copied.
      */
     export function copyProperties<T>(source: Map<T>, target: MapLike<T>): void {
         for (const key in source) {
-            target[key] = source[key];
-        }
-    }
-
-    /**
-     * Performs a shallow copy of the owned properties from a source map to a target map-like.
-     *
-     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
-     *       copyProperties instead as it offers better performance.
-     *
-     * @param source A map-like from which properties should be copied.
-     * @param target A map-like to which properties should be copied.
-     */
-    export function copyOwnProperties<T>(source: MapLike<T>, target: MapLike<T>): void {
-        for (const key in source) if (hasOwnProperty.call(source, key)) {
             target[key] = source[key];
         }
     }
@@ -553,70 +487,7 @@ namespace ts {
     }
 
     /**
-     * Counts the properties of a map.
-     *
-     * NOTE: This is intended for use with Map<T> objects. For MapLike<T> objects, use
-     *       countOwnProperties instead as it offers better runtime safety.
-     *
-     * @param map A map whose properties should be counted.
-     * @param predicate An optional callback used to limit which properties should be counted.
-     */
-    export function countProperties<T>(map: Map<T>, predicate?: (value: T, key: string) => boolean) {
-        let count = 0;
-        for (const key in map) {
-            if (!predicate || predicate(map[key], key)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    /**
-     * Counts the owned properties of a map-like.
-     *
-     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
-     *       countProperties instead as it offers better performance.
-     *
-     * @param map A map-like whose properties should be counted.
-     * @param predicate An optional callback used to limit which properties should be counted.
-     */
-    export function countOwnProperties<T>(map: MapLike<T>, predicate?: (value: T, key: string) => boolean) {
-        let count = 0;
-        for (const key in map) if (hasOwnProperty.call(map, key)) {
-            if (!predicate || predicate(map[key], key)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    /**
-     * Performs a shallow equality comparison of the contents of two maps.
-     *
-     * NOTE: This is intended for use with Map<T> objects. For MapLike<T> objects, use
-     *       equalOwnProperties instead as it offers better runtime safety.
-     *
-     * @param left A map whose properties should be compared.
-     * @param right A map whose properties should be compared.
-     */
-    export function equalProperties<T>(left: Map<T>, right: Map<T>, equalityComparer?: (left: T, right: T) => boolean) {
-        if (left === right) return true;
-        if (!left || !right) return false;
-        for (const key in left) {
-            if (!(key in right)) return false;
-            if (equalityComparer ? !equalityComparer(left[key], right[key]) : left[key] !== right[key]) return false;
-        }
-        for (const key in right) {
-            if (!(key in left)) return false;
-        }
-        return true;
-    }
-
-    /**
      * Performs a shallow equality comparison of the contents of two map-likes.
-     *
-     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
-     *       equalProperties instead as it offers better performance.
      *
      * @param left A map-like whose properties should be compared.
      * @param right A map-like whose properties should be compared.
@@ -670,17 +541,13 @@ namespace ts {
         return result;
     }
 
-    export function extend<T1 extends MapLike<{}>, T2 extends MapLike<{}>>(first: T1 , second: T2): T1 & T2 {
+    export function extend<T1, T2>(first: T1 , second: T2): T1 & T2 {
         const result: T1 & T2 = <any>{};
-        for (const id in first) {
-            if (hasOwnProperty.call(first, id)) {
-                (result as any)[id] = first[id];
-            }
+        for (const id in second) if (hasOwnProperty.call(second, id)) {
+            (result as any)[id] = (second as any)[id];
         }
-        for (const id in second) {
-            if (hasOwnProperty.call(second, id) && !hasOwnProperty.call(result, id)) {
-                (result as any)[id] = second[id];
-            }
+        for (const id in first) if (hasOwnProperty.call(first, id)) {
+            (result as any)[id] = (first as any)[id];
         }
         return result;
     }

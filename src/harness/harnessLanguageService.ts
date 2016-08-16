@@ -135,7 +135,7 @@ namespace Harness.LanguageService {
 
         public getFilenames(): string[] {
             const fileNames: string[] = [];
-            ts.forEachOwnProperty(this.fileNameToScript, (scriptInfo) => {
+            ts.forEachProperty(this.fileNameToScript, (scriptInfo) => {
                 if (scriptInfo.isRootFile) {
                     // only include root files here
                     // usually it means that we won't include lib.d.ts in the list of root files so it won't mess the computation of compilation root dir.
