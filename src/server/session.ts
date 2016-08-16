@@ -72,7 +72,8 @@ namespace ts.server {
         return {
             start: project.compilerService.host.positionToLineOffset(fileName, diag.start),
             end: project.compilerService.host.positionToLineOffset(fileName, diag.start + diag.length),
-            text: ts.flattenDiagnosticMessageText(diag.messageText, "\n")
+            text: ts.flattenDiagnosticMessageText(diag.messageText, "\n"),
+            code: diag.code
         };
     }
 
@@ -80,7 +81,8 @@ namespace ts.server {
         return {
             start: undefined,
             end: undefined,
-            text: ts.flattenDiagnosticMessageText(diag.messageText, "\n")
+            text: ts.flattenDiagnosticMessageText(diag.messageText, "\n"),
+            code: diag.code
         };
     }
 
@@ -128,6 +130,8 @@ namespace ts.server {
         export const ProjectInfo = "projectInfo";
         export const ReloadProjects = "reloadProjects";
         export const Unknown = "unknown";
+        export const CodeFixes = "codefixes";
+        export const CodeRefactors = "coderefactors";
     }
 
     namespace Errors {
@@ -398,6 +402,32 @@ namespace ts.server {
             }
             const diagnostics = selector(project, file);
             return ts.map(diagnostics, originalDiagnostic => formatDiag(file, project, originalDiagnostic));
+        }
+
+        private getCodeRefactors(args: protocol.CodeRefactorsRequestArgs): CodeAction[] {
+            const fileName: string = ts.normalizePath(args.file);
+            const project = this.projectService.getProjectForFile(fileName);
+
+            if (!project || project.languageServiceDiabled) {
+                throw Errors.NoProject;
+            }
+
+            const { compilerService } = project;
+
+            return compilerService.languageService.getCodeRefactors(fileName, args.start, args.end, compilerService.languageService);
+        }
+
+        private getCodeFixes(args: protocol.CodeFixesRequestArgs): CodeAction[] {
+            const fileName: string = ts.normalizePath(args.file);
+            const project = this.projectService.getProjectForFile(fileName);
+
+            if (!project || project.languageServiceDiabled) {
+                throw Errors.NoProject;
+            }
+
+            const { compilerService } = project;
+
+            return compilerService.languageService.getCodeFixesAtPosition(fileName, args.start, args.end, args.errorCodes);
         }
 
         private getSyntacticDiagnosticsSync(args: protocol.FileRequestArgs): protocol.Diagnostic[] {
@@ -1134,6 +1164,12 @@ namespace ts.server {
             },
             [CommandNames.SyntacticDiagnosticsSync]: (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getSyntacticDiagnosticsSync(request.arguments));
+            },
+            [CommandNames.CodeFixes]: (request: protocol.CodeFixesRequest) => {
+                return this.requiredResponse(this.getCodeFixes(request.arguments));
+            },
+            [CommandNames.CodeRefactors]: (request: protocol.CodeRefactorsRequest) => {
+                return this.requiredResponse(this.getCodeRefactors(request.arguments));
             },
             [CommandNames.Geterr]: (request: protocol.Request) => {
                 const geterrArgs = <protocol.GeterrRequestArgs>request.arguments;

@@ -175,14 +175,14 @@ namespace ts.codeRefactor {
     }
 
     function getSetterBeginning(version: ScriptTarget, accessorName: string): string {
-        if (version === ScriptTarget.ES6) {
+        if (version !== ScriptTarget.ES3) {
             return "set " + accessorName;
         }
         return "function set" + accessorName;
     }
 
     function getGetterBeginning(version: ScriptTarget, accessorName: string): string {
-        if (version === ScriptTarget.ES6) {
+        if (version !== ScriptTarget.ES3) {
             return "get " + accessorName;
         } else {
             return "function get" + accessorName;

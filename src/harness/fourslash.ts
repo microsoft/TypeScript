@@ -2053,10 +2053,16 @@ namespace FourSlash {
                 const fileName = file.fileName;
 
                 let i = 0;
+                let found = false;
                 for (; i < actual[actualIndex].changes.length; i++) {
                     if (actual[actualIndex].changes[i].fileName === fileName) {
+                        found = true;
                         break;
                     }
+                }
+
+                if (!found) {
+                    break;
                 }
 
                 this.applyEdits(fileName, actual[actualIndex].changes[i].textChanges, /*isFormattingEdit*/ false);

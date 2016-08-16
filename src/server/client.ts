@@ -387,11 +387,47 @@ namespace ts.server {
         }
 
         getSyntacticDiagnostics(fileName: string): Diagnostic[] {
-            throw new Error("Not Implemented Yet.");
+            const args: protocol.SyntacticDiagnosticsRequestArgs = {
+                file: fileName
+            };
+
+            const request = this.processRequest<protocol.SyntacticDiagnosticsRequest>(CommandNames.SyntacticDiagnosticsSync, args);
+            const response = this.processResponse<protocol.SyntacticDiagnosticsResponse>(request);
+
+            return response.body.map((entry: protocol.Diagnostic) => {
+                const start = this.lineOffsetToPosition(fileName, entry.start);
+                const end = this.lineOffsetToPosition(fileName, entry.end);
+                return {
+                    file: undefined,
+                    start: start,
+                    length: end - start,
+                    messageText: entry.text,
+                    category: undefined,
+                    code: entry.code
+                };
+            });
         }
 
         getSemanticDiagnostics(fileName: string): Diagnostic[] {
-            throw new Error("Not Implemented Yet.");
+            const args: protocol.SemanticDiagnosticsRequestArgs = {
+                file: fileName
+            };
+
+            const request = this.processRequest<protocol.SemanticDiagnosticsRequest>(CommandNames.SemanticDiagnosticsSync, args);
+            const response = this.processResponse<protocol.SemanticDiagnosticsResponse>(request);
+
+            return response.body.map((entry: protocol.Diagnostic) => {
+                const start = this.lineOffsetToPosition(fileName, entry.start);
+                const end = this.lineOffsetToPosition(fileName, entry.end);
+                return {
+                    file: undefined,
+                    start: start,
+                    length: end - start,
+                    messageText: entry.text,
+                    category: undefined,
+                    code: entry.code
+                };
+            });
         }
 
         getCompilerOptionsDiagnostics(): Diagnostic[] {
@@ -593,11 +629,30 @@ namespace ts.server {
         }
 
         getCodeRefactors(fileName: string, start: number, end: number, serviceInstance: LanguageService): ts.CodeAction[] {
-            throw new Error("Not Implemented Yet.");
+            const args: protocol.CodeRefactorsRequestArgs = {
+                file: fileName,
+                start: start,
+                end: end
+            };
+
+            const request = this.processRequest<protocol.CodeRefactorsRequest>(CommandNames.CodeRefactors, args);
+            const response = this.processResponse<protocol.CodeRefactorsResponse>(request);
+
+            return response.body;
         }
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: string[]): ts.CodeAction[] {
-            throw new Error("Not Implemented Yet.");
+            const args: protocol.CodeFixesRequestArgs = {
+                file: fileName,
+                start: start,
+                end: end,
+                errorCodes: errorCodes
+            };
+
+            const request = this.processRequest<protocol.CodeFixesRequest>(CommandNames.CodeFixes, args);
+            const response = this.processResponse<protocol.CodeFixesResponse>(request);
+
+            return response.body;
         }
 
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {

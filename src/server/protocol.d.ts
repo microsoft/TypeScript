@@ -83,6 +83,59 @@ declare namespace ts.server.protocol {
         body?: any;
     }
 
+    export interface CodeRefactorsRequestArgs {
+        file: string;
+        start: number;
+        end: number;
+    }
+
+    export interface CodeRefactorsRequest extends Request {
+        arguments: CodeRefactorsRequestArgs;
+    }
+
+    export interface CodeRefactorsResponse extends Response {
+        body?: CodeAction[];
+    }
+
+    export interface CodeFixesRequestArgs {
+        file: string;
+        start: number;
+        end: number;
+        errorCodes: string[];
+    }
+
+    export interface CodeFixesResponse extends Response {
+        body?: CodeAction[];
+    }
+
+    export interface CodeFixesRequest extends Request {
+        arguments: CodeFixesRequestArgs;
+    }
+
+    export interface SemanticDiagnosticsRequestArgs {
+        file: string;
+    }
+
+    export interface SemanticDiagnosticsResponse extends Response {
+        body?: Diagnostic[];
+    }
+
+    export interface SemanticDiagnosticsRequest extends Request {
+        arguments: SemanticDiagnosticsRequestArgs;
+    }
+
+    export interface SyntacticDiagnosticsRequestArgs {
+        file: string;
+    }
+
+    export interface SyntacticDiagnosticsResponse extends Response {
+        body?: Diagnostic[];
+    }
+
+    export interface SyntacticDiagnosticsRequest extends Request {
+        arguments: SyntacticDiagnosticsRequestArgs;
+    }
+
     /**
       * Arguments for FileRequest messages.
       */
@@ -1025,6 +1078,8 @@ declare namespace ts.server.protocol {
           * Text of diagnostic message.
           */
         text: string;
+
+        code: number;
     }
 
     export interface DiagnosticEventBody {
