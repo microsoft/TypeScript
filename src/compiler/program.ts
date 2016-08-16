@@ -2048,7 +2048,7 @@ namespace ts {
                         const otherFileText = host.readFile(resolvedTypeReferenceDirective.resolvedFileName);
                         if (otherFileText !== getSourceFile(previousResolution.resolvedFileName).text) {
                             fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd,
-                                Diagnostics.Conflicting_library_definitions_for_0_found_at_1_and_2_Copy_the_correct_file_to_the_typings_folder_to_resolve_this_conflict,
+                                Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
                                 typeReferenceDirective,
                                 resolvedTypeReferenceDirective.resolvedFileName,
                                 previousResolution.resolvedFileName
