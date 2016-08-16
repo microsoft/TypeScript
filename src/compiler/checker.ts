@@ -8809,21 +8809,34 @@ namespace ts {
 
             const type = getTypeOfSymbol(localOrExportSymbol);
             const declaration = localOrExportSymbol.valueDeclaration;
+            // We only narrow variables and parameters occurring in a non-assignment position. For all other
+            // entities we simply return the declared type.
             if (!(localOrExportSymbol.flags & SymbolFlags.Variable) || isAssignmentTarget(node) || !declaration) {
                 return type;
             }
-
+            // The declaration container is the innermost function that encloses the declaration of the variable
+            // or parameter. The flow container is the innermost function starting with which we analyze the control
+            // flow graph to determine the control flow based type.
             const isParameter = getRootDeclaration(declaration).kind === SyntaxKind.Parameter;
             const declarationContainer = getControlFlowContainer(declaration);
             let flowContainer = getControlFlowContainer(node);
+            // When the control flow originates in a function expression or arrow function and we are referencing
+            // a const variable or parameter from an outer function, we extend the origin of the control flow
+            // analysis to include the immediately enclosing function.
             while (flowContainer !== declarationContainer &&
                 (flowContainer.kind === SyntaxKind.FunctionExpression || flowContainer.kind === SyntaxKind.ArrowFunction) &&
                 (isReadonlySymbol(localOrExportSymbol) || isParameter && !isParameterAssigned(localOrExportSymbol))) {
                 flowContainer = getControlFlowContainer(flowContainer);
             }
+            // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
+            // the entire control flow graph from the variable's declaration (i.e. when the flow container and
+            // declaration container are the same).
             const assumeInitialized = !strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || isParameter ||
                 flowContainer !== declarationContainer || isInAmbientContext(declaration);
             const flowType = getFlowTypeOfReference(node, type, assumeInitialized, flowContainer);
+            // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
+            // from declaration to use, and when the variable's declared type doesn't include undefined but the
+            // control flow based type does include undefined.
             if (!assumeInitialized && !(getFalsyFlags(type) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
                 error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
                 // Return the declared type to reduce follow-on errors

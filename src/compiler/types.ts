@@ -2157,7 +2157,7 @@ namespace ts {
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
         /* @internal */ isReferenced?: boolean; // True if the symbol is referenced elsewhere
-        /* @internal */ isAssigned?: boolean;   // True if the symbol has assignments
+        /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
     }
 
     /* @internal */
