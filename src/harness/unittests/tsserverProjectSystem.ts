@@ -209,6 +209,8 @@ namespace ts {
         readonly watchedDirectories: Map<{ cb: DirectoryWatcherCallback, recursive: boolean }[]> = {};
         readonly watchedFiles: Map<FileWatcherCallback[]> = {};
 
+        private filesOrFolders: FileOrFolder[];
+
         constructor(public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[]) {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
@@ -217,6 +219,7 @@ namespace ts {
         }
 
         reloadFS(filesOrFolders: FileOrFolder[]) {
+            this.filesOrFolders = filesOrFolders;
             this.fs = createFileMap<FSEntry>();
             for (const fileOrFolder of filesOrFolders) {
                 const path = this.toPath(fileOrFolder.path);
@@ -368,6 +371,26 @@ namespace ts {
             this.immediateCallbacks.unregister(timeoutId);
         }
 
+        createDirectory(directoryName: string): void {
+            this.createFileOrFolder({ path: directoryName });
+        }
+
+        createFileOrFolder(f: FileOrFolder, createParentDirectory = false): void {
+            const base = getDirectoryPath(f.path);
+            if (base !== f.path && !this.directoryExists(base)) {
+                if (createParentDirectory) {
+                    // TODO: avoid reloading FS on every creation
+                    this.createFileOrFolder({ path: base }, createParentDirectory);
+                }
+                else {
+                    throw new Error(`directory ${base} does not exist`);
+                }
+            }
+            const filesOrFolders = this.filesOrFolders.slice(0);
+            filesOrFolders.push(f);
+            this.reloadFS(filesOrFolders);
+        }
+
         writeFile(fileName: string, content: string) {
             const path = this.toPath(fileName);
             const newEntry: File = {
@@ -384,7 +407,6 @@ namespace ts {
         readonly getCurrentDirectory = () => this.currentDirectory;
         readonly writeCompressedData = () => notImplemented();
         readonly write = (s: string) => notImplemented();
-        readonly createDirectory = (s: string) => notImplemented();
         readonly exit = () => notImplemented();
     }
 

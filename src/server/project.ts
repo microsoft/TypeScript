@@ -86,12 +86,12 @@ namespace ts.server {
             return this.languageService;
         }
 
-        getCompileOnSaveAffectedFileList(triggerFileName: string): string[] {
+        getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[] {
             if (!this.languageServiceEnabled) {
                 return [];
             }
             this.updateGraph();
-            return this.builder.getFilesAffectedBy(triggerFileName);
+            return this.builder.getFilesAffectedBy(scriptInfo);
         }
 
         getProjectVersion() {

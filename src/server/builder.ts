@@ -80,27 +80,27 @@ namespace ts.server {
 
     export interface Builder {
         readonly project: Project;
-        getFilesAffectedBy(fileName: string): string[];
+        getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
         onProjectUpdateGraph(): void;
-        emitFile(fileName: string, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean;
+        emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean;
     }
 
     abstract class AbstractBuilder<T extends BuilderFileInfo> implements Builder {
 
         private fileInfos = createFileMap<T>();
 
-        constructor(public readonly project: Project) {
+        constructor(public readonly project: Project, private ctor: { new(scriptInfo: ScriptInfo, project: Project): T }) {
         }
 
         protected getFileInfo(path: Path): T {
             return this.fileInfos.get(path);
         }
 
-        protected getOrCreateFileInfo(path: Path, ctor: { new(scriptInfo: ScriptInfo, project: Project): T }): T {
+        protected getOrCreateFileInfo(path: Path): T {
             let fileInfo = this.getFileInfo(path);
             if (!fileInfo) {
                 const scriptInfo = this.project.getScriptInfo(path);
-                fileInfo = new ctor(scriptInfo, this.project);
+                fileInfo = new this.ctor(scriptInfo, this.project);
                 this.setFileInfo(path, fileInfo);
             }
             return fileInfo;
@@ -115,24 +115,21 @@ namespace ts.server {
         }
 
         protected removeFileInfo(path: Path) {
-            if (this.fileInfos.contains(path)) {
-                this.fileInfos.remove(path);
-            }
+            this.fileInfos.remove(path);
         }
 
         protected forEachFileInfo(action: (fileInfo: T) => any) {
             this.fileInfos.forEachValue((path: Path, value: T) => action(value));
         }
 
-        abstract getFilesAffectedBy(fileName: string): string[];
+        abstract getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
         abstract onProjectUpdateGraph(): void;
 
         /**
          * @returns {boolean} whether the emit was conducted or not
          */
-        emitFile(fileName: string, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean {
-            const path = toPath(fileName, getDirectoryPath(fileName), this.project.projectService.toCanonicalFileName);
-            const fileInfo = this.getFileInfo(path);
+        emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean {
+            const fileInfo = this.getFileInfo(scriptInfo.path);
             if (!fileInfo) {
                 return false;
             }
@@ -149,11 +146,11 @@ namespace ts.server {
 
     class NonModuleBuilder extends AbstractBuilder<BuilderFileInfo> {
 
-        onProjectUpdateGraph() {
+        constructor(public project: Project) {
+            super(project, BuilderFileInfo);
         }
 
-        getOrCreateFileInfo(path: Path) {
-            return super.getOrCreateFileInfo(path, BuilderFileInfo);
+        onProjectUpdateGraph() {
         }
 
         /**
@@ -161,23 +158,22 @@ namespace ts.server {
          * consumed by the API user, which will use it to interact with file systems. Path
          * should only be used internally, because the case sensitivity is not trustable.
          */
-        getFilesAffectedBy(fileName: string): string[] {
-            const path = toPath(fileName, getDirectoryPath(fileName), this.project.projectService.toCanonicalFileName);
-            const info = this.getOrCreateFileInfo(path);
+        getFilesAffectedBy(scriptInfo: ScriptInfo): string[] {
+            const info = this.getOrCreateFileInfo(scriptInfo.path);
             let result: string[];
             if (info.updateShapeSignature()) {
                 const options = this.project.getCompilerOptions();
                 // If `--out` or `--outFile` is specified, any new emit will result in re-emitting the entire project,
                 // so returning the file itself is good enough.
                 if (options && (options.out || options.outFile)) {
-                    result = [fileName];
+                    result = [scriptInfo.fileName];
                 }
                 else {
                     result = this.project.getFileNamesWithoutDefaultLib();
                 }
             }
             else {
-                result = [fileName];
+                result = [scriptInfo.fileName];
             }
             return result;
         }
@@ -237,6 +233,10 @@ namespace ts.server {
 
     class ModuleBuilder extends AbstractBuilder<ModuleBuilderFileInfo> {
 
+        constructor(public project: Project) {
+            super(project, ModuleBuilderFileInfo);
+        }
+
         private projectVersionForDependencyGraph: string;
 
         private getReferencedFileInfos(fileInfo: ModuleBuilderFileInfo): ModuleBuilderFileInfo[] {
@@ -249,10 +249,6 @@ namespace ts.server {
                 return map(referencedFilePaths, f => this.getFileInfo(f)).sort(ModuleBuilderFileInfo.compareFileInfos);
             }
             return [];
-        }
-
-        getOrCreateFileInfo(path: Path) {
-            return super.getOrCreateFileInfo(path, ModuleBuilderFileInfo);
         }
 
         onProjectUpdateGraph() {
@@ -330,11 +326,10 @@ namespace ts.server {
             fileInfo.references = [];
         }
 
-        getFilesAffectedBy(fileName: string): string[] {
+        getFilesAffectedBy(scriptInfo: ScriptInfo): string[] {
             this.ensureProjectDependencyGraphUpToDate();
 
-            const path = toPath(fileName, getDirectoryPath(fileName), createGetCanonicalFileName(this.project.projectService.host.useCaseSensitiveFileNames));
-            const fileInfo = this.getFileInfo(path);
+            const fileInfo = this.getFileInfo(scriptInfo.path);
             if (fileInfo && fileInfo.updateShapeSignature()) {
                 let result: string[];
                 if (!fileInfo.isExternalModuleOrHasOnlyAmbientExternalModules()) {
@@ -343,7 +338,7 @@ namespace ts.server {
                 else {
                     const options = this.project.getCompilerOptions();
                     if (options && (options.isolatedModules || options.out || options.outFile)) {
-                        result = [fileName];
+                        result = [scriptInfo.fileName];
                     }
                     else {
                         // Now we need to if each file in the referencedBy list has a shape change as well.
@@ -353,7 +348,7 @@ namespace ts.server {
                         // Use slice to clone the array to avoid manipulating in place
                         const queue = fileInfo.referencedBy.slice(0);
                         const fileNameSet: Map<boolean> = {};
-                        fileNameSet[fileName] = true;
+                        fileNameSet[scriptInfo.fileName] = true;
                         while (queue.length > 0) {
                             const processingFileInfo = queue.pop();
                             if (processingFileInfo.updateShapeSignature() && processingFileInfo.referencedBy.length > 0) {
@@ -370,12 +365,12 @@ namespace ts.server {
                 }
                 return result;
             }
-            return [fileName];
+            return [scriptInfo.fileName];
         }
     }
 
     export function createBuilder(project: Project): Builder {
-        if (project.projectKind === ProjectKind.Configured) {
+        if (project.projectKind === ProjectKind.Configured || project.projectKind === ProjectKind.External) {
             const moduleKind = project.getCompilerOptions().module;
             switch (moduleKind) {
                 case ModuleKind.None:

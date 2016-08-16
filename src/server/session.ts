@@ -959,7 +959,7 @@ namespace ts.server {
             let result: string[] = [];
             for (const project of info.containingProjects) {
                 if (project.compileOnSaveEnabled) {
-                    result = concatenate(result, project.getCompileOnSaveAffectedFileList(info.fileName));
+                    result = concatenate(result, project.getCompileOnSaveAffectedFileList(info));
                 }
             }
             return result;
@@ -970,8 +970,8 @@ namespace ts.server {
             if (!project) {
                 throw Errors.NoProject;
             }
-            const filePath = toPath(file, getDirectoryPath(file), file => this.getCanonicalFileName(file));
-            return project.builder.emitFile(filePath, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
+            const scriptInfo = project.getScriptInfo(file);
+            return project.builder.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
         }
 
         private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems {

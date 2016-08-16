@@ -6,15 +6,14 @@
 
 namespace ts {
     /* @internal */
+    export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean" };
+    /* @internal */
     export const optionDeclarations: CommandLineOption[] = [
         {
             name: "charset",
             type: "string",
         },
-        {
-            name: "compileOnSave",
-            type: "boolean",
-        },
+        compileOnSaveCommandLineOption,
         {
             name: "declaration",
             shortName: "d",
@@ -781,7 +780,7 @@ namespace ts {
         if (!hasProperty(jsonOption, "compileOnSave")) {
             return false;
         }
-        const result = convertJsonOption({ name: "compileOnSave", type: "boolean" }, jsonOption["compileOnSave"], basePath, errors);
+        const result = convertJsonOption(compileOnSaveCommandLineOption, jsonOption["compileOnSave"], basePath, errors);
         if (typeof result == "boolean") {
             return result;
         }
