@@ -349,23 +349,26 @@ namespace ts {
                             ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
                             : Diagnostics.Duplicate_identifier_0;
 
-                        // If the current node is a default export of some sort, then check if
-                        // there are any other default exports that we need to error on.
-                        // We'll know whether we have other default exports depending on if `symbol` already has a declaration list set.
-                        if (isDefaultExport && symbol.declarations) {
-                            message = Diagnostics.A_module_cannot_have_multiple_default_exports;
-                        }
-                        else {
-                            // This is to properly report an error in the case "export default { }" is after export default of class declaration or function declaration.
-                            forEach(symbol.declarations, declaration => {
-                                // Error on multiple export default in the following case:
-                                // 1. multiple export default of class declaration or function declaration by checking NodeFlags.Default
-                                // 2. multiple export default of export assignment. This one doesn't have NodeFlags.Default on (as export default doesn't considered as modifiers)
-                                if ((declaration.flags & NodeFlags.Default) ||
-                                    (declaration.kind === SyntaxKind.ExportAssignment && !(<ExportAssignment>node).isExportEquals)) {
-                                    message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                        if (symbol.declarations && symbol.declarations.length) {
+                            // If the current node is a default export of some sort, then check if
+                            // there are any other default exports that we need to error on.
+                            // We'll know whether we have other default exports depending on if `symbol` already has a declaration list set.
+                            if (isDefaultExport) {
+                                message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                            }
+                            else {
+                                // This is to properly report an error in the case "export default { }" is after export default of class declaration or function declaration.
+                                for (const declaration of symbol.declarations) {
+                                    // Error on multiple export default in the following case:
+                                    // 1. multiple export default of class declaration or function declaration by checking NodeFlags.Default
+                                    // 2. multiple export default of export assignment. This one doesn't have NodeFlags.Default on (as export default doesn't considered as modifiers)
+                                    if ((declaration.flags & NodeFlags.Default) ||
+                                        (declaration.kind === SyntaxKind.ExportAssignment && !(<ExportAssignment>node).isExportEquals)) {
+                                        message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                                        break;
+                                    }
                                 }
-                            });
+                            }
                         }
 
                         forEach(symbol.declarations, declaration => {
