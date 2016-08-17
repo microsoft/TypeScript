@@ -205,12 +205,13 @@ const rangesByText = test.rangesByText();
 for (const text in rangesByText) {
     const ranges = rangesByText[text];
     if (text === "globalVar") {
-        function isShadow(r) {
-            return r.marker && r.marker.data && r.marker.data.shadow;
-        }
         verify.rangesReferenceEachOther(ranges.filter(isShadow));
         verify.rangesReferenceEachOther(ranges.filter(r => !isShadow(r)));
     } else {
         verify.rangesReferenceEachOther(ranges);
     }
+}
+
+function isShadow(r) {
+    return r.marker && r.marker.data && r.marker.data.shadow;
 }

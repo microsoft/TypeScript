@@ -421,10 +421,10 @@ namespace ts {
     }
 
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
-        const start = performance.mark();
+        performance.mark("beforeParse");
         const result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind);
-
-        performance.measure("Parse", start);
+        performance.mark("afterParse");
+        performance.measure("Parse", "beforeParse", "afterParse");
         return result;
     }
 
@@ -595,7 +595,7 @@ namespace ts {
 
             parseDiagnostics = [];
             parsingContext = 0;
-            identifiers = {};
+            identifiers = createMap<string>();
             identifierCount = 0;
             nodeCount = 0;
 
@@ -1084,7 +1084,7 @@ namespace ts {
 
         function internIdentifier(text: string): string {
             text = escapeIdentifier(text);
-            return hasProperty(identifiers, text) ? identifiers[text] : (identifiers[text] = text);
+            return identifiers[text] || (identifiers[text] = text);
         }
 
         // An identifier that starts with two underscores has an extra underscore character prepended to it to avoid issues
