@@ -19,6 +19,7 @@
         "scriptVersionCache.ts",
         "scriptInfo.ts",
         "lshost.ts",
+        "typingsCache.ts",
         "project.ts",
         "editorServices.ts",
         "protocol.d.ts",
