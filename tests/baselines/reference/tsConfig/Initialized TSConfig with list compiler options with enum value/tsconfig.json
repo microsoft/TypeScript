@@ -8,8 +8,5 @@
             "es5",
             "es2015.core"
         ]
-    },
-    "exclude": [
-        "node_modules"
-    ]
+    }
 }

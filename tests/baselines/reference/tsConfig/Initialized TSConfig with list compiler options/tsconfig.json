@@ -8,8 +8,5 @@
             "jquery",
             "mocha"
         ]
-    },
-    "exclude": [
-        "node_modules"
-    ]
+    }
 }

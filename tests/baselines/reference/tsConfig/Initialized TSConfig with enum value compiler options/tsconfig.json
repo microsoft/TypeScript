@@ -5,8 +5,5 @@
         "noImplicitAny": false,
         "sourceMap": false,
         "jsx": "react"
-    },
-    "exclude": [
-        "node_modules"
-    ]
+    }
 }

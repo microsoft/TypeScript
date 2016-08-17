@@ -690,12 +690,6 @@ namespace ts {
             // only set the files property if we have at least one file
             configurations.files = fileNames;
         }
-        else {
-            configurations.exclude = ["node_modules"];
-            if (compilerOptions.outDir) {
-                configurations.exclude.push(compilerOptions.outDir);
-            }
-        }
 
         return configurations;
 
