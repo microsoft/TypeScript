@@ -12,6 +12,7 @@ namespace ts.server {
     interface NodeChildProcess {
         send(message: any, sendHandle?: any): void;
         on(message: "message", f: (m: any) => void): void;
+        kill(): void;
     }
 
     const childProcess: {
@@ -175,6 +176,10 @@ namespace ts.server {
 
             this.installer = childProcess.fork(combinePaths(__dirname, "typingsInstaller.js"));
             this.installer.on("message", m => this.handleMessage(m));
+            process.on("exit", () => {
+                this.installer.kill();
+            })
+            
         }
 
         onProjectClosed(p: Project): void {

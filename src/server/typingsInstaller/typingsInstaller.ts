@@ -72,7 +72,7 @@ namespace ts.server.typingsInstaller {
             this.closeWatchers(req.projectName);
         }
 
-        private closeWatchers(projectName: string): boolean {
+        private closeWatchers(projectName: string): void {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Closing file watchers for project '${projectName}'`);
             }
@@ -82,7 +82,7 @@ namespace ts.server.typingsInstaller {
                     this.log.writeLine(`No watchers are registered for project '${projectName}'`);
                 }
                 
-                return false;
+                return;
             }
             for (const w of watchers) {
                 w.close();
@@ -93,8 +93,6 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Closing file watchers for project '${projectName}' - done.`);
             }
-
-            return true;
         }
 
         install(req: DiscoverTypings) {
@@ -137,7 +135,14 @@ namespace ts.server.typingsInstaller {
             this.watchFiles(req.projectName, discoverTypingsResult.filesToWatch);
 
             // install typings
-            this.installTypings(req, req.cachePath || this.globalCachePath, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames);
+            if (discoverTypingsResult.newTypingNames.length) {
+                this.installTypings(req, req.cachePath || this.globalCachePath, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames);
+            }
+            else {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`No new typings were requested as a result of typings discovery`);
+                }
+            }
         }
 
         private processCacheLocation(cacheLocation: string) {
@@ -259,17 +264,23 @@ namespace ts.server.typingsInstaller {
             if (!files.length) {
                 return;
             }
+            // shut down existing watchers
+            this.closeWatchers(projectName);
+
+            // handler should be invoked once for the entire set of files since it will trigger full rediscovery of typings
+            let isInvoked = false;
             const watchers: FileWatcher[] = [];
             for (const file of files) {
                 const w = this.installTypingHost.watchFile(file, f => {
                     if (this.log.isEnabled()) {
-                        this.log.writeLine(`FS notification for '${f}', sending 'clean' message for project '${projectName}'`);
+                        this.log.writeLine(`Got FS notification for ${f}, handler is already invoked '${isInvoked}'`);
                     }
-                    this.closeWatchers(projectName);
-                    this.sendResponse(<InvalidateCachedTypings>{ projectName: projectName, kind: "invalidate" })
+                    this.sendResponse({ projectName: projectName, kind: "invalidate" });
+                    isInvoked = true;
                 });
                 watchers.push(w);
             }
+            this.projectWatchers[projectName] = watchers;
         }
 
         private createSetTypings(request: DiscoverTypings, typings: string[]): SetTypings {

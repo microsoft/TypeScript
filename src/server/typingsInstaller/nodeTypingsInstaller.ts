@@ -52,6 +52,9 @@ namespace ts.server.typingsInstaller {
 
         constructor(log?: Log) {
             super(getGlobalCacheLocation(), toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)), log);
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Process id: ${process.pid}`);
+            }
             const { exec, execSync } = require("child_process"); 
             this.execSync = execSync;
             this.exec = exec;
@@ -84,20 +87,34 @@ namespace ts.server.typingsInstaller {
 
         protected isPackageInstalled(packageName: string) {
             try {
-                this.execSync(`npm list --global --depth=1 ${packageName}`, { stdio: "ignore" });
+                const output = this.execSync(`npm list --global --depth=1 ${packageName}`, { stdio: "pipe" }).toString();
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`IsPackageInstalled::stdout '${output}'`);
+                }
                 return true;
             }
             catch (e) {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`IsPackageInstalled::err::stdout '${e.stdout && e.stdout.toString()}'`);
+                    this.log.writeLine(`IsPackageInstalled::err::stderr '${e.stdout && e.stderr.toString()}'`);
+                }
                 return false;
             }
         }
 
         protected installPackage(packageName: string) {
             try {
-                this.execSync(`npm install --global ${packageName}`, { stdio: "ignore" });
+                const output = this.execSync(`npm install --global ${packageName}`, { stdio: "pipe" }).toString();
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`installPackage::stdout '${output}'`);
+                }
                 return true;
             }
             catch (e) {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`installPackage::err::stdout '${e.stdout && e.stdout.toString()}'`);
+                    this.log.writeLine(`installPackage::err::stderr '${e.stdout && e.stderr.toString()}'`);
+                }
                 return false;
             }
         }
@@ -107,6 +124,9 @@ namespace ts.server.typingsInstaller {
                 this.log.writeLine(`Sending response: ${JSON.stringify(response)}`)
             }
             process.send(response);
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Response has been sent.`)
+            }
         }
 
         protected runTsd(cachePath: string, typingsToInstall: string[], postInstallAction: (installedTypings: string[]) => void): void {
@@ -139,11 +159,15 @@ namespace ts.server.typingsInstaller {
     }
 
     const log = new FileLog(process.env.TI_LOG_FILE);
-    process.on("uncaughtException", (e: Error) => {
-        if (log.isEnabled()) {
+    if (log.isEnabled()) {
+        process.on("uncaughtException", (e: Error) => {
             log.writeLine(`Unhandled exception: ${e} at ${e.stack}`);
-        }
-    })
+        });
+        process.on("disconnect", () => {
+            log.writeLine(`Parent process has exited, shutting down...`);
+            process.exit(0);
+        });
+    }
     const installer = new NodeTypingsInstaller(log);
     installer.init();
 }
