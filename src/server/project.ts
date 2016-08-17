@@ -47,7 +47,7 @@ namespace ts.server {
          */
         private projectStateVersion = 0;
 
-        private typingFiles: string[];
+        private typingFiles: TypingsArray;
 
         constructor(
             readonly projectKind: ProjectKind,
@@ -226,18 +226,19 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return true;
             }
-            const hasChanges = this.updateGraphWorker();
+            let hasChanges = this.updateGraphWorker();
+            const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this);
+            if (this.setTypings(cachedTypings)) {
+                hasChanges = this.updateGraphWorker() || hasChanges;
+            }
             if (hasChanges) {
-                if (this.setTypings(this.projectService.typingsCache.getTypingsForProject(this))) {
-                    this.updateGraphWorker();
-                }
                 this.projectStructureVersion++;
             }
             return !hasChanges;
         }
 
-        setTypings(typings: string[]): boolean {
-            if (typings === this.typingFiles) {
+        private setTypings(typings: TypingsArray): boolean {
+            if (arrayIsEqualTo(this.typingFiles, typings)) {
                 return false;
             }
             this.typingFiles = typings;

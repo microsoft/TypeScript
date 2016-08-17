@@ -16,7 +16,7 @@ namespace ts.server {
     class TypingsCacheEntry {
         readonly typingOptions: TypingOptions;
         readonly compilerOptions: CompilerOptions;
-        readonly typings: string[];
+        readonly typings: TypingsArray;
     }
 
     const emptyArray: any[] = [];
@@ -43,9 +43,7 @@ namespace ts.server {
         if ((arr1 || emptyArray).length === 0 && (arr2 || emptyArray).length === 0) {
             return true;
         }
-/* tslint:disable:no-null-keyword */
-        const set: Map<boolean> = Object.create(null);
-/* tslint:enable:no-null-keyword */
+        const set: Map<boolean> = createMap<boolean>();
         let unique = 0;
 
         for (const v of arr1) {
@@ -77,24 +75,33 @@ namespace ts.server {
         return opt1.allowJs != opt2.allowJs;
     }
 
+    export interface TypingsArray extends ReadonlyArray<string> {
+        " __typingsArrayBrand": any;
+    }
+
+    function toTypingsArray(arr: string[]): TypingsArray {
+        arr.sort();
+        return <any>arr;
+    }
+
     export class TypingsCache {
         private readonly perProjectCache: Map<TypingsCacheEntry> = createMap<TypingsCacheEntry>();
 
         constructor(private readonly installer: ITypingsInstaller) {
         }
 
-        getTypingsForProject(project: Project): Path[] {
+        getTypingsForProject(project: Project): TypingsArray {
             const typingOptions = getTypingOptionsForProjects(project);
 
             if (!typingOptions.enableAutoDiscovery) {
-                return emptyArray;
+                return <any>emptyArray;
             }
 
             const entry = this.perProjectCache[project.getProjectName()];
             if (!entry || typingOptionsChanged(typingOptions, entry.typingOptions) || compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions)) {
                 this.installer.enqueueInstallTypingsRequest(project, typingOptions);
             }
-            return entry ? entry.typings : emptyArray;
+            return entry ? entry.typings : <any>emptyArray;
         }
 
         invalidateCachedTypingsForProject(project: Project) {
@@ -109,7 +116,7 @@ namespace ts.server {
             this.perProjectCache[projectName] = {
                 compilerOptions,
                 typingOptions,
-                typings: newTypings
+                typings: toTypingsArray(newTypings)
             };
         }
 
