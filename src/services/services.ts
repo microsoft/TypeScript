@@ -4248,7 +4248,7 @@ namespace ts {
                 addRange(entries, keywordCompletions);
             }
 
-            return { isMemberCompletion, isNewIdentifierLocation, entries };
+            return { isMemberCompletion, isNewIdentifierLocation: isNewIdentifierLocation || isSourceFileJavaScript(sourceFile), entries };
 
             function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: Map<string>): CompletionEntry[] {
                 const entries: CompletionEntry[] = [];
