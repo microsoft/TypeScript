@@ -1977,33 +1977,25 @@ namespace ts {
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression) {
+            Debug.assert(isInJavaScriptFile(node));
             // Declare a 'member' if the container is an ES5 class or ES6 constructor
-            let assignee: Node;
             if (container.kind === SyntaxKind.FunctionDeclaration || container.kind === SyntaxKind.FunctionExpression) {
-                assignee = container;
+                container.symbol.members = container.symbol.members || createMap<Symbol>();
+                // It's acceptable for multiple 'this' assignments of the same identifier to occur
+                declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
             }
             else if (container.kind === SyntaxKind.Constructor) {
-                if (isInJavaScriptFile(node)) {
-                    // this.foo assignment in a JavaScript class
-                    // Bind this property to the containing class
-                    const saveContainer = container;
-                    container = container.parent;
-                    bindPropertyOrMethodOrAccessor(node, SymbolFlags.Property, SymbolFlags.None);
-                    container = saveContainer;
-                    return;
+                // this.foo assignment in a JavaScript class
+                // Bind this property to the containing class
+                const saveContainer = container;
+                container = container.parent;
+                // AND it can be overwritten by subsequent method declarations
+                const symbol = bindPropertyOrMethodOrAccessor(node, SymbolFlags.Property, SymbolFlags.None);
+                if (symbol) {
+                    (symbol as Symbol).isReplaceableByMethod = true;
                 }
-                else {
-                    assignee = container.parent;
-                }
+                container = saveContainer;
             }
-            else {
-                return;
-            }
-            assignee.symbol.members = assignee.symbol.members || createMap<Symbol>();
-            // It's acceptable for multiple 'this' assignments of the same identifier to occur
-            // AND it can be overwritten by subsequent method declarations
-            const symbol = declareSymbol(assignee.symbol.members, assignee.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
-            symbol.isReplaceableByMethod = true;
         }
 
         function bindPrototypePropertyAssignment(node: BinaryExpression) {
