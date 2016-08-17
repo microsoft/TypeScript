@@ -17095,11 +17095,6 @@ namespace ts {
                 }
             }
 
-            if (compilerOptions.noImplicitAny && !node.body) {
-                // Ambient shorthand module is an implicit any
-                reportImplicitAnyError(node, anyType);
-            }
-
             if (node.body) {
                 checkSourceElement(node.body);
                 if (!isGlobalScopeAugmentation(node)) {
