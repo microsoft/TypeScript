@@ -8364,13 +8364,18 @@ namespace ts {
                 // each antecedent code path.
                 const antecedentTypes: Type[] = [];
                 let subtypeReduction = false;
+                let firstAntecedentType: FlowType;
                 flowLoopNodes[flowLoopCount] = flow;
                 flowLoopKeys[flowLoopCount] = key;
                 flowLoopTypes[flowLoopCount] = antecedentTypes;
                 for (const antecedent of flow.antecedents) {
                     flowLoopCount++;
-                    const type = getTypeFromFlowType(getTypeAtFlowNode(antecedent));
+                    const flowType = getTypeAtFlowNode(antecedent);
                     flowLoopCount--;
+                    if (!firstAntecedentType) {
+                        firstAntecedentType = flowType;
+                    }
+                    const type = getTypeFromFlowType(flowType);
                     // If we see a value appear in the cache it is a sign that control flow  analysis
                     // was restarted and completed by checkExpressionCached. We can simply pick up
                     // the resulting type and bail out.
@@ -8393,7 +8398,13 @@ namespace ts {
                         break;
                     }
                 }
-                return cache[key] = getUnionType(antecedentTypes, subtypeReduction);
+                // The result is incomplete if the first antecedent (the non-looping control flow path)
+                // is incomplete.
+                const result = getUnionType(antecedentTypes, subtypeReduction);
+                if (isIncomplete(firstAntecedentType)) {
+                    return createFlowType(result, /*incomplete*/ true);
+                }
+                return cache[key] = result;
             }
 
             function isMatchingReferenceDiscriminant(expr: Expression) {
