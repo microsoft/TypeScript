@@ -127,6 +127,10 @@ namespace ts {
             description: Diagnostics.Do_not_emit_outputs_if_any_errors_were_reported,
         },
         {
+            name: "noErrorTruncation",
+            type: "boolean"
+        },
+        {
             name: "noImplicitAny",
             type: "boolean",
             description: Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type,
