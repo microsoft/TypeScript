@@ -2010,15 +2010,16 @@ namespace ts {
         }
 
         function processTypeReferenceDirectives(file: SourceFile) {
-            const typeDirectives = map(file.typeReferenceDirectives, l => l.fileName);
+            const typeDirectives = map(file.typeReferenceDirectives, ref => ref.fileName.toLocaleLowerCase());
             const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file.fileName);
 
             for (let i = 0; i < typeDirectives.length; i++) {
                 const ref = file.typeReferenceDirectives[i];
                 const resolvedTypeReferenceDirective = resolutions[i];
                 // store resolved type directive on the file
-                setResolvedTypeReferenceDirective(file, ref.fileName, resolvedTypeReferenceDirective);
-                processTypeReferenceDirective(ref.fileName, resolvedTypeReferenceDirective, file, ref.pos, ref.end);
+                const fileName = ref.fileName.toLocaleLowerCase();
+                setResolvedTypeReferenceDirective(file, fileName, resolvedTypeReferenceDirective);
+                processTypeReferenceDirective(fileName, resolvedTypeReferenceDirective, file, ref.pos, ref.end);
             }
         }
 
