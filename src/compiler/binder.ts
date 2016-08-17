@@ -1989,9 +1989,9 @@ namespace ts {
                 // Bind this property to the containing class
                 const saveContainer = container;
                 container = container.parent;
-                // AND it can be overwritten by subsequent method declarations
                 const symbol = bindPropertyOrMethodOrAccessor(node, SymbolFlags.Property, SymbolFlags.None);
                 if (symbol) {
+                    // constructor-declared symbols can be overwritten by subsequent method declarations
                     (symbol as Symbol).isReplaceableByMethod = true;
                 }
                 container = saveContainer;
