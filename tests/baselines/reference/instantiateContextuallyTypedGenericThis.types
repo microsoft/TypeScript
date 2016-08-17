@@ -3,7 +3,7 @@ interface JQuery {
 >JQuery : JQuery
 
     each<T>(
->each : <T>(collection: T[], callback: (this: T, dit: T) => T) => any
+>each : <T>(collection: T[], callback: (this: T, dit: T) => T) => T[]
 >T : T
 
         collection: T[], callback: (this: T, dit: T) => T
@@ -16,7 +16,8 @@ interface JQuery {
 >T : T
 >T : T
 
-    ): any;
+    ): T[];
+>T : T
 }
 
 let $: JQuery;
@@ -27,12 +28,12 @@ let lines: string[];
 >lines : string[]
 
 $.each(lines, function(dit) {
->$.each(lines, function(dit) {    return dit.charAt(0) + this.charAt(1);}) : any
->$.each : <T>(collection: T[], callback: (this: T, dit: T) => T) => any
+>$.each(lines, function(dit) {    return dit.charAt(0) + this.charAt(1);}) : string[]
+>$.each : <T>(collection: T[], callback: (this: T, dit: T) => T) => T[]
 >$ : JQuery
->each : <T>(collection: T[], callback: (this: T, dit: T) => T) => any
+>each : <T>(collection: T[], callback: (this: T, dit: T) => T) => T[]
 >lines : string[]
->function(dit) {    return dit.charAt(0) + this.charAt(1);} : (dit: string) => string
+>function(dit) {    return dit.charAt(0) + this.charAt(1);} : (this: string, dit: string) => string
 >dit : string
 
     return dit.charAt(0) + this.charAt(1);

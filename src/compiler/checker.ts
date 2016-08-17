@@ -4785,9 +4785,6 @@ namespace ts {
 
         function getThisTypeOfSignature(signature: Signature): Type | undefined {
             if (signature.thisParameter) {
-                if (signature.mapper) {
-                    signature = instantiateSignature(signature, signature.mapper);
-                }
                 return getTypeOfSymbol(signature.thisParameter);
             }
         }
@@ -9085,14 +9082,14 @@ namespace ts {
                         return getInferredClassType(classSymbol);
                     }
                 }
-                const type = getContextuallyTypedThisType(container);
-                if (type) {
-                    return type;
-                }
 
                 const thisType = getThisTypeOfDeclaration(container);
                 if (thisType) {
                     return thisType;
+                }
+                const type = getContextuallyTypedThisType(container);
+                if (type) {
+                    return type;
                 }
             }
             if (isClassLike(container.parent)) {
@@ -12277,8 +12274,10 @@ namespace ts {
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
             const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             if (context.thisParameter) {
-                // save the mapper in case we need to type `this` later
-                context.mapper = mapper;
+                if (!signature.thisParameter) {
+                    signature.thisParameter = createTransientSymbol(context.thisParameter, undefined);
+                }
+                assignTypeToParameterAndFixTypeParameters(signature.thisParameter, getTypeOfSymbol(context.thisParameter), mapper);
             }
             for (let i = 0; i < len; i++) {
                 const parameter = signature.parameters[i];
