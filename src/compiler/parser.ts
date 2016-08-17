@@ -1241,7 +1241,7 @@ namespace ts {
                     // not in error recovery.  If we're in error recovery, we don't want an errant
                     // semicolon to be treated as a class member (since they're almost always used
                     // for statements.
-                    return lookAhead(isClassMemberStart) || (token() === SyntaxKind.SemicolonToken && !inErrorRecovery);
+                    return lookAhead(isClassMemberStart) || (token() === SyntaxKind.SemicolonToken && !inErrorRecovery);
                 case ParsingContext.EnumMembers:
                     // Include open bracket computed properties. This technically also lets in indexers,
                     // which would be a candidate for improved error reporting.
