@@ -13916,7 +13916,6 @@ namespace ts {
 
                 checkDecorators(node);
                 checkSignatureDeclaration(node);
-                // TODO (weswig): Consolidate the below into checkAllCodePathsInNonVoidFunctionReturnOrThrow
                 if (node.kind === SyntaxKind.GetAccessor) {
                     if (!isInAmbientContext(node) && nodeIsPresent(node.body) && (node.flags & NodeFlags.HasImplicitReturn)) {
                         if (!(node.flags & NodeFlags.HasExplicitReturn)) {
