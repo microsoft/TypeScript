@@ -17,7 +17,7 @@ declare module "gulp-typescript" {
         stripInternal?: boolean;
         types?: string[];
     }
-    interface CompileStream extends NodeJS.ReadWriteStream {} // Either gulp or gulp-typescript has some odd typings which don't reflect reality, making this required
+    interface CompileStream extends NodeJS.ReadWriteStream { } // Either gulp or gulp-typescript has some odd typings which don't reflect reality, making this required
 }
 import * as insert from "gulp-insert";
 import * as sourcemaps from "gulp-sourcemaps";
@@ -65,7 +65,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
     }
 });
 
-function exec(cmd: string, args: string[], complete: () => void = (() => {}), error: (e: any, status: number) => void = (() => {})) {
+function exec(cmd: string, args: string[], complete: () => void = (() => { }), error: (e: any, status: number) => void = (() => { })) {
     console.log(`${cmd} ${args.join(" ")}`);
     // TODO (weswig): Update child_process types to add windowsVerbatimArguments to the type definition
     const subshellFlag = isWin ? "/c" : "-c";
@@ -116,12 +116,12 @@ const es2015LibrarySources = [
 ];
 
 const es2015LibrarySourceMap = es2015LibrarySources.map(function(source) {
-   return  { target: "lib." + source, sources: ["header.d.ts", source] };
+    return { target: "lib." + source, sources: ["header.d.ts", source] };
 });
 
-const es2016LibrarySource = [ "es2016.array.include.d.ts" ];
+const es2016LibrarySource = ["es2016.array.include.d.ts"];
 
-const es2016LibrarySourceMap = es2016LibrarySource.map(function (source) {
+const es2016LibrarySourceMap = es2016LibrarySource.map(function(source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
 });
 
@@ -130,38 +130,38 @@ const es2017LibrarySource = [
     "es2017.sharedmemory.d.ts"
 ];
 
-const es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
+const es2017LibrarySourceMap = es2017LibrarySource.map(function(source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
 });
 
 const hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"];
 
 const librarySourceMap = [
-        // Host library
-        { target: "lib.dom.d.ts", sources: ["header.d.ts", "dom.generated.d.ts"] },
-        { target: "lib.dom.iterable.d.ts", sources: ["header.d.ts", "dom.iterable.d.ts"] },
-        { target: "lib.webworker.d.ts", sources: ["header.d.ts", "webworker.generated.d.ts"] },
-        { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"] },
+    // Host library
+    { target: "lib.dom.d.ts", sources: ["header.d.ts", "dom.generated.d.ts"] },
+    { target: "lib.dom.iterable.d.ts", sources: ["header.d.ts", "dom.iterable.d.ts"] },
+    { target: "lib.webworker.d.ts", sources: ["header.d.ts", "webworker.generated.d.ts"] },
+    { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"] },
 
-        // JavaScript library
-        { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
-        { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
-        { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
-        { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
+    // JavaScript library
+    { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
+    { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
+    { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
+    { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
 
-        // JavaScript + all host library
-        { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
-        { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") }
+    // JavaScript + all host library
+    { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
+    { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") }
 ].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap);
 
-const libraryTargets = librarySourceMap.map(function (f) {
+const libraryTargets = librarySourceMap.map(function(f) {
     return path.join(builtLocalDirectory, f.target);
 });
 
 for (const i in libraryTargets) {
     const entry = librarySourceMap[i];
     const target = libraryTargets[i];
-    const sources = [copyright].concat(entry.sources.map(function (s) {
+    const sources = [copyright].concat(entry.sources.map(function(s) {
         return path.join(libraryDirectory, s);
     }));
     gulp.task(target, false, [], function() {
@@ -391,7 +391,7 @@ gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], () => {
         .pipe(sourcemaps.init())
         .pipe(tsc(servicesProject));
     const completedJs = js.pipe(prependCopyright())
-            .pipe(sourcemaps.write("."));
+        .pipe(sourcemaps.write("."));
     const completedDts = dts.pipe(prependCopyright(/*outputCopyright*/true))
         .pipe(insert.transform((contents, file) => {
             file.path = standaloneDefinitionsFile;
@@ -434,17 +434,17 @@ const tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverli
 
 gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
     const serverLibraryProject = tsc.createProject("src/server/tsconfig.library.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
-    const {js, dts}: {js: NodeJS.ReadableStream, dts: NodeJS.ReadableStream} = serverLibraryProject.src()
+    const {js, dts}: { js: NodeJS.ReadableStream, dts: NodeJS.ReadableStream } = serverLibraryProject.src()
         .pipe(sourcemaps.init())
         .pipe(newer(tsserverLibraryFile))
         .pipe(tsc(serverLibraryProject));
 
     return merge2([
         js.pipe(prependCopyright())
-          .pipe(sourcemaps.write("."))
-          .pipe(gulp.dest(builtLocalDirectory)),
+            .pipe(sourcemaps.write("."))
+            .pipe(gulp.dest(builtLocalDirectory)),
         dts.pipe(prependCopyright())
-        .pipe(gulp.dest(builtLocalDirectory))
+            .pipe(gulp.dest(builtLocalDirectory))
     ]);
 });
 
@@ -476,7 +476,7 @@ gulp.task(specMd, false, [word2mdJs], (done) => {
     const specMDFullPath = path.resolve(specMd);
     const cmd = "cscript //nologo " + word2mdJs + " \"" + specWordFullPath + "\" " + "\"" + specMDFullPath + "\"";
     console.log(cmd);
-    cp.exec(cmd, function () {
+    cp.exec(cmd, function() {
         done();
     });
 });
@@ -492,12 +492,12 @@ gulp.task("dontUseDebugMode", false, [], (done) => { useDebugMode = false; done(
 
 gulp.task("VerifyLKG", false, [], () => {
     const expectedFiles = [builtLocalCompiler, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile, tsserverLibraryFile, tsserverLibraryDefinitionFile].concat(libraryTargets);
-    const missingFiles = expectedFiles.filter(function (f) {
+    const missingFiles = expectedFiles.filter(function(f) {
         return !fs.existsSync(f);
     });
     if (missingFiles.length > 0) {
         throw new Error("Cannot replace the LKG unless all built targets are present in directory " + builtLocalDirectory +
-                    ". The following files are missing:\n" + missingFiles.join("\n"));
+            ". The following files are missing:\n" + missingFiles.join("\n"));
     }
     // Copy all the targets into the LKG directory
     return gulp.src(expectedFiles).pipe(gulp.dest(LKGDirectory));
@@ -531,8 +531,6 @@ const localRwcBaseline = path.join(internalTests, "baselines/rwc/local");
 const refRwcBaseline = path.join(internalTests, "baselines/rwc/reference");
 
 const localTest262Baseline = path.join(internalTests, "baselines/test262/local");
-const refTest262Baseline = path.join(internalTests, "baselines/test262/reference");
-
 
 gulp.task("tests", "Builds the test infrastructure using the built compiler", [run]);
 gulp.task("tests-debug", "Builds the test sources and automation in debug mode", () => {
@@ -627,7 +625,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             }
             args.push(run);
             setNodeEnvToDevelopment();
-            runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function (err) {
+            runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function(err) {
                 // last worker clean everything and runs linter in case if there were no errors
                 del(taskConfigsFolder).then(() => {
                     if (!err) {
@@ -679,7 +677,7 @@ gulp.task("runtests",
     ["build-rules", "tests"],
     (done) => {
         runConsoleTests("mocha-fivemat-progress-reporter", /*runInParallel*/ false, done);
-});
+    });
 
 const nodeServerOutFile = "tests/webTestServer.js";
 const nodeServerInFile = "tests/webTestServer.ts";
@@ -811,32 +809,36 @@ gulp.task("diff-rwc", "Diffs the RWC baselines using the diff tool specified by 
     exec(getDiffTool(), [refRwcBaseline, localRwcBaseline], done, done);
 });
 
+gulp.task("baseline-accept", "Makes the most recent test results the new baseline, overwriting the old baseline", () => {
+    return baselineAccept("");
+});
 
-gulp.task("baseline-accept", "Makes the most recent test results the new baseline, overwriting the old baseline", (done) => {
-    const softAccept = cmdLineOptions["soft"];
-    if (!softAccept) {
-        del(refBaseline).then(() => {
-            fs.renameSync(localBaseline, refBaseline);
-            done();
-        }, done);
-    }
-    else {
-        gulp.src(localBaseline)
-          .pipe(gulp.dest(refBaseline))
-          .on("end", () => {
-              del(path.join(refBaseline, "local")).then(() => done(), done);
-          });
-    }
-});
+function baselineAccept(subfolder = "") {
+    return merge2(baselineCopy(subfolder), baselineDelete(subfolder));
+}
+
+function baselineCopy(subfolder = "") {
+    return gulp.src([`tests/baselines/local/${subfolder}/**`, `!tests/baselines/local/${subfolder}/**/*.delete`])
+        .pipe(gulp.dest(refBaseline));
+}
+
+function baselineDelete(subfolder = "") {
+    return gulp.src(["tests/baselines/local/**/*.delete"])
+        .pipe(insert.transform((content, fileObj) => {
+            const target = path.join(refBaseline, fileObj.relative.substr(0, fileObj.relative.length - ".delete".length));
+            del.sync(target);
+            del.sync(fileObj.path);
+            return "";
+        }));
+}
+
 gulp.task("baseline-accept-rwc", "Makes the most recent rwc test results the new baseline, overwriting the old baseline", () => {
-    return del(refRwcBaseline).then(() => {
-        fs.renameSync(localRwcBaseline, refRwcBaseline);
-    });
+    return baselineAccept("rwc");
 });
+
+
 gulp.task("baseline-accept-test262", "Makes the most recent test262 test results the new baseline, overwriting the old baseline", () => {
-    return del(refTest262Baseline).then(() => {
-        fs.renameSync(localTest262Baseline, refTest262Baseline);
-    });
+    return baselineAccept("test262");
 });
 
 
