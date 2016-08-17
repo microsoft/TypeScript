@@ -2010,6 +2010,7 @@ namespace ts {
         }
 
         function processTypeReferenceDirectives(file: SourceFile) {
+            // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
             const typeDirectives = map(file.typeReferenceDirectives, ref => ref.fileName.toLocaleLowerCase());
             const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file.fileName);
 
