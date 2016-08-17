@@ -13,13 +13,13 @@ let [hello, brave, newish, world] = ["Hello", "Brave", "New", "World"];
 >"World" : string
 
 type RexOrRaptor = "t-rex" | "raptor"
->RexOrRaptor : "t-rex" | "raptor"
+>RexOrRaptor : RexOrRaptor
 
 let [im, a, dinosaur]: ["I'm", "a", RexOrRaptor] = ['I\'m', 'a', 't-rex'];
 >im : "I'm"
 >a : "a"
->dinosaur : "t-rex" | "raptor"
->RexOrRaptor : "t-rex" | "raptor"
+>dinosaur : RexOrRaptor
+>RexOrRaptor : RexOrRaptor
 >['I\'m', 'a', 't-rex'] : ["I'm", "a", "t-rex"]
 >'I\'m' : "I'm"
 >'a' : "a"
@@ -27,26 +27,26 @@ let [im, a, dinosaur]: ["I'm", "a", RexOrRaptor] = ['I\'m', 'a', 't-rex'];
 
 rawr(dinosaur);
 >rawr(dinosaur) : string
->rawr : (dino: "t-rex" | "raptor") => string
+>rawr : (dino: RexOrRaptor) => string
 >dinosaur : "t-rex"
 
 function rawr(dino: RexOrRaptor) {
->rawr : (dino: "t-rex" | "raptor") => string
->dino : "t-rex" | "raptor"
->RexOrRaptor : "t-rex" | "raptor"
+>rawr : (dino: RexOrRaptor) => string
+>dino : RexOrRaptor
+>RexOrRaptor : RexOrRaptor
 
     if (dino === "t-rex") {
 >dino === "t-rex" : boolean
->dino : "t-rex" | "raptor"
->"t-rex" : string
+>dino : RexOrRaptor
+>"t-rex" : "t-rex"
 
         return "ROAAAAR!";
 >"ROAAAAR!" : string
     }
     if (dino === "raptor") {
 >dino === "raptor" : boolean
->dino : "t-rex" | "raptor"
->"raptor" : string
+>dino : "raptor"
+>"raptor" : "raptor"
 
         return "yip yip!";
 >"yip yip!" : string
@@ -55,5 +55,5 @@ function rawr(dino: RexOrRaptor) {
     throw "Unexpected " + dino;
 >"Unexpected " + dino : string
 >"Unexpected " : string
->dino : "t-rex" | "raptor"
+>dino : never
 }

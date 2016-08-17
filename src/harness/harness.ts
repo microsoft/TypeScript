@@ -750,7 +750,7 @@ namespace Harness {
 
             export function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]) {
                 const fs = new Utils.VirtualFileSystem(path, useCaseSensitiveFileNames());
-                for (const file in listFiles(path)) {
+                for (const file of listFiles(path)) {
                     fs.addFile(file);
                 }
                 return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), path => {
@@ -848,9 +848,9 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
-        const libFileNameSourceFileMap: ts.Map<ts.SourceFile> = {
+        const libFileNameSourceFileMap=  ts.createMap<ts.SourceFile>({
             [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
-        };
+        });
 
         export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile {
             if (!isDefaultLibraryFile(fileName)) {
@@ -1005,13 +1005,13 @@ namespace Harness {
         let optionsIndex: ts.Map<ts.CommandLineOption>;
         function getCommandLineOption(name: string): ts.CommandLineOption {
             if (!optionsIndex) {
-                optionsIndex = {};
+                optionsIndex = ts.createMap<ts.CommandLineOption>();
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
                 for (const option of optionDeclarations) {
                     optionsIndex[option.name.toLowerCase()] = option;
                 }
             }
-            return ts.lookUp(optionsIndex, name.toLowerCase());
+            return optionsIndex[name.toLowerCase()];
         }
 
         export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
@@ -1210,18 +1210,7 @@ namespace Harness {
         }
 
         export function minimalDiagnosticsToString(diagnostics: ts.Diagnostic[]) {
-            // This is basically copied from tsc.ts's reportError to replicate what tsc does
-            let errorOutput = "";
-            ts.forEach(diagnostics, diagnostic => {
-                if (diagnostic.file) {
-                    const lineAndCharacter = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
-                    errorOutput += diagnostic.file.fileName + "(" + (lineAndCharacter.line + 1) + "," + (lineAndCharacter.character + 1) + "): ";
-                }
-
-                errorOutput += ts.DiagnosticCategory[diagnostic.category].toLowerCase() + " TS" + diagnostic.code + ": " + ts.flattenDiagnosticMessageText(diagnostic.messageText, Harness.IO.newLine()) + Harness.IO.newLine();
-            });
-
-            return errorOutput;
+            return ts.formatDiagnostics(diagnostics, { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => Harness.IO.newLine() });
         }
 
         export function getErrorBaseline(inputFiles: TestFile[], diagnostics: ts.Diagnostic[]) {
@@ -1377,31 +1366,27 @@ namespace Harness {
             writeByteOrderMark: boolean;
         }
 
-        function stringEndsWith(str: string, end: string) {
-            return str.substr(str.length - end.length) === end;
-        }
-
         export function isTS(fileName: string) {
-            return stringEndsWith(fileName, ".ts");
+            return ts.endsWith(fileName, ".ts");
         }
 
         export function isTSX(fileName: string) {
-            return stringEndsWith(fileName, ".tsx");
+            return ts.endsWith(fileName, ".tsx");
         }
 
         export function isDTS(fileName: string) {
-            return stringEndsWith(fileName, ".d.ts");
+            return ts.endsWith(fileName, ".d.ts");
         }
 
         export function isJS(fileName: string) {
-            return stringEndsWith(fileName, ".js");
+            return ts.endsWith(fileName, ".js");
         }
         export function isJSX(fileName: string) {
-            return stringEndsWith(fileName, ".jsx");
+            return ts.endsWith(fileName, ".jsx");
         }
 
         export function isJSMap(fileName: string) {
-            return stringEndsWith(fileName, ".js.map") || stringEndsWith(fileName, ".jsx.map");
+            return ts.endsWith(fileName, ".js.map") || ts.endsWith(fileName, ".jsx.map");
         }
 
         /** Contains the code and errors of a compilation and some helper methods to check its status. */

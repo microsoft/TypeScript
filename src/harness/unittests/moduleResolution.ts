@@ -1,21 +1,6 @@
 /// <reference path="..\harness.ts" />
 
 namespace ts {
-    function diagnosticToString(diagnostic: Diagnostic) {
-        let output = "";
-
-        if (diagnostic.file) {
-            const loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-
-            output += `${diagnostic.file.fileName}(${loc.line + 1},${loc.character + 1}): `;
-        }
-
-        const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += `${category} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine)}${sys.newLine}`;
-
-        return output;
-    }
-
     interface File {
         name: string;
         content?: string;
@@ -25,7 +10,7 @@ namespace ts {
         const map = arrayToMap(files, f => f.name);
 
         if (hasDirectoryExists) {
-            const directories: Map<string> = {};
+            const directories = createMap<string>();
             for (const f of files) {
                 let name = getDirectoryPath(f.name);
                 while (true) {
@@ -40,19 +25,19 @@ namespace ts {
             return {
                 readFile,
                 directoryExists: path => {
-                    return hasProperty(directories, path);
+                    return path in directories;
                 },
                 fileExists: path => {
-                    assert.isTrue(hasProperty(directories, getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
-                    return hasProperty(map, path);
+                    assert.isTrue(getDirectoryPath(path) in directories, `'fileExists' '${path}' request in non-existing directory`);
+                    return path in map;
                 }
             };
         }
         else {
-            return { readFile, fileExists: path => hasProperty(map, path), };
+            return { readFile, fileExists: path => path in map, };
         }
         function readFile(path: string): string {
-            return hasProperty(map, path) ? map[path].content : undefined;
+            return path in map ? map[path].content : undefined;
         }
     }
 
@@ -302,7 +287,7 @@ namespace ts {
             const host: CompilerHost = {
                 getSourceFile: (fileName: string, languageVersion: ScriptTarget) => {
                     const path = normalizePath(combinePaths(currentDirectory, fileName));
-                    return hasProperty(files, path) ? createSourceFile(fileName, files[path], languageVersion) : undefined;
+                    return path in files ? createSourceFile(fileName, files[path], languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: (fileName, content): void => { throw new Error("NotImplemented"); },
@@ -313,7 +298,7 @@ namespace ts {
                 useCaseSensitiveFileNames: () => false,
                 fileExists: fileName => {
                     const path = normalizePath(combinePaths(currentDirectory, fileName));
-                    return hasProperty(files, path);
+                    return path in files;
                 },
                 readFile: (fileName): string => { throw new Error("NotImplemented"); }
             };
@@ -322,9 +307,9 @@ namespace ts {
 
             assert.equal(program.getSourceFiles().length, expectedFilesCount);
             const syntacticDiagnostics = program.getSyntacticDiagnostics();
-            assert.equal(syntacticDiagnostics.length, 0, `expect no syntactic diagnostics, got: ${JSON.stringify(syntacticDiagnostics.map(diagnosticToString))}`);
+            assert.equal(syntacticDiagnostics.length, 0, `expect no syntactic diagnostics, got: ${JSON.stringify(Harness.Compiler.minimalDiagnosticsToString(syntacticDiagnostics))}`);
             const semanticDiagnostics = program.getSemanticDiagnostics();
-            assert.equal(semanticDiagnostics.length, 0, `expect no semantic diagnostics, got: ${JSON.stringify(semanticDiagnostics.map(diagnosticToString))}`);
+            assert.equal(semanticDiagnostics.length, 0, `expect no semantic diagnostics, got: ${JSON.stringify(Harness.Compiler.minimalDiagnosticsToString(semanticDiagnostics))}`);
 
             // try to get file using a relative name
             for (const relativeFileName of relativeNamesToCheck) {
@@ -333,7 +318,7 @@ namespace ts {
         }
 
         it("should find all modules", () => {
-            const files: Map<string> = {
+            const files = createMap({
                 "/a/b/c/first/shared.ts": `
 class A {}
 export = A`,
@@ -347,23 +332,23 @@ import Shared = require('../first/shared');
 class C {}
 export = C;
                 `
-            };
+            });
             test(files, "/a/b/c/first/second", ["class_a.ts"], 3, ["../../../c/third/class_c.ts"]);
         });
 
         it("should find modules in node_modules", () => {
-            const files: Map<string> = {
+            const files = createMap({
                 "/parent/node_modules/mod/index.d.ts": "export var x",
                 "/parent/app/myapp.ts": `import {x} from "mod"`
-            };
+            });
             test(files, "/parent/app", ["myapp.ts"], 2, []);
         });
 
         it("should find file referenced via absolute and relative names", () => {
-            const files: Map<string> = {
+            const files = createMap({
                 "/a/b/c.ts": `/// <reference path="b.ts"/>`,
                 "/a/b/b.ts": "var x"
-            };
+            });
             test(files, "/a/b", ["c.ts", "/a/b/b.ts"], 2, []);
         });
     });
@@ -373,11 +358,7 @@ export = C;
         function test(files: Map<string>, options: CompilerOptions, currentDirectory: string, useCaseSensitiveFileNames: boolean, rootFiles: string[], diagnosticCodes: number[]): void {
             const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             if (!useCaseSensitiveFileNames) {
-                const f: Map<string> = {};
-                for (const fileName in files) {
-                    f[getCanonicalFileName(fileName)] = files[fileName];
-                }
-                files = f;
+                files = reduceProperties(files, (files, file, fileName) => (files[getCanonicalFileName(fileName)] = file, files), createMap<string>());
             }
 
             const host: CompilerHost = {
@@ -386,7 +367,7 @@ export = C;
                         return library;
                     }
                     const path = getCanonicalFileName(normalizePath(combinePaths(currentDirectory, fileName)));
-                    return hasProperty(files, path) ? createSourceFile(fileName, files[path], languageVersion) : undefined;
+                    return path in files ? createSourceFile(fileName, files[path], languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: (fileName, content): void => { throw new Error("NotImplemented"); },
@@ -397,70 +378,70 @@ export = C;
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 fileExists: fileName => {
                     const path = getCanonicalFileName(normalizePath(combinePaths(currentDirectory, fileName)));
-                    return hasProperty(files, path);
+                    return path in files;
                 },
                 readFile: (fileName): string => { throw new Error("NotImplemented"); }
             };
             const program = createProgram(rootFiles, options, host);
             const diagnostics = sortAndDeduplicateDiagnostics(program.getSemanticDiagnostics().concat(program.getOptionsDiagnostics()));
-            assert.equal(diagnostics.length, diagnosticCodes.length, `Incorrect number of expected diagnostics, expected ${diagnosticCodes.length}, got '${map(diagnostics, diagnosticToString).join("\r\n")}'`);
+            assert.equal(diagnostics.length, diagnosticCodes.length, `Incorrect number of expected diagnostics, expected ${diagnosticCodes.length}, got '${Harness.Compiler.minimalDiagnosticsToString(diagnostics)}'`);
             for (let i = 0; i < diagnosticCodes.length; i++) {
                 assert.equal(diagnostics[i].code, diagnosticCodes[i], `Expected diagnostic code ${diagnosticCodes[i]}, got '${diagnostics[i].code}': '${diagnostics[i].messageText}'`);
             }
         }
 
         it("should succeed when the same file is referenced using absolute and relative names", () => {
-            const files: Map<string> = {
+            const files = createMap({
                 "/a/b/c.ts": `/// <reference path="d.ts"/>`,
                 "/a/b/d.ts": "var x"
-            };
+            });
             test(files, { module: ts.ModuleKind.AMD },  "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "/a/b/d.ts"], []);
         });
 
         it("should fail when two files used in program differ only in casing (tripleslash references)", () => {
-            const files: Map<string> = {
+            const files = createMap({
                 "/a/b/c.ts": `/// <reference path="D.ts"/>`,
                 "/a/b/d.ts": "var x"
-            };
+            });
             test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true },  "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when two files used in program differ only in casing (imports)", () => {
-            const files: Map<string> = {
+            const files = createMap({
                 "/a/b/c.ts": `import {x} from "D"`,
                 "/a/b/d.ts": "export var x"
-            };
+            });
             test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true },  "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when two files used in program differ only in casing (imports, relative module names)", () => {
-            const files: Map<string> = {
+            const files = createMap({
                 "moduleA.ts": `import {x} from "./ModuleB"`,
                 "moduleB.ts": "export var x"
-            };
+            });
             test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts"], [1149]);
         });
 
         it("should fail when two files exist on disk that differs only in casing", () => {
-            const files: Map<string> = {
+            const files = createMap({
                 "/a/b/c.ts": `import {x} from "D"`,
                 "/a/b/D.ts": "export var x",
                 "/a/b/d.ts": "export var y"
-            };
+            });
             test(files, { module: ts.ModuleKind.AMD },  "/a/b", /*useCaseSensitiveFileNames*/ true, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when module name in 'require' calls has inconsistent casing", () => {
-            const files: Map<string> = {
+            const files = createMap({
                 "moduleA.ts": `import a = require("./ModuleC")`,
                 "moduleB.ts": `import a = require("./moduleC")`,
                 "moduleC.ts": "export var x"
-            };
+            });
             test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts", "moduleC.ts"], [1149, 1149]);
         });
 
         it("should fail when module names in 'require' calls has inconsistent casing and current directory has uppercase chars", () => {
-            const files: Map<string> = {
+            const files = createMap({
                 "/a/B/c/moduleA.ts": `import a = require("./ModuleC")`,
                 "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
                 "/a/B/c/moduleC.ts": "export var x",
@@ -468,11 +449,11 @@ export = C;
 import a = require("./moduleA.ts");
 import b = require("./moduleB.ts");
                 `
-            };
+            });
             test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], [1149]);
         });
         it("should not fail when module names in 'require' calls has consistent casing and current directory has uppercase chars", () => {
-            const files: Map<string> = {
+            const files = createMap({
                 "/a/B/c/moduleA.ts": `import a = require("./moduleC")`,
                 "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
                 "/a/B/c/moduleC.ts": "export var x",
@@ -480,7 +461,7 @@ import b = require("./moduleB.ts");
 import a = require("./moduleA.ts");
 import b = require("./moduleB.ts");
                 `
-            };
+            });
             test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], []);
         });
     });
@@ -1038,7 +1019,7 @@ import b = require("./moduleB.ts");
             const names = map(files, f => f.name);
             const sourceFiles = arrayToMap(map(files, f => createSourceFile(f.name, f.content, ScriptTarget.ES6)), f => f.fileName);
             const compilerHost: CompilerHost = {
-                fileExists : fileName => hasProperty(sourceFiles, fileName),
+                fileExists : fileName => fileName in sourceFiles,
                 getSourceFile: fileName => sourceFiles[fileName],
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile(file, text) {
@@ -1049,7 +1030,7 @@ import b = require("./moduleB.ts");
                 getCanonicalFileName: f => f.toLowerCase(),
                 getNewLine: () => "\r\n",
                 useCaseSensitiveFileNames: () => false,
-                readFile: fileName => hasProperty(sourceFiles, fileName) ? sourceFiles[fileName].text : undefined
+                readFile: fileName => fileName in sourceFiles ? sourceFiles[fileName].text : undefined
             };
             const program1 = createProgram(names, {}, compilerHost);
             const diagnostics1 = program1.getFileProcessingDiagnostics().getDiagnostics();

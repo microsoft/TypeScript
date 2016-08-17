@@ -1,0 +1,50 @@
+tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(22,7): error TS2339: Property 'method' does not exist on type '{}'.
+tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(23,5): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(28,7): error TS2339: Property 'mesage' does not exist on type 'Error'.
+tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(33,7): error TS2339: Property 'getHuors' does not exist on type 'Date'.
+
+
+==== tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts (4 errors) ====
+    declare var x: any;
+    declare function isFunction(x): x is Function;
+    declare function isObject(x): x is Object;
+    declare function isAnything(x): x is {};
+    declare function isError(x): x is Error;
+    declare function isDate(x): x is Date;
+    
+    
+    if (isFunction(x)) { // 'any' is not narrowed when target type is 'Function'
+        x();
+        x(1, 2, 3);
+        x("hello!");
+        x.prop;
+    }
+    
+    if (isObject(x)) { // 'any' is not narrowed when target type is 'Object'
+        x.method();
+        x();
+    }
+    
+    if (isAnything(x)) { // 'any' is narrowed to types other than 'Function'/'Object' (including {})
+        x.method();
+          ~~~~~~
+!!! error TS2339: Property 'method' does not exist on type '{}'.
+        x();
+        ~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+    }
+    
+    if (isError(x)) { 
+        x.message;
+        x.mesage;
+          ~~~~~~
+!!! error TS2339: Property 'mesage' does not exist on type 'Error'.
+    }
+    
+    if (isDate(x)) {
+        x.getDate();
+        x.getHuors();
+          ~~~~~~~~
+!!! error TS2339: Property 'getHuors' does not exist on type 'Date'.
+    }
+    

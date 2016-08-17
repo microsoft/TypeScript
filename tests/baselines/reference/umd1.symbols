@@ -30,4 +30,5 @@ export interface Thing { n: typeof x }
 >x : Symbol(x, Decl(foo.d.ts, 1, 10))
 
 export as namespace Foo;
+>Foo : Symbol(Foo, Decl(foo.d.ts, 3, 38))
 

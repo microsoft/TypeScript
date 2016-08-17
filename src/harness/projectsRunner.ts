@@ -253,18 +253,15 @@ class ProjectRunner extends RunnerBase {
                     moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future
                 };
                 // Set the values specified using json
-                const optionNameMap: ts.Map<ts.CommandLineOption> = {};
-                ts.forEach(ts.optionDeclarations, option => {
-                    optionNameMap[option.name] = option;
-                });
+                const optionNameMap = ts.arrayToMap(ts.optionDeclarations, option => option.name);
                 for (const name in testCase) {
-                    if (name !== "mapRoot" && name !== "sourceRoot" && ts.hasProperty(optionNameMap, name)) {
+                    if (name !== "mapRoot" && name !== "sourceRoot" && name in optionNameMap) {
                         const option = optionNameMap[name];
                         const optType = option.type;
                         let value = <any>testCase[name];
                         if (typeof optType !== "string") {
                             const key = value.toLowerCase();
-                            if (ts.hasProperty(optType, key)) {
+                            if (key in optType) {
                                 value = optType[key];
                             }
                         }
@@ -328,7 +325,7 @@ class ProjectRunner extends RunnerBase {
 
                 if (Harness.Compiler.isJS(fileName)) {
                     // Make sure if there is URl we have it cleaned up
-                    const indexOfSourceMapUrl = data.lastIndexOf("//# sourceMappingURL=");
+                    const indexOfSourceMapUrl = data.lastIndexOf(`//# ${"sourceMappingURL"}=`); // This line can be seen as a sourceMappingURL comment
                     if (indexOfSourceMapUrl !== -1) {
                         data = data.substring(0, indexOfSourceMapUrl + 21) + cleanProjectUrl(data.substring(indexOfSourceMapUrl + 21));
                     }
