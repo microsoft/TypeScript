@@ -428,7 +428,7 @@ namespace ts.server {
             hasExplicitListOfFiles: boolean,
             compilerOptions: CompilerOptions,
             private typingOptions: TypingOptions,
-            private wildcardDirectories: MapLike<WatchDirectoryFlags>,
+            private wildcardDirectories: Map<WatchDirectoryFlags>,
             languageServiceEnabled: boolean) {
             super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions);
         }
@@ -488,7 +488,9 @@ namespace ts.server {
                 this.projectFileWatcher.close();
             }
 
-            forEachValue(this.directoriesWatchedForWildcards, watcher => { watcher.close(); });
+            for (const id in this.directoriesWatchedForWildcards) {
+                this.directoriesWatchedForWildcards[id].close();
+            }
             this.directoriesWatchedForWildcards = undefined;
 
             this.stopWatchingDirectory();

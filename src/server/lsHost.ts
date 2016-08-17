@@ -31,9 +31,9 @@ namespace ts.server {
 
             for (const name of names) {
                 // check if this is a duplicate entry in the list
-                let resolution = lookUp(newResolutions, name);
+                let resolution = newResolutions[name];
                 if (!resolution) {
-                    const existingResolution = currentResolutionsInFile && ts.lookUp(currentResolutionsInFile, name);
+                    const existingResolution = currentResolutionsInFile && currentResolutionsInFile[name];
                     if (moduleResolutionIsValid(existingResolution)) {
                         // ok, it is safe to use existing name resolution results
                         resolution = existingResolution;

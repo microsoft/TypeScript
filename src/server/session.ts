@@ -1213,7 +1213,7 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
-        private handlers: MapLike<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
+        private handlers = createMap<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>({
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
                 this.projectService.openExternalProject(request.arguments);
                 // TODO: report errors
@@ -1430,9 +1430,10 @@ namespace ts.server {
                 this.projectService.reloadProjects();
                 return this.notRequired();
             }
-        };
+        });
+
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => { response?: any, responseRequired: boolean }) {
-            if (this.handlers[command]) {
+            if (command in this.handlers) {
                 throw new Error(`Protocol handler already exists for command "${command}"`);
             }
             this.handlers[command] = handler;

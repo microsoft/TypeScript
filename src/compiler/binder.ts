@@ -89,9 +89,10 @@ namespace ts {
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
-        const start = performance.mark();
+        performance.mark("beforeBind");
         binder(file, options);
-        performance.measure("Bind", start);
+        performance.mark("afterBind");
+        performance.measure("Bind", "beforeBind", "afterBind");
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
@@ -298,8 +299,10 @@ namespace ts {
             const name = isDefaultExport && parent ? "default" : getDeclarationName(node);
 
             let symbol: Symbol;
-            if (name !== undefined) {
-
+            if (name === undefined) {
+                symbol = createSymbol(SymbolFlags.None, "__missing");
+            }
+            else {
                 // Check and see if the symbol table already has a symbol with this name.  If not,
                 // create a new symbol with this name and add it to the table.  Note that we don't
                 // give the new symbol any flags *yet*.  This ensures that it will not conflict
@@ -310,6 +313,11 @@ namespace ts {
                 // the same symbol table.  If we have a conflict, report the issue on each
                 // declaration we have for this symbol, and then create a new symbol for this
                 // declaration.
+                //
+                // Note that when properties declared in Javascript constructors
+                // (marked by isReplaceableByMethod) conflict with another symbol, the property loses.
+                // Always. This allows the common Javascript pattern of overwriting a prototype method
+                // with an bound instance method of the same type: `this.method = this.method.bind(this)`
                 //
                 // If we created a new symbol, either because we didn't have a symbol with this name
                 // in the symbol table, or we conflicted with an existing symbol, then just add this
@@ -325,32 +333,36 @@ namespace ts {
                 }
 
                 if (symbol.flags & excludes) {
-                    if (node.name) {
-                        node.name.parent = node;
+                    if (symbol.isReplaceableByMethod) {
+                        // Javascript constructor-declared symbols can be discarded in favor of
+                        // prototype symbols like methods.
+                        symbol = symbolTable[name] = createSymbol(SymbolFlags.None, name);
                     }
-
-                    // Report errors every position with duplicate declaration
-                    // Report errors on previous encountered declarations
-                    let message = symbol.flags & SymbolFlags.BlockScopedVariable
-                        ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
-                        : Diagnostics.Duplicate_identifier_0;
-
-                    forEach(symbol.declarations, declaration => {
-                        if (declaration.flags & NodeFlags.Default) {
-                            message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                    else {
+                        if (node.name) {
+                            node.name.parent = node;
                         }
-                    });
 
-                    forEach(symbol.declarations, declaration => {
-                        file.bindDiagnostics.push(createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
-                    });
-                    file.bindDiagnostics.push(createDiagnosticForNode(node.name || node, message, getDisplayName(node)));
+                        // Report errors every position with duplicate declaration
+                        // Report errors on previous encountered declarations
+                        let message = symbol.flags & SymbolFlags.BlockScopedVariable
+                            ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
+                            : Diagnostics.Duplicate_identifier_0;
 
-                    symbol = createSymbol(SymbolFlags.None, name);
+                        forEach(symbol.declarations, declaration => {
+                            if (declaration.flags & NodeFlags.Default) {
+                                message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                            }
+                        });
+
+                        forEach(symbol.declarations, declaration => {
+                            file.bindDiagnostics.push(createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
+                        });
+                        file.bindDiagnostics.push(createDiagnosticForNode(node.name || node, message, getDisplayName(node)));
+
+                        symbol = createSymbol(SymbolFlags.None, name);
+                    }
                 }
-            }
-            else {
-                symbol = createSymbol(SymbolFlags.None, "__missing");
             }
 
             addDeclarationToSymbol(symbol, node, includes);
@@ -1965,20 +1977,25 @@ namespace ts {
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression) {
-            // Declare a 'member' in case it turns out the container was an ES5 class or ES6 constructor
-            let assignee: Node;
+            Debug.assert(isInJavaScriptFile(node));
+            // Declare a 'member' if the container is an ES5 class or ES6 constructor
             if (container.kind === SyntaxKind.FunctionDeclaration || container.kind === SyntaxKind.FunctionExpression) {
-                assignee = container;
+                container.symbol.members = container.symbol.members || createMap<Symbol>();
+                // It's acceptable for multiple 'this' assignments of the same identifier to occur
+                declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
             }
             else if (container.kind === SyntaxKind.Constructor) {
-                assignee = container.parent;
+                // this.foo assignment in a JavaScript class
+                // Bind this property to the containing class
+                const saveContainer = container;
+                container = container.parent;
+                const symbol = bindPropertyOrMethodOrAccessor(node, SymbolFlags.Property, SymbolFlags.None);
+                if (symbol) {
+                    // constructor-declared symbols can be overwritten by subsequent method declarations
+                    (symbol as Symbol).isReplaceableByMethod = true;
+                }
+                container = saveContainer;
             }
-            else {
-                return;
-            }
-            assignee.symbol.members = assignee.symbol.members || createMap<Symbol>();
-            // It's acceptable for multiple 'this' assignments of the same identifier to occur
-            declareSymbol(assignee.symbol.members, assignee.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
         }
 
         function bindPrototypePropertyAssignment(node: BinaryExpression) {

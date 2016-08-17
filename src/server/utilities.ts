@@ -197,7 +197,7 @@ namespace ts.server {
          * these fields can be present in the project file
          **/
         files?: string[];
-        wildcardDirectories?: MapLike<WatchDirectoryFlags>;
+        wildcardDirectories?: Map<WatchDirectoryFlags>;
         compilerOptions?: CompilerOptions;
         typingOptions?: TypingOptions;
     }

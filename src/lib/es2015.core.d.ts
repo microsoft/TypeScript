@@ -68,6 +68,10 @@ interface ArrayConstructor {
     of<T>(...items: T[]): Array<T>;
 }
 
+interface DateConstructor {
+    new (value: Date): Date;
+}
+
 interface Function {
     /**
       * Returns the name of the function. Function names are read-only and can not be changed.

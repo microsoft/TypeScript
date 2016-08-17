@@ -1,0 +1,33 @@
+tests/cases/conformance/types/any/narrowFromAnyWithInstanceof.ts(17,7): error TS2339: Property 'mesage' does not exist on type 'Error'.
+tests/cases/conformance/types/any/narrowFromAnyWithInstanceof.ts(22,7): error TS2339: Property 'getHuors' does not exist on type 'Date'.
+
+
+==== tests/cases/conformance/types/any/narrowFromAnyWithInstanceof.ts (2 errors) ====
+    declare var x: any;
+    
+    if (x instanceof Function) { // 'any' is not narrowed when target type is 'Function'
+        x();
+        x(1, 2, 3);
+        x("hello!");
+        x.prop;
+    }
+    
+    if (x instanceof Object) { // 'any' is not narrowed when target type is 'Object'
+        x.method();
+        x();
+    }
+    
+    if (x instanceof Error) { // 'any' is narrowed to types other than 'Function'/'Object'
+        x.message;
+        x.mesage;
+          ~~~~~~
+!!! error TS2339: Property 'mesage' does not exist on type 'Error'.
+    }
+    
+    if (x instanceof Date) {
+        x.getDate();
+        x.getHuors();
+          ~~~~~~~~
+!!! error TS2339: Property 'getHuors' does not exist on type 'Date'.
+    }
+    

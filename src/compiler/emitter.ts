@@ -24,7 +24,7 @@ namespace ts {
         Return      = 1 << 3
     }
 
-    const entities: MapLike<number> = {
+    const entities = createMap({
         "quot": 0x0022,
         "amp": 0x0026,
         "apos": 0x0027,
@@ -278,7 +278,7 @@ namespace ts {
         "clubs": 0x2663,
         "hearts": 0x2665,
         "diams": 0x2666
-    };
+    });
 
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
@@ -407,7 +407,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
         function isUniqueLocalName(name: string, container: Node): boolean {
             for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
-                if (node.locals && hasProperty(node.locals, name)) {
+                if (node.locals && name in node.locals) {
                     // We conservatively include alias symbols to cover cases where they're emitted as locals
                     if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
                         return false;
@@ -531,7 +531,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             let currentText: string;
             let currentLineMap: number[];
             let currentFileIdentifiers: Map<string>;
-            let renamedDependencies: MapLike<string>;
+            let renamedDependencies: Map<string>;
             let isEs6Module: boolean;
             let isCurrentFileExternalModule: boolean;
 
@@ -577,21 +577,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             const setSourceMapWriterEmit = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? changeSourceMapEmit : function (writer: SourceMapWriter) { };
 
-            const moduleEmitDelegates: MapLike<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
+            const moduleEmitDelegates = createMap<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void>({
                 [ModuleKind.ES6]: emitES6Module,
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
                 [ModuleKind.UMD]: emitUMDModule,
                 [ModuleKind.CommonJS]: emitCommonJSModule,
-            };
+            });
 
-            const bundleEmitDelegates: MapLike<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
+            const bundleEmitDelegates = createMap<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void>({
                 [ModuleKind.ES6]() {},
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
                 [ModuleKind.UMD]() {},
                 [ModuleKind.CommonJS]() {},
-            };
+            });
 
             return doEmit;
 
@@ -669,8 +669,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function isUniqueName(name: string): boolean {
                 return !resolver.hasGlobalName(name) &&
-                    !hasProperty(currentFileIdentifiers, name) &&
-                    !hasProperty(generatedNameSet, name);
+                    !(name in currentFileIdentifiers) &&
+                    !(name in generatedNameSet);
             }
 
             // Return the next available name in the pattern _a ... _z, _0, _1, ...
@@ -2646,7 +2646,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     return false;
                 }
 
-                return !exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, (<Identifier>node).text);
+                return !exportEquals && exportSpecifiers && (<Identifier>node).text in exportSpecifiers;
             }
 
             function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
@@ -3263,7 +3263,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                                write(", ");
                            }
 
-                           if (!hasProperty(seen, id.text)) {
+                           if (!(id.text in seen)) {
                                emit(id);
                                seen[id.text] = id.text;
                            }
@@ -3970,7 +3970,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     return;
                 }
 
-                if (!exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
+                if (!exportEquals && exportSpecifiers && name.text in exportSpecifiers) {
                     for (const specifier of exportSpecifiers[name.text]) {
                         writeLine();
                         emitStart(specifier.name);
@@ -5311,18 +5311,7 @@ const _super = (function (geti, seti) {
                         emitSignatureParameters(ctor);
                     }
                     else {
-                        // Based on EcmaScript6 section 14.5.14: Runtime Semantics: ClassDefinitionEvaluation.
-                        // If constructor is empty, then,
-                        //      If ClassHeritageopt is present, then
-                        //          Let constructor be the result of parsing the String "constructor(... args){ super (...args);}" using the syntactic grammar with the goal symbol MethodDefinition.
-                        //      Else,
-                        //          Let constructor be the result of parsing the String "constructor( ){ }" using the syntactic grammar with the goal symbol MethodDefinition
-                        if (baseTypeElement) {
-                            write("(...args)");
-                        }
-                        else {
-                            write("()");
-                        }
+                        write("()");
                     }
                 }
 
@@ -5360,7 +5349,7 @@ const _super = (function (geti, seti) {
                             write("_super.apply(this, arguments);");
                         }
                         else {
-                            write("super(...args);");
+                            write("super(...arguments);");
                         }
                         emitEnd(baseTypeElement);
                     }
@@ -6461,7 +6450,7 @@ const _super = (function (geti, seti) {
              * Here we check if alternative name was provided for a given moduleName and return it if possible.
              */
             function tryRenameExternalModule(moduleName: LiteralExpression): string {
-                if (renamedDependencies && hasProperty(renamedDependencies, moduleName.text)) {
+                if (renamedDependencies && moduleName.text in renamedDependencies) {
                     return `"${renamedDependencies[moduleName.text]}"`;
                 }
                 return undefined;
@@ -6842,7 +6831,7 @@ const _super = (function (geti, seti) {
                                 // export { x, y }
                                 for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
                                     const name = (specifier.propertyName || specifier.name).text;
-                                    getOrUpdateProperty(exportSpecifiers, name, () => []).push(specifier);
+                                    (exportSpecifiers[name] || (exportSpecifiers[name] = [])).push(specifier);
                                 }
                             }
                             break;
@@ -6941,7 +6930,7 @@ const _super = (function (geti, seti) {
                 }
 
                 // local names set should only be added if we have anything exported
-                if (!exportedDeclarations && isEmpty(exportSpecifiers)) {
+                if (!exportedDeclarations && !someProperties(exportSpecifiers)) {
                     // no exported declarations (export var ...) or export specifiers (export {x})
                     // check if we have any non star export declarations.
                     let hasExportDeclarationWithExportClause = false;
@@ -7091,7 +7080,7 @@ const _super = (function (geti, seti) {
                         if (name) {
                             // do not emit duplicate entries (in case of declaration merging) in the list of hoisted variables
                             const text = unescapeIdentifier(name.text);
-                            if (hasProperty(seen, text)) {
+                            if (text in seen) {
                                 continue;
                             }
                             else {
@@ -7460,7 +7449,7 @@ const _super = (function (geti, seti) {
                     // for deduplication purposes in key remove leading and trailing quotes so 'a' and "a" will be considered the same
                     const key = text.substr(1, text.length - 2);
 
-                    if (hasProperty(groupIndices, key)) {
+                    if (key in groupIndices) {
                         // deduplicate/group entries in dependency list by the dependency name
                         const groupIndex = groupIndices[key];
                         dependencyGroups[groupIndex].push(externalImports[i]);

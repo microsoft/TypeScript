@@ -178,8 +178,7 @@ namespace ts.server {
             this.installer.on("message", m => this.handleMessage(m));
             process.on("exit", () => {
                 this.installer.kill();
-            })
-            
+            });
         }
 
         onProjectClosed(p: Project): void {

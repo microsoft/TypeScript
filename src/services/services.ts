@@ -1006,7 +1006,7 @@ namespace ts {
             }
 
             function getDeclarations(name: string) {
-                return getProperty(result, name) || (result[name] = []);
+                return result[name] || (result[name] = []);
             }
 
             function getDeclarationName(declaration: Declaration) {
@@ -2067,7 +2067,7 @@ namespace ts {
     function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
         commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
-            typeof o.type === "object" && !forEachValue(<Map<any>>o.type, v => typeof v !== "number"));
+            typeof o.type === "object" && !forEachProperty(o.type, v => typeof v !== "number"));
 
         options = clone(options);
 
@@ -2083,7 +2083,7 @@ namespace ts {
                 options[opt.name] = parseCustomTypeOption(opt, value, diagnostics);
             }
             else {
-                if (!forEachValue(opt.type, v => v === value)) {
+                if (!forEachProperty(opt.type, v => v === value)) {
                     // Supplied value isn't a valid enum value.
                     diagnostics.push(createCompilerDiagnosticForInvalidCustomType(opt));
                 }
@@ -2142,7 +2142,9 @@ namespace ts {
             sourceFile.moduleName = transpileOptions.moduleName;
         }
 
-        sourceFile.renamedDependencies = transpileOptions.renamedDependencies;
+        if (transpileOptions.renamedDependencies) {
+            sourceFile.renamedDependencies = createMap(transpileOptions.renamedDependencies);
+        }
 
         const newLine = getNewLineCharacter(options);
 
@@ -2276,7 +2278,7 @@ namespace ts {
         }
 
         function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
-            let bucket = lookUp(buckets, key);
+            let bucket = buckets[key];
             if (!bucket && createIfMissing) {
                 buckets[key] = bucket = createFileMap<DocumentRegistryEntry>();
             }
@@ -2285,7 +2287,7 @@ namespace ts {
 
         function reportStats() {
             const bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === "_").map(name => {
-                const entries = lookUp(buckets, name);
+                const entries = buckets[name];
                 const sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
                 entries.forEachValue((key, entry) => {
                     sourceFiles.push({
@@ -3124,7 +3126,7 @@ namespace ts {
                  oldSettings.allowJs !== newSettings.allowJs ||
                  oldSettings.disableSizeLimit !== oldSettings.disableSizeLimit ||
                  oldSettings.baseUrl !== newSettings.baseUrl ||
-                 !mapIsEqualTo(oldSettings.paths, newSettings.paths));
+                 !equalOwnProperties(oldSettings.paths, newSettings.paths));
 
             // Now create a new compiler
             const compilerHost: CompilerHost = {
@@ -3139,7 +3141,6 @@ namespace ts {
                 getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => {
                     // stub missing host functionality
-                    Debug.assert(!host.resolveModuleNames || !host.resolveTypeReferenceDirectives);
                     return hostCache.getOrCreateEntry(fileName) !== undefined;
                 },
                 readFile: (fileName): string => {
@@ -3301,7 +3302,7 @@ namespace ts {
                     const scriptKind = ts.getScriptKind(fileName, host);
                     const compilerOptions = host.getCompilationSettings();
                     let sourceFile: SourceFile;
-                    if (currentFileName !== fileName || (currentCompilerOptions && !mapIsEqualTo(compilerOptions, currentCompilerOptions))) {
+                    if (currentFileName !== fileName || (currentCompilerOptions && !equalOwnProperties(compilerOptions, currentCompilerOptions))) {
                         // Release the current document
                         if (currentFileName) {
                             documentRegistry.releaseDocument(currentFileName, currentCompilerOptions);
@@ -4201,11 +4202,11 @@ namespace ts {
                     existingImportsOrExports[name.text] = true;
                 }
 
-                if (isEmpty(existingImportsOrExports)) {
+                if (!someProperties(existingImportsOrExports)) {
                     return filter(exportsOfModule, e => e.name !== "default");
                 }
 
-                return filter(exportsOfModule, e => e.name !== "default" && !lookUp(existingImportsOrExports, e.name));
+                return filter(exportsOfModule, e => e.name !== "default" && !existingImportsOrExports[e.name]);
             }
 
             /**
@@ -4252,7 +4253,7 @@ namespace ts {
                     existingMemberNames[existingName] = true;
                 }
 
-                return filter(contextualMemberSymbols, m => !lookUp(existingMemberNames, m.name));
+                return filter(contextualMemberSymbols, m => !existingMemberNames[m.name]);
             }
 
             /**
@@ -4274,7 +4275,7 @@ namespace ts {
                     }
                 }
 
-                return filter(symbols, a => !lookUp(seenNames, a.name));
+                return filter(symbols, a => !seenNames[a.name]);
             }
         }
 
@@ -4334,7 +4335,7 @@ namespace ts {
                 addRange(entries, keywordCompletions);
             }
 
-            return { isMemberCompletion, isNewIdentifierLocation, entries };
+            return { isMemberCompletion, isNewIdentifierLocation: isNewIdentifierLocation || isSourceFileJavaScript(sourceFile), entries };
 
             function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: Map<string>): CompletionEntry[] {
                 const entries: CompletionEntry[] = [];
@@ -4410,7 +4411,7 @@ namespace ts {
                         const entry = createCompletionEntry(symbol, location, performCharacterChecks);
                         if (entry) {
                             const id = escapeIdentifier(entry.name);
-                            if (!lookUp(uniqueNames, id)) {
+                            if (!uniqueNames[id]) {
                                 entries.push(entry);
                                 uniqueNames[id] = id;
                             }
@@ -5238,7 +5239,7 @@ namespace ts {
             // Type reference directives
             const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
             if (typeReferenceDirective) {
-                const referenceFile = lookUp(program.getResolvedTypeReferenceDirectives(), typeReferenceDirective.fileName);
+                const referenceFile = program.getResolvedTypeReferenceDirectives()[typeReferenceDirective.fileName];
                 if (referenceFile && referenceFile.resolvedFileName) {
                     return [getDefinitionInfoForFileReference(typeReferenceDirective.fileName, referenceFile.resolvedFileName)];
                 }
@@ -5410,7 +5411,7 @@ namespace ts {
                     for (const referencedSymbol of referencedSymbols) {
                         for (const referenceEntry of referencedSymbol.references) {
                             const fileName = referenceEntry.fileName;
-                            let documentHighlights = getProperty(fileNameToDocumentHighlights, fileName);
+                            let documentHighlights = fileNameToDocumentHighlights[fileName];
                             if (!documentHighlights) {
                                 documentHighlights = { fileName, highlightSpans: [] };
 
@@ -6155,7 +6156,7 @@ namespace ts {
 
                     const nameTable = getNameTable(sourceFile);
 
-                    if (lookUp(nameTable, internedName) !== undefined) {
+                    if (nameTable[internedName] !== undefined) {
                         result = result || [];
                         getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
                     }
@@ -6832,7 +6833,7 @@ namespace ts {
                 // the function will add any found symbol of the property-name, then its sub-routine will call
                 // getPropertySymbolsFromBaseTypes again to walk up any base types to prevent revisiting already
                 // visited symbol, interface "C", the sub-routine will pass the current symbol as previousIterationSymbol.
-                if (hasProperty(previousIterationSymbolsCache, symbol.name)) {
+                if (symbol.name in previousIterationSymbolsCache) {
                     return;
                 }
 

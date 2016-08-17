@@ -854,9 +854,9 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
-        const libFileNameSourceFileMap: ts.MapLike<ts.SourceFile> = {
+        const libFileNameSourceFileMap=  ts.createMap<ts.SourceFile>({
             [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
-        };
+        });
 
         export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile {
             if (!isDefaultLibraryFile(fileName)) {
@@ -1008,16 +1008,16 @@ namespace Harness {
             { name: "symlink", type: "string" }
         ];
 
-        let optionsIndex: ts.MapLike<ts.CommandLineOption>;
+        let optionsIndex: ts.Map<ts.CommandLineOption>;
         function getCommandLineOption(name: string): ts.CommandLineOption {
             if (!optionsIndex) {
-                optionsIndex = {};
+                optionsIndex = ts.createMap<ts.CommandLineOption>();
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
                 for (const option of optionDeclarations) {
                     optionsIndex[option.name.toLowerCase()] = option;
                 }
             }
-            return ts.lookUp(optionsIndex, name.toLowerCase());
+            return optionsIndex[name.toLowerCase()];
         }
 
         export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
@@ -1575,6 +1575,7 @@ namespace Harness {
 
     /** Support class for baseline files */
     export namespace Baseline {
+        const NoContent = "<no content>";
 
         export interface BaselineOptions {
             Subfolder?: string;
@@ -1641,14 +1642,6 @@ namespace Harness {
                 throw new Error("The generated content was \"undefined\". Return \"null\" if no baselining is required.\"");
             }
 
-            // Store the content in the 'local' folder so we
-            // can accept it later (manually)
-            /* tslint:disable:no-null-keyword */
-            if (actual !== null) {
-            /* tslint:enable:no-null-keyword */
-                IO.writeFile(actualFileName, actual);
-            }
-
             return actual;
         }
 
@@ -1665,7 +1658,7 @@ namespace Harness {
             /* tslint:disable:no-null-keyword */
             if (actual === null) {
             /* tslint:enable:no-null-keyword */
-                actual = "<no content>";
+                actual = NoContent;
             }
 
             let expected = "<no content>";
@@ -1678,7 +1671,13 @@ namespace Harness {
 
         function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string, descriptionForDescribe: string) {
             const encoded_actual = Utils.encodeString(actual);
-            if (expected != encoded_actual) {
+            if (expected !== encoded_actual) {
+                if (actual === NoContent) {
+                    IO.writeFile(relativeFileName + ".delete", "");
+                }
+                else {
+                    IO.writeFile(relativeFileName, actual);
+                }
                 // Overwrite & issue error
                 const errMsg = "The baseline file " + relativeFileName + " has changed.";
                 throw new Error(errMsg);

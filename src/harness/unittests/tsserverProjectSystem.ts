@@ -159,20 +159,10 @@ namespace ts {
         return entry;
     }
 
-    function sizeOfMap(map: MapLike<any>): number {
-        let n = 0;
-        for (const name in map) {
-            if (hasProperty(map, name)) {
-                n++;
-            }
-        }
-        return n;
-    }
-
-    function checkMapKeys(caption: string, map: MapLike<any>, expectedKeys: string[]) {
-        assert.equal(sizeOfMap(map), expectedKeys.length, `${caption}: incorrect size of map`);
+    function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
+        assert.equal(reduceProperties(map, count => count + 1, 0), expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
-            assert.isTrue(hasProperty(map, name), `${caption} is expected to contain ${name}, actual keys: ${getKeys(map)}`);
+            assert.isTrue(name in map, `${caption} is expected to contain ${name}, actual keys: ${Object.keys(map)}`);
         }
     }
 
@@ -234,7 +224,13 @@ namespace ts {
         }
 
         count() {
-            return sizeOfMap(this.map);
+            let n = 0;
+/* tslint:disable:no-unused-variable */
+            for (const _ in this.map) {
+/* tslint:enable:no-unused-variable */
+                n++;
+            }
+            return n;
         }
 
         invoke() {
@@ -259,8 +255,8 @@ namespace ts {
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
 
-        readonly watchedDirectories: MapLike<{ cb: DirectoryWatcherCallback, recursive: boolean }[]> = {};
-        readonly watchedFiles: MapLike<FileWatcherCallback[]> = {};
+        readonly watchedDirectories =  createMap<{ cb: DirectoryWatcherCallback, recursive: boolean }[]>();
+        readonly watchedFiles = createMap<FileWatcherCallback[]>();
 
         private filesOrFolders: FileOrFolder[];
 
@@ -344,7 +340,7 @@ namespace ts {
 
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toPath(directoryName);
-            const callbacks = lookUp(this.watchedDirectories, path) || (this.watchedDirectories[path] = []);
+            const callbacks = this.watchedDirectories[path] || (this.watchedDirectories[path] = []);
             callbacks.push({ cb: callback, recursive });
             return {
                 referenceCount: 0,
@@ -365,7 +361,7 @@ namespace ts {
 
         triggerDirectoryWatcherCallback(directoryName: string, fileName: string): void {
             const path = this.toPath(directoryName);
-            const callbacks = lookUp(this.watchedDirectories, path);
+            const callbacks = this.watchedDirectories[path];
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback.cb(fileName);
@@ -375,7 +371,7 @@ namespace ts {
 
         triggerFileWatcherCallback(fileName: string, removed?: boolean): void {
             const path = this.toPath(fileName);
-            const callbacks = lookUp(this.watchedFiles, path);
+            const callbacks = this.watchedFiles[path];
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback(path, removed);
@@ -385,7 +381,7 @@ namespace ts {
 
         watchFile(fileName: string, callback: FileWatcherCallback) {
             const path = this.toPath(fileName);
-            const callbacks = lookUp(this.watchedFiles, path) || (this.watchedFiles[path] = []);
+            const callbacks = this.watchedFiles[path] || (this.watchedFiles[path] = []);
             callbacks.push(callback);
             return {
                 close: () => {
@@ -754,7 +750,7 @@ namespace ts {
                 content: `{
                     "compilerOptions": {
                         "target": "es6"
-                    }, 
+                    },
                     "files": [ "main.ts" ]
                 }`
             };
@@ -781,7 +777,7 @@ namespace ts {
                 content: `{
                     "compilerOptions": {
                         "target": "es6"
-                    }, 
+                    },
                     "files": [ "main.ts" ]
                 }`
             };

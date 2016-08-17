@@ -6,71 +6,57 @@ namespace ts {
 }
 
 /*@internal*/
+/** Performance measurements for the compiler. */
 namespace ts.performance {
-    /** Performance measurements for the compiler. */
     declare const onProfilerEvent: { (markName: string): void; profiler: boolean; };
-    let profilerEvent: (markName: string) => void;
-    let counters: MapLike<number>;
-    let measures: MapLike<number>;
+
+    const profilerEvent = typeof onProfilerEvent === "function" && onProfilerEvent.profiler === true
+            ? onProfilerEvent
+            : (markName: string) => { };
+
+    let enabled = false;
+    let profilerStart = 0;
+    let counts: Map<number>;
+    let marks: Map<number>;
+    let measures: Map<number>;
 
     /**
-     * Emit a performance event if ts-profiler is connected. This is primarily used
-     * to generate heap snapshots.
+     * Marks a performance event.
      *
-     * @param eventName A name for the event.
+     * @param markName The name of the mark.
      */
-    export function emit(eventName: string) {
-        if (profilerEvent) {
-            profilerEvent(eventName);
+    export function mark(markName: string) {
+        if (enabled) {
+            marks[markName] = timestamp();
+            counts[markName] = (counts[markName] || 0) + 1;
+            profilerEvent(markName);
         }
-    }
-
-    /**
-     * Increments a counter with the specified name.
-     *
-     * @param counterName The name of the counter.
-     */
-    export function increment(counterName: string) {
-        if (counters) {
-            counters[counterName] = (getProperty(counters, counterName) || 0) + 1;
-        }
-    }
-
-    /**
-     * Gets the value of the counter with the specified name.
-     *
-     * @param counterName The name of the counter.
-     */
-    export function getCount(counterName: string) {
-        return counters && getProperty(counters, counterName) || 0;
-    }
-
-    /**
-     * Marks the start of a performance measurement.
-     */
-    export function mark() {
-        return measures ? timestamp() : 0;
     }
 
     /**
      * Adds a performance measurement with the specified name.
      *
      * @param measureName The name of the performance measurement.
-     * @param marker The timestamp of the starting mark.
+     * @param startMarkName The name of the starting mark. If not supplied, the point at which the
+     *      profiler was enabled is used.
+     * @param endMarkName The name of the ending mark. If not supplied, the current timestamp is
+     *      used.
      */
-    export function measure(measureName: string, marker: number) {
-        if (measures) {
-            measures[measureName] = (getProperty(measures, measureName) || 0) + (timestamp() - marker);
+    export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
+        if (enabled) {
+            const end = endMarkName && marks[endMarkName] || timestamp();
+            const start = startMarkName && marks[startMarkName] || profilerStart;
+            measures[measureName] = (measures[measureName] || 0) + (end - start);
         }
     }
 
     /**
-     * Iterate over each measure, performing some action
-     * 
-     * @param cb The action to perform for each measure
+     * Gets the number of times a marker was encountered.
+     *
+     * @param markName The name of the mark.
      */
-    export function forEachMeasure(cb: (measureName: string, duration: number) => void) {
-        return forEachKey(measures, key => cb(key, measures[key]));
+    export function getCount(markName: string) {
+        return counts && counts[markName] || 0;
     }
 
     /**
@@ -79,31 +65,31 @@ namespace ts.performance {
      * @param measureName The name of the measure whose durations should be accumulated.
      */
     export function getDuration(measureName: string) {
-        return measures && getProperty(measures, measureName) || 0;
+        return measures && measures[measureName] || 0;
+    }
+
+    /**
+     * Iterate over each measure, performing some action
+     *
+     * @param cb The action to perform for each measure
+     */
+    export function forEachMeasure(cb: (measureName: string, duration: number) => void) {
+        for (const key in measures) {
+            cb(key, measures[key]);
+        }
     }
 
     /** Enables (and resets) performance measurements for the compiler. */
     export function enable() {
-        counters = { };
-        measures = {
-            "I/O Read": 0,
-            "I/O Write": 0,
-            "Program": 0,
-            "Parse": 0,
-            "Bind": 0,
-            "Check": 0,
-            "Emit": 0,
-        };
-
-        profilerEvent = typeof onProfilerEvent === "function" && onProfilerEvent.profiler === true
-            ? onProfilerEvent
-            : undefined;
+        counts = createMap<number>();
+        marks = createMap<number>();
+        measures = createMap<number>();
+        enabled = true;
+        profilerStart = timestamp();
     }
 
-    /** Disables (and clears) performance measurements for the compiler. */
+    /** Disables performance measurements for the compiler. */
     export function disable() {
-        counters = undefined;
-        measures = undefined;
-        profilerEvent = undefined;
+        enabled = false;
     }
 }
