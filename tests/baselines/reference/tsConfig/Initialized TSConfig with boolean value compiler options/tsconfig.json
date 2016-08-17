@@ -1,10 +1,10 @@
 {
     "compilerOptions": {
-        "noUnusedLocals": true,
         "module": "commonjs",
         "target": "es5",
         "noImplicitAny": false,
-        "sourceMap": false
+        "sourceMap": false,
+        "noUnusedLocals": true
     },
     "exclude": [
         "node_modules"

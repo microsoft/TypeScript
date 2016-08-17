@@ -1,13 +1,13 @@
 {
     "compilerOptions": {
-        "lib": [
-            "es5",
-            "es2015.core"
-        ],
         "module": "commonjs",
         "target": "es5",
         "noImplicitAny": false,
-        "sourceMap": false
+        "sourceMap": false,
+        "lib": [
+            "es5",
+            "es2015.core"
+        ]
     },
     "exclude": [
         "node_modules"

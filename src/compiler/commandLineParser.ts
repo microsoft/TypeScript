@@ -61,10 +61,10 @@ namespace ts {
         },
         {
             name: "jsx",
-            type: {
+            type: createMap({
                 "preserve": JsxEmit.Preserve,
                 "react": JsxEmit.React
-            },
+            }),
             paramType: Diagnostics.KIND,
             description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_react,
         },
@@ -91,7 +91,7 @@ namespace ts {
         {
             name: "module",
             shortName: "m",
-            type: {
+            type: createMap({
                 "none": ModuleKind.None,
                 "commonjs": ModuleKind.CommonJS,
                 "amd": ModuleKind.AMD,
@@ -99,16 +99,16 @@ namespace ts {
                 "umd": ModuleKind.UMD,
                 "es6": ModuleKind.ES6,
                 "es2015": ModuleKind.ES2015,
-            },
+            }),
             description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
             paramType: Diagnostics.KIND,
         },
         {
             name: "newLine",
-            type: {
+            type: createMap({
                 "crlf": NewLineKind.CarriageReturnLineFeed,
                 "lf": NewLineKind.LineFeed
-            },
+            }),
             description: Diagnostics.Specify_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
             paramType: Diagnostics.NEWLINE,
         },
@@ -250,12 +250,12 @@ namespace ts {
         {
             name: "target",
             shortName: "t",
-            type: {
+            type: createMap({
                 "es3": ScriptTarget.ES3,
                 "es5": ScriptTarget.ES5,
                 "es6": ScriptTarget.ES6,
                 "es2015": ScriptTarget.ES2015,
-            },
+            }),
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
             paramType: Diagnostics.VERSION,
         },
@@ -284,10 +284,10 @@ namespace ts {
         },
         {
             name: "moduleResolution",
-            type: {
+            type: createMap({
                 "node": ModuleResolutionKind.NodeJs,
                 "classic": ModuleResolutionKind.Classic,
-            },
+            }),
             description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
         },
         {
@@ -392,7 +392,7 @@ namespace ts {
             type: "list",
             element: {
                 name: "lib",
-                type: {
+                type: createMap({
                     // JavaScript only
                     "es5": "lib.es5.d.ts",
                     "es6": "lib.es2015.d.ts",
@@ -417,7 +417,7 @@ namespace ts {
                     "es2016.array.include": "lib.es2016.array.include.d.ts",
                     "es2017.object": "lib.es2017.object.d.ts",
                     "es2017.sharedmemory": "lib.es2017.sharedmemory.d.ts"
-                },
+                }),
             },
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
         },
@@ -494,10 +494,9 @@ namespace ts {
     /* @internal */
     export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
         const namesOfType: string[] = [];
-        forEachKey(opt.type, key => {
+        for (const key in opt.type) {
             namesOfType.push(` '${key}'`);
-        });
-
+        }
         return createCompilerDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, namesOfType);
     }
 
@@ -505,7 +504,7 @@ namespace ts {
     export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
         const key = trimString((value || "")).toLowerCase();
         const map = opt.type;
-        if (hasProperty(map, key)) {
+        if (key in map) {
             return map[key];
         }
         else {
@@ -559,11 +558,11 @@ namespace ts {
                     s = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
 
                     // Try to translate short option names to their full equivalents.
-                    if (hasProperty(shortOptionNames, s)) {
+                    if (s in shortOptionNames) {
                         s = shortOptionNames[s];
                     }
 
-                    if (hasProperty(optionNameMap, s)) {
+                    if (s in optionNameMap) {
                         const opt = optionNameMap[s];
 
                         if (opt.isTSConfigOnly) {
@@ -700,7 +699,7 @@ namespace ts {
 
         return configurations;
 
-        function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): MapLike<string | number> | undefined {
+        function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string | number> | undefined {
             if (optionDefinition.type === "string" || optionDefinition.type === "number" || optionDefinition.type === "boolean") {
                 // this is of a type CommandLineOptionOfPrimitiveType
                 return undefined;
@@ -715,12 +714,12 @@ namespace ts {
 
         function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: MapLike<string | number>): string | undefined {
             // There is a typeMap associated with this command-line option so use it to map value back to its name
-            const name = forEachKey(customTypeMap, (key) => {
-                if (getProperty(customTypeMap, key) === value) {
+            for (const key in customTypeMap) {
+                if (customTypeMap[key] === value) {
                     return key;
                 }
-            });
-            return name ? name : undefined;
+            }
+            return undefined;
         }
 
         function serializeCompilerOptions(options: CompilerOptions): Map<CompilerOptionsValue> {
@@ -913,7 +912,7 @@ namespace ts {
         const optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
 
         for (const id in jsonOptions) {
-            if (hasProperty(optionNameMap, id)) {
+            if (id in optionNameMap) {
                 const opt = optionNameMap[id];
                 defaultOptions[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
             }
@@ -950,7 +949,7 @@ namespace ts {
 
     function convertJsonOptionOfCustomType(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
         const key = value.toLowerCase();
-        if (hasProperty(opt.type, key)) {
+        if (key in opt.type) {
             return opt.type[key];
         }
         else {
@@ -1113,7 +1112,7 @@ namespace ts {
                 removeWildcardFilesWithLowerPriorityExtension(file, wildcardFileMap, supportedExtensions, keyMapper);
 
                 const key = keyMapper(file);
-                if (!hasProperty(literalFileMap, key) && !hasProperty(wildcardFileMap, key)) {
+                if (!(key in literalFileMap) && !(key in wildcardFileMap)) {
                     wildcardFileMap[key] = file;
                 }
             }
@@ -1178,7 +1177,7 @@ namespace ts {
                 if (match) {
                     const key = useCaseSensitiveFileNames ? match[0] : match[0].toLowerCase();
                     const flags = watchRecursivePattern.test(name) ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None;
-                    const existingFlags = getProperty(wildcardDirectories, key);
+                    const existingFlags = wildcardDirectories[key];
                     if (existingFlags === undefined || existingFlags < flags) {
                         wildcardDirectories[key] = flags;
                         if (flags === WatchDirectoryFlags.Recursive) {
@@ -1190,11 +1189,9 @@ namespace ts {
 
             // Remove any subpaths under an existing recursively watched directory.
             for (const key in wildcardDirectories) {
-                if (hasProperty(wildcardDirectories, key)) {
-                    for (const recursiveKey of recursiveKeys) {
-                        if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
-                            delete wildcardDirectories[key];
-                        }
+                for (const recursiveKey of recursiveKeys) {
+                    if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
+                        delete wildcardDirectories[key];
                     }
                 }
             }
@@ -1217,7 +1214,7 @@ namespace ts {
         for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
             const higherPriorityExtension = extensions[i];
             const higherPriorityPath = keyMapper(changeExtension(file, higherPriorityExtension));
-            if (hasProperty(literalFiles, higherPriorityPath) || hasProperty(wildcardFiles, higherPriorityPath)) {
+            if (higherPriorityPath in literalFiles || higherPriorityPath in wildcardFiles) {
                 return true;
             }
         }
