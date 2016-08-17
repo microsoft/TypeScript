@@ -128,6 +128,7 @@ var serverCoreSources = [
     "types.d.ts",
     "utilities.ts",
     "scriptVersionCache.ts",
+    "typingsCache.ts",
     "scriptInfo.ts",
     "lsHost.ts",
     "project.ts",
@@ -1101,6 +1102,8 @@ var lintTargets = compilerSources
     .concat(serverCoreSources)
     .concat(tslintRulesFiles)
     .concat(servicesSources)
+    .concat(typingsInstallerSources)
+    .concat(cancellationTokenSources)
     .concat(["Gulpfile.ts"])
     .concat([nodeServerInFile, perftscPath, "tests/perfsys.ts", webhostPath]);
 

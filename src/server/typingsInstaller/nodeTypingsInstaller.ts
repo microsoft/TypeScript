@@ -21,7 +21,7 @@ namespace ts.server.typingsInstaller {
                 basePath = os.homedir();
                 break;
             case "darwin":
-                basePath = combinePaths(os.homedir(), "Library/Application Support/")
+                basePath = combinePaths(os.homedir(), "Library/Application Support/");
                 break;
         }
 
@@ -32,7 +32,7 @@ namespace ts.server.typingsInstaller {
     class FileLog implements Log {
         constructor(private readonly logFile?: string) {
         }
-        
+
         isEnabled() {
             return this.logFile !== undefined;
         }
@@ -44,9 +44,8 @@ namespace ts.server.typingsInstaller {
     export class NodeTypingsInstaller extends TypingsInstaller {
         private execSync: { (command: string, options: { stdio: "ignore" | "pipe" }): Buffer | string };
         private exec: { (command: string, options: { cwd: string }, callback?: (error: Error, stdout: string, stderr: string) => void): any };
-        
         private npmBinPath: string;
-        
+
         private tsdRunCount = 1;
         readonly installTypingHost: InstallTypingHost = sys;
 
@@ -55,7 +54,7 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Process id: ${process.pid}`);
             }
-            const { exec, execSync } = require("child_process"); 
+            const { exec, execSync } = require("child_process");
             this.execSync = execSync;
             this.exec = exec;
         }
@@ -68,7 +67,7 @@ namespace ts.server.typingsInstaller {
                     this.log.writeLine(`Global npm bin path '${this.npmBinPath}'`);
                 }
             }
-            catch(e) {
+            catch (e) {
                 this.npmBinPath = "";
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Error when getting npm bin path: ${e}. Set bin path to ""`);
@@ -82,7 +81,7 @@ namespace ts.server.typingsInstaller {
                     case "closeProject":
                         this.closeProject(req);
                 }
-            })
+            });
         }
 
         protected isPackageInstalled(packageName: string) {
@@ -121,11 +120,11 @@ namespace ts.server.typingsInstaller {
 
         protected sendResponse(response: SetTypings | InvalidateCachedTypings) {
             if (this.log.isEnabled()) {
-                this.log.writeLine(`Sending response: ${JSON.stringify(response)}`)
+                this.log.writeLine(`Sending response: ${JSON.stringify(response)}`);
             }
             process.send(response);
             if (this.log.isEnabled()) {
-                this.log.writeLine(`Response has been sent.`)
+                this.log.writeLine(`Response has been sent.`);
             }
         }
 
@@ -134,12 +133,12 @@ namespace ts.server.typingsInstaller {
             this.tsdRunCount++;
             const tsdPath = combinePaths(this.npmBinPath, "tsd");
             if (this.log.isEnabled()) {
-                this.log.writeLine(`Running tsd ${id}, tsd path '${tsdPath}, typings to install: ${JSON.stringify(typingsToInstall)}. cache path '${cachePath}'`) 
+                this.log.writeLine(`Running tsd ${id}, tsd path '${tsdPath}, typings to install: ${JSON.stringify(typingsToInstall)}. cache path '${cachePath}'`);
             }
-            this.exec(`${tsdPath} install ${typingsToInstall.join(" ")} -ros`, { cwd: cachePath  }, (err, stdout, stderr) => {
+            this.exec(`${tsdPath} install ${typingsToInstall.join(" ")} -ros`, { cwd: cachePath }, (err, stdout, stderr) => {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`TSD ${id} stdout: ${stdout}`);
-                    this.log.writeLine(`TSD ${id} stderr: ${stderr}`)
+                    this.log.writeLine(`TSD ${id} stderr: ${stderr}`);
                 }
                 const i = stdout.indexOf("running install");
                 if (i < 0) {
@@ -154,7 +153,7 @@ namespace ts.server.typingsInstaller {
                     installedTypings.push(match[1]);
                 }
                 postInstallAction(installedTypings);
-            })
+            });
         }
     }
 

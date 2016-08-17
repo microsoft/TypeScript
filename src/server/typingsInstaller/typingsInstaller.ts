@@ -17,11 +17,11 @@ namespace ts.server.typingsInstaller {
         isEnabled(): boolean;
         writeLine(text: string): void;
     }
-    
+
     const nullLog: Log = {
         isEnabled: () => false,
         writeLine: () => {}
-    }
+    };
 
     function tsdTypingToFileName(cachePath: string, tsdTypingFile: string) {
         return combinePaths(cachePath, `typings/${tsdTypingFile}`);
@@ -33,7 +33,6 @@ namespace ts.server.typingsInstaller {
     }
 
     export abstract class TypingsInstaller {
-        
         private isTsdInstalled: boolean;
 
         private packageNameToTypingLocation: Map<string> = createMap<string>();
@@ -81,14 +80,13 @@ namespace ts.server.typingsInstaller {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`No watchers are registered for project '${projectName}'`);
                 }
-                
                 return;
             }
             for (const w of watchers) {
                 w.close();
             }
 
-            delete this.projectWatchers[projectName]
+            delete this.projectWatchers[projectName];
 
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Closing file watchers for project '${projectName}' - done.`);
@@ -102,7 +100,7 @@ namespace ts.server.typingsInstaller {
                 }
                 return;
             }
-            
+
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Got install request ${JSON.stringify(req)}`);
             }
@@ -123,7 +121,7 @@ namespace ts.server.typingsInstaller {
                 this.packageNameToTypingLocation,
                 req.typingOptions,
                 req.compilerOptions);
-                
+
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Finished typings discovery: ${JSON.stringify(discoverTypingsResult)}`);
             }
@@ -151,7 +149,7 @@ namespace ts.server.typingsInstaller {
             }
             if (this.knownCachesSet[cacheLocation]) {
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`Cache location was already processed...`)
+                    this.log.writeLine(`Cache location was already processed...`);
                 }
                 return;
             }
