@@ -417,6 +417,8 @@ namespace ts {
             case SyntaxKind.JSDocPropertyTag:
                 return visitNode(cbNode, (<JSDocPropertyTag>node).typeExpression) ||
                     visitNode(cbNode, (<JSDocPropertyTag>node).name);
+            case SyntaxKind.JSDocLiteralType:
+                    return visitNode(cbNode, (<JSDocLiteralType>node).literal);
         }
     }
 
@@ -5889,9 +5891,13 @@ namespace ts {
                     case SyntaxKind.SymbolKeyword:
                     case SyntaxKind.VoidKeyword:
                         return parseTokenNode<JSDocType>();
+                    case SyntaxKind.StringLiteral:
+                    case SyntaxKind.NumericLiteral:
+                    case SyntaxKind.TrueKeyword:
+                    case SyntaxKind.FalseKeyword:
+                        return parseJSDocLiteralType();
                 }
 
-                // TODO (drosen): Parse string literal types in JSDoc as well.
                 return parseJSDocTypeReference();
             }
 
@@ -6067,6 +6073,12 @@ namespace ts {
             function parseJSDocAllType(): JSDocAllType {
                 const result = <JSDocAllType>createNode(SyntaxKind.JSDocAllType);
                 nextToken();
+                return finishNode(result);
+            }
+
+            function parseJSDocLiteralType(): JSDocLiteralType {
+                const result = <JSDocLiteralType>createNode(SyntaxKind.JSDocLiteralType);
+                result.literal = parseLiteralTypeNode();
                 return finishNode(result);
             }
 
