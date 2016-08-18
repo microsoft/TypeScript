@@ -241,7 +241,7 @@ class ListWrapper {
 >array.length : number
 >array : T[]
 >length : number
->0 : number
+>0 : 0
 >null : null
 
     return array[array.length - 1];
@@ -288,7 +288,7 @@ class ListWrapper {
 >list : T[]
 >indexOf : (searchElement: T, fromIndex?: number) => number
 >el : T
->-1 : number
+>-1 : -1
 >1 : number
 
   static reversed<T>(dit: typeof ListWrapper, array: T[]): T[] {
@@ -348,9 +348,9 @@ class ListWrapper {
 >a : any[]
 >b : any[]
 >a.concat(b) : any[]
->a.concat : (...items: any[]) => any[]
+>a.concat : { (...items: any[][]): any[]; (...items: any[]): any[]; }
 >a : any[]
->concat : (...items: any[]) => any[]
+>concat : { (...items: any[][]): any[]; (...items: any[]): any[]; }
 >b : any[]
 
   static insert<T>(dit: typeof ListWrapper, list: T[], index: number, value: T) { list.splice(index, 0, value); }
@@ -496,7 +496,7 @@ class ListWrapper {
 >list.length : number
 >list : any[]
 >length : number
->0 : number
+>0 : 0
 
   static fill(dit: typeof ListWrapper, list: any[], value: any, start: number = 0, end: number = null) {
 >fill : (dit: typeof ListWrapper, list: any[], value: any, start?: number, end?: number) => void
@@ -662,9 +662,9 @@ class ListWrapper {
 >l : T[]
 >T : T
 >JSON.stringify(l) : string
->JSON.stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[], space?: string | number): string; }
+>JSON.stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
 >JSON : JSON
->stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[], space?: string | number): string; }
+>stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
 >l : T[]
 
   static maximum<T>(dit: typeof ListWrapper, list: T[], predicate: (t: T) => number): T {
@@ -684,7 +684,7 @@ class ListWrapper {
 >list.length : number
 >list : T[]
 >length : number
->0 : number
+>0 : 0
 
       return null;
 >null : null

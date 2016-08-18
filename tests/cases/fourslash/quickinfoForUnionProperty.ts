@@ -21,7 +21,7 @@ verify.quickInfoIs('var x: One | Two');
 
 
 goTo.marker("2");
-verify.quickInfoIs('(property) commonProperty: number | string');
+verify.quickInfoIs('(property) commonProperty: string | number');
 
 goTo.marker("3");
 verify.quickInfoIs('(method) commonFunction(): number');

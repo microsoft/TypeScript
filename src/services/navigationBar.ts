@@ -234,7 +234,7 @@ namespace ts.NavigationBar {
 
     /** Merge declarations of the same kind. */
     function mergeChildren(children: NavigationBarNode[]): void {
-        const nameToItems: Map<NavigationBarNode | NavigationBarNode[]> = {};
+        const nameToItems = createMap<NavigationBarNode | NavigationBarNode[]>();
         filterMutate(children, child => {
             const decl = <Declaration>child.node;
             const name = decl.name && nodeText(decl.name);
@@ -243,7 +243,7 @@ namespace ts.NavigationBar {
                 return true;
             }
 
-            const itemsWithSameName = getProperty(nameToItems, name);
+            const itemsWithSameName = nameToItems[name];
             if (!itemsWithSameName) {
                 nameToItems[name] = child;
                 return true;
@@ -506,7 +506,7 @@ namespace ts.NavigationBar {
     function convertToTopLevelItem(n: NavigationBarNode): NavigationBarItem {
         return {
             text: getItemName(n.node),
-            kind: nodeKind(n.node),
+            kind: getNodeKind(n.node),
             kindModifiers: getNodeModifiers(n.node),
             spans: getSpans(n),
             childItems: map(n.children, convertToChildItem) || emptyChildItemArray,
@@ -518,7 +518,7 @@ namespace ts.NavigationBar {
         function convertToChildItem(n: NavigationBarNode): NavigationBarItem {
             return {
                 text: getItemName(n.node),
-                kind: nodeKind(n.node),
+                kind: getNodeKind(n.node),
                 kindModifiers: getNodeModifiers(n.node),
                 spans: getSpans(n),
                 childItems: emptyChildItemArray,
@@ -536,57 +536,6 @@ namespace ts.NavigationBar {
                 }
             }
             return spans;
-        }
-    }
-
-    // TODO: GH#9145: We should just use getNodeKind. No reason why navigationBar and navigateTo should have different behaviors.
-    function nodeKind(node: Node): string {
-        switch (node.kind) {
-            case SyntaxKind.SourceFile:
-                return ScriptElementKind.moduleElement;
-
-            case SyntaxKind.EnumMember:
-                return ScriptElementKind.memberVariableElement;
-
-            case SyntaxKind.VariableDeclaration:
-            case SyntaxKind.BindingElement:
-                let variableDeclarationNode: Node;
-                let name: Node;
-
-                if (node.kind === SyntaxKind.BindingElement) {
-                    name = (<BindingElement>node).name;
-                    variableDeclarationNode = node;
-                    // binding elements are added only for variable declarations
-                    // bubble up to the containing variable declaration
-                    while (variableDeclarationNode && variableDeclarationNode.kind !== SyntaxKind.VariableDeclaration) {
-                        variableDeclarationNode = variableDeclarationNode.parent;
-                    }
-                    Debug.assert(!!variableDeclarationNode);
-                }
-                else {
-                    Debug.assert(!isBindingPattern((<VariableDeclaration>node).name));
-                    variableDeclarationNode = node;
-                    name = (<VariableDeclaration>node).name;
-                }
-
-                if (isConst(variableDeclarationNode)) {
-                    return ts.ScriptElementKind.constElement;
-                }
-                else if (isLet(variableDeclarationNode)) {
-                    return ts.ScriptElementKind.letElement;
-                }
-                else {
-                    return ts.ScriptElementKind.variableElement;
-                }
-
-            case SyntaxKind.ArrowFunction:
-                return ts.ScriptElementKind.functionElement;
-
-            case SyntaxKind.JSDocTypedefTag:
-                return ScriptElementKind.typeElement;
-
-            default:
-                return getNodeKind(node);
         }
     }
 

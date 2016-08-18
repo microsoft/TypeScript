@@ -50,7 +50,9 @@ class CompilerBaselineRunner extends RunnerBase {
     }
 
     private makeUnitName(name: string, root: string) {
-        return ts.isRootedDiskPath(name) ? name : ts.combinePaths(root, name);
+        const path = ts.toPath(name, root, (fileName) => Harness.Compiler.getCanonicalFileName(fileName));
+        const pathStart = ts.toPath(Harness.IO.getCurrentDirectory(), "", (fileName) => Harness.Compiler.getCanonicalFileName(fileName));
+        return pathStart ? path.replace(pathStart, "/") : path;
     };
 
     public checkTestCodeOutput(fileName: string) {
@@ -289,8 +291,8 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
 
-                const fullResults: ts.Map<TypeWriterResult[]> = {};
-                const pullResults: ts.Map<TypeWriterResult[]> = {};
+                const fullResults = ts.createMap<TypeWriterResult[]>();
+                const pullResults = ts.createMap<TypeWriterResult[]>();
 
                 for (const sourceFile of allFiles) {
                     fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);

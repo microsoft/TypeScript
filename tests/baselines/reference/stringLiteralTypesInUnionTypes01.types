@@ -15,27 +15,27 @@ var y: T = undefined;
 if (x === "foo") {
 >x === "foo" : boolean
 >x : "foo" | "bar" | "baz"
->"foo" : string
+>"foo" : "foo"
 
     let a = x;
->a : "foo" | "bar" | "baz"
->x : "foo" | "bar" | "baz"
+>a : "foo"
+>x : "foo"
 }
 else if (x !== "bar") {
 >x !== "bar" : boolean
->x : "foo" | "bar" | "baz"
->"bar" : string
+>x : "bar" | "baz"
+>"bar" : "bar"
 
     let b = x || y;
 >b : "foo" | "bar" | "baz"
 >x || y : "foo" | "bar" | "baz"
->x : "foo" | "bar" | "baz"
+>x : "baz"
 >y : "foo" | "bar" | "baz"
 }
 else {
     let c = x;
->c : "foo" | "bar" | "baz"
->x : "foo" | "bar" | "baz"
+>c : "bar"
+>x : "bar"
 
     let d = y;
 >d : "foo" | "bar" | "baz"
@@ -43,10 +43,10 @@ else {
 
     let e: (typeof x) | (typeof y) = c || d;
 >e : "foo" | "bar" | "baz"
->x : "foo" | "bar" | "baz"
+>x : "bar"
 >y : "foo" | "bar" | "baz"
 >c || d : "foo" | "bar" | "baz"
->c : "foo" | "bar" | "baz"
+>c : "bar"
 >d : "foo" | "bar" | "baz"
 }
 

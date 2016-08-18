@@ -24,7 +24,7 @@ namespace ts {
         Return      = 1 << 3
     }
 
-    const entities: Map<number> = {
+    const entities = createMap({
         "quot": 0x0022,
         "amp": 0x0026,
         "apos": 0x0027,
@@ -278,7 +278,7 @@ namespace ts {
         "clubs": 0x2663,
         "hearts": 0x2665,
         "diams": 0x2666
-    };
+    });
 
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
@@ -407,7 +407,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
         function isUniqueLocalName(name: string, container: Node): boolean {
             for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
-                if (node.locals && hasProperty(node.locals, name)) {
+                if (node.locals && name in node.locals) {
                     // We conservatively include alias symbols to cover cases where they're emitted as locals
                     if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
                         return false;
@@ -489,13 +489,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         function setLabeledJump(state: ConvertedLoopState, isBreak: boolean, labelText: string, labelMarker: string): void {
             if (isBreak) {
                 if (!state.labeledNonLocalBreaks) {
-                    state.labeledNonLocalBreaks = {};
+                    state.labeledNonLocalBreaks = createMap<string>();
                 }
                 state.labeledNonLocalBreaks[labelText] = labelMarker;
             }
             else {
                 if (!state.labeledNonLocalContinues) {
-                    state.labeledNonLocalContinues = {};
+                    state.labeledNonLocalContinues = createMap<string>();
                 }
                 state.labeledNonLocalContinues[labelText] = labelMarker;
             }
@@ -577,27 +577,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             const setSourceMapWriterEmit = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? changeSourceMapEmit : function (writer: SourceMapWriter) { };
 
-            const moduleEmitDelegates: Map<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
+            const moduleEmitDelegates = createMap<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void>({
                 [ModuleKind.ES6]: emitES6Module,
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
                 [ModuleKind.UMD]: emitUMDModule,
                 [ModuleKind.CommonJS]: emitCommonJSModule,
-            };
+            });
 
-            const bundleEmitDelegates: Map<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
+            const bundleEmitDelegates = createMap<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void>({
                 [ModuleKind.ES6]() {},
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
                 [ModuleKind.UMD]() {},
                 [ModuleKind.CommonJS]() {},
-            };
+            });
 
             return doEmit;
 
             function doEmit(jsFilePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
                 sourceMap.initialize(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
-                generatedNameSet = {};
+                generatedNameSet = createMap<string>();
                 nodeToGeneratedName = [];
                 decoratedClassAliases = [];
                 isOwnFileEmit = !isBundledEmit;
@@ -614,7 +614,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 const sourceMappingURL = sourceMap.getSourceMappingURL();
                 if (sourceMappingURL) {
-                    write(`//# sourceMappingURL=${sourceMappingURL}`);
+                    write(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Sometimes tools can sometimes see this line as a source mapping url comment
                 }
 
                 writeEmittedFiles(writer.getText(), jsFilePath, sourceMapFilePath, /*writeByteOrderMark*/ compilerOptions.emitBOM, sourceFiles);
@@ -669,8 +669,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function isUniqueName(name: string): boolean {
                 return !resolver.hasGlobalName(name) &&
-                    !hasProperty(currentFileIdentifiers, name) &&
-                    !hasProperty(generatedNameSet, name);
+                    !(name in currentFileIdentifiers) &&
+                    !(name in generatedNameSet);
             }
 
             // Return the next available name in the pattern _a ... _z, _0, _1, ...
@@ -2578,7 +2578,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             operand = (<TypeAssertion | NonNullExpression>operand).expression;
                         }
 
-                        // We have an expression of the form: (<Type>SubExpr)
+                        // We have an expression of the form: (<Type>SubExpr) or (SubExpr as Type)
                         // Emitting this as (SubExpr) is really not desirable. We would like to emit the subexpr as is.
                         // Omitting the parentheses, however, could cause change in the semantics of the generated
                         // code if the casted expression has a lower precedence than the rest of the expression, e.g.:
@@ -2592,6 +2592,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             operand.kind !== SyntaxKind.DeleteExpression &&
                             operand.kind !== SyntaxKind.PostfixUnaryExpression &&
                             operand.kind !== SyntaxKind.NewExpression &&
+                            !(operand.kind === SyntaxKind.BinaryExpression && node.expression.kind === SyntaxKind.AsExpression) &&
                             !(operand.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.NewExpression) &&
                             !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression) &&
                             !(operand.kind === SyntaxKind.NumericLiteral && node.parent.kind === SyntaxKind.PropertyAccessExpression)) {
@@ -2645,7 +2646,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     return false;
                 }
 
-                return !exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, (<Identifier>node).text);
+                return !exportEquals && exportSpecifiers && (<Identifier>node).text in exportSpecifiers;
             }
 
             function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
@@ -2667,7 +2668,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     isNameOfExportedDeclarationInNonES6Module(node.operand);
 
                 if (internalExportChanged) {
-                    emitAliasEqual(<Identifier> node.operand);
+                    emitAliasEqual(<Identifier>node.operand);
                 }
 
                 write(tokenToString(node.operator));
@@ -2722,7 +2723,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     }
                 }
                 else if (internalExportChanged) {
-                    emitAliasEqual(<Identifier> node.operand);
+                    emitAliasEqual(<Identifier>node.operand);
                     emit(node.operand);
                     if (node.operator === SyntaxKind.PlusPlusToken) {
                         write(" += 1");
@@ -3256,13 +3257,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                            // Don't initialize seen unless we have at least one element.
                            // Emit a comma to separate for all but the first element.
                            if (!seen) {
-                               seen = {};
+                               seen = createMap<string>();
                            }
                            else {
                                write(", ");
                            }
 
-                           if (!hasProperty(seen, id.text)) {
+                           if (!(id.text in seen)) {
                                emit(id);
                                seen[id.text] = id.text;
                            }
@@ -3855,7 +3856,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 if (convertedLoopState) {
                     if (!convertedLoopState.labels) {
-                        convertedLoopState.labels = {};
+                        convertedLoopState.labels = createMap<string>();
                     }
                     convertedLoopState.labels[node.label.text] = node.label.text;
                 }
@@ -3969,7 +3970,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     return;
                 }
 
-                if (!exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
+                if (!exportEquals && exportSpecifiers && name.text in exportSpecifiers) {
                     for (const specifier of exportSpecifiers[name.text]) {
                         writeLine();
                         emitStart(specifier.name);
@@ -5310,18 +5311,7 @@ const _super = (function (geti, seti) {
                         emitSignatureParameters(ctor);
                     }
                     else {
-                        // Based on EcmaScript6 section 14.5.14: Runtime Semantics: ClassDefinitionEvaluation.
-                        // If constructor is empty, then,
-                        //      If ClassHeritageopt is present, then
-                        //          Let constructor be the result of parsing the String "constructor(... args){ super (...args);}" using the syntactic grammar with the goal symbol MethodDefinition.
-                        //      Else,
-                        //          Let constructor be the result of parsing the String "constructor( ){ }" using the syntactic grammar with the goal symbol MethodDefinition
-                        if (baseTypeElement) {
-                            write("(...args)");
-                        }
-                        else {
-                            write("()");
-                        }
+                        write("()");
                     }
                 }
 
@@ -5359,7 +5349,7 @@ const _super = (function (geti, seti) {
                             write("_super.apply(this, arguments);");
                         }
                         else {
-                            write("super(...args);");
+                            write("super(...arguments);");
                         }
                         emitEnd(baseTypeElement);
                     }
@@ -6045,7 +6035,7 @@ const _super = (function (geti, seti) {
                             return;
 
                         case SyntaxKind.StringKeyword:
-                        case SyntaxKind.StringLiteralType:
+                        case SyntaxKind.LiteralType:
                             write("String");
                             return;
 
@@ -6460,7 +6450,7 @@ const _super = (function (geti, seti) {
              * Here we check if alternative name was provided for a given moduleName and return it if possible.
              */
             function tryRenameExternalModule(moduleName: LiteralExpression): string {
-                if (renamedDependencies && hasProperty(renamedDependencies, moduleName.text)) {
+                if (renamedDependencies && moduleName.text in renamedDependencies) {
                     return `"${renamedDependencies[moduleName.text]}"`;
                 }
                 return undefined;
@@ -6802,7 +6792,7 @@ const _super = (function (geti, seti) {
 
             function collectExternalModuleInfo(sourceFile: SourceFile) {
                 externalImports = [];
-                exportSpecifiers = {};
+                exportSpecifiers = createMap<ExportSpecifier[]>();
                 exportEquals = undefined;
                 hasExportStarsToExportValues = false;
                 for (const node of sourceFile.statements) {
@@ -6841,7 +6831,7 @@ const _super = (function (geti, seti) {
                                 // export { x, y }
                                 for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
                                     const name = (specifier.propertyName || specifier.name).text;
-                                    getOrUpdateProperty(exportSpecifiers, name, () => []).push(specifier);
+                                    (exportSpecifiers[name] || (exportSpecifiers[name] = [])).push(specifier);
                                 }
                             }
                             break;
@@ -6940,7 +6930,7 @@ const _super = (function (geti, seti) {
                 }
 
                 // local names set should only be added if we have anything exported
-                if (!exportedDeclarations && isEmpty(exportSpecifiers)) {
+                if (!exportedDeclarations && !someProperties(exportSpecifiers)) {
                     // no exported declarations (export var ...) or export specifiers (export {x})
                     // check if we have any non star export declarations.
                     let hasExportDeclarationWithExportClause = false;
@@ -7080,7 +7070,7 @@ const _super = (function (geti, seti) {
                 if (hoistedVars) {
                     writeLine();
                     write("var ");
-                    const seen: Map<string> = {};
+                    const seen = createMap<string>();
                     for (let i = 0; i < hoistedVars.length; i++) {
                         const local = hoistedVars[i];
                         const name = local.kind === SyntaxKind.Identifier
@@ -7090,7 +7080,7 @@ const _super = (function (geti, seti) {
                         if (name) {
                             // do not emit duplicate entries (in case of declaration merging) in the list of hoisted variables
                             const text = unescapeIdentifier(name.text);
-                            if (hasProperty(seen, text)) {
+                            if (text in seen) {
                                 continue;
                             }
                             else {
@@ -7446,7 +7436,7 @@ const _super = (function (geti, seti) {
                 writeModuleName(node, emitRelativePathAsModuleName);
                 write("[");
 
-                const groupIndices: Map<number> = {};
+                const groupIndices = createMap<number>();
                 const dependencyGroups: DependencyGroup[] = [];
 
                 for (let i = 0; i < externalImports.length; i++) {
@@ -7459,7 +7449,7 @@ const _super = (function (geti, seti) {
                     // for deduplication purposes in key remove leading and trailing quotes so 'a' and "a" will be considered the same
                     const key = text.substr(1, text.length - 2);
 
-                    if (hasProperty(groupIndices, key)) {
+                    if (key in groupIndices) {
                         // deduplicate/group entries in dependency list by the dependency name
                         const groupIndex = groupIndices[key];
                         dependencyGroups[groupIndex].push(externalImports[i]);

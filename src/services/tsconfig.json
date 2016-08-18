@@ -1,8 +1,10 @@
 {
     "compilerOptions": {
         "noImplicitAny": true,
+        "noImplicitThis": true,
         "removeComments": false,
         "preserveConstEnums": true,
+        "pretty": true,
         "outFile": "../../built/local/typescriptServices.js",
         "sourceMap": true,
         "stripInternal": true,
@@ -11,6 +13,7 @@
     },
     "files": [
         "../compiler/core.ts",
+        "../compiler/performance.ts",
         "../compiler/sys.ts",
         "../compiler/types.ts",
         "../compiler/scanner.ts",
