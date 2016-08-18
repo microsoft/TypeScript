@@ -67,21 +67,21 @@ class Test262BaselineRunner extends RunnerBase {
             });
 
             it("has the expected emitted code", () => {
-                Harness.Baseline.runBaseline("has the expected emitted code", testState.filename + ".output.js", () => {
+                Harness.Baseline.runBaseline(testState.filename + ".output.js", () => {
                     const files = testState.compilerResult.files.filter(f => f.fileName !== Test262BaselineRunner.helpersFilePath);
                     return Harness.Compiler.collateOutputs(files);
-                }, false, Test262BaselineRunner.baselineOptions);
+                }, Test262BaselineRunner.baselineOptions);
             });
 
             it("has the expected errors", () => {
-                Harness.Baseline.runBaseline("has the expected errors", testState.filename + ".errors.txt", () => {
+                Harness.Baseline.runBaseline(testState.filename + ".errors.txt", () => {
                     const errors = testState.compilerResult.errors;
                     if (errors.length === 0) {
                         return null;
                     }
 
                     return Harness.Compiler.getErrorBaseline(testState.inputFiles, errors);
-                }, false, Test262BaselineRunner.baselineOptions);
+                }, Test262BaselineRunner.baselineOptions);
             });
 
             it("satisfies invariants", () => {
@@ -90,10 +90,10 @@ class Test262BaselineRunner extends RunnerBase {
             });
 
             it("has the expected AST", () => {
-                Harness.Baseline.runBaseline("has the expected AST", testState.filename + ".AST.txt", () => {
+                Harness.Baseline.runBaseline(testState.filename + ".AST.txt", () => {
                     const sourceFile = testState.compilerResult.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
                     return Utils.sourceFileToJSON(sourceFile);
-                }, false, Test262BaselineRunner.baselineOptions);
+                }, Test262BaselineRunner.baselineOptions);
             });
         });
     }

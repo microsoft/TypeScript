@@ -147,7 +147,7 @@ class CompilerBaselineRunner extends RunnerBase {
             // check errors
             it("Correct errors for " + fileName, () => {
                 if (this.errors) {
-                    Harness.Baseline.runBaseline("Correct errors for " + fileName, justName.replace(/\.tsx?$/, ".errors.txt"), (): string => {
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".errors.txt"), (): string => {
                         if (result.errors.length === 0) return null;
                         return getErrorBaseline(toBeCompiled, otherFiles, result);
                     });
@@ -156,7 +156,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
             it (`Correct module resolution tracing for ${fileName}`, () => {
                 if (options.traceResolution) {
-                    Harness.Baseline.runBaseline("Correct module resolution tracing for " + fileName, justName.replace(/\.tsx?$/, ".trace.json"), () => {
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".trace.json"), () => {
                         return JSON.stringify(result.traceResults || [], undefined, 4);
                     });
                 }
@@ -165,7 +165,7 @@ class CompilerBaselineRunner extends RunnerBase {
             // Source maps?
             it("Correct sourcemap content for " + fileName, () => {
                 if (options.sourceMap || options.inlineSourceMap) {
-                    Harness.Baseline.runBaseline("Correct sourcemap content for " + fileName, justName.replace(/\.tsx?$/, ".sourcemap.txt"), () => {
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".sourcemap.txt"), () => {
                         const record = result.getSourceMapRecord();
                         if (options.noEmitOnError && result.errors.length !== 0 && record === undefined) {
                             // Because of the noEmitOnError option no files are created. We need to return null because baselining isn"t required.
@@ -183,7 +183,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     }
 
                     // check js output
-                    Harness.Baseline.runBaseline("Correct JS output for " + fileName, justName.replace(/\.tsx?/, ".js"), () => {
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?/, ".js"), () => {
                         let tsCode = "";
                         const tsSources = otherFiles.concat(toBeCompiled);
                         if (tsSources.length > 1) {
@@ -242,7 +242,7 @@ class CompilerBaselineRunner extends RunnerBase {
                         throw new Error("Number of sourcemap files should be same as js files.");
                     }
 
-                    Harness.Baseline.runBaseline("Correct Sourcemap output for " + fileName, justName.replace(/\.tsx?/, ".js.map"), () => {
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?/, ".js.map"), () => {
                         if (options.noEmitOnError && result.errors.length !== 0 && result.sourceMaps.length === 0) {
                             // We need to return null here or the runBaseLine will actually create a empty file.
                             // Baselining isn't required here because there is no output.
@@ -330,11 +330,11 @@ class CompilerBaselineRunner extends RunnerBase {
                     const pullExtension = isSymbolBaseLine ? ".symbols.pull" : ".types.pull";
 
                     if (fullBaseLine !== pullBaseLine) {
-                        Harness.Baseline.runBaseline("Correct full information for " + fileName, justName.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
-                        Harness.Baseline.runBaseline("Correct pull information for " + fileName, justName.replace(/\.tsx?/, pullExtension), () => pullBaseLine);
+                        Harness.Baseline.runBaseline(justName.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
+                        Harness.Baseline.runBaseline(justName.replace(/\.tsx?/, pullExtension), () => pullBaseLine);
                     }
                     else {
-                        Harness.Baseline.runBaseline("Correct information for " + fileName, justName.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
+                        Harness.Baseline.runBaseline(justName.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
                     }
                 }
 
